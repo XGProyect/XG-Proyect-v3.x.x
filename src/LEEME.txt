@@ -1,0 +1,61 @@
+ESTA VERSIÓN DE XG PROYECT FUE DECARGADA DESDE
+
+
+< - - - - - WWW.XGPROYECT.NET - - - - >
+
+
+
+ESTE PACK ES OPEN SOURCE... NADIE TE PUEDE COBRAR POR EL.
+
+LA LICENCIA SE ENCUENTRA EN EL INSTALADOR...
+
+
+GRACIAS POR DESCARGAR EL PACK Y HABERNOS ELEGIDO...
+
+
+// ---------------------------------------------------------- //
+
+Si esta es la primera vez que instalas XG Proyect, pero tienes conocimientos de php y MySql, decide si lo deseas
+hacer en tu pc o en un hosting.
+
+Sólo es necesario copiar todo el contenido de la carpeta upload en el root de tu hosting o en la ubicación que
+desees en tu hosting.
+
+Y luego el sistema te guiará en el proceso de instalación.-
+
+REQUERIMIENTOS MINIMOS:
+
+PHP 5.2.0 O SUPERIOR
+MySQL 5.0.19 O SUPERIOR.
+
+
+
+// ---------------------------------------------------------- //
+
+Si esta es la primera vez que instalas XG Proyect, pero no tienes idea de nada; te recomendamos alguna de las
+siguientes guías:
+
+INSTALAR XG PROYECT EN HOSTING	-> - http://xgproyect.net/threads/2292
+				   - http://xgproyect.net/threads/851
+
+INSTALAR XG PROYECT EN TU PC 	-> - http://xgproyect.net/threads/173
+
+// ---------------------------------------------------------- //
+
+Si tienes alguna versión anterior a la 2.0:
+
+1º Actualiza a la 2.3
+2º Actualiza a la 2.9.8
+
+
+Si tienes entre la versión 2.0 y 2.9:
+
+1º Actualiza a la 2.9.8
+2º Actualiza a la 3.0.0
+
+
+Si tienes la versión 2.9.0 o superior puedes actualizar directamente a la 3.0.0
+
+// ---------------------------------------------------------- //
+
+Si estas actualizando, simplemente sube todos los archivos contenidos dentro de la carpeta upload, y corre la instalación pero en modo actualización.
