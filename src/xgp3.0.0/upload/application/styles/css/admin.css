@@ -1,0 +1,8 @@
+body{padding-top:60px;padding-bottom:40px}
+.sidebar-nav{padding:9px 0}
+.hover-group .image-wrapper{position:relative}
+.hover-group .image-wrapper .hover-toggle{position:absolute;left:75px;bottom:0;display:none}
+.hover-group:hover .image-wrapper .hover-toggle{display:block}
+.small_font{font-size:12px}
+.bold_font{font-weight:bold}
+td.align_center{text-align:center}

@@ -25,7 +25,7 @@ Y luego el sistema te guiará en el proceso de instalación.-
 
 REQUERIMIENTOS MINIMOS:
 
-PHP 5.2.0 O SUPERIOR
+PHP 5.3.0 O SUPERIOR
 MySQL 5.0.19 O SUPERIOR.
 
 

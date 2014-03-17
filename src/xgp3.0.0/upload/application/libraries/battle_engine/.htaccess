@@ -1,0 +1,9 @@
+IndexIgnore TestCombat.php
+IndexIgnore RunnableTest.php
+IndexIgnore Test.php
+IndexIgnore *.txt
+IndexIgnore *.png
+IndexIgnore *.jpg
+IndexIgnore *.css
+IndexIgnore *.html
+IndexIgnore *.js

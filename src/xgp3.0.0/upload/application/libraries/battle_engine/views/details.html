@@ -1,0 +1,15 @@
+The attacker has lost a total of <?php echo number_format($this->getTotalAttackersLostUnits(),0, ',', ' '); ?> units.<br />
+The defender has lost a total of <?php echo number_format($this->getTotalDefendersLostUnits(),0, ',', ' '); ?> units.<br />
+<?php $debris = $this->getDebris(); ?>
+At these space coordinates now float <?php echo number_format($debris[0],0, ',', ' '); ?> Metal and <?php echo number_format($debris[1],0, ',', ' '); ?> Crystal.<br />
+<br />
+The chance for a moon to arise from the debris is <?php echo $this->getMoonProb(); ?> %.<br />
+<?php $moon = $this->tryMoon(); ?>
+<?php if ($moon !== false) { ?>
+    A moon orbit near your planet<br />
+<?php } ?>
+<br />
+Repaired Defense:<br />
+<?php foreach ($this->getDefendersRepaired() as $_id => $_player) {  ?>
+    <?php $st='Defender'; include('player2.html'); ?>
+<?php } ?>

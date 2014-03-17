@@ -1,0 +1,81 @@
+
+h1 {
+    font-size: 1.5em;
+    font-weight: normal;
+    margin: 0;
+}
+h2 {
+    font-size: 1.3em;
+    font-weight: normal;
+    margin: 2em 0 0;
+}
+p {
+    margin: 0.6em 0;
+}
+p.tabnav {
+    font-size: 1.1em;
+    text-align: right;
+    text-transform: uppercase;
+}
+p.tabnav a {
+    color: #999999;
+    text-decoration: none;
+}
+article.tabs {
+    display: block;
+   
+    margin: 2em auto;
+    position: relative;
+    
+}
+article.tabs section {
+    background-color: #DDDDDD;
+    border-radius: 5px 5px 5px 5px;
+    box-shadow: 0 3px 3px rgba(0, 0, 0, 0.1);
+    display: block;
+    left: 0;
+    padding: 10px 20px;
+    position: absolute;
+    top: 1.8em;
+    z-index: 0;
+}
+article.tabs section:first-child {
+    z-index: 1;
+}
+article.tabs section h2 {
+    background-color: #DDDDDD;
+    border-radius: 5px 5px 0 0;
+    color: #999999;
+    font-size: 1em;
+    font-weight: normal;
+    height: 1.8em;
+    left: 10px;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    top: -1.8em;
+    width: 120px;
+}
+article.tabs section:nth-child(2) h2 {
+    left: 132px;
+}
+article.tabs section:nth-child(3) h2 {
+    left: 254px;
+}
+article.tabs section h2 a {
+    color: inherit;
+    display: block;
+    line-height: 1.8em;
+    outline: 0 none;
+    text-align: center;
+    text-decoration: none;
+    width: 100%;
+}
+article.tabs section, article.tabs section h2 {
+    transition: all 500ms ease 0s;
+}
+article.tabs section:target, article.tabs section:target h2 {
+    background-color: #FFFFFF;
+    color: #333333;
+    z-index: 2;
+}
