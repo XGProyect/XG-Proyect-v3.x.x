@@ -1,45 +1,34 @@
 <?php
-
 /**
- * @project XG Proyect
- * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2014
+ * Ajax File
+ *
+ * PHP Version 5.4+
+ *
+ * @category Application
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
  */
 
-define ( 'INSIDE'  	, TRUE );
-define ( 'IN_LOGIN'	, TRUE );
-define ( 'XGP_ROOT'	, './' );
+define('IN_LOGIN', true);
+define('XGP_ROOT', './');
 
-$InLogin	= TRUE;
+include XGP_ROOT . 'application/core/common.php';
 
-include ( XGP_ROOT . 'application/core/common.php' );
+if (isset($_GET['content'])) {
+    
+    $file_name  = XGP_ROOT . AJAX_PATH . $_GET['content'] . '.php';
 
-switch ( ( isset ( $_GET['content'] ) ? $_GET['content'] : '' ) )
-{
-	// information ajax request
-	case 'info':
+    if (file_exists($file_name)) {
 
-		include ( XGP_ROOT . AJAX_PATH. 'info.php' );
-		new Info();
-
-	break;
-
-	// media ajax request
-	case 'media':
-
-		include ( XGP_ROOT . AJAX_PATH. 'media.php' );
-		new Media();
-
-	break;
-
-	// home ajax request
-	case '':
-	case 'home':
-	default:
-
-		include ( XGP_ROOT . AJAX_PATH. 'home.php' );
-		new Home();
-
-	break;
+        include $file_name;
+        
+        $class_name = ucfirst($_GET['content']);
+        
+        new $class_name();
+    }   
 }
+
 /* end of ajax.php */

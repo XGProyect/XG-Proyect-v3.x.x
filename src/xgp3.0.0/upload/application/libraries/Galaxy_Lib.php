@@ -3,10 +3,8 @@
 /**
  * @project XG Proyect
  * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2014
+ * @copyright Copyright (C) 2008 - 2016
  */
-
-if ( ! defined ( 'INSIDE' ) ) { die ( header ( 'location:../../' ) ) ; }
 
 class Galaxy_Lib extends XGPCore
 {
@@ -29,19 +27,19 @@ class Galaxy_Lib extends XGPCore
 	/**
 	 * __construct()
 	 */
-	public function __construct ( $user , $planet , $galaxy , $system )
+	public function __construct($user = '', $planet = '', $galaxy = '', $system = '')
 	{
-		parent::__construct();
-
-		$this->_lang			= parent::$lang;
-		$this->_current_user	= $user;
-		$this->_current_planet	= $planet;
-		$this->_galaxy			= $galaxy;
-		$this->_system			= $system;
-		$this->_resource		= parent::$objects->get_objects();
-		$this->_pricelist		= parent::$objects->get_price();
-		$this->_formula			= Functions_Lib::load_library ( 'Formula_Lib' );
-		$this->_noob			= Functions_Lib::load_library ( 'NoobsProtection_Lib' );
+            parent::__construct();
+            
+            $this->_lang            = parent::$lang;
+            $this->_current_user    = $user;
+            $this->_current_planet  = $planet;
+            $this->_galaxy          = $galaxy;
+            $this->_system          = $system;
+            $this->_resource        = parent::$objects->get_objects();
+            $this->_pricelist       = parent::$objects->get_price();
+            $this->_formula         = Functions_Lib::load_library('Formula_Lib');
+            $this->_noob            = Functions_Lib::load_library('NoobsProtection_Lib');
 	}
 
 	######################################

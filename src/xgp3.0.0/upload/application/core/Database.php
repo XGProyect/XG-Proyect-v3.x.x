@@ -3,10 +3,8 @@
 /**
  * @project XG Proyect
  * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2014
+ * @copyright Copyright (C) 2008 - 2016
  */
-
-if ( ! defined ( 'INSIDE' ) ) { die ( header ( 'location:../../' ) ) ; }
 
 require ( XGP_ROOT . 'application/config/config.php' );
 
@@ -16,7 +14,6 @@ class Database
 	public  $_last_query;
 	private $_connection;
 	private $_magic_quotes_active;
-	private $_real_escape_string_exists;
 	private $_debug;
 
 	/**
@@ -24,12 +21,11 @@ class Database
 	 */
 	public function __construct()
 	{
-		global $debug;
+            global $debug;
 
-		$this->_debug	= $debug;
-		$this->open_connection();
-		$this->_magic_quotes_active			= get_magic_quotes_gpc();
-		$this->_real_escape_string_exists 	= function_exists ( "mysql_real_escape_string" );
+            $this->_debug               = $debug;
+            $this->open_connection();
+            $this->_magic_quotes_active = get_magic_quotes_gpc();
 	}
 
 	/**
@@ -37,34 +33,34 @@ class Database
 	*/
 	public function open_connection()
 	{
-		if ( defined ( 'DB_HOST' ) && defined ( 'DB_USER' ) && defined ( 'DB_PASS' ) && defined ( 'DB_NAME' ) )
-		{
-			if ( !$this->try_connection() )
-			{
-				if ( !defined ( 'IN_INSTALL' ) )
-				{
-					die ( $this->_debug->error ( 'Database connection failed: ' . $this->_connection->connect_error  , "SQL Error" ) );
-				}
-				else
-				{
-					return FALSE;
-				}
-			}
-			else
-			{
-				if ( !$this->try_database() )
-				{
-					if ( !defined ( 'IN_INSTALL' ) )
-					{
-						die ( $this->_debug->error ( 'Database selection failed: ' . $this->_connection->connect_error  , "SQL Error" ) );
-					}
-					else
-					{
-						return FALSE;
-					}
-				}
-			}
-		}
+            if ( defined ( 'DB_HOST' ) && defined ( 'DB_USER' ) && defined ( 'DB_PASS' ) && defined ( 'DB_NAME' ) )
+            {
+                if ( !$this->try_connection() )
+                {
+                    if ( !defined ( 'IN_INSTALL' ) )
+                    {
+                            die ( $this->_debug->error ( 'Database connection failed: ' . $this->_connection->connect_error  , "SQL Error" ) );
+                    }
+                    else
+                    {
+                            return FALSE;
+                    }
+                }
+                else
+                {
+                    if ( !$this->try_database() )
+                    {
+                        if ( !defined ( 'IN_INSTALL' ) )
+                        {
+                                die ( $this->_debug->error ( 'Database selection failed: ' . $this->_connection->connect_error  , "SQL Error" ) );
+                        }
+                        else
+                        {
+                                return FALSE;
+                        }
+                    }
+                }
+            }
 	}
 
 	/**
@@ -114,7 +110,7 @@ class Database
 		if ( $sql != FALSE )
 		{
 			$this->_last_query	= $sql;
-			$result 			= @$this->_connection->query ( $sql );
+			$result 		= @$this->_connection->query ( $sql );
 			$this->_confirm_query ( $result );
 
 			return $result;
@@ -132,7 +128,7 @@ class Database
 		{
 
 			$this->_last_query	= $sql;
-			$result 			= @$this->_connection->query ( $sql );
+			$result                 = @$this->_connection->query ( $sql );
 			$this->_confirm_query ( $result );
 
 			return $this->fetch_array ( $result );
@@ -146,27 +142,14 @@ class Database
 	*/
 	public function escape_value ( $value )
 	{
-		if( $this->_real_escape_string_exists )
-		{
-			// PHP v4.3.0 or higher
-			// undo any magic quote effects so mysql_real_escape_string can do the work
-			if( $this->_magic_quotes_active )
-			{
-				$value = stripslashes( $value );
-			}
-			$value = mysql_real_escape_string( $value );
-		}
-		else
-		{
-			// before PHP v4.3.0
-			// if magic quotes aren't already on then add slashes manually
-			if( !$this->_magic_quotes_active )
-			{
-				$value = addslashes ( $value );
-			}
-			// if magic quotes are active, then the slashes already exist
-		}
-		return $value;
+            // undo any magic quote effects so mysqli_real_escape_string can do the work
+            if( $this->_magic_quotes_active )
+            {
+                $value = stripslashes( $value );
+            }
+            $value = $this->_connection->real_escape_string( $value );
+
+            return $value;
 	}
 
 	/**

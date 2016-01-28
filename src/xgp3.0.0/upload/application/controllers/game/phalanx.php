@@ -3,16 +3,8 @@
 /**
  * @project XG Proyect
  * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2014
+ * @copyright Copyright (C) 2008 - 2016
  */
-
-/**
- * @autor jstar,
- * @version v2
- * @copyright gnu v3
- */
-
-if ( ! defined ( 'INSIDE' ) ) { die ( header ( 'location:../../' ) ) ; }
 
 class Phalanx extends XGPCore
 {

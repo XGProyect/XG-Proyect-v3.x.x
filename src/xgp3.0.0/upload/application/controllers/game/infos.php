@@ -6,8 +6,6 @@
  * @copyright Copyright (C) 2008 - 2014
  */
 
-if ( ! defined ( 'INSIDE' ) ) { die ( header ( 'location:../../' ) ) ; }
-
 class Infos extends XGPCore
 {
 	const MODULE_ID	= 24;
@@ -100,7 +98,7 @@ class Infos extends XGPCore
             $PageTPL	= parent::$page->get_template ('infos/info_officiers_general');
         }
 
-        //Sólo hay destroy en <200
+        //Sï¿½lo hay destroy en <200
         if($this->_element_id < 200 && $this->_element_id != 33 && $this->_element_id != 41)
         {
 	        $DestroyTPL           = parent::$page->get_template ('infos/info_buildings_destroy');

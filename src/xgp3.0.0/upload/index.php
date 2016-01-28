@@ -1,44 +1,38 @@
 <?php
-
 /**
- * @project XG Proyect
- * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2014
+ * Index File
+ *
+ * PHP Version 5.4+
+ *
+ * @category Application
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
  */
 
-define ( 'INSIDE'  	, TRUE );
-define ( 'IN_LOGIN'	, TRUE );
-define ( 'XGP_ROOT'	, './' );
+define('IN_LOGIN', true);
+define('XGP_ROOT', './');
 
-$InLogin	= TRUE;
+require XGP_ROOT . 'application/core/common.php';
 
-include ( XGP_ROOT . 'application/core/common.php' );
+$page   = strtr(
+    (isset($_GET['page']) ? $_GET['page'] : 'home'),
+    array(
+        'reg' => 'register'
+    )
+);
 
-switch ( ( isset ( $_GET['page'] ) ? $_GET['page'] : '' ) )
-{
-	// REGISTER PAGE
-	case 'reg':
+$file_name  = XGP_ROOT . HOME_PATH . $page . '.php';
 
-		include ( XGP_ROOT . HOME_PATH . 'register.php' );
-		new Register();
+if (file_exists($file_name)) {
 
-	break;
+    include $file_name;
 
-	// RECOVER PASSWORD PAGE
-	case 'recoverpassword':
+    $class_name = ucfirst($page);
 
-		include ( XGP_ROOT . HOME_PATH . 'recoverpassword.php' );
-		new Recoverpassword();
-
-	break;
-
-	// HOME - INDEX - DEFAULT - START PAGE
-	case '':
-	default:
-
-		include ( XGP_ROOT . HOME_PATH . 'home.php' );
-		new Home();
-
-	break;
+    new $class_name();
 }
+
 /* end of index.php */

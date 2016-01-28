@@ -3,10 +3,8 @@
 /**
  * @project XG Proyect
  * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2014
+ * @copyright Copyright (C) 2008 - 2016
  */
-
-if ( ! defined ( 'INSIDE' ) ) { die ( header ( 'location:../../' ) ) ; }
 
 class Objects
 {
@@ -23,14 +21,14 @@ class Objects
 	public function __construct()
 	{
 		// REQUIRE THIS DAMN FILE
-		require ( XGP_ROOT . 'application/core/objects_collection.php' );
+		require XGP_ROOT . 'application/core/objects_collection.php';
 
 		// SET THE ARRAY ELEMENTS TO A PARTICULAR PROPERTY
-		$this->_objects			= $resource;
-		$this->_relations		= $requeriments;
-		$this->_price			= $pricelist;
+		$this->_objects         = $resource;
+		$this->_relations       = $requeriments;
+		$this->_price           = $pricelist;
 		$this->_combat_specs	= $CombatCaps;
-		$this->_production		= $ProdGrid;
+		$this->_production      = $ProdGrid;
 		$this->_objects_list	= $reslist;
 	}
 

@@ -2,7 +2,7 @@
 
 // SOME MESSAGES
 $lang['404_error']					= 'La p&aacute;gina solicitada no existe';
-$lang['ins_no_server_requirements']	= 'Tu servidor/hosting no cumple con los requisitos m&iacute;nimos que requiere XG Proyect para funcionar.<br /><br />Requisitos: <br />- PHP 5.2.0<br />- MySQL 5.0.19';
+$lang['ins_no_server_requirements']	= 'Tu servidor/hosting no cumple con los requisitos m&iacute;nimos que requiere XG Proyect para funcionar.<br /><br />Requisitos: <br />- PHP 5.4.x<br />- MySQL 5.5.x';
 $lang['ins_already_installed']		= 'XG Proyect ya se encuentra instalado. Selecciona una opci&oacute;n: <br /><br /> - <a href="index.php?page=update">Actualizar</a> <br /> - <a href="index.php?page=migrate">Migrar</a> <br /> - <a href="../">Volver al juego</a> <br /><br />En el caso de que no desees realizar ninguna acci&oacute;n, por seguridad, te recomendamos <span style="color:red;text-decoration:underline;">BORRAR</span> el directorio install.';
 $lang['ins_missing_xml_file']		= 'No se puede encontrar el archivo config.xml ni el archivo config.xml.cfg, debes tener alguno de estos para poder continuar con la instalación. Revisa tu directorio application/config y los permisos del mismo deben estar en chmod 777';
 

@@ -3,12 +3,10 @@
 /**
  * @project XG Proyect
  * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2014
+ * @copyright Copyright (C) 2008 - 2016
  */
 
-if ( ! defined ( 'INSIDE' ) ) { die ( header ( 'location:../../' ) ) ; }
-
-class CombatReport extends XGPCore
+class Combatreport extends XGPCore
 {
 	const MODULE_ID	= 23;
 

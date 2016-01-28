@@ -3,10 +3,9 @@
 /**
  * @project XG Proyect
  * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2014
+ * @copyright Copyright (C) 2008 - 2016
  */
 
-define ( 'INSIDE'   , TRUE );
 define ( 'IN_ADMIN' , TRUE );
 define ( 'XGP_ROOT' , './' );
 

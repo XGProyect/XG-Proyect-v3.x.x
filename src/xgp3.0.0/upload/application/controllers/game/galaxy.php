@@ -3,12 +3,8 @@
 /**
  * @project XG Proyect
  * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2014
+ * @copyright Copyright (C) 2008 - 2016
  */
-
-if ( ! defined ( 'INSIDE' ) ) { die ( header ( 'location:../../' ) ) ; }
-
-include_once ( XGP_ROOT . 'application/libraries/Galaxy_Lib.php' );
 
 class Galaxy extends XGPCore
 {
@@ -22,6 +18,7 @@ class Galaxy extends XGPCore
 	private $_system;
 	private $_formula;
 	private $_noob;
+        private $_galaxyLib;
 
 	/**
 	 * __construct()
@@ -44,7 +41,8 @@ class Galaxy extends XGPCore
 		$this->_reslist			= parent::$objects->get_objects_list();
 		$this->_formula			= Functions_Lib::load_library ( 'Formula_Lib' );
 		$this->_noob			= Functions_Lib::load_library ( 'NoobsProtection_Lib' );
-
+                $this->_galaxyLib               = Functions_Lib::load_library ( 'Galaxy_Lib' );
+                
 		$this->build_page();
 	}
 
@@ -200,12 +198,12 @@ class Galaxy extends XGPCore
 	 */
 	private function show_row ()
 	{
-		$rows					= '';
-		$start					= 1;
-		$template				= parent::$page->get_template ( 'galaxy/galaxy_row' );
-		$galaxy_row 			= new Galaxy_Lib ( $this->_current_user , $this->_current_planet , $this->_galaxy , $this->_system );
+		$rows				= '';
+		$start                          = 1;
+		$template                       = parent::$page->get_template ( 'galaxy/galaxy_row' );
+		$galaxy_row 			= new $this->_galaxyLib ( $this->_current_user , $this->_current_planet , $this->_galaxy , $this->_system );
 		$parse['planet'] 		= '';
-		$parse['planetname'] 	= '';
+		$parse['planetname']            = '';
 		$parse['moon'] 			= '';
 		$parse['debris'] 		= '';
 		$parse['username'] 		= '';

@@ -3,10 +3,8 @@
 /**
  * @project XG Proyect
  * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2014
+ * @copyright Copyright (C) 2008 - 2016
  */
-
-if ( ! defined ( 'INSIDE' ) ) { die ( header ( 'location:../../' ) ) ; }
 
 class Users_Lib extends XGPCore
 {
@@ -39,7 +37,7 @@ class Users_Lib extends XGPCore
 			UpdateResources_Lib::update_resource ( $this->_user_data , $this->_planet_data , time() );
 
 			// Update buildings queue
-			Update_Lib::update_buildings_queue ( $this->_planet_data , $this->_user_data );
+			UpdateLib::updateBuildingsQueue($this->_planet_data, $this->_user_data);
 		}
 	}
 

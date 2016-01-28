@@ -3,10 +3,8 @@
 /**
  * @project XG Proyect
  * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2014
+ * @copyright Copyright (C) 2008 - 2016
  */
-
-if(!defined('INSIDE')) {die(header('location:../../'));}
 
 class Overview extends XGPCore
 {
@@ -120,7 +118,7 @@ class Overview extends XGPCore
 		if ( ! $is_current_planet )
 		{
 			// UPDATE THE PLANET INFORMATION FIRST, MAY BE SOMETHING HAS JUST FINISHED
-			Update_Lib::update_buildings_queue ( $user_planet , $this->_current_user );
+			UpdateLib::updateBuildingsQueue ( $user_planet , $this->_current_user );
 		}
 
 		if ( $user_planet['planet_b_building'] != 0 )
