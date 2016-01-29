@@ -264,7 +264,7 @@ class Trader extends XGPCore
 
 			if ( array_key_exists ( $k , $amount ) )
 			{
-				if ( $this->_current_planet[$k] + $amount[$k] >= Production_Lib::max_storable ( $this->_current_planet[$this->_resource[$v]] ) )
+				if ( $this->_current_planet[$k] + $amount[$k] >= ProductionLib::max_storable ( $this->_current_planet[$this->_resource[$v]] ) )
 				{
 					$check[$k] = FALSE;
 				}

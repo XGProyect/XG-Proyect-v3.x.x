@@ -2,7 +2,7 @@
 /**
  * Planet Library
  *
- * PHP Version 5.4+
+ * PHP Version 5.5+
  *
  * @category Library
  * @package  Application
@@ -13,7 +13,7 @@
  */
 
 /**
- * Planet_Lib Class
+ * PlanetLib Class
  *
  * @category Classes
  * @package  Application

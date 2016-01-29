@@ -2,7 +2,13 @@ OPBE
 ====
 
 **O**game **P**robabilistic **B**attle **E**ngine  
-live: http://opbe.altervista.org
+live: http://opbe.altervista.org  
+2moons running opbe: http://testopbe.altervista.org
+
+Require PHP >= 5.3  
+
+
+![http://www.phpclasses.org/package/8318-PHP-Ogame-probabilistic-battle-engine.html](http://www.phpclasses.org/award/innovation/nominee.gif)
 
 1. [Introduction](#introduction)
 2. [Quick start](#quick-start-installation)
@@ -248,11 +254,12 @@ This time you have to manually choose the right class and HomeFleet should have 
 ```php
     $fleet = new Fleet($idFleet); // $idFleet is a must
     $fleet = new HomeFleet(0); // 0 is a must
-    $fleet->add($shipType);
+    $fleet->addShipType($shipType);
 ```
 
 - Note that you can assign differents techs to each *Fleet*, see functions inside this class.   
 - By default, Fleet will give tech levels by its Player container . 
+- HomeFleet work as Fleet, but with the difference that is unique: adding more HomeFleet will result on merging them. Feature implemented just for a better report.
 - Fleet has a __toString method that automatically fill-up the corrispective *views/fleet.html* and return the result html.   
 So you can echo it.
 
@@ -296,7 +303,7 @@ So you can echo it.
 An easy way to display them:
 ```php   
     $fleet = new Fleet($idFleet);
-    $fleet->add($this->getShipType($id, $count));
+    $fleet->addShipType($this->getShipType($id, $count));
     
     $player = new Player($idPlayer);
     $player->addFleet($fleet);

@@ -105,7 +105,9 @@ class Round
         //--------------------------------------------------------------------------//
 
         //------------------------- Sending the fire -------------------------------//
+        echo "***** firing to defenders *****<br>";
         $this->physicShotsToDefenders = $this->defenders->inflictDamage($this->fire_a);
+        echo "***** firing to attackers *****<br>";
         $this->physicShotsToAttachers = $this->attackers->inflictDamage($this->fire_d);
         //--------------------------------------------------------------------------//
 
@@ -222,5 +224,50 @@ class Round
     public function getNumber()
     {
         return $this->number;
+    }
+    
+    public function getAttackersFirePower()
+    {
+        return $this->getAttackersFire()->getAttackerTotalFire();
+    }
+    public function getAttackersFireCount()
+    {
+        return $this->getAttackersFire()->getAttackerTotalShots();
+    }
+    public function getDefendersFirePower()
+    {
+        return $this->getDefendersFire()->getAttackerTotalFire();
+    }
+    public function getDefendersFireCount()
+    {
+        return $this->getDefendersFire()->getAttackerTotalShots();
+    }
+    public function getAttachersAssorbedDamage()
+    {
+        $playerGroupPS = $this->getDefendersPhysicShots();
+        return $this->getPlayersAssorbedDamage($playerGroupPS);
+    }
+    public function getDefendersAssorbedDamage()
+    {
+        $playerGroupPS = $this->getAttachersPhysicShots();
+        return $this->getPlayersAssorbedDamage($playerGroupPS);
+    }
+    private function getPlayersAssorbedDamage($playerGroupPS)
+    {
+        $ass = 0;
+        foreach ($playerGroupPS as $idPlayer => $playerPs)
+        {
+            foreach ($playerPs as $idFleet => $fleetPS)
+            {
+                foreach ($fleetPS as $idTypeD => $typeDPS)
+                {
+                    foreach ($typeDPS as $typeAPS)
+                    {
+                        $ass += $typeAPS->getAssorbedDamage();
+                    }
+                }
+            }
+        }
+        return $ass;
     }
 }

@@ -21,9 +21,9 @@
  *
  * @package OPBE
  * @author Jstar <frascafresca@gmail.com>
- * @copyright 2013 Jstar <frascafresca@gmail.com>
+ * @copyright 2015 Jstar <frascafresca@gmail.com>
  * @license http://www.gnu.org/licenses/ GNU AGPLv3 License
- * @version beta(26-10-2013)
+ * @version 21-03-2015)
  * @link https://github.com/jstar88/opbe
  */
 
@@ -37,6 +37,10 @@ abstract class GeometricDistribution
      */
     public static function getProbabilityFromMean($m)
     {
+        if ($m <= 1 )
+        {
+            return 1;
+        }
         return 1 / $m;
     }
 
@@ -67,7 +71,7 @@ abstract class GeometricDistribution
         {
             return INF;
         }
-        return (1 - $p) / pow(2, $p);
+        return (1 - $p) / ($p * $p);
     }
     
     /**

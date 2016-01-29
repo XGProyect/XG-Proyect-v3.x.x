@@ -26,7 +26,7 @@
  * @version beta(26-10-2013)
  * @link https://github.com/jstar88/opbe
  */
-require ("../RunnableTest.php");
+require (".." . DIRECTORY_SEPARATOR . "RunnableTest.php");
 
 class WebTest extends RunnableTest
 {
@@ -42,6 +42,7 @@ class WebTest extends RunnableTest
     private function buildPlayerGroup($tech, $fleets)
     {
         $playerObj = new Player(1);
+        $playerObj->setName('bot');
         $playerObj->setTech($tech['weapons'], $tech['shields'], $tech['armour']);
         foreach ($fleets as $idFleet => $fleet)
         {
@@ -52,7 +53,7 @@ class WebTest extends RunnableTest
                 $id = floor($id);
                 if ($count > 0 && $id > 0)
                 {
-                    $fleetObj->add($this->getShipType($id, $count));
+                    $fleetObj->addShipType($this->getShipType($id, $count));
                 }
             }
             if (!$fleetObj->isEmpty())
@@ -83,7 +84,13 @@ else
     $selectedVar = 'XG';
 }
 WebTest::includeVars($selectedVar);
-LangManager::getInstance()->setImplementation(new LangImplementation($selectedVar));
+if ($selectedVar == 'XG'){
+    LangManager::getInstance()->setImplementation(new XGLangImplementation());
+}
+else{
+    LangManager::getInstance()->setImplementation(new MoonsLangImplementation());
+}
+
 
 if (isset($_GET['good']))
 {
@@ -113,16 +120,17 @@ if ($_POST)
 {
     if (isset($_POST['report']))
     {
-        if (!file_exists('errors/reports'))
+        $path = 'errors' . DIRECTORY_SEPARATOR . 'reports';
+        if (!file_exists($path))
         {
-            mkdir('errors/reports', 0777, true);
+            mkdir($path, 0777, true);
         }
-        $contents = 'comment=' . $_POST['comment'] . PHP_EOL . $_POST['report'];
-        require_once 'HTMLPurifier/HTMLPurifier.auto.php';
+        require_once 'HTMLPurifier' . DIRECTORY_SEPARATOR . 'HTMLPurifier.auto.php';
         $config = HTMLPurifier_Config::createDefault();
         $purifier = new HTMLPurifier($config);
-        $clean_html = $purifier->purify($contents);
-        file_put_contents('errors/reports/' . date('d-m-y_H:i:s') . '.html', $clean_html);
+        $clean_html = $purifier->purify($_POST['report']);
+        $clean_html = 'comment = ' . strip_tags($_POST['comment']) . PHP_EOL . $clean_html;
+        file_put_contents($path . DIRECTORY_SEPARATOR . date('d-m-y__H-i-s') . '.html', $clean_html);
 
         $extra = 'WebTest.php';
         echo 'This battle has been reported.';
@@ -168,6 +176,7 @@ if ($_POST)
     $comment->setAttribute('type', 'text');
     $comment->setAttribute('name', 'comment');
     $comment->setAttribute('value', 'insert a comment here');
+    $comment->setAttribute('size', '100');
 
     $fieldset = $dom->createElement('fieldset');
     $fieldset->appendChild($submit);
@@ -190,6 +199,8 @@ else
     $count = floor(file_get_contents('count.txt'));
     $list = WebTest::getVarsList();
     $reslist = WebTest::$reslist;
+    $combatCaps = WebTest::$CombatCaps;
+    $pricelist = WebTest::$pricelist;
     require ('WebTestGui.html');
 
 }

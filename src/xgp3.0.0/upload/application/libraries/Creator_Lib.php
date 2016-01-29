@@ -142,7 +142,7 @@ class Creator_Lib extends XGPCore
 			$planet['planet_name'] 			= ($planet_name == '') ? $this->_lang['ge_colony'] : $planet_name;
 
 			parent::$db->query ( "INSERT INTO " . PLANETS . " SET
-									" . ( ( $home_world == FALSE ) ? "`planet_name` = '{$planet['planet_name']}'," : $this->_lang['ge_home_planet'] ) ."
+									" . ( ( $home_world == FALSE ) ? "`planet_name` = '{$planet['planet_name']}'," : "`planet_name` = '{$this->_lang['ge_home_planet']}'," ) ."
 									`planet_user_id` = '" . $planet['planet_user_id'] . "',
 									`planet_galaxy` = '" . $planet['galaxy'] . "',
 									`planet_system` = '" . $planet['system'] . "',

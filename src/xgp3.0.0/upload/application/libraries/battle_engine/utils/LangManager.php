@@ -23,11 +23,15 @@ class LangManager
     {
         if (empty($this->impl))
         {
+            if (empty($arguments))
+            {
+                return $name;
+            }
             return $arguments[0];
         }
         return call_user_func_array(array($this->impl, $name), $arguments);
     }
-    
+
     public function implementationExist()
     {
         return !empty($this->impl);

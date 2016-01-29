@@ -21,9 +21,9 @@
  *
  * @package OPBE
  * @author Jstar <frascafresca@gmail.com>
- * @copyright 2013 Jstar <frascafresca@gmail.com>
+ * @copyright 2015 Jstar <frascafresca@gmail.com>
  * @license http://www.gnu.org/licenses/ GNU AGPLv3 License
- * @version beta(2013-2-4)
+ * @version 21-03-2015
  * @link https://github.com/jstar88/opbe
  *
  *
@@ -37,11 +37,16 @@ class Fire
 {
     private $attackerShipType;
     private $defenderFleet;
+
+    /* old way
     const SPEEDSIM = true;
     const RAPIDFIRE = true;
-
     private $shots = null;
     private $power = null;
+    */
+
+    private $shots = 0;
+    private $power = 0;
 
     /**
      * Fire::__construct()
@@ -53,8 +58,10 @@ class Fire
      */
     public function __construct(ShipType $attackerShipType, Fleet $defenderFleet)
     {
-        $this->attackerShipType = $attackerShipType->cloneMe();
-        $this->defenderFleet = $defenderFleet->cloneMe();
+        log_comment('calculating fire from attacker '.$attackerShipType->getId());
+        $this->attackerShipType = $attackerShipType;
+        $this->defenderFleet = $defenderFleet;
+        $this->calculateTotal();
     }
     public function getPower()
     {
@@ -73,10 +80,6 @@ class Fire
      */
     public function getAttackerTotalFire()
     {
-        if ($this->power == null)
-        {
-            $this->calculateTotal();
-        }
         return $this->power;
     }
 
@@ -87,10 +90,6 @@ class Fire
      */
     public function getAttackerTotalShots()
     {
-        if ($this->shots == null)
-        {
-            $this->calculateTotal();
-        }
         return $this->shots;
     }
 
@@ -101,17 +100,27 @@ class Fire
      */
     private function calculateTotal()
     {
-        $this->shots = 0;
-        $this->power = 0;
-        if (self::RAPIDFIRE)
+        $this->shots += $this->attackerShipType->getCount();
+        $this->power += $this->getNormalPower();
+
+        if (USE_RF)
         {
             $this->calculateRf();
         }
+        log_var('$this->shots',$this->shots);
+        /*  old way
+        $this->shots = 0;
+        $this->power = 0;          
+        if (self::RAPIDFIRE)
+        {
+        $this->calculateRf();
+        }
         if (!self::SPEEDSIM || !self::RAPIDFIRE)
         {
-            $this->shots += $this->attackerShipType->getCount();
-            $this->power += $this->getNormalPower();
+        $this->shots += $this->attackerShipType->getCount();
+        $this->power += $this->getNormalPower();
         }
+        */
     }
 
     /**
@@ -121,13 +130,21 @@ class Fire
      */
     private function calculateRf()
     {
+        //rapid fire
+        $tmpshots = round($this->getShotsFromOneAttackerShipOfType($this->attackerShipType) * $this->attackerShipType->getCount());
+        log_var('$tmpshots',$tmpshots);
+        $this->power += $tmpshots * $this->attackerShipType->getPower();
+        $this->shots += $tmpshots;
+
+        /* old way
         $tmpshots = round($this->getShotsFromOneAttackerShipOfType($this->attackerShipType) * $this->attackerShipType->getCount());
         if (self::SPEEDSIM && $tmpshots == 0)
         {
-            $tmpshots = $this->attackerShipType->getCount();
+        $tmpshots = $this->attackerShipType->getCount();
         }
         $this->power += $tmpshots * $this->attackerShipType->getPower();
         $this->shots += $tmpshots;
+        */
     }
 
     /**
@@ -139,11 +156,14 @@ class Fire
     private function getShotsFromOneAttackerShipOfType(ShipType $shipType_A)
     {
         $p = $this->getProbabilityToShotAgainForAttackerShipOfType($shipType_A);
-        $meanShots = ($p != 1) ? GeometricDistribution::getMeanFromProbability(1 - $p) : 0;
+        $meanShots = GeometricDistribution::getMeanFromProbability(1 - $p) - 1;
         if (USE_RANDOMIC_RF)
         {
             $max = $meanShots * (1 + MAX_RF_BUFF);
-            $min = $meanShots * MAX_RF_NERF;
+            $min = $meanShots * (1 - MAX_RF_NERF);
+            log_var('$max', $max);
+            log_var('$min', $min);
+            log_var('$mean', $meanShots);
             return Gauss::getNextMsBetween($meanShots, GeometricDistribution::getStandardDeviationFromProbability(1 - $p), $min, $max);
         }
         return $meanShots;
@@ -161,15 +181,27 @@ class Fire
         foreach ($this->defenderFleet->getIterator() as $idFleet => $shipType_D)
         {
             $RF = $shipType_A->getRfTo($shipType_D);
-            if (!self::SPEEDSIM)
-            {
-                $RF = max(0, $RF - 1);
-            }
-            $probabilityToShotAgain = ($RF != 0) ? 1 - GeometricDistribution::getProbabilityFromMean($RF) : 0;
+            $probabilityToShotAgain = 1 - GeometricDistribution::getProbabilityFromMean($RF);
             $probabilityToHitThisType = $shipType_D->getCount() / $this->defenderFleet->getTotalCount();
             $p += $probabilityToShotAgain * $probabilityToHitThisType;
         }
         return $p;
+
+        /* old way
+        $p = 0;
+        foreach ($this->defenderFleet->getIterator() as $idFleet => $shipType_D)
+        {
+        $RF = $shipType_A->getRfTo($shipType_D);
+        if (!self::SPEEDSIM)
+        {
+        $RF = max(0, $RF - 1);
+        }
+        $probabilityToShotAgain = ($RF != 0) ? 1 - GeometricDistribution::getProbabilityFromMean($RF) : 0;
+        $probabilityToHitThisType = $shipType_D->getCount() / $this->defenderFleet->getTotalCount();
+        $p += $probabilityToShotAgain * $probabilityToHitThisType;
+        }
+        return $p;
+        */
     }
 
     /**

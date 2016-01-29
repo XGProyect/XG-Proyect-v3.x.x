@@ -2,7 +2,7 @@
 /**
  * Common File
  *
- * PHP Version 5.4+
+ * PHP Version 5.5+
  *
  * @category Core
  * @package  Application
@@ -28,7 +28,7 @@ require_once XGP_ROOT . 'application/core/XGPCore.php';
 require_once XGP_ROOT . 'application/core/Xml.php';
 require_once XGP_ROOT . 'application/libraries/Format_Lib.php';
 require_once XGP_ROOT . 'application/libraries/Officiers_Lib.php';
-require_once XGP_ROOT . 'application/libraries/Production_Lib.php';
+require_once XGP_ROOT . 'application/libraries/ProductionLib.php';
 require_once XGP_ROOT . 'application/libraries/Fleets_Lib.php';
 require_once XGP_ROOT . 'application/libraries/Developments_Lib.php';
 require_once XGP_ROOT . 'application/libraries/Functions_Lib.php';
@@ -82,7 +82,7 @@ if (!defined('IN_INSTALL')) {
     require_once XGP_ROOT . 'application/core/Sessions.php';
     require_once XGP_ROOT . 'application/core/Hooks.php';
     require_once XGP_ROOT . 'application/libraries/Statistics_Lib.php';
-    require_once XGP_ROOT . 'application/libraries/UpdateResources_Lib.php';
+    require_once XGP_ROOT . 'application/libraries/UpdateResourcesLib.php';
     require_once XGP_ROOT . 'application/libraries/UpdateLib.php';
 
     // Sessions

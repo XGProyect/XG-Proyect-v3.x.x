@@ -21,9 +21,9 @@
  *
  * @package OPBE
  * @author Jstar <frascafresca@gmail.com>
- * @copyright 2013 Jstar <frascafresca@gmail.com>
+ * @copyright 2015 Jstar <frascafresca@gmail.com>
  * @license http://www.gnu.org/licenses/ GNU AGPLv3 License
- * @version beta(26-10-2013)
+ * @version 23-3-2015)
  * @link https://github.com/jstar88/opbe
  */
 class Fleet extends Iterable
@@ -32,24 +32,37 @@ class Fleet extends Iterable
     private $count;
     private $id;
     // added but only used in report templates
-    private $weapons_tech;
-    private $shields_tech;
-    private $armour_tech;
-    public function __construct($id, $shipTypes = array(),$weapons_tech = 0, $shields_tech = 0, $armour_tech = 0)
+    private $weapons_tech = 0;
+    private $shields_tech = 0;
+    private $armour_tech = 0;
+    private $name;
+    public function __construct($id, $shipTypes = array(),$weapons_tech = null, $shields_tech = null, $armour_tech = null, $name = "")
     {
         $this->id = $id;
         $this->count = 0;
+        $this->name = $name;
+        if($this->id != -1)
+        {
+            $this->setTech($weapons_tech, $shields_tech, $armour_tech);
+        }
         foreach ($shipTypes as $shipType)
         {
-            $this->add($shipType);
+            $this->addShipType($shipType);
         }
-        $this->setTech($weapons_tech, $shields_tech, $armour_tech);
+    }
+    public function getName()
+    {
+        return $this->name;
+    }
+    public function setName($name)
+    {
+        $this->name = $name;    
     }
     public function getId()
     {
         return $this->id;
     }
-    public function setTech($weapons, $shields, $armour)
+    public function setTech($weapons = null, $shields = null, $armour = null)
     {
         foreach ($this->array as $id => $shipType)
         {
@@ -57,11 +70,11 @@ class Fleet extends Iterable
             $shipType->setShieldsTech($shields);
             $shipType->setArmourTech($armour);
         }
-        $this->weapons_tech = $weapons;
-        $this->shields_tech = $shields;
-        $this->armour_tech = $armour;
+        if(is_numeric($weapons)) $this->weapons_tech = intval($weapons);
+        if(is_numeric($shields)) $this->shields_tech = intval($shields);
+        if(is_numeric($armour)) $this->armour_tech = intval($armour);
     }
-    public function add(ShipType $shipType)
+    public function addShipType(ShipType $shipType)
     {
         if (isset($this->array[$shipType->getId()]))
         {
@@ -69,7 +82,14 @@ class Fleet extends Iterable
         }
         else
         {
-            $this->array[$shipType->getId()] = $shipType->cloneMe(); //avoid collateral effects
+            $shipType = $shipType->cloneMe();//avoid collateral effects
+            if($this->id != -1)
+            {
+                $shipType->setWeaponsTech($this->weapons_tech);
+                $shipType->setShieldsTech($this->shields_tech);
+                $shipType->setArmourTech($this->armour_tech);
+            }
+            $this->array[$shipType->getId()] = $shipType; 
         }
         $this->count += $shipType->getCount();
     }
@@ -86,7 +106,7 @@ class Fleet extends Iterable
     {
         foreach ($other->getIterator() as $idShipType => $shipType)
         {
-            $this->add($shipType);
+            $this->addShipType($shipType);
         }
     }
     public function getShipType($id)
@@ -119,14 +139,35 @@ class Fleet extends Iterable
         //doesn't matter who shot first, but who receive first the damage
         foreach ($fires->getIterator() as $fire)
         {
+            $tmp = array();
             foreach ($this->getOrderedIterator() as $idShipTypeDefender => $shipTypeDefender)
             {
                 $idShipTypeAttacker = $fire->getId();
-                echo "---- firing from $idShipTypeAttacker to $idShipTypeDefender ---- <br>";
+                log_comment( "---- firing from $idShipTypeAttacker to $idShipTypeDefender ----");
                 $xs = $fire->getShotsFiredByAllToDefenderType($shipTypeDefender, true);
                 $ps = $shipTypeDefender->inflictDamage($fire->getPower(), $xs->result);
+                log_var('$xs',$xs);
+                $tmp[$idShipTypeDefender] = $xs->rest;
                 if ($ps != null)
                     $physicShots[$idShipTypeDefender][] = $ps;
+            }
+            log_var('$tmp',$tmp);
+            // assign the last shot to the more likely shitType
+            $m = 0;
+            $f = 0;
+            foreach ($tmp as $k => $v)
+            {
+                if ($v > $m)
+                {
+                    $m = $v;
+                    $f = $k;
+                }    
+            }
+            if ($f != 0)
+            {
+                log_comment('adding 1 shot');
+                $ps = $this->getShipType($f)->inflictDamage($fire->getPower(), 1);
+                $physicShots[$f][] = $ps;
             }
 
         }
@@ -147,7 +188,7 @@ class Fleet extends Iterable
         $shipsCleaners = array();
         foreach ($this->array as $id => $shipType)
         {
-            echo "---- exploding $id ----<br>";
+            log_comment("---- exploding $id ----");
             $sc = $shipType->cleanShips();
             $this->count -= $sc->getExplodedShips();
             if ($shipType->isEmpty())
@@ -163,13 +204,6 @@ class Fleet extends Iterable
         foreach ($this->array as $id => $shipTypeDefender)
         {
             $shipTypeDefender->repairShields();
-        }
-    }
-    public function repairHull()
-    {
-        foreach ($this->array as $id => $shipTypeDefender)
-        {
-            $shipTypeDefender->repairHull();
         }
     }
     public function isEmpty()
@@ -198,6 +232,7 @@ class Fleet extends Iterable
     public function cloneMe()
     {
         $types = array_values($this->array);
-        return new Fleet($this->id, $types ,$this->weapons_tech, $this->shields_tech, $this->armour_tech);
+        $class = get_class($this);
+        return new $class($this->id, $types ,$this->weapons_tech, $this->shields_tech, $this->armour_tech);
     }
 }

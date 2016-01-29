@@ -161,7 +161,7 @@ class Missions extends XGPCore
 														INNER JOIN " . PREMIUM . " AS pr ON pr.premium_user_id = u.user_id
 														WHERE u.`user_id` = " . $target_planet['planet_user_id'] );
 
-		UpdateResources_Lib::update_resource ( $target_user , $target_planet , time() );
+		UpdateResourcesLib::updateResource ( $target_user , $target_planet , time() );
 	}
 }
 /* end of missions.php */

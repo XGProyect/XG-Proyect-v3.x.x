@@ -34,7 +34,7 @@ class Users_Lib extends XGPCore
 			$this->set_planet_data();
 
 			// Update resources, ships, defenses & technologies
-			UpdateResources_Lib::update_resource ( $this->_user_data , $this->_planet_data , time() );
+			UpdateResourcesLib::updateResource ( $this->_user_data , $this->_planet_data , time() );
 
 			// Update buildings queue
 			UpdateLib::updateBuildingsQueue($this->_planet_data, $this->_user_data);

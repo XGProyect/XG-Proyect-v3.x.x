@@ -271,11 +271,11 @@ class Infos extends XGPCore
 		$BuildStartLvl    	= max ( 1 , $CurrentBuildtLvl - 2 );
 		$Table     			= "";
 		$ProdFirst 			= 0;
-		$ActualProd 		= Production_Lib::max_storable ( $CurrentBuildtLvl );
+		$ActualProd 		= ProductionLib::max_storable ( $CurrentBuildtLvl );
 
 		for ( $BuildLevel = $BuildStartLvl ; $BuildLevel < $BuildStartLvl + 15 ; ++$BuildLevel )
 		{
-			$Prod	= Production_Lib::max_storable ( $BuildLevel );
+			$Prod	= ProductionLib::max_storable ( $BuildLevel );
 
 			$bloc['build_lvl']			= ( $CurrentBuildtLvl == $BuildLevel ) ? "<font color=\"#ff0000\">" . $BuildLevel . "</font>" : $BuildLevel;
 			$bloc['build_prod']      	= Format_Lib::pretty_number ( $Prod );
@@ -507,18 +507,18 @@ class Infos extends XGPCore
 		$energy_prod		= eval ( $this->_prod_grid[$this->_element_id]['formule']['energy'] );
 
 		// PRODUCTION
-		$Prod[1]			= Production_Lib::production_amount ( $metal_prod , $geologe_boost );
-		$Prod[2]			= Production_Lib::production_amount ( $crystal_prod , $geologe_boost );
-		$Prod[3]			= Production_Lib::production_amount ( $deuterium_prod , $geologe_boost );
+		$Prod[1]			= ProductionLib::production_amount ( $metal_prod , $geologe_boost );
+		$Prod[2]			= ProductionLib::production_amount ( $crystal_prod , $geologe_boost );
+		$Prod[3]			= ProductionLib::production_amount ( $deuterium_prod , $geologe_boost );
 
 		if( $this->_element_id >= 4 )
 		{
-			$Prod[4]		= Production_Lib::production_amount ( $energy_prod , $engineer_boost , TRUE );
+			$Prod[4]		= ProductionLib::production_amount ( $energy_prod , $engineer_boost , TRUE );
 			$ActualProd    	= floor ( $Prod[4] );
 		}
 		else
 		{
-			$Prod[4]		= Production_Lib::production_amount ( $energy_prod , 1 , TRUE );
+			$Prod[4]		= ProductionLib::production_amount ( $energy_prod , 1 , TRUE );
 			$ActualProd    	= floor ( $Prod[$this->_element_id] );
 		}
 
@@ -549,17 +549,17 @@ class Infos extends XGPCore
 				$energy_prod		= eval ( $this->_prod_grid[$this->_element_id]['formule']['energy'] );
 
 				// PRODUCTION
-				$Prod[1]			= Production_Lib::production_amount ( $metal_prod , $geologe_boost );
-				$Prod[2]			= Production_Lib::production_amount ( $crystal_prod , $geologe_boost );
-				$Prod[3]			= Production_Lib::production_amount ( $deuterium_prod , $geologe_boost );
+				$Prod[1]			= ProductionLib::production_amount ( $metal_prod , $geologe_boost );
+				$Prod[2]			= ProductionLib::production_amount ( $crystal_prod , $geologe_boost );
+				$Prod[3]			= ProductionLib::production_amount ( $deuterium_prod , $geologe_boost );
 
 				if( $this->_element_id >= 4 )
 				{
-					$Prod[4]		= Production_Lib::production_amount ( $energy_prod , $engineer_boost , TRUE );
+					$Prod[4]		= ProductionLib::production_amount ( $energy_prod , $engineer_boost , TRUE );
 				}
 				else
 				{
-					$Prod[4]		= Production_Lib::production_amount ( $energy_prod , 1 , TRUE );
+					$Prod[4]		= ProductionLib::production_amount ( $energy_prod , 1 , TRUE );
 				}
 
                 $bloc['build_lvl']       = ($CurrentBuildtLvl == $BuildLevel) ? "<font color=\"#ff0000\">".$BuildLevel."</font>" : $BuildLevel;

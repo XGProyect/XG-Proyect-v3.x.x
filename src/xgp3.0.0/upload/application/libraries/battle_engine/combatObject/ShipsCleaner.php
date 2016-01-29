@@ -2,7 +2,7 @@
 
 /**
  *  OPBE
- *  Copyright (C) 2013  Jstar
+ *  Copyright (C) 2015  Jstar
  *
  * This file is part of OPBE.
  * 
@@ -21,9 +21,9 @@
  *
  * @package OPBE
  * @author Jstar <frascafresca@gmail.com>
- * @copyright 2013 Jstar <frascafresca@gmail.com>
+ * @copyright 2015 Jstar <frascafresca@gmail.com>
  * @license http://www.gnu.org/licenses/ GNU AGPLv3 License
- * @version beta(26-10-2013)
+ * @version 6-3-2015
  * @link https://github.com/jstar88/opbe
  */
 class ShipsCleaner
@@ -45,9 +45,9 @@ class ShipsCleaner
     public function __construct(ShipType $shipType, $lastShipHit, $lastShots)
     {
         if ($lastShipHit < 0)
-            throw new Exception('negative $lastShipHit');
+            throw new Exception('Negative $lastShipHit');
         if ($lastShots < 0)
-            throw new Exception('negative $lastShots');
+            throw new Exception('Negative $lastShots');
         $this->fighters = $shipType->cloneMe();
         $this->lastShipHit = $lastShipHit;
         $this->lastShots = $lastShots;
@@ -63,15 +63,18 @@ class ShipsCleaner
 
         //the mean probably to explode based on damage
         $prob = 1 - $this->fighters->getCurrentLife() / ($this->fighters->getHull() * $this->fighters->getCount());
-        echo "prob=$prob<br>";
+        if ($prob < 0 && $prob > -EPSILON)
+        {
+            $prob = 0;
+        }
         if ($prob < 0)
         {
-            throw new Exception("negative prob");
+            throw new Exception("Negative prob");
         }
         //if most of ships are hitten,then we can apply the more realistic way
         if (USE_BIEXPLOSION_SYSTEM && $this->lastShipHit >= $this->fighters->getCount() / PROB_TO_REAL_MAGIC)
         {
-            echo "this->lastShipHit >= this->fighters->getCount()/2<br>";
+            log_comment('lastShipHit bigger than getCount()/magic');
             if ($prob < MIN_PROB_TO_EXPLODE)
             {
                 $probToExplode = 0;
@@ -84,26 +87,30 @@ class ShipsCleaner
         //otherwise  statistically:
         else
         {
-            echo "this->lastShipHit < this->fighters->getCount()/2<br>";
+            log_comment('lastShipHit smaller than getCount()/magic');
             $probToExplode = $prob * (1 - MIN_PROB_TO_EXPLODE);
         }
 
 
         /*** calculating the amount of exploded ships ***/
 
-        $teoricExploded = $this->fighters->getCount() * $probToExplode;
-        //$this->exploded = round($teoricExploded);
-        //$this->exploded = min(floor($teoricExploded), $this->lastShots);
-        $this->exploded = min(round($teoricExploded), $this->lastShots); //bounded by the total shots fired to simulate a real combat :)
+        $teoricExploded = round($this->fighters->getCount() * $probToExplode);
+        if (USE_EXPLODED_LIMITATION)
+        {
+            $teoricExploded = min($teoricExploded, $this->lastShots);
+        }
+        $this->exploded = $teoricExploded; //bounded by the total shots fired to simulate a real combat :)
 
 
         /*** calculating the life of destroyed ships ***/
 
         //$this->remainLife = $this->exploded * (1 - $prob) * ($this->fighters->getCurrentLife() / $this->fighters->getCount());
-        $this->remainLife = $this->exploded * ($this->fighters->getCurrentLife() / $this->fighters->getCount());
-        echo "probToExplode = $probToExplode<br>$teoricExploded = teoricExploded<br>";
-        echo "exploded ={$this->exploded}<br>";
-        echo "remainLife = {$this->remainLife}<br>";
+        $this->remainLife = $this->fighters->getCurrentLife() / $this->fighters->getCount();
+        log_var('prob',$prob);
+        log_var('probToExplode',$probToExplode);
+        log_var('teoricExploded',$teoricExploded);
+        log_var('exploded',$this->exploded);
+        log_var('remainLife',$this->remainLife);
     }
     /**
      * ShipsCleaner::getExplodeShips()

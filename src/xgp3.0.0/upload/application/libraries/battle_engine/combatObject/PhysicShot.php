@@ -2,7 +2,7 @@
 
 /**
  *  OPBE
- *  Copyright (C) 2013  Jstar
+ *  Copyright (C) 2015  Jstar
  *
  * This file is part of OPBE.
  * 
@@ -21,9 +21,9 @@
  *
  * @package OPBE
  * @author Jstar <frascafresca@gmail.com>
- * @copyright 2013 Jstar <frascafresca@gmail.com>
+ * @copyright 2015 Jstar <frascafresca@gmail.com>
  * @license http://www.gnu.org/licenses/ GNU AGPLv3 License
- * @version beta(26-10-2013)
+ * @version 6-03-2015
  * @link https://github.com/jstar88/opbe
  */
 
@@ -37,6 +37,8 @@ class PhysicShot
     private $bouncedDamage = 0;
     private $hullDamage = 0;
     private $cellDestroyed = 0;
+
+
     /**
      * PhysicShot::__construct()
      * 
@@ -47,47 +49,51 @@ class PhysicShot
      */
     public function __construct(ShipType $shipType, $damage, $count)
     {
-        echo "damage=$damage<br>count=$count<br>";
+        log_var('damage', $damage);
+        log_var('count', $count);
         if ($damage < 0)
-            throw new Exception('negative damage');
+            throw new Exception('Negative damage');
         if ($count < 0)
-            throw new Exception('negative amount of shots');
+            throw new Exception('Negative amount of shots');
         $this->fighters = $shipType->cloneMe();
         $this->damage = $damage;
         $this->count = $count;
     }
+
+
     /**
      * PhysicShot::getAssorbedDamage()
-     * 
+     * Return the damage assorbed by shield
      * @return float
      */
     public function getAssorbedDamage($cell = false)
     {
-        if ($cell)
-        {
-            return $this->cellDestroyed;
-        }
         return $this->assorbedDamage;
-
     }
+
+
     /**
      * PhysicShot::getBouncedDamage()
-     * 
+     * Return the bounced damage
      * @return float
      */
     public function getBouncedDamage()
     {
         return $this->bouncedDamage;
     }
+
+
     /**
      * PhysicShot::getHullDamage()
-     * 
+     * Return the damage assorbed by hull
      * @return float
      */
     public function getHullDamage()
     {
         return $this->hullDamage;
     }
+
+
     /**
      * PhysicShot::getPureDamage()
      * Return the total amount of damage from enemy
@@ -97,6 +103,8 @@ class PhysicShot
     {
         return $this->damage * $this->count;
     }
+
+
     /**
      * PhysicShot::getHitShips()
      * Return the number of hitten ships.
@@ -106,40 +114,21 @@ class PhysicShot
     {
         return min($this->count, $this->fighters->getCount());
     }
+
+
     /**
      * PhysicShot::start()
      * Start the system
      * @return
      */
     public function start()
-    {
-        //se il danno è zero non serve.
-        if ($this->damage == 0)
-        {
-            return;
-        }  
-        //se gli scudi sono disattivati,per evitare la divisione per zero  
-        if($this->fighters->getShieldCellValue() == 0)
-        {
-            $this->inflict();
-            return;    
-        }
-        $currentCellsCount = $this->fighters->getCurrentShield();
-        if (USE_HITSHIP_LIMITATION)
-        {
-            // bisogna tenere solo i colpi neccessari alla distruzione di tutti gli scudi
-            $currentCellsCount = floor($currentCellsCount * $this->getHitShips() / $this->fighters->getCount());
-        }
-                
-        $dv = Math::divide(new Number($this->damage), new Number($this->fighters->getShieldCellValue()), true);
-        $cellsDestroyedInOneShot = $dv->result;
-        $bouncedDamageForOneShot = $dv->rest;
-
-        echo "cellvalue=".$this->fighters->getShieldCellValue()."<br>cellsDestroyedInOneShot=$cellsDestroyedInOneShot<br>bouncedDamageForOneShot=$bouncedDamageForOneShot<br>currentCellsCount=$currentCellsCount<br>";
-        $this->bounce($currentCellsCount, $cellsDestroyedInOneShot, $bouncedDamageForOneShot);
-        $this->assorb($currentCellsCount, $cellsDestroyedInOneShot);
+    {     
+        $this->bounce();
+        $this->assorb();
         $this->inflict();
     }
+    
+    
     /**
      * PhysicShot::bounce()
      * If the shield is disabled, then bounced damaged is zero.
@@ -151,36 +140,15 @@ class PhysicShot
      * @param float $bouncedDamageForOneShot
      * @return null
      */
-    private function bounce($currentCellsCount, $cellsDestroyedInOneShot, $bouncedDamageForOneShot)
+    private function bounce()
     {
-        echo "bounce function<br>";
-        if ($this->fighters->getCurrentShield() == 0)
-        {
-            return;
-        }
-        $currentShieldValue = $currentCellsCount * $this->fighters->getShieldCellValue();
-        if ($this->damage > $currentShieldValue)
-        {
-            $this->bouncedDamage = 0;
-            echo "bouncedDamage = 0<br>";
-            return;
-        }
-        if ($cellsDestroyedInOneShot == 0)
-        {
-            $this->bouncedDamage = $this->damage * $this->count;
-            return;
-        }
-        $numeroDiColpiPerDistruggereTuttiGliScudi = $currentCellsCount / $cellsDestroyedInOneShot;
-        $this->bouncedDamage = min($numeroDiColpiPerDistruggereTuttiGliScudi, $this->count) * $bouncedDamageForOneShot;
-        //l'ultimo colpo viene rimbalzato => dovrebbe andare nella corazza!<-
-        if ($this->count >= $numeroDiColpiPerDistruggereTuttiGliScudi)
-        {
-            $this->bouncedDamage -= $bouncedDamageForOneShot;
-        }
-        //$colpiAsegno = max(0, $this->count - $numeroDiColpiPerDistruggereTuttiGliScudi);
-        echo "numeroDiColpiPerDistruggereTuttiGliScudi=$numeroDiColpiPerDistruggereTuttiGliScudi<br>";
-        echo "bouncedDamage={$this->bouncedDamage}<br>";
+        $count = $this->count;
+        $damage = $this->damage;
+        $shieldCellValue = $this->fighters->getShieldCellValue();
+        $unbauncedDamage = $this->clamp($damage, $shieldCellValue);
+        $this->bouncedDamage = ($damage - $unbauncedDamage) * $count;
     }
+
     /**
      * PhysicShot::assorb()
      * If the shield is disabled, then assorbed damaged is zero.
@@ -189,16 +157,20 @@ class PhysicShot
      * @param int $cellsDestroyedInOneShot
      * @return null
      */
-    private function assorb($currentCellsCount, $cellsDestroyedInOneShot)
+    private function assorb()
     {
-        echo "assorb function<br>";
-        $totalCellsDestroyedAtMax = $cellsDestroyedInOneShot * $this->count;
-        $realTotalCellsDestroyed = round(min($totalCellsDestroyedAtMax, $currentCellsCount));
-        $this->assorbedDamage = $realTotalCellsDestroyed * $this->fighters->getShieldCellValue();
-        $this->cellDestroyed = $realTotalCellsDestroyed;
-
-        echo "totalCellsDestroyedAtMax = $totalCellsDestroyedAtMax<br>realTotalCellsDestroyed=$realTotalCellsDestroyed<br>assorbedDamage={$this->assorbedDamage}<br>";
+        $count = $this->count;
+        $damage = $this->damage;
+        $shieldCellValue = $this->fighters->getShieldCellValue();
+        $unbauncedDamage = $this->clamp($damage, $shieldCellValue);
+        $currentShield = $this->fighters->getCurrentShield();
+        if (USE_HITSHIP_LIMITATION)
+        {
+            $currentShield = $currentShield * $this->getHitShips() / $this->fighters->getCount();
+        }
+        $this->assorbedDamage = min($unbauncedDamage * $count, $currentShield);
     }
+
     /**
      * PhysicShot::inflict()
      * HullDamage should be more than zero and less than shiplife.
@@ -207,14 +179,25 @@ class PhysicShot
      */
     private function inflict()
     {
-        echo "inflict function<br>";
-        //il danno è quello sparato meno quello assorbito dagli scudi meno quello rimbalzato
         $hullDamage = $this->getPureDamage() - $this->assorbedDamage - $this->bouncedDamage;
-        //il danno non può essere superiore alla vita delle navi colpite
         $hullDamage = min($hullDamage, $this->fighters->getCurrentLife() * $this->getHitShips() / $this->fighters->getCount());
-
         $this->hullDamage = max(0, $hullDamage);
-
-        echo "hullDamage=$hullDamage<br>hullDamage={$this->hullDamage}<br>";
     }
+
+    /**
+     * PhysicShot2::clamp()
+     * Return $a if greater than $b, zero otherwise
+     * @param mixed $a
+     * @param mixed $b
+     * @return mized
+     */
+    private function clamp($a, $b)
+    {
+        if ($a > $b)
+        {
+            return $a;
+        }
+        return 0;
+    }
+
 }

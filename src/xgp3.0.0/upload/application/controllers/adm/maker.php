@@ -382,7 +382,7 @@ class Maker extends XGPCore
 														WHERE `user_email` = '" . parent::$db->escape_value ( $_POST['email'] ) . "'
 														LIMIT 1" );
 
-			$check_planet = parent::$db->query_fetch ( "SELECT COUNT(id) AS count
+			$check_planet = parent::$db->query_fetch ( "SELECT COUNT(planet_id) AS count
 														FROM " . PLANETS . "
 														WHERE `planet_galaxy` = '".$galaxy."' AND
 																`planet_system` = '".$system."' AND
@@ -471,6 +471,18 @@ class Maker extends XGPCore
 										`user_planet` = '" . $planet . "'
 										WHERE `user_id` = '" . $last_user_id . "'
 										LIMIT 1;" );
+                                
+				parent::$db->query ( "INSERT INTO " . RESEARCH . " SET
+										`research_user_id` = '" . $last_user_id . "';" );
+
+				parent::$db->query ( "INSERT INTO " . USERS_STATISTICS . " SET
+										`user_statistic_user_id` = '" . $last_user_id . "';" );
+
+				parent::$db->query ( "INSERT INTO " . PREMIUM . " SET
+										`premium_user_id` = '" . $last_user_id . "';" );
+
+				parent::$db->query ( "INSERT INTO " . SETTINGS . " SET
+										`setting_user_id` = '" . $last_user_id . "';" );
 
 				$this->_alert	= Administration_Lib::save_message ( 'ok' , str_replace ( '%s' , $pass , $this->_lang['mk_user_added'] ) );
 			}

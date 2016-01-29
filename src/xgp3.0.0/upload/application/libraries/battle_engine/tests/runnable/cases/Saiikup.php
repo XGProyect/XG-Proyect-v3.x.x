@@ -42,6 +42,6 @@ class BsVsBc extends RunnableTest
         return new PlayerGroup(array($player));
     }
 }
-new BsVsBc(true);
+new BsVsBc();
 
 ?>

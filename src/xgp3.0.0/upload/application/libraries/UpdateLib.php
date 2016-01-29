@@ -2,7 +2,7 @@
 /**
  * Update Libray
  *
- * PHP Version 5.4+
+ * PHP Version 5.5+
  *
  * @category Library
  * @package  Application
@@ -118,7 +118,7 @@ WHERE (s.`setting_delete_account` < '".$del_deleted."' AND s.`setting_delete_acc
 
                 if ($current_planet['planet_b_building'] <= time()) {
 
-                    UpdateResources_Lib::update_resource(
+                    UpdateResourcesLib::updateResource(
                         $current_user,
                         $current_planet,
                         $current_planet['planet_b_building'],
@@ -143,7 +143,7 @@ WHERE (s.`setting_delete_account` < '".$del_deleted."' AND s.`setting_delete_acc
      */
     private function updateFleets()
     {
-        include_once XGP_ROOT . 'application/libraries/MissionControl_Lib.php';
+        include_once XGP_ROOT . 'application/libraries/MissionControlLib.php';
 
         $_fleets    = parent::$db->query("SELECT 
 fleet_start_galaxy, 
@@ -162,7 +162,7 @@ ORDER BY fleet_id ASC;");
             $array['planet_planet'] = $row['fleet_start_planet'];
             $array['planet_type']   = $row['fleet_start_type'];
 
-            new MissionControl_Lib($array);
+            new MissionControlLib($array);
         }
 
         parent::$db->free_result($_fleets);
@@ -183,7 +183,7 @@ ORDER BY fleet_id ASC';");
             $array['planet_planet'] = $row['fleet_end_planet'];
             $array['planet_type']   = $row['fleet_end_type'];
 
-            new MissionControl_Lib($array);
+            new MissionControlLib($array);
         }
 
         parent::$db->free_result($_fleets);

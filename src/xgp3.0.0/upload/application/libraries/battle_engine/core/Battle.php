@@ -23,7 +23,7 @@
  * @author Jstar <frascafresca@gmail.com>
  * @copyright 2013 Jstar <frascafresca@gmail.com>
  * @license http://www.gnu.org/licenses/ GNU AGPLv3 License
- * @version beta(26-10-2013)
+ * @version 21-03-2015
  * @link https://github.com/jstar88/opbe
  */
 class Battle
@@ -52,12 +52,15 @@ class Battle
      * 
      * @return null
      */
-    public function startBattle($debug=false)
+    public function startBattle($debug = false)
     {
-        if(!$debug) ob_start();
+        if (!$debug)
+            ob_start();
         $this->battleStarted = true;
         //only for initial fleets presentation
-        $round = new Round( $this->attackers, $this->defenders,0);
+        log_var('attackers', $this->attackers);
+        log_var('defenders', $this->defenders);
+        $round = new Round($this->attackers, $this->defenders, 0);
         $this->report->addRound($round);
         for ($i = 1; $i <= ROUNDS; $i++)
         {
@@ -68,22 +71,24 @@ class Battle
             {
                 $this->checkWhoWon($att_lose, $deff_lose);
                 $this->report->setBattleResult($this->attackers->battleResult, $this->defenders->battleResult);
-                if(!$debug) ob_get_clean();
+                if (!$debug)
+                    ob_get_clean();
                 return;
             }
             //initialize the round
-            $round = new Round( $this->attackers, $this->defenders,$i);
+            $round = new Round($this->attackers, $this->defenders, $i);
             $round->startRound();
             //add the round to the combatReport
             $this->report->addRound($round);
             //if($i==2) die('Round: '.$this->report->getRound(0)->getNumber()); // ERRORE
             //update the attackers and defenders after round
-            $this->attackers =  $round->getAfterBattleAttackers();
-            $this->defenders =  $round->getAfterBattleDefenders();
+            $this->attackers = $round->getAfterBattleAttackers();
+            $this->defenders = $round->getAfterBattleDefenders();
         }
         //check status after all rounds
         $this->checkWhoWon($this->attackers->isEmpty(), $this->defenders->isEmpty());
-        if(!$debug) ob_get_clean();
+        if (!$debug)
+            ob_get_clean();
         return true;
     }
     /**

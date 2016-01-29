@@ -72,12 +72,12 @@ class Resources extends XGPCore
 			$game_deuterium_basic_income 	= 0;
 		}
 
-		$this->_current_planet['planet_metal_max']			 = Production_Lib::max_storable ( $this->_current_planet[ $this->_resource[22] ]);
-		$this->_current_planet['planet_crystal_max']		= Production_Lib::max_storable ( $this->_current_planet[ $this->_resource[23] ]);
-		$this->_current_planet['planet_deuterium_max']		= Production_Lib::max_storable ( $this->_current_planet[ $this->_resource[24] ]);
+		$this->_current_planet['planet_metal_max']			 = ProductionLib::max_storable ( $this->_current_planet[ $this->_resource[22] ]);
+		$this->_current_planet['planet_crystal_max']		= ProductionLib::max_storable ( $this->_current_planet[ $this->_resource[23] ]);
+		$this->_current_planet['planet_deuterium_max']		= ProductionLib::max_storable ( $this->_current_planet[ $this->_resource[24] ]);
 
 		$parse['production_level'] 			 				= 100;
-		$post_porcent 						 				= Production_Lib::max_production ( $this->_current_planet['planet_energy_max'] , $this->_current_planet['planet_energy_used'] );
+		$post_porcent 						 				= ProductionLib::max_production ( $this->_current_planet['planet_energy_max'] , $this->_current_planet['planet_energy_used'] );
 
 		$parse['resource_row']               				= '';
 		$this->_current_planet['planet_metal_perhour']      = 0;
@@ -108,17 +108,17 @@ class Resources extends XGPCore
 				$energy_prod		= eval ( $this->_prod_grid[$ProdID]['formule']['energy'] );
 
 				// PRODUCTION
-				$metal				= Production_Lib::production_amount ( $metal_prod , $geologe_boost );
-				$crystal			= Production_Lib::production_amount ( $crystal_prod , $geologe_boost );
-				$deuterium			= Production_Lib::production_amount ( $deuterium_prod , $geologe_boost );
+				$metal				= ProductionLib::production_amount ( $metal_prod , $geologe_boost );
+				$crystal			= ProductionLib::production_amount ( $crystal_prod , $geologe_boost );
+				$deuterium			= ProductionLib::production_amount ( $deuterium_prod , $geologe_boost );
 
 				if ( $ProdID >= 4 )
 				{
-					$energy			= Production_Lib::production_amount ( $energy_prod , $engineer_boost , TRUE );
+					$energy			= ProductionLib::production_amount ( $energy_prod , $engineer_boost , TRUE );
 				}
 				else
 				{
-					$energy			= Production_Lib::production_amount ( $energy_prod , 1 , TRUE );
+					$energy			= ProductionLib::production_amount ( $energy_prod , 1 , TRUE );
 				}
 
 				if ( $energy > 0 )
@@ -134,10 +134,10 @@ class Resources extends XGPCore
 				$this->_current_planet['planet_crystal_perhour']   	+= $crystal;
 				$this->_current_planet['planet_deuterium_perhour'] 	+= $deuterium;
 
-				$metal                               = Production_Lib::current_production ( $metal , $post_porcent );
-				$crystal                             = Production_Lib::current_production ( $crystal , $post_porcent );
-				$deuterium                           = Production_Lib::current_production ( $deuterium , $post_porcent );
-				$energy                              = Production_Lib::current_production ( $energy , $post_porcent );
+				$metal                               = ProductionLib::current_production ( $metal , $post_porcent );
+				$crystal                             = ProductionLib::current_production ( $crystal , $post_porcent );
+				$deuterium                           = ProductionLib::current_production ( $deuterium , $post_porcent );
+				$energy                              = ProductionLib::current_production ( $energy , $post_porcent );
 				$Field                               = 'planet_' . $this->_resource[$ProdID] . '_porcent';
 				$CurrRow                             = array();
 				$CurrRow['name']                     = $this->_resource[$ProdID];

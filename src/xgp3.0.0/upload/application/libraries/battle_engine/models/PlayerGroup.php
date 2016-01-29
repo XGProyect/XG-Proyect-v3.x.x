@@ -102,6 +102,7 @@ class PlayerGroup extends Iterable
         $physicShots = array();
         foreach ($this->array as $idPlayer => $player)
         {
+            echo "---------** firing to player with ID = $idPlayer **---------- <br>";
             $ps = $player->inflictDamage($fire);
             $physicShots[$idPlayer] = $ps;
         }
@@ -112,6 +113,7 @@ class PlayerGroup extends Iterable
         $shipsCleaners = array();
         foreach ($this->array as $idPlayer => $player)
         {
+            echo "---------** cleanShips to player with ID = $idPlayer **---------- <br>";
             $sc = $player->cleanShips();
             $shipsCleaners[] = $sc;
             if ($player->isEmpty())
@@ -126,13 +128,6 @@ class PlayerGroup extends Iterable
         foreach ($this->array as $idPlayer => $player)
         {
             $player->repairShields();
-        }
-    }
-    public function repairHull()
-    {
-        foreach ($this->array as $idPlayer => $player)
-        {
-            $player->repairHull();
         }
     }
     public function getEquivalentFleetContent()

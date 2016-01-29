@@ -1,4 +1,5 @@
 <?php
+
 /**
  *  OPBE
  *  Copyright (C) 2013  Jstar
@@ -25,6 +26,19 @@
  * @version beta(26-10-2013)
  * @link https://github.com/jstar88/opbe
  */
- 
-`git pull`; 
+
+//`git pull`;
+function isEnabled($func)
+{
+    return is_callable($func) && false === stripos(ini_get('disable_functions'), $func);
+}
+if (isEnabled('shell_exec'))
+{
+    echo shell_exec('git pull');
+}
+else
+{
+    echo "shell not aviable";
+}
+
 ?>

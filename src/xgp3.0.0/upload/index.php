@@ -2,7 +2,7 @@
 /**
  * Index File
  *
- * PHP Version 5.4+
+ * PHP Version 5.5+
  *
  * @category Application
  * @package  Application

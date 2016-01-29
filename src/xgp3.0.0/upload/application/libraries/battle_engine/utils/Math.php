@@ -47,8 +47,8 @@ abstract class Math
     {
         $result = $first->result * $second->result;
         if ($real)
-        {
-            return new Number(round($result));
+        {            
+            return new Number(floor($result),$result - floor($result));
         }
         return new Number($result);
     }
@@ -80,7 +80,7 @@ abstract class Math
         {
             throw new Exception();
         }
-        if (mt_rand(0, 99) <= $probability)
+        if (mt_rand(0, 99) < $probability)
             return call_user_func($callback, $callbackParam);
         return false;
     }

@@ -31,34 +31,49 @@ class Player extends Iterable
     private $id;
     protected $array = array();
 
-    private $weapons_tech;
-    private $shields_tech;
-    private $armour_tech;
+    private $weapons_tech = 0;
+    private $shields_tech = 0;
+    private $armour_tech = 0;
+    private $name;
 
-    public function __construct($id, $fleets = array(), $weapons_tech = 0, $shields_tech = 0, $armour_tech = 0)
+    public function __construct($id, $fleets = array(), $weapons_tech = null, $shields_tech = null, $armour_tech = null, $name = "")
     {
         $this->id = $id;
-
+        $this->name = $name;
+        $this->setTech($weapons_tech, $shields_tech, $armour_tech);
         foreach ($fleets as $fleet)
         {
             $this->addFleet($fleet);
         }
-        $this->setTech($weapons_tech, $shields_tech, $armour_tech);
+    }
+    public function getName()
+    {
+        return $this->name;
+    }
+    public function setName($name)
+    {
+        $this->name = $name;
+        foreach ($this->array as $id => $fleet)
+        {
+            $fleet->setName($name);
+        }
     }
     public function addFleet(Fleet $fleet)
     {
+        $fleet = $fleet->cloneMe();
         $fleet->setTech($this->weapons_tech, $this->shields_tech, $this->armour_tech);
-        $this->array[$fleet->getId()] = $fleet->cloneMe(); //avoid collateral effects: when the object or array is an argument && it's saved in a structure
+        $fleet->setName($this->name);
+        $this->array[$fleet->getId()] = $fleet; //avoid collateral effects: when the object or array is an argument && it's saved in a structure
     }
-    public function setTech($weapons, $shields, $armour)
+    public function setTech($weapons = null, $shields = null, $armour = null)
     {
         foreach ($this->array as $id => $fleet)
         {
             $fleet->setTech($weapons, $shields, $armour);
         }
-        $this->weapons_tech = $weapons;
-        $this->shields_tech = $shields;
-        $this->armour_tech = $armour;
+        if(is_numeric($weapons)) $this->weapons_tech = intval($weapons);
+        if(is_numeric($shields)) $this->shields_tech = intval($shields);
+        if(is_numeric($armour)) $this->armour_tech = intval($armour);
     }
     public function getId()
     {
@@ -128,6 +143,7 @@ class Player extends Iterable
         $physicShots = array();
         foreach ($this->array as $idFleet => $fleet)
         {
+            echo "------- firing to fleet with ID = $idFleet -------- <br>";
             $ps = $fleet->inflictDamage($fire);
             $physicShots[$idFleet] = $ps;
         }
@@ -138,6 +154,7 @@ class Player extends Iterable
         $shipsCleaners = array();
         foreach ($this->array as $idFleet => $fleet)
         {
+            echo "------- cleanShips to fleet with ID = $idFleet -------- <br>";
             $sc = $fleet->cleanShips();
             $shipsCleaners[$this->getId()] = $sc;
             if ($fleet->isEmpty())
@@ -154,13 +171,6 @@ class Player extends Iterable
             $fleet->repairShields();
         }
     }
-    public function repairHull()
-    {
-        foreach ($this->array as $idFleet => $fleet)
-        {
-            $fleet->repairHull();
-        }
-    }
     public function getEquivalentFleetContent()
     {
         $merged = new Fleet(-1);
@@ -172,16 +182,17 @@ class Player extends Iterable
     }
     public function addDefense(Fleet $fleetDefender) // da fare: controllare ordine 
     {
+        $fleetDefender = $fleetDefender->cloneMe();
         $fleetDefender->setTech($this->weapons_tech, $this->shields_tech, $this->armour_tech);
         $this->order();
         $fl = current($this->array);
         if ($fl === false)
         {
-            $this->array[$fleetDefender->getId()] = $fleetDefender->cloneMe();//avoid collateral effects: when the object or array is an argument && it's saved in a structure
+            $this->array[$fleetDefender->getId()] = $fleetDefender;//avoid collateral effects: when the object or array is an argument && it's saved in a structure
         }
         else
         {
-            $f->mergeFleet($fleetDefender);
+            $fl->mergeFleet($fleetDefender);
         }
     }
     public function mergePlayerFleets(Player $player)
@@ -204,6 +215,6 @@ class Player extends Iterable
     public function cloneMe()
     {
         $fleets = array_values($this->array);
-        return new Player($this->id, $fleets ,$this->weapons_tech, $this->shields_tech, $this->armour_tech);
+        return new Player($this->id, $fleets ,$this->weapons_tech, $this->shields_tech, $this->armour_tech, $this->name);
     }
 }

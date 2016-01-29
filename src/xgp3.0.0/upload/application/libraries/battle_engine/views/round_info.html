@@ -1,4 +1,4 @@
-The attacking fleet fires a total of <?php echo number_format($this->getAttackersFireCount($_i),0, ',', ' '); ?> times with the power of <?php echo number_format($this->getAttackersFirePower($_i),0, ',', ' '); ?> upon the defender.<br />
-The defender's shields absorb <?php echo number_format($this->getDefendersAssorbedDamage($_i),0, ',', ' '); ?> damage points.<br />
-The defending fleet fires a total of <?php echo number_format($this->getDefendersFireCount($_i),0, ',', ' '); ?> times with the power of <?php echo number_format($this->getDefendersFirePower($_i),0, ',', ' '); ?> upon the attacker.<br />
-The attacker's shields absorb <?php echo number_format($this->getAttachersAssorbedDamage($_i),0, ',', ' '); ?> damage points.<br /> 
+<?php echo LangManager::getInstance()->getAttackersAttackingDescr(number_format($_round->getAttackersFireCount(),0, ',', '\''),number_format($_round->getAttackersFirePower(),0, ',', '\'')); ?>
+<?php echo LangManager::getInstance()->getDefendersDefendingDescr(number_format($_round->getDefendersAssorbedDamage(),0, ',', '\'')); ?><br />
+<?php echo LangManager::getInstance()->getDefendersAttackingDescr(number_format($_round->getDefendersFireCount(),0, ',', '\''),number_format($_round->getDefendersFirePower(),0, ',', '\'')); ?>
+<?php echo LangManager::getInstance()->getAttackersDefendingDescr(number_format($_round->getAttachersAssorbedDamage(),0, ',', '\'')); ?><br />

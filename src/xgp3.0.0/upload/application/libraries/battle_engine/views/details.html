@@ -1,12 +1,17 @@
-The attacker has lost a total of <?php echo number_format($this->getTotalAttackersLostUnits(),0, ',', ' '); ?> units.<br />
-The defender has lost a total of <?php echo number_format($this->getTotalDefendersLostUnits(),0, ',', ' '); ?> units.<br />
-<?php $debris = $this->getDebris(); ?>
-At these space coordinates now float <?php echo number_format($debris[0],0, ',', ' '); ?> Metal and <?php echo number_format($debris[1],0, ',', ' '); ?> Crystal.<br />
-<br />
-The chance for a moon to arise from the debris is <?php echo $this->getMoonProb(); ?> %.<br />
+<?php 
+$lng = LangManager::getInstance(); 
+$debris = $this->getDebris();
+$Mdebris = number_format($debris[0],0, ',', ' ');
+$Cdebris = number_format($debris[1],0, ',', ' ');
+?>
+<?php echo $lng->getAttackersLostUnits(number_format($this->getTotalAttackersLostUnits(),0, ',', ' ')); ?><br />
+<?php echo $lng->getDefendersLostUnits(number_format($this->getTotalDefendersLostUnits(),0, ',', ' ')); ?><br />
+
+<?php echo $lng->getFloatingDebris($Mdebris,$Cdebris); ?><br />
+<?php echo $lng->getMoonProb( $this->getMoonProb()); ?><br />
 <?php $moon = $this->tryMoon(); ?>
-<?php if ($moon !== false) { ?>
-    A moon orbit near your planet<br />
+<?php if ($moon !== false) { echo $lng->getNewMoon(); ?>
+<br />
 <?php } ?>
 <br />
 Repaired Defense:<br />

@@ -36,7 +36,7 @@ class Number
     }
     public function __toString()
     {
-        return "result=$this->result;rest=$this->rest;<br>";
+        return "result=$this->result;rest=$this->rest;";
     }
 }
 
