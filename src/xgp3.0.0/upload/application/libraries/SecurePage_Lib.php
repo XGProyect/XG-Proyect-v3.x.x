@@ -10,7 +10,7 @@
  //To Secure Global varaible values consisting in array while posting from GET,Session, and POST.
 
 /**
- * SecurePage by Jstar (xgproyect.net)
+ * SecurePage by Jstar (xgproyect.org)
  * This class implement a security controll against SQL-injection and xss
  *
  * --Usage--

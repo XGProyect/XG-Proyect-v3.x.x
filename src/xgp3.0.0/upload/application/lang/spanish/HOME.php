@@ -89,7 +89,7 @@ Mientras esperas tienes la oportunidad de leer más sobre el juego.<br/>
 Encontrarás ayuda:<br/>
 En el <a href="game.php?page=tutorial">Tutorial</a><br/>
 En el <a href="game.php?page=forums">Foro</a><br/>
-O puedes pedir ayuda en el canal de soporte de IRC: #xgproyect.net y #xgproyect.net-support en:<br/>
+O puedes pedir ayuda en el canal de soporte de IRC: #xgproyect.org y #xgproyect.org-support en:<br/>
 http://www.onlinegamesnet.net/javaChat.php?game=xgproyect&cc=en<br/>
 <br/><br/>
 También puedes solicitar soporte del equipo utilizando el <a href="game.php?page=ticket">Sistema de Tickets</a><br/>

@@ -12,7 +12,7 @@
 				</div>
 				<div align="left">
 					<label>{ins_migrate_admin_email}</label>
-					<input type="text" name="admin_email" placeholder="{ins_ex_tag} admin@xgproyect.net" value="">
+					<input type="text" name="admin_email" placeholder="{ins_ex_tag} admin@xgproyect.org" value="">
 					<label>{ins_migrate_admin_password}</label>
 					<input type="password" name="admin_password">
 					<div align="center">

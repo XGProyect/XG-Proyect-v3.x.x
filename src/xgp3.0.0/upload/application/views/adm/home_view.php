@@ -4,7 +4,7 @@
           <div class="hero-unit">
             <h1>{hm_title}</h1>
             <p>{hm_welcome_text}</p>
-            <p><a href="http://www.xgproyect.net" target="_blank" class="btn btn-primary btn-large">{hm_learn_more} &raquo;</a></p>
+            <p><a href="http://www.xgproyect.org" target="_blank" class="btn btn-primary btn-large">{hm_learn_more} &raquo;</a></p>
           </div>
 		<div class="alert {second_style}">
 		  <button type="button" class="close" data-dismiss="alert">×</button>
@@ -14,17 +14,17 @@
             <div class="span4">
               <h2>{hm_bug_report_title}</h2>
               <p>{hm_bug_report_message}</p>
-              <p><a class="btn" href="http://www.xgproyect.net/3-x-x-bug-report/" target="_blank">{hm_bug_report_go} &raquo;</a></p>
+              <p><a class="btn" href="http://www.xgproyect.org/3-x-x-bug-report/" target="_blank">{hm_bug_report_go} &raquo;</a></p>
             </div><!--/span-->
             <div class="span4">
               <h2>{hm_game_version_title}</h2>
               <p>Running v{game_version} {old_version_alert}</p>
-              <p><a class="btn" href="http://www.xgproyect.net/anuncios/1554-changelog-xg-proyect.html" target="_blank">{hm_game_version_go} &raquo;</a></p>
+              <p><a class="btn" href="http://www.xgproyect.org/anuncios/1554-changelog-xg-proyect.html" target="_blank">{hm_game_version_go} &raquo;</a></p>
             </div><!--/span-->
             <div class="span4">
               <h2>{hm_license_title}</h2>
               <p>{hm_license_message}</p>
-              <p><a class="btn" href="http://www.xgproyect.net/anuncios/" target="_blank">{hm_license_go} &raquo;</a></p>
+              <p><a class="btn" href="http://www.xgproyect.org/anuncios/" target="_blank">{hm_license_go} &raquo;</a></p>
             </div><!--/span-->
           </div><!--/row-->
           <div class="hero-unit" align="justify">

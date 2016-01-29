@@ -109,7 +109,7 @@ class Home extends XGPCore
 		}
 
 		$parse['game_version']		= Functions_Lib::read_config ( 'version' );
-		$parse['old_version_alert']	= ( $old_version ) ? '<a href="http://www.xgproyect.net/downloads/">' . $this->_lang['hm_update'] . '</a> <i class="icon-download"></i>' : '';
+		$parse['old_version_alert']	= ( $old_version ) ? '<a href="http://www.xgproyect.org/downloads/">' . $this->_lang['hm_update'] . '</a> <i class="icon-download"></i>' : '';
 
 		parent::$page->display ( parent::$page->parse_template ( parent::$page->get_template ( 'adm/home_view' ) , $parse ) );
 	}
@@ -123,7 +123,7 @@ class Home extends XGPCore
 	{
 		if ( function_exists ( 'file_get_contents' ) )
 		{
-			$last_v 	= @file_get_contents ( 'http://xgproyect.xgproyect.net/current.php' );
+			$last_v 	= @file_get_contents ( 'http://xgproyect.xgproyect.org/current.php' );
 			$system_v	= Functions_Lib::read_config ( 'version' );
 
 			return version_compare ( $system_v , $last_v , '<' );

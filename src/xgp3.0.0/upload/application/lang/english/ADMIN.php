@@ -65,7 +65,7 @@ $lang['hm_ok']												= 'Ok!';
 $lang['hm_install_file_detected']							= 'install/ directory detected. For safety reasons you must rename or delete it.';
 $lang['hm_config_file_writable']							= 'The config.php file can be written, it is recommended to be placed in chmod 440 (read only).';
 $lang['hm_database_errors']									= 'There are errors in your database. You can view them by clicking <a href="admin.php?page=errors">here</a>';
-$lang['hm_old_version']										= 'A new version is available. Click <a href="http://www.xgproyect.net/downloads/" target="_blank">here</a> to download it.';
+$lang['hm_old_version']										= 'A new version is available. Click <a href="http://www.xgproyect.org/downloads/" target="_blank">here</a> to download it.';
 $lang['hm_all_ok']											= 'No updates or alerts';
 $lang['hm_bug_report_title']								= 'Bug report';
 $lang['hm_bug_report_message']								= 'Report problems with the game to the XG Proyect team';
