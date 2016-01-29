@@ -6,7 +6,11 @@
  * @copyright Copyright (C) 2008 - 2016
  */
 
-require XGP_ROOT . 'application/config/config.php';
+$config_file    = XGP_ROOT . 'application/config/config.php';
+
+if (file_exists($config_file)) {
+    require $config_file;
+}
 
 class Database
 {
