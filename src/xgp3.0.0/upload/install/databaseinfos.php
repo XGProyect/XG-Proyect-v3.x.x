@@ -244,7 +244,7 @@ UNIQUE KEY `premium_user_id` (`premium_user_id`)
 $tables['reports'] =
 "CREATE TABLE `" . REPORTS . "` (
 `report_owners` varchar(255) NOT NULL,
-`report_rid` varchar(32) NOT NULL,
+`report_rid` varchar(42) NOT NULL,
 `report_content` text NOT NULL,
 `report_destroyed` tinyint(1) unsigned NOT NULL DEFAULT '0',
 `report_time` int(10) unsigned NOT NULL DEFAULT '0',
