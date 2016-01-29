@@ -205,19 +205,19 @@ class Users_Lib extends XGPCore
 	            									WHERE (u.user_name = '" . parent::$db->escape_value ( $_SESSION['user_name'] ) . "')
 	            									LIMIT 1;");
 
-		if ( parent::$db->num_rows ( $this->_user_data ) != 1 )
+		if ( parent::$db->num_rows ( $this->_user_data ) != 1 && !defined('IN_LOGIN'))
 		{
 			Functions_Lib::message ( $this->_lang['ccs_multiple_users'] , XGP_ROOT , 3 , FALSE , FALSE );
 		}
 
 		$user_row    = parent::$db->fetch_array ( $this->_user_data );
 
-		if ( $user_row['user_id'] != $_SESSION['user_id'] )
+		if ( $user_row['user_id'] != $_SESSION['user_id'] && !defined('IN_LOGIN'))
 		{
 			Functions_Lib::message ( $this->_lang['ccs_other_user'] , XGP_ROOT , 3 ,  FALSE , FALSE );
 		}
 
-		if ( sha1 ( $user_row['user_password'] . "-" . SECRETWORD ) != $_SESSION['user_password'] )
+		if ( sha1 ( $user_row['user_password'] . "-" . SECRETWORD ) != $_SESSION['user_password'] && !defined('IN_LOGIN'))
 		{
 			Functions_Lib::message ( $this->_lang['css_different_password'] , XGP_ROOT , 5 ,  FALSE , FALSE );
 		}
