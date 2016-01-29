@@ -250,10 +250,18 @@ class Template_Lib
 	*/
 	private function game_header ( $metatags = '' )
 	{
+                if (defined('VERSION')) {
+
+                    $version    = VERSION;
+                } else {
+
+                    $version    = SYSTEM_VERSION;
+                }
+            
 		$parse['-title-'] 	 = Functions_Lib::read_config ( 'game_name' );
 		$parse['-favi-']	 = "<link rel=\"shortcut icon\" href=\"" . XGP_ROOT . "favicon.ico\">\n";
 		$parse['-meta-']	 = "<meta http-equiv=\"Content-Type\" content=\"text/html;charset=UTF-8\">\n";
-		$parse['-meta-']	.= "<meta name=\"generator\" content=\"XG Proyect " . VERSION . "\" />\n";
+		$parse['-meta-']	.= "<meta name=\"generator\" content=\"XG Proyect " . $version . "\" />\n";
 		$parse['-style-']  	 = "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . XGP_ROOT . CSS_PATH . "default.css\">\n";
 		$parse['-style-']  	.= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . XGP_ROOT . CSS_PATH . "formate.css\">\n";
 		$parse['-style-'] 	.= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . XGP_ROOT . DPATH ."formate.css\" />\n";

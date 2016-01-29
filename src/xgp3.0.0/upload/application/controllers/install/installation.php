@@ -25,11 +25,11 @@
 class Installation extends XGPCore
 {
     private $host;
-    private $db;
+    private $name;
     private $user;
     private $password;
     private $prefix;
-    private $lang;
+    private $langs;
 
     /**
      * __construct()
@@ -38,14 +38,14 @@ class Installation extends XGPCore
     {
         parent::__construct();
 
-        $this->lang     = parent::$lang;
+        $this->langs    = parent::$lang;
         $this->_planet  = Functions_Lib::load_library('PlanetLib');
 
         if ($this->serverRequirementes()) {
             
             $this->buildPage();
         } else {
-            die(Functions_Lib::message($this->lang['ins_no_server_requirements']));
+            die(Functions_Lib::message($this->langs['ins_no_server_requirements']));
         }
     }
 
@@ -66,38 +66,38 @@ class Installation extends XGPCore
      */
     private function buildPage()
     {
-        $parse      = $this->lang;
+        $parse      = $this->langs;
         $continue   = true;
 
         // VERIFICATION - WE DON'T WANT ANOTHER INSTALLATION
         if ($this->isInstalled()) {
 
-            die(Functions_Lib::message($this->lang['ins_already_installed'], '', '', false, false));
+            die(Functions_Lib::message($this->langs['ins_already_installed'], '', '', false, false));
         }
 
         if (!$this->checkXmlFile()) {
             
-            die(Functions_Lib::message($this->lang['ins_missing_xml_file'], '', '', false, false));
+            die(Functions_Lib::message($this->langs['ins_missing_xml_file'], '', '', false, false));
         }
 
         // ACTION FOR THE CURRENT PAGE
         switch ((isset($_POST['page']) ? $_POST['page'] : '')) {
             case 'step1':
                 $this->host     = $_POST['host'];
-                $this->db       = $_POST['db'];
+                $this->name     = $_POST['db'];
                 $this->user     = $_POST['user'];
                 $this->password = $_POST['password'];
                 $this->prefix   = $_POST['prefix'];
 
                 if (!$this->validateDbData()) {
                     
-                    $alerts     = $this->lang['ins_empty_fields_error'];
+                    $alerts     = $this->langs['ins_empty_fields_error'];
                     $continue   = false;
                 }
 
                 if (!$this->writeConfigFile()) {
                     
-                    $alerts     = $this->lang['ins_write_config_error'];
+                    $alerts     = $this->langs['ins_write_config_error'];
                     $continue   = false;
                 }
 
@@ -118,7 +118,7 @@ class Installation extends XGPCore
             case 'step2':
                 if (!$this->tryConnection()) {
                     
-                    $alerts     = $this->lang['ins_not_connected_error'];
+                    $alerts     = $this->langs['ins_not_connected_error'];
                     $continue   = false;
                 }
 
@@ -138,7 +138,7 @@ class Installation extends XGPCore
             case 'step3':
                 if (!$this->insertDbData()) {
                     
-                    $alerts     = $this->lang['ins_insert_tables_error'];
+                    $alerts     = $this->langs['ins_insert_tables_error'];
                     $continue   = false;
                 }
 
@@ -161,7 +161,7 @@ class Installation extends XGPCore
             case 'step5':
                 if (!$this->createAccount()) {
                     
-                    $parse['alert'] = $this->saveMessage($this->lang['ins_adm_empty_fields_eror'], 'warning');
+                    $parse['alert'] = $this->saveMessage($this->langs['ins_adm_empty_fields_eror'], 'warning');
                     $current_page   = parent::$page->parse_template(
                         parent::$page->get_template('install/in_create_admin_view'),
                         $parse
@@ -176,7 +176,7 @@ class Installation extends XGPCore
 
                     $current_page   = parent::$page->parse_template(
                         parent::$page->get_template('install/in_create_admin_done_view'),
-                        $this->lang
+                        $this->langs
                     );
                     
                     // This will continue on false meaning "This is the end of the installation, no else where to go"
@@ -195,14 +195,14 @@ class Installation extends XGPCore
                 case 'step1':
                     $current_page   = parent::$page->parse_template(
                         parent::$page->get_template('install/in_database_view'),
-                        $this->lang
+                        $this->langs
                     );
 
                     break;
 
                 case 'step2':
                     $parse['step']              = 'step2';
-                    $parse['done_config']       = $this->lang['ins_done_config'];
+                    $parse['done_config']       = $this->langs['ins_done_config'];
                     $parse['done_connected']    = '';
                     $parse['done_insert']       = '';
                     $current_page               = parent::$page->parse_template(
@@ -215,7 +215,7 @@ class Installation extends XGPCore
                 case 'step3':
                     $parse['step']              = 'step3';
                     $parse['done_config']       = '';
-                    $parse['done_connected']    = $this->lang['ins_done_connected'];
+                    $parse['done_connected']    = $this->langs['ins_done_connected'];
                     $parse['done_insert']       = '';
                     $current_page               = parent::$page->parse_template(
                         parent::$page->get_template('install/in_done_actions_view'),
@@ -228,7 +228,7 @@ class Installation extends XGPCore
                     $parse['step']              = 'step4';
                     $parse['done_config']       = '';
                     $parse['done_connected']    = '';
-                    $parse['done_insert']       = $this->lang['ins_done_insert'];
+                    $parse['done_insert']       = $this->langs['ins_done_insert'];
                     $current_page               = parent::$page->parse_template(
                         parent::$page->get_template('install/in_done_actions_view'),
                         $parse
@@ -248,7 +248,7 @@ class Installation extends XGPCore
                 case 'license':
                     $current_page   = parent::$page->parse_template(
                         parent::$page->get_template('install/in_license_view'),
-                        $this->lang
+                        $this->langs
                     );
 
                     break;
@@ -258,7 +258,7 @@ class Installation extends XGPCore
                 default:
                     $current_page   = parent::$page->parse_template(
                         parent::$page->get_template('install/in_welcome_view'),
-                        $this->lang
+                        $this->langs
                     );
 
                     break;
@@ -329,7 +329,7 @@ class Installation extends XGPCore
         $data   .= "defined('DB_HOST') ? NULL : define('DB_HOST', '".$this->host."');\n";
         $data   .= "defined('DB_USER') ? NULL : define('DB_USER', '".$this->user."');\n";
         $data   .= "defined('DB_PASS') ? NULL : define('DB_PASS', '".$this->password."');\n";
-        $data   .= "defined('DB_NAME') ? NULL : define('DB_NAME', '".$this->db."');\n";
+        $data   .= "defined('DB_NAME') ? NULL : define('DB_NAME', '".$this->name."');\n";
         $data   .= "defined('DB_PREFIX') ? NULL : define('DB_PREFIX', '".$this->prefix."');\n";
         $data   .= "defined('SECRETWORD') ? NULL : define('SECRETWORD', 'xgp-".$this->generateToken()."');\n";
         $data   .= "?>";
@@ -436,7 +436,7 @@ class Installation extends XGPCore
      */
     private function validateDbData()
     {
-        if (!empty($this->host) && !empty($this->db) &&
+        if (!empty($this->host) && !empty($this->name) &&
             !empty($this->user) && !empty($this->password) &&
             !empty($this->prefix)) {
             
@@ -483,7 +483,16 @@ class Installation extends XGPCore
         $default_config_file    = $location . 'config.xml.cfg';
         $needed_config_file     = $location . 'config.xml';
 
-        return (copy($default_config_file, $needed_config_file));
+        @chmod($location, 0777);
+        
+        if (@copy($default_config_file, $needed_config_file)) {
+
+            @chmod($needed_config_file, 0777);
+            
+            return true;
+        }
+        
+        return false;
     }
 
     /**
@@ -517,17 +526,17 @@ class Installation extends XGPCore
         switch ($result) {
             case 'ok':
                 $parse['color']     = 'alert-success';
-                $parse['status']    = $this->lang['ins_ok_title'];
+                $parse['status']    = $this->langs['ins_ok_title'];
                 break;
 
             case 'error':
                 $parse['color']     = 'alert-error';
-                $parse['status']    = $this->lang['ins_error_title'];
+                $parse['status']    = $this->langs['ins_error_title'];
                 break;
 
             case 'warning':
                 $parse['color']     = 'alert-block';
-                $parse['status']    = $this->lang['ins_warning_title'];
+                $parse['status']    = $this->langs['ins_warning_title'];
                 break;
         }
 
