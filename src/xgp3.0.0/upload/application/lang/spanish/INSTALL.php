@@ -69,7 +69,8 @@ $lang['ins_admin_create_email']		= 'Correo electr&oacute;nico:';
 $lang['ins_admin_create_create']	= 'Crear';
 
 // ERRORS
-$lang['ins_adm_empty_fields_eror']	= 'Todos los campos son obligatorios';
+$lang['ins_adm_empty_fields_error']	    = 'Todos los campos son obligatorios';
+$lang['ins_adm_invalid_email_address']	= 'Por favor, especifica una dirección de correo válida';
 
 // STEP 4
 $lang['ins_completed']				= '&iexcl;INSTALACI&Oacute;N FINALIZADA!';
