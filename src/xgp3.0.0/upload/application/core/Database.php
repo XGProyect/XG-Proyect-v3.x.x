@@ -56,6 +56,8 @@ class Database
                         return false;
                     }
                 }
+                else
+                    return true;
             }
         }
     }
@@ -95,7 +97,11 @@ class Database
 
             $this->_connection->close();
             unset($this->_connection);
+
+            return true;
         }
+
+        return false;
     }
 
     /**

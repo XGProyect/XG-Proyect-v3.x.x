@@ -127,7 +127,7 @@ class Sessions extends XGPCore
 		$this->_dbc->query ( "REPLACE INTO `" . SESSIONS . "` (`session_id`, `session_data`)
 								VALUES ('" . $this->_dbc->escape_value ( $sid ) . "', '" . $this->_dbc->escape_value ( $data ) . "')" );
 
-		return $this->_dbc->affected_rows();
+		return ( $this->_dbc->affected_rows() > 0 );
 	}
 
 	/**
