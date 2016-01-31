@@ -1,14 +1,17 @@
 <?php
+
 /**
- * Info Controller
+ * Info Controller.
  *
  * PHP Version 5.5+
  *
  * @category Controller
- * @package  Application
+ *
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
+ *
  * @link     http://www.xgproyect.org
+ *
  * @version  3.0.0
  */
 
@@ -17,13 +20,15 @@ namespace application\controllers\ajax;
 use application\core\XGPCore;
 
 /**
- * Info Class
+ * Info Class.
  *
  * @category Classes
- * @package  Application
+ *
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
+ *
  * @link     http://www.xgproyect.org
+ *
  * @version  3.0.0
  */
 class Info extends XGPCore
@@ -31,23 +36,19 @@ class Info extends XGPCore
     private $langs;
 
     /**
-     * __construct
-     *
-     * @return void
+     * __construct.
      */
     public function __construct()
     {
         parent::__construct();
 
-        $this->langs    = parent::$lang;
+        $this->langs = parent::$lang;
 
         $this->buildPage();
     }
 
     /**
-     * __destructor
-     *
-     * @return void
+     * __destructor.
      */
     public function __destruct()
     {
@@ -55,9 +56,7 @@ class Info extends XGPCore
     }
 
     /**
-     * buildPage
-     *
-     * @return void
+     * buildPage.
      */
     private function buildPage()
     {

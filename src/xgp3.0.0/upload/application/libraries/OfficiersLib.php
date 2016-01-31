@@ -1,33 +1,38 @@
 <?php
+
 /**
- * Officiers Library
+ * Officiers Library.
  *
  * PHP Version 5.5+
  *
  * @category Library
- * @package  Application
+ *
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
+ *
  * @link     http://www.xgproyect.org
+ *
  * @version  3.0.0
  */
 
 namespace application\libraries;
 
 /**
- * OfficiersLib Class
+ * OfficiersLib Class.
  *
  * @category Classes
- * @package  Application
+ *
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
+ *
  * @link     http://www.xgproyect.org
+ *
  * @version  3.0.0
  */
 class OfficiersLib
 {
     /**
-     * isOfficierActive
+     * isOfficierActive.
      *
      * @param int $expire_time Expiration time
      *
@@ -35,11 +40,11 @@ class OfficiersLib
      */
     public static function isOfficierActive($expire_time)
     {
-        return ($expire_time > time() && $expire_time != 0);
+        return $expire_time > time() && $expire_time != 0;
     }
 
     /**
-     * getMaxEspionage
+     * getMaxEspionage.
      *
      * @param int $espionage_tech    Espionage tech level
      * @param int $technocrate_level Technocrate level
@@ -52,7 +57,7 @@ class OfficiersLib
     }
 
     /**
-     * getMaxComputer
+     * getMaxComputer.
      *
      * @param int $computer_tech Computer tech level
      * @param int $amiral_level  Amiral level

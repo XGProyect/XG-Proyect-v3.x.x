@@ -1,14 +1,17 @@
 <?php
+
 /**
- * Database
+ * Database.
  *
  * PHP Version 5.5+
  *
  * @category Core
- * @package  Application
+ *
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
+ *
  * @link     http://www.xgproyect.org
+ *
  * @version  3.0.0
  */
 
@@ -18,70 +21,63 @@ use application\libraries\DebugLib;
 use mysqli;
 
 /**
- * Database Class
+ * Database Class.
  *
  * @category Classes
- * @package  Application
+ *
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
+ *
  * @link     http://www.xgproyect.org
+ *
  * @version  3.0.0
  */
 class Database
 {
     /**
-     *
      * @var string
      */
     private $last_query;
-    
+
     /**
-     *
      * @var mysqli
      */
     private $connection;
-    
+
     /**
-     *
-     * @var boolean
+     * @var bool
      */
     private $magic_quotes_active;
-    
+
     /**
-     *
      * @var DebugLib
      */
     private $debug;
 
     /**
-     * createPlanetWithOptions
+     * createPlanetWithOptions.
      *
      * @param array $data Data
-     *
-     * @return void
      */
     public function __construct()
     {
         global $debug;
 
-        $this->debug               = $debug;
+        $this->debug = $debug;
         $this->openConnection();
         $this->magic_quotes_active = get_magic_quotes_gpc();
     }
 
     /**
-     * openConnection
+     * openConnection.
      *
-     * @return boolean
+     * @return bool
      */
     public function openConnection()
     {
         if (defined('DB_HOST') && defined('DB_USER') && defined('DB_PASS') && defined('DB_NAME')) {
-
             if (!$this->tryConnection()) {
-
                 if (!defined('IN_INSTALL')) {
-
                     die($this->debug->error(
                         'Database connection failed: ' . $this->connection->connect_error,
                         'SQL Error'
@@ -91,9 +87,7 @@ class Database
                 }
             } else {
                 if (!$this->tryDatabase()) {
-
                     if (!defined('IN_INSTALL')) {
-                        
                         die($this->debug->error(
                             'Database selection failed: ' . $this->connection->connect_error,
                             'SQL Error'
@@ -107,53 +101,48 @@ class Database
     }
 
     /**
-     * tryConnection
+     * tryConnection.
      *
      * @return mysqli
      */
     public function tryConnection()
     {
-        $this->connection  = new mysqli(DB_HOST, DB_USER, DB_PASS);
+        $this->connection = new mysqli(DB_HOST, DB_USER, DB_PASS);
 
         return $this->connection;
     }
 
     /**
-     * tryDatabase
+     * tryDatabase.
      *
-     * @return boolean
+     * @return bool
      */
     public function tryDatabase()
     {
-        $db_select  = $this->connection->select_db(DB_NAME);
+        $db_select = $this->connection->select_db(DB_NAME);
 
         if ($db_select) {
-            
             return true;
         } else {
-
             return false;
         }
     }
 
     /**
-     * createPlanetWithOptions
+     * createPlanetWithOptions.
      *
      * @param array $data Data
-     *
-     * @return void
      */
     public function closeConnection()
     {
         if (is_resource($this->connection) or is_object($this->connection)) {
-
             $this->connection->close();
             unset($this->connection);
         }
     }
 
     /**
-     * query
+     * query.
      *
      * @param string $sql SQL String
      *
@@ -162,10 +151,9 @@ class Database
     public function query($sql = false)
     {
         if ($sql != false) {
+            $this->last_query = $sql;
+            $result           = @$this->connection->query($sql);
 
-            $this->last_query   = $sql;
-            $result             = @$this->connection->query($sql);
-            
             $this->confirmQuery($result);
 
             return $result;
@@ -175,7 +163,7 @@ class Database
     }
 
     /**
-     * queryFetch
+     * queryFetch.
      *
      * @param string $sql SQL String
      *
@@ -184,9 +172,8 @@ class Database
     public function queryFetch($sql = false)
     {
         if ($sql != false) {
-
-            $this->last_query   = $sql;
-            $result             = @$this->connection->query($sql);
+            $this->last_query = $sql;
+            $result           = @$this->connection->query($sql);
 
             $this->confirmQuery($result);
 
@@ -197,7 +184,7 @@ class Database
     }
 
     /**
-     * escapeValue
+     * escapeValue.
      *
      * @param mixed $value Value to escape
      *
@@ -207,15 +194,14 @@ class Database
     {
         // undo any magic quote effects so mysqli_real_escape_string can do the work
         if ($this->magic_quotes_active) {
-
-            $value  = stripslashes($value);
+            $value = stripslashes($value);
         }
 
         return $this->connection->real_escape_string($value);
     }
 
     /**
-     * fetchArray
+     * fetchArray.
      *
      * @param array $result_set Result set
      *
@@ -227,7 +213,7 @@ class Database
     }
 
     /**
-     * fetchAssoc
+     * fetchAssoc.
      *
      * @param array $result_set Result set
      *
@@ -239,7 +225,7 @@ class Database
     }
 
     /**
-     * fetchRow
+     * fetchRow.
      *
      * @param array $result_set Result set
      *
@@ -251,7 +237,7 @@ class Database
     }
 
     /**
-     * numRows
+     * numRows.
      *
      * @param array $result_set Result set
      *
@@ -263,7 +249,7 @@ class Database
     }
 
     /**
-     * numFields
+     * numFields.
      *
      * @param array $result_set Result set
      *
@@ -275,7 +261,7 @@ class Database
     }
 
     /**
-     * insertId
+     * insertId.
      *
      * @return int
      */
@@ -286,7 +272,7 @@ class Database
     }
 
     /**
-     * affectedRows
+     * affectedRows.
      *
      * @return array
      */
@@ -296,7 +282,7 @@ class Database
     }
 
     /**
-     * serverInfo
+     * serverInfo.
      *
      * @return array
      */
@@ -306,11 +292,9 @@ class Database
     }
 
     /**
-     * freeResult
+     * freeResult.
      *
      * @param array $result_set Result set
-     *
-     * @return void
      */
     public function freeResult($result_set)
     {
@@ -318,22 +302,19 @@ class Database
     }
 
     /**
-     * confirmQuery
+     * confirmQuery.
      *
      * @param array $result Result set
-     *
-     * @return void
      */
     private function confirmQuery($result)
     {
         if (!$result) {
-
-            $output = "Database query failed: " . mysql_error();
+            $output = 'Database query failed: ' . mysql_error();
 
             // uncomment below line when you want to debug your last query
-            $output .= " Last SQL Query: " . $this->last_query;
+            $output .= ' Last SQL Query: ' . $this->last_query;
 
-            die($this->debug->error($output, "SQL Error"));
+            die($this->debug->error($output, 'SQL Error'));
         }
 
         // DEBUG LOG
@@ -341,7 +322,7 @@ class Database
     }
 
     /**
-     * backupDb
+     * backupDb.
      *
      * @param array $tables Data
      *
@@ -351,13 +332,11 @@ class Database
     {
         // GET ALL THE TABLES
         if ($tables == '*') {
-
             $tables = array();
             $result = $this->query('SHOW TABLES');
 
             while ($row = $this->fetchRow($result)) {
-
-                $tables[]   = $row[0];
+                $tables[] = $row[0];
             }
         } else {
             $tables = is_array($tables) ? $tables : explode(',', $tables);
@@ -367,50 +346,43 @@ class Database
 
         //CYCLE TROUGHT
         foreach ($tables as $table) {
-
             $result     = $this->query('SELECT * FROM' . $table);
             $num_fields = $this->num_fields($result);
 
             $return     .= 'DROP TABLE ' . $table . ';';
-            $row2       = $this->fetchRow($this->query('SHOW CREATE TABLE ' . $table));
-            $return     .= "\n\n".$row2[1].";\n\n";
+            $row2 = $this->fetchRow($this->query('SHOW CREATE TABLE ' . $table));
+            $return     .= "\n\n" . $row2[1] . ";\n\n";
 
-            for ($i = 0; $i < $num_fields; $i++) {
-
+            for ($i = 0; $i < $num_fields; ++$i) {
                 while ($row = $this->fetchRow($result)) {
-
                     $return .= 'INSERT INTO ' . $table . ' VALUES(';
 
-                    for ($j = 0; $j < $num_fields; $j++) {
-
-                        $row[$j]    = addslashes($row[$j]);
-                        $row[$j]    = str_replace("\n", "\\n", $row[$j]);
+                    for ($j = 0; $j < $num_fields; ++$j) {
+                        $row[$j] = addslashes($row[$j]);
+                        $row[$j] = str_replace("\n", '\\n', $row[$j]);
 
                         if (isset($row[$j])) {
-
-                            $return .= '"' . $row[$j] . '"' ;
+                            $return .= '"' . $row[$j] . '"';
                         } else {
-
                             $return .= '""';
                         }
 
                         if ($j < ($num_fields - 1)) {
-
                             $return .= ',';
                         }
                     }
-                    
+
                     $return .= ");\n";
                 }
             }
-            $return .="\n\n\n";
+            $return .= "\n\n\n";
         }
 
         // SAVE FILE
-        $file_name  = 'db-backup-' . date('Ymd') . '-' . time() . '-' . (sha1(implode(',', $tables))) . '.sql';
-        $handle     = fopen(XGP_ROOT . BACKUP_PATH . $file_name, 'w+');
-        $writed     = fwrite($handle, $return);
-       
+        $file_name = 'db-backup-' . date('Ymd') . '-' . time() . '-' . (sha1(implode(',', $tables))) . '.sql';
+        $handle    = fopen(XGP_ROOT . BACKUP_PATH . $file_name, 'w+');
+        $writed    = fwrite($handle, $return);
+
         fclose($handle);
 
         return $writed;

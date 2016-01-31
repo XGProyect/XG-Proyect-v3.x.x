@@ -1,55 +1,55 @@
 <?php
+
 /**
- * Language
+ * Language.
  *
  * PHP Version 5.5+
  *
  * @category Core
- * @package  Application
+ *
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
+ *
  * @link     http://www.xgproyect.org
+ *
  * @version  3.0.0
  */
 
 namespace application\core;
 
 /**
- * Language Class
+ * Language Class.
  *
  * @category Classes
- * @package  Application
+ *
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
+ *
  * @link     http://www.xgproyect.org
+ *
  * @version  3.0.0
  */
 class Language
 {
     /**
-     *
      * @var array
      */
     private $lang;
-    
+
     /**
-     *
      * @var string
      */
     private $lang_extension = 'php';
 
     /**
-     * __construct
-     *
-     * @return void
+     * __construct.
      */
     public function __construct()
     {
-        $languages_loaded   = $this->getFileName();
+        $languages_loaded = $this->getFileName();
 
         foreach ($languages_loaded as $load) {
-
-            $route  = XGP_ROOT . LANG_PATH . DEFAULT_LANG . '/' . $load . '.' . $this->lang_extension;
+            $route = XGP_ROOT . LANG_PATH . DEFAULT_LANG . '/' . $load . '.' . $this->lang_extension;
 
             // WE GOT SOMETHING
             if (file_exists($route)) {
@@ -73,7 +73,7 @@ class Language
     }
 
     /**
-     * lang
+     * lang.
      *
      * @return array
      */
@@ -83,34 +83,29 @@ class Language
     }
 
     /**
-     * getFileName
+     * getFileName.
      *
      * @return array
      */
     private function getFileName()
     {
         if (defined('IN_ADMIN')) {
-
             $required[] = 'ADMIN';
         }
 
         if (defined('IN_CHANGELOG')) {
-
             $required[] = 'CHANGELOG';
         }
 
         if (defined('IN_GAME')) {
-
             $required[] = 'INGAME';
         }
 
         if (defined('IN_INSTALL')) {
-
             $required[] = 'INSTALL';
         }
 
         if (defined('IN_LOGIN')) {
-
             $required[] = 'HOME';
         }
 

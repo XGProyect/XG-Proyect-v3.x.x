@@ -1,14 +1,17 @@
 <?php
+
 /**
- * Encrypter Controller
+ * Encrypter Controller.
  *
  * PHP Version 5.5+
  *
  * @category Controller
- * @package  Application
+ *
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
+ *
  * @link     http://www.xgproyect.org
+ *
  * @version  3.0.0
  */
 
@@ -19,13 +22,15 @@ use application\libraries\adm\AdministrationLib;
 use application\libraries\FunctionsLib;
 
 /**
- * Encrypter Class
+ * Encrypter Class.
  *
  * @category Classes
- * @package  Application
+ *
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
+ *
  * @link     http://www.xgproyect.org
+ *
  * @version  3.0.0
  */
 class Encrypter extends XGPCore
@@ -34,9 +39,7 @@ class Encrypter extends XGPCore
     private $current_user;
 
     /**
-     * __construct
-     *
-     * @return void
+     * __construct.
      */
     public function __construct()
     {
@@ -51,18 +54,14 @@ class Encrypter extends XGPCore
         // Check if the user is allowed to access
         if (AdministrationLib::have_access($this->current_user['user_authlevel'])
             && AdministrationLib::authorization($this->current_user['user_authlevel'], 'use_tools') == 1) {
-
             $this->buildPage();
         } else {
-
             die(FunctionsLib::message($this->langs['ge_no_permissions']));
         }
     }
 
     /**
-     * __destruct
-     *
-     * @return void
+     * __destruct.
      */
     public function __destruct()
     {
@@ -70,9 +69,7 @@ class Encrypter extends XGPCore
     }
 
     /**
-     * buildPage
-     *
-     * @return void
+     * buildPage.
      */
     private function buildPage()
     {
@@ -81,7 +78,6 @@ class Encrypter extends XGPCore
         $parse['encrypted'] = sha1('');
 
         if (isset($_POST['uncrypted']) && $_POST['uncrypted'] != '') {
-
             $parse['uncrypted'] = $_POST['uncrypted'];
             $parse['encrypted'] = sha1($_POST['encrypted']);
         }

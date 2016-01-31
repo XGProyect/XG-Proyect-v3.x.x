@@ -1,14 +1,17 @@
 <?php
+
 /**
- * Debug Library
+ * Debug Library.
  *
  * PHP Version 5.5+
  *
  * @category Library
- * @package  Application
+ *
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
+ *
  * @link     http://www.xgproyect.org
+ *
  * @version  3.0.0
  */
 
@@ -17,13 +20,15 @@ namespace application\libraries;
 use application\core\XGPCore;
 
 /**
- * DebugLib Class
+ * DebugLib Class.
  *
  * @category Classes
- * @package  Application
+ *
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
+ *
  * @link     http://www.xgproyect.org
+ *
  * @version  3.0.0
  */
 class DebugLib extends XGPCore
@@ -33,19 +38,17 @@ class DebugLib extends XGPCore
     private $langs;
 
     /**
-     * __construct
-     *
-     * @return void
+     * __construct.
      */
     public function __construct()
     {
-        $this->vars         = $this->log    = '';
-        $this->numqueries   = 0;
-        $this->langs        = parent::$lang;
+        $this->vars       = $this->log       = '';
+        $this->numqueries = 0;
+        $this->langs      = parent::$lang;
     }
 
     /**
-     * dump
+     * dump.
      *
      * @param array $var Var
      *
@@ -60,7 +63,7 @@ class DebugLib extends XGPCore
     }
 
     /**
-     * whereCalled
+     * whereCalled.
      *
      * @param int $level Level
      *
@@ -74,33 +77,30 @@ class DebugLib extends XGPCore
         $object = $trace[$level]['object'];
 
         if (is_object($object)) {
-
             $object = get_class($object);
         }
 
-        $break  = Explode('/', $file);
-        $pfile  = $break[count($break) - 1];
+        $break = Explode('/', $file);
+        $pfile = $break[count($break) - 1];
 
         return "Where called: line $line of $object <br/>(in $pfile)";
     }
 
     /**
-     * add
+     * add.
      *
      * @param int $query Query
-     *
-     * @return void
      */
     public function add($query)
     {
-        $this->numqueries++;
+        ++$this->numqueries;
         $this->log .= '<tr><th rowspan="2">Query ' .
             $this->numqueries . ':</th><th>' . $query . '</th></tr><tr><th>' .
             $this->whereCalled(3) . '</th></tr>';
     }
 
     /**
-     * echoLog
+     * echoLog.
      *
      * @return string
      */
@@ -118,39 +118,34 @@ class DebugLib extends XGPCore
     }
 
     /**
-     * error
+     * error.
      *
      * @param string $message Message
      * @param string $title   Title
-     *
-     * @return void
      */
     public function error($message, $title)
     {
         if (FunctionsLib::read_config('debug') == 1) {
-
-            echo '<h2>'.$title.'</h2><br><font color="red">' . $message . '</font><br><hr>';
+            echo '<h2>' . $title . '</h2><br><font color="red">' . $message . '</font><br><hr>';
             echo $this->echoLog();
             echo $this->whereCalled(3);
         } else {
-
             if (isset(parent::$users->get_user_data)) {
-
-                $user_id    = parent::$users->get_user_data()['user_id'];
+                $user_id = parent::$users->get_user_data()['user_id'];
             } else {
-                $user_id    = 0;
+                $user_id = 0;
             }
 
             // format log
-            $log    = '|' . $user_id . '|'. $title .'|' . $message . '|' . $this->whereCalled(3) . '|';
+            $log = '|' . $user_id . '|' . $title . '|' . $message . '|' . $this->whereCalled(3) . '|';
 
             // log the error
-            $this->writeErrors($log, "ErrorLog");
+            $this->writeErrors($log, 'ErrorLog');
 
-            $headers    =  'MIME-Version: 1.0' . "\r\n";
+            $headers = 'MIME-Version: 1.0' . "\r\n";
             $headers    .= 'From: XG Proyect ' . FunctionsLib::read_config('admin_email') . "\r\n";
             $headers    .= 'Content-type: text/html; charset=utf-8' . "\r\n";
-            
+
             // notify administrator
             @mail(
                 FunctionsLib::read_config('admin_email'),
@@ -187,25 +182,22 @@ class DebugLib extends XGPCore
     }
 
     /**
-     * writeErrors
+     * writeErrors.
      *
      * @param string $text     Text
      * @param string $log_file Log title
-     *
-     * @return void
      */
     private function writeErrors($text, $log_file)
     {
-        $file   = XGP_ROOT . LOGS_PATH . $log_file . ".php";
+        $file = XGP_ROOT . LOGS_PATH . $log_file . '.php';
 
         if (!file_exists($file) && is_writable($file)) {
-
-            @fopen($file, "w+");
-            @fclose(fopen($file, "w+"));
+            @fopen($file, 'w+');
+            @fclose(fopen($file, 'w+'));
         }
 
-        $fp     =   @fopen($file, "a");
-        $date   =   $text;
+        $fp   = @fopen($file, 'a');
+        $date = $text;
         $date   .=  date(FunctionsLib::read_config('date_format_extended'), time()) . "||\n";
 
         @fwrite($fp, $date);

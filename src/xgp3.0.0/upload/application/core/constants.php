@@ -1,14 +1,17 @@
 <?php
+
 /**
- * Constants
+ * Constants.
  *
  * PHP Version 5.5+
  *
  * @category Core
- * @package  Application
+ *
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
+ *
  * @link     http://www.xgproyect.org
+ *
  * @version  3.0.0
  */
 
@@ -36,7 +39,7 @@ define('CSS_PATH', APP_PATH . 'styles/css/');
 define('SKIN_PATH', APP_PATH . 'styles/skins/');
 define('DEFAULT_SKINPATH', APP_PATH . 'styles/skins/xgproyect/');
 define('IMG_PATH', APP_PATH . 'styles/images/');
-define('JS_PATH', PUBLIC_PATH. 'js/');
+define('JS_PATH', PUBLIC_PATH . 'js/');
 
 // APPLICATION PATHS
 define('CONFIGS_PATH', APP_PATH . 'config/');
@@ -56,7 +59,7 @@ define('LOGS_PATH', DATA_PATH . 'logs/');
 define('BACKUP_PATH', DATA_PATH . 'backups/');
 
 // GAME URL
-define('GAMEURL', "http://" . $_SERVER['HTTP_HOST'] . "/");
+define('GAMEURL', 'http://' . $_SERVER['HTTP_HOST'] . '/');
 
 // BASE PATH
 define(
@@ -113,7 +116,6 @@ define('VACATION_TIME_FORCED', 2); // IN DAYS
 
 // TO PREVENT ERRORS
 if (!defined('DB_PREFIX')) {
-
     define('DB_PREFIX', '');
 }
 

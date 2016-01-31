@@ -1,14 +1,17 @@
 <?php
+
 /**
- * Forum Controller
+ * Forum Controller.
  *
  * PHP Version 5.5+
  *
  * @category Controller
- * @package  Application
+ *
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
+ *
  * @link     http://www.xgproyect.org
+ *
  * @version  3.0.0
  */
 
@@ -18,13 +21,15 @@ use application\core\XGPCore;
 use application\libraries\FunctionsLib;
 
 /**
- * Forum Class
+ * Forum Class.
  *
  * @category Classes
- * @package  Application
+ *
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
+ *
  * @link     http://www.xgproyect.org
+ *
  * @version  3.0.0
  */
 class Forum extends XGPCore
@@ -32,9 +37,7 @@ class Forum extends XGPCore
     const MODULE_ID = 14;
 
     /**
-     * __construct
-     *
-     * @return void
+     * __construct.
      */
     public function __construct()
     {
@@ -50,9 +53,7 @@ class Forum extends XGPCore
     }
 
     /**
-     * __destructor
-     *
-     * @return void
+     * __destructor.
      */
     public function __destruct()
     {
@@ -60,9 +61,7 @@ class Forum extends XGPCore
     }
 
     /**
-     * buildPage
-     *
-     * @return void
+     * buildPage.
      */
     private function buildPage()
     {

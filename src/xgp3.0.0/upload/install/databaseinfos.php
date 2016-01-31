@@ -2,12 +2,13 @@
 
 /**
  * @project XG Proyect
+ *
  * @version 3.x.x build 0000
+ *
  * @copyright Copyright (C) 2008 - 2016
  */
-
 $tables['acs_fleets'] =
-"CREATE TABLE `" . ACS_FLEETS . "` (
+'CREATE TABLE `' . ACS_FLEETS . '` (
 `acs_fleet_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
 `acs_fleet_name` varchar(50) CHARACTER SET latin1 COLLATE latin1_general_ci DEFAULT NULL,
 `acs_fleet_members` text CHARACTER SET latin1 COLLATE latin1_general_ci,
@@ -19,10 +20,10 @@ $tables['acs_fleets'] =
 `acs_fleet_invited` text,
 PRIMARY KEY (`acs_fleet_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
-";
+';
 
 $tables['alliance'] =
-"CREATE TABLE `" . ALLIANCE . "` (
+'CREATE TABLE `' . ALLIANCE . "` (
 `alliance_id` bigint(11) NOT NULL AUTO_INCREMENT,
 `alliance_name` varchar(32) DEFAULT NULL,
 `alliance_tag` varchar(8) DEFAULT NULL,
@@ -40,7 +41,7 @@ PRIMARY KEY (`alliance_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;";
 
 $tables['alliance_statistics'] =
-"CREATE TABLE `" . ALLIANCE_STATISTICS . "` (
+'CREATE TABLE `' . ALLIANCE_STATISTICS . "` (
 `alliance_statistic_alliance_id` int(11) NOT NULL,
 `alliance_statistic_buildings_points` double(132,8) NOT NULL DEFAULT '0.00000000',
 `alliance_statistic_buildings_old_rank` int(11) NOT NULL DEFAULT '0',
@@ -62,7 +63,7 @@ PRIMARY KEY (`alliance_statistic_alliance_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;";
 
 $tables['banned'] =
-"CREATE TABLE `" . BANNED . "` (
+'CREATE TABLE `' . BANNED . "` (
 `banned_id` bigint(11) NOT NULL AUTO_INCREMENT,
 `banned_who` varchar(64) NOT NULL DEFAULT '',
 `banned_theme` text NOT NULL,
@@ -76,7 +77,7 @@ KEY `ID` (`banned_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;";
 
 $tables['buddys'] =
-"CREATE TABLE  `" . BUDDY . "` (
+'CREATE TABLE  `' . BUDDY . "` (
 `buddy_id` INT( 10 ) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY ,
 `buddy_sender` INT( 10 ) UNSIGNED NOT NULL ,
 `buddy_receiver` INT( 10 ) UNSIGNED NOT NULL ,
@@ -85,7 +86,7 @@ $tables['buddys'] =
 ) ENGINE = MYISAM ;";
 
 $tables['buildings'] =
-"CREATE TABLE `" . BUILDINGS . "` (
+'CREATE TABLE `' . BUILDINGS . "` (
 `building_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
 `building_planet_id` int(11) unsigned NOT NULL,
 `building_metal_mine` int(11) NOT NULL DEFAULT '0',
@@ -111,7 +112,7 @@ UNIQUE KEY `building_planet_id` (`building_planet_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;";
 
 $tables['defenses'] =
-"CREATE TABLE `" . DEFENSES . "` (
+'CREATE TABLE `' . DEFENSES . "` (
 `defense_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
 `defense_planet_id` int(11) unsigned NOT NULL,
 `defense_rocket_launcher` int(11) NOT NULL DEFAULT '0',
@@ -129,7 +130,7 @@ UNIQUE KEY `defense_planet_id` (`defense_planet_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;";
 
 $tables['fleets'] =
-"CREATE TABLE `" . FLEETS . "` (
+'CREATE TABLE `' . FLEETS . "` (
 `fleet_id` bigint(11) NOT NULL AUTO_INCREMENT,
 `fleet_owner` int(11) NOT NULL DEFAULT '0',
 `fleet_mission` int(11) NOT NULL DEFAULT '0',
@@ -158,7 +159,7 @@ PRIMARY KEY (`fleet_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;";
 
 $tables['messages'] =
-"CREATE TABLE `" . MESSAGES . "` (
+'CREATE TABLE `' . MESSAGES . "` (
 `message_id` BIGINT(11) NOT NULL AUTO_INCREMENT,
 `message_sender` INT(11) NOT NULL DEFAULT '0',
 `message_receiver` INT(11) NOT NULL DEFAULT '0',
@@ -172,7 +173,7 @@ PRIMARY KEY  (`message_id`)
 ) ENGINE=MyISAM;";
 
 $tables['notes'] =
-"CREATE TABLE `" . NOTES . "` (
+'CREATE TABLE `' . NOTES . '` (
 `note_id` bigint(11) NOT NULL AUTO_INCREMENT,
 `note_owner` int(11) DEFAULT NULL,
 `note_time` int(11) DEFAULT NULL,
@@ -180,10 +181,10 @@ $tables['notes'] =
 `note_title` varchar(32) DEFAULT NULL,
 `note_text` text,
 PRIMARY KEY (`note_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;";
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;';
 
 $tables['planets'] =
-"CREATE TABLE `" . PLANETS . "` (
+'CREATE TABLE `' . PLANETS . "` (
 `planet_id` bigint(11) NOT NULL AUTO_INCREMENT,
 `planet_name` varchar(255) DEFAULT NULL,
 `planet_user_id` int(11) DEFAULT NULL,
@@ -230,7 +231,7 @@ PRIMARY KEY (`planet_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;";
 
 $tables['premium'] =
-"CREATE TABLE `" . PREMIUM . "` (
+'CREATE TABLE `' . PREMIUM . '` (
 `premium_user_id` INT(10) UNSIGNED NOT NULL,
 `premium_dark_matter` INT(10) NOT NULL,
 `premium_officier_commander` INT(10) NOT NULL,
@@ -239,10 +240,10 @@ $tables['premium'] =
 `premium_officier_geologist` INT(10) NOT NULL,
 `premium_officier_technocrat` INT(10) NOT NULL,
 UNIQUE KEY `premium_user_id` (`premium_user_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;";
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;';
 
 $tables['reports'] =
-"CREATE TABLE `" . REPORTS . "` (
+'CREATE TABLE `' . REPORTS . "` (
 `report_owners` varchar(255) NOT NULL,
 `report_rid` varchar(42) NOT NULL,
 `report_content` text NOT NULL,
@@ -254,7 +255,7 @@ KEY `time` (`report_time`)
 ";
 
 $tables['research'] =
-"CREATE TABLE `" . RESEARCH . "` (
+'CREATE TABLE `' . RESEARCH . "` (
 `research_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
 `research_user_id` int(11) unsigned NOT NULL,
 `research_current_research` int(11) NOT NULL DEFAULT '0',
@@ -279,15 +280,15 @@ UNIQUE KEY `research_user_id` (`research_user_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;";
 
 $tables['sessions'] =
-"CREATE TABLE `" . SESSIONS . "` (
+'CREATE TABLE `' . SESSIONS . '` (
 `session_id` CHAR(32) NOT NULL,
 `session_data` longtext NOT NULL,
 `session_last_accessed` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 PRIMARY KEY  (`session_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;";
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;';
 
 $tables['settings'] =
-"CREATE TABLE `" . SETTINGS . "` (
+'CREATE TABLE `' . SETTINGS . "` (
 `setting_user_id` INT(10) UNSIGNED NOT NULL,
 `setting_no_ip_check` TINYINT(1) NOT NULL DEFAULT '1',
 `setting_planet_sort` TINYINT(1) NOT NULL DEFAULT '0',
@@ -305,7 +306,7 @@ $tables['settings'] =
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;";
 
 $tables['ships'] =
-"CREATE TABLE `" . SHIPS . "` (
+'CREATE TABLE `' . SHIPS . "` (
 `ship_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
 `ship_planet_id` int(11) unsigned NOT NULL,
 `ship_small_cargo_ship` int(11) NOT NULL DEFAULT '0',
@@ -327,7 +328,7 @@ UNIQUE KEY `ship_planet_id` (`ship_planet_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;";
 
 $tables['users'] =
-"CREATE TABLE `" . USERS . "` (
+'CREATE TABLE `' . USERS . "` (
 `user_id` bigint(11) unsigned NOT NULL AUTO_INCREMENT,
 `user_name` varchar(64) NOT NULL DEFAULT '',
 `user_password` varchar(64) NOT NULL DEFAULT '',
@@ -356,7 +357,7 @@ PRIMARY KEY (`user_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;";
 
 $tables['user_statistics'] =
-"CREATE TABLE `" . USERS_STATISTICS . "` (
+'CREATE TABLE `' . USERS_STATISTICS . "` (
 `user_statistic_user_id` int(11) NOT NULL,
 `user_statistic_buildings_points` double(132,8) NOT NULL DEFAULT '0.00000000',
 `user_statistic_buildings_old_rank` int(11) NOT NULL DEFAULT '0',
