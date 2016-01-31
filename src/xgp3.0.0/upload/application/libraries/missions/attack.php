@@ -4,13 +4,29 @@
  *
  * PHP Version 5.5+
  *
- * @category Libraries/Missions
+ * @category Library
  * @package  Application
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
+
+namespace application\libraries\missions;
+
+use application\libraries\FleetsLib;
+use application\libraries\FormatLib;
+use application\libraries\FunctionsLib;
+use application\libraries\UpdateResourcesLib;
+use Battle;
+use DebugManager;
+use Defense;
+use Fleet;
+use HomeFleet;
+use LangManager;
+use Player;
+use PlayerGroup;
+use Ship;
 
 /**
  * Attack Class
@@ -52,7 +68,7 @@ class Attack extends Missions
         $errorHandler       = null;
         $exceptionHandler   = null;
 
-        $target_planet = parent::$db->query_fetch(
+        $target_planet = parent::$db->queryFetch(
             "SELECT *
             FROM " . PLANETS . " AS p
             INNER JOIN " . BUILDINGS . " AS b ON b.building_planet_id = p.`planet_id`
@@ -66,16 +82,14 @@ class Attack extends Missions
         
         if ($fleet_row['fleet_mess'] == 0 && $fleet_row['fleet_start_time'] <= time()) {
 
-            $base   = dirname(dirname(__dir__)) . DIRECTORY_SEPARATOR;
-
             // require several stuff
-            require $base . 'libraries' . DIRECTORY_SEPARATOR . 
-                    'battle_engine' . DIRECTORY_SEPARATOR . 
+            require XGP_ROOT . VENDOR_PATH .
+                    'battle_engine' . DIRECTORY_SEPARATOR .
                     'utils' . DIRECTORY_SEPARATOR . 'includer.php';
 
             // require language implementation
-            require $base . 'libraries' . DIRECTORY_SEPARATOR . 
-                    'missions' . DIRECTORY_SEPARATOR . 'attackLang.php'; 
+            require XGP_ROOT . LIB_PATH .
+                    'missions' . DIRECTORY_SEPARATOR . 'attackLang.php';
             
             // set language for the reports
             LangManager::getInstance()->setImplementation(new AttackLang($this->_lang));
@@ -97,7 +111,7 @@ class Attack extends Missions
                 parent::return_fleet($fleet_row['fleet_id']);
             }
 
-            $targetUser = parent::$db->query_fetch(
+            $targetUser = parent::$db->queryFetch(
                 "SELECT u.*,
                     r.*,
                     pr.*
@@ -109,7 +123,7 @@ class Attack extends Missions
 
             $target_userID  = $targetUser['user_id'];
 
-            UpdateResourcesLib::updateResource($targetUser, $target_planet, time());
+            UpdateResourcesLib::updateResources($targetUser, $target_planet, time());
 
             //----------------------- prepare players for battle ----------------------
             // attackers fleet sum
@@ -118,7 +132,7 @@ class Attack extends Missions
             // If we have a ACS attack
             if ($fleet_row['fleet_group'] != 0) {
                     
-                $fleets     = parent::$db->query_fetch(
+                $fleets     = parent::$db->queryFetch(
                     "SELECT * FROM `" . FLEETS . "` WHERE `fleet_group` = '" . $fleet_row['fleet_group'] . "';"
                 );
 
@@ -222,16 +236,16 @@ class Attack extends Missions
             $message    = sprintf(
                 $this->_lang['sys_fleet_won'],
                 $target_planet['planet_name'],
-                Fleets_Lib::target_link($fleet_row, ''),
-                Format_Lib::pretty_number($fleet_row['fleet_resource_metal']),
+                FleetsLib::target_link($fleet_row, ''),
+                FormatLib::pretty_number($fleet_row['fleet_resource_metal']),
                 $this->_lang['Metal'],
-                Format_Lib::pretty_number($fleet_row['fleet_resource_crystal']),
+                FormatLib::pretty_number($fleet_row['fleet_resource_crystal']),
                 $this->_lang['Crystal'],
-                Format_Lib::pretty_number($fleet_row['fleet_resource_deuterium']),
+                FormatLib::pretty_number($fleet_row['fleet_resource_deuterium']),
                 $this->_lang['Deuterium']
             );
 
-            Functions_Lib::send_message(
+            FunctionsLib::send_message(
                 $fleet_row['fleet_owner'],
                 '',
                 $fleet_row['fleet_end_time'],
@@ -320,7 +334,7 @@ class Attack extends Missions
             }
         }
 
-        $player_info    = parent::$db->query_fetch(
+        $player_info    = parent::$db->queryFetch(
             "SELECT u.user_name,
                 r.research_weapons_technology,
                 r.research_shielding_technology,
@@ -356,7 +370,7 @@ class Attack extends Missions
     {
         $playerGroup    = new PlayerGroup();
         
-        while ($fleet_row = parent::$db->fetch_assoc($result)) {
+        while ($fleet_row = parent::$db->fetchAssoc($result)) {
 
             //making the current fleet object
             $serializedTypes    = explode(';', $fleet_row['fleet_array']);
@@ -383,7 +397,7 @@ class Attack extends Missions
                     $player_info    = $target_user;
                 } else {
 
-                    $player_info    = parent::$db->query_fetch(
+                    $player_info    = parent::$db->queryFetch(
                         "SELECT u.user_name,
                             r.research_weapons_technology,
                             r.research_shielding_technology,
@@ -437,7 +451,7 @@ class Attack extends Missions
         $system = $fleet_row['fleet_end_system'];
         $planet = $fleet_row['fleet_end_planet'];
 
-        $moon_exists    = parent::$db->query_fetch(
+        $moon_exists    = parent::$db->queryFetch(
             "SELECT `planet_id`
             FROM `" . PLANETS . "`
             WHERE `planet_galaxy` = '" . $galaxy . "'
@@ -453,7 +467,7 @@ class Attack extends Missions
         // $size and $fields
         extract($moon);
 
-        $_creator   = Functions_Lib::load_library('Creator_Lib');
+        $_creator   = FunctionsLib::load_library('CreatorLib');
         $_creator->create_moon($galaxy, $system, $planet, $target_userId, $moonName, '', $size);
     }
 
@@ -502,7 +516,7 @@ class Attack extends Missions
                 $fleet_row['fleet_end_planet']
             );
 
-            Functions_Lib::send_message(
+            FunctionsLib::send_message(
                 $id,
                 '',
                 $fleet_row['fleet_start_time'],
@@ -534,7 +548,7 @@ class Attack extends Missions
                 $fleet_row['fleet_end_planet']
             );
             
-            Functions_Lib::send_message(
+            FunctionsLib::send_message(
                 $id,
                 '',
                 $fleet_row['fleet_start_time'],
@@ -843,9 +857,9 @@ class Attack extends Missions
     {
         $style      = 'style="color:' . $color . ';"';
         $js         = "OnClick=\'f(\"game.php?page=combatreport&report=" . $rid . "\", \"\");\'";
-        $content    = $this->_lang['sys_mess_attack_report'] . ' ' . Format_Lib::pretty_coords($g, $s, $p);
+        $content    = $this->_lang['sys_mess_attack_report'] . ' ' . FormatLib::pretty_coords($g, $s, $p);
         
-        return Functions_Lib::set_url(
+        return FunctionsLib::set_url(
             '',
             '',
             $content,

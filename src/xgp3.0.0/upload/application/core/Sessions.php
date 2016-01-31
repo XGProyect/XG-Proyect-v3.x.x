@@ -1,158 +1,214 @@
 <?php
-
 /**
- * @project XG Proyect
- * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * Sessions
+ *
+ * PHP Version 5.5+
+ *
+ * @category Core
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
  */
 
+namespace application\core;
+
+/**
+ * Sessions Class
+ *
+ * @category Classes
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
+ */
 class Sessions extends XGPCore
 {
-	private $_alive = TRUE;
-	private $_dbc	= NULL;
+    /**
+     *
+     * @var boolean
+     */
+    private $alive  = true;
+    
+    /**
+     *
+     * @var Database
+     */
+    private $dbc    = null;
 
-	/**
-	 * __construct()
-	 */
-	public function __construct()
-	{
-		parent::__construct();
+    /**
+     * __construct
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        parent::__construct();
 
-		// WE'RE GOING TO HANDLE A DIFFERENT DB OBJECT FOR THE SESSIONS
-		$this->_dbc = clone parent::$db;
+        // WE'RE GOING TO HANDLE A DIFFERENT DB OBJECT FOR THE SESSIONS
+        $this->dbc  = clone parent::$db;
 
-		session_set_save_handler
-									(
-										array ( &$this , 'open' ),
-										array ( &$this , 'close' ),
-										array ( &$this , 'read' ),
-										array ( &$this , 'write' ),
-										array ( &$this , 'delete' ),
-										array ( &$this , 'clean' )
-									);
+        session_set_save_handler(
+            array (&$this, 'open'),
+            array (&$this, 'close'),
+            array (&$this, 'read'),
+            array (&$this, 'write'),
+            array (&$this, 'delete'),
+            array (&$this, 'clean')
+        );
 
-		if ( session_id() == '' )
-		{
-			session_start();
-		}
-	}
+        if (session_id() == '') {
 
-	/**
-	 * __destruct()
-	 */
-	public function __destruct()
-	{
-		if ( $this->_alive )
-		{
-			session_write_close();
-			$this->_alive = FALSE;
-		}
-	}
+            session_start();
+        }
+    }
 
-	/**
-	 * delete()
-	 */
-	public function delete()
-	{
-		if ( ini_get ( 'session.use_cookies' ) )
-		{
-			$params 	= session_get_cookie_params();
-			setcookie	(
-							session_name() ,
-							'' ,
-							time() - 42000 ,
-							$params['path'] ,
-							$params['domain'] ,
-							$params['secure'] ,
-							$params['httponly']
-						);
-		}
+    /**
+     * __destruct
+     *
+     * @return void
+     */
+    public function __destruct()
+    {
+        if ($this->alive) {
 
+            session_write_close();
+            $this->alive    = false;
+        }
+    }
 
+    /**
+     * delete
+     *
+     * @return void
+     */
+    public function delete()
+    {
+        if (ini_get('session.use_cookies')) {
 
-		if ( ! empty ( $_SESSION ) )
-		{
-			unset ( $_SESSION );
+            $params = session_get_cookie_params();
+            setcookie(
+                session_name(),
+                '',
+                time() - 42000,
+                $params['path'],
+                $params['domain'],
+                $params['secure'],
+                $params['httponly']
+            );
+        }
 
-			@session_destroy();
-		}
+        if (!empty($_SESSION)) {
 
-		$this->_alive = FALSE;
-	}
+            unset($_SESSION);
+            @session_destroy();
+        }
 
-	/**
-	 * open()
-	 */
-	private function open ()
-	{
+        $this->alive    = false;
+    }
 
-		return $this->_dbc->open_connection();
-	}
+    /**
+     * open
+     *
+     * @return Database
+     */
+    private function open()
+    {
+        return $this->dbc->openConnection();
+    }
 
-	/**
-	 * close()
-	 */
-	private function close ()
-	{
-		return $this->_dbc->close_connection();
-	}
+    /**
+     * close
+     *
+     * @return void
+     */
+    private function close()
+    {
+        return $this->dbc->closeConnection();
+    }
 
-	/**
-	 * read()
-	 */
-	private function read ( $sid )
-	{
-		$row = $this->_dbc->query ( "SELECT `session_data`
-										FROM " . SESSIONS . "
-										WHERE `session_id` = '" .  $this->_dbc->escape_value ( $sid ) . "'
-										LIMIT 1" );
+    /**
+     * read
+     *
+     * @param string $sid Session Id
+     *
+     * @return void
+     */
+    private function read($sid)
+    {
+        $row    = $this->dbc->query(
+            "SELECT `session_data`
+            FROM " . SESSIONS . "
+            WHERE `session_id` = '" .  $this->dbc->escapeValue($sid) . "'
+            LIMIT 1"
+        );
 
-		if ( $this->_dbc->num_rows ( $row ) == 1 )
-		{
-			$fields = $this->_dbc->fetch_assoc ( $row );
+        if ($this->dbc->numRows($row) == 1) {
 
-			return $fields['session_data'];
-		}
-		else
-		{
-			return '';
-		}
-	}
+            $fields = $this->dbc->fetchAssoc($row);
 
-	/**
-	 * write()
-	 */
-	private function write ( $sid , $data )
-	{
-		$this->_dbc->query ( "REPLACE INTO `" . SESSIONS . "` (`session_id`, `session_data`)
-								VALUES ('" . $this->_dbc->escape_value ( $sid ) . "', '" . $this->_dbc->escape_value ( $data ) . "')" );
+            return $fields['session_data'];
+        } else {
 
-		return ( $this->_dbc->affected_rows() > 0 );
-	}
+            return '';
+        }
+    }
 
-	/**
-	 * destroy()
-	 */
-	private function destroy ( $sid )
-	{
-		$this->_dbc->query ( "DELETE FROM `" . SESSIONS . "`
-								WHERE `session_id` = '" . $this->_dbc->escape_value ( $sid ) . "'" );
+    /**
+     * write
+     *
+     * @param string $sid  Session Id
+     * @param string $data Session Data
+     *
+     * @return array
+     */
+    private function write($sid, $data)
+    {
+        $this->dbc->query(
+            "REPLACE INTO `" . SESSIONS . "` (`session_id`, `session_data`)
+            VALUES ('" . $this->dbc->escapeValue($sid) . "', '" . $this->dbc->escapeValue($data) . "')"
+        );
 
-		$_SESSION = array();
+        return $this->dbc->affectedRows();
+    }
 
-		return $this->_dbc->affected_rows();
-	}
+    /**
+     * destroy
+     *
+     * @param string $sid Session Id
+     *
+     * @return array
+     */
+    private function destroy($sid)
+    {
+        $this->dbc->query(
+            "DELETE FROM `" . SESSIONS . "`
+            WHERE `session_id` = '" . $this->dbc->escapeValue($sid) . "'"
+        );
 
-	/**
-	 * clean()
-	 */
-	private function clean ( $expire )
-	{
-		$this->_dbc->query ( "DELETE FROM `" . SESSIONS . "`
-								WHERE DATE_ADD(`session_last_accessed`, INTERVAL " . (int) $expire . " SECOND) < NOW()" );
+        $_SESSION   = array();
 
-		return $this->_dbc->affected_rows();
-	}
+        return $this->dbc->affectedRows();
+    }
+
+    /**
+     * clean
+     *
+     * @param int $expire Expire
+     *
+     * @return array
+     */
+    private function clean($expire)
+    {
+        $this->dbc->query(
+            "DELETE FROM `" . SESSIONS . "`
+            WHERE DATE_ADD(`session_last_accessed`, INTERVAL " . (int)$expire . " SECOND) < NOW()"
+        );
+
+        return $this->dbc->affectedRows();
+    }
 }
 
 /* end of Sessions.php */

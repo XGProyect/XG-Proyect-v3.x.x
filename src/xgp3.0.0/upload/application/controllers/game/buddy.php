@@ -1,11 +1,32 @@
 <?php
-
 /**
- * @project XG Proyect
- * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * Buddy Controller
+ *
+ * PHP Version 5.5+
+ *
+ * @category Controller
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
  */
 
+namespace application\controllers\game;
+
+use application\core\XGPCore;
+use application\libraries\FunctionsLib;
+
+/**
+ * Buddy Class
+ *
+ * @category Classes
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
+ */
 class Buddy extends XGPCore
 {
 	const MODULE_ID = 20;
@@ -24,7 +45,7 @@ class Buddy extends XGPCore
 		parent::$users->check_session();
 
 		// Check module access
-		Functions_Lib::module_message ( Functions_Lib::is_module_accesible ( self::MODULE_ID ) );
+		FunctionsLib::module_message ( FunctionsLib::is_module_accesible ( self::MODULE_ID ) );
 
 		$this->_lang			= parent::$lang;
 		$this->_current_user	= parent::$users->get_user_data();
@@ -39,7 +60,7 @@ class Buddy extends XGPCore
 	 */
 	public function __destruct()
 	{
-		parent::$db->close_connection();
+		parent::$db->closeConnection();
 	}
 
 	/**
@@ -68,7 +89,7 @@ class Buddy extends XGPCore
 					// REJECT / CANCEL
 					case 1:
 
-						$senderID = parent::$db->query_fetch ( "SELECT *
+						$senderID = parent::$db->queryFetch ( "SELECT *
 																	FROM " . BUDDY . "
 																	WHERE `buddy_id`='" . intval ( $bid ) . "'" );
 
@@ -76,22 +97,22 @@ class Buddy extends XGPCore
 						{
 							if ( $senderID['buddy_sender'] != $this->_current_user['user_id'] )
 							{
-								Functions_Lib::send_message ( $senderID['buddy_sender'] , $this->_current_user['user_id'] , '' , 5 , $this->_current_user['user_name'] , $this->_lang['bu_rejected_title'] , str_replace ( '%u' , $this->_current_user['user_name'] , $this->_lang['bu_rejected_text'] ) );
+								FunctionsLib::send_message ( $senderID['buddy_sender'] , $this->_current_user['user_id'] , '' , 5 , $this->_current_user['user_name'] , $this->_lang['bu_rejected_title'] , str_replace ( '%u' , $this->_current_user['user_name'] , $this->_lang['bu_rejected_text'] ) );
 							}
 							elseif ( $senderID['buddy_sender'] == $this->_current_user['user_id'] )
 							{
-								Functions_Lib::send_message ( $senderID['buddy_receiver'] , $this->_current_user['user_id'] , '' , 5 , $this->_current_user['user_name'] , $this->_lang['bu_rejected_title'] , str_replace ( '%u' , $this->_current_user['user_name'] , $this->_lang['bu_rejected_title'] ) );
+								FunctionsLib::send_message ( $senderID['buddy_receiver'] , $this->_current_user['user_id'] , '' , 5 , $this->_current_user['user_name'] , $this->_lang['bu_rejected_title'] , str_replace ( '%u' , $this->_current_user['user_name'] , $this->_lang['bu_rejected_title'] ) );
 							}
 						}
 						else
 						{
 							if ( $senderID['buddy_sender'] != $this->_current_user['user_id'] )
 							{
-								Functions_Lib::send_message ( $senderID['buddy_sender'] , $this->_current_user['user_id'] , '' , 5 , $this->_current_user['user_name'] , $this->_lang['bu_deleted_title'] , str_replace ( '%u' , $this->_current_user['user_name'] , $this->_lang['bu_deleted_text'] ) );
+								FunctionsLib::send_message ( $senderID['buddy_sender'] , $this->_current_user['user_id'] , '' , 5 , $this->_current_user['user_name'] , $this->_lang['bu_deleted_title'] , str_replace ( '%u' , $this->_current_user['user_name'] , $this->_lang['bu_deleted_text'] ) );
 							}
 							elseif ( $senderID['buddy_sender'] == $this->_current_user['user_id'] )
 							{
-								Functions_Lib::send_message ( $senderID['buddy_receiver'] , $this->_current_user['user_id'] , '' , 5 , $this->_current_user['user_name'] , $this->_lang['bu_deleted_title'] , str_replace ( '%u' , $this->_current_user['user_name'] , $this->_lang['bu_deleted_text'] ) );
+								FunctionsLib::send_message ( $senderID['buddy_receiver'] , $this->_current_user['user_id'] , '' , 5 , $this->_current_user['user_name'] , $this->_lang['bu_deleted_title'] , str_replace ( '%u' , $this->_current_user['user_name'] , $this->_lang['bu_deleted_text'] ) );
 							}
 						}
 
@@ -99,32 +120,32 @@ class Buddy extends XGPCore
 												WHERE `buddy_id`='" . intval ( $bid ) . "' AND
 														(`buddy_receiver`='" . $this->_current_user['user_id'] . "' OR `buddy_sender`='" . $this->_current_user['user_id'] . "') " );
 
-						Functions_Lib::redirect ( 'game.php?page=buddy' );
+						FunctionsLib::redirect ( 'game.php?page=buddy' );
 
 					break;
 
 						// ACCEPT
 					case 2:
 
-						$senderID = parent::$db->query_fetch ( "SELECT *
+						$senderID = parent::$db->queryFetch ( "SELECT *
 																FROM " . BUDDY . "
 																WHERE `buddy_id`='" . intval ( $bid ) . "'" );
 
-						Functions_Lib::send_message ( $senderID['buddy_sender'] , $this->_current_user['user_id'] , '' , 5 , $this->_current_user['user_name'] , $this->_lang['bu_accepted_title'] , str_replace ( '%u' , $this->_current_user['user_name'] , $this->_lang['bu_accepted_text'] ) );
+						FunctionsLib::send_message ( $senderID['buddy_sender'] , $this->_current_user['user_id'] , '' , 5 , $this->_current_user['user_name'] , $this->_lang['bu_accepted_title'] , str_replace ( '%u' , $this->_current_user['user_name'] , $this->_lang['bu_accepted_text'] ) );
 
 						parent::$db->query ( "UPDATE " . BUDDY . "
 												SET `buddy_status` = '1'
 												WHERE `buddy_id` ='" . intval ( $bid ) . "' AND
 														`buddy_receiver`='" . $this->_current_user['user_id'] . "'" );
 
-						Functions_Lib::redirect ( 'game.php?page=buddy' );
+						FunctionsLib::redirect ( 'game.php?page=buddy' );
 
 					break;
 
 						// SEND REQUEST
 					case 3:
 
-						$query = parent::$db->query_fetch ( "SELECT `buddy_id`
+						$query = parent::$db->queryFetch ( "SELECT `buddy_id`
 																FROM " . BUDDY . "
 																WHERE (`buddy_receiver`='" . intval ( $this->_current_user['user_id'] ) . "' AND
 																		`buddy_sender`='" . intval ( $_POST['user'] ) . "') OR
@@ -134,9 +155,9 @@ class Buddy extends XGPCore
 						if ( !$query )
 						{
 
-							$text = parent::$db->escape_value ( strip_tags ( $_POST['text'] ) );
+							$text = parent::$db->escapeValue ( strip_tags ( $_POST['text'] ) );
 
-							Functions_Lib::send_message ( intval ( $_POST['user'] ) , $this->_current_user['user_id'] , '' , 5 , $this->_current_user['user_name'] , $this->_lang['bu_to_accept_title'] , str_replace ( '%u' , $this->_current_user['user_name'] , $this->_lang['bu_to_accept_text'] ) );
+							FunctionsLib::send_message ( intval ( $_POST['user'] ) , $this->_current_user['user_id'] , '' , 5 , $this->_current_user['user_name'] , $this->_lang['bu_to_accept_title'] , str_replace ( '%u' , $this->_current_user['user_name'] , $this->_lang['bu_to_accept_text'] ) );
 
 							parent::$db->query ( "INSERT INTO " . BUDDY . " SET
 													`buddy_sender`='" . intval ( $this->_current_user['user_id'] ) . "',
@@ -144,18 +165,18 @@ class Buddy extends XGPCore
 													`buddy_status`='0',
 													`buddy_request_text`='" . $text . "'" );
 
-							Functions_Lib::redirect ( 'game.php?page=buddy' );
+							FunctionsLib::redirect ( 'game.php?page=buddy' );
 						}
 						else
 						{
-							Functions_Lib::message ( $this->_lang['bu_request_exists'] , 'game.php?page=buddy' , 2 , FALSE , FALSE , FALSE );
+							FunctionsLib::message ( $this->_lang['bu_request_exists'] , 'game.php?page=buddy' , 2 , FALSE , FALSE , FALSE );
 						}
 
 						break;
 						// ANY OTHER OPTION EXIT
 					default:
 
-						Functions_Lib::redirect ( 'game.php?page=buddy' );
+						FunctionsLib::redirect ( 'game.php?page=buddy' );
 
 					break;
 				}
@@ -168,12 +189,12 @@ class Buddy extends XGPCore
 				// IF USER = REQUESTED USER, SHOW ERROR.
 				if ( $user == $this->_current_user['user_id'] )
 				{
-					Functions_Lib::message ( $this->_lang['bu_cannot_request_yourself'] , 'game.php?page=buddy' , 2 , FALSE , FALSE , FALSE );
+					FunctionsLib::message ( $this->_lang['bu_cannot_request_yourself'] , 'game.php?page=buddy' , 2 , FALSE , FALSE , FALSE );
 				}
 				else
 				{
 					// SEARCH THE PLAYER
-					$player				= parent::$db->query_fetch ( "SELECT `user_name`
+					$player				= parent::$db->queryFetch ( "SELECT `user_name`
 																		FROM " . USERS . "
 																		WHERE `user_id`='" . intval ( $user ) . "'" );
 
@@ -187,7 +208,7 @@ class Buddy extends XGPCore
 					}
 					else // EXIT
 					{
-						Functions_Lib::redirect ( 'game.php?page=buddy' );
+						FunctionsLib::redirect ( 'game.php?page=buddy' );
 					}
 				}
 
@@ -203,13 +224,13 @@ class Buddy extends XGPCore
 
 				$subTemplate	= parent::$page->get_template ( 'buddy/buddy_row' );
 
-				while ( $buddy = parent::$db->fetch_assoc ( $getBuddys ) )
+				while ( $buddy = parent::$db->fetchAssoc ( $getBuddys ) )
 				{
 					if ( $buddy['buddy_status'] == 0 )
 					{
 						if ( $buddy['buddy_sender'] == $this->_current_user['user_id'] )
 						{
-							$buddy_receiver = parent::$db->query_fetch ( "SELECT u.`user_id`, u.`user_name`, u.`user_galaxy`, u.`user_system`, u.`user_planet`, u.`user_ally_id`, a.`alliance_name`
+							$buddy_receiver = parent::$db->queryFetch ( "SELECT u.`user_id`, u.`user_name`, u.`user_galaxy`, u.`user_system`, u.`user_planet`, u.`user_ally_id`, a.`alliance_name`
 																			FROM " . USERS . " AS u
 																			LEFT JOIN `" . ALLIANCE . "` AS a ON a.`alliance_id` = u.`user_ally_id`
 																			WHERE u.`user_id`='" . intval ( $buddy['buddy_receiver'] ) . "'" );
@@ -228,7 +249,7 @@ class Buddy extends XGPCore
 						}
 						else
 						{
-							$buddy_sender	= parent::$db->query_fetch ( "SELECT `user_id`, `user_name`, `user_galaxy`, `user_system`, `user_planet`,`user_ally_id`, `alliance_name`
+							$buddy_sender	= parent::$db->queryFetch ( "SELECT `user_id`, `user_name`, `user_galaxy`, `user_system`, `user_planet`,`user_ally_id`, `alliance_name`
 																			FROM " . USERS . "
 																			WHERE `user_id`='" . intval ( $buddy['buddy_sender'] ) . "'" );
 
@@ -249,13 +270,13 @@ class Buddy extends XGPCore
 					{
 						if ( $buddy['buddy_sender'] == $this->_current_user['user_id'] )
 						{
-							$buddy_receiver = parent::$db->query_fetch ( "SELECT `user_id`, `user_name`, `user_onlinetime`, `user_galaxy`, `user_system`, `user_planet`,`user_ally_id`, `alliance_name`
+							$buddy_receiver = parent::$db->queryFetch ( "SELECT `user_id`, `user_name`, `user_onlinetime`, `user_galaxy`, `user_system`, `user_planet`,`user_ally_id`, `alliance_name`
 																			FROM " . USERS . "
 																			WHERE `user_id`='" . intval ( $buddy['buddy_receiver'] ) . "'" );
 						}
 						else
 						{
-							$buddy_receiver = parent::$db->query_fetch ( "SELECT `user_id`, `user_name`, `user_onlinetime`, `user_galaxy`, `user_system`, `user_planet`,`user_ally_id`, `alliance_name`
+							$buddy_receiver = parent::$db->queryFetch ( "SELECT `user_id`, `user_name`, `user_onlinetime`, `user_galaxy`, `user_system`, `user_planet`,`user_ally_id`, `alliance_name`
 																			FROM " . USERS . "
 																			WHERE `user_id`='" . intval ( $buddy['buddy_sender'] ) . "'" );
 						}
@@ -284,4 +305,5 @@ class Buddy extends XGPCore
 		}
 	}
 }
+
 /* end of buddy.php */

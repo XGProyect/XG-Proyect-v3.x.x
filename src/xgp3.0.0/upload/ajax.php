@@ -4,8 +4,8 @@
  *
  * PHP Version 5.5+
  *
- * @category Application
- * @package  Application
+ * @category Root File
+ * @package  N/A
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
@@ -25,10 +25,10 @@ if (isset($_GET['content'])) {
 
         include $file_name;
         
-        $class_name = ucfirst($_GET['content']);
+        $class_name = 'application\controllers\ajax\\' . ucfirst($_GET['content']);
         
         new $class_name();
-    }   
+    }
 }
 
 /* end of ajax.php */

@@ -4,13 +4,17 @@
  *
  * PHP Version 5.5+
  *
- * @category Libraries
+ * @category Library
  * @package  Application
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
+
+namespace application\libraries;
+
+use application\core\XGPCore;
 
 /**
  * MissionControlLib Class
@@ -25,7 +29,9 @@
 class MissionControlLib extends XGPCore
 {
     /**
-     * __construct()
+     * __construct
+     *
+     * @return void
      */
     public function __construct(&$planet)
     {
@@ -116,19 +122,21 @@ class MissionControlLib extends XGPCore
         );
 
         // Process missions
-        while ($fleet = parent::$db->fetch_array($all_fleets)) {
+        while ($fleet = parent::$db->fetchArray($all_fleets)) {
 
-            $class_name     = $missions[$fleet['fleet_mission']];
-            $file_name      = strtolower($class_name);
-            $mission_name   = strtolower($class_name) . 'Mission';
-
+            $name           = $missions[$fleet['fleet_mission']];
+            $file_name      = strtolower($name);
+            $mission_name   = strtolower($name) . 'Mission';
+            $class_name     = '\application\libraries\missions\\' . $name;
+            
             include_once XGP_ROOT . 'application/libraries/missions/' . $file_name . '.php';
             
-            $mission    = new $class_name;
+            $mission    = new $class_name();
             $mission->$mission_name($fleet);
         }
 
         parent::$db->query("UNLOCK TABLES");
     }
 }
+
 /* end of MissionControlLib.php */

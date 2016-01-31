@@ -1,155 +1,178 @@
 <?php
-
 /**
- * @project XG Proyect
- * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * Objects
+ *
+ * PHP Version 5.5+
+ *
+ * @category Core
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
  */
 
+namespace application\core;
+
+/**
+ * Objects Class
+ *
+ * @category Classes
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
+ */
 class Objects
 {
-	private $_objects;
-	private $_relations;
-	private $_price;
-	private $_combat_specs;
-	private $_production;
-	private $_objects_list;
+    private $objects;
+    private $relations;
+    private $price;
+    private $combat_specs;
+    private $production;
+    private $objects_list;
 
-	/**
-	 * __construct()
-	 */
-	public function __construct()
-	{
-		// REQUIRE THIS DAMN FILE
-		require XGP_ROOT . 'application/core/objects_collection.php';
+    /**
+     * __construct
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        // REQUIRE THIS DAMN FILE
+        require XGP_ROOT . CORE_PATH . 'objects_collection.php';
 
-		// SET THE ARRAY ELEMENTS TO A PARTICULAR PROPERTY
-		$this->_objects         = $resource;
-		$this->_relations       = $requeriments;
-		$this->_price           = $pricelist;
-		$this->_combat_specs	= $CombatCaps;
-		$this->_production      = $ProdGrid;
-		$this->_objects_list	= $reslist;
-	}
+        // SET THE ARRAY ELEMENTS TO A PARTICULAR PROPERTY
+        $this->objects      = $resource;
+        $this->relations    = $requeriments;
+        $this->price        = $pricelist;
+        $this->combat_specs = $CombatCaps;
+        $this->production   = $ProdGrid;
+        $this->objects_list = $reslist;
+    }
 
-	/**
-	 * method get_objects
-	 * param $object_id
-	 * return one particular object or everything
-	 */
-	public function get_objects ( $object_id = NULL )
-	{
-		if ( ! empty ( $object_id ) )
-		{
-			return $this->_objects[$object_id];
-		}
-		else
-		{
+    /**
+     * getObjects
+     *
+     * @param int $object_id Object ID
+     *
+     * @return array
+     */
+    public function getObjects($object_id = null)
+    {
+        if (!empty($object_id)) {
+            
+            return $this->objects[$object_id];
+        } else {
 
-			return $this->_objects;
-		}
-	}
+            return $this->objects;
+        }
+    }
 
-	/**
-	 * method get_relations
-	 * param $object_id
-	 * return one particular object relations or everything
-	 */
-	public function get_relations ( $object_id = NULL )
-	{
-		if ( ! empty ( $object_id ) )
-		{
-			return $this->_relations[$object_id];
-		}
-		else
-		{
-			return $this->_relations;
-		}
-	}
+    /**
+     * getRelations
+     *
+     * @param int $object_id Object ID
+     *
+     * @return array
+     */
+    public function getRelations($object_id = null)
+    {
+        if (!empty($object_id)) {
 
-	/**
-	 * method get_price
-	 * param $object_id
-	 * param $resource
-	 * return one particular object relations or everything
-	 */
-	public function get_price ( $object_id = NULL , $resource = '' )
-	{
-		if ( ! empty ( $object_id ) )
-		{
-			if ( empty ( $resource ) )
-			{
-				return $this->_price[$object_id];
-			}
-			else
-			{
-				return $this->_price[$object_id][$resource];
-			}
-		}
-		else
-		{
-			return $this->_price;
-		}
-	}
+            return $this->relations[$object_id];
+        } else {
 
-	/**
-	 * method get_combat_specs
-	 * param $object_id
-	 * param $type
-	 * return one particular object combat specs or everything
-	 */
-	public function get_combat_specs ( $object_id = NULL , $type = '' )
-	{
-		if ( ! empty ( $object_id ) )
-		{
-			if ( empty ( $type ) )
-			{
-				return $this->_combat_specs[$object_id];
-			}
-			else
-			{
-				return $this->_combat_specs[$object_id][$type];
-			}
-		}
-		else
-		{
-			return $this->_combat_specs;
-		}
-	}
+            return $this->relations;
+        }
+    }
 
-	/**
-	 * method get_production
-	 * param $object_id
-	 * return one particular object relations or everything
-	 */
-	public function get_production ( $object_id = NULL )
-	{
-		if ( ! empty ( $object_id ) )
-		{
-			return $this->_production[$object_id];
-		}
-		else
-		{
-			return $this->_production;
-		}
-	}
+    /**
+     * getPrice
+     *
+     * @param int    $object_id Object ID
+     * @param string $resource  Resource
+     *
+     * @return array
+     */
+    public function getPrice($object_id = null, $resource = '')
+    {
+        if (!empty($object_id)) {
 
-	/**
-	 * method get_objects_list
-	 * param $object_id
-	 * return one particular object list or everything
-	 */
-	public function get_objects_list ( $object_id = NULL )
-	{
-		if ( ! empty ( $object_id ) )
-		{
-			return $this->_objects_list[$object_id];
-		}
-		else
-		{
-			return $this->_objects_list;
-		}
-	}
+            if (empty($resource)) {
+
+                return $this->price[$object_id];
+            } else {
+
+                return $this->price[$object_id][$resource];
+            }
+        } else {
+
+            return $this->price;
+        }
+    }
+
+    /**
+     * getCombatSpecs
+     *
+     * @param int    $object_id Object ID
+     * @param string $type      Type
+     *
+     * @return array
+     */
+    public function getCombatSpecs($object_id = null, $type = '')
+    {
+        if (!empty($object_id)) {
+
+            if (empty($type)) {
+
+                return $this->combat_specs[$object_id];
+            } else {
+
+                return $this->combat_specs[$object_id][$type];
+            }
+        } else {
+
+            return $this->combat_specs;
+        }
+    }
+
+    /**
+     * getProduction
+     *
+     * @param int $object_id Object ID
+     *
+     * @return array
+     */
+    public function getProduction($object_id = null)
+    {
+        if (!empty($object_id)) {
+
+            return $this->production[$object_id];
+        } else {
+
+            return $this->production;
+        }
+    }
+
+    /**
+     * getObjectsList
+     *
+     * @param int $object_id Object ID
+     *
+     * @return array
+     */
+    public function getObjectsList($object_id = null)
+    {
+        if (!empty($object_id)) {
+
+            return $this->objects_list[$object_id];
+        } else {
+
+            return $this->objects_list;
+        }
+    }
 }
 
 /* end of Objects.php */

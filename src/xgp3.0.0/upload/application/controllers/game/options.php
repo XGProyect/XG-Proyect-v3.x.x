@@ -1,11 +1,32 @@
 <?php
-
 /**
- * @project XG Proyect
- * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2014
+ * Options Controller
+ *
+ * PHP Version 5.5+
+ *
+ * @category Controller
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
  */
 
+namespace application\controllers\game;
+
+use application\core\XGPCore;
+use application\libraries\FunctionsLib;
+
+/**
+ * Options Class
+ *
+ * @category Classes
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
+ */
 class Options extends XGPCore
 {
 	const MODULE_ID	= 21;
@@ -24,7 +45,7 @@ class Options extends XGPCore
 		parent::$users->check_session();
 
 		// Check module access
-		Functions_Lib::module_message ( Functions_Lib::is_module_accesible ( self::MODULE_ID ) );
+		FunctionsLib::module_message ( FunctionsLib::is_module_accesible ( self::MODULE_ID ) );
 
 		$this->_lang			= parent::$lang;
 		$this->_current_user	= parent::$users->get_user_data();
@@ -39,7 +60,7 @@ class Options extends XGPCore
 	 */
 	public function __destruct()
 	{
-		parent::$db->close_connection();
+		parent::$db->closeConnection();
 	}
 
 	/**
@@ -68,12 +89,12 @@ class Options extends XGPCore
 										planet_ship_solar_satellite_porcent = '10'
 										WHERE `setting_user_id` = '".intval($this->_current_user['user_id'])."' AND planet_user_id = '".intval($this->_current_user['user_id'])."'" );
 
-				Functions_Lib::redirect ( 'game.php?page=options' );
+				FunctionsLib::redirect ( 'game.php?page=options' );
 			}
 			else
 			{
 				$urlaubs_modus = '1';
-				Functions_Lib::redirect ( 'game.php?page=options' );
+				FunctionsLib::redirect ( 'game.php?page=options' );
 			}
 		}
 
@@ -91,21 +112,21 @@ class Options extends XGPCore
 			// < ------------------------------------------------- NOMBRE DE USUARIO --------------------------------------------------- >
 			if (isset($_POST['db_character']) && $_POST['db_character'] != '')
 			{
-				$username = parent::$db->escape_value ( $_POST['db_character'] );
+				$username = parent::$db->escapeValue ( $_POST['db_character'] );
 			}
 			else
 			{
-				$username = parent::$db->escape_value ( $this->_current_user['user_name'] );
+				$username = parent::$db->escapeValue ( $this->_current_user['user_name'] );
 			}
 			// < ------------------------------------------------- DIRECCION DE EMAIL -------------------------------------------------- >
 
 			if (isset($_POST['db_email']) && $_POST['db_email'] != '')
 			{
-				$db_email = parent::$db->escape_value ( $_POST['db_email'] );
+				$db_email = parent::$db->escapeValue ( $_POST['db_email'] );
 			}
 			else
 			{
-				$db_email = parent::$db->escape_value ( $this->_current_user['user_email'] );
+				$db_email = parent::$db->escapeValue ( $this->_current_user['user_email'] );
 			}
 			// < ------------------------------------------------- CANTIDAD DE SONDAS -------------------------------------------------- >
 			if (isset($_POST['spio_anz']) && is_numeric($_POST['spio_anz']))
@@ -143,7 +164,7 @@ class Options extends XGPCore
 			{
 				$settings_wri = '0';
 			}
-			// < --------------------------------------------- AÑADIR A LISTA DE AMIGOS ------------------------------------------------ >
+			// < --------------------------------------------- Aï¿½ADIR A LISTA DE AMIGOS ------------------------------------------------ >
 			if (isset($_POST['settings_bud']) && $_POST['settings_bud'] == 'on')
 			{
 				$settings_bud = '1';
@@ -176,17 +197,17 @@ class Options extends XGPCore
 			{
 				if($this->CheckIfIsBuilding())
 				{
-					Functions_Lib::message($this->_lang['op_cant_activate_vacation_mode'], "game.php?page=options",2);
+					FunctionsLib::message($this->_lang['op_cant_activate_vacation_mode'], "game.php?page=options",2);
 				}
 
 				$urlaubs_modus = '1';
-				$time = Functions_Lib::get_default_vacation_time();
+				$time = FunctionsLib::get_default_vacation_time();
 				parent::$db->query ( "UPDATE " . SETTINGS . ", " . PLANETS . " SET
 										`setting_vacations_status` = '$urlaubs_modus',
 										`setting_vacations_until` = '$time',
-										planet_metal_perhour = '".Functions_Lib::read_config ( 'metal_basic_income' )."',
-										planet_crystal_perhour = '".Functions_Lib::read_config ( 'crystal_basic_income' )."',
-										planet_deuterium_perhour = '".Functions_Lib::read_config ( 'deuterium_basic_income' )."',
+										planet_metal_perhour = '".FunctionsLib::read_config ( 'metal_basic_income' )."',
+										planet_crystal_perhour = '".FunctionsLib::read_config ( 'crystal_basic_income' )."',
+										planet_deuterium_perhour = '".FunctionsLib::read_config ( 'deuterium_basic_income' )."',
 										planet_energy_used = '0',
 										planet_energy_max = '0',
 										planet_building_metal_mine_porcent = '0',
@@ -211,8 +232,8 @@ class Options extends XGPCore
 				$db_deaktjava = '0';
 			}
 
-			$SetSort  	= parent::$db->escape_value($_POST['settings_sort']);
-			$SetOrder 	= parent::$db->escape_value($_POST['settings_order']);
+			$SetSort  	= parent::$db->escapeValue($_POST['settings_sort']);
+			$SetOrder 	= parent::$db->escapeValue($_POST['settings_order']);
 			//// < -------------------------------------- ACTUALIZAR TODO LO SETEADO ANTES --------------------------------------------- >
 
 			parent::$db->query ( "UPDATE " . USERS . " AS u, " . SETTINGS . " AS s SET
@@ -242,28 +263,28 @@ class Options extends XGPCore
 												`user_password` = '{$newpass}'
 												WHERE `user_id` = '".intval($this->_current_user['user_id'])."' LIMIT 1" );
 
-						Functions_Lib::message($this->_lang['op_password_changed'],"index.php",1);
+						FunctionsLib::message($this->_lang['op_password_changed'],"index.php",1);
 					}
 				}
 			}
 			// < --------------------------------------------- CAMBIO DE NOMBRE DE USUARIO --------------------------------------------- >
 			if ($this->_current_user['user_name'] != $_POST['db_character'])
 			{
-				$query = parent::$db->query_fetch ( "SELECT `user_id`
+				$query = parent::$db->queryFetch ( "SELECT `user_id`
 														FROM `" . USERS . "`
-														WHERE user_name = '" . parent::$db->escape_value ( $_POST['db_character'] ) . "'" );
+														WHERE user_name = '" . parent::$db->escapeValue ( $_POST['db_character'] ) . "'" );
 
 				if (!$query)
 				{
 					parent::$db->query ( "UPDATE `" . USERS . "` SET
-											`user_name` = '" . parent::$db->escape_value ( $username ) . "'
+											`user_name` = '" . parent::$db->escapeValue ( $username ) . "'
 											WHERE `user_id` = '" . $this->_current_user['user_id'] . "'
 											LIMIT 1" );
 
-					Functions_Lib::message($this->_lang['op_username_changed'], "index.php", 1);
+					FunctionsLib::message($this->_lang['op_username_changed'], "index.php", 1);
 				}
 			}
-			Functions_Lib::message($this->_lang['op_options_changed'], "game.php?page=options", 1);
+			FunctionsLib::message($this->_lang['op_options_changed'], "game.php?page=options", 1);
 		}
 		else
 		{
@@ -274,7 +295,7 @@ class Options extends XGPCore
 			{
 				$parse['opt_modev_data'] 	= ($this->_current_user['setting_vacations_status'] == 1)?" checked='checked'/":'';
 				$parse['opt_modev_exit'] 	= ($this->_current_user['setting_vacations_status'] == 0)?" checked='1'/":'';
-				$parse['vacation_until'] 	= date(Functions_Lib::read_config ( 'date_format_extended' ),$this->_current_user['setting_vacations_until']);
+				$parse['vacation_until'] 	= date(FunctionsLib::read_config ( 'date_format_extended' ),$this->_current_user['setting_vacations_until']);
 
 				parent::$page->display ( parent::$page->parse_template ( parent::$page->get_template ( 'options/options_body_vmode' ) , $parse ) );
 			}
@@ -305,7 +326,7 @@ class Options extends XGPCore
 
 	private function CheckIfIsBuilding()
 	{
-		$activity	= parent::$db->query_fetch ( "SELECT (
+		$activity	= parent::$db->queryFetch ( "SELECT (
 															(
 																SELECT COUNT( fleet_id ) AS quantity
 																	FROM " . FLEETS . "
@@ -330,4 +351,5 @@ class Options extends XGPCore
 		}
 	}
 }
+
 /* end of options.php */

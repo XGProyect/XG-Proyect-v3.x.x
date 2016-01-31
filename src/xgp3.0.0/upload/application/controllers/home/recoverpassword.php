@@ -1,11 +1,32 @@
 <?php
-
 /**
- * @project XG Proyect
- * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * Recoverpassword Controller
+ *
+ * PHP Version 5.5+
+ *
+ * @category Controller
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
  */
 
+namespace application\controllers\home;
+
+use application\core\XGPCore;
+use application\libraries\FunctionsLib;
+
+/**
+ * Recoverpassword Class
+ *
+ * @category Classes
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
+ */
 class Recoverpassword extends XGPCore
 {
 	/**
@@ -25,7 +46,7 @@ class Recoverpassword extends XGPCore
 	 */
 	public function __destruct()
 	{
-		parent::$db->close_connection();
+		parent::$db->closeConnection();
 	}
 
 	/**
@@ -41,13 +62,13 @@ class Recoverpassword extends XGPCore
 		if ( $_POST )
 		{
 			$this->process_request ( $_POST['email'] );
-			Functions_Lib::message ( $lang['mail_sended'] , "./" , 2 , FALSE , FALSE );
+			FunctionsLib::message ( $lang['mail_sended'] , "./" , 2 , FALSE , FALSE );
 		}
 		else
 		{
 			$parse['year']		   = date ( 'Y' );
 			$parse['version']	   = VERSION;
-			$parse['forum_url']    = Functions_Lib::read_config ( 'forum_url' );
+			$parse['forum_url']    = FunctionsLib::read_config ( 'forum_url' );
 			parent::$page->display ( parent::$page->parse_template ( parent::$page->get_template ( 'home/lostpassword' ) , $parse ) , FALSE , '' , FALSE );
 		}
 	}
@@ -82,13 +103,13 @@ class Recoverpassword extends XGPCore
 	private function process_request ( $mail )
 	{
 		$lang		= parent::$lang;
-		$ExistMail 	= parent::$db->query_fetch	( "SELECT `user_name`
+		$ExistMail 	= parent::$db->queryFetch	( "SELECT `user_name`
 										 			FROM " . USERS . "
-										 			WHERE `user_email` = '" . parent::$db->escape_value ( $mail ) . "' LIMIT 1;" );
+										 			WHERE `user_email` = '" . parent::$db->escapeValue ( $mail ) . "' LIMIT 1;" );
 
 		if ( empty ( $ExistMail['user_name'] ) )
 		{
-			Functions_Lib::message ( $lang['mail_not_exist'] , "index.php?page=recoverpassword" , 2 , FALSE , FALSE );
+			FunctionsLib::message ( $lang['mail_not_exist'] , "index.php?page=recoverpassword" , 2 , FALSE , FALSE );
 		}
 		else
 		{
@@ -96,7 +117,7 @@ class Recoverpassword extends XGPCore
 
 			parent::$db->query ( "UPDATE " . USERS . " SET
 									`user_password` ='". sha1 ( $new_password ) ."'
-									WHERE `user_email`='". parent::$db->escape_value ( $mail ) ."' LIMIT 1;" );
+									WHERE `user_email`='". parent::$db->escapeValue ( $mail ) ."' LIMIT 1;" );
 		}
 	}
 
@@ -109,7 +130,7 @@ class Recoverpassword extends XGPCore
 	private function send_pass_email ( $emailaddress , $UserName )
 	{
 		$lang							= parent::$lang;
-		$game_name						= Functions_Lib::read_config ( 'game_name' );
+		$game_name						= FunctionsLib::read_config ( 'game_name' );
 
 		$parse							= $lang;
 		$parse['user_name']				= $UserName;
@@ -138,10 +159,10 @@ class Recoverpassword extends XGPCore
 
 		if ( !$from )
 		{
-			$from = Functions_Lib::read_config ( 'admin_email' );
+			$from = FunctionsLib::read_config ( 'admin_email' );
 		}
 
-		$rp 	= Functions_Lib::read_config ( 'admin_email' );
+		$rp 	= FunctionsLib::read_config ( 'admin_email' );
 
 		$head  	= '';
 		$head  .= "Content-Type: text/html \r\n";
@@ -161,4 +182,5 @@ class Recoverpassword extends XGPCore
 		return @mail ( $to , $title , $body , $head );
 	}
 }
+
 /* end of recoverpassword.php */

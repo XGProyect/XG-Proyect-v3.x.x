@@ -1,11 +1,34 @@
 <?php
-
 /**
- * @project XG Proyect
- * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * Information Controller
+ *
+ * PHP Version 5.5+
+ *
+ * @category Controller
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
  */
 
+namespace application\controllers\adm;
+
+use application\core\XGPCore;
+use application\libraries\adm\AdministrationLib;
+use application\libraries\FormatLib;
+use application\libraries\FunctionsLib;
+
+/**
+ * Information Class
+ *
+ * @category Classes
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
+ */
 class Information extends XGPCore
 {
 	private $_lang;
@@ -25,13 +48,13 @@ class Information extends XGPCore
 		$this->_current_user	= parent::$users->get_user_data();
 
 		// Check if the user is allowed to access
-		if ( Administration_Lib::have_access ( $this->_current_user['user_authlevel'] ) && Administration_Lib::authorization ( $this->_current_user['user_authlevel'] , 'observation' ) == 1 )
+		if ( AdministrationLib::have_access ( $this->_current_user['user_authlevel'] ) && AdministrationLib::authorization ( $this->_current_user['user_authlevel'] , 'observation' ) == 1 )
 		{
 			$this->build_page();
 		}
 		else
 		{
-			die ( Functions_Lib::message ( $this->_lang['ge_no_permissions'] ) );
+			die ( FunctionsLib::message ( $this->_lang['ge_no_permissions'] ) );
 		}
 	}
 
@@ -42,7 +65,7 @@ class Information extends XGPCore
 	 */
 	public function __destruct ()
 	{
-		parent::$db->close_connection();
+		parent::$db->closeConnection();
 	}
 
 	/**
@@ -53,10 +76,10 @@ class Information extends XGPCore
 	private function build_page()
 	{
 		$parse					= $this->_lang;
-		$update					= Functions_Lib::read_config ( 'stat_last_update' );
-		$backup					= Functions_Lib::read_config ( 'last_backup' );
-		$cleanup				= Functions_Lib::read_config ( 'last_cleanup' );
-		$modules				= explode ( ';' , Functions_Lib::read_config ( 'modules' ) );
+		$update					= FunctionsLib::read_config ( 'stat_last_update' );
+		$backup					= FunctionsLib::read_config ( 'last_backup' );
+		$cleanup				= FunctionsLib::read_config ( 'last_cleanup' );
+		$modules				= explode ( ';' , FunctionsLib::read_config ( 'modules' ) );
 		$count_modules			= 0;
 
 		// COUNT MODULES
@@ -70,7 +93,7 @@ class Information extends XGPCore
 
 		// LOAD STATISTICS
 		$inactive_time	= ( time() - 60 * 60 * 24 * 7 );
-		$users_count	= parent::$db->query_fetch ( "SELECT (
+		$users_count	= parent::$db->queryFetch ( "SELECT (
 																SELECT COUNT(user_id)
 																	FROM " . USERS . "
 															 ) AS users_count,
@@ -103,15 +126,15 @@ class Information extends XGPCore
 		$db_tables	= parent::$db->query ( "SHOW TABLE STATUS" );
 		$db_size	= 0;
 
-		while ( $row = parent::$db->fetch_array ( $db_tables ) )
+		while ( $row = parent::$db->fetchArray ( $db_tables ) )
 		{
 			$db_size += $row['Data_length'] + $row['Index_length'];
 		}
 
 		// PARSE STATISTICS
-		$parse['info_points']				= date ( Functions_Lib::read_config ( 'date_format_extended' ) , $update ) . ' | ' . Format_Lib::pretty_time ( ( time() - $update ) );
-		$parse['info_backup']				= date ( Functions_Lib::read_config ( 'date_format_extended' ) , $backup ) . ' | ' . Format_Lib::pretty_time ( ( time() - $backup ) );
-		$parse['info_cleanup']				= date ( Functions_Lib::read_config ( 'date_format_extended' ) , $cleanup ) . ' | ' . Format_Lib::pretty_time ( ( time() - $cleanup ) );
+		$parse['info_points']				= date ( FunctionsLib::read_config ( 'date_format_extended' ) , $update ) . ' | ' . FormatLib::pretty_time ( ( time() - $update ) );
+		$parse['info_backup']				= date ( FunctionsLib::read_config ( 'date_format_extended' ) , $backup ) . ' | ' . FormatLib::pretty_time ( ( time() - $backup ) );
+		$parse['info_cleanup']				= date ( FunctionsLib::read_config ( 'date_format_extended' ) , $cleanup ) . ' | ' . FormatLib::pretty_time ( ( time() - $cleanup ) );
 		$parse['info_modules']				= $count_modules . '/' . ( count ( $modules ) - 1 );
 		$parse['info_total_users']			= $users_count['users_count'];
 		$parse['info_inactive_users']		= $users_count['inactive_count'];
@@ -120,9 +143,10 @@ class Information extends XGPCore
 		$parse['info_banned_users']			= $users_count['banned_users'];
 		$parse['info_flying_fleets']		= $users_count['fleets_count'];
 		$parse['info_database_size']		= round ( $db_size / 1024 , 1 ) . ' kb';
-		$parse['info_database_server']		= 'MySQL ' . parent::$db->server_info();
+		$parse['info_database_server']		= 'MySQL ' . parent::$db->serverInfo();
 
 		parent::$page->display ( parent::$page->parse_template ( parent::$page->get_template ( "adm/information_view" ) , $parse ) );
 	}
 }
+
 /* end of information.php */

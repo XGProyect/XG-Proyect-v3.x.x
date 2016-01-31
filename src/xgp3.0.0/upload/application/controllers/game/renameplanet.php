@@ -1,11 +1,32 @@
 <?php
-
 /**
- * @project XG Proyect
- * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * Renameplanet Controller
+ *
+ * PHP Version 5.5+
+ *
+ * @category Controller
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
  */
 
+namespace application\controllers\game;
+
+use application\core\XGPCore;
+use application\libraries\FunctionsLib;
+
+/**
+ * Renameplanet Class
+ *
+ * @category Classes
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
+ */
 class Renameplanet extends XGPCore
 {
 	const MODULE_ID	= 1;
@@ -25,7 +46,7 @@ class Renameplanet extends XGPCore
 		parent::$users->check_session();
 
 		// Check module access
-		Functions_Lib::module_message ( Functions_Lib::is_module_accesible ( self::MODULE_ID ) );
+		FunctionsLib::module_message ( FunctionsLib::is_module_accesible ( self::MODULE_ID ) );
 
 		$this->_lang			= parent::$lang;
 		$this->_current_user	= parent::$users->get_user_data();
@@ -41,7 +62,7 @@ class Renameplanet extends XGPCore
 	 */
 	public function __destruct()
 	{
-		parent::$db->close_connection();
+		parent::$db->closeConnection();
 	}
 
 	/**
@@ -94,11 +115,11 @@ class Renameplanet extends XGPCore
 	 */
 	private function rename_planet ( $new_name )
 	{
-		$new_name = parent::$db->escape_value ( strip_tags ( trim ( $new_name ) ) );
+		$new_name = parent::$db->escapeValue ( strip_tags ( trim ( $new_name ) ) );
 
 		if ( preg_match ( "/[^A-z0-9_\- ]/" , $new_name ) == 1 )
 		{
-			Functions_Lib::message ( $this->_lang['ov_newname_error'] , "game.php?page=renameplanet" , 2 );
+			FunctionsLib::message ( $this->_lang['ov_newname_error'] , "game.php?page=renameplanet" , 2 );
 		}
 
 		if ( $new_name != "" )
@@ -130,7 +151,7 @@ class Renameplanet extends XGPCore
 																fleet_end_system='" . intval ( $this->_current_planet['planet_system'] ) . "' AND
 																fleet_end_planet='" . intval ( $this->_current_planet['planet_planet'] ) . "')");
 
-		while ( $fleet = parent::$db->fetch_array ( $fleets_incoming ) )
+		while ( $fleet = parent::$db->fetchArray ( $fleets_incoming ) )
 		{
 			$own_fleet 		= $fleet['fleet_owner'];
 			$enemy_fleet 	= $fleet['fleet_target_owner'];
@@ -145,11 +166,11 @@ class Renameplanet extends XGPCore
 
 		if ( $own_fleet > 0 )
 		{
-			Functions_Lib::message ( $this->_lang['ov_abandon_planet_not_possible'] , 'game.php?page=renameplanet' );
+			FunctionsLib::message ( $this->_lang['ov_abandon_planet_not_possible'] , 'game.php?page=renameplanet' );
 		}
 		elseif ( ( ( $enemy_fleet > 0 ) && ( $mess < 1 ) ) && $end_type != 2 )
 		{
-			Functions_Lib::message ( $this->_lang['ov_abandon_planet_not_possible'] , 'game.php?page=renameplanet' );
+			FunctionsLib::message ( $this->_lang['ov_abandon_planet_not_possible'] , 'game.php?page=renameplanet' );
 		}
 		else
 		{
@@ -178,17 +199,18 @@ class Renameplanet extends XGPCore
 				}
 
 
-				Functions_Lib::message ( $this->_lang['ov_planet_abandoned']  , 'game.php?page=overview' );
+				FunctionsLib::message ( $this->_lang['ov_planet_abandoned']  , 'game.php?page=overview' );
 			}
 			elseif ( $this->_current_user['user_home_planet_id'] == $this->_current_user['user_current_planet'] )
 			{
-				Functions_Lib::message ( $this->_lang['ov_principal_planet_cant_abanone'] , 'game.php?page=renameplanet' );
+				FunctionsLib::message ( $this->_lang['ov_principal_planet_cant_abanone'] , 'game.php?page=renameplanet' );
 			}
 			else
 			{
-				Functions_Lib::message ( $this->_lang['ov_wrong_pass']  , 'game.php?page=renameplanet' );
+				FunctionsLib::message ( $this->_lang['ov_wrong_pass']  , 'game.php?page=renameplanet' );
 			}
 		}
 	}
 }
+
 /* end of renameplanet.php */

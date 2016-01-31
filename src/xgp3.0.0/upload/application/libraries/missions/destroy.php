@@ -1,11 +1,31 @@
 <?php
-
 /**
- * @project XG Proyect
- * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * Destroy Library
+ *
+ * PHP Version 5.5+
+ *
+ * @category Library
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
  */
 
+namespace application\libraries\missions;
+
+use application\libraries\FunctionsLib;
+
+/**
+ * Destroy Class
+ *
+ * @category Classes
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
+ */
 class Destroy extends Missions
 {
 	/**
@@ -21,11 +41,11 @@ class Destroy extends Missions
 	 * param $fleet_row
 	 * return the transport result
 	*/
-	public function destroy_mission ( $fleet_row )
+	public function destroyMission ( $fleet_row )
 	{
 		if ( $fleet_row['fleet_mess'] == 0 && $fleet_row['fleet_start_time'] <= time() )
 		{
-			$current_data	= parent::$db->query_fetch ( "SELECT p.planet_name, r.research_weapons_technology, r.research_shielding_technology, r.research_armour_technology, u.user_name, u.user_id
+			$current_data	= parent::$db->queryFetch ( "SELECT p.planet_name, r.research_weapons_technology, r.research_shielding_technology, r.research_armour_technology, u.user_name, u.user_id
 															FROM " . PLANETS . " AS p
 															INNER JOIN " . USERS . " AS u ON u.user_id = p.planet_user_id
 															INNER JOIN " . PREMIUM . " AS pr ON pr.premium_user_id = p.planet_user_id
@@ -35,7 +55,7 @@ class Destroy extends Missions
 																	p.`planet_planet` = " . $fleet_row['fleet_start_planet'] . " AND
 																	p.`planet_type` = " . $fleet_row['fleet_start_type'] . ";" );
 
-			$target_data	= parent::$db->query_fetch ( "SELECT s.*, d.*, p.`planet_id`, p.planet_diameter, p.planet_user_id, u.user_name, u.user_current_planet, r.research_weapons_technology, r.research_shielding_technology, r.research_armour_technology
+			$target_data	= parent::$db->queryFetch ( "SELECT s.*, d.*, p.`planet_id`, p.planet_diameter, p.planet_user_id, u.user_name, u.user_current_planet, r.research_weapons_technology, r.research_shielding_technology, r.research_armour_technology
 															FROM " . PLANETS . " AS p
 															INNER JOIN " . SHIPS . " AS s ON s.ship_planet_id = p.`planet_id`
 															INNER JOIN " . DEFENSES . " AS d ON d.defense_planet_id = p.`planet_id`
@@ -703,8 +723,8 @@ class Destroy extends Missions
 			$wygrana = "w";
 		}
 
-		$game_fleet_cdr		= Functions_Lib::read_config ( 'fleet_cdr' );
-		$game_def_cdr		= Functions_Lib::read_config ( 'defs_cdr' );
+		$game_fleet_cdr		= FunctionsLib::read_config ( 'fleet_cdr' );
+		$game_def_cdr		= FunctionsLib::read_config ( 'defs_cdr' );
 
 		$debris['metal']    = ( ( ( $current_debris_start['metal']   - $current_debris_end['metal'] )   + ($target_debris_start['metal']   - $target_debris_end['metal'] ) )   * ( $game_fleet_cdr / 100 ) );
 		$debris['crystal']  = ( ( ( $current_debris_start['crystal'] - $current_debris_end['crystal'] ) + ($target_debris_start['crystal'] - $target_debris_end['crystal'] ) ) * ( $game_fleet_cdr / 100 ) );
@@ -771,7 +791,8 @@ class Destroy extends Missions
 	*/
 	private function destroy_message ( $owner , $message , $time )
 	{
-		Functions_Lib::send_message ( $owner , '' , $time , 1 , $this->_lang['sys_mess_tower'] , $this->_lang['sys_mess_destruc_report'] , $message );
+		FunctionsLib::send_message ( $owner , '' , $time , 1 , $this->_lang['sys_mess_tower'] , $this->_lang['sys_mess_destruc_report'] , $message );
 	}
 }
+
 /* end of destroy.php */

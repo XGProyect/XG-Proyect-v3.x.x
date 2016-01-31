@@ -1,11 +1,34 @@
 <?php
-
 /**
- * @project XG Proyect
- * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * Fleet2 Controller
+ *
+ * PHP Version 5.5+
+ *
+ * @category Controller
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
  */
 
+namespace application\controllers\game;
+
+use application\core\XGPCore;
+use application\libraries\FleetsLib;
+use application\libraries\FunctionsLib;
+use application\libraries\OfficiersLib;
+
+/**
+ * Fleet2 Class
+ *
+ * @category Classes
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
+ */
 class Fleet2 extends XGPCore
 {
 	const MODULE_ID	= 8;
@@ -25,7 +48,7 @@ class Fleet2 extends XGPCore
 		parent::$users->check_session();
 
 		// Check module access
-		Functions_Lib::module_message ( Functions_Lib::is_module_accesible ( self::MODULE_ID ) );
+		FunctionsLib::module_message ( FunctionsLib::is_module_accesible ( self::MODULE_ID ) );
 
 		$this->_lang			= parent::$lang;
 		$this->_current_user	= parent::$users->get_user_data();
@@ -41,7 +64,7 @@ class Fleet2 extends XGPCore
 	 */
 	public function __destruct()
 	{
-		parent::$db->close_connection();
+		parent::$db->closeConnection();
 	}
 
 	/**
@@ -51,9 +74,9 @@ class Fleet2 extends XGPCore
 	 */
 	private function build_page()
 	{
-		$resource	=	parent::$objects->get_objects();
-		$pricelist	=	parent::$objects->get_price();
-		$reslist	=	parent::$objects->get_objects_list();
+		$resource	=	parent::$objects->getObjects();
+		$pricelist	=	parent::$objects->getPrice();
+		$reslist	=	parent::$objects->getObjectsList();
 
 		#####################################################################################################
 		// SOME DEFAULT VALUES
@@ -105,7 +128,7 @@ class Fleet2 extends XGPCore
 			{
 				if ( ( $_POST["ship$i"] > $this->_current_planet[$resource[$i]]) OR (!ctype_digit( $_POST["ship$i"] )))
 				{
-					Functions_Lib::redirect ( 'game.php?page=fleet1' );
+					FunctionsLib::redirect ( 'game.php?page=fleet1' );
 				}
 				else
 				{
@@ -113,12 +136,12 @@ class Fleet2 extends XGPCore
 					$fleet['fleetlist']        .= $i . "," . $_POST["ship$i"] . ";";
 					$fleet['amount']           += $_POST["ship$i"];
 					$fleet['i']				   	= $i;
-					$fleet['consumption']	   += Fleets_Lib::ship_consumption ( $i , $this->_current_user );
-					$fleet['speed']				= Fleets_Lib::fleet_max_speed ( '' , $i , $this->_current_user );
+					$fleet['consumption']	   += FleetsLib::ship_consumption ( $i , $this->_current_user );
+					$fleet['speed']				= FleetsLib::fleet_max_speed ( '' , $i , $this->_current_user );
 					$fleet['capacity']			= $pricelist[$i]['capacity'];
 					$fleet['ship']				= $_POST["ship$i"];
 
-					$speedalls[$i]             = Fleets_Lib::fleet_max_speed ( '' , $i , $this->_current_user);
+					$speedalls[$i]             = FleetsLib::fleet_max_speed ( '' , $i , $this->_current_user);
 					$FleetHiddenBlock		  .= parent::$page->parse_template ( $inputs_template , $fleet );
 				}
 			}
@@ -126,7 +149,7 @@ class Fleet2 extends XGPCore
 
 		if ( !$fleet['fleetlist'] )
 		{
-			Functions_Lib::redirect ( 'game.php?page=fleet1' );
+			FunctionsLib::redirect ( 'game.php?page=fleet1' );
 		}
 
 		else
@@ -186,7 +209,7 @@ class Fleet2 extends XGPCore
 		$parse['galaxy_post'] 			= (int)$_POST['galaxy'];
 		$parse['system_post'] 			= (int)$_POST['system'];
 		$parse['planet_post'] 			= (int)$_POST['planet'];
-		$parse['speedfactor'] 			= Functions_Lib::fleet_speed_factor();
+		$parse['speedfactor'] 			= FunctionsLib::fleet_speed_factor();
 		$parse['planet_type'] 			= $this->_current_planet['planet_type'];
 		$parse['metal'] 				= floor($this->_current_planet['planet_metal']);
 		$parse['crystal'] 				= floor($this->_current_planet['planet_crystal']);
@@ -198,7 +221,7 @@ class Fleet2 extends XGPCore
 		#####################################################################################################
 		// LOAD FLEET SHORTCUTS
 		#####################################################################################################
-		if ( Officiers_Lib::is_officier_active( $this->_current_user['premium_officier_commander'] ) )
+		if ( OfficiersLib::isOfficierActive( $this->_current_user['premium_officier_commander'] ) )
 		{
 			if ( $this->_current_user['user_fleet_shortcuts'] )
 			{
@@ -249,7 +272,7 @@ class Fleet2 extends XGPCore
 		// LOAD COLONY SHORTCUTS
 		#####################################################################################################
 		$colony['select']			= 'colonies';
-		$colony['shortcut_options']	= Functions_Lib::build_planet_list ( $this->_current_user , $this->_current_planet['planet_id'] );
+		$colony['shortcut_options']	= FunctionsLib::build_planet_list ( $this->_current_user , $this->_current_planet['planet_id'] );
 		$parse['colonylist']		= parent::$page->parse_template ( $shortcut_row_template , $colony );
 
 		if ( $colony['shortcut_options'] === FALSE )
@@ -263,7 +286,7 @@ class Fleet2 extends XGPCore
 		#####################################################################################################
 		$acs_fleets	= '';
 
-		while ( $row = parent::$db->fetch_array ( $getCurrentAcs ) )
+		while ( $row = parent::$db->fetchArray ( $getCurrentAcs ) )
 		{
 			$members = explode ( "," , $row['acs_fleet_invited'] );
 
@@ -291,4 +314,5 @@ class Fleet2 extends XGPCore
 		parent::$page->display ( parent::$page->parse_template ( parent::$page->get_template ( 'fleet/fleet2_table' ) , $parse ) );
 	}
 }
+
 /* end of fleet2.php */

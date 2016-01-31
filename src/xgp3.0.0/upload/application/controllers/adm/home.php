@@ -1,11 +1,33 @@
 <?php
-
 /**
- * @project XG Proyect
- * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * Home Controller
+ *
+ * PHP Version 5.5+
+ *
+ * @category Controller
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
  */
 
+namespace application\controllers\adm;
+
+use application\core\XGPCore;
+use application\libraries\adm\AdministrationLib;
+use application\libraries\FunctionsLib;
+
+/**
+ * Home Class
+ *
+ * @category Classes
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
+ */
 class Home extends XGPCore
 {
 	private $_lang;
@@ -25,9 +47,9 @@ class Home extends XGPCore
 		$this->_current_user	= parent::$users->get_user_data();
 
 		// Check if the user is allowed to access
-		if ( ! Administration_Lib::have_access ( $this->_current_user['user_authlevel'] ) )
+		if ( ! AdministrationLib::have_access ( $this->_current_user['user_authlevel'] ) )
 		{
-			die ( Functions_Lib::message ( $this->_lang['ge_no_permissions'] ) );
+			die ( FunctionsLib::message ( $this->_lang['ge_no_permissions'] ) );
 		}
 		else
 		{
@@ -42,7 +64,7 @@ class Home extends XGPCore
 	 */
 	public function __destruct ()
 	{
-		parent::$db->close_connection();
+		parent::$db->closeConnection();
 	}
 
 	/**
@@ -63,13 +85,13 @@ class Home extends XGPCore
 		// VERIFICATIONS
 		if ( $this->_current_user['user_authlevel'] >= 3 )
 		{
-			if ( is_writable ( XGP_ROOT . 'application/config/config.php' ) )
+			if ( is_writable ( XGP_ROOT . CONFIGS_PATH . 'config.php' ) )
 			{
 				$message[1]		= $this->_lang['hm_config_file_writable'] . '<br />';
 				$error++;
 			}
 
-			if ( ( filesize ( XGP_ROOT . LOGS_PATH . 'ErrorLog.php' ) ) != 0 )
+			if ( ( @filesize ( XGP_ROOT . LOGS_PATH . 'ErrorLog.php' ) ) != 0 )
 			{
 				$message[2]		= $this->_lang['hm_database_errors'] . '<br />';
 				$error++;
@@ -82,7 +104,7 @@ class Home extends XGPCore
 				$error++;
 			}
 
-			if ( Administration_Lib::install_dir_exists() )
+			if ( AdministrationLib::install_dir_exists() )
 			{
 				$message[4]		= $this->_lang['hm_install_file_detected'] . '<br />';
 				$error++;
@@ -108,7 +130,7 @@ class Home extends XGPCore
 			$parse['error_type']		= $this->_lang['hm_ok'];
 		}
 
-		$parse['game_version']		= Functions_Lib::read_config ( 'version' );
+		$parse['game_version']		= FunctionsLib::read_config ( 'version' );
 		$parse['old_version_alert']	= ( $old_version ) ? '<a href="http://www.xgproyect.org/downloads/">' . $this->_lang['hm_update'] . '</a> <i class="icon-download"></i>' : '';
 
 		parent::$page->display ( parent::$page->parse_template ( parent::$page->get_template ( 'adm/home_view' ) , $parse ) );
@@ -124,10 +146,11 @@ class Home extends XGPCore
 		if ( function_exists ( 'file_get_contents' ) )
 		{
 			$last_v 	= @file_get_contents ( 'http://xgproyect.xgproyect.org/current.php' );
-			$system_v	= Functions_Lib::read_config ( 'version' );
+			$system_v	= FunctionsLib::read_config ( 'version' );
 
 			return version_compare ( $system_v , $last_v , '<' );
 		}
 	}
 }
+
 /* end of home.php */

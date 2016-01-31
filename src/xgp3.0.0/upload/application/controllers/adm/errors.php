@@ -1,11 +1,33 @@
 <?php
-
 /**
- * @project XG Proyect
- * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * Errors Controller
+ *
+ * PHP Version 5.5+
+ *
+ * @category Controller
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
  */
 
+namespace application\controllers\adm;
+
+use application\core\XGPCore;
+use application\libraries\adm\AdministrationLib;
+use application\libraries\FunctionsLib;
+
+/**
+ * Errors Class
+ *
+ * @category Classes
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
+ */
 class Errors extends XGPCore
 {
 	private $_lang;
@@ -25,13 +47,13 @@ class Errors extends XGPCore
 		$this->_current_user	= parent::$users->get_user_data();
 
 		// Check if the user is allowed to access
-		if ( Administration_Lib::have_access ( $this->_current_user['user_authlevel'] ) && Administration_Lib::authorization ( $this->_current_user['user_authlevel'] , 'config_game' ) == 1 )
+		if ( AdministrationLib::have_access ( $this->_current_user['user_authlevel'] ) && AdministrationLib::authorization ( $this->_current_user['user_authlevel'] , 'config_game' ) == 1 )
 		{
 			$this->build_page();
 		}
 		else
 		{
-			die ( Functions_Lib::message ( $this->_lang['ge_no_permissions'] ) );
+			die ( FunctionsLib::message ( $this->_lang['ge_no_permissions'] ) );
 		}
 	}
 
@@ -42,7 +64,7 @@ class Errors extends XGPCore
 	 */
 	public function __destruct ()
 	{
-		parent::$db->close_connection();
+		parent::$db->closeConnection();
 	}
 
 	/**
@@ -56,7 +78,7 @@ class Errors extends XGPCore
 		$load_template			= parent::$page->get_template ( 'adm/errors_row_view' );
 		$deleteall				= isset ( $_GET['deleteall'] ) ? $_GET['deleteall'] : '';
 		$file					=  XGP_ROOT . LOGS_PATH . 'ErrorLog.php';
-		$errors_all				= file_get_contents ( $file );
+		$errors_all				= @file_get_contents ( $file );
 		$i 						= 0;
 		$parse['errors_list']	= '';
 
@@ -83,10 +105,11 @@ class Errors extends XGPCore
 		{
 			$fh = fopen ( $file , 'w' );
 			fclose ( $fh );
-			Functions_Lib::redirect ( 'admin.php?page=errors' );
+			FunctionsLib::redirect ( 'admin.php?page=errors' );
 		}
 
 		parent::$page->display ( parent::$page->parse_template ( parent::$page->get_template ( 'adm/errors_view' ) , $parse ) );
 	}
 }
+
 /* end of errors.php */

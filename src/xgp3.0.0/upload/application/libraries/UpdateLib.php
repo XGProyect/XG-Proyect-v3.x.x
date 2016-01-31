@@ -12,6 +12,10 @@
  * @version  3.0.0
  */
 
+namespace application\libraries;
+
+use application\core\XGPCore;
+
 /**
  * UpdateLib Class
  *
@@ -43,13 +47,13 @@ class UpdateLib extends XGPCore
     }
 
     /**
-     * method cleanUp
-     * param
-     * return delete all data
+     * cleanUp
+     *
+     * @return void
      */
     private function cleanUp()
     {
-        $last_cleanup       = Functions_Lib::read_config('last_cleanup');
+        $last_cleanup       = FunctionsLib::read_config('last_cleanup');
         $cleanup_interval   = 6; // 6 HOURS
 
         if ((time() >= ($last_cleanup + (3600 * $cleanup_interval)))) {
@@ -60,15 +64,17 @@ class UpdateLib extends XGPCore
             $del_deleted    = time() - (60 * 60 * 24 * 7); // 1 WEEK
 
             // USERS TO DELETE
-            $ChooseToDelete = parent::$db->query("SELECT u.`user_id`
-FROM `" . USERS . "` AS u
-INNER JOIN `" . SETTINGS . "` AS s ON s.setting_user_id = u.user_id
-WHERE (s.`setting_delete_account` < '".$del_deleted."' AND s.`setting_delete_account` <> 0) OR
-(u.`user_onlinetime` < '".$del_inactive."' AND u.`user_onlinetime` <> 0 AND u.`user_authlevel` <> 3)");
+            $ChooseToDelete = parent::$db->query(
+                "SELECT u.`user_id`
+                FROM `" . USERS . "` AS u
+                INNER JOIN `" . SETTINGS . "` AS s ON s.setting_user_id = u.user_id
+                WHERE (s.`setting_delete_account` < '".$del_deleted."' AND s.`setting_delete_account` <> 0) OR
+                (u.`user_onlinetime` < '".$del_inactive."' AND u.`user_onlinetime` <> 0 AND u.`user_authlevel` <> 3)"
+            );
 
             if ($ChooseToDelete) {
                 
-                while ($delete = parent::$db->fetch_array($ChooseToDelete)) {
+                while ($delete = parent::$db->fetchArray($ChooseToDelete)) {
                     
                     parent::$users->delete_user($delete['id']);
                 }
@@ -77,7 +83,7 @@ WHERE (s.`setting_delete_account` < '".$del_deleted."' AND s.`setting_delete_acc
             parent::$db->query("DELETE FROM " . MESSAGES . " WHERE `message_time` < '". $del_before ."';");
             parent::$db->query("DELETE FROM " . REPORTS . " WHERE `report_time` < '". $del_before ."';");
 
-            Functions_Lib::update_config('last_cleanup', time());
+            FunctionsLib::update_config('last_cleanup', time());
         }
     }
 
@@ -89,16 +95,16 @@ WHERE (s.`setting_delete_account` < '".$del_deleted."' AND s.`setting_delete_acc
     private function createBackup()
     {
         // LAST UPDATE AND UPDATE INTERVAL, EX: 15 MINUTES
-        $auto_backup        = Functions_Lib::read_config('auto_backup');
-        $last_backup        = Functions_Lib::read_config('last_backup');
+        $auto_backup        = FunctionsLib::read_config('auto_backup');
+        $last_backup        = FunctionsLib::read_config('last_backup');
         $update_interval    = 6; // 6 HOURS
 
         // CHECK TIME
         if ((time() >= ($last_backup + (3600 * $update_interval))) &&  ($auto_backup == 1)) {
             
-            parent::$db->backup_db(); // MAKE BACKUP
+            parent::$db->backupDb(); // MAKE BACKUP
 
-            Functions_Lib::update_config('last_backup', time());
+            FunctionsLib::update_config('last_backup', time());
         }
     }
 
@@ -118,7 +124,7 @@ WHERE (s.`setting_delete_account` < '".$del_deleted."' AND s.`setting_delete_acc
 
                 if ($current_planet['planet_b_building'] <= time()) {
 
-                    UpdateResourcesLib::updateResource(
+                    UpdateResourcesLib::updateResources(
                         $current_user,
                         $current_planet,
                         $current_planet['planet_b_building'],
@@ -127,7 +133,7 @@ WHERE (s.`setting_delete_account` < '".$del_deleted."' AND s.`setting_delete_acc
 
                     if (self::checkBuildingQueue($current_planet, $current_user)) {
 
-                        Developments_Lib::set_first_element($current_planet, $current_user);
+                        DevelopmentsLib::set_first_element($current_planet, $current_user);
                     }
                 } else {
                     break;
@@ -145,16 +151,18 @@ WHERE (s.`setting_delete_account` < '".$del_deleted."' AND s.`setting_delete_acc
     {
         include_once XGP_ROOT . 'application/libraries/MissionControlLib.php';
 
-        $_fleets    = parent::$db->query("SELECT 
-fleet_start_galaxy, 
-fleet_start_system, 
-fleet_start_planet, 
-fleet_start_type
-FROM " . FLEETS . "
-WHERE `fleet_start_time` <= '" . time() . "' AND `fleet_mess` ='0'
-ORDER BY fleet_id ASC;");
+        $_fleets    = parent::$db->query(
+            "SELECT 
+            fleet_start_galaxy, 
+            fleet_start_system, 
+            fleet_start_planet, 
+            fleet_start_type
+            FROM " . FLEETS . "
+            WHERE `fleet_start_time` <= '" . time() . "' AND `fleet_mess` ='0'
+            ORDER BY fleet_id ASC;"
+        );
 
-        while ($row = parent::$db->fetch_array($_fleets)) {
+        while ($row = parent::$db->fetchArray($_fleets)) {
             
             $array                  = array();
             $array['planet_galaxy'] = $row['fleet_start_galaxy'];
@@ -165,18 +173,20 @@ ORDER BY fleet_id ASC;");
             new MissionControlLib($array);
         }
 
-        parent::$db->free_result($_fleets);
+        parent::$db->freeResult($_fleets);
 
-        $_fleets    = parent::$db->query("SELECT 
-fleet_end_galaxy, 
-fleet_end_system, 
-fleet_end_planet, 
-fleet_end_type
-FROM " . FLEETS . "
-WHERE `fleet_end_time` <= '" . time() . "
-ORDER BY fleet_id ASC';");
+        $_fleets    = parent::$db->query(
+            "SELECT 
+            fleet_end_galaxy, 
+            fleet_end_system, 
+            fleet_end_planet, 
+            fleet_end_type
+            FROM " . FLEETS . "
+            WHERE `fleet_end_time` <= '" . time() . "
+            ORDER BY fleet_id ASC';"
+        );
 
-        while ($row = parent::$db->fetch_array($_fleets)) {
+        while ($row = parent::$db->fetchArray($_fleets)) {
             $array                  = array();
             $array['planet_galaxy'] = $row['fleet_end_galaxy'];
             $array['planet_system'] = $row['fleet_end_system'];
@@ -186,7 +196,7 @@ ORDER BY fleet_id ASC';");
             new MissionControlLib($array);
         }
 
-        parent::$db->free_result($_fleets);
+        parent::$db->freeResult($_fleets);
 
         unset($_fleets);
     }
@@ -199,14 +209,14 @@ ORDER BY fleet_id ASC';");
     private function updateStatistics()
     {
         // LAST UPDATE AND UPDATE INTERVAL, EX: 15 MINUTES
-        $stat_last_update   = Functions_Lib::read_config('stat_last_update');
-        $update_interval    = Functions_Lib::read_config('stat_update_time');
+        $stat_last_update   = FunctionsLib::read_config('stat_last_update');
+        $update_interval    = FunctionsLib::read_config('stat_update_time');
 
         if ((time() >= ($stat_last_update + (60 * $update_interval)))) {
 
-            $result = Statistics_Lib::make_stats();
+            $result = StatisticsLib::make_stats();
 
-            Functions_Lib::update_config('stat_last_update', $result['stats_time']);
+            FunctionsLib::update_config('stat_last_update', $result['stats_time']);
         }
     }
 
@@ -220,7 +230,7 @@ ORDER BY fleet_id ASC';");
      */
     private static function checkBuildingQueue(&$current_planet, &$current_user)
     {
-        $resource   = parent::$objects->get_objects();
+        $resource   = parent::$objects->getObjects();
         $ret_value  = false;
 
         if ($current_planet['planet_b_building_id'] != 0) {
@@ -248,7 +258,7 @@ ORDER BY fleet_id ASC';");
 
             if ($build_end_time <= time()) {
 
-                $needed     = Developments_Lib::development_price(
+                $needed     = DevelopmentsLib::development_price(
                     $current_user,
                     $current_planet,
                     $element,
@@ -303,23 +313,24 @@ ORDER BY fleet_id ASC';");
                 $current_planet['planet_b_building_id'] = $new_queue;
                 $current_planet['planet_field_current'] = $current;
                 $current_planet['planet_field_max']     = $max;
-                $current_planet['building_points']      = Statistics_Lib::calculate_points(
+                $current_planet['building_points']      = StatisticsLib::calculate_points(
                     $element,
                     $current_planet[$resource[$element]]
                 );
 
-                parent::$db->query("
-UPDATE " . PLANETS . " AS p
-INNER JOIN " . USERS_STATISTICS . " AS s ON s.user_statistic_user_id = p.planet_user_id
-INNER JOIN " . BUILDINGS . " AS b ON b.building_planet_id = p.`planet_id` SET
-`".$resource[$element]."` = '".$current_planet[$resource[$element]]."',
-`user_statistic_buildings_points` = `user_statistic_buildings_points` + '". $current_planet['building_points'] ."',
-`planet_b_building` = '". $current_planet['planet_b_building'] ."',
-`planet_b_building_id` = '". $current_planet['planet_b_building_id'] ."',
-`planet_field_current` = '" . $current_planet['planet_field_current'] . "',
-`planet_field_max` = '" . $current_planet['planet_field_max'] . "'
-WHERE `planet_id` = '" . $current_planet['planet_id'] . "';
-");
+                parent::$db->query(
+                    "UPDATE " . PLANETS . " AS p
+                    INNER JOIN " . USERS_STATISTICS . " AS s ON s.user_statistic_user_id = p.planet_user_id
+                    INNER JOIN " . BUILDINGS . " AS b ON b.building_planet_id = p.`planet_id` SET
+                    `".$resource[$element]."` = '".$current_planet[$resource[$element]]."',
+                    `user_statistic_buildings_points` = `user_statistic_buildings_points` + '" .
+                        $current_planet['building_points'] . "',
+                    `planet_b_building` = '". $current_planet['planet_b_building'] ."',
+                    `planet_b_building_id` = '". $current_planet['planet_b_building_id'] ."',
+                    `planet_field_current` = '" . $current_planet['planet_field_current'] . "',
+                    `planet_field_max` = '" . $current_planet['planet_field_max'] . "'
+                    WHERE `planet_id` = '" . $current_planet['planet_id'] . "';"
+                );
                 
                 $ret_value = true;
             } else {
@@ -330,10 +341,12 @@ WHERE `planet_id` = '" . $current_planet['planet_id'] . "';
             $current_planet['planet_b_building']    = 0;
             $current_planet['planet_b_building_id'] = 0;
 
-            parent::$db->query("UPDATE " . PLANETS . " SET
-`planet_b_building` = '". $current_planet['planet_b_building'] ."',
-`planet_b_building_id` = '". $current_planet['planet_b_building_id'] ."'
-WHERE `planet_id` = '" . $current_planet['planet_id'] . "';");
+            parent::$db->query(
+                "UPDATE " . PLANETS . " SET
+                `planet_b_building` = '". $current_planet['planet_b_building'] ."',
+                `planet_b_building_id` = '". $current_planet['planet_b_building_id'] ."'
+                WHERE `planet_id` = '" . $current_planet['planet_id'] . "';"
+            );
 
             $ret_value = false;
         }
@@ -341,4 +354,5 @@ WHERE `planet_id` = '" . $current_planet['planet_id'] . "';");
         return $ret_value;
     }
 }
+
 /* end of UpdateLib.php */

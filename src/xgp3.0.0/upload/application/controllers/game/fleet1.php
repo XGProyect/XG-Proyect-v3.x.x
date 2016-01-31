@@ -1,11 +1,34 @@
 <?php
-
 /**
- * @project XG Proyect
- * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * Fleet1 Controller
+ *
+ * PHP Version 5.5+
+ *
+ * @category Controller
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
  */
 
+namespace application\controllers\game;
+
+use application\core\XGPCore;
+use application\libraries\FleetsLib;
+use application\libraries\FormatLib;
+use application\libraries\FunctionsLib;
+
+/**
+ * Fleet1 Class
+ *
+ * @category Classes
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
+ */
 class Fleet1 extends XGPCore
 {
 	const MODULE_ID	= 8;
@@ -25,7 +48,7 @@ class Fleet1 extends XGPCore
 		parent::$users->check_session();
 
 		// Check module access
-		Functions_Lib::module_message ( Functions_Lib::is_module_accesible ( self::MODULE_ID ) );
+		FunctionsLib::module_message ( FunctionsLib::is_module_accesible ( self::MODULE_ID ) );
 
 		$this->_lang			= parent::$lang;
 		$this->_current_user	= parent::$users->get_user_data();
@@ -41,7 +64,7 @@ class Fleet1 extends XGPCore
 	 */
 	public function __destruct()
 	{
-		parent::$db->close_connection();
+		parent::$db->closeConnection();
 	}
 
 	/**
@@ -51,14 +74,14 @@ class Fleet1 extends XGPCore
 	 */
 	private function build_page()
 	{
-		$resource	=	parent::$objects->get_objects();
-		$reslist	=	parent::$objects->get_objects_list();
+		$resource	=	parent::$objects->getObjects();
+		$reslist	=	parent::$objects->getObjectsList();
 
 		#####################################################################################################
 		// SOME DEFAULT VALUES
 		#####################################################################################################
 		// QUERYS
-		$count				= parent::$db->query_fetch ( "SELECT
+		$count				= parent::$db->queryFetch ( "SELECT
 															(SELECT COUNT(fleet_owner) AS `actcnt`
 																FROM " . FLEETS . "
 																WHERE `fleet_owner` = '" . (int)$this->_current_user['user_id'] . "') AS max_fleet,
@@ -83,7 +106,7 @@ class Fleet1 extends XGPCore
 		if ($MaxExpedition >= 1)
 		{
 			$ExpeditionEnCours  = $count['max_expeditions'];
-			$EnvoiMaxExpedition = Fleets_Lib::get_max_expeditions ( $MaxExpedition );
+			$EnvoiMaxExpedition = FleetsLib::get_max_expeditions ( $MaxExpedition );
 		}
 		else
 		{
@@ -91,8 +114,8 @@ class Fleet1 extends XGPCore
 			$EnvoiMaxExpedition = 0;
 		}
 
-		$MaxFlottes						= Fleets_Lib::get_max_fleets ( $this->_current_user[$resource[108]] , $this->_current_user['premium_officier_admiral'] );
-		$missiontype					= Fleets_Lib::get_missions();
+		$MaxFlottes						= FleetsLib::get_max_fleets ( $this->_current_user[$resource[108]] , $this->_current_user['premium_officier_admiral'] );
+		$missiontype					= FleetsLib::get_missions();
 		$galaxy         				= isset ( $_GET['galaxy'] ) ? (int)$_GET['galaxy'] : $this->_current_planet['planet_galaxy'];
 		$system         				= isset ( $_GET['system'] ) ? (int)$_GET['system'] : $this->_current_planet['planet_system'];
 		$planet         				= isset ( $_GET['planet'] ) ? (int)$_GET['planet'] : $this->_current_planet['planet_planet'];
@@ -118,15 +141,15 @@ class Fleet1 extends XGPCore
 				}
 				else
 				{
-					$ships['fleet_max_speed']	= 	Fleets_Lib::fleet_max_speed ( "" , $i , $this->_current_user );
+					$ships['fleet_max_speed']	= 	FleetsLib::fleet_max_speed ( "" , $i , $this->_current_user );
 				}
 
 				$ships['ship']					= 	$this->_lang['tech'][$i];
-				$ships['amount']				= 	Format_Lib::pretty_number ( $this->_current_planet[$resource[$i]] );
+				$ships['amount']				= 	FormatLib::pretty_number ( $this->_current_planet[$resource[$i]] );
 				$inputs['i']					=	$i;
 				$inputs['maxship']				=	$this->_current_planet[$resource[$i]];
-				$inputs['consumption']			=	Fleets_Lib::ship_consumption ( $i , $this->_current_user );
-				$inputs['speed']				=	Fleets_Lib::fleet_max_speed ( "" , $i , $this->_current_user );
+				$inputs['consumption']			=	FleetsLib::ship_consumption ( $i , $this->_current_user );
+				$inputs['speed']				=	FleetsLib::fleet_max_speed ( "" , $i , $this->_current_user );
 				$inputs['capacity']				=	isset ( $pricelist[$i]['capacity'] ) ? $pricelist[$i]['capacity'] : 0;
 
 				if ($i == 212)
@@ -173,4 +196,5 @@ class Fleet1 extends XGPCore
 		parent::$page->display ( parent::$page->parse_template ( parent::$page->get_template ( 'fleet/fleet1_table' ) , $parse ) );
 	}
 }
+
 /* end of fleet1.php */

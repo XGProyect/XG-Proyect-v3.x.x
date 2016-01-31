@@ -1,11 +1,33 @@
 <?php
-
 /**
- * @project XG Proyect
- * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * Modules Controller
+ *
+ * PHP Version 5.5+
+ *
+ * @category Controller
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
  */
 
+namespace application\controllers\adm;
+
+use application\core\XGPCore;
+use application\libraries\adm\AdministrationLib;
+use application\libraries\FunctionsLib;
+
+/**
+ * Modules Class
+ *
+ * @category Classes
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
+ */
 class Modules extends XGPCore
 {
 	private $_lang;
@@ -25,13 +47,13 @@ class Modules extends XGPCore
 		$this->_current_user	= parent::$users->get_user_data();
 
 		// Check if the user is allowed to access
-		if ( Administration_Lib::have_access ( $this->_current_user['user_authlevel'] ) && Administration_Lib::authorization ( $this->_current_user['user_authlevel'] , 'edit_users' ) == 1 )
+		if ( AdministrationLib::have_access ( $this->_current_user['user_authlevel'] ) && AdministrationLib::authorization ( $this->_current_user['user_authlevel'] , 'edit_users' ) == 1 )
 		{
 			$this->build_page();
 		}
 		else
 		{
-			die ( Functions_Lib::message ( $this->_lang['ge_no_permissions'] ) );
+			die ( FunctionsLib::message ( $this->_lang['ge_no_permissions'] ) );
 		}
 	}
 
@@ -42,7 +64,7 @@ class Modules extends XGPCore
 	 */
 	public function __destruct ()
 	{
-		parent::$db->close_connection();
+		parent::$db->closeConnection();
 	}
 
 	/**
@@ -54,7 +76,7 @@ class Modules extends XGPCore
 	{
 		$parse			= $this->_lang;
 		$modules_array	= '';
-		$modules_count	= count ( explode ( ';' , Functions_Lib::read_config ( 'modules' ) ) );
+		$modules_count	= count ( explode ( ';' , FunctionsLib::read_config ( 'modules' ) ) );
 		$row_template	= parent::$page->get_template ( 'adm/modules_row_view' );
 		$module_rows	= '';
 		$parse['alert']	= '';
@@ -67,13 +89,13 @@ class Modules extends XGPCore
 				$modules_array	.= ( ( isset ( $_POST["status{$i}"] ) ) ? 1 : 0 ) . ';';
 			}
 
-			Functions_Lib::update_config ( 'modules' , $modules_array );
+			FunctionsLib::update_config ( 'modules' , $modules_array );
 
-			$parse['alert']				= Administration_Lib::save_message ( 'ok' , $this->_lang['se_all_ok_message'] );
+			$parse['alert']				= AdministrationLib::save_message ( 'ok' , $this->_lang['se_all_ok_message'] );
 		}
 
 		// SHOW PAGE
-		$modules_array	= explode ( ';' , Functions_Lib::read_config ( 'modules' ) );
+		$modules_array	= explode ( ';' , FunctionsLib::read_config ( 'modules' ) );
 
 		foreach ( $modules_array as $module => $status )
 		{
@@ -93,4 +115,5 @@ class Modules extends XGPCore
 		parent::$page->display ( parent::$page->parse_template ( parent::$page->get_template ( "adm/modules_view" ) , $parse ) );
 	}
 }
+
 /* end of modules.php */

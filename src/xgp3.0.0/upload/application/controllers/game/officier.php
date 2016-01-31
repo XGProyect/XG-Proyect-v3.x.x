@@ -1,11 +1,34 @@
 <?php
-
 /**
- * @project XG Proyect
- * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * Officier Controller
+ *
+ * PHP Version 5.5+
+ *
+ * @category Controller
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
  */
 
+namespace application\controllers\game;
+
+use application\core\XGPCore;
+use application\libraries\FormatLib;
+use application\libraries\FunctionsLib;
+use application\libraries\OfficiersLib;
+
+/**
+ * Officier Class
+ *
+ * @category Classes
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
+ */
 class Officier extends XGPCore
 {
 	const MODULE_ID = 15;
@@ -27,13 +50,13 @@ class Officier extends XGPCore
 		parent::$users->check_session();
 
 		// Check module access
-		Functions_Lib::module_message ( Functions_Lib::is_module_accesible ( self::MODULE_ID ) );
+		FunctionsLib::module_message ( FunctionsLib::is_module_accesible ( self::MODULE_ID ) );
 
 		$this->_lang			= parent::$lang;
 		$this->_current_user	= parent::$users->get_user_data();
-		$this->_resource		= parent::$objects->get_objects();
-		$this->_pricelist		= parent::$objects->get_price();
-		$this->_reslist			= parent::$objects->get_objects_list();
+		$this->_resource		= parent::$objects->getObjects();
+		$this->_pricelist		= parent::$objects->getPrice();
+		$this->_reslist			= parent::$objects->getObjectsList();
 
 		$this->build_page();
 	}
@@ -45,7 +68,7 @@ class Officier extends XGPCore
 	 */
 	public function __destruct()
 	{
-		parent::$db->close_connection();
+		parent::$db->closeConnection();
 	}
 
 	/**
@@ -77,7 +100,7 @@ class Officier extends XGPCore
 					$this->_current_user['premium_dark_matter']	-= $Price;
 
 					// IF THE OFFICIER IS ACTIVE
-					if ( Officiers_Lib::is_officier_active ( $this->_current_user[$this->_resource[$Selected]] ) )
+					if ( OfficiersLib::isOfficierActive ( $this->_current_user[$this->_resource[$Selected]] ) )
 					{
 						$this->_current_user[$this->_resource[$Selected]] += $set_time; // ADD TIME
 					}
@@ -92,13 +115,13 @@ class Officier extends XGPCore
 											WHERE `premium_user_id` = '". $this->_current_user['user_id'] ."';");
 				}
 			}
-			Functions_Lib::redirect ( 'game.php?page=officier' );
+			FunctionsLib::redirect ( 'game.php?page=officier' );
 		}
 		else
 		{
 			$OfficierRowTPL				= parent::$page->get_template ( 'officier/officier_row' );
 			$parse['disp_off_tbl']		= '';
-			$parse['premium_pay_url']	= Functions_Lib::read_config ( 'premium_url' ) != '' ? Functions_Lib::read_config ( 'premium_url' ) : 'game.php?page=officier';
+			$parse['premium_pay_url']	= FunctionsLib::read_config ( 'premium_url' ) != '' ? FunctionsLib::read_config ( 'premium_url' ) : 'game.php?page=officier';
 
 			foreach ( $this->_lang['tech'] as $Element => $ElementName )
 			{
@@ -106,12 +129,12 @@ class Officier extends XGPCore
 				{
 					$bloc['dpath']			= DPATH;
 					$bloc['off_id']   		= $Element;
-					$bloc['off_status']		= ( ( Officiers_Lib::is_officier_active ( $this->_current_user[$this->_resource[$Element]] ) ) ? '<font color=lime>' . $this->_lang['of_active'] . ' ' . date ( Functions_Lib::read_config ( 'date_format' ) , $this->_current_user[$this->_resource[$Element]] ) . '</font>' : '<font color=red>' . $this->_lang['of_inactive'] . '</font>' );
+					$bloc['off_status']		= ( ( OfficiersLib::isOfficierActive ( $this->_current_user[$this->_resource[$Element]] ) ) ? '<font color=lime>' . $this->_lang['of_active'] . ' ' . date ( FunctionsLib::read_config ( 'date_format' ) , $this->_current_user[$this->_resource[$Element]] ) . '</font>' : '<font color=red>' . $this->_lang['of_inactive'] . '</font>' );
 					$bloc['off_name']		= $ElementName;
 					$bloc['off_desc'] 		= $this->_lang['res']['descriptions'][$Element];
 					$bloc['off_desc_short'] = $this->_lang['info'][$Element]['description'];
-					$bloc['month_price']	= Format_Lib::pretty_number ( $this->get_officier_price ( $Element , 'darkmatter_month' ) );
-					$bloc['week_price']		= Format_Lib::pretty_number ( $this->get_officier_price ( $Element , 'darkmatter_week' ) );
+					$bloc['month_price']	= FormatLib::pretty_number ( $this->get_officier_price ( $Element , 'darkmatter_month' ) );
+					$bloc['week_price']		= FormatLib::pretty_number ( $this->get_officier_price ( $Element , 'darkmatter_week' ) );
 					$bloc['img_big']		= $this->get_officier_image ( $Element , 'img_big' );
 					$bloc['img_small']		= $this->get_officier_image ( $Element , 'img_small' );
 					$bloc['off_link_month']	= "game.php?page=officier&mode=2&offi=" . $Element . "&time=month";
@@ -163,4 +186,5 @@ class Officier extends XGPCore
 		return $this->_pricelist[$officier][$type];
 	}
 }
+
 /* end of officier.php */

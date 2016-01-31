@@ -1,12 +1,32 @@
 <?php
-
 /**
- * @project XG Proyect
- * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * Creator Library
+ *
+ * PHP Version 5.5+
+ *
+ * @category Library
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
  */
 
-class Creator_Lib extends XGPCore
+namespace application\libraries;
+
+use application\core\XGPCore;
+
+/**
+ * CreatorLib Class
+ *
+ * @category Classes
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
+ */
+class CreatorLib extends XGPCore
 {
 	private $_lang;
 
@@ -42,7 +62,7 @@ class Creator_Lib extends XGPCore
 		else
 		{
 			$diameter	= '12800';
-			$fields 	= Functions_Lib::read_config ( 'initial_fields' );
+			$fields 	= FunctionsLib::read_config ( 'initial_fields' );
 		}
 
 		$return['planet_diameter'] 	= $diameter;
@@ -63,7 +83,7 @@ class Creator_Lib extends XGPCore
 	 */
 	public function create_planet ( $galaxy , $system , $position , $planet_owner_id , $planet_name = '' , $home_world = FALSE )
 	{
-		$planet_exist	= parent::$db->query_fetch ( "SELECT `planet_id`
+		$planet_exist	= parent::$db->queryFetch ( "SELECT `planet_id`
 						   								FROM " . PLANETS . "
 						   								WHERE `planet_galaxy` = '" . $galaxy . "' AND
 						   										`planet_system` = '" . $system . "' AND
@@ -77,9 +97,9 @@ class Creator_Lib extends XGPCore
 			$planet['metal']	 				= BUILD_METAL;
 			$planet['crystal'] 					= BUILD_CRISTAL;
 			$planet['deuterium'] 				= BUILD_DEUTERIUM;
-			$planet['planet_metal_perhour'] 	= Functions_Lib::read_config ( 'metal_basic_income' );
-			$planet['planet_crystal_perhour'] 	= Functions_Lib::read_config ( 'crystal_basic_income' );
-			$planet['planet_deuterium_perhour'] = Functions_Lib::read_config ( 'deuterium_basic_income' );
+			$planet['planet_metal_perhour'] 	= FunctionsLib::read_config ( 'metal_basic_income' );
+			$planet['planet_crystal_perhour'] 	= FunctionsLib::read_config ( 'crystal_basic_income' );
+			$planet['planet_deuterium_perhour'] = FunctionsLib::read_config ( 'deuterium_basic_income' );
 			$planet['galaxy'] 					= $galaxy;
 			$planet['system'] 					= $system;
 			$planet['planet'] 					= $position;
@@ -161,7 +181,7 @@ class Creator_Lib extends XGPCore
 									`planet_deuterium` = '" . $planet['deuterium'] . "',
 									`planet_deuterium_perhour` = '" . $planet['planet_deuterium_perhour'] . "';" );
 
-			$last_id	= parent::$db->insert_id();
+			$last_id	= parent::$db->insertId();
 
 			parent::$db->query ( "INSERT INTO " . BUILDINGS . " SET
 									`building_planet_id` = '" . $last_id . "';" );
@@ -197,7 +217,7 @@ class Creator_Lib extends XGPCore
 	{
 		$planet_name            = '';
 
-		$MoonPlanet = parent::$db->query_fetch ( "SELECT pm2.`planet_id`,
+		$MoonPlanet = parent::$db->queryFetch ( "SELECT pm2.`planet_id`,
 														pm2.`planet_name`,
 														pm2.`planet_temp_max`,
 														pm2.`planet_temp_min`,
@@ -235,7 +255,7 @@ class Creator_Lib extends XGPCore
 									`planet_temp_min` = '". $mintemp ."',
 									`planet_temp_max` = '". $maxtemp ."';" );
 
-			$last_id	= parent::$db->insert_id();
+			$last_id	= parent::$db->insertId();
 
 			parent::$db->query ( "INSERT INTO " . BUILDINGS . " SET
 									`building_planet_id` = '" . $last_id . "';" );
@@ -250,4 +270,5 @@ class Creator_Lib extends XGPCore
 		return $planet_name;
 	}
 }
-/* end of Creator_Lib.php */
+
+/* end of CreatorLib.php */

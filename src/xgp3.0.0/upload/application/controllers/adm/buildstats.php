@@ -1,12 +1,35 @@
 <?php
-
 /**
- * @project XG Proyect
- * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * Buildstats Controller
+ *
+ * PHP Version 5.5+
+ *
+ * @category Controller
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
  */
 
-class ShowBuildStatsPage extends XGPCore
+namespace application\controllers\adm;
+
+use application\core\XGPCore;
+use application\libraries\adm\AdministrationLib;
+use application\libraries\FunctionsLib;
+use application\libraries\StatisticsLib;
+
+/**
+ * Buildstats Class
+ *
+ * @category Classes
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
+ */
+class Buildstats extends XGPCore
 {
 	private $_lang;
 	private $_current_user;
@@ -25,13 +48,13 @@ class ShowBuildStatsPage extends XGPCore
 		$this->_current_user	= parent::$users->get_user_data();
 
 		// Check if the user is allowed to access
-		if ( Administration_Lib::have_access ( $this->_current_user['user_authlevel'] ) && Administration_Lib::authorization ( $this->_current_user['user_authlevel'] , 'use_tools' ) == 1 )
+		if ( AdministrationLib::have_access ( $this->_current_user['user_authlevel'] ) && AdministrationLib::authorization ( $this->_current_user['user_authlevel'] , 'use_tools' ) == 1 )
 		{
 			$this->build_page();
 		}
 		else
 		{
-			die ( Functions_Lib::message ( $this->_lang['ge_no_permissions'] ) );
+			die ( FunctionsLib::message ( $this->_lang['ge_no_permissions'] ) );
 		}
 	}
 
@@ -42,7 +65,7 @@ class ShowBuildStatsPage extends XGPCore
 	 */
 	public function __destruct ()
 	{
-		parent::$db->close_connection();
+		parent::$db->closeConnection();
 	}
 
 	/**
@@ -53,20 +76,21 @@ class ShowBuildStatsPage extends XGPCore
 	private function build_page()
 	{
 		// RUN STATISTICS SCRIPT AND THE SET THE RESULT
-		$result					= Statistics_Lib::make_stats();
+		$result					= StatisticsLib::make_stats();
 
 		// PREPARE DATA TO PARSE
 		$parse					= $this->_lang;
 		$parse['memory_p']		= str_replace ( array ( "%p" , "%m" ) , $result['memory_peak'] , $this->_lang['sb_top_memory'] );
 		$parse['memory_e']		= str_replace ( array ( "%e" , "%m" ) , $result['end_memory'] , $this->_lang['sb_final_memory'] );
 		$parse['memory_i']		= str_replace ( array ( "%i" , "%m" ) , $result['initial_memory'] , $this->_lang['sb_start_memory'] );
-		$parse['alert']			= Administration_Lib::save_message ( 'ok' , str_replace ( "%t" , $result['totaltime'] , $this->_lang['sb_stats_update'] ) );
+		$parse['alert']			= AdministrationLib::save_message ( 'ok' , str_replace ( "%t" , $result['totaltime'] , $this->_lang['sb_stats_update'] ) );
 
 		// UPDATE STATISTICS LAST UPDATE
-		Functions_Lib::update_config( 'stat_last_update', $result['stats_time']);
+		FunctionsLib::update_config( 'stat_last_update', $result['stats_time']);
 
 		// SHOW TEMPLATE
 		parent::$page->display ( parent::$page->parse_template ( parent::$page->get_template ( 'adm/buildstats_view' ) , $parse ) );
 	}
 }
+
 /* end of buildstats.php */

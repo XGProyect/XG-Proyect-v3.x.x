@@ -1,10 +1,18 @@
 <?php
-
 /**
- * @project XG Proyect
- * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * Game File
+ *
+ * PHP Version 5.5+
+ *
+ * @category Root File
+ * @package  N/A
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
  */
+
+use application\libraries\FunctionsLib;
 
 define('IN_GAME', true);
 define('XGP_ROOT', './');
@@ -35,26 +43,27 @@ if (isset($page)) {
     // logout
     if ($page == 'logout') {
         $session->delete();
-        Functions_Lib::redirect(XGP_ROOT);
+        FunctionsLib::redirect(XGP_ROOT);
     }
     
+    // other pages
     if (file_exists($file_name)) {
 
         include $file_name;
 
-        $class_name = ucfirst($page);
+        $class_name = 'application\controllers\game\\' . ucfirst($page);
 
         new $class_name();
-    } 
+    }
 }
 
 if ($page == null) {
     
     if (!$hooks->call_hook('new_page')) {
-        Functions_Lib::redirect('game.php?page=overview');
+        FunctionsLib::redirect('game.php?page=overview');
     }
-    
-    Functions_Lib::redirect('game.php?page=overview');
 }
+
+FunctionsLib::redirect('game.php?page=overview');
 
 /* end of game.php */

@@ -1,12 +1,30 @@
 <?php
-
 /**
- * @project XG Proyect
- * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * Template Library
+ *
+ * PHP Version 5.5+
+ *
+ * @category Library
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
  */
 
-class Template_Lib
+namespace application\libraries;
+
+/**
+ * TemplateLib Class
+ *
+ * @category Classes
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
+ */
+class TemplateLib
 {
 	private $_current_user;
 	private $_current_planet;
@@ -174,9 +192,9 @@ class Template_Lib
 		// Update config language to the new setted value
 		if ( isset ( $_POST['language'] ) )
 		{
-			Functions_Lib::update_config ( 'lang' , $_POST['language'] );
+			FunctionsLib::update_config ( 'lang' , $_POST['language'] );
 
-			Functions_Lib::redirect ( XGP_ROOT . 'install/' );
+			FunctionsLib::redirect ( XGP_ROOT . 'install/' );
 		}
 
 		$current_page	= isset ( $_GET['page'] ) ? $_GET['page'] : NULL;
@@ -207,7 +225,7 @@ class Template_Lib
 		// PARSE THE MENU AND OTHER DATA
 		$parse						= $this->_lang;
 		$parse['menu_items']		= $items;
-		$parse['language_select']	= Functions_Lib::get_languages ( Functions_Lib::read_config ( 'lang' ) );
+		$parse['language_select']	= FunctionsLib::get_languages ( FunctionsLib::read_config ( 'lang' ) );
 
 		return $this->parse_template ( $this->get_template ( 'install/topnav_view' ) , $parse );
 	}
@@ -258,7 +276,7 @@ class Template_Lib
                     $version    = SYSTEM_VERSION;
                 }
             
-		$parse['-title-'] 	 = Functions_Lib::read_config ( 'game_name' );
+		$parse['-title-'] 	 = FunctionsLib::read_config ( 'game_name' );
 		$parse['-favi-']	 = "<link rel=\"shortcut icon\" href=\"" . XGP_ROOT . "favicon.ico\">\n";
 		$parse['-meta-']	 = "<meta http-equiv=\"Content-Type\" content=\"text/html;charset=UTF-8\">\n";
 		$parse['-meta-']	.= "<meta name=\"generator\" content=\"XG Proyect " . $version . "\" />\n";
@@ -281,59 +299,59 @@ class Template_Lib
 		$parse					= $this->_lang;
 		$parse['dpath']			= DPATH;
 		$parse['image']			= $this->_current_planet['planet_image'];
-		$parse['planetlist']	= Functions_Lib::build_planet_list ( $this->_current_user );
+		$parse['planetlist']	= FunctionsLib::build_planet_list ( $this->_current_user );
 
 		// VACATION MODE & DELETE MODE MESSAGES
 		if ( $this->_current_user['setting_vacations_status'] && $this->_current_user['setting_delete_account'] )
         {
-            $parse['show_umod_notice']		.= $this->_current_user['setting_delete_account'] ? '<table width="100%" style="border: 2px solid red; text-align:center;background:transparent;"><tr style="background:transparent;"><td style="background:transparent;">' . $this->_lang['tn_delete_mode'] . date(Functions_Lib::read_config ( 'date_format_extended' ),$this->_current_user['setting_delete_account'] + (60 * 60 * 24 * 7)).'</td></tr></table>' : '';
+            $parse['show_umod_notice']		.= $this->_current_user['setting_delete_account'] ? '<table width="100%" style="border: 2px solid red; text-align:center;background:transparent;"><tr style="background:transparent;"><td style="background:transparent;">' . $this->_lang['tn_delete_mode'] . date(FunctionsLib::read_config ( 'date_format_extended' ),$this->_current_user['setting_delete_account'] + (60 * 60 * 24 * 7)).'</td></tr></table>' : '';
         }
         else
         {
             if ( $this->_current_user['setting_vacations_status'] < time() )
             {
-                $parse['show_umod_notice']   = $this->_current_user['setting_vacations_status'] ? '<table width="100%" style="border: 2px solid #1DF0F0; text-align:center;background:transparent;"><tr style="background:transparent;"><td style="background:transparent;">' . $this->_lang['tn_vacation_mode'] . date(Functions_Lib::read_config ( 'date_format_extended' ),$this->_current_user['setting_vacations_until']).'</td></tr></table><br>' : '';
+                $parse['show_umod_notice']   = $this->_current_user['setting_vacations_status'] ? '<table width="100%" style="border: 2px solid #1DF0F0; text-align:center;background:transparent;"><tr style="background:transparent;"><td style="background:transparent;">' . $this->_lang['tn_vacation_mode'] . date(FunctionsLib::read_config ( 'date_format_extended' ),$this->_current_user['setting_vacations_until']).'</td></tr></table><br>' : '';
             }
 
-            $parse['show_umod_notice']      .= $this->_current_user['setting_delete_account'] ? '<table width="100%" style="border: 2px solid red; text-align:center;background:transparent;"><tr style="background:transparent;"><td style="background:transparent;">' . $this->_lang['tn_delete_mode'] . date(Functions_Lib::read_config ( 'date_format_extended' ),$this->_current_user['setting_delete_account'] + (60 * 60 * 24 * 7)).'</td></tr></table>' : '';
+            $parse['show_umod_notice']      .= $this->_current_user['setting_delete_account'] ? '<table width="100%" style="border: 2px solid red; text-align:center;background:transparent;"><tr style="background:transparent;"><td style="background:transparent;">' . $this->_lang['tn_delete_mode'] . date(FunctionsLib::read_config ( 'date_format_extended' ),$this->_current_user['setting_delete_account'] + (60 * 60 * 24 * 7)).'</td></tr></table>' : '';
         }
 
 		// RESOURCES FORMAT
-		$metal 		= Format_Lib::pretty_number ( $this->_current_planet['planet_metal'] );
-		$crystal 	= Format_Lib::pretty_number ( $this->_current_planet['planet_crystal'] );
-		$deuterium	= Format_Lib::pretty_number ( $this->_current_planet['planet_deuterium'] );
-		$darkmatter	= Format_Lib::pretty_number ( $this->_current_user['premium_dark_matter'] );
-		$energy		= Format_Lib::pretty_number ( $this->_current_planet['planet_energy_max'] + $this->_current_planet['planet_energy_used'] ) . "/" . Format_Lib::pretty_number ( $this->_current_planet['planet_energy_max'] );
+		$metal 		= FormatLib::pretty_number ( $this->_current_planet['planet_metal'] );
+		$crystal 	= FormatLib::pretty_number ( $this->_current_planet['planet_crystal'] );
+		$deuterium	= FormatLib::pretty_number ( $this->_current_planet['planet_deuterium'] );
+		$darkmatter	= FormatLib::pretty_number ( $this->_current_user['premium_dark_matter'] );
+		$energy		= FormatLib::pretty_number ( $this->_current_planet['planet_energy_max'] + $this->_current_planet['planet_energy_used'] ) . "/" . FormatLib::pretty_number ( $this->_current_planet['planet_energy_max'] );
 
 		// OFFICERS AVAILABILITY
-		$commander	= Officiers_Lib::is_officier_active ( $this->_current_user['premium_officier_commander'] ) ? '' : '_un';
-		$admiral	= Officiers_Lib::is_officier_active ( $this->_current_user['premium_officier_admiral'] ) ? '' : '_un';
-		$engineer	= Officiers_Lib::is_officier_active ( $this->_current_user['premium_officier_engineer'] ) ? '' : '_un';
-		$geologist	= Officiers_Lib::is_officier_active ( $this->_current_user['premium_officier_geologist'] ) ? '' : '_un';
-		$technocrat	= Officiers_Lib::is_officier_active ( $this->_current_user['premium_officier_technocrat'] ) ? '' : '_un';
+		$commander	= OfficiersLib::isOfficierActive ( $this->_current_user['premium_officier_commander'] ) ? '' : '_un';
+		$admiral	= OfficiersLib::isOfficierActive ( $this->_current_user['premium_officier_admiral'] ) ? '' : '_un';
+		$engineer	= OfficiersLib::isOfficierActive ( $this->_current_user['premium_officier_engineer'] ) ? '' : '_un';
+		$geologist	= OfficiersLib::isOfficierActive ( $this->_current_user['premium_officier_geologist'] ) ? '' : '_un';
+		$technocrat	= OfficiersLib::isOfficierActive ( $this->_current_user['premium_officier_technocrat'] ) ? '' : '_un';
 
 		// METAL
 		if ( ( $this->_current_planet['planet_metal'] >= $this->_current_planet['planet_metal_max'] ) )
 		{
-			$metal		= Format_Lib::color_red ( $metal );
+			$metal		= FormatLib::color_red ( $metal );
 		}
 
 		// CRYSTAL
 		if ( ( $this->_current_planet['planet_crystal'] >= $this->_current_planet['planet_crystal_max'] ) )
 		{
-			$crystal	= Format_Lib::color_red ( $crystal );
+			$crystal	= FormatLib::color_red ( $crystal );
 		}
 
 		// DEUTERIUM
 		if ( ( $this->_current_planet['planet_deuterium'] >= $this->_current_planet['planet_deuterium_max'] ) )
 		{
-			$deuterium	= Format_Lib::color_red ( $deuterium );
+			$deuterium	= FormatLib::color_red ( $deuterium );
 		}
 
 		// ENERGY
 		if ( ( $this->_current_planet['planet_energy_max'] + $this->_current_planet['planet_energy_used'] ) < 0 )
 		{
-			$energy		= Format_Lib::color_red ( $energy );
+			$energy		= FormatLib::color_red ( $energy );
 		}
 
 		$parse['metal']			= $metal;
@@ -360,7 +378,7 @@ class Template_Lib
 		$menu_block1	= '';
 		$menu_block2	= '';
 		$menu_block3	= '';
-		$modules_array	= Functions_Lib::read_config ( 'modules' );
+		$modules_array	= FunctionsLib::read_config ( 'modules' );
 		$modules_array	= explode ( ';' , $modules_array );
 		$sub_template	= $this->get_template ( 'general/left_menu_row_view' );
 		$tota_rank		= $this->_current_user['user_statistic_total_rank'] == '' ? $this->_current_planet['stats_users'] : $this->_current_user['user_statistic_total_rank'];
@@ -401,7 +419,7 @@ class Template_Lib
 				continue;
 			}
 
-			if ( !Officiers_Lib::is_officier_active ( $this->_current_user['premium_officier_commander'] ) && $data[0] == 'imperium' )
+			if ( !OfficiersLib::isOfficierActive ( $this->_current_user['premium_officier_commander'] ) && $data[0] == 'imperium' )
 			{
 				continue;
 			}
@@ -462,7 +480,7 @@ class Template_Lib
 		// PARSE THE MENU AND OTHER DATA
 		$parse['dpath']			= DPATH;
 		$parse['version']		= VERSION;
-		$parse['servername']	= Functions_Lib::read_config ( 'game_name' );
+		$parse['servername']	= FunctionsLib::read_config ( 'game_name' );
 		$parse['year']			= $this->_current_year;
 		$parse['menu_block1']	= $menu_block1;
 		$parse['menu_block2']	= $menu_block2;
@@ -483,7 +501,7 @@ class Template_Lib
 		$parse['xgp_root']		= XGP_ROOT;
 		$parse['js_path']		= XGP_ROOT . JS_PATH;
 		$parse['css_path']		= XGP_ROOT . CSS_PATH;
-		$parse['secure_url']	= Functions_Lib::read_config ( 'ssl_enabled' ) == 1 ? 'https://' : 'http://';
+		$parse['secure_url']	= FunctionsLib::read_config ( 'ssl_enabled' ) == 1 ? 'https://' : 'http://';
 		$parse['-meta-'] 	    = $metatags ? $metatags : '';
 
 		return $this->parse_template ( $this->get_template ( 'adm/simple_header' ) , $parse );
@@ -573,7 +591,7 @@ class Template_Lib
 			}
 
 			// URL
-			if ( Functions_Lib::read_config ( 'ssl_enabled' ) == 1 )
+			if ( FunctionsLib::read_config ( 'ssl_enabled' ) == 1 )
 			{
 				$url	= 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'];
 			}
@@ -599,4 +617,5 @@ class Template_Lib
 		return $this->parse_template ( $this->get_template ( 'adm/menu_view' ) , $parse );
 	}
 }
-/* end of Template_Lib.php */
+
+/* end of TemplateLib.php */
