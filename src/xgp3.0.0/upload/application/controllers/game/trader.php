@@ -280,14 +280,9 @@ class Trader extends XGPCore
 
 		foreach ( $hangar as $k => $v )
 		{
-			if ( $amount[$k] == 0 )
+            if (!emtpy($amount[$k]))
 			{
-				unset ( $amount[$k] );
-			}
-
-			if ( array_key_exists ( $k , $amount ) )
-			{
-				if ( $this->_current_planet[$k] + $amount[$k] >= ProductionLib::maxStorable ( $this->_current_planet[$this->_resource[$v]] ) )
+				if ( $this->_current_planet["planet_".$k] + $amount[$k] >= ProductionLib::maxStorable ( $this->_current_planet[$this->_resource[$v]] ) )
 				{
 					$check[$k] = FALSE;
 				}
