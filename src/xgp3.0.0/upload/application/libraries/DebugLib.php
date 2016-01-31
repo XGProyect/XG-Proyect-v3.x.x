@@ -152,7 +152,7 @@ class DebugLib extends XGPCore
             $headers    .= 'Content-type: text/html; charset=utf-8' . "\r\n";
             
             // notify administrator
-            mail(
+            @mail(
                 FunctionsLib::read_config('admin_email'),
                 '[DEBUG][' . $title . ']',
                 $this->whereCalled(3),
