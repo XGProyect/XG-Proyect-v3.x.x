@@ -1,23 +1,24 @@
 <?php
+
 /**
- * Common File
+ * Common File.
  *
  * PHP Version 5.5+
  *
  * @category Core
- * @package  Application
+ *
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
+ *
  * @link     http://www.xgproyect.org
+ *
  * @version  3.0.0
  */
 
 // For first installations, and weird errors
 if (@filesize(XGP_ROOT . 'application/config/config.xml') == 0) {
-    
     define('XML_CONFIG_FILE', 'config.xml.cfg');
 } else {
-    
     define('XML_CONFIG_FILE', 'config.xml');
 }
 
@@ -28,7 +29,7 @@ use application\libraries\FunctionsLib;
 use application\libraries\SecurePageLib;
 use application\libraries\UpdateLib;
 
-$config_file    = XGP_ROOT . 'application/config/config.php';
+$config_file = XGP_ROOT . 'application/config/config.php';
 
 if (file_exists($config_file)) {
     require $config_file;
@@ -47,7 +48,7 @@ require_once XGP_ROOT . LIB_PATH . 'DevelopmentsLib.php';
 require_once XGP_ROOT . LIB_PATH . 'FunctionsLib.php';
 
 // some values by default
-$lang   = array();
+$lang = array();
 
 // set time zone
 date_default_timezone_set(FunctionsLib::read_config('date_time_zone'));
@@ -68,22 +69,20 @@ if (FunctionsLib::read_config('debug') == 1) {
     error_reporting(E_ALL);
 }
 
-$debug          = FunctionsLib::load_library('DebugLib');
-$db             = new Database();
-$installed      = FunctionsLib::read_config('game_installed');
-$game_version   = FunctionsLib::read_config('version');
-$game_lang      = FunctionsLib::read_config('lang');
-$current_page   = isset($_GET['page']) ? $_GET['page'] : '';
+$debug        = FunctionsLib::load_library('DebugLib');
+$db           = new Database();
+$installed    = FunctionsLib::read_config('game_installed');
+$game_version = FunctionsLib::read_config('version');
+$game_lang    = FunctionsLib::read_config('lang');
+$current_page = isset($_GET['page']) ? $_GET['page'] : '';
 
 // check if is installed
 if ($installed == 0 && !defined('IN_INSTALL')) {
-    
-    FunctionsLib::redirect(XGP_ROOT .  'install/');
+    FunctionsLib::redirect(XGP_ROOT . 'install/');
 }
 
 // define game version
 if ($installed != 0) {
-    
     define('VERSION', ($game_version == '') ? '' : 'v' . $game_version);
 }
 
@@ -91,7 +90,6 @@ if ($installed != 0) {
 define('DEFAULT_LANG', ($game_lang == '') ? 'spanish' : $game_lang);
 
 if (!defined('IN_INSTALL')) {
-    
     require_once XGP_ROOT . CORE_PATH . 'Sessions.php';
     require_once XGP_ROOT . CORE_PATH . 'Hooks.php';
     require_once XGP_ROOT . LIB_PATH . 'StatisticsLib.php';
@@ -99,18 +97,17 @@ if (!defined('IN_INSTALL')) {
     require_once XGP_ROOT . LIB_PATH . 'UpdateLib.php';
 
     // Sessions
-    $session    = new Sessions();
+    $session = new Sessions();
 
     // Hooks
-    $hooks      = new Hooks();
+    $hooks = new Hooks();
 
     // Before load stuff
     $hooks->call_hook('before_loads');
 
     if (!defined('IN_LOGIN') or 'IN_LOGIN' != true) {
-
         require_once XGP_ROOT . LIB_PATH . 'SecurePageLib.php';
-        $exclude    = array('editor');
+        $exclude = array('editor');
 
         if (!in_array($current_page, $exclude)) {
             SecurePageLib::run();

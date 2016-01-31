@@ -1,14 +1,17 @@
 <?php
+
 /**
- * Update Controller
+ * Update Controller.
  *
  * PHP Version 5.5+
  *
  * @category Controllers
- * @package  Application
+ *
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
+ *
  * @link     http://www.xgproyect.org
+ *
  * @version  3.0.0
  */
 
@@ -18,13 +21,15 @@ use application\core\XGPCore;
 use application\libraries\FunctionsLib;
 
 /**
- * Update Class
+ * Update Class.
  *
  * @category Classes
- * @package  Application
+ *
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
+ *
  * @link     http://www.xgproyect.org
+ *
  * @version  3.0.0
  */
 class Update extends XGPCore
@@ -32,16 +37,15 @@ class Update extends XGPCore
     private $langs;
 
     /**
-     * __construct()
+     * __construct().
      */
     public function __construct()
     {
         parent::__construct();
 
-        $this->langs    = parent::$lang;
+        $this->langs = parent::$lang;
 
         if ($this->serverRequirementes()) {
-            
             $this->buildPage();
         } else {
             die(FunctionsLib::message($this->langs['ins_no_server_requirements']));
@@ -51,7 +55,7 @@ class Update extends XGPCore
     /**
      * method __destruct
      * param
-     * return close db connection
+     * return close db connection.
      */
     public function __destruct()
     {
@@ -61,7 +65,7 @@ class Update extends XGPCore
     /**
      * method build_page
      * param
-     * return main method, loads everything
+     * return main method, loads everything.
      */
     private function buildPage()
     {
@@ -73,15 +77,13 @@ class Update extends XGPCore
     /**
      * method server_requirementes
      * param
-     * return true if the required server requirements are met
+     * return true if the required server requirements are met.
      */
     private function serverRequirementes()
     {
         if (version_compare(PHP_VERSION, '5.5.0', '<')) {
-            
             return false;
         } else {
-            
             return true;
         }
     }

@@ -1,27 +1,32 @@
 <?php
+
 /**
- * Objects
+ * Objects.
  *
  * PHP Version 5.5+
  *
  * @category Core
- * @package  Application
+ *
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
+ *
  * @link     http://www.xgproyect.org
+ *
  * @version  3.0.0
  */
 
 namespace application\core;
 
 /**
- * Objects Class
+ * Objects Class.
  *
  * @category Classes
- * @package  Application
+ *
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
+ *
  * @link     http://www.xgproyect.org
+ *
  * @version  3.0.0
  */
 class Objects
@@ -34,9 +39,7 @@ class Objects
     private $objects_list;
 
     /**
-     * __construct
-     *
-     * @return void
+     * __construct.
      */
     public function __construct()
     {
@@ -53,7 +56,7 @@ class Objects
     }
 
     /**
-     * getObjects
+     * getObjects.
      *
      * @param int $object_id Object ID
      *
@@ -62,16 +65,14 @@ class Objects
     public function getObjects($object_id = null)
     {
         if (!empty($object_id)) {
-            
             return $this->objects[$object_id];
         } else {
-
             return $this->objects;
         }
     }
 
     /**
-     * getRelations
+     * getRelations.
      *
      * @param int $object_id Object ID
      *
@@ -80,16 +81,14 @@ class Objects
     public function getRelations($object_id = null)
     {
         if (!empty($object_id)) {
-
             return $this->relations[$object_id];
         } else {
-
             return $this->relations;
         }
     }
 
     /**
-     * getPrice
+     * getPrice.
      *
      * @param int    $object_id Object ID
      * @param string $resource  Resource
@@ -99,22 +98,18 @@ class Objects
     public function getPrice($object_id = null, $resource = '')
     {
         if (!empty($object_id)) {
-
             if (empty($resource)) {
-
                 return $this->price[$object_id];
             } else {
-
                 return $this->price[$object_id][$resource];
             }
         } else {
-
             return $this->price;
         }
     }
 
     /**
-     * getCombatSpecs
+     * getCombatSpecs.
      *
      * @param int    $object_id Object ID
      * @param string $type      Type
@@ -124,22 +119,18 @@ class Objects
     public function getCombatSpecs($object_id = null, $type = '')
     {
         if (!empty($object_id)) {
-
             if (empty($type)) {
-
                 return $this->combat_specs[$object_id];
             } else {
-
                 return $this->combat_specs[$object_id][$type];
             }
         } else {
-
             return $this->combat_specs;
         }
     }
 
     /**
-     * getProduction
+     * getProduction.
      *
      * @param int $object_id Object ID
      *
@@ -148,16 +139,14 @@ class Objects
     public function getProduction($object_id = null)
     {
         if (!empty($object_id)) {
-
             return $this->production[$object_id];
         } else {
-
             return $this->production;
         }
     }
 
     /**
-     * getObjectsList
+     * getObjectsList.
      *
      * @param int $object_id Object ID
      *
@@ -166,10 +155,8 @@ class Objects
     public function getObjectsList($object_id = null)
     {
         if (!empty($object_id)) {
-
             return $this->objects_list[$object_id];
         } else {
-
             return $this->objects_list;
         }
     }

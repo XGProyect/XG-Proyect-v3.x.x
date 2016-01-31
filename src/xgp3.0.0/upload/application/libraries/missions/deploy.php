@@ -1,14 +1,17 @@
 <?php
+
 /**
- * Deploy Library
+ * Deploy Library.
  *
  * PHP Version 5.5+
  *
  * @category Library
- * @package  Application
+ *
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
+ *
  * @link     http://www.xgproyect.org
+ *
  * @version  3.0.0
  */
 
@@ -18,21 +21,21 @@ use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
 
 /**
- * Deploy Class
+ * Deploy Class.
  *
  * @category Classes
- * @package  Application
+ *
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
+ *
  * @link     http://www.xgproyect.org
+ *
  * @version  3.0.0
  */
 class Deploy extends Missions
 {
     /**
-     * __construct
-     *
-     * @return void
+     * __construct.
      */
     public function __construct()
     {
@@ -40,26 +43,22 @@ class Deploy extends Missions
     }
 
     /**
-     * deployMission
+     * deployMission.
      *
      * @param array $fleet_row Fleet row
-     *
-     * @return void
      */
     public function deployMission($fleet_row)
     {
         if ($fleet_row['fleet_mess'] == 0) {
-
             if ($fleet_row['fleet_start_time'] <= time()) {
-
-                $target_coords      = sprintf(
+                $target_coords = sprintf(
                     $this->_lang['sys_adress_planet'],
                     $fleet_row['fleet_end_galaxy'],
                     $fleet_row['fleet_end_system'],
                     $fleet_row['fleet_end_planet']
                 );
 
-                $target_resources   = sprintf(
+                $target_resources = sprintf(
                     $this->_lang['sys_stay_mess_goods'],
                     $this->_lang['Metal'],
                     FormatLib::pretty_number($fleet_row['fleet_resource_metal']),
@@ -68,11 +67,11 @@ class Deploy extends Missions
                     $this->_lang['Deuterium'],
                     FormatLib::pretty_number($fleet_row['fleet_resource_deuterium'])
                 );
-                
-                $target_message = $this->_lang['sys_stay_mess_start'] ."<a href=\"game.php?page=galaxy&mode=3&galaxy=" .
-                    $fleet_row['fleet_end_galaxy'] ."&system=". $fleet_row['fleet_end_system'] ."\">";
-                $target_message .= $target_coords . "</a>" . $this->_lang['sys_stay_mess_end'] .
-                    "<br />" . $target_resources;
+
+                $target_message = $this->_lang['sys_stay_mess_start'] . '<a href="game.php?page=galaxy&mode=3&galaxy=' .
+                    $fleet_row['fleet_end_galaxy'] . '&system=' . $fleet_row['fleet_end_system'] . '">';
+                $target_message .= $target_coords . '</a>' . $this->_lang['sys_stay_mess_end'] .
+                    '<br />' . $target_resources;
 
                 FunctionsLib::send_message(
                     $fleet_row['fleet_target_owner'],
@@ -88,17 +87,15 @@ class Deploy extends Missions
                 parent::remove_fleet($fleet_row['fleet_id']);
             }
         } else {
-
             if ($fleet_row['fleet_end_time'] <= time()) {
-
-                    $target_coords  = sprintf(
+                $target_coords = sprintf(
                         $this->_lang['sys_adress_planet'],
                         $fleet_row['fleet_start_galaxy'],
                         $fleet_row['fleet_start_system'],
                         $fleet_row['fleet_start_planet']
                     );
 
-                    $target_resources   = sprintf(
+                $target_resources = sprintf(
                         $this->_lang['sys_stay_mess_goods'],
                         $this->_lang['Metal'],
                         FormatLib::pretty_number($fleet_row['fleet_resource_metal']),
@@ -108,13 +105,13 @@ class Deploy extends Missions
                         FormatLib::pretty_number($fleet_row['fleet_resource_deuterium'])
                     );
 
-                    $target_message = $this->_lang['sys_stay_mess_back'] .
-                        "<a href=\"game.php?page=galaxy&mode=3&galaxy=" .
-                        $fleet_row['fleet_start_galaxy'] . "&system=" . $fleet_row['fleet_start_system'] . "\">";
-                    $target_message .= $target_coords . "</a>" . $this->_lang['sys_stay_mess_bend'] .
-                        "<br />" . $target_resources;
+                $target_message = $this->_lang['sys_stay_mess_back'] .
+                        '<a href="game.php?page=galaxy&mode=3&galaxy=' .
+                        $fleet_row['fleet_start_galaxy'] . '&system=' . $fleet_row['fleet_start_system'] . '">';
+                $target_message .= $target_coords . '</a>' . $this->_lang['sys_stay_mess_bend'] .
+                        '<br />' . $target_resources;
 
-                    FunctionsLib::send_message(
+                FunctionsLib::send_message(
                         $fleet_row['fleet_owner'],
                         '',
                         $fleet_row['fleet_end_time'],
@@ -124,8 +121,8 @@ class Deploy extends Missions
                         $target_message
                     );
 
-                    parent::restore_fleet($fleet_row, true);
-                    parent::remove_fleet($fleet_row['fleet_id']);
+                parent::restore_fleet($fleet_row, true);
+                parent::remove_fleet($fleet_row['fleet_id']);
             }
         }
     }

@@ -1,27 +1,32 @@
 <?php
+
 /**
- * Attack Language Library
+ * Attack Language Library.
  *
  * PHP Version 5.5+
  *
  * @category Library
- * @package  Application
+ *
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
+ *
  * @link     http://www.xgproyect.org
+ *
  * @version  3.0.0
  */
 
 namespace application\libraries\missions;
 
 /**
- * AttackLang Class
+ * AttackLang Class.
  *
  * @category Classes
- * @package  Application
+ *
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
+ *
  * @link     http://www.xgproyect.org
+ *
  * @version  3.0.0
  */
 class AttackLang implements Lang
@@ -29,11 +34,9 @@ class AttackLang implements Lang
     private $lang;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param array $lang Language
-     *
-     * @return void
      */
     public function __construct($lang)
     {
@@ -41,7 +44,7 @@ class AttackLang implements Lang
     }
 
     /**
-     * getShipName
+     * getShipName.
      *
      * @param int $id ID
      *
@@ -53,7 +56,7 @@ class AttackLang implements Lang
     }
 
     /**
-     * getAttackersAttackingDescr
+     * getAttackersAttackingDescr.
      *
      * @param int $amount Amount
      * @param int $damage Damage
@@ -62,11 +65,11 @@ class AttackLang implements Lang
      */
     public function getAttackersAttackingDescr($amount, $damage)
     {
-        return $this->lang['fleet_attack_1'] . ' ' . $damage . " " . $this->lang['damage'] . " with $amount shots ";
+        return $this->lang['fleet_attack_1'] . ' ' . $damage . ' ' . $this->lang['damage'] . " with $amount shots ";
     }
 
     /**
-     * getDefendersDefendingDescr
+     * getDefendersDefendingDescr.
      *
      * @param int $damage Damage
      *
@@ -74,11 +77,11 @@ class AttackLang implements Lang
      */
     public function getDefendersDefendingDescr($damage)
     {
-        return $this->lang['fleet_attack_2'] .' '. $damage . ' ' . $this->lang['damage'];
+        return $this->lang['fleet_attack_2'] . ' ' . $damage . ' ' . $this->lang['damage'];
     }
 
     /**
-     * getDefendersAttackingDescr
+     * getDefendersAttackingDescr.
      *
      * @param int $amount Amount
      * @param int $damage Damage
@@ -87,11 +90,11 @@ class AttackLang implements Lang
      */
     public function getDefendersAttackingDescr($amount, $damage)
     {
-        return $this->lang['fleet_defs_1'] . ' ' . $damage . " " . $this->lang['damage'] . " with $amount shots ";
+        return $this->lang['fleet_defs_1'] . ' ' . $damage . ' ' . $this->lang['damage'] . " with $amount shots ";
     }
 
     /**
-     * getAttackersDefendingDescr
+     * getAttackersDefendingDescr.
      *
      * @param int $damage Damage
      *
@@ -99,11 +102,11 @@ class AttackLang implements Lang
      */
     public function getAttackersDefendingDescr($damage)
     {
-        return $this->lang['fleet_defs_2']. ' ' . $damage . ' ' . $this->lang['damage'];
+        return $this->lang['fleet_defs_2'] . ' ' . $damage . ' ' . $this->lang['damage'];
     }
 
     /**
-     * getAttackerHasWon
+     * getAttackerHasWon.
      *
      * @return string
      */
@@ -113,7 +116,7 @@ class AttackLang implements Lang
     }
 
     /**
-     * getDefendersHasWon
+     * getDefendersHasWon.
      *
      * @return string
      */
@@ -123,7 +126,7 @@ class AttackLang implements Lang
     }
 
     /**
-     * getDraw
+     * getDraw.
      *
      * @return string
      */
@@ -133,7 +136,7 @@ class AttackLang implements Lang
     }
 
     /**
-     * getStoleDescr
+     * getStoleDescr.
      *
      * @param int $metal     Metal
      * @param int $crystal   Crystal
@@ -144,12 +147,12 @@ class AttackLang implements Lang
     public function getStoleDescr($metal, $crystal, $deuterium)
     {
         return $this->lang['sys_stealed_ressources'] . " $metal " . $this->lang['Metal'] .
-            ", $crystal " . $this->lang['Crystal'] . " " . $this->lang['sys_and'] .
+            ", $crystal " . $this->lang['Crystal'] . ' ' . $this->lang['sys_and'] .
             " $deuterium " . $this->lang['Deuterium'];
     }
 
     /**
-     * getAttackersLostUnits
+     * getAttackersLostUnits.
      *
      * @param int $units Units
      *
@@ -161,7 +164,7 @@ class AttackLang implements Lang
     }
 
     /**
-     * getDefendersLostUnits
+     * getDefendersLostUnits.
      *
      * @param int $units Units
      *
@@ -173,7 +176,7 @@ class AttackLang implements Lang
     }
 
     /**
-     * getFloatingDebris
+     * getFloatingDebris.
      *
      * @param int $metal   Metal
      * @param int $crystal Crystal
@@ -187,7 +190,7 @@ class AttackLang implements Lang
     }
 
     /**
-     * getMoonProb
+     * getMoonProb.
      *
      * @param int $prob Probability
      *
@@ -199,7 +202,7 @@ class AttackLang implements Lang
     }
 
     /**
-     * getNewMoon
+     * getNewMoon.
      *
      * @return string
      */

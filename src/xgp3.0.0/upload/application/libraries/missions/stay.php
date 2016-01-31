@@ -1,14 +1,17 @@
 <?php
+
 /**
- * Stay Library
+ * Stay Library.
  *
  * PHP Version 5.5+
  *
  * @category Library
- * @package  Application
+ *
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
+ *
  * @link     http://www.xgproyect.org
+ *
  * @version  3.0.0
  */
 
@@ -18,41 +21,41 @@ use application\libraries\FleetsLib;
 use application\libraries\FunctionsLib;
 
 /**
- * Stay Class
+ * Stay Class.
  *
  * @category Classes
- * @package  Application
+ *
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
+ *
  * @link     http://www.xgproyect.org
+ *
  * @version  3.0.0
  */
 class Stay extends Missions
 {
-	/**
-	 * __construct()
-	 */
-	public function __construct()
-	{
-		parent::__construct();
-	}
+    /**
+     * __construct().
+     */
+    public function __construct()
+    {
+        parent::__construct();
+    }
 
-	/**
-	 * method stay_mission
-	 * param $fleet_row
-	 * return the stay result
-	*/
-	public function stayMission ( $fleet_row )
-	{
-		if ( $fleet_row['fleet_mess'] == 0 )
-		{
-			if ( $fleet_row['fleet_start_time'] <= time() )
-			{
-				$transport_check	= parent::$db->queryFetch ( "SELECT pc1.`planet_user_id` AS start_id,
+    /**
+     * method stay_mission
+     * param $fleet_row
+     * return the stay result.
+     */
+    public function stayMission($fleet_row)
+    {
+        if ($fleet_row['fleet_mess'] == 0) {
+            if ($fleet_row['fleet_start_time'] <= time()) {
+                $transport_check = parent::$db->queryFetch('SELECT pc1.`planet_user_id` AS start_id,
 																			pc1.`planet_name` AS start_name,
 																			pc2.`planet_user_id` AS target_id,
 																			pc2.`planet_name` AS target_name
-																	FROM " . PLANETS . " AS pc1, " . PLANETS . " AS pc2
+																	FROM ' . PLANETS . ' AS pc1, ' . PLANETS . " AS pc2
 																	WHERE pc1.planet_ = '" . $fleet_row['fleet_start_galaxy'] . "' AND
 																			pc1.`planet_system` = '" . $fleet_row['fleet_start_system'] . "' AND
 																			pc1.`planet_planet` = '" . $fleet_row['fleet_start_planet'] . "' AND
@@ -60,64 +63,62 @@ class Stay extends Missions
 																			pc2.`planet_galaxy` = '" . $fleet_row['fleet_end_galaxy'] . "' AND
 																			pc2.`planet_system` = '" . $fleet_row['fleet_end_system'] . "' AND
 																			pc2.`planet_planet` = '" . $fleet_row['fleet_end_planet'] . "' AND
-																			pc2.`planet_type` = '" . $fleet_row['fleet_end_type'] . "'" );
+																			pc2.`planet_type` = '" . $fleet_row['fleet_end_type'] . "'");
 
-				// SOME REQUIRED VALUES
-				$start_name			= $transport_check['start_id'];
-				$start_owner_id		= $transport_check['start_name'];
-				$target_name		= $transport_check['target_id'];
-				$target_owner_id	= $transport_check['target_name'];
+                // SOME REQUIRED VALUES
+                $start_name      = $transport_check['start_id'];
+                $start_owner_id  = $transport_check['start_name'];
+                $target_name     = $transport_check['target_id'];
+                $target_owner_id = $transport_check['target_name'];
 
-				// DIFFERENT TYPES OF MESSAGES
-				$message[1]			= sprintf ( $this->_lang['sys_tran_mess_owner'] , $target_name , FleetsLib::target_link ( $fleet_row , '' ) , $fleet_row['fleet_resource_metal'] , $this->_lang['Metal'] , $fleet_row['fleet_resource_crystal'] , $this->_lang['Crystal'] , $fleet_row['fleet_resource_deuterium'] , $this->_lang['Deuterium'] );
-				$message[2]			= sprintf ( $this->_lang['sys_tran_mess_user'] , $start_name , FleetsLib::start_link ( $fleet_row , '' ) , $target_name , FleetsLib::target_link ( $fleet_row , '' ) , $fleet_row['fleet_resource_metal'] , $this->_lang['Metal'] , $fleet_row['fleet_resource_crystal'] , $this->_lang['Crystal'] , $fleet_row['fleet_resource_deuterium'] , $this->_lang['Deuterium'] );
-				$message[3]			= sprintf ( $this->_lang['sys_tran_mess_back'] , $start_name , FleetsLib::start_link ( $fleet_row , '' ) );
+                // DIFFERENT TYPES OF MESSAGES
+                $message[1] = sprintf($this->_lang['sys_tran_mess_owner'], $target_name, FleetsLib::target_link($fleet_row, ''), $fleet_row['fleet_resource_metal'], $this->_lang['Metal'], $fleet_row['fleet_resource_crystal'], $this->_lang['Crystal'], $fleet_row['fleet_resource_deuterium'], $this->_lang['Deuterium']);
+                $message[2] = sprintf($this->_lang['sys_tran_mess_user'], $start_name, FleetsLib::start_link($fleet_row, ''), $target_name, FleetsLib::target_link($fleet_row, ''), $fleet_row['fleet_resource_metal'], $this->_lang['Metal'], $fleet_row['fleet_resource_crystal'], $this->_lang['Crystal'], $fleet_row['fleet_resource_deuterium'], $this->_lang['Deuterium']);
+                $message[3] = sprintf($this->_lang['sys_tran_mess_back'], $start_name, FleetsLib::start_link($fleet_row, ''));
 
-				$this->stay_message ( $start_owner_id , $message[1] , $fleet_row['fleet_start_time'] , $this->_lang['sys_mess_transport'] );
-				$this->stay_message ( $target_owner_id , $message[2] , $fleet_row['fleet_start_time'] , $this->_lang['sys_mess_transport'] );
+                $this->stay_message($start_owner_id, $message[1], $fleet_row['fleet_start_time'], $this->_lang['sys_mess_transport']);
+                $this->stay_message($target_owner_id, $message[2], $fleet_row['fleet_start_time'], $this->_lang['sys_mess_transport']);
 
-				$this->start_stay ( $fleet_row['fleet_id'] );
-			}
+                $this->start_stay($fleet_row['fleet_id']);
+            }
 
-			if ( $fleet_row['fleet_end_stay'] <= time() )
-			{
-				parent::return_fleet ( $fleet_row['fleet_id'] );
-			}
-		}
+            if ($fleet_row['fleet_end_stay'] <= time()) {
+                parent::return_fleet($fleet_row['fleet_id']);
+            }
+        }
 
-		if ( $fleet_row['fleet_end_time'] < time() )
-		{
-			$this->stay_message ( $start_owner_id , $message , $fleet_row['fleet_end_time'] , $this->_lang['sys_mess_fleetback'] );
+        if ($fleet_row['fleet_end_time'] < time()) {
+            $this->stay_message($start_owner_id, $message, $fleet_row['fleet_end_time'], $this->_lang['sys_mess_fleetback']);
 
-			parent::restore_fleet ( $fleet_row, TRUE );
-			parent::remove_fleet ( $fleet_row['fleet_id'] );
-		}
-	}
+            parent::restore_fleet($fleet_row, true);
+            parent::remove_fleet($fleet_row['fleet_id']);
+        }
+    }
 
-	/**
-	 * method start_stay
-	 * param $fleet_id
-	 * return the fleet on stay mode, just reached the position to start the stay
-	*/
-	private function start_stay ( $fleet_id )
-	{
-		parent::$db->query ( "UPDATE " . FLEETS . " SET
+    /**
+     * method start_stay
+     * param $fleet_id
+     * return the fleet on stay mode, just reached the position to start the stay.
+     */
+    private function start_stay($fleet_id)
+    {
+        parent::$db->query('UPDATE ' . FLEETS . " SET
 								`fleet_mess` = 2
-								WHERE `fleet_id` = '" . $fleet_id . "' LIMIT 1 ;" );
-	}
+								WHERE `fleet_id` = '" . $fleet_id . "' LIMIT 1 ;");
+    }
 
-	/**
-	 * method stay_message
-	 * param $owner
-	 * param $message
-	 * param $time
-	 * param $status_message
-	 * return send a message with the stay details
-	*/
-	private function stay_message ( $owner , $message , $time , $status_message )
-	{
-		FunctionsLib::send_message ( $owner , '' , $time , 5 , $this->_lang['sys_mess_tower'] , $status_message , $message );
-	}
+    /**
+     * method stay_message
+     * param $owner
+     * param $message
+     * param $time
+     * param $status_message
+     * return send a message with the stay details.
+     */
+    private function stay_message($owner, $message, $time, $status_message)
+    {
+        FunctionsLib::send_message($owner, '', $time, 5, $this->_lang['sys_mess_tower'], $status_message, $message);
+    }
 }
 
 /* end of stay.php */

@@ -1,14 +1,17 @@
 <?php
+
 /**
- * Fleet2 Controller
+ * Fleet2 Controller.
  *
  * PHP Version 5.5+
  *
  * @category Controller
- * @package  Application
+ *
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
+ *
  * @link     http://www.xgproyect.org
+ *
  * @version  3.0.0
  */
 
@@ -20,299 +23,275 @@ use application\libraries\FunctionsLib;
 use application\libraries\OfficiersLib;
 
 /**
- * Fleet2 Class
+ * Fleet2 Class.
  *
  * @category Classes
- * @package  Application
+ *
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
+ *
  * @link     http://www.xgproyect.org
+ *
  * @version  3.0.0
  */
 class Fleet2 extends XGPCore
 {
-	const MODULE_ID	= 8;
+    const MODULE_ID = 8;
 
-	private $_lang;
-	private $_current_user;
-	private $_current_planet;
+    private $_lang;
+    private $_current_user;
+    private $_current_planet;
 
-	/**
-	 * __construct()
-	 */
-	public function __construct()
-	{
-		parent::__construct();
+    /**
+     * __construct().
+     */
+    public function __construct()
+    {
+        parent::__construct();
 
-		// check if session is active
-		parent::$users->check_session();
+        // check if session is active
+        parent::$users->check_session();
 
-		// Check module access
-		FunctionsLib::module_message ( FunctionsLib::is_module_accesible ( self::MODULE_ID ) );
+        // Check module access
+        FunctionsLib::module_message(FunctionsLib::is_module_accesible(self::MODULE_ID));
 
-		$this->_lang			= parent::$lang;
-		$this->_current_user	= parent::$users->get_user_data();
-		$this->_current_planet	= parent::$users->get_planet_data();
+        $this->_lang           = parent::$lang;
+        $this->_current_user   = parent::$users->get_user_data();
+        $this->_current_planet = parent::$users->get_planet_data();
 
-		$this->build_page();
-	}
+        $this->build_page();
+    }
 
-	/**
-	 * method __destruct
-	 * param
-	 * return close db connection
-	 */
-	public function __destruct()
-	{
-		parent::$db->closeConnection();
-	}
+    /**
+     * method __destruct
+     * param
+     * return close db connection.
+     */
+    public function __destruct()
+    {
+        parent::$db->closeConnection();
+    }
 
-	/**
-	 * method build_page
-	 * param
-	 * return main method, loads everything
-	 */
-	private function build_page()
-	{
-		$resource	=	parent::$objects->getObjects();
-		$pricelist	=	parent::$objects->getPrice();
-		$reslist	=	parent::$objects->getObjectsList();
+    /**
+     * method build_page
+     * param
+     * return main method, loads everything.
+     */
+    private function build_page()
+    {
+        $resource  = parent::$objects->getObjects();
+        $pricelist = parent::$objects->getPrice();
+        $reslist   = parent::$objects->getObjectsList();
 
-		#####################################################################################################
-		// SOME DEFAULT VALUES
-		#####################################################################################################
-		// QUERYS
-		$getCurrentAcs		= parent::$db->query ( "SELECT *
-														FROM " . ACS_FLEETS . "
-														WHERE acs_fleet_members = '" . $this->_current_user['user_id'] . "'" );
+        #####################################################################################################
+        // SOME DEFAULT VALUES
+        #####################################################################################################
+        // QUERYS
+        $getCurrentAcs = parent::$db->query('SELECT *
+														FROM ' . ACS_FLEETS . "
+														WHERE acs_fleet_members = '" . $this->_current_user['user_id'] . "'");
 
-		// ARRAYS
-		$speed_values		= array ( 10 => 100 , 9 => 90 , 8 => 80 , 7 => 70 , 6 => 60 , 5 => 50 , 4 => 40 , 3 => 30 , 2 => 20 , 1 => 10 );
-		$planet_type		= array ( 'fl_planet' , 'fl_debris' , 'fl_moon' );
+        // ARRAYS
+        $speed_values = array(10 => 100, 9 => 90, 8 => 80, 7 => 70, 6 => 60, 5 => 50, 4 => 40, 3 => 30, 2 => 20, 1 => 10);
+        $planet_type  = array('fl_planet', 'fl_debris', 'fl_moon');
 
-		// LOAD TEMPLATES REQUIRED
-		$inputs_template			= parent::$page->get_template ( 'fleet/fleet2_inputs' );
-		$options_template			= parent::$page->get_template ( 'fleet/fleet_options' );
-		$shortcut_template			= parent::$page->get_template ( 'fleet/fleet2_shortcuts' );
-		$shortcut_row_template		= parent::$page->get_template ( 'fleet/fleet2_shortcuts_row' );
-		$shortcut_noshortcuts 		= parent::$page->get_template ( 'fleet/fleet2_shortcuts_noshortcuts_row' );
-		$shortcut_acs_row			= parent::$page->get_template ( 'fleet/fleet2_shortcut_acs_row' );
+        // LOAD TEMPLATES REQUIRED
+        $inputs_template       = parent::$page->get_template('fleet/fleet2_inputs');
+        $options_template      = parent::$page->get_template('fleet/fleet_options');
+        $shortcut_template     = parent::$page->get_template('fleet/fleet2_shortcuts');
+        $shortcut_row_template = parent::$page->get_template('fleet/fleet2_shortcuts_row');
+        $shortcut_noshortcuts  = parent::$page->get_template('fleet/fleet2_shortcuts_noshortcuts_row');
+        $shortcut_acs_row      = parent::$page->get_template('fleet/fleet2_shortcut_acs_row');
 
-		// LANGUAGE
-		$this->_lang['js_path']		= XGP_ROOT . JS_PATH;
-		$parse 						= $this->_lang;
+        // LANGUAGE
+        $this->_lang['js_path'] = XGP_ROOT . JS_PATH;
+        $parse                  = $this->_lang;
 
-		// COORDS
-		$g 					= ( ( $_POST['galaxy'] == '' ) ? $this->_current_planet['planet_galaxy'] : $_POST['galaxy'] );
-		$s 					= ( ( $_POST['system'] == '' ) ? $this->_current_planet['planet_system'] : $_POST['system'] );
-		$p 					= ( ( $_POST['planet'] == '' ) ? $this->_current_planet['planet_planet'] : $_POST['planet'] );
-		$t 					= ( ( $_POST['planet_type'] == '' ) ? $this->_current_planet['planet_type'] : $_POST['planet_type'] );
+        // COORDS
+        $g = (($_POST['galaxy'] == '') ? $this->_current_planet['planet_galaxy'] : $_POST['galaxy']);
+        $s = (($_POST['system'] == '') ? $this->_current_planet['planet_system'] : $_POST['system']);
+        $p = (($_POST['planet'] == '') ? $this->_current_planet['planet_planet'] : $_POST['planet']);
+        $t = (($_POST['planet_type'] == '') ? $this->_current_planet['planet_type'] : $_POST['planet_type']);
 
-		// OTHER VALUES
-		$value				= 0;
-		$FleetHiddenBlock  	= '';
-		#####################################################################################################
-		// END DEFAULT VALUES
-		#####################################################################################################
+        // OTHER VALUES
+        $value            = 0;
+        $FleetHiddenBlock = '';
+        #####################################################################################################
+        // END DEFAULT VALUES
+        #####################################################################################################
 
-		#####################################################################################################
-		// LOAD SHIPS INPUTS
-		#####################################################################################################
-		$fleet['fleetlist']		= '';
-		$fleet['amount']		= 0;
-		$fleet['consumption']	= 0;
+        #####################################################################################################
+        // LOAD SHIPS INPUTS
+        #####################################################################################################
+        $fleet['fleetlist']   = '';
+        $fleet['amount']      = 0;
+        $fleet['consumption'] = 0;
 
-		foreach ( $reslist['fleet'] as $n => $i )
-		{
-			if ( isset ( $_POST["ship$i"] ) && $i >= 201 && $i <= 215 && $_POST["ship$i"] > "0" )
-			{
-				if ( ( $_POST["ship$i"] > $this->_current_planet[$resource[$i]]) OR (!ctype_digit( $_POST["ship$i"] )))
-				{
-					FunctionsLib::redirect ( 'game.php?page=fleet1' );
-				}
-				else
-				{
-					$fleet['fleetarray'][$i]   	= $_POST["ship$i"];
-					$fleet['fleetlist']        .= $i . "," . $_POST["ship$i"] . ";";
-					$fleet['amount']           += $_POST["ship$i"];
-					$fleet['i']				   	= $i;
-					$fleet['consumption']	   += FleetsLib::ship_consumption ( $i , $this->_current_user );
-					$fleet['speed']				= FleetsLib::fleet_max_speed ( '' , $i , $this->_current_user );
-					$fleet['capacity']			= $pricelist[$i]['capacity'];
-					$fleet['ship']				= $_POST["ship$i"];
+        foreach ($reslist['fleet'] as $n => $i) {
+            if (isset($_POST["ship$i"]) && $i >= 201 && $i <= 215 && $_POST["ship$i"] > '0') {
+                if (($_POST["ship$i"] > $this->_current_planet[$resource[$i]]) or (!ctype_digit($_POST["ship$i"]))) {
+                    FunctionsLib::redirect('game.php?page=fleet1');
+                } else {
+                    $fleet['fleetarray'][$i] = $_POST["ship$i"];
+                    $fleet['fleetlist']        .= $i . ',' . $_POST["ship$i"] . ';';
+                    $fleet['amount']           += $_POST["ship$i"];
+                    $fleet['i'] = $i;
+                    $fleet['consumption']       += FleetsLib::ship_consumption($i, $this->_current_user);
+                    $fleet['speed']    = FleetsLib::fleet_max_speed('', $i, $this->_current_user);
+                    $fleet['capacity'] = $pricelist[$i]['capacity'];
+                    $fleet['ship']     = $_POST["ship$i"];
 
-					$speedalls[$i]             = FleetsLib::fleet_max_speed ( '' , $i , $this->_current_user);
-					$FleetHiddenBlock		  .= parent::$page->parse_template ( $inputs_template , $fleet );
-				}
-			}
-		}
+                    $speedalls[$i] = FleetsLib::fleet_max_speed('', $i, $this->_current_user);
+                    $FleetHiddenBlock          .= parent::$page->parse_template($inputs_template, $fleet);
+                }
+            }
+        }
 
-		if ( !$fleet['fleetlist'] )
-		{
-			FunctionsLib::redirect ( 'game.php?page=fleet1' );
-		}
+        if (!$fleet['fleetlist']) {
+            FunctionsLib::redirect('game.php?page=fleet1');
+        } else {
+            $speedallsmin = min($speedalls);
+        }
 
-		else
-		{
-			$speedallsmin = min ( $speedalls );
-		}
+        #####################################################################################################
+        // LOAD PLANET TYPES OPTIONS
+        #####################################################################################################
+        $parse['options_planettype'] = '';
 
-		#####################################################################################################
-		// LOAD PLANET TYPES OPTIONS
-		#####################################################################################################
-		$parse['options_planettype']	= '';
+        foreach ($planet_type as $type) {
+            ++$value;
 
-		foreach ( $planet_type as $type )
-		{
-			$value++;
+            $options['value'] = $value;
 
-			$options['value']			=	$value;
+            if ($value == $t) {
+                $options['selected'] = 'SELECTED';
+            } else {
+                $options['selected'] = '';
+            }
 
-			if ( $value == $t )
-			{
-				$options['selected']	=	'SELECTED';
-			}
-			else
-			{
-				$options['selected']	=	'';
-			}
+            $options['title'] = $this->_lang[$type];
 
-			$options['title']			=	$this->_lang[$type];
+            $parse['options_planettype'] .= parent::$page->parse_template($options_template, $options);
+        }
 
+        #####################################################################################################
+        // LOAD SPEED OPTIONS
+        #####################################################################################################
+        $parse['options'] = '';
 
-			$parse['options_planettype'] .= parent::$page->parse_template ( $options_template , $options );
-		}
+        foreach ($speed_values as $value => $porcentage) {
+            $speed_porcentage['value']    = $value;
+            $speed_porcentage['selected'] = '';
+            $speed_porcentage['title']    = $porcentage;
 
-		#####################################################################################################
-		// LOAD SPEED OPTIONS
-		#####################################################################################################
-		$parse['options']	= '';
+            $parse['options'] .= parent::$page->parse_template($options_template, $speed_porcentage);
+        }
 
-		foreach ( $speed_values as $value => $porcentage )
-		{
-			$speed_porcentage['value']		=	$value;
-			$speed_porcentage['selected']	=	'';
-			$speed_porcentage['title']		=	$porcentage;
+        #####################################################################################################
+        // PARSE THE REST OF THE OPTIONS
+        #####################################################################################################
+        $parse['fleetblock']   = $FleetHiddenBlock;
+        $parse['speedallsmin'] = $speedallsmin;
+        $parse['fleetarray']   = str_rot13(base64_encode(serialize($fleet['fleetarray'])));
+        $parse['galaxy']       = $this->_current_planet['planet_galaxy'];
+        $parse['system']       = $this->_current_planet['planet_system'];
+        $parse['planet']       = $this->_current_planet['planet_planet'];
+        $parse['galaxy_post']  = (int) $_POST['galaxy'];
+        $parse['system_post']  = (int) $_POST['system'];
+        $parse['planet_post']  = (int) $_POST['planet'];
+        $parse['speedfactor']  = FunctionsLib::fleet_speed_factor();
+        $parse['planet_type']  = $this->_current_planet['planet_type'];
+        $parse['metal']        = floor($this->_current_planet['planet_metal']);
+        $parse['crystal']      = floor($this->_current_planet['planet_crystal']);
+        $parse['deuterium']    = floor($this->_current_planet['planet_deuterium']);
+        $parse['g']            = $g;
+        $parse['s']            = $s;
+        $parse['p']            = $p;
 
-			$parse['options'] .= parent::$page->parse_template ( $options_template , $speed_porcentage );
-		}
+        #####################################################################################################
+        // LOAD FLEET SHORTCUTS
+        #####################################################################################################
+        if (OfficiersLib::isOfficierActive($this->_current_user['premium_officier_commander'])) {
+            if ($this->_current_user['user_fleet_shortcuts']) {
+                $scarray = explode(';', $this->_current_user['user_fleet_shortcuts']);
 
-		#####################################################################################################
-		// PARSE THE REST OF THE OPTIONS
-		#####################################################################################################
-		$parse['fleetblock'] 			= $FleetHiddenBlock;
-		$parse['speedallsmin'] 			= $speedallsmin;
-		$parse['fleetarray'] 			= str_rot13(base64_encode(serialize($fleet['fleetarray'])));
-		$parse['galaxy'] 				= $this->_current_planet['planet_galaxy'];
-		$parse['system'] 				= $this->_current_planet['planet_system'];
-		$parse['planet'] 				= $this->_current_planet['planet_planet'];
-		$parse['galaxy_post'] 			= (int)$_POST['galaxy'];
-		$parse['system_post'] 			= (int)$_POST['system'];
-		$parse['planet_post'] 			= (int)$_POST['planet'];
-		$parse['speedfactor'] 			= FunctionsLib::fleet_speed_factor();
-		$parse['planet_type'] 			= $this->_current_planet['planet_type'];
-		$parse['metal'] 				= floor($this->_current_planet['planet_metal']);
-		$parse['crystal'] 				= floor($this->_current_planet['planet_crystal']);
-		$parse['deuterium'] 			= floor($this->_current_planet['planet_deuterium']);
-		$parse['g'] 					= $g;
-		$parse['s'] 					= $s;
-		$parse['p'] 					= $p;
+                foreach ($scarray as $a => $b) {
+                    if ($b != '') {
+                        $c = explode(',', $b);
 
-		#####################################################################################################
-		// LOAD FLEET SHORTCUTS
-		#####################################################################################################
-		if ( OfficiersLib::isOfficierActive( $this->_current_user['premium_officier_commander'] ) )
-		{
-			if ( $this->_current_user['user_fleet_shortcuts'] )
-			{
-				$scarray 	= explode ( ";" , $this->_current_user['user_fleet_shortcuts'] );
+                        $shortcut['description'] = $c[0] . ' ' . $c[1] . ':' . $c[2] . ':' . $c[3] . ' ';
 
-				foreach ( $scarray as $a => $b )
-				{
-					if ( $b != "" )
-					{
-						$c 	= explode ( ',' , $b );
+                        switch ($c[4]) {
+                            case 1:
+                                $shortcut['description'] .= $this->_lang['fl_planet_shortcut'];
+                            break;
+                            case 2:
+                                $shortcut['description'] .= $this->_lang['fl_debris_shortcut'];
+                            break;
+                            case 3:
+                                $shortcut['description'] .= $this->_lang['fl_moon_shortcut'];
+                            break;
+                            default:
+                                $shortcut['description'] .= '';
+                            break;
+                        }
+                        $shortcut['select']   = 'shortcuts';
+                        $shortcut['selected'] = '';
+                        $shortcut['value']    = $c['1'] . ';' . $c['2'] . ';' . $c['3'] . ';' . $c['4'];
+                        $shortcut['title']    = $shortcut['description'];
+                        $shortcut['shortcut_options']  .= parent::$page->parse_template($options_template, $shortcut);
+                    }
+                }
 
-						$shortcut['description']   		= $c[0] ." ". $c[1] .":". $c[2] .":". $c[3] . " ";
+                $parse['shortcuts_rows'] = parent::$page->parse_template($shortcut_row_template, $shortcut);
+                $parse['shortcut']       = parent::$page->parse_template($shortcut_template, $parse);
+            } else {
+                $parse['fl_shorcut_message'] = $this->_lang['fl_no_shortcuts'];
+                $parse['shortcuts_rows']     = parent::$page->parse_template($shortcut_noshortcuts, $parse);
+                $parse['shortcut']           = parent::$page->parse_template($shortcut_template, $parse);
+            }
+        }
+        #####################################################################################################
+        // LOAD COLONY SHORTCUTS
+        #####################################################################################################
+        $colony['select']           = 'colonies';
+        $colony['shortcut_options'] = FunctionsLib::build_planet_list($this->_current_user, $this->_current_planet['planet_id']);
+        $parse['colonylist']        = parent::$page->parse_template($shortcut_row_template, $colony);
 
-						switch ( $c[4] )
-						{
-							case 1:
-								$shortcut['description'] .= $this->_lang['fl_planet_shortcut'];
-							break;
-							case 2:
-								$shortcut['description'] .= $this->_lang['fl_debris_shortcut'];
-							break;
-							case 3:
-								$shortcut['description'] .= $this->_lang['fl_moon_shortcut'];
-							break;
-							default:
-								$shortcut['description'] .= '';
-							break;
-						}
-						$shortcut['select']				= 'shortcuts';
-						$shortcut['selected']			= '';
-						$shortcut['value']			   	= $c['1'].';'.$c['2'].';'.$c['3'].';'.$c['4'];
-						$shortcut['title']			   	= $shortcut['description'];
-						$shortcut['shortcut_options']  .= parent::$page->parse_template ( $options_template , $shortcut );
-					}
-				}
+        if ($colony['shortcut_options'] === false) {
+            $parse['fl_shorcut_message'] = $this->_lang['fl_no_colony'];
+            $parse['colonylist']         = parent::$page->parse_template($shortcut_noshortcuts, $parse);
+        }
 
-				$parse['shortcuts_rows'] 		= parent::$page->parse_template ( $shortcut_row_template , $shortcut );
-				$parse['shortcut']				= parent::$page->parse_template ( $shortcut_template , $parse );
-			}
-			else
-			{
-				$parse['fl_shorcut_message']	= $this->_lang['fl_no_shortcuts'];
-				$parse['shortcuts_rows'] 		= parent::$page->parse_template ( $shortcut_noshortcuts , $parse );
-				$parse['shortcut']				= parent::$page->parse_template ( $shortcut_template , $parse );
-			}
-		}
-		#####################################################################################################
-		// LOAD COLONY SHORTCUTS
-		#####################################################################################################
-		$colony['select']			= 'colonies';
-		$colony['shortcut_options']	= FunctionsLib::build_planet_list ( $this->_current_user , $this->_current_planet['planet_id'] );
-		$parse['colonylist']		= parent::$page->parse_template ( $shortcut_row_template , $colony );
+        #####################################################################################################
+        // LOAD SAC SHORTCUTS
+        #####################################################################################################
+        $acs_fleets = '';
 
-		if ( $colony['shortcut_options'] === FALSE )
-		{
-			$parse['fl_shorcut_message']			= $this->_lang['fl_no_colony'];
-			$parse['colonylist']					= parent::$page->parse_template ( $shortcut_noshortcuts , $parse );
-		}
+        while ($row = parent::$db->fetchArray($getCurrentAcs)) {
+            $members = explode(',', $row['acs_fleet_invited']);
 
-		#####################################################################################################
-		// LOAD SAC SHORTCUTS
-		#####################################################################################################
-		$acs_fleets	= '';
+            foreach ($members as $a => $b) {
+                if ($b == $this->_current_user['user_id']) {
+                    $acs['galaxy']      = $row['acs_fleet_galaxy'];
+                    $acs['system']      = $row['acs_fleet_system'];
+                    $acs['planet']      = $row['acs_fleet_planet'];
+                    $acs['planet_type'] = $row['acs_fleet_planet_type'];
+                    $acs['id']          = $row['acs_fleet_id'];
+                    $acs['name']        = $row['acs_fleet_name'];
 
-		while ( $row = parent::$db->fetchArray ( $getCurrentAcs ) )
-		{
-			$members = explode ( "," , $row['acs_fleet_invited'] );
+                    $acs_fleets       .= parent::$page->parse_template($shortcut_acs_row, $acs);
+                }
+            }
+        }
 
-			foreach ( $members as $a => $b )
-			{
-				if ( $b == $this->_current_user['user_id'] )
-				{
-					$acs['galaxy']		=	$row['acs_fleet_galaxy'];
-					$acs['system']		=	$row['acs_fleet_system'];
-					$acs['planet']		=	$row['acs_fleet_planet'];
-					$acs['planet_type']	=	$row['acs_fleet_planet_type'];
-					$acs['id']			=	$row['acs_fleet_id'];
-					$acs['name']		=	$row['acs_fleet_name'];
+        $parse['asc']            = $acs_fleets;
+        $parse['maxepedition']   = $_POST['maxepedition'];
+        $parse['curepedition']   = $_POST['curepedition'];
+        $parse['target_mission'] = $_POST['target_mission'];
 
-					$acs_fleets 	   .= parent::$page->parse_template ( $shortcut_acs_row , $acs );
-				}
-			}
-		}
-
-		$parse['asc'] 				= $acs_fleets;
-		$parse['maxepedition'] 		= $_POST['maxepedition'];
-		$parse['curepedition'] 		= $_POST['curepedition'];
-		$parse['target_mission'] 	= $_POST['target_mission'];
-
-		parent::$page->display ( parent::$page->parse_template ( parent::$page->get_template ( 'fleet/fleet2_table' ) , $parse ) );
-	}
+        parent::$page->display(parent::$page->parse_template(parent::$page->get_template('fleet/fleet2_table'), $parse));
+    }
 }
 
 /* end of fleet2.php */
