@@ -1,11 +1,34 @@
 <?php
-
 /**
- * @project XG Proyect
- * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * Fleet4 Controller
+ *
+ * PHP Version 5.5+
+ *
+ * @category Controller
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
  */
 
+namespace application\controllers\game;
+
+use application\core\XGPCore;
+use application\libraries\FleetsLib;
+use application\libraries\FormatLib;
+use application\libraries\FunctionsLib;
+
+/**
+ * Fleet4 Class
+ *
+ * @category Classes
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
+ */
 class Fleet4 extends XGPCore
 {
 	const MODULE_ID = 8;
@@ -26,12 +49,12 @@ class Fleet4 extends XGPCore
 		parent::$users->check_session();
 
 		// Check module access
-		Functions_Lib::module_message ( Functions_Lib::is_module_accesible ( self::MODULE_ID ) );
+		FunctionsLib::module_message ( FunctionsLib::is_module_accesible ( self::MODULE_ID ) );
 
 		$this->_lang			= parent::$lang;
 		$this->_current_user	= parent::$users->get_user_data();
 		$this->_current_planet	= parent::$users->get_planet_data();
-		$this->_noob			= Functions_Lib::load_library ( 'NoobsProtection_Lib' );
+		$this->_noob			= FunctionsLib::load_library ( 'NoobsProtectionLib' );
 
 		$this->build_page();
 	}
@@ -43,7 +66,7 @@ class Fleet4 extends XGPCore
 	 */
 	public function __destruct()
 	{
-		parent::$db->close_connection();
+		parent::$db->closeConnection();
 	}
 
 	/**
@@ -53,14 +76,14 @@ class Fleet4 extends XGPCore
 	 */
 	private function build_page()
 	{
-		$resource	=	parent::$objects->get_objects();
-		$pricelist	=	parent::$objects->get_price();
-		$reslist	=	parent::$objects->get_objects_list();
+		$resource	=	parent::$objects->getObjects();
+		$pricelist	=	parent::$objects->getPrice();
+		$reslist	=	parent::$objects->getObjectsList();
 		$parse		=	$this->_lang;
 
 		if ( parent::$users->is_on_vacations ( $this->_current_user ) )
 		{
-			exit ( Functions_Lib::message ( $this->_lang['fl_vacation_mode_active'] , "game.php?page=overview" , 2 ) );
+			exit ( FunctionsLib::message ( $this->_lang['fl_vacation_mode_active'] , "game.php?page=overview" , 2 ) );
 		}
 
 		$fleet_group_mr = 0;
@@ -93,14 +116,14 @@ class Fleet4 extends XGPCore
 			$_POST['mission'] = 1;
 		}
 
-		$TargetPlanet  		= parent::$db->query_fetch ( "SELECT `planet_user_id`,`planet_destroyed`
+		$TargetPlanet  		= parent::$db->queryFetch ( "SELECT `planet_user_id`,`planet_destroyed`
 															FROM `" . PLANETS . "`
 															 WHERE `planet_galaxy` = '". (int)$_POST['galaxy'] ."' AND
 															 		`planet_system` = '". (int)$_POST['system'] ."' AND
 															 		`planet_planet` = '". (int)$_POST['planet'] ."' AND
 															 		`planet_type` = '". (int)$_POST['planettype'] ."';");
 
-		$MyDBRec       		= parent::$db->query_fetch ( "SELECT u.`user_id`, u.`user_onlinetime`, u.`user_ally_id`, s.`setting_vacations_status`
+		$MyDBRec       		= parent::$db->queryFetch ( "SELECT u.`user_id`, u.`user_onlinetime`, u.`user_ally_id`, s.`setting_vacations_status`
 															FROM " . USERS . " AS u, " . SETTINGS . " AS s
 															WHERE u.`user_id` = '" . $this->_current_user['user_id']."'
 																AND s.`setting_user_id` = '". $this->_current_user['user_id']."';");
@@ -109,12 +132,12 @@ class Fleet4 extends XGPCore
 
 		if ( $TargetPlanet['planet_destroyed'] != 0 )
 		{
-			Functions_Lib::redirect ( 'game.php?page=movement' );
+			FunctionsLib::redirect ( 'game.php?page=movement' );
 		}
 
 		if ( !is_array ( $fleetarray ) )
 		{
-			Functions_Lib::redirect ( 'game.php?page=movement' );
+			FunctionsLib::redirect ( 'game.php?page=movement' );
 		}
 
 		foreach ( $fleetarray as $Ship => $Count )
@@ -123,7 +146,7 @@ class Fleet4 extends XGPCore
 
 			if ($Count > $this->_current_planet[$resource[$Ship]])
 			{
-				Functions_Lib::redirect ( 'game.php?page=movement' );
+				FunctionsLib::redirect ( 'game.php?page=movement' );
 			}
 		}
 
@@ -137,12 +160,12 @@ class Fleet4 extends XGPCore
 		//fix by jstar
 		if ( $fleetmission == 7 && !isset ( $fleetarray[208] ) )
 		{
-			Functions_Lib::redirect ( 'game.php?page=movement' );
+			FunctionsLib::redirect ( 'game.php?page=movement' );
 		}
 
 		if ($planettype != 1 && $planettype != 2 && $planettype != 3)
 		{
-			Functions_Lib::redirect ( 'game.php?page=movement' );
+			FunctionsLib::redirect ( 'game.php?page=movement' );
 		}
 
 		//fix invisible debris like ogame by jstar
@@ -150,7 +173,7 @@ class Fleet4 extends XGPCore
 		{
 			$YourPlanet = FALSE;
 			$UsedPlanet = FALSE;
-			$select     = parent::$db->query_fetch ( "SELECT COUNT(*) AS count, p.*
+			$select     = parent::$db->queryFetch ( "SELECT COUNT(*) AS count, p.*
 														FROM `" . PLANETS . "` AS p
 														WHERE `planet_galaxy` = '". $galaxy ."' AND
 																`planet_system` = '". $system ."' AND
@@ -159,14 +182,14 @@ class Fleet4 extends XGPCore
 
 			if($select['planet_debris_metal'] == 0 && $select['planet_debris_crystal'] == 0 && time() > ($select['planet_invisible_start_time']+DEBRIS_LIFE_TIME))
 			{
-				Functions_Lib::redirect ( 'game.php?page=movement' );
+				FunctionsLib::redirect ( 'game.php?page=movement' );
 			}
 		}
 		else
 		{
 			$YourPlanet = FALSE;
 			$UsedPlanet = FALSE;
-			$select     = parent::$db->query_fetch ( "SELECT COUNT(*) AS count, p.`planet_user_id`
+			$select     = parent::$db->queryFetch ( "SELECT COUNT(*) AS count, p.`planet_user_id`
 														FROM `" . PLANETS . "` AS p
 														WHERE `planet_galaxy` = '". $galaxy ."' AND
 																`planet_system` = '". $system ."' AND
@@ -177,18 +200,18 @@ class Fleet4 extends XGPCore
 		if ($this->_current_planet['planet_galaxy'] == $galaxy && $this->_current_planet['planet_system'] == $system &&
 			$this->_current_planet['planet_planet'] == $planet && $this->_current_planet['planet_type'] == $planettype)
 		{
-			Functions_Lib::redirect ( 'game.php?page=movement' );
+			FunctionsLib::redirect ( 'game.php?page=movement' );
 		}
 
 		if ($_POST['mission'] != 15)
 		{
 			if ($select['count'] < 1 && $fleetmission != 7)
 			{
-				Functions_Lib::redirect ( 'game.php?page=movement' );
+				FunctionsLib::redirect ( 'game.php?page=movement' );
 			}
 			elseif ($fleetmission == 9 && $select['count'] < 1)
 			{
-				Functions_Lib::redirect ( 'game.php?page=movement' );
+				FunctionsLib::redirect ( 'game.php?page=movement' );
 			}
 		}
 		else
@@ -197,12 +220,12 @@ class Fleet4 extends XGPCore
 
 			if ($MaxExpedition >= 1)
 			{
-				$maxexpde  			= parent::$db->query_fetch ( "SELECT COUNT(fleet_owner) AS `expedi`
+				$maxexpde  			= parent::$db->queryFetch ( "SELECT COUNT(fleet_owner) AS `expedi`
 																	FROM " . FLEETS . "
 																	WHERE `fleet_owner` = '" . $this->_current_user['user_id'] . "'
 																		AND `fleet_mission` = '15';" );
 				$ExpeditionEnCours  = $maxexpde['expedi'];
-				$EnvoiMaxExpedition = Fleets_Lib::get_max_expeditions ( $MaxExpedition );
+				$EnvoiMaxExpedition = FleetsLib::get_max_expeditions ( $MaxExpedition );
 			}
 			else
 			{
@@ -212,12 +235,12 @@ class Fleet4 extends XGPCore
 
 			if($EnvoiMaxExpedition == 0 )
 			{
-				Functions_Lib::message ("<font color=\"red\"><b>".$this->_lang['fl_expedition_tech_required']."</b></font>", "game.php?page=movement", 2);
+				FunctionsLib::message ("<font color=\"red\"><b>".$this->_lang['fl_expedition_tech_required']."</b></font>", "game.php?page=movement", 2);
 
 			}
 			elseif ($ExpeditionEnCours >= $EnvoiMaxExpedition )
 			{
-				Functions_Lib::message ("<font color=\"red\"><b>".$this->_lang['fl_expedition_fleets_limit']."</b></font>", "game.php?page=movement", 2);
+				FunctionsLib::message ("<font color=\"red\"><b>".$this->_lang['fl_expedition_fleets_limit']."</b></font>", "game.php?page=movement", 2);
 			}
 		}
 
@@ -244,25 +267,25 @@ class Fleet4 extends XGPCore
 
 			if ( $YourPlanet or !$UsedPlanet or $planettype != 3 )
 			{
-				Functions_Lib::redirect ( 'game.php?page=movement' );
+				FunctionsLib::redirect ( 'game.php?page=movement' );
 			}
 			elseif ( $countfleettype == 1 && ! ( isset ( $fleetarray[214] ) ) )
 			{
-				Functions_Lib::redirect ( 'game.php?page=movement' );
+				FunctionsLib::redirect ( 'game.php?page=movement' );
 			}
 			elseif ( $countfleettype == 2 && ! ( isset ( $fleetarray[214] ) ) )
 			{
-				Functions_Lib::redirect ( 'game.php?page=movement' );
+				FunctionsLib::redirect ( 'game.php?page=movement' );
 			}
 			elseif ( $countfleettype > 2 )
 			{
-				Functions_Lib::redirect ( 'game.php?page=movement' );
+				FunctionsLib::redirect ( 'game.php?page=movement' );
 			}
 		}
 
 		if ( empty ( $fleetmission ) )
 		{
-			Functions_Lib::redirect ( 'game.php?page=movement' );
+			FunctionsLib::redirect ( 'game.php?page=movement' );
 		}
 
 		if ( $TargetPlanet['planet_user_id'] == '' )
@@ -271,7 +294,7 @@ class Fleet4 extends XGPCore
 		}
 		elseif ( $TargetPlanet['planet_user_id'] != '' )
 		{
-			$HeDBRec 	= parent::$db->query_fetch ( "SELECT u.`user_id`, u.`user_onlinetime`, u.`user_ally_id`, s.`setting_vacations_status`
+			$HeDBRec 	= parent::$db->queryFetch ( "SELECT u.`user_id`, u.`user_onlinetime`, u.`user_ally_id`, s.`setting_vacations_status`
 														FROM " . USERS . " AS u, " . SETTINGS . " AS s
 														WHERE u.`user_id` = '" . $TargetPlanet['planet_user_id'] ."'
 															AND s.`setting_user_id` ='" . $TargetPlanet['planet_user_id'] ."';" );
@@ -287,67 +310,67 @@ class Fleet4 extends XGPCore
 					$TargetPlanet['planet_user_id'] != '' &&
 					($_POST['mission'] == 1 or $_POST['mission'] == 6 or $_POST['mission'] == 9))
 			{
-				Functions_Lib::message("<font color=\"lime\"><b>".$this->_lang['fl_week_player']."</b></font>", "game.php?page=movement", 2);
+				FunctionsLib::message("<font color=\"lime\"><b>".$this->_lang['fl_week_player']."</b></font>", "game.php?page=movement", 2);
 			}
 
 			if ( $this->_noob->is_strong ( $MyGameLevel , $HeGameLevel ) &&
 					$TargetPlanet['planet_user_id'] != '' &&
 					($_POST['mission'] == 1 or $_POST['mission'] == 5 or $_POST['mission'] == 6 or $_POST['mission'] == 9))
 			{
-				Functions_Lib::message("<font color=\"red\"><b>".$this->_lang['fl_strong_player']."</b></font>", "game.php?page=movement", 2);
+				FunctionsLib::message("<font color=\"red\"><b>".$this->_lang['fl_strong_player']."</b></font>", "game.php?page=movement", 2);
 			}
 		}
 
 		if ( $HeDBRec['setting_vacations_status'] && $_POST['mission'] != 8 )
 		{
-			Functions_Lib::message("<font color=\"lime\"><b>".$this->_lang['fl_in_vacation_player']."</b></font>", "game.php?page=movement", 2);
+			FunctionsLib::message("<font color=\"lime\"><b>".$this->_lang['fl_in_vacation_player']."</b></font>", "game.php?page=movement", 2);
 		}
 
-		$FlyingFleets = parent::$db->query_fetch ( "SELECT COUNT(fleet_id) as Number
+		$FlyingFleets = parent::$db->queryFetch ( "SELECT COUNT(fleet_id) as Number
 													FROM " . FLEETS . "
 													WHERE `fleet_owner`='" . $this->_current_user['user_id'] . "'" );
 		$ActualFleets = $FlyingFleets['Number'];
 
-		if ((Fleets_Lib::get_max_fleets ( $this->_current_user[$resource[108]] , $this->_current_user['premium_officier_admiral'] ) ) <= $ActualFleets)
+		if ((FleetsLib::get_max_fleets ( $this->_current_user[$resource[108]] , $this->_current_user['premium_officier_admiral'] ) ) <= $ActualFleets)
 		{
-			Functions_Lib::message($this->_lang['fl_no_slots'], "game.php?page=movement", 1);
+			FunctionsLib::message($this->_lang['fl_no_slots'], "game.php?page=movement", 1);
 		}
 
 		if ($_POST['resource1'] + $_POST['resource2'] + $_POST['resource3'] < 1 && $_POST['mission'] == 3)
 		{
-			Functions_Lib::message("<font color=\"lime\"><b>".$this->_lang['fl_empty_transport']."</b></font>", "game.php?page=movement", 1);
+			FunctionsLib::message("<font color=\"lime\"><b>".$this->_lang['fl_empty_transport']."</b></font>", "game.php?page=movement", 1);
 		}
 
 		if ($_POST['mission'] != 15)
 		{
 			if ($TargetPlanet['planet_user_id'] == '' && $_POST['mission'] < 7)
 			{
-				Functions_Lib::redirect ( 'game.php?page=movement' );
+				FunctionsLib::redirect ( 'game.php?page=movement' );
 			}
 
 			if ($TargetPlanet['planet_user_id'] != '' && $_POST['mission'] == 7)
 			{
-				Functions_Lib::message ("<font color=\"red\"><b>".$this->_lang['fl_planet_populed']."</b></font>", "game.php?page=movement", 2);
+				FunctionsLib::message ("<font color=\"red\"><b>".$this->_lang['fl_planet_populed']."</b></font>", "game.php?page=movement", 2);
 			}
 
 			if ($HeDBRec['user_ally_id'] != $MyDBRec['user_ally_id'] && $_POST['mission'] == 4)
 			{
-				Functions_Lib::message ("<font color=\"red\"><b>".$this->_lang['fl_stay_not_on_enemy']."</b></font>", "game.php?page=movement", 2);
+				FunctionsLib::message ("<font color=\"red\"><b>".$this->_lang['fl_stay_not_on_enemy']."</b></font>", "game.php?page=movement", 2);
 			}
 
 			if (($TargetPlanet['planet_user_id'] == $this->_current_planet['planet_user_id']) && (($_POST['mission'] == 1) or ($_POST['mission'] == 6)))
 			{
-				Functions_Lib::redirect ( 'game.php?page=movement' );
+				FunctionsLib::redirect ( 'game.php?page=movement' );
 			}
 
 			if (($TargetPlanet['planet_user_id'] != $this->_current_planet['planet_user_id']) && ($_POST['mission'] == 4))
 			{
-				Functions_Lib::message ("<font color=\"red\"><b>".$this->_lang['fl_deploy_only_your_planets']."</b></font>","game.php?page=movement", 2);
+				FunctionsLib::message ("<font color=\"red\"><b>".$this->_lang['fl_deploy_only_your_planets']."</b></font>","game.php?page=movement", 2);
 			}
 
 			if($_POST['mission'] == 5)
 			{
-				$buddy = parent::$db->query_fetch ( "SELECT COUNT( * ) AS buddys
+				$buddy = parent::$db->queryFetch ( "SELECT COUNT( * ) AS buddys
 														FROM  `" . BUDDY . "`
 															WHERE (
 																(
@@ -363,46 +386,46 @@ class Fleet4 extends XGPCore
 
 				if ( $HeDBRec['user_ally_id'] != $MyDBRec['user_ally_id'] && $buddy['buddys'] < 1 )
 				{
-					Functions_Lib::message ("<font color=\"red\"><b>".$this->_lang['fl_stay_not_on_enemy']."</b></font>", "game.php?page=movement", 2);
+					FunctionsLib::message ("<font color=\"red\"><b>".$this->_lang['fl_stay_not_on_enemy']."</b></font>", "game.php?page=movement", 2);
 				}
 			}
 		}
 
-		$missiontype	= Fleets_Lib::get_missions();
+		$missiontype	= FleetsLib::get_missions();
 		$speed_possible	= array(10, 9, 8, 7, 6, 5, 4, 3, 2, 1);
-		$AllFleetSpeed	= Fleets_Lib::fleet_max_speed ($fleetarray, 0, $this->_current_user);
+		$AllFleetSpeed	= FleetsLib::fleet_max_speed ($fleetarray, 0, $this->_current_user);
 		$GenFleetSpeed  = $_POST['speed'];
-		$SpeedFactor    = Functions_Lib::fleet_speed_factor();
+		$SpeedFactor    = FunctionsLib::fleet_speed_factor();
 		$MaxFleetSpeed  = min($AllFleetSpeed);
 
 		if (!in_array($GenFleetSpeed, $speed_possible))
 		{
-			Functions_Lib::redirect ( 'game.php?page=movement' );
+			FunctionsLib::redirect ( 'game.php?page=movement' );
 		}
 
 		if ($MaxFleetSpeed != $_POST['speedallsmin'])
 		{
-			Functions_Lib::redirect ( 'game.php?page=movement' );
+			FunctionsLib::redirect ( 'game.php?page=movement' );
 		}
 
 		if (!$_POST['planettype'])
 		{
-			Functions_Lib::redirect ( 'game.php?page=movement' );
+			FunctionsLib::redirect ( 'game.php?page=movement' );
 		}
 
 		if (!$_POST['galaxy'] || !is_numeric($_POST['galaxy']) || $_POST['galaxy'] > MAX_GALAXY_IN_WORLD || $_POST['galaxy'] < 1)
 		{
-			Functions_Lib::redirect ( 'game.php?page=movement' );
+			FunctionsLib::redirect ( 'game.php?page=movement' );
 		}
 
 		if (!$_POST['system'] || !is_numeric($_POST['system']) || $_POST['system'] > MAX_SYSTEM_IN_GALAXY || $_POST['system'] < 1)
 		{
-			Functions_Lib::redirect ( 'game.php?page=movement' );
+			FunctionsLib::redirect ( 'game.php?page=movement' );
 		}
 
 		if (!$_POST['planet'] || !is_numeric($_POST['planet']) || $_POST['planet'] > (MAX_PLANET_IN_SYSTEM + 1) || $_POST['planet'] < 1)
 		{
-			Functions_Lib::redirect ( 'game.php?page=movement' );
+			FunctionsLib::redirect ( 'game.php?page=movement' );
 		}
 
 		if ($_POST['thisgalaxy'] != $this->_current_planet['planet_galaxy'] |
@@ -410,17 +433,17 @@ class Fleet4 extends XGPCore
 			$_POST['thisplanet'] != $this->_current_planet['planet_planet'] |
 			$_POST['thisplanettype'] != $this->_current_planet['planet_type'])
 		{
-			Functions_Lib::redirect ( 'game.php?page=movement' );
+			FunctionsLib::redirect ( 'game.php?page=movement' );
 		}
 
 		if (!isset($fleetarray))
 		{
-			Functions_Lib::redirect ( 'game.php?page=movement' );
+			FunctionsLib::redirect ( 'game.php?page=movement' );
 		}
 
-		$distance      = Fleets_Lib::target_distance($_POST['thisgalaxy'], $_POST['galaxy'], $_POST['thissystem'], $_POST['system'], $_POST['thisplanet'], $_POST['planet']);
-		$duration      = Fleets_Lib::mission_duration($GenFleetSpeed, $MaxFleetSpeed, $distance, $SpeedFactor);
-		$consumption   = Fleets_Lib::fleet_consumption($fleetarray, $SpeedFactor, $duration, $distance, $MaxFleetSpeed, $this->_current_user);
+		$distance      = FleetsLib::target_distance($_POST['thisgalaxy'], $_POST['galaxy'], $_POST['thissystem'], $_POST['system'], $_POST['thisplanet'], $_POST['planet']);
+		$duration      = FleetsLib::mission_duration($GenFleetSpeed, $MaxFleetSpeed, $distance, $SpeedFactor);
+		$consumption   = FleetsLib::fleet_consumption($fleetarray, $SpeedFactor, $duration, $distance, $MaxFleetSpeed, $this->_current_user);
 
 		$fleet['start_time'] = $duration + time();
 
@@ -436,7 +459,7 @@ class Fleet4 extends XGPCore
 			}
 			else
 			{
-				Functions_Lib::redirect ( 'game.php?page=movement' );
+				FunctionsLib::redirect ( 'game.php?page=movement' );
 			}
 		} // END CODE BY JSTAR
 		elseif ($_POST['mission'] == 5)
@@ -476,7 +499,7 @@ class Fleet4 extends XGPCore
 
 		if(!$haveSpyProbos && $_POST['mission'] == 6)
 		{
-			Functions_Lib::redirect ( 'game.php?page=movement' );
+			FunctionsLib::redirect ( 'game.php?page=movement' );
 		}
 
 		$FleetStorage        -= $consumption;
@@ -535,22 +558,22 @@ class Fleet4 extends XGPCore
 
 		if (!$StockOk)
 		{
-			Functions_Lib::message ("<font color=\"red\"><b>". $this->_lang['fl_no_enought_deuterium'] . Format_Lib::pretty_number($consumption) ."</b></font>", "game.php?page=movement", 2);
+			FunctionsLib::message ("<font color=\"red\"><b>". $this->_lang['fl_no_enought_deuterium'] . FormatLib::pretty_number($consumption) ."</b></font>", "game.php?page=movement", 2);
 		}
 
 		if ( $StorageNeeded > $FleetStorage)
 		{
-			Functions_Lib::message ("<font color=\"red\"><b>". $this->_lang['fl_no_enought_cargo_capacity'] . Format_Lib::pretty_number($StorageNeeded - $FleetStorage) ."</b></font>", "game.php?page=movement", 2);
+			FunctionsLib::message ("<font color=\"red\"><b>". $this->_lang['fl_no_enought_cargo_capacity'] . FormatLib::pretty_number($StorageNeeded - $FleetStorage) ."</b></font>", "game.php?page=movement", 2);
 		}
 
-		if ( Functions_Lib::read_config ( 'adm_attack' ) != 0 )
+		if ( FunctionsLib::read_config ( 'adm_attack' ) != 0 )
 		{
-			Functions_Lib::message($this->_lang['fl_admins_cannot_be_attacked'], "game.php?page=movement",2);
+			FunctionsLib::message($this->_lang['fl_admins_cannot_be_attacked'], "game.php?page=movement",2);
 		}
 
 		if ($fleet_group_mr != 0)
 		{
-			$AksStartTime = parent::$db->query_fetch ( "SELECT MAX(`fleet_start_time`) AS Start
+			$AksStartTime = parent::$db->queryFetch ( "SELECT MAX(`fleet_start_time`) AS Start
 														FROM " . FLEETS . "
 														WHERE `fleet_group` = '". $fleet_group_mr . "';" );
 
@@ -601,7 +624,8 @@ class Fleet4 extends XGPCore
 								`planet_deuterium` = `planet_deuterium` - ". ($TransDeuterium + $consumption) ."
 								WHERE `planet_id` = ". $this->_current_planet['planet_id'] .";" );
 
-		Functions_Lib::redirect ( 'game.php?page=movement' );
+		FunctionsLib::redirect ( 'game.php?page=movement' );
 	}
 }
+
 /* end of fleet4.php */

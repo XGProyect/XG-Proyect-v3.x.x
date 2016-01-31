@@ -1,11 +1,33 @@
 <?php
-
 /**
- * @project XG Proyect
- * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * Alliances Controller
+ *
+ * PHP Version 5.5+
+ *
+ * @category Controller
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
  */
 
+namespace application\controllers\adm;
+
+use application\core\XGPCore;
+use application\libraries\adm\AdministrationLib;
+use application\libraries\FunctionsLib;
+
+/**
+ * Alliances Class
+ *
+ * @category Classes
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
+ */
 class Alliances extends XGPCore
 {
 	private $_lang;
@@ -32,13 +54,13 @@ class Alliances extends XGPCore
 		$this->_current_user	= parent::$users->get_user_data();
 
 		// Check if the user is allowed to access
-		if ( Administration_Lib::have_access ( $this->_current_user['user_authlevel'] ) && Administration_Lib::authorization ( $this->_current_user['user_authlevel'] , 'edit_users' ) == 1 )
+		if ( AdministrationLib::have_access ( $this->_current_user['user_authlevel'] ) && AdministrationLib::authorization ( $this->_current_user['user_authlevel'] , 'edit_users' ) == 1 )
 		{
 			$this->build_page();
 		}
 		else
 		{
-			die ( Functions_Lib::message ( $this->_lang['ge_no_permissions'] ) );
+			die ( FunctionsLib::message ( $this->_lang['ge_no_permissions'] ) );
 		}
 	}
 
@@ -49,7 +71,7 @@ class Alliances extends XGPCore
 	 */
 	public function __destruct ()
 	{
-		parent::$db->close_connection();
+		parent::$db->closeConnection();
 	}
 
 	######################################
@@ -75,7 +97,7 @@ class Alliances extends XGPCore
 		{
 			if ( !$this->check_alliance ( $alliance ) )
 			{
-				$parse['alert']	= Administration_Lib::save_message ( 'error' , $this->_lang['al_nothing_found'] );
+				$parse['alert']	= AdministrationLib::save_message ( 'error' , $this->_lang['al_nothing_found'] );
 				$alliance		= '';
 			}
 			else
@@ -86,7 +108,7 @@ class Alliances extends XGPCore
 					$this->save_data ( $type );
 				}
 
-				$this->_alliance_query	= parent::$db->query_fetch ( "SELECT a.*, als.*
+				$this->_alliance_query	= parent::$db->queryFetch ( "SELECT a.*, als.*
 					           											FROM " . ALLIANCE . " AS a
 					           											INNER JOIN " . ALLIANCE_STATISTICS . " AS als ON als.alliance_statistic_alliance_id = a.alliance_id
 					           											WHERE (a.`alliance_id` = '{$this->_id}') LIMIT 1;");
@@ -185,11 +207,11 @@ class Alliances extends XGPCore
 		$parse											= $this->_lang;
 		$parse	   							   		   += (array)$this->_alliance_query;
 		$parse['al_alliance_information']				= str_replace ( '%s' , $this->_alliance_query['alliance_name'] , $this->_lang['al_alliance_information'] );
-		$parse['alliance_register_time']				= ( $this->_alliance_query['alliance_register_time'] == 0 ) ? '-' : date ( Functions_Lib::read_config ( 'date_format_extended' ) , $this->_alliance_query['alliance_register_time'] );
+		$parse['alliance_register_time']				= ( $this->_alliance_query['alliance_register_time'] == 0 ) ? '-' : date ( FunctionsLib::read_config ( 'date_format_extended' ) , $this->_alliance_query['alliance_register_time'] );
 		$parse['alliance_owner']						= $this->build_users_combo ( $this->_alliance_query['alliance_owner'] );
 		$parse['sel1']									= $this->_alliance_query['alliance_request_notallow'] == 1 ? 'selected' : '';
 		$parse['sel0']									= $this->_alliance_query['alliance_request_notallow'] == 0 ? 'selected' : '';
-		$parse['alert_info']							= ( $this->_alert_type != '' ) ? Administration_Lib::save_message ( $this->_alert_type , $this->_alert_info ) : '';
+		$parse['alert_info']							= ( $this->_alert_type != '' ) ? AdministrationLib::save_message ( $this->_alert_type , $this->_alert_info ) : '';
 
 		return parent::$page->parse_template ( parent::$page->get_template ( "adm/alliances_information_view" ) , $parse );
 	}
@@ -231,7 +253,7 @@ class Alliances extends XGPCore
 		}
 
 		$parse['ranks_table']				= empty ( $ranks ) ? $this->_lang['al_no_ranks'] : $ranks;
-		$parse['alert_info']				= ( $this->_alert_type != '' ) ? Administration_Lib::save_message ( $this->_alert_type , $this->_alert_info ) : '';
+		$parse['alert_info']				= ( $this->_alert_type != '' ) ? AdministrationLib::save_message ( $this->_alert_type , $this->_alert_info ) : '';
 
 		return parent::$page->parse_template ( parent::$page->get_template ( "adm/alliances_ranks_view" ) , $parse );
 	}
@@ -252,11 +274,11 @@ class Alliances extends XGPCore
 
 		if ( ! empty ( $all_members ) )
 		{
-			while ( $member = parent::$db->fetch_assoc ( $all_members ) )
+			while ( $member = parent::$db->fetchAssoc ( $all_members ) )
 			{
 				$member['alliance_request']			= ( $member['alliance_request'] ) ? $this->_lang['al_request_yes'] : $this->_lang['al_request_no'];
 				$member['ally_request_text']		= ( $member['ally_request_text'] ) ? $this->_lang['ally_request_text'] : '-';
-				$member['alliance_register_time']	= date ( Functions_Lib::read_config ( 'date_format_extended' ) , $member['alliance_register_time'] );
+				$member['alliance_register_time']	= date ( FunctionsLib::read_config ( 'date_format_extended' ) , $member['alliance_register_time'] );
 
 				if ( $member['user_id'] == $member['alliance_owner'] )
 				{
@@ -279,7 +301,7 @@ class Alliances extends XGPCore
 		}
 
 		$parse['members_table']			= empty ( $members ) ? '<tr><td colspan="6" class="align_center text-error">' . $this->_lang['al_no_ranks'] .'</td></tr>' : $members;
-		$parse['alert_info']			= ( $this->_alert_type != '' ) ? Administration_Lib::save_message ( $this->_alert_type , $this->_alert_info ) : '';
+		$parse['alert_info']			= ( $this->_alert_type != '' ) ? AdministrationLib::save_message ( $this->_alert_type , $this->_alert_info ) : '';
 
 		return parent::$page->parse_template ( parent::$page->get_template ( "adm/alliances_members_view" ) , $parse );
 	}
@@ -347,16 +369,16 @@ class Alliances extends XGPCore
 		else
 		{
 			parent::$db->query ( "UPDATE " . ALLIANCE . " SET
-									`alliance_name` = '" . parent::$db->escape_value ( $alliance_name ) . "',
-									`alliance_tag` = '" . parent::$db->escape_value ( $alliance_tag ) . "',
+									`alliance_name` = '" . parent::$db->escapeValue ( $alliance_name ) . "',
+									`alliance_tag` = '" . parent::$db->escapeValue ( $alliance_tag ) . "',
 									`alliance_owner` = '" . $alliance_owner . "',
-									`alliance_owner_range` = '" . parent::$db->escape_value ( $alliance_owner_range ) . "',
-									`alliance_web` = '" . parent::$db->escape_value ( $alliance_web ) . "',
-									`alliance_image` = '" . parent::$db->escape_value ( $alliance_image ) . "',
-									`alliance_description` = '" . parent::$db->escape_value ( $alliance_description ) . "',
-									`alliance_text` = '" . parent::$db->escape_value ( $alliance_text ) . "',
-									`alliance_request` = '" . parent::$db->escape_value ( $alliance_request ) . "',
-									`alliance_request_notallow` = '" . parent::$db->escape_value ( $alliance_request_notallow ) . "'
+									`alliance_owner_range` = '" . parent::$db->escapeValue ( $alliance_owner_range ) . "',
+									`alliance_web` = '" . parent::$db->escapeValue ( $alliance_web ) . "',
+									`alliance_image` = '" . parent::$db->escapeValue ( $alliance_image ) . "',
+									`alliance_description` = '" . parent::$db->escapeValue ( $alliance_description ) . "',
+									`alliance_text` = '" . parent::$db->escapeValue ( $alliance_text ) . "',
+									`alliance_request` = '" . parent::$db->escapeValue ( $alliance_request ) . "',
+									`alliance_request_notallow` = '" . parent::$db->escapeValue ( $alliance_request_notallow ) . "'
 									WHERE `alliance_id` = '" . $this->_id . "';" );
 
 			$this->_alert_info	= $this->_lang['al_all_ok_message'];
@@ -378,7 +400,7 @@ class Alliances extends XGPCore
 			if ( ! empty ( $_POST['rank_name'] ) )
 			{
 				$alliance_ranks[]	= array	(
-												'name' => parent::$db->escape_value ( strip_tags ( $_POST['rank_name'] ) ),
+												'name' => parent::$db->escapeValue ( strip_tags ( $_POST['rank_name'] ) ),
 												'mails' => 0,
 												'delete' => 0,
 												'kick' => 0,
@@ -502,7 +524,7 @@ class Alliances extends XGPCore
 		$users		= parent::$db->query ( "SELECT `user_id`, `user_name`
 												FROM " . USERS . ";" );
 
-		while ( $users_row = parent::$db->fetch_array ( $users ) )
+		while ( $users_row = parent::$db->fetchArray ( $users ) )
 		{
 			$combo_rows	.= '<option value="' . $users_row['user_id'] . '" ' . ( $users_row['user_id'] == $user_id ? ' selected' : '' ) . '>' .  $users_row['user_name'] . '</option>';
 		}
@@ -523,7 +545,7 @@ class Alliances extends XGPCore
 	 */
 	private function check_alliance ( $alliance )
 	{
-		$alliance_query		= parent::$db->query_fetch ( "SELECT `alliance_id`
+		$alliance_query		= parent::$db->queryFetch ( "SELECT `alliance_id`
 															FROM " . ALLIANCE . "
 															WHERE `alliance_name` = '" . $alliance . "' OR
 																	`alliance_tag` = '" . $alliance . "';" );
@@ -548,9 +570,9 @@ class Alliances extends XGPCore
 			return FALSE;
 		}
 
-		$alliance_tag		= parent::$db->escape_value ( $alliance_tag );
+		$alliance_tag		= parent::$db->escapeValue ( $alliance_tag );
 
-		$check_tag 			= parent::$db->query_fetch ( "SELECT `alliance_tag`
+		$check_tag 			= parent::$db->queryFetch ( "SELECT `alliance_tag`
 															FROM `" . ALLIANCE . "`
 															WHERE `alliance_tag` = '" . $alliance_tag . "'" );
 		if ( $check_tag )
@@ -576,9 +598,9 @@ class Alliances extends XGPCore
 			return FALSE;
 		}
 
-		$alliance_name	= parent::$db->escape_value ( $alliance_name );
+		$alliance_name	= parent::$db->escapeValue ( $alliance_name );
 
-		$check_name 	= parent::$db->query_fetch ( "SELECT `alliance_name`
+		$check_name 	= parent::$db->queryFetch ( "SELECT `alliance_name`
 														FROM `" . ALLIANCE . "`
 														WHERE `alliance_name` = '" . $alliance_name . "'" );
 
@@ -597,7 +619,7 @@ class Alliances extends XGPCore
 	 */
 	private function check_founder ( $user_id )
 	{
-		$ally_data	= parent::$db->query_fetch ( "SELECT `user_ally_id`, `user_ally_request`
+		$ally_data	= parent::$db->queryFetch ( "SELECT `user_ally_id`, `user_ally_request`
 													FROM `" . USERS . "`
 													WHERE `user_id` = '" . $user_id . "';" );
 
@@ -625,4 +647,5 @@ class Alliances extends XGPCore
 										WHERE u.`user_ally_id` = '" . $this->_id . "';" );
 	}
 }
+
 /* end of alliances.php */

@@ -1,57 +1,103 @@
 <?php
-
 /**
- * @project XG Proyect
- * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * Database
+ *
+ * PHP Version 5.5+
+ *
+ * @category Core
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
  */
 
-$config_file    = XGP_ROOT . 'application/config/config.php';
+namespace application\core;
 
-if (file_exists($config_file)) {
-    require $config_file;
-}
+use application\libraries\DebugLib;
+use mysqli;
 
+/**
+ * Database Class
+ *
+ * @category Classes
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
+ */
 class Database
 {
-    public  $_last_query;
-    private $_connection;
-    private $_magic_quotes_active;
-    private $_debug;
+    /**
+     *
+     * @var string
+     */
+    private $last_query;
+    
+    /**
+     *
+     * @var mysqli
+     */
+    private $connection;
+    
+    /**
+     *
+     * @var boolean
+     */
+    private $magic_quotes_active;
+    
+    /**
+     *
+     * @var DebugLib
+     */
+    private $debug;
 
     /**
-     * __construct()
+     * createPlanetWithOptions
+     *
+     * @param array $data Data
+     *
+     * @return void
      */
     public function __construct()
     {
         global $debug;
 
-        $this->_debug               = $debug;
-        $this->open_connection();
-        $this->_magic_quotes_active = get_magic_quotes_gpc();
+        $this->debug               = $debug;
+        $this->openConnection();
+        $this->magic_quotes_active = get_magic_quotes_gpc();
     }
 
     /**
-    * open_connection();
-    */
-    public function open_connection()
+     * openConnection
+     *
+     * @return boolean
+     */
+    public function openConnection()
     {
         if (defined('DB_HOST') && defined('DB_USER') && defined('DB_PASS') && defined('DB_NAME')) {
 
-            if (!$this->try_connection()) {
+            if (!$this->tryConnection()) {
 
                 if (!defined('IN_INSTALL')) {
 
-                    die($this->_debug->error('Database connection failed: ' . $this->_connection->connect_error, 'SQL Error'));
+                    die($this->debug->error(
+                        'Database connection failed: ' . $this->connection->connect_error,
+                        'SQL Error'
+                    ));
                 } else {
                     return false;
                 }
             } else {
-                if (!$this->try_database()) {
+                if (!$this->tryDatabase()) {
 
                     if (!defined('IN_INSTALL')) {
                         
-                        die($this->_debug->error('Database selection failed: ' . $this->_connection->connect_error, 'SQL Error'));
+                        die($this->debug->error(
+                            'Database selection failed: ' . $this->connection->connect_error,
+                            'SQL Error'
+                        ));
                     } else {
                         return false;
                     }
@@ -61,21 +107,25 @@ class Database
     }
 
     /**
-    * open_connection();
-    */
-    public function try_connection()
+     * tryConnection
+     *
+     * @return mysqli
+     */
+    public function tryConnection()
     {
-        $this->_connection  = new mysqli(DB_HOST, DB_USER, DB_PASS);
+        $this->connection  = new mysqli(DB_HOST, DB_USER, DB_PASS);
 
-        return $this->_connection;
+        return $this->connection;
     }
 
     /**
-    * try_database();
-    */
-    public function try_database()
+     * tryDatabase
+     *
+     * @return boolean
+     */
+    public function tryDatabase()
     {
-        $db_select  = $this->_connection->select_db(DB_NAME);
+        $db_select  = $this->connection->select_db(DB_NAME);
 
         if ($db_select) {
             
@@ -87,228 +137,281 @@ class Database
     }
 
     /**
-    * close_connection();
-    */
-    public function close_connection()
+     * createPlanetWithOptions
+     *
+     * @param array $data Data
+     *
+     * @return void
+     */
+    public function closeConnection()
     {
-        if (is_resource($this->_connection) or is_object($this->_connection)) {
+        if (is_resource($this->connection) or is_object($this->connection)) {
 
-            $this->_connection->close();
-            unset($this->_connection);
+            $this->connection->close();
+            unset($this->connection);
         }
     }
 
     /**
-    * query();
-    */
-    public function query ( $sql = FALSE )
+     * query
+     *
+     * @param string $sql SQL String
+     *
+     * @return mixed
+     */
+    public function query($sql = false)
     {
-        if ( $sql != FALSE )
-        {
-                $this->_last_query	= $sql;
-                $result 		= @$this->_connection->query ( $sql );
-                $this->_confirm_query ( $result );
+        if ($sql != false) {
 
-                return $result;
+            $this->last_query   = $sql;
+            $result             = @$this->connection->query($sql);
+            
+            $this->confirmQuery($result);
+
+            return $result;
         }
 
-        return FALSE;
+        return false;
     }
 
     /**
-    * query_fetch();
-    */
-    public function query_fetch ( $sql )
+     * queryFetch
+     *
+     * @param string $sql SQL String
+     *
+     * @return mixed
+     */
+    public function queryFetch($sql = false)
     {
-        if ( $sql != FALSE )
-        {
+        if ($sql != false) {
 
-                $this->_last_query	= $sql;
-                $result                 = @$this->_connection->query ( $sql );
-                $this->_confirm_query ( $result );
+            $this->last_query   = $sql;
+            $result             = @$this->connection->query($sql);
 
-                return $this->fetch_array ( $result );
+            $this->confirmQuery($result);
+
+            return $this->fetchArray($result);
         }
 
-        return FALSE;
+        return false;
     }
 
     /**
-    * escape_value();
-    */
-    public function escape_value ( $value )
+     * escapeValue
+     *
+     * @param mixed $value Value to escape
+     *
+     * @return mixed
+     */
+    public function escapeValue($value)
     {
         // undo any magic quote effects so mysqli_real_escape_string can do the work
-        if($this->_magic_quotes_active) {
+        if ($this->magic_quotes_active) {
 
             $value  = stripslashes($value);
         }
 
-        $value  = $this->_connection->real_escape_string($value);
-
-        return $value;
+        return $this->connection->real_escape_string($value);
     }
 
     /**
-    * fetch_array();
-    */
-    public function fetch_array ( $result_set )
+     * fetchArray
+     *
+     * @param array $result_set Result set
+     *
+     * @return array
+     */
+    public function fetchArray($result_set)
     {
         return $result_set->fetch_array();
     }
 
     /**
-    * fetch_assoc();
-    */
-    public function fetch_assoc ( $result_set )
+     * fetchAssoc
+     *
+     * @param array $result_set Result set
+     *
+     * @return array
+     */
+    public function fetchAssoc($result_set)
     {
         return $result_set->fetch_assoc();
     }
 
     /**
-    * fetch_row();
-    */
-    public function fetch_row ( $result_set )
+     * fetchRow
+     *
+     * @param array $result_set Result set
+     *
+     * @return array
+     */
+    public function fetchRow($result_set)
     {
         return $result_set->fetch_row();
     }
 
     /**
-    * num_rows();
-    */
-    public function num_rows ( $result_set )
+     * numRows
+     *
+     * @param array $result_set Result set
+     *
+     * @return int
+     */
+    public function numRows($result_set)
     {
         return $result_set->num_rows;
     }
 
     /**
-    * num_fields();
-    */
-    public function num_fields ( $result_set )
+     * numFields
+     *
+     * @param array $result_set Result set
+     *
+     * @return int
+     */
+    public function numFields($result_set)
     {
         return $result_set->num_fields;
     }
 
     /**
-    * insert_id();
-    */
-    public function insert_id()
+     * insertId
+     *
+     * @return int
+     */
+    public function insertId()
     {
         // get the last id inserted over the current db connection
-        return $this->_connection->insert_id;
+        return $this->connection->insert_id;
     }
 
     /**
-    * affected_rows();
-    */
-    public function affected_rows()
+     * affectedRows
+     *
+     * @return array
+     */
+    public function affectedRows()
     {
-        return $this->_connection->affected_rows;
+        return $this->connection->affected_rows;
     }
 
     /**
-    * server_info();
-    */
-    public function server_info()
+     * serverInfo
+     *
+     * @return array
+     */
+    public function serverInfo()
     {
-        return $this->_connection->server_info;
+        return $this->connection->server_info;
     }
 
     /**
-    * free_resul();
-    */
-    public function free_result ( $result )
+     * freeResult
+     *
+     * @param array $result_set Result set
+     *
+     * @return void
+     */
+    public function freeResult($result_set)
     {
-        return $result->free_result();
+        $result_set->free_result();
     }
 
     /**
-    * _confirm_query();
-    */
-    private function _confirm_query ( $result )
+     * confirmQuery
+     *
+     * @param array $result Result set
+     *
+     * @return void
+     */
+    private function confirmQuery($result)
     {
-        if ( !$result )
-        {
-                $output	= "Database query failed: " . mysql_error();
+        if (!$result) {
 
-                // uncomment below line when you want to debug your last query
-                $output .= " Last SQL Query: " . $this->_last_query;
-                die ( $this->_debug->error ( $output , "SQL Error" ) );
+            $output = "Database query failed: " . mysql_error();
+
+            // uncomment below line when you want to debug your last query
+            $output .= " Last SQL Query: " . $this->last_query;
+
+            die($this->debug->error($output, "SQL Error"));
         }
 
         // DEBUG LOG
-        $this->_debug->add ( $this->_last_query );
+        $this->debug->add($this->last_query);
     }
 
     /**
-    * backup_db();
-    */
-    public function backup_db ( $tables = '*' )
+     * backupDb
+     *
+     * @param array $tables Data
+     *
+     * @return string
+     */
+    public function backupDb($tables = '*')
     {
         // GET ALL THE TABLES
-        if ( $tables == '*' )
-        {
-                $tables = array();
-                $result = $this->query ( 'SHOW TABLES' );
+        if ($tables == '*') {
 
-                while ( $row = $this->fetch_row ( $result ) )
-                {
-                        $tables[] = $row[0];
-                }
-        }
-        else
-        {
-                $tables = is_array ( $tables ) ? $tables : explode ( ',' , $tables );
+            $tables = array();
+            $result = $this->query('SHOW TABLES');
+
+            while ($row = $this->fetchRow($result)) {
+
+                $tables[]   = $row[0];
+            }
+        } else {
+            $tables = is_array($tables) ? $tables : explode(',', $tables);
         }
 
-        $return	= '';
+        $return = '';
 
         //CYCLE TROUGHT
-        foreach ( $tables as $table )
-        {
-                $result 	= $this->query ( 'SELECT * FROM ' . $table );
-                $num_fields = $this->num_fields ( $result );
+        foreach ($tables as $table) {
 
-                $return	.= 'DROP TABLE ' . $table . ';';
-                $row2	 = $this->fetch_row ( $this->query ( 'SHOW CREATE TABLE ' . $table ) );
-                $return	.= "\n\n".$row2[1].";\n\n";
+            $result     = $this->query('SELECT * FROM' . $table);
+            $num_fields = $this->num_fields($result);
 
-                for ( $i = 0 ; $i < $num_fields ; $i++ )
-                {
-                        while ( $row = $this->fetch_row ( $result ) )
-                        {
-                                $return.= 'INSERT INTO ' . $table . ' VALUES(';
+            $return     .= 'DROP TABLE ' . $table . ';';
+            $row2       = $this->fetchRow($this->query('SHOW CREATE TABLE ' . $table));
+            $return     .= "\n\n".$row2[1].";\n\n";
 
-                                for ( $j = 0 ; $j < $num_fields ; $j++ )
-                                {
-                                        $row[$j]	= addslashes ( $row[$j] );
-                                        $row[$j]	= str_replace ( "\n" , "\\n" , $row[$j] );
+            for ($i = 0; $i < $num_fields; $i++) {
 
-                                        if ( isset ( $row[$j] ) )
-                                        {
-                                                $return	.= '"'.$row[$j].'"' ;
-                                        }
-                                        else
-                                        {
-                                                $return	.= '""';
-                                        }
+                while ($row = $this->fetchRow($result)) {
 
-                                        if ( $j < ( $num_fields - 1 ) )
-                                        {
-                                                $return	.= ',';
-                                        }
-                                }
-                                $return.= ");\n";
+                    $return .= 'INSERT INTO ' . $table . ' VALUES(';
+
+                    for ($j = 0; $j < $num_fields; $j++) {
+
+                        $row[$j]    = addslashes($row[$j]);
+                        $row[$j]    = str_replace("\n", "\\n", $row[$j]);
+
+                        if (isset($row[$j])) {
+
+                            $return .= '"' . $row[$j] . '"' ;
+                        } else {
+
+                            $return .= '""';
                         }
+
+                        if ($j < ($num_fields - 1)) {
+
+                            $return .= ',';
+                        }
+                    }
+                    
+                    $return .= ");\n";
                 }
-                $return.="\n\n\n";
+            }
+            $return .="\n\n\n";
         }
 
         // SAVE FILE
-        $handle	= fopen ( XGP_ROOT . BACKUP_PATH . 'db-backup-' . date ( 'Ymd' ) . '-' . time() . '-' . ( sha1 ( implode ( ',' , $tables ) ) ) . '.sql' , 'w+' );
-
-        $writed	= fwrite ( $handle , $return );
-        fclose ( $handle );
+        $file_name  = 'db-backup-' . date('Ymd') . '-' . time() . '-' . (sha1(implode(',', $tables))) . '.sql';
+        $handle     = fopen(XGP_ROOT . BACKUP_PATH . $file_name, 'w+');
+        $writed     = fwrite($handle, $return);
+       
+        fclose($handle);
 
         return $writed;
     }

@@ -1,85 +1,109 @@
 <?php
-
 /**
- * @project XG Proyect
- * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * XGPCore
+ *
+ * PHP Version 5.5+
+ *
+ * @category Core
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
  */
 
+namespace application\core;
+
+use application\libraries\TemplateLib;
+use application\libraries\UsersLib;
+
+/**
+ * XGPCore Class
+ *
+ * @category Classes
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
+ */
 abstract class XGPCore
 {
-	protected static $db;
-	protected static $lang;
-	protected static $users;
-	protected static $objects;
-	protected static $page;
+    protected static $db;
+    protected static $lang;
+    protected static $users;
+    protected static $objects;
+    protected static $page;
 
-	/**
-	 * __construct()
-	 */
-	public function __construct()
-	{
-		$this->set_db_class(); // DATABASE
-		$this->set_lang_class(); // LANGUAGE
-		$this->set_users_class(); // USERS
-		$this->set_objects_class(); // OBJECTS
-		$this->set_template_class(); // TEMPLATE
-	}
+    /**
+     * __construct
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->setDbClass(); // DATABASE
+        $this->setLangClass(); // LANGUAGE
+        $this->setUsersClass(); // USERS
+        $this->setObjectsClass(); // OBJECTS
+        $this->setTemplateClass(); // TEMPLATE
+    }
 
-	/**
-	 * method set_db_class
-	 * param
-	 * return database instance
-	 */
-	private function set_db_class ()
-	{
-		require_once ( XGP_ROOT. '/application/core/Database.php' );
-		self::$db		= new Database();
-	}
+    /**
+     * setDbClass
+     *
+     * @return void
+     */
+    private function setDbClass()
+    {
+        require_once XGP_ROOT. '/application/core/Database.php';
+        self::$db   = new Database();
+    }
 
-	/**
-	 * method set_lang_class
-	 * param
-	 * return language instance
-	 */
-	private function set_lang_class ()
-	{
-		require_once ( XGP_ROOT. '/application/core/Language.php' );
-		$languages		= new Language();
-		self::$lang		= $languages->lang();
-	}
+    /**
+     * setLangClass
+     *
+     * @return void
+     */
+    private function setLangClass()
+    {
+        require_once XGP_ROOT. '/application/core/Language.php';
+        $languages  = new Language();
+        self::$lang = $languages->lang();
+    }
 
-	/**
-	 * method set_users_class
-	 * param
-	 * return users instance
-	 */
-	private function set_users_class()
-	{
-		require_once ( XGP_ROOT . '/application/libraries/Users_Lib.php' );
-		self::$users	= new Users_Lib();
-	}
+    /**
+     * setUsersClass
+     *
+     * @return void
+     */
+    private function setUsersClass()
+    {
+        require_once XGP_ROOT . '/application/libraries/UsersLib.php';
+        self::$users    = new UsersLib();
+    }
 
-	/**
-	 * method set_objects_class
-	 * param
-	 * return objects instance
-	 */
-	private function set_objects_class ()
-	{
-		require_once ( XGP_ROOT. '/application/core/Objects.php' );
-		self::$objects	= new Objects();
-	}
+    /**
+     * setObjectsClass
+     *
+     * @return void
+     */
+    private function setObjectsClass()
+    {
+        require_once XGP_ROOT. '/application/core/Objects.php';
+        self::$objects  = new Objects();
+    }
 
-	/**
-	 * method set_template_class
-	 * param
-	 * return template instance
-	 */
-	private function set_template_class ()
-	{
-		require_once ( XGP_ROOT. '/application/libraries/Template_Lib.php' );
-		self::$page		= new Template_Lib ( self::$lang , self::$users );
-	}
+    /**
+     * setTemplateClass
+     *
+     * @return void
+     */
+    private function setTemplateClass()
+    {
+        require_once XGP_ROOT. '/application/libraries/TemplateLib.php';
+        self::$page = new TemplateLib(self::$lang, self::$users);
+    }
 }
+
 /* end of XGPCore.php */

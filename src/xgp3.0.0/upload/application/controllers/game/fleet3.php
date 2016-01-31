@@ -12,6 +12,12 @@
  * @version  3.0.0
  */
 
+namespace application\controllers\game;
+
+use application\core\XGPCore;
+use application\libraries\FleetsLib;
+use application\libraries\FunctionsLib;
+
 /**
  * Fleet3 Class
  *
@@ -43,7 +49,7 @@ class Fleet3 extends XGPCore
         parent::$users->check_session();
 
         // Check module access
-        Functions_Lib::module_message(Functions_Lib::is_module_accesible(self::MODULE_ID));
+        FunctionsLib::module_message(FunctionsLib::is_module_accesible(self::MODULE_ID));
 
         $this->langs            = parent::$lang;
         $this->current_user     = parent::$users->get_user_data();
@@ -59,22 +65,22 @@ class Fleet3 extends XGPCore
      */
     public function __destruct()
     {
-        parent::$db->close_connection();
+        parent::$db->closeConnection();
     }
 
     /**
-     * buildPages
+     * buildPage
      *
      * @return void
      */
     private function buildPage()
     {
         if (!isset($_POST) or empty($_POST)) {
-            Functions_Lib::redirect('game.php?page=fleet1');
+            FunctionsLib::redirect('game.php?page=fleet1');
         }
 
-        $pricelist  = parent::$objects->get_price();
-        $reslist    = parent::$objects->get_objects_list();
+        $pricelist  = parent::$objects->getPrice();
+        $reslist    = parent::$objects->getObjectsList();
         $lang       = $this->langs;
 
         #####################################################################################################
@@ -106,7 +112,7 @@ class Fleet3 extends XGPCore
         $available_ships    = $this->getAvailableShips($_POST);
         
         // QUERYS
-        $select = parent::$db->query_fetch(
+        $select = parent::$db->queryFetch(
             "SELECT `planet_user_id`
             FROM `" . PLANETS . "`
             WHERE `planet_galaxy` = '" . $galaxy . "'
@@ -191,10 +197,10 @@ class Fleet3 extends XGPCore
         $fleetarray     = unserialize(base64_decode(str_rot13($_POST['usedfleet'])));
         $mission        = $_POST['target_mission'];
         $SpeedFactor    = $_POST['speedfactor'];
-        $AllFleetSpeed  = Fleets_Lib::fleet_max_speed($fleetarray, 0, $this->current_user);
+        $AllFleetSpeed  = FleetsLib::fleet_max_speed($fleetarray, 0, $this->current_user);
         $GenFleetSpeed  = $_POST['speed'];
         $MaxFleetSpeed  = min($AllFleetSpeed);
-        $distance       = Fleets_Lib::target_distance(
+        $distance       = FleetsLib::target_distance(
             $_POST['thisgalaxy'],
             $galaxy,
             $_POST['thissystem'],
@@ -203,9 +209,9 @@ class Fleet3 extends XGPCore
             $planet
         );
         
-        $duration       = Fleets_Lib::mission_duration($GenFleetSpeed, $MaxFleetSpeed, $distance, $SpeedFactor);
+        $duration       = FleetsLib::mission_duration($GenFleetSpeed, $MaxFleetSpeed, $distance, $SpeedFactor);
         
-        $consumption    = Fleets_Lib::fleet_consumption(
+        $consumption    = FleetsLib::fleet_consumption(
             $fleetarray,
             $SpeedFactor,
             $duration,
@@ -250,8 +256,8 @@ class Fleet3 extends XGPCore
             $input_parse['ship']        = $Ship;
             $input_parse['amount']      = $Count;
             $input_parse['capacity']    = $pricelist[$Ship]['capacity'];
-            $input_parse['consumption'] = Fleets_Lib::ship_consumption($Ship, $this->current_user);
-            $input_parse['speed']       = Fleets_Lib::fleet_max_speed('', $Ship, $this->current_user);
+            $input_parse['consumption'] = FleetsLib::ship_consumption($Ship, $this->current_user);
+            $input_parse['speed']       = FleetsLib::fleet_max_speed('', $Ship, $this->current_user);
 
             $input_extra .= parent::$page->parse_template($input_template, $input_parse);
         }
@@ -303,13 +309,14 @@ class Fleet3 extends XGPCore
                 }
             }
         } else {
-            Functions_Lib::redirect('game.php?page=fleet1');
+            FunctionsLib::redirect('game.php?page=fleet1');
         }
 
         #####################################################################################################
         // STAY / EXPEDITION BLOCKS
         #####################################################################################################
         $stay_row['options']    = '';
+        $StayBlock              = '';
 
         if ($planet == 16) {
 
@@ -324,7 +331,7 @@ class Fleet3 extends XGPCore
             }
 
             $StayBlock  = parent::$page->parse_template($stay_template, array_merge($stay_row, $this->langs));
-        } elseif ($missiontype[5] != '') {
+        } elseif (isset($missiontype[5])) {
 
             $stay_row['stay_type']  = 'holdingtime';
 
@@ -362,7 +369,7 @@ class Fleet3 extends XGPCore
      */
     private function acsExists($fleet_acs, $galaxy, $system, $planet, $planettype)
     {
-        $acs = parent::$db->query_fetch(
+        $acs = parent::$db->queryFetch(
             "SELECT 
                 COUNT(`acs_fleet_id`) AS `amount`
             FROM `" . ACS_FLEETS . "`
@@ -382,7 +389,7 @@ class Fleet3 extends XGPCore
     }
     
     /**
-     * acsExists
+     * getAvailableShips
      *
      * @param array $post_data Post Data
      *
@@ -393,7 +400,7 @@ class Fleet3 extends XGPCore
         if (is_array($post_data)) {
             
             $ships      = array();
-            $resource   = parent::$objects->get_objects();
+            $resource   = parent::$objects->getObjects();
             
             foreach ($resource as $ship => $amount) {
 
@@ -413,4 +420,5 @@ class Fleet3 extends XGPCore
         return array();
     }
 }
+
 /* end of fleet3.php */

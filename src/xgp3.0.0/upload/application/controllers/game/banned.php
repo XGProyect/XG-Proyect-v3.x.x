@@ -1,11 +1,32 @@
 <?php
-
 /**
- * @project XG Proyect
- * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * Banned Controller
+ *
+ * PHP Version 5.5+
+ *
+ * @category Controller
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
  */
 
+namespace application\controllers\game;
+
+use application\core\XGPCore;
+use application\libraries\FunctionsLib;
+
+/**
+ * Banned Class
+ *
+ * @category Classes
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
+ */
 class Banned extends XGPCore
 {
 	const MODULE_ID	= 22;
@@ -23,7 +44,7 @@ class Banned extends XGPCore
 		parent::$users->check_session();
 
 		// Check module access
-		Functions_Lib::module_message ( Functions_Lib::is_module_accesible ( self::MODULE_ID ) );
+		FunctionsLib::module_message ( FunctionsLib::is_module_accesible ( self::MODULE_ID ) );
 
 		$this->_lang	= parent::$lang;
 
@@ -37,7 +58,7 @@ class Banned extends XGPCore
 	 */
 	public function __destruct()
 	{
-		parent::$db->close_connection();
+		parent::$db->closeConnection();
 	}
 
 	/**
@@ -56,12 +77,12 @@ class Banned extends XGPCore
 		$sub_template	= parent::$page->get_template ( 'banned/banned_row' );
 		$body			= '';
 
-		while ( $u = parent::$db->fetch_array ( $query ) )
+		while ( $u = parent::$db->fetchArray ( $query ) )
 		{
 			$parse['player']	= $u[1];
 			$parse['reason']	= $u[2];
-			$parse['since']		= date ( Functions_Lib::read_config ( 'date_format_extended' ) , $u[4] );
-			$parse['until']		= date ( Functions_Lib::read_config ( 'date_format_extended' ) , $u[5] );
+			$parse['since']		= date ( FunctionsLib::read_config ( 'date_format_extended' ) , $u[4] );
+			$parse['until']		= date ( FunctionsLib::read_config ( 'date_format_extended' ) , $u[5] );
 			$parse['by']		= $u[6];
 
 			$i++;
@@ -83,4 +104,5 @@ class Banned extends XGPCore
 		parent::$page->display ( parent::$page->parse_template ( parent::$page->get_template ( 'banned/banned_body' ) , $parse ) );
 	}
 }
+
 /* end of banned.php */

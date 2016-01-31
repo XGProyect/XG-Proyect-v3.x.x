@@ -1,12 +1,32 @@
 <?php
-
 /**
- * @project XG Proyect
- * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * Noobs Protection Library
+ *
+ * PHP Version 5.5+
+ *
+ * @category Library
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
  */
 
-class NoobsProtection_Lib extends XGPCore
+namespace application\libraries;
+
+use application\core\XGPCore;
+
+/**
+ * NoobsProtectionLib Class
+ *
+ * @category Classes
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
+ */
+class NoobsProtectionLib extends XGPCore
 {
 	private $_protection; // 1 OR 0
 	private $_protectiontime;
@@ -17,9 +37,9 @@ class NoobsProtection_Lib extends XGPCore
 	 */
 	public function __construct()
 	{
-		$this->_protection      	= Functions_Lib::read_config ( 'noobprotection' );
-		$this->_protectiontime  	= Functions_Lib::read_config ( 'noobprotectiontime' );
-		$this->_protectionmulti 	= Functions_Lib::read_config ( 'noobprotectionmulti' );
+		$this->_protection      	= FunctionsLib::read_config ( 'noobprotection' );
+		$this->_protectiontime  	= FunctionsLib::read_config ( 'noobprotectiontime' );
+		$this->_protectionmulti 	= FunctionsLib::read_config ( 'noobprotectionmulti' );
 	}
 
 	/**
@@ -52,7 +72,7 @@ class NoobsProtection_Lib extends XGPCore
 	 */
 	public function return_points ( $current_user_id , $other_user_id )
 	{
-		$user_points	= parent::$db->query_fetch ( "SELECT
+		$user_points	= parent::$db->queryFetch ( "SELECT
 														(SELECT user_statistic_total_points
 															FROM " . USERS_STATISTICS . "
 																WHERE `user_statistic_user_id` = ". $current_user_id ."
@@ -64,4 +84,5 @@ class NoobsProtection_Lib extends XGPCore
 		return $user_points;
 	}
 }
-/* end of NoobsProtection_Lib.php */
+
+/* end of NoobsProtectionLib.php */

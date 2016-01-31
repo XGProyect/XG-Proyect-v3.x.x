@@ -1,11 +1,33 @@
 <?php
-
 /**
- * @project XG Proyect
- * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * Search Controller
+ *
+ * PHP Version 5.5+
+ *
+ * @category Controller
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
  */
 
+namespace application\controllers\game;
+
+use application\core\XGPCore;
+use application\libraries\FormatLib;
+use application\libraries\FunctionsLib;
+
+/**
+ * Search Class
+ *
+ * @category Classes
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
+ */
 class Search extends XGPCore
 {
 	const MODULE_ID	= 17;
@@ -24,7 +46,7 @@ class Search extends XGPCore
 		parent::$users->check_session();
 
 		// Check module access
-		Functions_Lib::module_message ( Functions_Lib::is_module_accesible ( self::MODULE_ID ) );
+		FunctionsLib::module_message ( FunctionsLib::is_module_accesible ( self::MODULE_ID ) );
 
 		$this->_lang			= parent::$lang;
 		$this->_current_user	= parent::$users->get_user_data();
@@ -39,7 +61,7 @@ class Search extends XGPCore
 	 */
 	public function __destruct()
 	{
-		parent::$db->close_connection();
+		parent::$db->closeConnection();
 	}
 
 	/**
@@ -51,7 +73,7 @@ class Search extends XGPCore
 	{
 		$parse 			= $this->_lang;
 		$type 			= isset ( $_POST['type'] ) ? $_POST['type'] : '';
-		$searchtext 	= parent::$db->escape_value ( isset ( $_POST['searchtext'] ) ? $_POST['searchtext'] : '' );
+		$searchtext 	= parent::$db->escapeValue ( isset ( $_POST['searchtext'] ) ? $_POST['searchtext'] : '' );
 		$search_results	= '';
 
 		if ( $_POST )
@@ -112,7 +134,7 @@ class Search extends XGPCore
 		{
 			$result_list	= '';
 
-			while ( $s = parent::$db->fetch_array ( $search ) )
+			while ( $s = parent::$db->fetchArray ( $search ) )
 			{
 				if ( $type == 'playername' or $type == 'planetname' )
 				{
@@ -131,7 +153,7 @@ class Search extends XGPCore
 				}
 				elseif ( $type == 'allytag' or $type == 'allyname' )
 				{
-					$s['ally_points'] 	= Format_Lib::pretty_number ( $s['points'] );
+					$s['ally_points'] 	= FormatLib::pretty_number ( $s['points'] );
 					$s['ally_tag'] 		= "<a href=\"game.php?page=alliance&mode=ainfo&allyid={$s['alliance_id']}\">{$s['alliance_tag']}</a>";
 					$result_list 	   .= parent::$page->parse_template ( $row , $s );
 				}
@@ -154,4 +176,5 @@ class Search extends XGPCore
 		parent::$page->display ( parent::$page->parse_template ( parent::$page->get_template ( 'search/search_body' ) , $parse ) );
 	}
 }
+
 /* end of search.php */

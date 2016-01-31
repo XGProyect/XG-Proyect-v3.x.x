@@ -1,11 +1,33 @@
 <?php
-
 /**
- * @project XG Proyect
- * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * Fleetshortcuts Controller
+ *
+ * PHP Version 5.5+
+ *
+ * @category Controller
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
  */
 
+namespace application\controllers\game;
+
+use application\core\XGPCore;
+use application\libraries\FunctionsLib;
+use application\libraries\OfficiersLib;
+
+/**
+ * Fleetshortcuts Class
+ *
+ * @category Classes
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
+ */
 class Fleetshortcuts extends XGPCore
 {
 	const MODULE_ID	= 8;
@@ -24,13 +46,13 @@ class Fleetshortcuts extends XGPCore
 		parent::$users->check_session();
 
 		// Check module access
-		Functions_Lib::module_message ( Functions_Lib::is_module_accesible ( self::MODULE_ID ) );
+		FunctionsLib::module_message ( FunctionsLib::is_module_accesible ( self::MODULE_ID ) );
 
 		$this->_current_user	= parent::$users->get_user_data();
 
-		if ( ! Officiers_Lib::is_officier_active ( $this->_current_user['premium_officier_commander'] ) )
+		if ( ! OfficiersLib::isOfficierActive ( $this->_current_user['premium_officier_commander'] ) )
 		{
-			Functions_Lib::redirect ( 'game.php?page=officier' );
+			FunctionsLib::redirect ( 'game.php?page=officier' );
 		}
 		else
 		{
@@ -45,7 +67,7 @@ class Fleetshortcuts extends XGPCore
 	 */
 	public function __destruct()
 	{
-		parent::$db->close_connection();
+		parent::$db->closeConnection();
 	}
 
 	/**
@@ -61,11 +83,11 @@ class Fleetshortcuts extends XGPCore
 
 			if($mode == "add" && !empty($_POST['galaxy'])&&!empty($_POST['system'])&&!empty($_POST['planet']))
 			{
-				$this->addFleetShortcuts(parent::$db->escape_value(strip_tags($_POST['name'])),(int)$_POST['galaxy'],(int)$_POST['system'],(int)$_POST['planet'],(int)$_POST['moon']);
+				$this->addFleetShortcuts(parent::$db->escapeValue(strip_tags($_POST['name'])),(int)$_POST['galaxy'],(int)$_POST['system'],(int)$_POST['planet'],(int)$_POST['moon']);
 			}
 			elseif($mode=="edit" && isset($_GET['a']) && !empty($_POST['galaxy'])&&!empty($_POST['system'])&&!empty($_POST['planet']) )
 			{
-				$this->saveFleetShortcuts((int)$_GET['a'],parent::$db->escape_value(strip_tags($_POST['name'])),(int)$_POST['galaxy'],(int)$_POST['system'],(int)$_POST['planet'],(int)$_POST['moon']);
+				$this->saveFleetShortcuts((int)$_GET['a'],parent::$db->escapeValue(strip_tags($_POST['name'])),(int)$_POST['galaxy'],(int)$_POST['system'],(int)$_POST['planet'],(int)$_POST['moon']);
 			}
 			elseif($mode=="delete" && isset($_GET['a']))
 			{
@@ -125,7 +147,7 @@ class Fleetshortcuts extends XGPCore
 								user_fleet_shortcuts='".($this->_current_user['user_fleet_shortcuts'])."'
 								WHERE user_id=".($this->_current_user['user_id']));
 
-		Functions_Lib::redirect ( 'game.php?page=shortcuts' );
+		FunctionsLib::redirect ( 'game.php?page=shortcuts' );
 	}
 
     private function addFleetShortcuts($name,$galaxy,$system,$planet,$moon)
@@ -136,7 +158,7 @@ class Fleetshortcuts extends XGPCore
 								user_fleet_shortcuts='".($this->_current_user['user_fleet_shortcuts'])."'
 								WHERE user_id=".($this->_current_user['user_id']) );
 
-		Functions_Lib::redirect ( 'game.php?page=shortcuts' );
+		FunctionsLib::redirect ( 'game.php?page=shortcuts' );
 	}
 
 	private function deleteFleetShortcuts($id)
@@ -151,7 +173,7 @@ class Fleetshortcuts extends XGPCore
 							user_fleet_shortcuts='".($this->_current_user['user_fleet_shortcuts'])."'
 							WHERE user_id=".($this->_current_user['user_id']) );
 
-		Functions_Lib::redirect ( 'game.php?page=shortcuts' );
+		FunctionsLib::redirect ( 'game.php?page=shortcuts' );
 	}
 
 	private function showAll()
@@ -218,4 +240,5 @@ class Fleetshortcuts extends XGPCore
 		parent::$page->display ( parent::$page->parse_template ( parent::$page->get_template ( 'shortcuts/shortcuts_table' ) , $parse ) );
 	}
 }
+
 /* end of fleetshortcuts.php */

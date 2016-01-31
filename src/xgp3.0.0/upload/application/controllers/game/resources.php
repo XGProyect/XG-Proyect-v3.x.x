@@ -1,11 +1,35 @@
 <?php
-
 /**
- * @project XG Proyect
- * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * Resources Controller
+ *
+ * PHP Version 5.5+
+ *
+ * @category Controller
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
  */
 
+namespace application\controllers\game;
+
+use application\core\XGPCore;
+use application\libraries\FormatLib;
+use application\libraries\FunctionsLib;
+use application\libraries\OfficiersLib;
+use application\libraries\ProductionLib;
+
+/**
+ * Resources Class
+ *
+ * @category Classes
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
+ */
 class Resources extends XGPCore
 {
 	const MODULE_ID	= 4;
@@ -28,13 +52,13 @@ class Resources extends XGPCore
 		parent::$users->check_session();
 
 		// Check module access
-		Functions_Lib::module_message ( Functions_Lib::is_module_accesible ( self::MODULE_ID ) );
+		FunctionsLib::module_message ( FunctionsLib::is_module_accesible ( self::MODULE_ID ) );
 
 		$this->_lang			= parent::$lang;
 
-		$this->_resource		= parent::$objects->get_objects();
-		$this->_prod_grid		= parent::$objects->get_production();
-		$this->_reslist			= parent::$objects->get_objects_list();
+		$this->_resource		= parent::$objects->getObjects();
+		$this->_prod_grid		= parent::$objects->getProduction();
+		$this->_reslist			= parent::$objects->getObjectsList();
 		$this->_current_user	= parent::$users->get_user_data();
 		$this->_current_planet	= parent::$users->get_planet_data();
 
@@ -48,7 +72,7 @@ class Resources extends XGPCore
 	 */
 	public function __destruct()
 	{
-		parent::$db->close_connection();
+		parent::$db->closeConnection();
 	}
 
 	/**
@@ -59,11 +83,11 @@ class Resources extends XGPCore
 	private function build_page()
 	{
 		$parse 							= 	$this->_lang;
-		$game_metal_basic_income		=	Functions_Lib::read_config ( 'metal_basic_income' );
-		$game_crystal_basic_income		=	Functions_Lib::read_config ( 'crystal_basic_income' );
-		$game_deuterium_basic_income	=	Functions_Lib::read_config ( 'deuterium_basic_income' );
-		$game_energy_basic_income		=	Functions_Lib::read_config ( 'energy_basic_income' );
-		$game_resource_multiplier		=	Functions_Lib::read_config ( 'resource_multiplier' );
+		$game_metal_basic_income		=	FunctionsLib::read_config ( 'metal_basic_income' );
+		$game_crystal_basic_income		=	FunctionsLib::read_config ( 'crystal_basic_income' );
+		$game_deuterium_basic_income	=	FunctionsLib::read_config ( 'deuterium_basic_income' );
+		$game_energy_basic_income		=	FunctionsLib::read_config ( 'energy_basic_income' );
+		$game_resource_multiplier		=	FunctionsLib::read_config ( 'resource_multiplier' );
 
 		if ($this->_current_planet['planet_type'] == 3)
 		{
@@ -72,12 +96,12 @@ class Resources extends XGPCore
 			$game_deuterium_basic_income 	= 0;
 		}
 
-		$this->_current_planet['planet_metal_max']			 = ProductionLib::max_storable ( $this->_current_planet[ $this->_resource[22] ]);
-		$this->_current_planet['planet_crystal_max']		= ProductionLib::max_storable ( $this->_current_planet[ $this->_resource[23] ]);
-		$this->_current_planet['planet_deuterium_max']		= ProductionLib::max_storable ( $this->_current_planet[ $this->_resource[24] ]);
+		$this->_current_planet['planet_metal_max']			 = ProductionLib::maxStorable ( $this->_current_planet[ $this->_resource[22] ]);
+		$this->_current_planet['planet_crystal_max']		= ProductionLib::maxStorable ( $this->_current_planet[ $this->_resource[23] ]);
+		$this->_current_planet['planet_deuterium_max']		= ProductionLib::maxStorable ( $this->_current_planet[ $this->_resource[24] ]);
 
 		$parse['production_level'] 			 				= 100;
-		$post_porcent 						 				= ProductionLib::max_production ( $this->_current_planet['planet_energy_max'] , $this->_current_planet['planet_energy_used'] );
+		$post_porcent 						 				= ProductionLib::maxProduction ( $this->_current_planet['planet_energy_max'] , $this->_current_planet['planet_energy_used'] );
 
 		$parse['resource_row']               				= '';
 		$this->_current_planet['planet_metal_perhour']      = 0;
@@ -98,8 +122,8 @@ class Resources extends XGPCore
 				$BuildEnergy        = $this->_current_user['research_energy_technology'];
 
 				// BOOST
-				$geologe_boost		= 1 + ( 1 * ( Officiers_Lib::is_officier_active ( $this->_current_user['premium_officier_geologist'] ) ? GEOLOGUE : 0 ) );
-				$engineer_boost		= 1 + ( 1 * ( Officiers_Lib::is_officier_active ( $this->_current_user['premium_officier_engineer'] ) ? ENGINEER_ENERGY : 0 ) );
+				$geologe_boost		= 1 + ( 1 * ( OfficiersLib::isOfficierActive ( $this->_current_user['premium_officier_geologist'] ) ? GEOLOGUE : 0 ) );
+				$engineer_boost		= 1 + ( 1 * ( OfficiersLib::isOfficierActive ( $this->_current_user['premium_officier_engineer'] ) ? ENGINEER_ENERGY : 0 ) );
 
 				// PRODUCTION FORMULAS
 				$metal_prod			= eval ( $this->_prod_grid[$ProdID]['formule']['metal'] );
@@ -108,17 +132,17 @@ class Resources extends XGPCore
 				$energy_prod		= eval ( $this->_prod_grid[$ProdID]['formule']['energy'] );
 
 				// PRODUCTION
-				$metal				= ProductionLib::production_amount ( $metal_prod , $geologe_boost );
-				$crystal			= ProductionLib::production_amount ( $crystal_prod , $geologe_boost );
-				$deuterium			= ProductionLib::production_amount ( $deuterium_prod , $geologe_boost );
+				$metal				= ProductionLib::productionAmount ( $metal_prod , $geologe_boost );
+				$crystal			= ProductionLib::productionAmount ( $crystal_prod , $geologe_boost );
+				$deuterium			= ProductionLib::productionAmount ( $deuterium_prod , $geologe_boost );
 
 				if ( $ProdID >= 4 )
 				{
-					$energy			= ProductionLib::production_amount ( $energy_prod , $engineer_boost , TRUE );
+					$energy			= ProductionLib::productionAmount ( $energy_prod , $engineer_boost , TRUE );
 				}
 				else
 				{
-					$energy			= ProductionLib::production_amount ( $energy_prod , 1 , TRUE );
+					$energy			= ProductionLib::productionAmount ( $energy_prod , 1 , TRUE );
 				}
 
 				if ( $energy > 0 )
@@ -134,10 +158,10 @@ class Resources extends XGPCore
 				$this->_current_planet['planet_crystal_perhour']   	+= $crystal;
 				$this->_current_planet['planet_deuterium_perhour'] 	+= $deuterium;
 
-				$metal                               = ProductionLib::current_production ( $metal , $post_porcent );
-				$crystal                             = ProductionLib::current_production ( $crystal , $post_porcent );
-				$deuterium                           = ProductionLib::current_production ( $deuterium , $post_porcent );
-				$energy                              = ProductionLib::current_production ( $energy , $post_porcent );
+				$metal                               = ProductionLib::currentProduction ( $metal , $post_porcent );
+				$crystal                             = ProductionLib::currentProduction ( $crystal , $post_porcent );
+				$deuterium                           = ProductionLib::currentProduction ( $deuterium , $post_porcent );
+				$energy                              = ProductionLib::currentProduction ( $energy , $post_porcent );
 				$Field                               = 'planet_' . $this->_resource[$ProdID] . '_porcent';
 				$CurrRow                             = array();
 				$CurrRow['name']                     = $this->_resource[$ProdID];
@@ -146,14 +170,14 @@ class Resources extends XGPCore
 				$CurrRow['type']                     = $this->_lang['tech'][$ProdID];
 				$CurrRow['level']                    = ($ProdID > 200) ? $this->_lang['rs_amount'] : $this->_lang['rs_lvl'];
 				$CurrRow['level_type']               = $this->_current_planet[ $this->_resource[$ProdID] ];
-				$CurrRow['metal_type']               = Format_Lib::pretty_number ( $metal     );
-				$CurrRow['crystal_type']             = Format_Lib::pretty_number ( $crystal   );
-				$CurrRow['deuterium_type']           = Format_Lib::pretty_number ( $deuterium );
-				$CurrRow['energy_type']              = Format_Lib::pretty_number ( $energy    );
-				$CurrRow['metal_type']               = Format_Lib::color_number ( $CurrRow['metal_type']     );
-				$CurrRow['crystal_type']             = Format_Lib::color_number ( $CurrRow['crystal_type']   );
-				$CurrRow['deuterium_type']           = Format_Lib::color_number ( $CurrRow['deuterium_type'] );
-				$CurrRow['energy_type']              = Format_Lib::color_number ( $CurrRow['energy_type']    );
+				$CurrRow['metal_type']               = FormatLib::pretty_number ( $metal     );
+				$CurrRow['crystal_type']             = FormatLib::pretty_number ( $crystal   );
+				$CurrRow['deuterium_type']           = FormatLib::pretty_number ( $deuterium );
+				$CurrRow['energy_type']              = FormatLib::pretty_number ( $energy    );
+				$CurrRow['metal_type']               = FormatLib::color_number ( $CurrRow['metal_type']     );
+				$CurrRow['crystal_type']             = FormatLib::color_number ( $CurrRow['crystal_type']   );
+				$CurrRow['deuterium_type']           = FormatLib::color_number ( $CurrRow['deuterium_type'] );
+				$CurrRow['energy_type']              = FormatLib::color_number ( $CurrRow['energy_type']    );
 				$parse['resource_row']              .= parent::$page->parse_template ($ResourcesRowTPL , $CurrRow );
 			}
 		}
@@ -169,10 +193,10 @@ class Resources extends XGPCore
 		$parse['planet_crystal_max']		= $this->resource_color ( $this->_current_planet['planet_crystal'] , $this->_current_planet['planet_crystal_max'] );
 		$parse['planet_deuterium_max']      = $this->resource_color ( $this->_current_planet['planet_deuterium'] , $this->_current_planet['planet_deuterium_max'] );
 
-		$parse['metal_total']           	= Format_Lib::color_number( Format_Lib::pretty_number( floor( ( ($this->_current_planet['planet_metal_perhour']     * 0.01 * $parse['production_level'] ) + $parse['metal_basic_income']))));
-		$parse['crystal_total']         	= Format_Lib::color_number( Format_Lib::pretty_number( floor( ( ($this->_current_planet['planet_crystal_perhour']   * 0.01 * $parse['production_level'] ) + $parse['crystal_basic_income']))));
-		$parse['deuterium_total']       	= Format_Lib::color_number( Format_Lib::pretty_number( floor( ( ($this->_current_planet['planet_deuterium_perhour'] * 0.01 * $parse['production_level'] ) + $parse['deuterium_basic_income']))));
-		$parse['energy_total']          	= Format_Lib::color_number( Format_Lib::pretty_number( floor( ( $this->_current_planet['planet_energy_max'] + $parse['energy_basic_income']    ) + $this->_current_planet['planet_energy_used'] ) ) );
+		$parse['metal_total']           	= FormatLib::color_number( FormatLib::pretty_number( floor( ( ($this->_current_planet['planet_metal_perhour']     * 0.01 * $parse['production_level'] ) + $parse['metal_basic_income']))));
+		$parse['crystal_total']         	= FormatLib::color_number( FormatLib::pretty_number( floor( ( ($this->_current_planet['planet_crystal_perhour']   * 0.01 * $parse['production_level'] ) + $parse['crystal_basic_income']))));
+		$parse['deuterium_total']       	= FormatLib::color_number( FormatLib::pretty_number( floor( ( ($this->_current_planet['planet_deuterium_perhour'] * 0.01 * $parse['production_level'] ) + $parse['deuterium_basic_income']))));
+		$parse['energy_total']          	= FormatLib::color_number( FormatLib::pretty_number( floor( ( $this->_current_planet['planet_energy_max'] + $parse['energy_basic_income']    ) + $this->_current_planet['planet_energy_used'] ) ) );
 
 
 		$parse['daily_metal']				= $this->calculate_daily ( $this->_current_planet['planet_metal_perhour'] , $parse['production_level'] , $parse['metal_basic_income'] );
@@ -187,14 +211,14 @@ class Resources extends XGPCore
 		$parse['weekly_deuterium']			= $this->calculate_weekly ( $this->_current_planet['planet_deuterium_perhour'] , $parse['production_level'] , $parse['deuterium_basic_income'] );
 
 
-		$parse['daily_metal']           	= Format_Lib::color_number(Format_Lib::pretty_number($parse['daily_metal']));
-		$parse['weekly_metal']          	= Format_Lib::color_number(Format_Lib::pretty_number($parse['weekly_metal']));
+		$parse['daily_metal']           	= FormatLib::color_number(FormatLib::pretty_number($parse['daily_metal']));
+		$parse['weekly_metal']          	= FormatLib::color_number(FormatLib::pretty_number($parse['weekly_metal']));
 
-		$parse['daily_crystal']         	= Format_Lib::color_number(Format_Lib::pretty_number($parse['daily_crystal']));
-		$parse['weekly_crystal']        	= Format_Lib::color_number(Format_Lib::pretty_number($parse['weekly_crystal']));
+		$parse['daily_crystal']         	= FormatLib::color_number(FormatLib::pretty_number($parse['daily_crystal']));
+		$parse['weekly_crystal']        	= FormatLib::color_number(FormatLib::pretty_number($parse['weekly_crystal']));
 
-		$parse['daily_deuterium']       	= Format_Lib::color_number(Format_Lib::pretty_number($parse['daily_deuterium']));
-		$parse['weekly_deuterium']      	= Format_Lib::color_number(Format_Lib::pretty_number($parse['weekly_deuterium']));
+		$parse['daily_deuterium']       	= FormatLib::color_number(FormatLib::pretty_number($parse['daily_deuterium']));
+		$parse['weekly_deuterium']      	= FormatLib::color_number(FormatLib::pretty_number($parse['weekly_deuterium']));
 
 		$ValidList['percent'] 				= array (  0,  10,  20,  30,  40,  50,  60,  70,  80,  90, 100 );
 		$SubQry               				= '';
@@ -208,7 +232,7 @@ class Resources extends XGPCore
 				{
 					if ( ! in_array( $Value, $ValidList['percent'] ) )
 					{
-						Functions_Lib::redirect ( 'game.php?page=resourceSettings' );
+						FunctionsLib::redirect ( 'game.php?page=resourceSettings' );
 					}
 
 					$Value                        = $Value / 10;
@@ -222,7 +246,7 @@ class Resources extends XGPCore
 									$SubQry
 									WHERE `planet_id` = '". $this->_current_planet['planet_id'] ."';" );
 
-			Functions_Lib::redirect ( 'game.php?page=resourceSettings' );
+			FunctionsLib::redirect ( 'game.php?page=resourceSettings' );
 		}
 
 		parent::$page->display ( parent::$page->parse_template ( parent::$page->get_template ( 'resources/resources' ) , $parse ) );
@@ -290,11 +314,11 @@ class Resources extends XGPCore
 	{
 		if ( $max_amount < $current_amount )
 		{
-			return ( Format_Lib::color_red ( Format_Lib::pretty_number ( $max_amount / 1000 ) . 'k' ) );
+			return ( FormatLib::color_red ( FormatLib::pretty_number ( $max_amount / 1000 ) . 'k' ) );
 		}
 		else
 		{
-			return ( Format_Lib::color_green ( Format_Lib::pretty_number ( $max_amount / 1000 ) . 'k' ) );
+			return ( FormatLib::color_green ( FormatLib::pretty_number ( $max_amount / 1000 ) . 'k' ) );
 		}
 	}
 
@@ -331,4 +355,5 @@ class Resources extends XGPCore
 		return $prod_level;
 	}
 }
+
 /* end of resources.php */

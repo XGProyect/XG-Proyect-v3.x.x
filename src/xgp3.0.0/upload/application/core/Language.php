@@ -1,90 +1,121 @@
 <?php
-
 /**
- * @project XG Proyect
- * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * Language
+ *
+ * PHP Version 5.5+
+ *
+ * @category Core
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
  */
 
+namespace application\core;
+
+/**
+ * Language Class
+ *
+ * @category Classes
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
+ */
 class Language
 {
-	private $_lang;
-	private $_lang_extension = 'php';
+    /**
+     *
+     * @var array
+     */
+    private $lang;
+    
+    /**
+     *
+     * @var string
+     */
+    private $lang_extension = 'php';
 
-	/**
-	 * __construct()
-	 */
-	public function __construct()
-	{
-		$languages_loaded	= $this->get_file_name();
+    /**
+     * __construct
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $languages_loaded   = $this->getFileName();
 
-		foreach ( $languages_loaded as $load )
-		{
-			$route	= XGP_ROOT . LANG_PATH . DEFAULT_LANG . '/' . $load . '.' . $this->_lang_extension;
+        foreach ($languages_loaded as $load) {
 
-			if ( file_exists ( $route ) ) // WE GOT SOMETHING
-			{
-				// GET THE LANGUAGE PACK
-				include ( $route );
-			}
-		}
+            $route  = XGP_ROOT . LANG_PATH . DEFAULT_LANG . '/' . $load . '.' . $this->lang_extension;
 
-		if ( ! empty ( $lang ) ) // WE GOT SOMETHING
-		{
-			// SET DATA
-			$this->_lang	= $lang;
-		}
-		else
-		{
-			// THROW EXCEPTION
-			die ( 'Language file not found or empty: <strong>' . $load . '</strong><br />Location: <strong>' . $route . '</strong>' );
-		}
-	}
+            // WE GOT SOMETHING
+            if (file_exists($route)) {
 
-	/**
-	 * method lang
-	 * param
-	 * return the language data
-	 */
-	public function lang()
-	{
-		return $this->_lang;
-	}
+                // GET THE LANGUAGE PACK
+                include $route;
+            }
+        }
 
-	/**
-	 * method get_file_name
-	 * param
-	 * return language pack file
-	 */
-	private function get_file_name()
-	{
-		if ( defined ( 'IN_ADMIN' ) )
-		{
-			$required[] = 'ADMIN';
-		}
+        // WE GOT SOMETHING
+        if (!empty($lang)) {
 
-		if ( defined ( 'IN_CHANGELOG' ) )
-		{
-			$required[] = 'CHANGELOG';
-		}
+            // SET DATA
+            $this->lang = $lang;
+        } else {
 
-		if ( defined ( 'IN_GAME' ) )
-		{
-			$required[] = 'INGAME';
-		}
+            // THROW EXCEPTION
+            die('Language not found or empty: <strong>' . $load . '</strong><br/>
+                Location: <strong>' . $route . '</strong>');
+        }
+    }
 
-		if ( defined ( 'IN_INSTALL' ) )
-		{
-			$required[] = 'INSTALL';
-		}
+    /**
+     * lang
+     *
+     * @return array
+     */
+    public function lang()
+    {
+        return $this->lang;
+    }
 
-		if ( defined ( 'IN_LOGIN' ) )
-		{
-			$required[] = 'HOME';
-		}
+    /**
+     * getFileName
+     *
+     * @return array
+     */
+    private function getFileName()
+    {
+        if (defined('IN_ADMIN')) {
 
-		return $required;
-	}
+            $required[] = 'ADMIN';
+        }
+
+        if (defined('IN_CHANGELOG')) {
+
+            $required[] = 'CHANGELOG';
+        }
+
+        if (defined('IN_GAME')) {
+
+            $required[] = 'INGAME';
+        }
+
+        if (defined('IN_INSTALL')) {
+
+            $required[] = 'INSTALL';
+        }
+
+        if (defined('IN_LOGIN')) {
+
+            $required[] = 'HOME';
+        }
+
+        return $required;
+    }
 }
 
 /* end of Language.php */

@@ -1,11 +1,33 @@
 <?php
-
 /**
- * @project XG Proyect
- * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * Planets Controller
+ *
+ * PHP Version 5.5+
+ *
+ * @category Controller
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
  */
 
+namespace application\controllers\adm;
+
+use application\core\XGPCore;
+use application\libraries\adm\AdministrationLib;
+use application\libraries\FunctionsLib;
+
+/**
+ * Planets Class
+ *
+ * @category Classes
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
+ */
 class Planets extends XGPCore
 {
 	private $_current_user;
@@ -26,15 +48,15 @@ class Planets extends XGPCore
 		$this->_current_user	= parent::$users->get_user_data();
 
 		// Check if the user is allowed to access
-		if ( Administration_Lib::have_access ( $this->_current_user['user_authlevel'] ) && Administration_Lib::authorization ( $this->_current_user['user_authlevel'] , 'config_game' ) == 1 )
+		if ( AdministrationLib::have_access ( $this->_current_user['user_authlevel'] ) && AdministrationLib::authorization ( $this->_current_user['user_authlevel'] , 'config_game' ) == 1 )
 		{
-			$this->_game_config		= Functions_Lib::read_config ( '' , TRUE );
+			$this->_game_config		= FunctionsLib::read_config ( '' , TRUE );
 
 			$this->build_page();
 		}
 		else
 		{
-			die ( Functions_Lib::message ( $this->_lang['ge_no_permissions'] ) );
+			die ( FunctionsLib::message ( $this->_lang['ge_no_permissions'] ) );
 		}
 	}
 
@@ -45,7 +67,7 @@ class Planets extends XGPCore
 	 */
 	public function __destruct ()
 	{
-		parent::$db->close_connection();
+		parent::$db->closeConnection();
 	}
 
 	/**
@@ -63,13 +85,13 @@ class Planets extends XGPCore
 			// CHECK BEFORE SAVE
 			$this->run_validations();
 
-			Functions_Lib::update_config ( 'initial_fields' 		, $this->_game_config['initial_fields']         );
-			Functions_Lib::update_config ( 'metal_basic_income' 	, $this->_game_config['metal_basic_income']     );
-			Functions_Lib::update_config ( 'crystal_basic_income' 	, $this->_game_config['crystal_basic_income']   );
-			Functions_Lib::update_config ( 'deuterium_basic_income'	, $this->_game_config['deuterium_basic_income']	);
-			Functions_Lib::update_config ( 'energy_basic_income'	, $this->_game_config['energy_basic_income']	);
+			FunctionsLib::update_config ( 'initial_fields' 		, $this->_game_config['initial_fields']         );
+			FunctionsLib::update_config ( 'metal_basic_income' 	, $this->_game_config['metal_basic_income']     );
+			FunctionsLib::update_config ( 'crystal_basic_income' 	, $this->_game_config['crystal_basic_income']   );
+			FunctionsLib::update_config ( 'deuterium_basic_income'	, $this->_game_config['deuterium_basic_income']	);
+			FunctionsLib::update_config ( 'energy_basic_income'	, $this->_game_config['energy_basic_income']	);
 
-			$parse['alert']					= Administration_Lib::save_message ( 'ok' , $this->_lang['np_all_ok_message'] );
+			$parse['alert']					= AdministrationLib::save_message ( 'ok' , $this->_lang['np_all_ok_message'] );
 		}
 
 		$parse['initial_fields']         	= $this->_game_config['initial_fields'];
@@ -119,4 +141,5 @@ class Planets extends XGPCore
 		}
 	}
 }
+
 /* end of planets.php */

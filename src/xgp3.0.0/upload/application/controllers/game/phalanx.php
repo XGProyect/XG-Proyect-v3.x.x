@@ -1,11 +1,33 @@
 <?php
-
 /**
- * @project XG Proyect
- * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * Phalanx Controller
+ *
+ * PHP Version 5.5+
+ *
+ * @category Controller
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
  */
 
+namespace application\controllers\game;
+
+use application\core\XGPCore;
+use application\libraries\FleetsLib;
+use application\libraries\FunctionsLib;
+
+/**
+ * Phalanx Class
+ *
+ * @category Classes
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
+ */
 class Phalanx extends XGPCore
 {
 	const MODULE_ID	= 11;
@@ -26,12 +48,12 @@ class Phalanx extends XGPCore
 		parent::$users->check_session();
 
 		// Check module access
-		Functions_Lib::module_message ( Functions_Lib::is_module_accesible ( self::MODULE_ID ) );
+		FunctionsLib::module_message ( FunctionsLib::is_module_accesible ( self::MODULE_ID ) );
 
 		$this->_lang			= parent::$lang;
 		$this->_current_user	= parent::$users->get_user_data();
 		$this->_current_planet	= parent::$users->get_planet_data();
-		$this->_formula			= Functions_Lib::load_library ( 'Formula_Lib' );
+		$this->_formula			= FunctionsLib::load_library ( 'FormulaLib' );
 
 		$this->build_page();
 	}
@@ -43,7 +65,7 @@ class Phalanx extends XGPCore
 	 */
 	public function __destruct()
 	{
-		parent::$db->close_connection();
+		parent::$db->closeConnection();
 	}
 
 	/**
@@ -68,7 +90,7 @@ class Phalanx extends XGPCore
         /* cheater detection */
         if ( $System < $radar_limit_inf or $System > $radar_limit_sup or $Galaxy != $this->_current_planet['planet_galaxy'] or $PlType != 1 or $this->_current_planet['planet_type'] != 3 )
         {
-        	Functions_Lib::redirect ( 'game.php?page=galaxy' );
+        	FunctionsLib::redirect ( 'game.php?page=galaxy' );
         }
 
 		/* main page */
@@ -78,7 +100,7 @@ class Phalanx extends XGPCore
             						`planet_deuterium` = `planet_deuterium` - '10000'
             						WHERE `planet_id` = '" . $this->_current_user['user_current_planet'] . "';");
 
-            $TargetInfo 	= parent::$db->query_fetch ( "SELECT `planet_name`, `planet_user_id`
+            $TargetInfo 	= parent::$db->queryFetch ( "SELECT `planet_name`, `planet_user_id`
             												FROM " . PLANETS . "
             												WHERE `planet_galaxy` = '" . $Galaxy . "' AND
             														`planet_system` = '" . $System . "' AND
@@ -87,7 +109,7 @@ class Phalanx extends XGPCore
 
             $TargetID 		= $TargetInfo['planet_user_id'];
             $TargetName 	= $TargetInfo['planet_name'];
-            $TargetInfo 	= parent::$db->query_fetch ( "SELECT `planet_destroyed`
+            $TargetInfo 	= parent::$db->queryFetch ( "SELECT `planet_destroyed`
             												FROM " . PLANETS . "
             												WHERE `planet_galaxy` = '" . $Galaxy . "' AND
             														`planet_system` = '" . $System . "' AND
@@ -116,7 +138,7 @@ class Phalanx extends XGPCore
 
             $Record = 0;
             $fpage = array();
-            while ( $FleetRow = parent::$db->fetch_array ( $FleetToTarget ) )
+            while ( $FleetRow = parent::$db->fetchArray ( $FleetToTarget ) )
             {
                 $Record++;
 
@@ -145,14 +167,14 @@ class Phalanx extends XGPCore
                         if ($Mission != 4)
                         {
                             $Label = "fs";
-                            $fpage[$ArrivetoTargetTime] .= "\n". Fleets_Lib::flying_fleets_table($FleetRow, 0, $myFleet, $Label, $Record,$this->_current_user);
+                            $fpage[$ArrivetoTargetTime] .= "\n". FleetsLib::flying_fleets_table($FleetRow, 0, $myFleet, $Label, $Record,$this->_current_user);
                         }
                     }
                     //scanning of destination fleet planet
                     elseif (!$isStartedfromThis && ($FleetRow['fleet_end_type'] == 1 || ($FleetRow['fleet_end_type'] == 3 && $TargetMoonIsDestroyed)))
                     {
                         $Label = "fs";
-                        $fpage[$ArrivetoTargetTime] .= "\n". Fleets_Lib::flying_fleets_table($FleetRow, 0, $myFleet, $Label, $Record,$this->_current_user);
+                        $fpage[$ArrivetoTargetTime] .= "\n". FleetsLib::flying_fleets_table($FleetRow, 0, $myFleet, $Label, $Record,$this->_current_user);
                     }
                 }
                 /* 2)the stay fleet table event
@@ -161,7 +183,7 @@ class Phalanx extends XGPCore
                 if ($EndStayTime > time() && $Mission == 5 && ($FleetRow['fleet_end_type'] == 1 || ($FleetRow['fleet_end_type'] == 3 && $TargetMoonIsDestroyed)) && $isTheTarget)
                 {
                     $Label = "ft";
-                    $fpage[$EndStayTime] .= "\n". Fleets_Lib::flying_fleets_table($FleetRow, 1, $myFleet, $Label, $Record,$this->_current_user);
+                    $fpage[$EndStayTime] .= "\n". FleetsLib::flying_fleets_table($FleetRow, 1, $myFleet, $Label, $Record,$this->_current_user);
                 }
                 /* 3)the return fleet table event
                 * you can see the return fleet if this is the started planet(or destroyed moon)
@@ -170,7 +192,7 @@ class Phalanx extends XGPCore
                 if ($ReturnTime > time() && $Mission != 4 && $Mission != 10 && $isStartedfromThis && ($FleetRow['fleet_start_type'] == 1 || ($FleetRow['fleet_start_type'] == 3 && $TargetMoonIsDestroyed)))
                 {
                     $Label = "fe";
-                    $fpage[$ReturnTime] .= "\n". Fleets_Lib::flying_fleets_table($FleetRow, 2, $myFleet, $Label, $Record,$this->_current_user);
+                    $fpage[$ReturnTime] .= "\n". FleetsLib::flying_fleets_table($FleetRow, 2, $myFleet, $Label, $Record,$this->_current_user);
                 }
             }
             ksort($fpage);
@@ -191,4 +213,5 @@ class Phalanx extends XGPCore
         parent::$page->display ( parent::$page->parse_template ( parent::$page->get_template ( 'galaxy/phalanx_body' ) , $parse ) , FALSE , '' , FALSE );
     }
 }
+
 /* end of phalanx.php */

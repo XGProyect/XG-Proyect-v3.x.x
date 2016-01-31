@@ -1,11 +1,33 @@
 <?php
-
 /**
- * @project XG Proyect
- * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * Messages Controller
+ *
+ * PHP Version 5.5+
+ *
+ * @category Controller
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
  */
 
+namespace application\controllers\adm;
+
+use application\core\XGPCore;
+use application\libraries\adm\AdministrationLib;
+use application\libraries\FunctionsLib;
+
+/**
+ * Messages Class
+ *
+ * @category Classes
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
+ */
 class Messages extends XGPCore
 {
 	private $_lang;
@@ -26,13 +48,13 @@ class Messages extends XGPCore
 		$this->_current_user	= parent::$users->get_user_data();
 
 		// Check if the user is allowed to access
-		if ( Administration_Lib::have_access ( $this->_current_user['user_authlevel'] ) && Administration_Lib::authorization ( $this->_current_user['user_authlevel'] , 'observation' ) == 1 )
+		if ( AdministrationLib::have_access ( $this->_current_user['user_authlevel'] ) && AdministrationLib::authorization ( $this->_current_user['user_authlevel'] , 'observation' ) == 1 )
 		{
 			$this->build_page();
 		}
 		else
 		{
-			die ( Functions_Lib::message ( $this->_lang['ge_no_permissions'] ) );
+			die ( FunctionsLib::message ( $this->_lang['ge_no_permissions'] ) );
 		}
 	}
 
@@ -43,7 +65,7 @@ class Messages extends XGPCore
 	 */
 	public function __destruct ()
 	{
-		parent::$db->close_connection();
+		parent::$db->closeConnection();
 	}
 
 	/**
@@ -90,10 +112,10 @@ class Messages extends XGPCore
 		if ( $search_result !== FALSE )
 		{
 			// loop thru the results
-			while ( $search_data = parent::$db->fetch_array ( $search_result ) )
+			while ( $search_data = parent::$db->fetchArray ( $search_result ) )
 			{
 				$search_data['mg_show_hide']	= $this->_lang['mg_show_hide'];
-				$search_data['message_time']	= date ( Functions_Lib::read_config ( 'date_format_extended' ) , $search_data['message_time'] );
+				$search_data['message_time']	= date ( FunctionsLib::read_config ( 'date_format_extended' ) , $search_data['message_time'] );
 				$search_data['message_text']	= stripslashes( nl2br( $search_data['message_text'] ) ) ;
 
 				$results	.= parent::$page->parse_template ( $template , $search_data );
@@ -103,7 +125,7 @@ class Messages extends XGPCore
 			return $results;
 		}
 
-		$this->_alert	= Administration_Lib::save_message ( 'warning' , $this->_lang['mg_no_results'] );
+		$this->_alert	= AdministrationLib::save_message ( 'warning' , $this->_lang['mg_no_results'] );
 	}
 
 	/**
@@ -129,7 +151,7 @@ class Messages extends XGPCore
 								WHERE `message_id` IN (" . rtrim ( $ids_array , ',') . ")" );
 
 		// show alert
-		$this->_alert	= Administration_Lib::save_message ( 'ok' , $this->_lang['mg_delete_ok'] );
+		$this->_alert	= AdministrationLib::save_message ( 'ok' , $this->_lang['mg_delete_ok'] );
 	}
 
 	/**
@@ -281,4 +303,5 @@ class Messages extends XGPCore
 		return $year_combo;
 	}
 }
+
 /* end of messages.php */

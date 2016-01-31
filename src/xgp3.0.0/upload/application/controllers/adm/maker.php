@@ -1,11 +1,33 @@
 <?php
-
 /**
- * @project XG Proyect
- * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * Maker Controller
+ *
+ * PHP Version 5.5+
+ *
+ * @category Controller
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
  */
 
+namespace application\controllers\adm;
+
+use application\core\XGPCore;
+use application\libraries\adm\AdministrationLib;
+use application\libraries\FunctionsLib;
+
+/**
+ * Maker Class
+ *
+ * @category Classes
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
+ */
 class Maker extends XGPCore
 {
 	private $_current_user;
@@ -24,17 +46,17 @@ class Maker extends XGPCore
 		parent::$users->check_session();
 
 		$this->_lang			= parent::$lang;
-		$this->_creator			= Functions_Lib::load_library ( 'Creator_Lib' );
+		$this->_creator			= FunctionsLib::load_library ( 'CreatorLib' );
 		$this->_current_user	= parent::$users->get_user_data();
 
 		// Check if the user is allowed to access
-		if ( Administration_Lib::have_access ( $this->_current_user['user_authlevel'] ) && Administration_Lib::authorization ( $this->_current_user['user_authlevel'] , 'edit_users' ) == 1 )
+		if ( AdministrationLib::have_access ( $this->_current_user['user_authlevel'] ) && AdministrationLib::authorization ( $this->_current_user['user_authlevel'] , 'edit_users' ) == 1 )
 		{
 			$this->build_page();
 		}
 		else
 		{
-			die ( Functions_Lib::message ( $this->_lang['ge_no_permissions'] ) );
+			die ( FunctionsLib::message ( $this->_lang['ge_no_permissions'] ) );
 		}
 	}
 
@@ -45,7 +67,7 @@ class Maker extends XGPCore
 	 */
 	public function __destruct ()
 	{
-		parent::$db->close_connection();
+		parent::$db->closeConnection();
 	}
 
 	/**
@@ -108,11 +130,11 @@ class Maker extends XGPCore
 
 		if ( isset ( $_POST['add_alliance'] ) && $_POST['add_alliance'] )
 		{
-			$alliance_name		= parent::$db->escape_value ( (string)$_POST['name'] );
-			$alliance_tag		= parent::$db->escape_value ( (string)$_POST['tag'] );
+			$alliance_name		= parent::$db->escapeValue ( (string)$_POST['name'] );
+			$alliance_tag		= parent::$db->escapeValue ( (string)$_POST['tag'] );
 			$alliance_founder	= (int)$_POST['founder'];
 
-			$check_alliance		= parent::$db->query_fetch ( "SELECT `alliance_id`
+			$check_alliance		= parent::$db->queryFetch ( "SELECT `alliance_id`
 																FROM `" . ALLIANCE . "`
 																WHERE `alliance_name` = '" . $alliance_name . "'
 																	OR `alliance_tag` = '" . $alliance_tag . "';" );
@@ -126,7 +148,7 @@ class Maker extends XGPCore
 										`alliance_owner_range` = '" . $this->_lang['mk_alliance_founder_rank'] . "',
 										`alliance_register_time`='" . time() . "'" );
 
-				$new_alliance_id	= parent::$db->insert_id();
+				$new_alliance_id	= parent::$db->insertId();
 
 				parent::$db->query ( "INSERT INTO " . ALLIANCE_STATISTICS . " SET
 										`alliance_statistic_alliance_id`='" . $new_alliance_id . "'" );
@@ -136,11 +158,11 @@ class Maker extends XGPCore
 										`user_ally_register_time`='" . time() . "'
 										WHERE `user_id`='" . $alliance_founder . "'" );
 
-				$this->_alert	= Administration_Lib::save_message ( 'ok' , $this->_lang['mk_alliance_added'] );
+				$this->_alert	= AdministrationLib::save_message ( 'ok' , $this->_lang['mk_alliance_added'] );
 			}
 			else
 			{
-				$this->_alert	= Administration_Lib::save_message ( 'warning' , $this->_lang['mk_alliance_all_fields'] );
+				$this->_alert	= AdministrationLib::save_message ( 'warning' , $this->_lang['mk_alliance_all_fields'] );
 			}
 		}
 
@@ -166,7 +188,7 @@ class Maker extends XGPCore
 			$temp_max		= (int)$_POST['planet_temp_max'];
 			$max_fields		= (int)$_POST['planet_field_max'];
 
-			$moon_planet	= 	parent::$db->query_fetch ( "SELECT p.*, (SELECT `planet_id`
+			$moon_planet	= 	parent::$db->queryFetch ( "SELECT p.*, (SELECT `planet_id`
 																			FROM " . PLANETS . "
 																			WHERE `planet_galaxy` = (SELECT `planet_galaxy`
 																										FROM " . PLANETS . "
@@ -206,7 +228,7 @@ class Maker extends XGPCore
 					}
 					else
 					{
-						$this->_alert	= Administration_Lib::save_message ( 'warning' , $this->_lang['mk_moon_only_numbers'] );
+						$this->_alert	= AdministrationLib::save_message ( 'warning' , $this->_lang['mk_moon_only_numbers'] );
 					}
 
 
@@ -222,7 +244,7 @@ class Maker extends XGPCore
 					}
 					else
 					{
-						$this->_alert	= Administration_Lib::save_message ( 'warning' , $this->_lang['mk_moon_only_numbers'] );
+						$this->_alert	= AdministrationLib::save_message ( 'warning' , $this->_lang['mk_moon_only_numbers'] );
 					}
 
 					parent::$db->query ( "INSERT INTO " . PLANETS . " SET
@@ -239,7 +261,7 @@ class Maker extends XGPCore
 											`planet_temp_min` = '" . $mintemp . "',
 											`planet_temp_max` = '" . $maxtemp . "';" );
 
-					$last_id	= parent::$db->insert_id();
+					$last_id	= parent::$db->insertId();
 
 					parent::$db->query ( "INSERT INTO " . BUILDINGS . " SET
 											`building_planet_id` = '" . $last_id . "';" );
@@ -250,17 +272,17 @@ class Maker extends XGPCore
 					parent::$db->query ( "INSERT INTO " . SHIPS . " SET
 											`ship_planet_id` = '" . $last_id . "';" );
 
-					$this->_alert		= Administration_Lib::save_message ( 'ok' , $this->_lang['mk_moon_added'] );
+					$this->_alert		= AdministrationLib::save_message ( 'ok' , $this->_lang['mk_moon_added'] );
 
 				}
 				else
 				{
-					$this->_alert		= Administration_Lib::save_message ( 'warning' , $this->_lang['mk_moon_add_errors'] );
+					$this->_alert		= AdministrationLib::save_message ( 'warning' , $this->_lang['mk_moon_add_errors'] );
 				}
 			}
 			else
 			{
-				$this->_alert			= Administration_Lib::save_message ( 'error' , $this->_lang['mk_moon_planet_doesnt_exist'] );
+				$this->_alert			= AdministrationLib::save_message ( 'error' , $this->_lang['mk_moon_planet_doesnt_exist'] );
 			}
 		}
 
@@ -287,13 +309,13 @@ class Maker extends XGPCore
 			$field_max	= (int)$_POST['planet_field_max'];
 			$i			= 0;
 
-			$planet_query	=	parent::$db->query_fetch ( "SELECT *
+			$planet_query	=	parent::$db->queryFetch ( "SELECT *
 																FROM " . PLANETS . "
 																WHERE `planet_galaxy` = '" . $galaxy . "' AND
 																		`planet_system` = '" . $system . "' AND
 																		`planet_planet` = '" . $planet . "'" );
 
-			$user_query	=	parent::$db->query_fetch ( "SELECT *
+			$user_query	=	parent::$db->queryFetch ( "SELECT *
 															FROM " . USERS . "
 															WHERE `user_id` = '" . $user_id . "'" );
 
@@ -333,16 +355,16 @@ class Maker extends XGPCore
 												AND `planet_planet` = '". $planet ."'
 												AND `planet_type` = '1'" );
 
-					$this->_alert	= Administration_Lib::save_message ( 'ok' , $this->_lang['mk_planet_added'] );
+					$this->_alert	= AdministrationLib::save_message ( 'ok' , $this->_lang['mk_planet_added'] );
 				}
 				else
 				{
-					$this->_alert	= Administration_Lib::save_message ( 'warning' , $error );
+					$this->_alert	= AdministrationLib::save_message ( 'warning' , $error );
 				}
 			}
 			else
 			{
-				$this->_alert		= Administration_Lib::save_message ( 'warning' , $this->_lang['mk_planet_unavailable_coords'] );
+				$this->_alert		= AdministrationLib::save_message ( 'warning' , $this->_lang['mk_planet_unavailable_coords'] );
 			}
 		}
 
@@ -372,17 +394,17 @@ class Maker extends XGPCore
 			$i			= 0;
 			$error		= '';
 
-			$check_user = parent::$db->query_fetch ( "SELECT `user_name`
+			$check_user = parent::$db->queryFetch ( "SELECT `user_name`
 														FROM " . USERS . "
-														WHERE `user_name` = '" . parent::$db->escape_value ( $_POST['name'] ) . "'
+														WHERE `user_name` = '" . parent::$db->escapeValue ( $_POST['name'] ) . "'
 														LIMIT 1" );
 
-			$check_email = parent::$db->query_fetch ( "SELECT `user_email`
+			$check_email = parent::$db->queryFetch ( "SELECT `user_email`
 														FROM " . USERS . "
-														WHERE `user_email` = '" . parent::$db->escape_value ( $_POST['email'] ) . "'
+														WHERE `user_email` = '" . parent::$db->escapeValue ( $_POST['email'] ) . "'
 														LIMIT 1" );
 
-			$check_planet = parent::$db->query_fetch ( "SELECT COUNT(planet_id) AS count
+			$check_planet = parent::$db->queryFetch ( "SELECT COUNT(planet_id) AS count
 														FROM " . PLANETS . "
 														WHERE `planet_galaxy` = '".$galaxy."' AND
 																`planet_system` = '".$system."' AND
@@ -406,7 +428,7 @@ class Maker extends XGPCore
 				$i++;
 			}
 
-			if ( ! Functions_Lib::valid_email ( strip_tags ( $email ) ) )
+			if ( ! FunctionsLib::valid_email ( strip_tags ( $email ) ) )
 			{
 				$error	.=	$this->_lang['mk_user_invalid_email'];
 				$i++;
@@ -447,9 +469,9 @@ class Maker extends XGPCore
 			{
 
 				parent::$db->query ( "INSERT INTO " . USERS . " SET
-										`user_name` = '" . parent::$db->escape_value ( strip_tags ( $name ) ) . "',
-										`user_email` = '" . parent::$db->escape_value ( $email ) . "',
-										`user_email_permanent` = '" . parent::$db->escape_value ( $email ) . "',
+										`user_name` = '" . parent::$db->escapeValue ( strip_tags ( $name ) ) . "',
+										`user_email` = '" . parent::$db->escapeValue ( $email ) . "',
+										`user_email_permanent` = '" . parent::$db->escapeValue ( $email ) . "',
 										`user_ip_at_reg` = '" . $_SERVER['REMOTE_ADDR'] . "',
 										`user_home_planet_id` = '0',
 										`user_register_time` = '" .$time. "',
@@ -457,11 +479,11 @@ class Maker extends XGPCore
 										`user_authlevel` = '" .$auth. "',
 										`user_password`='" . sha1 ( $pass ) . "';" );
 
-				$last_user_id	= parent::$db->insert_id();
+				$last_user_id	= parent::$db->insertId();
 
 				$this->_creator->create_planet ( $galaxy , $system , $planet , $last_user_id , '' , TRUE );
 
-				$last_planet_id	= parent::$db->insert_id();
+				$last_planet_id	= parent::$db->insertId();
 
 				parent::$db->query ( "UPDATE " . USERS . " SET
 										`user_home_planet_id` = '" . $last_planet_id . "',
@@ -484,11 +506,11 @@ class Maker extends XGPCore
 				parent::$db->query ( "INSERT INTO " . SETTINGS . " SET
 										`setting_user_id` = '" . $last_user_id . "';" );
 
-				$this->_alert	= Administration_Lib::save_message ( 'ok' , str_replace ( '%s' , $pass , $this->_lang['mk_user_added'] ) );
+				$this->_alert	= AdministrationLib::save_message ( 'ok' , str_replace ( '%s' , $pass , $this->_lang['mk_user_added'] ) );
 			}
 			else
 			{
-				$this->_alert	= Administration_Lib::save_message ( 'warning' , '<br/>' . $error );
+				$this->_alert	= AdministrationLib::save_message ( 'warning' , '<br/>' . $error );
 			}
 
 		}
@@ -507,7 +529,7 @@ class Maker extends XGPCore
 		$users		= parent::$db->query ( "SELECT `user_id`, `user_name`
 												FROM " . USERS . ";" );
 
-		while ( $users_row = parent::$db->fetch_array ( $users ) )
+		while ( $users_row = parent::$db->fetchArray ( $users ) )
 		{
 			if ( isset ( $_GET['user'] ) && $_GET['user'] > 0 )
 			{
@@ -535,7 +557,7 @@ class Maker extends XGPCore
 												WHERE `planet_destroyed` = '0'
 													AND `planet_type` = '1';" );
 
-		while ( $planets_row = parent::$db->fetch_array ( $planets ) )
+		while ( $planets_row = parent::$db->fetchArray ( $planets ) )
 		{
 			if ( isset ( $_GET['planet'] ) && $_GET['planet'] > 0 )
 			{
@@ -580,7 +602,7 @@ class Maker extends XGPCore
 												WHERE `user_ally_id` = '0'
 													AND `user_ally_request` = '0';" );
 
-		while ( $users_row = parent::$db->fetch_array ( $users ) )
+		while ( $users_row = parent::$db->fetchArray ( $users ) )
 		{
 			$combo_rows	.= '<option value="' . $users_row['user_id'] . '">' .  $users_row['user_name'] . '</option>';
 		}
@@ -610,4 +632,5 @@ class Maker extends XGPCore
 		return $new_pass;
 	}
 }
+
 /* end of maker.php */

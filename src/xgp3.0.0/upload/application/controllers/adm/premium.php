@@ -1,11 +1,33 @@
 <?php
-
 /**
- * @project XG Proyect
- * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * Premium Controller
+ *
+ * PHP Version 5.5+
+ *
+ * @category Controller
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
  */
 
+namespace application\controllers\adm;
+
+use application\core\XGPCore;
+use application\libraries\adm\AdministrationLib;
+use application\libraries\FunctionsLib;
+
+/**
+ * Premium Class
+ *
+ * @category Classes
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
+ */
 class Premium extends XGPCore
 {
 	private $_lang;
@@ -25,13 +47,13 @@ class Premium extends XGPCore
 		$this->_current_user	= parent::$users->get_user_data();
 
 		// Check if the user is allowed to access
-		if ( Administration_Lib::have_access ( $this->_current_user['user_authlevel'] ) && Administration_Lib::authorization ( $this->_current_user['user_authlevel'] , 'config_game' ) == 1 )
+		if ( AdministrationLib::have_access ( $this->_current_user['user_authlevel'] ) && AdministrationLib::authorization ( $this->_current_user['user_authlevel'] , 'config_game' ) == 1 )
 		{
 			$this->build_page();
 		}
 		else
 		{
-			die ( Functions_Lib::message ( $this->_lang['ge_no_permissions'] ) );
+			die ( FunctionsLib::message ( $this->_lang['ge_no_permissions'] ) );
 		}
 	}
 
@@ -42,7 +64,7 @@ class Premium extends XGPCore
 	 */
 	public function __destruct ()
 	{
-		parent::$db->close_connection();
+		parent::$db->closeConnection();
 	}
 
 	/**
@@ -60,7 +82,7 @@ class Premium extends XGPCore
 		{
 			if ( isset ( $_POST['premium_url'] ) && ! empty ( $_POST['premium_url'] ) )
 			{
-				Functions_Lib::update_config ( 'premium_url' , Functions_Lib::prep_url ( $_POST['premium_url'] ) );
+				FunctionsLib::update_config ( 'premium_url' , FunctionsLib::prep_url ( $_POST['premium_url'] ) );
 			}
 			else
 			{
@@ -69,7 +91,7 @@ class Premium extends XGPCore
 
 			if ( isset ( $_POST['trader_darkmatter'] ) && ( $_POST['trader_darkmatter'] > 0 ) )
 			{
-				Functions_Lib::update_config ( 'trader_darkmatter' , $_POST['trader_darkmatter'] );
+				FunctionsLib::update_config ( 'trader_darkmatter' , $_POST['trader_darkmatter'] );
 			}
 			else
 			{
@@ -78,18 +100,19 @@ class Premium extends XGPCore
 
 			if ( $error	!= '' )
 			{
-				$parse['alert']		= Administration_Lib::save_message ( 'warning' , $error );
+				$parse['alert']		= AdministrationLib::save_message ( 'warning' , $error );
 			}
 			else
 			{
-				$parse['alert']		= Administration_Lib::save_message ( 'ok' , $this->_lang['pr_all_ok_message'] );
+				$parse['alert']		= AdministrationLib::save_message ( 'ok' , $this->_lang['pr_all_ok_message'] );
 			}
 		}
 
-		$parse['premium_url']		= Functions_Lib::read_config ( 'premium_url' );
-		$parse['trader_darkmatter']	= Functions_Lib::read_config ( 'trader_darkmatter' );
+		$parse['premium_url']		= FunctionsLib::read_config ( 'premium_url' );
+		$parse['trader_darkmatter']	= FunctionsLib::read_config ( 'trader_darkmatter' );
 
 		parent::$page->display ( parent::$page->parse_template ( parent::$page->get_template ( 'adm/premium_view' ) , $parse ) );
 	}
 }
+
 /* end of premium.php */

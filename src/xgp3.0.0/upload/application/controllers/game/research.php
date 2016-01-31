@@ -1,11 +1,34 @@
 <?php
-
 /**
- * @project XG Proyect
- * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * Research Controller
+ *
+ * PHP Version 5.5+
+ *
+ * @category Controller
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
  */
 
+namespace application\controllers\game;
+
+use application\core\XGPCore;
+use application\libraries\DevelopmentsLib;
+use application\libraries\FormatLib;
+use application\libraries\FunctionsLib;
+
+/**
+ * Research Class
+ *
+ * @category Classes
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
+ */
 class Research extends XGPCore
 {
 	const MODULE_ID	= 6;
@@ -29,17 +52,17 @@ class Research extends XGPCore
 		parent::$users->check_session();
 
 		// Check module access
-		Functions_Lib::module_message ( Functions_Lib::is_module_accesible ( self::MODULE_ID ) );
+		FunctionsLib::module_message ( FunctionsLib::is_module_accesible ( self::MODULE_ID ) );
 
 		$this->_current_user	= parent::$users->get_user_data();
 		$this->_current_planet	= parent::$users->get_planet_data();
 		$this->_lang			= parent::$lang;
-		$this->_resource		= parent::$objects->get_objects();
-		$this->_reslist			= parent::$objects->get_objects_list();
+		$this->_resource		= parent::$objects->getObjects();
+		$this->_reslist			= parent::$objects->getObjectsList();
 
 		if ( $this->_current_planet[$this->_resource[31]] == 0 )
 		{
-			Functions_Lib::message ( $this->_lang['bd_lab_required'] , '' , '' , TRUE );
+			FunctionsLib::message ( $this->_lang['bd_lab_required'] , '' , '' , TRUE );
 		}
 		else
 		{
@@ -55,7 +78,7 @@ class Research extends XGPCore
 	 */
 	public function __destruct()
 	{
-		parent::$db->close_connection();
+		parent::$db->closeConnection();
 	}
 
 	/**
@@ -78,34 +101,34 @@ class Research extends XGPCore
 		{
 			if ( $tech > 105 && $tech <= 199 )
 			{
-				if ( Developments_Lib::is_development_allowed ( $this->_current_user , $this->_current_planet , $tech ) )
+				if ( DevelopmentsLib::is_development_allowed ( $this->_current_user , $this->_current_planet , $tech ) )
 				{
 					$RowParse['dpath']       = DPATH;
 					$RowParse['tech_id']     = $tech;
 					$building_level          = $this->_current_user[$this->_resource[$tech]];
-					$RowParse['tech_level']	 = Developments_Lib::set_level_format ( $building_level , $tech , $this->_current_user );
+					$RowParse['tech_level']	 = DevelopmentsLib::set_level_format ( $building_level , $tech , $this->_current_user );
 					$RowParse['tech_name']   = $tech_name;
 					$RowParse['tech_descr']  = $this->_lang['res']['descriptions'][$tech];
-					$RowParse['tech_price']  = Developments_Lib::formated_development_price ( $this->_current_user , $this->_current_planet , $tech );
-					$SearchTime              = Developments_Lib::development_time ( $this->_current_user , $this->_current_planet , $tech , FALSE , $this->_lab_level );
-					$RowParse['search_time'] = Developments_Lib::formated_development_time ( $SearchTime );
+					$RowParse['tech_price']  = DevelopmentsLib::formated_development_price ( $this->_current_user , $this->_current_planet , $tech );
+					$SearchTime              = DevelopmentsLib::development_time ( $this->_current_user , $this->_current_planet , $tech , FALSE , $this->_lab_level );
+					$RowParse['search_time'] = DevelopmentsLib::formated_development_time ( $SearchTime );
 
 					if ( !$this->_is_working['is_working'] )
 					{
-						if ( Developments_Lib::is_development_payable ( $this->_current_user , $this->_current_planet , $tech ) && ! parent::$users->is_on_vacations ( $this->_current_user ) )
+						if ( DevelopmentsLib::is_development_payable ( $this->_current_user , $this->_current_planet , $tech ) && ! parent::$users->is_on_vacations ( $this->_current_user ) )
 						{
 							if ( !$this->is_laboratory_in_queue() )
 							{
-								$action_link	= Format_Lib::color_red ( $this->_lang['bd_research'] );
+								$action_link	= FormatLib::color_red ( $this->_lang['bd_research'] );
 							}
 							else
 							{
-								$action_link	= Functions_Lib::set_url ( 'game.php?page=research&cmd=search&tech=' . $tech , '' , Format_Lib::color_green (  $this->_lang['bd_research'] ) );
+								$action_link	= FunctionsLib::set_url ( 'game.php?page=research&cmd=search&tech=' . $tech , '' , FormatLib::color_green (  $this->_lang['bd_research'] ) );
 							}
 						}
 						else
 						{
-							$action_link		= Format_Lib::color_red ( $this->_lang['bd_research'] );
+							$action_link		= FormatLib::color_red ( $this->_lang['bd_research'] );
 						}
 					}
 					else
@@ -117,7 +140,7 @@ class Research extends XGPCore
 							if ( $this->_is_working['working_on']['id'] != $this->_current_planet['planet_id'] )
 							{
 								$bloc['tech_time']  = $this->_is_working['working_on']['planet_b_tech'] - time();
-								$bloc['tech_name']  = $this->_lang['bd_from'] . $this->_is_working['working_on']['planet_name'] . '<br /> ' . Format_Lib::pretty_coords ( $this->_is_working['working_on']['planet_galaxy'] , $this->_is_working['working_on']['planet_system'] , $this->_is_working['working_on']['planet_planet'] );
+								$bloc['tech_name']  = $this->_lang['bd_from'] . $this->_is_working['working_on']['planet_name'] . '<br /> ' . FormatLib::pretty_coords ( $this->_is_working['working_on']['planet_galaxy'] , $this->_is_working['working_on']['planet_system'] , $this->_is_working['working_on']['planet_planet'] );
 								$bloc['tech_home']  = $this->_is_working['working_on']['id'];
 								$bloc['tech_id']    = $this->_is_working['working_on']['planet_b_tech_id'];
 							}
@@ -178,7 +201,7 @@ class Research extends XGPCore
 
 						if ( $this->_is_working['working_on']['planet_b_tech_id'] == $technology )
 						{
-							$costs                        						= Developments_Lib::development_price ( $this->_current_user , $working_planet , $technology );
+							$costs                        						= DevelopmentsLib::development_price ( $this->_current_user , $working_planet , $technology );
 							$working_planet['planet_metal']      			   += $costs['metal'];
 							$working_planet['planet_crystal']    			   += $costs['crystal'];
 							$working_planet['planet_deuterium']  			   += $costs['deuterium'];
@@ -194,14 +217,14 @@ class Research extends XGPCore
 					// start a research
 					case 'search':
 
-						if ( Developments_Lib::is_development_allowed ( $this->_current_user , $working_planet , $technology ) && Developments_Lib::is_development_payable ( $this->_current_user , $working_planet , $technology ) && ! parent::$users->is_on_vacations ( $this->_current_user ) )
+						if ( DevelopmentsLib::is_development_allowed ( $this->_current_user , $working_planet , $technology ) && DevelopmentsLib::is_development_payable ( $this->_current_user , $working_planet , $technology ) && ! parent::$users->is_on_vacations ( $this->_current_user ) )
 						{
-							$costs                        						= Developments_Lib::development_price ( $this->_current_user , $working_planet , $technology );
+							$costs                        						= DevelopmentsLib::development_price ( $this->_current_user , $working_planet , $technology );
 							$working_planet['planet_metal']      			   -= $costs['metal'];
 							$working_planet['planet_crystal']    			   -= $costs['crystal'];
 							$working_planet['planet_deuterium']  			   -= $costs['deuterium'];
 							$working_planet['planet_b_tech_id']   				= $technology;
-							$working_planet['planet_b_tech']      				= time() + Developments_Lib::development_time ( $this->_current_user , $working_planet , $technology , FALSE , $this->_lab_level );
+							$working_planet['planet_b_tech']      				= time() + DevelopmentsLib::development_time ( $this->_current_user , $working_planet , $technology , FALSE , $this->_lab_level );
 							$this->_current_user['research_current_research'] 	= $working_planet['id'];
 							$update_data                   						= TRUE;
 							$this->_is_working['is_working']                   	= TRUE;
@@ -240,7 +263,7 @@ class Research extends XGPCore
 				}
 			}
 
-			Functions_Lib::redirect ( 'game.php?page=research' );
+			FunctionsLib::redirect ( 'game.php?page=research' );
 		}
 	}
 
@@ -302,7 +325,7 @@ class Research extends XGPCore
 		{
 			if ( $this->_current_user['research_current_research'] != $this->_current_planet['planet_id'] )
 			{
-				$working_planet = parent::$db->query_fetch ( "SELECT `planet_id`, `planet_name`, `planet_b_tech`, `planet_b_tech_id`, `planet_galaxy`, `planet_system`, `planet_planet`
+				$working_planet = parent::$db->queryFetch ( "SELECT `planet_id`, `planet_name`, `planet_b_tech`, `planet_b_tech_id`, `planet_galaxy`, `planet_system`, `planet_planet`
 																FROM " . PLANETS . "
 																WHERE `planet_id` = '". (int)$this->_current_user['research_current_research'] ."';");
 			}
@@ -351,7 +374,7 @@ class Research extends XGPCore
 	private function set_labs_amount ()
 	{
 		$labs_limit	= $this->_current_user[$this->_resource[123]] + 1;
-		$labs_level = parent::$db->query_fetch ( "SELECT SUM(`building_laboratory`) AS `total_level`
+		$labs_level = parent::$db->queryFetch ( "SELECT SUM(`building_laboratory`) AS `total_level`
 														FROM " . BUILDINGS . " AS b
 														INNER JOIN " . PLANETS . " AS p ON p.`planet_id` = b.building_planet_id
 														WHERE planet_user_id='" . (int)$this->_current_user['user_id'] . "'
@@ -360,4 +383,5 @@ class Research extends XGPCore
 		$this->_lab_level	= $labs_level['total_level'];
 	}
 }
+
 /* end of research.php */

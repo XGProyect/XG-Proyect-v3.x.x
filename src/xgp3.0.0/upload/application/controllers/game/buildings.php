@@ -1,11 +1,34 @@
 <?php
-
 /**
- * @project XG Proyect
- * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * Buildings Controller
+ *
+ * PHP Version 5.5+
+ *
+ * @category Controller
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
  */
 
+namespace application\controllers\game;
+
+use application\core\XGPCore;
+use application\libraries\DevelopmentsLib;
+use application\libraries\FormatLib;
+use application\libraries\FunctionsLib;
+
+/**
+ * Buildings Class
+ *
+ * @category Classes
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
+ */
 class Buildings extends XGPCore
 {
 	const MODULE_ID	= 3;
@@ -28,7 +51,7 @@ class Buildings extends XGPCore
 		parent::$users->check_session();
 
 		// Check module access
-		Functions_Lib::module_message ( Functions_Lib::is_module_accesible ( self::MODULE_ID ) );
+		FunctionsLib::module_message ( FunctionsLib::is_module_accesible ( self::MODULE_ID ) );
 
 		$this->_current_user		= parent::$users->get_user_data();
 		$this->_current_planet		= parent::$users->get_planet_data();
@@ -67,7 +90,7 @@ class Buildings extends XGPCore
 	 */
 	public function __destruct()
 	{
-		parent::$db->close_connection();
+		parent::$db->closeConnection();
 	}
 
 	/**
@@ -77,16 +100,16 @@ class Buildings extends XGPCore
 	 */
 	private function build_page()
 	{
-		$resource			= $this->_objects->get_objects();
+		$resource			= $this->_objects->getObjects();
 		$parse				= $this->_lang;
 		$parse['dpath']    	= DPATH;
 		$page        		= '';
-		$max_fields    		= Developments_Lib::max_fields ( $this->_current_planet );
+		$max_fields    		= DevelopmentsLib::max_fields ( $this->_current_planet );
 
 		// time to do something
 		$this->do_command();
 
-		Developments_Lib::set_first_element ( $this->_current_planet , $this->_current_user );
+		DevelopmentsLib::set_first_element ( $this->_current_planet , $this->_current_user );
 
 		$Sprice				= array();
 		$queue 				= $this->show_queue ( $Sprice );
@@ -110,17 +133,17 @@ class Buildings extends XGPCore
 					$have_fields = FALSE;
 				}
 
-				if ( Developments_Lib::is_development_allowed ( $this->_current_user , $this->_current_planet , $building ) )
+				if ( DevelopmentsLib::is_development_allowed ( $this->_current_user , $this->_current_planet , $building ) )
 				{
 					$building_level         = $this->_current_planet[$resource[$building]];
-					$building_time 			= Developments_Lib::development_time ( $this->_current_user , $this->_current_planet , $building , $building_level );
+					$building_time 			= DevelopmentsLib::development_time ( $this->_current_user , $this->_current_planet , $building , $building_level );
 
 					$parse['i']            	= $building;
-					$parse['nivel']        	= Developments_Lib::set_level_format ( $building_level );
+					$parse['nivel']        	= DevelopmentsLib::set_level_format ( $building_level );
 					$parse['n']            	= $building_name;
 					$parse['descriptions'] 	= $this->_lang['res']['descriptions'][$building];
-					$parse['price'] 		= Developments_Lib::formated_development_price ( $this->_current_user , $this->_current_planet , $building , TRUE , $building_level );
-					$parse['time'] 			= Developments_Lib::formated_development_time ( $building_time );
+					$parse['price'] 		= DevelopmentsLib::formated_development_price ( $this->_current_user , $this->_current_planet , $building , TRUE , $building_level );
+					$parse['time'] 			= DevelopmentsLib::formated_development_time ( $building_time );
 					$parse['click']        	= $this->set_action_button ( $have_fields , $full_queue , $building , $queue );
 
 					$page .= parent::$page->parse_template ( parent::$page->get_template ( 'buildings/buildings_builds_row' ) , $parse );
@@ -130,7 +153,7 @@ class Buildings extends XGPCore
 
 		if ( $queue['lenght'] > 0 )
 		{
-			$parse['BuildListScript']  = Developments_Lib::current_building ( $this->_current_page );
+			$parse['BuildListScript']  = DevelopmentsLib::current_building ( $this->_current_page );
 			$parse['BuildList']        = $queue['buildlist'];
 		}
 		else
@@ -190,7 +213,7 @@ class Buildings extends XGPCore
 
 			if ( isset ( $_GET['r'] ) && $_GET['r'] == 'overview' )
 			{
-				Functions_Lib::redirect ( 'game.php?page=overview' );
+				FunctionsLib::redirect ( 'game.php?page=overview' );
 			}
 			else
 			{
@@ -210,36 +233,36 @@ class Buildings extends XGPCore
 	private function set_action_button ( $have_fields , $full_queue , $building , $queue )
 	{
 		// all field occupied
-		$action				= Format_Lib::color_red ( $this->_lang['bd_no_more_fields'] );
+		$action				= FormatLib::color_red ( $this->_lang['bd_no_more_fields'] );
 
 		// with fields
 		if ( $have_fields && ! $full_queue )
 		{
 			if ( $queue['lenght'] == 0 )
 			{
-				if ( Developments_Lib::is_development_payable ( $this->_current_user , $this->_current_planet , $building , TRUE , FALSE ) && ! parent::$users->is_on_vacations ( $this->_current_user ) )
+				if ( DevelopmentsLib::is_development_payable ( $this->_current_user , $this->_current_planet , $building , TRUE , FALSE ) && ! parent::$users->is_on_vacations ( $this->_current_user ) )
 				{
-					$action	= Functions_Lib::set_url ( 'game.php?page=' . $this->_current_page . '&cmd=insert&building='. $building , '' , Format_Lib::color_green ( $this->_lang['bd_build'] ) );
+					$action	= FunctionsLib::set_url ( 'game.php?page=' . $this->_current_page . '&cmd=insert&building='. $building , '' , FormatLib::color_green ( $this->_lang['bd_build'] ) );
 				}
 				else
 				{
-					$action = Format_Lib::color_red ( $this->_lang['bd_build'] );
+					$action = FormatLib::color_red ( $this->_lang['bd_build'] );
 				}
 			}
 			else
 			{
-				$action 	= Functions_Lib::set_url ( 'game.php?page=' . $this->_current_page . '&cmd=insert&building='. $building , '' , Format_Lib::color_green ( $this->_lang['bd_add_to_list'] ) );
+				$action 	= FunctionsLib::set_url ( 'game.php?page=' . $this->_current_page . '&cmd=insert&building='. $building , '' , FormatLib::color_green ( $this->_lang['bd_add_to_list'] ) );
 			}
 		}
 
 		if ( $have_fields && $full_queue )
 		{
-			$action 		= Format_Lib::color_red ( $this->_lang['bd_build'] );
+			$action 		= FormatLib::color_red ( $this->_lang['bd_build'] );
 		}
 
-		if ( ( $building == 31 && Developments_Lib::is_lab_working ( $this->_current_user ) ) or ( ( $building == 21 or $building == 14 or $building == 15 ) && Developments_Lib::is_shipyard_working ( $this->_current_planet ) ) )
+		if ( ( $building == 31 && DevelopmentsLib::is_lab_working ( $this->_current_user ) ) or ( ( $building == 21 or $building == 14 or $building == 15 ) && DevelopmentsLib::is_shipyard_working ( $this->_current_planet ) ) )
 		{
-			$action 		= Format_Lib::color_red ( $this->_lang['bd_working'] );
+			$action 		= FormatLib::color_red ( $this->_lang['bd_working'] );
 		}
 
 		return $action;
@@ -322,7 +345,7 @@ class Buildings extends XGPCore
 						$ListIDArray[1] -= 1;
 					}
 
-					$current_build_time	= Developments_Lib::development_time ( $this->_current_user , $this->_current_planet , $ListIDArray[0] );
+					$current_build_time	= DevelopmentsLib::development_time ( $this->_current_user , $this->_current_planet , $ListIDArray[0] );
 					$BuildEndTime      += $current_build_time;
 					$ListIDArray[2]     = $current_build_time;
 					$ListIDArray[3]     = $BuildEndTime;
@@ -350,7 +373,7 @@ class Buildings extends XGPCore
 
 			if ( $building != FALSE )
 			{
-				$Needed                        		   		  = Developments_Lib::development_price ($this->_current_user, $this->_current_planet, $building, TRUE, $ForDestroy);
+				$Needed                        		   		  = DevelopmentsLib::development_price ($this->_current_user, $this->_current_planet, $building, TRUE, $ForDestroy);
 				$this->_current_planet['planet_metal']       += $Needed['metal'];
 				$this->_current_planet['planet_crystal']     += $Needed['crystal'];
 				$this->_current_planet['planet_deuterium']   += $Needed['deuterium'];
@@ -386,7 +409,7 @@ class Buildings extends XGPCore
 				$QueueArray    = explode ( ";", $CurrentQueue );
 				$ActualCount   = count ( $QueueArray );
 				if ($ActualCount< 2)
-					Functions_Lib::redirect ( 'game.php?page=' . $this->_current_page );
+					FunctionsLib::redirect ( 'game.php?page=' . $this->_current_page );
 
 				//  finding the buildings time
 				$ListIDArrayToDelete   = explode ( ",", $QueueArray[$QueueID - 1] );
@@ -435,14 +458,14 @@ class Buildings extends XGPCore
 	 */
 	private function add_to_queue ( $building , $AddMode = TRUE )
 	{
-		$resource			= $this->_objects->get_objects();
+		$resource			= $this->_objects->getObjects();
 		$CurrentQueue  		= $this->_current_planet['planet_b_building_id'];
 		$queue 				= $this->show_queue();
-		$max_fields  		= Developments_Lib::max_fields ( $this->_current_planet );
+		$max_fields  		= DevelopmentsLib::max_fields ( $this->_current_planet );
 
 		if ( ( $this->_current_planet['planet_field_current'] >= ( $max_fields - $queue['lenght'] ) ) )
 		{
-			Functions_Lib::redirect ( 'game.php?page=' . $this->_current_page );
+			FunctionsLib::redirect ( 'game.php?page=' . $this->_current_page );
 		}
 
 		if ($CurrentQueue != 0)
@@ -476,11 +499,11 @@ class Buildings extends XGPCore
 
 		$continue = FALSE;
 
-		if ( $QueueID != FALSE && Developments_Lib::is_development_allowed ( $this->_current_user , $this->_current_planet , $building ) )
+		if ( $QueueID != FALSE && DevelopmentsLib::is_development_allowed ( $this->_current_user , $this->_current_planet , $building ) )
 		{
 			if ( $QueueID <= 1 )
 			{
-				if ( Developments_Lib::is_development_payable ( $this->_current_user , $this->_current_planet , $building , TRUE , FALSE ) && ! parent::$users->is_on_vacations ( $this->_current_user ) )
+				if ( DevelopmentsLib::is_development_payable ( $this->_current_user , $this->_current_planet , $building , TRUE , FALSE ) && ! parent::$users->is_on_vacations ( $this->_current_user ) )
 				{
 					$continue = TRUE;
 				}
@@ -516,14 +539,14 @@ class Buildings extends XGPCore
 					{
 						$BuildLevel   = $ActualLevel + 1 + $InArray;
 						$this->_current_planet[$resource[$building]] += $InArray;
-						$BuildTime    = Developments_Lib::development_time($this->_current_user, $this->_current_planet, $building);
+						$BuildTime    = DevelopmentsLib::development_time($this->_current_user, $this->_current_planet, $building);
 						$this->_current_planet[$resource[$building]] -= $InArray;
 					}
 					else
 					{
 						$BuildLevel   = $ActualLevel - 1 - $InArray;
 						$this->_current_planet[$resource[$building]] -= $InArray;
-						$BuildTime    = Developments_Lib::development_time($this->_current_user, $this->_current_planet, $building) / 2;
+						$BuildTime    = DevelopmentsLib::development_time($this->_current_user, $this->_current_planet, $building) / 2;
 						$this->_current_planet[$resource[$building]] += $InArray;
 					}
 				}
@@ -533,12 +556,12 @@ class Buildings extends XGPCore
 					if ($AddMode == TRUE)
 					{
 						$BuildLevel   = $ActualLevel + 1;
-						$BuildTime    = Developments_Lib::development_time($this->_current_user, $this->_current_planet, $building);
+						$BuildTime    = DevelopmentsLib::development_time($this->_current_user, $this->_current_planet, $building);
 					}
 					else
 					{
 						$BuildLevel   = $ActualLevel - 1;
-						$BuildTime    = Developments_Lib::development_time($this->_current_user, $this->_current_planet, $building) / 2;
+						$BuildTime    = DevelopmentsLib::development_time($this->_current_user, $this->_current_planet, $building) / 2;
 					}
 				}
 
@@ -639,7 +662,7 @@ class Buildings extends XGPCore
 							$ListIDRow .= "			pl = \"". $PlanetID ."\";\n";
 							$ListIDRow .= "			t();\n";
 							$ListIDRow .= "		</script>";
-							$ListIDRow .= "		<strong color=\"lime\"><br><font color=\"lime\">". date(Functions_Lib::read_config ( 'date_format_extended' ) ,$BuildEndTime) ."</font></strong>";
+							$ListIDRow .= "		<strong color=\"lime\"><br><font color=\"lime\">". date(FunctionsLib::read_config ( 'date_format_extended' ) ,$BuildEndTime) ."</font></strong>";
 						}
 						else
 						{
@@ -661,4 +684,5 @@ class Buildings extends XGPCore
 		return $RetValue;
 	}
 }
+
 /* end of buildings.php */

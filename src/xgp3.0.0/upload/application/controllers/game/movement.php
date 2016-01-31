@@ -1,11 +1,34 @@
 <?php
-
 /**
- * @project XG Proyect
- * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * Movement Controller
+ *
+ * PHP Version 5.5+
+ *
+ * @category Controller
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
  */
 
+namespace application\controllers\game;
+
+use application\core\XGPCore;
+use application\libraries\FleetsLib;
+use application\libraries\FormatLib;
+use application\libraries\FunctionsLib;
+
+/**
+ * Movement Class
+ *
+ * @category Classes
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
+ */
 class Movement extends XGPCore
 {
 	const MODULE_ID	= 9;
@@ -24,7 +47,7 @@ class Movement extends XGPCore
 		parent::$users->check_session();
 
 		// Check module access
-		Functions_Lib::module_message ( Functions_Lib::is_module_accesible ( self::MODULE_ID ) );
+		FunctionsLib::module_message ( FunctionsLib::is_module_accesible ( self::MODULE_ID ) );
 
 		$this->_lang			= parent::$lang;
 		$this->_current_user	= parent::$users->get_user_data();
@@ -40,7 +63,7 @@ class Movement extends XGPCore
 	 */
 	public function __destruct()
 	{
-		parent::$db->close_connection();
+		parent::$db->closeConnection();
 	}
 
 	/**
@@ -54,10 +77,10 @@ class Movement extends XGPCore
 		// SOME DEFAULT VALUES
 		#####################################################################################################
 		//	ELEMENTS
-		$resource			= parent::$objects->get_objects();
+		$resource			= parent::$objects->getObjects();
 
 		// QUERYS
-		$count				= parent::$db->query_fetch ( "SELECT
+		$count				= parent::$db->queryFetch ( "SELECT
 															(SELECT COUNT(fleet_owner) AS `actcnt`
 																FROM " . FLEETS . "
 																WHERE `fleet_owner` = '" . $this->_current_user['user_id'] . "') AS max_fleet,
@@ -76,7 +99,7 @@ class Movement extends XGPCore
 		if ($MaxExpedition >= 1)
 		{
 			$ExpeditionEnCours  = $count['max_expeditions'];
-			$EnvoiMaxExpedition = Fleets_Lib::get_max_expeditions ( $MaxExpedition );
+			$EnvoiMaxExpedition = FleetsLib::get_max_expeditions ( $MaxExpedition );
 		}
 		else
 		{
@@ -84,8 +107,8 @@ class Movement extends XGPCore
 			$EnvoiMaxExpedition = 0;
 		}
 
-		$MaxFlottes		= Fleets_Lib::get_max_fleets ( $this->_current_user[$resource[108]] , $this->_current_user['premium_officier_admiral'] );
-		$missiontype	= Fleets_Lib::get_missions();
+		$MaxFlottes		= FleetsLib::get_max_fleets ( $this->_current_user[$resource[108]] , $this->_current_user['premium_officier_admiral'] );
+		$missiontype	= FleetsLib::get_missions();
 		$ShipData       = '';
 
 		$parse['flyingfleets']			= $MaxFlyingFleets;
@@ -102,14 +125,14 @@ class Movement extends XGPCore
 										FROM " . FLEETS . "
 										WHERE fleet_owner = '" . $this->_current_user['user_id'] . "'");
 
-			while ( $f = parent::$db->fetch_array ( $fq ) )
+			while ( $f = parent::$db->fetchArray ( $fq ) )
 			{
 				$i++;
 
 				$parse['num']				=	$i;
 				$parse['fleet_mission']		=	$missiontype[$f['fleet_mission']];
 
-				if ( Fleets_Lib::is_fleet_returning ( $f ) )
+				if ( FleetsLib::is_fleet_returning ( $f ) )
 				{
 					$parse['tooltip']		=	 $this->_lang['fl_returning'];
 					$parse['title']			=	 $this->_lang['fl_r'];
@@ -139,18 +162,18 @@ class Movement extends XGPCore
 					}
 				}
 
-				$parse['fleet_amount']		=	Format_Lib::pretty_number ( $f['fleet_amount'] );
-				$parse['fleet_start']		=	Format_Lib::pretty_coords ( $f['fleet_start_galaxy'] , $f['fleet_start_system'] , $f['fleet_start_planet'] );
-				$parse['fleet_start_time']	=	date ( Functions_Lib::read_config ( 'date_format_extended' ) , $f['fleet_creation'] );
-				$parse['fleet_end']			=	Format_Lib::pretty_coords ( $f['fleet_end_galaxy'] , $f['fleet_end_system'] , $f['fleet_end_planet'] );
-				$parse['fleet_end_time']	=	date ( Functions_Lib::read_config ( 'date_format_extended' ) , $f['fleet_start_time'] );
-				$parse['fleet_arrival']		=	date ( Functions_Lib::read_config ( 'date_format_extended' ) , $f['fleet_end_time'] );
+				$parse['fleet_amount']		=	FormatLib::pretty_number ( $f['fleet_amount'] );
+				$parse['fleet_start']		=	FormatLib::pretty_coords ( $f['fleet_start_galaxy'] , $f['fleet_start_system'] , $f['fleet_start_planet'] );
+				$parse['fleet_start_time']	=	date ( FunctionsLib::read_config ( 'date_format_extended' ) , $f['fleet_creation'] );
+				$parse['fleet_end']			=	FormatLib::pretty_coords ( $f['fleet_end_galaxy'] , $f['fleet_end_system'] , $f['fleet_end_planet'] );
+				$parse['fleet_end_time']	=	date ( FunctionsLib::read_config ( 'date_format_extended' ) , $f['fleet_start_time'] );
+				$parse['fleet_arrival']		=	date ( FunctionsLib::read_config ( 'date_format_extended' ) , $f['fleet_end_time'] );
 
 				//now we can view the call back button for ships in maintaing position (2)
 				if ($f['fleet_mess'] == 0 or $f['fleet_mess'] == 2)
 				{
 					$parse['inputs']  = '<form action="game.php?page=movement&action=return" method="post">';
-					$parse['inputs'] .= '<input name="fleetid\" value="' . $f['fleet_id'] . '" type="hidden">';
+					$parse['inputs'] .= '<input name="fleetid" value="' . $f['fleet_id'] . '" type="hidden">';
 					$parse['inputs'] .= '<input value="' . $this->_lang['fl_send_back'] . '" type="submit" name="send">';
 					$parse['inputs'] .= '</form>';
 
@@ -200,11 +223,16 @@ class Movement extends XGPCore
 	 */
 	private function send_back_fleet()
 	{
+                    //echo $_POST['fleetid'];
+                    //echo $_GET['action'];
+                    //die();
 		if ( ( isset ( $_POST['fleetid'] ) ) && ( is_numeric ( $_POST['fleetid'] ) ) && ( isset ( $_GET['action'] ) ) && ( $_GET['action'] == 'return' ) )
 		{
+
+                    
 			$fleet_id  	= (int)$_POST['fleetid'];
 			$i 			= 0;
-			$fleet_row 	= parent::$db->query_fetch ( "SELECT *
+			$fleet_row 	= parent::$db->queryFetch ( "SELECT *
 														FROM " . FLEETS . "
 														WHERE `fleet_id` = '". $fleet_id ."';" );
 
@@ -214,7 +242,7 @@ class Movement extends XGPCore
 				{
 					if ( $fleet_row['fleet_group'] > 0 )
 					{
-						$acs	= parent::$db->query_fetch ( "SELECT `acs_fleet_members`
+						$acs	= parent::$db->queryFetch ( "SELECT `acs_fleet_members`
 																FROM `" . ACS_FLEETS . "`
 																WHERE `acs_fleet_id` = '". $fleet_row['fleet_group'] ."';" );
 
@@ -253,4 +281,5 @@ class Movement extends XGPCore
 		}
 	}
 }
+
 /* end of movement.php */

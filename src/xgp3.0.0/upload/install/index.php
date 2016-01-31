@@ -1,5 +1,9 @@
 <?php
 
+use application\controllers\install\Installation;
+use application\controllers\install\Migration;
+use application\controllers\install\Update;
+
 /**
  * @project XG Proyect
  * @version 3.x.x build 0000

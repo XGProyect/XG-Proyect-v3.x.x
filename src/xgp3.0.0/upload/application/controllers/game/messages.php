@@ -1,11 +1,33 @@
 <?php
-
 /**
- * @project XG Proyect
- * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * Messages Controller
+ *
+ * PHP Version 5.5+
+ *
+ * @category Controller
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
  */
 
+namespace application\controllers\game;
+
+use application\core\XGPCore;
+use application\libraries\FunctionsLib;
+use application\libraries\OfficiersLib;
+
+/**
+ * Messages Class
+ *
+ * @category Classes
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
+ */
 class Messages extends XGPCore
 {
     const MODULE_ID = 18;
@@ -33,11 +55,11 @@ class Messages extends XGPCore
             parent::$users->check_session();
 
             // Check module access
-            Functions_Lib::module_message ( Functions_Lib::is_module_accesible ( self::MODULE_ID ) );
+            FunctionsLib::module_message ( FunctionsLib::is_module_accesible ( self::MODULE_ID ) );
 
             $this->_lang			= parent::$lang;
             $this->_current_user	= parent::$users->get_user_data();
-            $this->_have_premium	= Officiers_Lib::is_officier_active ( $this->_current_user['premium_officier_commander'] );
+            $this->_have_premium	= OfficiersLib::isOfficierActive ( $this->_current_user['premium_officier_commander'] );
 
             // build the page
             $this->build_page();
@@ -50,7 +72,7 @@ class Messages extends XGPCore
      */
     public function __destruct()
     {
-            parent::$db->close_connection();
+            parent::$db->closeConnection();
     }
 
     /**
@@ -72,9 +94,9 @@ class Messages extends XGPCore
 
                     foreach ( $_GET as $field => $value )
                     {
-                            if ( Functions_Lib::in_multiarray ( $field , $this->_message_type ) )
+                            if ( FunctionsLib::in_multiarray ( $field , $this->_message_type ) )
                             {
-                                    $type_id			= Functions_lib::recursive_array_search ( $field , $this->_message_type );
+                                    $type_id			= FunctionsLib::recursive_array_search ( $field , $this->_message_type );
                                     $get_messages	   .= $type_id . ',';
                                     $active[$type_id]	= 1;
                             }
@@ -116,18 +138,18 @@ class Messages extends XGPCore
 
                             if ( !is_numeric ( $write_to ) )
                             {
-                                    Functions_Lib::redirect ( 'game.php?page=messages' );
+                                    FunctionsLib::redirect ( 'game.php?page=messages' );
                             }
                             else
                             {
-                                    $OwnerHome		= 	parent::$db->query_fetch ( "SELECT u.`user_name`, p.`planet_galaxy`, p.`planet_system`, p.`planet_planet`
+                                    $OwnerHome		= 	parent::$db->queryFetch ( "SELECT u.`user_name`, p.`planet_galaxy`, p.`planet_system`, p.`planet_planet`
                                                                                                                                             FROM " . PLANETS . " AS p
                                                                                                                                             INNER JOIN " . USERS . " as u ON p.planet_user_id = u.user_id
                                                                                                                                             WHERE p.`planet_user_id` = '" . (int)$write_to . "';" );
 
                                     if ( !$OwnerHome )
                                     {
-                                            Functions_Lib::redirect ( 'game.php?page=messages' );
+                                            FunctionsLib::redirect ( 'game.php?page=messages' );
                                     }
                             }
 
@@ -160,9 +182,9 @@ class Messages extends XGPCore
                                             $Sender  				= $this->_current_user['user_id'];
                                             $From    				= $this->_current_user['user_name'] . ' [' .$this->_current_user['user_galaxy'] . ':' . $this->_current_user['user_system'] . ':' . $this->_current_user['user_planet'] . ']';
                                             $Subject 				= $_POST['subject'];
-                                            $Message				= Functions_Lib::format_text ( $_POST['text'] );
+                                            $Message				= FunctionsLib::format_text ( $_POST['text'] );
 
-                                            Functions_Lib::send_message ( $Owner , $Sender , '' , 4 , $From , $Subject , $Message );
+                                            FunctionsLib::send_message ( $Owner , $Sender , '' , 4 , $From , $Subject , $Message );
 
                                             $subject 				= '';
                                             $text    				= '';
@@ -193,7 +215,7 @@ class Messages extends XGPCore
                                             if ( preg_match ( "/delmes/i" , $Message ) && $Answer == 'on' )
                                             {
                                                     $MessId   = str_replace("delmes", "", $Message);
-                                                    $MessHere = parent::$db->query_fetch ( "SELECT *
+                                                    $MessHere = parent::$db->queryFetch ( "SELECT *
                                                                                                                                     FROM " . MESSAGES . "
                                                                                                                                     WHERE `message_id` = '". (int)$MessId ."' AND
                                                                                                                                                     `message_receiver` = '" . $this->_current_user['user_id'] . "';" );
@@ -217,21 +239,21 @@ class Messages extends XGPCore
 
                                             if ( preg_match ( "/showmes/i" , $Message ) && !isset ( $IsSelected ) )
                                             {
-                                                    $MessHere = parent::$db->query_fetch ( "SELECT *
+                                                    $MessHere = parent::$db->queryFetch ( "SELECT *
                                                                                                                                     FROM " . MESSAGES . "
                                                                                                                                     WHERE `message_id` = '" . (int)$MessId . "' AND
                                                                                                                                                     `message_receiver` = '" . $this->_current_user['user_id'] . "';" );
 
                                                     if ( $MessHere )
                                                     {
-                                                            parent::$db->query_fetch ( "DELETE FROM " . MESSAGES . "
+                                                            parent::$db->queryFetch ( "DELETE FROM " . MESSAGES . "
                                                                                                                     WHERE `message_id` = '" . (int)$MessId . "';" );
                                                     }
                                             }
                                     }
                             }
 
-                            Functions_Lib::redirect ( 'game.php?page=messages' );
+                            FunctionsLib::redirect ( 'game.php?page=messages' );
 
                     break;
 
@@ -243,7 +265,7 @@ class Messages extends XGPCore
                                     $rows							= '';
                                     $this->make_counts();
 
-                                    while ( $messages_list = parent::$db->fetch_assoc ( $this->_messages_count ) )
+                                    while ( $messages_list = parent::$db->fetchAssoc ( $this->_messages_count ) )
                                     {
                                             $this->_message_type[$messages_list['message_type']]['count']	= $messages_list['message_type_count'];
                                             $this->_message_type[$messages_list['message_type']]['unread']	= $messages_list['unread_count'];
@@ -288,7 +310,7 @@ class Messages extends XGPCore
                                     $single_message_template	= parent::$page->get_template ( 'messages/messages_list_row_view' );
                                     $list_of_messages			= '';
 
-                                    while ( $message = parent::$db->fetch_array ( $message_list ) )
+                                    while ( $message = parent::$db->fetchArray ( $message_list ) )
                                     {
                                             $message['message_text']	= nl2br ( $message['message_text'] );
                                             $message['message_time']	= date('m-d h:i:s', $message['message_time']);
@@ -314,7 +336,7 @@ class Messages extends XGPCore
             $single_message_template	= parent::$page->get_template ( 'messages/messages_list_row_view' );
             $list_of_messages			= '';
 
-            while ( $message = parent::$db->fetch_array ( $messages ) )
+            while ( $message = parent::$db->fetchArray ( $messages ) )
             {
                     $message['message_text']	= nl2br ( $message['message_text'] );
                     $list_of_messages		   .= parent::$page->parse_template ( $single_message_template , $message );
@@ -350,7 +372,7 @@ class Messages extends XGPCore
                                                                                                                     WHERE `message_receiver` = '" . $this->_current_user['user_id'] . "'
                                                                                                                     GROUP BY `message_type`" );
 
-            $this->_extra_count		= parent::$db->query_fetch ( "SELECT
+            $this->_extra_count		= parent::$db->queryFetch ( "SELECT
                                                                                                                             ( SELECT COUNT(`user_id`)
                                                                                                                                             FROM `" . USERS . "`
                                                                                                                                             WHERE `user_ally_id` = '" . $this->_current_user['user_ally_id'] . "' AND `user_ally_id` <> 0
@@ -390,4 +412,5 @@ class Messages extends XGPCore
             }
     }
 }
+
 /* end of messages.php */

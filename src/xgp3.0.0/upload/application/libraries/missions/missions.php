@@ -1,11 +1,32 @@
 <?php
-
 /**
- * @project XG Proyect
- * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * Missions Library
+ *
+ * PHP Version 5.5+
+ *
+ * @category Library
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
  */
 
+namespace application\libraries\missions;
+
+use application\core\XGPCore;
+use application\libraries\UpdateResourcesLib;
+
+/**
+ * Missions Class
+ *
+ * @category Classes
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
+ */
 class Missions extends XGPCore
 {
 	protected $_lang;
@@ -21,9 +42,9 @@ class Missions extends XGPCore
 		parent::__construct();
 
 		$this->_lang		= parent::$lang;
-		$this->_resource	= parent::$objects->get_objects();
-		$this->_pricelist	= parent::$objects->get_price();
-		$this->_combat_caps	= parent::$objects->get_combat_specs();
+		$this->_resource	= parent::$objects->getObjects();
+		$this->_pricelist	= parent::$objects->getPrice();
+		$this->_combat_caps	= parent::$objects->getCombatSpecs();
 	}
 
 	/**
@@ -145,7 +166,7 @@ class Missions extends XGPCore
 	*/
 	protected function make_update ( $fleet_row , $galaxy , $system , $planet , $type )
 	{
-		$target_planet	= parent::$db->query_fetch ( "SELECT *
+		$target_planet	= parent::$db->queryFetch ( "SELECT *
 														FROM `" . PLANETS . "` AS p
 														LEFT JOIN `" . BUILDINGS . "` AS b ON b.building_planet_id = p.`planet_id`
 														LEFT JOIN `" . DEFENSES . "` AS d ON d.defense_planet_id = p.`planet_id`
@@ -155,13 +176,14 @@ class Missions extends XGPCore
 																`planet_planet` = " . $planet . " AND
 																`planet_type` = " . $type . ";" );
 
-		$target_user	= parent::$db->query_fetch ( "SELECT *
+		$target_user	= parent::$db->queryFetch ( "SELECT *
 														FROM `" . USERS . "` AS u
 														INNER JOIN " . RESEARCH . " AS r ON r.research_user_id = u.user_id
 														INNER JOIN " . PREMIUM . " AS pr ON pr.premium_user_id = u.user_id
 														WHERE u.`user_id` = " . $target_planet['planet_user_id'] );
 
-		UpdateResourcesLib::updateResource ( $target_user , $target_planet , time() );
+		UpdateResourcesLib::updateResources($target_user, $target_planet, time());
 	}
 }
+
 /* end of missions.php */

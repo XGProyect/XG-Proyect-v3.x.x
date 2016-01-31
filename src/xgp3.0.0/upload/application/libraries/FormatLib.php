@@ -1,12 +1,30 @@
 <?php
-
 /**
- * @project XG Proyect
- * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * Format Library
+ *
+ * PHP Version 5.5+
+ *
+ * @category Library
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
  */
 
-class Format_Lib
+namespace application\libraries;
+
+/**
+ * FormatLib Class
+ *
+ * @category Classes
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
+ */
+class FormatLib
 {
 	/**
 	 * method pretty_time
@@ -226,4 +244,5 @@ class Format_Lib
 		return '<strong>' . $value . '</strong>';
 	}
 }
-/* end of Format_Lib.php */
+
+/* end of FormatLib.php */

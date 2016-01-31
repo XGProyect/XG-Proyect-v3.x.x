@@ -1,12 +1,34 @@
 <?php
-
 /**
- * @project XG Proyect
- * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * Database Controller
+ *
+ * PHP Version 5.5+
+ *
+ * @category Controller
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
  */
 
-class Data extends XGPCore
+namespace application\controllers\adm;
+
+use application\core\XGPCore;
+use application\libraries\adm\AdministrationLib;
+use application\libraries\FunctionsLib;
+
+/**
+ * Database Class
+ *
+ * @category Classes
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
+ */
+class Database extends XGPCore
 {
 	private $_lang;
 	private $_current_user;
@@ -25,13 +47,13 @@ class Data extends XGPCore
 		$this->_current_user	= parent::$users->get_user_data();
 
 		// Check if the user is allowed to access
-		if ( Administration_Lib::have_access ( $this->_current_user['user_authlevel'] ) && Administration_Lib::authorization ( $this->_current_user['user_authlevel'] , 'config_game' ) == 1 )
+		if ( AdministrationLib::have_access ( $this->_current_user['user_authlevel'] ) && AdministrationLib::authorization ( $this->_current_user['user_authlevel'] , 'config_game' ) == 1 )
 		{
 			$this->build_page ( $this->_current_user );
 		}
 		else
 		{
-			die ( Functions_Lib::message ( $this->_lang['ge_no_permissions'] ) );
+			die ( FunctionsLib::message ( $this->_lang['ge_no_permissions'] ) );
 		}
 	}
 
@@ -42,7 +64,7 @@ class Data extends XGPCore
 	 */
 	public function __destruct ()
 	{
-		parent::$db->close_connection();
+		parent::$db->closeConnection();
 	}
 
 	/**
@@ -61,7 +83,7 @@ class Data extends XGPCore
 			$Tablas 		= parent::$db->query ( "SHOW TABLES" , "todas" );
 			$parse['tabla']	= '';
 
-			while ( $row = parent::$db->fetch_array ( $Tablas ) )
+			while ( $row = parent::$db->fetchArray ( $Tablas ) )
 			{
 				$row['row']				= $row[0];
 				$row['status_style']	= 'text-info';
@@ -74,7 +96,7 @@ class Data extends XGPCore
 			$Tablas 		= parent::$db->query ( "SHOW TABLES" , 'todas' );
 			$parse['tabla']	= '';
 
-			while ( $row = parent::$db->fetch_array ( $Tablas ) )
+			while ( $row = parent::$db->fetchArray ( $Tablas ) )
 			{
 				if ( isset ( $_POST['Optimize'] ) )
 				{
@@ -114,4 +136,5 @@ class Data extends XGPCore
 		parent::$page->display ( parent::$page->parse_template ( parent::$page->get_template ( 'adm/data_view' ) , $parse ) );
 	}
 }
-/* end of data.php */
+
+/* end of database.php */

@@ -1,11 +1,34 @@
 <?php
-
 /**
- * @project XG Proyect
- * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * Galaxy Controller
+ *
+ * PHP Version 5.5+
+ *
+ * @category Controller
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
  */
 
+namespace application\controllers\game;
+
+use application\core\XGPCore;
+use application\libraries\FleetsLib;
+use application\libraries\FormatLib;
+use application\libraries\FunctionsLib;
+
+/**
+ * Galaxy Class
+ *
+ * @category Classes
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
+ */
 class Galaxy extends XGPCore
 {
 	const MODULE_ID	= 11;
@@ -31,17 +54,17 @@ class Galaxy extends XGPCore
 		parent::$users->check_session();
 
 		// Check module access
-		Functions_Lib::module_message ( Functions_Lib::is_module_accesible ( self::MODULE_ID ) );
+		FunctionsLib::module_message ( FunctionsLib::is_module_accesible ( self::MODULE_ID ) );
 
 		$this->_current_user	= parent::$users->get_user_data();
 		$this->_current_planet	= parent::$users->get_planet_data();
 		$this->_lang			= parent::$lang;
-		$this->_resource		= parent::$objects->get_objects();
-		$this->_pricelist		= parent::$objects->get_price();
-		$this->_reslist			= parent::$objects->get_objects_list();
-		$this->_formula			= Functions_Lib::load_library ( 'Formula_Lib' );
-		$this->_noob			= Functions_Lib::load_library ( 'NoobsProtection_Lib' );
-                $this->_galaxyLib               = Functions_Lib::load_library ( 'Galaxy_Lib' );
+		$this->_resource		= parent::$objects->getObjects();
+		$this->_pricelist		= parent::$objects->getPrice();
+		$this->_reslist			= parent::$objects->getObjectsList();
+		$this->_formula			= FunctionsLib::load_library ( 'FormulaLib' );
+		$this->_noob			= FunctionsLib::load_library ( 'NoobsProtectionLib' );
+                $this->_galaxyLib               = FunctionsLib::load_library ( 'GalaxyLib' );
                 
 		$this->build_page();
 	}
@@ -53,7 +76,7 @@ class Galaxy extends XGPCore
 	 */
 	public function __destruct()
 	{
-		parent::$db->close_connection();
+		parent::$db->closeConnection();
 	}
 
 	/**
@@ -73,7 +96,7 @@ class Galaxy extends XGPCore
 			$this->send_missiles();
 		}
 
-		$fleetmax      	= Fleets_Lib::get_max_fleets ( $this->_current_user['research_computer_technology'] , $this->_current_user['premium_officier_admiral'] );
+		$fleetmax      	= FleetsLib::get_max_fleets ( $this->_current_user['research_computer_technology'] , $this->_current_user['premium_officier_admiral'] );
 		$CurrentPlID   	= $this->_current_planet['planet_id'];
 		$CurrentSP     	= $this->_current_planet['ship_espionage_probe'];
 
@@ -81,7 +104,7 @@ class Galaxy extends XGPCore
 												FROM " . FLEETS . "
 												WHERE `fleet_owner` = '". intval($this->_current_user['user_id']) ."';");
 
-		$maxfleet_count = parent::$db->num_rows ( $maxfleet );
+		$maxfleet_count = parent::$db->numRows ( $maxfleet );
 
 		if ( !isset ( $mode ) )
 		{
@@ -106,7 +129,7 @@ class Galaxy extends XGPCore
 		{
 			if ( ( $this->_current_planet['planet_system'] != ( $psystem - 1 ) ) && ( $this->_current_planet['planet_system'] != isset ( $_GET['system'] ) or $this->_current_planet['planet_galaxy'] != isset ( $_GET['galaxy'] ) ) && ( $mode != 0 ) && ( $this->_current_planet['planet_deuterium'] < 10 ) )
 			{
-				die ( Functions_Lib::message ( $this->_lang['gl_no_deuterium_to_view_galaxy'] , "game.php?page=galaxy&mode=0" , 2 ) );
+				die ( FunctionsLib::message ( $this->_lang['gl_no_deuterium_to_view_galaxy'] , "game.php?page=galaxy&mode=0" , 2 ) );
 			}
 			elseif ( ( $this->_current_planet['planet_system'] != ( $psystem - 1 ) ) && ( $this->_current_planet['planet_system'] != isset ( $_GET['system'] ) or $this->_current_planet['planet_galaxy'] != isset ( $_GET['galaxy'] ) ) && ( $mode != 0 ) )
 			{
@@ -115,7 +138,7 @@ class Galaxy extends XGPCore
 		}
 		elseif ( $mode == 2 && $this->_current_planet['defense_interplanetary_missile'] < 1 )
 		{
-			die ( Functions_Lib::message ( $this->_lang['ma_no_missiles'] , "game.php?page=galaxy&mode=0" , 2 ) );
+			die ( FunctionsLib::message ( $this->_lang['ma_no_missiles'] , "game.php?page=galaxy&mode=0" , 2 ) );
 		}
 		// END FIX BY alivan
 
@@ -176,8 +199,8 @@ class Galaxy extends XGPCore
 		$parse['currentmip']		= $this->_current_planet['defense_interplanetary_missile'];
 		$parse['maxfleetcount']		= $maxfleet_count;
 		$parse['fleetmax']			= $fleetmax;
-		$parse['recyclers']   		= Format_Lib::pretty_number ( $this->_current_planet['ship_recycler'] );
-		$parse['spyprobes']   		= Format_Lib::pretty_number ( $CurrentSP );
+		$parse['recyclers']   		= FormatLib::pretty_number ( $this->_current_planet['ship_recycler'] );
+		$parse['spyprobes']   		= FormatLib::pretty_number ( $CurrentSP );
 		$parse['missile_count']		= sprintf ( $this->_lang['gl_missil_to_launch'] , $this->_current_planet['defense_interplanetary_missile'] );
 		$parse['current']			= isset ( $_GET['current'] ) ? $_GET['current'] : NULL;
 		$parse['current_galaxy']	= $this->_current_planet['planet_galaxy'];
@@ -210,7 +233,7 @@ class Galaxy extends XGPCore
 		$parse['alliance'] 		= '';
 		$parse['actions'] 		= '';
 
-		while ( $row_data = parent::$db->fetch_array ( $this->_galaxy_data ) )
+		while ( $row_data = parent::$db->fetchArray ( $this->_galaxy_data ) )
 		{
 			for ( $current_planet = $start ; $current_planet < 1 + ( MAX_PLANET_IN_SYSTEM ) ; $current_planet++ )
 			{
@@ -422,7 +445,7 @@ class Galaxy extends XGPCore
 		$tempvar1      	= abs ( $s - $this->_current_planet['planet_system'] );
 		$tempvar2      	= $this->_formula->missile_range ( $this->_current_user['research_impulse_drive'] );
 
-		$tempvar3      	= parent::$db->query_fetch ( "SELECT u.`user_id`,u.`user_onlinetime`,s.`setting_vacations_status`
+		$tempvar3      	= parent::$db->queryFetch ( "SELECT u.`user_id`,u.`user_onlinetime`,s.`setting_vacations_status`
 														FROM " . USERS . " AS u
 														INNER JOIN " . SETTINGS . " AS s ON s.setting_user_id = u.user_id
 														WHERE u.user_id = (SELECT `planet_user_id`
@@ -505,12 +528,12 @@ class Galaxy extends XGPCore
 
 		if ($errors != 0)
 		{
-			Functions_Lib::message ($error, "game.php?page=galaxy&mode=0&galaxy=".$g."&system=".$s, 3);
+			FunctionsLib::message ($error, "game.php?page=galaxy&mode=0&galaxy=".$g."&system=".$s, 3);
 		}
 
 		$ziel_id = $tempvar3['id'];
 
-		$flugzeit = round(((30 + (60 * $tempvar1)) * 2500) / Functions_Lib::read_config ( 'fleet_speed' ) );
+		$flugzeit = round(((30 + (60 * $tempvar1)) * 2500) / FunctionsLib::read_config ( 'fleet_speed' ) );
 
 		$DefenseLabel =	array	(
 									0 => $this->_lang['tech'][401],
@@ -554,7 +577,7 @@ class Galaxy extends XGPCore
 								defense_interplanetary_missile = defense_interplanetary_missile - ".$anz."
 								WHERE defense_planet_id =  '".$this->_current_user['user_current_planet']."'");
 
-		Functions_Lib::message ( "<b>" . $anz . "</b>" . $this->_lang['ma_missiles_sended'] . $DefenseLabel[$target] , "game.php?page=overview" , 3 );
+		FunctionsLib::message ( "<b>" . $anz . "</b>" . $this->_lang['ma_missiles_sended'] . $DefenseLabel[$target] , "game.php?page=overview" , 3 );
 	}
 
 	/**
@@ -652,18 +675,18 @@ class Galaxy extends XGPCore
 		}
 
 
-		$CurrentFlyingFleets	= parent::$db->query_fetch	( "SELECT COUNT(fleet_id) AS `Nbre`
+		$CurrentFlyingFleets	= parent::$db->queryFetch	( "SELECT COUNT(fleet_id) AS `Nbre`
 																FROM " . FLEETS . "
 																WHERE `fleet_owner` = '".$this->_current_user['user_id']."';" );
 
 		$CurrentFlyingFleets	= $CurrentFlyingFleets['Nbre'];
 
-		$TargetRow				= parent::$db->query_fetch	( "SELECT *
+		$TargetRow				= parent::$db->queryFetch	( "SELECT *
 																FROM " . PLANETS . "
-																WHERE `planet_galaxy` = '". parent::$db->escape_value ( $_POST['galaxy'] ) ."' AND
-																		`planet_system` = '". parent::$db->escape_value ( $_POST['system'] ) ."' AND
-																		`planet_planet` = '". parent::$db->escape_value ( $_POST['planet'] ) ."' AND
-																		`planet_type` = '". parent::$db->escape_value ( $_POST['planettype'] ) ."';");
+																WHERE `planet_galaxy` = '". parent::$db->escapeValue ( $_POST['galaxy'] ) ."' AND
+																		`planet_system` = '". parent::$db->escapeValue ( $_POST['system'] ) ."' AND
+																		`planet_planet` = '". parent::$db->escapeValue ( $_POST['planet'] ) ."' AND
+																		`planet_type` = '". parent::$db->escapeValue ( $_POST['planettype'] ) ."';");
 
 		if ( $TargetRow['planet_user_id'] == '' )
 		{
@@ -671,7 +694,7 @@ class Galaxy extends XGPCore
 		}
 		elseif ( $TargetRow['planet_user_id'] != '' )
 		{
-			$TargetUser = parent::$db->query_fetch ( "SELECT u.`user_id`, u.`user_onlinetime`, u.`user_authlevel`, s.`setting_vacations_status`
+			$TargetUser = parent::$db->queryFetch ( "SELECT u.`user_id`, u.`user_onlinetime`, u.`user_authlevel`, s.`setting_vacations_status`
 														FROM " . USERS . " AS u
 														INNER JOIN " . SETTINGS . " AS s ON s.setting_user_id = u.user_id
 														WHERE `user_id` = '". $TargetRow['planet_user_id'] ."';" );
@@ -680,11 +703,11 @@ class Galaxy extends XGPCore
 		// invisible debris by jstar
 		if ( $order == 8 )
 		{
-			$TargetGPlanet 	= parent::$db->query_fetch	( "SELECT planet_invisible_start_time, planet_debris_metal, planet_debris_crystal
+			$TargetGPlanet 	= parent::$db->queryFetch	( "SELECT planet_invisible_start_time, planet_debris_metal, planet_debris_crystal
 																FROM " . PLANETS . "
-																WHERE planet_galaxy = '" . parent::$db->escape_value ( $_POST['galaxy'] ) ."' AND
-																		planet_system = '" . parent::$db->escape_value ( $_POST['system'] ) ."' AND
-																		planet_planet = '" . parent::$db->escape_value ( $_POST['planet'] ) ."' AND
+																WHERE planet_galaxy = '" . parent::$db->escapeValue ( $_POST['galaxy'] ) ."' AND
+																		planet_system = '" . parent::$db->escapeValue ( $_POST['system'] ) ."' AND
+																		planet_planet = '" . parent::$db->escapeValue ( $_POST['planet'] ) ."' AND
 																		planet_type = 1;" );
 
 			if ( $TargetGPlanet['planet_debris_metal'] == 0 && $TargetGPlanet['planet_debris_crystal'] == 0 && time() > ( $TargetGPlanet['planet_invisible_start_time'] + DEBRIS_LIFE_TIME ) )
@@ -698,7 +721,7 @@ class Galaxy extends XGPCore
 		$TargetPoints  	= $user_points['target_points'];
 		$TargetVacat   	= $TargetUser['setting_vacations_status'];
 
-		if ( ( Fleets_Lib::get_max_fleets ( $this->_current_user[$this->_resource[108]] , $this->_current_user['premium_officier_admiral'] ) ) <= $CurrentFlyingFleets )
+		if ( ( FleetsLib::get_max_fleets ( $this->_current_user[$this->_resource[108]] , $this->_current_user['premium_officier_admiral'] ) ) <= $CurrentFlyingFleets )
 		{
 			die ( "612 " );
 		}
@@ -741,10 +764,10 @@ class Galaxy extends XGPCore
 			die ( "601 " );
 		}
 
-		$Distance    		= Fleets_Lib::target_distance ( $this->_current_planet['planet_galaxy'] , $_POST['galaxy'] , $this->_current_planet['planet_system'] , $_POST['system'] , $this->_current_planet['planet_planet'] , $_POST['planet'] );
-		$speedall    		= Fleets_Lib::fleet_max_speed ( $FleetArray , 0 , $this->_current_user );
+		$Distance    		= FleetsLib::target_distance ( $this->_current_planet['planet_galaxy'] , $_POST['galaxy'] , $this->_current_planet['planet_system'] , $_POST['system'] , $this->_current_planet['planet_planet'] , $_POST['planet'] );
+		$speedall    		= FleetsLib::fleet_max_speed ( $FleetArray , 0 , $this->_current_user );
 		$SpeedAllMin 		= min ( $speedall );
-		$Duration    		= Fleets_Lib::mission_duration ( 10, $SpeedAllMin, $Distance, Functions_Lib::fleet_speed_factor());
+		$Duration    		= FleetsLib::mission_duration ( 10, $SpeedAllMin, $Distance, FunctionsLib::fleet_speed_factor());
 
 		$fleet['fly_time']   = $Duration;
 		$fleet['start_time'] = $Duration + time();
@@ -754,7 +777,7 @@ class Galaxy extends XGPCore
 		$FleetDBArray        = "";
 		$FleetSubQRY         = "";
 		$consumption         = 0;
-		$SpeedFactor         = Functions_Lib::fleet_speed_factor ();
+		$SpeedFactor         = FunctionsLib::fleet_speed_factor ();
 
 		foreach ( $FleetArray as $Ship => $Count )
 		{
@@ -777,7 +800,7 @@ class Galaxy extends XGPCore
 			die ( "613 " );
 		}
 
-		if ( Functions_Lib::read_config ( 'adm_attack' ) == 1 && $TargetUser['user_authlevel'] > 0 )
+		if ( FunctionsLib::read_config ( 'adm_attack' ) == 1 && $TargetUser['user_authlevel'] > 0 )
 		{
 			die ( "601 " );
 		}
@@ -872,4 +895,5 @@ class Galaxy extends XGPCore
 		}
 	}
 }
+
 /* end of galaxy.php */

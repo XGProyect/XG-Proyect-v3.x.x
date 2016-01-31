@@ -1,12 +1,36 @@
 <?php
-
 /**
- * @project XG Proyect
- * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * Fleetmovements Controller
+ *
+ * PHP Version 5.5+
+ *
+ * @category Controller
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
  */
 
-class FleetMovements extends XGPCore
+namespace application\controllers\adm;
+
+use application\core\XGPCore;
+use application\libraries\adm\AdministrationLib;
+use application\libraries\FleetsLib;
+use application\libraries\FormatLib;
+use application\libraries\FunctionsLib;
+
+/**
+ * Fleetmovements Class
+ *
+ * @category Classes
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
+ */
+class Fleetmovements extends XGPCore
 {
 	private $_lang;
 	private $_current_user;
@@ -26,13 +50,13 @@ class FleetMovements extends XGPCore
 		$this->_current_user	= parent::$users->get_user_data();
 
 		// Check if the user is allowed to access
-		if ( Administration_Lib::have_access ( $this->_current_user['user_authlevel'] ) && Administration_Lib::authorization ( $this->_current_user['user_authlevel'] , 'observation' ) == 1 )
+		if ( AdministrationLib::have_access ( $this->_current_user['user_authlevel'] ) && AdministrationLib::authorization ( $this->_current_user['user_authlevel'] , 'observation' ) == 1 )
 		{
 			$this->build_page();
 		}
 		else
 		{
-			die ( Functions_Lib::message ( $this->_lang['ge_no_permissions'] ) );
+			die ( FunctionsLib::message ( $this->_lang['ge_no_permissions'] ) );
 		}
 	}
 
@@ -43,7 +67,7 @@ class FleetMovements extends XGPCore
 	 */
 	public function __destruct ()
 	{
-		parent::$db->close_connection();
+		parent::$db->closeConnection();
 	}
 
 	/**
@@ -79,16 +103,16 @@ class FleetMovements extends XGPCore
 		$table			= '';
 		$i				= 0;
 
-		while ( $fleet = parent::$db->fetch_array ( $this->_flying_fleets ) )
+		while ( $fleet = parent::$db->fetchArray ( $this->_flying_fleets ) )
 		{
 			$block['num']       		= ++$i;
-			$block['mission']			= $this->resources_pop_up (  $this->_lang['ff_type_mission'][$fleet['fleet_mission']] . ' ' . ( Fleets_Lib::is_fleet_returning ( $fleet ) ? $this->_lang['ff_r'] : $this->_lang['ff_a'] ) , $fleet );
+			$block['mission']			= $this->resources_pop_up (  $this->_lang['ff_type_mission'][$fleet['fleet_mission']] . ' ' . ( FleetsLib::is_fleet_returning ( $fleet ) ? $this->_lang['ff_r'] : $this->_lang['ff_a'] ) , $fleet );
 			$block['amount']    		= $this->ships_pop_up ( $this->_lang['ff_ships'] , $fleet );
-			$block['beginning']			= Format_Lib::pretty_coords ( $fleet['fleet_start_galaxy'] , $fleet['fleet_start_system'] , $fleet['fleet_start_planet'] );
-			$block['departure']			= date ( Functions_Lib::read_config ( 'date_format_extended' ) , $fleet['fleet_creation'] );
-			$block['objective']			= Format_Lib::pretty_coords ( $fleet['fleet_end_galaxy'] , $fleet['fleet_end_system'] , $fleet['fleet_end_planet'] );
-			$block['arrival']			= date ( Functions_Lib::read_config ( 'date_format_extended' ) , $fleet['fleet_start_time'] );
-			$block['return']			= date ( Functions_Lib::read_config ( 'date_format_extended' ) , $fleet['fleet_end_time'] );
+			$block['beginning']			= FormatLib::pretty_coords ( $fleet['fleet_start_galaxy'] , $fleet['fleet_start_system'] , $fleet['fleet_start_planet'] );
+			$block['departure']			= date ( FunctionsLib::read_config ( 'date_format_extended' ) , $fleet['fleet_creation'] );
+			$block['objective']			= FormatLib::pretty_coords ( $fleet['fleet_end_galaxy'] , $fleet['fleet_end_system'] , $fleet['fleet_end_planet'] );
+			$block['arrival']			= date ( FunctionsLib::read_config ( 'date_format_extended' ) , $fleet['fleet_start_time'] );
+			$block['return']			= date ( FunctionsLib::read_config ( 'date_format_extended' ) , $fleet['fleet_end_time'] );
 
 			$table .= parent::$page->parse_template ( parent::$page->get_template ( 'adm/fleet_rows_view' ) , $block );
 		}
@@ -107,9 +131,9 @@ class FleetMovements extends XGPCore
 
 		if ( $total_resources <> 0 )
 		{
-			$resources_popup	= $this->_lang['ff_metal'] . ': ' . Format_Lib::pretty_number ( $content['fleet_resource_metal'] ) . '<br />';
-			$resources_popup   .= $this->_lang['ff_crystal'] . ': ' . Format_Lib::pretty_number ( $content['fleet_resource_crystal'] ) . '<br />';
-			$resources_popup   .= $this->_lang['ff_deuterium'] . ': ' . Format_Lib::pretty_number ( $content['fleet_resource_deuterium'] );
+			$resources_popup	= $this->_lang['ff_metal'] . ': ' . FormatLib::pretty_number ( $content['fleet_resource_metal'] ) . '<br />';
+			$resources_popup   .= $this->_lang['ff_crystal'] . ': ' . FormatLib::pretty_number ( $content['fleet_resource_crystal'] ) . '<br />';
+			$resources_popup   .= $this->_lang['ff_deuterium'] . ': ' . FormatLib::pretty_number ( $content['fleet_resource_deuterium'] );
 		}
 		else
 		{
@@ -137,7 +161,7 @@ class FleetMovements extends XGPCore
 			if ( $group != '' )
 			{
 				$ship		= explode ( ',' , $group );
-				$pop_up	   .= $this->_lang['tech'][$ship[0]] . ': ' . Format_Lib::pretty_number ( $ship[1] ) . '<br />';
+				$pop_up	   .= $this->_lang['tech'][$ship[0]] . ': ' . FormatLib::pretty_number ( $ship[1] ) . '<br />';
 			}
 		}
 
@@ -147,4 +171,5 @@ class FleetMovements extends XGPCore
 		return parent::$page->parse_template ( parent::$page->get_template ( 'adm/fleet_popup_view' ) , $parse );
 	}
 }
+
 /* end of fleetmovements.php */

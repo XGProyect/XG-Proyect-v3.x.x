@@ -1,16 +1,18 @@
 <?php
 /**
- * Attack lang implementation
+ * Attack Language Library
  *
  * PHP Version 5.5+
  *
- * @category Libraries/Missions
+ * @category Library
  * @package  Application
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
+
+namespace application\libraries\missions;
 
 /**
  * AttackLang Class

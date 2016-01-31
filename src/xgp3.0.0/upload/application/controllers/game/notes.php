@@ -1,11 +1,32 @@
 <?php
-
 /**
- * @project XG Proyect
- * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * Notes Controller
+ *
+ * PHP Version 5.5+
+ *
+ * @category Controller
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
  */
 
+namespace application\controllers\game;
+
+use application\core\XGPCore;
+use application\libraries\FunctionsLib;
+
+/**
+ * Notes Class
+ *
+ * @category Classes
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
+ */
 class Notes extends XGPCore
 {
 	const MODULE_ID	= 19;
@@ -24,7 +45,7 @@ class Notes extends XGPCore
 		parent::$users->check_session();
 
 		// Check module access
-		Functions_Lib::module_message ( Functions_Lib::is_module_accesible ( self::MODULE_ID ) );
+		FunctionsLib::module_message ( FunctionsLib::is_module_accesible ( self::MODULE_ID ) );
 
 		$this->_lang			= parent::$lang;
 		$this->_current_user	= parent::$users->get_user_data();
@@ -39,7 +60,7 @@ class Notes extends XGPCore
 	 */
 	public function __destruct()
 	{
-		parent::$db->close_connection();
+		parent::$db->closeConnection();
 	}
 
 	/**
@@ -60,8 +81,8 @@ class Notes extends XGPCore
 		{
 			$time 		= time();
 			$priority 	= intval($_POST['u']);
-			$title 		= ( $_POST['title'] ) ? parent::$db->escape_value ( strip_tags ( $_POST['title'] ) ) : "Sin t&iacute;tulo";
-			$text		= $_POST['text'] ? Functions_Lib::format_text ( $_POST['text'] )  : $this->_lang['nt_no_text'];
+			$title 		= ( $_POST['title'] ) ? parent::$db->escapeValue ( strip_tags ( $_POST['title'] ) ) : "Sin t&iacute;tulo";
+			$text		= $_POST['text'] ? FunctionsLib::format_text ( $_POST['text'] )  : $this->_lang['nt_no_text'];
 
 			if ( $s == 1 )
 			{
@@ -72,7 +93,7 @@ class Notes extends XGPCore
 										note_title='$title',
 										note_text='$text'" );
 
-				Functions_Lib::redirect ( 'game.php?page=notes' );
+				FunctionsLib::redirect ( 'game.php?page=notes' );
 			}
 			elseif ( $s == 2 )
 			{
@@ -83,7 +104,7 @@ class Notes extends XGPCore
 															note_owner=".intval($this->_current_user['user_id'])."" );
 
 				if(!$note_query)
-					Functions_Lib::redirect ( 'game.php?page=notes' );
+					FunctionsLib::redirect ( 'game.php?page=notes' );
 
 				parent::$db->query ( "UPDATE `" . NOTES . "` SET
 										note_time=$time,
@@ -92,7 +113,7 @@ class Notes extends XGPCore
 										note_text='$text'
 										WHERE note_id=".intval($id)."" );
 
-				Functions_Lib::redirect ( 'game.php?page=notes' );
+				FunctionsLib::redirect ( 'game.php?page=notes' );
 			}
 		}
 		elseif ( $_POST )
@@ -115,7 +136,7 @@ class Notes extends XGPCore
 				}
 			}
 
-			Functions_Lib::redirect ( 'game.php?page=notes' );
+			FunctionsLib::redirect ( 'game.php?page=notes' );
 		}
 		else
 		{
@@ -136,14 +157,14 @@ class Notes extends XGPCore
 				$SELECTED['1']	= '';
 				$SELECTED['2']	= '';
 
-				$note = parent::$db->query_fetch ( "SELECT *
+				$note = parent::$db->queryFetch ( "SELECT *
 														FROM `" . NOTES . "`
 														WHERE `note_owner` = " . $this->_current_user['user_id'] . "
 															AND `note_id` = " . (int)$n . ";" );
 
 				if ( ! $note )
 				{
-					Functions_Lib::redirect ( 'game.php?page=notes' );
+					FunctionsLib::redirect ( 'game.php?page=notes' );
 				}
 
 
@@ -172,13 +193,13 @@ class Notes extends XGPCore
 				$NotesBodyEntryTPL	= parent::$page->get_template ( 'notes/notes_body_entry' );
 				$list				= '';
 
-				while ( $note = parent::$db->fetch_array ( $notes_query ) )
+				while ( $note = parent::$db->fetchArray ( $notes_query ) )
 				{
 					$count++;
 
 					$parse['NOTE_COLOR']	= $this->return_priority ( $note['note_priority'] );
 					$parse['NOTE_ID'] 		= $note['note_id'];
-					$parse['NOTE_TIME'] 	= date ( Functions_Lib::read_config ( 'date_format_extended' ) , $note['note_time'] );
+					$parse['NOTE_TIME'] 	= date ( FunctionsLib::read_config ( 'date_format_extended' ) , $note['note_time'] );
 					$parse['NOTE_TITLE'] 	= $note['note_title'];
 					$parse['NOTE_TEXT'] 	= strlen ( $note['note_text'] );
 
@@ -219,4 +240,5 @@ class Notes extends XGPCore
 		}
 	}
 }
+
 /* end of notes.php */

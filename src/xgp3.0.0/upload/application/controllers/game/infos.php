@@ -1,11 +1,37 @@
 <?php
-
 /**
- * @project XG Proyect
- * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2014
+ * Infos Controller
+ *
+ * PHP Version 5.5+
+ *
+ * @category Controller
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
  */
 
+namespace application\controllers\game;
+
+use application\core\XGPCore;
+use application\libraries\DevelopmentsLib;
+use application\libraries\FleetsLib;
+use application\libraries\FormatLib;
+use application\libraries\FunctionsLib;
+use application\libraries\OfficiersLib;
+use application\libraries\ProductionLib;
+
+/**
+ * Infos Class
+ *
+ * @category Classes
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
+ */
 class Infos extends XGPCore
 {
 	const MODULE_ID	= 24;
@@ -30,13 +56,13 @@ class Infos extends XGPCore
 		parent::$users->check_session();
 
 		// Check module access
-		Functions_Lib::module_message ( Functions_Lib::is_module_accesible ( self::MODULE_ID ) );
+		FunctionsLib::module_message ( FunctionsLib::is_module_accesible ( self::MODULE_ID ) );
 
 		$this->_lang			= parent::$lang;
-		$this->_resource		= parent::$objects->get_objects();
-		$this->_pricelist		= parent::$objects->get_price();
-		$this->_combat_caps		= parent::$objects->get_combat_specs();
-		$this->_prod_grid		= parent::$objects->get_production();
+		$this->_resource		= parent::$objects->getObjects();
+		$this->_pricelist		= parent::$objects->getPrice();
+		$this->_combat_caps		= parent::$objects->getCombatSpecs();
+		$this->_prod_grid		= parent::$objects->getProduction();
 		$this->_current_user	= parent::$users->get_user_data();
 		$this->_current_planet	= parent::$users->get_planet_data();
 		$this->_element_id		= isset ( $_GET['gid'] ) ? (int)$_GET['gid'] : NULL;
@@ -51,7 +77,7 @@ class Infos extends XGPCore
 	 */
 	public function __destruct()
 	{
-		parent::$db->close_connection();
+		parent::$db->closeConnection();
 	}
 
 	/**
@@ -63,7 +89,7 @@ class Infos extends XGPCore
     {
 		if ( !array_key_exists ( $this->_element_id , $this->_resource ) )
 		{
-			Functions_Lib::redirect ( 'game.php?page=techtree' );
+			FunctionsLib::redirect ( 'game.php?page=techtree' );
 		}
 
         $GateTPL              	= '';
@@ -130,6 +156,7 @@ class Infos extends XGPCore
         }
         elseif ($this->_element_id ==  42)
         {
+            $PageTPL 	= parent::$page->get_template ( 'infos/info_buildings_table' );
         	$TableHeadTPL         = parent::$page->get_template ('infos/info_range_header');
         	$TableTPL             = parent::$page->get_template ('infos/info_range_body');
         }
@@ -139,7 +166,7 @@ class Infos extends XGPCore
 
             if ( $_POST )
             {
-	            Functions_Lib::message ( $this->DoFleetJump() , "game.php?page=infos&gid=43" , 2 );
+	            FunctionsLib::message ( $this->DoFleetJump() , "game.php?page=infos&gid=43" , 2 );
             }
         }
         elseif ( $this->_element_id ==  124 )
@@ -156,21 +183,21 @@ class Infos extends XGPCore
             $parse['element_typ'] = $this->_lang['tech'][200];
             $parse['rf_info_to']  = $this->ShowRapidFireTo();
             $parse['rf_info_fr']  = $this->ShowRapidFireFrom();
-            $parse['hull_pt']     = Format_Lib::pretty_number ( $this->_pricelist[$this->_element_id]['metal'] + $this->_pricelist[$this->_element_id]['crystal'] );
-            $parse['shield_pt']   = Format_Lib::pretty_number ( $this->_combat_caps[$this->_element_id]['shield'] );
-            $parse['attack_pt']   = Format_Lib::pretty_number ( $this->_combat_caps[$this->_element_id]['attack'] );
-            $parse['capacity_pt'] = Format_Lib::pretty_number ( $this->_pricelist[$this->_element_id]['capacity'] );
-            $parse['base_speed']  = Format_Lib::pretty_number ( $this->_pricelist[$this->_element_id]['speed'] );
-            $parse['base_conso']  = Format_Lib::pretty_number ( $this->_pricelist[$this->_element_id]['consumption'] );
+            $parse['hull_pt']     = FormatLib::pretty_number ( $this->_pricelist[$this->_element_id]['metal'] + $this->_pricelist[$this->_element_id]['crystal'] );
+            $parse['shield_pt']   = FormatLib::pretty_number ( $this->_combat_caps[$this->_element_id]['shield'] );
+            $parse['attack_pt']   = FormatLib::pretty_number ( $this->_combat_caps[$this->_element_id]['attack'] );
+            $parse['capacity_pt'] = FormatLib::pretty_number ( $this->_pricelist[$this->_element_id]['capacity'] );
+            $parse['base_speed']  = FormatLib::pretty_number ( $this->_pricelist[$this->_element_id]['speed'] );
+            $parse['base_conso']  = FormatLib::pretty_number ( $this->_pricelist[$this->_element_id]['consumption'] );
 
             if ($this->_element_id == 202)
             {
-                $parse['upd_speed']   = "<font color=\"yellow\">(". Format_Lib::pretty_number ($this->_pricelist[$this->_element_id]['speed2']) .")</font>";
-                $parse['upd_conso']   = "<font color=\"yellow\">(". Format_Lib::pretty_number ($this->_pricelist[$this->_element_id]['consumption2']) .")</font>";
+                $parse['upd_speed']   = "<font color=\"yellow\">(". FormatLib::pretty_number ($this->_pricelist[$this->_element_id]['speed2']) .")</font>";
+                $parse['upd_conso']   = "<font color=\"yellow\">(". FormatLib::pretty_number ($this->_pricelist[$this->_element_id]['consumption2']) .")</font>";
             }
             elseif ($this->_element_id == 211)
             {
-	            $parse['upd_speed']   = "<font color=\"yellow\">(". Format_Lib::pretty_number ($this->_pricelist[$this->_element_id]['speed2']) .")</font>";
+	            $parse['upd_speed']   = "<font color=\"yellow\">(". FormatLib::pretty_number ($this->_pricelist[$this->_element_id]['speed2']) .")</font>";
             }
         }
         elseif ( $this->_element_id >= 401 && $this->_element_id <= 550 )
@@ -184,9 +211,9 @@ class Infos extends XGPCore
                 $parse['rf_info_fr']  = $this->ShowRapidFireFrom();
             }
 
-            $parse['hull_pt']     = Format_Lib::pretty_number ( $this->_pricelist[$this->_element_id]['metal'] + $this->_pricelist[$this->_element_id]['crystal'] );
-            $parse['shield_pt']   = Format_Lib::pretty_number ( $this->_combat_caps[$this->_element_id]['shield'] );
-            $parse['attack_pt']   = Format_Lib::pretty_number ( $this->_combat_caps[$this->_element_id]['attack'] );
+            $parse['hull_pt']     = FormatLib::pretty_number ( $this->_pricelist[$this->_element_id]['metal'] + $this->_pricelist[$this->_element_id]['crystal'] );
+            $parse['shield_pt']   = FormatLib::pretty_number ( $this->_combat_caps[$this->_element_id]['shield'] );
+            $parse['attack_pt']   = FormatLib::pretty_number ( $this->_combat_caps[$this->_element_id]['attack'] );
         }
 
 		if ( $TableHeadTPL != '' )
@@ -201,7 +228,11 @@ class Infos extends XGPCore
 			{
 				$parse['table_data']	= $this->astrophysics_table ( $TableTPL );
 			}
-			else
+			elseif ($this->_element_id == 42)
+                        {
+                            $parse['table_data']    = $this->phalanxRange ($TableTPL);
+                        }
+                        else
 			{
 				$parse['table_data']  	= $this->ShowProductionTable ( $TableTPL );
 			}
@@ -222,9 +253,9 @@ class Infos extends XGPCore
                 $parse['gate_start_link'] = $this->planet_link ( $this->_current_planet );
                 if ($RestString['value'] != 0)
                 {
-                    $parse['gate_time_script'] = Functions_Lib::chrono_applet ( "Gate", "1", $RestString['value'], TRUE );
+                    $parse['gate_time_script'] = FunctionsLib::chrono_applet ( "Gate", "1", $RestString['value'], TRUE );
                     $parse['gate_wait_time']   = "<div id=\"bxx". "Gate" . "1" ."\"></div>";
-                    $parse['gate_script_go']   = Functions_Lib::chrono_applet ( "Gate", "1", $RestString['value'], FALSE );
+                    $parse['gate_script_go']   = FunctionsLib::chrono_applet ( "Gate", "1", $RestString['value'], FALSE );
                 }
                 else
                 {
@@ -242,17 +273,17 @@ class Infos extends XGPCore
         {
             if ( isset ( $this->_current_planet[$this->_resource[$this->_element_id]] ) && $this->_current_planet[$this->_resource[$this->_element_id]] > 0 )
             {
-                $NeededRessources		= Developments_Lib::development_price ( $this->_current_user , $this->_current_planet , $this->_element_id , TRUE , TRUE );
-                $DestroyTime          	= Developments_Lib::development_time  ( $this->_current_user , $this->_current_planet , $this->_element_id ) / 2;
-                $parse['destroyurl']  	= "game.php?page=" . Developments_Lib::set_building_page ( $this->_element_id ) . "&cmd=destroy&building=" . $this->_element_id;
+                $NeededRessources		= DevelopmentsLib::development_price ( $this->_current_user , $this->_current_planet , $this->_element_id , TRUE , TRUE );
+                $DestroyTime          	= DevelopmentsLib::development_time  ( $this->_current_user , $this->_current_planet , $this->_element_id ) / 2;
+                $parse['destroyurl']  	= "game.php?page=" . DevelopmentsLib::set_building_page ( $this->_element_id ) . "&cmd=destroy&building=" . $this->_element_id;
                 $parse['levelvalue']  	= $this->_current_planet[$this->_resource[$this->_element_id]];
                 $parse['nfo_metal']   	= $this->_lang['Metal'];
                 $parse['nfo_crysta']  	= $this->_lang['Crystal'];
                 $parse['nfo_deuter']  	= $this->_lang['Deuterium'];
-                $parse['metal']       	= Format_Lib::pretty_number ( $NeededRessources['metal'] );
-                $parse['crystal']     	= Format_Lib::pretty_number ( $NeededRessources['crystal'] );
-                $parse['deuterium']   	= Format_Lib::pretty_number ( $NeededRessources['deuterium'] );
-                $parse['destroytime'] 	= Format_Lib::pretty_time   ( $DestroyTime );
+                $parse['metal']       	= FormatLib::pretty_number ( $NeededRessources['metal'] );
+                $parse['crystal']     	= FormatLib::pretty_number ( $NeededRessources['crystal'] );
+                $parse['deuterium']   	= FormatLib::pretty_number ( $NeededRessources['deuterium'] );
+                $parse['destroytime'] 	= FormatLib::pretty_time   ( $DestroyTime );
 
                 $page .= parent::$page->parse_template ( $DestroyTPL , $parse );
             }
@@ -271,15 +302,15 @@ class Infos extends XGPCore
 		$BuildStartLvl    	= max ( 1 , $CurrentBuildtLvl - 2 );
 		$Table     			= "";
 		$ProdFirst 			= 0;
-		$ActualProd 		= ProductionLib::max_storable ( $CurrentBuildtLvl );
+		$ActualProd 		= ProductionLib::maxStorable ( $CurrentBuildtLvl );
 
 		for ( $BuildLevel = $BuildStartLvl ; $BuildLevel < $BuildStartLvl + 15 ; ++$BuildLevel )
 		{
-			$Prod	= ProductionLib::max_storable ( $BuildLevel );
+			$Prod	= ProductionLib::maxStorable ( $BuildLevel );
 
 			$bloc['build_lvl']			= ( $CurrentBuildtLvl == $BuildLevel ) ? "<font color=\"#ff0000\">" . $BuildLevel . "</font>" : $BuildLevel;
-			$bloc['build_prod']      	= Format_Lib::pretty_number ( $Prod );
-			$bloc['build_prod_diff'] 	= Format_Lib::color_number ( Format_Lib::pretty_number ( ( $Prod - $ActualProd ) ) );
+			$bloc['build_prod']      	= FormatLib::pretty_number ( $Prod );
+			$bloc['build_prod_diff'] 	= FormatLib::color_number ( FormatLib::pretty_number ( ( $Prod - $ActualProd ) ) );
 
 			if ( $ProdFirst == 0 )
 			{
@@ -306,8 +337,8 @@ class Infos extends XGPCore
 		for ( $BuildLevel = $BuildStartLvl ; $BuildLevel < $BuildStartLvl + 15 ; ++$BuildLevel )
 		{
 			$bloc['tech_lvl']			= ( $CurrentBuildtLvl == $BuildLevel ) ? "<font color=\"#ff0000\">" . $BuildLevel . "</font>" : $BuildLevel;
-			$bloc['tech_colonies']      = Format_Lib::pretty_number ( Fleets_Lib::get_max_colonies ( $BuildLevel ) );
-			$bloc['tech_expeditions']	= Format_Lib::pretty_number ( Fleets_Lib::get_max_expeditions ( $BuildLevel ) );
+			$bloc['tech_colonies']      = FormatLib::pretty_number ( FleetsLib::get_max_colonies ( $BuildLevel ) );
+			$bloc['tech_expeditions']	= FormatLib::pretty_number ( FleetsLib::get_max_expeditions ( $BuildLevel ) );
 
 			$Table .= parent::$page->parse_template ( $template , $bloc );
 		}
@@ -326,7 +357,7 @@ class Infos extends XGPCore
             if ($NextJumpTime >= time())
             {
                 $RestWait   = $NextJumpTime - time();
-                $RestString = " ". Format_Lib::pretty_time($RestWait);
+                $RestString = " ". FormatLib::pretty_time($RestWait);
             }
             else
             {
@@ -356,7 +387,7 @@ class Infos extends XGPCore
             if ( $NextJumpTime == 0 )
             {
                 $TargetPlanet = $_POST['jmpto'];
-                $TargetGate   = parent::$db->query_fetch ( "SELECT p.`planet_id`, b.`building_jump_gate`, p.`planet_last_jump_time`
+                $TargetGate   = parent::$db->queryFetch ( "SELECT p.`planet_id`, b.`building_jump_gate`, p.`planet_last_jump_time`
                 												FROM `" . PLANETS . "` AS p
                 												INNER JOIN `" . BUILDINGS . "` AS b ON b.`building_planet_id` = p.`planet_id`
                 												WHERE p.`planet_id` = '". $TargetPlanet ."';");
@@ -458,7 +489,7 @@ class Infos extends XGPCore
                     $bloc['idx']             = $CurrIdx;
                     $bloc['fleet_id']        = $Ship;
                     $bloc['fleet_name']      = $this->_lang['tech'][$Ship];
-                    $bloc['fleet_max']       = Format_Lib::pretty_number ( $this->_current_planet[$this->_resource[$Ship]] );
+                    $bloc['fleet_max']       = FormatLib::pretty_number ( $this->_current_planet[$this->_resource[$Ship]] );
                     $bloc['gate_ship_dispo'] = $this->_lang['in_jump_gate_available'];
                     $Result                 .= parent::$page->parse_template ( $RowsTPL, $bloc );
                     $CurrIdx++;
@@ -476,7 +507,7 @@ class Infos extends XGPCore
         													`planet_user_id` = '" . $this->_current_user['user_id'] . "';" );
         $Combo           = "";
 
-        while ( $CurMoon = parent::$db->fetch_assoc ( $MoonList ) )
+        while ( $CurMoon = parent::$db->fetchAssoc ( $MoonList ) )
         {
             if ( $CurMoon['planet_id'] != $this->_current_planet['planet_id'] )
             {
@@ -488,6 +519,29 @@ class Infos extends XGPCore
         return $Combo;
     }
 
+    private function phalanxRange($Template)
+    {
+        $CurrentBuildtLvl   = $this->_current_planet[ $this->_resource[$this->_element_id] ];
+        $BuildLevel         = ($CurrentBuildtLvl > 0) ? $CurrentBuildtLvl : 1;
+        $BuildStartLvl      = $CurrentBuildtLvl - 2;
+
+        if ($BuildStartLvl < 1) {
+            $BuildStartLvl = 1;   
+        }
+        
+        $Table = '';
+
+        for ( $BuildLevel = $BuildStartLvl; $BuildLevel < $BuildStartLvl + 15; $BuildLevel++ )
+        {
+            $bloc['build_lvl']       = ($CurrentBuildtLvl == $BuildLevel) ? "<font color=\"#ff0000\">".$BuildLevel."</font>" : $BuildLevel;
+            $bloc['build_range']     = ($BuildLevel * $BuildLevel) - 1;
+            
+            $Table    .= parent::$page->parse_template ($Template, $bloc);
+        }
+
+        return $Table;
+    }
+    
     private function ShowProductionTable ( $Template )
     {
         $BuildLevelFactor 	= $this->_current_planet[ 'planet_' . $this->_resource[$this->_element_id] . '_porcent' ];
@@ -497,8 +551,8 @@ class Infos extends XGPCore
         $BuildEnergy        = $this->_current_user['research_energy_technology'];
 
 		// BOOST
-		$geologe_boost		= 1 + ( 1 * ( Officiers_Lib::is_officier_active ( $this->_current_user['premium_officier_geologist'] ) ? GEOLOGUE : 0 ) );
-		$engineer_boost		= 1 + ( 1 * ( Officiers_Lib::is_officier_active ( $this->_current_user['premium_officier_engineer'] ) ? ENGINEER_ENERGY : 0 ) );
+		$geologe_boost		= 1 + ( 1 * ( OfficiersLib::isOfficierActive ( $this->_current_user['premium_officier_geologist'] ) ? GEOLOGUE : 0 ) );
+		$engineer_boost		= 1 + ( 1 * ( OfficiersLib::isOfficierActive ( $this->_current_user['premium_officier_engineer'] ) ? ENGINEER_ENERGY : 0 ) );
 
 		// PRODUCTION FORMULAS
 		$metal_prod			= eval ( $this->_prod_grid[$this->_element_id]['formule']['metal'] );
@@ -507,18 +561,18 @@ class Infos extends XGPCore
 		$energy_prod		= eval ( $this->_prod_grid[$this->_element_id]['formule']['energy'] );
 
 		// PRODUCTION
-		$Prod[1]			= ProductionLib::production_amount ( $metal_prod , $geologe_boost );
-		$Prod[2]			= ProductionLib::production_amount ( $crystal_prod , $geologe_boost );
-		$Prod[3]			= ProductionLib::production_amount ( $deuterium_prod , $geologe_boost );
+		$Prod[1]			= ProductionLib::productionAmount ( $metal_prod , $geologe_boost );
+		$Prod[2]			= ProductionLib::productionAmount ( $crystal_prod , $geologe_boost );
+		$Prod[3]			= ProductionLib::productionAmount ( $deuterium_prod , $geologe_boost );
 
 		if( $this->_element_id >= 4 )
 		{
-			$Prod[4]		= ProductionLib::production_amount ( $energy_prod , $engineer_boost , TRUE );
+			$Prod[4]		= ProductionLib::productionAmount ( $energy_prod , $engineer_boost , TRUE );
 			$ActualProd    	= floor ( $Prod[4] );
 		}
 		else
 		{
-			$Prod[4]		= ProductionLib::production_amount ( $energy_prod , 1 , TRUE );
+			$Prod[4]		= ProductionLib::productionAmount ( $energy_prod , 1 , TRUE );
 			$ActualProd    	= floor ( $Prod[$this->_element_id] );
 		}
 
@@ -540,65 +594,58 @@ class Infos extends XGPCore
 
         for ( $BuildLevel = $BuildStartLvl; $BuildLevel < $BuildStartLvl + 15; $BuildLevel++ )
         {
-            if ( $this->_element_id != 42 )
+            // PRODUCTION FORMULAS
+            $metal_prod			= eval ( $this->_prod_grid[$this->_element_id]['formule']['metal'] );
+            $crystal_prod		= eval ( $this->_prod_grid[$this->_element_id]['formule']['crystal'] );
+            $deuterium_prod		= eval ( $this->_prod_grid[$this->_element_id]['formule']['deuterium'] );
+            $energy_prod		= eval ( $this->_prod_grid[$this->_element_id]['formule']['energy'] );
+
+            // PRODUCTION
+            $Prod[1]			= ProductionLib::productionAmount ( $metal_prod , $geologe_boost );
+            $Prod[2]			= ProductionLib::productionAmount ( $crystal_prod , $geologe_boost );
+            $Prod[3]			= ProductionLib::productionAmount ( $deuterium_prod , $geologe_boost );
+
+            if( $this->_element_id >= 4 )
             {
-				// PRODUCTION FORMULAS
-				$metal_prod			= eval ( $this->_prod_grid[$this->_element_id]['formule']['metal'] );
-				$crystal_prod		= eval ( $this->_prod_grid[$this->_element_id]['formule']['crystal'] );
-				$deuterium_prod		= eval ( $this->_prod_grid[$this->_element_id]['formule']['deuterium'] );
-				$energy_prod		= eval ( $this->_prod_grid[$this->_element_id]['formule']['energy'] );
-
-				// PRODUCTION
-				$Prod[1]			= ProductionLib::production_amount ( $metal_prod , $geologe_boost );
-				$Prod[2]			= ProductionLib::production_amount ( $crystal_prod , $geologe_boost );
-				$Prod[3]			= ProductionLib::production_amount ( $deuterium_prod , $geologe_boost );
-
-				if( $this->_element_id >= 4 )
-				{
-					$Prod[4]		= ProductionLib::production_amount ( $energy_prod , $engineer_boost , TRUE );
-				}
-				else
-				{
-					$Prod[4]		= ProductionLib::production_amount ( $energy_prod , 1 , TRUE );
-				}
-
-                $bloc['build_lvl']       = ($CurrentBuildtLvl == $BuildLevel) ? "<font color=\"#ff0000\">".$BuildLevel."</font>" : $BuildLevel;
-
-                if ($ProdFirst > 0)
-                    if ($this->_element_id != 12)
-                        $bloc['build_gain']      = "<font color=\"lime\">(". Format_Lib::pretty_number(floor($Prod[$this->_element_id] - $ProdFirst)) .")</font>";
-                    else
-                        $bloc['build_gain']      = "<font color=\"lime\">(". Format_Lib::pretty_number(floor($Prod[4] - $ProdFirst)) .")</font>";
-                else
-                    $bloc['build_gain']      = "";
-
-                if ($this->_element_id != 12)
-                {
-                    $bloc['build_prod']      = Format_Lib::pretty_number(floor($Prod[$this->_element_id]));
-                    $bloc['build_prod_diff'] = Format_Lib::color_number( Format_Lib::pretty_number(floor($Prod[$this->_element_id] - $ActualProd)) );
-                    $bloc['build_need']      = Format_Lib::color_number( Format_Lib::pretty_number(floor($Prod[4])) );
-                    $bloc['build_need_diff'] = Format_Lib::color_number( Format_Lib::pretty_number(floor($Prod[4] - $ActualNeed)) );
-                }
-                else
-                {
-                    $bloc['build_prod']      = Format_Lib::pretty_number(floor($Prod[4]));
-                    $bloc['build_prod_diff'] = Format_Lib::color_number( Format_Lib::pretty_number(floor($Prod[4] - $ActualProd)) );
-                    $bloc['build_need']      = Format_Lib::color_number( Format_Lib::pretty_number(floor($Prod[3])) );
-                    $bloc['build_need_diff'] = Format_Lib::color_number( Format_Lib::pretty_number(floor($Prod[3] - $ActualNeed)) );
-                }
-                if ($ProdFirst == 0)
-                {
-                    if ($this->_element_id != 12)
-                        $ProdFirst = floor($Prod[$this->_element_id]);
-                    else
-                        $ProdFirst = floor($Prod[4]);
-                }
+                    $Prod[4]		= ProductionLib::productionAmount ( $energy_prod , $engineer_boost , TRUE );
             }
             else
             {
-                $bloc['build_lvl']       = ($CurrentBuildtLvl == $BuildLevel) ? "<font color=\"#ff0000\">".$BuildLevel."</font>" : $BuildLevel;
-                $bloc['build_range']     = ($BuildLevel * $BuildLevel) - 1;
+                    $Prod[4]		= ProductionLib::productionAmount ( $energy_prod , 1 , TRUE );
             }
+
+            $bloc['build_lvl']       = ($CurrentBuildtLvl == $BuildLevel) ? "<font color=\"#ff0000\">".$BuildLevel."</font>" : $BuildLevel;
+
+            if ($ProdFirst > 0)
+                if ($this->_element_id != 12)
+                    $bloc['build_gain']      = "<font color=\"lime\">(". FormatLib::pretty_number(floor($Prod[$this->_element_id] - $ProdFirst)) .")</font>";
+                else
+                    $bloc['build_gain']      = "<font color=\"lime\">(". FormatLib::pretty_number(floor($Prod[4] - $ProdFirst)) .")</font>";
+            else
+                $bloc['build_gain']      = "";
+
+            if ($this->_element_id != 12)
+            {
+                $bloc['build_prod']      = FormatLib::pretty_number(floor($Prod[$this->_element_id]));
+                $bloc['build_prod_diff'] = FormatLib::color_number( FormatLib::pretty_number(floor($Prod[$this->_element_id] - $ActualProd)) );
+                $bloc['build_need']      = FormatLib::color_number( FormatLib::pretty_number(floor($Prod[4])) );
+                $bloc['build_need_diff'] = FormatLib::color_number( FormatLib::pretty_number(floor($Prod[4] - $ActualNeed)) );
+            }
+            else
+            {
+                $bloc['build_prod']      = FormatLib::pretty_number(floor($Prod[4]));
+                $bloc['build_prod_diff'] = FormatLib::color_number( FormatLib::pretty_number(floor($Prod[4] - $ActualProd)) );
+                $bloc['build_need']      = FormatLib::color_number( FormatLib::pretty_number(floor($Prod[3])) );
+                $bloc['build_need_diff'] = FormatLib::color_number( FormatLib::pretty_number(floor($Prod[3] - $ActualNeed)) );
+            }
+            if ($ProdFirst == 0)
+            {
+                if ($this->_element_id != 12)
+                    $ProdFirst = floor($Prod[$this->_element_id]);
+                else
+                    $ProdFirst = floor($Prod[4]);
+            }
+            
             $Table    .= parent::$page->parse_template ($Template, $bloc);
         }
 
@@ -610,7 +657,7 @@ class Infos extends XGPCore
         $ResultString = "";
         for ($Type = 200; $Type < 500; $Type++)
         {
-            if ($this->_combat_caps[$this->_element_id]['sd'][$Type] > 1)
+            if (isset($this->_combat_caps[$this->_element_id]['sd'][$Type]) && $this->_combat_caps[$this->_element_id]['sd'][$Type] > 1)
                 $ResultString .= $this->_lang['in_rf_again']. " ". $this->_lang['tech'][$Type] ." <font color=\"#00ff00\">".$this->_combat_caps[$this->_element_id]['sd'][$Type]."</font><br>";
         }
         return $ResultString;
@@ -621,7 +668,7 @@ class Infos extends XGPCore
         $ResultString = "";
         for ($Type = 200; $Type < 500; $Type++)
         {
-            if ($this->_combat_caps[$Type]['sd'][$this->_element_id] > 1)
+            if (isset($this->_combat_caps[$Type]['sd'][$this->_element_id]) && $this->_combat_caps[$Type]['sd'][$this->_element_id] > 1)
                 $ResultString .= $this->_lang['in_rf_from']. " ". $this->_lang['tech'][$Type] ." <font color=\"#ff0000\">".$this->_combat_caps[$Type]['sd'][$this->_element_id]."</font><br>";
         }
         return $ResultString;
@@ -632,4 +679,5 @@ class Infos extends XGPCore
 		return "<a href=\"game.php?page=galaxy&mode=3&galaxy=".$current_planet['planet_galaxy']."&system=".$current_planet['planet_system']."\">[".$current_planet['planet_galaxy'].":".$current_planet['planet_system'].":".$current_planet['planet_planet']."]</a>";
 	}
 }
+
 /* end of infos.php */

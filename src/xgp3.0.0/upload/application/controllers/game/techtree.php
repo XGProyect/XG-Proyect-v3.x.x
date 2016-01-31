@@ -1,11 +1,33 @@
 <?php
-
 /**
- * @project XG Proyect
- * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * Techtree Controller
+ *
+ * PHP Version 5.5+
+ *
+ * @category Controller
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
  */
 
+namespace application\controllers\game;
+
+use application\core\XGPCore;
+use application\libraries\FormatLib;
+use application\libraries\FunctionsLib;
+
+/**
+ * Techtree Class
+ *
+ * @category Classes
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
+ */
 class Techtree extends XGPCore
 {
 	const MODULE_ID = 10;
@@ -27,11 +49,11 @@ class Techtree extends XGPCore
 		parent::$users->check_session();
 
 		// Check module access
-		Functions_Lib::module_message ( Functions_Lib::is_module_accesible ( self::MODULE_ID ) );
+		FunctionsLib::module_message ( FunctionsLib::is_module_accesible ( self::MODULE_ID ) );
 
 		$this->_lang			= parent::$lang;
-		$this->_resource		= parent::$objects->get_objects();
-		$this->_requeriments	= parent::$objects->get_relations();
+		$this->_resource		= parent::$objects->getObjects();
+		$this->_requeriments	= parent::$objects->getRelations();
 		$this->_current_user	= parent::$users->get_user_data();
 		$this->_current_planet	= parent::$users->get_planet_data();
 
@@ -45,7 +67,7 @@ class Techtree extends XGPCore
 	 */
 	public function __destruct()
 	{
-		parent::$db->close_connection();
+		parent::$db->closeConnection();
 	}
 
 	/**
@@ -81,15 +103,15 @@ class Techtree extends XGPCore
 						{
 							if ( isset ( $this->_current_user[$this->_resource[$requirement]] ) && $this->_current_user[$this->_resource[$requirement]] >= $level )
 							{
-								$list	.= Format_Lib::color_green ( $this->set_level_format ( $level , $this->_lang['tech'][$requirement] ) );
+								$list	.= FormatLib::color_green ( $this->set_level_format ( $level , $this->_lang['tech'][$requirement] ) );
 							}
 							elseif ( isset($this->_current_planet[$this->_resource[$requirement]] ) && $this->_current_planet[$this->_resource[$requirement]] >= $level )
 							{
-								$list	.= Format_Lib::color_green ( $this->set_level_format ( $level , $this->_lang['tech'][$requirement] ) );
+								$list	.= FormatLib::color_green ( $this->set_level_format ( $level , $this->_lang['tech'][$requirement] ) );
 							}
 							else
 							{
-								$list	.= Format_Lib::color_red ( $this->set_level_format ( $level , $this->_lang['tech'][$requirement] ) );
+								$list	.= FormatLib::color_red ( $this->set_level_format ( $level , $this->_lang['tech'][$requirement] ) );
 							}
 
 							$list		.= '<br/>';
@@ -125,4 +147,5 @@ class Techtree extends XGPCore
 		return $tech_name . ' ('. $this->_lang['tt_lvl'] . $level . ')';
 	}
 }
+
 /* end of techtree.php */

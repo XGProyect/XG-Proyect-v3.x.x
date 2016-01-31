@@ -1,11 +1,33 @@
 <?php
-
 /**
- * @project XG Proyect
- * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * Registration Controller
+ *
+ * PHP Version 5.5+
+ *
+ * @category Controller
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
  */
 
+namespace application\controllers\adm;
+
+use application\core\XGPCore;
+use application\libraries\adm\AdministrationLib;
+use application\libraries\FunctionsLib;
+
+/**
+ * Registration Class
+ *
+ * @category Classes
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
+ */
 class Registration extends XGPCore
 {
 	private $_current_user;
@@ -26,15 +48,15 @@ class Registration extends XGPCore
 		$this->_current_user	= parent::$users->get_user_data();
 
 		// Check if the user is allowed to access
-		if ( Administration_Lib::have_access ( $this->_current_user['user_authlevel'] ) && Administration_Lib::authorization ( $this->_current_user['user_authlevel'] , 'config_game' ) == 1 )
+		if ( AdministrationLib::have_access ( $this->_current_user['user_authlevel'] ) && AdministrationLib::authorization ( $this->_current_user['user_authlevel'] , 'config_game' ) == 1 )
 		{
-			$this->_game_config		= Functions_Lib::read_config ( '' , TRUE );
+			$this->_game_config		= FunctionsLib::read_config ( '' , TRUE );
 
 			$this->build_page();
 		}
 		else
 		{
-			die ( Functions_Lib::message ( $this->_lang['ge_no_permissions'] ) );
+			die ( FunctionsLib::message ( $this->_lang['ge_no_permissions'] ) );
 		}
 	}
 
@@ -45,7 +67,7 @@ class Registration extends XGPCore
 	 */
 	public function __destruct ()
 	{
-		parent::$db->close_connection();
+		parent::$db->closeConnection();
 	}
 
 	/**
@@ -63,11 +85,11 @@ class Registration extends XGPCore
 			// CHECK BEFORE SAVE
 			$this->run_validations();
 
-			Functions_Lib::update_config ( 'reg_enable'				, $this->_game_config['reg_enable'] 			);
-			Functions_Lib::update_config ( 'reg_welcome_message'	, $this->_game_config['reg_welcome_message'] 	);
-			Functions_Lib::update_config ( 'reg_welcome_email'		, $this->_game_config['reg_welcome_email'] 		);
+			FunctionsLib::update_config ( 'reg_enable'				, $this->_game_config['reg_enable'] 			);
+			FunctionsLib::update_config ( 'reg_welcome_message'	, $this->_game_config['reg_welcome_message'] 	);
+			FunctionsLib::update_config ( 'reg_welcome_email'		, $this->_game_config['reg_welcome_email'] 		);
 
-			$parse['alert']					= Administration_Lib::save_message ( 'ok' , $this->_lang['ur_all_ok_message'] );
+			$parse['alert']					= AdministrationLib::save_message ( 'ok' , $this->_lang['ur_all_ok_message'] );
 		}
 
 		$parse['reg_closed']				= $this->_game_config['reg_enable'] == 1 ? " checked = 'checked' " : "";
@@ -115,4 +137,5 @@ class Registration extends XGPCore
 		}
 	}
 }
+
 /* end of registration.php */

@@ -1,38 +1,61 @@
 <?php
-
 /**
- * @project XG Proyect
- * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * Acs Library
+ *
+ * PHP Version 5.5+
+ *
+ * @category Library
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
  */
 
+namespace application\libraries\missions;
+
+/**
+ * Acs Class
+ *
+ * @category Classes
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
+ */
 class Acs extends Missions
 {
-	/**
-	 * __construct()
-	 */
-	public function __construct()
-	{
-		parent::__construct();
-	}
+    /**
+     * __construct
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        parent::__construct();
+    }
 
-	/**
-	 * method acs_mission
-	 * param $fleet_row
-	 * return the acs result
-	*/
-	public function acs_mission ( $fleet_row )
-	{
-		if ( $fleet_row['fleet_mess'] == 0 && $fleet_row['fleet_start_time'] > time() )
-		{
-			parent::return_fleet ( $fleet_row['fleet_id'] );
-		}
+    /**
+     * acsMission
+     *
+     * @param array $fleet_row Fleet row
+     *
+     * @return void
+     */
+    public function acsMission($fleet_row)
+    {
+        if ($fleet_row['fleet_mess'] == 0 && $fleet_row['fleet_start_time'] > time()) {
 
-		if ( $fleet_row['fleet_end_time'] <= time() )
-		{
-			parent::restore_fleet ( $fleet_row );
-			parent::remove_fleet ( $fleet_row['fleet_id'] );
-		}
-	}
+            parent::return_fleet($fleet_row['fleet_id']);
+        }
+
+        if ($fleet_row['fleet_end_time'] <= time()) {
+
+            parent::restore_fleet($fleet_row);
+            parent::remove_fleet($fleet_row['fleet_id']);
+        }
+    }
 }
+
 /* end of acs.php */

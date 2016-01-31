@@ -1,11 +1,32 @@
 <?php
-
 /**
- * @project XG Proyect
- * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * Register Controller
+ *
+ * PHP Version 5.5+
+ *
+ * @category Controller
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
  */
 
+namespace application\controllers\home;
+
+use application\core\XGPCore;
+use application\libraries\FunctionsLib;
+
+/**
+ * Register Class
+ *
+ * @category Classes
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
+ */
 class Register extends XGPCore
 {
 	private $_creator;
@@ -20,15 +41,15 @@ class Register extends XGPCore
 
 		$this->_lang = parent::$lang;
 
-		if ( Functions_Lib::read_config ( 'reg_enable' ) == 1 )
+		if ( FunctionsLib::read_config ( 'reg_enable' ) == 1 )
 		{
-			$this->_creator	= Functions_Lib::load_library ( 'Creator_Lib' );
+			$this->_creator	= FunctionsLib::load_library ( 'CreatorLib' );
 
 			$this->build_page();
 		}
 		else
 		{
-			die ( Functions_Lib::message ( $this->_lang['re_disabled'] , 'index.php' , '5' , FALSE , FALSE ) );
+			die ( FunctionsLib::message ( $this->_lang['re_disabled'] , 'index.php' , '5' , FALSE , FALSE ) );
 		}
 	}
 
@@ -39,7 +60,7 @@ class Register extends XGPCore
 	 */
 	public function __destruct()
 	{
-		parent::$db->close_connection();
+		parent::$db->closeConnection();
 	}
 
 	/**
@@ -53,7 +74,7 @@ class Register extends XGPCore
 		{
 			if ( ! $this->run_validations() )
 			{
-				Functions_Lib::redirect ( 'index.php' );
+				FunctionsLib::redirect ( 'index.php' );
 			}
 			else
 			{
@@ -63,16 +84,16 @@ class Register extends XGPCore
 				$hashed_password 	= sha1 ( $user_password );
 
 				parent::$db->query ( "INSERT INTO " . USERS . " SET
-										`user_name` = '" . parent::$db->escape_value ( strip_tags ( $user_name ) ) . "',
-										`user_email` = '" . parent::$db->escape_value ( $user_email ) . "',
-										`user_email_permanent` = '" . parent::$db->escape_value ( $user_email ) . "',
+										`user_name` = '" . parent::$db->escapeValue ( strip_tags ( $user_name ) ) . "',
+										`user_email` = '" . parent::$db->escapeValue ( $user_email ) . "',
+										`user_email_permanent` = '" . parent::$db->escapeValue ( $user_email ) . "',
 										`user_ip_at_reg` = '" . $_SERVER['REMOTE_ADDR'] . "',
 										`user_agent` = '" . $_SERVER['HTTP_USER_AGENT'] . "',
 										`user_home_planet_id` = '0',
 										`user_register_time` = '" . time() . "',
 										`user_password`='" . $hashed_password . "';" );
 
-				$user_id = parent::$db->insert_id();
+				$user_id = parent::$db->insertId();
 
 				parent::$db->query ( "INSERT INTO " . RESEARCH . " SET
 										`research_user_id` = '" . $user_id . "';" );
@@ -86,9 +107,9 @@ class Register extends XGPCore
 				parent::$db->query ( "INSERT INTO " . SETTINGS . " SET
 										`setting_user_id` = '" . $user_id . "';" );
 
-				$last_galaxy	= Functions_Lib::read_config ( 'lastsettedgalaxypos' );
-				$last_system 	= Functions_Lib::read_config ( 'lastsettedsystempos' );
-				$last_planet 	= Functions_Lib::read_config ( 'lastsettedplanetpos' );
+				$last_galaxy	= FunctionsLib::read_config ( 'lastsettedgalaxypos' );
+				$last_system 	= FunctionsLib::read_config ( 'lastsettedsystempos' );
+				$last_planet 	= FunctionsLib::read_config ( 'lastsettedplanetpos' );
 
 				while ( ! isset ( $newpos_checked ) )
 				{
@@ -140,7 +161,7 @@ class Register extends XGPCore
 						break;
 					}
 
-					$planet_row = parent::$db->query_fetch ( "SELECT *
+					$planet_row = parent::$db->queryFetch ( "SELECT *
 																FROM " . PLANETS . "
 																WHERE `planet_galaxy` = '" . $galaxy . "' AND
 																		`planet_system` = '" . $system . "' AND
@@ -160,9 +181,9 @@ class Register extends XGPCore
 
 					if ( $newpos_checked )
 					{
-						Functions_Lib::update_config ( 'lastsettedgalaxypos' , $last_galaxy );
-						Functions_Lib::update_config ( 'lastsettedsystempos' , $last_system );
-						Functions_Lib::update_config ( 'lastsettedplanetpos' , $last_planet );
+						FunctionsLib::update_config ( 'lastsettedgalaxypos' , $last_galaxy );
+						FunctionsLib::update_config ( 'lastsettedsystempos' , $last_system );
+						FunctionsLib::update_config ( 'lastsettedplanetpos' , $last_planet );
 					}
 				}
 
@@ -179,13 +200,13 @@ class Register extends XGPCore
 				$message 	= str_replace ( '%s' , $user_name , $this->_lang['re_welcome_message_content'] );
 
 				// Send Welcome Message to the user if the feature is enabled
-				if ( Functions_Lib::read_config ( 'reg_welcome_message' ) )
+				if ( FunctionsLib::read_config ( 'reg_welcome_message' ) )
 				{
-					Functions_Lib::send_message ( $user_id , 0 , '' , 5 , $from , $subject , $message );
+					FunctionsLib::send_message ( $user_id , 0 , '' , 5 , $from , $subject , $message );
 				}
 
 				// Send Welcome Email to the user if the feature is enabled
-				if ( Functions_Lib::read_config ( 'reg_welcome_email' ) )
+				if ( FunctionsLib::read_config ( 'reg_welcome_email' ) )
 				{
 					$this->send_pass_email ( $user_email , $user_name , $user_password );
 				}
@@ -194,13 +215,13 @@ class Register extends XGPCore
 				if ( parent::$users->user_login ( $user_id , $user_name , $hashed_password ) )
 				{
 					// Redirect to game
-					Functions_Lib::redirect ( 'game.php?page=overview' );
+					FunctionsLib::redirect ( 'game.php?page=overview' );
 				}
 			}
 		}
 
 		// If login fails
-		Functions_Lib::redirect ( 'index.php' );
+		FunctionsLib::redirect ( 'index.php' );
 	}
 
 	/**
@@ -211,7 +232,7 @@ class Register extends XGPCore
 	**/
 	private function send_pass_email ( $emailaddress , $user_name , $password )
 	{
-		$game_name						= Functions_Lib::read_config ( 'game_name' );
+		$game_name						= FunctionsLib::read_config ( 'game_name' );
 
 		$parse							= $this->_lang;
 		$parse['user_name']				= $user_name;
@@ -221,7 +242,7 @@ class Register extends XGPCore
 		$parse['reg_mail_text_part7']	= str_replace ( '%s' , $game_name , $this->_lang['re_mail_text_part7'] );
 
 		$email 							= parent::$page->parse_template (  parent::$page->get_template ( 'home/email_template' ) , $parse );
-		$status 						= $this->send_mail ( $emailaddress , $this->_lang['re_register_at'] . Functions_Lib::read_config ( 'game_name' ) , $email );
+		$status 						= $this->send_mail ( $emailaddress , $this->_lang['re_register_at'] . FunctionsLib::read_config ( 'game_name' ) , $email );
 
 		return $status;
 	}
@@ -240,18 +261,18 @@ class Register extends XGPCore
 
 		if ( !$from )
 		{
-			$from = Functions_Lib::read_config ( 'admin_email' );
+			$from = FunctionsLib::read_config ( 'admin_email' );
 		}
 
 		$head  	= '';
 		$head  .= "Content-Type: text/html \r\n";
 		$head  .= "charset: UTF-8 \r\n";
 		$head  .= "Date: " . date('r') . " \r\n";
-		$head  .= "Return-Path: " . Functions_Lib::read_config ( 'admin_email' ) . " \r\n";
+		$head  .= "Return-Path: " . FunctionsLib::read_config ( 'admin_email' ) . " \r\n";
 		$head  .= "From: $from \r\n";
 		$head  .= "Sender: $from \r\n";
 		$head  .= "Reply-To: $from \r\n";
-		$head  .= "Organization: " . Functions_Lib::read_config ( 'game_name' ) . " \r\n";
+		$head  .= "Organization: " . FunctionsLib::read_config ( 'game_name' ) . " \r\n";
 		$head  .= "X-Sender: $from \r\n";
 		$head  .= "X-Priority: 3 \r\n";
 
@@ -270,7 +291,7 @@ class Register extends XGPCore
 	{
 		$errors	= 0;
 
-		if ( ! Functions_Lib::valid_email ( $_POST['email'] ) )
+		if ( ! FunctionsLib::valid_email ( $_POST['email'] ) )
 		{
 			$errors++;
 		}
@@ -322,9 +343,9 @@ class Register extends XGPCore
 	 **/
 	private function check_user ()
 	{
-		return parent::$db->query_fetch ( "SELECT `user_name`
+		return parent::$db->queryFetch ( "SELECT `user_name`
 											FROM " . USERS . "
-											WHERE `user_name` = '" . parent::$db->escape_value ( $_POST['character'] ) . "'
+											WHERE `user_name` = '" . parent::$db->escapeValue ( $_POST['character'] ) . "'
 											LIMIT 1;" );
 	}
 
@@ -335,10 +356,11 @@ class Register extends XGPCore
 	 **/
 	private function check_email ()
 	{
-		return parent::$db->query_fetch ( "SELECT `user_email`
+		return parent::$db->queryFetch ( "SELECT `user_email`
 											FROM " . USERS . "
-											WHERE `user_email` = '" . parent::$db->escape_value ( $_POST['email'] ) . "'
+											WHERE `user_email` = '" . parent::$db->escapeValue ( $_POST['email'] ) . "'
 											LIMIT 1;" );
 	}
 }
+
 /* end of register.php */

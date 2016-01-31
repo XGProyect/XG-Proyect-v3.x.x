@@ -1,11 +1,33 @@
 <?php
-
 /**
- * @project XG Proyect
- * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * Queries Controller
+ *
+ * PHP Version 5.5+
+ *
+ * @category Controller
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
  */
 
+namespace application\controllers\adm;
+
+use application\core\XGPCore;
+use application\libraries\adm\AdministrationLib;
+use application\libraries\FunctionsLib;
+
+/**
+ * Queries Class
+ *
+ * @category Classes
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
+ */
 class Queries extends XGPCore
 {
 	private $_lang;
@@ -25,13 +47,13 @@ class Queries extends XGPCore
 		$this->_current_user	= parent::$users->get_user_data();
 
 		// Check if the user is allowed to access
-		if ( Administration_Lib::have_access ( $this->_current_user['user_authlevel'] ) && $this->_current_user['user_authlevel'] == 3 )
+		if ( AdministrationLib::have_access ( $this->_current_user['user_authlevel'] ) && $this->_current_user['user_authlevel'] == 3 )
 		{
 			$this->build_page();
 		}
 		else
 		{
-			die ( Functions_Lib::message ( $this->_lang['ge_no_permissions'] ) );
+			die ( FunctionsLib::message ( $this->_lang['ge_no_permissions'] ) );
 		}
 	}
 
@@ -42,7 +64,7 @@ class Queries extends XGPCore
 	 */
 	public function __destruct ()
 	{
-		parent::$db->close_connection();
+		parent::$db->closeConnection();
 	}
 
 	/**
@@ -61,15 +83,16 @@ class Queries extends XGPCore
 
 			if ( ! mysql_query ( $query ) )
 			{
-				$parse['alert']		= Administration_Lib::save_message ( 'error' , mysql_error() );
+				$parse['alert']		= AdministrationLib::save_message ( 'error' , mysql_error() );
 			}
 			else
 			{
-				$parse['alert']		= Administration_Lib::save_message ( 'ok' , $this->_lang['qe_succes'] );
+				$parse['alert']		= AdministrationLib::save_message ( 'ok' , $this->_lang['qe_succes'] );
 			}
 		}
 
 		parent::$page->display ( parent::$page->parse_template ( parent::$page->get_template ( 'adm/queries_view' ) , $parse ) );
 	}
 }
+
 /* end of queries.php */
