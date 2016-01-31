@@ -102,6 +102,8 @@ class Database
                         return false;
                     }
                 }
+                else
+                    return true;
             }
         }
     }
@@ -149,7 +151,11 @@ class Database
 
             $this->connection->close();
             unset($this->connection);
+
+            return true;
         }
+
+        return false;
     }
 
     /**
