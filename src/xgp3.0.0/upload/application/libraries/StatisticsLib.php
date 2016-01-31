@@ -1,12 +1,32 @@
 <?php
-
 /**
- * @project XG Proyect
- * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * Statistics Library
+ *
+ * PHP Version 5.5+
+ *
+ * @category Library
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
  */
 
-class Statistics_Lib extends XGPCore
+namespace application\libraries;
+
+use application\core\XGPCore;
+
+/**
+ * StatisticsLib Class
+ *
+ * @category Classes
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
+ */
+class StatisticsLib extends XGPCore
 {
 	private static $time;
 
@@ -34,10 +54,10 @@ class Statistics_Lib extends XGPCore
 			break;
 		}
 
-		$element			= parent::$objects->get_price ( $element );
+		$element			= parent::$objects->getPrice ( $element );
 		$resources_total	= $element['metal'] + $element['crystal'] + $element['deuterium'];
 		$level_mult     	= pow ( $element['factor'] , $current_level );
-		$points 			= ( $resources_total * $level_mult ) / Functions_Lib::read_config ( 'stat_settings' );
+		$points 			= ( $resources_total * $level_mult ) / FunctionsLib::read_config ( 'stat_settings' );
 
 		return $points;
 	}
@@ -101,7 +121,7 @@ class Statistics_Lib extends XGPCore
 														ORDER BY `user_statistic_user_id` ASC;" );
 
 		// BUILD ALL THE ARRAYS
-		while ( $CurUser = parent::$db->fetch_assoc ( $all_stats_data ) )
+		while ( $CurUser = parent::$db->fetchAssoc ( $all_stats_data ) )
 		{
 			$tech['old_rank'][$CurUser['user_statistic_user_id']]	= $CurUser['user_statistic_technology_rank'];
 			$tech['points'][$CurUser['user_statistic_user_id']]		= $CurUser['user_statistic_technology_points'];
@@ -278,13 +298,13 @@ class Statistics_Lib extends XGPCore
 													GROUP BY alliance_id" );
 
 		// ANY ALLIANCE ?
-		if ( empty ( $all_stats_data ) or parent::$db->num_rows ( $all_stats_data ) == 0 )
+		if ( empty ( $all_stats_data ) or parent::$db->numRows ( $all_stats_data ) == 0 )
 		{
 			return;
 		}
 
 		// BUILD ALL THE ARRAYS
-		while ( $CurAlliance = parent::$db->fetch_assoc ( $all_stats_data ) )
+		while ( $CurAlliance = parent::$db->fetchAssoc ( $all_stats_data ) )
 		{
 			$tech['old_rank'][$CurAlliance['alliance_id']]	= $CurAlliance['alliance_statistic_technology_rank'];
 			$tech['points'][$CurAlliance['alliance_id']]	= $CurAlliance['technology_points'];
@@ -447,4 +467,5 @@ class Statistics_Lib extends XGPCore
 		unset ( $all_stats_data , $build , $defs , $ships , $tech , $rank , $update_query , $values );
 	}
 }
-/* end of Statistics_Lib.php */
+
+/* end of StatisticsLib.php */

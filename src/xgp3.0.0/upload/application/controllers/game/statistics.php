@@ -1,11 +1,33 @@
 <?php
-
 /**
- * @project XG Proyect
- * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * Statistics Controller
+ *
+ * PHP Version 5.5+
+ *
+ * @category Controller
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
  */
 
+namespace application\controllers\game;
+
+use application\core\XGPCore;
+use application\libraries\FormatLib;
+use application\libraries\FunctionsLib;
+
+/**
+ * Statistics Class
+ *
+ * @category Classes
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
+ */
 class Statistics extends XGPCore
 {
 	const MODULE_ID	= 16;
@@ -25,7 +47,7 @@ class Statistics extends XGPCore
 		parent::$users->check_session();
 
 		// Check module access
-		Functions_Lib::module_message ( Functions_Lib::is_module_accesible ( self::MODULE_ID ) );
+		FunctionsLib::module_message ( FunctionsLib::is_module_accesible ( self::MODULE_ID ) );
 
 		$this->_lang			= parent::$lang;
 		$this->_current_user	= parent::$users->get_user_data();
@@ -41,7 +63,7 @@ class Statistics extends XGPCore
 	 */
 	public function __destruct()
 	{
-		parent::$db->close_connection();
+		parent::$db->closeConnection();
 	}
 
 	/**
@@ -73,7 +95,7 @@ class Statistics extends XGPCore
 
 		if ( $who == 2 )
 		{
-			$MaxAllys = parent::$db->query_fetch ( "SELECT COUNT(`alliance_id`) AS `count`
+			$MaxAllys = parent::$db->queryFetch ( "SELECT COUNT(`alliance_id`) AS `count`
 														FROM " . ALLIANCE . ";" );
 
 			$parse['range']			= $this->build_range_list ( $MaxAllys['count'] , $range );
@@ -92,11 +114,11 @@ class Statistics extends XGPCore
 
 			$start++;
 
-			$parse['stat_date']   	= date ( Functions_Lib::read_config ( 'date_format_extended' ) , Functions_Lib::read_config ( 'stat_last_update' ) );
+			$parse['stat_date']   	= date ( FunctionsLib::read_config ( 'date_format_extended' ) , FunctionsLib::read_config ( 'stat_last_update' ) );
 			$parse['stat_values'] 	= "";
 			$StatAllianceTableTPL	= parent::$page->get_template ( 'stat/stat_alliancetable' );
 
-			while ( $StatRow = parent::$db->fetch_assoc ( $query ) )
+			while ( $StatRow = parent::$db->fetchAssoc ( $query ) )
 			{
 				$parse['ally_rank']       		= $start;
 				$ranking                  		= $StatRow['alliance_statistic_' . $OldRank] - $StatRow['alliance_statistic_' . $Rank];
@@ -105,8 +127,8 @@ class Statistics extends XGPCore
 				$parse['alliance_name']       	= $StatRow['alliance_name'];
 				$parse['ally_members']    	  	= $StatRow['ally_members'];
 				$parse['ally_action']		  	= $StatRow['alliance_request_notallow'] == 0 ? '<a href="game.php?page=alliance&mode=apply&allyid=' . $StatRow['alliance_id'] . '"><img src="' . DPATH . 'img/m.gif" border="0" title="' . $this->_lang['st_ally_request'] . '" /></a>' : '';
-				$parse['ally_points']     	  	= Format_Lib::pretty_number ( $StatRow['alliance_statistic_' . $Order] );
-				$parse['ally_members_points']	= Format_Lib::pretty_number ( floor ( $StatRow['alliance_statistic_' . $Order] / $StatRow['ally_members'] ) );
+				$parse['ally_points']     	  	= FormatLib::pretty_number ( $StatRow['alliance_statistic_' . $Order] );
+				$parse['ally_members_points']	= FormatLib::pretty_number ( floor ( $StatRow['alliance_statistic_' . $Order] / $StatRow['ally_members'] ) );
 				$parse['stat_values']    	   .= parent::$page->parse_template ( $StatAllianceTableTPL , $parse );
 				$start++;
 			}
@@ -124,12 +146,12 @@ class Statistics extends XGPCore
 												ORDER BY `user_statistic_'. $Order .'` DESC, `user_statistic_total_rank` ASC
 												LIMIT '. $start .',100;' );
 			$start++;
-			$parse['stat_date']   	= date ( Functions_Lib::read_config ( 'date_format_extended' ) , Functions_Lib::read_config ( 'stat_last_update' ) );
+			$parse['stat_date']   	= date ( FunctionsLib::read_config ( 'date_format_extended' ) , FunctionsLib::read_config ( 'stat_last_update' ) );
 			$parse['stat_values'] 	= "";
 			$previusId 				= 0;
 			$StatPlayerTableTPL		= parent::$page->get_template ( 'stat/stat_playertable' );
 
-			while ( $StatRow = parent::$db->fetch_assoc ( $query ) )
+			while ( $StatRow = parent::$db->fetchAssoc ( $query ) )
 			{
 				$parse['player_rank']		= $start;
 				$ranking                  	= $StatRow['user_statistic_' . $OldRank] - $StatRow['user_statistic_' . $Rank];
@@ -169,7 +191,7 @@ class Statistics extends XGPCore
 				}
 
 				$parse['player_rankplus']	= $this->rank_difference ( $ranking );
-				$parse['player_points']   	= Format_Lib::pretty_number ( $StatRow['user_statistic_' . $Order] );
+				$parse['player_points']   	= FormatLib::pretty_number ( $StatRow['user_statistic_' . $Order] );
 				$parse['stat_values']      .= parent::$page->parse_template ( $StatPlayerTableTPL , $parse );
 				$start++;
 			}
@@ -279,4 +301,5 @@ class Statistics extends XGPCore
 		return $return;
 	}
 }
+
 /* end of statistics.php */

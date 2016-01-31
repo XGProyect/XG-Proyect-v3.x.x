@@ -1,11 +1,33 @@
 <?php
-
 /**
- * @project XG Proyect
- * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * Ban Controller
+ *
+ * PHP Version 5.5+
+ *
+ * @category Controller
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
  */
 
+namespace application\controllers\adm;
+
+use application\core\XGPCore;
+use application\libraries\adm\AdministrationLib;
+use application\libraries\FunctionsLib;
+
+/**
+ * Ban Class
+ *
+ * @category Classes
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
+ */
 class Ban extends XGPCore
 {
 	private $_lang;
@@ -27,13 +49,13 @@ class Ban extends XGPCore
 		$this->_current_user	= parent::$users->get_user_data();
 
 		// Check if the user is allowed to access
-		if ( Administration_Lib::have_access ( $this->_current_user['user_authlevel'] ) && Administration_Lib::authorization ( $this->_current_user['user_authlevel'] , 'edit_users' ) == 1 )
+		if ( AdministrationLib::have_access ( $this->_current_user['user_authlevel'] ) && AdministrationLib::authorization ( $this->_current_user['user_authlevel'] , 'edit_users' ) == 1 )
 		{
 			$this->build_page();
 		}
 		else
 		{
-			die ( Functions_Lib::message ( $this->_lang['ge_no_permissions'] ) );
+			die ( FunctionsLib::message ( $this->_lang['ge_no_permissions'] ) );
 		}
 	}
 
@@ -44,7 +66,7 @@ class Ban extends XGPCore
 	 */
 	public function __destruct ()
 	{
-		parent::$db->close_connection();
+		parent::$db->closeConnection();
 	}
 
 	/**
@@ -85,7 +107,7 @@ class Ban extends XGPCore
 
 		if ( isset ( $_POST['unban_name'] ) && $_POST['unban_name'] )
 		{
-			$username	= parent::$db->escape_value ( $_POST['unban_name'] );
+			$username	= parent::$db->escapeValue ( $_POST['unban_name'] );
 
 			parent::$db->query ( "DELETE FROM `" . BANNED . "`
 									WHERE `banned_who` = '" . $username . "'");
@@ -95,7 +117,7 @@ class Ban extends XGPCore
 									WHERE `user_name` = '" . $username . "'
 									LIMIT 1" );
 
-			$parse['alert']		= Administration_Lib::save_message ( 'ok' , ( str_replace ( '%s' , $username , $this->_lang['bn_lift_ban_success'] ) ) );
+			$parse['alert']		= AdministrationLib::save_message ( 'ok' , ( str_replace ( '%s' , $username , $this->_lang['bn_lift_ban_success'] ) ) );
 		}
 
 		$parse['users_list']	= $this->get_users_list();
@@ -115,7 +137,7 @@ class Ban extends XGPCore
 	{
 		$parse 						= $this->_lang;
 		$parse['js_path']			= XGP_ROOT . JS_PATH;
-		$ban_name					= isset ( $_GET['ban_name'] ) ? parent::$db->escape_value ( $_GET['ban_name'] ) : NULL;
+		$ban_name					= isset ( $_GET['ban_name'] ) ? parent::$db->escapeValue ( $_GET['ban_name'] ) : NULL;
 
 		if ( isset ( $_GET['banuser'] ) && isset ( $_GET['ban_name'] ) )
 		{
@@ -124,7 +146,7 @@ class Ban extends XGPCore
 			$parse['changedate']	= $this->_lang['bn_auto_lift_ban_message'];
 			$parse['vacation']		= '';
 
-			$banned_user			= parent::$db->query_fetch ( "SELECT b.*, s.`setting_user_id`, s.`setting_vacations_status`
+			$banned_user			= parent::$db->queryFetch ( "SELECT b.*, s.`setting_user_id`, s.`setting_vacations_status`
 																	FROM `" . BANNED . "` AS b
 																	INNER JOIN `" . SETTINGS . "` AS s
 																		ON s.`setting_user_id` = (SELECT `user_id`
@@ -134,9 +156,9 @@ class Ban extends XGPCore
 																	WHERE `banned_who` = '" . $ban_name . "'" );
 			if ( $banned_user )
 			{
-				$parse['banned_until']			= $this->_lang['bn_banned_until'] . ' (' . date ( Functions_Lib::read_config ( 'date_format_extended' ) , $banned_user['banned_longer'] ) . ')';
+				$parse['banned_until']			= $this->_lang['bn_banned_until'] . ' (' . date ( FunctionsLib::read_config ( 'date_format_extended' ) , $banned_user['banned_longer'] ) . ')';
 				$parse['reason']				= $banned_user['banned_theme'];
-				$parse['changedate']			= '<div style="float:left">' . $this->_lang['bn_change_date'] . '</div><div style="float:right">' . Administration_Lib::show_pop_up ( $this->_lang['bn_edit_ban_help'] ) . '</div>';
+				$parse['changedate']			= '<div style="float:left">' . $this->_lang['bn_change_date'] . '</div><div style="float:right">' . AdministrationLib::show_pop_up ( $this->_lang['bn_edit_ban_help'] ) . '</div>';
 			}
 
 			$parse['vacation']					= $banned_user['setting_vacations_status'] ? 'checked="checked"' : '';
@@ -145,7 +167,7 @@ class Ban extends XGPCore
 			{
 				if ( ! is_numeric ( $_POST['days'] ) or ! is_numeric ( $_POST['hour'] ) )
 				{
-					$parse['alert']	= Administration_Lib::save_message ( 'warning' ,  $this->_lang['bn_all_fields_required'] );
+					$parse['alert']	= AdministrationLib::save_message ( 'warning' ,  $this->_lang['bn_all_fields_required'] );
 				}
 				else
 				{
@@ -196,7 +218,7 @@ class Ban extends XGPCore
 											`banned_email` = '" . $admin_mail . "';" );
 					}
 
-					$user_id	= parent::$db->query_fetch ( "SELECT `user_id`
+					$user_id	= parent::$db->queryFetch ( "SELECT `user_id`
 																FROM " . USERS . "
 																WHERE `user_name` = '" . $ban_name . "' LIMIT 1" );
 
@@ -210,13 +232,13 @@ class Ban extends XGPCore
 													AND s.`setting_user_id` = " . $user_id['user_id'] . "
 													AND p.`planet_user_id` = " . $user_id['user_id'] . ";" );
 
-					$parse['alert']	= Administration_Lib::save_message ( 'ok' , ( str_replace ( '%s' , $ban_name , $this->_lang['bn_ban_success'] ) ) );
+					$parse['alert']	= AdministrationLib::save_message ( 'ok' , ( str_replace ( '%s' , $ban_name , $this->_lang['bn_ban_success'] ) ) );
 				}
 			}
 		}
 		else
 		{
-			Functions_Lib::redirect ( 'admin.php?page=ban' );
+			FunctionsLib::redirect ( 'admin.php?page=ban' );
 		}
 
 		return parent::$page->parse_template ( parent::$page->get_template ( "adm/ban_result_view" ) , $parse );
@@ -257,7 +279,7 @@ class Ban extends XGPCore
 																" . $where_authlevel . " " . $where_banned . "
 																ORDER BY " . $query_order . " ASC" );
 
-		while ( $user = parent::$db->fetch_array ( $users_query ) )
+		while ( $user = parent::$db->fetchArray ( $users_query ) )
 		{
 			$status	= '';
 
@@ -271,7 +293,7 @@ class Ban extends XGPCore
 			$this->_users_count++;
 		}
 
-		parent::$db->free_result ( $users_query ); // free resources
+		parent::$db->freeResult ( $users_query ); // free resources
 
 		return $users_list; // return builded list
 	}
@@ -292,16 +314,17 @@ class Ban extends XGPCore
 													WHERE `user_banned` <> '0'
 													ORDER BY " . $order . " ASC");
 
-		while ( $user = parent::$db->fetch_array ( $banned_query ) )
+		while ( $user = parent::$db->fetchArray ( $banned_query ) )
 		{
 			$banned_list	.=	'<option value="' . $user['user_name'] . '">' . $user['user_name'] . '&nbsp;&nbsp;(ID:&nbsp;' . $user['user_id'] . ')</option>';
 
 			$this->_banned_count++;
 		}
 
-		parent::$db->free_result ( $banned_query ); // free resources
+		parent::$db->freeResult ( $banned_query ); // free resources
 
 		return $banned_list; // return builded list
 	}
 }
+
 /* end of ban.php */

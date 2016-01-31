@@ -11,18 +11,18 @@ function migrate_to_xml ()
 	$query = $db->query ( "SELECT * FROM " . DB_PREFIX . "config");
 
 	$search		=	array	(
-								'¡',
-								'¿',
-								'º',
-								'ª',
+								'ï¿½',
+								'ï¿½',
+								'ï¿½',
+								'ï¿½',
 								'"',
 								'#',
 								'$',
 								'%',
 								'(',
 								')',
-								'¬',
-								'€',
+								'ï¿½',
+								'ï¿½',
 								'|',
 								'~'
 							);

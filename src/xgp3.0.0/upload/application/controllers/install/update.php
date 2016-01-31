@@ -1,69 +1,90 @@
 <?php
-
 /**
- * @project XG Proyect
- * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * Update Controller
+ *
+ * PHP Version 5.5+
+ *
+ * @category Controllers
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
  */
 
+namespace application\controllers\install;
+
+use application\core\XGPCore;
+use application\libraries\FunctionsLib;
+
+/**
+ * Update Class
+ *
+ * @category Classes
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
+ */
 class Update extends XGPCore
 {
-	private $_lang;
+    private $langs;
 
-	/**
-	 * __construct()
-	 */
-	public function __construct()
-	{
-		parent::__construct();
+    /**
+     * __construct()
+     */
+    public function __construct()
+    {
+        parent::__construct();
 
-		$this->_lang	= parent::$lang;
+        $this->langs    = parent::$lang;
 
-		if ( $this->server_requirementes() )
-		{
-			$this->build_page();
-		}
-		else
-		{
-			die ( Functions_Lib::message ( $this->_lang['ins_no_server_requirements'] ) );
-		}
-	}
+        if ($this->serverRequirementes()) {
+            
+            $this->buildPage();
+        } else {
+            die(FunctionsLib::message($this->langs['ins_no_server_requirements']));
+        }
+    }
 
-	/**
-	 * method __destruct
-	 * param
-	 * return close db connection
-	 */
-	public function __destruct ()
-	{
-		parent::$db->close_connection();
-	}
+    /**
+     * method __destruct
+     * param
+     * return close db connection
+     */
+    public function __destruct()
+    {
+        parent::$db->closeConnection();
+    }
 
-	/**
-	 * method build_page
-	 * param
-	 * return main method, loads everything
-	 */
-	private function build_page()
-	{
-		parent::$page->display ( parent::$page->parse_template ( parent::$page->get_template ( 'install/in_update' ) , $this->_lang ) );
-	}
+    /**
+     * method build_page
+     * param
+     * return main method, loads everything
+     */
+    private function buildPage()
+    {
+        parent::$page->display(
+            parent::$page->parse_template(parent::$page->get_template('install/in_update'), $this->langs)
+        );
+    }
 
-	/**
-	 * method server_requirementes
-	 * param
-	 * return true if the required server requirements are met
-	 */
-	private function server_requirementes()
-	{
-		if ( version_compare ( PHP_VERSION , '5.3.0' , '<' ) )
-		{
-			return FALSE;
-		}
-		else
-		{
-			return TRUE;
-		}
-	}
+    /**
+     * method server_requirementes
+     * param
+     * return true if the required server requirements are met
+     */
+    private function serverRequirementes()
+    {
+        if (version_compare(PHP_VERSION, '5.5.0', '<')) {
+            
+            return false;
+        } else {
+            
+            return true;
+        }
+    }
 }
+
 /* end of update.php */

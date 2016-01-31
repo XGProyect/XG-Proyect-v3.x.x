@@ -1,11 +1,33 @@
 <?php
-
 /**
- * @project XG Proyect
- * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * Users Controller
+ *
+ * PHP Version 5.5+
+ *
+ * @category Controller
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
  */
 
+namespace application\controllers\adm;
+
+use application\core\XGPCore;
+use application\libraries\adm\AdministrationLib;
+use application\libraries\FunctionsLib;
+
+/**
+ * Users Class
+ *
+ * @category Classes
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
+ */
 class Users extends XGPCore
 {
 	private $_lang;
@@ -33,13 +55,13 @@ class Users extends XGPCore
 		$this->_current_user	= parent::$users->get_user_data();
 
 		// Check if the user is allowed to access
-		if ( Administration_Lib::have_access ( $this->_current_user['user_authlevel'] ) && Administration_Lib::authorization ( $this->_current_user['user_authlevel'] , 'edit_users' ) == 1 )
+		if ( AdministrationLib::have_access ( $this->_current_user['user_authlevel'] ) && AdministrationLib::authorization ( $this->_current_user['user_authlevel'] , 'edit_users' ) == 1 )
 		{
 			$this->build_page();
 		}
 		else
 		{
-			die ( Functions_Lib::message ( $this->_lang['ge_no_permissions'] ) );
+			die ( FunctionsLib::message ( $this->_lang['ge_no_permissions'] ) );
 		}
 	}
 
@@ -50,7 +72,7 @@ class Users extends XGPCore
 	 */
 	public function __destruct ()
 	{
-		parent::$db->close_connection();
+		parent::$db->closeConnection();
 	}
 
 	######################################
@@ -79,7 +101,7 @@ class Users extends XGPCore
 		{
 			if ( !$this->check_user ( $user ) )
 			{
-				$parse['alert']	= Administration_Lib::save_message ( 'error' , $this->_lang['us_nothing_found'] );
+				$parse['alert']	= AdministrationLib::save_message ( 'error' , $this->_lang['us_nothing_found'] );
 				$user			= '';
 			}
 			else
@@ -90,7 +112,7 @@ class Users extends XGPCore
 					$this->save_data ( $type );
 				}
 
-				$this->_user_query	= parent::$db->query_fetch ( "SELECT u.*,
+				$this->_user_query	= parent::$db->queryFetch ( "SELECT u.*,
 						           											p.*,
 						           											se.*,
 						           											r.*
@@ -106,7 +128,7 @@ class Users extends XGPCore
 		if ( isset ( $_GET['mode'] ) && $_GET['mode'] == 'delete' && $this->_user_query['user_authlevel'] != 3 )
 		{
 			parent::$users->delete_user ( $this->_user_query['user_id'] );
-			$parse['alert']	= Administration_Lib::save_message ( 'ok' , $this->_lang['us_user_deleted'] );
+			$parse['alert']	= AdministrationLib::save_message ( 'ok' , $this->_lang['us_user_deleted'] );
 		}
 
 		$parse['type']		= ( $type != '' ) ? $type : 'info';
@@ -114,7 +136,7 @@ class Users extends XGPCore
 		$parse['status']	= ( $user != '' ) ? '' : ' disabled';
 		$parse['status_box']= ( $user != '' && $this->_id != $this->_current_user['user_id'] ) ? '' : ' disabled';
 		$parse['tag']		= ( $user != '' ) ? 'a' : 'button';
-		$parse['user_rank']	= Administration_Lib::return_rank ( $this->_authlevel );
+		$parse['user_rank']	= AdministrationLib::return_rank ( $this->_authlevel );
 		$parse['content']	= ( $user != '' && $type != '' ) ? $this->get_data ( $type ) : '';
 
 		parent::$page->display ( parent::$page->parse_template ( parent::$page->get_template ( "adm/users_view" ) , $parse ) );
@@ -286,7 +308,7 @@ class Users extends XGPCore
 		$user	= ( isset ( $_GET['user'] ) ? '&user=' . $_GET['user'] : '' );
 
 		// REDIRECTION
-		Functions_Lib::redirect ( "admin.php{$page}{$type}{$user}" );
+		FunctionsLib::redirect ( "admin.php{$page}{$type}{$user}" );
 	}
 
 	######################################
@@ -308,13 +330,13 @@ class Users extends XGPCore
 		$parse['main_planet']								= $this->build_planet_combo ( $this->_user_query , 'user_home_planet_id' );
 		$parse['current_planet']							= $this->build_planet_combo ( $this->_user_query , 'user_current_planet' );
 		$parse['alliances']									= $this->build_alliance_combo ( $this->_user_query );
-		$parse['register_time']								= ( $this->_user_query['user_register_time'] == 0 ) ? '-' : date ( Functions_Lib::read_config ( 'date_format' ) , $this->_user_query['user_register_time'] );
+		$parse['register_time']								= ( $this->_user_query['user_register_time'] == 0 ) ? '-' : date ( FunctionsLib::read_config ( 'date_format' ) , $this->_user_query['user_register_time'] );
 		$parse['user_onlinetime']							= $this->last_activity ( $this->_user_query['user_onlinetime'] );
 		$parse['sel'.$this->_user_query['user_authlevel']]	= 'selected';
 		$parse['user_banned']								= ( $this->_user_query['user_banned'] <= 0 ) ? '<p class="text-error">' . $this->_lang['ge_no'] : '<p class="text-success">' . $this->_lang['ge_yes'];
-		$parse['user_banned']						   	   .= ( $this->_user_query['user_banned'] > 0 ) ? $this->_lang['us_user_information_banned_until'] . date ( Functions_Lib::read_config ( 'date_format' ) , $this->_user_query['user_banned'] ) . '</p>' : '</p>';
+		$parse['user_banned']						   	   .= ( $this->_user_query['user_banned'] > 0 ) ? $this->_lang['us_user_information_banned_until'] . date ( FunctionsLib::read_config ( 'date_format' ) , $this->_user_query['user_banned'] ) . '</p>' : '</p>';
 		$parse['user_fleet_shortcuts']						= $this->build_shortcuts_combo ( $this->_user_query['user_fleet_shortcuts'] );
-		$parse['alert_info']								= ( $this->_alert_type != '' ) ? Administration_Lib::save_message ( $this->_alert_type , $this->_alert_info ) : '';
+		$parse['alert_info']								= ( $this->_alert_type != '' ) ? AdministrationLib::save_message ( $this->_alert_type , $this->_alert_info ) : '';
 
 		return parent::$page->parse_template ( parent::$page->get_template ( "adm/users_information_view" ) , $parse );
 	}
@@ -340,7 +362,7 @@ class Users extends XGPCore
 		$parse['setting_vacations_status']	= ( $this->_user_query['setting_vacations_status'] ) ? ' checked="checked" ' : '';
 		$parse['setting_vacations_until']	= ( $this->_user_query['setting_vacations_until'] ) ? $this->vacation_set() : '';
 		$parse['setting_delete_account']	= ( $this->_user_query['setting_delete_account'] ) ? ' checked="checked" ' : '';
-		$parse['alert_info']				= ( $this->_alert_type != '' ) ? Administration_Lib::save_message ( $this->_alert_type , $this->_alert_info ) : '';
+		$parse['alert_info']				= ( $this->_alert_type != '' ) ? AdministrationLib::save_message ( $this->_alert_type , $this->_alert_info ) : '';
 
 		return parent::$page->parse_template ( parent::$page->get_template ( "adm/users_settings_view" ) , $parse );
 	}
@@ -356,7 +378,7 @@ class Users extends XGPCore
 		$parse	   					   += (array)$this->_user_query;
 		$parse['research']				= str_replace ( array ( '%s' , '%d' ) , array ( $this->_user_query['user_name'] , $this->_id ) , $this->_lang['us_user_research'] );
 		$parse['technologies_table']	= $this->research_table();
-		$parse['alert_info']			= ( $this->_alert_type != '' ) ? Administration_Lib::save_message ( $this->_alert_type , $this->_alert_info ) : '';
+		$parse['alert_info']			= ( $this->_alert_type != '' ) ? AdministrationLib::save_message ( $this->_alert_type , $this->_alert_info ) : '';
 
 		return parent::$page->parse_template ( parent::$page->get_template ( "adm/users_research_view" ) , $parse );
 	}
@@ -372,7 +394,7 @@ class Users extends XGPCore
 		$parse['premium']				= str_replace ( '%s' , $this->_user_query['user_name'] , $this->_lang['us_user_premium'] );
 		$parse['premium_dark_matter']	= $this->_user_query['premium_dark_matter'];
 		$parse['premium_table']			= $this->premium_table ();
-		$parse['alert_info']			= ( $this->_alert_type != '' ) ? Administration_Lib::save_message ( $this->_alert_type , $this->_alert_info ) : '';
+		$parse['alert_info']			= ( $this->_alert_type != '' ) ? AdministrationLib::save_message ( $this->_alert_type , $this->_alert_info ) : '';
 
 		return parent::$page->parse_template ( parent::$page->get_template ( "adm/users_premium_view" ) , $parse );
 	}
@@ -504,7 +526,7 @@ class Users extends XGPCore
 			break;
 		} // SWITCH
 
-		$parse['alert_info']				= ( $this->_alert_type != '' ) ? Administration_Lib::save_message ( $this->_alert_type , $this->_alert_info ) : '';
+		$parse['alert_info']				= ( $this->_alert_type != '' ) ? AdministrationLib::save_message ( $this->_alert_type , $this->_alert_info ) : '';
 
 		return $view;
 	}
@@ -620,7 +642,7 @@ class Users extends XGPCore
 			break;
 		} // SWITCH
 
-		$parse['alert_info']	= ( $this->_alert_type != '' ) ? Administration_Lib::save_message ( $this->_alert_type , $this->_alert_info ) : '';
+		$parse['alert_info']	= ( $this->_alert_type != '' ) ? AdministrationLib::save_message ( $this->_alert_type , $this->_alert_info ) : '';
 
 		return $view;
 	}
@@ -728,7 +750,7 @@ class Users extends XGPCore
 	 */
 	private function save_settings()
 	{
-		$vacation_time				= Functions_Lib::get_default_vacation_time(); // DEFAULT VACATION TIME BEFORE A USER CAN REMOVE IT
+		$vacation_time				= FunctionsLib::get_default_vacation_time(); // DEFAULT VACATION TIME BEFORE A USER CAN REMOVE IT
 		$setting_planet_sort		= ( ( isset ( $_POST['setting_planet_sort'] ) ) ? (int)$_POST['setting_planet_sort'] : 0 );
 		$setting_planet_order		= ( ( isset ( $_POST['setting_planet_order'] ) ) ? (int)$_POST['setting_planet_order'] : 0 );
 		$setting_no_ip_check		= ( ( isset ( $_POST['setting_no_ip_check'] ) && $_POST['setting_no_ip_check'] == 'on' ) ? 1 : 0 );
@@ -766,9 +788,9 @@ class Users extends XGPCore
 			$vacation_query 	= "
 			s.`setting_vacations_status` = '{$setting_vacations_status}',
 			s.`setting_vacations_until` = '{$setting_vacations_until}',
-			p.`planet_metal_perhour` = '".Functions_Lib::read_config ( 'metal_basic_income' )."',
-			p.`planet_crystal_perhour` = '".Functions_Lib::read_config ( 'crystal_basic_income' )."',
-			p.`planet_deuterium_perhour` = '".Functions_Lib::read_config ( 'deuterium_basic_income' )."',
+			p.`planet_metal_perhour` = '".FunctionsLib::read_config ( 'metal_basic_income' )."',
+			p.`planet_crystal_perhour` = '".FunctionsLib::read_config ( 'crystal_basic_income' )."',
+			p.`planet_deuterium_perhour` = '".FunctionsLib::read_config ( 'deuterium_basic_income' )."',
 			p.`planet_energy_used` = '0',
 			p.`planet_energy_max` = '0',
 			p.`planet_building_metal_mine_porcent` = '0',
@@ -820,7 +842,7 @@ class Users extends XGPCore
 			if ( strpos ( $tech , 'research_' ) !== FALSE )
 			{
 				$level			= ( isset ( $level ) ? $level : 0 );
-				$query_string  .= "`{$tech}` = '" . parent::$db->escape_value ( $level ) . "',";
+				$query_string  .= "`{$tech}` = '" . parent::$db->escapeValue ( $level ) . "',";
 			}
 		}
 
@@ -828,7 +850,7 @@ class Users extends XGPCore
 		$query_string	= substr_replace ( $query_string , '' , -1 );
 
 		// QUERY END
-		$query_string  .= " WHERE `research_user_id` = '" . parent::$db->escape_value ( $this->_id  ) . "';";
+		$query_string  .= " WHERE `research_user_id` = '" . parent::$db->escapeValue ( $this->_id  ) . "';";
 
 		// RUN THE QUERY
 		parent::$db->query ( $query_string );
@@ -886,7 +908,7 @@ class Users extends XGPCore
 				}
 
 				// BUILD THE QUERY STRING WITH THE DATA
-				$query_string  .= "`{$premium}` = '" . parent::$db->escape_value ( $data ) . "',";
+				$query_string  .= "`{$premium}` = '" . parent::$db->escapeValue ( $data ) . "',";
 			}
 		}
 
@@ -894,7 +916,7 @@ class Users extends XGPCore
 		$query_string	= substr_replace ( $query_string , '' , -1 );
 
 		// QUERY END
-		$query_string  .= " WHERE `premium_user_id` = '" . parent::$db->escape_value ( $this->_id  ) . "';";
+		$query_string  .= " WHERE `premium_user_id` = '" . parent::$db->escapeValue ( $this->_id  ) . "';";
 
 		// RUN THE QUERY
 		parent::$db->query ( $query_string );
@@ -954,7 +976,7 @@ class Users extends XGPCore
 				case '':
 				default:
 
-					$query_string  .= "`{$field}` = '" . parent::$db->escape_value ( $value ) . "',";
+					$query_string  .= "`{$field}` = '" . parent::$db->escapeValue ( $value ) . "',";
 
 				break;
 			}
@@ -964,7 +986,7 @@ class Users extends XGPCore
 		$query_string	= substr_replace ( $query_string , '' , -1 );
 
 		// QUERY END
-		$query_string  .= " WHERE `planet_id` = '" . parent::$db->escape_value ( $id_get ) . "';";
+		$query_string  .= " WHERE `planet_id` = '" . parent::$db->escapeValue ( $id_get ) . "';";
 
 		// RUN THE QUERY
 		parent::$db->query ( $query_string );
@@ -997,7 +1019,7 @@ class Users extends XGPCore
 			if ( strpos ( $building , 'building_' ) !== FALSE )
 			{
 				$level			= ( isset ( $level ) ? $level : 0 );
-				$query_string  .= "`{$building}` = '" . parent::$db->escape_value ( $level ) . "',";
+				$query_string  .= "`{$building}` = '" . parent::$db->escapeValue ( $level ) . "',";
 			}
 		}
 
@@ -1005,7 +1027,7 @@ class Users extends XGPCore
 		$query_string	= substr_replace ( $query_string , '' , -1 );
 
 		// QUERY END
-		$query_string  .= " WHERE `building_planet_id` = '" . parent::$db->escape_value ( $id_get ) . "';";
+		$query_string  .= " WHERE `building_planet_id` = '" . parent::$db->escapeValue ( $id_get ) . "';";
 
 		// RUN THE QUERY
 		parent::$db->query ( $query_string );
@@ -1038,7 +1060,7 @@ class Users extends XGPCore
 			if ( strpos ( $ship , 'ship_' ) !== FALSE )
 			{
 				$level			= ( isset ( $amount ) ? $amount : 0 );
-				$query_string  .= "`{$ship}` = '" . parent::$db->escape_value ( $amount ) . "',";
+				$query_string  .= "`{$ship}` = '" . parent::$db->escapeValue ( $amount ) . "',";
 			}
 		}
 
@@ -1046,7 +1068,7 @@ class Users extends XGPCore
 		$query_string	= substr_replace ( $query_string , '' , -1 );
 
 		// QUERY END
-		$query_string  .= " WHERE `ship_planet_id` = '" . parent::$db->escape_value ( $id_get ) . "';";
+		$query_string  .= " WHERE `ship_planet_id` = '" . parent::$db->escapeValue ( $id_get ) . "';";
 
 		// RUN THE QUERY
 		parent::$db->query ( $query_string );
@@ -1079,7 +1101,7 @@ class Users extends XGPCore
 			if ( strpos ( $defense , 'defense_' ) !== FALSE )
 			{
 				$level			= ( isset ( $amount ) ? $amount : 0 );
-				$query_string  .= "`{$defense}` = '" . parent::$db->escape_value ( $amount ) . "',";
+				$query_string  .= "`{$defense}` = '" . parent::$db->escapeValue ( $amount ) . "',";
 			}
 		}
 
@@ -1087,7 +1109,7 @@ class Users extends XGPCore
 		$query_string	= substr_replace ( $query_string , '' , -1 );
 
 		// QUERY END
-		$query_string  .= " WHERE `defense_planet_id` = '" . parent::$db->escape_value ( $id_get ) . "';";
+		$query_string  .= " WHERE `defense_planet_id` = '" . parent::$db->escapeValue ( $id_get ) . "';";
 
 		// RUN THE QUERY
 		parent::$db->query ( $query_string );
@@ -1114,7 +1136,7 @@ class Users extends XGPCore
 		$users		= parent::$db->query ( "SELECT `user_id`, `user_name`
 												FROM " . USERS . ";" );
 
-		while ( $users_row = parent::$db->fetch_array ( $users ) )
+		while ( $users_row = parent::$db->fetchArray ( $users ) )
 		{
 			$combo_rows	.= '<option value="' . $users_row['user_id'] . '" ' . ( $users_row['user_id'] == $user_id ? ' selected' : '' ) . '>' .  $users_row['user_name'] . '</option>';
 		}
@@ -1135,7 +1157,7 @@ class Users extends XGPCore
 												FROM " . PLANETS . "
 												WHERE planet_user_id = '" . $this->_id . "';" );
 
-		while ( $planets_row = parent::$db->fetch_array ( $planets ) )
+		while ( $planets_row = parent::$db->fetchArray ( $planets ) )
 		{
 			if ( $user_data[$id_field] == $planets_row['planet_id'] )
 			{
@@ -1161,7 +1183,7 @@ class Users extends XGPCore
 		$alliances	= parent::$db->query ( "SELECT `alliance_id`, `alliance_name`, `alliance_tag`
 												FROM " . ALLIANCE . ";" );
 
-		while ( $alliance_row = parent::$db->fetch_array ( $alliances ) )
+		while ( $alliance_row = parent::$db->fetchArray ( $alliances ) )
 		{
 			if ( $user_data['user_ally_id'] == $alliance_row['alliance_id'] )
 			{
@@ -1428,7 +1450,7 @@ class Users extends XGPCore
 					}
 
 					$parse['premium']		= $this->_lang['us_user_' . $officier];
-					$parse['status']		= ( $expire == 0 ) ? $this->_lang['us_user_premium_inactive'] : ( $this->_lang['us_user_premium_active_until'] . date ( Functions_Lib::read_config ( 'date_format' ) ,$expire ) );
+					$parse['status']		= ( $expire == 0 ) ? $this->_lang['us_user_premium_inactive'] : ( $this->_lang['us_user_premium_active_until'] . date ( FunctionsLib::read_config ( 'date_format' ) ,$expire ) );
 					$parse['status_style']	= ( $expire == 0 ) ? 'text-error' : 'text-success';
 					$parse['field']			= $officier;
 					$parse['combo']			= $this->premium_combo ( $expire );
@@ -1454,7 +1476,7 @@ class Users extends XGPCore
 		$template 				= parent::$page->get_template ( "adm/users_planets_table_view" );
 		$prepare_table			= '';
 
-		while ( $planets = parent::$db->fetch_assoc ( $planets_data )  )
+		while ( $planets = parent::$db->fetchAssoc ( $planets_data )  )
 		{
 			$parse['planet_id']			= $planets['planet_id'];
 			$parse['planet_name']		= $planets['planet_name'];
@@ -1486,7 +1508,7 @@ class Users extends XGPCore
 		$template 				= parent::$page->get_template ( 'adm/users_moons_table_view' );
 		$prepare_table			= '';
 
-		while ( $moons = parent::$db->fetch_assoc ( $moons_data )  )
+		while ( $moons = parent::$db->fetchAssoc ( $moons_data )  )
 		{
 			$parse['moon_id']		= $moons['planet_id'];
 			$parse['moon_name']		= str_replace ( '%s' , $moons['planet_name'] , $this->_lang['us_user_moon_title'] );
@@ -1512,18 +1534,18 @@ class Users extends XGPCore
 	private function edit_main ( $planets_data )
 	{
 		$parse													= $this->_lang;
-		$parse				   						   		   += parent::$db->fetch_array ( $planets_data );
+		$parse				   						   		   += parent::$db->fetchArray ( $planets_data );
 		$parse['planet_user_id']								= $this->build_users_combo ( $parse['planet_user_id'] );
-		$parse['planet_last_update']							= date ( Functions_Lib::read_config ( 'date_format_extended' ) , $parse['planet_last_update'] );
+		$parse['planet_last_update']							= date ( FunctionsLib::read_config ( 'date_format_extended' ) , $parse['planet_last_update'] );
 		$parse['type1']											= $parse['planet_type'] == 1 ? ' selected' : '';
 		$parse['type2']											= $parse['planet_type'] == 3 ? ' selected' : '';
 		$parse['dest1']											= $parse['planet_destroyed'] > 0 ? ' selected' : '';
 		$parse['dest2']											= $parse['planet_destroyed'] <= 0 ? ' selected' : '';
-		$parse['planet_destroyed']								= $parse['planet_destroyed'] > 0 ? date ( Functions_Lib::read_config ( 'date_format_extended' ) , $parse['planet_destroyed'] ) : '-';
-		$parse['planet_b_building']								= $parse['planet_b_building'] > 0 ? date ( Functions_Lib::read_config ( 'date_format_extended' ) , $parse['planet_b_building'] ) : '-';
+		$parse['planet_destroyed']								= $parse['planet_destroyed'] > 0 ? date ( FunctionsLib::read_config ( 'date_format_extended' ) , $parse['planet_destroyed'] ) : '-';
+		$parse['planet_b_building']								= $parse['planet_b_building'] > 0 ? date ( FunctionsLib::read_config ( 'date_format_extended' ) , $parse['planet_b_building'] ) : '-';
 		$parse['planet_b_building_id']							= $this->build_process_queue ( $parse['planet_b_building_id'] );
-		$parse['planet_b_tech']									= $parse['planet_b_tech'] > 0 ? date ( Functions_Lib::read_config ( 'date_format_extended' ) , $parse['planet_b_tech'] ) : '-';
-		$parse['planet_b_hangar']								= $parse['planet_b_hangar'] > 0 ? date ( Functions_Lib::read_config ( 'date_format_extended' ) , $parse['planet_b_hangar'] ) : '-';
+		$parse['planet_b_tech']									= $parse['planet_b_tech'] > 0 ? date ( FunctionsLib::read_config ( 'date_format_extended' ) , $parse['planet_b_tech'] ) : '-';
+		$parse['planet_b_hangar']								= $parse['planet_b_hangar'] > 0 ? date ( FunctionsLib::read_config ( 'date_format_extended' ) , $parse['planet_b_hangar'] ) : '-';
 		$parse['planet_image']									= $this->build_image_combo ( $parse['planet_image'] );
 		$parse['planet_building_metal_mine_porcent']			= $this->build_percent_combo ( $parse['planet_building_metal_mine_porcent'] );
 		$parse['planet_building_crystal_mine_porcent']			= $this->build_percent_combo ( $parse['planet_building_crystal_mine_porcent'] );
@@ -1531,8 +1553,8 @@ class Users extends XGPCore
 		$parse['planet_building_solar_plant_porcent']			= $this->build_percent_combo ( $parse['planet_building_solar_plant_porcent'] );
 		$parse['planet_building_fusion_reactor_porcent']		= $this->build_percent_combo ( $parse['planet_building_fusion_reactor_porcent'] );
 		$parse['planet_ship_solar_satellite_porcent']			= $this->build_percent_combo ( $parse['planet_ship_solar_satellite_porcent'] );
-		$parse['planet_last_jump_time']							= $parse['planet_last_jump_time'] > 0 ? date ( Functions_Lib::read_config ( 'date_format_extended' ) , $parse['planet_last_jump_time'] ) : '-';
-		$parse['planet_invisible_start_time']					= $parse['planet_invisible_start_time'] > 0 ? date ( Functions_Lib::read_config ( 'date_format_extended' ) , $parse['planet_invisible_start_time'] ) : '-';
+		$parse['planet_last_jump_time']							= $parse['planet_last_jump_time'] > 0 ? date ( FunctionsLib::read_config ( 'date_format_extended' ) , $parse['planet_last_jump_time'] ) : '-';
+		$parse['planet_invisible_start_time']					= $parse['planet_invisible_start_time'] > 0 ? date ( FunctionsLib::read_config ( 'date_format_extended' ) , $parse['planet_invisible_start_time'] ) : '-';
 
 		return $parse;
 	}
@@ -1557,7 +1579,7 @@ class Users extends XGPCore
 		$flag					= 1;
 
 
-		foreach ( parent::$db->fetch_assoc ( $planets_data ) as $building => $level )
+		foreach ( parent::$db->fetchAssoc ( $planets_data ) as $building => $level )
 		{
 			if ( strpos ( $building , 'building_' ) !== FALSE && ! in_array ( $building , $exclude_buildings ) )
 			{
@@ -1590,7 +1612,7 @@ class Users extends XGPCore
 		$prepare_table			= '';
 		$flag					= 1;
 
-		foreach ( parent::$db->fetch_assoc ( $planets_data ) as $ship => $amount )
+		foreach ( parent::$db->fetchAssoc ( $planets_data ) as $ship => $amount )
 		{
 			if ( strpos ( $ship , 'ship_' ) !== FALSE )
 			{
@@ -1631,7 +1653,7 @@ class Users extends XGPCore
 		$prepare_table			= '';
 		$flag					= 1;
 
-		foreach ( parent::$db->fetch_assoc ( $planets_data ) as $defense => $amount )
+		foreach ( parent::$db->fetchAssoc ( $planets_data ) as $defense => $amount )
 		{
 			if ( strpos ( $defense , 'defense_' ) !== FALSE && ! in_array ( $defense , $exclude_buildings ) )
 			{
@@ -1666,7 +1688,7 @@ class Users extends XGPCore
 	 */
 	private function check_user ( $user )
 	{
-		$user_query	= parent::$db->query_fetch ( "SELECT `user_id`, `user_authlevel`
+		$user_query	= parent::$db->queryFetch ( "SELECT `user_id`, `user_authlevel`
 													FROM " . USERS . "
 													WHERE `user_name` = '" . $user . "' OR
 															`user_email` = '" . $user . "' OR
@@ -1706,7 +1728,7 @@ class Users extends XGPCore
 	 */
 	private function check_username ( $username )
 	{
-		return parent::$db->query_fetch ( "SELECT `user_id`
+		return parent::$db->queryFetch ( "SELECT `user_id`
 											FROM `" . USERS . "`
 											WHERE `user_name` = '" . $username . "' AND
 													`user_id` <> '" . $this->_id . "';" );
@@ -1729,7 +1751,7 @@ class Users extends XGPCore
 			$email_type = 'user_email';
 		}
 
-		return parent::$db->query_fetch ( "SELECT `user_id`
+		return parent::$db->queryFetch ( "SELECT `user_id`
 												FROM `" . USERS . "`
 												WHERE `{$email_type}` = '{$email}' AND
 													`user_id` <> '{$this->_id}';" );
@@ -1742,7 +1764,8 @@ class Users extends XGPCore
 	 */
 	private function vacation_set ()
 	{
-		return $this->_lang['us_user_setting_vacations_until'] . date ( Functions_Lib::read_config ( 'date_format_extended' ) , $this->_user_query['setting_vacations_until'] );
+		return $this->_lang['us_user_setting_vacations_until'] . date ( FunctionsLib::read_config ( 'date_format_extended' ) , $this->_user_query['setting_vacations_until'] );
 	}
 }
+
 /* end of users.php */

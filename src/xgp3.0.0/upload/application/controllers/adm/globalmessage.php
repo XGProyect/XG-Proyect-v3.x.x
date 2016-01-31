@@ -1,11 +1,33 @@
 <?php
-
 /**
- * @project XG Proyect
- * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * Globalmessage Controller
+ *
+ * PHP Version 5.5+
+ *
+ * @category Controller
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
  */
 
+namespace application\controllers\adm;
+
+use application\core\XGPCore;
+use application\libraries\adm\AdministrationLib;
+use application\libraries\FunctionsLib;
+
+/**
+ * Globalmessage Class
+ *
+ * @category Classes
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
+ */
 class Globalmessage extends XGPCore
 {
 	private $_lang;
@@ -25,13 +47,13 @@ class Globalmessage extends XGPCore
 		$this->_current_user	= parent::$users->get_user_data();
 
 		// Check if the user is allowed to access
-		if ( Administration_Lib::have_access ( $this->_current_user['user_authlevel'] ) && Administration_Lib::authorization ( $this->_current_user['user_authlevel'] , 'use_tools' ) == 1 )
+		if ( AdministrationLib::have_access ( $this->_current_user['user_authlevel'] ) && AdministrationLib::authorization ( $this->_current_user['user_authlevel'] , 'use_tools' ) == 1 )
 		{
 			$this->build_page();
 		}
 		else
 		{
-			die ( Functions_Lib::message ( $this->_lang['ge_no_permissions'] ) );
+			die ( FunctionsLib::message ( $this->_lang['ge_no_permissions'] ) );
 		}
 	}
 
@@ -42,7 +64,7 @@ class Globalmessage extends XGPCore
 	 */
 	public function __destruct ()
 	{
-		parent::$db->close_connection();
+		parent::$db->closeConnection();
 	}
 
 	/**
@@ -76,11 +98,11 @@ class Globalmessage extends XGPCore
 					$time    	= time();
 					$from    	= '<font color="' . $color . '">' . $level . ' '. $this->_current_user['user_name'] . '</font>';
 					$subject 	= '<font color="' . $color . '">' . $_POST['temat'] . '</font>';
-					$message 	= '<font color="' . $color . '"><b>' . Functions_Lib::format_text ( $_POST['tresc'] ) . '</b></font>';
+					$message 	= '<font color="' . $color . '"><b>' . FunctionsLib::format_text ( $_POST['tresc'] ) . '</b></font>';
 
-					while ( $u = parent::$db->fetch_array ( $sq ) )
+					while ( $u = parent::$db->fetchArray ( $sq ) )
 					{
-						Functions_Lib::send_message ( $u['user_id'] , $this->_current_user['user_id'] , $time , 5 , $from , $subject , $message );
+						FunctionsLib::send_message ( $u['user_id'] , $this->_current_user['user_id'] , $time , 5 , $from , $subject , $message );
 						$_POST['tresc'] = str_replace ( ":name:" , $u['user_name'] , $_POST['tresc'] );
 					}
 				}
@@ -89,7 +111,7 @@ class Globalmessage extends XGPCore
 				{
 					$i	= 0;
 
-					while ( $u = parent::$db->fetch_array ( $sq ) )
+					while ( $u = parent::$db->fetchArray ( $sq ) )
 					{
 						mail ( $u['user_email'] , $_POST['temat'] , $_POST['tresc'] );
 
@@ -103,11 +125,11 @@ class Globalmessage extends XGPCore
 					}
 				}
 
-				$parse['alert']		= Administration_Lib::save_message ( 'ok' , $this->_lang['ma_message_sended'] );
+				$parse['alert']		= AdministrationLib::save_message ( 'ok' , $this->_lang['ma_message_sended'] );
 			}
 			else
 			{
-				$parse['alert']		= Administration_Lib::save_message ( 'warning' , $this->_lang['ma_subject_needed'] );
+				$parse['alert']		= AdministrationLib::save_message ( 'warning' , $this->_lang['ma_subject_needed'] );
 			}
 
 			;
@@ -116,4 +138,5 @@ class Globalmessage extends XGPCore
 		parent::$page->display ( parent::$page->parse_template ( parent::$page->get_template ( 'adm/global_message_view' ) , $parse ) );
 	}
 }
+
 /* end of globalmessage.php */

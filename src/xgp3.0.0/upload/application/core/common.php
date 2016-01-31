@@ -21,29 +21,42 @@ if (@filesize(XGP_ROOT . 'application/config/config.xml') == 0) {
     define('XML_CONFIG_FILE', 'config.xml');
 }
 
+use application\core\Database;
+use application\core\Hooks;
+use application\core\Sessions;
+use application\libraries\FunctionsLib;
+use application\libraries\SecurePageLib;
+use application\libraries\UpdateLib;
+
+$config_file    = XGP_ROOT . 'application/config/config.php';
+
+if (file_exists($config_file)) {
+    require $config_file;
+}
+
 // Require some stuff
-require_once XGP_ROOT . 'application/core/Database.php';
 require_once XGP_ROOT . 'application/core/constants.php';
-require_once XGP_ROOT . 'application/core/XGPCore.php';
-require_once XGP_ROOT . 'application/core/Xml.php';
-require_once XGP_ROOT . 'application/libraries/Format_Lib.php';
-require_once XGP_ROOT . 'application/libraries/Officiers_Lib.php';
-require_once XGP_ROOT . 'application/libraries/ProductionLib.php';
-require_once XGP_ROOT . 'application/libraries/Fleets_Lib.php';
-require_once XGP_ROOT . 'application/libraries/Developments_Lib.php';
-require_once XGP_ROOT . 'application/libraries/Functions_Lib.php';
+require_once XGP_ROOT . CORE_PATH . 'Database.php';
+require_once XGP_ROOT . CORE_PATH . 'XGPCore.php';
+require_once XGP_ROOT . CORE_PATH . 'Xml.php';
+require_once XGP_ROOT . LIB_PATH . 'FormatLib.php';
+require_once XGP_ROOT . LIB_PATH . 'OfficiersLib.php';
+require_once XGP_ROOT . LIB_PATH . 'ProductionLib.php';
+require_once XGP_ROOT . LIB_PATH . 'FleetsLib.php';
+require_once XGP_ROOT . LIB_PATH . 'DevelopmentsLib.php';
+require_once XGP_ROOT . LIB_PATH . 'FunctionsLib.php';
 
 // some values by default
 $lang   = array();
 
 // set time zone
-date_default_timezone_set(Functions_Lib::read_config('date_time_zone'));
+date_default_timezone_set(FunctionsLib::read_config('date_time_zone'));
 
 // default skin path
 define('DPATH', DEFAULT_SKINPATH);
 
 // For debugging
-if (Functions_Lib::read_config('debug') == 1) {
+if (FunctionsLib::read_config('debug') == 1) {
 
     // Show all errors
     ini_set('display_errors', 1);
@@ -55,17 +68,17 @@ if (Functions_Lib::read_config('debug') == 1) {
     error_reporting(E_ALL);
 }
 
-$debug          = Functions_Lib::load_library('Debug_Lib');
+$debug          = FunctionsLib::load_library('DebugLib');
 $db             = new Database();
-$installed      = Functions_Lib::read_config('game_installed');
-$game_version   = Functions_Lib::read_config('version');
-$game_lang      = Functions_Lib::read_config('lang');
+$installed      = FunctionsLib::read_config('game_installed');
+$game_version   = FunctionsLib::read_config('version');
+$game_lang      = FunctionsLib::read_config('lang');
 $current_page   = isset($_GET['page']) ? $_GET['page'] : '';
 
 // check if is installed
 if ($installed == 0 && !defined('IN_INSTALL')) {
     
-    Functions_Lib::redirect(XGP_ROOT .  'install/');
+    FunctionsLib::redirect(XGP_ROOT .  'install/');
 }
 
 // define game version
@@ -79,11 +92,11 @@ define('DEFAULT_LANG', ($game_lang == '') ? 'spanish' : $game_lang);
 
 if (!defined('IN_INSTALL')) {
     
-    require_once XGP_ROOT . 'application/core/Sessions.php';
-    require_once XGP_ROOT . 'application/core/Hooks.php';
-    require_once XGP_ROOT . 'application/libraries/Statistics_Lib.php';
-    require_once XGP_ROOT . 'application/libraries/UpdateResourcesLib.php';
-    require_once XGP_ROOT . 'application/libraries/UpdateLib.php';
+    require_once XGP_ROOT . CORE_PATH . 'Sessions.php';
+    require_once XGP_ROOT . CORE_PATH . 'Hooks.php';
+    require_once XGP_ROOT . LIB_PATH . 'StatisticsLib.php';
+    require_once XGP_ROOT . LIB_PATH . 'UpdateResourcesLib.php';
+    require_once XGP_ROOT . LIB_PATH . 'UpdateLib.php';
 
     // Sessions
     $session    = new Sessions();
@@ -96,11 +109,11 @@ if (!defined('IN_INSTALL')) {
 
     if (!defined('IN_LOGIN') or 'IN_LOGIN' != true) {
 
-        require_once XGP_ROOT . 'application/libraries/SecurePage_Lib.php';
+        require_once XGP_ROOT . LIB_PATH . 'SecurePageLib.php';
         $exclude    = array('editor');
 
         if (!in_array($current_page, $exclude)) {
-            SecurePage_Lib::run();
+            SecurePageLib::run();
         }
     }
 
@@ -109,4 +122,5 @@ if (!defined('IN_INSTALL')) {
         new UpdateLib();
     }
 }
+
 /* end of common.php */

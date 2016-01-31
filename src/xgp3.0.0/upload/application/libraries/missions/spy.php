@@ -1,11 +1,33 @@
 <?php
-
 /**
- * @project XG Proyect
- * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * Spy Library
+ *
+ * PHP Version 5.5+
+ *
+ * @category Library
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
  */
 
+namespace application\libraries\missions;
+
+use application\libraries\FormatLib;
+use application\libraries\FunctionsLib;
+use application\libraries\OfficiersLib;
+
+/**
+ * Spy Class
+ *
+ * @category Classes
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
+ */
 class Spy extends Missions
 {
 	/**
@@ -21,11 +43,11 @@ class Spy extends Missions
 	 * param $fleet_row
 	 * return the spy result
 	*/
-	public function spy_mission ( $fleet_row )
+	public function spyMission ( $fleet_row )
 	{
 		if ( $fleet_row['fleet_mess'] == 0 && $fleet_row['fleet_start_time'] <= time() )
 		{
-			$current_data	= parent::$db->query_fetch ( "SELECT p.planet_name, p.planet_galaxy, p.planet_system, p.planet_planet, u.user_name, r.research_espionage_technology, pr.premium_officier_technocrat
+			$current_data	= parent::$db->queryFetch ( "SELECT p.planet_name, p.planet_galaxy, p.planet_system, p.planet_planet, u.user_name, r.research_espionage_technology, pr.premium_officier_technocrat
 															FROM " . PLANETS . " AS p
 															INNER JOIN " . USERS . " AS u ON u.user_id = p.planet_user_id
 															INNER JOIN " . PREMIUM . " AS pr ON pr.premium_user_id = p.planet_user_id
@@ -35,7 +57,7 @@ class Spy extends Missions
 																	p.`planet_planet` = " . $fleet_row['fleet_start_planet'] . " AND
 																	p.`planet_type` = " . $fleet_row['fleet_start_type'] . ";" );
 
-			$target_data	= parent::$db->query_fetch ( "SELECT p.`planet_id`, p.planet_user_id, p.planet_name, p.planet_galaxy, p.planet_system, p.planet_planet, p.planet_metal, p.planet_crystal, p.planet_deuterium, p.planet_energy_max, s.*, d.*, b.*, r.*, pr.premium_officier_technocrat
+			$target_data	= parent::$db->queryFetch ( "SELECT p.`planet_id`, p.planet_user_id, p.planet_name, p.planet_galaxy, p.planet_system, p.planet_planet, p.planet_metal, p.planet_crystal, p.planet_deuterium, p.planet_energy_max, s.*, d.*, b.*, r.*, pr.premium_officier_technocrat
 															FROM " . PLANETS . " AS p
 															INNER JOIN " . SHIPS . " AS s ON s.ship_planet_id = p.`planet_id`
 															INNER JOIN " . DEFENSES . " AS d ON d.defense_planet_id = p.`planet_id`
@@ -48,8 +70,8 @@ class Spy extends Missions
 																	p.`planet_planet` = '" . $fleet_row['fleet_end_planet'] . "' AND
 																	p.`planet_type` = '" . $fleet_row['fleet_end_type'] . "';" );
 
-			$CurrentSpyLvl       = Officiers_Lib::get_max_espionage ( $current_data['research_espionage_technology'] , $current_data['premium_officier_technocrat'] );
-			$TargetSpyLvl        = Officiers_Lib::get_max_espionage ( $target_data['research_espionage_technology'] , $target_data['premium_officier_technocrat'] );
+			$CurrentSpyLvl       = OfficiersLib::getMaxEspionage ( $current_data['research_espionage_technology'] , $current_data['premium_officier_technocrat'] );
+			$TargetSpyLvl        = OfficiersLib::getMaxEspionage ( $target_data['research_espionage_technology'] , $target_data['premium_officier_technocrat'] );
 			$fleet               = explode ( ';' , $fleet_row['fleet_array'] );
 			$fquery              = '';
 
@@ -159,7 +181,7 @@ class Spy extends Missions
 							$SpyMessage = $TargetTechnos . "<br />" . $AttackLink . $MessageEnd;
 						}
 
-						Functions_Lib::send_message ( $fleet_row['fleet_owner'] , '' , $fleet_row['fleet_start_time'] , 0 , $this->_lang['sys_mess_qg'] , $this->_lang['sys_mess_spy_report'] , $SpyMessage );
+						FunctionsLib::send_message ( $fleet_row['fleet_owner'] , '' , $fleet_row['fleet_start_time'] , 0 , $this->_lang['sys_mess_qg'] , $this->_lang['sys_mess_spy_report'] , $SpyMessage );
 
 						$TargetMessage  	 = $this->_lang['sys_mess_spy_ennemyfleet'] ." ". $current_data['planet_name'];
 						$TargetMessage 		.= " <a href=\"game.php?page=galaxy&mode=3&galaxy=" . $current_data['planet_galaxy'] . "&system=" . $current_data['planet_system'] . "\">";
@@ -168,7 +190,7 @@ class Spy extends Missions
 						$TargetMessage 		.= " <a href=\"game.php?page=galaxy&mode=3&galaxy=" . $target_data['planet_galaxy'] . "&system=" . $target_data['planet_system'] . "\">";
 						$TargetMessage 		.= "[" . $target_data['planet_galaxy'] . ":" . $target_data['planet_system'] . ":" . $target_data['planet_planet'] . "]</a>.";
 
-						Functions_Lib::send_message ( $target_data['planet_user_id']  , '' , $fleet_row['fleet_start_time'] , 0 , $this->_lang['sys_mess_spy_control'] , $this->_lang['sys_mess_spy_activity'] , $TargetMessage . ' ' . sprintf ( $this->_lang['sys_mess_spy_lostproba'] , $TargetChances ) );
+						FunctionsLib::send_message ( $target_data['planet_user_id']  , '' , $fleet_row['fleet_start_time'] , 0 , $this->_lang['sys_mess_spy_control'] , $this->_lang['sys_mess_spy_activity'] , $TargetMessage . ' ' . sprintf ( $this->_lang['sys_mess_spy_lostproba'] , $TargetChances ) );
 
 						if ( $TargetChances >= $SpyerChances )
 						{
@@ -215,13 +237,13 @@ class Spy extends Missions
 				$String .= $TitleString ." ". $target_data['planet_name'];
 				$String .= " <a href=\"game.php?page=galaxy&mode=3&galaxy=". $target_data['planet_galaxy'] ."&system=". $target_data['planet_system']. "\">";
 				$String .= "[". $target_data['planet_galaxy'] .":". $target_data['planet_system'] .":". $target_data['planet_planet'] ."]</a>";
-				$String .= $this->_lang['sys_the'] . date(Functions_Lib::read_config ( 'date_format_extended' ), time()) ."</td>";
+				$String .= $this->_lang['sys_the'] . date(FunctionsLib::read_config ( 'date_format_extended' ), time()) ."</td>";
 				$String .= "</tr><tr>";
-				$String .= "<td width=220>". $this->_lang['Metal']     ."</td><td width=220 align=right>". Format_Lib::pretty_number($target_data['planet_metal'])      ."</td><td>&nbsp;</td>";
-				$String .= "<td width=220>". $this->_lang['Crystal']   ."</td></td><td width=220 align=right>". Format_Lib::pretty_number($target_data['planet_crystal'])    ."</td>";
+				$String .= "<td width=220>". $this->_lang['Metal']     ."</td><td width=220 align=right>". FormatLib::pretty_number($target_data['planet_metal'])      ."</td><td>&nbsp;</td>";
+				$String .= "<td width=220>". $this->_lang['Crystal']   ."</td></td><td width=220 align=right>". FormatLib::pretty_number($target_data['planet_crystal'])    ."</td>";
 				$String .= "</tr><tr>";
-				$String .= "<td width=220>". $this->_lang['Deuterium'] ."</td><td width=220 align=right>". Format_Lib::pretty_number($target_data['planet_deuterium'])  ."</td><td>&nbsp;</td>";
-				$String .= "<td width=220>". $this->_lang['Energy']    ."</td><td width=220 align=right>". Format_Lib::pretty_number($target_data['planet_energy_max']) ."</td>";
+				$String .= "<td width=220>". $this->_lang['Deuterium'] ."</td><td width=220 align=right>". FormatLib::pretty_number($target_data['planet_deuterium'])  ."</td><td>&nbsp;</td>";
+				$String .= "<td width=220>". $this->_lang['Energy']    ."</td><td width=220 align=right>". FormatLib::pretty_number($target_data['planet_energy_max']) ."</td>";
 				$String .= "</tr>";
 
 				$LookAtLoop = FALSE;
@@ -322,4 +344,5 @@ class Spy extends Missions
 		return $return;
 	}
 }
+
 /* end of spy.php */

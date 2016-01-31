@@ -1,11 +1,35 @@
 <?php
-
 /**
- * @project XG Proyect
- * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * Server Controller
+ *
+ * PHP Version 5.5+
+ *
+ * @category Controller
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
  */
 
+namespace application\controllers\adm;
+
+use application\core\XGPCore;
+use application\libraries\adm\AdministrationLib;
+use application\libraries\FunctionsLib;
+use DateTime;
+use DateTimeZone;
+
+/**
+ * Server Class
+ *
+ * @category Classes
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
+ */
 class Server extends XGPCore
 {
 	private $_current_user;
@@ -26,15 +50,15 @@ class Server extends XGPCore
 		$this->_current_user	= parent::$users->get_user_data();
 
 		// Check if the user is allowed to access
-		if ( Administration_Lib::have_access ( $this->_current_user['user_authlevel'] ) && Administration_Lib::authorization ( $this->_current_user['user_authlevel'] , 'config_game' ) == 1 )
+		if ( AdministrationLib::have_access ( $this->_current_user['user_authlevel'] ) && AdministrationLib::authorization ( $this->_current_user['user_authlevel'] , 'config_game' ) == 1 )
 		{
-			$this->_game_config		= Functions_Lib::read_config ( '' , TRUE );
+			$this->_game_config		= FunctionsLib::read_config ( '' , TRUE );
 
 			$this->build_page();
 		}
 		else
 		{
-			die ( Functions_Lib::message ( $this->_lang['ge_no_permissions'] ) );
+			die ( FunctionsLib::message ( $this->_lang['ge_no_permissions'] ) );
 		}
 	}
 
@@ -45,7 +69,7 @@ class Server extends XGPCore
 	 */
 	public function __destruct ()
 	{
-		parent::$db->close_connection();
+		parent::$db->closeConnection();
 	}
 
 	/**
@@ -63,35 +87,35 @@ class Server extends XGPCore
 			// CHECK BEFORE SAVE
 			$this->run_validations();
 
-			Functions_Lib::update_config ( 'game_name' 				, $this->_game_config['game_name'] 				);
-			Functions_Lib::update_config ( 'game_logo' 				, $this->_game_config['game_logo'] 				);
-			Functions_Lib::update_config ( 'lang' 					, $this->_game_config['lang'] 					);
-			Functions_Lib::update_config ( 'game_speed' 			, $this->_game_config['game_speed'] 			);
-			Functions_Lib::update_config ( 'fleet_speed' 			, $this->_game_config['fleet_speed']            );
-			Functions_Lib::update_config ( 'resource_multiplier' 	, $this->_game_config['resource_multiplier']    );
-			Functions_Lib::update_config ( 'admin_email' 			, $this->_game_config['admin_email'] 			);
-			Functions_Lib::update_config ( 'forum_url' 				, $this->_game_config['forum_url'] 				);
-			Functions_Lib::update_config ( 'reg_enable'				, $this->_game_config['reg_enable'] 			);
-			Functions_Lib::update_config ( 'game_enable'			, $this->_game_config['game_enable'] 			);
-			Functions_Lib::update_config ( 'close_reason' 			, $this->_game_config['close_reason'] 			);
-			Functions_Lib::update_config ( 'ssl_enabled' 			, $this->_game_config['ssl_enabled'] 			);
-			Functions_Lib::update_config ( 'date_time_zone' 		, $this->_game_config['date_time_zone'] 		);
-			Functions_Lib::update_config ( 'date_format' 			, $this->_game_config['date_format'] 			);
-			Functions_Lib::update_config ( 'date_format_extended' 	, $this->_game_config['date_format_extended'] 	);
-			Functions_Lib::update_config ( 'adm_attack' 			, $this->_game_config['adm_attack'] 			);
-			Functions_Lib::update_config ( 'debug' 					, $this->_game_config['debug'] 					);
-			Functions_Lib::update_config ( 'fleet_cdr' 				, $this->_game_config['fleet_cdr'] 				);
-			Functions_Lib::update_config ( 'defs_cdr' 				, $this->_game_config['defs_cdr'] 				);
-			Functions_Lib::update_config ( 'noobprotection' 		, $this->_game_config['noobprotection'] 		);
-			Functions_Lib::update_config ( 'noobprotectiontime' 	, $this->_game_config['noobprotectiontime'] 	);
-			Functions_Lib::update_config ( 'noobprotectionmulti' 	, $this->_game_config['noobprotectionmulti'] 	);
+			FunctionsLib::update_config ( 'game_name' 				, $this->_game_config['game_name'] 				);
+			FunctionsLib::update_config ( 'game_logo' 				, $this->_game_config['game_logo'] 				);
+			FunctionsLib::update_config ( 'lang' 					, $this->_game_config['lang'] 					);
+			FunctionsLib::update_config ( 'game_speed' 			, $this->_game_config['game_speed'] 			);
+			FunctionsLib::update_config ( 'fleet_speed' 			, $this->_game_config['fleet_speed']            );
+			FunctionsLib::update_config ( 'resource_multiplier' 	, $this->_game_config['resource_multiplier']    );
+			FunctionsLib::update_config ( 'admin_email' 			, $this->_game_config['admin_email'] 			);
+			FunctionsLib::update_config ( 'forum_url' 				, $this->_game_config['forum_url'] 				);
+			FunctionsLib::update_config ( 'reg_enable'				, $this->_game_config['reg_enable'] 			);
+			FunctionsLib::update_config ( 'game_enable'			, $this->_game_config['game_enable'] 			);
+			FunctionsLib::update_config ( 'close_reason' 			, $this->_game_config['close_reason'] 			);
+			FunctionsLib::update_config ( 'ssl_enabled' 			, $this->_game_config['ssl_enabled'] 			);
+			FunctionsLib::update_config ( 'date_time_zone' 		, $this->_game_config['date_time_zone'] 		);
+			FunctionsLib::update_config ( 'date_format' 			, $this->_game_config['date_format'] 			);
+			FunctionsLib::update_config ( 'date_format_extended' 	, $this->_game_config['date_format_extended'] 	);
+			FunctionsLib::update_config ( 'adm_attack' 			, $this->_game_config['adm_attack'] 			);
+			FunctionsLib::update_config ( 'debug' 					, $this->_game_config['debug'] 					);
+			FunctionsLib::update_config ( 'fleet_cdr' 				, $this->_game_config['fleet_cdr'] 				);
+			FunctionsLib::update_config ( 'defs_cdr' 				, $this->_game_config['defs_cdr'] 				);
+			FunctionsLib::update_config ( 'noobprotection' 		, $this->_game_config['noobprotection'] 		);
+			FunctionsLib::update_config ( 'noobprotectiontime' 	, $this->_game_config['noobprotectiontime'] 	);
+			FunctionsLib::update_config ( 'noobprotectionmulti' 	, $this->_game_config['noobprotectionmulti'] 	);
 
-			$parse['alert']					= Administration_Lib::save_message ( 'ok' , $this->_lang['se_all_ok_message'] );
+			$parse['alert']					= AdministrationLib::save_message ( 'ok' , $this->_lang['se_all_ok_message'] );
 		}
 
 		$parse['game_name']              	= $this->_game_config['game_name'];
 		$parse['game_logo']              	= $this->_game_config['game_logo'];
-		$parse['language_settings']			= Functions_Lib::get_languages ( $this->_game_config['lang'] );
+		$parse['language_settings']			= FunctionsLib::get_languages ( $this->_game_config['lang'] );
 		$parse['game_speed']             	= $this->_game_config['game_speed'] / 2500;
 		$parse['fleet_speed']            	= $this->_game_config['fleet_speed'] / 2500;
 		$parse['resource_multiplier']    	= $this->_game_config['resource_multiplier'];
@@ -168,7 +192,7 @@ class Server extends XGPCore
 		}
 
 		// ADMIN EMAIL CONTACT
-		if ( isset ( $_POST['admin_email'] ) && $_POST['admin_email'] != '' && Functions_Lib::valid_email ( $_POST['admin_email'] ) )
+		if ( isset ( $_POST['admin_email'] ) && $_POST['admin_email'] != '' && FunctionsLib::valid_email ( $_POST['admin_email'] ) )
 		{
 			$this->_game_config['admin_email']	= $_POST['admin_email'];
 		}
@@ -176,7 +200,7 @@ class Server extends XGPCore
 		// FORUM LINK
 		if ( isset ( $_POST['forum_url'] ) && $_POST['forum_url'] != '' )
 		{
-			$this->_game_config['forum_url']	= Functions_Lib::prep_url ( $_POST['forum_url'] );
+			$this->_game_config['forum_url']	= FunctionsLib::prep_url ( $_POST['forum_url'] );
 		}
 
 		// ACTIVATE SERVER
@@ -313,7 +337,7 @@ class Server extends XGPCore
 		$utc				= new DateTimeZone ( 'UTC' );
 		$dt 				= new DateTime ( 'now' , $utc );
 		$time_zones			= '';
-		$current_time_zone	= Functions_Lib::read_config ( 'date_time_zone' );
+		$current_time_zone	= FunctionsLib::read_config ( 'date_time_zone' );
 
 		// Get the data
 		foreach ( DateTimeZone::listIdentifiers() as $tz )
@@ -369,4 +393,5 @@ class Server extends XGPCore
 		return $sign . str_pad ( $hour , 2 , '0' , STR_PAD_LEFT ) . ':' . str_pad ( $minutes , 2 , '0' );
 	}
 }
+
 /* end of server.php */

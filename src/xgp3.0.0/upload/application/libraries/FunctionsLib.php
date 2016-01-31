@@ -1,12 +1,33 @@
 <?php
-
 /**
- * @project XG Proyect
- * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * Functions Library
+ *
+ * PHP Version 5.5+
+ *
+ * @category Library
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
  */
 
-abstract class Functions_Lib extends XGPCore
+namespace application\libraries;
+
+use application\core\XGPCore;
+use application\core\Xml;
+
+/**
+ * FunctionsLib Class
+ *
+ * @category Classes
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
+ */
+abstract class FunctionsLib extends XGPCore
 {
     /**
      * __construct()
@@ -26,10 +47,12 @@ abstract class Functions_Lib extends XGPCore
         if (!empty($library)) {
 
             // Require file
-            require_once ( XGP_ROOT . 'application/libraries/' . $library . '.php' );
+            require_once XGP_ROOT . LIB_PATH . $library . '.php';
 
+            $class_name = 'application\libraries\\' . $library;
+            
             // Create new $library object
-            return new $library();
+            return new $class_name();
         } else {
 
             // ups!
@@ -44,7 +67,7 @@ abstract class Functions_Lib extends XGPCore
     */
     public static function format_text ( $text )
     {
-            $text	= parent::$db->escape_value ( $text );
+            $text	= parent::$db->escapeValue ( $text );
             $text	= trim ( nl2br ( strip_tags ( $text , '<br>' ) ) );
             $text	= preg_replace ( '|[\r][\n]|' , '\\r\\n' , $text );
 
@@ -89,11 +112,11 @@ abstract class Functions_Lib extends XGPCore
 
             if ( $all )
             {
-                    return $configs->get_configs ();
+                    return $configs->getConfigs ();
             }
             else
             {
-                    return $configs->get_config ( $config_name );
+                    return $configs->getConfig ( $config_name );
             }
 
     }
@@ -108,7 +131,7 @@ abstract class Functions_Lib extends XGPCore
     {
             $configs	= Xml::getInstance ( XML_CONFIG_FILE );
 
-            $configs->write_config ( $config_name , $config_value );
+            $configs->writeConfig ( $config_name , $config_value );
     }
 
     /**
@@ -148,7 +171,7 @@ abstract class Functions_Lib extends XGPCore
     */
     public static function fleet_speed_factor ()
     {
-            return Functions_Lib::read_config ( 'fleet_speed' ) / 2500;
+            return FunctionsLib::read_config ( 'fleet_speed' ) / 2500;
     }
 
     /**
@@ -276,7 +299,7 @@ abstract class Functions_Lib extends XGPCore
 
             if ( $user_planets )
             {
-                    while ( $planets = parent::$db->fetch_array ( $user_planets ) )
+                    while ( $planets = parent::$db->fetchArray ( $user_planets ) )
                     {
                             if ( $current_planet_id != $planets['planet_id'] )
                             {
@@ -481,10 +504,10 @@ abstract class Functions_Lib extends XGPCore
     {
             if ( self::read_config  ( 'game_enable' ) == 0 && $current_user['user_authlevel'] == 3 )
             {
-                    self::message ( stripslashes ( Functions_Lib::read_config  ( 'close_reason' ) ) , '' , '' , FALSE , FALSE );
+                    self::message ( stripslashes ( FunctionsLib::read_config  ( 'close_reason' ) ) , '' , '' , FALSE , FALSE );
                     die();
             }
     }
 }
 
-/* end of Functions_Lib.php */
+/* end of FunctionsLib.php */

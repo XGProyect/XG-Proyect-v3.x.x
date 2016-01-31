@@ -1,12 +1,32 @@
 <?php
-
 /**
- * @project XG Proyect
- * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * Developments Library
+ *
+ * PHP Version 5.5+
+ *
+ * @category Library
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
  */
 
-class Developments_Lib extends XGPCore
+namespace application\libraries;
+
+use application\core\XGPCore;
+
+/**
+ * DevelopmentsLib Class
+ *
+ * @category Classes
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
+ */
+class DevelopmentsLib extends XGPCore
 {
 	/**
 	 * method set_building_page
@@ -38,7 +58,7 @@ class Developments_Lib extends XGPCore
 	 */
 	public static function max_fields ( &$current_planet )
 	{
-		return $current_planet['planet_field_max'] + ( $current_planet[parent::$objects->get_objects(33)] * FIELDS_BY_TERRAFORMER );
+		return $current_planet['planet_field_max'] + ( $current_planet[parent::$objects->getObjects(33)] * FIELDS_BY_TERRAFORMER );
 	}
 
 	/**
@@ -52,8 +72,8 @@ class Developments_Lib extends XGPCore
 	 */
 	public static function development_price ( $current_user , $current_planet , $element , $incremental = TRUE , $destroy = FALSE )
 	{
-		$resource	= parent::$objects->get_objects();
-		$pricelist	= parent::$objects->get_price();
+		$resource	= parent::$objects->getObjects();
+		$pricelist	= parent::$objects->getPrice();
 
 		if ( $incremental )
 		{
@@ -127,8 +147,8 @@ class Developments_Lib extends XGPCore
 	 */
 	public static function formated_development_price ( $current_user , $current_planet , $element , $userfactor = TRUE , $level = FALSE )
 	{
-		$resource	= parent::$objects->get_objects();
-		$pricelist	= parent::$objects->get_price();
+		$resource	= parent::$objects->getObjects();
+		$pricelist	= parent::$objects->getPrice();
 		$lang		= parent::$lang;
 
 		if ( $userfactor && ( $level === FALSE ) )
@@ -170,13 +190,13 @@ class Developments_Lib extends XGPCore
 
 				if ( $cost > $current_planet['planet_' . $res_type] )
 				{
-					$text .= "<b style=\"color:red;\"> <t title=\"-" . Format_Lib::pretty_number ( $cost - $current_planet['planet_' . $res_type] ) . "\">";
-					$text .= "<span class=\"noresources\">" . Format_Lib::pretty_number ( $cost ) . "</span></t></b> ";
+					$text .= "<b style=\"color:red;\"> <t title=\"-" . FormatLib::pretty_number ( $cost - $current_planet['planet_' . $res_type] ) . "\">";
+					$text .= "<span class=\"noresources\">" . FormatLib::pretty_number ( $cost ) . "</span></t></b> ";
 					$is_buyeable = FALSE;
 				}
 				else
 				{
-					$text .= "<b style=\"color:lime;\">" . Format_Lib::pretty_number ( $cost ) . "</b> ";
+					$text .= "<b style=\"color:lime;\">" . FormatLib::pretty_number ( $cost ) . "</b> ";
 				}
 			}
 		}
@@ -194,9 +214,9 @@ class Developments_Lib extends XGPCore
 	 */
 	public static function development_time ( $current_user , $current_planet , $element , $level = FALSE , $total_lab_level = 0 )
 	{
-		$resource	= parent::$objects->get_objects();
-		$pricelist	= parent::$objects->get_price();
-		$reslist	= parent::$objects->get_objects_list();
+		$resource	= parent::$objects->getObjects();
+		$pricelist	= parent::$objects->getPrice();
+		$reslist	= parent::$objects->getObjectsList();
 
 		// IF ROUTINE FIX BY JSTAR
 		if( $level === FALSE )
@@ -208,7 +228,7 @@ class Developments_Lib extends XGPCore
 		{
 			$cost_metal   = floor ( $pricelist[$element]['metal']   * pow ( $pricelist[$element]['factor'] , $level ) );
 			$cost_crystal = floor ( $pricelist[$element]['crystal'] * pow ( $pricelist[$element]['factor'] , $level ) );
-			$time         = ( ( $cost_crystal + $cost_metal ) / Functions_Lib::read_config ( 'game_speed' ) ) * ( 1 / ( $current_planet[$resource['14']] + 1 ) ) * pow ( 0.5 , $current_planet[$resource['15']] );
+			$time         = ( ( $cost_crystal + $cost_metal ) / FunctionsLib::read_config ( 'game_speed' ) ) * ( 1 / ( $current_planet[$resource['14']] + 1 ) ) * pow ( 0.5 , $current_planet[$resource['15']] );
 			$time         = floor ( ( $time * 60 * 60 ) );
 		}
 		elseif ( in_array ( $element , $reslist['tech'] ) )
@@ -226,17 +246,17 @@ class Developments_Lib extends XGPCore
 				$lablevel	=	$total_lab_level;
 			}
 
-			$time         = ( ( $cost_metal + $cost_crystal ) / Functions_Lib::read_config ( 'game_speed' ) ) / ( ( $lablevel + 1 ) * 2 );
-			$time         = floor ( ( $time * 60 * 60 ) * ( 1 - ( ( Officiers_Lib::is_officier_active ( $current_user['premium_officier_technocrat'] ) ) ? TECHNOCRATE_SPEED : 0 ) ) );
+			$time         = ( ( $cost_metal + $cost_crystal ) / FunctionsLib::read_config ( 'game_speed' ) ) / ( ( $lablevel + 1 ) * 2 );
+			$time         = floor ( ( $time * 60 * 60 ) * ( 1 - ( ( OfficiersLib::isOfficierActive ( $current_user['premium_officier_technocrat'] ) ) ? TECHNOCRATE_SPEED : 0 ) ) );
 		}
 		elseif ( in_array ( $element , $reslist['defense'] ) )
 		{
-			$time         = ( ( $pricelist[$element]['metal'] + $pricelist[$element]['crystal'] ) / Functions_Lib::read_config ( 'game_speed' ) ) * ( 1 / ( $current_planet[$resource['21'] ] + 1 ) ) * pow ( 1 / 2, $current_planet[$resource['15']] );
+			$time         = ( ( $pricelist[$element]['metal'] + $pricelist[$element]['crystal'] ) / FunctionsLib::read_config ( 'game_speed' ) ) * ( 1 / ( $current_planet[$resource['21'] ] + 1 ) ) * pow ( 1 / 2, $current_planet[$resource['15']] );
 			$time         = floor ( ( $time * 60 * 60 ) );
 		}
 		elseif ( in_array ( $element , $reslist['fleet'] ) )
 		{
-			$time         = ( ( $pricelist[$element]['metal'] + $pricelist[$element]['crystal'] ) / Functions_Lib::read_config ( 'game_speed' ) ) * ( 1 / ( $current_planet[$resource['21']] + 1 ) ) * pow ( 1 / 2, $current_planet[$resource['15']] );
+			$time         = ( ( $pricelist[$element]['metal'] + $pricelist[$element]['crystal'] ) / FunctionsLib::read_config ( 'game_speed' ) ) * ( 1 / ( $current_planet[$resource['21']] + 1 ) ) * pow ( 1 / 2, $current_planet[$resource['15']] );
 			$time         = floor ( ( $time * 60 * 60 ) );
 		}
 
@@ -255,7 +275,7 @@ class Developments_Lib extends XGPCore
 	 */
 	public static function formated_development_time ( $time )
 	{
-		return "<br>". parent::$lang['fgf_time'] . Format_Lib::pretty_time ( $time );
+		return "<br>". parent::$lang['fgf_time'] . FormatLib::pretty_time ( $time );
 	}
 
 	/**
@@ -267,8 +287,8 @@ class Developments_Lib extends XGPCore
 	 */
 	public static function is_development_allowed ( $current_user , $current_planet , $element )
 	{
-		$resource		= parent::$objects->get_objects();
-		$requeriments	= parent::$objects->get_relations();
+		$resource		= parent::$objects->getObjects();
+		$requeriments	= parent::$objects->getRelations();
 
 		if ( isset ( $requeriments[$element] ) )
 		{
@@ -307,7 +327,7 @@ class Developments_Lib extends XGPCore
 	{
 		$parse					= parent::$lang;
 		$parse['call_program']	= $call_program;
-		$parse['current_page']	= ( $element_id != 0 ) ? Developments_Lib::set_building_page ( $element_id ) : $call_program;
+		$parse['current_page']	= ( $element_id != 0 ) ? DevelopmentsLib::set_building_page ( $element_id ) : $call_program;
 
 		return parent::$page->parse_template ( parent::$page->get_template ( 'buildings/buildings_buildlist_script' ) , $parse );
 	}
@@ -321,7 +341,7 @@ class Developments_Lib extends XGPCore
 	public static function set_first_element ( &$current_planet, $current_user )
 	{
 		$lang		= parent::$lang;
-		$resource	= parent::$objects->get_objects();
+		$resource	= parent::$objects->getObjects();
 
 		if ( $current_planet['planet_b_building'] == 0 )
 		{
@@ -393,16 +413,16 @@ class Developments_Lib extends XGPCore
 							$message    = sprintf	(
 														$lang['sys_notenough_money'] ,
 														$element_name,
-														Format_Lib::pretty_number ( $current_planet['planet_metal'] ) , $lang['Metal'],
-														Format_Lib::pretty_number ( $current_planet['planet_crystal'] ) , $lang['Crystal'],
-														Format_Lib::pretty_number ( $current_planet['planet_deuterium'] ) , $lang['Deuterium'],
-														Format_Lib::pretty_number ( $price['metal'] ) , $lang['Metal'],
-														Format_Lib::pretty_number ( $price['crystal'] ) , $lang['Crystal'],
-														Format_Lib::pretty_number ( $price['deuterium'] ) , $lang['Deuterium']
+														FormatLib::pretty_number ( $current_planet['planet_metal'] ) , $lang['Metal'],
+														FormatLib::pretty_number ( $current_planet['planet_crystal'] ) , $lang['Crystal'],
+														FormatLib::pretty_number ( $current_planet['planet_deuterium'] ) , $lang['Deuterium'],
+														FormatLib::pretty_number ( $price['metal'] ) , $lang['Metal'],
+														FormatLib::pretty_number ( $price['crystal'] ) , $lang['Crystal'],
+														FormatLib::pretty_number ( $price['deuterium'] ) , $lang['Deuterium']
 													);
 						}
 
-						Functions_Lib::send_message ( $current_user['user_id'], '', '', 5, $lang['sys_buildlist'], $lang['sys_buildlist_fail'], $message);
+						FunctionsLib::send_message ( $current_user['user_id'], '', '', 5, $lang['sys_buildlist'], $lang['sys_buildlist_fail'], $message);
 
 						array_shift ( $queue_array );
 
@@ -466,18 +486,18 @@ class Developments_Lib extends XGPCore
 		{
 			case 106:
 
-				if ( Officiers_Lib::is_officier_active ( $current_user['premium_officier_technocrat'] ) )
+				if ( OfficiersLib::isOfficierActive ( $current_user['premium_officier_technocrat'] ) )
 				{
-					$return_level 	.= Format_Lib::strong_text ( Format_Lib::color_green ( ' +' . TECHNOCRATE_SPY . parent::$lang['bd_spy'] ) );
+					$return_level 	.= FormatLib::strong_text ( FormatLib::color_green ( ' +' . TECHNOCRATE_SPY . parent::$lang['bd_spy'] ) );
 				}
 
 			break;
 
 			case 108:
 
-				if ( Officiers_Lib::is_officier_active ( $current_user['premium_officier_admiral'] ) )
+				if ( OfficiersLib::isOfficierActive ( $current_user['premium_officier_admiral'] ) )
 				{
-					$return_level 	.= Format_Lib::strong_text ( Format_Lib::color_green ( ' +' . AMIRAL . parent::$lang['bd_commander'] ) );
+					$return_level 	.= FormatLib::strong_text ( FormatLib::color_green ( ' +' . AMIRAL . parent::$lang['bd_commander'] ) );
 				}
 
 			break;
@@ -506,4 +526,5 @@ class Developments_Lib extends XGPCore
 		return ( $current_planet['planet_b_hangar'] != 0 );
 	}
 }
-/* end of Developments_Lib.php */
+
+/* end of DevelopmentsLib.php */

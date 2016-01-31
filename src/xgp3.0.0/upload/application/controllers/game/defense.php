@@ -12,6 +12,13 @@
  * @version  3.0.0
  */
 
+namespace application\controllers\game;
+
+use application\core\XGPCore;
+use application\libraries\DevelopmentsLib;
+use application\libraries\FormatLib;
+use application\libraries\FunctionsLib;
+
 /**
  * Defense Class
  *
@@ -43,11 +50,11 @@ class Defense extends XGPCore
             parent::$users->check_session();
 
             // Check module access
-            Functions_Lib::module_message ( Functions_Lib::is_module_accesible ( self::MODULE_ID ) );
+            FunctionsLib::module_message ( FunctionsLib::is_module_accesible ( self::MODULE_ID ) );
 
             $this->_lang			= parent::$lang;
-            $this->_resource		= parent::$objects->get_objects();
-            $this->_price			= parent::$objects->get_price();
+            $this->_resource		= parent::$objects->getObjects();
+            $this->_price			= parent::$objects->getPrice();
             $this->_current_user	= parent::$users->get_user_data();
             $this->_current_planet	= parent::$users->get_planet_data();
 
@@ -61,7 +68,7 @@ class Defense extends XGPCore
      */
     public function __destruct()
     {
-            parent::$db->close_connection();
+            parent::$db->closeConnection();
     }
 
     public function build_page()
@@ -121,7 +128,7 @@ class Defense extends XGPCore
                                             }
                                     }
 
-                                    if (Developments_Lib::is_development_allowed($this->_current_user, $this->_current_planet, $Element))
+                                    if (DevelopmentsLib::is_development_allowed($this->_current_user, $this->_current_planet, $Element))
                                     {
                                             $MaxElements = $this->GetMaxConstructibleElements ( $Element, $this->_current_planet );
 
@@ -185,11 +192,11 @@ class Defense extends XGPCore
                                                                             WHERE p.`planet_id` = '".$this->_current_planet['planet_id']."';" );
                     }
 
-                    Functions_Lib::redirect ( 'game.php?page=defense' );
+                    FunctionsLib::redirect ( 'game.php?page=defense' );
             }
 
             if ($this->_current_planet[$this->_resource[21]] == 0)
-                    Functions_Lib::message($this->_lang['bd_shipyard_required'], '', '', TRUE);
+                    FunctionsLib::message($this->_lang['bd_shipyard_required'], '', '', TRUE);
 
             $NotBuilding = TRUE;
 
@@ -235,20 +242,20 @@ class Defense extends XGPCore
             {
                     if ($Element > 400 && $Element <= 599)
                     {
-                            if (Developments_Lib::is_development_allowed($this->_current_user, $this->_current_planet, $Element))
+                            if (DevelopmentsLib::is_development_allowed($this->_current_user, $this->_current_planet, $Element))
                             {
-                                    $CanBuildOne         			= Developments_Lib::is_development_payable($this->_current_user, $this->_current_planet, $Element, FALSE);
-                                    $BuildOneElementTime 			= Developments_Lib::development_time($this->_current_user, $this->_current_planet, $Element);
+                                    $CanBuildOne         			= DevelopmentsLib::is_development_payable($this->_current_user, $this->_current_planet, $Element, FALSE);
+                                    $BuildOneElementTime 			= DevelopmentsLib::development_time($this->_current_user, $this->_current_planet, $Element);
                                     $ElementCount        			= $this->_current_planet[$this->_resource[$Element]];
-                                    $ElementNbre         			= ($ElementCount == 0) ? "" : " (". $this->_lang['bd_available'] . Format_Lib::pretty_number($ElementCount) . ")";
+                                    $ElementNbre         			= ($ElementCount == 0) ? "" : " (". $this->_lang['bd_available'] . FormatLib::pretty_number($ElementCount) . ")";
 
                                     $parse['add_element']			= '';
                                     $parse['dpath']					= DPATH;
                                     $parse['element']				= $Element;
                                     $parse['element_name']			= $ElementName;
                                     $parse['element_description']	= $this->_lang['res']['descriptions'][$Element];
-                                    $parse['element_price']			= Developments_Lib::formated_development_price($this->_current_user, $this->_current_planet, $Element, FALSE);
-                                    $parse['building_time']			= Developments_Lib::formated_development_time($BuildOneElementTime);
+                                    $parse['element_price']			= DevelopmentsLib::formated_development_price($this->_current_user, $this->_current_planet, $Element, FALSE);
+                                    $parse['building_time']			= DevelopmentsLib::formated_development_time($BuildOneElementTime);
                                     $parse['element_nbre']			= $ElementNbre;
 
                                     if ( $CanBuildOne && ! parent::$users->is_on_vacations ( $this->_current_user ) )
@@ -353,7 +360,7 @@ class Defense extends XGPCore
                     if ( $Element != '' )
                     {
                             $Element		= explode(',', $Element);
-                            $ElementTime  	= Developments_Lib::development_time( $this->_current_user, $this->_current_planet, $Element[0] );
+                            $ElementTime  	= DevelopmentsLib::development_time( $this->_current_user, $this->_current_planet, $Element[0] );
                             $QueueTime   	+= $ElementTime * $Element[1];
                             $TimePerType 	.= "".$ElementTime.",";
                             $NamePerType 	.= "'". html_entity_decode ( $this->_lang['tech'][$Element[0]], ENT_COMPAT , "utf-8" ) ."',";
@@ -367,7 +374,7 @@ class Defense extends XGPCore
             $parse['c'] 					= $TimePerType;
             $parse['b_hangar_id_plus'] 		= $this->_current_planet['planet_b_hangar'];
             $parse['current_page']			= $current_page;
-            $parse['pretty_time_b_hangar'] 	= Format_Lib::pretty_time($QueueTime - $this->_current_planet['planet_b_hangar']);
+            $parse['pretty_time_b_hangar'] 	= FormatLib::pretty_time($QueueTime - $this->_current_planet['planet_b_hangar']);
 
             return parent::$page->parse_template ( parent::$page->get_template ( 'buildings/buildings_script' ) , $parse );
     }
@@ -383,4 +390,5 @@ class Defense extends XGPCore
         return (strpos($queue, $element . ','));
     }
 }
-/* end of shipyard.php */
+
+/* end of defense.php */

@@ -1,11 +1,32 @@
 <?php
-
 /**
- * @project XG Proyect
- * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * Stay Library
+ *
+ * PHP Version 5.5+
+ *
+ * @category Library
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
  */
 
+namespace application\libraries\missions;
+
+use application\libraries\FleetsLib;
+use application\libraries\FunctionsLib;
+
+/**
+ * Stay Class
+ *
+ * @category Classes
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
+ */
 class Stay extends Missions
 {
 	/**
@@ -21,13 +42,13 @@ class Stay extends Missions
 	 * param $fleet_row
 	 * return the stay result
 	*/
-	public function stay_mission ( $fleet_row )
+	public function stayMission ( $fleet_row )
 	{
 		if ( $fleet_row['fleet_mess'] == 0 )
 		{
 			if ( $fleet_row['fleet_start_time'] <= time() )
 			{
-				$transport_check	= parent::$db->query_fetch ( "SELECT pc1.`planet_user_id` AS start_id,
+				$transport_check	= parent::$db->queryFetch ( "SELECT pc1.`planet_user_id` AS start_id,
 																			pc1.`planet_name` AS start_name,
 																			pc2.`planet_user_id` AS target_id,
 																			pc2.`planet_name` AS target_name
@@ -48,9 +69,9 @@ class Stay extends Missions
 				$target_owner_id	= $transport_check['target_name'];
 
 				// DIFFERENT TYPES OF MESSAGES
-				$message[1]			= sprintf ( $this->_lang['sys_tran_mess_owner'] , $target_name , Fleets_Lib::target_link ( $fleet_row , '' ) , $fleet_row['fleet_resource_metal'] , $this->_lang['Metal'] , $fleet_row['fleet_resource_crystal'] , $this->_lang['Crystal'] , $fleet_row['fleet_resource_deuterium'] , $this->_lang['Deuterium'] );
-				$message[2]			= sprintf ( $this->_lang['sys_tran_mess_user'] , $start_name , Fleets_Lib::start_link ( $fleet_row , '' ) , $target_name , Fleets_Lib::target_link ( $fleet_row , '' ) , $fleet_row['fleet_resource_metal'] , $this->_lang['Metal'] , $fleet_row['fleet_resource_crystal'] , $this->_lang['Crystal'] , $fleet_row['fleet_resource_deuterium'] , $this->_lang['Deuterium'] );
-				$message[3]			= sprintf ( $this->_lang['sys_tran_mess_back'] , $start_name , Fleets_Lib::start_link ( $fleet_row , '' ) );
+				$message[1]			= sprintf ( $this->_lang['sys_tran_mess_owner'] , $target_name , FleetsLib::target_link ( $fleet_row , '' ) , $fleet_row['fleet_resource_metal'] , $this->_lang['Metal'] , $fleet_row['fleet_resource_crystal'] , $this->_lang['Crystal'] , $fleet_row['fleet_resource_deuterium'] , $this->_lang['Deuterium'] );
+				$message[2]			= sprintf ( $this->_lang['sys_tran_mess_user'] , $start_name , FleetsLib::start_link ( $fleet_row , '' ) , $target_name , FleetsLib::target_link ( $fleet_row , '' ) , $fleet_row['fleet_resource_metal'] , $this->_lang['Metal'] , $fleet_row['fleet_resource_crystal'] , $this->_lang['Crystal'] , $fleet_row['fleet_resource_deuterium'] , $this->_lang['Deuterium'] );
+				$message[3]			= sprintf ( $this->_lang['sys_tran_mess_back'] , $start_name , FleetsLib::start_link ( $fleet_row , '' ) );
 
 				$this->stay_message ( $start_owner_id , $message[1] , $fleet_row['fleet_start_time'] , $this->_lang['sys_mess_transport'] );
 				$this->stay_message ( $target_owner_id , $message[2] , $fleet_row['fleet_start_time'] , $this->_lang['sys_mess_transport'] );
@@ -95,7 +116,8 @@ class Stay extends Missions
 	*/
 	private function stay_message ( $owner , $message , $time , $status_message )
 	{
-		Functions_Lib::send_message ( $owner , '' , $time , 5 , $this->_lang['sys_mess_tower'] , $status_message , $message );
+		FunctionsLib::send_message ( $owner , '' , $time , 5 , $this->_lang['sys_mess_tower'] , $status_message , $message );
 	}
 }
+
 /* end of stay.php */

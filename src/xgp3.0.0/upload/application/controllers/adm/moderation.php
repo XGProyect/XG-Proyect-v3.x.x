@@ -1,11 +1,33 @@
 <?php
-
 /**
- * @project XG Proyect
- * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * Moderation Controller
+ *
+ * PHP Version 5.5+
+ *
+ * @category Controller
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
  */
 
+namespace application\controllers\adm;
+
+use application\core\XGPCore;
+use application\libraries\adm\AdministrationLib;
+use application\libraries\FunctionsLib;
+
+/**
+ * Moderation Class
+ *
+ * @category Classes
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
+ */
 class Moderation extends XGPCore
 {
 	private $_current_user;
@@ -25,13 +47,13 @@ class Moderation extends XGPCore
 		$this->_current_user	= parent::$users->get_user_data();
 
 		// Check if the user is allowed to access
-		if ( Administration_Lib::have_access ( $this->_current_user['user_authlevel'] ) && $this->_current_user['user_authlevel'] == 3 )
+		if ( AdministrationLib::have_access ( $this->_current_user['user_authlevel'] ) && $this->_current_user['user_authlevel'] == 3 )
 		{
 			$this->build_page();
 		}
 		else
 		{
-			die ( Functions_Lib::message ( $this->_lang['ge_no_permissions'] ) );
+			die ( FunctionsLib::message ( $this->_lang['ge_no_permissions'] ) );
 		}
 	}
 
@@ -42,7 +64,7 @@ class Moderation extends XGPCore
 	 */
 	public function __destruct ()
 	{
-		parent::$db->close_connection();
+		parent::$db->closeConnection();
 	}
 
 	/**
@@ -73,12 +95,12 @@ class Moderation extends XGPCore
 
 			$QueryEdit		=	$view_m.",".$edit_m.",".$config_m.",".$tools_m.",".$log_m.",".$maintenance_m.";".$view_o.",".$edit_o.",".$config_o.",".$tools_o.",".$log_o.",".$maintenance_o.";".$log_a.";";
 
-			Functions_Lib::update_config ( 'moderation' , $QueryEdit );
+			FunctionsLib::update_config ( 'moderation' , $QueryEdit );
 
-			$parse['alert']	= Administration_Lib::save_message ( 'ok' , $this->_lang['mod_all_ok_message'] );
+			$parse['alert']	= AdministrationLib::save_message ( 'ok' , $this->_lang['mod_all_ok_message'] );
 		}
 
-		$QueryModeration	= Functions_Lib::read_config ( 'moderation' );
+		$QueryModeration	= FunctionsLib::read_config ( 'moderation' );
 		$QueryModerationEx	= explode ( ";" , $QueryModeration );
 		$Moderator			= explode ( "," , $QueryModerationEx[0] );
 		$Operator			= explode ( "," , $QueryModerationEx[1] );
@@ -128,4 +150,5 @@ class Moderation extends XGPCore
 		}
 	}
 }
+
 /* end of moderation.php */

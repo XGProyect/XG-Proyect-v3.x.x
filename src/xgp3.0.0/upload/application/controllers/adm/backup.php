@@ -1,11 +1,33 @@
 <?php
-
 /**
- * @project XG Proyect
- * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * Backup Controller
+ *
+ * PHP Version 5.5+
+ *
+ * @category Controller
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
  */
 
+namespace application\controllers\adm;
+
+use application\core\XGPCore;
+use application\libraries\adm\AdministrationLib;
+use application\libraries\FunctionsLib;
+
+/**
+ * Backup Class
+ *
+ * @category Classes
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
+ */
 class Backup extends XGPCore
 {
 	private $_lang;
@@ -25,13 +47,13 @@ class Backup extends XGPCore
 		$this->_current_user	= parent::$users->get_user_data();
 
 		// Check if the user is allowed to access
-		if ( Administration_Lib::have_access ( $this->_current_user['user_authlevel'] ) && Administration_Lib::authorization ( $this->_current_user['user_authlevel'] , 'use_tools' ) == 1 )
+		if ( AdministrationLib::have_access ( $this->_current_user['user_authlevel'] ) && AdministrationLib::authorization ( $this->_current_user['user_authlevel'] , 'use_tools' ) == 1 )
 		{
 			$this->build_page();
 		}
 		else
 		{
-			die ( Functions_Lib::message ( $this->_lang['ge_no_permissions'] ) );
+			die ( FunctionsLib::message ( $this->_lang['ge_no_permissions'] ) );
 		}
 	}
 
@@ -42,7 +64,7 @@ class Backup extends XGPCore
 	 */
 	public function __destruct ()
 	{
-		parent::$db->close_connection();
+		parent::$db->closeConnection();
 	}
 
 	/**
@@ -60,27 +82,28 @@ class Backup extends XGPCore
 			// SAVE DATA
 			if ( isset ( $_POST['save'] ) && $_POST['save'] )
 			{
-				Functions_Lib::update_config ( 'auto_backup' , ( ( isset ( $_POST['auto_backup'] ) && $_POST['auto_backup'] == 'on' ) ? 1 : 0 ) );
+				FunctionsLib::update_config ( 'auto_backup' , ( ( isset ( $_POST['auto_backup'] ) && $_POST['auto_backup'] == 'on' ) ? 1 : 0 ) );
 			}
 
 			// BACKUP DATABASE RIGHT NOW
 			if ( isset ( $_POST['backup'] ) && $_POST['backup'] )
 			{
-				$result	= parent::$db->backup_db();
+				$result	= parent::$db->backupDb();
 
 				if ( $result != FALSE )
 				{
-					$parse['alert']	= Administration_Lib::save_message ( 'ok' , str_replace ( '%s' , round ( $result / 1024 , 2 ) , $this->_lang['bku_backup_done'] ) );
+					$parse['alert']	= AdministrationLib::save_message ( 'ok' , str_replace ( '%s' , round ( $result / 1024 , 2 ) , $this->_lang['bku_backup_done'] ) );
 				}
 			}
 		}
 
 		// PARSE DATA
-		$auto_backup_status	= Functions_Lib::read_config ( 'auto_backup' );
+		$auto_backup_status	= FunctionsLib::read_config ( 'auto_backup' );
 		$parse['color']		= ( $auto_backup_status == 1 ) ? 'text-success' : 'text-error';
 		$parse['checked']	= ( $auto_backup_status == 1 ) ? 'checked' : '';
 
 		parent::$page->display ( parent::$page->parse_template ( parent::$page->get_template ( "adm/backup_view" ) , $parse ) );
 	}
 }
+
 /* end of backup.php */

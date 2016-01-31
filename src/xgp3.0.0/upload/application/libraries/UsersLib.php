@@ -1,12 +1,32 @@
 <?php
-
 /**
- * @project XG Proyect
- * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * Users Library
+ *
+ * PHP Version 5.5+
+ *
+ * @category Library
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
  */
 
-class Users_Lib extends XGPCore
+namespace application\libraries;
+
+use application\core\XGPCore;
+
+/**
+ * UsersLib Class
+ *
+ * @category Classes
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
+ */
+class UsersLib extends XGPCore
 {
 	private $_user_data;
 	private $_planet_data;
@@ -25,7 +45,7 @@ class Users_Lib extends XGPCore
 			$this->set_user_data();
 
 			// Check game close
-			Functions_Lib::check_server ( $this->_user_data );
+			FunctionsLib::check_server ( $this->_user_data );
 
 			// Set the changed planet
 			$this->set_planet();
@@ -34,7 +54,7 @@ class Users_Lib extends XGPCore
 			$this->set_planet_data();
 
 			// Update resources, ships, defenses & technologies
-			UpdateResourcesLib::updateResource ( $this->_user_data , $this->_planet_data , time() );
+			UpdateResourcesLib::updateResources($this->_user_data, $this->_planet_data, time());
 
 			// Update buildings queue
 			UpdateLib::updateBuildingsQueue($this->_planet_data, $this->_user_data);
@@ -93,7 +113,7 @@ class Users_Lib extends XGPCore
 	{
 		if ( ! $this->is_session_set() )
 		{
-			Functions_Lib::redirect ( XGP_ROOT );
+			FunctionsLib::redirect ( XGP_ROOT );
 		}
 	}
 
@@ -104,11 +124,11 @@ class Users_Lib extends XGPCore
 	 */
 	public function delete_user ( $user_id )
 	{
-		$user_data = parent::$db->query_fetch ( "SELECT `user_ally_id` FROM " . USERS . " WHERE `user_id` = '" . $user_id . "';" );
+		$user_data = parent::$db->queryFetch ( "SELECT `user_ally_id` FROM " . USERS . " WHERE `user_id` = '" . $user_id . "';" );
 
 		if ( $user_data['user_ally_id'] != 0 )
 		{
-			$alliance	= parent::$db->query_fetch ( "SELECT a.`alliance_id`, (SELECT COUNT(user_id) AS `ally_members` FROM `" . USERS . "` WHERE `user_ally_id` = '" . $user_data['user_ally_id'] . "') AS `ally_members`
+			$alliance	= parent::$db->queryFetch ( "SELECT a.`alliance_id`, (SELECT COUNT(user_id) AS `ally_members` FROM `" . USERS . "` WHERE `user_ally_id` = '" . $user_data['user_ally_id'] . "') AS `ally_members`
 														FROM " . ALLIANCE . " AS a
 														WHERE a.`alliance_id` = '" . $user_data['user_ally_id'] . "';" );
 
@@ -202,40 +222,40 @@ class Users_Lib extends XGPCore
 	                                    			INNER JOIN " . PREMIUM . " AS pre ON pre.premium_user_id = u.user_id
 	                                    			INNER JOIN " . RESEARCH . " AS r ON r.research_user_id = u.user_id
 	                                    			LEFT JOIN " . ALLIANCE . " AS a ON a.alliance_id = u.user_ally_id
-	            									WHERE (u.user_name = '" . parent::$db->escape_value ( $_SESSION['user_name'] ) . "')
+	            									WHERE (u.user_name = '" . parent::$db->escapeValue ( $_SESSION['user_name'] ) . "')
 	            									LIMIT 1;");
 
-		if ( parent::$db->num_rows ( $this->_user_data ) != 1 && !defined('IN_LOGIN'))
+		if ( parent::$db->numRows ( $this->_user_data ) != 1 && !defined('IN_LOGIN'))
 		{
-			Functions_Lib::message ( $this->_lang['ccs_multiple_users'] , XGP_ROOT , 3 , FALSE , FALSE );
+			FunctionsLib::message ( $this->_lang['ccs_multiple_users'] , XGP_ROOT , 3 , FALSE , FALSE );
 		}
 
-		$user_row    = parent::$db->fetch_array ( $this->_user_data );
+		$user_row    = parent::$db->fetchArray ( $this->_user_data );
 
 		if ( $user_row['user_id'] != $_SESSION['user_id'] && !defined('IN_LOGIN'))
 		{
-			Functions_Lib::message ( $this->_lang['ccs_other_user'] , XGP_ROOT , 3 ,  FALSE , FALSE );
+			FunctionsLib::message ( $this->_lang['ccs_other_user'] , XGP_ROOT , 3 ,  FALSE , FALSE );
 		}
 
 		if ( sha1 ( $user_row['user_password'] . "-" . SECRETWORD ) != $_SESSION['user_password'] && !defined('IN_LOGIN'))
 		{
-			Functions_Lib::message ( $this->_lang['css_different_password'] , XGP_ROOT , 5 ,  FALSE , FALSE );
+			FunctionsLib::message ( $this->_lang['css_different_password'] , XGP_ROOT , 5 ,  FALSE , FALSE );
 		}
 
 		if ( $user_row['user_banned'] > 0 )
 		{
 			$parse					= $this->_lang;
-			$parse['banned_until']	= date ( Functions_Lib::read_config ( 'date_format_extended' ) , $user_row['user_banned'] );
+			$parse['banned_until']	= date ( FunctionsLib::read_config ( 'date_format_extended' ) , $user_row['user_banned'] );
 
 			die ( parent::$page->parse_template ( parent::$page->get_template ( 'home/banned_message' ) , $parse ) );
 		}
 
 		parent::$db->query ( "UPDATE " . USERS . " SET
             					`user_onlinetime` = '" . time() ."',
-            					`user_current_page` = '". parent::$db->escape_value ( $_SERVER['REQUEST_URI'] ) ."',
-            					`user_lastip` = '". parent::$db->escape_value ( $_SERVER['REMOTE_ADDR'] ) ."',
-            					`user_agent` = '". parent::$db->escape_value ( $_SERVER['HTTP_USER_AGENT'] ) ."'
-            					WHERE `user_id` = '". parent::$db->escape_value ( $_SESSION['user_id'] ) ."'
+            					`user_current_page` = '". parent::$db->escapeValue ( $_SERVER['REQUEST_URI'] ) ."',
+            					`user_lastip` = '". parent::$db->escapeValue ( $_SERVER['REMOTE_ADDR'] ) ."',
+            					`user_agent` = '". parent::$db->escapeValue ( $_SERVER['HTTP_USER_AGENT'] ) ."'
+            					WHERE `user_id` = '". parent::$db->escapeValue ( $_SESSION['user_id'] ) ."'
             					LIMIT 1;" );
 
 		// pass the data
@@ -252,7 +272,7 @@ class Users_Lib extends XGPCore
 	 */
 	private function set_planet_data()
 	{
-		$this->_planet_data	= parent::$db->query_fetch ( "SELECT p.*, b.*, d.*, s.*,
+		$this->_planet_data	= parent::$db->queryFetch ( "SELECT p.*, b.*, d.*, s.*,
 																m.planet_id AS moon_id,
 																m.planet_name AS moon_name,
 																m.planet_image AS moon_image,
@@ -284,7 +304,7 @@ class Users_Lib extends XGPCore
 
 		if ( isset ( $select ) && is_numeric ( $select ) && isset ( $restore ) && $restore == 0 && $select != 0 )
 		{
-			$owned   = parent::$db->query_fetch ( "SELECT `planet_id`
+			$owned   = parent::$db->queryFetch ( "SELECT `planet_id`
 													FROM " . PLANETS . "
 													WHERE `planet_id` = '". $select ."'
 														AND `planet_user_id` = '" . $this->_user_data['user_id'] . "';");
@@ -300,4 +320,5 @@ class Users_Lib extends XGPCore
 		}
 	}
 }
-/* end of Users_Lib.php */
+
+/* end of UsersLib.php */

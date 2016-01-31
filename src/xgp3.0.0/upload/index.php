@@ -4,8 +4,8 @@
  *
  * PHP Version 5.5+
  *
- * @category Application
- * @package  Application
+ * @category Root File
+ * @package  N/A
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
@@ -30,7 +30,7 @@ if (file_exists($file_name)) {
 
     include $file_name;
 
-    $class_name = ucfirst($page);
+    $class_name = 'application\controllers\home\\' . ucfirst($page);
 
     new $class_name();
 }

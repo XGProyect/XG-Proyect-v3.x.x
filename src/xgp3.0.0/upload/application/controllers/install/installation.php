@@ -12,6 +12,11 @@
  * @version  3.0.0
  */
 
+namespace application\controllers\install;
+
+use application\core\XGPCore;
+use application\libraries\FunctionsLib;
+
 /**
  * Installation Class
  *
@@ -39,13 +44,13 @@ class Installation extends XGPCore
         parent::__construct();
 
         $this->langs    = parent::$lang;
-        $this->_planet  = Functions_Lib::load_library('PlanetLib');
+        $this->_planet  = FunctionsLib::load_library('PlanetLib');
 
         if ($this->serverRequirementes()) {
             
             $this->buildPage();
         } else {
-            die(Functions_Lib::message($this->langs['ins_no_server_requirements']));
+            die(FunctionsLib::message($this->langs['ins_no_server_requirements']));
         }
     }
 
@@ -56,7 +61,7 @@ class Installation extends XGPCore
      */
     public function __destruct()
     {
-        parent::$db->close_connection();
+        parent::$db->closeConnection();
     }
 
     /**
@@ -72,12 +77,12 @@ class Installation extends XGPCore
         // VERIFICATION - WE DON'T WANT ANOTHER INSTALLATION
         if ($this->isInstalled()) {
 
-            die(Functions_Lib::message($this->langs['ins_already_installed'], '', '', false, false));
+            die(FunctionsLib::message($this->langs['ins_already_installed'], '', '', false, false));
         }
 
         if (!$this->checkXmlFile()) {
             
-            die(Functions_Lib::message($this->langs['ins_missing_xml_file'], '', '', false, false));
+            die(FunctionsLib::message($this->langs['ins_missing_xml_file'], '', '', false, false));
         }
 
         // ACTION FOR THE CURRENT PAGE
@@ -103,7 +108,7 @@ class Installation extends XGPCore
 
                 if ($continue) {
                     
-                    Functions_Lib::redirect('?page=install&mode=step2');
+                    FunctionsLib::redirect('?page=install&mode=step2');
                 }
 
                 $parse['alert'] = $this->saveMessage($alerts, 'warning');
@@ -124,7 +129,7 @@ class Installation extends XGPCore
 
                 if ($continue) {
                     
-                    Functions_Lib::redirect('?page=install&mode=step3');
+                    FunctionsLib::redirect('?page=install&mode=step3');
                 }
 
                 $parse['alert'] = $this->saveMessage($alerts, 'warning');
@@ -144,7 +149,7 @@ class Installation extends XGPCore
 
                 if ($continue) {
                     
-                    Functions_Lib::redirect('?page=install&mode=step4');
+                    FunctionsLib::redirect('?page=install&mode=step4');
                 }
 
                 $parse['alert'] = $this->saveMessage($alerts, 'warning');
@@ -155,7 +160,7 @@ class Installation extends XGPCore
                 break;
 
             case 'step4':
-                Functions_Lib::redirect('?page=install&mode=step5');
+                FunctionsLib::redirect('?page=install&mode=step5');
                 break;
 
             case 'step5':
@@ -171,8 +176,8 @@ class Installation extends XGPCore
 
                 if ($continue) {
                     
-                    Functions_Lib::update_config('stat_last_update', time());
-                    Functions_Lib::update_config('game_installed', '1');
+                    FunctionsLib::update_config('stat_last_update', time());
+                    FunctionsLib::update_config('game_installed', '1');
 
                     $current_page   = parent::$page->parse_template(
                         parent::$page->get_template('install/in_create_admin_done_view'),
@@ -291,7 +296,7 @@ class Installation extends XGPCore
      */
     private function isInstalled()
     {
-        return (Functions_Lib::read_config('game_installed') == 1);
+        return (FunctionsLib::read_config('game_installed') == 1);
     }
 
     /**
@@ -302,7 +307,7 @@ class Installation extends XGPCore
     private function tryConnection()
     {
         // Try & check
-        if (parent::$db->try_connection() && parent::$db->try_database()) {
+        if (parent::$db->tryConnection() && parent::$db->tryDatabase()) {
             
             return true;
         } else {
@@ -318,7 +323,7 @@ class Installation extends XGPCore
      */
     private function writeConfigFile()
     {
-        $config_file    = @fopen(XGP_ROOT . 'application/config/config.php', "w");
+        $config_file    = @fopen(XGP_ROOT . CONFIGS_PATH . 'config.php', "w");
 
         if (!$config_file) {
             
@@ -374,14 +379,14 @@ class Installation extends XGPCore
     {
         // validations
         if (empty($_POST['adm_user']) or empty($_POST['adm_pass']) or
-            empty($_POST['adm_email']) or !Functions_Lib::valid_email($_POST['adm_email'])) {
+            empty($_POST['adm_email']) or !FunctionsLib::valid_email($_POST['adm_email'])) {
             
             return false;
         }
 
         // some default values
-        $adm_name   = parent::$db->escape_value($_POST['adm_user']);
-        $adm_email  = parent::$db->escape_value($_POST['adm_email']);
+        $adm_name   = parent::$db->escapeValue($_POST['adm_user']);
+        $adm_email  = parent::$db->escapeValue($_POST['adm_email']);
         $adm_pass   = sha1($_POST['adm_pass']);
 
         // a bunch of of queries :/
@@ -424,7 +429,7 @@ class Installation extends XGPCore
         parent::$db->query("INSERT INTO " . SHIPS . " SET `ship_planet_id` = '1';");
 
         // write the new admin email for support and debugging
-        Functions_Lib::update_config('admin_email', $adm_email);
+        FunctionsLib::update_config('admin_email', $adm_email);
 
         return true;
     }
@@ -454,8 +459,8 @@ class Installation extends XGPCore
      */
     private function checkXmlFile()
     {
-        $needed_config_file     = @fopen(XGP_ROOT . 'application/config/config.xml', "r");
-        $default_config_file    = @fopen(XGP_ROOT . 'application/config/config.xml.cfg', "r");
+        $needed_config_file     = @fopen(XGP_ROOT . CONFIGS_PATH . 'config.xml', "r");
+        $default_config_file    = @fopen(XGP_ROOT . CONFIGS_PATH . 'config.xml.cfg', "r");
 
         if (!$needed_config_file) {
             
@@ -479,7 +484,7 @@ class Installation extends XGPCore
      */
     private function createXml()
     {
-        $location               = XGP_ROOT . 'application/config/';
+        $location               = XGP_ROOT . CONFIGS_PATH;
         $default_config_file    = $location . 'config.xml.cfg';
         $needed_config_file     = $location . 'config.xml';
 
@@ -548,4 +553,5 @@ class Installation extends XGPCore
         );
     }
 }
+
 /* end of installation.php */

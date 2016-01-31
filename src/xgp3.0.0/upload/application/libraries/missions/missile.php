@@ -1,11 +1,31 @@
 <?php
-
 /**
- * @project XG Proyect
- * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * Missile Library
+ *
+ * PHP Version 5.5+
+ *
+ * @category Library
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
  */
 
+namespace application\libraries\missions;
+
+use application\libraries\FunctionsLib;
+
+/**
+ * Missile Class
+ *
+ * @category Classes
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
+ */
 class Missile extends Missions
 {
 	/**
@@ -21,13 +41,13 @@ class Missile extends Missions
 	 * param $fleet_row
 	 * return the missile result
 	*/
-	public function missile_mission ( $fleet_row )
+	public function missileMission ( $fleet_row )
 	{
 		if ( $fleet_row['fleet_start_time'] <= time() )
 		{
 			if ( $fleet_row['fleet_mess'] == 0 )
 			{
-				$attacker_data	= parent::$db->query_fetch ( "SELECT p.`planet_name`, r.`research_weapons_technology`
+				$attacker_data	= parent::$db->queryFetch ( "SELECT p.`planet_name`, r.`research_weapons_technology`
 																FROM " . PLANETS . " AS p
 																INNER JOIN " . RESEARCH . " AS r ON r.research_user_id = p.planet_user_id
 																WHERE `planet_galaxy` = " . $fleet_row['fleet_start_galaxy'] . " AND
@@ -35,7 +55,7 @@ class Missile extends Missions
 																		`planet_planet` = " . $fleet_row['fleet_start_planet'] . " AND
 																		`planet_type` = " . $fleet_row['fleet_start_type'] . ";" );
 
-				$target_data	= parent::$db->query_fetch ( "SELECT p.`planet_id`, p.`planet_name`, p.`planet_user_id`, d.*, r.`research_shielding_technology`
+				$target_data	= parent::$db->queryFetch ( "SELECT p.`planet_id`, p.`planet_name`, p.`planet_user_id`, d.*, r.`research_shielding_technology`
 																FROM " . PLANETS . " AS p
 																INNER JOIN " . DEFENSES . " AS d ON d.defense_planet_id = p.`planet_id`
 																INNER JOIN " . RESEARCH . " AS r ON r.research_user_id = p.planet_user_id
@@ -110,7 +130,7 @@ class Missile extends Missions
 					$message	= $this->_lang['ma_planet_without_defens'];
 				}
 
-				Functions_Lib::send_message ( $target_data['planet_user_id'] , '' , $fleet_row['fleet_end_time'] , 5 , $this->_lang['sys_mess_tower'] , $this->_lang['gl_missile_attack'] , $message_vorlage . $message );
+				FunctionsLib::send_message ( $target_data['planet_user_id'] , '' , $fleet_row['fleet_end_time'] , 5 , $this->_lang['sys_mess_tower'] , $this->_lang['gl_missile_attack'] , $message_vorlage . $message );
 
 				parent::remove_fleet ( $fleet_row['fleet_id'] );
 			}
@@ -182,4 +202,5 @@ class Missile extends Missions
 		}
 	}
 }
+
 /* end of missile.php */

@@ -1,11 +1,32 @@
 <?php
-
 /**
- * @project XG Proyect
- * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * Expedition Library
+ *
+ * PHP Version 5.5+
+ *
+ * @category Library
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
  */
 
+namespace application\libraries\missions;
+
+use application\libraries\FormatLib;
+use application\libraries\FunctionsLib;
+
+/**
+ * Expedition Class
+ *
+ * @category Classes
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
+ */
 class Expedition extends Missions
 {
 	/**
@@ -21,7 +42,7 @@ class Expedition extends Missions
 	 * param $fleet_row
 	 * return the expedition result
 	*/
-	public function expedition_mission ( $fleet_row )
+	public function expeditionMission ( $fleet_row )
 	{
 		if ( $fleet_row['fleet_mess'] == 0 )
 		{
@@ -189,7 +210,7 @@ class Expedition extends Missions
 									`fleet_mess` = '1'
 									WHERE `fleet_id` = '" . $fleet_row['fleet_id'] . "';" );
 
-			$message	= sprintf ( $this->_lang['sys_expe_found_goods'] , Format_Lib::pretty_number ( $found_metal ) , $this->_lang['Metal'] , Format_Lib::pretty_number ( $found_crystal ) , $this->_lang['Crystal'] , Format_Lib::pretty_number ( $found_deuterium ) , $this->_lang['Deuterium'] , Format_Lib::pretty_number ( $found_darkmatter ) , $this->_lang['Darkmatter'] );
+			$message	= sprintf ( $this->_lang['sys_expe_found_goods'] , FormatLib::pretty_number ( $found_metal ) , $this->_lang['Metal'] , FormatLib::pretty_number ( $found_crystal ) , $this->_lang['Crystal'] , FormatLib::pretty_number ( $found_deuterium ) , $this->_lang['Deuterium'] , FormatLib::pretty_number ( $found_darkmatter ) , $this->_lang['Darkmatter'] );
 			$this->expedition_message ( $fleet_row['fleet_owner'] , $message , $fleet_row['fleet_end_stay'] );
 		}
 	}
@@ -279,7 +300,8 @@ class Expedition extends Missions
 	*/
 	private function expedition_message ( $owner , $message , $time )
 	{
-		Functions_Lib::send_message ( $owner , '' , $time , 5 , $this->_lang['sys_mess_qg'] , $this->_lang['sys_expe_report'] , $message );
+		FunctionsLib::send_message ( $owner , '' , $time , 5 , $this->_lang['sys_mess_qg'] , $this->_lang['sys_expe_report'] , $message );
 	}
 }
+
 /* end of expedition.php */

@@ -1,11 +1,34 @@
 <?php
-
 /**
- * @project XG Proyect
- * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * Reset Controller
+ *
+ * PHP Version 5.5+
+ *
+ * @category Controller
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
  */
 
+namespace application\controllers\adm;
+
+use application\core\XGPCore;
+use application\libraries\adm\AdministrationLib;
+use application\libraries\CreatorLib;
+use application\libraries\FunctionsLib;
+
+/**
+ * Reset Class
+ *
+ * @category Classes
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
+ */
 class Reset extends XGPCore
 {
 	private $_current_user;
@@ -26,17 +49,17 @@ class Reset extends XGPCore
 		$this->_current_user	= parent::$users->get_user_data();
 
 		// Check if the user is allowed to access
-		if ( Administration_Lib::have_access ( $this->_current_user['user_authlevel'] ) && $this->_current_user['user_authlevel'] == 3 )
+		if ( AdministrationLib::have_access ( $this->_current_user['user_authlevel'] ) && $this->_current_user['user_authlevel'] == 3 )
 		{
-			include_once ( XGP_ROOT . 'application/libraries/Creator_Lib.php' );
+			include_once ( XGP_ROOT . 'application/libraries/CreatorLib.php' );
 
-			$this->_creator			= new Creator_Lib();
+			$this->_creator			= new CreatorLib();
 
 			$this->build_page();
 		}
 		else
 		{
-			die ( Functions_Lib::message ( $this->_lang['ge_no_permissions'] ) );
+			die ( FunctionsLib::message ( $this->_lang['ge_no_permissions'] ) );
 		}
 	}
 
@@ -47,7 +70,7 @@ class Reset extends XGPCore
 	 */
 	public function __destruct ()
 	{
-		parent::$db->close_connection();
+		parent::$db->closeConnection();
 	}
 
 	private function reset_universe ()
@@ -82,11 +105,11 @@ class Reset extends XGPCore
 		$LimitTime = time() - (15 * (24 * (60 * 60)));
 		$TransUser = 0;
 
-		while ( $TheUser = parent::$db->fetch_assoc ( $AllUsers ) )
+		while ( $TheUser = parent::$db->fetchAssoc ( $AllUsers ) )
 		{
 			if ( $TheUser['user_onlinetime'] > $LimitTime )
 			{
-				$UserPlanet     = parent::$db->query_fetch ( "SELECT `planet_name`
+				$UserPlanet     = parent::$db->queryFetch ( "SELECT `planet_name`
 																FROM " . PLANETS . "_s
 																WHERE `planet_id` = '". $TheUser['user_home_planet_id']."';" );
 				if ($UserPlanet['planet_name'] != "")
@@ -107,7 +130,7 @@ class Reset extends XGPCore
 											`user_onlinetime` = '".$Time ."',
 											`user_password` = '".$TheUser['user_password']."';" );
 
-					$last_id	= parent::$db->insert_id();
+					$last_id	= parent::$db->insertId();
 					$NewUser	= $last_id;
 
 					parent::$db->query ( "INSERT INTO " . RESEARCH . " SET
@@ -128,7 +151,7 @@ class Reset extends XGPCore
 
 					$this->_creator->create_planet ( $TheUser['user_galaxy'] , $TheUser['user_system'] , $TheUser['user_planet'] , $NewUser , $UserPlanet['planet_name'] , TRUE );
 
-					$PlanetID       = parent::$db->query_fetch ( "SELECT `planet_id`
+					$PlanetID       = parent::$db->queryFetch ( "SELECT `planet_id`
 																	FROM " . PLANETS . "
 																	WHERE `planet_user_id` = '". $NewUser ."'
 																	LIMIT 1;" );
@@ -369,10 +392,11 @@ class Reset extends XGPCore
 				$this->reset_universe ();
 			}
 
-			$parse['alert']			= Administration_Lib::save_message ( 'ok' , $this->_lang['re_reset_excess'] );
+			$parse['alert']			= AdministrationLib::save_message ( 'ok' , $this->_lang['re_reset_excess'] );
 		}
 
 		parent::$page->display ( parent::$page->parse_template ( parent::$page->get_template ( 'adm/reset_view' ) , $parse ) );
 	}
 }
+
 /* end of reset.php */

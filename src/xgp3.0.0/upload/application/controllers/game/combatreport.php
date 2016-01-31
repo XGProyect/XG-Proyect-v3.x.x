@@ -1,11 +1,32 @@
 <?php
-
 /**
- * @project XG Proyect
- * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * Combatreport Controller
+ *
+ * PHP Version 5.5+
+ *
+ * @category Controller
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
  */
 
+namespace application\controllers\game;
+
+use application\core\XGPCore;
+use application\libraries\FunctionsLib;
+
+/**
+ * Combatreport Class
+ *
+ * @category Classes
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
+ */
 class Combatreport extends XGPCore
 {
     const MODULE_ID = 23;
@@ -24,7 +45,7 @@ class Combatreport extends XGPCore
         parent::$users->check_session();
 
         // Check module access
-        Functions_Lib::module_message(Functions_Lib::is_module_accesible(self::MODULE_ID));
+        FunctionsLib::module_message(FunctionsLib::is_module_accesible(self::MODULE_ID));
 
         $this->langs        = parent::$lang;
         $this->current_user = parent::$users->get_user_data();
@@ -39,7 +60,7 @@ class Combatreport extends XGPCore
      */
     public function __destruct()
     {
-        parent::$db->close_connection();
+        parent::$db->closeConnection();
     }
 
     /**
@@ -50,10 +71,10 @@ class Combatreport extends XGPCore
     private function buildPage()
     {
         $report     = isset($_GET['report']) ? $_GET['report'] : die();
-        $reportrow  = parent::$db->query_fetch(
+        $reportrow  = parent::$db->queryFetch(
             "SELECT *
             FROM " .  REPORTS . "
-            WHERE `report_rid` = '" . (parent::$db->escape_value($report)) . "';"
+            WHERE `report_rid` = '" . (parent::$db->escapeValue($report)) . "';"
         );
         
         // Get owners
@@ -102,4 +123,5 @@ class Combatreport extends XGPCore
         parent::$page->display($page, false, '', false);
     }
 }
+
 /* end of combatreport.php */

@@ -12,6 +12,10 @@
  * @version  3.0.0
  */
 
+namespace application\libraries;
+
+use application\core\XGPCore;
+
 /**
  * PlanetLib Class
  *
@@ -74,4 +78,5 @@ class PlanetLib extends XGPCore
     {
     }
 }
+
 /* end of PlanetLib.php */
