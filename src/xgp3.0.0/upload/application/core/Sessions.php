@@ -171,7 +171,7 @@ class Sessions extends XGPCore
             VALUES ('" . $this->dbc->escapeValue($sid) . "', '" . $this->dbc->escapeValue($data) . "')"
         );
 
-        return $this->dbc->affectedRows();
+        return ($this->dbc->affectedRows() > 0);
     }
 
     /**

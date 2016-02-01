@@ -87,6 +87,7 @@ class Database
                         'SQL Error'
                     ));
                 } else {
+
                     return false;
                 }
             } else {
@@ -99,8 +100,12 @@ class Database
                             'SQL Error'
                         ));
                     } else {
+
                         return false;
                     }
+                } else {
+
+                    return false;
                 }
             }
         }
@@ -141,7 +146,7 @@ class Database
      *
      * @param array $data Data
      *
-     * @return void
+     * @return boolean
      */
     public function closeConnection()
     {
@@ -149,7 +154,11 @@ class Database
 
             $this->connection->close();
             unset($this->connection);
+            
+            return true;
         }
+        
+        return false;
     }
 
     /**
