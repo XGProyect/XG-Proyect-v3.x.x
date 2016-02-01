@@ -50,6 +50,7 @@ class Installation extends XGPCore
             
             $this->buildPage();
         } else {
+
             die(FunctionsLib::message($this->langs['ins_no_server_requirements']));
         }
     }
@@ -157,18 +158,30 @@ class Installation extends XGPCore
 
             case 'step5':
                 $create_account_status = $this->createAccount();
+
                 if ($create_account_status < 0) {
+
                     // Failure
-                    $error_message = $create_account_status == -1 ? $this->langs['ins_adm_empty_fields_error'] : $this->langs['ins_adm_invalid_email_address'];
+                    if ($create_account_status == -1) {
+
+                        $error_message  = $this->langs['ins_adm_empty_fields_error'];
+                    } else {
+
+                        $error_message  = $this->langs['ins_adm_invalid_email_address'];
+                    }
+                    
                     $parse['alert'] = $this->saveMessage($error_message, 'warning');
+
                     $current_page   = parent::$page->parse_template(
                         parent::$page->get_template('install/in_create_admin_view'),
                         $parse
                     );
+
                     $continue       = false;
                 }
 
                 if ($continue) {
+
                     FunctionsLib::update_config('stat_last_update', time());
                     FunctionsLib::update_config('game_installed', '1');
 
@@ -188,7 +201,9 @@ class Installation extends XGPCore
         }
 
         if ($continue) {
+
             switch ((isset($_GET['mode']) ? $_GET['mode'] : '')) {
+
                 case 'step1':
                     $current_page   = parent::$page->parse_template(
                         parent::$page->get_template('install/in_database_view'),
@@ -375,7 +390,7 @@ class Installation extends XGPCore
             return -1;
         }
             
-        if(!Functions_Lib::valid_email($_POST['adm_email'])) {
+        if (!FunctionsLib::valid_email($_POST['adm_email'])) {
             return -2;
         }
 
@@ -438,7 +453,7 @@ class Installation extends XGPCore
     {
         return !empty($this->host) && !empty($this->name) &&
                 !empty($this->user) && !empty($this->prefix);
-        }
+    }
 
     /**
      * method checkXmlFile

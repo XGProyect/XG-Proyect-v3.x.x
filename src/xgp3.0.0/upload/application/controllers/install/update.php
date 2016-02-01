@@ -44,6 +44,7 @@ class Update extends XGPCore
             
             $this->buildPage();
         } else {
+
             die(FunctionsLib::message($this->langs['ins_no_server_requirements']));
         }
     }
