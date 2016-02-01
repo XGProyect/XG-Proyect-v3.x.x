@@ -68,7 +68,8 @@ $lang['ins_admin_create_email']		= 'Email address:';
 $lang['ins_admin_create_create']	= 'Create';
 
 // ERRORS
-$lang['ins_adm_empty_fields_eror']	= 'All fields are required';
+$lang['ins_adm_empty_fields_error']	    = 'All fields are required';
+$lang['ins_adm_invalid_email_address']	= 'Please specify a valid email address';
 
 // STEP 4
 $lang['ins_completed']				= 'INSTALLATION COMPLETE!';
