@@ -14,6 +14,8 @@
 
 namespace application\libraries\missions;
 
+use Lang;
+
 /**
  * AttackLang Class
  *
