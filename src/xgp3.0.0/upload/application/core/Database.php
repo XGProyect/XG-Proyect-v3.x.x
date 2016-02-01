@@ -328,7 +328,7 @@ class Database
     {
         if (!$result) {
 
-            $output = "Database query failed: " . mysql_error();
+            $output = "Database query failed: " . $this->connection->error;
 
             // uncomment below line when you want to debug your last query
             $output .= " Last SQL Query: " . $this->last_query;
