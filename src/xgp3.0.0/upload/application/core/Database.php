@@ -87,6 +87,7 @@ class Database
                         'SQL Error'
                     ));
                 } else {
+
                     return false;
                 }
             } else {
@@ -99,8 +100,12 @@ class Database
                             'SQL Error'
                         ));
                     } else {
+
                         return false;
                     }
+                } else {
+
+                    return false;
                 }
             }
         }
@@ -141,7 +146,7 @@ class Database
      *
      * @param array $data Data
      *
-     * @return void
+     * @return boolean
      */
     public function closeConnection()
     {
@@ -149,7 +154,11 @@ class Database
 
             $this->connection->close();
             unset($this->connection);
+            
+            return true;
         }
+        
+        return false;
     }
 
     /**
@@ -328,7 +337,7 @@ class Database
     {
         if (!$result) {
 
-            $output = "Database query failed: " . mysql_error();
+            $output = "Database query failed: " . $this->connection->error;
 
             // uncomment below line when you want to debug your last query
             $output .= " Last SQL Query: " . $this->last_query;

@@ -50,6 +50,7 @@ class Installation extends XGPCore
             
             $this->buildPage();
         } else {
+
             die(FunctionsLib::message($this->langs['ins_no_server_requirements']));
         }
     }
@@ -76,12 +77,10 @@ class Installation extends XGPCore
 
         // VERIFICATION - WE DON'T WANT ANOTHER INSTALLATION
         if ($this->isInstalled()) {
-
             die(FunctionsLib::message($this->langs['ins_already_installed'], '', '', false, false));
         }
 
         if (!$this->checkXmlFile()) {
-            
             die(FunctionsLib::message($this->langs['ins_missing_xml_file'], '', '', false, false));
         }
 
@@ -95,19 +94,16 @@ class Installation extends XGPCore
                 $this->prefix   = $_POST['prefix'];
 
                 if (!$this->validateDbData()) {
-                    
                     $alerts     = $this->langs['ins_empty_fields_error'];
                     $continue   = false;
                 }
 
                 if (!$this->writeConfigFile()) {
-                    
                     $alerts     = $this->langs['ins_write_config_error'];
                     $continue   = false;
                 }
 
                 if ($continue) {
-                    
                     FunctionsLib::redirect('?page=install&mode=step2');
                 }
 
@@ -122,13 +118,11 @@ class Installation extends XGPCore
 
             case 'step2':
                 if (!$this->tryConnection()) {
-                    
                     $alerts     = $this->langs['ins_not_connected_error'];
                     $continue   = false;
                 }
 
                 if ($continue) {
-                    
                     FunctionsLib::redirect('?page=install&mode=step3');
                 }
 
@@ -142,7 +136,6 @@ class Installation extends XGPCore
 
             case 'step3':
                 if (!$this->insertDbData()) {
-                    
                     $alerts     = $this->langs['ins_insert_tables_error'];
                     $continue   = false;
                 }
@@ -164,18 +157,31 @@ class Installation extends XGPCore
                 break;
 
             case 'step5':
-                if (!$this->createAccount()) {
+                $create_account_status = $this->createAccount();
+
+                if ($create_account_status < 0) {
+
+                    // Failure
+                    if ($create_account_status == -1) {
+
+                        $error_message  = $this->langs['ins_adm_empty_fields_error'];
+                    } else {
+
+                        $error_message  = $this->langs['ins_adm_invalid_email_address'];
+                    }
                     
-                    $parse['alert'] = $this->saveMessage($this->langs['ins_adm_empty_fields_eror'], 'warning');
+                    $parse['alert'] = $this->saveMessage($error_message, 'warning');
+
                     $current_page   = parent::$page->parse_template(
                         parent::$page->get_template('install/in_create_admin_view'),
                         $parse
                     );
+
                     $continue       = false;
                 }
 
                 if ($continue) {
-                    
+
                     FunctionsLib::update_config('stat_last_update', time());
                     FunctionsLib::update_config('game_installed', '1');
 
@@ -195,8 +201,9 @@ class Installation extends XGPCore
         }
 
         if ($continue) {
-            
+
             switch ((isset($_GET['mode']) ? $_GET['mode'] : '')) {
+
                 case 'step1':
                     $current_page   = parent::$page->parse_template(
                         parent::$page->get_template('install/in_database_view'),
@@ -371,17 +378,20 @@ class Installation extends XGPCore
     }
 
     /**
-     * method createAccount
-     * param
-     * return TRUE successfully created admin | FALSE an error ocurred
+     * @method createAccount
+     * @return negative value if an error ocurred, or 0 if admin account was successfully created
+     *          -1: Some field is empty
+     *          -2: Admin email is invalid
      */
     private function createAccount()
     {
         // validations
-        if (empty($_POST['adm_user']) or empty($_POST['adm_pass']) or
-            empty($_POST['adm_email']) or !FunctionsLib::valid_email($_POST['adm_email'])) {
+        if (empty($_POST['adm_user']) || empty($_POST['adm_pass']) || empty($_POST['adm_email'])) {
+            return -1;
+        }
             
-            return false;
+        if (!FunctionsLib::valid_email($_POST['adm_email'])) {
+            return -2;
         }
 
         // some default values
@@ -441,15 +451,8 @@ class Installation extends XGPCore
      */
     private function validateDbData()
     {
-        if (!empty($this->host) && !empty($this->name) &&
-            !empty($this->user) && !empty($this->password) &&
-            !empty($this->prefix)) {
-            
-            return true;
-        } else {
-            
-            return false;
-        }
+        return !empty($this->host) && !empty($this->name) &&
+                !empty($this->user) && !empty($this->prefix);
     }
 
     /**

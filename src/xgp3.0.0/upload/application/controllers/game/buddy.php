@@ -249,8 +249,9 @@ class Buddy extends XGPCore
 						}
 						else
 						{
-							$buddy_sender	= parent::$db->queryFetch ( "SELECT `user_id`, `user_name`, `user_galaxy`, `user_system`, `user_planet`,`user_ally_id`, `alliance_name`
-																			FROM " . USERS . "
+							$buddy_sender	= parent::$db->queryFetch ( "SELECT u.`user_id`, u.`user_name`, u.`user_galaxy`, u.`user_system`, u.`user_planet`, u.`user_ally_id`, a.`alliance_name`
+																			FROM " . USERS . " as u
+																			LEFT JOIN `" . ALLIANCE . "` AS a ON a.`alliance_id` = u.`user_ally_id`
 																			WHERE `user_id`='" . intval ( $buddy['buddy_sender'] ) . "'" );
 
 							$parse['id']				= $buddy_sender['user_id'];
@@ -268,18 +269,11 @@ class Buddy extends XGPCore
 					}
 					else
 					{
-						if ( $buddy['buddy_sender'] == $this->_current_user['user_id'] )
-						{
-							$buddy_receiver = parent::$db->queryFetch ( "SELECT `user_id`, `user_name`, `user_onlinetime`, `user_galaxy`, `user_system`, `user_planet`,`user_ally_id`, `alliance_name`
-																			FROM " . USERS . "
-																			WHERE `user_id`='" . intval ( $buddy['buddy_receiver'] ) . "'" );
-						}
-						else
-						{
-							$buddy_receiver = parent::$db->queryFetch ( "SELECT `user_id`, `user_name`, `user_onlinetime`, `user_galaxy`, `user_system`, `user_planet`,`user_ally_id`, `alliance_name`
-																			FROM " . USERS . "
-																			WHERE `user_id`='" . intval ( $buddy['buddy_sender'] ) . "'" );
-						}
+						$who = $buddy['buddy_sender'] == $this->_current_user['user_id'] ? intval ( $buddy['buddy_receiver'] ) : intval ( $buddy['buddy_sender'] );
+						$buddy_receiver = parent::$db->queryFetch ( "SELECT u.`user_id`, u.`user_name`, u.`user_galaxy`, u.`user_system`, u.`user_planet`, u.`user_onlinetime`, u.`user_ally_id`, a.`alliance_name`
+																			FROM " . USERS . " as u
+																			LEFT JOIN `" . ALLIANCE . "` AS a ON a.`alliance_id` = u.`user_ally_id`
+																			WHERE `user_id`='" . $who . "'" );
 
 						$parse['id']				= $buddy_receiver['user_id'];
 						$parse['username']			= $buddy_receiver['user_name'];

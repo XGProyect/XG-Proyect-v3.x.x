@@ -69,7 +69,7 @@ class Destroy extends Missions
 
 			for ( $SetItem = 200 ; $SetItem < 500 ; $SetItem++ )
 			{
-				if ( $target_data[$this->_resource[$SetItem]] > 0 )
+				if ( isset($target_data[$this->_resource[$SetItem]]) && $target_data[$this->_resource[$SetItem]] > 0 )
 				{
 					$target_ships[$SetItem]['count'] = $target_data[$this->_resource[$SetItem]];
 				}
