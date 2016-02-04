@@ -105,7 +105,7 @@ class Database
                     }
                 } else {
 
-                    return false;
+                    return true;
                 }
             }
         }
