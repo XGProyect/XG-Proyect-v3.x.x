@@ -30,90 +30,83 @@ use application\libraries\FunctionsLib;
  */
 class Modules extends XGPCore
 {
-	private $_lang;
-	private $_current_user;
+    private $_lang;
+    private $_current_user;
 
-	/**
-	 * __construct()
-	 */
-	public function __construct()
-	{
-		parent::__construct();
+    /**
+     * __construct()
+     */
+    public function __construct()
+    {
+        parent::__construct();
 
-		// check if session is active
-		parent::$users->check_session();
+        // check if session is active
+        parent::$users->checkSession();
 
-		$this->_lang			= parent::$lang;
-		$this->_current_user	= parent::$users->get_user_data();
+        $this->_lang = parent::$lang;
+        $this->_current_user = parent::$users->getUserData();
 
-		// Check if the user is allowed to access
-		if ( AdministrationLib::have_access ( $this->_current_user['user_authlevel'] ) && AdministrationLib::authorization ( $this->_current_user['user_authlevel'] , 'edit_users' ) == 1 )
-		{
-			$this->build_page();
-		}
-		else
-		{
-			die ( FunctionsLib::message ( $this->_lang['ge_no_permissions'] ) );
-		}
-	}
+        // Check if the user is allowed to access
+        if (AdministrationLib::haveAccess($this->_current_user['user_authlevel']) && AdministrationLib::authorization($this->_current_user['user_authlevel'], 'edit_users') == 1) {
+            $this->build_page();
+        } else {
+            die(FunctionsLib::message($this->_lang['ge_no_permissions']));
+        }
+    }
 
-	/**
-	 * method __destruct
-	 * param
-	 * return close db connection
-	 */
-	public function __destruct ()
-	{
-		parent::$db->closeConnection();
-	}
+    /**
+     * method __destruct
+     * param
+     * return close db connection
+     */
+    public function __destruct()
+    {
+        parent::$db->closeConnection();
+    }
 
-	/**
-	 * method build_page
-	 * param
-	 * return main method, loads everything
-	 */
-	private function build_page()
-	{
-		$parse			= $this->_lang;
-		$modules_array	= '';
-		$modules_count	= count ( explode ( ';' , FunctionsLib::read_config ( 'modules' ) ) );
-		$row_template	= parent::$page->get_template ( 'adm/modules_row_view' );
-		$module_rows	= '';
-		$parse['alert']	= '';
+    /**
+     * method build_page
+     * param
+     * return main method, loads everything
+     */
+    private function build_page()
+    {
+        $parse = $this->_lang;
+        $modules_array = '';
+        $modules_count = count(explode(';', FunctionsLib::readConfig('modules')));
+        $row_template = parent::$page->getTemplate('adm/modules_row_view');
+        $module_rows = '';
+        $parse['alert'] = '';
 
-		// SAVE PAGE
-		if ( $_SERVER['REQUEST_METHOD'] == 'POST' && $_POST['save'] )
-		{
-			for ( $i = 0 ; $i <= $modules_count - 2 ; $i++ )
-			{
-				$modules_array	.= ( ( isset ( $_POST["status{$i}"] ) ) ? 1 : 0 ) . ';';
-			}
+        // SAVE PAGE
+        if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST['save']) {
+            for ($i = 0; $i <= $modules_count - 2; $i++) {
+                $modules_array .= ( ( isset($_POST["status{$i}"]) ) ? 1 : 0 ) . ';';
+            }
 
-			FunctionsLib::update_config ( 'modules' , $modules_array );
+            FunctionsLib::updateConfig('modules', $modules_array);
 
-			$parse['alert']				= AdministrationLib::save_message ( 'ok' , $this->_lang['se_all_ok_message'] );
-		}
+            $parse['alert'] = AdministrationLib::saveMessage('ok', $this->_lang['se_all_ok_message']);
+        }
 
-		// SHOW PAGE
-		$modules_array	= explode ( ';' , FunctionsLib::read_config ( 'modules' ) );
+        // SHOW PAGE
+        $modules_array = explode(';', FunctionsLib::readConfig('modules'));
 
-		foreach ( $modules_array as $module => $status )
-		{
-			if ( $status != NULL )
-			{
-				$parse['module']		= $module;
-				$parse['module_name']	= $this->_lang['module'][$module];
-				$parse['module_value']	= ( $status == 1 ) ? 'checked' : '';
-				$parse['color']			= ( $status == 1 ) ? 'text-success' : 'text-error';
+        foreach ($modules_array as $module => $status) {
+            if ($status != NULL) {
+                $parse['module'] = $module;
+                $parse['module_name'] = $this->_lang['module'][$module];
+                $parse['module_value'] = ( $status == 1 ) ? 'checked' : '';
+                $parse['color'] = ( $status == 1 ) ? 'text-success' : 'text-error';
 
-				$module_rows	.= parent::$page->parse_template ( $row_template , $parse );
-			}
-		}
+                $module_rows .= parent::$page->parseTemplate($row_template, $parse);
+            }
+        }
 
-		$parse['module_rows']	= $module_rows;
+        $parse['module_rows'] = $module_rows;
 
-		parent::$page->display ( parent::$page->parse_template ( parent::$page->get_template ( "adm/modules_view" ) , $parse ) );
-	}
+        parent::$page->display(parent::$page->parseTemplate(parent::$page->getTemplate("adm/modules_view"), $parse));
+    }
 }
 
 /* end of modules.php */

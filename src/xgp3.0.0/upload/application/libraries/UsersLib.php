@@ -28,297 +28,333 @@ use application\core\XGPCore;
  */
 class UsersLib extends XGPCore
 {
-	private $_user_data;
-	private $_planet_data;
-	private $_lang;
 
-	/**
-	 * __construct()
-	 */
-	public function __construct()
-	{
-		$this->_lang	= parent::$lang;
+    private $user_data;
+    private $planet_data;
+    private $langs;
 
-		if ( $this->is_session_set() )
-		{
-			// Get user data and check it
-			$this->set_user_data();
+    /**
+     * __construct
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->langs    = parent::$lang;
 
-			// Check game close
-			FunctionsLib::check_server ( $this->_user_data );
+        if ($this->isSessionSet()) {
 
-			// Set the changed planet
-			$this->set_planet();
+            // Get user data and check it
+            $this->setUserData();
 
-			// Get planet data and check it
-			$this->set_planet_data();
+            // Check game close
+            FunctionsLib::checkServer($this->user_data);
 
-			// Update resources, ships, defenses & technologies
-			UpdateResourcesLib::updateResources($this->_user_data, $this->_planet_data, time());
+            // Set the changed planet
+            $this->setPlanet();
 
-			// Update buildings queue
-			UpdateLib::updateBuildingsQueue($this->_planet_data, $this->_user_data);
-		}
-	}
+            // Get planet data and check it
+            $this->setPlanetData();
 
-	/**
-	 * method user_login
-	 * param $user_id
-	 * param $user_name
-	 * param $password
-	 * return (bool) true on success, false if not
-	 */
-	public function user_login ( $user_id = 0 , $user_name = '' , $password = '' )
-	{
-		if ( $user_id != 0 && ! empty ( $user_name ) && ! empty ( $password ) )
-		{
-			$_SESSION['user_id']		= $user_id;
-			$_SESSION['user_name']		= $user_name;
-			$_SESSION['user_password']	= sha1 ( $password . '-' . SECRETWORD );
+            // Update resources, ships, defenses & technologies
+            UpdateResourcesLib::updateResources($this->user_data, $this->planet_data, time());
 
-			return TRUE;
-		}
-		else
-		{
-			return FALSE;
-		}
-	}
+            // Update buildings queue
+            UpdateLib::updateBuildingsQueue($this->planet_data, $this->user_data);
+        }
+    }
 
-	/**
-	 * method get_user_data
-	 * param
-	 * return (array) all the user data
-	 */
-	public function get_user_data()
-	{
-		return $this->_user_data;
-	}
+    /**
+     * userLogin
+     *
+     * @param int    $user_id   User ID
+     * @param string $user_name User name
+     * @param string $password  Password
+     *
+     * @return void
+     */
+    public function userLogin($user_id = 0, $user_name = '', $password = '')
+    {
+        if ($user_id != 0 && !empty($user_name) && !empty($password)) {
 
-	/**
-	 * method get_planet_data
-	 * param
-	 * return (array) all the planet data
-	 */
-	public function get_planet_data()
-	{
-		return $this->_planet_data;
-	}
+            $_SESSION['user_id']        = $user_id;
+            $_SESSION['user_name']      = $user_name;
+            $_SESSION['user_password']  = sha1($password . '-' . SECRETWORD);
 
-	/**
-	 * method check_session
-	 * param
-	 * return (void)
-	 */
-	public function check_session()
-	{
-		if ( ! $this->is_session_set() )
-		{
-			FunctionsLib::redirect ( XGP_ROOT );
-		}
-	}
+            return true;
+        } else {
 
-	/**
-	 * method delete_user
-	 * param $user_id
-	 * return delete all the selected user data
-	 */
-	public function delete_user ( $user_id )
-	{
-		$user_data = parent::$db->queryFetch ( "SELECT `user_ally_id` FROM " . USERS . " WHERE `user_id` = '" . $user_id . "';" );
+            return false;
+        }
+    }
 
-		if ( $user_data['user_ally_id'] != 0 )
-		{
-			$alliance	= parent::$db->queryFetch ( "SELECT a.`alliance_id`, (SELECT COUNT(user_id) AS `ally_members` FROM `" . USERS . "` WHERE `user_ally_id` = '" . $user_data['user_ally_id'] . "') AS `ally_members`
-														FROM " . ALLIANCE . " AS a
-														WHERE a.`alliance_id` = '" . $user_data['user_ally_id'] . "';" );
+    /**
+     * getUserData
+     *
+     * @return array
+     */
+    public function getUserData()
+    {
+        return $this->user_data;
+    }
 
-			if ( $alliance['ally_members'] <= 0 )
-			{
-				parent::$db->query ( "DELETE ass,a FROM " . ALLIANCE . " AS a
-										INNER JOIN " . ALLIANCE_STATISTICS . " AS ass ON ass.alliance_statistic_alliance_id = a.alliance_id
-										WHERE a.`alliance_id` = '" . $alliance['alliance_id'] . "';" );
-			}
-		}
+    /**
+     * getPlanetData
+     *
+     * @return array
+     */
+    public function getPlanetData()
+    {
+        return $this->planet_data;
+    }
 
-		parent::$db->query ( "DELETE p,b,d,s FROM " . PLANETS . " AS p
-								INNER JOIN " . BUILDINGS . " AS b ON b.building_planet_id = p.`planet_id`
-								INNER JOIN " . DEFENSES . " AS d ON d.defense_planet_id = p.`planet_id`
-								INNER JOIN " . SHIPS . " AS s ON s.ship_planet_id = p.`planet_id`
-								WHERE `planet_user_id` = '" . $user_id . "';" );
+    /**
+     * checkSession
+     *
+     * @return void
+     */
+    public function checkSession()
+    {
+        if (!$this->isSessionSet()) {
 
-		parent::$db->query ( "DELETE FROM " . MESSAGES . " WHERE `message_sender` = '" . $user_id . "' OR `message_receiver` = '" . $user_id . "';" );
-		parent::$db->query ( "DELETE FROM " . BUDDY . " WHERE `buddy_sender` = '" . $user_id . "' OR `buddy_receiver` = '" . $user_id . "';" );
+            FunctionsLib::redirect(XGP_ROOT);
+        }
+    }
 
-		parent::$db->query ( "DELETE r,f,n,p,se,s,u FROM " . USERS . " AS u
-								INNER JOIN " . RESEARCH . " AS r ON r.research_user_id = u.user_id
-								LEFT JOIN " . FLEETS . " AS f ON f.fleet_owner = u.user_id
-								LEFT JOIN " . NOTES . " AS n ON n.note_owner = u.user_id
-								INNER JOIN " . PREMIUM . " AS p ON p.premium_user_id = u.user_id
-								INNER JOIN " . SETTINGS . " AS se ON se.setting_user_id = u.user_id
-								INNER JOIN " . USERS_STATISTICS . " AS s ON s.user_statistic_user_id = u.user_id
-								WHERE u.`user_id` = '" . $user_id . "';" );
-	}
+    /**
+     * deleteUser
+     *
+     * @param int $user_id User ID
+     *
+     * @return void
+     */
+    public function deleteUser($user_id)
+    {
+        $user_data  = parent::$db->queryFetch(
+            "SELECT `user_ally_id` FROM " . USERS . " WHERE `user_id` = '" . $user_id . "';"
+        );
 
-	/**
-	 * method is_on_vacations
-	 * param $current_user
-	 * return return TRUE if the user is on vacation mode, FALSE if not.
-	 */
-	public function is_on_vacations ( $user )
-	{
-		if ( $user['setting_vacations_status'] == 1 )
-		{
-			return TRUE;
-		}
-		else
-		{
-			return FALSE;
-		}
-	}
+        if ($user_data['user_ally_id'] != 0) {
 
-	###########################################################################
-	#
-	# Private Methods
-	#
-	###########################################################################
+            $alliance = parent::$db->queryFetch(
+                "SELECT a.`alliance_id`, 
+                    (SELECT COUNT(user_id) AS `ally_members` 
+                        FROM `" . USERS . "` 
+                        WHERE `user_ally_id` = '" . $user_data['user_ally_id'] . "') AS `ally_members`
+                FROM " . ALLIANCE . " AS a
+                WHERE a.`alliance_id` = '" . $user_data['user_ally_id'] . "';"
+            );
 
-	/**
-	 * method is_session_set
-	 * param
-	 * return (bool)
-	 */
-	private function is_session_set()
-	{
-		if ( ! isset ( $_SESSION['user_id'] ) or ! isset ( $_SESSION['user_name'] ) or ! isset ( $_SESSION['user_password'] ) )
-		{
-			return FALSE;
-		}
-		else
-		{
-			return TRUE;
-		}
-	}
+            if ($alliance['ally_members'] <= 0) {
 
-	/**
-	 * method set_user_data
-	 * param
-	 * return (void)
-	 */
-	private function set_user_data()
-	{
-		$user_row	= array();
+                parent::$db->query(
+                    "DELETE ass,a FROM " . ALLIANCE . " AS a
+                    INNER JOIN " . ALLIANCE_STATISTICS . " AS ass ON ass.alliance_statistic_alliance_id = a.alliance_id
+                    WHERE a.`alliance_id` = '" . $alliance['alliance_id'] . "';"
+                );
+            }
+        }
 
-		$this->_user_data = parent::$db->query ( "SELECT u.*,
-	            											pre.*,
-	            											se.*,
-	            											usul.user_statistic_total_rank,
-	            											usul.user_statistic_total_points,
-	            											r.*,
-	            											a.alliance_name,
-	            											(SELECT COUNT(`message_id`) AS `new_message` FROM `" . MESSAGES . "` WHERE `message_receiver` = u.`user_id` AND `message_read` = 0) AS `new_message`
-	            									FROM " . USERS . " AS u
-	            									INNER JOIN " . SETTINGS . " AS se ON se.setting_user_id = u.user_id
-	                                    			INNER JOIN " . USERS_STATISTICS . " AS usul ON usul.user_statistic_user_id = u.user_id
-	                                    			INNER JOIN " . PREMIUM . " AS pre ON pre.premium_user_id = u.user_id
-	                                    			INNER JOIN " . RESEARCH . " AS r ON r.research_user_id = u.user_id
-	                                    			LEFT JOIN " . ALLIANCE . " AS a ON a.alliance_id = u.user_ally_id
-	            									WHERE (u.user_name = '" . parent::$db->escapeValue ( $_SESSION['user_name'] ) . "')
-	            									LIMIT 1;");
+        parent::$db->query(
+            "DELETE p,b,d,s FROM " . PLANETS . " AS p
+            INNER JOIN " . BUILDINGS . " AS b ON b.building_planet_id = p.`planet_id`
+            INNER JOIN " . DEFENSES . " AS d ON d.defense_planet_id = p.`planet_id`
+            INNER JOIN " . SHIPS . " AS s ON s.ship_planet_id = p.`planet_id`
+            WHERE `planet_user_id` = '" . $user_id . "';"
+        );
 
-		if ( parent::$db->numRows ( $this->_user_data ) != 1 && !defined('IN_LOGIN'))
-		{
-			FunctionsLib::message ( $this->_lang['ccs_multiple_users'] , XGP_ROOT , 3 , FALSE , FALSE );
-		}
+        parent::$db->query(
+            "DELETE FROM " . MESSAGES . " 
+                WHERE `message_sender` = '" . $user_id . "' OR `message_receiver` = '" . $user_id . "';"
+        );
 
-		$user_row    = parent::$db->fetchArray ( $this->_user_data );
+        parent::$db->query(
+            "DELETE FROM " . BUDDY . " 
+                WHERE `buddy_sender` = '" . $user_id . "' OR `buddy_receiver` = '" . $user_id . "';"
+        );
 
-		if ( $user_row['user_id'] != $_SESSION['user_id'] && !defined('IN_LOGIN'))
-		{
-			FunctionsLib::message ( $this->_lang['ccs_other_user'] , XGP_ROOT , 3 ,  FALSE , FALSE );
-		}
+        parent::$db->query(
+            "DELETE r,f,n,p,se,s,u FROM " . USERS . " AS u
+            INNER JOIN " . RESEARCH . " AS r ON r.research_user_id = u.user_id
+            LEFT JOIN " . FLEETS . " AS f ON f.fleet_owner = u.user_id
+            LEFT JOIN " . NOTES . " AS n ON n.note_owner = u.user_id
+            INNER JOIN " . PREMIUM . " AS p ON p.premium_user_id = u.user_id
+            INNER JOIN " . SETTINGS . " AS se ON se.setting_user_id = u.user_id
+            INNER JOIN " . USERS_STATISTICS . " AS s ON s.user_statistic_user_id = u.user_id
+            WHERE u.`user_id` = '" . $user_id . "';"
+        );
+    }
 
-		if ( sha1 ( $user_row['user_password'] . "-" . SECRETWORD ) != $_SESSION['user_password'] && !defined('IN_LOGIN'))
-		{
-			FunctionsLib::message ( $this->_lang['css_different_password'] , XGP_ROOT , 5 ,  FALSE , FALSE );
-		}
+    /**
+     * isOnVacations
+     *
+     * @param array $user User data
+     *
+     * @return boolean
+     */
+    public function isOnVacations($user)
+    {
+        if ($user['setting_vacations_status'] == 1) {
 
-		if ( $user_row['user_banned'] > 0 )
-		{
-			$parse					= $this->_lang;
-			$parse['banned_until']	= date ( FunctionsLib::read_config ( 'date_format_extended' ) , $user_row['user_banned'] );
+            return true;
+        } else {
 
-			die ( parent::$page->parse_template ( parent::$page->get_template ( 'home/banned_message' ) , $parse ) );
-		}
+            return false;
+        }
+    }
 
-		parent::$db->query ( "UPDATE " . USERS . " SET
-            					`user_onlinetime` = '" . time() ."',
-            					`user_current_page` = '". parent::$db->escapeValue ( $_SERVER['REQUEST_URI'] ) ."',
-            					`user_lastip` = '". parent::$db->escapeValue ( $_SERVER['REMOTE_ADDR'] ) ."',
-            					`user_agent` = '". parent::$db->escapeValue ( $_SERVER['HTTP_USER_AGENT'] ) ."'
-            					WHERE `user_id` = '". parent::$db->escapeValue ( $_SESSION['user_id'] ) ."'
-            					LIMIT 1;" );
+    ###########################################################################
+    #
+    # Private Methods
+    #
+    ###########################################################################
 
-		// pass the data
-		$this->_user_data	= $user_row;
+    /**
+     * isSessionSet
+     *
+     * @return boolean
+     */
+    private function isSessionSet()
+    {
+        if (!isset($_SESSION['user_id']) or !isset($_SESSION['user_name']) or !isset($_SESSION['user_password'])) {
 
-		// unset the old data
-		unset ( $user_row );
-	}
+            return false;
+        } else {
 
-	/**
-	 * method set_planet_data
-	 * param
-	 * return (void)
-	 */
-	private function set_planet_data()
-	{
-		$this->_planet_data	= parent::$db->queryFetch ( "SELECT p.*, b.*, d.*, s.*,
-																m.planet_id AS moon_id,
-																m.planet_name AS moon_name,
-																m.planet_image AS moon_image,
-																m.planet_destroyed AS moon_destruyed,
-																m.planet_image AS moon_image,
-																(SELECT COUNT(user_statistic_user_id) AS stats_users FROM `" . USERS_STATISTICS . "`) AS stats_users
-															FROM " . PLANETS . " AS p
-															INNER JOIN " . BUILDINGS . " AS b ON b.building_planet_id = p.`planet_id`
-															INNER JOIN " . DEFENSES . " AS d ON d.defense_planet_id = p.`planet_id`
-															INNER JOIN " . SHIPS . " AS s ON s.ship_planet_id = p.`planet_id`
-															LEFT JOIN " . PLANETS . " AS m ON m.planet_id = (SELECT mp.`planet_id`
-																												FROM " . PLANETS . " AS mp
-																												WHERE (mp.planet_galaxy=p.planet_galaxy AND
-																														mp.planet_system=p.planet_system AND
-																														mp.planet_planet=p.planet_planet AND
-																														mp.planet_type=3))
-															WHERE p.`planet_id` = '" . $this->_user_data['user_current_planet'] . "';" );
-	}
+            return true;
+        }
+    }
 
-	/**
-	 * method set_planet
-	 * param
-	 * return (void)
-	 */
-	private function set_planet()
-	{
-		$select		= isset ( $_GET['cp'] ) ? (int)$_GET['cp'] : '';
-		$restore 	= isset ( $_GET['re'] ) ? (int)$_GET['re'] : '';
+    /**
+     * setUserData
+     *
+     * @return void
+     */
+    private function setUserData()
+    {
+        $user_row   = array();
 
-		if ( isset ( $select ) && is_numeric ( $select ) && isset ( $restore ) && $restore == 0 && $select != 0 )
-		{
-			$owned   = parent::$db->queryFetch ( "SELECT `planet_id`
-													FROM " . PLANETS . "
-													WHERE `planet_id` = '". $select ."'
-														AND `planet_user_id` = '" . $this->_user_data['user_id'] . "';");
+        $this->user_data = parent::$db->query(
+            "SELECT u.*,
+                pre.*,
+                se.*,
+                usul.user_statistic_total_rank,
+                usul.user_statistic_total_points,
+                r.*,
+                a.alliance_name,
+                (SELECT COUNT(`message_id`) AS `new_message` 
+                FROM `" . MESSAGES . "` 
+                WHERE `message_receiver` = u.`user_id` AND `message_read` = 0) AS `new_message`
+            FROM " . USERS . " AS u
+            INNER JOIN " . SETTINGS . " AS se ON se.setting_user_id = u.user_id
+            INNER JOIN " . USERS_STATISTICS . " AS usul ON usul.user_statistic_user_id = u.user_id
+            INNER JOIN " . PREMIUM . " AS pre ON pre.premium_user_id = u.user_id
+            INNER JOIN " . RESEARCH . " AS r ON r.research_user_id = u.user_id
+            LEFT JOIN " . ALLIANCE . " AS a ON a.alliance_id = u.user_ally_id
+            WHERE (u.user_name = '" . parent::$db->escapeValue($_SESSION['user_name']) . "')
+            LIMIT 1;"
+        );
 
-			if ( $owned )
-			{
-				$this->_user_data['current_planet']	= $select;
+        if (parent::$db->numRows($this->user_data) != 1 && !defined('IN_LOGIN')) {
 
-				parent::$db->query ( "UPDATE " . USERS . " SET
-										`user_current_planet` = '" . $select . "'
-										WHERE `user_id` = '" . $this->_user_data['user_id'] . "';");
-			}
-		}
-	}
+            FunctionsLib::message($this->langs['ccs_multiple_users'], XGP_ROOT, 3, false, false);
+        }
+
+        $user_row   = parent::$db->fetchArray($this->user_data);
+
+        if ($user_row['user_id'] != $_SESSION['user_id'] && !defined('IN_LOGIN')) {
+
+            FunctionsLib::message($this->langs['ccs_other_user'], XGP_ROOT, 3, false, false);
+        }
+
+        if (sha1($user_row['user_password'] . "-" . SECRETWORD) != $_SESSION['user_password'] && !defined('IN_LOGIN')) {
+
+            FunctionsLib::message($this->langs['css_different_password'], XGP_ROOT, 5, false, false);
+        }
+
+        if ($user_row['user_banned'] > 0) {
+
+            $parse                  = $this->langs;
+            $parse['banned_until']  = date(FunctionsLib::readConfig('date_format_extended'), $user_row['user_banned']);
+
+            die(parent::$page->parseTemplate(parent::$page->getTemplate('home/banned_message'), $parse));
+        }
+
+        parent::$db->query("UPDATE " . USERS . " SET
+            					`user_onlinetime` = '" . time() . "',
+            					`user_current_page` = '" . parent::$db->escapeValue($_SERVER['REQUEST_URI']) . "',
+            					`user_lastip` = '" . parent::$db->escapeValue($_SERVER['REMOTE_ADDR']) . "',
+            					`user_agent` = '" . parent::$db->escapeValue($_SERVER['HTTP_USER_AGENT']) . "'
+            					WHERE `user_id` = '" . parent::$db->escapeValue($_SESSION['user_id']) . "'
+            					LIMIT 1;");
+
+        // pass the data
+        $this->user_data = $user_row;
+
+        // unset the old data
+        unset($user_row);
+    }
+
+    /**
+     * setPlanetData
+     *
+     * @return void
+     */
+    private function setPlanetData()
+    {
+        $this->planet_data = parent::$db->queryFetch(
+            "SELECT p.*, b.*, d.*, s.*,
+            m.planet_id AS moon_id,
+            m.planet_name AS moon_name,
+            m.planet_image AS moon_image,
+            m.planet_destroyed AS moon_destruyed,
+            m.planet_image AS moon_image,
+            (SELECT COUNT(user_statistic_user_id) AS stats_users FROM `" . USERS_STATISTICS . "`) AS stats_users
+            FROM " . PLANETS . " AS p
+            INNER JOIN " . BUILDINGS . " AS b ON b.building_planet_id = p.`planet_id`
+            INNER JOIN " . DEFENSES . " AS d ON d.defense_planet_id = p.`planet_id`
+            INNER JOIN " . SHIPS . " AS s ON s.ship_planet_id = p.`planet_id`
+            LEFT JOIN " . PLANETS . " AS m ON m.planet_id = (SELECT mp.`planet_id`
+                FROM " . PLANETS . " AS mp
+                WHERE (mp.planet_galaxy=p.planet_galaxy AND
+                                mp.planet_system=p.planet_system AND
+                                mp.planet_planet=p.planet_planet AND
+                                mp.planet_type=3))
+            WHERE p.`planet_id` = '" . $this->user_data['user_current_planet'] . "';"
+        );
+    }
+
+    /**
+     * setPlanet
+     *
+     * @return void
+     */
+    private function setPlanet()
+    {
+        $select     = isset($_GET['cp']) ? (int)$_GET['cp'] : '';
+        $restore    = isset($_GET['re']) ? (int)$_GET['re'] : '';
+
+        if (isset($select) && is_numeric($select) && isset($restore) && $restore == 0 && $select != 0) {
+
+            $owned = parent::$db->queryFetch(
+                "SELECT `planet_id`
+                FROM " . PLANETS . "
+                WHERE `planet_id` = '" . $select . "'
+                AND `planet_user_id` = '" . $this->user_data['user_id'] . "';"
+            );
+
+            if ($owned) {
+
+                $this->user_data['current_planet'] = $select;
+
+                parent::$db->query(
+                    "UPDATE " . USERS . " SET
+                    `user_current_planet` = '" . $select . "'
+                    WHERE `user_id` = '" . $this->user_data['user_id'] . "';"
+                );
+            }
+        }
+    }
 }
 
 /* end of UsersLib.php */

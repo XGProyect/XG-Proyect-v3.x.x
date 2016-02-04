@@ -44,10 +44,10 @@ class UpdateResourcesLib extends XGPCore
         $ProdGrid   = parent::$objects->getProduction();
         $reslist    = parent::$objects->getObjectsList();
 
-        $game_resource_multiplier       = FunctionsLib::read_config('resource_multiplier');
-        $game_metal_basic_income        = FunctionsLib::read_config('metal_basic_income');
-        $game_crystal_basic_income      = FunctionsLib::read_config('crystal_basic_income');
-        $game_deuterium_basic_income    = FunctionsLib::read_config('deuterium_basic_income');
+        $game_resource_multiplier       = FunctionsLib::readConfig('resource_multiplier');
+        $game_metal_basic_income        = FunctionsLib::readConfig('metal_basic_income');
+        $game_crystal_basic_income      = FunctionsLib::readConfig('crystal_basic_income');
+        $game_deuterium_basic_income    = FunctionsLib::readConfig('deuterium_basic_income');
 
         $current_planet['planet_metal_max']     = ProductionLib::maxStorable($current_planet[$resource[22]]);
         $current_planet['planet_crystal_max']   = ProductionLib::maxStorable($current_planet[$resource[23]]);
@@ -256,11 +256,11 @@ class UpdateResourcesLib extends XGPCore
                         switch ($element) {
 
                             case (($element >= 202) && ($element <= 215)):
-                                $ship_points    += StatisticsLib::calculate_points($element, $count) * $count;
+                                $ship_points    += StatisticsLib::calculatePoints($element, $count) * $count;
                                 break;
 
                             case (($element >= 401) && ($element <= 503)):
-                                $defense_points += StatisticsLib::calculate_points($element, $count) * $count;
+                                $defense_points += StatisticsLib::calculatePoints($element, $count) * $count;
                                 break;
 
                             default:
@@ -275,7 +275,7 @@ class UpdateResourcesLib extends XGPCore
             // RESEARCH UPDATE
             if ($current_planet['planet_b_tech'] <= time() && $current_planet['planet_b_tech_id'] != 0) {
 
-                $current_user['research_points']    = StatisticsLib::calculate_points(
+                $current_user['research_points']    = StatisticsLib::calculatePoints(
                     $current_planet['planet_b_tech_id'],
                     $current_user[$resource[$current_planet['planet_b_tech_id']]],
                     'tech'
@@ -345,7 +345,7 @@ class UpdateResourcesLib extends XGPCore
             foreach ($BuildQueue as $Node => $Array) {
                 if ($Array != '') {
                     $Item               = explode(',', $Array);
-                    $AcumTime           = DevelopmentsLib::development_time(
+                    $AcumTime           = DevelopmentsLib::developmentTime(
                         $current_user,
                         $current_planet,
                         $Item[0]

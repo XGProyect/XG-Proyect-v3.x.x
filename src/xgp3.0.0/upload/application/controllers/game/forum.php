@@ -41,10 +41,10 @@ class Forum extends XGPCore
         parent::__construct();
 
         // check if session is active
-        parent::$users->check_session();
+        parent::$users->checkSession();
 
         // Check module access
-        FunctionsLib::module_message(FunctionsLib::is_module_accesible(self::MODULE_ID));
+        FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
         $this->buildPage();
     }
@@ -66,7 +66,7 @@ class Forum extends XGPCore
      */
     private function buildPage()
     {
-        FunctionsLib::redirect(FunctionsLib::read_config('forum_url'));
+        FunctionsLib::redirect(FunctionsLib::readConfig('forum_url'));
     }
 }
 

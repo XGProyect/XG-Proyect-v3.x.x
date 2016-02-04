@@ -53,7 +53,7 @@ class UpdateLib extends XGPCore
      */
     private function cleanUp()
     {
-        $last_cleanup       = FunctionsLib::read_config('last_cleanup');
+        $last_cleanup       = FunctionsLib::readConfig('last_cleanup');
         $cleanup_interval   = 6; // 6 HOURS
 
         if ((time() >= ($last_cleanup + (3600 * $cleanup_interval)))) {
@@ -76,14 +76,14 @@ class UpdateLib extends XGPCore
                 
                 while ($delete = parent::$db->fetchArray($ChooseToDelete)) {
                     
-                    parent::$users->delete_user($delete['id']);
+                    parent::$users->deleteUser($delete['id']);
                 }
             }
 
             parent::$db->query("DELETE FROM " . MESSAGES . " WHERE `message_time` < '". $del_before ."';");
             parent::$db->query("DELETE FROM " . REPORTS . " WHERE `report_time` < '". $del_before ."';");
 
-            FunctionsLib::update_config('last_cleanup', time());
+            FunctionsLib::updateConfig('last_cleanup', time());
         }
     }
 
@@ -95,8 +95,8 @@ class UpdateLib extends XGPCore
     private function createBackup()
     {
         // LAST UPDATE AND UPDATE INTERVAL, EX: 15 MINUTES
-        $auto_backup        = FunctionsLib::read_config('auto_backup');
-        $last_backup        = FunctionsLib::read_config('last_backup');
+        $auto_backup        = FunctionsLib::readConfig('auto_backup');
+        $last_backup        = FunctionsLib::readConfig('last_backup');
         $update_interval    = 6; // 6 HOURS
 
         // CHECK TIME
@@ -104,7 +104,7 @@ class UpdateLib extends XGPCore
             
             parent::$db->backupDb(); // MAKE BACKUP
 
-            FunctionsLib::update_config('last_backup', time());
+            FunctionsLib::updateConfig('last_backup', time());
         }
     }
 
@@ -133,7 +133,7 @@ class UpdateLib extends XGPCore
 
                     if (self::checkBuildingQueue($current_planet, $current_user)) {
 
-                        DevelopmentsLib::set_first_element($current_planet, $current_user);
+                        DevelopmentsLib::setFirstElement($current_planet, $current_user);
                     }
                 } else {
                     break;
@@ -149,7 +149,12 @@ class UpdateLib extends XGPCore
      */
     private function updateFleets()
     {
-        include_once XGP_ROOT . 'application/libraries/MissionControlLib.php';
+        // language issues if is not present
+        if (!defined('IN_GAME')) {
+            define('IN_GAME', true);
+        }
+        
+        include_once XGP_ROOT . LIB_PATH . 'MissionControlLib.php';
 
         $_fleets    = parent::$db->query(
             "SELECT 
@@ -209,14 +214,14 @@ class UpdateLib extends XGPCore
     private function updateStatistics()
     {
         // LAST UPDATE AND UPDATE INTERVAL, EX: 15 MINUTES
-        $stat_last_update   = FunctionsLib::read_config('stat_last_update');
-        $update_interval    = FunctionsLib::read_config('stat_update_time');
+        $stat_last_update   = FunctionsLib::readConfig('stat_last_update');
+        $update_interval    = FunctionsLib::readConfig('stat_update_time');
 
         if ((time() >= ($stat_last_update + (60 * $update_interval)))) {
 
-            $result = StatisticsLib::make_stats();
+            $result = StatisticsLib::makeStats();
 
-            FunctionsLib::update_config('stat_last_update', $result['stats_time']);
+            FunctionsLib::updateConfig('stat_last_update', $result['stats_time']);
         }
     }
 
@@ -258,7 +263,7 @@ class UpdateLib extends XGPCore
 
             if ($build_end_time <= time()) {
 
-                $needed     = DevelopmentsLib::development_price(
+                $needed     = DevelopmentsLib::developmentPrice(
                     $current_user,
                     $current_planet,
                     $element,
@@ -313,7 +318,7 @@ class UpdateLib extends XGPCore
                 $current_planet['planet_b_building_id'] = $new_queue;
                 $current_planet['planet_field_current'] = $current;
                 $current_planet['planet_field_max']     = $max;
-                $current_planet['building_points']      = StatisticsLib::calculate_points(
+                $current_planet['building_points']      = StatisticsLib::calculatePoints(
                     $element,
                     $current_planet[$resource[$element]]
                 );

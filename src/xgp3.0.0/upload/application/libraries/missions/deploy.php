@@ -53,79 +53,79 @@ class Deploy extends Missions
             if ($fleet_row['fleet_start_time'] <= time()) {
 
                 $target_coords      = sprintf(
-                    $this->_lang['sys_adress_planet'],
+                    $this->langs['sys_adress_planet'],
                     $fleet_row['fleet_end_galaxy'],
                     $fleet_row['fleet_end_system'],
                     $fleet_row['fleet_end_planet']
                 );
 
                 $target_resources   = sprintf(
-                    $this->_lang['sys_stay_mess_goods'],
-                    $this->_lang['Metal'],
-                    FormatLib::pretty_number($fleet_row['fleet_resource_metal']),
-                    $this->_lang['Crystal'],
-                    FormatLib::pretty_number($fleet_row['fleet_resource_crystal']),
-                    $this->_lang['Deuterium'],
-                    FormatLib::pretty_number($fleet_row['fleet_resource_deuterium'])
+                    $this->langs['sys_stay_mess_goods'],
+                    $this->langs['Metal'],
+                    FormatLib::prettyNumber($fleet_row['fleet_resource_metal']),
+                    $this->langs['Crystal'],
+                    FormatLib::prettyNumber($fleet_row['fleet_resource_crystal']),
+                    $this->langs['Deuterium'],
+                    FormatLib::prettyNumber($fleet_row['fleet_resource_deuterium'])
                 );
                 
-                $target_message = $this->_lang['sys_stay_mess_start'] ."<a href=\"game.php?page=galaxy&mode=3&galaxy=" .
+                $target_message = $this->langs['sys_stay_mess_start'] ."<a href=\"game.php?page=galaxy&mode=3&galaxy=" .
                     $fleet_row['fleet_end_galaxy'] ."&system=". $fleet_row['fleet_end_system'] ."\">";
-                $target_message .= $target_coords . "</a>" . $this->_lang['sys_stay_mess_end'] .
+                $target_message .= $target_coords . "</a>" . $this->langs['sys_stay_mess_end'] .
                     "<br />" . $target_resources;
 
-                FunctionsLib::send_message(
+                FunctionsLib::sendMessage(
                     $fleet_row['fleet_target_owner'],
                     '',
                     $fleet_row['fleet_start_time'],
                     5,
-                    $this->_lang['sys_mess_qg'],
-                    $this->_lang['sys_stay_mess_stay'],
+                    $this->langs['sys_mess_qg'],
+                    $this->langs['sys_stay_mess_stay'],
                     $target_message
                 );
 
-                parent::restore_fleet($fleet_row, false);
-                parent::remove_fleet($fleet_row['fleet_id']);
+                parent::restoreFleet($fleet_row, false);
+                parent::removeFleet($fleet_row['fleet_id']);
             }
         } else {
 
             if ($fleet_row['fleet_end_time'] <= time()) {
 
                     $target_coords  = sprintf(
-                        $this->_lang['sys_adress_planet'],
+                        $this->langs['sys_adress_planet'],
                         $fleet_row['fleet_start_galaxy'],
                         $fleet_row['fleet_start_system'],
                         $fleet_row['fleet_start_planet']
                     );
 
                     $target_resources   = sprintf(
-                        $this->_lang['sys_stay_mess_goods'],
-                        $this->_lang['Metal'],
-                        FormatLib::pretty_number($fleet_row['fleet_resource_metal']),
-                        $this->_lang['Crystal'],
-                        FormatLib::pretty_number($fleet_row['fleet_resource_crystal']),
-                        $this->_lang['Deuterium'],
-                        FormatLib::pretty_number($fleet_row['fleet_resource_deuterium'])
+                        $this->langs['sys_stay_mess_goods'],
+                        $this->langs['Metal'],
+                        FormatLib::prettyNumber($fleet_row['fleet_resource_metal']),
+                        $this->langs['Crystal'],
+                        FormatLib::prettyNumber($fleet_row['fleet_resource_crystal']),
+                        $this->langs['Deuterium'],
+                        FormatLib::prettyNumber($fleet_row['fleet_resource_deuterium'])
                     );
 
-                    $target_message = $this->_lang['sys_stay_mess_back'] .
+                    $target_message = $this->langs['sys_stay_mess_back'] .
                         "<a href=\"game.php?page=galaxy&mode=3&galaxy=" .
                         $fleet_row['fleet_start_galaxy'] . "&system=" . $fleet_row['fleet_start_system'] . "\">";
-                    $target_message .= $target_coords . "</a>" . $this->_lang['sys_stay_mess_bend'] .
+                    $target_message .= $target_coords . "</a>" . $this->langs['sys_stay_mess_bend'] .
                         "<br />" . $target_resources;
 
-                    FunctionsLib::send_message(
+                    FunctionsLib::sendMessage(
                         $fleet_row['fleet_owner'],
                         '',
                         $fleet_row['fleet_end_time'],
                         5,
-                        $this->_lang['sys_mess_qg'],
-                        $this->_lang['sys_mess_fleetback'],
+                        $this->langs['sys_mess_qg'],
+                        $this->langs['sys_mess_fleetback'],
                         $target_message
                     );
 
-                    parent::restore_fleet($fleet_row, true);
-                    parent::remove_fleet($fleet_row['fleet_id']);
+                    parent::restoreFleet($fleet_row, true);
+                    parent::removeFleet($fleet_row['fleet_id']);
             }
         }
     }

@@ -28,49 +28,54 @@ use application\core\XGPCore;
  */
 class FormulaLib extends XGPCore
 {
-	/**
-	 * __construct()
-	 */
-	public function __construct ()
-	{
-		parent::__construct();
-	}
+    /**
+     * __construct
+     *
+     * return void
+     */
+    public function __construct()
+    {
+        parent::__construct();
+    }
 
-	/**
-	 * method phalanx_range
-	 * param $phalanx_level
-	 * return the plalanx range
-	 */
-	public function phalanx_range ( $phalanx_level )
-	{
-		$range = 0;
+    /**
+     * phalanxRange
+     *
+     * @param int $phalanx_level Phalanx level
+     *
+     * return int
+     */
+    public function phalanxRange($phalanx_level)
+    {
+        $range = 0;
 
-		if ( $phalanx_level > 1 )
-		{
-			$range = pow ( $phalanx_level , 2 ) - 1;
-		}
-		elseif ( $phalanx_level == 1 )
-		{
-			$range = 1;
-		}
+        if ($phalanx_level > 1) {
 
-		return $range;
-	}
+            $range  = pow($phalanx_level, 2) - 1;
+        } elseif ($phalanx_level == 1) {
 
-	/**
-	 * method missile_range
-	 * param $impulse_drive_level
-	 * return the missile range
-	 */
-	public function missile_range ( $impulse_drive_level )
-	{
-		if ( $impulse_drive_level > 0 )
-		{
-			return ( $impulse_drive_level * 5 ) - 1;
-		}
+            $range  = 1;
+        }
 
-		return 0;
-	}
+        return $range;
+    }
+
+    /**
+     * missileRange
+     *
+     * @param int $impulse_drive_level Impulse drive level
+     *
+     * return int
+     */
+    public function missileRange($impulse_drive_level)
+    {
+        if ($impulse_drive_level > 0) {
+
+            return ($impulse_drive_level * 5) - 1;
+        }
+
+        return 0;
+    }
 }
 
 /* end of FormulaLib.php */

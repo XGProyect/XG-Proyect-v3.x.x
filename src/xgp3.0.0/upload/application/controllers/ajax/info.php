@@ -62,7 +62,7 @@ class Info extends XGPCore
     private function buildPage()
     {
         parent::$page->display(
-            parent::$page->parse_template(parent::$page->get_template('ajax/info_view'), $this->langs),
+            parent::$page->parseTemplate(parent::$page->getTemplate('ajax/info_view'), $this->langs),
             false,
             '',
             false

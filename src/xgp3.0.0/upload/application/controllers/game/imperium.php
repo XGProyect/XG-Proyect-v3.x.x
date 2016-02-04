@@ -32,58 +32,56 @@ use application\libraries\OfficiersLib;
  */
 class Imperium extends XGPCore
 {
-	const MODULE_ID	= 2;
 
-	private $_lang;
-	private $_current_user;
+    const MODULE_ID = 2;
 
-	/**
-	 * __construct()
-	 */
-	public function __construct()
-	{
-		parent::__construct();
+    private $_lang;
+    private $_current_user;
 
-		// check if session is active
-		parent::$users->check_session();
+    /**
+     * __construct()
+     */
+    public function __construct()
+    {
+        parent::__construct();
 
-		// Check module access
-		FunctionsLib::module_message ( FunctionsLib::is_module_accesible ( self::MODULE_ID ) );
+        // check if session is active
+        parent::$users->checkSession();
 
-		$this->_lang			= parent::$lang;
-		$this->_current_user	= parent::$users->get_user_data();
+        // Check module access
+        FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
-		if ( ! OfficiersLib::isOfficierActive ( $this->_current_user['premium_officier_commander'] ) )
-		{
-			FunctionsLib::redirect ( 'game.php?page=officier' );
-		}
-		else
-		{
-			$this->build_page();
-		}
-	}
+        $this->_lang = parent::$lang;
+        $this->_current_user = parent::$users->getUserData();
 
-	/**
-	 * method __destruct
-	 * param
-	 * return close db connection
-	 */
-	public function __destruct()
-	{
-		parent::$db->closeConnection();
-	}
+        if (!OfficiersLib::isOfficierActive($this->_current_user['premium_officier_commander'])) {
+            FunctionsLib::redirect('game.php?page=officier');
+        } else {
+            $this->build_page();
+        }
+    }
 
-	/**
-	 * method build_page
-	 * param
-	 * return main method, loads everything
-	 */
-	private function build_page()
-	{
-		$resource	= parent::$objects->getObjects();
-		$reslist	= parent::$objects->getObjectsList();
+    /**
+     * method __destruct
+     * param
+     * return close db connection
+     */
+    public function __destruct()
+    {
+        parent::$db->closeConnection();
+    }
 
-		$planetsrow = parent::$db->query ( "SELECT `planet_id`,
+    /**
+     * method build_page
+     * param
+     * return main method, loads everything
+     */
+    private function build_page()
+    {
+        $resource = parent::$objects->getObjects();
+        $reslist = parent::$objects->getObjectsList();
+
+        $planetsrow = parent::$db->query("SELECT `planet_id`,
 													`planet_name`,
 													`planet_galaxy`,
 													`planet_system`,
@@ -146,55 +144,49 @@ class Imperium extends XGPCore
 													INNER JOIN " . BUILDINGS . " AS b ON b.building_planet_id = p.`planet_id`
 													INNER JOIN " . DEFENSES . " AS d ON d.defense_planet_id = p.`planet_id`
 													INNER JOIN " . SHIPS . " AS s ON s.ship_planet_id = p.`planet_id`
-													WHERE `planet_user_id` = '" . (int)$this->_current_user['user_id'] . "'
+													WHERE `planet_user_id` = '" . (int) $this->_current_user['user_id'] . "'
 														AND `planet_destroyed` = 0;");
 
-		$parse 			= $this->_lang;
-		$planet 		= array();
-		$r				= array();
-		$EmpireRowTPL	= parent::$page->get_template ( 'empire/empire_row' );
-		$f 				= array ( 'file_images' , 'file_names' , 'file_coordinates' , 'file_fields' , 'file_metal', 'file_crystal' , 'file_deuterium' , 'file_energy' );
-		$m 				= array ( 'build' , 'tech' , 'fleet' , 'defense' );
-		$n	 			= array ( 'building_row' , 'technology_row' , 'fleet_row' , 'defense_row' );
+        $parse = $this->_lang;
+        $planet = array();
+        $r = array();
+        $EmpireRowTPL = parent::$page->getTemplate('empire/empire_row');
+        $f = array('file_images', 'file_names', 'file_coordinates', 'file_fields', 'file_metal', 'file_crystal', 'file_deuterium', 'file_energy');
+        $m = array('build', 'tech', 'fleet', 'defense');
+        $n = array('building_row', 'technology_row', 'fleet_row', 'defense_row');
 
-		while ( $p = parent::$db->fetchArray ( $planetsrow ) )
-		{
-			$planet[] = $p;
-		}
+        while ($p = parent::$db->fetchArray($planetsrow)) {
+            $planet[] = $p;
+        }
 
-		$parse['mount'] = 	count ( $planet ) + 1;
+        $parse['mount'] = count($planet) + 1;
 
-		foreach ( $planet as $p )
-		{
-			$datat  = array ( '<a href="game.php?page=overview&cp=' . $p['planet_id'] . '&amp;re=0"><img src="' . DPATH . 'planets/small/s_' . $p['planet_image'] . '.jpg" border="0" height="80" width="80"></a>', $p['planet_name'], "[<a href=\"game.php?page=galaxy&mode=3&galaxy={$p['planet_galaxy']}&system={$p['planet_system']}\">{$p['planet_galaxy']}:{$p['planet_system']}:{$p['planet_planet']}</a>]", $p['planet_field_current'] . '/' . $p['planet_field_max'], '<a href="game.php?page=resources&cp=' . $p['planet_id'] . '&amp;re=0&amp;planettype=' . $p['planet_type'] . '">' . FormatLib::pretty_number($p['planet_metal']) . '</a> / ' . FormatLib::pretty_number($p['planet_metal_perhour'] + FunctionsLib::read_config ( 'metal_basic_income' )), '<a href="game.php?page=resources&cp=' . $p['planet_id'] . '&amp;re=0&amp;planettype=' . $p['planet_type'] . '">' . FormatLib::pretty_number($p['planet_crystal']) . '</a> / ' . FormatLib::pretty_number($p['planet_crystal_perhour'] + FunctionsLib::read_config ( 'crystal_basic_income' )), '<a href="game.php?page=resources&cp=' . $p['planet_id'] . '&amp;re=0&amp;planettype=' . $p['planet_type'] . '">' . FormatLib::pretty_number($p['planet_deuterium']) . '</a> / ' . FormatLib::pretty_number($p['planet_deuterium_perhour'] + FunctionsLib::read_config ( 'deuterium_basic_income' )), FormatLib::pretty_number($p['planet_energy_max'] - $p['planet_energy_used']) . ' / ' . FormatLib::pretty_number($p['planet_energy_max']));
+        foreach ($planet as $p) {
+            $datat = array('<a href="game.php?page=overview&cp=' . $p['planet_id'] . '&amp;re=0"><img src="' . DPATH . 'planets/small/s_' . $p['planet_image'] . '.jpg" border="0" height="80" width="80"></a>', $p['planet_name'], "[<a href=\"game.php?page=galaxy&mode=3&galaxy={$p['planet_galaxy']}&system={$p['planet_system']}\">{$p['planet_galaxy']}:{$p['planet_system']}:{$p['planet_planet']}</a>]", $p['planet_field_current'] . '/' . $p['planet_field_max'], '<a href="game.php?page=resources&cp=' . $p['planet_id'] . '&amp;re=0&amp;planettype=' . $p['planet_type'] . '">' . FormatLib::prettyNumber($p['planet_metal']) . '</a> / ' . FormatLib::prettyNumber($p['planet_metal_perhour'] + FunctionsLib::readConfig('metal_basic_income')), '<a href="game.php?page=resources&cp=' . $p['planet_id'] . '&amp;re=0&amp;planettype=' . $p['planet_type'] . '">' . FormatLib::prettyNumber($p['planet_crystal']) . '</a> / ' . FormatLib::prettyNumber($p['planet_crystal_perhour'] + FunctionsLib::readConfig('crystal_basic_income')), '<a href="game.php?page=resources&cp=' . $p['planet_id'] . '&amp;re=0&amp;planettype=' . $p['planet_type'] . '">' . FormatLib::prettyNumber($p['planet_deuterium']) . '</a> / ' . FormatLib::prettyNumber($p['planet_deuterium_perhour'] + FunctionsLib::readConfig('deuterium_basic_income')), FormatLib::prettyNumber($p['planet_energy_max'] - $p['planet_energy_used']) . ' / ' . FormatLib::prettyNumber($p['planet_energy_max']));
 
-			for ($k = 0; $k < 8; $k++)
-			{
-				$parse[$f[$k]]	= isset ( $parse[$f[$k]] ) ? $parse[$f[$k]] : '';
-				$data['text'] 	= $datat[$k];
-				$parse[$f[$k]] .= parent::$page->parse_template ( $EmpireRowTPL , $data );
-			}
+            for ($k = 0; $k < 8; $k++) {
+                $parse[$f[$k]] = isset($parse[$f[$k]]) ? $parse[$f[$k]] : '';
+                $data['text'] = $datat[$k];
+                $parse[$f[$k]] .= parent::$page->parseTemplate($EmpireRowTPL, $data);
+            }
 
-			foreach ( $resource as $i => $res )
-			{
-				$r[$i]			= isset ( $r[$i] ) ? $r[$i] : '';
-				$data['text'] 	= ( !isset ( $p[$resource[$i]] ) && !isset ( $this->_current_user[$resource[$i]] ) ) ? '0' : ( ( in_array ( $i , $reslist['build'] ) ) ? "<a href=\"game.php?page=" . DevelopmentsLib::set_building_page ( $i ) . "&cp={$p['planet_id']}&amp;re=0&amp;planettype={$p['planet_type']}\">{$p[$resource[$i]]}</a>" : ( ( in_array ( $i , $reslist['tech'] ) ) ? "<a href=\"game.php?page=research&cp={$p['planet_id']}&amp;re=0&amp;planettype={$p['planet_type']}\">{$this->_current_user[$resource[$i]]}</a>" : ( ( in_array ( $i , $reslist['fleet'] ) ) ? "<a href=\"game.php?page=shipyard&cp={$p['planet_id']}&amp;re=0&amp;planettype={$p['planet_type']}\">{$p[$resource[$i]]}</a>" : ( ( in_array ( $i , $reslist['defense'] ) ) ? "<a href=\"game.php?page=defense&cp={$p['planet_id']}&amp;re=0&amp;planettype={$p['planet_type']}\">{$p[$resource[$i]]}</a>" : '0' ) ) ) );
-				$r[$i] 	   	   .= parent::$page->parse_template ( $EmpireRowTPL , $data );
-			}
-		}
+            foreach ($resource as $i => $res) {
+                $r[$i] = isset($r[$i]) ? $r[$i] : '';
+                $data['text'] = (!isset($p[$resource[$i]]) && !isset($this->_current_user[$resource[$i]]) ) ? '0' : ( ( in_array($i, $reslist['build']) ) ? "<a href=\"game.php?page=" . DevelopmentsLib::setBuildingPage($i) . "&cp={$p['planet_id']}&amp;re=0&amp;planettype={$p['planet_type']}\">{$p[$resource[$i]]}</a>" : ( ( in_array($i, $reslist['tech']) ) ? "<a href=\"game.php?page=research&cp={$p['planet_id']}&amp;re=0&amp;planettype={$p['planet_type']}\">{$this->_current_user[$resource[$i]]}</a>" : ( ( in_array($i, $reslist['fleet']) ) ? "<a href=\"game.php?page=shipyard&cp={$p['planet_id']}&amp;re=0&amp;planettype={$p['planet_type']}\">{$p[$resource[$i]]}</a>" : ( ( in_array($i, $reslist['defense']) ) ? "<a href=\"game.php?page=defense&cp={$p['planet_id']}&amp;re=0&amp;planettype={$p['planet_type']}\">{$p[$resource[$i]]}</a>" : '0' ) ) ) );
+                $r[$i] .= parent::$page->parseTemplate($EmpireRowTPL, $data);
+            }
+        }
 
-		for ( $j = 0 ; $j < 4 ; $j++ )
-		{
-			foreach ( $reslist[$m[$j]] as $a => $i )
-			{
-				$parse[$n[$j]]		= isset ( $parse[$n[$j]] ) ? $parse[$n[$j]] : '';
-				$data['text'] 	 	= $this->_lang['tech'][$i];
-				$parse[$n[$j]] 	   .= "<tr>" . parent::$page->parse_template ( $EmpireRowTPL , $data ) . $r[$i] . "</tr>";
-			}
-		}
+        for ($j = 0; $j < 4; $j++) {
+            foreach ($reslist[$m[$j]] as $a => $i) {
+                $parse[$n[$j]] = isset($parse[$n[$j]]) ? $parse[$n[$j]] : '';
+                $data['text'] = $this->_lang['tech'][$i];
+                $parse[$n[$j]] .= "<tr>" . parent::$page->parseTemplate($EmpireRowTPL, $data) . $r[$i] . "</tr>";
+            }
+        }
 
-		parent::$page->display ( parent::$page->parse_template ( parent::$page->get_template ( 'empire/empire_table' ) , $parse ) , FALSE );
-	}
+        parent::$page->display(parent::$page->parseTemplate(parent::$page->getTemplate('empire/empire_table'), $parse), false);
+    }
 }
 
 /* end of imperium.php */

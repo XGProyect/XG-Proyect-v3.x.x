@@ -30,173 +30,157 @@ use application\libraries\FunctionsLib;
  */
 class Ban extends XGPCore
 {
-	private $_lang;
-	private $_current_user;
-	private $_users_count	= 0;
-	private $_banned_count	= 0;
+    private $_lang;
+    private $_current_user;
+    private $_users_count = 0;
+    private $_banned_count = 0;
 
-	/**
-	 * __construct()
-	 */
-	public function __construct()
-	{
-		parent::__construct();
+    /**
+     * __construct()
+     */
+    public function __construct()
+    {
+        parent::__construct();
 
-		// check if session is active
-		parent::$users->check_session();
+        // check if session is active
+        parent::$users->checkSession();
 
-		$this->_lang			= parent::$lang;
-		$this->_current_user	= parent::$users->get_user_data();
+        $this->_lang = parent::$lang;
+        $this->_current_user = parent::$users->getUserData();
 
-		// Check if the user is allowed to access
-		if ( AdministrationLib::have_access ( $this->_current_user['user_authlevel'] ) && AdministrationLib::authorization ( $this->_current_user['user_authlevel'] , 'edit_users' ) == 1 )
-		{
-			$this->build_page();
-		}
-		else
-		{
-			die ( FunctionsLib::message ( $this->_lang['ge_no_permissions'] ) );
-		}
-	}
+        // Check if the user is allowed to access
+        if (AdministrationLib::haveAccess($this->_current_user['user_authlevel']) && AdministrationLib::authorization($this->_current_user['user_authlevel'], 'edit_users') == 1) {
+            $this->build_page();
+        } else {
+            die(FunctionsLib::message($this->_lang['ge_no_permissions']));
+        }
+    }
 
-	/**
-	 * method __destruct
-	 * param
-	 * return close db connection
-	 */
-	public function __destruct ()
-	{
-		parent::$db->closeConnection();
-	}
+    /**
+     * method __destruct
+     * param
+     * return close db connection
+     */
+    public function __destruct()
+    {
+        parent::$db->closeConnection();
+    }
 
-	/**
-	 * method build_page
-	 * param
-	 * return main method, loads everything
-	 */
-	private function build_page()
-	{
-		switch ( ( isset ( $_GET['mode'] ) ? $_GET['mode'] : '' ) )
-		{
-			case 'ban':
+    /**
+     * method build_page
+     * param
+     * return main method, loads everything
+     */
+    private function build_page()
+    {
+        switch (( isset($_GET['mode']) ? $_GET['mode'] : '')) {
+            case 'ban':
 
-				$view	= $this->show_ban();
+                $view = $this->show_ban();
 
-			break;
+                break;
 
-			case '':
-			default:
+            case '':
+            default:
 
-				$view	= $this->show_default();
+                $view = $this->show_default();
 
-			break;
-		}
+                break;
+        }
 
-		parent::$page->display ( $view );
-	}
+        parent::$page->display($view);
+    }
 
-	/**
-	 * method show_default
-	 * param
-	 * return build the default page
-	 */
-	private function show_default()
-	{
-		$parse 					= $this->_lang;
-		$parse['js_path']		= XGP_ROOT . JS_PATH;
+    /**
+     * method show_default
+     * param
+     * return build the default page
+     */
+    private function show_default()
+    {
+        $parse = $this->_lang;
+        $parse['js_path'] = XGP_ROOT . JS_PATH;
 
-		if ( isset ( $_POST['unban_name'] ) && $_POST['unban_name'] )
-		{
-			$username	= parent::$db->escapeValue ( $_POST['unban_name'] );
+        if (isset($_POST['unban_name']) && $_POST['unban_name']) {
+            $username = parent::$db->escapeValue($_POST['unban_name']);
 
-			parent::$db->query ( "DELETE FROM `" . BANNED . "`
+            parent::$db->query("DELETE FROM `" . BANNED . "`
 									WHERE `banned_who` = '" . $username . "'");
 
-			parent::$db->query ( "UPDATE `" . USERS . "` SET
+            parent::$db->query("UPDATE `" . USERS . "` SET
 									`user_banned` = '0'
 									WHERE `user_name` = '" . $username . "'
-									LIMIT 1" );
+									LIMIT 1");
 
-			$parse['alert']		= AdministrationLib::save_message ( 'ok' , ( str_replace ( '%s' , $username , $this->_lang['bn_lift_ban_success'] ) ) );
-		}
+            $parse['alert'] = AdministrationLib::saveMessage('ok', ( str_replace('%s', $username, $this->_lang['bn_lift_ban_success'])));
+        }
 
-		$parse['users_list']	= $this->get_users_list();
-		$parse['banned_list']	= $this->get_banned_list();
-		$parse['users_amount']	= $this->_users_count;
-		$parse['banned_amount']	= $this->_banned_count;
+        $parse['users_list'] = $this->get_users_list();
+        $parse['banned_list'] = $this->get_banned_list();
+        $parse['users_amount'] = $this->_users_count;
+        $parse['banned_amount'] = $this->_banned_count;
 
-		return parent::$page->parse_template ( parent::$page->get_template ( 'adm/ban_view' ) , $parse );
-	}
+        return parent::$page->parseTemplate(parent::$page->getTemplate('adm/ban_view'), $parse);
+    }
 
-	/**
-	 * method show_ban
-	 * param
-	 * return build the ban page
-	 */
-	private function show_ban()
-	{
-		$parse 						= $this->_lang;
-		$parse['js_path']			= XGP_ROOT . JS_PATH;
-		$ban_name					= isset ( $_GET['ban_name'] ) ? parent::$db->escapeValue ( $_GET['ban_name'] ) : NULL;
+    /**
+     * method show_ban
+     * param
+     * return build the ban page
+     */
+    private function show_ban()
+    {
+        $parse = $this->_lang;
+        $parse['js_path'] = XGP_ROOT . JS_PATH;
+        $ban_name = isset($_GET['ban_name']) ? parent::$db->escapeValue($_GET['ban_name']) : NULL;
 
-		if ( isset ( $_GET['banuser'] ) && isset ( $_GET['ban_name'] ) )
-		{
-			$parse['name']			= $ban_name;
-			$parse['banned_until']	= '';
-			$parse['changedate']	= $this->_lang['bn_auto_lift_ban_message'];
-			$parse['vacation']		= '';
+        if (isset($_GET['banuser']) && isset($_GET['ban_name'])) {
+            $parse['name'] = $ban_name;
+            $parse['banned_until'] = '';
+            $parse['changedate'] = $this->_lang['bn_auto_lift_ban_message'];
+            $parse['vacation'] = '';
 
-			$banned_user			= parent::$db->queryFetch ( "SELECT b.*, s.`setting_user_id`, s.`setting_vacations_status`
+            $banned_user = parent::$db->queryFetch("SELECT b.*, s.`setting_user_id`, s.`setting_vacations_status`
 																	FROM `" . BANNED . "` AS b
 																	INNER JOIN `" . SETTINGS . "` AS s
 																		ON s.`setting_user_id` = (SELECT `user_id`
 																									FROM `" . USERS . "`
 																										WHERE `user_name` = '" . $ban_name . "'
 																										LIMIT 1)
-																	WHERE `banned_who` = '" . $ban_name . "'" );
-			if ( $banned_user )
-			{
-				$parse['banned_until']			= $this->_lang['bn_banned_until'] . ' (' . date ( FunctionsLib::read_config ( 'date_format_extended' ) , $banned_user['banned_longer'] ) . ')';
-				$parse['reason']				= $banned_user['banned_theme'];
-				$parse['changedate']			= '<div style="float:left">' . $this->_lang['bn_change_date'] . '</div><div style="float:right">' . AdministrationLib::show_pop_up ( $this->_lang['bn_edit_ban_help'] ) . '</div>';
-			}
+																	WHERE `banned_who` = '" . $ban_name . "'");
+            if ($banned_user) {
+                $parse['banned_until'] = $this->_lang['bn_banned_until'] . ' (' . date(FunctionsLib::readConfig('date_format_extended'), $banned_user['banned_longer']) . ')';
+                $parse['reason'] = $banned_user['banned_theme'];
+                $parse['changedate'] = '<div style="float:left">' . $this->_lang['bn_change_date'] . '</div><div style="float:right">' . AdministrationLib::showPopUp($this->_lang['bn_edit_ban_help']) . '</div>';
+            }
 
-			$parse['vacation']					= $banned_user['setting_vacations_status'] ? 'checked="checked"' : '';
+            $parse['vacation'] = $banned_user['setting_vacations_status'] ? 'checked="checked"' : '';
 
-			if ( isset ( $_POST['bannow'] ) && $_POST['bannow'] )
-			{
-				if ( ! is_numeric ( $_POST['days'] ) or ! is_numeric ( $_POST['hour'] ) )
-				{
-					$parse['alert']	= AdministrationLib::save_message ( 'warning' ,  $this->_lang['bn_all_fields_required'] );
-				}
-				else
-				{
-					$reas          		= (string)$_POST['why'];
-					$days          		= (int)$_POST['days'];
-					$hour          		= (int)$_POST['hour'];
-					$admin_name			= $this->_current_user['user_name'];
-					$admin_mail    		= $this->_current_user['user_email'];
-					$current_time		= time();
-					$ban_time			= $days * 86400;
-					$ban_time  	   	   += $hour * 3600;
+            if (isset($_POST['bannow']) && $_POST['bannow']) {
+                if (!is_numeric($_POST['days']) or ! is_numeric($_POST['hour'])) {
+                    $parse['alert'] = AdministrationLib::saveMessage('warning', $this->_lang['bn_all_fields_required']);
+                } else {
+                    $reas = (string) $_POST['why'];
+                    $days = (int) $_POST['days'];
+                    $hour = (int) $_POST['hour'];
+                    $admin_name = $this->_current_user['user_name'];
+                    $admin_mail = $this->_current_user['user_email'];
+                    $current_time = time();
+                    $ban_time = $days * 86400;
+                    $ban_time += $hour * 3600;
 
-					if ( $banned_user['banned_longer'] > time() )
-					{
-						$ban_time  	   += ( $banned_user['banned_longer'] - time() );
-					}
+                    if ($banned_user['banned_longer'] > time()) {
+                        $ban_time += ( $banned_user['banned_longer'] - time() );
+                    }
 
-					if ( ( $ban_time + $current_time ) < time() )
-					{
-						$banned_until   = $current_time;
-					}
-					else
-					{
-						$banned_until   = $current_time + $ban_time;
-					}
+                    if (( $ban_time + $current_time ) < time()) {
+                        $banned_until = $current_time;
+                    } else {
+                        $banned_until = $current_time + $ban_time;
+                    }
 
-					if ( $banned_user )
-					{
-						parent::$db->query ( "UPDATE " . BANNED . "  SET
+                    if ($banned_user) {
+                        parent::$db->query("UPDATE " . BANNED . "  SET
 											`banned_who` = '" . $ban_name . "',
 											`banned_theme` = '" . $reas . "',
 											`banned_who2` = '" . $ban_name . "',
@@ -204,127 +188,115 @@ class Ban extends XGPCore
 											`banned_longer` = '" . $banned_until . "',
 											`banned_author` = '" . $admin_name . "',
 											`banned_email` = '" . $admin_mail . "'
-											WHERE `banned_who2` = '".$ban_name."';" );
-					}
-					else
-					{
-						parent::$db->query ( "INSERT INTO " . BANNED . " SET
+											WHERE `banned_who2` = '" . $ban_name . "';");
+                    } else {
+                        parent::$db->query("INSERT INTO " . BANNED . " SET
 											`banned_who` = '" . $ban_name . "',
 											`banned_theme` = '" . $reas . "',
 											`banned_who2` = '" . $ban_name . "',
 											`banned_time` = '" . $current_time . "',
 											`banned_longer` = '" . $banned_until . "',
 											`banned_author` = '" . $admin_name . "',
-											`banned_email` = '" . $admin_mail . "';" );
-					}
+											`banned_email` = '" . $admin_mail . "';");
+                    }
 
-					$user_id	= parent::$db->queryFetch ( "SELECT `user_id`
+                    $user_id = parent::$db->queryFetch("SELECT `user_id`
 																FROM " . USERS . "
-																WHERE `user_name` = '" . $ban_name . "' LIMIT 1" );
+																WHERE `user_name` = '" . $ban_name . "' LIMIT 1");
 
-					parent::$db->query ( "UPDATE " . USERS . " AS u, " . SETTINGS . " AS s, " . PLANETS . " AS p SET
+                    parent::$db->query("UPDATE " . USERS . " AS u, " . SETTINGS . " AS s, " . PLANETS . " AS p SET
 											u.`user_banned` = '" . $banned_until . "',
-											s.`setting_vacations_status` = '" . ( isset ( $_POST['vacat'] ) ? 1 : 0 ) . "',
+											s.`setting_vacations_status` = '" . ( isset($_POST['vacat']) ? 1 : 0 ) . "',
 											p.`planet_building_metal_mine_porcent` = '0',
 											p.`planet_building_crystal_mine_porcent` = '0',
 											p.`planet_building_deuterium_sintetizer_porcent` = '0'
 											WHERE u.`user_id` = " . $user_id['user_id'] . "
 													AND s.`setting_user_id` = " . $user_id['user_id'] . "
-													AND p.`planet_user_id` = " . $user_id['user_id'] . ";" );
+													AND p.`planet_user_id` = " . $user_id['user_id'] . ";");
 
-					$parse['alert']	= AdministrationLib::save_message ( 'ok' , ( str_replace ( '%s' , $ban_name , $this->_lang['bn_ban_success'] ) ) );
-				}
-			}
-		}
-		else
-		{
-			FunctionsLib::redirect ( 'admin.php?page=ban' );
-		}
+                    $parse['alert'] = AdministrationLib::saveMessage('ok', ( str_replace('%s', $ban_name, $this->_lang['bn_ban_success'])));
+                }
+            }
+        } else {
+            FunctionsLib::redirect('admin.php?page=ban');
+        }
 
-		return parent::$page->parse_template ( parent::$page->get_template ( "adm/ban_result_view" ) , $parse );
-	}
+        return parent::$page->parseTemplate(parent::$page->getTemplate("adm/ban_result_view"), $parse);
+    }
 
-	/**
-	 * method get_users_list
-	 * param
-	 * return the users list (left select)
-	 */
-	private function get_users_list()
-	{
-		$query_order			= ( isset ( $_GET['order'] )  && $_GET['order'] == 'id' ) ? 'user_id' : 'user_name';
-		$where_authlevel		= '';
-		$where_banned			= '';
-		$users_list				= '';
+    /**
+     * method get_users_list
+     * param
+     * return the users list (left select)
+     */
+    private function get_users_list()
+    {
+        $query_order = ( isset($_GET['order']) && $_GET['order'] == 'id' ) ? 'user_id' : 'user_name';
+        $where_authlevel = '';
+        $where_banned = '';
+        $users_list = '';
 
-		if ( $this->_current_user['user_authlevel'] != 3 )
-		{
-			$where_authlevel	= "WHERE `user_authlevel` < '" . ( $this->_current_user['user_authlevel'] ) . "'";
-		}
+        if ($this->_current_user['user_authlevel'] != 3) {
+            $where_authlevel = "WHERE `user_authlevel` < '" . ( $this->_current_user['user_authlevel'] ) . "'";
+        }
 
-		if ( isset ( $_GET['view'] ) && ( $_GET['view'] == 'user_banned' ) )
-		{
-			if ( $this->_current_user['user_authlevel'] == 3 )
-			{
-				$where_banned	=	"WHERE `user_banned` <> '0'";
-			}
-			else
-			{
-				$where_banned	=	"AND `user_banned` <> '1'";
-			}
-		}
+        if (isset($_GET['view']) && ( $_GET['view'] == 'user_banned' )) {
+            if ($this->_current_user['user_authlevel'] == 3) {
+                $where_banned = "WHERE `user_banned` <> '0'";
+            } else {
+                $where_banned = "AND `user_banned` <> '1'";
+            }
+        }
 
-		// get the users according to the filters
-		$users_query				=	parent::$db->query ( "SELECT `user_id`, `user_name`, `user_banned`
+        // get the users according to the filters
+        $users_query = parent::$db->query("SELECT `user_id`, `user_name`, `user_banned`
 																FROM `" . USERS . "`
 																" . $where_authlevel . " " . $where_banned . "
-																ORDER BY " . $query_order . " ASC" );
+																ORDER BY " . $query_order . " ASC");
 
-		while ( $user = parent::$db->fetchArray ( $users_query ) )
-		{
-			$status	= '';
+        while ($user = parent::$db->fetchArray($users_query)) {
+            $status = '';
 
-			if ( $user['user_banned'] == 1 )
-			{
-				$status	= $this->_lang['bn_status'];
-			}
+            if ($user['user_banned'] == 1) {
+                $status = $this->_lang['bn_status'];
+            }
 
-			$users_list	.=	'<option value="' . $user['user_name'] . '">' . $user['user_name'] . '&nbsp;&nbsp;(ID:&nbsp;' . $user['user_id'] . ')' . $status . '</option>';
+            $users_list .= '<option value="' . $user['user_name'] . '">' . $user['user_name'] . '&nbsp;&nbsp;(ID:&nbsp;' . $user['user_id'] . ')' . $status . '</option>';
 
-			$this->_users_count++;
-		}
+            $this->_users_count++;
+        }
 
-		parent::$db->freeResult ( $users_query ); // free resources
+        parent::$db->freeResult($users_query); // free resources
 
-		return $users_list; // return builded list
-	}
+        return $users_list; // return builded list
+    }
 
-	/**
-	 * method get_banned_list
-	 * param
-	 * return the banned users list (right select)
-	 */
-	private function get_banned_list()
-	{
-		$order			= ( isset ( $_GET['order2'] ) && $_GET['order2'] == 'id' ) ? 'user_id' : 'user_name';
-		$banned_list	= '';
+    /**
+     * method get_banned_list
+     * param
+     * return the banned users list (right select)
+     */
+    private function get_banned_list()
+    {
+        $order = ( isset($_GET['order2']) && $_GET['order2'] == 'id' ) ? 'user_id' : 'user_name';
+        $banned_list = '';
 
-		// get the banned users
-		$banned_query	= parent::$db->query ( "SELECT `user_id`, `user_name`
+        // get the banned users
+        $banned_query = parent::$db->query("SELECT `user_id`, `user_name`
 													FROM `" . USERS . "`
 													WHERE `user_banned` <> '0'
 													ORDER BY " . $order . " ASC");
 
-		while ( $user = parent::$db->fetchArray ( $banned_query ) )
-		{
-			$banned_list	.=	'<option value="' . $user['user_name'] . '">' . $user['user_name'] . '&nbsp;&nbsp;(ID:&nbsp;' . $user['user_id'] . ')</option>';
+        while ($user = parent::$db->fetchArray($banned_query)) {
+            $banned_list .= '<option value="' . $user['user_name'] . '">' . $user['user_name'] . '&nbsp;&nbsp;(ID:&nbsp;' . $user['user_id'] . ')</option>';
 
-			$this->_banned_count++;
-		}
+            $this->_banned_count++;
+        }
 
-		parent::$db->freeResult ( $banned_query ); // free resources
+        parent::$db->freeResult($banned_query); // free resources
 
-		return $banned_list; // return builded list
-	}
+        return $banned_list; // return builded list
+    }
 }
 
 /* end of ban.php */

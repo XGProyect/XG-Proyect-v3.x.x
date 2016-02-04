@@ -43,13 +43,13 @@ class Encrypter extends XGPCore
         parent::__construct();
 
         // check if session is active
-        parent::$users->check_session();
+        parent::$users->checkSession();
 
         $this->langs        = parent::$lang;
-        $this->current_user = parent::$users->get_user_data();
+        $this->current_user = parent::$users->getUserData();
 
         // Check if the user is allowed to access
-        if (AdministrationLib::have_access($this->current_user['user_authlevel'])
+        if (AdministrationLib::haveAccess($this->current_user['user_authlevel'])
             && AdministrationLib::authorization($this->current_user['user_authlevel'], 'use_tools') == 1) {
 
             $this->buildPage();
@@ -87,7 +87,7 @@ class Encrypter extends XGPCore
         }
 
         parent::$page->display(
-            parent::$page->parse_template(parent::$page->get_template('adm/encrypter_view'), $parse)
+            parent::$page->parseTemplate(parent::$page->getTemplate('adm/encrypter_view'), $parse)
         );
     }
 }

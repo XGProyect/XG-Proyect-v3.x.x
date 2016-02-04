@@ -29,317 +29,308 @@ use application\libraries\FunctionsLib;
  */
 class Federation extends XGPCore
 {
-	const MODULE_ID	= 8;
+    const MODULE_ID = 8;
 
-	private $_lang;
-	private $_current_user;
-	private $_fleet_id;
+    private $_lang;
+    private $_current_user;
+    private $_fleet_id;
 
-	/**
-	 * __construct()
-	 */
-	public function __construct()
-	{
-		parent::__construct();
+    /**
+     * __construct()
+     */
+    public function __construct()
+    {
+        parent::__construct();
 
-		// check if session is active
-		parent::$users->check_session();
+        // check if session is active
+        parent::$users->checkSession();
 
-		// Check module access
-		FunctionsLib::module_message ( FunctionsLib::is_module_accesible ( self::MODULE_ID ) );
+        // Check module access
+        FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
-		$this->_lang			= parent::$lang;
-		$this->_current_user	= parent::$users->get_user_data();
+        $this->_lang = parent::$lang;
+        $this->_current_user = parent::$users->getUserData();
 
-		$this->build_page();
-	}
+        $this->build_page();
+    }
 
-	/**
-	 * method __destruct
-	 * param
-	 * return close db connection
-	 */
-	public function __destruct()
-	{
-		parent::$db->closeConnection();
-	}
+    /**
+     * method __destruct
+     * param
+     * return close db connection
+     */
+    public function __destruct()
+    {
+        parent::$db->closeConnection();
+    }
 
-	/**
-	 * method build_page
-	 * param
-	 * return main method, loads everything
-	 */
-	private function build_page()
-	{
-		#####################################################################################################
-		// SOME DEFAULT VALUES
-		#####################################################################################################
-		// LOAD TEMPLATES REQUIRED
-		$options_template	= parent::$page->get_template ( 'fleet/fleet_options' );
+    /**
+     * method build_page
+     * param
+     * return main method, loads everything
+     */
+    private function build_page()
+    {
+        #####################################################################################################
+        // SOME DEFAULT VALUES
+        #####################################################################################################
+        // LOAD TEMPLATES REQUIRED
+        $options_template = parent::$page->getTemplate('fleet/fleet_options');
 
-		// LANGUAGE
-		$parse 				= $this->_lang;
+        // LANGUAGE
+        $parse = $this->_lang;
 
-		// OTHER VALUES
-		$this->_fleet_id 	= isset ( $_GET['fleet'] ) ? (int)$_GET['fleet'] : NULL;
-		$union				= isset ( $_GET['union'] ) ? (int)$_GET['union'] : NULL;
-		$acs_user_message	= '';
+        // OTHER VALUES
+        $this->_fleet_id = isset($_GET['fleet']) ? (int) $_GET['fleet'] : NULL;
+        $union = isset($_GET['union']) ? (int) $_GET['union'] : NULL;
+        $acs_user_message = '';
 
-		if ( !is_numeric ( $this->_fleet_id ) or empty ( $this->_fleet_id ) or !is_numeric ( $union ) or empty ( $union ) )
-		{
-			FunctionsLib::redirect ( 'game.php?page=fleet1' );
-		}
+        if (!is_numeric($this->_fleet_id) or empty($this->_fleet_id) or ! is_numeric($union)) {
+            FunctionsLib::redirect('game.php?page=fleet1');
+        }
 
-		// QUERY
-		$fleet 			= parent::$db->queryFetch ( "SELECT `fleet_id`,
-																`fleet_start_time`,
-																`fleet_end_time`,
-																`fleet_mess`,
-																`fleet_group`,
-																`fleet_end_galaxy`,
-																`fleet_end_system`,
-																`fleet_end_planet`,
-																`fleet_end_type`
-														FROM " . FLEETS . "
-														WHERE fleet_id = '" . intval ( $this->_fleet_id ) . "'" );
+        // QUERY
+        $fleet = parent::$db->queryFetch(
+                "SELECT `fleet_id`,
+            `fleet_start_time`,
+            `fleet_end_time`,
+            `fleet_mess`,
+            `fleet_group`,
+            `fleet_end_galaxy`,
+            `fleet_end_system`,
+            `fleet_end_planet`,
+            `fleet_end_type`
+            FROM " . FLEETS . "
+            WHERE fleet_id = '" . intval($this->_fleet_id) . "'"
+        );
 
-		$query_buddies	= parent::$db->query ( "SELECT `user_id`, `user_name`
-													FROM " . BUDDY . " AS b
-													LEFT JOIN " . USERS . " AS u ON ((u.user_id = b.buddy_sender) OR (u.user_id = b.buddy_receiver))
-													WHERE (`buddy_sender` = '" . $this->_current_user['user_id'] . "' OR
-															`buddy_receiver` = '" . $this->_current_user['user_id'] . "') AND
-															`buddy_status` = '1';" );
+        $query_buddies = parent::$db->query("SELECT `user_id`, `user_name`
+            FROM " . BUDDY . " AS b
+            LEFT JOIN " . USERS . " AS u ON ((u.user_id = b.buddy_sender) OR (u.user_id = b.buddy_receiver))
+            WHERE (`buddy_sender` = '" . $this->_current_user['user_id'] . "' OR
+            `buddy_receiver` = '" . $this->_current_user['user_id'] . "') AND
+            `buddy_status` = '1';"
+        );
 
-		if ( $fleet['fleet_id'] == '' )
-		{
-			FunctionsLib::redirect ( 'game.php?page=fleet1' );
-		}
+        if ($fleet['fleet_id'] == '') {
+            FunctionsLib::redirect('game.php?page=fleet1');
+        }
 
-		// ACTIONS
-		if ( $_POST['save_acs'] )
-		{
-			$this->set_name ( $_POST['name_acs'] );
-		}
+        // ACTIONS
+        if (isset($_POST['save_acs']) && $_POST['save_acs']) {
+            $this->set_name($_POST['name_acs']);
+        }
 
-		// REMOVE A MEMBER
-		if ( $_POST['remove'] )
-		{
-			$this->remove_user ( $_POST['members_list'] );
-		}
+        // REMOVE A MEMBER
+        if (isset($_POST['remove']) && $_POST['remove']) {
+            $this->remove_user($_POST['members_list']);
+        }
 
-		// ADD A MEMBER
-		if ( $_POST['search_user'] or $_POST['add'] )
-		{
-			$user_to_add	= $_POST['search_user'] ? '' : $_POST['add'] ? $_POST['friends_list'] : '';
+        // ADD A MEMBER
+        if (isset($_POST['search_user']) or isset($_POST['add'])) {
+            $user_to_add = isset($_POST['search_user']) ? '' : $_POST['add'] ? $_POST['friends_list'] : '';
 
-			if ( $this->add_user ( $user_to_add ) )
-			{
-				$acs_user_message	= "<font color=\"lime\">" . $this->_lang['fl_player'] . " " . $_POST['addtogroup'] . " " .  $this->_lang['fl_add_to_attack'] . "</font>";
-			}
-			else
-			{
-				$acs_user_message	= "<font color=\"red\">" . $this->_lang['fl_player'] . " " . $_POST['addtogroup'] . " " . $this->_lang['fl_dont_exist'] . "</font>";
-			}
-		}
+            if ($this->add_user($user_to_add)) {
+                $acs_user_message = "<font color=\"lime\">" . $this->_lang['fl_player'] . " " . $_POST['addtogroup'] . " " . $this->_lang['fl_add_to_attack'] . "</font>";
+            } else {
+                $acs_user_message = "<font color=\"red\">" . $this->_lang['fl_player'] . " " . $_POST['addtogroup'] . " " . $this->_lang['fl_dont_exist'] . "</font>";
+            }
+        }
 
-		if ( $fleet['fleet_start_time'] <= time() or $fleet['fleet_end_time'] < time() or $fleet['fleet_mess'] == 1 )
-		{
-			FunctionsLib::redirect ( 'game.php?page=fleet1' );
-		}
+        if ($fleet['fleet_start_time'] <= time() or $fleet['fleet_end_time'] < time() or $fleet['fleet_mess'] == 1) {
+            FunctionsLib::redirect('game.php?page=fleet1');
+        }
 
-		if ( empty ( $fleet['fleet_group'] ) )
-		{
-			$rand 				= mt_rand ( 100000 , 999999999 );
-			$acs_code 			= "AG" . $rand;
-			$federation_invited = intval ( $this->_current_user['user_id'] );
+        if (empty($fleet['fleet_group'])) {
 
-			parent::$db->query ( "INSERT INTO " . ACS_FLEETS . " SET
-									`acs_fleet_name` = '" . $acs_code . "',
-									`acs_fleet_members` = '" . $this->_current_user['user_id'] . "',
-									`acs_fleet_fleets` = '" . $this->_fleet_id . "',
-									`acs_fleet_galaxy` = '" . $fleet['fleet_end_galaxy'] . "',
-									`acs_fleet_system` = '" . $fleet['fleet_end_system'] . "',
-									`acs_fleet_planet` = '" . $fleet['fleet_end_planet'] . "',
-									`acs_fleet_planet_type` = '" . $fleet['fleet_end_type'] . "',
-									`acs_fleet_invited` = '" . $federation_invited . "'" );
+            $rand = mt_rand(100000, 999999999);
+            $acs_code = "AG" . $rand;
+            $federation_invited = intval($this->_current_user['user_id']);
 
-			$acs_id			= parent::$db->insertId();
-			$acs_madnessred = parent::$db->query ( "SELECT `acs_fleet_invited`, `acs_fleet_name`
-													FROM " . ACS_FLEETS . "
-													WHERE `acs_fleet_name` = '" . $acs_code . "' AND
-															`acs_fleet_members` = '" . $this->_current_user['user_id'] . "' AND
-															`acs_fleet_fleets` = '" . $this->_fleet_id . "' AND
-															`acs_fleet_galaxy` = '" . $fleet['fleet_end_galaxy'] . "' AND
-															`acs_fleet_system` = '" . $fleet['fleet_end_system'] . "' AND
-															`acs_fleet_planet` = '" . $fleet['fleet_end_planet'] . "' AND
-															`acs_fleet_invited` = '" . $this->_current_user['user_id'] . "'" );
+            parent::$db->query("INSERT INTO " . ACS_FLEETS . " SET
+                `acs_fleet_name` = '" . $acs_code . "',
+                `acs_fleet_members` = '" . $this->_current_user['user_id'] . "',
+                `acs_fleet_fleets` = '" . $this->_fleet_id . "',
+                `acs_fleet_galaxy` = '" . $fleet['fleet_end_galaxy'] . "',
+                `acs_fleet_system` = '" . $fleet['fleet_end_system'] . "',
+                `acs_fleet_planet` = '" . $fleet['fleet_end_planet'] . "',
+                `acs_fleet_planet_type` = '" . $fleet['fleet_end_type'] . "',
+                `acs_fleet_invited` = '" . $federation_invited . "'"
+            );
 
-			parent::$db->query ( "UPDATE " . FLEETS . "
-									SET fleet_group = '" . $acs_id . "'
-									WHERE fleet_id = '" . intval ( $this->_fleet_id ) . "'" );
-		}
-		else
-		{
-			$acs_madnessred = parent::$db->query ( "SELECT `acs_fleet_invited`, `acs_fleet_name`
-													FROM " . ACS_FLEETS . "
-													WHERE acs_fleet_id = '" . intval ( $fleet['fleet_group'] ) . "'" );
-		}
+            $acs_id = parent::$db->insertId();
+            $acs_madnessred = parent::$db->query(
+                    "SELECT `acs_fleet_invited`, `acs_fleet_name`
+            FROM " . ACS_FLEETS . "
+            WHERE `acs_fleet_name` = '" . $acs_code . "' AND
+                            `acs_fleet_members` = '" . $this->_current_user['user_id'] . "' AND
+                            `acs_fleet_fleets` = '" . $this->_fleet_id . "' AND
+                            `acs_fleet_galaxy` = '" . $fleet['fleet_end_galaxy'] . "' AND
+                            `acs_fleet_system` = '" . $fleet['fleet_end_system'] . "' AND
+                            `acs_fleet_planet` = '" . $fleet['fleet_end_planet'] . "' AND
+                            `acs_fleet_invited` = '" . $this->_current_user['user_id'] . "'"
+            );
 
+            parent::$db->query(
+                    "UPDATE " . FLEETS . "
+                SET fleet_group = '" . $acs_id . "'
+                WHERE fleet_id = '" . intval($this->_fleet_id) . "'"
+            );
+        } else {
 
-		$row 				= parent::$db->fetchArray ( $acs_madnessred );
-		$federation_invited	= $row['acs_fleet_invited'];
-		$parse['acs_code']	= $row['acs_fleet_name'];
-		$members 			= explode ( "," , $federation_invited );
-		$members_count		= 0;
+            $acs_madnessred = parent::$db->query(
+                    "SELECT `acs_fleet_invited`, `acs_fleet_name`
+                FROM " . ACS_FLEETS . "
+                WHERE acs_fleet_id = '" . intval($fleet['fleet_group']) . "'"
+            );
+        }
 
-		foreach ( $members as $a => $b )
-		{
-			if ( $b != '' )
-			{
-				$member_qry 	= parent::$db->query ( "SELECT `user_name`
-														FROM " . USERS . "
-														WHERE `user_id` ='".intval($b)."' ;" );
+        $row = parent::$db->fetchArray($acs_madnessred);
+        $federation_invited = $row['acs_fleet_invited'];
+        $parse['acs_code'] = $row['acs_fleet_name'];
+        $members = explode(",", $federation_invited);
+        $members_count = 0;
+        $members_row = '';
 
-				while ( $row = parent::$db->fetchArray ( $member_qry ) )
-				{
-					$members_option['value']	= $row['user_name'];
-					$members_option['selected']	= '';
-					$members_option['title']	= $row['user_name'];
-					$members_row    			.= parent::$page->parse_template ( $options_template , $members_option );
-				}
-			}
-			$members_count++;
-		}
+        foreach ($members as $a => $b) {
 
+            if ($b != '') {
 
-		while ( $buddies = parent::$db->fetchArray ( $query_buddies ) )
-		{
-			if ( $buddies['user_id'] != $this->_current_user['user_id'] )
-			{
-				$members_option['value']	= $buddies['user_name'];
-				$members_option['selected']	= '';
-				$members_option['title']	= $buddies['user_name'];
-				$friends_row    		   .= parent::$page->parse_template ( $options_template , $members_option );
-			}
-		}
+                $member_qry = parent::$db->query(
+                        "SELECT `user_name`
+                    FROM " . USERS . "
+                    WHERE `user_id` ='" . intval($b) . "' ;"
+                );
 
-		$parse['friends']				= $friends_row;
-		$parse['invited_count']			= $members_count;
-		$parse['invited_members']		= $members_row;
-		$parse['fleetid']				= $_GET['fleetid'];
-		$parse['federation_invited']	= $federation_invited;
-		$parse['add_user_message']		= $acs_user_message;
+                while ($row = parent::$db->fetchArray($member_qry)) {
+                    $members_option['value'] = $row['user_name'];
+                    $members_option['selected'] = '';
+                    $members_option['title'] = $row['user_name'];
+                    $members_row .= parent::$page->parseTemplate($options_template, $members_option);
+                }
+            }
+            $members_count++;
+        }
 
-		parent::$page->display ( parent::$page->parse_template ( parent::$page->get_template ( 'fleet/fleet_federation' ) , $parse ) , FALSE , '' , FALSE );
-	}
+        $friends_row = '';
 
-	/**
-	 * method set_name
-	 * param $acs_name
-	 * return set acs name
-	 */
-	private function set_name ( $acs_name )
-	{
-		$name_len	= strlen ( $acs_name );
+        while ($buddies = parent::$db->fetchArray($query_buddies)) {
+            if ($buddies['user_id'] != $this->_current_user['user_id']) {
+                $members_option['value'] = $buddies['user_name'];
+                $members_option['selected'] = '';
+                $members_option['title'] = $buddies['user_name'];
+                $friends_row .= parent::$page->parseTemplate($options_template, $members_option);
+            }
+        }
 
-		if ( $name_len >= 3 && $name_len <= 20  )
-		{
-			parent::$db->query ( "UPDATE " . ACS_FLEETS . "
-									SET `acs_fleet_name` = '" . parent::$db->escapeValue ( $acs_name ) . "'
-									WHERE acs_fleet_members = '" . intval ( $this->_current_user['user_id'] ) . "';" );
-		}
+        $parse['friends'] = $friends_row;
+        $parse['invited_count'] = $members_count;
+        $parse['invited_members'] = $members_row;
+        $parse['federation_invited'] = $federation_invited;
+        $parse['add_user_message'] = $acs_user_message;
 
-		return TRUE;
-	}
+        parent::$page->display(parent::$page->parseTemplate(parent::$page->getTemplate('fleet/fleet_federation'), $parse), false, '', false);
+    }
 
-	/**
-	 * method add_user
-	 * param
-	 * return search and add the user
-	 */
-	private function add_user ( $member_name = '' )
-	{
-		if ( $member_name == '' )
-		{
-			$member_name	= $_POST['addtogroup'];
-		}
+    /**
+     * method set_name
+     * param $acs_name
+     * return set acs name
+     */
+    private function set_name($acs_name)
+    {
+        $name_len = strlen($acs_name);
 
-		$added_user_id		= 0;
-		$member_qry			= parent::$db->queryFetch ( "SELECT `user_id`
+        if ($name_len >= 3 && $name_len <= 20) {
+            parent::$db->query("UPDATE " . ACS_FLEETS . "
+									SET `acs_fleet_name` = '" . parent::$db->escapeValue($acs_name) . "'
+									WHERE acs_fleet_members = '" . intval($this->_current_user['user_id']) . "';");
+        }
+
+        return true;
+    }
+
+    /**
+     * method add_user
+     * param
+     * return search and add the user
+     */
+    private function add_user($member_name = '')
+    {
+        if ($member_name == '') {
+            $member_name = $_POST['addtogroup'];
+        }
+
+        $added_user_id = 0;
+        $member_qry = parent::$db->queryFetch("SELECT `user_id`
 															FROM " . USERS . "
-															WHERE `user_name` ='" . parent::$db->escapeValue ( $member_name ) . "';" );
+															WHERE `user_name` ='" . parent::$db->escapeValue($member_name) . "';");
 
-		if ( ( $member_qry['user_id'] != NULL ) && ( $this->members_count ( $_POST['federation_invited'] ) < 5 ) && ( $member_qry['user_id'] != $this->_current_user['user_id'] ) )
-		{
-			$new_member_string	= parent::$db->escapeValue ( $_POST['federation_invited'] ) . ',' . $member_qry['user_id'];
+        if (( $member_qry['user_id'] != NULL ) && ( $this->members_count($_POST['federation_invited']) < 5 ) && ( $member_qry['user_id'] != $this->_current_user['user_id'] )) {
+            $new_member_string = parent::$db->escapeValue($_POST['federation_invited']) . ',' . $member_qry['user_id'];
 
-			parent::$db->query ( "UPDATE " . ACS_FLEETS . " SET
+            parent::$db->query("UPDATE " . ACS_FLEETS . " SET
 									`acs_fleet_invited` = '" . $new_member_string . "'
-									WHERE `acs_fleet_fleets` = '" . $this->_fleet_id . "';" );
+									WHERE `acs_fleet_fleets` = '" . $this->_fleet_id . "';");
 
-			$invite_message = $this->_lang['fl_player'] . $this->_current_user['user_name'] . $this->_lang['fl_acs_invitation_message'];
-			FunctionsLib::send_message ( $member_qry['user_id'] , $this->_current_user['user_id'] , '' , 5 , $this->_current_user['user_name'] , $this->_lang['fl_acs_invitation_title'] , $invite_message );
+            $invite_message = $this->_lang['fl_player'] . $this->_current_user['user_name'] . $this->_lang['fl_acs_invitation_message'];
+            FunctionsLib::sendMessage($member_qry['user_id'], $this->_current_user['user_id'], '', 5, $this->_current_user['user_name'], $this->_lang['fl_acs_invitation_title'], $invite_message);
 
-			return TRUE;
-		}
-		else
-		{
-			return FALSE;
-		}
-	}
+            return true;
+        } else {
+            return false;
+        }
+    }
 
-	/**
-	 * method add_user
-	 * param
-	 * return search and add the user
-	 */
-	private function remove_user ( $member_name = '' )
-	{
-		$remove_user_id		= 0;
-		$member_qry			= parent::$db->queryFetch ( "SELECT `user_id`
+    /**
+     * method add_user
+     * param
+     * return search and add the user
+     */
+    private function remove_user($member_name = '')
+    {
+        $remove_user_id = 0;
+        $member_qry = parent::$db->queryFetch("SELECT `user_id`
 															FROM " . USERS . "
-															WHERE `user_name` ='" . parent::$db->escapeValue ( $member_name ) . "';" );
+															WHERE `user_name` ='" . parent::$db->escapeValue($member_name) . "';");
 
-		if ( ( $member_qry['user_id'] != NULL ) && ( $this->members_count ( $_POST['federation_invited'] ) >= 1 ) && ( $member_qry['user_id'] != $this->_current_user['user_id'] ) )
-		{
-			$members	= explode ( ',' , $_POST['federation_invited'] );
+        if (( $member_qry['user_id'] != NULL ) && ( $this->members_count($_POST['federation_invited']) >= 1 ) && ( $member_qry['user_id'] != $this->_current_user['user_id'] )) {
 
-			foreach ( $members as $member_id )
-			{
-				if ( $member_qry['user_id'] != $member_id )
-				{
-					$new_member_string .= $member_id . ',';
-				}
-			}
+            $members = explode(',', $_POST['federation_invited']);
+            $new_member_string = '';
 
-			$new_member_string	= substr_replace ( $new_member_string , '' , -1 );
+            foreach ($members as $member_id) {
+                if ($member_qry['user_id'] != $member_id) {
+                    $new_member_string .= $member_id . ',';
+                }
+            }
 
-			parent::$db->query ( "UPDATE " . ACS_FLEETS . " SET
+            $new_member_string = substr_replace($new_member_string, '', -1);
+
+            parent::$db->query("UPDATE " . ACS_FLEETS . " SET
 									`acs_fleet_invited` = '" . $new_member_string . "'
-									WHERE `acs_fleet_fleets` = '" . $this->_fleet_id . "';" );
+									WHERE `acs_fleet_fleets` = '" . $this->_fleet_id . "';");
 
-			$invite_message = $this->_lang['fl_player'] . $this->_current_user['user_name'] . $this->_lang['fl_acs_invitation_message'];
-			FunctionsLib::send_message ( $member_qry['user_id'] , $this->_current_user['user_id'] , '' , 5 , $this->_current_user['user_name'] , $this->_lang['fl_acs_invitation_title'] , $invite_message );
+            $invite_message = $this->_lang['fl_player'] . $this->_current_user['user_name'] . $this->_lang['fl_acs_invitation_message'];
+            FunctionsLib::sendMessage($member_qry['user_id'], $this->_current_user['user_id'], '', 5, $this->_current_user['user_name'], $this->_lang['fl_acs_invitation_title'], $invite_message);
 
-			return TRUE;
-		}
-		else
-		{
-			return FALSE;
-		}
-	}
+            return true;
+        } else {
+            return false;
+        }
+    }
 
-	/**
-	 * method can_add_members
-	 * param $members_array
-	 * return TRUE if can add members, FALSE if queue is full
-	 */
-	private function members_count ( $members_array )
-	{
-		$member_id		= explode ( ',' , $members_array );
+    /**
+     * method can_add_members
+     * param $members_array
+     * return true if can add members, false if queue is full
+     */
+    private function members_count($members_array)
+    {
+        $member_id = explode(',', $members_array);
 
-		return count ( $member_id );
-	}
+        return count($member_id);
+    }
 }
 
 /* end of federation.php */

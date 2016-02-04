@@ -26,9 +26,9 @@ namespace application\core;
  */
 class Hooks
 {
-    var $_enabled		= FALSE;
+    var $_enabled		= false;
     var $_hooks			= array();
-    var $_in_progress	= FALSE;
+    var $_in_progress	= false;
 
     /**
      * __construct
@@ -48,7 +48,7 @@ class Hooks
     function initialize()
     {
             // IF HOOKS ARE NOT ENABLED THERE IS NOTHING ELSE TO DO
-            if ( HOOKS_ENABLED === 'FALSE' )
+            if ( HOOKS_ENABLED === false )
             {
                     return;
             }
@@ -65,7 +65,7 @@ class Hooks
             }
 
             $this->_hooks	= &$hook;
-            $this->_enabled = TRUE;
+            $this->_enabled = true;
     }
 
     /**
@@ -77,7 +77,7 @@ class Hooks
     {
             if ( !$this->_enabled or !isset ( $this->_hooks[$which] ) )
             {
-                    return FALSE;
+                    return false;
             }
 
             if ( isset ( $this->_hooks[$which][0] ) && is_array ( $this->_hooks[$which][0] ) )
@@ -92,7 +92,7 @@ class Hooks
                     $this->run_hook ( $this->_hooks[$which] );
             }
 
-            return TRUE;
+            return true;
     }
 
     /**
@@ -104,11 +104,11 @@ class Hooks
     {
             if ( !is_array ( $data ) )
             {
-                    return FALSE;
+                    return false;
             }
 
             // PREVENTS LOOPS
-            if ( $this->_in_progress == TRUE )
+            if ( $this->_in_progress == true )
             {
                     return;
             }
@@ -116,19 +116,19 @@ class Hooks
             // SET FILE PATH
             if ( !isset ( $data['filepath'] ) or !isset ( $data['filename'] ) )
             {
-                    return FALSE;
+                    return false;
             }
 
             $filepath = XGP_ROOT . 'application/' . $data['filepath'] . '/' . $data['filename'];
 
             if ( !file_exists ( $filepath ) )
             {
-                    return FALSE;
+                    return false;
             }
 
             // SET CLASS / FUNCTION NAME
-            $class		= FALSE;
-            $function	= FALSE;
+            $class		= false;
+            $function	= false;
             $params		= '';
 
             if ( isset ( $data['class'] ) && $data['class'] != '' )
@@ -146,16 +146,16 @@ class Hooks
                     $params		= $data['params'];
             }
 
-            if ( $class === FALSE && $function === FALSE )
+            if ( $class === false && $function === false )
             {
-                    return FALSE;
+                    return false;
             }
 
             // SET in_progress FLAG
-            $this->_in_progress = TRUE;
+            $this->_in_progress = true;
 
             // CALL THE CLASS AND / OR FUNCTION
-            if ( $class !== FALSE )
+            if ( $class !== false )
             {
                     if ( !class_exists ( $class ) )
                     {
@@ -175,8 +175,8 @@ class Hooks
                     $function ( $params );
             }
 
-            $this->_in_progress = FALSE;
-            return TRUE;
+            $this->_in_progress = false;
+            return true;
     }
 }
 

@@ -35,28 +35,30 @@ class Combatreport extends XGPCore
     private $current_user;
 
     /**
-     * __construct()
+     * __construct
+     *
+     * @return void
      */
     public function __construct()
     {
         parent::__construct();
 
         // check if session is active
-        parent::$users->check_session();
+        parent::$users->checkSession();
 
         // Check module access
-        FunctionsLib::module_message(FunctionsLib::is_module_accesible(self::MODULE_ID));
+        FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
         $this->langs        = parent::$lang;
-        $this->current_user = parent::$users->get_user_data();
+        $this->current_user = parent::$users->getUserData();
 
         $this->buildPage();
     }
 
     /**
-     * method __destruct
-     * param
-     * return close db connection
+     * __destruct
+     *
+     * @return void
      */
     public function __destruct()
     {
@@ -64,9 +66,9 @@ class Combatreport extends XGPCore
     }
 
     /**
-     * method build_page
-     * param
-     * return main method, loads everything
+     * buildPage
+     *
+     * @return void
      */
     private function buildPage()
     {
@@ -88,8 +90,8 @@ class Combatreport extends XGPCore
         // When the fleet was destroyed in the first row
         if (($owners[0] == $this->current_user['user_id']) && ($reportrow['report_destroyed'] == 1)) {
 
-            $page   = parent::$page->parse_template(
-                parent::$page->get_template('combatreport/combatreport_no_fleet_view'),
+            $page   = parent::$page->parseTemplate(
+                parent::$page->getTemplate('combatreport/combatreport_no_fleet_view'),
                 $this->langs
             );
         } else {
@@ -104,13 +106,13 @@ class Combatreport extends XGPCore
                 $report     = str_replace($search, $replace, $report);
             }
 
-            $no_fleet   = parent::$page->parse_template(
-                parent::$page->get_template('combatreport/combatreport_no_fleet_view'),
+            $no_fleet   = parent::$page->parseTemplate(
+                parent::$page->getTemplate('combatreport/combatreport_no_fleet_view'),
                 $this->langs
             );
             
-            $destroyed  = parent::$page->parse_template(
-                parent::$page->get_template('combatreport/combatreport_destroyed_view'),
+            $destroyed  = parent::$page->parseTemplate(
+                parent::$page->getTemplate('combatreport/combatreport_destroyed_view'),
                 $this->langs
             );
             

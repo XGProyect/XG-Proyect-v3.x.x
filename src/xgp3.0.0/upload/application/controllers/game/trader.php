@@ -49,16 +49,16 @@ class Trader extends XGPCore
         parent::__construct();
 
         // check if session is active
-        parent::$users->check_session();
+        parent::$users->checkSession();
 
         // Check module access
-        FunctionsLib::module_message(FunctionsLib::is_module_accesible(self::MODULE_ID));
+        FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
         $this->langs            = parent::$lang;
         $this->resource         = parent::$objects->getObjects();
-        $this->tr_dark_matter   = FunctionsLib::read_config('trader_darkmatter');
-        $this->current_user     = parent::$users->get_user_data();
-        $this->current_planet   = parent::$users->get_planet_data();
+        $this->tr_dark_matter   = FunctionsLib::readConfig('trader_darkmatter');
+        $this->current_user     = parent::$users->getUserData();
+        $this->current_planet   = parent::$users->getPlanetData();
 
         $this->buildPage();
     }
@@ -236,7 +236,7 @@ class Trader extends XGPCore
             FunctionsLib::message($this->langs['tr_exchange_done'], "game.php?page=trader", 1);
         } else {
 
-            $template = parent::$page->get_template('trader/trader_main');
+            $template = parent::$page->getTemplate('trader/trader_main');
 
             if (isset($_POST['action'])) {
 
@@ -245,7 +245,7 @@ class Trader extends XGPCore
                 switch ((isset($_POST['choix']) ? $_POST['choix'] : null)) {
 
                     case 'metal':
-                        $template   = parent::$page->get_template('trader/trader_metal');
+                        $template   = parent::$page->getTemplate('trader/trader_metal');
 
                         $parse['mod_ma_res_a']  = '2';
                         $parse['mod_ma_res_b']  = '4';
@@ -253,7 +253,7 @@ class Trader extends XGPCore
                         break;
 
                     case 'cristal':
-                        $template   = parent::$page->get_template('trader/trader_cristal');
+                        $template   = parent::$page->getTemplate('trader/trader_cristal');
 
                         $parse['mod_ma_res_a']  = '0.5';
                         $parse['mod_ma_res_b']  = '2';
@@ -261,7 +261,7 @@ class Trader extends XGPCore
                         break;
 
                     case 'deut':
-                        $template   = parent::$page->get_template('trader/trader_deuterium');
+                        $template   = parent::$page->getTemplate('trader/trader_deuterium');
 
                         $parse['mod_ma_res_a']  = '0.25';
                         $parse['mod_ma_res_b']  = '0.5';
@@ -271,7 +271,7 @@ class Trader extends XGPCore
             }
         }
 
-        parent::$page->display(parent::$page->parse_template($template, $parse));
+        parent::$page->display(parent::$page->parseTemplate($template, $parse));
     }
 
     /**

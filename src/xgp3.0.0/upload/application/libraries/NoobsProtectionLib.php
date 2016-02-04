@@ -28,61 +28,103 @@ use application\core\XGPCore;
  */
 class NoobsProtectionLib extends XGPCore
 {
-	private $_protection; // 1 OR 0
-	private $_protectiontime;
-	private $_protectionmulti;
+    private $protection;
+    private $protectiontime;
+    private $protectionmulti;
 
-	/**
-	 * __construct()
-	 */
-	public function __construct()
-	{
-		$this->_protection      	= FunctionsLib::read_config ( 'noobprotection' );
-		$this->_protectiontime  	= FunctionsLib::read_config ( 'noobprotectiontime' );
-		$this->_protectionmulti 	= FunctionsLib::read_config ( 'noobprotectionmulti' );
-	}
+    /**
+     * __construct()
+     */
+    public function __construct()
+    {
+        $this->protection       = FunctionsLib::readConfig('noobprotection');
+        $this->protectiontime   = FunctionsLib::readConfig('noobprotectiontime');
+        $this->protectionmulti  = FunctionsLib::readConfig('noobprotectionmulti');
+    }
 
-	/**
-	 * method is_weak
-	 * param $current_points
-	 * param $other_points
-	 * return TRUE if player is weak
-	 */
-	public function is_weak ( $current_points , $other_points )
-	{
-		return  ( $current_points > $other_points * $this->_protectionmulti  or  $other_points < $this->_protectiontime )  &&  $this->_protection;
-	}
+    /**
+     * isWeak
+     *
+     * @param int $current_points Current points
+     * @param int $other_points   Other points
+     *
+     * return boolean
+     */
+    public function isWeak($current_points, $other_points)
+    {
+        if ($this->protection) {
+            
+            if ($this->protectionmulti == 0) {
+                $this->protectionmulti = 1;
+            }
+            
+            if ($current_points > $other_points * $this->protectionmulti) {
+                
+                if ($other_points > $this->protectiontime && $this->protectiontime > 0) {
+                    
+                    return false;
+                }
 
-	/**
-	 * method is_weak
-	 * param $current_points
-	 * param $other_points
-	 * return TRUE if player is strong
-	 */
-	public function is_strong ( $current_points , $other_points )
-	{
-		return (  $current_points * $this->_protectionmulti  < $other_points  or  $current_points < $this->_protectiontime  )  &&  $this->_protection;
-	}
+                return true;
+            }
+        }
+        
+        return false;
+    }
 
-	/**
-	 * method return_points
-	 * param $current_user_id
-	 * param $other_user_id
-	 * return amount of points for each user
-	 */
-	public function return_points ( $current_user_id , $other_user_id )
-	{
-		$user_points	= parent::$db->queryFetch ( "SELECT
-														(SELECT user_statistic_total_points
-															FROM " . USERS_STATISTICS . "
-																WHERE `user_statistic_user_id` = ". $current_user_id ."
-																) AS user_points,
-														(SELECT user_statistic_total_points
-															FROM " . USERS_STATISTICS . "
-																WHERE `user_statistic_user_id` = ". $other_user_id ."
-																) AS target_points" );
-		return $user_points;
-	}
+    /**
+     * isStrong
+     *
+     * @param int $current_points Current points
+     * @param int $other_points   Other points
+     *
+     * return boolean
+     */
+    public function isStrong($current_points, $other_points)
+    {        
+        if ($this->protection) {
+        
+            if ($this->protectionmulti == 0) {
+                $this->protectionmulti = 1;
+            }
+            
+            if ($current_points * $this->protectionmulti  < $other_points) {
+
+                if ($current_points > $this->protectiontime && $this->protectiontime > 0) {
+
+                    return false;
+                }
+
+                return true;
+            }
+        }
+        
+        return false;
+    }
+
+    /**
+     * returnPoints
+     *
+     * @param int $current_user_id Current user id
+     * @param int $other_user_id   Other user id
+     *
+     * return int
+     */
+    public function returnPoints($current_user_id, $other_user_id)
+    {
+        $user_points    = parent::$db->queryFetch(
+            "SELECT
+            (SELECT user_statistic_total_points
+                    FROM " . USERS_STATISTICS . "
+                            WHERE `user_statistic_user_id` = ". $current_user_id ."
+                            ) AS user_points,
+            (SELECT user_statistic_total_points
+                    FROM " . USERS_STATISTICS . "
+                            WHERE `user_statistic_user_id` = ". $other_user_id ."
+                            ) AS target_points"
+        );
+        return $user_points;
+    }
 }
 
 /* end of NoobsProtectionLib.php */

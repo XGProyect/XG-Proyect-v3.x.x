@@ -23,7 +23,7 @@ require XGP_ROOT . 'application/core/common.php';
 include_once XGP_ROOT . 'application/libraries/adm/AdministrationLib.php';
 
 // check if SSL is setted
-AdministrationLib::secure_connection();
+AdministrationLib::secureConnection();
 
 $page       = isset($_GET['page']) ? $_GET['page'] : 'home';
 $file_name  = XGP_ROOT . ADMIN_PATH . $page . '.php';

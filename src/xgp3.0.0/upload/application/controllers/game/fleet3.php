@@ -46,14 +46,14 @@ class Fleet3 extends XGPCore
         parent::__construct();
 
         // check if session is active
-        parent::$users->check_session();
+        parent::$users->checkSession();
 
         // Check module access
-        FunctionsLib::module_message(FunctionsLib::is_module_accesible(self::MODULE_ID));
+        FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
         $this->langs            = parent::$lang;
-        $this->current_user     = parent::$users->get_user_data();
-        $this->current_planet   = parent::$users->get_planet_data();
+        $this->current_user     = parent::$users->getUserData();
+        $this->current_planet   = parent::$users->getPlanetData();
 
         $this->buildPage();
     }
@@ -95,10 +95,10 @@ class Fleet3 extends XGPCore
         $parse                  = $this->langs;
 
         // LOAD TEMPLATES REQUIRED
-        $mission_row_template   = parent::$page->get_template('fleet/fleet3_mission_row');
-        $input_template         = parent::$page->get_template('fleet/fleet3_inputs');
-        $stay_template          = parent::$page->get_template('fleet/fleet3_stay_row');
-        $options_template       = parent::$page->get_template('fleet/fleet_options');
+        $mission_row_template   = parent::$page->getTemplate('fleet/fleet3_mission_row');
+        $input_template         = parent::$page->getTemplate('fleet/fleet3_inputs');
+        $stay_template          = parent::$page->getTemplate('fleet/fleet3_stay_row');
+        $options_template       = parent::$page->getTemplate('fleet/fleet_options');
 
         // OTHER VALUES
         $galaxy             = (int)$_POST['galaxy'];
@@ -197,10 +197,10 @@ class Fleet3 extends XGPCore
         $fleetarray     = unserialize(base64_decode(str_rot13($_POST['usedfleet'])));
         $mission        = $_POST['target_mission'];
         $SpeedFactor    = $_POST['speedfactor'];
-        $AllFleetSpeed  = FleetsLib::fleet_max_speed($fleetarray, 0, $this->current_user);
+        $AllFleetSpeed  = FleetsLib::fleetMaxSpeed($fleetarray, 0, $this->current_user);
         $GenFleetSpeed  = $_POST['speed'];
         $MaxFleetSpeed  = min($AllFleetSpeed);
-        $distance       = FleetsLib::target_distance(
+        $distance       = FleetsLib::targetDistance(
             $_POST['thisgalaxy'],
             $galaxy,
             $_POST['thissystem'],
@@ -209,9 +209,9 @@ class Fleet3 extends XGPCore
             $planet
         );
         
-        $duration       = FleetsLib::mission_duration($GenFleetSpeed, $MaxFleetSpeed, $distance, $SpeedFactor);
+        $duration       = FleetsLib::missionDuration($GenFleetSpeed, $MaxFleetSpeed, $distance, $SpeedFactor);
         
-        $consumption    = FleetsLib::fleet_consumption(
+        $consumption    = FleetsLib::fleetConsumption(
             $fleetarray,
             $SpeedFactor,
             $duration,
@@ -256,10 +256,10 @@ class Fleet3 extends XGPCore
             $input_parse['ship']        = $Ship;
             $input_parse['amount']      = $Count;
             $input_parse['capacity']    = $pricelist[$Ship]['capacity'];
-            $input_parse['consumption'] = FleetsLib::ship_consumption($Ship, $this->current_user);
-            $input_parse['speed']       = FleetsLib::fleet_max_speed('', $Ship, $this->current_user);
+            $input_parse['consumption'] = FleetsLib::shipConsumption($Ship, $this->current_user);
+            $input_parse['speed']       = FleetsLib::fleetMaxSpeed('', $Ship, $this->current_user);
 
-            $input_extra .= parent::$page->parse_template($input_template, $input_parse);
+            $input_extra .= parent::$page->parseTemplate($input_template, $input_parse);
         }
 
         #####################################################################################################
@@ -290,7 +290,7 @@ class Fleet3 extends XGPCore
                 $parse_mission['id']                    = ' ';
                 $parse_mission['checked']               = ' checked="checked"';
 
-                $MissionSelector    .= parent::$page->parse_template($mission_row_template, $parse_mission);
+                $MissionSelector    .= parent::$page->parseTemplate($mission_row_template, $parse_mission);
             } else {
 
                 $i  = 0;
@@ -305,7 +305,7 @@ class Fleet3 extends XGPCore
 
                     $i++;
 
-                    $MissionSelector    .= parent::$page->parse_template($mission_row_template, $parse_mission);
+                    $MissionSelector    .= parent::$page->parseTemplate($mission_row_template, $parse_mission);
                 }
             }
         } else {
@@ -327,10 +327,10 @@ class Fleet3 extends XGPCore
                 $stay['selected']   = '';
                 $stay['title']      = $value;
 
-                $stay_row['options']    .= parent::$page->parse_template($options_template, $stay);
+                $stay_row['options']    .= parent::$page->parseTemplate($options_template, $stay);
             }
 
-            $StayBlock  = parent::$page->parse_template($stay_template, array_merge($stay_row, $this->langs));
+            $StayBlock  = parent::$page->parseTemplate($stay_template, array_merge($stay_row, $this->langs));
         } elseif (isset($missiontype[5])) {
 
             $stay_row['stay_type']  = 'holdingtime';
@@ -341,10 +341,10 @@ class Fleet3 extends XGPCore
                 $stay['selected']   = (($value == 1) ? ' selected' : '');
                 $stay['title']      = $value;
 
-                $stay_row['options']  .= parent::$page->parse_template($options_template, $stay);
+                $stay_row['options']  .= parent::$page->parseTemplate($options_template, $stay);
             }
 
-            $StayBlock  = parent::$page->parse_template($stay_template, array_merge($stay_row, $this->langs));
+            $StayBlock  = parent::$page->parseTemplate($stay_template, array_merge($stay_row, $this->langs));
         }
 
         $parse['input_extra']       = $input_extra;
@@ -352,7 +352,7 @@ class Fleet3 extends XGPCore
         $parse['stayblock']         = $StayBlock;
 
         parent::$page->display(
-            parent::$page->parse_template(parent::$page->get_template('fleet/fleet3_table'), $parse)
+            parent::$page->parseTemplate(parent::$page->getTemplate('fleet/fleet3_table'), $parse)
         );
     }
     

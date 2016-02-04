@@ -22,7 +22,7 @@
 define('SYSTEM_VERSION', '3.0.0');
 
 // HOOKS
-define('HOOKS_ENABLED', 'FALSE');
+define('HOOKS_ENABLED', false);
 
 // GLOBAL PATHS
 define('APP_PATH', 'application/');

@@ -30,180 +30,184 @@ use application\libraries\FunctionsLib;
 class AdministrationLib extends XGPCore
 {
     /**
-     * __construct()
+     * __construct
+     *
+     * @return void
      */
-    public function __construct ()
+    public function __construct()
     {
-            parent::__construct();
+        parent::__construct();
     }
 
     /**
-     * method have_access
-     * param $user_level
-     * return TRUE = access allowed | FALSE = access disallowed
+     * haveAccess
+     *
+     * @param int $user_level User level
+     *
+     * @return void
      */
-    public static function have_access ( $user_level )
+    public static function haveAccess($user_level)
     {
-            if ( $user_level >= 1 )
-            {
-                    return TRUE;
-            }
-            else
-            {
-                    return FALSE;
-            }
+        if ($user_level >= 1) {
+
+            return true;
+        } else {
+
+            return false;
+        }
     }
 
     /**
-     * method install_dir_exists
-     * param
-     * return TRUE = install dir exists | FALSE = install dir was not found
+     * installDirExists
+     *
+     * @return boolean
      */
-    public static function install_dir_exists()
+    public static function installDirExists()
     {
-            if ( file_exists ( XGP_ROOT . 'install/' ) )
-            {
-                    return TRUE;
-            }
-            else
-            {
-                    return FALSE;
-            }
+        if (file_exists(XGP_ROOT . 'install/')) {
+
+            return true;
+        } else {
+
+            return false;
+        }
     }
 
     /**
-     * method authorization
-     * param1 $user_level
-     * param2 $permission
-     * return the page permission
+     * authorization
+     *
+     * @param int    $user_level User level
+     * @param string $permission Permission
+     *
+     * @return array
      */
-    public static function authorization ( $user_level , $permission )
+    public static function authorization($user_level, $permission)
     {
-            $QueryModeration	=	FunctionsLib::read_config ( 'moderation' );
-            $QueryModerationEx  =   explode ( ";" , $QueryModeration );
-            $Moderator			=	explode ( "," , $QueryModerationEx[0] );
-            $Operator			=	explode ( "," , $QueryModerationEx[1] );
-            $Administrator		=	explode ( "," , $QueryModerationEx[2] );
+        $QueryModeration    = FunctionsLib::readConfig('moderation');
+        $QueryModerationEx  = explode(";", $QueryModeration);
+        $Moderator          = explode(",", $QueryModerationEx[0]);
+        $Operator           = explode(",", $QueryModerationEx[1]);
+        $Administrator      = explode(",", $QueryModerationEx[2]);
 
-            if ( $user_level == 1 )
-            {
-                    $permissions['observation']		=	$Moderator[0];
-                    $permissions['edit_users']		=	$Moderator[1];
-                    $permissions['config_game']		=	$Moderator[2];
-                    $permissions['use_tools']		=	$Moderator[3];
-                    $permissions['track_activity']	=	$Moderator[4];
-            }
+        if ($user_level == 1) {
+            $permissions['observation'] = $Moderator[0];
+            $permissions['edit_users'] = $Moderator[1];
+            $permissions['config_game'] = $Moderator[2];
+            $permissions['use_tools'] = $Moderator[3];
+            $permissions['track_activity'] = $Moderator[4];
+        }
 
-            if ( $user_level == 2 )
-            {
-                    $permissions['observation']		=	$Operator[0];
-                    $permissions['edit_users']		=	$Operator[1];
-                    $permissions['config_game']		=	$Operator[2];
-                    $permissions['use_tools']		=	$Operator[3];
-                    $permissions['track_activity']	=	$Operator[4];
-            }
+        if ($user_level == 2) {
+            $permissions['observation'] = $Operator[0];
+            $permissions['edit_users'] = $Operator[1];
+            $permissions['config_game'] = $Operator[2];
+            $permissions['use_tools'] = $Operator[3];
+            $permissions['track_activity'] = $Operator[4];
+        }
 
-            if ( $user_level == 3 )
-            {
-                    $permissions['observation']		=	1;
-                    $permissions['edit_users']		=	1;
-                    $permissions['config_game']		=	1;
-                    $permissions['use_tools']		=	1;
-                    $permissions['track_activity']	=	$Administrator[0];
-            }
+        if ($user_level == 3) {
+            $permissions['observation'] = 1;
+            $permissions['edit_users'] = 1;
+            $permissions['config_game'] = 1;
+            $permissions['use_tools'] = 1;
+            $permissions['track_activity'] = $Administrator[0];
+        }
 
-            return $permissions[$permission];
+        return $permissions[$permission];
     }
 
     /**
-     * method save_message
-     * param $result
-     * return show the save message
+     * saveMessage
+     *
+     * @param string $result  Result
+     * @param string $message Message
+     *
+     * @return string
      */
-    public static function save_message ( $result = 'ok' , $message )
+    public static function saveMessage($result, $message)
     {
-            switch ( $result )
-            {
-                    case 'ok':
-                            $parse['color']		= 'alert-success';
-                            $parse['status']	= parent::$lang['gn_ok_title'];
-                    break;
+        switch ($result) {
+            case 'ok':
+                $parse['color'] = 'alert-success';
+                $parse['status'] = parent::$lang['gn_ok_title'];
+                break;
 
-                    case 'error':
-                            $parse['color']		= 'alert-error';
-                            $parse['status']	= parent::$lang['gn_error_title'];
-                    break;
+            case 'error':
+                $parse['color'] = 'alert-error';
+                $parse['status'] = parent::$lang['gn_error_title'];
+                break;
 
-                    case 'warning':
-                            $parse['color']		= 'alert-block';
-                            $parse['status']	= parent::$lang['gn_warning_title'];
-                    break;
-            }
+            case 'warning':
+                $parse['color'] = 'alert-block';
+                $parse['status'] = parent::$lang['gn_warning_title'];
+                break;
+        }
 
-            $parse['message']			= $message;
+        $parse['message'] = $message;
 
-            return parent::$page->parse_template ( parent::$page->get_template ( 'adm/save_message_view' ) , $parse );
+        return parent::$page->parseTemplate(parent::$page->getTemplate('adm/save_message_view'), $parse);
     }
 
     /**
-     * method return_rank
-     * param $authlevel
-     * return show the save message
+     * returnRank
+     *
+     * @param int $authlevel Auth level
+     *
+     * @return string
      */
-    public static function return_rank ( $authlevel )
+    public static function returnRank($authlevel)
     {
-            switch ( $authlevel )
-            {
-                    default:
-                    case 0:
+        switch ($authlevel) {
+            default:
+            case 0:
+                return parent::$lang['ge_user'];
 
-                            return parent::$lang['ge_user'];
+                break;
 
-                    break;
+            case 1:
+                return parent::$lang['ge_go'];
 
-                    case 1:
+                break;
 
-                            return parent::$lang['ge_go'];
+            case 2:
+                return parent::$lang['ge_sgo'];
 
-                    break;
+                break;
 
-                    case 2:
+            case 3:
+                return parent::$lang['ge_ga'];
 
-                            return parent::$lang['ge_sgo'];
-
-                    break;
-
-                    case 3:
-
-                            return parent::$lang['ge_ga'];
-
-                    break;
-            }
+                break;
+        }
     }
 
     /**
-     * method show_pop_up
-     * param $message
-     * return show the pop up
+     * showPopUp
+     *
+     * @param string $message Message
+     *
+     * @return string
      */
-    public static function show_pop_up ( $message )
+    public static function showPopUp($message)
     {
-            $parse['message']	= $message;
+        $parse['message'] = $message;
 
-            return parent::$page->parse_template ( parent::$page->get_template ( 'adm/popup_view' ) , $parse );
+        return parent::$page->parseTemplate(parent::$page->getTemplate('adm/popup_view'), $parse);
     }
 
     /**
-     * method secure_connection
-     * param
-     * return stablish a secure connection and force it
+     * secureConnection
+     *
+     * @return void
      */
-    public static function secure_connection()
+    public static function secureConnection()
     {
-            if ( ( FunctionsLib::read_config ( 'ssl_enabled' ) == 1 ) && ( $_SERVER['SERVER_PORT'] !== 443 ) && ( empty ( $_SERVER['HTTPS'] ) or $_SERVER['HTTPS'] === 'off' ) )
-            {
-                    FunctionsLib::redirect ( 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] );
-            }
+        if ((FunctionsLib::readConfig('ssl_enabled') == 1)
+            && ($_SERVER['SERVER_PORT'] !== 443)
+            && (empty($_SERVER['HTTPS']) or $_SERVER['HTTPS'] === 'off')) {
+
+            FunctionsLib::redirect('https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
+        }
     }
 }
 

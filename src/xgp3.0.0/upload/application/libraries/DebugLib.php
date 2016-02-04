@@ -127,16 +127,16 @@ class DebugLib extends XGPCore
      */
     public function error($message, $title)
     {
-        if (FunctionsLib::read_config('debug') == 1) {
+        if (FunctionsLib::readConfig('debug') == 1) {
 
             echo '<h2>'.$title.'</h2><br><font color="red">' . $message . '</font><br><hr>';
             echo $this->echoLog();
             echo $this->whereCalled(3);
         } else {
 
-            if (isset(parent::$users->get_user_data)) {
+            if (isset(parent::$users->getUserData)) {
 
-                $user_id    = parent::$users->get_user_data()['user_id'];
+                $user_id    = parent::$users->getUserData()['user_id'];
             } else {
                 $user_id    = 0;
             }
@@ -148,12 +148,12 @@ class DebugLib extends XGPCore
             $this->writeErrors($log, "ErrorLog");
 
             $headers    =  'MIME-Version: 1.0' . "\r\n";
-            $headers    .= 'From: XG Proyect ' . FunctionsLib::read_config('admin_email') . "\r\n";
+            $headers    .= 'From: XG Proyect ' . FunctionsLib::readConfig('admin_email') . "\r\n";
             $headers    .= 'Content-type: text/html; charset=utf-8' . "\r\n";
             
             // notify administrator
             @mail(
-                FunctionsLib::read_config('admin_email'),
+                FunctionsLib::readConfig('admin_email'),
                 '[DEBUG][' . $title . ']',
                 $this->whereCalled(3),
                 $headers
@@ -206,7 +206,7 @@ class DebugLib extends XGPCore
 
         $fp     =   @fopen($file, "a");
         $date   =   $text;
-        $date   .=  date(FunctionsLib::read_config('date_format_extended'), time()) . "||\n";
+        $date   .=  date(FunctionsLib::readConfig('date_format_extended'), time()) . "||\n";
 
         @fwrite($fp, $date);
         @fclose($fp);

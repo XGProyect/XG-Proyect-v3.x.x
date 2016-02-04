@@ -41,15 +41,15 @@ class Register extends XGPCore
 
 		$this->_lang = parent::$lang;
 
-		if ( FunctionsLib::read_config ( 'reg_enable' ) == 1 )
+		if ( FunctionsLib::readConfig ( 'reg_enable' ) == 1 )
 		{
-			$this->_creator	= FunctionsLib::load_library ( 'CreatorLib' );
+			$this->_creator	= FunctionsLib::loadLibrary ( 'CreatorLib' );
 
 			$this->build_page();
 		}
 		else
 		{
-			die ( FunctionsLib::message ( $this->_lang['re_disabled'] , 'index.php' , '5' , FALSE , FALSE ) );
+			die ( FunctionsLib::message ( $this->_lang['re_disabled'] , 'index.php' , '5' , false , false ) );
 		}
 	}
 
@@ -107,9 +107,9 @@ class Register extends XGPCore
 				parent::$db->query ( "INSERT INTO " . SETTINGS . " SET
 										`setting_user_id` = '" . $user_id . "';" );
 
-				$last_galaxy	= FunctionsLib::read_config ( 'lastsettedgalaxypos' );
-				$last_system 	= FunctionsLib::read_config ( 'lastsettedsystempos' );
-				$last_planet 	= FunctionsLib::read_config ( 'lastsettedplanetpos' );
+				$last_galaxy	= FunctionsLib::readConfig ( 'lastsettedgalaxypos' );
+				$last_system 	= FunctionsLib::readConfig ( 'lastsettedsystempos' );
+				$last_planet 	= FunctionsLib::readConfig ( 'lastsettedplanetpos' );
 
 				while ( ! isset ( $newpos_checked ) )
 				{
@@ -169,21 +169,21 @@ class Register extends XGPCore
 
 					if ( $planet_row['id'] == '0' )
 					{
-						$newpos_checked	= TRUE;
+						$newpos_checked	= true;
 					}
 
 
 					if ( ! $planet_row )
 					{
-						$this->_creator->create_planet ( $galaxy , $system , $planet , $user_id , '' , TRUE );
-						$newpos_checked	= TRUE;
+						$this->_creator->createPlanet ( $galaxy , $system , $planet , $user_id , '' , true );
+						$newpos_checked	= true;
 					}
 
 					if ( $newpos_checked )
 					{
-						FunctionsLib::update_config ( 'lastsettedgalaxypos' , $last_galaxy );
-						FunctionsLib::update_config ( 'lastsettedsystempos' , $last_system );
-						FunctionsLib::update_config ( 'lastsettedplanetpos' , $last_planet );
+						FunctionsLib::updateConfig ( 'lastsettedgalaxypos' , $last_galaxy );
+						FunctionsLib::updateConfig ( 'lastsettedsystempos' , $last_system );
+						FunctionsLib::updateConfig ( 'lastsettedplanetpos' , $last_planet );
 					}
 				}
 
@@ -200,19 +200,19 @@ class Register extends XGPCore
 				$message 	= str_replace ( '%s' , $user_name , $this->_lang['re_welcome_message_content'] );
 
 				// Send Welcome Message to the user if the feature is enabled
-				if ( FunctionsLib::read_config ( 'reg_welcome_message' ) )
+				if ( FunctionsLib::readConfig ( 'reg_welcome_message' ) )
 				{
-					FunctionsLib::send_message ( $user_id , 0 , '' , 5 , $from , $subject , $message );
+					FunctionsLib::sendMessage ( $user_id , 0 , '' , 5 , $from , $subject , $message );
 				}
 
 				// Send Welcome Email to the user if the feature is enabled
-				if ( FunctionsLib::read_config ( 'reg_welcome_email' ) )
+				if ( FunctionsLib::readConfig ( 'reg_welcome_email' ) )
 				{
 					$this->send_pass_email ( $user_email , $user_name , $user_password );
 				}
 
 				// User login
-				if ( parent::$users->user_login ( $user_id , $user_name , $hashed_password ) )
+				if ( parent::$users->userLogin ( $user_id , $user_name , $hashed_password ) )
 				{
 					// Redirect to game
 					FunctionsLib::redirect ( 'game.php?page=overview' );
@@ -232,7 +232,7 @@ class Register extends XGPCore
 	**/
 	private function send_pass_email ( $emailaddress , $user_name , $password )
 	{
-		$game_name						= FunctionsLib::read_config ( 'game_name' );
+		$game_name						= FunctionsLib::readConfig ( 'game_name' );
 
 		$parse							= $this->_lang;
 		$parse['user_name']				= $user_name;
@@ -241,8 +241,8 @@ class Register extends XGPCore
 		$parse['reg_mail_text_part1']	= str_replace ( '%s' , $game_name , $this->_lang['re_mail_text_part1'] );
 		$parse['reg_mail_text_part7']	= str_replace ( '%s' , $game_name , $this->_lang['re_mail_text_part7'] );
 
-		$email 							= parent::$page->parse_template (  parent::$page->get_template ( 'home/email_template' ) , $parse );
-		$status 						= $this->send_mail ( $emailaddress , $this->_lang['re_register_at'] . FunctionsLib::read_config ( 'game_name' ) , $email );
+		$email 							= parent::$page->parseTemplate (  parent::$page->getTemplate ( 'home/email_template' ) , $parse );
+		$status 						= $this->send_mail ( $emailaddress , $this->_lang['re_register_at'] . FunctionsLib::readConfig ( 'game_name' ) , $email );
 
 		return $status;
 	}
@@ -261,18 +261,18 @@ class Register extends XGPCore
 
 		if ( !$from )
 		{
-			$from = FunctionsLib::read_config ( 'admin_email' );
+			$from = FunctionsLib::readConfig ( 'admin_email' );
 		}
 
 		$head  	= '';
 		$head  .= "Content-Type: text/html \r\n";
 		$head  .= "charset: UTF-8 \r\n";
 		$head  .= "Date: " . date('r') . " \r\n";
-		$head  .= "Return-Path: " . FunctionsLib::read_config ( 'admin_email' ) . " \r\n";
+		$head  .= "Return-Path: " . FunctionsLib::readConfig ( 'admin_email' ) . " \r\n";
 		$head  .= "From: $from \r\n";
 		$head  .= "Sender: $from \r\n";
 		$head  .= "Reply-To: $from \r\n";
-		$head  .= "Organization: " . FunctionsLib::read_config ( 'game_name' ) . " \r\n";
+		$head  .= "Organization: " . FunctionsLib::readConfig ( 'game_name' ) . " \r\n";
 		$head  .= "X-Sender: $from \r\n";
 		$head  .= "X-Priority: 3 \r\n";
 
@@ -291,7 +291,7 @@ class Register extends XGPCore
 	{
 		$errors	= 0;
 
-		if ( ! FunctionsLib::valid_email ( $_POST['email'] ) )
+		if ( ! FunctionsLib::validEmail ( $_POST['email'] ) )
 		{
 			$errors++;
 		}
@@ -328,11 +328,11 @@ class Register extends XGPCore
 
 		if ( $errors > 0 )
 		{
-			return FALSE;
+			return false;
 		}
 		else
 		{
-			return TRUE;
+			return true;
 		}
 	}
 

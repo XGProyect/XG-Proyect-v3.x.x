@@ -67,7 +67,7 @@ class Update extends XGPCore
     private function buildPage()
     {
         parent::$page->display(
-            parent::$page->parse_template(parent::$page->get_template('install/in_update'), $this->langs)
+            parent::$page->parseTemplate(parent::$page->getTemplate('install/in_update'), $this->langs)
         );
     }
 

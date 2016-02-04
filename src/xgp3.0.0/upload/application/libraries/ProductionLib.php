@@ -83,7 +83,7 @@ class ProductionLib
             return floor($production * $boost);
         } else {
 
-            return floor($production * FunctionsLib::read_config('resource_multiplier') * $boost);
+            return floor($production * FunctionsLib::readConfig('resource_multiplier') * $boost);
         }
     }
 

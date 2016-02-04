@@ -50,13 +50,13 @@ require_once XGP_ROOT . LIB_PATH . 'FunctionsLib.php';
 $lang   = array();
 
 // set time zone
-date_default_timezone_set(FunctionsLib::read_config('date_time_zone'));
+date_default_timezone_set(FunctionsLib::readConfig('date_time_zone'));
 
 // default skin path
 define('DPATH', DEFAULT_SKINPATH);
 
 // For debugging
-if (FunctionsLib::read_config('debug') == 1) {
+if (FunctionsLib::readConfig('debug') == 1) {
 
     // Show all errors
     ini_set('display_errors', 1);
@@ -68,11 +68,11 @@ if (FunctionsLib::read_config('debug') == 1) {
     error_reporting(E_ALL);
 }
 
-$debug          = FunctionsLib::load_library('DebugLib');
+$debug          = FunctionsLib::loadLibrary('DebugLib');
 $db             = new Database();
-$installed      = FunctionsLib::read_config('game_installed');
-$game_version   = FunctionsLib::read_config('version');
-$game_lang      = FunctionsLib::read_config('lang');
+$installed      = FunctionsLib::readConfig('game_installed');
+$game_version   = FunctionsLib::readConfig('version');
+$game_lang      = FunctionsLib::readConfig('lang');
 $current_page   = isset($_GET['page']) ? $_GET['page'] : '';
 
 // check if is installed

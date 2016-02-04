@@ -47,13 +47,13 @@ class Acs extends Missions
     {
         if ($fleet_row['fleet_mess'] == 0 && $fleet_row['fleet_start_time'] > time()) {
 
-            parent::return_fleet($fleet_row['fleet_id']);
+            parent::returnFleet($fleet_row['fleet_id']);
         }
 
         if ($fleet_row['fleet_end_time'] <= time()) {
 
-            parent::restore_fleet($fleet_row);
-            parent::remove_fleet($fleet_row['fleet_id']);
+            parent::restoreFleet($fleet_row);
+            parent::removeFleet($fleet_row['fleet_id']);
         }
     }
 }

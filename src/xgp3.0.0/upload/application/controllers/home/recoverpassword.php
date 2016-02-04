@@ -62,14 +62,14 @@ class Recoverpassword extends XGPCore
 		if ( $_POST )
 		{
 			$this->process_request ( $_POST['email'] );
-			FunctionsLib::message ( $lang['mail_sended'] , "./" , 2 , FALSE , FALSE );
+			FunctionsLib::message ( $lang['mail_sended'] , "./" , 2 , false , false );
 		}
 		else
 		{
 			$parse['year']		   = date ( 'Y' );
 			$parse['version']	   = VERSION;
-			$parse['forum_url']    = FunctionsLib::read_config ( 'forum_url' );
-			parent::$page->display ( parent::$page->parse_template ( parent::$page->get_template ( 'home/lostpassword' ) , $parse ) , FALSE , '' , FALSE );
+			$parse['forum_url']    = FunctionsLib::readConfig ( 'forum_url' );
+			parent::$page->display ( parent::$page->parseTemplate ( parent::$page->getTemplate ( 'home/lostpassword' ) , $parse ) , false , '' , false );
 		}
 	}
 
@@ -109,7 +109,7 @@ class Recoverpassword extends XGPCore
 
 		if ( empty ( $ExistMail['user_name'] ) )
 		{
-			FunctionsLib::message ( $lang['mail_not_exist'] , "index.php?page=recoverpassword" , 2 , FALSE , FALSE );
+			FunctionsLib::message ( $lang['mail_not_exist'] , "index.php?page=recoverpassword" , 2 , false , false );
 		}
 		else
 		{
@@ -130,7 +130,7 @@ class Recoverpassword extends XGPCore
 	private function send_pass_email ( $emailaddress , $UserName )
 	{
 		$lang							= parent::$lang;
-		$game_name						= FunctionsLib::read_config ( 'game_name' );
+		$game_name						= FunctionsLib::readConfig ( 'game_name' );
 
 		$parse							= $lang;
 		$parse['user_name']				= $UserName;
@@ -139,7 +139,7 @@ class Recoverpassword extends XGPCore
 		$parse['reg_mail_text_part1']	= str_replace ( '%s' , $game_name , $lang['reg_mail_text_part1'] );
 		$parse['reg_mail_text_part7']	= str_replace ( '%s' , $game_name , $lang['reg_mail_text_part7'] );
 
-		$email 							= parent::$page->parse_template (  parent::$page->get_template ( 'home/recover_password_email_template' ) , $parse );
+		$email 							= parent::$page->parseTemplate (  parent::$page->getTemplate ( 'home/recover_password_email_template' ) , $parse );
 		$status 						= $this->send_mail ( $emailaddress , $lang['mail_title'] , $email );
 
 		return $parse['user_pass'];
@@ -159,10 +159,10 @@ class Recoverpassword extends XGPCore
 
 		if ( !$from )
 		{
-			$from = FunctionsLib::read_config ( 'admin_email' );
+			$from = FunctionsLib::readConfig ( 'admin_email' );
 		}
 
-		$rp 	= FunctionsLib::read_config ( 'admin_email' );
+		$rp 	= FunctionsLib::readConfig ( 'admin_email' );
 
 		$head  	= '';
 		$head  .= "Content-Type: text/html \r\n";

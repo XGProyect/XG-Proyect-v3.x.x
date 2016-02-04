@@ -20,7 +20,7 @@
 	</tr>
 	<tr>
 		<td>{us_user_main_coords}</td>
-		<td><input type="text" name="galaxy" value="{galaxy}" class="input-mini">:<input type="text" name="system" value="{system}" class="input-mini">:<input type="text" name="planet" value="{planet}" class="input-mini"></td>
+		<td><input type="text" name="planet_galaxy" value="{planet_galaxy}" class="input-mini">:<input type="text" name="planet_system" value="{planet_system}" class="input-mini">:<input type="text" name="planet_planet" value="{planet_planet}" class="input-mini"></td>
 	</tr>
 	<tr>
 		<td>{us_user_main_last_update}</td>

@@ -44,7 +44,7 @@ class Installation extends XGPCore
         parent::__construct();
 
         $this->langs    = parent::$lang;
-        $this->_planet  = FunctionsLib::load_library('PlanetLib');
+        $this->_planet  = FunctionsLib::loadLibrary('PlanetLib');
 
         if ($this->serverRequirementes()) {
             
@@ -109,8 +109,8 @@ class Installation extends XGPCore
 
                 $parse['alert'] = $this->saveMessage($alerts, 'warning');
                 
-                $current_page   = parent::$page->parse_template(
-                    parent::$page->get_template('install/in_database_view'),
+                $current_page   = parent::$page->parseTemplate(
+                    parent::$page->getTemplate('install/in_database_view'),
                     $parse
                 );
                 
@@ -127,8 +127,8 @@ class Installation extends XGPCore
                 }
 
                 $parse['alert'] = $this->saveMessage($alerts, 'warning');
-                $current_page   = parent::$page->parse_template(
-                    parent::$page->get_template('install/in_database_view'),
+                $current_page   = parent::$page->parseTemplate(
+                    parent::$page->getTemplate('install/in_database_view'),
                     $parse
                 );
 
@@ -146,8 +146,8 @@ class Installation extends XGPCore
                 }
 
                 $parse['alert'] = $this->saveMessage($alerts, 'warning');
-                $current_page   = parent::$page->parse_template(
-                    parent::$page->get_template('install/in_database_view'),
+                $current_page   = parent::$page->parseTemplate(
+                    parent::$page->getTemplate('install/in_database_view'),
                     $parse
                 );
                 break;
@@ -172,8 +172,8 @@ class Installation extends XGPCore
                     
                     $parse['alert'] = $this->saveMessage($error_message, 'warning');
 
-                    $current_page   = parent::$page->parse_template(
-                        parent::$page->get_template('install/in_create_admin_view'),
+                    $current_page   = parent::$page->parseTemplate(
+                        parent::$page->getTemplate('install/in_create_admin_view'),
                         $parse
                     );
 
@@ -182,11 +182,11 @@ class Installation extends XGPCore
 
                 if ($continue) {
 
-                    FunctionsLib::update_config('stat_last_update', time());
-                    FunctionsLib::update_config('game_installed', '1');
+                    FunctionsLib::updateConfig('stat_last_update', time());
+                    FunctionsLib::updateConfig('game_installed', '1');
 
-                    $current_page   = parent::$page->parse_template(
-                        parent::$page->get_template('install/in_create_admin_done_view'),
+                    $current_page   = parent::$page->parseTemplate(
+                        parent::$page->getTemplate('install/in_create_admin_done_view'),
                         $this->langs
                     );
                     
@@ -205,8 +205,8 @@ class Installation extends XGPCore
             switch ((isset($_GET['mode']) ? $_GET['mode'] : '')) {
 
                 case 'step1':
-                    $current_page   = parent::$page->parse_template(
-                        parent::$page->get_template('install/in_database_view'),
+                    $current_page   = parent::$page->parseTemplate(
+                        parent::$page->getTemplate('install/in_database_view'),
                         $this->langs
                     );
 
@@ -217,8 +217,8 @@ class Installation extends XGPCore
                     $parse['done_config']       = $this->langs['ins_done_config'];
                     $parse['done_connected']    = '';
                     $parse['done_insert']       = '';
-                    $current_page               = parent::$page->parse_template(
-                        parent::$page->get_template('install/in_done_actions_view'),
+                    $current_page               = parent::$page->parseTemplate(
+                        parent::$page->getTemplate('install/in_done_actions_view'),
                         $parse
                     );
 
@@ -229,8 +229,8 @@ class Installation extends XGPCore
                     $parse['done_config']       = '';
                     $parse['done_connected']    = $this->langs['ins_done_connected'];
                     $parse['done_insert']       = '';
-                    $current_page               = parent::$page->parse_template(
-                        parent::$page->get_template('install/in_done_actions_view'),
+                    $current_page               = parent::$page->parseTemplate(
+                        parent::$page->getTemplate('install/in_done_actions_view'),
                         $parse
                     );
 
@@ -241,8 +241,8 @@ class Installation extends XGPCore
                     $parse['done_config']       = '';
                     $parse['done_connected']    = '';
                     $parse['done_insert']       = $this->langs['ins_done_insert'];
-                    $current_page               = parent::$page->parse_template(
-                        parent::$page->get_template('install/in_done_actions_view'),
+                    $current_page               = parent::$page->parseTemplate(
+                        parent::$page->getTemplate('install/in_done_actions_view'),
                         $parse
                     );
 
@@ -250,16 +250,16 @@ class Installation extends XGPCore
 
                 case 'step5':
                     $parse['step']  = 'step5';
-                    $current_page   = parent::$page->parse_template(
-                        parent::$page->get_template('install/in_create_admin_view'),
+                    $current_page   = parent::$page->parseTemplate(
+                        parent::$page->getTemplate('install/in_create_admin_view'),
                         $parse
                     );
 
                     break;
 
                 case 'license':
-                    $current_page   = parent::$page->parse_template(
-                        parent::$page->get_template('install/in_license_view'),
+                    $current_page   = parent::$page->parseTemplate(
+                        parent::$page->getTemplate('install/in_license_view'),
                         $this->langs
                     );
 
@@ -268,8 +268,8 @@ class Installation extends XGPCore
                 case '':
                 case 'overview':
                 default:
-                    $current_page   = parent::$page->parse_template(
-                        parent::$page->get_template('install/in_welcome_view'),
+                    $current_page   = parent::$page->parseTemplate(
+                        parent::$page->getTemplate('install/in_welcome_view'),
                         $this->langs
                     );
 
@@ -303,7 +303,7 @@ class Installation extends XGPCore
      */
     private function isInstalled()
     {
-        return (FunctionsLib::read_config('game_installed') == 1);
+        return (FunctionsLib::readConfig('game_installed') == 1);
     }
 
     /**
@@ -355,7 +355,7 @@ class Installation extends XGPCore
     /**
      * method insertDbData
      * param
-     * return TRUE successfully inserted data | FALSE an error ocurred
+     * return true successfully inserted data | false an error ocurred
      */
     private function insertDbData()
     {
@@ -390,7 +390,7 @@ class Installation extends XGPCore
             return -1;
         }
             
-        if (!FunctionsLib::valid_email($_POST['adm_email'])) {
+        if (!FunctionsLib::validEmail($_POST['adm_email'])) {
             return -2;
         }
 
@@ -439,7 +439,7 @@ class Installation extends XGPCore
         parent::$db->query("INSERT INTO " . SHIPS . " SET `ship_planet_id` = '1';");
 
         // write the new admin email for support and debugging
-        FunctionsLib::update_config('admin_email', $adm_email);
+        FunctionsLib::updateConfig('admin_email', $adm_email);
 
         return true;
     }
@@ -550,8 +550,8 @@ class Installation extends XGPCore
 
         $parse['message']   = $message;
 
-        return parent::$page->parse_template(
-            parent::$page->get_template('adm/save_message_view'),
+        return parent::$page->parseTemplate(
+            parent::$page->getTemplate('adm/save_message_view'),
             $parse
         );
     }

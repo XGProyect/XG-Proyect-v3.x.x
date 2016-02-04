@@ -1,43 +1,32 @@
 <?php
-
-use application\controllers\install\Installation;
-use application\controllers\install\Migration;
-use application\controllers\install\Update;
-
 /**
- * @project XG Proyect
- * @version 3.x.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * Install File
+ *
+ * PHP Version 5.5+
+ *
+ * @category Install File
+ * @package  N/A
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.0
  */
 
-define ( 'IN_INSTALL'	, TRUE );
-define ( 'XGP_ROOT'		, './../' );
+define('IN_INSTALL', true);
+define('XGP_ROOT', './../');
 
-require ( XGP_ROOT . 'application/core/common.php' );
+require XGP_ROOT . 'application/core/common.php';
 
-switch ( ( isset ( $_GET['page'] ) ? $_GET['page'] : '' ) )
-{
-	case 'update':
+$page       = isset($_GET['page']) ? $_GET['page'] : null;
+$file_name  = XGP_ROOT . INSTALL_PATH . $page . '.php';
 
-		include_once ( XGP_ROOT . INSTALL_PATH . 'update.php' );
-		new Update();
+if (file_exists($file_name)) {
 
-	break;
+    include $file_name;
 
-	case 'migrate':
+    $class_name = 'application\controllers\install\\' . ucfirst($page);
 
-		include_once ( XGP_ROOT . INSTALL_PATH . 'migration.php' );
-		new Migration();
-
-	break;
-
-	case '':
-	case 'install':
-	default:
-
-		include_once ( XGP_ROOT . INSTALL_PATH . 'installation.php' );
-		new Installation();
-
-	break;
+    new $class_name();
 }
+
 /* end of index.php */

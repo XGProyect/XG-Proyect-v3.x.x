@@ -62,7 +62,7 @@ class Media extends XGPCore
     private function buildPage()
     {
         parent::$page->display(
-            parent::$page->parse_template(parent::$page->get_template('ajax/media_view'), $this->langs),
+            parent::$page->parseTemplate(parent::$page->getTemplate('ajax/media_view'), $this->langs),
             false,
             '',
             false

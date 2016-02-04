@@ -1,6 +1,6 @@
 <?php
 /**
- * Migration Controller
+ * Migrate Controller
  *
  * PHP Version 5.5+
  *
@@ -18,7 +18,7 @@ use application\core\XGPCore;
 use application\libraries\FunctionsLib;
 
 /**
- * Migration Class
+ * Migrate Class
  *
  * @category Classes
  * @package  Application
@@ -67,7 +67,7 @@ class Migration extends XGPCore
     private function buildPage()
     {
         parent::$page->display(
-            parent::$page->parse_template(parent::$page->get_template('install/in_migrate'), $this->langs)
+            parent::$page->parseTemplate(parent::$page->getTemplate('install/in_migrate'), $this->langs)
         );
     }
 
@@ -88,4 +88,4 @@ class Migration extends XGPCore
     }
 }
 
-/* end of migration.php */
+/* end of migrate.php */
