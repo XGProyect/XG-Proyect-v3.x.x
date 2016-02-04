@@ -214,9 +214,9 @@ class TemplateLib
         $items          = '';
 
         $pages  = [
-            0 => array('install', $this->langs['ins_overview'], 'overview'),
-            1 => array('install', $this->langs['ins_license'], 'license'),
-            2 => array('install', $this->langs['ins_install'], 'step1'),
+            0 => array('installation', $this->langs['ins_overview'], 'overview'),
+            1 => array('installation', $this->langs['ins_license'], 'license'),
+            2 => array('installation', $this->langs['ins_install'], 'step1'),
             3 => array('update', $this->langs['ins_update'], ''),
             4 => array('migrate', $this->langs['ins_migrate'], '')
         ];
@@ -240,7 +240,7 @@ class TemplateLib
         // PARSE THE MENU AND OTHER DATA
         $parse                      = $this->langs;
         $parse['menu_items']        = $items;
-        $parse['language_select']   = FunctionsLib::getlangsuages(FunctionsLib::readConfig('lang'));
+        $parse['language_select']   = FunctionsLib::getLanguages(FunctionsLib::readConfig('lang'));
 
         return $this->parseTemplate($this->getTemplate('install/topnav_view'), $parse);
     }

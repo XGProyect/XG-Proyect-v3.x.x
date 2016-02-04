@@ -104,7 +104,7 @@ class Installation extends XGPCore
                 }
 
                 if ($continue) {
-                    FunctionsLib::redirect('?page=install&mode=step2');
+                    FunctionsLib::redirect('?page=installation&mode=step2');
                 }
 
                 $parse['alert'] = $this->saveMessage($alerts, 'warning');
@@ -123,7 +123,7 @@ class Installation extends XGPCore
                 }
 
                 if ($continue) {
-                    FunctionsLib::redirect('?page=install&mode=step3');
+                    FunctionsLib::redirect('?page=installation&mode=step3');
                 }
 
                 $parse['alert'] = $this->saveMessage($alerts, 'warning');
@@ -142,7 +142,7 @@ class Installation extends XGPCore
 
                 if ($continue) {
                     
-                    FunctionsLib::redirect('?page=install&mode=step4');
+                    FunctionsLib::redirect('?page=installation&mode=step4');
                 }
 
                 $parse['alert'] = $this->saveMessage($alerts, 'warning');
@@ -153,7 +153,7 @@ class Installation extends XGPCore
                 break;
 
             case 'step4':
-                FunctionsLib::redirect('?page=install&mode=step5');
+                FunctionsLib::redirect('?page=installation&mode=step5');
                 break;
 
             case 'step5':

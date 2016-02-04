@@ -27,7 +27,7 @@ use application\libraries\FunctionsLib;
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
-class Migration extends XGPCore
+class Migrate extends XGPCore
 {
     private $langs;
 
