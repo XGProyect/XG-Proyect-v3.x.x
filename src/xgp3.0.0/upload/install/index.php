@@ -17,7 +17,7 @@ define('XGP_ROOT', './../');
 
 require XGP_ROOT . 'application/core/common.php';
 
-$page       = isset($_GET['page']) ? $_GET['page'] : null;
+$page       = isset($_GET['page']) ? $_GET['page'] : 'installation';
 $file_name  = XGP_ROOT . INSTALL_PATH . $page . '.php';
 
 if (file_exists($file_name)) {
