@@ -73,8 +73,9 @@ class Home extends XGPCore
             $login  = parent::$db->queryFetch(
                 "SELECT `user_id`, `user_name`, `user_password`, `user_banned`
                 FROM " . USERS . "
-                WHERE `user_name` = '" . parent::$db->escapeValue($_POST['login']) . "'
-                AND `user_password` = '" . sha1($_POST['pass']) . "'
+                WHERE (`user_name` = '" . parent::$db->escapeValue($_POST['login']) . "'
+                    OR `user_email` = '" . parent::$db->escapeValue($_POST['login']) . "')
+                    AND `user_password` = '" . sha1($_POST['pass']) . "'
                 LIMIT 1"
             );
 

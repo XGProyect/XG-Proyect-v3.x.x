@@ -14,7 +14,6 @@
 
 namespace application\libraries\missions;
 
-use application\libraries\CreatorLib;
 use application\libraries\FleetsLib;
 use application\libraries\FunctionsLib;
 use application\libraries\StatisticsLib;
@@ -146,11 +145,9 @@ class Colonize extends Missions
      */
     private function start_creation($fleet_row)
     {
-        include_once ( XGP_ROOT . 'application/libraries/CreatorLib.php' );
+        $creator = FunctionsLib::loadLibrary('PlanetLib');
 
-        $creator = new CreatorLib();
-
-        return $creator->createPlanet($fleet_row['fleet_end_galaxy'], $fleet_row['fleet_end_system'], $fleet_row['fleet_end_planet'], $fleet_row['fleet_owner'], $this->langs['sys_colo_defaultname'], false);
+        return $creator->setNewPlanet($fleet_row['fleet_end_galaxy'], $fleet_row['fleet_end_system'], $fleet_row['fleet_end_planet'], $fleet_row['fleet_owner'], $this->langs['sys_colo_defaultname'], false);
     }
 
     /**

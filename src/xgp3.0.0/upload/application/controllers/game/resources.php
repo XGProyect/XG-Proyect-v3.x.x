@@ -100,7 +100,7 @@ class Resources extends XGPCore
         $this->_current_planet['planet_deuterium_max'] = ProductionLib::maxStorable($this->_current_planet[$this->_resource[24]]);
 
         $parse['production_level'] = 100;
-        $post_porcent = ProductionLib::maxProduction($this->_current_planet['planet_energy_max'], $this->_current_planet['planet_energy_used']);
+        $post_percent = ProductionLib::maxProduction($this->_current_planet['planet_energy_max'], $this->_current_planet['planet_energy_used']);
 
         $parse['resource_row'] = '';
         $this->_current_planet['planet_metal_perhour'] = 0;
@@ -114,7 +114,7 @@ class Resources extends XGPCore
 
         foreach ($this->_reslist['prod'] as $ProdID) {
             if ($this->_current_planet[$this->_resource[$ProdID]] > 0 && isset($this->_prod_grid[$ProdID])) {
-                $BuildLevelFactor = $this->_current_planet['planet_' . $this->_resource[$ProdID] . '_porcent'];
+                $BuildLevelFactor = $this->_current_planet['planet_' . $this->_resource[$ProdID] . '_percent'];
                 $BuildLevel = $this->_current_planet[$this->_resource[$ProdID]];
                 $BuildEnergy = $this->_current_user['research_energy_technology'];
 
@@ -149,15 +149,15 @@ class Resources extends XGPCore
                 $this->_current_planet['planet_crystal_perhour'] += $crystal;
                 $this->_current_planet['planet_deuterium_perhour'] += $deuterium;
 
-                $metal = ProductionLib::currentProduction($metal, $post_porcent);
-                $crystal = ProductionLib::currentProduction($crystal, $post_porcent);
-                $deuterium = ProductionLib::currentProduction($deuterium, $post_porcent);
-                $energy = ProductionLib::currentProduction($energy, $post_porcent);
-                $Field = 'planet_' . $this->_resource[$ProdID] . '_porcent';
+                $metal = ProductionLib::currentProduction($metal, $post_percent);
+                $crystal = ProductionLib::currentProduction($crystal, $post_percent);
+                $deuterium = ProductionLib::currentProduction($deuterium, $post_percent);
+                $energy = ProductionLib::currentProduction($energy, $post_percent);
+                $Field = 'planet_' . $this->_resource[$ProdID] . '_percent';
                 $CurrRow = array();
                 $CurrRow['name'] = $this->_resource[$ProdID];
-                $CurrRow['porcent'] = $this->_current_planet[$Field];
-                $CurrRow['option'] = $this->build_options($CurrRow['porcent']);
+                $CurrRow['percent'] = $this->_current_planet[$Field];
+                $CurrRow['option'] = $this->build_options($CurrRow['percent']);
                 $CurrRow['type'] = $this->_lang['tech'][$ProdID];
                 $CurrRow['level'] = ($ProdID > 200) ? $this->_lang['rs_amount'] : $this->_lang['rs_lvl'];
                 $CurrRow['level_type'] = $this->_current_planet[$this->_resource[$ProdID]];
@@ -216,7 +216,7 @@ class Resources extends XGPCore
 
         if ($_POST && !parent::$users->isOnVacations($this->_current_user)) {
             foreach ($_POST as $Field => $Value) {
-                $FieldName = 'planet_' . $Field . '_porcent';
+                $FieldName = 'planet_' . $Field . '_percent';
                 if (isset($this->_current_planet[$FieldName])) {
                     if (!in_array($Value, $ValidList['percent'])) {
                         FunctionsLib::redirect('game.php?page=resourceSettings');
@@ -241,8 +241,8 @@ class Resources extends XGPCore
 
     /**
      * method build_options
-     * param $current_porcentage
-     * return porcentage options for the select element
+     * param $current_percentage
+     * return percentage options for the select element
      */
     private function build_options($current_porcentage)
     {

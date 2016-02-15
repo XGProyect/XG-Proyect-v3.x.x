@@ -43,7 +43,7 @@ class Encrypter extends XGPCore
         parent::__construct();
 
         // check if session is active
-        parent::$users->checkSession();
+        AdministrationLib::checkSession();
 
         $this->langs        = parent::$lang;
         $this->current_user = parent::$users->getUserData();
@@ -55,7 +55,7 @@ class Encrypter extends XGPCore
             $this->buildPage();
         } else {
 
-            die(FunctionsLib::message($this->langs['ge_no_permissions']));
+            die(AdministrationLib::noAccessMessage($this->langs['ge_no_permissions']));
         }
     }
 

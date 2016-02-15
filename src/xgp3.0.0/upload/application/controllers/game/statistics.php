@@ -100,16 +100,18 @@ class Statistics extends XGPCore
             $parse['range'] = $this->build_range_list($MaxAllys['count'], $range);
             $parse['stat_header'] = parent::$page->parseTemplate(parent::$page->getTemplate('stat/stat_alliancetable_header'), $parse);
             $start = floor($range / 100 % 100) * 100;
-            $query = parent::$db->query('SELECT s.*,
-																	a.alliance_id,
-																	a.alliance_tag,
-																	a.alliance_name,
-																	a.alliance_request_notallow,
-																	(SELECT COUNT(user_id) AS `ally_members` FROM `' . USERS . '` WHERE `user_ally_id` = a.`alliance_id`) AS `ally_members`
-																FROM ' . ALLIANCE_STATISTICS . ' AS s
-																INNER JOIN  ' . ALLIANCE . ' AS a ON a.alliance_id = s.alliance_statistic_alliance_id
-																ORDER BY `alliance_statistic_' . $Order . '` DESC, `alliance_statistic_total_rank` ASC
-																LIMIT ' . $start . ',100;');
+            $query = parent::$db->query(
+                'SELECT s.*,
+                a.alliance_id,
+                a.alliance_tag,
+                a.alliance_name,
+                a.alliance_request_notallow,
+                (SELECT COUNT(user_id) AS `ally_members` FROM `' . USERS . '` WHERE `user_ally_id` = a.`alliance_id`) AS `ally_members`
+                FROM ' . ALLIANCE_STATISTICS . ' AS s
+                INNER JOIN  ' . ALLIANCE . ' AS a ON a.alliance_id = s.alliance_statistic_alliance_id
+                ORDER BY `alliance_statistic_' . $Order . '` DESC, `alliance_statistic_total_rank` ASC
+                LIMIT ' . $start . ',100;'
+            );
 
             $start++;
 
@@ -135,12 +137,20 @@ class Statistics extends XGPCore
             $parse['stat_header'] = parent::$page->parseTemplate(parent::$page->getTemplate('stat/stat_playertable_header'), $parse);
 
             $start = floor($range / 100 % 100) * 100;
-            $query = parent::$db->query('SELECT s.*, u.user_id, u.user_name, u.user_ally_id, a.alliance_name
-												FROM ' . USERS_STATISTICS . ' as s
-												INNER JOIN ' . USERS . ' as u ON u.user_id = s.user_statistic_user_id
-												LEFT JOIN ' . ALLIANCE . ' AS a ON a.alliance_id = u.user_ally_id
-												ORDER BY `user_statistic_' . $Order . '` DESC, `user_statistic_total_rank` ASC
-												LIMIT ' . $start . ',100;');
+            $query = parent::$db->query(
+                'SELECT s.*, 
+                        u.user_id, 
+                        u.user_name, 
+                        u.user_ally_id, 
+                        a.alliance_name
+                FROM ' . USERS_STATISTICS . ' as s
+                INNER JOIN ' . USERS . ' as u ON u.user_id = s.user_statistic_user_id
+                LEFT JOIN ' . ALLIANCE . ' AS a ON a.alliance_id = u.user_ally_id
+                WHERE `user_authlevel` <= ' . FunctionsLib::readConfig('stat_admin_level') . '
+                ORDER BY `user_statistic_' . $Order . '` DESC, `user_statistic_total_rank` ASC
+                LIMIT ' . $start . ',100;'
+            );
+
             $start++;
             $parse['stat_date'] = date(FunctionsLib::readConfig('date_format_extended'), FunctionsLib::readConfig('stat_last_update'));
             $parse['stat_values'] = "";

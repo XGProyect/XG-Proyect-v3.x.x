@@ -16,8 +16,6 @@ namespace application\controllers\adm;
 
 use application\core\XGPCore;
 use application\libraries\adm\AdministrationLib;
-use application\libraries\CreatorLib;
-use application\libraries\FunctionsLib;
 
 /**
  * Reset Class
@@ -43,20 +41,19 @@ class Reset extends XGPCore
         parent::__construct();
 
         // check if session is active
-        parent::$users->checkSession();
+        AdministrationLib::checkSession();
 
         $this->_lang = parent::$lang;
         $this->_current_user = parent::$users->getUserData();
 
         // Check if the user is allowed to access
         if (AdministrationLib::haveAccess($this->_current_user['user_authlevel']) && $this->_current_user['user_authlevel'] == 3) {
-            include_once ( XGP_ROOT . 'application/libraries/CreatorLib.php' );
 
-            $this->_creator = new CreatorLib();
+            $this->_creator = FunctionsLib::loadLibrary('PlanetLib');
 
             $this->build_page();
         } else {
-            die(FunctionsLib::message($this->_lang['ge_no_permissions']));
+            die(AdministrationLib::noAccessMessage($this->_lang['ge_no_permissions']));
         }
     }
 
@@ -143,7 +140,7 @@ class Reset extends XGPCore
 											`user_banned` = '0'
 											WHERE `user_id` > '1'");
 
-                    $this->_creator->createPlanet($TheUser['user_galaxy'], $TheUser['user_system'], $TheUser['user_planet'], $NewUser, $UserPlanet['planet_name'], true);
+                    $this->_creator->setNewPlanet($TheUser['user_galaxy'], $TheUser['user_system'], $TheUser['user_planet'], $NewUser, $UserPlanet['planet_name'], true);
 
                     $PlanetID = parent::$db->queryFetch("SELECT `planet_id`
 																	FROM " . PLANETS . "
@@ -151,8 +148,8 @@ class Reset extends XGPCore
 																	LIMIT 1;");
 
                     parent::$db->query("UPDATE " . USERS . " SET
-											`user_home_planet_id` = '" . $PlanetID['id'] . "',
-											`user_current_planet` = '" . $PlanetID['id'] . "'
+											`user_home_planet_id` = '" . $PlanetID['planet_id'] . "',
+											`user_current_planet` = '" . $PlanetID['planet_id'] . "'
 											WHERE `user_id` = '" . $NewUser . "';");
                     $TransUser++;
                 }

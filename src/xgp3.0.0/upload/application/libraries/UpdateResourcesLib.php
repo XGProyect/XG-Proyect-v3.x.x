@@ -62,7 +62,7 @@ class UpdateResourcesLib extends XGPCore
         $sub_query                          = '';
         $parse['production_level']          = 100;
 
-        $post_porcent                       = ProductionLib::maxProduction(
+        $post_percent                       = ProductionLib::maxProduction(
             $current_planet['planet_energy_max'],
             $current_planet['planet_energy_used']
         );
@@ -75,7 +75,7 @@ class UpdateResourcesLib extends XGPCore
 
         foreach ($ProdGrid as $ProdID => $formula) {
 
-            $BuildLevelFactor   = $current_planet['planet_' . $resource[$ProdID] . '_porcent'];
+            $BuildLevelFactor   = $current_planet['planet_' . $resource[$ProdID] . '_percent'];
             $BuildLevel         = $current_planet[$resource[$ProdID]];
             $BuildEnergy        = $current_user['research_energy_technology'];
 
@@ -96,17 +96,17 @@ class UpdateResourcesLib extends XGPCore
             // PRODUCTION
             $Caps['planet_metal_perhour']       += ProductionLib::currentProduction(
                 ProductionLib::productionAmount($metal_prod, $geologe_boost),
-                $post_porcent
+                $post_percent
             );
 
             $Caps['planet_crystal_perhour']     += ProductionLib::currentProduction(
                 ProductionLib::productionAmount($crystal_prod, $geologe_boost),
-                $post_porcent
+                $post_percent
             );
 
             $Caps['planet_deuterium_perhour']   += ProductionLib::currentProduction(
                 ProductionLib::productionAmount($deuterium_prod, $geologe_boost),
-                $post_porcent
+                $post_percent
             );
 
             if ($ProdID >= 4) {

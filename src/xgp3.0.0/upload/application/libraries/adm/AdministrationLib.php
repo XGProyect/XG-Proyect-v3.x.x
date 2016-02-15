@@ -56,6 +56,23 @@ class AdministrationLib extends XGPCore
             return false;
         }
     }
+    
+    /**
+     * noAccessMessage
+     *
+     * @param string $mes Message
+     *
+     * @return void
+     */
+    public static function noAccessMessage($mes = '')
+    {
+        FunctionsLib::message(
+            self::saveMessage('error', $mes, false),
+            '',
+            '',
+            true
+        );
+    }
 
     /**
      * installDirExists
@@ -124,7 +141,7 @@ class AdministrationLib extends XGPCore
      *
      * @return string
      */
-    public static function saveMessage($result, $message)
+    public static function saveMessage($result, $message, $dismissible = true)
     {
         switch ($result) {
             case 'ok':
@@ -145,6 +162,11 @@ class AdministrationLib extends XGPCore
 
         $parse['message'] = $message;
 
+        if (!$dismissible) {
+
+            $parse['dismissible']   = 'hide';
+        }
+        
         return parent::$page->parseTemplate(parent::$page->getTemplate('adm/save_message_view'), $parse);
     }
 
@@ -207,6 +229,113 @@ class AdministrationLib extends XGPCore
             && (empty($_SERVER['HTTPS']) or $_SERVER['HTTPS'] === 'off')) {
 
             FunctionsLib::redirect('https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
+        }
+    }
+    
+    /**
+     * adminLogin
+     *
+     * @param int    $admin_id   Admin ID
+     * @param string $admin_name Admin name
+     * @param string $password   Password
+     *
+     * @return void
+     */
+    public static function adminLogin($admin_id = 0, $admin_name = '', $password = '')
+    {
+        if ($admin_id != 0 && !empty($admin_name) && !empty($password)) {
+
+            parent::$users->userLogin($admin_id, $admin_name, $password);
+            
+            $_SESSION['admin_id']        = $admin_id;
+            $_SESSION['admin_name']      = $admin_name;
+            $_SESSION['admin_password']  = sha1($password . '-' . SECRETWORD);
+
+            return true;
+        } else {
+
+            return false;
+        }
+    }
+    
+    /**
+     * checkSession
+     *
+     * @return void
+     */
+    public static function checkSession()
+    {
+        if (!self::isSessionSet()) {
+
+            $parse  = parent::$lang;
+
+            if ($_POST) {
+
+                $login  = parent::$db->queryFetch(
+                    "SELECT `user_id`, `user_name`, `user_password`
+                    FROM " . USERS . "
+                    WHERE `user_email` = '" . parent::$db->escapeValue($_POST['inputEmail']) . "'
+                        AND `user_password` = '" . sha1($_POST['inputPassword']) . "'
+                        AND `user_authlevel` >= '1'
+                        LIMIT 1"
+                );
+
+                if ($login) {
+
+                    // User login
+                    if (self::adminLogin($login['user_id'], $login['user_name'], $login['user_password'])) {
+
+                        // Redirect to game
+                        FunctionsLib::redirect('admin.php');
+                    }
+                }
+
+                // If login fails
+                FunctionsLib::redirect(XGP_ROOT . 'admin.php?error=1');
+            } else {
+
+                $parse['alert'] = '';
+                
+                if (isset($_GET['error']) && $_GET['error'] == 1) {
+
+                    $parse['alert'] = self::saveMessage('error', parent::$lang['lg_error_wrong_data'], false);
+                }
+                
+                parent::$page->display(
+                    parent::$page->parseTemplate(parent::$page->getTemplate('adm/login_view'), $parse),
+                    false,
+                    '',
+                    false
+                );
+            }
+        }
+    }
+    
+    /**
+     * closeSession
+     *
+     * @return boolean
+     */
+    public static function closeSession()
+    {
+        unset($_SESSION['admin_id']);
+        unset($_SESSION['admin_name']);
+        unset($_SESSION['admin_password']);
+    }
+    
+    /**
+     * isSessionSet
+     *
+     * @return boolean
+     */
+    private static function isSessionSet()
+    {
+        if (!isset($_SESSION['admin_id']) or !isset($_SESSION['admin_name']) or !isset($_SESSION['admin_password'])) {
+
+            return false;
+        } else {
+
+            return true;
         }
     }
 }

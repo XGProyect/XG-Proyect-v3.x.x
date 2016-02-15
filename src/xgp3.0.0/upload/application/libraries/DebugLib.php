@@ -134,15 +134,10 @@ class DebugLib extends XGPCore
             echo $this->whereCalled(3);
         } else {
 
-            if (isset(parent::$users->getUserData)) {
-
-                $user_id    = parent::$users->getUserData()['user_id'];
-            } else {
-                $user_id    = 0;
-            }
+            $user_ip    = $_SERVER['REMOTE_ADDR'];
 
             // format log
-            $log    = '|' . $user_id . '|'. $title .'|' . $message . '|' . $this->whereCalled(3) . '|';
+            $log    = '|' . $user_ip . '|'. $title .'|' . $message . '|' . $this->whereCalled(3) . '|';
 
             // log the error
             $this->writeErrors($log, "ErrorLog");

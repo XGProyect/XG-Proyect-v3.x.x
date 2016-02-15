@@ -147,7 +147,10 @@ class Phalanx extends XGPCore
                 $isStartedfromThis = $FleetRow['fleet_start_galaxy'] == $Galaxy && $FleetRow['fleet_start_system'] == $System && $FleetRow['fleet_start_planet'] == $Planet;
                 $isTheTarget = $FleetRow['fleet_end_galaxy'] == $Galaxy && $FleetRow['fleet_end_system'] == $System && $FleetRow['fleet_end_planet'] == $Planet;
 
-
+                $fpage[$ArrivetoTargetTime] = '';
+                $fpage[$EndStayTime]        = '';
+                $fpage[$ReturnTime]         = '';
+                
                 /* 1)the arrive to target fleet table event
                  * you can see start-fleet event only if this is a planet(or destroyed moon)
                  * and if the fleet mission started from this planet is different from hold
@@ -184,6 +187,7 @@ class Phalanx extends XGPCore
                 }
             }
             ksort($fpage);
+            $Fleets = '';
             foreach ($fpage as $FleetTime => $FleetContent)
                 $Fleets .= $FleetContent . "\n";
 

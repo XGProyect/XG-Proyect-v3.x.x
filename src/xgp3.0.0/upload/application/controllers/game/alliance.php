@@ -53,16 +53,16 @@ class Alliance extends XGPCore
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
         // DEFAULT VALUES
-        $this->_current_user = parent::$users->getUserData();
-        $this->_lang = parent::$lang;
-        $this->bbcode = FunctionsLib::loadLibrary('BBCodeLib');
-        $this->_ally = '';
-        $this->_permissions = array();
+        $this->_current_user    = parent::$users->getUserData();
+        $this->_lang            = parent::$lang;
+        $this->bbcode           = FunctionsLib::loadLibrary('BBCodeLib');
+        $this->_ally            = '';
+        $this->_permissions     = array();
 
         // SOME REQUIRED PATHS
-        $this->_lang['dpath'] = DPATH;
-        $this->_lang['img_path'] = XGP_ROOT . IMG_PATH;
-        $this->_lang['js_path'] = XGP_ROOT . JS_PATH;
+        $this->_lang['dpath']       = DPATH;
+        $this->_lang['img_path']    = XGP_ROOT . IMG_PATH;
+        $this->_lang['js_path']     = XGP_ROOT . JS_PATH;
 
         // SET THE PERMISSIONS
         $this->setPermissions();
@@ -88,7 +88,7 @@ class Alliance extends XGPCore
      */
     private function buildPage()
     {
-        switch (( isset($_GET['mode']) ? $_GET['mode'] : NULL)) {
+        switch (( isset($_GET['mode']) ? $_GET['mode'] : null)) {
             ##############################################################################################
             # IN THIS CASE THE USER IS ONLY VISITING THE ALLIANCE
             ##############################################################################################
@@ -175,17 +175,21 @@ class Alliance extends XGPCore
 
         // VALIDATE AND GET ALLIANCE DATA
         if (is_numeric($ally_id) && $ally_id != 0) {
-            $alliance_data = parent::$db->queryFetch("SELECT a.`alliance_id`,
-                                                                                                                                    a.`alliance_image`,
-                                                                                                                                    a.`alliance_name`,
-                                                                                                                                    a.`alliance_tag`,
-                                                                                                                                    a.`alliance_description`,
-                                                                                                                                    a.`alliance_web`,
-                                                                                                                                    a.`alliance_request_notallow`,
-                                                                                                                                    (SELECT COUNT(user_id) AS `ally_members` FROM `" . USERS . "` WHERE `user_ally_id` = a.`alliance_id`) AS `ally_members`
-                                                                                                                    FROM `" . ALLIANCE . "` AS a
-                                                                                                                    WHERE a.`alliance_id` = '{$ally_id}'
-                                                                                                                    LIMIT 1;");
+            $alliance_data = parent::$db->queryFetch(
+                "SELECT a.`alliance_id`,
+                        a.`alliance_image`,
+                        a.`alliance_name`,
+                        a.`alliance_tag`,
+                        a.`alliance_description`,
+                        a.`alliance_web`,
+                        a.`alliance_request_notallow`,
+                    (SELECT COUNT(user_id) AS `ally_members` 
+                        FROM `" . USERS . "` 
+                        WHERE `user_ally_id` = a.`alliance_id`) AS `ally_members`
+                FROM `" . ALLIANCE . "` AS a
+                WHERE a.`alliance_id` = '{$ally_id}'
+                LIMIT 1;"
+            );
         }
 
         // LET'S GET OUT OF HERE IF WE DIDN'T GET SOMETHING
@@ -370,8 +374,7 @@ class Alliance extends XGPCore
      */
     private function ally_main()
     {
-        $parse = $this->_lang;
-        $alliance_ranks = unserialize($this->_ally['alliance_ranks']);
+        $parse          = $this->_lang;
 
         ##############################################################################################
         # DEFAULT PART WITHOUT ALLIANCE
@@ -404,6 +407,9 @@ class Alliance extends XGPCore
         # DEFAULT PART WITH ALLIANCE
         ##############################################################################################
         if ($this->_current_user['user_ally_id'] != 0 && $this->_current_user['user_ally_request'] == 0) {
+
+            $alliance_ranks = unserialize($this->_ally['alliance_ranks']);
+            
             // IMAGE
             if ($this->_ally['alliance_ranks'] != '') {
                 $parse['alliance_image'] = $this->image_block($this->_ally['alliance_image']);
@@ -492,11 +498,21 @@ class Alliance extends XGPCore
                                                                             `user_ally_rank_id` = 0
                                                                             WHERE `user_id`='" . $this->_current_user['user_id'] . "'");
 
-                $this->_lang['Go_out_welldone'] = str_replace("%s", $alliance_name, $this->_lang['al_leave_sucess']);
-                $page = $this->message_box($this->_lang['Go_out_welldone'], "<br>", $PHP_SELF, $this->_lang['al_continue']);
+                $this->_lang['Go_out_welldone'] = str_replace("%s", $this->_ally['alliance_name'], $this->_lang['al_leave_sucess']);
+                $page = $this->message_box(
+                    $this->_lang['Go_out_welldone'],
+                    "<br>",
+                    "game.php?page=alliance",
+                    $this->_lang['al_continue']
+                );
             } else {
-                $this->_lang['Want_go_out'] = str_replace("%s", $alliance_name, $this->_lang['al_do_you_really_want_to_go_out']);
-                $page = $this->message_box($this->_lang['Want_go_out'], "<br>", "game.php?page=alliance&mode=exit&yes=1", $this->_lang['al_go_out_yes']);
+                $this->_lang['Want_go_out'] = str_replace("%s", $this->_ally['alliance_name'], $this->_lang['al_do_you_really_want_to_go_out']);
+                $page = $this->message_box(
+                    $this->_lang['Want_go_out'],
+                    "<br>",
+                    "game.php?page=alliance&mode=exit&yes=1",
+                    $this->_lang['al_go_out_yes']
+                );
             }
 
             return $page;
@@ -874,7 +890,7 @@ class Alliance extends XGPCore
                                     "UPDATE " . USERS . " SET
                                 `user_ally_id`='0',
                                 `user_ally_rank_id` = 0
-                                WHERE `user_id`='" . (int) $u['id'] . "' LIMIT 1;"
+                                WHERE `user_id`='" . (int) $u['user_id'] . "' LIMIT 1;"
                             );
                         }
                     } elseif (isset($_POST['newrang'])) {

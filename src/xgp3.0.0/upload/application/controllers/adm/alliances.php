@@ -48,7 +48,7 @@ class Alliances extends XGPCore
         parent::__construct();
 
         // check if session is active
-        parent::$users->checkSession();
+        AdministrationLib::checkSession();
 
         $this->_lang = parent::$lang;
         $this->_current_user = parent::$users->getUserData();
@@ -57,7 +57,7 @@ class Alliances extends XGPCore
         if (AdministrationLib::haveAccess($this->_current_user['user_authlevel']) && AdministrationLib::authorization($this->_current_user['user_authlevel'], 'edit_users') == 1) {
             $this->build_page();
         } else {
-            die(FunctionsLib::message($this->_lang['ge_no_permissions']));
+            die(AdministrationLib::noAccessMessage($this->_lang['ge_no_permissions']));
         }
     }
 

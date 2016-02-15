@@ -58,7 +58,7 @@ class StatisticsLib extends XGPCore
         $element            = parent::$objects->getPrice($element);
         $resources_total    = $element['metal'] + $element['crystal'] + $element['deuterium'];
         $level_mult         = pow($element['factor'], $current_level);
-        $points             = ($resources_total * $level_mult) / FunctionsLib::readConfig('stat_settings');
+        $points             = ($resources_total * $level_mult) / FunctionsLib::readConfig('stat_points');
 
         return $points;
     }

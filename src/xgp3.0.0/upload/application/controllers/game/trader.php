@@ -113,7 +113,7 @@ class Trader extends XGPCore
                             'deuterium' => $_POST['deut']
                         );
 
-                        $storage = $this->check_storage($amout);
+                        $storage = $this->checkStorage($amout);
 
                         if (is_string($storage)) {
 
@@ -158,7 +158,7 @@ class Trader extends XGPCore
                             'deuterium' => $_POST['deut']
                         );
 
-                        $storage    = $this->check_storage($amout);
+                        $storage    = $this->checkStorage($amout);
 
                         if (is_string($storage)) {
 
@@ -200,7 +200,7 @@ class Trader extends XGPCore
                             'deuterium' => 0
                         );
 
-                        $storage = $this->check_storage($amout);
+                        $storage = $this->checkStorage($amout);
 
                         if (is_string($storage)) {
 

@@ -36,7 +36,7 @@
 		</td>
 	</tr>
 	<tr>
-		<td>{us_user_main_destruyed}</td>
+		<td>{us_user_main_destroyed}</td>
 		<td>
 			<select name="planet_destroyed">
 				<option value="1"{dest1}>{us_user_main_planet_destroyed_yes}</option>
@@ -150,50 +150,50 @@
 		<td><input type="text" name="planet_energy_used" value="{planet_energy_used}" class="input-mini"> <span style="font-size:30px">/</span> <input type="text" name="planet_energy_max" value="{planet_energy_max}" class="input-mini"></td>
 	</tr>
 	<tr>
-		<td>{us_user_main_building_metal_mine_porcent}</td>
+		<td>{us_user_main_building_metal_mine_percent}</td>
 		<td>
-			<select name="planet_building_metal_mine_porcent">
-				{planet_building_metal_mine_porcent}
+			<select name="planet_building_metal_mine_percent">
+				{planet_building_metal_mine_percent}
 			</select>
 		</td>
 	</tr>
 	<tr>
-		<td>{us_user_main_building_crystal_mine_porcent}</td>
+		<td>{us_user_main_building_crystal_mine_percent}</td>
 		<td>
-			<select name="planet_building_crystal_mine_porcent">
-				{planet_building_crystal_mine_porcent}
+			<select name="planet_building_crystal_mine_percent">
+				{planet_building_crystal_mine_percent}
 			</select>
 		</td>
 	</tr>
 	<tr>
-		<td>{us_user_main_building_deuterium_sintetizer_porcent}</td>
+		<td>{us_user_main_building_deuterium_sintetizer_percent}</td>
 		<td>
-			<select name="planet_building_deuterium_sintetizer_porcent">
-				{planet_building_deuterium_sintetizer_porcent}
+			<select name="planet_building_deuterium_sintetizer_percent">
+				{planet_building_deuterium_sintetizer_percent}
 			</select>
 		</td>
 	</tr>
 	<tr>
-		<td>{us_user_main_building_solar_plant_porcent}</td>
+		<td>{us_user_main_building_solar_plant_percent}</td>
 		<td>
-			<select name="planet_building_solar_plant_porcent">
-				{planet_building_solar_plant_porcent}
+			<select name="planet_building_solar_plant_percent">
+				{planet_building_solar_plant_percent}
 			</select>
 		</td>
 	</tr>
 	<tr>
-		<td>{us_user_main_building_fusion_reactor_porcent}</td>
+		<td>{us_user_main_building_fusion_reactor_percent}</td>
 		<td>
-			<select name="planet_building_fusion_reactor_porcent">
-				{planet_building_fusion_reactor_porcent}
+			<select name="planet_building_fusion_reactor_percent">
+				{planet_building_fusion_reactor_percent}
 			</select>
 		</td>
 	</tr>
 	<tr>
-		<td>{us_user_main_ship_solar_satellite_porcent}</td>
+		<td>{us_user_main_ship_solar_satellite_percent}</td>
 		<td>
-			<select name="planet_ship_solar_satellite_porcent">
-				{planet_ship_solar_satellite_porcent}
+			<select name="planet_ship_solar_satellite_percent">
+				{planet_ship_solar_satellite_percent}
 			</select>
 		</td>
 	</tr>

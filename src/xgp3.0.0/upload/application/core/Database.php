@@ -78,7 +78,7 @@ class Database
     {
         if (defined('DB_HOST') && defined('DB_USER') && defined('DB_PASS') && defined('DB_NAME')) {
 
-            if (!$this->tryConnection()) {
+            if (!$this->tryConnection(DB_HOST, DB_USER, DB_PASS)) {
 
                 if (!defined('IN_INSTALL')) {
 
@@ -91,7 +91,7 @@ class Database
                     return false;
                 }
             } else {
-                if (!$this->tryDatabase()) {
+                if (!$this->tryDatabase(DB_NAME)) {
 
                     if (!defined('IN_INSTALL')) {
                         
@@ -114,23 +114,41 @@ class Database
     /**
      * tryConnection
      *
+     * @param string $host Host
+     * @param string $user User
+     * @param string $pass Pass
+     *
      * @return mysqli
      */
-    public function tryConnection()
+    public function tryConnection($host = '', $user = '', $pass = '')
     {
-        $this->connection  = new mysqli(DB_HOST, DB_USER, DB_PASS);
+        if (empty($host) or empty($user) or empty($pass)) {
+            return;
+        }
 
-        return $this->connection;
+        $this->connection  = @new mysqli($host, $user, $pass);
+
+        if ($this->connection->connect_error) {
+            return false;
+        }
+        
+        return true;
     }
 
     /**
      * tryDatabase
      *
+     * @param string $db_name DB Name
+     *
      * @return boolean
      */
-    public function tryDatabase()
+    public function tryDatabase($db_name)
     {
-        $db_select  = $this->connection->select_db(DB_NAME);
+        if (empty($db_name)) {
+            return false;
+        }
+        
+        $db_select  = @$this->connection->select_db($db_name);
 
         if ($db_select) {
             
@@ -280,7 +298,7 @@ class Database
      */
     public function numFields($result_set)
     {
-        return $result_set->num_fields;
+        return $result_set->field_count;
     }
 
     /**
@@ -377,8 +395,8 @@ class Database
         //CYCLE TROUGHT
         foreach ($tables as $table) {
 
-            $result     = $this->query('SELECT * FROM' . $table);
-            $num_fields = $this->num_fields($result);
+            $result     = $this->query('SELECT * FROM ' . $table);
+            $num_fields = $this->numFields($result);
 
             $return     .= 'DROP TABLE ' . $table . ';';
             $row2       = $this->fetchRow($this->query('SHOW CREATE TABLE ' . $table));

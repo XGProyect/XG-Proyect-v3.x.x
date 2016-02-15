@@ -51,18 +51,25 @@ class Expedition extends Missions
     public function expeditionMission($fleet_row)
     {
         if ($fleet_row['fleet_mess'] == 0) {
-            if ($fleet_row['fleet_end_stay'] < time()) {
-                $ships_points = $this->set_ships_points();
-                $ships = explode(";", $fleet_row['fleet_array']);
 
+            if ($fleet_row['fleet_end_stay'] < time()) {
+
+                $ships_points   = $this->set_ships_points();
+                $ships          = explode(";", $fleet_row['fleet_array']);
+                $fleet_capacity = 0;
+                $fleet_points   = 0;
+                
                 foreach ($ships as $item => $group) {
+
                     if ($group != '') {
-                        $ship = explode(",", $group);
-                        $ship_number = $ship[0];
-                        $ship_amount = $ship[1];
-                        $current_fleet[$ship_number] = $ship_amount;
-                        $fleet_capacity += $this->pricelist[$ship_number]['capacity'] * $ship_amount;
-                        $fleet_points += ( $ship_amount * $ships_points[$ship_number] );
+
+                        $ship                           = explode(",", $group);
+                        $ship_number                    = $ship[0];
+                        $ship_amount                    = $ship[1];
+                        $current_fleet[$ship_number]    = $ship_amount;
+                        $fleet_capacity                 += $this->pricelist[$ship_number]['capacity']
+                            * $ship_amount;
+                        $fleet_points                   += ( $ship_amount * $ships_points[$ship_number] );
                     }
                 }
 
@@ -111,7 +118,11 @@ class Expedition extends Missions
         }
 
         if ($fleet_row['fleet_end_time'] < time()) {
-            $this->expedition_message($fleet_row['fleet_owner'], $this->langs['sys_expe_back_home'], $fleet_row['fleet_end_time']);
+            $this->expedition_message(
+                $fleet_row['fleet_owner'],
+                $this->langs['sys_expe_back_home'],
+                $fleet_row['fleet_end_time']
+            );
 
             parent::restoreFleet($fleet_row, true);
             parent::removeFleet($fleet_row['fleet_id']);
@@ -169,7 +180,11 @@ class Expedition extends Missions
      */
     private function hazard_nothing($fleet_row)
     {
-        $this->expedition_message($fleet_row['fleet_owner'], $message, $fleet_row['fleet_end_stay'], $this->langs['sys_expe_nothing_' . mt_rand(1, 2)]);
+        $this->expedition_message(
+            $fleet_row['fleet_owner'],
+            $this->langs['sys_expe_nothing_' . mt_rand(1, 2)],
+            $fleet_row['fleet_end_stay']
+        );
 
         parent::returnFleet($fleet_row['fleet_id']);
     }
@@ -292,7 +307,15 @@ class Expedition extends Missions
      */
     private function expedition_message($owner, $message, $time)
     {
-        FunctionsLib::sendMessage($owner, '', $time, 5, $this->langs['sys_mess_qg'], $this->langs['sys_expe_report'], $message);
+        FunctionsLib::sendMessage(
+            $owner,
+            '',
+            $time,
+            5,
+            $this->langs['sys_mess_qg'],
+            $this->langs['sys_expe_report'],
+            $message
+        );
     }
 }
 

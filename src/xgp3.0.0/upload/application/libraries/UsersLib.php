@@ -307,7 +307,7 @@ class UsersLib extends XGPCore
             m.planet_id AS moon_id,
             m.planet_name AS moon_name,
             m.planet_image AS moon_image,
-            m.planet_destroyed AS moon_destruyed,
+            m.planet_destroyed AS moon_destroyed,
             m.planet_image AS moon_image,
             (SELECT COUNT(user_statistic_user_id) AS stats_users FROM `" . USERS_STATISTICS . "`) AS stats_users
             FROM " . PLANETS . " AS p
@@ -354,6 +354,100 @@ class UsersLib extends XGPCore
                 );
             }
         }
+    }
+    
+    /**
+     * createUserWithOptions
+     *
+     * @param array   $data        The data as an array
+     * @param boolean $full_insert Insert all the required tables
+     *
+     * @return void
+     */
+    public function createUserWithOptions($data, $full_insert = true)
+    {
+        if (is_array($data)) {
+            
+            $insert_query   = 'INSERT INTO ' . USERS . ' SET ';
+            
+            foreach ($data as $column => $value) {
+                $insert_query .= "`" . $column . "` = '" . $value . "', ";
+            }
+                
+            // Remove last comma
+            $insert_query   = substr_replace($insert_query, '', -2) . ';';
+            
+            parent::$db->query($insert_query);
+            
+            // insert extra required tables
+            if ($full_insert) {
+
+                // get the last inserted user id
+                $user_id  = parent::$db->insertId();
+                
+                // create the buildings, defenses and ships tables
+                self::createPremium($user_id);
+                self::createResearch($user_id);
+                self::createSettings($user_id);
+                self::createUserStatistics($user_id);
+            }
+        }
+    }
+    
+    /**
+     * createPremium
+     * 
+     * @param type $user_id The user id
+     * 
+     * @return void
+     */
+    public function createPremium($user_id)
+    {
+        parent::$db->query(
+            "INSERT INTO " . PREMIUM . " SET `premium_user_id` = '" . $user_id . "';"
+        );
+    }
+    
+    /**
+     * createResearch
+     * 
+     * @param type $user_id The user id
+     * 
+     * @return void
+     */
+    public function createResearch($user_id)
+    {
+        parent::$db->query(
+            "INSERT INTO " . RESEARCH . " SET `research_user_id` = '" . $user_id . "';"
+        );
+    }
+    
+    /**
+     * createSettings
+     * 
+     * @param type $user_id The user id
+     * 
+     * @return void
+     */
+    public function createSettings($user_id)
+    {
+        parent::$db->query(
+            "INSERT INTO " . SETTINGS . " SET `setting_user_id` = '" . $user_id . "';"
+        );
+    }
+    
+    /**
+     * createUserStatistics
+     * 
+     * @param type $user_id The user id
+     * 
+     * @return void
+     */
+    public function createUserStatistics($user_id)
+    {
+        parent::$db->query(
+            "INSERT INTO " . USERS_STATISTICS . " SET `user_statistic_user_id` = '" . $user_id . "';"
+        );
     }
 }
 

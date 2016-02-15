@@ -21,7 +21,7 @@ require XGP_ROOT . 'application/core/common.php';
 
 $hooks->call_hook('before_page');
 
-$page   = isset($_GET['page']) ? $_GET['page'] : null;
+$page   = isset($_GET['page']) ? $_GET['page'] : FunctionsLib::redirect('game.php?page=overview');
 
 // some replacements to adapt the pages
 $page   = strtr(
@@ -57,13 +57,12 @@ if (isset($page)) {
     }
 }
 
-if ($page == null) {
-    
-    if (!$hooks->call_hook('new_page')) {
-        FunctionsLib::redirect('game.php?page=overview');
-    }
+// call hooks
+if (!$hooks->call_hook('new_page')) {
+    FunctionsLib::redirect('game.php?page=overview');
 }
 
+// any other case
 FunctionsLib::redirect('game.php?page=overview');
 
 /* end of game.php */

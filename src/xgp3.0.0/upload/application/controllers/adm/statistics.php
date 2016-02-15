@@ -30,8 +30,8 @@ use application\libraries\FunctionsLib;
  */
 class Statistics extends XGPCore
 {
-    private $_lang;
-    private $_current_user;
+    private $langs;
+    private $current_user;
 
     /**
      * __construct()
@@ -41,16 +41,19 @@ class Statistics extends XGPCore
         parent::__construct();
 
         // check if session is active
-        parent::$users->checkSession();
+        AdministrationLib::checkSession();
 
-        $this->_lang = parent::$lang;
-        $this->_current_user = parent::$users->getUserData();
+        $this->langs        = parent::$lang;
+        $this->current_user = parent::$users->getUserData();
 
         // Check if the user is allowed to access
-        if (AdministrationLib::haveAccess($this->_current_user['user_authlevel']) && AdministrationLib::authorization($this->_current_user['user_authlevel'], 'config_game') == 1) {
-            $this->build_page();
+        if (AdministrationLib::haveAccess($this->current_user['user_authlevel'])
+            && AdministrationLib::authorization($this->current_user['user_authlevel'], 'config_game') == 1) {
+
+            $this->buildPage();
         } else {
-            die(FunctionsLib::message($this->_lang['ge_no_permissions']));
+
+            die(AdministrationLib::noAccessMessage($this->langs['ge_no_permissions']));
         }
     }
 
@@ -69,54 +72,75 @@ class Statistics extends XGPCore
      * param
      * return main method, loads everything
      */
-    private function build_page()
+    private function buildPage()
     {
-        $game_stat = FunctionsLib::readConfig('stat');
-        $game_stat_level = FunctionsLib::readConfig('stat_level');
-        $game_stat_settings = FunctionsLib::readConfig('stat_settings');
-        $game_stat_update_time = FunctionsLib::readConfig('stat_update_time');
-        $this->_lang['alert'] = '';
+        $game_stat_level        = FunctionsLib::readConfig('stat_admin_level');
+        $game_stat_settings     = FunctionsLib::readConfig('stat_points');
+        $game_stat_update_time  = FunctionsLib::readConfig('stat_update_time');
+        $this->langs['alert']   = '';
 
-        if (isset($_POST['save']) && ( $_POST['save'] == $this->_lang['cs_save_changes'] )) {
-            if (isset($_POST['stat']) && $_POST['stat'] != $game_stat) {
-                FunctionsLib::updateConfig('stat', $_POST['stat']);
+        if (isset($_POST['save']) && ($_POST['save'] == $this->langs['cs_save_changes'])) {
 
-                $game_stat = $_POST['stat'];
-                $ASD3 = $_POST['stat'];
+            if (isset($_POST['stat_admin_level']) && is_numeric($_POST['stat_admin_level']) && $_POST['stat_admin_level'] != $game_stat_level) {
+
+                FunctionsLib::updateConfig('stat_admin_level', $_POST['stat_admin_level']);
+
+                $game_stat_level    = $_POST['stat_admin_level'];
+                $ASD1               = $_POST['stat_admin_level'];
             }
 
-            if (isset($_POST['stat_level']) && is_numeric($_POST['stat_level']) && $_POST['stat_level'] != $game_stat_level) {
-                FunctionsLib::updateConfig('stat_level', $_POST['stat_level']);
+            if (isset($_POST['stat_points']) && is_numeric($_POST['stat_points']) && $_POST['stat_points'] != $game_stat_settings) {
+                FunctionsLib::updateConfig('stat_points', $_POST['stat_points']);
 
-                $game_stat_level = $_POST['stat_level'];
-                $ASD1 = $_POST['stat_level'];
-            }
-
-            if (isset($_POST['stat_settings']) && is_numeric($_POST['stat_settings']) && $_POST['stat_settings'] != $game_stat_settings) {
-                FunctionsLib::updateConfig('stat_settings', $_POST['stat_settings']);
-
-                $game_stat_settings = $_POST['stat_settings'];
+                $game_stat_settings = $_POST['stat_points'];
             }
 
             if (isset($_POST['stat_update_time']) && is_numeric($_POST['stat_update_time']) && $_POST['stat_update_time'] != $game_stat_update_time) {
+
                 FunctionsLib::updateConfig('stat_update_time', $_POST['stat_update_time']);
 
-                $game_stat_update_time = $_POST['stat_update_time'];
+                $game_stat_update_time  = $_POST['stat_update_time'];
             }
 
-            $this->_lang['alert'] = AdministrationLib::saveMessage('ok', $this->_lang['cs_all_ok_message']);
+            $this->langs['alert']   = AdministrationLib::saveMessage('ok', $this->langs['cs_all_ok_message']);
         }
 
-        $selected = "selected=\"selected\"";
-        $stat = ( ( $game_stat == 1 ) ? 'sel_sta1' : 'sel_sta0' );
-        $this->_lang[$stat] = $selected;
-        $this->_lang['stat_level'] = $game_stat_level;
-        $this->_lang['stat_settings'] = $game_stat_settings;
-        $this->_lang['stat_update_time'] = $game_stat_update_time;
-        $this->_lang['yes'] = $this->_lang['cs_yes'][1];
-        $this->_lang['no'] = $this->_lang['cs_no'][0];
+        $this->langs['stat_admin_level']    = $game_stat_level;
+        $this->langs['stat_points']         = $game_stat_settings;
+        $this->langs['stat_update_time']    = $game_stat_update_time;
+        $this->langs['yes']                 = $this->langs['cs_yes'][1];
+        $this->langs['no']                  = $this->langs['cs_no'][0];
+        $this->langs['admin_levels']        = $this->adminLevels($game_stat_level);
+        
+        parent::$page->display(
+            parent::$page->parseTemplate(parent::$page->getTemplate('adm/statistics_view'),
+            $this->langs)
+        );
+    }
+    
+    /**
+     * adminLevels
+     * 
+     * @param string $selected Selected level
+     * 
+     * @return string
+     */
+    private function adminLevels($selected)
+    {
+        $options    = '';
 
-        parent::$page->display(parent::$page->parseTemplate(parent::$page->getTemplate('adm/statistics_view'), $this->_lang));
+        foreach ($this->langs['user_level'] as $id => $name) {
+
+            if ($selected == $id) {
+                $sel    = 'selected="selected"';
+            } else {
+                $sel    = '';
+            }
+            
+            $options    .= '<option value="' . $id . '" ' . $sel . '>' . $name . '</option>\n';
+        }
+        
+        return $options;
     }
 }
 

@@ -24,6 +24,9 @@ define('SYSTEM_VERSION', '3.0.0');
 // HOOKS
 define('HOOKS_ENABLED', false);
 
+// RUN QUERIES FLAG
+define('ADMIN_ACCESS_QUERY', true);
+
 // GLOBAL PATHS
 define('APP_PATH', 'application/');
 define('PUBLIC_PATH', 'public/');

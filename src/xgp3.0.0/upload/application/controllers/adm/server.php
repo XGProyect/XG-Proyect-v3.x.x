@@ -44,7 +44,7 @@ class Server extends XGPCore
         parent::__construct();
 
         // check if session is active
-        parent::$users->checkSession();
+        AdministrationLib::checkSession();
 
         $this->_lang = parent::$lang;
         $this->_current_user = parent::$users->getUserData();
@@ -55,7 +55,7 @@ class Server extends XGPCore
 
             $this->build_page();
         } else {
-            die(FunctionsLib::message($this->_lang['ge_no_permissions']));
+            die(AdministrationLib::noAccessMessage($this->_lang['ge_no_permissions']));
         }
     }
 

@@ -368,6 +368,10 @@ class Attack extends Missions
      */
     private function getPlayerGroupFromQuery($result, $target_user = false)
     {
+        if ($result == null) {
+            return;
+        }
+        
         $playerGroup    = new PlayerGroup();
         
         while ($fleet_row = parent::$db->fetchAssoc($result)) {
@@ -467,8 +471,8 @@ class Attack extends Missions
         // $size and $fields
         extract($moon);
 
-        $_creator   = FunctionsLib::loadLibrary('CreatorLib');
-        $_creator->createMoon($galaxy, $system, $planet, $target_userId, $moonName, '', $size);
+        $_creator   = FunctionsLib::loadLibrary('PlanetLib');
+        $_creator->setNewMoon($galaxy, $system, $planet, $target_userId, $moonName, '', $size);
     }
 
     /**
@@ -756,7 +760,7 @@ class Attack extends Missions
 
         // Updating defenses and ships on planet
         parent::$db->query(
-            "UPDATE `" . PLANETS . "`, `" . SHIPS . "`  SET
+            "UPDATE `" . PLANETS . "`, `" . SHIPS . "`, `" . DEFENSES . "`  SET
             " . $fleetArray. "
             `planet_metal` = `planet_metal` -  " . $steal['metal'] . ",
             `planet_crystal` = `planet_crystal` -  " . $steal['crystal'] . ",

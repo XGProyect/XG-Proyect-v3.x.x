@@ -36,7 +36,7 @@
 		</td>
 	</tr>
 	<tr>
-		<td>{us_user_main_destruyed}</td>
+		<td>{us_user_main_destroyed}</td>
 		<td>
 			<select name="planet_destroyed">
 				<option value="1"{dest1}>{us_user_main_planet_destroyed_yes}</option>
@@ -122,10 +122,10 @@
 		<td><input type="text" name="planet_deuterium_max" value="{planet_deuterium_max}"></td>
 	</tr>
 	<tr>
-		<td>{us_user_main_ship_solar_satellite_porcent}</td>
+		<td>{us_user_main_ship_solar_satellite_percent}</td>
 		<td>
-			<select name="planet_ship_solar_satellite_porcent">
-				{planet_ship_solar_satellite_porcent}
+			<select name="planet_ship_solar_satellite_percent">
+				{planet_ship_solar_satellite_percent}
 			</select>
 		</td>
 	</tr>

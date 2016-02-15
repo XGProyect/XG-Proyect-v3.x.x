@@ -143,7 +143,7 @@ class Infos extends XGPCore
             $GateTPL = parent::$page->getTemplate('infos/info_gate_table');
 
             if ($_POST) {
-                FunctionsLib::message($this->DoFleetJump(), "game.php?page=infos&gid=43", 2);
+                FunctionsLib::message($this->doFleetJump(), "game.php?page=infos&gid=43", 2);
             }
         } elseif ($this->_element_id == 124) {
             $PageTPL = parent::$page->getTemplate('infos/info_buildings_table');
@@ -296,8 +296,8 @@ class Infos extends XGPCore
 
     private function GetNextJumpWaitTime($CurMoon)
     {
-        $JumpGateLevel = $CurMoon[$this->_resource[43]];
-        $LastJumpTime = $CurMoon['planet_last_jump_time'];
+        $JumpGateLevel  = $CurMoon[$this->_resource[43]];
+        $LastJumpTime   = $CurMoon['planet_last_jump_time'];
         if ($JumpGateLevel > 0) {
             $WaitBetweenJmp = (60 * 60) * (1 / $JumpGateLevel);
             $NextJumpTime = $LastJumpTime + $WaitBetweenJmp;
@@ -317,79 +317,109 @@ class Infos extends XGPCore
 
         return $RetValue;
     }
-
-    private function DoFleetJump()
+    
+    /**
+     * doFleetJump
+     * 
+     * @return string
+     */
+    private function doFleetJump()
     {
         if ($_POST) {
-            $RestString = $this->GetNextJumpWaitTime();
-            $NextJumpTime = $RestString['value'];
-            $JumpTime = time();
+
+            $RestString     = $this->GetNextJumpWaitTime($this->_current_planet);
+            $NextJumpTime   = $RestString['value'];
+            $JumpTime       = time();
 
             if ($NextJumpTime == 0) {
-                $TargetPlanet = $_POST['jmpto'];
-                $TargetGate = parent::$db->queryFetch("SELECT p.`planet_id`, b.`building_jump_gate`, p.`planet_last_jump_time`
-                												FROM `" . PLANETS . "` AS p
-                												INNER JOIN `" . BUILDINGS . "` AS b ON b.`building_planet_id` = p.`planet_id`
-                												WHERE p.`planet_id` = '" . $TargetPlanet . "';");
 
-                if ($TargetGate['sprungtor'] > 0) {
-                    $RestString = $this->GetNextJumpWaitTime($TargetGate);
-                    $NextDestTime = $RestString['value'];
+                $TargetPlanet   = isset($_POST['jmpto']) ? $_POST['jmpto'] : '';
+                
+                if (!is_int($TargetPlanet)) {
+                    $RetMessage = $this->_lang['in_jump_gate_error_data'];
+                }
+                
+                $TargetGate     = parent::$db->queryFetch(
+                    "SELECT p.`planet_id`, b.`building_jump_gate`, p.`planet_last_jump_time`
+                    FROM `" . PLANETS . "` AS p
+                    INNER JOIN `" . BUILDINGS . "` AS b ON b.`building_planet_id` = p.`planet_id`
+                    WHERE p.`planet_id` = '" . $TargetPlanet . "';"
+                );
+
+                if ($TargetGate['building_jump_gate'] > 0) {
+
+                    $RestString     = $this->GetNextJumpWaitTime($TargetGate);
+                    $NextDestTime   = $RestString['value'];
 
                     if ($NextDestTime == 0) {
-                        $ShipArray = array();
-                        $SubQueryOri = "";
-                        $SubQueryDes = "";
+
+                        $ShipArray      = array();
+                        $SubQueryOri    = '';
+                        $SubQueryDes    = '';
 
                         for ($Ship = 200; $Ship < 300; $Ship++) {
-                            $ShipLabel = "c" . $Ship;
-                            $gemi_kontrol = $_POST[$ShipLabel];
+
+                            $ShipLabel      = "c" . $Ship;
+                            $gemi_kontrol   = $_POST[$ShipLabel];
 
                             if (is_numeric($gemi_kontrol)) {
+
                                 if ($gemi_kontrol > $this->_current_planet[$this->_resource[$Ship]]) {
-                                    $ShipArray[$Ship] = $this->_current_planet[$this->_resource[$Ship]];
+
+                                    $ShipArray[$Ship]   = $this->_current_planet[$this->_resource[$Ship]];
                                 } else {
-                                    $ShipArray[$Ship] = $gemi_kontrol;
+
+                                    $ShipArray[$Ship]   = $gemi_kontrol;
                                 }
 
 
                                 if ($ShipArray[$Ship] > 0) {
+
                                     $SubQueryOri .= "`" . $this->_resource[$Ship] . "` = `" . $this->_resource[$Ship] . "` - '" . $ShipArray[$Ship] . "', ";
                                     $SubQueryDes .= "`" . $this->_resource[$Ship] . "` = `" . $this->_resource[$Ship] . "` + '" . $ShipArray[$Ship] . "', ";
                                 }
                             }
                         }
                         if ($SubQueryOri != "") {
-                            parent::$db->query("UPDATE " . PLANETS . " SET
-                            						$SubQueryOri
-                            						`planet_last_jump_time` = '" . $JumpTime . "'
-                            						WHERE `planet_id` = '" . $this->_current_planet['planet_id'] . "';");
 
-                            parent::$db->query("UPDATE " . PLANETS . " SET
-                            						$SubQueryDes
-                            						`planet_last_jump_time` = '" . $JumpTime . "
-                            						WHERE `planet_id` = '" . $TargetGate['id'] . "';");
+                            parent::$db->query(
+                                "UPDATE " . PLANETS . ", " . USERS . " SET
+                                    $SubQueryOri
+                                    `planet_last_jump_time` = '" . $JumpTime . "',
+                                    `user_current_planet` = '" . $TargetGate['id'] . "'
+                                WHERE `planet_id` = '" . $this->_current_planet['planet_id'] . "' 
+                                    AND `user_id` = '" . $this->_current_user['user_id'] . "';"
+                            );
 
-                            parent::$db->query("UPDATE " . USERS . " SET
-                            						`user_current_planet` = '" . $TargetGate['id'] . "'
-                            						WHERE `user_id` = '" . $this->_current_user['user_id'] . "'");
+                            parent::$db->query(
+                                "UPDATE " . PLANETS . " SET
+                                $SubQueryDes
+                                `planet_last_jump_time` = '" . $JumpTime . "
+                                WHERE `planet_id` = '" . $TargetGate['id'] . "';"
+                            );
 
                             $this->_current_planet['planet_last_jump_time'] = $JumpTime;
+
                             $RestString = $this->GetNextJumpWaitTime($this->_current_planet);
                             $RetMessage = $this->_lang['in_jump_gate_done'] . $RestString['string'];
                         } else {
+
                             $RetMessage = $this->_lang['in_jump_gate_error_data'];
                         }
                     } else {
+
                         $RetMessage = $this->_lang['in_jump_gate_not_ready_target'] . $RestString['string'];
                     }
                 } else {
+
                     $RetMessage = $this->_lang['in_jump_gate_doesnt_have_one'];
                 }
             } else {
+
                 $RetMessage = $this->_lang['in_jump_gate_already_used'] . $RestString['string'];
             }
         } else {
+
             $RetMessage = $this->_lang['in_jump_gate_error_data'];
         }
 
@@ -402,7 +432,7 @@ class Infos extends XGPCore
         $CurrIdx = 1;
         $Result = "";
         for ($Ship = 200; $Ship < 250; $Ship++) {
-            if ($this->_resource[$Ship] != "") {
+            if (isset($this->_resource[$Ship]) && $this->_resource[$Ship] != '') {
                 if ($this->_current_planet[$this->_resource[$Ship]] > 0) {
                     $bloc['idx'] = $CurrIdx;
                     $bloc['fleet_id'] = $Ship;
@@ -419,11 +449,15 @@ class Infos extends XGPCore
 
     private function BuildJumpableMoonCombo()
     {
-        $MoonList = parent::$db->query("SELECT *
-        											FROM " . PLANETS . "
-        											WHERE `planet_type` = '3' AND
-        													`planet_user_id` = '" . $this->_current_user['user_id'] . "';");
-        $Combo = "";
+        $MoonList = parent::$db->query(
+            "SELECT *
+            FROM `" . PLANETS . "` AS m
+            INNER JOIN `" . BUILDINGS . "` AS b ON b.building_planet_id = m.planet_id
+            WHERE m.`planet_type` = '3' AND
+                m.`planet_user_id` = '" . $this->_current_user['user_id'] . "';"
+        );
+        
+        $Combo  = "";
 
         while ($CurMoon = parent::$db->fetchAssoc($MoonList)) {
             if ($CurMoon['planet_id'] != $this->_current_planet['planet_id']) {
@@ -459,7 +493,7 @@ class Infos extends XGPCore
 
     private function ShowProductionTable($Template)
     {
-        $BuildLevelFactor = $this->_current_planet['planet_' . $this->_resource[$this->_element_id] . '_porcent'];
+        $BuildLevelFactor = $this->_current_planet['planet_' . $this->_resource[$this->_element_id] . '_percent'];
         $BuildTemp = $this->_current_planet['planet_temp_max'];
         $CurrentBuildtLvl = $this->_current_planet[$this->_resource[$this->_element_id]];
         $BuildLevel = ($CurrentBuildtLvl > 0) ? $CurrentBuildtLvl : 1;

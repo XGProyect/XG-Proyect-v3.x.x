@@ -45,17 +45,17 @@ class Maker extends XGPCore
         parent::__construct();
 
         // check if session is active
-        parent::$users->checkSession();
+        AdministrationLib::checkSession();
 
         $this->_lang = parent::$lang;
-        $this->_creator = FunctionsLib::loadLibrary('CreatorLib');
+        $this->_creator = FunctionsLib::loadLibrary('PlanetLib');
         $this->_current_user = parent::$users->getUserData();
 
         // Check if the user is allowed to access
         if (AdministrationLib::haveAccess($this->_current_user['user_authlevel']) && AdministrationLib::authorization($this->_current_user['user_authlevel'], 'edit_users') == 1) {
             $this->build_page();
         } else {
-            die(FunctionsLib::message($this->_lang['ge_no_permissions']));
+            die(AdministrationLib::noAccessMessage($this->_lang['ge_no_permissions']));
         }
     }
 
@@ -208,40 +208,42 @@ class Maker extends XGPCore
                     $planet = $moon_planet['planet_planet'];
                     $owner = $moon_planet['planet_user_id'];
 
-                    if ($_POST['diameter_check'] == 'on') {
+                    if (isset($_POST['diameter_check']) && $_POST['diameter_check'] == 'on') {
                         $size = mt_rand(4500, 9999);
                     }
 
-                    if ($_POST['diameter_check'] != 'on' && is_numeric($diameter)) {
+                    if (isset($_POST['diameter_check']) && $_POST['diameter_check'] != 'on' && is_numeric($diameter)) {
                         $size = $diameter;
                     } else {
                         $this->_alert = AdministrationLib::saveMessage('warning', $this->_lang['mk_moon_only_numbers']);
                     }
 
 
-                    if ($_POST['temp_check'] == 'on') {
+                    if (isset($_POST['temp_check']) && $_POST['temp_check'] == 'on') {
                         $maxtemp = $moon_planet['planet_temp_max'] - mt_rand(10, 45);
                         $mintemp = $moon_planet['planet_temp_min'] - mt_rand(10, 45);
-                    } elseif ($_POST['temp_check'] != 'on' && is_numeric($temp_max) && is_numeric($temp_min)) {
+                    } elseif (isset($_POST['temp_check']) && $_POST['temp_check'] != 'on' && is_numeric($temp_max) && is_numeric($temp_min)) {
                         $maxtemp = $temp_max;
                         $mintemp = $temp_min;
                     } else {
                         $this->_alert = AdministrationLib::saveMessage('warning', $this->_lang['mk_moon_only_numbers']);
                     }
 
-                    parent::$db->query("INSERT INTO " . PLANETS . " SET
-											`planet_name` = '" . $moon_name . "',
-											`planet_user_id` = '" . $owner . "',
-											`planet_galaxy` = '" . $galaxy . "',
-											`planet_system` = '" . $system . "',
-											`planet_planet` = '" . $planet . "',
-											`planet_last_update` = '" . time() . "',
-											`planet_type` = '3',
-											`planet_image` = 'mond',
-											`planet_diameter` = '" . $size . "',
-											`planet_field_max` = '" . $max_fields . "',
-											`planet_temp_min` = '" . $mintemp . "',
-											`planet_temp_max` = '" . $maxtemp . "';");
+                    parent::$db->query(
+                        "INSERT INTO " . PLANETS . " SET
+                        `planet_name` = '" . $moon_name . "',
+                        `planet_user_id` = '" . $owner . "',
+                        `planet_galaxy` = '" . $galaxy . "',
+                        `planet_system` = '" . $system . "',
+                        `planet_planet` = '" . $planet . "',
+                        `planet_last_update` = '" . time() . "',
+                        `planet_type` = '3',
+                        `planet_image` = 'mond',
+                        `planet_diameter` = '" . $size . "',
+                        `planet_field_max` = '" . $max_fields . "',
+                        `planet_temp_min` = '" . $mintemp . "',
+                        `planet_temp_max` = '" . $maxtemp . "';"
+                    );
 
                     $last_id = parent::$db->insertId();
 
@@ -315,7 +317,7 @@ class Maker extends XGPCore
                         $name = $this->_lang['mk_planet_default_name'];
                     }
 
-                    $this->_creator->createPlanet($galaxy, $system, $planet, $user_id, '', '', false);
+                    $this->_creator->setNewPlanet($galaxy, $system, $planet, $user_id, '', '', false);
 
                     parent::$db->query("UPDATE " . PLANETS . " SET
 											`planet_field_max` = '" . $field_max . "',
@@ -433,7 +435,7 @@ class Maker extends XGPCore
 
                 $last_user_id = parent::$db->insertId();
 
-                $this->_creator->createPlanet($galaxy, $system, $planet, $last_user_id, '', true);
+                $this->_creator->setNewPlanet($galaxy, $system, $planet, $last_user_id, '', true);
 
                 $last_planet_id = parent::$db->insertId();
 

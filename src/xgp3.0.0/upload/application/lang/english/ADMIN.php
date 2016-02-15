@@ -1,5 +1,11 @@
 <?php
 
+// LOGIN
+$lang['lg_email_label']                                                                         = 'Email';
+$lang['lg_psw_label']                                                                           = 'Password';
+$lang['lg_signin_btn']                                                                          = 'Login';
+$lang['lg_error_wrong_data']                                                                    = 'The email or password is invalid.';
+
 // GENERAL
 $lang['gn_error_title']										= 'Alert!';
 $lang['gn_warning_title']									= 'Warning!';
@@ -246,8 +252,7 @@ $lang['cs_point_per_resources_used']						= 'One point equals';
 $lang['cs_resources']										= 'resources';
 $lang['cs_time_between_updates']							= 'Time between updates';
 $lang['cs_minutes']											= 'minutes';
-$lang['cs_points_to_zero']									= 'Administrators can appear on the statistics?';
-$lang['cs_access_lvl']										= 'Until which rank?';
+$lang['cs_access_lvl']										= 'Until which rank can be shown in the rank page?';
 $lang['cs_save_changes']									= 'Save changes';
 $lang['cs_all_ok_message']									= 'Changes saved successfully!';
 $lang['cs_yes']												= 'Yes';
@@ -296,7 +301,7 @@ $lang['ia_database_server']									= 'MySQL version';
 // DB ERRORS
 $lang['er_error_list']										= 'DB errors';
 $lang['er_dlte_all']										= 'Delete all';
-$lang['er_user_id']											= 'User (ID)';
+$lang['er_user_id']											= 'User (IP)';
 $lang['er_type']											= 'Type';
 $lang['er_data']											= 'Date';
 $lang['er_track']											= 'Line / Class / File';
@@ -522,6 +527,8 @@ $lang['us_user_premium_active_until']						= 'Active until ';
 $lang['us_user_planets']									= '"%s" planets';
 $lang['us_user_planets_header']								= 'Planet / Image / Moon';
 $lang['us_user_planets_actions']							= 'Actions';
+$lang['us_user_planets_destroyed']							= 'Destroyed';
+$lang['us_user_planets_destroyed_short']							= 'D';
 $lang['us_user_moon_title']									= '%s (Moon)';
 $lang['us_user_planets_edit']								= 'Edit planet';
 $lang['us_user_buildings_edit']								= 'Edit buildings';
@@ -530,6 +537,8 @@ $lang['us_user_defenses_edit']								= 'Edit defenses';
 $lang['us_user_add_moon']									= 'Add Moon';
 $lang['us_user_delete_planet']								= 'Delete planet and moon';
 $lang['us_user_delete_moon']								= 'Delete Moon';
+$lang['us_user_delete_pm_soft']								= '(Soft)';
+$lang['us_user_delete_pm_physical']                                                     = '(Physical)';
 $lang['us_user_moons']										= '"%s" moons';
 $lang['us_user_moons_header']								= 'Moon / Image';
 $lang['us_user_moons_actions']								= 'Actions';
@@ -543,7 +552,7 @@ $lang['us_user_main_last_update']							= 'Last access';
 $lang['us_user_main_planet_type']							= 'Planet type';
 $lang['us_user_main_planet']								= 'Planet';
 $lang['us_user_main_moon']									= 'Moon';
-$lang['us_user_main_destruyed']								= 'Status';
+$lang['us_user_main_destroyed']								= 'Status';
 $lang['us_user_main_planet_destroyed_yes']					= 'Yes';
 $lang['us_user_main_planet_destroyed_no']					= 'No';
 $lang['us_user_main_b_building']							= 'Building time';
@@ -569,12 +578,12 @@ $lang['us_user_main_deuterium_perhour']						= 'Deuterium per hour';
 $lang['us_user_main_deuterium_max']							= 'Maximum Deuterium';
 $lang['us_user_main_energy_used']							= 'Energy used';
 $lang['us_user_main_energy_max']							= 'Maximum energy';
-$lang['us_user_main_building_metal_mine_porcent']			= '% metal production';
-$lang['us_user_main_building_crystal_mine_porcent']			= '% crystal production';
-$lang['us_user_main_building_deuterium_sintetizer_porcent']	= '% deuterium production';
-$lang['us_user_main_building_solar_plant_porcent']			= '% solar plant production';
-$lang['us_user_main_building_fusion_reactor_porcent']		= '% fusion reactor production';
-$lang['us_user_main_ship_solar_satellite_porcent']			= '% solar satellite production';
+$lang['us_user_main_building_metal_mine_percent']			= '% metal production';
+$lang['us_user_main_building_crystal_mine_percent']			= '% crystal production';
+$lang['us_user_main_building_deuterium_sintetizer_percent']	= '% deuterium production';
+$lang['us_user_main_building_solar_plant_percent']			= '% solar plant production';
+$lang['us_user_main_building_fusion_reactor_percent']		= '% fusion reactor production';
+$lang['us_user_main_ship_solar_satellite_percent']			= '% solar satellite production';
 $lang['us_user_main_last_jump_time']						= 'Last jump';
 $lang['us_user_main_reset']									= 'Reset jump';
 $lang['us_user_main_planet_debris_metal']					= 'Metal debris';

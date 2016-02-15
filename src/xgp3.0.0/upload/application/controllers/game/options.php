@@ -79,12 +79,12 @@ class Options extends XGPCore
                 parent::$db->query("UPDATE " . SETTINGS . ", " . PLANETS . " SET
 										`setting_vacations_status` = '0',
 										`setting_vacations_until` = '0',
-										planet_building_metal_mine_porcent = '10',
-										planet_building_crystal_mine_porcent = '10',
-										planet_building_deuterium_sintetizer_porcent = '10',
-										planet_building_solar_plant_porcent = '10',
-										planet_building_fusion_reactor_porcent = '10',
-										planet_ship_solar_satellite_porcent = '10'
+										planet_building_metal_mine_percent = '10',
+										planet_building_crystal_mine_percent = '10',
+										planet_building_deuterium_sintetizer_percent = '10',
+										planet_building_solar_plant_percent = '10',
+										planet_building_fusion_reactor_percent = '10',
+										planet_ship_solar_satellite_percent = '10'
 										WHERE `setting_user_id` = '" . intval($this->_current_user['user_id']) . "' AND planet_user_id = '" . intval($this->_current_user['user_id']) . "'");
 
                 FunctionsLib::redirect('game.php?page=options');
@@ -173,12 +173,12 @@ class Options extends XGPCore
 										planet_deuterium_perhour = '" . FunctionsLib::readConfig('deuterium_basic_income') . "',
 										planet_energy_used = '0',
 										planet_energy_max = '0',
-										planet_building_metal_mine_porcent = '0',
-										planet_building_crystal_mine_porcent = '0',
-										planet_building_deuterium_sintetizer_porcent = '0',
-										planet_building_solar_plant_porcent = '0',
-										planet_building_fusion_reactor_porcent = '0',
-										planet_ship_solar_satellite_porcent = '0'
+										planet_building_metal_mine_percent = '0',
+										planet_building_crystal_mine_percent = '0',
+										planet_building_deuterium_sintetizer_percent = '0',
+										planet_building_solar_plant_percent = '0',
+										planet_building_fusion_reactor_percent = '0',
+										planet_ship_solar_satellite_percent = '0'
 										WHERE `setting_user_id` = '" . intval($this->_current_user['user_id']) . "' AND planet_user_id = '" . intval($this->_current_user['user_id']) . "'");
             } else {
                 $urlaubs_modus = '0';
@@ -234,7 +234,8 @@ class Options extends XGPCore
 											WHERE `user_id` = '" . $this->_current_user['user_id'] . "'
 											LIMIT 1");
 
-                    FunctionsLib::message($this->_lang['op_username_changed'], "index.php", 1);
+                    $_SESSION['user_name']  = parent::$db->escapeValue($username);
+                    FunctionsLib::message($this->_lang['op_username_changed'], "game.php?page=options", 1);
                 }
             }
             FunctionsLib::message($this->_lang['op_options_changed'], "game.php?page=options", 1);

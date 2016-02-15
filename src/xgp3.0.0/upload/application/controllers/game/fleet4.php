@@ -111,17 +111,21 @@ class Fleet4 extends XGPCore
             $_POST['mission'] = 1;
         }
 
-        $TargetPlanet = parent::$db->queryFetch("SELECT `planet_user_id`,`planet_destroyed`
-															FROM `" . PLANETS . "`
-															 WHERE `planet_galaxy` = '" . (int) $_POST['galaxy'] . "' AND
-															 		`planet_system` = '" . (int) $_POST['system'] . "' AND
-															 		`planet_planet` = '" . (int) $_POST['planet'] . "' AND
-															 		`planet_type` = '" . (int) $_POST['planettype'] . "';");
+        $TargetPlanet = parent::$db->queryFetch(
+            "SELECT `planet_user_id`,`planet_destroyed`
+            FROM `" . PLANETS . "`
+             WHERE `planet_galaxy` = '" . (int) $_POST['galaxy'] . "' AND
+                            `planet_system` = '" . (int) $_POST['system'] . "' AND
+                            `planet_planet` = '" . (int) $_POST['planet'] . "' AND
+                            `planet_type` = '" . (int) $_POST['planettype'] . "';"
+        );
 
-        $MyDBRec = parent::$db->queryFetch("SELECT u.`user_id`, u.`user_onlinetime`, u.`user_ally_id`, s.`setting_vacations_status`
-															FROM " . USERS . " AS u, " . SETTINGS . " AS s
-															WHERE u.`user_id` = '" . $this->_current_user['user_id'] . "'
-																AND s.`setting_user_id` = '" . $this->_current_user['user_id'] . "';");
+        $MyDBRec = parent::$db->queryFetch(
+            "SELECT u.`user_id`, u.`user_onlinetime`, u.`user_ally_id`, s.`setting_vacations_status`
+            FROM " . USERS . " AS u, " . SETTINGS . " AS s
+            WHERE u.`user_id` = '" . $this->_current_user['user_id'] . "'
+                    AND s.`setting_user_id` = '" . $this->_current_user['user_id'] . "';"
+        );
 
         $fleetarray = unserialize(base64_decode(str_rot13($_POST['usedfleet'])));
 
@@ -248,10 +252,12 @@ class Fleet4 extends XGPCore
         if ($TargetPlanet['planet_user_id'] == '') {
             $HeDBRec = $MyDBRec;
         } elseif ($TargetPlanet['planet_user_id'] != '') {
-            $HeDBRec = parent::$db->queryFetch("SELECT u.`user_id`, u.`user_onlinetime`, u.`user_ally_id`, s.`setting_vacations_status`
-														FROM " . USERS . " AS u, " . SETTINGS . " AS s
-														WHERE u.`user_id` = '" . $TargetPlanet['planet_user_id'] . "'
-															AND s.`setting_user_id` ='" . $TargetPlanet['planet_user_id'] . "';");
+            $HeDBRec = parent::$db->queryFetch(
+                "SELECT u.`user_id`, u.`user_authlevel`, u.`user_onlinetime`, u.`user_ally_id`, s.`setting_vacations_status`
+                FROM " . USERS . " AS u, " . SETTINGS . " AS s
+                WHERE u.`user_id` = '" . $TargetPlanet['planet_user_id'] . "'
+                        AND s.`setting_user_id` ='" . $TargetPlanet['planet_user_id'] . "';"
+            );
         }
 
         $user_points = $this->_noob->returnPoints($MyDBRec['user_id'], $HeDBRec['user_id']);
@@ -474,7 +480,7 @@ class Fleet4 extends XGPCore
             FunctionsLib::message("<font color=\"red\"><b>" . $this->_lang['fl_no_enought_cargo_capacity'] . FormatLib::prettyNumber($StorageNeeded - $FleetStorage) . "</b></font>", "game.php?page=movement", 2);
         }
 
-        if (FunctionsLib::readConfig('adm_attack') != 0) {
+        if (FunctionsLib::readConfig('adm_attack') != 0 && $HeDBRec['user_authlevel'] >= 1 && $this->_current_user['user_authlevel'] == 0) {
             FunctionsLib::message($this->_lang['fl_admins_cannot_be_attacked'], "game.php?page=movement", 2);
         }
 

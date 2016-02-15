@@ -43,7 +43,7 @@ class Register extends XGPCore
 
 		if ( FunctionsLib::readConfig ( 'reg_enable' ) == 1 )
 		{
-			$this->_creator	= FunctionsLib::loadLibrary ( 'CreatorLib' );
+			$this->_creator	= FunctionsLib::loadLibrary('PlanetLib');
 
 			$this->build_page();
 		}
@@ -175,7 +175,7 @@ class Register extends XGPCore
 
 					if ( ! $planet_row )
 					{
-						$this->_creator->createPlanet ( $galaxy , $system , $planet , $user_id , '' , true );
+						$this->_creator->setNewPlanet($galaxy, $system, $planet, $user_id, '', true);
 						$newpos_checked	= true;
 					}
 

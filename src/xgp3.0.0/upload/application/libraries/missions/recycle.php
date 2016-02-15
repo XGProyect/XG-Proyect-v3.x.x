@@ -31,6 +31,12 @@ use application\libraries\FunctionsLib;
 class Recycle extends Missions
 {
     /**
+     *
+     * @var string
+     */
+    private $planet_name;
+    
+    /**
      * bbCode function.
      *
      * @param string $string String
@@ -53,9 +59,6 @@ class Recycle extends Missions
     {
         $recycled_resources = $this->calculateCapacity($fleet_row);
 
-        // SOME REQUIRED VALUES
-        $target_name        = $recycled_resources['target_name'];
-        
         if ($fleet_row['fleet_mess'] == '0') {
 
             if ($fleet_row['fleet_start_time'] <= time()) {
@@ -81,7 +84,7 @@ class Recycle extends Missions
                     FormatLib::prettyNumber($recycled_resources['crystal']),
                     $this->langs['Crystal']
                 );
-                $this->recycle_message(
+                $this->recycleMessage(
                     $fleet_row['fleet_owner'],
                     $message,
                     $fleet_row['fleet_start_time'],
@@ -91,8 +94,8 @@ class Recycle extends Missions
         } elseif ($fleet_row['fleet_end_time'] <= time()) {
 
             $message    = sprintf(
-                $this->langs['sys_tran_mess_owner'],
-                $target_name,
+                $this->langs['sys_tran_mess_user'],
+                $this->planet_name,
                 FleetsLib::targetLink($fleet_row, ''),
                 FormatLib::prettyNumber($fleet_row['fleet_resource_metal']),
                 $this->langs['Metal'],
@@ -136,6 +139,8 @@ class Recycle extends Missions
             LIMIT 1;"
         );
 
+        $this->planet_name  = $target_planet['target_name'];
+        
         // SOME REQUIRED VALUES
         $ships              = explode(';', $fleet_row['fleet_array']);
         $recycle_capacity   = 0;

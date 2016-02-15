@@ -173,7 +173,9 @@ class Defense extends XGPCore
         $NotBuilding = true;
 
         if ($this->_current_planet['planet_b_building_id'] != 0) {
-            $CurrentQueue = $this->_current_planet['planet_b_building_id'];
+            $CurrentQueue   = $this->_current_planet['planet_b_building_id'];
+            $Element        = 0;
+
             if (strpos($CurrentQueue, ";")) {
                 // FIX BY LUCKY - IF THE SHIPYARD IS IN QUEUE THE USER CANT RESEARCH ANYTHING...
                 $QueueArray = explode(";", $CurrentQueue);

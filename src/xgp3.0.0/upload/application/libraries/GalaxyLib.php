@@ -241,7 +241,7 @@ class GalaxyLib extends XGPCore
             }
         } else {
 
-            $planetname = $this->langs['glplanet_destroyed'];
+            $planetname = $this->langs['gl_planet_destroyed'];
         }
 
         return $planetname;
@@ -285,7 +285,7 @@ class GalaxyLib extends XGPCore
         }
 
         // CHECK MOON STATUS AND COMPLETE DATA IF REQUIRED
-        if ($this->row_data['destruyed_moon'] == 0 && $this->row_data['id_luna'] != 0) {
+        if ($this->row_data['destroyed_moon'] == 0 && $this->row_data['id_luna'] != 0) {
 
             $parse                      = $this->langs;
             $parse['dpath']             = DPATH;

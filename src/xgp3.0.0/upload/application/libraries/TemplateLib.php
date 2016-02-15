@@ -76,14 +76,14 @@ class TemplateLib
                 $page   .= $menu ? $this->installMenu() : ''; // MENU
                 $page   .= $topnav ? $this->installNavbar() : ''; // TOP NAVIGATION BAR
             }
+        }
+        
+        // For the Admin page
+        if (defined('IN_ADMIN')) {
 
-            // For the Admin page
-            if (defined('IN_ADMIN')) {
-
-                $page   .= $this->adminHeader($metatags);
-                $page   .= $menu ? $this->adminMenu() : ''; // MENU
-                $page   .= $topnav ? $this->adminNavbar() : ''; // TOP NAVIGATION BAR
-            }
+            $page   .= $this->adminHeader($metatags);
+            $page   .= $menu ? $this->adminMenu() : ''; // MENU
+            $page   .= $topnav ? $this->adminNavbar() : ''; // TOP NAVIGATION BAR
         }
 
         // Anything else

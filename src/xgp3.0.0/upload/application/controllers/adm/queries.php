@@ -17,6 +17,7 @@ namespace application\controllers\adm;
 use application\core\XGPCore;
 use application\libraries\adm\AdministrationLib;
 use application\libraries\FunctionsLib;
+use mysqli;
 
 /**
  * Queries Class
@@ -30,8 +31,8 @@ use application\libraries\FunctionsLib;
  */
 class Queries extends XGPCore
 {
-    private $_lang;
-    private $_current_user;
+    private $langs;
+    private $current_user;
 
     /**
      * __construct()
@@ -41,16 +42,20 @@ class Queries extends XGPCore
         parent::__construct();
 
         // check if session is active
-        parent::$users->checkSession();
+        AdministrationLib::checkSession();
 
-        $this->_lang = parent::$lang;
-        $this->_current_user = parent::$users->getUserData();
+        $this->langs        = parent::$lang;
+        $this->current_user = parent::$users->getUserData();
 
         // Check if the user is allowed to access
-        if (AdministrationLib::haveAccess($this->_current_user['user_authlevel']) && $this->_current_user['user_authlevel'] == 3) {
-            $this->build_page();
+        if (AdministrationLib::haveAccess(
+            $this->current_user['user_authlevel']
+        ) && $this->current_user['user_authlevel'] == 3 && ADMIN_ACCESS_QUERY === true) {
+
+            $this->buildPage();
         } else {
-            die(FunctionsLib::message($this->_lang['ge_no_permissions']));
+
+            die(AdministrationLib::noAccessMessage($this->langs['ge_no_permissions']));
         }
     }
 
@@ -69,18 +74,26 @@ class Queries extends XGPCore
      * param
      * return main method, loads everything
      */
-    private function build_page()
+    private function buildPage()
     {
-        $parse = $this->_lang;
-        $query = isset($_POST['querie']) ? $_POST['querie'] : NULL;
+        $parse  = $this->langs;
+        $query  = isset($_POST['querie']) ? $_POST['querie'] : null;
 
-        if ($_POST) {
-            $query = str_replace("\'", "'", str_replace('\"', '"', $query));
+        if (isset($_POST) && !empty($query)) {
 
-            if (!mysql_query($query)) {
-                $parse['alert'] = AdministrationLib::saveMessage('error', mysql_error());
+            // clean
+            $query      = str_replace("\'", "'", str_replace('\"', '"', $query));
+
+            // connect
+            $connection = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+            
+            // do
+            if (!$connection->query($query)) {
+
+                $parse['alert'] = AdministrationLib::saveMessage('error', $connection->error);
             } else {
-                $parse['alert'] = AdministrationLib::saveMessage('ok', $this->_lang['qe_succes']);
+
+                $parse['alert'] = AdministrationLib::saveMessage('ok', $this->langs['qe_succes']);
             }
         }
 

@@ -12,15 +12,15 @@
 				</div>
 				<div align="left">
 					<label>{ins_server_title}</label>
-					<input type="text" name="host" placeholder="{ins_ex_tag} localhost" value=""/>
-					<label>{ins_db_title}</label>
-					<input type="text" name="db" placeholder="{ins_ex_tag} xgproyect" value="">
+					<input type="text" name="host" placeholder="{ins_ex_tag} localhost" value="{v_host}"/>
 					<label>{ins_user_title}</label>
-					<input type="text" name="user" placeholder="{ins_ex_tag} root" value="">
+					<input type="text" name="user" placeholder="{ins_ex_tag} root" value="{v_user}">
 					<label>{ins_password_title}</label>
 					<input type="password" name="password">
+					<label>{ins_db_title}</label>
+					<input type="text" name="db" placeholder="{ins_ex_tag} xgproyect" value="{v_db}">
 					<label>{ins_prefix_title}</label>
-					<input type="text" name="prefix" placeholder="{ins_ex_tag} xgp_" value="">
+					<input type="text" name="prefix" placeholder="{ins_ex_tag} xgp_" value="{v_prefix}">
 					<div align="center">
 						<input type="button" class="btn btn-primary" name="next" onclick="submit();" value="{ins_install_go}">
 					</div>

@@ -10,26 +10,19 @@
 				<label>
 					<strong>{cs_point_per_resources_used} ({cs_resources})</strong>
 				</label>
-				<input type="text" name="stat_settings" id="stat_settings" value="{stat_settings}" />
+				<input type="text" name="stat_points" id="stat_points" value="{stat_points}" />
 
 				<label>
 					<strong>{cs_time_between_updates} ({cs_minutes})</strong>
 				</label>
 				<input type="text" name="stat_update_time" id="stat_update_time" value="{stat_update_time}" />
 
-				<label>
-					<strong>{cs_points_to_zero}</strong>
-				</label>
-				<select name="stat" id="stat">
-			          <option value="1" {sel_sta1}>{cs_yes}</option>
-			          <option value="0" {sel_sta0}>{cs_no}</option>
-			  	</select>
-
 			  	<label>
 			  		<strong>{cs_access_lvl}</strong>
 				</label>
-				<input type="text" name="stat_level" id="stat_level" value="{stat_level}" />
-
+				<select name="stat_admin_level" id="stat_admin_level">
+                                  {admin_levels}
+			  	</select>
 		      	<div align="center">
 			      	<input type="submit" name="save" value="{cs_save_changes}" class="btn btn-primary">
 		      	</div>

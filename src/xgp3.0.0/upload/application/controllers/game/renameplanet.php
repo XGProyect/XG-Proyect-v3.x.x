@@ -163,24 +163,32 @@ class Renameplanet extends XGPCore
         } elseif (( ( $enemy_fleet > 0 ) && ( $mess < 1 ) ) && $end_type != 2) {
             FunctionsLib::message($this->_lang['ov_abandon_planet_not_possible'], 'game.php?page=renameplanet');
         } else {
-            if (sha1($_POST['pw']) == $this->_current_user['password'] && $this->_current_user['user_home_planet_id'] != $this->_current_user['user_current_planet']) {
+
+            if (sha1($_POST['pw']) == $this->_current_user['user_password'] 
+                && $this->_current_user['user_home_planet_id'] != $this->_current_user['user_current_planet']) {
+
                 if ($this->_current_planet['moon_id'] != 0) {
-                    parent::$db->query("UPDATE " . PLANETS . " AS p, " . PLANETS . " AS m, " . USERS . " AS u SET
-													p.`planet_destroyed` = '" . (time() + (PLANETS_LIFE_TIME * 3600)) . "',
-													m.`planet_destroyed` = '" . (time() + (PLANETS_LIFE_TIME * 3600)) . "',
-													u.`user_current_planet` = u.`user_home_planet_id`
-													WHERE p.`planet_id` = '" . $this->_current_user['user_current_planet'] . "' AND
-															m.`planet_galaxy` = '" . $this->_current_planet['planet_galaxy'] . "' AND
-															m.`planet_system` = '" . $this->_current_planet['planet_system'] . "' AND
-															m.`planet_planet` = '" . $this->_current_planet['planet_planet'] . "' AND
-															m.`planet_type` = '3' AND
-															u.`user_id` = '" . $this->_current_user['user_id'] . "';");
+
+                    parent::$db->query(
+                        "UPDATE " . PLANETS . " AS p, " . PLANETS . " AS m, " . USERS . " AS u SET
+                        p.`planet_destroyed` = '" . (time() + (PLANETS_LIFE_TIME * 3600)) . "',
+                        m.`planet_destroyed` = '" . (time() + (PLANETS_LIFE_TIME * 3600)) . "',
+                        u.`user_current_planet` = u.`user_home_planet_id`
+                        WHERE p.`planet_id` = '" . $this->_current_user['user_current_planet'] . "' AND
+                            m.`planet_galaxy` = '" . $this->_current_planet['planet_galaxy'] . "' AND
+                            m.`planet_system` = '" . $this->_current_planet['planet_system'] . "' AND
+                            m.`planet_planet` = '" . $this->_current_planet['planet_planet'] . "' AND
+                            m.`planet_type` = '3' AND
+                            u.`user_id` = '" . $this->_current_user['user_id'] . "';"
+                    );
                 } else {
-                    parent::$db->query("UPDATE " . PLANETS . " AS p, " . USERS . " AS u SET
-													p.`planet_destroyed` = '" . (time() + (PLANETS_LIFE_TIME * 3600)) . "',
-													u.`user_current_planet` = u.`user_home_planet_id`
-													WHERE p.`planet_id` = '" . $this->_current_user['user_current_planet'] . "' AND
-															u.`user_id` = '" . $this->_current_user['user_id'] . "';");
+                    parent::$db->query(
+                        "UPDATE " . PLANETS . " AS p, " . USERS . " AS u SET
+                        p.`planet_destroyed` = '" . (time() + (PLANETS_LIFE_TIME * 3600)) . "',
+                        u.`user_current_planet` = u.`user_home_planet_id`
+                        WHERE p.`planet_id` = '" . $this->_current_user['user_current_planet'] . "' AND
+                                        u.`user_id` = '" . $this->_current_user['user_id'] . "';"
+                    );
                 }
 
 

@@ -174,12 +174,12 @@ class Fleet2 extends XGPCore
         #####################################################################################################
         $parse['options'] = '';
 
-        foreach ($speed_values as $value => $porcentage) {
-            $speed_porcentage['value'] = $value;
-            $speed_porcentage['selected'] = '';
-            $speed_porcentage['title'] = $porcentage;
+        foreach ($speed_values as $value => $percentage) {
+            $speed_percentage['value'] = $value;
+            $speed_percentage['selected'] = '';
+            $speed_percentage['title'] = $percentage;
 
-            $parse['options'] .= parent::$page->parseTemplate($options_template, $speed_porcentage);
+            $parse['options'] .= parent::$page->parseTemplate($options_template, $speed_percentage);
         }
 
         #####################################################################################################

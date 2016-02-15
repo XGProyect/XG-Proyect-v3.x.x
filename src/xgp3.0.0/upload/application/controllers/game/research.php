@@ -283,11 +283,14 @@ class Research extends XGPCore
                 $queue = explode(';', $current_queue);
 
                 for ($i = 0; $i < MAX_BUILDING_QUEUE_SIZE; $i++) {
-                    $element_data = explode(",", $queue[$i]);
-                    $element_id = $element_data[0];
+                    
+                    if (isset($queue[$i])) {
+                        $element_data = explode(",", $queue[$i]);
+                        $element_id = $element_data[0];
 
-                    if ($element_id == 31) {
-                        break;
+                        if ($element_id == 31) {
+                            break;
+                        }   
                     }
                 }
             } else {

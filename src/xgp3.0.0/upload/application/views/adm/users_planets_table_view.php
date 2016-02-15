@@ -4,7 +4,7 @@
 			<tr>
 				<td width="50%">
 					{planet_name} {planet_status}<br />
-					<img src="{image_path}{planet_image}.jpg" alt="{planet_image}.jpg" title="{planet_image}.jpg" border="0">
+					<img src="{image_path}{planet_image}.jpg" alt="{planet_image}.jpg" title="{planet_image}.jpg" border="0" {planet_image_style}>
 				</td>
 				<td width="50%">
 					{moon_name} {moon_status}<br />
@@ -22,11 +22,13 @@
 				<li><a href="admin.php?page=users&type=planets&edit=ships&user={user}&planet={planet_id}">{us_user_ships_edit}</a></li>
 				<li><a href="admin.php?page=users&type=planets&edit=defenses&user={user}&planet={planet_id}">{us_user_defenses_edit}</a></li>
 				<li class="divider"></li>
-				<li><a href="admin.php?page=users&type=planets&edit=delete&user={user}&planet={planet_id}">{us_user_delete_planet}</a></li>
+				<li><a href="admin.php?page=users&type=planets&edit=delete&dltmode=soft&user={user}&planet={planet_id}">{us_user_delete_planet} {us_user_delete_pm_soft}</a></li>
+                                <li><a href="admin.php?page=users&type=planets&edit=delete&dltmode=physical&user={user}&planet={planet_id}">{us_user_delete_planet} {us_user_delete_pm_physical}</a></li>
 				<li class="divider"></li>
 				<li><a href="admin.php?page=maker&mode=moon&planet={planet_id}">{us_user_add_moon}</a></li>
-				<li><a href="admin.php?page=users&type=moons&edit=delete&user={user}&moon={moon_id}">{us_user_delete_moon}</a></li>
-			</ul>
+				<li><a href="admin.php?page=users&type=moons&edit=delete&dltmode=soft&user={user}&moon={moon_id}">{us_user_delete_moon} {us_user_delete_pm_soft}</a></li>
+                                <li><a href="admin.php?page=users&type=moons&edit=delete&dltmode=physical&user={user}&moon={moon_id}">{us_user_delete_moon} {us_user_delete_pm_physical}</a></li>
+                        </ul>
 		</div>
 	</td>
 </tr>

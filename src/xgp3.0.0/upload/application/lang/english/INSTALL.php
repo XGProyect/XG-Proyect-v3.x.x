@@ -2,7 +2,7 @@
 
 // SOME MESSAGES
 $lang['404_error']					= 'The requested page doesn\'t exists';
-$lang['ins_no_server_requirements']	= 'Your server / hosting does not meet the minimum requirements needed to run XG Proyect.<br /><br />Requisitos: <br />- PHP 5.4.x<br />- MySQL 5.5.x';
+$lang['ins_no_server_requirements']	= 'Your server / hosting does not meet the minimum requirements needed to run XG Proyect.<br /><br />Requirements: <br />- PHP 5.5.x<br />- MySQL 5.5.x';
 $lang['ins_already_installed']		= 'XG Proyect is already installed. Select an option: <br /><br /> - <a href="index.php?page=update">Update</a> <br /> - <a href="index.php?page=migrate">Migrate</a> <br /> - <a href="../">Back to the game</a> <br /><br />In case you do not want to take any action, for safety, we recommend <span style="color:red;text-decoration:underline;">DELETE</span> the install directory.';
 $lang['ins_missing_xml_file']		= 'Could not find the config.xml file or the file config.xml.cfg, you must have one of these in order to continue with the installation. Check your application/config directory and the permissions must be set on chmod 777';
 
@@ -32,8 +32,8 @@ $lang['ins_install_license']		= 'License';
 // GENERAL
 $lang['ins_steps']					= 'Steps';
 $lang['ins_step1']					= 'Connection data';
-$lang['ins_step2']					= 'Configuration file';
-$lang['ins_step3']					= 'Check connectiom';
+$lang['ins_step2']					= 'Check connection';
+$lang['ins_step3']					= 'Configuration file';
 $lang['ins_step4']					= 'Insert data';
 $lang['ins_step5']					= 'Create administrator';
 $lang['ins_continue']				= 'Continue';
@@ -51,6 +51,7 @@ $lang['ins_install_go']				= 'Intall';
 
 // ERRORS
 $lang['ins_not_connected_error']	= 'Unable to connect to the database with the data entered.';
+$lang['ins_db_not_exists']              = 'Unable to access the database with the provided name.';
 $lang['ins_empty_fields_error']		= 'All fields are required';
 $lang['ins_write_config_error']		= 'Error writing the config.php file, make sure it is 777 CHMOD (write permissions) or the file exists';
 $lang['ins_insert_tables_error']	= 'Failed to insert data into the database, check the database or that the server is active.';

@@ -43,7 +43,7 @@ class Ban extends XGPCore
         parent::__construct();
 
         // check if session is active
-        parent::$users->checkSession();
+        AdministrationLib::checkSession();
 
         $this->_lang = parent::$lang;
         $this->_current_user = parent::$users->getUserData();
@@ -52,7 +52,7 @@ class Ban extends XGPCore
         if (AdministrationLib::haveAccess($this->_current_user['user_authlevel']) && AdministrationLib::authorization($this->_current_user['user_authlevel'], 'edit_users') == 1) {
             $this->build_page();
         } else {
-            die(FunctionsLib::message($this->_lang['ge_no_permissions']));
+            die(AdministrationLib::noAccessMessage($this->_lang['ge_no_permissions']));
         }
     }
 
@@ -207,9 +207,9 @@ class Ban extends XGPCore
                     parent::$db->query("UPDATE " . USERS . " AS u, " . SETTINGS . " AS s, " . PLANETS . " AS p SET
 											u.`user_banned` = '" . $banned_until . "',
 											s.`setting_vacations_status` = '" . ( isset($_POST['vacat']) ? 1 : 0 ) . "',
-											p.`planet_building_metal_mine_porcent` = '0',
-											p.`planet_building_crystal_mine_porcent` = '0',
-											p.`planet_building_deuterium_sintetizer_porcent` = '0'
+											p.`planet_building_metal_mine_percent` = '0',
+											p.`planet_building_crystal_mine_percent` = '0',
+											p.`planet_building_deuterium_sintetizer_percent` = '0'
 											WHERE u.`user_id` = " . $user_id['user_id'] . "
 													AND s.`setting_user_id` = " . $user_id['user_id'] . "
 													AND p.`planet_user_id` = " . $user_id['user_id'] . ";");

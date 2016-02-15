@@ -351,7 +351,7 @@ class Overview extends XGPCore
         $return['moon_img'] = '';
         $return['moon'] = '';
 
-        if ($this->_current_planet['moon_id'] != 0 && $this->_current_planet['moon_destruyed'] == 0 && $this->_current_planet['planet_type'] == 1) {
+        if ($this->_current_planet['moon_id'] != 0 && $this->_current_planet['moon_destroyed'] == 0 && $this->_current_planet['planet_type'] == 1) {
             $moon_name = $this->_current_planet['moon_name'] . " (" . $this->_lang['fcm_moon'] . ")";
             $url = 'game.php?page=overview&cp=' . $this->_current_planet['moon_id'] . '&re=0';
             $image = DPATH . 'planets/' . $this->_current_planet['moon_image'] . '.jpg';
@@ -418,11 +418,10 @@ class Overview extends XGPCore
      */
     private function get_user_rank()
     {
-        $stats_available = FunctionsLib::readConfig('stat');
         $user_rank = '-';
         $total_rank = $this->_current_user['user_statistic_total_rank'] == '' ? $this->_current_planet['stats_users'] : $this->_current_user['user_statistic_total_rank'];
 
-        if (( $stats_available && ( $this->_current_user['user_authlevel'] <= FunctionsLib::readConfig('stat_level') ) ) or ( !$stats_available && ( $this->_current_user['user_authlevel'] == 0 ) )) {
+        if ($this->_current_user['user_authlevel'] <= FunctionsLib::readConfig('stat_admin_level')) {
             $user_rank = FormatLib::prettyNumber($this->_current_user['user_statistic_total_points']) . " (" . $this->_lang['ov_place'] . ' ' . FunctionsLib::setUrl('game.php?page=statistics&range=' . $total_rank, $total_rank, $total_rank) . ' ' . $this->_lang['ov_of'] . ' ' . $this->_current_planet['stats_users'] . ")";
         }
 

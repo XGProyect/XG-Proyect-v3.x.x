@@ -155,7 +155,7 @@ class Galaxy extends XGPCore
 														m.planet_id AS id_luna,
 														m.planet_diameter,
 														m.planet_temp_min,
-														m.planet_destroyed AS destruyed_moon,
+														m.planet_destroyed AS destroyed_moon,
 														m.planet_name AS name_moon,
 														a.alliance_name,
 														a.alliance_tag,
@@ -231,7 +231,7 @@ class Galaxy extends XGPCore
                             $this->_planet_count++;
                         }
 
-                        if ($row_data['id_luna'] != 0 && $row_data['destruyed_moon'] != 0) {
+                        if ($row_data['id_luna'] != 0 && $row_data['destroyed_moon'] != 0) {
                             $this->check_moon_state($row_data);
                         }
                     }
