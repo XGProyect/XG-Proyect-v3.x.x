@@ -47,28 +47,31 @@ class Language
     {
         $languages_loaded   = $this->getFileName();
 
-        foreach ($languages_loaded as $load) {
+        if (defined('DEFAULT_LANG')) {
 
-            $route  = XGP_ROOT . LANG_PATH . DEFAULT_LANG . '/' . $load . '.' . $this->lang_extension;
+            foreach ($languages_loaded as $load) {
 
-            // WE GOT SOMETHING
-            if (file_exists($route)) {
+                $route  = XGP_ROOT . LANG_PATH . DEFAULT_LANG . '/' . $load . '.' . $this->lang_extension;
 
-                // GET THE LANGUAGE PACK
-                include $route;
+                // WE GOT SOMETHING
+                if (file_exists($route)) {
+
+                    // GET THE LANGUAGE PACK
+                    include $route;
+                }
             }
-        }
+            
+            // WE GOT SOMETHING
+            if (!empty($lang)) {
 
-        // WE GOT SOMETHING
-        if (!empty($lang)) {
+                // SET DATA
+                $this->lang = $lang;
+            } else {
 
-            // SET DATA
-            $this->lang = $lang;
-        } else {
-
-            // THROW EXCEPTION
-            die('Language not found or empty: <strong>' . $load . '</strong><br/>
-                Location: <strong>' . $route . '</strong>');
+                // THROW EXCEPTION
+                die('Language not found or empty: <strong>' . $load . '</strong><br/>
+                    Location: <strong>' . $route . '</strong>');
+            }
         }
     }
 

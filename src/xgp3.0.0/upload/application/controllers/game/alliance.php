@@ -1037,11 +1037,13 @@ class Alliance extends XGPCore
                         $_POST['text'] = trim(nl2br(strip_tags($_POST['text'], '<br>')));
                         $_POST['text'] = str_replace('rn', '\\r\\n', $_POST['text']);
 
-                        parent::$db->query("UPDATE " . USERS . " SET
-                                                                                            user_ally_request_text = '',
-                                                                                            user_ally_request = '0',
-                                                                                            user_ally_id = '" . $this->_ally['alliance_id'] . "'
-                                                                                            WHERE user_id = '" . $show . "'");
+                        parent::$db->query(
+                            "UPDATE " . USERS . " SET
+                            user_ally_request_text = '',
+                            user_ally_request = '0',
+                            user_ally_id = '" . $this->_ally['alliance_id'] . "'
+                            WHERE user_id = '" . $show . "'"
+                        );
 
                         FunctionsLib::sendMessage($show, $this->_current_user['user_id'], '', 3, $this->_ally['alliance_tag'], $this->_lang['al_you_was_acceted'] . $this->_ally['alliance_name'], $this->_lang['al_hi_the_alliance'] . $this->_ally['alliance_name'] . $this->_lang['al_has_accepted'] . $_POST['text']);
 

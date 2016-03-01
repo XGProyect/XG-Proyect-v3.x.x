@@ -270,7 +270,7 @@ class Attack extends Missions
      */
     private function getShipType($id, $count)
     {
-        $rf     = $this->combat_caps[$id]['sd'];
+        $rf     = isset($this->combat_caps[$id]['sd']) ? $this->combat_caps[$id]['sd'] : 0;
         $shield = $this->combat_caps[$id]['shield'];
         $cost   = array($this->pricelist[$id]['metal'], $this->pricelist[$id]['crystal']);
         $power  = $this->combat_caps[$id]['attack'];

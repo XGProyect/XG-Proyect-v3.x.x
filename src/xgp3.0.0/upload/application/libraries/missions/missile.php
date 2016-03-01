@@ -96,7 +96,8 @@ class Missile extends Missions
                     );
                     $attack_order       = $this->setAttackOrder($fleet_row['fleet_target_obj']);
                     $destroyed_query    = '';
-
+                    $message            = '';
+                    
                     // PROCESS THE MISSILE ATTACK
                     for ($t = 0; $t < count($attack_order); $t++) {
 
@@ -104,7 +105,7 @@ class Missile extends Missions
 
                         if ($target_data[$this->resource[$n]]) {
 
-                            $defense    = (($this->pricelist[$n]['metal'] + parent::$pricelist[$n]['crystal']) / 10)
+                            $defense    = (($this->pricelist[$n]['metal'] + $this->pricelist[$n]['crystal']) / 10)
                                 * (1 + ( $target_data['research_shielding_technology'] / 10));
 
                             if ($attack >= ($defense * $target_data[$this->resource[$n]])) {
@@ -132,7 +133,7 @@ class Missile extends Missions
                             "UPDATE " . DEFENSES . " SET
                             {$destroyed_query}
                             `defense_anti-ballistic_missile` = '" . $amount . "'
-                            WHERE defense_planet_id = '" . $target_data['id'] . "';"
+                            WHERE defense_planet_id = '" . $target_data['planet_id'] . "';"
                         );
                     }
                 }

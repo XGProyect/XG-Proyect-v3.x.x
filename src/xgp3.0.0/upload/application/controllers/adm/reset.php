@@ -16,6 +16,7 @@ namespace application\controllers\adm;
 
 use application\core\XGPCore;
 use application\libraries\adm\AdministrationLib;
+use application\libraries\FunctionsLib;
 
 /**
  * Reset Class

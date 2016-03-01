@@ -51,6 +51,7 @@ class Server extends XGPCore
 
         // Check if the user is allowed to access
         if (AdministrationLib::haveAccess($this->_current_user['user_authlevel']) && AdministrationLib::authorization($this->_current_user['user_authlevel'], 'config_game') == 1) {
+
             $this->_game_config = FunctionsLib::readConfig('', true);
 
             $this->build_page();

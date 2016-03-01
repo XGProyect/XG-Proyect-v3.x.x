@@ -185,7 +185,6 @@ $lang['gl_collect']							= 'Recolectar';
 $lang['gl_resources']						= 'Recursos';
 $lang['gl_features']						= 'Características';
 $lang['gl_diameter']						= 'Diámetro';
-$lang['gl_temperature']						= 'Temperatura';
 $lang['gl_phalanx']							= 'Phalanx';
 $lang['gl_planet_destroyed']				= 'Planeta destruido';
 $lang['gl_player']							= 'Jugador ';

@@ -275,10 +275,12 @@ class Buildings extends XGPCore
      */
     private function start_building()
     {
-        parent::$db->query("UPDATE " . PLANETS . " SET
-								`planet_b_building_id` = '" . $this->_current_planet['planet_b_building_id'] . "',
-								`planet_b_building` = '" . $this->_current_planet['planet_b_building'] . "'
-								WHERE `planet_id` = '" . $this->_current_planet['planet_id'] . "';");
+        parent::$db->query(
+            "UPDATE " . PLANETS . " SET
+            `planet_b_building_id` = '" . $this->_current_planet['planet_b_building_id'] . "',
+            `planet_b_building` = '" . $this->_current_planet['planet_b_building'] . "'
+            WHERE `planet_id` = '" . $this->_current_planet['planet_id'] . "';"
+        );
 
         return;
     }

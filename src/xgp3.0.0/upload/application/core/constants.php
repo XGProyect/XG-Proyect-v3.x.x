@@ -18,7 +18,7 @@
 #
 ###########################################################################
 
-// VERSION
+// GAME FILES VERSION
 define('SYSTEM_VERSION', '3.0.0');
 
 // HOOKS
@@ -57,6 +57,9 @@ define('INSTALL_PATH', CONTROLLERS_PATH . 'install/');
 // OTHER PATHS
 define('LOGS_PATH', DATA_PATH . 'logs/');
 define('BACKUP_PATH', DATA_PATH . 'backups/');
+
+// default skin path
+define('DPATH', DEFAULT_SKINPATH);
 
 // GAME URL
 define('GAMEURL', "http://" . $_SERVER['HTTP_HOST'] . "/");
@@ -131,6 +134,7 @@ define('DEFENSES', DB_PREFIX . 'defenses');
 define('FLEETS', DB_PREFIX . 'fleets');
 define('MESSAGES', DB_PREFIX . 'messages');
 define('NOTES', DB_PREFIX . 'notes');
+define('OPTIONS', DB_PREFIX . 'options');
 define('PLANETS', DB_PREFIX . 'planets');
 define('PREMIUM', DB_PREFIX . 'premium');
 define('RESEARCH', DB_PREFIX . 'research');

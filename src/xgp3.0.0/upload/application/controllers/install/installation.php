@@ -75,13 +75,14 @@ class Installation extends XGPCore
         $parse      = $this->langs;
         $continue   = true;
 
+        // VERIFICATION - WE NEED THE config DIR WRITABLE
+        if (!$this->isWritable()) {
+            die(FunctionsLib::message($this->langs['ins_not_writable'], '', '', false, false));
+        }
+        
         // VERIFICATION - WE DON'T WANT ANOTHER INSTALLATION
         if ($this->isInstalled()) {
             die(FunctionsLib::message($this->langs['ins_already_installed'], '', '', false, false));
-        }
-
-        if (!$this->checkXmlFile()) {
-            die(FunctionsLib::message($this->langs['ins_missing_xml_file'], '', '', false, false));
         }
 
         // ACTION FOR THE CURRENT PAGE
@@ -110,9 +111,11 @@ class Installation extends XGPCore
                     $continue   = false;
                 }
 
-                if (!$this->writeConfigFile() && $continue) {
-                    $alerts     = $this->langs['ins_write_config_error'];
-                    $continue   = false;
+                if ($continue) {
+                    if (!$this->writeConfigFile()) {
+                        $alerts     = $this->langs['ins_write_config_error'];
+                        $continue   = false;
+                    }   
                 }
 
                 if ($continue) {
@@ -193,9 +196,12 @@ class Installation extends XGPCore
 
                 if ($continue) {
 
+                    // set last stat update
                     FunctionsLib::updateConfig('stat_last_update', time());
-                    FunctionsLib::updateConfig('game_installed', '1');
-
+                    
+                    // set the installation language to the game language
+                    FunctionsLib::updateConfig('lang', FunctionsLib::getCurrentLanguage());
+                    
                     $current_page   = parent::$page->parseTemplate(
                         parent::$page->getTemplate('install/in_create_admin_done_view'),
                         $this->langs
@@ -308,15 +314,91 @@ class Installation extends XGPCore
     }
 
     /**
+     * isWritable
+     * 
+     * @return boolean
+     */
+    private function isWritable()
+    {
+        $config_dir    = XGP_ROOT . 'application/config/';
+        
+        return is_writable($config_dir);
+    }
+    
+    /**
      * method isInstalled
      * param
      * return true if the game is already installed, false if not
      */
     private function isInstalled()
     {
-        return (FunctionsLib::readConfig('game_installed') == 1);
+        // if file not exists
+        $config_file    = XGP_ROOT . 'application/config/config.php';
+
+        if (!file_exists($config_file) or filesize($config_file) == 0) {
+            
+            return false;
+        }
+        
+        // if no db object
+        if (parent::$db == null) {
+
+            return false;
+        }
+        
+        // check if tables exist
+        if (!$this->tablesExists()) {
+            
+            return false;
+        }
+        
+        // check for admin account
+        if (!$this->adminExists()) {
+            
+            return false;
+        }
+        
+        return true;
     }
 
+    /**
+     * tablesExists
+     * 
+     * @return boolean
+     */
+    private function tablesExists()
+    {
+        $result = parent::$db->query("SHOW TABLES FROM " . DB_NAME);
+        $arr    = [];
+        
+        while($row = parent::$db->fetchArray($result)) {
+
+            if (strpos($row[0], DB_PREFIX) !== false) {
+                $arr[]  = $row[0];
+            }
+        }
+
+        if (count($arr) > 0) {
+
+            return true;
+        }
+        
+        return false;
+    }
+    
+    /**
+     * adminExists
+     * 
+     * @return boolean
+     */
+    private function adminExists()
+    {
+        return parent::$db->queryFetch(
+            "SELECT COUNT(`user_id`) as count FROM " . USERS . " 
+                WHERE `user_id` = '1' OR `user_authlevel` = '3';"
+        )['count'] >= 1;
+    }
+    
     /**
      * tryConnection
      * 
@@ -348,7 +430,7 @@ class Installation extends XGPCore
 
         if (!$config_file) {
             
-                return false;
+            return false;
         }
 
         $data   = "<?php\n";
@@ -360,10 +442,21 @@ class Installation extends XGPCore
         $data   .= "defined('SECRETWORD') ? NULL : define('SECRETWORD', 'xgp-".$this->generateToken()."');\n";
         $data   .= "?>";
 
-        fwrite($config_file, $data);
-        fclose($config_file);
+        // create the new file
+        if (fwrite($config_file, $data)) {
 
-        return true;
+            fclose($config_file);
+            
+            return true;
+        }
+        
+        // check if something was created and delete it
+        if (file_exists($config_file)) {
+
+            unlink($config_file);
+        }
+        
+        return false;
     }
 
     /**
@@ -450,54 +543,6 @@ class Installation extends XGPCore
     {        
         return !empty($this->host) && !empty($this->name) &&
                 !empty($this->user) && !empty($this->prefix);
-    }
-
-    /**
-     * method checkXmlFile
-     * param
-     * return true if file was found, else if not
-     */
-    private function checkXmlFile()
-    {
-        $needed_config_file     = @fopen(XGP_ROOT . CONFIGS_PATH . 'config.xml', "r");
-        $default_config_file    = @fopen(XGP_ROOT . CONFIGS_PATH . 'config.xml.cfg', "r");
-
-        if (!$needed_config_file) {
-            
-            if (!$default_config_file) {
-                
-                return false;
-            } else {
-                
-                // Will return true if the file was successfully created
-                return $this->createXml();
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     * method createXml
-     * param
-     * return true if file was succesfully created
-     */
-    private function createXml()
-    {
-        $location               = XGP_ROOT . CONFIGS_PATH;
-        $default_config_file    = $location . 'config.xml.cfg';
-        $needed_config_file     = $location . 'config.xml';
-
-        @chmod($location, 0777);
-        
-        if (@copy($default_config_file, $needed_config_file)) {
-
-            @chmod($needed_config_file, 0777);
-            
-            return true;
-        }
-        
-        return false;
     }
 
     /**

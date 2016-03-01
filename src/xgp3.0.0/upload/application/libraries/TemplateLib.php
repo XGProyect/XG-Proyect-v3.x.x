@@ -78,6 +78,14 @@ class TemplateLib
             }
         }
         
+        // For the Install page
+        if (defined('IN_INSTALL') && defined('IN_MESSAGE')) {
+
+            $page   .= $this->installHeader($metatags);
+            $page   .= $menu ? $this->installMenu() : ''; // MENU
+            $page   .= $topnav ? $this->installNavbar() : ''; // TOP NAVIGATION BAR
+        }
+        
         // For the Admin page
         if (defined('IN_ADMIN')) {
 
@@ -206,7 +214,7 @@ class TemplateLib
         // Update config language to the new setted value
         if (isset($_POST['language'])) {
 
-            FunctionsLib::updateConfig('lang', $_POST['language']);
+            FunctionsLib::setCurrentLanguage($_POST['language']);
             FunctionsLib::redirect(XGP_ROOT . 'install/');
         }
 
@@ -240,7 +248,7 @@ class TemplateLib
         // PARSE THE MENU AND OTHER DATA
         $parse                      = $this->langs;
         $parse['menu_items']        = $items;
-        $parse['language_select']   = FunctionsLib::getLanguages(FunctionsLib::readConfig('lang'));
+        $parse['language_select']   = FunctionsLib::getLanguages(FunctionsLib::getCurrentLanguage());
 
         return $this->parseTemplate($this->getTemplate('install/topnav_view'), $parse);
     }
@@ -286,17 +294,9 @@ class TemplateLib
      */
     private function gameHeader($metatags = '')
     {
-        if (defined('VERSION')) {
-
-            $version = VERSION;
-        } else {
-
-            $version = SYSTEM_VERSION;
-        }
-        
         $parse['game_title']    = FunctionsLib::readConfig('game_name');
         $parse['root_path']     = XGP_ROOT;
-        $parse['version']       = $version;
+        $parse['version']       = SYSTEM_VERSION;
         $parse['css_path']      = XGP_ROOT . CSS_PATH;
         $parse['skin_path']     = XGP_ROOT . DPATH;
         $parse['js_path']       = XGP_ROOT . JS_PATH;
@@ -426,7 +426,7 @@ class TemplateLib
         $tota_rank      = $this->current_user['user_statistic_total_rank'] == '' ?
             $this->current_planet['stats_users'] : $this->current_user['user_statistic_total_rank'];
         $pages          = [
-           ['changelog', VERSION, '', 'FFF', '', '0', '0'],
+           ['changelog', SYSTEM_VERSION, '', 'FFF', '', '0', '0'],
            ['overview', $this->langs['lm_overview'], '', 'FFF', '', '1', '1'],
            ['imperium', $this->langs['lm_empire'], '', 'FFF', '', '1', '2'],
            ['resources', $this->langs['lm_resources'], '', 'FFF', '', '1', '3'],
@@ -519,7 +519,7 @@ class TemplateLib
 
         // PARSE THE MENU AND OTHER DATA
         $parse['dpath']         = DPATH;
-        $parse['version']       = VERSION;
+        $parse['version']       = SYSTEM_VERSION;
         $parse['servername']    = FunctionsLib::readConfig('game_name');
         $parse['year']          = $this->current_year;
         $parse['menu_block1']   = $menu_block1;
@@ -659,6 +659,28 @@ class TemplateLib
         $parse['menu_block_5']  = $parse_block[5];
 
         return $this->parseTemplate($this->getTemplate('adm/menu_view'), $parse);
+    }
+    
+    /**
+     * Removes speacial chars like tabs, new lines and carriage return.
+     *
+     * @param string $template Template
+     *
+     * @return string
+     */
+    public function jsReady($template = '')
+    {
+        $output     = str_replace(["\r\n", "\r"], "\n", $template);
+        $lines      = explode("\n", $output);
+        $new_lines  = [];
+
+        foreach ($lines as $i => $line) {
+            if (!empty($line)) {
+                $new_lines[] = trim($line);
+            }
+        }
+        
+        return implode($new_lines);
     }
 }
 

@@ -62,9 +62,9 @@ class Database
      */
     public function __construct()
     {
-        global $debug;
-
-        $this->debug               = $debug;
+        require_once XGP_ROOT . 'application/libraries/DebugLib.php';
+        
+        $this->debug               = new DebugLib();
         $this->openConnection();
         $this->magic_quotes_active = get_magic_quotes_gpc();
     }
@@ -86,11 +86,9 @@ class Database
                         'Database connection failed: ' . $this->connection->connect_error,
                         'SQL Error'
                     ));
-                } else {
-
-                    return false;
                 }
             } else {
+
                 if (!$this->tryDatabase(DB_NAME)) {
 
                     if (!defined('IN_INSTALL')) {
@@ -99,15 +97,14 @@ class Database
                             'Database selection failed: ' . $this->connection->connect_error,
                             'SQL Error'
                         ));
-                    } else {
-
-                        return false;
                     }
                 } else {
 
                     return true;
                 }
             }
+            
+            return false;
         }
     }
 
@@ -123,12 +120,14 @@ class Database
     public function tryConnection($host = '', $user = '', $pass = '')
     {
         if (empty($host) or empty($user) or empty($pass)) {
+
             return;
         }
 
         $this->connection  = @new mysqli($host, $user, $pass);
 
         if ($this->connection->connect_error) {
+
             return false;
         }
         
@@ -145,6 +144,7 @@ class Database
     public function tryDatabase($db_name)
     {
         if (empty($db_name)) {
+
             return false;
         }
         
@@ -159,6 +159,24 @@ class Database
         }
     }
 
+    /**
+     * Test if MySQLi connection was stablished
+     * 
+     * @return boolean
+     */
+    public function testConnection()
+    {
+        if (is_resource($this->connection) or is_object($this->connection)) {
+
+            if ($this->connection->ping()) {
+
+                return true;
+            }   
+        }
+        
+        return false;
+    }
+    
     /**
      * createPlanetWithOptions
      *

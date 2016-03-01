@@ -350,7 +350,7 @@ class FleetsLib extends XGPCore
             $popup['fleet_resource_deuterium']  = FormatLib::prettyNumber($fleet_row['fleet_resource_deuterium']);
             
             $resources_popup    = parent::$page->parseTemplate(
-                parent::$page->getTemplate('general/fleet_resources_popup_view'),
+                parent::$page->jsReady(parent::$page->getTemplate('general/fleet_resources_popup_view')),
                 $popup
             );
         } else {

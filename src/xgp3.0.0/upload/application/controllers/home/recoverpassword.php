@@ -67,7 +67,7 @@ class Recoverpassword extends XGPCore
 		else
 		{
 			$parse['year']		   = date ( 'Y' );
-			$parse['version']	   = VERSION;
+			$parse['version']	   = SYSTEM_VERSION;
 			$parse['forum_url']    = FunctionsLib::readConfig ( 'forum_url' );
 			parent::$page->display ( parent::$page->parseTemplate ( parent::$page->getTemplate ( 'home/lostpassword' ) , $parse ) , false , '' , false );
 		}

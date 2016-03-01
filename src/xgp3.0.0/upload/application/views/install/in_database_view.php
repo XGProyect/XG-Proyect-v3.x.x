@@ -16,17 +16,13 @@
 					<label>{ins_user_title}</label>
 					<input type="text" name="user" placeholder="{ins_ex_tag} root" value="{v_user}">
 					<label>{ins_password_title}</label>
-					<input type="password" name="password">
+                                        <input type="text" name="password" value="" autocomplete="off">
 					<label>{ins_db_title}</label>
 					<input type="text" name="db" placeholder="{ins_ex_tag} xgproyect" value="{v_db}">
 					<label>{ins_prefix_title}</label>
 					<input type="text" name="prefix" placeholder="{ins_ex_tag} xgp_" value="{v_prefix}">
 					<div align="center">
 						<input type="button" class="btn btn-primary" name="next" onclick="submit();" value="{ins_install_go}">
-					</div>
-					<div align="center">
-						<br/>
-						<span class="text-error">{ins_chmod_notice}</span>
 					</div>
 				</div>
 			</form>

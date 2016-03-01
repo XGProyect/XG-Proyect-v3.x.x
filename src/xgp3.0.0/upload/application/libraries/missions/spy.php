@@ -185,10 +185,12 @@ class Spy extends Missions
 
                         if ($TargetChances >= $SpyerChances) {
 
-                            parent::$db->query("UPDATE " . PLANETS . " SET
-													`planet_invisible_start_time` = '" . time() . "',
-													`planet_debris_crystal` = `planet_debris_crystal` + '" . (0 + $SpyToolDebris) . "'
-													WHERE `planet_id` = '" . $target_data['id'] . "';");
+                            parent::$db->query(
+                                "UPDATE " . PLANETS . " SET
+                                `planet_invisible_start_time` = '" . time() . "',
+                                `planet_debris_crystal` = `planet_debris_crystal` + '" . (0 + $SpyToolDebris) . "'
+                                WHERE `planet_id` = '" . $target_data['planet_id'] . "';"
+                            );
 
                             parent::removeFleet($fleet_row['fleet_id']);
                         } else {

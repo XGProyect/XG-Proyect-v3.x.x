@@ -288,8 +288,8 @@ class DevelopmentsLib extends XGPCore
                 $lablevel   = $total_lab_level;
             }
 
-            $time   = (($cost_metal + $cost_crystal )
-                / FunctionsLib::readConfig('game_speed') ) / ( ( $lablevel + 1) * 2);
+            $time   = (($cost_metal + $cost_crystal)
+                / FunctionsLib::readConfig('game_speed')) / (($lablevel + 1) * 2);
             $time   = floor(
                 ($time * 60 * 60) * (1 - ((OfficiersLib::isOfficierActive(
                     $current_user['premium_officier_technocrat']

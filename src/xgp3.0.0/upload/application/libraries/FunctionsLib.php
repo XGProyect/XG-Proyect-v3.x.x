@@ -15,7 +15,7 @@
 namespace application\libraries;
 
 use application\core\XGPCore;
-use application\core\Xml;
+use application\core\Options;
 
 /**
  * FunctionsLib Class
@@ -117,14 +117,18 @@ abstract class FunctionsLib extends XGPCore
      */
     public static function readConfig($config_name = '', $all = false)
     {
-        $configs = Xml::getInstance(XML_CONFIG_FILE);
+        $configs = Options::getInstance();
 
         if ($all) {
 
-            return $configs->getConfigs();
+            foreach ($configs->getOptions()  as $row) {
+                $return[$row['option_name']]   = $row['option_value'];
+            }
+            
+            return $return;
         } else {
 
-            return $configs->getConfig($config_name);
+            return $configs->getOptions($config_name);
         }
     }
 
@@ -138,9 +142,7 @@ abstract class FunctionsLib extends XGPCore
      */
     public static function updateConfig($config_name, $config_value)
     {
-        $configs = Xml::getInstance(XML_CONFIG_FILE);
-
-        $configs->writeConfig($config_name, $config_value);
+        return Options::getInstance()->writeOptions($config_name, $config_value);
     }
 
     /**
@@ -401,7 +403,7 @@ abstract class FunctionsLib extends XGPCore
             `message_type` = '" . $type . "',
             `message_from` = '" . $from . "',
             `message_subject` = '" . $subject . "',
-            `message_text` 	= '" . $message . "';"
+            `message_text` 	= '" . parent::$db->escapeValue($message) . "';"
         );
     }
 
@@ -526,6 +528,50 @@ abstract class FunctionsLib extends XGPCore
         exit(header('location:' . $route));
     }
 
+    /**
+     * getCurrentLanguage
+     *
+     * @return string
+     */
+    public static function getCurrentLanguage($installed = false)
+    {
+        if ($installed) {
+            return self::readConfig('lang');
+        }
+        
+        // set the user language reading the config file
+        if (parent::$db != null && parent::$db->testConnection() && !isset($_COOKIE['current_lang'])) {
+
+            $_COOKIE['current_lang']    = self::readConfig('lang');
+        }
+
+        // get the language from the session
+        if (isset($_COOKIE['current_lang'])) {
+
+            return $_COOKIE['current_lang'];
+        }
+        
+        return 'english'; // the universal language if nothing was set
+    }
+    
+    /**
+     * setCurrentLanguage
+     * 
+     * @param string $lang Language
+     * 
+     * @return void
+     */
+    public static function setCurrentLanguage($lang = '')
+    {
+        // set the user language reading the config file
+        if (parent::$db != null && parent::$db->testConnection() && !isset($_COOKIE['current_lang'])) {
+
+            self::updateConfig('lang', $lang);
+        }
+        
+        setcookie('current_lang', $lang);
+    }
+    
     /**
      * getLanguages
      *

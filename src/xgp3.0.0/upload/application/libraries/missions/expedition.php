@@ -30,9 +30,14 @@ use application\libraries\FunctionsLib;
 class Expedition extends Missions
 {
     /**
-     * bbCode function.
+     * The amount of hazard for an expedition
      *
-     * @param string $string String
+     * @var int
+     */
+    private $hazard;
+    
+    /**
+     * __construct
      *
      * @return void
      */
@@ -42,9 +47,9 @@ class Expedition extends Missions
     }
 
     /**
-     * bbCode function.
+     * expeditionMission
      *
-     * @param string $string String
+     * @param array $fleet_row Fleet row
      *
      * @return void
      */
@@ -54,7 +59,7 @@ class Expedition extends Missions
 
             if ($fleet_row['fleet_end_stay'] < time()) {
 
-                $ships_points   = $this->set_ships_points();
+                $ships_points   = $this->setShipsPoints();
                 $ships          = explode(";", $fleet_row['fleet_array']);
                 $fleet_capacity = 0;
                 $fleet_points   = 0;
@@ -74,43 +79,38 @@ class Expedition extends Missions
                 }
 
                 // GET A NUMBER BETWEEN 0 AND 10 RANDOMLY
-                $hazard = mt_rand(0, 10);
+                $this->hazard = mt_rand(0, 10);
 
                 // EXPEDITION RESULT "HAZARD"
-                switch ($hazard) {
+                switch ($this->hazard) {
                     // BLACKHOLE
-                    case ( ( $hazard < 3 ) ):
-
-                        $this->hazard_blackhole($fleet_row, $current_fleet);
+                    case (($this->hazard < 3)):
+                        $this->hazardBlackhole($fleet_row, $current_fleet);
 
                         break;
 
                     // NOTHING
-                    case ( ( $hazard == 3 ) ):
-
-                        $this->hazard_nothing($fleet_row);
+                    case (($this->hazard == 3)):
+                        $this->hazardNothing($fleet_row);
 
                         break;
 
                     // RESOURCES
-                    case ( ( ( $hazard >= 4 ) && ( $hazard < 7 ) ) ):
-
-                        $this->hazard_resources($fleet_row, $fleet_capacity);
+                    case ((($this->hazard >= 4) && ($this->hazard < 7))):
+                        $this->hazardResources($fleet_row, $fleet_capacity);
 
                         break;
 
                     // NOTHING
-                    case ( ( $hazard == 7 ) ):
-
-                        $this->hazard_nothing($fleet_row);
+                    case (($this->hazard == 7)):
+                        $this->hazardNothing($fleet_row);
 
                         break;
 
 
                     // SHIPS
-                    case ( ( ( $hazard >= 8 ) && ( $hazard < 11 ) ) ):
-
-                        $this->hazard_ships($fleet_row, $fleet_points);
+                    case ((($this->hazard >= 8) && ($this->hazard < 11))):
+                        $this->hazardShips($fleet_row, $fleet_points);
 
                         break;
                 }
@@ -118,7 +118,7 @@ class Expedition extends Missions
         }
 
         if ($fleet_row['fleet_end_time'] < time()) {
-            $this->expedition_message(
+            $this->expeditionMessage(
                 $fleet_row['fleet_owner'],
                 $this->langs['sys_expe_back_home'],
                 $fleet_row['fleet_end_time']
@@ -130,19 +130,24 @@ class Expedition extends Missions
     }
 
     /**
-     * bbCode function.
+     * hazardBlackhole
      *
-     * @param string $string String
+     * @param array $fleet_row     Fleet row
+     * @param array $current_fleet Current fleet
      *
      * @return void
      */
-    private function hazard_blackhole($fleet_row, $current_fleet)
+    private function hazardBlackhole($fleet_row, $current_fleet)
     {
-        $hazard += 1;
-        $lost_amount = ( ( $hazard * 33 ) + 1 ) / 100;
+        $this->hazard += 1;
+        $lost_amount = (($this->hazard * 33) + 1) / 100;
 
         if ($lost_amount == 1) {
-            $this->expedition_message($fleet_row['fleet_owner'], $this->langs['sys_expe_blackholl_2'], $fleet_row['fleet_end_stay']);
+            $this->expeditionMessage(
+                $fleet_row['fleet_owner'],
+                $this->langs['sys_expe_blackholl_2'],
+                $fleet_row['fleet_end_stay']
+            );
 
             parent::removeFleet($fleet_row['fleet_id']);
         } else {
@@ -151,20 +156,30 @@ class Expedition extends Missions
             foreach ($current_fleet as $ship => $amount) {
                 if (floor($amount * $lost_amount) != 0) {
                     $lost_ships[$ship] = floor($amount * $lost_amount);
-                    $new_ships .= $ship . "," . ( $amount - $lost_ships[$ship] ) . ";";
+                    $new_ships .= $ship . "," . ($amount - $lost_ships[$ship]) . ";";
                     $all_destroyed = false;
                 }
             }
 
             if (!$all_destroyed) {
-                $this->expedition_message($fleet_row['fleet_owner'], $this->langs['sys_expe_blackholl_1'], $fleet_row['fleet_end_stay']);
+                $this->expeditionMessage(
+                    $fleet_row['fleet_owner'],
+                    $this->langs['sys_expe_blackholl_1'],
+                    $fleet_row['fleet_end_stay']
+                );
 
-                parent::$db->query("UPDATE " . FLEETS . " SET
-										`fleet_array` = '" . $new_ships . "',
-										`fleet_mess` = '1'
-										WHERE `fleet_id` = '" . $fleet_row['fleet_id'] . "';");
+                parent::$db->query(
+                    "UPDATE " . FLEETS . " SET
+                    `fleet_array` = '" . $new_ships . "',
+                    `fleet_mess` = '1'
+                    WHERE `fleet_id` = '" . $fleet_row['fleet_id'] . "';"
+                );
             } else {
-                $this->expedition_message($fleet_row['fleet_owner'], $this->langs['sys_expe_blackholl_2'], $fleet_row['fleet_end_stay']);
+                $this->expeditionMessage(
+                    $fleet_row['fleet_owner'],
+                    $this->langs['sys_expe_blackholl_2'],
+                    $fleet_row['fleet_end_stay']
+                );
 
                 parent::removeFleet($fleet_row['fleet_id']);
             }
@@ -172,15 +187,15 @@ class Expedition extends Missions
     }
 
     /**
-     * bbCode function.
+     * hazardNothing
      *
-     * @param string $string String
+     * @param array $fleet_row Fleet row
      *
      * @return void
      */
-    private function hazard_nothing($fleet_row)
+    private function hazardNothing($fleet_row)
     {
-        $this->expedition_message(
+        $this->expeditionMessage(
             $fleet_row['fleet_owner'],
             $this->langs['sys_expe_nothing_' . mt_rand(1, 2)],
             $fleet_row['fleet_end_stay']
@@ -190,15 +205,17 @@ class Expedition extends Missions
     }
 
     /**
-     * bbCode function.
+     * hazardResources
      *
-     * @param string $string String
+     * @param array $fleet_row      Fleet row
+     * @param int   $fleet_capacity Fleet capacity
      *
      * @return void
      */
-    private function hazard_resources($fleet_row, $fleet_capacity)
+    private function hazardResources($fleet_row, $fleet_capacity)
     {
-        $fleet_current_capacity = $fleet_row['fleet_resource_metal'] + $fleet_row['fleet_resource_crystal'] + $fleet_row['fleet_resource_deuterium'];
+        $fleet_current_capacity = $fleet_row['fleet_resource_metal']
+            + $fleet_row['fleet_resource_crystal'] + $fleet_row['fleet_resource_deuterium'];
         $fleet_capacity -= $fleet_current_capacity;
 
         if ($fleet_capacity > 5000) {
@@ -211,30 +228,44 @@ class Expedition extends Missions
             $found_darkmatter = ( $fleet_capacity > 10000 ) ? intval(3 * log($fleet_capacity / 10000) * 100) : 0;
             $found_darkmatter = mt_rand($found_darkmatter / 2, $found_darkmatter);
 
-            parent::$db->query("UPDATE " . FLEETS . " AS f
-									INNER JOIN " . PREMIUM . " AS pr ON pr.premium_user_id = f.fleet_owner SET
-									`fleet_resource_metal` = `fleet_resource_metal` + '" . $found_metal . "',
-									`fleet_resource_crystal` = `fleet_resource_crystal` + '" . $found_crystal . "',
-									`fleet_resource_deuterium` = `fleet_resource_deuterium` + '" . $found_deuterium . "',
-									`premium_dark_matter` = `premium_dark_matter` + '" . $found_darkmatter . "',
-									`fleet_mess` = '1'
-									WHERE `fleet_id` = '" . $fleet_row['fleet_id'] . "';");
+            parent::$db->query(
+                "UPDATE " . FLEETS . " AS f
+                INNER JOIN " . PREMIUM . " AS pr ON pr.premium_user_id = f.fleet_owner SET
+                `fleet_resource_metal` = `fleet_resource_metal` + '" . $found_metal . "',
+                `fleet_resource_crystal` = `fleet_resource_crystal` + '" . $found_crystal . "',
+                `fleet_resource_deuterium` = `fleet_resource_deuterium` + '" . $found_deuterium . "',
+                `premium_dark_matter` = `premium_dark_matter` + '" . $found_darkmatter . "',
+                `fleet_mess` = '1'
+                WHERE `fleet_id` = '" . $fleet_row['fleet_id'] . "';"
+            );
 
-            $message = sprintf($this->langs['sys_expe_found_goods'], FormatLib::prettyNumber($found_metal), $this->langs['Metal'], FormatLib::prettyNumber($found_crystal), $this->langs['Crystal'], FormatLib::prettyNumber($found_deuterium), $this->langs['Deuterium'], FormatLib::prettyNumber($found_darkmatter), $this->langs['Darkmatter']);
-            $this->expedition_message($fleet_row['fleet_owner'], $message, $fleet_row['fleet_end_stay']);
+            $message = sprintf(
+                $this->langs['sys_expe_found_goods'],
+                FormatLib::prettyNumber($found_metal),
+                $this->langs['Metal'],
+                FormatLib::prettyNumber($found_crystal),
+                $this->langs['Crystal'],
+                FormatLib::prettyNumber($found_deuterium),
+                $this->langs['Deuterium'],
+                FormatLib::prettyNumber($found_darkmatter),
+                $this->langs['Darkmatter']
+            );
+
+            $this->expeditionMessage($fleet_row['fleet_owner'], $message, $fleet_row['fleet_end_stay']);
         }
     }
 
     /**
-     * bbCode function.
+     * hazardShips
      *
-     * @param string $string String
+     * @param array $fleet_row    Fleet row
+     * @param int   $fleet_points Fleet points
      *
      * @return void
      */
-    private function hazard_ships($fleet_row, $fleet_points)
+    private function hazardShips($fleet_row, $fleet_points)
     {
-        $ships_ratio = $this->set_ships_ratios();
+        $ships_ratio = $this->setShipsRatios();
         $found_chance = $fleet_points / $fleet_row['fleet_amount'];
 
         for ($ship = 202; $ship <= 215; $ship++) {
@@ -256,7 +287,7 @@ class Expedition extends Missions
             }
         }
 
-        if ($found_ship != NULL) {
+        if ($found_ship != null) {
             foreach ($found_ship as $ship => $count) {
                 if ($count != 0) {
                     $found_ship_message .= $count . " " . $this->langs['tech'][$ship] . ",";
@@ -271,41 +302,47 @@ class Expedition extends Missions
 
         $message = $this->langs['sys_expe_found_ships'] . $found_ship_message;
 
-        $this->expedition_message($fleet_row['fleet_owner'], $message, $fleet_row['fleet_end_stay']);
+        $this->expeditionMessage($fleet_row['fleet_owner'], $message, $fleet_row['fleet_end_stay']);
     }
 
     /**
-     * bbCode function.
+     * setShipsPoints
      *
-     * @param string $string String
-     *
-     * @return void
+     * @return array
      */
-    private function set_ships_points()
+    private function setShipsPoints()
     {
-        return array(202 => 1.0, 203 => 1.5, 204 => 0.5, 205 => 1.5, 206 => 2.0, 207 => 2.5, 208 => 0.5, 209 => 1.0, 210 => 0.01, 211 => 3.0, 212 => 0.0, 213 => 3.5, 214 => 5.0, 215 => 3.2);
+        return [
+            202 => 1.0, 203 => 1.5, 204 => 0.5, 205 => 1.5, 206 => 2.0,
+            207 => 2.5, 208 => 0.5, 209 => 1.0, 210 => 0.01, 211 => 3.0,
+            212 => 0.0, 213 => 3.5, 214 => 5.0, 215 => 3.2
+        ];
     }
 
     /**
-     * bbCode function.
+     * setShipsRatios
      *
-     * @param string $string String
-     *
-     * @return void
+     * @return array
      */
-    private function set_ships_ratio()
+    private function setShipsRatios()
     {
-        return array(202 => 0.1, 203 => 0.1, 204 => 0.1, 205 => 0.5, 206 => 0.25, 207 => 0.125, 208 => 0.5, 209 => 0.1, 210 => 0.1, 211 => 0.0625, 212 => 0.0, 213 => 0.0625, 214 => 0.03125, 215 => 0.0625);
+        return [
+            202 => 0.1, 203 => 0.1, 204 => 0.1, 205 => 0.5, 206 => 0.25,
+            207 => 0.125, 208 => 0.5, 209 => 0.1, 210 => 0.1, 211 => 0.0625,
+            212 => 0.0, 213 => 0.0625, 214 => 0.03125, 215 => 0.0625
+        ];
     }
 
     /**
-     * bbCode function.
+     * expeditionMessage
      *
-     * @param string $string String
+     * @param int $owner      Owner
+     * @param string $message Message
+     * @param int $time       Time
      *
      * @return void
      */
-    private function expedition_message($owner, $message, $time)
+    private function expeditionMessage($owner, $message, $time)
     {
         FunctionsLib::sendMessage(
             $owner,

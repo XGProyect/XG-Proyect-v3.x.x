@@ -3,8 +3,8 @@
 // SOME MESSAGES
 $lang['404_error']					= 'La p&aacute;gina solicitada no existe';
 $lang['ins_no_server_requirements']	= 'Tu servidor/hosting no cumple con los requisitos m&iacute;nimos que requiere XG Proyect para funcionar.<br /><br />Requisitos: <br />- PHP 5.5.x<br />- MySQL 5.5.x';
+$lang['ins_not_writable']               = 'Debes dar permisos de escritura (chmod 777) al directorio application/config para poder continuar con la instalación.';
 $lang['ins_already_installed']		= 'XG Proyect ya se encuentra instalado. Selecciona una opci&oacute;n: <br /><br /> - <a href="index.php?page=update">Actualizar</a> <br /> - <a href="index.php?page=migrate">Migrar</a> <br /> - <a href="../">Volver al juego</a> <br /><br />En el caso de que no desees realizar ninguna acci&oacute;n, por seguridad, te recomendamos <span style="color:red;text-decoration:underline;">BORRAR</span> el directorio install.';
-$lang['ins_missing_xml_file']		= 'No se puede encontrar el archivo config.xml ni el archivo config.xml.cfg, debes tener alguno de estos para poder continuar con la instalación. Revisa tu directorio application/config y los permisos del mismo deben estar en chmod 777';
 
 // SOME ERROR HEADERS
 $lang['ins_error_title']			= '¡Alerta!';
@@ -41,7 +41,6 @@ $lang['ins_continue']				= 'Continuar';
 // STEP1
 $lang['ins_install_title']			= 'Instalación';
 $lang['ins_connection_data_title']	= 'Datos para la conexi&oacute;n con la Base de Datos';
-$lang['ins_chmod_notice']			= 'Antes de instalar cambie los permisos del archivo config.php a "CHMOD 777"';
 $lang['ins_server_title']			= 'Servidor SQL:';
 $lang['ins_db_title']				= 'Base de datos:';
 $lang['ins_user_title']				= 'Usuario:';

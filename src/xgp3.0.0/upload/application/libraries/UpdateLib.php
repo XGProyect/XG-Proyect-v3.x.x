@@ -54,11 +54,12 @@ class UpdateLib extends XGPCore
     private function cleanUp()
     {
         $last_cleanup       = FunctionsLib::readConfig('last_cleanup');
-        $cleanup_interval   = 6; // 6 HOURS
+        $cleanup_interval   = 0; // 6 HOURS
 
         if ((time() >= ($last_cleanup + (3600 * $cleanup_interval)))) {
 
             // TIMERS
+            $del_planets    = time() - (60 * 60 * 24); // 1 DAY
             $del_before     = time() - (60 * 60 * 24 * 7); // 1 WEEK
             $del_inactive   = time() - (60 * 60 * 24 * 30); // 1 MONTH
             $del_deleted    = time() - (60 * 60 * 24 * 7); // 1 WEEK
@@ -76,13 +77,20 @@ class UpdateLib extends XGPCore
                 
                 while ($delete = parent::$db->fetchArray($ChooseToDelete)) {
                     
-                    parent::$users->deleteUser($delete['id']);
+                    parent::$users->deleteUser($delete['user_id']);
                 }
             }
 
             parent::$db->query("DELETE FROM " . MESSAGES . " WHERE `message_time` < '". $del_before ."';");
             parent::$db->query("DELETE FROM " . REPORTS . " WHERE `report_time` < '". $del_before ."';");
-
+            parent::$db->query(
+                "DELETE p,b,d,s FROM " . PLANETS . " AS p
+                INNER JOIN " . BUILDINGS . " AS b ON b.building_planet_id = p.`planet_id`
+                INNER JOIN " . DEFENSES . " AS d ON d.defense_planet_id = p.`planet_id`
+                INNER JOIN " . SHIPS . " AS s ON s.ship_planet_id = p.`planet_id`
+                WHERE `planet_destroyed` < '" . $del_planets . "' AND `planet_destroyed` <> 0;"
+            );
+            
             FunctionsLib::updateConfig('last_cleanup', time());
         }
     }

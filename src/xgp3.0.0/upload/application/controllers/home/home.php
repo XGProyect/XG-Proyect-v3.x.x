@@ -104,7 +104,7 @@ class Home extends XGPCore
             FunctionsLib::redirect('index.php');
         } else {
             $parse['year']          = date('Y');
-            $parse['version']       = VERSION;
+            $parse['version']       = SYSTEM_VERSION;
             $parse['servername']    = FunctionsLib::readConfig('game_name');
             $parse['game_logo']     = FunctionsLib::readConfig('game_logo');
             $parse['forum_url']     = FunctionsLib::readConfig('forum_url');

@@ -173,27 +173,35 @@ class Defense extends XGPCore
         $NotBuilding = true;
 
         if ($this->_current_planet['planet_b_building_id'] != 0) {
-            $CurrentQueue   = $this->_current_planet['planet_b_building_id'];
-            $Element        = 0;
+
+            $CurrentQueue       = $this->_current_planet['planet_b_building_id'];
+            $Element            = 0;
+            $CurrentBuilding    = 0;
 
             if (strpos($CurrentQueue, ";")) {
-                // FIX BY LUCKY - IF THE SHIPYARD IS IN QUEUE THE USER CANT RESEARCH ANYTHING...
+
                 $QueueArray = explode(";", $CurrentQueue);
 
                 for ($i = 0; $i < MAX_BUILDING_QUEUE_SIZE; $i++) {
-                    $ListIDArray = explode(",", $QueueArray[$i]);
-                    $Element = $ListIDArray[0];
 
-                    if (($Element == 21 ) or ( $Element == 14 ) or ( $Element == 15 )) {
-                        break;
+                    if (isset($QueueArray[$i])) {
+
+                        $ListIDArray = explode(",", $QueueArray[$i]);
+                        $Element = $ListIDArray[0];
+
+                        if (($Element == 21) or ($Element == 14) or ($Element == 15)) {
+                            break;
+                        }   
                     }
                 }
                 // END - FIX
             } else {
+
                 $CurrentBuilding = $CurrentQueue;
             }
 
-            if (( ( $CurrentBuilding == 21 ) or ( $CurrentBuilding == 14 ) or ( $CurrentBuilding == 15 ) ) or ( ($Element == 21 ) or ( $Element == 14 ) or ( $Element == 15 ))) { // ADDED (or $Element == 21) BY LUCKY
+            if ((($CurrentBuilding == 21) or ($CurrentBuilding == 14) or ($CurrentBuilding == 15)) or (($Element == 21) or ($Element == 14) or ($Element == 15))) {
+
                 $parse['message'] = "<font color=\"red\">" . $this->_lang['bd_building_shipyard'] . "</font>";
                 $NotBuilding = false;
             }

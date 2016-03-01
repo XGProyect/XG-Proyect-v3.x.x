@@ -63,6 +63,7 @@ class Research extends XGPCore
         if ($this->_current_planet[$this->_resource[31]] == 0) {
             FunctionsLib::message($this->_lang['bd_lab_required'], '', '', true);
         } else {
+            $this->set_labs_amount();
             $this->handle_technologie_build();
             $this->build_page();
         }
@@ -354,11 +355,13 @@ class Research extends XGPCore
     private function set_labs_amount()
     {
         $labs_limit = $this->_current_user[$this->_resource[123]] + 1;
-        $labs_level = parent::$db->queryFetch("SELECT SUM(`building_laboratory`) AS `total_level`
-														FROM " . BUILDINGS . " AS b
-														INNER JOIN " . PLANETS . " AS p ON p.`planet_id` = b.building_planet_id
-														WHERE planet_user_id='" . (int) $this->_current_user['user_id'] . "'
-														ORDER BY building_laboratory DESC LIMIT " . $labs_limit . "");
+        $labs_level = parent::$db->queryFetch(
+            "SELECT SUM(`building_laboratory`) AS `total_level`
+            FROM " . BUILDINGS . " AS b
+            INNER JOIN " . PLANETS . " AS p ON p.`planet_id` = b.building_planet_id
+            WHERE planet_user_id='" . (int) $this->_current_user['user_id'] . "'
+            ORDER BY building_laboratory DESC LIMIT " . $labs_limit . ""
+        );
 
         $this->_lab_level = $labs_level['total_level'];
     }

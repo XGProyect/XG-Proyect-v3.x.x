@@ -155,17 +155,20 @@ class PlanetLib extends XGPCore
     /**
      * setNewMoon
      *
-     * @param int    $galaxy   Galaxy
-     * @param int    $system   System
-     * @param int    $position Position
-     * @param int    $owner    Owner
-     * @param string $name     Moon name
-     * @param int    $chance   Chance
-     * @param int    $size     Size
+     * @param int    $galaxy     Galaxy
+     * @param int    $system     System
+     * @param int    $position   Position
+     * @param int    $owner      Owner
+     * @param string $name       Moon name
+     * @param int    $chance     Chance
+     * @param int    $size       Size
+     * @param int    $max_fields Max Fields
+     * @param int    $min_temp   Min Temp
+     * @param int    $max_temp   Max Temp
      *
      * @return string
      */
-    public function setNewMoon($galaxy, $system, $position, $owner, $name = '', $chance = 0, $size = 0)
+    public function setNewMoon($galaxy, $system, $position, $owner, $name = '', $chance = 0, $size = 0, $max_fields = 1, $min_temp = 0, $max_temp = 0)
     {
         $MoonPlanet = parent::$db->queryFetch(
             "SELECT pm2.`planet_id`,
@@ -190,7 +193,8 @@ class PlanetLib extends XGPCore
             $SizeMax    = 6000 + ($chance * 200);
             $temp       = $this->formula->setPlanetTemp($position);
             $size       = $chance == 0 ? $size : mt_rand($SizeMin, $SizeMax);
-
+            $size       = $size == 0 ? mt_rand(2000, 6000) : $size;
+            $max_fields = $max_fields == 0 ? 1 : $max_fields;
             
             $this->createPlanetWithOptions(
                 [
@@ -203,9 +207,9 @@ class PlanetLib extends XGPCore
                     'planet_type' => '3',
                     'planet_image' => 'mond',
                     'planet_diameter' => $size,
-                    'planet_field_max' => '1',
-                    'planet_temp_min' => $temp['min'],
-                    'planet_temp_max' => $temp['max']
+                    'planet_field_max' => $max_fields,
+                    'planet_temp_min' => $min_temp == 0 ? $temp['min'] : $min_temp,
+                    'planet_temp_max' => $max_temp == 0 ? $temp['max'] : $max_temp
                 ]
             );
         

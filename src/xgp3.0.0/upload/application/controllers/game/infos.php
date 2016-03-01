@@ -360,7 +360,7 @@ class Infos extends XGPCore
                         for ($Ship = 200; $Ship < 300; $Ship++) {
 
                             $ShipLabel      = "c" . $Ship;
-                            $gemi_kontrol   = $_POST[$ShipLabel];
+                            $gemi_kontrol   = isset($_POST[$ShipLabel]) ? $_POST[$ShipLabel] : null;
 
                             if (is_numeric($gemi_kontrol)) {
 
@@ -383,19 +383,21 @@ class Infos extends XGPCore
                         if ($SubQueryOri != "") {
 
                             parent::$db->query(
-                                "UPDATE " . PLANETS . ", " . USERS . " SET
+                                "UPDATE " . PLANETS . ", " . USERS . ", " . SHIPS . " SET
                                     $SubQueryOri
                                     `planet_last_jump_time` = '" . $JumpTime . "',
-                                    `user_current_planet` = '" . $TargetGate['id'] . "'
+                                    `user_current_planet` = '" . $TargetGate['planet_id'] . "'
                                 WHERE `planet_id` = '" . $this->_current_planet['planet_id'] . "' 
+                                    AND `ship_planet_id` = '" . $this->_current_planet['planet_id'] . "' 
                                     AND `user_id` = '" . $this->_current_user['user_id'] . "';"
                             );
 
                             parent::$db->query(
-                                "UPDATE " . PLANETS . " SET
+                                "UPDATE " . PLANETS . ", " . SHIPS . " SET
                                 $SubQueryDes
-                                `planet_last_jump_time` = '" . $JumpTime . "
-                                WHERE `planet_id` = '" . $TargetGate['id'] . "';"
+                                `planet_last_jump_time` = '" . $JumpTime . "'
+                                WHERE `planet_id` = '" . $TargetGate['planet_id'] . "'
+                                    AND `ship_planet_id` = '" . $TargetGate['planet_id'] . "';"
                             );
 
                             $this->_current_planet['planet_last_jump_time'] = $JumpTime;

@@ -14,7 +14,7 @@
 					<label>{ins_admin_create_user}</label>
 					<input name="adm_user" size="20" maxlength="20" type="text">
 					<label>{ins_admin_create_pass}</label>
-					<input name="adm_pass" size="20" maxlength="20" type="password">
+					<input name="adm_pass" size="20" maxlength="20" type="text" value="" autocomplete="off">
 					<label>{ins_admin_create_email}</label>
 					<input name="adm_email" size="20" maxlength="40" type="text">
 					<div align="center">

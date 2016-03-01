@@ -31,7 +31,6 @@ use application\libraries\FunctionsLib;
  */
 class Maker extends XGPCore
 {
-
     private $_current_user;
     private $_creator;
     private $_alert;
@@ -181,82 +180,76 @@ class Maker extends XGPCore
             $temp_max = (int) $_POST['planet_temp_max'];
             $max_fields = (int) $_POST['planet_field_max'];
 
-            $moon_planet = parent::$db->queryFetch("SELECT p.*, (SELECT `planet_id`
-																			FROM " . PLANETS . "
-																			WHERE `planet_galaxy` = (SELECT `planet_galaxy`
-																										FROM " . PLANETS . "
-																										WHERE `planet_id` = '" . $planet_id . "'
-																											AND `planet_type` = 1)
-																					AND `planet_system` = (SELECT `planet_system`
-																											FROM " . PLANETS . "
-																											WHERE `planet_id` = '" . $planet_id . "'
-																												AND `planet_type` = 1)
-																					AND `planet_planet` = (SELECT `planet_planet`
-																											FROM " . PLANETS . "
-																											WHERE `planet_id` = '" . $planet_id . "'
-																												AND `planet_type` = 1)
-																					AND `planet_type` = 3) AS id_moon
-																FROM " . PLANETS . " AS p
-																WHERE p.`planet_id` = '" . $planet_id . "' AND
-																		p.`planet_type` = '1'");
+            $moon_planet = parent::$db->queryFetch(
+                "SELECT p.*, (SELECT `planet_id`
+                FROM " . PLANETS . "
+                WHERE `planet_galaxy` = (SELECT `planet_galaxy`
+                                                                        FROM " . PLANETS . "
+                                                                        WHERE `planet_id` = '" . $planet_id . "'
+                                                                                AND `planet_type` = 1)
+                                AND `planet_system` = (SELECT `planet_system`
+                                                                                FROM " . PLANETS . "
+                                                                                WHERE `planet_id` = '" . $planet_id . "'
+                                                                                        AND `planet_type` = 1)
+                                AND `planet_planet` = (SELECT `planet_planet`
+                                                                                FROM " . PLANETS . "
+                                                                                WHERE `planet_id` = '" . $planet_id . "'
+                                                                                        AND `planet_type` = 1)
+                                AND `planet_type` = 3) AS id_moon
+                FROM " . PLANETS . " AS p
+                WHERE p.`planet_id` = '" . $planet_id . "' AND
+                p.`planet_type` = '1'"
+            );
 
 
             if ($moon_planet && is_numeric($planet_id)) {
                 if ($moon_planet['id_moon'] == '' && $moon_planet['planet_type'] == 1 && $moon_planet['planet_destroyed'] == 0) {
+                    
                     $galaxy = $moon_planet['planet_galaxy'];
                     $system = $moon_planet['planet_system'];
                     $planet = $moon_planet['planet_planet'];
-                    $owner = $moon_planet['planet_user_id'];
+                    $owner  = $moon_planet['planet_user_id'];
 
-                    if (isset($_POST['diameter_check']) && $_POST['diameter_check'] == 'on') {
-                        $size = mt_rand(4500, 9999);
+                    $size       = 0;
+                    $errors     = 0;
+                    $mintemp    = 0;
+                    $maxtemp    = 0;
+
+                    if (!isset($_POST['diameter_check'])) {
+                        if (is_numeric($diameter)) {
+                            $size   = $diameter;
+                        } else {
+                            $errors++;
+                            $this->_alert = AdministrationLib::saveMessage('warning', $this->_lang['mk_moon_only_numbers']);
+                        }
                     }
 
-                    if (isset($_POST['diameter_check']) && $_POST['diameter_check'] != 'on' && is_numeric($diameter)) {
-                        $size = $diameter;
-                    } else {
-                        $this->_alert = AdministrationLib::saveMessage('warning', $this->_lang['mk_moon_only_numbers']);
+                    if (!isset($_POST['temp_check'])) {
+                        if (is_numeric($temp_max) && is_numeric($temp_min)) {
+                            $mintemp    = $temp_min;
+                            $maxtemp    = $temp_max;
+                        } else {
+                            $errors++;
+                            $this->_alert = AdministrationLib::saveMessage('warning', $this->_lang['mk_moon_only_numbers']);
+                        }   
                     }
-
-
-                    if (isset($_POST['temp_check']) && $_POST['temp_check'] == 'on') {
-                        $maxtemp = $moon_planet['planet_temp_max'] - mt_rand(10, 45);
-                        $mintemp = $moon_planet['planet_temp_min'] - mt_rand(10, 45);
-                    } elseif (isset($_POST['temp_check']) && $_POST['temp_check'] != 'on' && is_numeric($temp_max) && is_numeric($temp_min)) {
-                        $maxtemp = $temp_max;
-                        $mintemp = $temp_min;
-                    } else {
-                        $this->_alert = AdministrationLib::saveMessage('warning', $this->_lang['mk_moon_only_numbers']);
+                    
+                    if ($errors == 0) {
+                        $this->_creator->setNewMoon(
+                            $galaxy,
+                            $system,
+                            $planet,
+                            $owner,
+                            $moon_name,
+                            0,
+                            $size,
+                            $max_fields,
+                            $mintemp,
+                            $maxtemp
+                        );
+                        
+                        $this->_alert = AdministrationLib::saveMessage('ok', $this->_lang['mk_moon_added']);
                     }
-
-                    parent::$db->query(
-                        "INSERT INTO " . PLANETS . " SET
-                        `planet_name` = '" . $moon_name . "',
-                        `planet_user_id` = '" . $owner . "',
-                        `planet_galaxy` = '" . $galaxy . "',
-                        `planet_system` = '" . $system . "',
-                        `planet_planet` = '" . $planet . "',
-                        `planet_last_update` = '" . time() . "',
-                        `planet_type` = '3',
-                        `planet_image` = 'mond',
-                        `planet_diameter` = '" . $size . "',
-                        `planet_field_max` = '" . $max_fields . "',
-                        `planet_temp_min` = '" . $mintemp . "',
-                        `planet_temp_max` = '" . $maxtemp . "';"
-                    );
-
-                    $last_id = parent::$db->insertId();
-
-                    parent::$db->query("INSERT INTO " . BUILDINGS . " SET
-											`building_planet_id` = '" . $last_id . "';");
-
-                    parent::$db->query("INSERT INTO " . DEFENSES . " SET
-											`defense_planet_id` = '" . $last_id . "';");
-
-                    parent::$db->query("INSERT INTO " . SHIPS . " SET
-											`ship_planet_id` = '" . $last_id . "';");
-
-                    $this->_alert = AdministrationLib::saveMessage('ok', $this->_lang['mk_moon_added']);
                 } else {
                     $this->_alert = AdministrationLib::saveMessage('warning', $this->_lang['mk_moon_add_errors']);
                 }

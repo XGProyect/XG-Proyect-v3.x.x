@@ -294,7 +294,6 @@ class GalaxyLib extends XGPCore
             $parse['system']            = $this->system;
             $parse['planet']            = $this->planet;
             $parse['planet_diameter']   = FormatLib::prettyNumber($this->row_data['planet_diameter']);
-            $parse['temperature']       = FormatLib::prettyNumber($this->row_data['planet_temp_min']);
             $parse['links']             = '';
 
             // LOOP THRU ACTIONS
@@ -435,6 +434,11 @@ class GalaxyLib extends XGPCore
             }
         } else {
             $parse['status']    = $this->row_data['user_name'];
+            
+            if ($status['vacation'] != '') {
+                $parse['status']    .=
+                    '<font color="white">(</font>' . $status['vacation'] . '<font color="white">)</font>';   
+            }
         }
 
         return $parse;
