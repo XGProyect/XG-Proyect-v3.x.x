@@ -38,6 +38,8 @@ class Installation extends XGPCore
 
     /**
      * __construct()
+     *
+     * @return void
      */
     public function __construct()
     {
@@ -56,9 +58,9 @@ class Installation extends XGPCore
     }
 
     /**
-     * method __destruct
-     * param
-     * return close db connection
+     * __destruct
+     *
+     * @return void
      */
     public function __destruct()
     {
@@ -66,9 +68,9 @@ class Installation extends XGPCore
     }
 
     /**
-     * method buildPage
-     * param
-     * return main method, loads everything
+     * buildPage
+     *
+     * @return void
      */
     private function buildPage()
     {
@@ -88,6 +90,7 @@ class Installation extends XGPCore
         // ACTION FOR THE CURRENT PAGE
         switch ((isset($_POST['page']) ? $_POST['page'] : '')) {
             case 'step1':
+                
                 $this->host     = $_POST['host'];
                 $this->user     = $_POST['user'];
                 $this->password = $_POST['password'];
@@ -95,27 +98,23 @@ class Installation extends XGPCore
                 $this->prefix   = $_POST['prefix'];
 
                 if (!$this->validateDbData()) {
-
                     $alerts     = $this->langs['ins_empty_fields_error'];
                     $continue   = false;
                 }
-                
-                if (!$this->tryConnection() && $continue) {
 
+                if ($continue && !$this->tryConnection()) {
                     $alerts     = $this->langs['ins_not_connected_error'];
                     $continue   = false;
                 }
-                
-                if (!$this->tryDatabase() && $continue) {
+
+                if ($continue && !$this->tryDatabase()) {
                     $alerts     = $this->langs['ins_db_not_exists'];
                     $continue   = false;
                 }
 
-                if ($continue) {
-                    if (!$this->writeConfigFile()) {
-                        $alerts     = $this->langs['ins_write_config_error'];
-                        $continue   = false;
-                    }   
+                if ($continue && !$this->writeConfigFile()) {
+                    $alerts     = $this->langs['ins_write_config_error'];
+                    $continue   = false;
                 }
 
                 if ($continue) {
@@ -315,7 +314,7 @@ class Installation extends XGPCore
 
     /**
      * isWritable
-     * 
+     *
      * @return boolean
      */
     private function isWritable()
@@ -326,9 +325,9 @@ class Installation extends XGPCore
     }
     
     /**
-     * method isInstalled
-     * param
-     * return true if the game is already installed, false if not
+     * isInstalled
+     *
+     * @return boolean
      */
     private function isInstalled()
     {
@@ -363,7 +362,7 @@ class Installation extends XGPCore
 
     /**
      * tablesExists
-     * 
+     *
      * @return boolean
      */
     private function tablesExists()
@@ -371,7 +370,7 @@ class Installation extends XGPCore
         $result = parent::$db->query("SHOW TABLES FROM " . DB_NAME);
         $arr    = [];
         
-        while($row = parent::$db->fetchArray($result)) {
+        while ($row = parent::$db->fetchArray($result)) {
 
             if (strpos($row[0], DB_PREFIX) !== false) {
                 $arr[]  = $row[0];
@@ -388,7 +387,7 @@ class Installation extends XGPCore
     
     /**
      * adminExists
-     * 
+     *
      * @return boolean
      */
     private function adminExists()
@@ -401,7 +400,7 @@ class Installation extends XGPCore
     
     /**
      * tryConnection
-     * 
+     *
      * @return boolean
      */
     private function tryConnection()
@@ -411,7 +410,7 @@ class Installation extends XGPCore
     
     /**
      * tryDatabase
-     * 
+     *
      * @return boolean
      */
     private function tryDatabase()
@@ -420,9 +419,9 @@ class Installation extends XGPCore
     }
 
     /**
-     * method writeConfigFile
-     * param
-     * return write configuration file
+     * writeConfigFile
+     *
+     * @return boolean
      */
     private function writeConfigFile()
     {
@@ -460,9 +459,9 @@ class Installation extends XGPCore
     }
 
     /**
-     * method insertDbData
-     * param
-     * return true successfully inserted data | false an error ocurred
+     * insertDbData
+     *
+     * @return boolean
      */
     private function insertDbData()
     {
@@ -485,7 +484,8 @@ class Installation extends XGPCore
     }
 
     /**
-     * @method createAccount
+     * createAccount
+     *
      * @return negative value if an error ocurred, or 0 if admin account was successfully created
      *          -1: Some field is empty
      *          -2: Admin email is invalid
@@ -535,20 +535,20 @@ class Installation extends XGPCore
     }
 
     /**
-     * method validateDbData
-     * param
-     * return check inserted data, try connection and return the result
+     * validateDbData
+     *
+     * @return boolean
      */
     private function validateDbData()
-    {        
+    {
         return !empty($this->host) && !empty($this->name) &&
                 !empty($this->user) && !empty($this->prefix);
     }
 
     /**
-     * method generateToken
-     * param
-     * return the security token generated
+     * generateToken
+     *
+     * return string
      */
     private function generateToken()
     {
@@ -567,9 +567,12 @@ class Installation extends XGPCore
     }
 
     /**
-     * method saveMessage
-     * param $result
-     * return show the save message
+     * saveMessage
+     *
+     * @param string $message Message
+     * @param string $result  Result
+     *
+     * @return array
      */
     private function saveMessage($message, $result = 'ok')
     {

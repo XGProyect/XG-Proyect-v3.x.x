@@ -540,7 +540,7 @@ abstract class FunctionsLib extends XGPCore
         }
         
         // set the user language reading the config file
-        if (parent::$db != null && parent::$db->testConnection() && !isset($_COOKIE['current_lang'])) {
+        if ($installed && !isset($_COOKIE['current_lang'])) {
 
             $_COOKIE['current_lang']    = self::readConfig('lang');
         }
