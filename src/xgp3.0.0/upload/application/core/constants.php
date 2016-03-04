@@ -24,6 +24,12 @@ define('SYSTEM_VERSION', '3.0.0');
 // HOOKS
 define('HOOKS_ENABLED', false);
 
+// DEBUG MODE
+define('DEBUG_MODE', false);
+
+// ERROR LOGS MAIL
+define('ERROR_LOGS_MAIL', '');
+
 // RUN QUERIES FLAG
 define('ADMIN_ACCESS_QUERY', true);
 

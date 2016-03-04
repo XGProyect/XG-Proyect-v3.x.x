@@ -76,7 +76,7 @@ if (!defined('IN_INSTALL')) {
     date_default_timezone_set(FunctionsLib::readConfig('date_time_zone'));
 
     // For debugging
-    if (FunctionsLib::readConfig('debug') == 1) {
+    if (DEBUG_MODE == 1) {
 
         // Show all errors
         ini_set('display_errors', 1);

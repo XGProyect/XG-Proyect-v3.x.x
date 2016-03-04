@@ -1181,10 +1181,6 @@ $lang['css_account_banned_message']			= 'SU CUENTA HA SIDO SUSPENDIDA';
 $lang['css_account_banned_expire']			= 'Expiraci&oacute;n:';
 
 //----------------------------------------------------------------------------//
-//class.debug.php
-$lang['cdg_error_message']					= 'Error, por favor contacte al administrador.';
-
-//----------------------------------------------------------------------------//
 // FLEET MOVEMENTS
 $lang['cff_no_fleet_data']					= 'No hay datos de la flota';
 $lang['cff_aproaching']						= 'Se aproximan ';

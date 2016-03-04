@@ -220,22 +220,6 @@
 					    <li class="span3">
 					        <div class="hover-group popup">
 					            <div class="image-wrapper">
-					            <strong>{se_debug_mode}</strong>
-					              <i class="icon-info-sign"></i>
-					              <div class="hover-toggle btn-group">
-					                  <span class="btn btn-info">{se_debug_message}</span>
-					              </div>
-					            </div>
-					        </div>
-					    </li>
-					</ul>
-				</label>
-				<input name="debug"{debug} type="checkbox" />
-				<label>
-					<ul class="popups">
-					    <li class="span3">
-					        <div class="hover-group popup">
-					            <div class="image-wrapper">
 					            <strong>{se_ships_cdr}</strong>
 					              <i class="icon-info-sign"></i>
 					              <div class="hover-toggle btn-group">

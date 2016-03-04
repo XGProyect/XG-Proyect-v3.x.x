@@ -528,7 +528,7 @@ class Installation extends XGPCore
         
         $this->_planet->setNewPlanet(1, 1, 1, 1, $adm_name);
 
-        // write the new admin email for support and debugging
+        // write the new admin email for support
         FunctionsLib::updateConfig('admin_email', $adm_email);
 
         return true;

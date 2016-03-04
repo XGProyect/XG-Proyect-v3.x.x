@@ -100,7 +100,6 @@ class Server extends XGPCore
             FunctionsLib::updateConfig('date_format', $this->_game_config['date_format']);
             FunctionsLib::updateConfig('date_format_extended', $this->_game_config['date_format_extended']);
             FunctionsLib::updateConfig('adm_attack', $this->_game_config['adm_attack']);
-            FunctionsLib::updateConfig('debug', $this->_game_config['debug']);
             FunctionsLib::updateConfig('fleet_cdr', $this->_game_config['fleet_cdr']);
             FunctionsLib::updateConfig('defs_cdr', $this->_game_config['defs_cdr']);
             FunctionsLib::updateConfig('noobprotection', $this->_game_config['noobprotection']);
@@ -125,7 +124,6 @@ class Server extends XGPCore
         $parse['date_format'] = $this->_game_config['date_format'];
         $parse['date_format_extended'] = $this->_game_config['date_format_extended'];
         $parse['adm_attack'] = $this->_game_config['adm_attack'] == 1 ? " checked = 'checked' " : "";
-        $parse['debug'] = $this->_game_config['debug'] == 1 ? " checked = 'checked' " : "";
         $parse['shiips'] = $this->_game_config['fleet_cdr'];
         $parse['defenses'] = $this->_game_config['defs_cdr'];
         $parse['noobprot'] = $this->_game_config['noobprotection'] == 1 ? " checked = 'checked' " : "";
@@ -235,13 +233,6 @@ class Server extends XGPCore
             $this->_game_config['adm_attack'] = 1;
         } else {
             $this->_game_config['adm_attack'] = 0;
-        }
-
-        // DEBUG MODE
-        if (isset($_POST['debug']) && $_POST['debug'] == 'on') {
-            $this->_game_config['debug'] = 1;
-        } else {
-            $this->_game_config['debug'] = 0;
         }
 
         // SHIPS TO DEBRIS
