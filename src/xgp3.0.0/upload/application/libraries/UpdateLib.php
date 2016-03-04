@@ -54,7 +54,7 @@ class UpdateLib extends XGPCore
     private function cleanUp()
     {
         $last_cleanup       = FunctionsLib::readConfig('last_cleanup');
-        $cleanup_interval   = 0; // 6 HOURS
+        $cleanup_interval   = 6; // 6 HOURS
 
         if ((time() >= ($last_cleanup + (3600 * $cleanup_interval)))) {
 

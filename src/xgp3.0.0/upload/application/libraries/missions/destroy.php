@@ -359,12 +359,14 @@ class Destroy extends Missions
 
             $owners = $fleet_row['fleet_owner'] . "," . $target_data['planet_user_id'];
 
-            parent::$db->query("INSERT INTO " . REPORTS . " SET
-									`report_time` = UNIX_TIMESTAMP(),
-									`report_owners` = '" . $owners . "',
-									`report_rid` = '" . $rid . "',
-									`report_destroyed` = '" . $a_zestrzelona . "',
-									`report_content` = '" . addslashes($raport) . "';");
+            parent::$db->query(
+                "INSERT INTO `" . REPORTS . "` SET
+                `report_owners` = '" . $owners . "',
+                `report_rid` = '" . $rid . "',
+                `report_content` = '" . addslashes($raport) . "',
+                `report_destroyed` = '" . $a_zestrzelona . "',
+                `report_time` = '" . time() . "'"
+            );
 
             $raport = "<a href=\"#\" OnClick=\'f(\"game.php?page=CombatReport&report=" . $rid . "\", \"\");\' >";
             $raport .= "<center>";
@@ -374,11 +376,13 @@ class Destroy extends Missions
             $raport .= "<font color=\"green\">   " . $this->langs['sys_perte_defenseur'] . ":" . $zlom['enemy'] . "</font><br />";
             $raport .= $this->langs['sys_debris'] . " " . $this->langs['Metal'] . ":<font color=\"#adaead\">" . $zlom['metal'] . "</font>   " . $this->langs['Crystal'] . ":<font color=\"#ef51ef\">" . $zlom['crystal'] . "</font><br /></center>";
 
-            parent::$db->query("UPDATE " . FLEETS . " SET
-									`fleet_amount` = '" . $FleetAmount . "',
-									`fleet_array` = '" . $FleetArray . "',
-									`fleet_mess` = '1'
-									WHERE fleet_id = '" . (int) $fleet_row['fleet_id'] . "';");
+            parent::$db->query(
+                "UPDATE " . FLEETS . " SET
+                `fleet_amount` = '" . $FleetAmount . "',
+                `fleet_array` = '" . $FleetArray . "',
+                `fleet_mess` = '1'
+                WHERE fleet_id = '" . (int) $fleet_row['fleet_id'] . "';"
+            );
 
             $this->destroy_message($current_data['user_id'], $raport, $fleet_row['fleet_start_time']);
 

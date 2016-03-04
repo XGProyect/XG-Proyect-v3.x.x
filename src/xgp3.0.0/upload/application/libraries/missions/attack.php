@@ -496,7 +496,7 @@ class Attack extends Missions
             `report_owners` = '" . $owners . "',
             `report_rid` = '" . $rid . "',
             `report_content` = '" . addslashes($report) . "',
-            `report_destroyed` = '" . time() . "'"
+            `report_time` = '" . time() . "'"
         );
 
         foreach ($idAtts as $id) {
