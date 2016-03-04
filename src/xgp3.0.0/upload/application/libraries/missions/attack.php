@@ -43,7 +43,7 @@ class Attack extends Missions
     const SHIP_MIN_ID       = 202;
     const SHIP_MAX_ID       = 215;
     const DEFENSE_MIN_ID    = 401;
-    const DEFENSE_MAX_ID    = 503;
+    const DEFENSE_MAX_ID    = 408;
 
     /**
      * __construct
@@ -158,7 +158,7 @@ class Attack extends Missions
             //defenses sum
             $homeFleet  = new HomeFleet(0);
 
-            for ($i = self::DEFENSE_MIN_ID; $i < self::DEFENSE_MAX_ID; $i++) {
+            for ($i = self::DEFENSE_MIN_ID; $i <= self::DEFENSE_MAX_ID; $i++) {
 
                 if (isset($this->resource[$i]) && isset($target_planet[$this->resource[$i]])) {
 
@@ -169,7 +169,7 @@ class Attack extends Missions
                 }
             }
 
-            for ($i = self::SHIP_MIN_ID; $i < self::SHIP_MAX_ID; $i++) {
+            for ($i = self::SHIP_MIN_ID; $i <= self::SHIP_MAX_ID; $i++) {
 
                 if (isset($this->resource[$i]) && isset($target_planet[$this->resource[$i]])) {
 
