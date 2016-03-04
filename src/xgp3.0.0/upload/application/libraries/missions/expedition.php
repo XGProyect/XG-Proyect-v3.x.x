@@ -110,7 +110,7 @@ class Expedition extends Missions
 
                     // SHIPS
                     case ((($this->hazard >= 8) && ($this->hazard < 11))):
-                        $this->hazardShips($fleet_row, $fleet_points);
+                        $this->hazardShips($fleet_row, $fleet_points, $current_fleet);
 
                         break;
                 }
@@ -151,8 +151,9 @@ class Expedition extends Missions
 
             parent::removeFleet($fleet_row['fleet_id']);
         } else {
-            $all_destroyed = true;
-
+            $all_destroyed  = true;
+            $new_ships      = '';
+            
             foreach ($current_fleet as $ship => $amount) {
                 if (floor($amount * $lost_amount) != 0) {
                     $lost_ships[$ship] = floor($amount * $lost_amount);
@@ -260,17 +261,18 @@ class Expedition extends Missions
      *
      * @param array $fleet_row    Fleet row
      * @param int   $fleet_points Fleet points
+     * @param array $current_fleet Current fleet
      *
      * @return void
      */
-    private function hazardShips($fleet_row, $fleet_points)
+    private function hazardShips($fleet_row, $fleet_points, $current_fleet)
     {
-        $ships_ratio = $this->setShipsRatios();
-        $found_chance = $fleet_points / $fleet_row['fleet_amount'];
+        $ships_ratio    = $this->setShipsRatios();
+        $found_chance   = $fleet_points / $fleet_row['fleet_amount'];
 
         for ($ship = 202; $ship <= 215; $ship++) {
             if ($current_fleet[$ship] != 0) {
-                $found_ship[$ship] = round($current_fleet[$ship] * $ships_ratio[$ship]) + 1;
+                $found_ship[$ship] = round($current_fleet[$ship] * $ships_ratio[$ship] * $found_chance) + 1;
 
                 if ($found_ship[$ship] > 0) {
                     $current_fleet[$ship] += $found_ship[$ship];
@@ -278,8 +280,8 @@ class Expedition extends Missions
             }
         }
 
-        $new_ships = "";
-        $found_ship_message = "";
+        $new_ships          = '';
+        $found_ship_message = '';
 
         foreach ($current_fleet as $ship => $count) {
             if ($count > 0) {
@@ -295,10 +297,12 @@ class Expedition extends Missions
             }
         }
 
-        parent::$db->query("UPDATE " . FLEETS . " SET
-								`fleet_array` = '" . $new_ships . "',
-								`fleet_mess` = '1'
-								WHERE `fleet_id` = '" . $fleet_row['fleet_id'] . "';");
+        parent::$db->query(
+            "UPDATE " . FLEETS . " SET
+            `fleet_array` = '" . $new_ships . "',
+            `fleet_mess` = '1'
+            WHERE `fleet_id` = '" . $fleet_row['fleet_id'] . "';"
+        );
 
         $message = $this->langs['sys_expe_found_ships'] . $found_ship_message;
 
