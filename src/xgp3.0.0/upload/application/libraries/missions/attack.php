@@ -228,7 +228,7 @@ class Attack extends Missions
             );
 
             $this->updateDebris($fleet_row, $report);
-            $this->updateMoon($fleet_row, $report, '', $target_userID, $target_planet);
+            $this->updateMoon($fleet_row, $report, $target_userID);
             $this->sendMessage($fleet_row, $report);
 
         } elseif ($fleet_row['fleet_end_time'] <= time()) {
@@ -437,13 +437,11 @@ class Attack extends Missions
      *
      * @param array  $fleet_row     Fleet Row
      * @param Report $report        Report
-     * @param string $moonName      Moon Name
      * @param int    $target_userId Target User ID
-     * @param array  $target_planet Target planet
      *
      * @return void
      */
-    private function updateMoon($fleet_row, $report, $moonName, $target_userId, $target_planet)
+    private function updateMoon($fleet_row, $report, $target_userId)
     {
         $moon   = $report->tryMoon();
 
@@ -464,15 +462,16 @@ class Attack extends Missions
                 AND `planet_type` = '3';"
         );
 
-        if ($moon_exists['planet_id'] != 0) {
+        if ($moon_exists['planet_id'] != null) {
             return;
         }
 
         // $size and $fields
         extract($moon);
 
+        // create the moon
         $_creator   = FunctionsLib::loadLibrary('PlanetLib');
-        $_creator->setNewMoon($galaxy, $system, $planet, $target_userId, $moonName, '', $size);
+        $_creator->setNewMoon($galaxy, $system, $planet, $target_userId, '', '', $size);
     }
 
     /**
