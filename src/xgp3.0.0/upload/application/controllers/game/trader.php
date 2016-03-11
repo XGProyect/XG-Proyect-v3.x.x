@@ -204,7 +204,7 @@ class Trader extends XGPCore
 
                         if (is_string($storage)) {
 
-                            die(message($storage, 'game.php?page=trader', '2'));
+                            die(FunctionsLib::message($storage, 'game.php?page=trader', '2'));
                         }
 
                         if ($this->current_planet['planet_deuterium'] > $necessaire) {
