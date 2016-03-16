@@ -187,7 +187,7 @@ $tables['options'] =
 `option_id` bigint(20) unsigned NOT NULL,
 `option_name` varchar(191) DEFAULT NULL,
 `option_value` longtext NOT NULL
-) ENGINE=MyISAM AUTO_INCREMENT=45 DEFAULT CHARSET=latin1;";
+) ENGINE=MyISAM AUTO_INCREMENT=44 DEFAULT CHARSET=latin1;";
 
 $tables['options_insert'] = 
 "INSERT INTO `" . OPTIONS . "` (`option_id`, `option_name`, `option_value`) VALUES
@@ -206,35 +206,34 @@ $tables['options_insert'] =
 (13, 'date_format', 'd.m.Y'),
 (14, 'date_format_extended', 'd.m.Y H:i:s'),
 (15, 'adm_attack', '1'),
-(16, 'debug', '0'),
-(17, 'fleet_cdr', '30'),
-(18, 'defs_cdr', '30'),
-(19, 'noobprotection', '1'),
-(20, 'noobprotectiontime', '50000'),
-(21, 'noobprotectionmulti', '5'),
-(22, 'modules', '1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;0;1;1;'),
-(23, 'moderation', '1,1,0,0,1,0;1,1,0,1,1,1;1;'),
-(24, 'initial_fields', '163'),
-(25, 'metal_basic_income', '90'),
-(26, 'crystal_basic_income', '45'),
-(27, 'deuterium_basic_income', '0'),
-(28, 'energy_basic_income', '0'),
-(29, 'reg_enable', '1'),
-(30, 'reg_welcome_message', '1'),
-(31, 'reg_welcome_email', '1'),
-(32, 'stat_points', '1000'),
-(33, 'stat_update_time', '1'),
-(34, 'stat_admin_level', '0'),
-(35, 'stat_last_update', '0'),
-(36, 'premium_url', 'http://www.xgproyect.org/game.php?page=officier'),
-(37, 'trader_darkmatter', '3500'),
-(38, 'auto_backup', '0'),
-(39, 'last_backup', '0'),
-(40, 'last_cleanup', '0'),
-(41, 'version', '3.0.0'),
-(42, 'lastsettedgalaxypos', '1'),
-(43, 'lastsettedsystempos', '1'),
-(44, 'lastsettedplanetpos', '1');";
+(16, 'fleet_cdr', '30'),
+(17, 'defs_cdr', '30'),
+(18, 'noobprotection', '1'),
+(19, 'noobprotectiontime', '50000'),
+(20, 'noobprotectionmulti', '5'),
+(21, 'modules', '1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;0;1;1;'),
+(22, 'moderation', '1,1,0,0,1,0;1,1,0,1,1,1;1;'),
+(23, 'initial_fields', '163'),
+(24, 'metal_basic_income', '90'),
+(25, 'crystal_basic_income', '45'),
+(26, 'deuterium_basic_income', '0'),
+(27, 'energy_basic_income', '0'),
+(28, 'reg_enable', '1'),
+(29, 'reg_welcome_message', '1'),
+(30, 'reg_welcome_email', '1'),
+(31, 'stat_points', '1000'),
+(32, 'stat_update_time', '1'),
+(33, 'stat_admin_level', '0'),
+(34, 'stat_last_update', '0'),
+(35, 'premium_url', 'http://www.xgproyect.org/game.php?page=officier'),
+(36, 'trader_darkmatter', '3500'),
+(37, 'auto_backup', '0'),
+(38, 'last_backup', '0'),
+(39, 'last_cleanup', '0'),
+(40, 'version', '3.0.0'),
+(41, 'lastsettedgalaxypos', '1'),
+(42, 'lastsettedsystempos', '1'),
+(43, 'lastsettedplanetpos', '1');";
 
 $tables['planets'] =
 "CREATE TABLE `" . PLANETS . "` (
@@ -286,12 +285,12 @@ PRIMARY KEY (`planet_id`)
 $tables['premium'] =
 "CREATE TABLE `" . PREMIUM . "` (
 `premium_user_id` INT(10) UNSIGNED NOT NULL,
-`premium_dark_matter` INT(10) NOT NULL,
-`premium_officier_commander` INT(10) NOT NULL,
-`premium_officier_admiral` INT(10) NOT NULL,
-`premium_officier_engineer` INT(10) NOT NULL,
-`premium_officier_geologist` INT(10) NOT NULL,
-`premium_officier_technocrat` INT(10) NOT NULL,
+`premium_dark_matter` INT(10) NOT NULL DEFAULT '0',
+`premium_officier_commander` INT(10) NOT NULL DEFAULT '0',
+`premium_officier_admiral` INT(10) NOT NULL DEFAULT '0',
+`premium_officier_engineer` INT(10) NOT NULL DEFAULT '0',
+`premium_officier_geologist` INT(10) NOT NULL DEFAULT '0',
+`premium_officier_technocrat` INT(10) NOT NULL DEFAULT '0',
 UNIQUE KEY `premium_user_id` (`premium_user_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;";
 
