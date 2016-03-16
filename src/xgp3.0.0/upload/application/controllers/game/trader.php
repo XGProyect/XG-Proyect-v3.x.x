@@ -179,7 +179,7 @@ class Trader extends XGPCore
                             $this->current_planet['planet_crystal']     -= $necessaire;
                             $this->current_planet['planet_deuterium']   += isset($_POST['deut']) ? $_POST['deut'] : 0;
 
-                            $this->discount_dark_matter($this->current_user); // REDUCE DARKMATTER
+                            $this->discountDarkMatter(); // REDUCE DARKMATTER
                         } else {
 
                             FunctionsLib::message($this->langs['tr_not_enought_crystal'], "game.php?page=trader", 1);
@@ -204,7 +204,7 @@ class Trader extends XGPCore
 
                         if (is_string($storage)) {
 
-                            die(message($storage, 'game.php?page=trader', '2'));
+                            die(FunctionsLib::message($storage, 'game.php?page=trader', '2'));
                         }
 
                         if ($this->current_planet['planet_deuterium'] > $necessaire) {
@@ -224,7 +224,7 @@ class Trader extends XGPCore
                             $this->current_planet['planet_deuterium']
                                 -= $necessaire;
 
-                            $this->discount_dark_matter($this->current_user); // REDUCE DARKMATTER
+                            $this->discountDarkMatter(); // REDUCE DARKMATTER
                         } else {
 
                             FunctionsLib::message($this->langs['tr_not_enought_deuterium'], "game.php?page=trader", 1);
