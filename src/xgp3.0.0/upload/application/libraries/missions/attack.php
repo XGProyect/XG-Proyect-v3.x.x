@@ -411,8 +411,15 @@ class Attack extends Missions
                         WHERE u.user_id = '" . $idPlayer . "';"
                     );
                 }
+                
+                if($target_user['planet_id'] == $idPlayer) {
 
-                $player = new Player($idPlayer, array($fleet));
+                    $fleetSouther   = new Fleet();
+                    $player         = new Player($idPlayer, [$fleetSouther]);
+                } else {
+
+                    $player         = new Player($idPlayer, [$fleet]);
+                }
 
                 $player->setTech(
                     $player_info['research_weapons_technology'],
@@ -423,6 +430,11 @@ class Attack extends Missions
                 $player->setName($player_info['user_name']);
                 
                 $playerGroup->addPlayer($player);
+                
+                if($targetUser['planet_id'] == $idPlayer) {
+
+                    $playerGroup->getPlayer($idPlayer)->addFleet($fleet);	
+                }
             } else {
 
                 $playerGroup->getPlayer($idPlayer)->addFleet($fleet);

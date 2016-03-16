@@ -14,6 +14,7 @@
 
 namespace application\libraries\missions;
 
+use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
 
 /**
@@ -31,7 +32,7 @@ class Destroy extends Missions
     const SHIP_MIN_ID       = 202;
     const SHIP_MAX_ID       = 215;
     const DEFENSE_MIN_ID    = 401;
-    const DEFENSE_MAX_ID    = 503;
+    const DEFENSE_MAX_ID    = 408;
     
     /**
      * __construct()
@@ -78,7 +79,7 @@ class Destroy extends Missions
 
             $target_ships   = [];
             
-            for ($i = self::DEFENSE_MIN_ID; $i < self::DEFENSE_MAX_ID; $i++) {
+            for ($i = self::DEFENSE_MIN_ID; $i <= self::DEFENSE_MAX_ID; $i++) {
 
                 if (isset($this->resource[$i]) && isset($target_planet[$this->resource[$i]])) {
 
@@ -89,7 +90,7 @@ class Destroy extends Missions
                 }
             }
 
-            for ($i = self::SHIP_MIN_ID; $i < self::SHIP_MAX_ID; $i++) {
+            for ($i = self::SHIP_MIN_ID; $i <= self::SHIP_MAX_ID; $i++) {
 
                 if (isset($this->resource[$i]) && isset($target_planet[$this->resource[$i]])) {
 
@@ -368,13 +369,14 @@ class Destroy extends Missions
                 `report_time` = '" . time() . "'"
             );
 
-            $raport = "<a href=\"#\" OnClick=\'f(\"game.php?page=CombatReport&report=" . $rid . "\", \"\");\' >";
-            $raport .= "<center>";
-            $raport .= $this->set_report_color($FleetResult);
-            $raport .= $this->langs['sys_mess_destruc_report'] . " [" . $fleet_row['fleet_end_galaxy'] . ":" . $fleet_row['fleet_end_system'] . ":" . $fleet_row['fleet_end_planet'] . "] </font></a><br /><br />";
-            $raport .= "<font color=\"red\">" . $this->langs['sys_perte_attaquant'] . ": " . $zlom['attacker'] . "</font>";
-            $raport .= "<font color=\"green\">   " . $this->langs['sys_perte_defenseur'] . ":" . $zlom['enemy'] . "</font><br />";
-            $raport .= $this->langs['sys_debris'] . " " . $this->langs['Metal'] . ":<font color=\"#adaead\">" . $zlom['metal'] . "</font>   " . $this->langs['Crystal'] . ":<font color=\"#ef51ef\">" . $zlom['crystal'] . "</font><br /></center>";
+
+            $raport = $this->buildReportLink(
+                $this->set_report_color($FleetResult),
+                $rid,
+                $fleet_row['fleet_end_galaxy'],
+                $fleet_row['fleet_end_system'],
+                $fleet_row['fleet_end_planet']
+            );
 
             parent::$db->query(
                 "UPDATE " . FLEETS . " SET
@@ -386,14 +388,18 @@ class Destroy extends Missions
 
             $this->destroy_message($current_data['user_id'], $raport, $fleet_row['fleet_start_time']);
 
-            $raport2 = "<a href=\"#\" OnClick=\'f(\"game.php?page=CombatReport&report=" . $rid . "\", \"\");\' >";
-            $raport2 .= "<center>";
-            $raport2 .= $this->set_report_color($FleetResult, FALSE);
-            $raport2 .= $this->langs['sys_mess_destruc_report'] . " [" . $fleet_row['fleet_end_galaxy'] . ":" . $fleet_row['fleet_end_system'] . ":" . $fleet_row['fleet_end_planet'] . "] </font></a><br /><br />";
+            $raport2    = $this->buildReportLink(
+                $this->set_report_color($FleetResult, false),
+                $rid,
+                $fleet_row['fleet_end_galaxy'],
+                $fleet_row['fleet_end_system'],
+                $fleet_row['fleet_end_planet']
+            );
 
             $this->destroy_message($target_data['planet_user_id'], $raport2, $fleet_row['fleet_start_time']);
         } elseif ($fleet_row['fleet_mess'] == 1 && $fleet_row['fleet_end_time'] <= time()) {
-            parent::restoreFleet($fleet_row, TRUE);
+
+            parent::restoreFleet($fleet_row, true);
             parent::removeFleet($fleet_row['fleet_id']);
         }
     }
@@ -680,29 +686,29 @@ class Destroy extends Missions
         if ($current) {
             switch ($result) {
                 case 'a':
-                    return "<font color=\"green\">";
+                    return "green";
                     break;
 
                 case 'r':
-                    return "<font color=\"orange\">";
+                    return "orage";
                     break;
 
                 case 'w':
-                    return "<font color=\"red\">";
+                    return "red";
                     break;
             }
         } else {
             switch ($result) {
                 case 'a':
-                    return "<font color=\"red\">";
+                    return "red";
                     break;
 
                 case 'r':
-                    return "<font color=\"orange\">";
+                    return "orange";
                     break;
 
                 case 'w':
-                    return "<font color=\"green\">";
+                    return "green";
                     break;
             }
         }
@@ -717,7 +723,40 @@ class Destroy extends Missions
      */
     private function destroy_message($owner, $message, $time)
     {
-        FunctionsLib::sendMessage($owner, '', $time, 1, $this->langs['sys_mess_tower'], $this->langs['sys_mess_destruc_report'], $message);
+        FunctionsLib::sendMessage(
+            $owner,
+            '',
+            $time,
+            1,
+            $this->langs['sys_mess_tower'],
+            $message,
+            ''
+        );
+    }
+    
+    /**
+     * buildReportLink
+     *
+     * @param string $color Color
+     * @param string $rid   Report ID
+     * @param int    $g     Galaxy
+     * @param int    $s     System
+     * @param int    $p     Planet
+     *
+     * @return string
+     */
+    private function buildReportLink($color, $rid, $g, $s, $p)
+    {
+        $style      = 'style="color:' . $color . ';"';
+        $js         = "OnClick=\'f(\"game.php?page=combatreport&report=" . $rid . "\", \"\");\'";
+        $content    = $this->langs['sys_mess_destruc_report'] . ' ' . FormatLib::prettyCoords($g, $s, $p);
+        
+        return FunctionsLib::setUrl(
+            '',
+            '',
+            $content,
+            $style . ' ' . $js
+        );
     }
 }
 

@@ -91,11 +91,11 @@ class Installation extends XGPCore
         switch ((isset($_POST['page']) ? $_POST['page'] : '')) {
             case 'step1':
                 
-                $this->host     = $_POST['host'];
-                $this->user     = $_POST['user'];
-                $this->password = $_POST['password'];
-                $this->name     = $_POST['db'];
-                $this->prefix   = $_POST['prefix'];
+                $this->host     = isset($_POST['host']) ? $_POST['host'] : null;
+                $this->user     = isset($_POST['user']) ? $_POST['user'] : null;
+                $this->password = isset($_POST['password']) ? $_POST['password'] : null;
+                $this->name     = isset($_POST['db']) ? $_POST['db'] : null;
+                $this->prefix   = isset($_POST['prefix']) ? $_POST['prefix'] : null;
 
                 if (!$this->validateDbData()) {
                     $alerts     = $this->langs['ins_empty_fields_error'];

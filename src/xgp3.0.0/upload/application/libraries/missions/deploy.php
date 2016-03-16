@@ -14,6 +14,7 @@
 
 namespace application\libraries\missions;
 
+use application\libraries\FleetsLib;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
 
@@ -91,41 +92,30 @@ class Deploy extends Missions
 
             if ($fleet_row['fleet_end_time'] <= time()) {
 
-                    $target_coords  = sprintf(
-                        $this->langs['sys_adress_planet'],
-                        $fleet_row['fleet_start_galaxy'],
-                        $fleet_row['fleet_start_system'],
-                        $fleet_row['fleet_start_planet']
-                    );
+                $message    = sprintf(
+                    $this->langs['sys_tran_mess_user'],
+                    '',
+                    FleetsLib::targetLink($fleet_row, ''),
+                    FormatLib::prettyNumber($fleet_row['fleet_resource_metal']),
+                    $this->langs['Metal'],
+                    FormatLib::prettyNumber($fleet_row['fleet_resource_crystal']),
+                    $this->langs['Crystal'],
+                    FormatLib::prettyNumber($fleet_row['fleet_resource_deuterium']),
+                    $this->langs['Deuterium']
+                );
 
-                    $target_resources   = sprintf(
-                        $this->langs['sys_stay_mess_goods'],
-                        $this->langs['Metal'],
-                        FormatLib::prettyNumber($fleet_row['fleet_resource_metal']),
-                        $this->langs['Crystal'],
-                        FormatLib::prettyNumber($fleet_row['fleet_resource_crystal']),
-                        $this->langs['Deuterium'],
-                        FormatLib::prettyNumber($fleet_row['fleet_resource_deuterium'])
-                    );
+                FunctionsLib::sendMessage(
+                    $fleet_row['fleet_owner'],
+                    '',
+                    $fleet_row['fleet_end_time'],
+                    5,
+                    $this->langs['sys_mess_qg'],
+                    $this->langs['sys_mess_fleetback'],
+                    $message
+                );
 
-                    $target_message = $this->langs['sys_stay_mess_back'] .
-                        "<a href=\"game.php?page=galaxy&mode=3&galaxy=" .
-                        $fleet_row['fleet_start_galaxy'] . "&system=" . $fleet_row['fleet_start_system'] . "\">";
-                    $target_message .= $target_coords . "</a>" . $this->langs['sys_stay_mess_bend'] .
-                        "<br />" . $target_resources;
-
-                    FunctionsLib::sendMessage(
-                        $fleet_row['fleet_owner'],
-                        '',
-                        $fleet_row['fleet_end_time'],
-                        5,
-                        $this->langs['sys_mess_qg'],
-                        $this->langs['sys_mess_fleetback'],
-                        $target_message
-                    );
-
-                    parent::restoreFleet($fleet_row, true);
-                    parent::removeFleet($fleet_row['fleet_id']);
+                parent::restoreFleet($fleet_row, true);
+                parent::removeFleet($fleet_row['fleet_id']);
             }
         }
     }

@@ -117,9 +117,9 @@ class Database
      *
      * @return mysqli
      */
-    public function tryConnection($host = '', $user = '', $pass = '')
+    public function tryConnection($host = '', $user = '', $pass = null)
     {
-        if (empty($host) or empty($user) or empty($pass)) {
+        if (empty($host) or empty($user)) {
 
             return;
         }
