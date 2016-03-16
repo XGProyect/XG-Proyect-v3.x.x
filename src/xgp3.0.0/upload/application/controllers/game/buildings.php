@@ -55,7 +55,7 @@ class Buildings extends XGPCore
 
         $this->_current_user = parent::$users->getUserData();
         $this->_current_planet = parent::$users->getPlanetData();
-        $this->_current_page = isset($_GET['page']) ? $_GET['page'] : NULL;
+        $this->_current_page = isset($_GET['page']) ? $_GET['page'] : null;
         $this->_lang = parent::$lang;
         $this->_objects = parent::$objects;
 
@@ -77,7 +77,7 @@ class Buildings extends XGPCore
         }
 
         // build the page
-        $this->build_page();
+        $this->buildPage();
     }
 
     /**
@@ -95,7 +95,7 @@ class Buildings extends XGPCore
      * param
      * return main method, loads everything
      */
-    private function build_page()
+    private function buildPage()
     {
         $resource = $this->_objects->getObjects();
         $parse = $this->_lang;
@@ -104,14 +104,14 @@ class Buildings extends XGPCore
         $max_fields = DevelopmentsLib::maxFields($this->_current_planet);
 
         // time to do something
-        $this->do_command();
+        $this->doCommand();
 
         DevelopmentsLib::setFirstElement($this->_current_planet, $this->_current_user);
 
         $Sprice = array();
-        $queue = $this->show_queue($Sprice);
+        $queue = $this->showQueue($Sprice);
 
-        $this->start_building();
+        $this->startBuilding();
 
         $full_queue = ( $queue['lenght'] < MAX_BUILDING_QUEUE_SIZE ) ? false : true;
 
@@ -127,15 +127,26 @@ class Buildings extends XGPCore
 
                 if (DevelopmentsLib::isDevelopmentAllowed($this->_current_user, $this->_current_planet, $building)) {
                     $building_level = $this->_current_planet[$resource[$building]];
-                    $building_time = DevelopmentsLib::developmentTime($this->_current_user, $this->_current_planet, $building, $building_level);
+                    $building_time  = DevelopmentsLib::developmentTime(
+                        $this->_current_user,
+                        $this->_current_planet,
+                        $building,
+                        $building_level
+                    );
 
-                    $parse['i'] = $building;
-                    $parse['nivel'] = DevelopmentsLib::setLevelFormat($building_level);
-                    $parse['n'] = $building_name;
-                    $parse['descriptions'] = $this->_lang['res']['descriptions'][$building];
-                    $parse['price'] = DevelopmentsLib::formatedDevelopmentPrice($this->_current_user, $this->_current_planet, $building, true, $building_level);
-                    $parse['time'] = DevelopmentsLib::formatedDevelopmentTime($building_time);
-                    $parse['click'] = $this->set_action_button($have_fields, $full_queue, $building, $queue);
+                    $parse['i']             = $building;
+                    $parse['nivel']         = DevelopmentsLib::setLevelFormat($building_level);
+                    $parse['n']             = $building_name;
+                    $parse['descriptions']  = $this->_lang['res']['descriptions'][$building];
+                    $parse['price']         = DevelopmentsLib::formatedDevelopmentPrice(
+                        $this->_current_user,
+                        $this->_current_planet,
+                        $building,
+                        true,
+                        $building_level
+                    );
+                    $parse['time']          = DevelopmentsLib::formatedDevelopmentTime($building_time);
+                    $parse['click']         = $this->setActionButton($have_fields, $full_queue, $building, $queue);
 
                     $page .= parent::$page->parseTemplate(parent::$page->getTemplate('buildings/buildings_builds_row'), $parse);
                 }
@@ -156,41 +167,37 @@ class Buildings extends XGPCore
     }
 
     /**
-     * method do_command
+     * method doCommand
      * param
      * return void
      */
-    private function do_command()
+    private function doCommand()
     {
-        $cmd    = isset($_GET['cmd']) ? $_GET['cmd'] : NULL;
+        $cmd    = isset($_GET['cmd']) ? $_GET['cmd'] : null;
 
         if (!is_null($cmd)) {
-            $building   = isset($_GET['building']) ? (int) $_GET['building'] : NULL;
-            $list_id    = isset($_GET['listid']) ? (int) $_GET['listid'] : NULL;
+            $building   = isset($_GET['building']) ? (int) $_GET['building'] : null;
+            $list_id    = isset($_GET['listid']) ? (int) $_GET['listid'] : null;
 
-            if ($this->can_build($building, $list_id)) {
+            if ($this->canBuild($building, $list_id)) {
                 switch ($cmd) {
                     case 'cancel':
-
-                        $this->cancel_current();
+                        $this->cancelCurrent();
 
                         break;
 
                     case 'remove':
-
-                        $this->remove_from_queue($list_id);
+                        $this->removeFromQueue($list_id);
 
                         break;
 
                     case 'insert':
-
-                        $this->add_to_queue($building, true);
+                        $this->addToQueue($building, true);
 
                         break;
 
                     case 'destroy':
-
-                        $this->add_to_queue($building, false);
+                        $this->addToQueue($building, false);
 
                         break;
                 }
@@ -207,14 +214,14 @@ class Buildings extends XGPCore
     }
 
     /**
-     * method do_command
+     * setActionButton
      * param $have_fields
      * param $full_queue
      * param $building
      * param $queue
      * return (string) $action
      */
-    private function set_action_button($have_fields, $full_queue, $building, $queue)
+    private function setActionButton($have_fields, $full_queue, $building, $queue)
     {
         // all field occupied
         $action = FormatLib::colorRed($this->_lang['bd_no_more_fields']);
@@ -244,12 +251,12 @@ class Buildings extends XGPCore
     }
 
     /**
-     * method can_build
+     * method canBuild
      * param (int) $building
      * param (int) $list_id
      * return (bool) $continue
      */
-    private function can_build($building, $list_id)
+    private function canBuild($building, $list_id)
     {
         if (isset($building) && in_array($building, $this->_allowed[$this->_current_planet['planet_type']])) {
             $continue = true;
@@ -269,11 +276,11 @@ class Buildings extends XGPCore
     }
 
     /**
-     * method start_building
+     * method startBuilding
      * param
      * return (void)
      */
-    private function start_building()
+    private function startBuilding()
     {
         parent::$db->query(
             "UPDATE " . PLANETS . " SET
@@ -286,11 +293,11 @@ class Buildings extends XGPCore
     }
 
     /**
-     * method cancel_current
+     * method cancelCurrent
      * param
      * return (bool) confirmation
      */
-    private function cancel_current()
+    private function cancelCurrent()
     {
         $CurrentQueue   = $this->_current_planet['planet_b_building_id'];
 
@@ -355,11 +362,11 @@ class Buildings extends XGPCore
     }
 
     /**
-     * method remove_from_queue
+     * method removeFromQueue
      * param $QueueID
      * return (int) the queue ID
      */
-    private function remove_from_queue($QueueID)
+    private function removeFromQueue($QueueID)
     {
         if ($QueueID > 1) {
             $CurrentQueue = $this->_current_planet['planet_b_building_id'];
@@ -367,8 +374,9 @@ class Buildings extends XGPCore
             if (!empty($CurrentQueue)) {
                 $QueueArray = explode(";", $CurrentQueue);
                 $ActualCount = count($QueueArray);
-                if ($ActualCount < 2)
+                if ($ActualCount < 2) {
                     FunctionsLib::redirect('game.php?page=' . $this->_current_page);
+                }
 
                 //  finding the buildings time
                 $ListIDArrayToDelete = explode(",", $QueueArray[$QueueID - 1]);
@@ -405,20 +413,22 @@ class Buildings extends XGPCore
     }
 
     /**
-     * method add_to_queue
+     * method addToQueue
      * param $building
      * param $AddMode
      * return (int) the queue ID
      */
-    private function add_to_queue($building, $AddMode = true)
+    private function addToQueue($building, $AddMode = true)
     {
-        $resource = $this->_objects->getObjects();
-        $CurrentQueue = $this->_current_planet['planet_b_building_id'];
-        $queue = $this->show_queue();
-        $max_fields = DevelopmentsLib::maxFields($this->_current_planet);
+        $resource       = $this->_objects->getObjects();
+        $CurrentQueue   = $this->_current_planet['planet_b_building_id'];
+        $queue          = $this->showQueue();
+        $max_fields     = DevelopmentsLib::maxFields($this->_current_planet);
 
-        if (( $this->_current_planet['planet_field_current'] >= ( $max_fields - $queue['lenght'] ))) {
-            FunctionsLib::redirect('game.php?page=' . $this->_current_page);
+        if ($AddMode) {
+            if (($this->_current_planet['planet_field_current'] >= ($max_fields - $queue['lenght']))) {
+                FunctionsLib::redirect('game.php?page=' . $this->_current_page);
+            }
         }
 
         if ($CurrentQueue != 0) {
@@ -506,11 +516,11 @@ class Buildings extends XGPCore
     }
 
     /**
-     * method show_queue
+     * method showQueue
      * param $Sprice
      * return (array) the queue to build data
      */
-    private function show_queue(&$Sprice = false)
+    private function showQueue(&$Sprice = false)
     {
         $lang = $this->_lang;
         $CurrentQueue = $this->_current_planet['planet_b_building_id'];

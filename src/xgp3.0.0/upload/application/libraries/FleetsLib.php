@@ -77,24 +77,25 @@ class FleetsLib extends XGPCore
         } elseif (( $orig_planet - $dest_planet ) != 0) {
 
             $distance   = abs($orig_planet - $dest_planet) * 5 + 1000;
-        } else {
-
-            $distance   = 5;
         }
 
         return $distance;
     }
 
     /**
-     * bbCode function.
+     * The formula calculates the mission duration
      *
-     * @param string $string String
+     * @param int $percentage      The speed percentage set by the user
+     * @param int $max_fleet_speed Max fleet speed
+     * @param int $distance        The distance
+     * @param int $speed_factor    The game speed factor
      *
      * @return int
      */
-    public static function missionDuration($game_speed, $max_fleet_speed, $distance, $speed_factor)
+    public static function missionDuration($percentage, $max_fleet_speed, $distance, $speed_factor)
     {
-        return round(((35000 / $game_speed * sqrt($distance * 10 / $max_fleet_speed) + 10) / $speed_factor));
+        // original formula: 3500 / Factor(percentage) * sqrt($distance * 10 / $max_fleet_speed) + 10)
+        return round((35000 / $percentage * sqrt($distance * 10 / $max_fleet_speed) + 10) / $speed_factor);
     }
 
     /**
@@ -120,6 +121,9 @@ class FleetsLib extends XGPCore
 
         foreach ($fleet_array as $ship => $count) {
 
+            /**
+             * Special condition for Small cargo
+             */
             if ($ship == 202) {
 
                 if ($user['research_impulse_drive'] >= 5) {
@@ -132,8 +136,29 @@ class FleetsLib extends XGPCore
                         + (($pricelist[$ship]['speed'] * $user['research_combustion_drive'] ) * 0.1);
                 }
             }
+            
+            /**
+             * Special condition for Recycler
+             */
+            if ($ship == 209) {
 
-            if ($ship == 203 or $ship == 204 or $ship == 209 or $ship == 210) {
+                $speed_all[$ship]   = $pricelist[$ship]['speed']
+                    + (($pricelist[$ship]['speed'] * $user['research_combustion_drive'] ) * 0.1);
+                
+                if ($user['research_impulse_drive'] >= 17) {
+
+                    $speed_all[$ship]   = $pricelist[$ship]['speed2']
+                        + (($pricelist[$ship]['speed'] * $user['research_impulse_drive'] ) * 0.2);
+                }
+                
+                if ($user['research_hyperspace_drive'] >= 15) {
+
+                    $speed_all[$ship]   = $pricelist[$ship]['speed2']
+                        + (($pricelist[$ship]['speed'] * $user['research_hyperspace_drive'] ) * 0.3);
+                }
+            }
+
+            if ($ship == 203 or $ship == 204 or $ship == 210) {
 
                 $speed_all[$ship]   = $pricelist[$ship]['speed']
                     + (($pricelist[$ship]['speed'] * $user['research_combustion_drive']) * 0.1);

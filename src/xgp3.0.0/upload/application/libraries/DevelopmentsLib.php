@@ -311,7 +311,7 @@ class DevelopmentsLib extends XGPCore
             $time   = floor(($time * 60 * 60));
         }
 
-        if ($time <= 0) {
+        if ($time < 1) {
 
             $time   = 1;
         }

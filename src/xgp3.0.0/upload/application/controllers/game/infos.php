@@ -226,6 +226,7 @@ class Infos extends XGPCore
             if (isset($this->_current_planet[$this->_resource[$this->_element_id]]) && $this->_current_planet[$this->_resource[$this->_element_id]] > 0) {
                 $NeededRessources = DevelopmentsLib::developmentPrice($this->_current_user, $this->_current_planet, $this->_element_id, true, true);
                 $DestroyTime = DevelopmentsLib::developmentTime($this->_current_user, $this->_current_planet, $this->_element_id) / 2;
+                $DestroyTime = $DestroyTime < 1 ? 1 : $DestroyTime;
                 $parse['destroyurl'] = "game.php?page=" . DevelopmentsLib::setBuildingPage($this->_element_id) . "&cmd=destroy&building=" . $this->_element_id;
                 $parse['levelvalue'] = $this->_current_planet[$this->_resource[$this->_element_id]];
                 $parse['nfo_metal'] = $this->_lang['Metal'];
