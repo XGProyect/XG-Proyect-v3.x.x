@@ -309,7 +309,10 @@ class UsersLib extends XGPCore
             m.planet_image AS moon_image,
             m.planet_destroyed AS moon_destroyed,
             m.planet_image AS moon_image,
-            (SELECT COUNT(user_statistic_user_id) AS stats_users FROM `" . USERS_STATISTICS . "`) AS stats_users
+            (SELECT COUNT(user_statistic_user_id) AS stats_users 
+                FROM `" . USERS_STATISTICS . "` AS s
+                INNER JOIN " . USERS . " AS u ON u.user_id = s.user_statistic_user_id
+                WHERE u.`user_authlevel` <= " . FunctionsLib::readConfig('stat_admin_level') . ") AS stats_users
             FROM " . PLANETS . " AS p
             INNER JOIN " . BUILDINGS . " AS b ON b.building_planet_id = p.`planet_id`
             INNER JOIN " . DEFENSES . " AS d ON d.defense_planet_id = p.`planet_id`
