@@ -311,6 +311,7 @@ class Migrate extends XGPCore
         // Define some stuff
         $migration_path = XGP_ROOT . 'install/migration/migrate_common.php';
         $queries        = [];
+        $password       = $this->current_user['user_password'];
         
         require_once $migration_path;
         
@@ -330,6 +331,8 @@ class Migrate extends XGPCore
                 }
             }
         }
+        
+        unset($password);
     }
 }
 

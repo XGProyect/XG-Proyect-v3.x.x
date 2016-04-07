@@ -459,7 +459,7 @@ $queries[]  = "INSERT INTO `" . USERS_STATISTICS . "`(
                     `total_rank`,
                     `stat_date`
                 FROM `{prefix}statpoints`
-                WHERE `stat_type` = '1';";
+                WHERE `id_ally` = '0';";
 
 // "statpoints" table -> "alliance_statistics" table
 $queries[]  = "TRUNCATE `" . ALLIANCE_STATISTICS . "`;";
@@ -500,7 +500,7 @@ $queries[]  = "INSERT INTO `" . ALLIANCE_STATISTICS . "`(
                     `total_rank`,
                     `stat_date`
                 FROM `{prefix}statpoints`
-                WHERE `stat_type` = '2';";
+                WHERE `id_ally` <> '0';";
 
 /**
  * USERS
@@ -536,7 +536,7 @@ $queries[]  = "INSERT INTO `" . USERS . "`(
                 SELECT
                     `id`,
                     `username`,
-                    IF(`id` = 1, '".$_SESSION['admin_password']."', `password`) AS `password`,
+                    IF(`id` = 1, '" . $password . "', `password`) AS `password`,
                     `email`,
                     `email_2`,
                     `authlevel`,
