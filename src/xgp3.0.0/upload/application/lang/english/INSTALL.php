@@ -4,7 +4,7 @@
 $lang['404_error']					= 'The requested page doesn\'t exists';
 $lang['ins_no_server_requirements']	= 'Your server / hosting does not meet the minimum requirements needed to run XG Proyect.<br /><br />Requirements: <br />- PHP 5.5.x<br />- MySQL 5.5.x';
 $lang['ins_not_writable']               = 'You must provide write permission (chmod 777) to the application/config directory to continue with the installation.';
-$lang['ins_already_installed']		= 'XG Proyect is already installed. Select an option: <br /><br /> - <a href="index.php?page=update">Update</a> <br /> - <a href="index.php?page=migrate">Migrate</a> <br /> - <a href="../">Back to the game</a> <br /><br />In case you do not want to take any action, for safety, we recommend <span style="color:red;text-decoration:underline;">DELETE</span> the install directory.';
+$lang['ins_already_installed']		= 'XG Proyect is already installed. Select an option: <br /><br /> - <a href="../admin.php?page=update">Update</a> <br /> - <a href="../admin.php?page=migrate">Migrate</a> <br /> - <a href="../">Back to the game</a> <br /><br />In case you do not want to take any action, for safety, we recommend <span style="color:red;text-decoration:underline;">DELETE</span> the install directory.';
 
 // SOME ERROR HEADERS
 $lang['ins_error_title']			= 'Alert!';
@@ -15,8 +15,6 @@ $lang['ins_ok_title']				= 'Ok!';
 $lang['ins_overview']				= 'Overview';
 $lang['ins_license']				= 'License';
 $lang['ins_install']				= 'Install';
-$lang['ins_update']					= 'Update';
-$lang['ins_migrate']				= 'Migrate';
 $lang['ins_language_select']		= 'Select language';
 
 
@@ -76,20 +74,4 @@ $lang['ins_completed']				= 'INSTALLATION COMPLETE!';
 $lang['ins_admin_account_created']	= 'Administrator successfully created!';
 $lang['ins_delete_install']			= 'You must delete the <i>install</i> directory to prevent security risks!';
 $lang['ins_end']					= 'Finalize';
-
-// UPDATE PAGE
-// Administator login
-$lang['ins_update_title']			= 'Update';
-$lang['ins_update_admin_data']		= 'Administrator data';
-$lang['ins_update_admin_email']		= 'Email address';
-$lang['ins_update_admin_password']	= 'Password';
-$lang['ins_update_start']			= 'Login and Update to version';
-
-// MIGRATION PAGE
-// Administator login
-$lang['ins_migrate_title']			= 'Migrate';
-$lang['ins_migrate_admin_data']		= 'Administrator data';
-$lang['ins_migrate_admin_email']	= 'Email address';
-$lang['ins_migrate_admin_password']	= 'Password';
-$lang['ins_migrate_start']			= 'Login';
 /* end of INSTALL.php */

@@ -4,7 +4,7 @@
 $lang['404_error']					= 'La p&aacute;gina solicitada no existe';
 $lang['ins_no_server_requirements']	= 'Tu servidor/hosting no cumple con los requisitos m&iacute;nimos que requiere XG Proyect para funcionar.<br /><br />Requisitos: <br />- PHP 5.5.x<br />- MySQL 5.5.x';
 $lang['ins_not_writable']               = 'Debes dar permisos de escritura (chmod 777) al directorio application/config para poder continuar con la instalación.';
-$lang['ins_already_installed']		= 'XG Proyect ya se encuentra instalado. Selecciona una opci&oacute;n: <br /><br /> - <a href="index.php?page=update">Actualizar</a> <br /> - <a href="index.php?page=migrate">Migrar</a> <br /> - <a href="../">Volver al juego</a> <br /><br />En el caso de que no desees realizar ninguna acci&oacute;n, por seguridad, te recomendamos <span style="color:red;text-decoration:underline;">BORRAR</span> el directorio install.';
+$lang['ins_already_installed']		= 'XG Proyect ya se encuentra instalado. Selecciona una opci&oacute;n: <br /><br /> - <a href="../admin.php?page=update">Actualizar</a> <br /> - <a href="../admin.php?page=migrate">Migrar</a> <br /> - <a href="../">Volver al juego</a> <br /><br />En el caso de que no desees realizar ninguna acci&oacute;n, por seguridad, te recomendamos <span style="color:red;text-decoration:underline;">BORRAR</span> el directorio install.';
 
 // SOME ERROR HEADERS
 $lang['ins_error_title']			= '¡Alerta!';
@@ -15,8 +15,6 @@ $lang['ins_ok_title']				= '¡Ok!';
 $lang['ins_overview']				= 'Vista general';
 $lang['ins_license']				= 'Licencia';
 $lang['ins_install']				= 'Instalar';
-$lang['ins_update']					= 'Actualizar';
-$lang['ins_migrate']				= 'Migrar';
 $lang['ins_language_select']		= 'Seleccionar idioma';
 
 
@@ -77,20 +75,4 @@ $lang['ins_completed']				= '&iexcl;INSTALACI&Oacute;N FINALIZADA!';
 $lang['ins_admin_account_created']	= 'El Administrador ha sido creado correctamente.';
 $lang['ins_delete_install']			= '&iexcl;Ahora debes borrar la carpeta <i>install</i> asi evitaras problemas graves de seguridad!';
 $lang['ins_end']					= 'Finalizar';
-
-// UPDATE PAGE
-// Administator login
-$lang['ins_update_title']			= 'Actualizar';
-$lang['ins_update_admin_data']		= 'Datos del administrador';
-$lang['ins_update_admin_email']		= 'Correo electrónico';
-$lang['ins_update_admin_password']	= 'Contraseña';
-$lang['ins_update_start']			= 'Ingresar y Actualizar a la versión';
-
-// MIGRATION PAGE
-// Administator login
-$lang['ins_migrate_title']			= 'Migrar';
-$lang['ins_migrate_admin_data']		= 'Datos del administrador';
-$lang['ins_migrate_admin_email']	= 'Correo electrónico';
-$lang['ins_migrate_admin_password']	= 'Contraseña';
-$lang['ins_migrate_start']			= 'Ingresar';
 /* end of INSTALL.php */

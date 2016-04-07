@@ -224,9 +224,7 @@ class TemplateLib
         $pages  = [
             0 => array('installation', $this->langs['ins_overview'], 'overview'),
             1 => array('installation', $this->langs['ins_license'], 'license'),
-            2 => array('installation', $this->langs['ins_install'], 'step1'),
-            3 => array('update', $this->langs['ins_update'], ''),
-            4 => array('migrate', $this->langs['ins_migrate'], '')
+            2 => array('installation', $this->langs['ins_install'], 'step1')
         ];
 
         // BUILD THE MENU
@@ -615,6 +613,8 @@ class TemplateLib
             ['globalmessage', $this->langs['mn_tools_global_message'], '4'],
             ['ban', $this->langs['mn_tools_ban'], '4'],
             ['buildstats', $this->langs['mn_tools_manual_update'], '4'],
+            ['update', $this->langs['mn_tools_update'], '4'],
+            ['migrate', $this->langs['mn_tools_migrate'], '4'],
             ['database', $this->langs['mn_maintenance_db'], '5'],
         );
         // BUILD THE MENU
