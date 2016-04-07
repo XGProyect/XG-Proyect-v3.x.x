@@ -1,12 +1,11 @@
 <div id="content" style="top: 118px; height: 656px;">
 <center>
-<script language="JavaScript">var session="c2eb568a0e29";</script>
 <table class="header">
 <tbody><tr class="header">
 
  <td>
   <table width="519">
-   <form action="game.php?page=messages" method="POST"></form>
+   <form action="{form_submit}" method="POST">
     <tbody><tr>
     <td colspan="4" class="c">{mg_title}</td>
     </tr>
@@ -34,7 +33,7 @@
    </form>
 
 
-      <form action="game.php?page=messages" method="POST"></form>
+      <form action="game.php?page=messages" method="POST">
     <tr height="20"> </tr>
     <tr>
       <td colspan="4" class="c">{mg_address_book}</td>
@@ -69,9 +68,10 @@
       <input type="submit" value="{mg_confirm_action}">
      </th>
     </tr>
+      </form>
 
 
-   <form action="./messages_extended1_files/messages_extended1.html" method="POST"></form>
+   <form action="game.php?page=messages" method="POST">
     <tr height="20"> </tr>
     <tr>
     <td colspan="4" class="c">{mg_notes}</td>
@@ -92,7 +92,7 @@
       <input type="submit" value="{mg_confirm_action}">
      </th>
     </tr>
-
+</form>
 
       </tbody></table>
   </td>
