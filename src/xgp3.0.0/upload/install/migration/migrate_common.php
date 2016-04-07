@@ -4,8 +4,8 @@
  */
 
 // "aks" table -> "acs_fleets" table
-$queries[]  = "TRUNCATE `" . DB_PREFIX . ACS_FLEETS . "`;";
-$queries[]  = "INSERT INTO `" . DB_PREFIX . ACS_FLEETS . "`(
+$queries[]  = "TRUNCATE `" . ACS_FLEETS . "`;";
+$queries[]  = "INSERT INTO `" . ACS_FLEETS . "`(
                 `acs_fleet_id`, 
                 `acs_fleet_name`, 
                 `acs_fleet_members`, 
@@ -28,8 +28,8 @@ $queries[]  = "INSERT INTO `" . DB_PREFIX . ACS_FLEETS . "`(
                 FROM `{prefix}aks`;";
 
 // "alliance" table -> "alliance" table
-$queries[]  = "TRUNCATE `" . DB_PREFIX . ALLIANCE . "`;";
-$queries[]  = "INSERT INTO `" . DB_PREFIX . ALLIANCE . "`(
+$queries[]  = "TRUNCATE `" . ALLIANCE . "`;";
+$queries[]  = "INSERT INTO `" . ALLIANCE . "`(
                 `alliance_id`,
                 `alliance_name`,
                 `alliance_tag`,
@@ -60,8 +60,8 @@ $queries[]  = "INSERT INTO `" . DB_PREFIX . ALLIANCE . "`(
                 FROM `{prefix}alliance`;";
 
 // "banned" table -> "banned" table
-$queries[]  = "TRUNCATE `" . DB_PREFIX . BANNED . "`;";
-$queries[]  = "INSERT INTO `" . DB_PREFIX . BANNED . "`(
+$queries[]  = "TRUNCATE `" . BANNED . "`;";
+$queries[]  = "INSERT INTO `" . BANNED . "`(
                 `banned_id`,
                 `banned_who`,
                 `banned_theme`,
@@ -82,8 +82,8 @@ $queries[]  = "INSERT INTO `" . DB_PREFIX . BANNED . "`(
                 FROM `{prefix}banned`;";
 
 // "buddy" table -> "buddys" table
-$queries[]  = "TRUNCATE `" . DB_PREFIX . BUDDY . "`;";
-$queries[]  = "INSERT INTO `" . DB_PREFIX . BUDDY . "`(
+$queries[]  = "TRUNCATE `" . BUDDY . "`;";
+$queries[]  = "INSERT INTO `" . BUDDY . "`(
                 `buddy_id`,
                 `buddy_sender`,
                 `buddy_receiver`,
@@ -98,8 +98,8 @@ $queries[]  = "INSERT INTO `" . DB_PREFIX . BUDDY . "`(
                 FROM `{prefix}buddy`;";
 
 // "fleets" table -> "fleets" table
-$queries[]  = "TRUNCATE `" . DB_PREFIX . FLEETS . "`;";
-$queries[]  = "INSERT INTO `" . DB_PREFIX . FLEETS . "`(
+$queries[]  = "TRUNCATE `" . FLEETS . "`;";
+$queries[]  = "INSERT INTO `" . FLEETS . "`(
                 `fleet_id`,
                 `fleet_owner`,
                 `fleet_mission`,
@@ -152,8 +152,8 @@ $queries[]  = "INSERT INTO `" . DB_PREFIX . FLEETS . "`(
                 FROM `{prefix}fleets`;";
 
 // "messages" table -> "messages" table
-$queries[]  = "TRUNCATE `" . DB_PREFIX . MESSAGES . "`;";
-$queries[]  = "INSERT INTO `" . DB_PREFIX . MESSAGES . "`(
+$queries[]  = "TRUNCATE `" . MESSAGES . "`;";
+$queries[]  = "INSERT INTO `" . MESSAGES . "`(
                 `message_id`,
                 `message_sender`,
                 `message_receiver`,
@@ -176,8 +176,8 @@ $queries[]  = "INSERT INTO `" . DB_PREFIX . MESSAGES . "`(
                 FROM `{prefix}messages`;";
 
 // "notes" table -> "notes" table
-$queries[]  = "TRUNCATE `" . DB_PREFIX . NOTES . "`;";
-$queries[]  = "INSERT INTO `" . DB_PREFIX . NOTES . "`(
+$queries[]  = "TRUNCATE `" . NOTES . "`;";
+$queries[]  = "INSERT INTO `" . NOTES . "`(
                 `note_id`,
                 `note_owner`,
                 `note_time`,
@@ -198,8 +198,8 @@ $queries[]  = "INSERT INTO `" . DB_PREFIX . NOTES . "`(
  */
 
 // "planets" table -> "planets" table && "galaxy" table -> "planets" table
-$queries[]  = "TRUNCATE `" . DB_PREFIX . PLANETS . "`;";
-$queries[]  = "INSERT INTO `" . DB_PREFIX . PLANETS . "`(
+$queries[]  = "TRUNCATE `" . PLANETS . "`;";
+$queries[]  = "INSERT INTO `" . PLANETS . "`(
                 `planet_id`,
                 `planet_name`,
                 `planet_user_id`,
@@ -293,8 +293,8 @@ $queries[]  = "INSERT INTO `" . DB_PREFIX . PLANETS . "`(
 
 
 // "planets" table -> "buildings" table
-$queries[]  = "TRUNCATE `" . DB_PREFIX . BUILDINGS . "`;";
-$queries[]  = "INSERT INTO `" . DB_PREFIX . BUILDINGS . "`(
+$queries[]  = "TRUNCATE `" . BUILDINGS . "`;";
+$queries[]  = "INSERT INTO `" . BUILDINGS . "`(
                     `building_planet_id`,
                     `building_metal_mine`,
                     `building_crystal_mine`,
@@ -337,8 +337,8 @@ $queries[]  = "INSERT INTO `" . DB_PREFIX . BUILDINGS . "`(
                 FROM `{prefix}planets`;";
 
 // "planets" table -> "defenses" table
-$queries[]  = "TRUNCATE `" . DB_PREFIX . DEFENSES . "`;";
-$queries[]  = "INSERT INTO `" . DB_PREFIX . DEFENSES . "`(
+$queries[]  = "TRUNCATE `" . DEFENSES . "`;";
+$queries[]  = "INSERT INTO `" . DEFENSES . "`(
                     `defense_planet_id`,
                     `defense_rocket_launcher`,
                     `defense_light_laser`,
@@ -365,8 +365,8 @@ $queries[]  = "INSERT INTO `" . DB_PREFIX . DEFENSES . "`(
                 FROM `{prefix}planets`;";
 
 // "planets" table -> "ships" table
-$queries[]  = "TRUNCATE `" . DB_PREFIX . SHIPS . "`;";
-$queries[]  = "INSERT INTO `" . DB_PREFIX . SHIPS . "`(
+$queries[]  = "TRUNCATE `" . SHIPS . "`;";
+$queries[]  = "INSERT INTO `" . SHIPS . "`(
                     `ship_planet_id`,
                     `ship_small_cargo_ship`,
                     `ship_big_cargo_ship`,
@@ -401,8 +401,8 @@ $queries[]  = "INSERT INTO `" . DB_PREFIX . SHIPS . "`(
                 FROM `{prefix}planets`;";
 
 // "rw" table -> "reports" table
-$queries[]  = "TRUNCATE `" . DB_PREFIX . REPORTS . "`;";
-$queries[]  = "INSERT INTO `" . DB_PREFIX . REPORTS . "`(
+$queries[]  = "TRUNCATE `" . REPORTS . "`;";
+$queries[]  = "INSERT INTO `" . REPORTS . "`(
                     `report_owners`,
                     `report_rid`,
                     `report_content`,
@@ -421,8 +421,8 @@ $queries[]  = "INSERT INTO `" . DB_PREFIX . REPORTS . "`(
  */
 
 // "statpoints" table -> "users_statistics" table
-$queries[]  = "TRUNCATE `" . DB_PREFIX . USERS_STATISTICS . "`;";
-$queries[]  = "INSERT INTO `" . DB_PREFIX . USERS_STATISTICS . "`(
+$queries[]  = "TRUNCATE `" . USERS_STATISTICS . "`;";
+$queries[]  = "INSERT INTO `" . USERS_STATISTICS . "`(
                     `user_statistic_user_id`,
                     `user_statistic_buildings_points`,
                     `user_statistic_buildings_old_rank`,
@@ -462,8 +462,8 @@ $queries[]  = "INSERT INTO `" . DB_PREFIX . USERS_STATISTICS . "`(
                 WHERE `stat_type` = '1';";
 
 // "statpoints" table -> "alliance_statistics" table
-$queries[]  = "TRUNCATE `" . DB_PREFIX . ALLIANCE_STATISTICS . "`;";
-$queries[]  = "INSERT INTO `" . DB_PREFIX . ALLIANCE_STATISTICS . "`(
+$queries[]  = "TRUNCATE `" . ALLIANCE_STATISTICS . "`;";
+$queries[]  = "INSERT INTO `" . ALLIANCE_STATISTICS . "`(
                     `alliance_statistic_alliance_id`,
                     `alliance_statistic_buildings_points`,
                     `alliance_statistic_buildings_old_rank`,
@@ -507,8 +507,8 @@ $queries[]  = "INSERT INTO `" . DB_PREFIX . ALLIANCE_STATISTICS . "`(
  */
 
 // "users" table -> "users" table
-$queries[]  = "TRUNCATE `" . DB_PREFIX . USERS . "`;";
-$queries[]  = "INSERT INTO `" . DB_PREFIX . USERS . "`(
+$queries[]  = "TRUNCATE `" . USERS . "`;";
+$queries[]  = "INSERT INTO `" . USERS . "`(
                     `user_id`,
                     `user_name`,
                     `user_password`,
@@ -561,8 +561,8 @@ $queries[]  = "INSERT INTO `" . DB_PREFIX . USERS . "`(
                 FROM `{prefix}users`;";
 
 // "users" table -> "premium" table
-$queries[]  = "TRUNCATE `" . DB_PREFIX . PREMIUM . "`;";
-$queries[]  = "INSERT INTO `" . DB_PREFIX . PREMIUM . "`(
+$queries[]  = "TRUNCATE `" . PREMIUM . "`;";
+$queries[]  = "INSERT INTO `" . PREMIUM . "`(
                     `premium_user_id`,
                     `premium_dark_matter`,
                     `premium_officier_commander`,
@@ -581,8 +581,8 @@ $queries[]  = "INSERT INTO `" . DB_PREFIX . PREMIUM . "`(
                 FROM `{prefix}users`;";
 
 // "users" table -> "research" table
-$queries[]  = "TRUNCATE `" . DB_PREFIX . RESEARCH . "`;";
-$queries[]  = "INSERT INTO `" . DB_PREFIX . RESEARCH . "`(
+$queries[]  = "TRUNCATE `" . RESEARCH . "`;";
+$queries[]  = "INSERT INTO `" . RESEARCH . "`(
                     `research_user_id`,
                     `research_current_research`,
                     `research_espionage_technology`,
@@ -623,8 +623,8 @@ $queries[]  = "INSERT INTO `" . DB_PREFIX . RESEARCH . "`(
                 FROM `{prefix}users`;";
 
 // "users" table -> "settings" table
-$queries[]  = "TRUNCATE `" . DB_PREFIX . SETTINGS . "`;";
-$queries[]  = "INSERT INTO `" . DB_PREFIX . SETTINGS . "`(
+$queries[]  = "TRUNCATE `" . SETTINGS . "`;";
+$queries[]  = "INSERT INTO `" . SETTINGS . "`(
                     `setting_user_id`,
                     `setting_no_ip_check`,
                     `setting_planet_sort`,
