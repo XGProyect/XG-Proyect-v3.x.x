@@ -556,28 +556,9 @@ class TemplateLib
      */
     private function adminNavbar()
     {
-        $current_page   = isset($_GET['page']) ? $_GET['page'] : null;
-        $items          = '';
-        $pages          = [
-            0 => ['', $this->langs['tn_index']],
-            1 => ['moderation', $this->langs['tn_permissions']],
-            2 => ['reset', $this->langs['tn_reset_universe']],
-            3 => ['queries', $this->langs['tn_sql_queries']],
-            4 => ['logout', $this->langs['tn_logout']],
-        ];
-
-        // BUILD THE MENU
-        foreach ($pages as $key => $data) {
-
-            // URL
-            $items .= '<li' . ($current_page == $data[0] ?
-                ' class="active"' : '') . '><a href="admin.php?page=' . $data[0] . '">' . $data[1] . '</a></li>';
-        }
-
         // PARSE THE MENU AND OTHER DATA
-        $parse                  = $this->langs;
-        $parse['username']      = $this->current_user['user_name'];
-        $parse['menu_items']    = $items;
+        $parse              = $this->langs;
+        $parse['version']   = FunctionsLib::readConfig('version');
 
         return $this->parseTemplate($this->getTemplate('adm/topnav_view'), $parse);
     }
@@ -592,30 +573,33 @@ class TemplateLib
         $current_page   = isset($_GET['page']) ? $_GET['page'] : null;
         $items          = '';
         $flag           = '';
-        $exclude        = [1, 2, 3, 4];
         $pages = array(
-            ['server', $this->langs['mn_config_server'], '1'],
-            ['modules', $this->langs['mn_config_modules'], '1'],
-            ['planets', $this->langs['mn_config_planets'], '1'],
-            ['registration', $this->langs['mn_config_registrations'], '1'],
-            ['statistics', $this->langs['mn_config_stats'], '1'],
-            ['premium', $this->langs['mn_premium'], '1'],
-            ['editor', $this->langs['mn_config_changelog'], '1'],
-            ['information', $this->langs['mn_info_general'], '2'],
-            ['errors', $this->langs['mn_info_db'], '2'],
-            ['fleetmovements', $this->langs['mn_info_fleets'], '2'],
-            ['messages', $this->langs['mn_info_messages'], '2'],
-            ['maker', $this->langs['mn_edition_maker'], '3'],
-            ['users', $this->langs['mn_edition_users'], '3'],
-            ['alliances', $this->langs['mn_edition_alliances'], '3'],
-            ['backup', $this->langs['mn_tools_backup'], '4'],
-            ['encrypter', $this->langs['mn_tools_encrypter'], '4'],
-            ['globalmessage', $this->langs['mn_tools_global_message'], '4'],
-            ['ban', $this->langs['mn_tools_ban'], '4'],
-            ['buildstats', $this->langs['mn_tools_manual_update'], '4'],
-            ['update', $this->langs['mn_tools_update'], '4'],
-            ['migrate', $this->langs['mn_tools_migrate'], '4'],
-            ['repair', $this->langs['mn_maintenance_db'], '5'],
+            ['', $this->langs['mn_index'], '1'],
+            ['moderation', $this->langs['mn_permissions'], '1'],
+            ['reset', $this->langs['mn_reset_universe'], '1'],
+            ['queries', $this->langs['mn_sql_queries'], '1'],
+            ['server', $this->langs['mn_config_server'], '2'],
+            ['modules', $this->langs['mn_config_modules'], '2'],
+            ['planets', $this->langs['mn_config_planets'], '2'],
+            ['registration', $this->langs['mn_config_registrations'], '2'],
+            ['statistics', $this->langs['mn_config_stats'], '2'],
+            ['premium', $this->langs['mn_premium'], '2'],
+            ['editor', $this->langs['mn_config_changelog'], '2'],
+            ['information', $this->langs['mn_info_general'], '3'],
+            ['errors', $this->langs['mn_info_db'], '3'],
+            ['fleetmovements', $this->langs['mn_info_fleets'], '3'],
+            ['messages', $this->langs['mn_info_messages'], '3'],
+            ['maker', $this->langs['mn_edition_maker'], '4'],
+            ['users', $this->langs['mn_edition_users'], '4'],
+            ['alliances', $this->langs['mn_edition_alliances'], '4'],
+            ['backup', $this->langs['mn_tools_backup'], '5'],
+            ['encrypter', $this->langs['mn_tools_encrypter'], '5'],
+            ['globalmessage', $this->langs['mn_tools_global_message'], '5'],
+            ['ban', $this->langs['mn_tools_ban'], '5'],
+            ['buildstats', $this->langs['mn_tools_manual_update'], '5'],
+            ['update', $this->langs['mn_tools_update'], '5'],
+            ['migrate', $this->langs['mn_tools_migrate'], '5'],
+            ['repair', $this->langs['mn_maintenance_db'], '6'],
         );
         // BUILD THE MENU
         foreach ($pages as $key => $data) {
@@ -657,6 +641,7 @@ class TemplateLib
         $parse['menu_block_3']  = $parse_block[3];
         $parse['menu_block_4']  = $parse_block[4];
         $parse['menu_block_5']  = $parse_block[5];
+        $parse['menu_block_6']  = $parse_block[6];
 
         return $this->parseTemplate($this->getTemplate('adm/menu_view'), $parse);
     }

@@ -16,6 +16,7 @@ namespace application\controllers\adm;
 
 use application\core\XGPCore;
 use application\libraries\adm\AdministrationLib;
+use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
 
 /**
@@ -73,7 +74,6 @@ class Home extends XGPCore
     {
         $parse = $this->_lang;
         $error = 0;
-        $old_version = false;
         $message[1] = '';
         $message[2] = '';
         $message[3] = '';
@@ -93,7 +93,6 @@ class Home extends XGPCore
 
             if ($this->check_updates()) {
                 $message[3] = $this->_lang['hm_old_version'] . '<br />';
-                $old_version = true;
                 $error++;
             }
 
@@ -117,9 +116,15 @@ class Home extends XGPCore
             $parse['error_type'] = $this->_lang['hm_ok'];
         }
 
-        $parse['game_version'] = FunctionsLib::readConfig('version');
-        $parse['old_version_alert'] = ( $old_version ) ? '<a href="http://www.xgproyect.org/downloads/">' . $this->_lang['hm_update'] . '</a> <i class="icon-download"></i>' : '';
-
+        $parse['server_type']               = PHP_OS;
+        $parse['web_server']                = $this->getWebServer();
+        $parse['php_version']               = PHP_VERSION;
+        $parse['php_max_post_size']         = FormatLib::prettyBytes((int)(str_replace('M', '', ini_get('post_max_size')) * 1024 * 1024));
+        $parse['php_upload_max_filesize']   = FormatLib::prettyBytes((int)(str_replace('M', '', ini_get('upload_max_filesize')) * 1024 * 1024));
+        $parse['php_memory_limit']          = FormatLib::prettyBytes((int)(str_replace('M', '', ini_get('memory_limit')) * 1024 * 1024));
+        $parse['mysql_version']             = parent::$db->serverInfo();
+        $parse['mysql_packet_size']         = FormatLib::prettyBytes(parent::$db->queryFetch("SHOW VARIABLES LIKE 'max_allowed_packet'")[1]);
+        
         parent::$page->display(parent::$page->parseTemplate(parent::$page->getTemplate('adm/home_view'), $parse));
     }
 
@@ -131,11 +136,60 @@ class Home extends XGPCore
     private function check_updates()
     {
         if (function_exists('file_get_contents')) {
-            $last_v = @file_get_contents('http://xgproyect.xgproyect.org/current.php');
-            $system_v = FunctionsLib::readConfig('version');
-
+            $last_v     = json_decode(@file_get_contents('http://xgproyect.org/current.php'))->version;
+            $system_v   = FunctionsLib::readConfig('version');
+            
             return version_compare($system_v, $last_v, '<');
         }
+    }
+    
+    /**
+     * getWebServer
+     * 
+     * @return string
+     */
+    private function getWebServer()
+    {
+        $sapi_name  = php_sapi_name();
+        $addsapi    = false;
+        
+        if (preg_match('#(Apache)/([0-9\.]+)\s#siU', $_SERVER['SERVER_SOFTWARE'], $wsregs))
+        {
+            $webserver  = "$wsregs[1] v$wsregs[2]";
+            if ($sapi_name == 'cgi' or $sapi_name == 'cgi-fcgi')
+            {
+                $addsapi    = true;
+            }
+        }
+        else if (preg_match('#Microsoft-IIS/([0-9\.]+)#siU', $_SERVER['SERVER_SOFTWARE'], $wsregs))
+        {
+            $webserver  = "IIS v$wsregs[1]";
+            $addsapi    = true;
+        }
+        else if (preg_match('#Zeus/([0-9\.]+)#siU', $_SERVER['SERVER_SOFTWARE'], $wsregs))
+        {
+            $webserver  = "Zeus v$wsregs[1]";
+            $addsapi    = true;
+        }
+        else if (strtoupper($_SERVER['SERVER_SOFTWARE']) == 'APACHE')
+        {
+            $webserver  = 'Apache';
+            if ($sapi_name == 'cgi' or $sapi_name == 'cgi-fcgi')
+            {
+                $addsapi = true;
+            }
+        }
+        else
+        {
+            $webserver  = $sapi_name;
+        }
+
+        if ($addsapi)
+        {
+            $webserver  .= ' (' . $sapi_name . ')';
+        }
+        
+        return $webserver;
     }
 }
 

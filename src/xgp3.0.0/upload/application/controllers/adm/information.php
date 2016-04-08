@@ -89,33 +89,33 @@ class Information extends XGPCore
         // LOAD STATISTICS
         $inactive_time = ( time() - 60 * 60 * 24 * 7 );
         $users_count = parent::$db->queryFetch("SELECT (
-																SELECT COUNT(user_id)
-																	FROM " . USERS . "
-															 ) AS users_count,
+                    SELECT COUNT(user_id)
+                            FROM " . USERS . "
+             ) AS users_count,
 
-															 ( SELECT COUNT(user_id)
-															 		FROM " . USERS . "
-															 		WHERE user_onlinetime < {$inactive_time} AND user_onlinetime <> 0
-															 ) AS inactive_count,
+             ( SELECT COUNT(user_id)
+                            FROM " . USERS . "
+                            WHERE user_onlinetime < {$inactive_time} AND user_onlinetime <> 0
+             ) AS inactive_count,
 
-															 ( SELECT COUNT(setting_user_id)
-															 		FROM " . SETTINGS . "
-															 		WHERE setting_vacations_status <> 0
-															 ) AS on_vacation,
+             ( SELECT COUNT(setting_user_id)
+                            FROM " . SETTINGS . "
+                            WHERE setting_vacations_status <> 0
+             ) AS on_vacation,
 
-															 ( SELECT COUNT(setting_user_id)
-															 		FROM " . SETTINGS . "
-															 		WHERE setting_delete_account <> 0
-															 ) AS to_delete,
+             ( SELECT COUNT(setting_user_id)
+                            FROM " . SETTINGS . "
+                            WHERE setting_delete_account <> 0
+             ) AS to_delete,
 
-															 ( SELECT COUNT(user_id)
-															 		FROM " . USERS . "
-															 		WHERE user_banned <> 0
-															 ) AS banned_users,
+             ( SELECT COUNT(user_id)
+                            FROM " . USERS . "
+                            WHERE user_banned <> 0
+             ) AS banned_users,
 
-															 ( SELECT COUNT(fleet_id)
-															 		FROM " . FLEETS . "
-															 ) AS fleets_count");
+             ( SELECT COUNT(fleet_id)
+                            FROM " . FLEETS . "
+             ) AS fleets_count");
 
         // LOAD STATISTICS
         $db_tables = parent::$db->query("SHOW TABLE STATUS");
