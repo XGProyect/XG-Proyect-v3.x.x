@@ -1,6 +1,7 @@
 '3.0.0' => ' 29/01/2016
 - Initial release based on XGP 2.10.4.-
 - Too many changes into the file structure and database to list them all.-
+- Core new features: new database structure, new core, new admin CP, new migration tool (From 2.9.x), new ingame features, new home page.-
 
 '2.10.4' => ' 06/08/2012
 - [Mejoras]
