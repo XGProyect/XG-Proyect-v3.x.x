@@ -102,8 +102,8 @@ class Repair extends XGPCore
 
                 $row['row']             = $row['table_name'];
                 $row['data']            = FormatLib::prettyBytes($row['data_length']);
-                $row['index']           = $row['index_length'];
-                $row['overhead']        = $row['data_free'];
+                $row['index']           = FormatLib::prettyBytes($row['index_length']);
+                $row['overhead']        = FormatLib::prettyBytes($row['data_free']);
                 $row['status_style']    = 'text-info';
 
                 $parse['tables']         .= parent::$page->parseTemplate(
