@@ -615,7 +615,7 @@ class TemplateLib
             ['buildstats', $this->langs['mn_tools_manual_update'], '4'],
             ['update', $this->langs['mn_tools_update'], '4'],
             ['migrate', $this->langs['mn_tools_migrate'], '4'],
-            ['database', $this->langs['mn_maintenance_db'], '5'],
+            ['repair', $this->langs['mn_maintenance_db'], '5'],
         );
         // BUILD THE MENU
         foreach ($pages as $key => $data) {

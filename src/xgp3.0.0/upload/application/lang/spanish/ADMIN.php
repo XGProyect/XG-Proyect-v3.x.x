@@ -52,7 +52,7 @@ $lang['mn_tools_manual_update_confirm']						= '¿Estas seguro que deseas actual
 $lang['mn_tools_update']                                                        = 'Actualizar';
 $lang['mn_tools_migrate']                                                       = 'Migrar';
 $lang['mn_maintenance_title']								= 'Mantenimiento';
-$lang['mn_maintenance_db']									= 'Base de datos';
+$lang['mn_maintenance_db']									= 'Reparar / Optimizar tablas';
 
 // TOP NAVIGATION BAR
 $lang['tn_loggued_in_as']									= 'Logueado como';
@@ -800,17 +800,23 @@ $lang['mi_alert_type_3_content_2']              = 'Los plugins no serán importa
 $lang['mi_alert_type_3_content_3']              = 'Las configuraciones no serán importadas.-';
 
 // DATA BASE
-$lang['db_not_opt']											= '¡Error!';
-$lang['db_not_check']										= '¡Hay errores!';
-$lang['db_opt']												= '¡Optimizado!';
-$lang['db_rep']												= '¡Reparado!';
-$lang['db_check_ok']										= '¡Todo en orden!';
-$lang['db_opt_db']											= 'Base de datos';
-$lang['db_optimize']										= 'Optimizar';
-$lang['db_repair']											= 'Reparar';
-$lang['db_check']											= 'Revisar';
-$lang['db_select_action']									= 'Seleccionar acción';
-$lang['us_all_ok_message']									= '¡Cambios guardados con éxito!';
+$lang['db_not_opt']         = '¡Error!';
+$lang['db_not_check']       = '¡Hay errores!';
+$lang['db_opt']             = '¡Optimizado!';
+$lang['db_rep']             = '¡Reparado!';
+$lang['db_check_ok']        = '¡Todo en orden!';
+$lang['db_opt_db']          = 'Reparar / Optimizar tablas';
+$lang['db_optimize']        = 'Optimizar';
+$lang['db_repair']          = 'Reparar';
+$lang['db_check']           = 'Revisar';
+$lang['db_table_name']      = 'Tabla';
+$lang['db_data_length']     = 'Longitud de datos';
+$lang['db_index_length']    = 'Longitud de índice';
+$lang['db_overhead']        = 'Overhead';
+$lang['db_checkall']        = 'Marcar todas';
+$lang['db_yes']             = 'Si';
+$lang['db_no']              = 'No';
+$lang['db_table_result']    = 'Resultado';
 
 // ELEMENTS LIST FOR QUEUE LISTS
 $lang['tech'][1] 											= 'Mina de metal';

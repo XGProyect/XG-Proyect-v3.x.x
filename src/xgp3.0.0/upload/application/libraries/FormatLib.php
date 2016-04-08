@@ -288,6 +288,32 @@ class FormatLib
     {
         return '<strong>' . $value . '</strong>';
     }
+
+    /**
+     * prettyBytes
+     * 
+     * @param int     $bytes     Bytes
+     * @param int     $precision Precision
+     * @param boolean $bitwise   Bitwise Arithmetic
+     * 
+     * @return int
+     */
+    public static function prettyBytes($bytes, $precision = 2, $bitwise = false)
+    { 
+        $units  = array('Bytes', 'KB', 'MB', 'GB', 'TB'); 
+
+        $bytes  = max($bytes, 0); 
+        $pow    = floor(($bytes ? log($bytes) : 0) / log(1024)); 
+        $pow    = min($pow, count($units) - 1); 
+
+        if ($bitwise) {
+            $bytes  /= (1 << (10 * $pow));
+        } else {
+            $bytes  /= pow(1024, $pow);
+        }
+
+        return round($bytes, $precision) . ' ' . $units[$pow]; 
+    } 
 }
 
 /* end of FormatLib.php */

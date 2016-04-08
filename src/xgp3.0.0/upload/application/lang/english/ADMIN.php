@@ -52,7 +52,7 @@ $lang['mn_tools_update']                                                        
 $lang['mn_tools_migrate']                                                       = 'Migrate';
 $lang['mn_tools_manual_update_confirm']						= '¿Are you sure you wan to update the Statistics?';
 $lang['mn_maintenance_title']								= 'Maintenance';
-$lang['mn_maintenance_db']									= 'Database';
+$lang['mn_maintenance_db']									= 'Repair / Optimize tables';
 
 // TOP NAVIGATION BAR
 $lang['tn_loggued_in_as']									= 'Logged as';
@@ -801,16 +801,23 @@ $lang['mi_alert_type_3_content_2']              = 'Plugins are not going to be i
 $lang['mi_alert_type_3_content_3']              = 'Configurations / settings are not going to be imported.-';
 
 // DATA BASE
-$lang['db_not_opt']											= '¡Error!';
-$lang['db_not_check']										= 'There\'re errors!';
-$lang['db_opt']												= 'Optimized!';
-$lang['db_rep']												= 'Repaired!';
-$lang['db_check_ok']										= 'Everything OK!';
-$lang['db_opt_db']											= 'Database';
-$lang['db_optimize']										= 'Optimize';
-$lang['db_repair']											= 'Repair';
-$lang['db_check']											= 'Check';
-$lang['db_select_action']									= 'Select action';
+$lang['db_not_opt']         = '¡Error!';
+$lang['db_not_check']       = 'There\'re errors!';
+$lang['db_opt']             = 'Optimized!';
+$lang['db_rep']             = 'Repaired!';
+$lang['db_check_ok']        = 'Everything OK!';
+$lang['db_opt_db']          = 'Repair / Optimize table';
+$lang['db_optimize']        = 'Optimize';
+$lang['db_repair']          = 'Repair';
+$lang['db_check']           = 'Check';
+$lang['db_table_name']      = 'Table';
+$lang['db_data_length']     = 'Data Length';
+$lang['db_index_length']    = 'Index Length';
+$lang['db_overhead']        = 'Overhead';
+$lang['db_checkall']        = 'Check All';
+$lang['db_yes']             = 'Yes';
+$lang['db_no']              = 'No';
+$lang['db_table_result']    = 'Result';
 
 // ELEMENTS LIST FOR QUEUE LISTS
 $lang['tech'][1] 											= 'Metal Mine';
