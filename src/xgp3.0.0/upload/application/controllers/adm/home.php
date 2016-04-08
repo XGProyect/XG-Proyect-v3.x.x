@@ -124,6 +124,9 @@ class Home extends XGPCore
         $parse['php_memory_limit']          = FormatLib::prettyBytes((int)(str_replace('M', '', ini_get('memory_limit')) * 1024 * 1024));
         $parse['mysql_version']             = parent::$db->serverInfo();
         $parse['mysql_packet_size']         = FormatLib::prettyBytes(parent::$db->queryFetch("SHOW VARIABLES LIKE 'max_allowed_packet'")[1]);
+        $db_stats                           = $this->getDbStats();
+        $parse['data_usage']                = FormatLib::prettyBytes($db_stats['Data_Usage']);
+        $parse['index_usage']               = FormatLib::prettyBytes($db_stats['Index_Usage']);
         
         parent::$page->display(parent::$page->parseTemplate(parent::$page->getTemplate('adm/home_view'), $parse));
     }
@@ -190,6 +193,22 @@ class Home extends XGPCore
         }
         
         return $webserver;
+    }
+    
+    /**
+     * getDbStats
+     *
+     * @return array
+     */
+    private function getDbStats()
+    {
+        return parent::$db->queryFetch(
+            "SELECT 
+                SUM(`data_length`) AS `Data_Usage`,
+                SUM(`index_length`) AS `Index_Usage`
+            FROM information_schema.TABLES 
+            WHERE table_schema = '" . DB_NAME . "';"
+        );
     }
 }
 

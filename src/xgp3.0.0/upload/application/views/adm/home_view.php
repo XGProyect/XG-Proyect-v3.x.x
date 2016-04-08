@@ -16,17 +16,17 @@
                         <tr>
                             <td style="background-color: #ccc">Server Type</td>
                             <td>{server_type}</td>
-                            <!--<td style="background-color: #ccc">Data Usage</td>
-                            <td>195.24 MB</td>
-                            <td style="background-color: #ccc">Users to Moderate</td>
+                            <td style="background-color: #ccc">Data Usage</td>
+                            <td>{data_usage}</td>
+                            <!--<td style="background-color: #ccc">Users to Moderate</td>
                             <td>0 [View]</td>-->
                         </tr>
                         <tr>
                             <td style="background-color: #ccc">Web Server</td>
                             <td>{web_server}</td>
-                            <!--<td style="background-color: #ccc">Index Usage</td>
-                            <td>32.96 MB</td>
-                            <td style="background-color: #ccc">Threads to Moderate</td>
+                            <td style="background-color: #ccc">Index Usage</td>
+                            <td>{index_usage}</td>
+                            <!--<td style="background-color: #ccc">Threads to Moderate</td>
                             <td>0 [View]</td>-->
                         </tr>
                         <tr>
