@@ -284,7 +284,7 @@ class Messages extends XGPCore
                 if ($this->have_premium) {
 
                     // make messages count per type, notes and admins count
-                    $this->make_counts();
+                    $this->makeCounts();
                     
                     $parse['form_submit']   = 'game.php?' . $_SERVER['QUERY_STRING'];
                     $type_row_template      = parent::$page->getTemplate('messages/messages_body_premium_row_view');
