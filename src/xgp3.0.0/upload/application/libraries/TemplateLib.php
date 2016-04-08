@@ -131,7 +131,7 @@ class TemplateLib
 
             $page   .= $this->parseTemplate(
                 $this->getTemplate('adm/simple_footer'),
-                array('year' => $this->current_year)
+                ['version' => SYSTEM_VERSION, 'year' => $this->current_year]
             );
         }
 
@@ -139,7 +139,7 @@ class TemplateLib
 
             $page   .= $this->parseTemplate(
                 $this->getTemplate('install/simple_footer'),
-                array('year' => $this->current_year)
+                ['year' => $this->current_year]
             );
         }
 
