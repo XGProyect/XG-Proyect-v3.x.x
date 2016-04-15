@@ -91,7 +91,7 @@ class Home extends XGPCore
                 $error++;
             }
 
-            if ($this->check_updates()) {
+            if ($this->checkUpdates()) {
                 $message[3] = $this->_lang['hm_old_version'] . '<br />';
                 $error++;
             }
@@ -127,6 +127,11 @@ class Home extends XGPCore
         $db_stats                           = $this->getDbStats();
         $parse['data_usage']                = FormatLib::prettyBytes($db_stats['Data_Usage']);
         $parse['index_usage']               = FormatLib::prettyBytes($db_stats['Index_Usage']);
+        $user_stats                         = $this->getUsersStats();
+        $parse['unique_visitors_today']     = $user_stats['unique_visitors_today'];
+        $parse['new_users_today']           = $user_stats['new_users_today'];
+        $parse['new_messages_today']        = $user_stats['new_messages_today'];
+        $parse['new_reports_today']         = $user_stats['new_reports_today'];
         
         parent::$page->display(parent::$page->parseTemplate(parent::$page->getTemplate('adm/home_view'), $parse));
     }
@@ -136,11 +141,24 @@ class Home extends XGPCore
      * param
      * return check for updates and returns true or false
      */
-    private function check_updates()
+    private function checkUpdates()
     {
         if (function_exists('file_get_contents')) {
-            $last_v     = json_decode(@file_get_contents('http://xgproyect.org/current.php'))->version;
+            
             $system_v   = FunctionsLib::readConfig('version');
+            $last_v     = @json_decode(
+                @file_get_contents(
+                    'http://xgproyect.org/current.php',
+                    false,
+                    stream_context_create(
+                        ['http'=>
+                            [
+                                'timeout' => 1, // one second
+                            ]
+                        ]
+                    )
+                )
+            )->version;
             
             return version_compare($system_v, $last_v, '<');
         }
@@ -196,7 +214,7 @@ class Home extends XGPCore
     }
     
     /**
-     * getDbStats
+     * Get some tables statistics from the database
      *
      * @return array
      */
@@ -207,7 +225,59 @@ class Home extends XGPCore
                 SUM(`data_length`) AS `Data_Usage`,
                 SUM(`index_length`) AS `Index_Usage`
             FROM information_schema.TABLES 
-            WHERE table_schema = '" . DB_NAME . "';"
+            WHERE table_schema = '" . parent::$db->escapeValue(DB_NAME) . "';"
+        );
+    }
+    
+    /**
+     * Get some user statistics from the database
+     * 
+     * @return array
+     */
+    private function getUsersStats()
+    {
+        return parent::$db->queryFetch(
+            "SELECT 
+                (
+                        SELECT 
+                                COUNT(`user_id`) AS `unique_visitors_today` 
+                        FROM 
+                                `" . USERS . "` 
+                        WHERE 
+                                `user_onlinetime` > UNIX_TIMESTAMP(
+                                        DATE_SUB(NOW(), INTERVAL 1 DAY)
+                                )
+                ) AS `unique_visitors_today`, 
+                (
+                        SELECT 
+                                COUNT(`user_id`) AS `new_users_today` 
+                        FROM 
+                                `" . USERS . "` 
+                        WHERE 
+                                `user_register_time` > UNIX_TIMESTAMP(
+                                        DATE_SUB(NOW(), INTERVAL 1 DAY)
+                                )
+                ) AS `new_users_today`,
+                (
+                        SELECT 
+                                COUNT(`message_id`) AS `new_messages_today` 
+                        FROM 
+                                `" . MESSAGES . "` 
+                        WHERE 
+                                `message_time` > UNIX_TIMESTAMP(
+                                        DATE_SUB(NOW(), INTERVAL 1 DAY)
+                                )
+                ) AS `new_messages_today`,
+                (
+                        SELECT 
+                                COUNT(`report_rid`) AS `new_reports_today` 
+                        FROM 
+                                `" . REPORTS . "` 
+                        WHERE 
+                                `report_time` > UNIX_TIMESTAMP(
+                                        DATE_SUB(NOW(), INTERVAL 1 DAY)
+                                )
+                ) AS `new_reports_today`"
         );
     }
 }
