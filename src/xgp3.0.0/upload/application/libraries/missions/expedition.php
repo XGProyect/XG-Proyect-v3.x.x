@@ -271,7 +271,7 @@ class Expedition extends Missions
         $found_chance   = $fleet_points / $fleet_row['fleet_amount'];
 
         for ($ship = 202; $ship <= 215; $ship++) {
-            if ($current_fleet[$ship] != 0) {
+            if (isset($current_fleet[$ship]) && $current_fleet[$ship] != 0) {
                 $found_ship[$ship] = round($current_fleet[$ship] * $ships_ratio[$ship] * $found_chance) + 1;
 
                 if ($found_ship[$ship] > 0) {
