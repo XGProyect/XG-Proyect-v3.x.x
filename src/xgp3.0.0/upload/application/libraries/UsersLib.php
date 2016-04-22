@@ -137,7 +137,7 @@ class UsersLib extends XGPCore
         if ($user_data['user_ally_id'] != 0) {
 
             $alliance = parent::$db->queryFetch(
-                "SELECT a.`alliance_id`, 
+                "SELECT a.`alliance_id`, a.`alliance_ranks`
                     (SELECT COUNT(user_id) AS `ally_members` 
                         FROM `" . USERS . "` 
                         WHERE `user_ally_id` = '" . $user_data['user_ally_id'] . "') AS `ally_members`
@@ -145,13 +145,43 @@ class UsersLib extends XGPCore
                 WHERE a.`alliance_id` = '" . $user_data['user_ally_id'] . "';"
             );
 
-            if ($alliance['ally_members'] <= 0) {
+            if ($alliance['ally_members'] > 1 
+                && (isset($alliance['alliance_ranks']) && !is_null($alliance['alliance_ranks']))) {
+                
+                $ranks      = unserialize($alliance['alliance_ranks']);
+                $userRank   = null;
+                
+                // search for an user that has permission to receive the alliance.
+                foreach ($ranks as $id => $rank) {
 
-                parent::$db->query(
-                    "DELETE ass,a FROM " . ALLIANCE . " AS a
-                    INNER JOIN " . ALLIANCE_STATISTICS . " AS ass ON ass.alliance_statistic_alliance_id = a.alliance_id
-                    WHERE a.`alliance_id` = '" . $alliance['alliance_id'] . "';"
-                );
+                    if ($rank['rechtehand'] == 1) {
+
+                        $userRank   = $id;
+                        break;
+                    }
+                }
+                
+                // check and update
+                if (is_numeric($userRank)) {
+                    parent::$db->query(
+                        "UPDATE `" . ALLIANCE . "` SET 
+                            `alliance_owner` = 
+                            (
+                                    SELECT `user_id` 
+                                FROM `" . USERS . "`
+                                WHERE `user_ally_rank_id` = '" . $userRank . "'
+                                    AND `user_ally_id` = '" . $alliance['alliance_id'] . "'
+                                LIMIT 1
+                            )
+                        WHERE `alliance_id` = '" . $alliance['alliance_id'] . "';"
+                    );
+                } else {
+
+                    $this->deleteAlliance($alliance['alliance_id']);
+                }
+            } else {
+
+                $this->deleteAlliance($alliance['alliance_id']);
             }
         }
 
@@ -185,6 +215,32 @@ class UsersLib extends XGPCore
         );
     }
 
+    /**
+     * deleteAlliance
+     * 
+     * @param Int $alliance_id Alliance ID
+     * 
+     * @return void
+     */
+    private function deleteAlliance($alliance_id)
+    {
+        parent::$db->query(
+            "DELETE ass, a FROM " . ALLIANCE . " AS a
+            INNER JOIN " . ALLIANCE_STATISTICS . " AS ass ON ass.alliance_statistic_alliance_id = a.alliance_id
+            WHERE a.`alliance_id` = '" . $alliance_id . "';"
+        );
+
+        parent::$db->query(
+            "UPDATE `" . USERS . "` SET 
+                `user_ally_id` = '0',
+                `user_ally_request` = '0',
+                `user_ally_request_text` = '',
+                `user_ally_register_time` = '',
+                `user_ally_rank_id` = '0'
+            WHERE `user_ally_id` = '" . $alliance_id . "';"
+        );
+    }
+    
     /**
      * isOnVacations
      *
