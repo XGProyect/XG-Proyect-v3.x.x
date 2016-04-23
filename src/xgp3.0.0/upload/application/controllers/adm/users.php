@@ -1034,7 +1034,8 @@ class Users extends XGPCore
         // REMOVE LAST COMMA
         //$query_string = substr_replace($query_string, '', -1);
         // QUERY END
-        $query_string .= " `planet_field_current` = '" . $total_fields . "' ";
+        $query_string .= " `planet_field_current` = '" . $total_fields . "', ";
+        $query_string .= " `planet_field_max` = IF(`planet_type` = 3, 1 + `building_mondbasis` * " . FIELDS_BY_MOONBASIS_LEVEL . ", `planet_field_max`) ";
         $query_string .= " WHERE `building_planet_id` = '" . parent::$db->escapeValue($id_get) . "' 
                             AND `planet_id` = '" . parent::$db->escapeValue($id_get) . "';";
 
