@@ -15,6 +15,7 @@
 namespace application\controllers\game;
 
 use application\core\XGPCore;
+use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
 use application\libraries\OfficiersLib;
 
