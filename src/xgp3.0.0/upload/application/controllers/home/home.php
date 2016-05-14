@@ -105,7 +105,7 @@ class Home extends XGPCore
         } else {
             $parse['year']          = date('Y');
             $parse['version']       = SYSTEM_VERSION;
-            $parse['servername']    = FunctionsLib::readConfig('game_name');
+            $parse['servername']    = strtr($this->langs['hm_title'], ['%s' => FunctionsLib::readConfig('game_name')]);
             $parse['game_logo']     = FunctionsLib::readConfig('game_logo');
             $parse['forum_url']     = FunctionsLib::readConfig('forum_url');
             $parse['js_path']       = JS_PATH . 'home/';

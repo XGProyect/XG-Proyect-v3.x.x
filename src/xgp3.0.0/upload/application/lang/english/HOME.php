@@ -3,6 +3,7 @@
 // index
 $lang['hm_keywords']						= 'Game, Browser, online, for free, legendary, MMOG, Science fiction, space, space ship';
 $lang['hm_description']						= 'XG Proyect - The legendary game in the space! Discover the universe together with thousands of players.';
+$lang['hm_title']                                               = '%s Homepage';
 $lang['hm_field_required']					= 'This field is required';
 $lang['hm_must_accept_tandc']				= 'You must accept the T&Cs.';
 $lang['hm_username_length']					= 'Between 3 and 20 characters allowed.';

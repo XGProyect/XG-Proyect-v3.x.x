@@ -11,7 +11,7 @@
     <meta name="Description" content="{hm_description}">
     <meta name="robots" content="index,follow">
     <meta name="Revisit" content="After 14 days">
-    <title>Página inicial de {servername}</title>
+    <title>{servername}</title>
     <link rel="stylesheet" type="text/css" href="{css_path}reset.css">
     <link rel="stylesheet" type="text/css" href="{css_path}forms.css">
 
