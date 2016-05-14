@@ -790,9 +790,9 @@ class Alliance extends XGPCore
                     }
 
                     if (isset($_POST['options'])) {
-                        $this->_ally['alliance_owner_range'] = parent::$db->escapeValue(htmlspecialchars(strip_tags($_POST['owner_range'])));
-                        $this->_ally['alliance_web'] = parent::$db->escapeValue(htmlspecialchars(strip_tags($_POST['web'])));
-                        $this->_ally['alliance_image'] = parent::$db->escapeValue(htmlspecialchars(strip_tags($_POST['image'])));
+                        $this->_ally['alliance_owner_range']    = parent::$db->escapeValue(strip_tags($_POST['owner_range']));
+                        $this->_ally['alliance_web']            = parent::$db->escapeValue(htmlspecialchars(strip_tags($_POST['web'])));
+                        $this->_ally['alliance_image']          = parent::$db->escapeValue(htmlspecialchars(strip_tags($_POST['image'])));
                         $this->_ally['alliance_request_notallow'] = (int) $_POST['request_notallow'];
 
                         if ($this->_ally['alliance_request_notallow'] != 0 && $this->_ally['alliance_request_notallow'] != 1) {
@@ -858,7 +858,7 @@ class Alliance extends XGPCore
                     $this->_lang['alliance_image']              = $this->_ally['alliance_image'];
                     $this->_lang['alliance_request_notallow_0'] = (($this->_ally['alliance_request_notallow'] == 1) ? ' SELECTED' : '');
                     $this->_lang['alliance_request_notallow_1'] = (($this->_ally['alliance_request_notallow'] == 0) ? ' SELECTED' : '');
-                    $this->_lang['alliance_owner_range']        = html_entity_decode($this->_ally['alliance_owner_range']);
+                    $this->_lang['alliance_owner_range']        = $this->_ally['alliance_owner_range'];
 
                     return parent::$page->parseTemplate(parent::$page->getTemplate('alliance/alliance_admin'), $this->_lang);
 
