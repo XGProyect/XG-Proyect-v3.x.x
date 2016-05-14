@@ -170,8 +170,8 @@ class Alliance extends XGPCore
     private function ally_info()
     {
         // GET ALLY ID
-        $ally_id = isset($_GET['allyid']) ? (int) $_GET['allyid'] : NULL;
-        $id = isset($_GET['id']) ? (int) $_GET['id'] : NULL;
+        $ally_id    = isset($_GET['allyid']) ? (int) $_GET['allyid'] : NULL;
+        $id         = isset($_GET['id']) ? (int) $_GET['id'] : NULL;
 
         // VALIDATE AND GET ALLIANCE DATA
         if (is_numeric($ally_id) && $ally_id != 0) {
@@ -203,15 +203,15 @@ class Alliance extends XGPCore
         // PARSE PAGE WITH THE PASSED VALUES
         return parent::$page->parseTemplate(
                         parent::$page->getTemplate('alliance/alliance_ainfo'), $this->_lang +
-                        array(
+                        [
                             'alliance_image' => $this->image_block($alliance_image),
                             'alliance_tag' => $alliance_tag,
                             'alliance_name' => $alliance_name,
                             'ally_member_scount' => $ally_members,
                             'alliance_description' => $this->description_block($alliance_description),
                             'alliance_web' => $this->web_block($alliance_web),
-                            'alliance_request' => $this->request_block($id, $alliance_request_notallow)
-                        )
+                            'alliance_request' => $this->request_block($alliance_id, $alliance_request_notallow)
+                        ]
         );
     }
 
