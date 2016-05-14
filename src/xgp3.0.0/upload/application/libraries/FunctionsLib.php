@@ -406,7 +406,67 @@ abstract class FunctionsLib extends XGPCore
             `message_text` 	= '" . parent::$db->escapeValue($message) . "';"
         );
     }
+    
+    /**
+     * Send and email
+     * 
+     * @param string $to      Mail To
+     * @param string $subject Mail Subject
+     * @param string $body    Mail Body
+     * @param array  $from    Mail From
+     * @param mixed  $headers Mail headers (optional)
+     * 
+     * @return mixed
+     */
+    public static function sendEmail($to, $subject, $body, $from, $headers = '')
+    {
+        // require email library
+        $mail_library_path  = XGP_ROOT . VENDOR_PATH . 'ci/system/libraries/Email.php';
+        
+        if (!file_exists($mail_library_path)) {
+            
+            return;
+        }
+        
+        // required by the library
+        if (!defined('BASEPATH')) {
 
+            define('BASEPATH', true);
+        }
+        
+        // use CI library
+        require_once $mail_library_path;
+        
+        $mail   = new \CI_Email();
+        
+        // from
+        if (is_array($from)) {
+
+            $mail->from($from['mail'], $from['name']);
+        }
+
+        // to
+        $mail->to($to);
+
+        // headers
+        if (is_array($headers)) {
+            
+            foreach ($headers as $header => $value) {
+
+                $mail->set_header($header, $value);
+            }
+        }
+        
+        // subject
+        $mail->subject($subject);
+        
+        // message body
+        $mail->message($body);
+
+        // send!
+        $mail->send();
+    }
+    
     /**
      * getDefaultVacationTime
      *

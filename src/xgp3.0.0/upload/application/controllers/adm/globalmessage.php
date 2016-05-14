@@ -101,10 +101,20 @@ class Globalmessage extends XGPCore
                 }
 
                 if (isset($_POST['mail'])) {
-                    $i = 0;
-
+                    $i      = 0;
+                    $from   = [
+                        'mail' => FunctionsLib::readConfig('admin_email'),
+                        'name' => FunctionsLib::readConfig('game_name')
+                    ];
+                    
                     while ($u = parent::$db->fetchArray($sq)) {
-                        mail($u['user_email'], $_POST['temat'], $_POST['tresc']);
+                        
+                        FunctionsLib::sendEmail(
+                            $u['user_email'],
+                            $_POST['temat'],
+                            $_POST['tresc'],
+                            $from
+                        );
 
                         // 20 per row
                         if ($i % 20 == 0) {

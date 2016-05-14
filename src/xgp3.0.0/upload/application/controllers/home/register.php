@@ -221,55 +221,25 @@ class Register extends XGPCore
     {
         $game_name = FunctionsLib::readConfig('game_name');
 
-        $parse = $this->langs;
-        $parse['user_name'] = $user_name;
-        $parse['user_pass'] = $password;
-        $parse['game_url'] = GAMEURL;
-        $parse['reg_mail_text_part1'] = str_replace('%s', $game_name, $this->langs['re_mail_text_part1']);
-        $parse['reg_mail_text_part7'] = str_replace('%s', $game_name, $this->langs['re_mail_text_part7']);
+        $parse                          = $this->langs;
+        $parse['user_name']             = $user_name;
+        $parse['user_pass']             = $password;
+        $parse['game_url']              = GAMEURL;
+        $parse['reg_mail_text_part1']   = str_replace('%s', $game_name, $this->langs['re_mail_text_part1']);
+        $parse['reg_mail_text_part7']   = str_replace('%s', $game_name, $this->langs['re_mail_text_part7']);
 
         $email = parent::$page->parseTemplate(parent::$page->getTemplate('home/email_template'), $parse);
-        $status = $this->sendMail(
+        $status = FunctionsLib::sendEmail(
             $emailaddress,
             $this->langs['re_mail_register_at'] . FunctionsLib::readConfig('game_name'),
-            $email
+            $email,
+            [
+                'mail' => FunctionsLib::readConfig('admin_email'),
+                'name' => $game_name
+            ]
         );
 
         return $status;
-    }
-
-    /**
-     * sendMail
-     * param $to
-     * param $title
-     * param $body
-     * param $from
-     * return send the email to destiny
-     * */
-    private function sendMail($to, $title, $body, $from = '')
-    {
-        $from = trim($from);
-
-        if (!$from) {
-            $from = FunctionsLib::readConfig('admin_email');
-        }
-
-        $head = '';
-        $head .= "Content-Type: text/html \r\n";
-        $head .= "charset: UTF-8 \r\n";
-        $head .= "Date: " . date('r') . " \r\n";
-        $head .= "Return-Path: " . FunctionsLib::readConfig('admin_email') . " \r\n";
-        $head .= "From: $from \r\n";
-        $head .= "Sender: $from \r\n";
-        $head .= "Reply-To: $from \r\n";
-        $head .= "Organization: " . FunctionsLib::readConfig('game_name') . " \r\n";
-        $head .= "X-Sender: $from \r\n";
-        $head .= "X-Priority: 3 \r\n";
-
-        $body = str_replace("\r\n", "\n", $body);
-        $body = str_replace("\n", "\r\n", $body);
-
-        return @mail($to, $title, $body, $head);
     }
 
     /**

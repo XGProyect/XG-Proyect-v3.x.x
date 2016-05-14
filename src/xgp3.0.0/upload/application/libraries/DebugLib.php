@@ -144,16 +144,16 @@ class DebugLib extends XGPCore
             
             // notify administrator
             if (defined('ERROR_LOGS_MAIL') && ERROR_LOGS_MAIL != '') {
-                $headers    =  'MIME-Version: 1.0' . "\r\n";
-                $headers    .= 'From: XG Proyect ' . ERROR_LOGS_MAIL . "\r\n";
-                $headers    .= 'Content-type: text/html; charset=utf-8' . "\r\n";
-                
-                @mail(
+
+                FunctionsLib::sendEmail(
                     ERROR_LOGS_MAIL,
                     '[DEBUG][' . $title . ']',
                     $this->whereCalled(3),
-                    $headers
-                );   
+                    [
+                        'mail' => ERROR_LOGS_MAIL,
+                        'name' => 'XG Proyect'
+                    ]
+                );
             }
 
             // show page to the user

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Constants
  *
@@ -11,13 +12,11 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
-
 ###########################################################################
 #
 # Constants should not be changed, unless you know what you are doing!
 #
 ###########################################################################
-
 // GAME FILES VERSION
 define('SYSTEM_VERSION', '3.0.1');
 
@@ -45,7 +44,7 @@ define('CSS_PATH', APP_PATH . 'styles/css/');
 define('SKIN_PATH', APP_PATH . 'styles/skins/');
 define('DEFAULT_SKINPATH', APP_PATH . 'styles/skins/xgproyect/');
 define('IMG_PATH', APP_PATH . 'styles/images/');
-define('JS_PATH', PUBLIC_PATH. 'js/');
+define('JS_PATH', PUBLIC_PATH . 'js/');
 
 // APPLICATION PATHS
 define('CONFIGS_PATH', APP_PATH . 'config/');
@@ -72,12 +71,9 @@ define('GAMEURL', "http://" . $_SERVER['HTTP_HOST'] . "/");
 
 // BASE PATH
 define(
-    'BASE_PATH',
-    $_SERVER['HTTP_HOST'] . str_replace(
-        '/' . basename($_SERVER['SCRIPT_NAME']),
-        '',
-        $_SERVER['SCRIPT_NAME']
-    )
+        'BASE_PATH', $_SERVER['HTTP_HOST'] . str_replace(
+                '/' . basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']
+        )
 );
 
 // UNIVERSE DATA, GALAXY, SYSTEMS AND PLANETS || DEFAULT 9-499-15 RESPECTIVELY
@@ -119,10 +115,8 @@ define('DEBRIS_MIN_VISIBLE_SIZE', 300);
 
 // DESTROYED PLANETS LIFE TIME
 define('PLANETS_LIFE_TIME', 24); // IN HOURS
-
 // VACATION TIME THAT AN USER HAS TO BE ON VACATION MODE BEFORE IT CAN REMOVE IT
 define('VACATION_TIME_FORCED', 2); // IN DAYS
-
 // TO PREVENT ERRORS
 if (!defined('DB_PREFIX')) {
 
@@ -150,5 +144,32 @@ define('SETTINGS', DB_PREFIX . 'settings');
 define('SHIPS', DB_PREFIX . 'ships');
 define('USERS', DB_PREFIX . 'users');
 define('USERS_STATISTICS', DB_PREFIX . 'users_statistics');
+
+// FOR MAILING
+$charset = 'UTF-8';
+ini_set('default_charset', $charset);
+
+if (extension_loaded('mbstring')) {
+    define('MB_ENABLED', TRUE);
+    // mbstring.internal_encoding is deprecated starting with PHP 5.6
+    // and it's usage triggers E_DEPRECATED messages.
+    @ini_set('mbstring.internal_encoding', $charset);
+    // This is required for mb_convert_encoding() to strip invalid characters.
+    // That's utilized by CI_Utf8, but it's also done for consistency with iconv.
+    mb_substitute_character('none');
+} else {
+    define('MB_ENABLED', FALSE);
+}
+
+// There's an ICONV_IMPL constant, but the PHP manual says that using
+// iconv's predefined constants is "strongly discouraged".
+if (extension_loaded('iconv')) {
+    define('ICONV_ENABLED', TRUE);
+    // iconv.internal_encoding is deprecated starting with PHP 5.6
+    // and it's usage triggers E_DEPRECATED messages.
+    @ini_set('iconv.internal_encoding', $charset);
+} else {
+    define('ICONV_ENABLED', FALSE);
+}
 
 /* end of constants.php */
