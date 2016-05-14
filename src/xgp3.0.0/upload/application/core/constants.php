@@ -19,7 +19,7 @@
 ###########################################################################
 
 // GAME FILES VERSION
-define('SYSTEM_VERSION', '3.0.0');
+define('SYSTEM_VERSION', '3.0.1');
 
 // HOOKS
 define('HOOKS_ENABLED', false);
