@@ -10,9 +10,15 @@ Require MySQL >= 5.5
 
 ![xgproyect](http://www.xgproyect.org/images/misc/xg-logo.png)
 
+## How to get XG Proyect?
+
+Download and install XG Proyect is easy. Go to the releases section and get the latest stable release.  
+Then unzip the upload dir in your localhost, rename that folder to wathever you want.  
+Point you browser to your localhost and follow the step by step instructions provided by the installation software.
+
 ## Who is using XG Proyect?
 
-I'm happy to deliver this software giving others the possibility to have a good OGame Clon.  
+We are happy to deliver this software giving others the possibility to have a good OGame Clon.  
 On the other hand, it's a pleasure to see people using XG Proyect.  
 Send me a PM in the forum so I can put your game logo here!  
 
