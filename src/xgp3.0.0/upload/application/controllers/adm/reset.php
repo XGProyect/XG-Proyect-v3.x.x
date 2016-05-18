@@ -108,19 +108,20 @@ class Reset extends XGPCore
                 if ($UserPlanet['planet_name'] != "") {
                     $Time = time();
 
-
-                    parent::$db->query("INSERT INTO " . USERS . " SET
-											`user_name` = '" . $TheUser['user_name'] . "',
-											`user_email` = '" . $TheUser['user_email'] . "',
-											`user_email_permanent` = '" . $TheUser['user_email_permanent'] . "',
-											`user_home_planet_id` = '0',
-											`user_authlevel` = '" . $TheUser['user_authlevel'] . "',
-											`user_galaxy` = '" . $TheUser['user_galaxy'] . "',
-											`user_system` = '" . $TheUser['user_system'] . "',
-											`user_planet` = '" . $TheUser['user_planet'] . "',
-											`user_register_time` = '" . $TheUser['user_register_time'] . "',
-											`user_onlinetime` = '" . $Time . "',
-											`user_password` = '" . $TheUser['user_password'] . "';");
+                    parent::$db->query(
+                        "INSERT INTO " . USERS . " SET
+                            `user_name` = '" . $TheUser['user_name'] . "',
+                            `user_email` = '" . $TheUser['user_email'] . "',
+                            `user_email_permanent` = '" . $TheUser['user_email_permanent'] . "',
+                            `user_home_planet_id` = '0',
+                            `user_authlevel` = '" . $TheUser['user_authlevel'] . "',
+                            `user_galaxy` = '" . $TheUser['user_galaxy'] . "',
+                            `user_system` = '" . $TheUser['user_system'] . "',
+                            `user_planet` = '" . $TheUser['user_planet'] . "',
+                            `user_register_time` = '" . $TheUser['user_register_time'] . "',
+                            `user_onlinetime` = '" . $Time . "',
+                            `user_password` = '" . $TheUser['user_password'] . "';"
+                    );
 
                     $last_id = parent::$db->insertId();
                     $NewUser = $last_id;
@@ -143,15 +144,19 @@ class Reset extends XGPCore
 
                     $this->_creator->setNewPlanet($TheUser['user_galaxy'], $TheUser['user_system'], $TheUser['user_planet'], $NewUser, $UserPlanet['planet_name'], true);
 
-                    $PlanetID = parent::$db->queryFetch("SELECT `planet_id`
-																	FROM " . PLANETS . "
-																	WHERE `planet_user_id` = '" . $NewUser . "'
-																	LIMIT 1;");
+                    $PlanetID = parent::$db->queryFetch(
+                        "SELECT `planet_id`
+                        FROM " . PLANETS . "
+                        WHERE `planet_user_id` = '" . $NewUser . "'
+                        LIMIT 1;"
+                    );
 
-                    parent::$db->query("UPDATE " . USERS . " SET
-											`user_home_planet_id` = '" . $PlanetID['planet_id'] . "',
-											`user_current_planet` = '" . $PlanetID['planet_id'] . "'
-											WHERE `user_id` = '" . $NewUser . "';");
+                    parent::$db->query(
+                        "UPDATE " . USERS . " SET
+                        `user_home_planet_id` = '" . $PlanetID['planet_id'] . "',
+                        `user_current_planet` = '" . $PlanetID['planet_id'] . "'
+                        WHERE `user_id` = '" . $NewUser . "';"
+                    );
                     $TransUser++;
                 }
             }
