@@ -1,0 +1,319 @@
+body#login {
+    background: #000 url("../../images/recover/bg.jpg") no-repeat;
+    color: #848484;
+    font-size: 11px;
+    font-family: Verdana, Arial, SunSans-Regular, Sans-Serif;
+    line-height: 1;
+    padding: 0;
+    margin: 0
+}
+
+body#login.captcha {
+    background: #000 url("../../images/recover/login.jpg") no-repeat
+}
+
+.floatLeft {
+    float: left
+}
+
+.floatRight {
+    float: right
+}
+
+.clear {
+    clear: both
+}
+
+.layoutCenter {
+    margin: 0 auto
+}
+
+.textCenter {
+    text-align: center
+}
+
+.textRight {
+    text-align: right
+}
+
+.textLeft {
+    text-align: left
+}
+
+.textBeefy {
+    font-weight: 700
+}
+
+.textGrow {
+    text-transform: uppercase
+}
+
+.page-break {
+    page-break-before: always
+}
+
+.error {
+    border: 1px solid #fb4343;
+    padding: 3px;
+    color: #fb4343
+}
+
+.warning {
+    border: 1px solid #d4ac0a;
+    padding: 3px;
+    color: #d4ac0a
+}
+
+.success {
+    border: 1px solid #149b0d;
+    padding: 3px;
+    color: #149b0d
+}
+
+.callOut {
+    font-size: 125%;
+    font-weight: bold
+}
+
+.strikeOut {
+    text-decoration: line-through
+}
+
+.underline {
+    text-decoration: underline
+}
+
+.resetTypeStyle {
+    font-weight: normal;
+    font-style: normal;
+    font-size: 100%;
+    text-decoration: none;
+    background-color: tranaparent;
+    word-spacing: normal;
+    letter-spacing: 0;
+    text-transform: none;
+    text-indent: 0
+}
+
+.transpBlack {
+    background: url("images/transpBlack.png")
+}
+
+.hide {
+    display: none
+}
+
+.show {
+    display: block
+}
+
+.invisible {
+    visibility: hidden
+}
+
+label {
+    display: block;
+    margin: 5px 0 2px;
+    font-size: 11px
+}
+
+h1 span {
+    position: absolute;
+    left: -9999px
+}
+
+p {
+    padding: 0 5px 0 9px;
+    font-weight: 100
+}
+
+table {
+    border-right: 1px solid #13131d;
+    border-bottom: 1px solid #10030d;
+    border-collapse: collapse;
+    margin-top: 15px
+}
+
+table th {
+    font-weight: 700;
+    background-color: #252d36
+}
+
+th,
+td {
+    border: 1px solid #171a1d;
+    font-size: 11px;
+    padding: 5px 10px;
+    vertical-align: middle
+}
+
+td {
+    background-color: #0d1014
+}
+
+td.paginator {
+    padding: 15px 10px
+}
+
+tr.alt td {
+    background-color: #13181d
+}
+
+.no-touch tbody tr:hover td,
+.no-touch tbody tr.alt:hover td {
+    background-color: #212121
+}
+
+a:link,
+a:visited,
+.no-touch a:hover,
+a:active {
+    color: #918682
+}
+
+.no-touch a:hover {
+    color: #d3fcd5
+}
+
+#login #loginwrapper {
+    position: absolute;
+    width: 354px;
+    height: 180px;
+    left: 349px;
+    top: 242px
+}
+
+#login #loginwrapper .input {
+    background: #13181d;
+    color: #df9fc8;
+    border: 1px solid #202733;
+    width: 175px;
+    height: 15px;
+    font-size: 11px;
+    font-weight: 100;
+    padding-left: 1px
+}
+
+#login #loginwrapper.captcha .wrap-inner {
+    padding: 11px 20px 10px 20px;
+    width: 419px;
+    height: 42px;
+    float: none
+}
+
+#login #loginwrapper .wrap-inner {
+    padding: 5px 10px 10px 10px;
+    width: 190px;
+    height: 100px;
+    float: left
+}
+
+#login #loginwrapper h2 {
+    font-weight: 700;
+    margin: 0;
+    padding: 0;
+    margin: 5px 5px 25px 25px
+}
+
+#login.captcha #loginwrapper h2 {
+    margin: 12px 10px 16px 35px
+}
+
+#login #loginwrapper div.captcha {
+    margin-left: 58px
+}
+
+div.captcha>label {
+    margin-bottom: 25px
+}
+
+#login.captcha #loginwrapper.captcha {
+    background: url("../../images/recover/login_wrapper.png") no-repeat;
+    width: 453px;
+    height: 286px
+}
+
+#login #loginwrapper input.start,
+#login #loginwrapper input.start {
+    padding: 3px 0;
+    text-align: center;
+    margin: 10px 0 0 0;
+    cursor: pointer;
+    width: 180px;
+    background-color: #1a2733;
+    color: #848484;
+    border: 1px solid #434353;
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    text-transform: uppercase
+}
+
+#login.captcha #loginwrapper input.start {
+    width: 129px;
+    margin: 9px 0 0 241px
+}
+
+.no-touch #login #loginwrapper input.start:hover,
+.no-touch #login #loginwrapper input.start:hover {
+    background-color: #3a5753;
+    color: #c1c1c1;
+    cursor: pointer
+}
+
+#login #loginwrapper #advice {
+    font-size: 11px;
+    float: left;
+    width: 140px
+}
+
+#login #loginwrapper #advice p {
+    padding: 22px 0 5px;
+    width: 130px;
+    margin: 0 0 0 3px
+}
+
+#login #loginwrapper #advice a,
+#login #loginwrapper #advice a:link {
+    color: #6f9fc8
+}
+
+.no-touch #login #loginwrapper #advice a:hover {
+    color: #9c0
+}
+
+#login #error {
+    padding: 20px 0;
+    position: absolute;
+    width: 354px;
+    left: 349px;
+    top: 100px;
+    border: 1px solid #848484;
+    background-color: #1a1611;
+    -moz-border-radius: 4px
+}
+
+#login .alarm {
+    background: url("../../images/recover/alarm.gif") no-repeat
+}
+
+.buttonSave {
+    background: transparent url("../../images/recover/button_save.gif") no-repeat 0 -54px;
+    border: 0 none;
+    color: #0d1014;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 11px;
+    height: 27px;
+    text-align: center;
+    width: 88px
+}
+
+.no-touch .buttonSave:hover {
+    background: transparent url("../../images/recover/button_save.gif") no-repeat 0 -81px
+}
+
+#login .buttonSave {
+    margin-top: 10px
+}

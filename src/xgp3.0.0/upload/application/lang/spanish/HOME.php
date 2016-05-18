@@ -70,13 +70,13 @@ $lang['aj_media_concept_art']				= 'Arte conceptual';
 
 // registration
 $lang['re_disabled']						= 'En estos momentos el registro a nuevos usuarios se encuentra cerrado.';
-$lang['re_mail_text_part1']					= '¡Bienvenido a XG Proyect, gracias por unirte en nuestro juego!<br/> En este email encontrarás toda la información que necesitarás para acceder a tu cuenta';
+$lang['re_mail_text_part1']					= '¡Bienvenido a %s, gracias por unirte en nuestro juego!<br/> En este email encontrarás toda la información que necesitarás para acceder a tu cuenta';
 $lang['re_mail_text_part2']					= '<strong>Datos de acceso al juego</strong>';
 $lang['re_mail_text_part3']					= 'Tu nombre de usuario';
 $lang['re_mail_text_part4']					= 'Tu clave';
 $lang['re_mail_text_part5']					= 'Enlace al juego';
 $lang['re_mail_text_part6']					= '&iexcl;Disfrut&aacute; del juego!';
-$lang['re_mail_text_part7']					= 'Atentamente,<br/>El equipo de XGP.-';
+$lang['re_mail_text_part7']					= 'Atentamente,<br/>El equipo de %s.-';
 $lang['re_mail_register_at']				= 'Registro en XG Proyect';
 
 // message for new users
@@ -102,4 +102,13 @@ Ahora puede comentar la conquista del universo... ¡Buena suerte!';
 // general
 $lang['ge_home_planet']						= 'Planeta Principal';
 $lang['ge_colony']							= 'Colonia';
+
+// lost password
+$lang['lp_send_pwd_title']  = 'Enviar contraseña de %s';
+$lang['lp_label']           = 'Dirección de e-mail';
+$lang['lp_value']           = 'Enviar datos de acceso';
+$lang['lp_advice']          = 'Por favor, introduce la dirección permanente de e-mail de tu cuenta de juego.';
+$lang['lp_error']           = '¡No hay ninguna cuenta con la dirección de E-Mail introducida!';
+$lang['lp_sent']            = '¡El E-Mail ha sido enviado satisfactoriamente!';
+$lang['lp_mail_title']      = 'Nueva contraseña';
 /* end of HOME.php */

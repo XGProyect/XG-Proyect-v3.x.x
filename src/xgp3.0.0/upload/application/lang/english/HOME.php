@@ -70,13 +70,13 @@ $lang['aj_media_concept_art']				= 'Concept Art';
 
 // registration
 $lang['re_disabled']						= 'New user registration is not currently available.';
-$lang['re_mail_text_part1']					= 'Welcome to XG Proyect, thanks for joining our game!<br/> In this email you\'ll fin all the information that you need to login into your account.';
+$lang['re_mail_text_part1']					= 'Welcome to %s, thanks for joining our game!<br/> In this email you\'ll fin all the information that you need to login into your account.';
 $lang['re_mail_text_part2']					= '<strong>Data to access the game</strong>';
 $lang['re_mail_text_part3']					= 'Your username';
 $lang['re_mail_text_part4']					= 'Your password';
 $lang['re_mail_text_part5']					= 'Game link';
 $lang['re_mail_text_part6']					= 'Enjoy the game!';
-$lang['re_mail_text_part7']					= 'Regards,<br/>The XGP Team.-';
+$lang['re_mail_text_part7']					= 'Regards,<br/>The %s Team.-';
 $lang['re_mail_register_at']				= 'Joined to XG Proyect';
 
 // message for new users
@@ -109,4 +109,13 @@ This message will be deleted in 24 hours.';
 // general
 $lang['ge_home_planet']						= 'Homeworld';
 $lang['ge_colony']							= 'Colony';
+
+// lost password
+$lang['lp_send_pwd_title']  = 'Send %s password';
+$lang['lp_label']           = 'Email address';
+$lang['lp_value']           = 'send login data';
+$lang['lp_advice']          = 'Please enter your email address';
+$lang['lp_error']           = 'There is no account with the given email address!';
+$lang['lp_sent']            = 'Email has been sent successfully!';
+$lang['lp_mail_title']      = 'New password';
 /* end of HOME.php */
