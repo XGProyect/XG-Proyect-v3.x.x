@@ -100,10 +100,13 @@ class Alliances extends XGPCore
                     $this->save_data($type);
                 }
 
-                $this->_alliance_query = parent::$db->queryFetch("SELECT a.*, als.*
-					           											FROM " . ALLIANCE . " AS a
-					           											INNER JOIN " . ALLIANCE_STATISTICS . " AS als ON als.alliance_statistic_alliance_id = a.alliance_id
-					           											WHERE (a.`alliance_id` = '{$this->_id}') LIMIT 1;");
+                $this->_alliance_query = parent::$db->queryFetch(
+                    "SELECT a.*, als.*
+                    FROM " . ALLIANCE . " AS a
+                    INNER JOIN " . ALLIANCE_STATISTICS . " AS als ON als.alliance_statistic_alliance_id = a.alliance_id
+                    WHERE (a.`alliance_id` = '{$this->_id}') 
+                    LIMIT 1;"
+                );
             }
         }
 
@@ -252,25 +255,35 @@ class Alliances extends XGPCore
      */
     private function get_data_members()
     {
-        $parse = $this->_lang;
-        $parse['al_alliance_members'] = str_replace('%s', $this->_alliance_query['alliance_name'], $this->_lang['al_alliance_members']);
-        $all_members = $this->get_members();
-        $alliance_ranks = unserialize($this->_alliance_query['alliance_ranks']);
-        $template = parent::$page->getTemplate('adm/alliances_members_row_view');
-        $members = '';
+        $parse                          = $this->_lang;
+        $parse['al_alliance_members']   = str_replace(
+            '%s',
+            $this->_alliance_query['alliance_name'],
+            $this->_lang['al_alliance_members']
+        );
+        $all_members                    = $this->get_members();
+        $alliance_ranks                 = unserialize($this->_alliance_query['alliance_ranks']);
+        $template                       = parent::$page->getTemplate('adm/alliances_members_row_view');
+        $members                        = '';
 
         if (!empty($all_members)) {
+
             while ($member = parent::$db->fetchAssoc($all_members)) {
-                $member['alliance_request'] = ( $member['alliance_request'] ) ? $this->_lang['al_request_yes'] : $this->_lang['al_request_no'];
-                $member['ally_request_text'] = ( $member['ally_request_text'] ) ? $this->_lang['ally_request_text'] : '-';
-                $member['alliance_register_time'] = date(FunctionsLib::readConfig('date_format_extended'), $member['alliance_register_time']);
+
+                $member['alliance_request']         = ( $member['user_ally_request'] ) ? $this->_lang['al_request_yes'] : $this->_lang['al_request_no'];
+                $member['ally_request_text']        = ( $member['user_ally_request_text'] ) ? $this->_lang['ally_request_text'] : '-';
+                $member['alliance_register_time']   = date(FunctionsLib::readConfig('date_format_extended'), $member['user_ally_register_time']);
 
                 if ($member['user_id'] == $member['alliance_owner']) {
+
                     $member['ally_rank'] = $member['alliance_owner_range'];
                 } else {
+
                     if (isset($member['ally_rank'])) {
+
                         $member['ally_rank'] = $alliance_ranks[$member['ally_rank']]['name'];
                     } else {
+
                         $member['ally_rank'] = $this->_lang['al_rank_not_defined'];
                     }
                 }
@@ -427,9 +440,11 @@ class Alliances extends XGPCore
                 }
             }
 
-            parent::$db->query("UPDATE `" . ALLIANCE . "` SET
-									`alliance_ranks` = '" . serialize($alliance_ranks) . "'
-									WHERE `alliance_id`= '" . $this->_id . "'");
+            parent::$db->query(
+                "UPDATE `" . ALLIANCE . "` SET
+                `alliance_ranks` = '" . serialize($alliance_ranks) . "'
+                WHERE `alliance_id`= '" . $this->_id . "'"
+            );
 
             $this->_alert_info = $this->_lang['al_rank_removed'];
             $this->_alert_type = 'ok';
@@ -443,25 +458,42 @@ class Alliances extends XGPCore
      */
     private function save_members()
     {
-        if (isset($_POST['delete_ranks'])) {
+        if (isset($_POST['delete_members'])) {
             $ids_array = '';
 
-            foreach ($_POST['delete_message'] as $user_id => $delete_status) {
-                if ($delete_status == 'on' && $user_id > 0 && is_numeric($user_id)) {
-                    $ids_array .= $user_id . ',';
+            if (isset($_POST['delete_message'])) {
+                foreach ($_POST['delete_message'] as $user_id => $delete_status) {
+                    if ($delete_status == 'on' && $user_id > 0 && is_numeric($user_id)) {
+                        $ids_array .= $user_id . ',';
+                    }
+                }
+                
+                $amount = parent::$db->queryFetch(
+                    "SELECT 
+                        COUNT(`user_id`) AS `Amount`
+                    FROM `" . USERS . "` 
+                    WHERE `user_ally_id` = '" . $this->_id . "';"
+                );
+
+                if ($amount['Amount'] > 1) {
+                    parent::$db->query(
+                        "UPDATE " . USERS . " SET
+                        `user_ally_id` = 0,
+                        `user_ally_request` = 0,
+                        `user_ally_request_text` = '',
+                        `user_ally_rank_id` = 0
+                        WHERE `user_id` IN (" . rtrim($ids_array, ',') . ")");  
+
+                    // RETURN THE ALERT
+                    $this->_alert_info = $this->_lang['us_all_ok_message'];
+                    $this->_alert_type = 'ok';
+
+                } else {
+                    // RETURN THE ALERT
+                    $this->_alert_info = $this->_lang['al_cant_delete_last_one'];
+                    $this->_alert_type = 'warning';
                 }
             }
-
-            parent::$db->query("UPDATE " . USERS . " SET
-									`user_ally_id` = 0,
-									`user_ally_request` = 0,
-									`user_ally_request_text` = '',
-									`user_ally_rank_id` = 0
-									WHERE `user_id` IN (" . rtrim($ids_array, ',') . ")");
-
-            // RETURN THE ALERT
-            $this->_alert_info = $this->_lang['us_all_ok_message'];
-            $this->_alert_type = 'ok';
         }
     }
 
@@ -528,9 +560,12 @@ class Alliances extends XGPCore
 
         $alliance_tag = parent::$db->escapeValue($alliance_tag);
 
-        $check_tag = parent::$db->queryFetch("SELECT `alliance_tag`
-															FROM `" . ALLIANCE . "`
-															WHERE `alliance_tag` = '" . $alliance_tag . "'");
+        $check_tag = parent::$db->queryFetch(
+            "SELECT `alliance_tag`
+            FROM `" . ALLIANCE . "`
+            WHERE `alliance_tag` = '" . $alliance_tag . "'"
+        );
+
         if ($check_tag) {
             return false;
         }
@@ -554,9 +589,11 @@ class Alliances extends XGPCore
 
         $alliance_name = parent::$db->escapeValue($alliance_name);
 
-        $check_name = parent::$db->queryFetch("SELECT `alliance_name`
-														FROM `" . ALLIANCE . "`
-														WHERE `alliance_name` = '" . $alliance_name . "'");
+        $check_name = parent::$db->queryFetch(
+            "SELECT `alliance_name`
+            FROM `" . ALLIANCE . "`
+            WHERE `alliance_name` = '" . $alliance_name . "'"
+        );
 
         if ($check_name) {
             return false;
@@ -586,18 +623,20 @@ class Alliances extends XGPCore
      */
     private function get_members()
     {
-        return parent::$db->query("SELECT u.`user_id`,
-											u.`user_name`,
-											u.`user_ally_request`,
-											u.`user_ally_request_text`,
-											u.`user_ally_register_time`,
-											u.`user_ally_rank_id`,
-											a.`alliance_owner`,
-											a.`alliance_owner_range`,
-											a.`alliance_ranks`
-										FROM `" . USERS . "` AS u
-										LEFT JOIN `" . ALLIANCE . "` AS a ON a.`alliance_id` = u.`user_ally_id`
-										WHERE u.`user_ally_id` = '" . $this->_id . "';");
+        return parent::$db->query(
+            "SELECT u.`user_id`,
+                u.`user_name`,
+                u.`user_ally_request`,
+                u.`user_ally_request_text`,
+                u.`user_ally_register_time`,
+                u.`user_ally_rank_id`,
+                a.`alliance_owner`,
+                a.`alliance_owner_range`,
+                a.`alliance_ranks`
+            FROM `" . USERS . "` AS u
+            LEFT JOIN `" . ALLIANCE . "` AS a ON a.`alliance_id` = u.`user_ally_id`
+            WHERE u.`user_ally_id` = '" . $this->_id . "';"
+        );
     }
 }
 

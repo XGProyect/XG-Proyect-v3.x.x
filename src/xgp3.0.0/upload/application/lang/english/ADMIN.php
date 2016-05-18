@@ -701,6 +701,7 @@ $lang['al_alliance_member_rank']							= 'Rank';
 $lang['al_save_members']									= 'Save members';
 $lang['al_delete_members']									= 'Delete members';
 $lang['al_rank_not_defined']								= 'N/A';
+$lang['al_cant_delete_last_one']                                                        = 'You can\'t delete the last member of the alliance';
 
 //	BACKUPS
 $lang['bku_title']											= 'Backups';

@@ -700,6 +700,7 @@ $lang['al_alliance_member_rank']							= 'Rango';
 $lang['al_save_members']									= 'Guardar miembros';
 $lang['al_delete_members']									= 'Borrar miembros';
 $lang['al_rank_not_defined']								= 'N/A';
+$lang['al_cant_delete_last_one']                                                        = 'No se puede borrar al último miembro de una alianza';
 
 //	BACKUPS
 $lang['bku_title']											= 'Backups';

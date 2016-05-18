@@ -18,7 +18,7 @@
 	<tr>
 		<td colspan="11">
 			<div align="center">
-				<input type="submit" name="delete_ranks" value="{al_delete_members}" class="btn btn-primary">
+				<input type="submit" name="delete_members" value="{al_delete_members}" class="btn btn-primary">
 			</div>
 		</td>
 	</tr>
