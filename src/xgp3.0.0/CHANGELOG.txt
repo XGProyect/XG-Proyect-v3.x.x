@@ -1,4 +1,14 @@
-'3.0.0' => ' 29/01/2016
+'3.0.1' => '26/05/2016
+- [#104] Recover password page implemented, some minor fixes and improvements.-
+- [#107] Fixed issue that was showing html characters for the alliance owner rank when it contained special chars.-
+- [#108] Fixed missing library issues when writing a new message (Thanks BeReal86).-
+- [#109][#110] Implemented CodeIgniter’s 3 mailing library, and created new global method to replace all the PHP mail() calls.-
+- [#113] Fixed issue where an user couldn’t send an application from the alliance info view.-
+- [#114] Fixed notices while editing alliances members, other improvements and fixes were applied.-
+- [#115] Fixed issue over some database field that were causing errors over MySQL 5.5.5-10.1.13-MariaDB.-
+- Added missing language line on the home page title.-
+
+'3.0.0' => ' 28/04/2016
 - Initial release based on XGP 2.10.4.-
 - Too many changes into the file structure and database to list them all.-
 - Core new features: new database structure, new core, new admin CP, new migration tool (From 2.9.x), new ingame features, new home page.-
