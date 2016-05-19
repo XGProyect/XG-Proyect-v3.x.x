@@ -146,7 +146,7 @@
                             </div>
 			</div>
 		<div class="input-wrap">
-						<label for="usernameLogin">{hm_username}</label>
+						<label for="usernameLogin">{hm_username_mail}</label>
 						<div class="black-border">
                             <input class="js_userName" type="text" onkeydown="hideLoginErrorBox();" id="usernameLogin" name="login" value="">
 						</div>
