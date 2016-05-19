@@ -5,8 +5,10 @@
 - [#109][#110] Implemented CodeIgniter’s 3 mailing library, and created new global method to replace all the PHP mail() calls.-
 - [#113] Fixed issue where an user couldn’t send an application from the alliance info view.-
 - [#114] Fixed notices while editing alliances members, other improvements and fixes were applied.-
-- [#115] Fixed issue over some database field that were causing errors over MySQL 5.5.5-10.1.13-MariaDB.-
-- Added missing language line on the home page title.-
+- [#115] Fixed issue where MySQL didn't allow a text column to have a default value, and not allowing fields to not have a default value.-
+- [#000] Added missing language line on the home page title.-
+- [#000] Fixed misplaced language line on the home page for login and register.-
+- [#000] Minor improvement over registration page. Redirection from index.php?page=reg to index.php?page=register removed, default is now "register".-
 
 '3.0.0' => ' 28/04/2016
 - Initial release based on XGP 2.10.4.-
