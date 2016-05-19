@@ -471,12 +471,13 @@ class Installation extends XGPCore
         // get the database structure
         require_once XGP_ROOT . 'install/databaseinfos.php';
 
-        
-        // Store the current sql_mode
-        parent::$db->query("set @orig_mode = @@global.sql_mode");
+        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+            // Store the current sql_mode
+            parent::$db->query("set @orig_mode = @@global.sql_mode");
 
-        // Set sql_mode to one that won't trigger errors...
-        parent::$db->query('set @@global.sql_mode = "MYSQL40"');
+            // Set sql_mode to one that won't trigger errors...
+            parent::$db->query('set @@global.sql_mode = "MYSQL40"');   
+        }
 
         /**
          * Do table creations here...
@@ -491,9 +492,10 @@ class Installation extends XGPCore
                 return false;
             }
         }
-        
-        // Change it back to original sql_mode
-        parent::$db->query('set @@global.sql_mode = @orig_mode');
+        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+            // Change it back to original sql_mode
+            parent::$db->query('set @@global.sql_mode = @orig_mode');
+        }
 
         // ok!
         return true;
