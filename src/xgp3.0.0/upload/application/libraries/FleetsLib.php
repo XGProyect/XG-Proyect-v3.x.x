@@ -110,7 +110,6 @@ class FleetsLib extends XGPCore
     public static function fleetMaxSpeed($fleet_array, $fleet, $user)
     {
         $pricelist  = parent::$objects->getPrice();
-        $reslist    = parent::$objects->getObjectsList();
 
         $speed_all = array();
 
@@ -129,7 +128,7 @@ class FleetsLib extends XGPCore
                 if ($user['research_impulse_drive'] >= 5) {
 
                     $speed_all[$ship]   = $pricelist[$ship]['speed2']
-                        + (($pricelist[$ship]['speed'] * $user['research_impulse_drive'] ) * 0.2);
+                        + ($pricelist[$ship]['speed2'] * $user['research_impulse_drive'] * 0.2);
                 } else {
 
                     $speed_all[$ship]   = $pricelist[$ship]['speed']
@@ -148,13 +147,13 @@ class FleetsLib extends XGPCore
                 if ($user['research_impulse_drive'] >= 17) {
 
                     $speed_all[$ship]   = $pricelist[$ship]['speed2']
-                        + (($pricelist[$ship]['speed'] * $user['research_impulse_drive'] ) * 0.2);
+                        + (($pricelist[$ship]['speed2'] * $user['research_impulse_drive'] ) * 0.2);
                 }
                 
                 if ($user['research_hyperspace_drive'] >= 15) {
 
                     $speed_all[$ship]   = $pricelist[$ship]['speed2']
-                        + (($pricelist[$ship]['speed'] * $user['research_hyperspace_drive'] ) * 0.3);
+                        + (($pricelist[$ship]['speed2'] * $user['research_hyperspace_drive'] ) * 0.3);
                 }
             }
 
@@ -175,11 +174,11 @@ class FleetsLib extends XGPCore
                 if ($user['research_hyperspace_drive'] >= 8) {
 
                     $speed_all[$ship]   = $pricelist[$ship]['speed2']
-                        + (($pricelist[$ship]['speed'] * $user['research_hyperspace_drive']) * 0.3);
+                        + (($pricelist[$ship]['speed2'] * $user['research_hyperspace_drive']) * 0.3);
                 } else {
 
-                    $speed_all[$ship]   = $pricelist[$ship]['speed2']
-                        + (($pricelist[$ship]['speed'] * $user['research_hyperspace_drive']) * 0.3);
+                    $speed_all[$ship]   = $pricelist[$ship]['speed']
+                        + (($pricelist[$ship]['speed'] * $user['research_hyperspace_drive']) * 0.2);
                 }
             }
 
