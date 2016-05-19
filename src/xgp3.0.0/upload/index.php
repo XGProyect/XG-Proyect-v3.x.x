@@ -17,12 +17,7 @@ define('XGP_ROOT', './');
 
 require XGP_ROOT . 'application/core/common.php';
 
-$page   = strtr(
-    (isset($_GET['page']) ? $_GET['page'] : 'home'),
-    array(
-        'reg' => 'register'
-    )
-);
+$page   = (isset($_GET['page']) ? $_GET['page'] : 'home');
 
 $file_name  = XGP_ROOT . HOME_PATH . $page . '.php';
 
