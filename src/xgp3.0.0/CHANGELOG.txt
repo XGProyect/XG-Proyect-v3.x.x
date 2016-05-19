@@ -6,9 +6,11 @@
 - [#113] Fixed issue where an user couldn’t send an application from the alliance info view.-
 - [#114] Fixed notices while editing alliances members, other improvements and fixes were applied.-
 - [#115] Fixed issue where MySQL didn't allow a text column to have a default value, and not allowing fields to not have a default value.-
+- [#116] Fixed issue with the evolution of ships engine, the base speed was been considered instead of the upgraded base speed.-
 - [#000] Added missing language line on the home page title.-
 - [#000] Fixed misplaced language line on the home page for login and register.-
 - [#000] Minor improvement over registration page. Redirection from index.php?page=reg to index.php?page=register removed, default is now "register".-
+- [#000] Updated installation welcome message for Spanish and English.-
 
 '3.0.0' => ' 28/04/2016
 - Initial release based on XGP 2.10.4.-
