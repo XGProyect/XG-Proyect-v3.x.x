@@ -465,9 +465,22 @@ class Installation extends XGPCore
      */
     private function insertDbData()
     {
+        // init
+        $tables = [];
+        
         // get the database structure
         require_once XGP_ROOT . 'install/databaseinfos.php';
 
+        
+        // Store the current sql_mode
+        parent::$db->query("set @orig_mode = @@global.sql_mode");
+
+        // Set sql_mode to one that won't trigger errors...
+        parent::$db->query('set @@global.sql_mode = "MYSQL40"');
+
+        /**
+         * Do table creations here...
+         */
         foreach ($tables as $table => $query) {
             
             // run query for each table
@@ -478,6 +491,9 @@ class Installation extends XGPCore
                 return false;
             }
         }
+        
+        // Change it back to original sql_mode
+        parent::$db->query('set @@global.sql_mode = @orig_mode');
 
         // ok!
         return true;

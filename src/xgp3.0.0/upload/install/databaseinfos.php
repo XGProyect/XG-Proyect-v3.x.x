@@ -76,13 +76,13 @@ KEY `ID` (`banned_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;";
 
 $tables['buddys'] =
-"CREATE TABLE  `" . BUDDY . "` (
-`buddy_id` INT( 10 ) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY ,
-`buddy_sender` INT( 10 ) UNSIGNED NOT NULL ,
-`buddy_receiver` INT( 10 ) UNSIGNED NOT NULL ,
-`buddy_status` TINYINT( 1 ) NOT NULL DEFAULT  '0',
-`buddy_request_text` TEXT NULL DEFAULT NULL
-) ENGINE = MYISAM ;";
+"CREATE TABLE `" . BUDDY . "` (
+  `buddy_id` int(10) unsigned NOT NULL,
+  `buddy_sender` int(10) unsigned NOT NULL,
+  `buddy_receiver` int(10) unsigned NOT NULL,
+  `buddy_status` tinyint(1) NOT NULL DEFAULT '0',
+  `buddy_request_text` text
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;";
 
 $tables['buildings'] =
 "CREATE TABLE `" . BUILDINGS . "` (
@@ -247,11 +247,11 @@ $tables['planets'] =
 `planet_type` int(11) NOT NULL DEFAULT '1',
 `planet_destroyed` int(11) NOT NULL DEFAULT '0',
 `planet_b_building` int(11) NOT NULL DEFAULT '0',
-`planet_b_building_id` text NOT NULL DEFAULT '0',
+`planet_b_building_id` text NOT NULL,
 `planet_b_tech` int(11) NOT NULL DEFAULT '0',
 `planet_b_tech_id` int(11) NOT NULL DEFAULT '0',
 `planet_b_hangar` int(11) NOT NULL DEFAULT '0',
-`planet_b_hangar_id` text NOT NULL DEFAULT '0',
+`planet_b_hangar_id` text NOT NULL,
 `planet_image` varchar(32) NOT NULL DEFAULT 'normaltempplanet01',
 `planet_diameter` int(11) NOT NULL DEFAULT '12800',
 `planet_field_current` int(11) NOT NULL DEFAULT '0',
