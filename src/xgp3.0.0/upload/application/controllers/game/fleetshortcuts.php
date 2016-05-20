@@ -48,11 +48,14 @@ class Fleetshortcuts extends XGPCore
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
-        $this->_current_user = parent::$users->getUserData();
-
+        $this->_current_user    = parent::$users->getUserData();
+        $this->_lang            = parent::$lang;
+        
         if (!OfficiersLib::isOfficierActive($this->_current_user['premium_officier_commander'])) {
+
             FunctionsLib::redirect('game.php?page=officier');
         } else {
+
             $this->build_page();
         }
     }
