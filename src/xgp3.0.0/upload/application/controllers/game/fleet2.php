@@ -207,8 +207,11 @@ class Fleet2 extends XGPCore
         // LOAD FLEET SHORTCUTS
         #####################################################################################################
         if (OfficiersLib::isOfficierActive($this->_current_user['premium_officier_commander'])) {
+
             if ($this->_current_user['user_fleet_shortcuts']) {
-                $scarray = explode(";", $this->_current_user['user_fleet_shortcuts']);
+
+                $shortcut['shortcut_options']   = '';
+                $scarray                        = explode(";", $this->_current_user['user_fleet_shortcuts']);
 
                 foreach ($scarray as $a => $b) {
                     if ($b != "") {
