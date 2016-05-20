@@ -1,5 +1,7 @@
 <div style="text-align:center">
-    ![xgproyect](http://www.xgproyect.org/images/misc/xg-logo.png)
+    <a href="http://www.xgproyect.org/" target="_blank">
+        <img src="http://www.xgproyect.org/images/misc/xg-logo.png" title="XG Proyect" alt="xgp-logo">
+    </a>
 </div> 
 
 XG Proyect
