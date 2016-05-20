@@ -1,8 +1,8 @@
-<div style="text-align:center">
+<p align="center"
     <a href="http://www.xgproyect.org/" target="_blank">
-        <img src="http://www.xgproyect.org/images/misc/xg-logo.png" title="XG Proyect" alt="xgp-logo">
+        <img align="center" src="http://www.xgproyect.org/images/misc/xg-logo.png" title="XG Proyect" alt="xgp-logo">
     </a>
-</div> 
+</p> 
 
 XG Proyect
 ====
