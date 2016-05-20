@@ -2,8 +2,8 @@
 {alert_info}
 <form name="save_info" method="post" action="">
 <input type="hidden" name="alliance_name_orig" value="{alliance_name}">
-<input type="hidden" name="alliance_tag_orig" value="{ally_tag}">
-<input type="hidden" name="alliance_owner_orig" value="{ally_founder}">
+<input type="hidden" name="alliance_tag_orig" value="{alliance_tag}">
+<input type="hidden" name="alliance_owner_orig" value="{alliance_owner}">
 <table width="100%" class="table table-bordered table-hover table-condensed">
 	<tr>
 		<th width="50%">{al_alliance_information_field}</th>
@@ -19,7 +19,7 @@
 	</tr>
 	<tr>
 		<td>{al_alliance_information_tag}</td>
-		<td><input type="text" name="ally_tag" value="{ally_tag}"></td>
+		<td><input type="text" name="alliance_tag" value="{alliance_tag}"></td>
 	</tr>
 	<tr>
 		<td>{al_alliance_information_owner}</td>
