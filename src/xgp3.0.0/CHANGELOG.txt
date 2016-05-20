@@ -8,6 +8,7 @@
 - [#115] Fixed issue where MySQL didn't allow a text column to have a default value, and not allowing fields to not have a default value.-
 - [#116] Fixed issue with the evolution of ships engine, the base speed was been considered instead of the upgraded base speed.-
 - [#118] Fixed issue that was causing the fleet shortcuts page to not show properly (Thanks JonaMiX).-
+- [#120] Fixed empty alliance tag for alliances administration on the admin cp, other issues were fixed too (Thanks JonaMiX).-
 - [#122] Fixed notice in the fleet shortcuts page (Thanks JonaMiX).-
 - [#123] Fixed notice on the fleet 2 page when there are shortcuts available (Thanks JonaMiX).-
 - [#000] Added missing language line on the home page title.-
