@@ -381,7 +381,7 @@ class Fleet4 extends XGPCore
 
         $distance = FleetsLib::targetDistance($_POST['thisgalaxy'], $_POST['galaxy'], $_POST['thissystem'], $_POST['system'], $_POST['thisplanet'], $_POST['planet']);
         $duration = FleetsLib::missionDuration($GenFleetSpeed, $MaxFleetSpeed, $distance, $SpeedFactor);
-        $consumption = FleetsLib::fleetConsumption($fleetarray, $SpeedFactor, $duration, $distance, $MaxFleetSpeed, $this->_current_user);
+        $consumption = FleetsLib::fleetConsumption($fleetarray, $SpeedFactor, $duration, $distance, $this->_current_user);
 
         $fleet['start_time'] = $duration + time();
 
@@ -521,6 +521,7 @@ class Fleet4 extends XGPCore
 							`fleet_resource_metal` = '" . $TransMetal . "',
 							`fleet_resource_crystal` = '" . $TransCrystal . "',
 							`fleet_resource_deuterium` = '" . $TransDeuterium . "',
+                                                        `fleet_fuel` = '" . $consumption . "',    
 							`fleet_target_owner` = '" . (int) $TargetPlanet['planet_user_id'] . "',
 							`fleet_group` = '" . (int) $fleet_group_mr . "',
 							`fleet_creation` = '" . time() . "';");

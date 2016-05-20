@@ -1,4 +1,5 @@
 '3.0.1' => '26/05/2016
+- [#075] Fixed issue on deploy mission where the fleet didn't return half of the deuterium when arrived to the destination planet (Thanks BeReal86).-
 - [#104] Recover password page implemented, some minor fixes and improvements.-
 - [#107] Fixed issue that was showing html characters for the alliance owner rank when it contained special chars.-
 - [#108] Fixed missing library issues when writing a new message (Thanks BeReal86).-

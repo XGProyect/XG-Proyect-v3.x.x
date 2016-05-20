@@ -205,7 +205,6 @@ class FleetsLib extends XGPCore
      * @param int   $speed_factor     Speed factor
      * @param int   $mission_duration Mission duration
      * @param int   $mission_distance Mission distance
-     * @param int   $fleet_max_speed  Fleet max speed
      * @param array $user             User
      *
      * @return int
@@ -215,7 +214,6 @@ class FleetsLib extends XGPCore
         $speed_factor,
         $mission_duration,
         $mission_distance,
-        $fleet_max_speed,
         $user
     ) {
         $consumption        = 0;

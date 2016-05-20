@@ -150,6 +150,7 @@ $tables['fleets'] =
 `fleet_resource_metal` bigint(11) NOT NULL DEFAULT '0',
 `fleet_resource_crystal` bigint(11) NOT NULL DEFAULT '0',
 `fleet_resource_deuterium` bigint(11) NOT NULL DEFAULT '0',
+`fleet_fuel` bigint(11) NOT NULL DEFAULT '0',
 `fleet_target_owner` int(11) NOT NULL DEFAULT '0',
 `fleet_group` varchar(15) NOT NULL DEFAULT '0',
 `fleet_mess` int(11) NOT NULL DEFAULT '0',

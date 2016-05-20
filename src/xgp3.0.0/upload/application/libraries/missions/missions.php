@@ -15,6 +15,7 @@
 namespace application\libraries\missions;
 
 use application\core\XGPCore;
+use application\libraries\FleetsLib;
 use application\libraries\UpdateResourcesLib;
 
 /**
@@ -118,13 +119,20 @@ class Missions extends XGPCore
             }
         }
 
+        $fuel_return = 0;
+        
+        if ($fleet_row['fleet_mission'] == 4 && !$start) {
+
+            $fuel_return = $fleet_row['fleet_fuel'] / 2;
+        }
+        
         parent::$db->query(
             "UPDATE " . PLANETS . " AS p
             INNER JOIN " . SHIPS . " AS s ON s.ship_planet_id = p.`planet_id` SET
             {$ships_fields}
             `planet_metal` = `planet_metal` + '" . $fleet_row['fleet_resource_metal'] . "',
             `planet_crystal` = `planet_crystal` + '" . $fleet_row['fleet_resource_crystal'] . "',
-            `planet_deuterium` = `planet_deuterium` + '" . $fleet_row['fleet_resource_deuterium'] . "'
+            `planet_deuterium` = `planet_deuterium` + '" . ($fleet_row['fleet_resource_deuterium'] + $fuel_return) . "'
             WHERE `planet_galaxy` = '" . $galaxy . "' AND
                 `planet_system` = '" . $system . "' AND
                 `planet_planet` = '" . $planet . "' AND

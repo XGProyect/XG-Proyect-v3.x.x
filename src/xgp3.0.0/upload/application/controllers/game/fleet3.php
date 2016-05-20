@@ -216,7 +216,6 @@ class Fleet3 extends XGPCore
             $SpeedFactor,
             $duration,
             $distance,
-            $MaxFleetSpeed,
             $this->current_user
         );
 
