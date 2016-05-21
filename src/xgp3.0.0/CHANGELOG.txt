@@ -12,6 +12,7 @@
 - [#120] Fixed empty alliance tag for alliances administration on the admin cp, other issues were fixed too (Thanks JonaMiX).-
 - [#122] Fixed notice in the fleet shortcuts page (Thanks JonaMiX).-
 - [#123] Fixed notice on the fleet 2 page when there are shortcuts available (Thanks JonaMiX).-
+- [#124] Fixed issue where the rank was being shown in the search and galaxy when it was disable for some levels.-
 - [#000] Added missing language line on the home page title.-
 - [#000] Fixed misplaced language line on the home page for login and register.-
 - [#000] Minor improvement over registration page. Redirection from index.php?page=reg to index.php?page=register removed, default is now "register".-

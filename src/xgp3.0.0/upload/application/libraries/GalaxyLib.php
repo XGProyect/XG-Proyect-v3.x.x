@@ -403,6 +403,11 @@ class GalaxyLib extends XGPCore
         $parse['username']      = $this->row_data['user_name'];
         $parse['current_rank']  = $this->row_data['user_statistic_total_rank'];
         $parse['start']         = (floor($this->row_data['user_statistic_total_rank'] / 100) * 100) + 1;
+        
+        if (!$this->noob->isRankVisible($this->row_data['user_authlevel'])) {
+            $parse['current_rank']  = '-';
+            $parse['start']         = 0;
+        }
 
         if ($this->row_data['user_id'] != $this->current_user['user_id']) {
 

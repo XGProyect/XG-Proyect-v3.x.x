@@ -31,15 +31,19 @@ class NoobsProtectionLib extends XGPCore
     private $protection;
     private $protectiontime;
     private $protectionmulti;
+    private $allowed_level;
 
     /**
      * __construct()
      */
     public function __construct()
     {
-        $this->protection       = FunctionsLib::readConfig('noobprotection');
-        $this->protectiontime   = FunctionsLib::readConfig('noobprotectiontime');
-        $this->protectionmulti  = FunctionsLib::readConfig('noobprotectionmulti');
+        $configs    = FunctionsLib::readConfig('', true);
+        
+        $this->protection       = $configs['noobprotection'];
+        $this->protectiontime   = $configs['noobprotectiontime'];
+        $this->protectionmulti  = $configs['noobprotectionmulti'];
+        $this->allowed_level    = $configs['stat_admin_level'];
     }
 
     /**
@@ -124,6 +128,22 @@ class NoobsProtectionLib extends XGPCore
                             ) AS target_points"
         );
         return $user_points;
+    }
+    
+    /**
+     * Determines if the rank can be shown or not
+     * 
+     * @param int $user_auth_level User authorization level (0-3)
+     * 
+     * @return boolean
+     */
+    public function isRankVisible($user_auth_level)
+    {
+        if ($user_auth_level <= $this->allowed_level) {
+            return true;
+        }
+        
+        return false;
     }
 }
 

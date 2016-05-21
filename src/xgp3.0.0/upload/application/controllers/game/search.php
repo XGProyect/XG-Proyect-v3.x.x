@@ -34,6 +34,7 @@ class Search extends XGPCore
 
     private $_current_user;
     private $_lang;
+    private $_noob;
 
     /**
      * __construct()
@@ -50,6 +51,7 @@ class Search extends XGPCore
 
         $this->_lang = parent::$lang;
         $this->_current_user = parent::$users->getUserData();
+        $this->_noob = FunctionsLib::loadLibrary('NoobsProtectionLib');
 
         $this->build_page();
     }
@@ -71,18 +73,18 @@ class Search extends XGPCore
      */
     private function build_page()
     {
-        $parse = $this->_lang;
-        $type = isset($_POST['type']) ? $_POST['type'] : '';
-        $searchtext = parent::$db->escapeValue(isset($_POST['searchtext']) ? $_POST['searchtext'] : '' );
-        $search_results = '';
-
+        $parse              = $this->_lang;
+        $type               = isset($_POST['type']) ? $_POST['type'] : '';
+        $searchtext         = parent::$db->escapeValue(isset($_POST['searchtext']) ? $_POST['searchtext'] : '' );
+        $search_results     = '';
+        
         if ($_POST) {
             switch ($type) {
                 case 'playername':
                 default:
                     $table = parent::$page->getTemplate('search/search_user_table');
                     $row = parent::$page->getTemplate('search/search_user_row');
-                    $search = parent::$db->query("SELECT u.user_id AS user_id, u.user_name, p.planet_name, p.planet_galaxy, p.planet_system, p.planet_planet, s.user_statistic_total_rank AS rank, a.alliance_id, a.alliance_name
+                    $search = parent::$db->query("SELECT u.user_id AS user_id, u.user_name, u.user_authlevel, p.planet_name, p.planet_galaxy, p.planet_system, p.planet_planet, s.user_statistic_total_rank AS rank, a.alliance_id, a.alliance_name
 														FROM " . USERS . " AS u
 														INNER JOIN " . USERS_STATISTICS . " AS s ON s.user_statistic_user_id = u.user_id
 														INNER JOIN " . PLANETS . " AS p ON p.`planet_id` = u.user_home_planet_id
@@ -92,7 +94,7 @@ class Search extends XGPCore
                 case 'planetname':
                     $table = parent::$page->getTemplate('search/search_user_table');
                     $row = parent::$page->getTemplate('search/search_user_row');
-                    $search = parent::$db->query("SELECT u.user_id AS user_id, u.user_name, p.planet_name, p.planet_galaxy, p.planet_system, p.planet_planet, s.user_statistic_total_rank AS rank, a.alliance_id, a.alliance_name
+                    $search = parent::$db->query("SELECT u.user_id AS user_id, u.user_name, u.user_authlevel, p.planet_name, p.planet_galaxy, p.planet_system, p.planet_planet, s.user_statistic_total_rank AS rank, a.alliance_id, a.alliance_name
 														FROM " . USERS . " AS u
 														INNER JOIN " . USERS_STATISTICS . " AS s ON s.user_statistic_user_id = u.user_id
 														INNER JOIN " . PLANETS . " AS p ON p.`planet_id` = u.user_home_planet_id
@@ -141,7 +143,7 @@ class Search extends XGPCore
                     $s['planet_name'] = $s['planet_name'];
                     $s['username'] = $s['user_name'];
                     $s['alliance_name'] = ($s['alliance_name'] != '') ? "<a href=\"game.php?page=alliance&mode=ainfo&allyid={$s['alliance_id']}\">{$s['alliance_name']}</a>" : '';
-                    $s['position'] = "<a href=\"game.php?page=statistics&start=" . $s['rank'] . "\">" . $s['rank'] . "</a>";
+                    $s['position'] = $this->setPosition($s['rank'], $s['user_authlevel']);
                     $s['coordinated'] = "{$s['planet_galaxy']}:{$s['planet_system']}:{$s['planet_planet']}";
                     $result_list .= parent::$page->parseTemplate($row, $s);
                 } elseif ($type == 'allytag' or $type == 'allyname') {
@@ -165,6 +167,25 @@ class Search extends XGPCore
         $parse['search_results'] = $search_results;
 
         parent::$page->display(parent::$page->parseTemplate(parent::$page->getTemplate('search/search_body'), $parse));
+    }
+    
+    /**
+     * Set the user position or not based on its level
+     * 
+     * @param int $user_rank  User rank
+     * @param int $user_level User level
+     * 
+     * @return string
+     */
+    private function setPosition($user_rank, $user_level)
+    {
+        if ($this->_noob->isRankVisible($user_level)) {
+
+            return '<a href="game.php?page=statistics&start=' . $user_rank . '">' . $user_rank . '</a>';
+        } else {
+
+            return '-';
+        }
     }
 }
 

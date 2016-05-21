@@ -38,6 +38,7 @@ class Overview extends XGPCore
     private $_lang;
     private $_current_user;
     private $_current_planet;
+    private $_noob;
 
     /**
      * __construct()
@@ -55,6 +56,7 @@ class Overview extends XGPCore
         $this->_lang = parent::$lang;
         $this->_current_user = parent::$users->getUserData();
         $this->_current_planet = parent::$users->getPlanetData();
+        $this->_noob = FunctionsLib::loadLibrary('NoobsProtectionLib');
 
         $this->build_page();
     }
@@ -421,7 +423,7 @@ class Overview extends XGPCore
         $user_rank = '-';
         $total_rank = $this->_current_user['user_statistic_total_rank'] == '' ? $this->_current_planet['stats_users'] : $this->_current_user['user_statistic_total_rank'];
 
-        if ($this->_current_user['user_authlevel'] <= FunctionsLib::readConfig('stat_admin_level')) {
+        if ($this->_noob->isRankVisible($this->_current_user['user_authlevel'])) {
             $user_rank = FormatLib::prettyNumber($this->_current_user['user_statistic_total_points']) . " (" . $this->_lang['ov_place'] . ' ' . FunctionsLib::setUrl('game.php?page=statistics&range=' . $total_rank, $total_rank, $total_rank) . ' ' . $this->_lang['ov_of'] . ' ' . $this->_current_planet['stats_users'] . ")";
         }
 
