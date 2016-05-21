@@ -16,6 +16,9 @@
 - [#000] Fixed misplaced language line on the home page for login and register.-
 - [#000] Minor improvement over registration page. Redirection from index.php?page=reg to index.php?page=register removed, default is now "register".-
 - [#000] Updated installation welcome message for Spanish and English.-
+- [#000] Minor improvements over the migration tool.-
+- [#000] Migration tool updated to support 3.0.1.-
+- [#000] New update tool that allows you to update the system to a recent version.-
 
 '3.0.0' => ' 28/04/2016
 - Initial release based on XGP 2.10.4.-

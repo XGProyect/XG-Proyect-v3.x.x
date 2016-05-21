@@ -16,7 +16,6 @@ namespace application\controllers\adm;
 
 use application\core\Database;
 use application\core\XGPCore;
-use application\core\Xml;
 use application\libraries\adm\AdministrationLib;
 
 /**
