@@ -77,12 +77,7 @@ $lang['hm_config_file_writable']							= 'The config.php file can be written, it
 $lang['hm_database_errors']									= 'There are errors in your database. You can view them by clicking <a href="admin.php?page=errors">here</a>';
 $lang['hm_old_version']										= 'A new version is available. Click <a href="http://www.xgproyect.org/downloads/" target="_blank">here</a> to download it.';
 $lang['hm_all_ok']											= 'No updates or alerts';
-
-
-
-
-
-
+$lang['hm_update_required']                                                     = 'Your system and DB versions are different, <a href="admin.php?page=update"><strong>Update now!</strong></a> to avoid issues.';
 $lang['hm_credits']											= 'Credits';
 $lang['hm_proyect_leader']									= 'Project Leader';
 $lang['hm_principal_contributors']							= 'Main contributors';
@@ -769,12 +764,20 @@ $lang['sb_stats_update']									= 'Statistics updated in: %t seconds<br>';
 $lang['sb_stats_updated']									= 'Summary:<br>';
 
 // UPDATE
-$lang['up_title']                                                               = 'Update';
+$lang['up_title']                               = 'Update';
+$lang['up_no_update_required']                  = 'No update required';
+$lang['up_sub_title']                           = 'Update from version <strong>v%s</strong> to <strong>v%s</strong>';
+$lang['up_test_mode']                           = 'Test mode:';
+$lang['up_test_mode_notice']                    = 'Notice: test mode allows you to obtain a list of queries that are going to be executed. Checking this box, allows you to get details about what the update system will do. It is important to clarify that <strong>no query will be executed.</strong>';
+$lang['up_go']                                  = 'Start update';
+$lang['up_back']                                = 'Back';
+$lang['up_no_version_file']                     = 'The update file doesn\'t exists, please verify that the "install" directory exists.';
+$lang['up_success']                             = 'Update completed!';
 
 // MIGRATE
-$lang['mi_title']                                                               = 'Migrate';
-$lang['mi_version_select']                                                      = 'Select version';
-$lang['mi_option_init']                                                         = 'Select';
+$lang['mi_title']                               = 'Migrate';
+$lang['mi_version_select']                      = 'Select version';
+$lang['mi_option_init']                         = 'Select';
 $lang['mi_server_title']			= 'SQL server:';
 $lang['mi_db_title']				= 'Database:';
 $lang['mi_user_title']				= 'User:';

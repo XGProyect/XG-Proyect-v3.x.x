@@ -77,12 +77,7 @@ $lang['hm_config_file_writable']							= 'El archivo config.php puede ser escrit
 $lang['hm_database_errors']									= 'Hay errores en tu base de datos. Puedes verlos haciendo <a href="admin.php?page=errors">click aquí</a>';
 $lang['hm_old_version']										= 'Hay una nueva versión disponible. Haz click <a href="http://www.xgproyect.org/downloads/" target="_blank">aquí</a> para descargarla';
 $lang['hm_all_ok']											= 'No hay actualizaciones ni advertencias';
-$lang['hm_bug_report_go']									= 'Reportar';
-$lang['hm_game_version_title']								= 'Versión actual';
-$lang['hm_game_version_go']									= 'Changelog';
-$lang['hm_license_title']									= 'Licencia';
-$lang['hm_license_message']									= 'La licencia de XG Proyect ayuda a proteger el proyecto y a los desarrolladores del mismo, como así también a todos aquellos que aportan y/o colaboran con el mismo.';
-$lang['hm_license_go']										= 'Ver licencia';
+$lang['hm_update_required']                                                     = 'La versión del sistema y la de tu DB no coinciden, <a href="admin.php?page=update"><strong>¡Actualiza ahora!</strong></a> para evitar errores.';
 $lang['hm_credits']											= 'Créditos';
 $lang['hm_proyect_leader']									= 'Project Leader';
 $lang['hm_principal_contributors']							= 'Principales colaboradores';
@@ -768,12 +763,20 @@ $lang['sb_stats_update']									= 'Estadísticas actualizadas en: %t segundos<b
 $lang['sb_stats_updated']									= 'Resumen:<br>';
 
 // UPDATE
-$lang['up_title']                                                               = 'Actualizar';
+$lang['up_title']                               = 'Actualizar';
+$lang['up_no_update_required']                  = 'Ya tienes la última versión';
+$lang['up_sub_title']                           = 'Actualizar de la versión <strong>v%s</strong> a <strong>v%s</strong>';
+$lang['up_test_mode']                           = 'Mode de prueba:';
+$lang['up_test_mode_notice']                    = 'Nota: el modo de prueba de permite obtener un listado de todas las consultas que se van a correr. De esta forma puedes obtener un detalle de que es lo que hará el sistema de actualización. Es importante aclarar que <strong>ninguna consulta será ejecutada</strong> mientras el modo de prueba este activo.';
+$lang['up_go']                                  = 'Iniciar actualización';
+$lang['up_back']                                = 'Volver';
+$lang['up_no_version_file']                     = 'El archivo de actualización no existe, verifique que el directorio "install" exista.';
+$lang['up_success']                             = '¡Actualización finalizada!';
 
 // MIGRATE
-$lang['mi_title']                                                               = 'Migrar';
-$lang['mi_version_select']                                                      = 'Seleccionar versión';
-$lang['mi_option_init']                                                         = 'Seleccionar';
+$lang['mi_title']                               = 'Migrar';
+$lang['mi_version_select']                      = 'Seleccionar versión';
+$lang['mi_option_init']                         = 'Seleccionar';
 $lang['mi_server_title']			= 'Servidor SQL:';
 $lang['mi_db_title']				= 'Base de datos:';
 $lang['mi_user_title']				= 'Usuario:';

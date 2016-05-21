@@ -78,7 +78,8 @@ class Home extends XGPCore
         $message[2] = '';
         $message[3] = '';
         $message[4] = '';
-
+        $message[5] = '';
+        
         // VERIFICATIONS
         if ($this->_current_user['user_authlevel'] >= 3) {
             if (is_writable(XGP_ROOT . CONFIGS_PATH . 'config.php')) {
@@ -100,14 +101,19 @@ class Home extends XGPCore
                 $message[4] = $this->_lang['hm_install_file_detected'] . '<br />';
                 $error++;
             }
+            
+            if (SYSTEM_VERSION != FunctionsLib::readConfig('version')) {
+                $message[5] = $this->_lang['hm_update_required'] . '<br />';
+                $error++;
+            }
         }
 
         if ($error > 1) {
-            $parse['error_message'] = '<br />' . $message[1] . $message[2] . $message[3] . $message[4];
+            $parse['error_message'] = '<br />' . $message[1] . $message[2] . $message[3] . $message[4] . $message[5];
             $parse['second_style'] = "alert-error";
             $parse['error_type'] = $this->_lang['hm_errors'];
         } elseif ($error == 1) {
-            $parse['error_message'] = '<br />' . $message[1] . $message[2] . $message[3] . $message[4];
+            $parse['error_message'] = '<br />' . $message[1] . $message[2] . $message[3] . $message[4] . $message[5];
             $parse['second_style'] = "alert-block";
             $parse['error_type'] = $this->_lang['hm_warning'];
         } else {
