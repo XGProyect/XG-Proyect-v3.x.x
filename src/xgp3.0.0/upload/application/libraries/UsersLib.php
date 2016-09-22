@@ -137,7 +137,7 @@ class UsersLib extends XGPCore
         if ($user_data['user_ally_id'] != 0) {
 
             $alliance = parent::$db->queryFetch(
-                "SELECT a.`alliance_id`, a.`alliance_ranks`
+                "SELECT a.`alliance_id`, a.`alliance_ranks`,
                     (SELECT COUNT(user_id) AS `ally_members` 
                         FROM `" . USERS . "` 
                         WHERE `user_ally_id` = '" . $user_data['user_ally_id'] . "') AS `ally_members`
