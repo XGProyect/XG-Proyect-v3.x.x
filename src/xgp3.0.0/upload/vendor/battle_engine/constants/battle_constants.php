@@ -57,8 +57,17 @@ define('ONLY_FIRST_AND_LAST_ROUND', false); //This option is usefull to decrease
 
 /*** After-battle constants, default as Ogame ***/
 define('REPAIRED_DO_DEBRIS',true);
-define('SHIP_DEBRIS_FACTOR', 0.3); //Percentage of debris generated from destroyed defenses.
-define('DEFENSE_DEBRIS_FACTOR', 0.3); //Percentage of debris generated from destroyed ships.
+
+//Percentage of debris generated from destroyed ships.
+if (!defined('SHIP_DEBRIS_FACTOR')) {
+    define('SHIP_DEBRIS_FACTOR', 0.3);
+}
+
+//Percentage of debris generated from destroyed defenses.
+if (!defined('DEFENSE_DEBRIS_FACTOR')) {
+    define('DEFENSE_DEBRIS_FACTOR', 0.3);
+}
+
 define('POINT_UNIT', 1000); //Ogame point = 1000 resources.
 define('MOON_UNIT_PROB', 100000);
 define('MAX_MOON_PROB', 20); //max probability to moon creation.

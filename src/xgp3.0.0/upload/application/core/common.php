@@ -110,6 +110,10 @@ if (!defined('IN_INSTALL')) {
     }
 
     if (!defined('IN_ADMIN')) {
+        
+        define('SHIP_DEBRIS_FACTOR', FunctionsLib::readConfig('fleet_cdr') / 100);
+        define('DEFENSE_DEBRIS_FACTOR', FunctionsLib::readConfig('defs_cdr') / 100);
+        
         // Several updates
         new UpdateLib();
     }
