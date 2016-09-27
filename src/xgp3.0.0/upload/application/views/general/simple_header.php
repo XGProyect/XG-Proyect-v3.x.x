@@ -10,4 +10,4 @@
 <script type="text/javascript" src="{js_path}overlib-min.js"></script>
 {meta_tags}
 </head>
-<body style="overflow: hidden;" onLoad="" onUnload="">
+<body>
