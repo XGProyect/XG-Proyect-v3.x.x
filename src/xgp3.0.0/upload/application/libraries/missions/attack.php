@@ -777,7 +777,8 @@ class Attack extends Missions
             `planet_crystal` = `planet_crystal` -  " . $steal['crystal'] . ",
             `planet_deuterium` = `planet_deuterium` -  " . $steal['deuterium'] . "
             WHERE `planet_id` = '" . $target_planet['planet_id'] . "' AND
-                `ship_planet_id` = '" . $target_planet['planet_id'] . "'"
+                `ship_planet_id` = '" . $target_planet['planet_id'] . "' AND
+                `defense_planet_id` = '" . $target_planet['planet_id'] . "'"
         );
 
         // Updating flying fleets
