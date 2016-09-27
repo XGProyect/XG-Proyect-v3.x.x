@@ -19,6 +19,7 @@ $lang['ins_language_select']		= 'Select language';
 
 
 // OVERVIEW PAGE
+$lang['ins_install_title']			= 'Installation';
 $lang['ins_title']					= 'Introduction';
 $lang['ins_welcome']				= 'Welcome to XG Proyect!';
 $lang['ins_welcome_first_line']		= 'XG Proyect is the best OGame clones around. XG Proyect 3 is the latest and most stable package never before developed. As any other version, XG Proyect receives support from the team known as Xtreme-gameZ, always making sure to get the best quality care and the stability of the release. XG Proyect 3 day by day looks forward and seeks growth, stability, flexibility, dynamism, quality and user confidence. We\'re always expecting that XG Proyect is better than your expectations.';
