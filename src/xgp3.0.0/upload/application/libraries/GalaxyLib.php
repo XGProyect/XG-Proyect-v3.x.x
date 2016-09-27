@@ -524,7 +524,7 @@ class GalaxyLib extends XGPCore
             if ($this->current_user['setting_galaxy_write'] == '1') {
 
                 $image  = FunctionsLib::setImage(DPATH . 'img/m.gif', $this->langs['write_message']);
-                $url    = 'game.php?page=messages&mode=write&id=' . $this->row_data['user_id'] . '>';
+                $url    = 'game.php?page=messages&mode=write&id=' . $this->row_data['user_id'];
                 $links  .= FunctionsLib::setUrl($url, '', $image) . '&nbsp;';
             }
 
