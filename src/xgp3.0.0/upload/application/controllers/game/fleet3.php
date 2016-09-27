@@ -110,6 +110,7 @@ class Fleet3 extends XGPCore
         $UsedPlanet         = false;
         $MissionSelector    = '';
         $available_ships    = $this->getAvailableShips($_POST);
+        $missiontype        = [];
         
         // QUERYS
         $select = parent::$db->queryFetch(
@@ -140,7 +141,7 @@ class Fleet3 extends XGPCore
                 $missiontype[8] = $this->langs['type_mission'][8];
             } else {
                 
-                $missiontype = array();
+                $missiontype = [];
             }
         } elseif ($planettype == 1 or $planettype == 3) {
             
