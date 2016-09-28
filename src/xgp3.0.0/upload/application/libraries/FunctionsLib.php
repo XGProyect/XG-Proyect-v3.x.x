@@ -418,7 +418,7 @@ abstract class FunctionsLib extends XGPCore
      * 
      * @return mixed
      */
-    public static function sendEmail($to, $subject, $body, $from, $headers = '')
+    public static function sendEmail($to, $subject, $body, $from, $format = 'text', $headers = '')
     {
         // require email library
         $mail_library_path  = XGP_ROOT . VENDOR_PATH . 'ci/system/libraries/Email.php';
@@ -438,6 +438,11 @@ abstract class FunctionsLib extends XGPCore
         require_once $mail_library_path;
         
         $mail   = new \CI_Email();
+        
+        if ($format === 'text' or $format === 'html') {
+
+            $mail->set_mailtype($format);
+        }
         
         // from
         if (is_array($from)) {

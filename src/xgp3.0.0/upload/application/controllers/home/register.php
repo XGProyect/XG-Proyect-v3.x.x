@@ -232,7 +232,8 @@ class Register extends XGPCore
             [
                 'mail' => FunctionsLib::readConfig('admin_email'),
                 'name' => $game_name
-            ]
+            ],
+            'html'
         );
 
         return $status;
