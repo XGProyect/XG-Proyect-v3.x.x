@@ -1,11 +1,11 @@
 <?php 
 $lng = LangManager::getInstance(); 
 $debris = $this->getDebris();
-$Mdebris = number_format($debris[0],0, ',', ' ');
-$Cdebris = number_format($debris[1],0, ',', ' ');
+$Mdebris = number_format($debris[0],0, ',', '.');
+$Cdebris = number_format($debris[1],0, ',', '.');
 ?>
-<?php echo $lng->getAttackersLostUnits(number_format($this->getTotalAttackersLostUnits(),0, ',', ' ')); ?><br />
-<?php echo $lng->getDefendersLostUnits(number_format($this->getTotalDefendersLostUnits(),0, ',', ' ')); ?><br />
+<?php echo $lng->getAttackersLostUnits(number_format($this->getTotalAttackersLostUnits(),0, ',', '.')); ?><br />
+<?php echo $lng->getDefendersLostUnits(number_format($this->getTotalDefendersLostUnits(),0, ',', '.')); ?><br />
 
 <?php echo $lng->getFloatingDebris($Mdebris,$Cdebris); ?><br />
 <?php echo $lng->getMoonProb( $this->getMoonProb()); ?><br />

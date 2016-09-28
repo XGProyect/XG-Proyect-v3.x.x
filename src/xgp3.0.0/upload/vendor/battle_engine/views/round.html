@@ -1,4 +1,4 @@
-<font size=4><cite>Round <?php echo $_i ?></cite></font>
+<!--<font size=4><cite>Round <?php echo $_i ?></cite></font>-->
 <br><br>
 <?php
 $_st = 'Attacker'; 
@@ -10,8 +10,6 @@ include('playerGroup.html');
 $_st = 'Defender'; 
 $_playerGroup = (isset($_roundBefore))?$_roundBefore->getAfterBattleDefenders():$_round->getAfterBattleDefenders();
 include('playerGroup.html');?>
-<br>
+<br><br>
 <?php include('round_info.html'); ?>
-
-_____________________________________________________
 <br>
