@@ -340,7 +340,10 @@ class Messages extends XGPCore
                     while ($message = parent::$db->fetchArray($message_list)) {
 
                         $message['message_text']    = nl2br($message['message_text']);
-                        $message['message_time']    = date('m-d h:i:s', $message['message_time']);
+                        $message['message_time']    = date(
+                            date(strtr(FunctionsLib::readConfig('date_format_extended'),['.Y' => '']), time()),
+                            $message['message_time']
+                        );
 
                         $list_of_messages   .= parent::$page->parseTemplate($single_message_template, $message);
                     }
@@ -371,7 +374,10 @@ class Messages extends XGPCore
         while ($message = parent::$db->fetchArray($messages)) {
 
             $message['message_text']    = nl2br($message['message_text']);
-            $message['message_time']    = date('m-d h:i:s', $message['message_time']);
+            $message['message_time']    = date(
+                date(strtr(FunctionsLib::readConfig('date_format_extended'),['.Y' => '']), time()),
+                $message['message_time']
+            );
             $list_of_messages           .= parent::$page->parseTemplate($single_message_template, $message);
         }
 
