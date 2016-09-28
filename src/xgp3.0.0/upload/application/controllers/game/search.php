@@ -89,7 +89,7 @@ class Search extends XGPCore
 														INNER JOIN " . USERS_STATISTICS . " AS s ON s.user_statistic_user_id = u.user_id
 														INNER JOIN " . PLANETS . " AS p ON p.`planet_id` = u.user_home_planet_id
 														LEFT JOIN " . ALLIANCE . " AS a ON a.alliance_id = u.user_ally_id
-														WHERE u.user_name LIKE '%" . $searchtext . "%' LIMIT 25;");
+														WHERE u.user_name LIKE '%" . $searchtext . "%' LIMIT 100;");
                     break;
                 case 'planetname':
                     $table = parent::$page->getTemplate('search/search_user_table');
@@ -97,9 +97,9 @@ class Search extends XGPCore
                     $search = parent::$db->query("SELECT u.user_id AS user_id, u.user_name, u.user_authlevel, p.planet_name, p.planet_galaxy, p.planet_system, p.planet_planet, s.user_statistic_total_rank AS rank, a.alliance_id, a.alliance_name
 														FROM " . USERS . " AS u
 														INNER JOIN " . USERS_STATISTICS . " AS s ON s.user_statistic_user_id = u.user_id
-														INNER JOIN " . PLANETS . " AS p ON p.`planet_id` = u.user_home_planet_id
+														INNER JOIN " . PLANETS . " AS p ON p.`planet_user_id` = u.user_id
 														LEFT JOIN " . ALLIANCE . " AS a ON a.alliance_id = u.user_ally_id
-														WHERE p.planet_name LIKE '%" . $searchtext . "%' LIMIT 25;");
+														WHERE p.planet_name LIKE '%" . $searchtext . "%' LIMIT 100;");
 
                     break;
                 case 'allytag':
@@ -112,7 +112,7 @@ class Search extends XGPCore
                     									(SELECT COUNT(user_id) AS `ally_members` FROM `" . USERS . "` WHERE `user_ally_id` = a.`alliance_id`) AS `ally_members`
                     								FROM " . ALLIANCE . " AS a
 													LEFT JOIN " . ALLIANCE_STATISTICS . " AS s ON a.alliance_id = s.alliance_statistic_alliance_id
-                    								WHERE a.alliance_tag LIKE '%" . $searchtext . "%' LIMIT 25;");
+                    								WHERE a.alliance_tag LIKE '%" . $searchtext . "%' LIMIT 100;");
 
                     break;
                 case 'allyname':
@@ -125,7 +125,7 @@ class Search extends XGPCore
                     										(SELECT COUNT(user_id) AS `ally_members` FROM `" . USERS . "` WHERE `user_ally_id` = a.`alliance_id`) AS `ally_members`
                     								FROM " . ALLIANCE . " AS a
 													LEFT JOIN " . ALLIANCE_STATISTICS . " AS s ON a.alliance_id = s.alliance_statistic_alliance_id
-                    								WHERE a.alliance_name LIKE '%" . $searchtext . "%' LIMIT 25;");
+                    								WHERE a.alliance_name LIKE '%" . $searchtext . "%' LIMIT 100;");
                     break;
             }
         }
