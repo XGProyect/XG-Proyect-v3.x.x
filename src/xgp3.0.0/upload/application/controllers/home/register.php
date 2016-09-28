@@ -221,8 +221,8 @@ class Register extends XGPCore
         $parse['user_name']             = $user_name;
         $parse['user_pass']             = $password;
         $parse['game_url']              = GAMEURL;
-        $parse['reg_mail_text_part1']   = str_replace('%s', $game_name, $this->langs['re_mail_text_part1']);
-        $parse['reg_mail_text_part7']   = str_replace('%s', $game_name, $this->langs['re_mail_text_part7']);
+        $parse['re_mail_text_part1']    = str_replace('%s', $game_name, $this->langs['re_mail_text_part1']);
+        $parse['re_mail_text_part7']    = str_replace('%s', $game_name, $this->langs['re_mail_text_part7']);
 
         $email = parent::$page->parseTemplate(parent::$page->getTemplate('home/email_template'), $parse);
         $status = FunctionsLib::sendEmail(
