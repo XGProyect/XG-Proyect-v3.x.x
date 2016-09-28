@@ -37,6 +37,13 @@ class Expedition extends Missions
     private $hazard;
     
     /**
+     * A flag to indicate if a fleet was completly destroyed.
+     *
+     * @var int
+     */
+    private $all_destroyed  = false;
+    
+    /**
      * __construct
      *
      * @return void
@@ -118,14 +125,18 @@ class Expedition extends Missions
         }
 
         if ($fleet_row['fleet_end_time'] < time()) {
-            $this->expeditionMessage(
-                $fleet_row['fleet_owner'],
-                $this->langs['sys_expe_back_home'],
-                $fleet_row['fleet_end_time']
-            );
+            
+            if (!$this->all_destroyed) {
 
-            parent::restoreFleet($fleet_row, true);
-            parent::removeFleet($fleet_row['fleet_id']);
+                $this->expeditionMessage(
+                    $fleet_row['fleet_owner'],
+                    $this->langs['sys_expe_back_home'],
+                    $fleet_row['fleet_end_time']
+                );
+
+                parent::restoreFleet($fleet_row, true);
+                parent::removeFleet($fleet_row['fleet_id']);   
+            }
         }
     }
 
@@ -151,18 +162,18 @@ class Expedition extends Missions
 
             parent::removeFleet($fleet_row['fleet_id']);
         } else {
-            $all_destroyed  = true;
-            $new_ships      = '';
+            $this->all_destroyed    = true;
+            $new_ships              = '';
             
             foreach ($current_fleet as $ship => $amount) {
                 if (floor($amount * $lost_amount) != 0) {
                     $lost_ships[$ship] = floor($amount * $lost_amount);
                     $new_ships .= $ship . "," . ($amount - $lost_ships[$ship]) . ";";
-                    $all_destroyed = false;
+                    $this->all_destroyed    = false;
                 }
             }
 
-            if (!$all_destroyed) {
+            if (!$this->all_destroyed) {
                 $this->expeditionMessage(
                     $fleet_row['fleet_owner'],
                     $this->langs['sys_expe_blackholl_1'],
