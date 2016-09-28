@@ -66,7 +66,7 @@
 					    </li>
 					</ul>
 				</label>
-				<input name="game_speed" value="{game_speed}" type="text" maxlength="5">
+				<input name="game_speed" value="{game_speed}" type="number" max="99999">
 				<label>
 					<ul class="popups">
 					    <li class="span3">
@@ -82,7 +82,7 @@
 					    </li>
 					</ul>
 				</label>
-				<input name="fleet_speed" value="{fleet_speed}" type="text" maxlength="5">
+				<input name="fleet_speed" value="{fleet_speed}" type="number" max="99999">
 				<label>
 					<ul class="popups">
 					    <li class="span3">
@@ -98,7 +98,7 @@
 					    </li>
 					</ul>
 				</label>
-				<input name="resource_multiplier" value="{resource_multiplier}" type="text">
+				<input name="resource_multiplier" value="{resource_multiplier}" type="number" max="99999">
 				<label>
 					<ul class="popups">
 					    <li class="span3">
@@ -230,7 +230,9 @@
 					    </li>
 					</ul>
 				</label>
-				<input name="Fleet_Cdr" maxlength="3" size="3" value="{shiips}" type="text"> %
+                                <select name="Fleet_Cdr">
+                                    {ships}
+                                </select>
 				<label>
 					<ul class="popups">
 					    <li class="span3">
@@ -246,7 +248,9 @@
 					    </li>
 					</ul>
 				</label>
-				<input name="Defs_Cdr" maxlength="3" size="3" value="{defenses}" type="text"> %
+                                <select name="Defs_Cdr">
+                                    {defenses}
+                                </select>
 
 				<br /><br />
 				<h4>{se_noob_protect}</h4>
@@ -278,7 +282,7 @@
 					    </li>
 					</ul>
 				</label>
-				<input name="noobprotectiontime" value="{noobprot2}" type="text">
+				<input name="noobprotectiontime" value="{noobprot2}" type="number" max="999999999">
 				<label>
 					<ul class="popups">
 					    <li class="span3">
@@ -294,7 +298,7 @@
 					    </li>
 					</ul>
 				</label>
-				<input name="noobprotectionmulti" value="{noobprot3}" type="text">
+				<input name="noobprotectionmulti" value="{noobprot3}" type="number" max="99">
 
 				<div align="center">
 					<input value="{se_save_parameters}" type="submit" class="btn btn-primary">

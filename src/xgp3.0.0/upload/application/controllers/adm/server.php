@@ -109,27 +109,26 @@ class Server extends XGPCore
             $parse['alert'] = AdministrationLib::saveMessage('ok', $this->_lang['se_all_ok_message']);
         }
 
-        $parse['game_name'] = $this->_game_config['game_name'];
-        $parse['game_logo'] = $this->_game_config['game_logo'];
-        $parse['language_settings'] = FunctionsLib::getLanguages($this->_game_config['lang']);
-        $parse['game_speed'] = $this->_game_config['game_speed'] / 2500;
-        $parse['fleet_speed'] = $this->_game_config['fleet_speed'] / 2500;
-        $parse['resource_multiplier'] = $this->_game_config['resource_multiplier'];
-        $parse['admin_email'] = $this->_game_config['admin_email'];
-        $parse['forum_url'] = $this->_game_config['forum_url'];
-        $parse['closed'] = $this->_game_config['game_enable'] == 1 ? " checked = 'checked' " : "";
-        $parse['close_reason'] = stripslashes($this->_game_config['close_reason']);
-        $parse['ssl_enabled'] = $this->_game_config['ssl_enabled'] == 1 ? " checked = 'checked' " : "";
-        $parse['date_time_zone'] = $this->time_zone_picker();
-        $parse['date_format'] = $this->_game_config['date_format'];
-        $parse['date_format_extended'] = $this->_game_config['date_format_extended'];
-        $parse['adm_attack'] = $this->_game_config['adm_attack'] == 1 ? " checked = 'checked' " : "";
-        $parse['shiips'] = $this->_game_config['fleet_cdr'];
-        $parse['defenses'] = $this->_game_config['defs_cdr'];
-        $parse['noobprot'] = $this->_game_config['noobprotection'] == 1 ? " checked = 'checked' " : "";
-        $parse['noobprot2'] = $this->_game_config['noobprotectiontime'];
-        $parse['noobprot3'] = $this->_game_config['noobprotectionmulti'];
-
+        $parse['game_name']             = $this->_game_config['game_name'];
+        $parse['game_logo']             = $this->_game_config['game_logo'];
+        $parse['language_settings']     = FunctionsLib::getLanguages($this->_game_config['lang']);
+        $parse['game_speed']            = $this->_game_config['game_speed'] / 2500;
+        $parse['fleet_speed']           = $this->_game_config['fleet_speed'] / 2500;
+        $parse['resource_multiplier']   = $this->_game_config['resource_multiplier'];
+        $parse['admin_email']           = $this->_game_config['admin_email'];
+        $parse['forum_url']             = $this->_game_config['forum_url'];
+        $parse['closed']                = $this->_game_config['game_enable'] == 1 ? " checked = 'checked' " : "";
+        $parse['close_reason']          = stripslashes($this->_game_config['close_reason']);
+        $parse['ssl_enabled']           = $this->_game_config['ssl_enabled'] == 1 ? " checked = 'checked' " : "";
+        $parse['date_time_zone']        = $this->time_zone_picker();
+        $parse['date_format']           = $this->_game_config['date_format'];
+        $parse['date_format_extended']  = $this->_game_config['date_format_extended'];
+        $parse['adm_attack']            = $this->_game_config['adm_attack'] == 1 ? " checked = 'checked' " : "";
+        $parse['ships']                 = $this->percentage_picker($this->_game_config['fleet_cdr']);
+        $parse['defenses']              = $this->percentage_picker($this->_game_config['defs_cdr']);
+        $parse['noobprot']              = $this->_game_config['noobprotection'] == 1 ? " checked = 'checked' " : "";
+        $parse['noobprot2']             = $this->_game_config['noobprotectiontime'];
+        $parse['noobprot3']             = $this->_game_config['noobprotectionmulti'];
 
         parent::$page->display(parent::$page->parseTemplate(parent::$page->getTemplate('adm/server_view'), $parse));
     }
@@ -335,6 +334,31 @@ class Server extends XGPCore
         }
 
         return $sign . str_pad($hour, 2, '0', STR_PAD_LEFT) . ':' . str_pad($minutes, 2, '0');
+    }
+
+    /**
+     * Percentage picker
+     * 
+     * @param string $current_percentage Current percentage for the field
+     * 
+     * @return string
+     */
+    private function percentage_picker($current_percentage)
+    {
+        $options    = '';
+
+        for ($i = 0; $i <= 10; $i++) {
+
+            $selected   = '';
+            
+            if ($i * 10 == $current_percentage) {
+                $selected = ' selected = selected ';
+            }
+            
+            $options    .= '<option value="' . $i * 10 . '"' . $selected . '>' . $i * 10 . '%</option>';
+        }
+        
+        return $options;
     }
 }
 
