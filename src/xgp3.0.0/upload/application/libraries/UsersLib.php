@@ -438,11 +438,11 @@ class UsersLib extends XGPCore
             
             parent::$db->query($insert_query);
             
+            // get the last inserted user id
+            $user_id  = parent::$db->insertId();
+            
             // insert extra required tables
             if ($full_insert) {
-
-                // get the last inserted user id
-                $user_id  = parent::$db->insertId();
                 
                 // create the buildings, defenses and ships tables
                 self::createPremium($user_id);
@@ -450,6 +450,8 @@ class UsersLib extends XGPCore
                 self::createSettings($user_id);
                 self::createUserStatistics($user_id);
             }
+            
+            return $user_id;
         }
     }
     

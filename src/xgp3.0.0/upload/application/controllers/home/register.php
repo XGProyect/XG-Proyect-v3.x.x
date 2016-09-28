@@ -32,6 +32,7 @@ class Register extends XGPCore
 {
     private $creator;
     private $langs;
+    private $current_user;
 
     /**
      * __construct()
@@ -43,10 +44,13 @@ class Register extends XGPCore
         $this->langs = parent::$lang;
 
         if (FunctionsLib::readConfig('reg_enable') == 1) {
-            $this->creator = FunctionsLib::loadLibrary('PlanetLib');
 
+            $this->creator      = FunctionsLib::loadLibrary('PlanetLib');
+            $this->current_user = parent::$users;
+            
             $this->buildPage();
         } else {
+
             die(FunctionsLib::message($this->langs['re_disabled'], 'index.php', '5', false, false));
         }
     }
@@ -69,37 +73,29 @@ class Register extends XGPCore
     private function buildPage()
     {
         if ($_POST) {
+
             if (!$this->runValidations()) {
+
                 FunctionsLib::redirect('index.php');
             } else {
-                $user_password = $_POST['password'];
-                $user_name = $_POST['character'];
-                $user_email = $_POST['email'];
-                $hashed_password = sha1($user_password);
 
-                parent::$db->query("INSERT INTO " . USERS . " SET
-										`user_name` = '" . parent::$db->escapeValue(strip_tags($user_name)) . "',
-										`user_email` = '" . parent::$db->escapeValue($user_email) . "',
-										`user_email_permanent` = '" . parent::$db->escapeValue($user_email) . "',
-										`user_ip_at_reg` = '" . $_SERVER['REMOTE_ADDR'] . "',
-										`user_agent` = '" . $_SERVER['HTTP_USER_AGENT'] . "',
-										`user_home_planet_id` = '0',
-										`user_register_time` = '" . time() . "',
-										`user_password`='" . $hashed_password . "';");
+                $user_password      = $_POST['password'];
+                $user_name          = $_POST['character'];
+                $user_email         = $_POST['email'];
+                $hashed_password    = sha1($user_password);
 
-                $user_id = parent::$db->insertId();
-
-                parent::$db->query("INSERT INTO " . RESEARCH . " SET
-										`research_user_id` = '" . $user_id . "';");
-
-                parent::$db->query("INSERT INTO " . USERS_STATISTICS . " SET
-										`user_statistic_user_id` = '" . $user_id . "';");
-
-                parent::$db->query("INSERT INTO " . PREMIUM . " SET
-										`premium_user_id` = '" . $user_id . "';");
-
-                parent::$db->query("INSERT INTO " . SETTINGS . " SET
-										`setting_user_id` = '" . $user_id . "';");
+                $user_id            = $this->current_user->createUserWithOptions(
+                    [
+                        'user_name' => parent::$db->escapeValue(strip_tags($user_name)),
+                        'user_email' => parent::$db->escapeValue($user_email),
+                        'user_email_permanent' => parent::$db->escapeValue($user_email),
+                        'user_ip_at_reg' => $_SERVER['REMOTE_ADDR'],
+                        'user_agent' => $_SERVER['HTTP_USER_AGENT'],
+                        'user_home_planet_id' => 0,
+                        'user_register_time' => time(),
+                        'user_password' => $hashed_password
+                    ]
+                );
 
                 $last_galaxy = FunctionsLib::readConfig('lastsettedgalaxypos');
                 $last_system = FunctionsLib::readConfig('lastsettedsystempos');
@@ -145,15 +141,15 @@ class Register extends XGPCore
                     }
 
                     $planet_row = parent::$db->queryFetch("SELECT *
-																FROM " . PLANETS . "
-																WHERE `planet_galaxy` = '" . $galaxy . "' AND
-																		`planet_system` = '" . $system . "' AND
-																		`planet_planet` = '" . $planet . "' LIMIT 1;");
+                        FROM " . PLANETS . "
+                        WHERE `planet_galaxy` = '" . $galaxy . "' AND
+                                        `planet_system` = '" . $system . "' AND
+                                        `planet_planet` = '" . $planet . "' LIMIT 1;"
+                    );
 
                     if ($planet_row['id'] == '0') {
                         $newpos_checked = true;
                     }
-
 
                     if (!$planet_row) {
                         $this->creator->setNewPlanet($galaxy, $system, $planet, $user_id, '', true);
