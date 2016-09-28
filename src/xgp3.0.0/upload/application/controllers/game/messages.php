@@ -105,7 +105,8 @@ class Messages extends XGPCore
                 "SELECT *
                 FROM `" . MESSAGES . "`
                 WHERE `message_receiver` = " . $this->current_user['user_id'] . "
-                        AND `message_type` IN (" . rtrim($get_messages, ',') . ");"
+                        AND `message_type` IN (" . rtrim($get_messages, ',') . ")
+                ORDER BY `message_time` DESC;"
             );
 
             // set messages as read
@@ -341,7 +342,7 @@ class Messages extends XGPCore
 
                         $message['message_text']    = nl2br($message['message_text']);
                         $message['message_time']    = date(
-                            date(strtr(FunctionsLib::readConfig('date_format_extended'),['.Y' => '']), time()),
+                            strtr(FunctionsLib::readConfig('date_format_extended'),['.Y' => '']),
                             $message['message_time']
                         );
 
@@ -375,7 +376,7 @@ class Messages extends XGPCore
 
             $message['message_text']    = nl2br($message['message_text']);
             $message['message_time']    = date(
-                date(strtr(FunctionsLib::readConfig('date_format_extended'),['.Y' => '']), time()),
+                strtr(FunctionsLib::readConfig('date_format_extended'),['.Y' => '']),
                 $message['message_time']
             );
             $list_of_messages           .= parent::$page->parseTemplate($single_message_template, $message);
