@@ -1463,6 +1463,10 @@ class Users extends XGPCore
                 $parse['planet_image_style']    = 'class="greyout"';  
             }
 
+            $parse['moon_id']       = '';
+            $parse['moon_name']     = '';
+            $parse['moon_image']    = '';
+            
             if (isset($planets['moon_id'])) {
 
                 $parse['moon_id'] = $planets['moon_id'];
