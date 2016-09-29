@@ -469,10 +469,10 @@ class Users extends XGPCore
             default:
 
                 $get_query = 'p.*, b.*, d.*, s.*,
-								m.planet_id AS moon_id,
-								m.planet_name AS moon_name,
-								m.planet_image AS moon_image,
-								m.planet_destroyed AS moon_destroyed ';
+                    m.planet_id AS moon_id,
+                    m.planet_name AS moon_name,
+                    m.planet_image AS moon_image,
+                    m.planet_destroyed AS moon_destroyed ';
 
                 break;
         } // SWITCH
@@ -487,13 +487,13 @@ class Users extends XGPCore
             INNER JOIN " . DEFENSES . " AS d ON d.defense_planet_id = p.`planet_id`
             INNER JOIN " . SHIPS . " AS s ON s.ship_planet_id = p.`planet_id`
             LEFT JOIN " . PLANETS . " AS m ON m.planet_id = (SELECT mp.`planet_id`
-                                                                                                    FROM " . PLANETS . " AS mp
-                                                                                                    WHERE (mp.planet_galaxy=p.planet_galaxy AND
-                                                                                                                    mp.planet_system=p.planet_system AND
-                                                                                                                    mp.planet_planet=p.planet_planet AND
-                                                                                                                    mp.planet_type=3))
+            FROM " . PLANETS . " AS mp
+            WHERE (mp.planet_galaxy=p.planet_galaxy AND
+                mp.planet_system=p.planet_system AND
+                mp.planet_planet=p.planet_planet AND
+                mp.planet_type=3))
             WHERE p.`planet_user_id` = '" . $this->_id . "'
-                            AND p.`planet_type` = 1{$sub_query};");
+                AND p.`planet_type` = 1{$sub_query};");
 
         $parse = $this->_lang;
         $parse['planets'] = str_replace('%s', $this->_user_query['user_name'], $this->_lang['us_user_planets']);
@@ -653,10 +653,10 @@ class Users extends XGPCore
             case 'delete':
 
                 parent::$db->query("UPDATE " . PLANETS . " AS m, " . USERS . " AS u SET
-													m.`planet_destroyed` = '" . (time() + (PLANETS_LIFE_TIME * 3600)) . "',
-													u.`user_current_planet` = u.`user_home_planet_id`
-													WHERE m.`planet_id` = '" . (int) $this->_moon . "' AND
-															m.`planet_type` = '3';");
+                    m.`planet_destroyed` = '" . (time() + (PLANETS_LIFE_TIME * 3600)) . "',
+                    u.`user_current_planet` = u.`user_home_planet_id`
+                    WHERE m.`planet_id` = '" . (int) $this->_moon . "' AND
+                                    m.`planet_type` = '3';");
                 $this->refresh_page();
 
                 break;
@@ -743,15 +743,15 @@ class Users extends XGPCore
             $this->_alert_type = 'error';
         } else {
             parent::$db->query("UPDATE " . USERS . " SET
-									`user_name` = '" . $username . "',
-									`user_password` = " . $password . ",
-									`user_email` = '" . $email . "',
-									`user_email_permanent` = '" . $perm_email . "',
-									`user_authlevel` = '" . $authlevel . "',
-									`user_home_planet_id` = '" . $id_planet . "',
-									`user_current_planet` = '" . $cur_planet . "',
-									`user_ally_id` = '" . $ally_id . "'
-									WHERE `user_id` = '" . $this->_id . "';");
+                `user_name` = '" . $username . "',
+                `user_password` = " . $password . ",
+                `user_email` = '" . $email . "',
+                `user_email_permanent` = '" . $perm_email . "',
+                `user_authlevel` = '" . $authlevel . "',
+                `user_home_planet_id` = '" . $id_planet . "',
+                `user_current_planet` = '" . $cur_planet . "',
+                `user_ally_id` = '" . $ally_id . "'
+                WHERE `user_id` = '" . $this->_id . "';");
 
             if ($this->_current_user['user_id'] == $this->_id) {
                  
