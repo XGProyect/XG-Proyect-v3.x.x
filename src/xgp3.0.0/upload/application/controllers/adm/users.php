@@ -951,6 +951,10 @@ class Users extends XGPCore
             $id_get = $this->_moon;
         }
 
+        if ((int)$id_get <= 0) {
+            return;
+        }
+        
         // QUERY START
         $query_string = "UPDATE " . PLANETS . " SET ";
 
