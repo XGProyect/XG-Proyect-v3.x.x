@@ -46,7 +46,10 @@ class Overview extends XGPCore
     public function __construct()
     {
         parent::__construct();
-
+        
+        // load Model
+        parent::loadModel('game/overview');
+        
         // check if session is active
         parent::$users->checkSession();
 
@@ -62,16 +65,6 @@ class Overview extends XGPCore
     }
 
     /**
-     * method __destruct
-     * param
-     * return close db connection
-     */
-    public function __destruct()
-    {
-        parent::$db->closeConnection();
-    }
-
-    /**
      * method build_page
      * param
      * return main method, loads everything
@@ -84,9 +77,9 @@ class Overview extends XGPCore
 
         ######################################
         #
-            # blocks
+        # blocks
         #
-            ######################################
+        ######################################
         // MESSAGES BLOCK
         $block['messages'] = $this->get_messages();
 
@@ -101,9 +94,9 @@ class Overview extends XGPCore
 
         ######################################
         #
-            # parse information
+        # parse information
         #
-            ######################################
+        ######################################
         // SHOW ALL THE INFORMATION, IN ORDER, ACCORDING TO THE TEMPLATE
         $parse['planet_name'] = $this->_current_planet['planet_name'];
         $parse['user_name'] = $this->_current_user['user_name'];
@@ -213,13 +206,8 @@ class Overview extends XGPCore
         $fleet_row = '';
         $record = 0;
 
-        $own_fleets = parent::$db->query(
-                "SELECT *
-            FROM " . FLEETS . "
-            WHERE `fleet_owner` = '" . (int) $this->_current_user['user_id'] . "' OR
-            `fleet_target_owner` = '" . (int) $this->_current_user['user_id'] . "';"
-        );
-
+        $own_fleets = $this->Overview_Model->getOwnFleets($this->_current_user['user_id']);
+        
         while ($fleets = parent::$db->fetchArray($own_fleets)) {
 
             ######################################
@@ -330,7 +318,7 @@ class Overview extends XGPCore
             }
         }
 
-        parent::$db->freeResult($own_fleets);
+        $this->Overview_Model->clearResults($own_fleets);
 
         if (count($fleet_row) > 0 && $fleet_row != '') {
             ksort($fleet_row);
@@ -374,15 +362,9 @@ class Overview extends XGPCore
     private function get_planets()
     {
         $colony = 1;
-
-        $planets_query = parent::$db->query("SELECT *
-                                                                                            FROM " . PLANETS . " AS p
-                                                                                            INNER JOIN " . BUILDINGS . " AS b ON b.building_planet_id = p.`planet_id`
-                                                                                            INNER JOIN " . DEFENSES . " AS d ON d.defense_planet_id = p.`planet_id`
-                                                                                            INNER JOIN " . SHIPS . " AS s ON s.ship_planet_id = p.`planet_id`
-                                                                                            WHERE `planet_user_id` = '" . (int) $this->_current_user['user_id'] . "'
-                                                                                                    AND `planet_destroyed` = 0;");
-        $planet_block = '<tr>';
+        
+        $planets_query  = $this->Overview_Model->getPlanets($this->_current_user['user_id']);
+        $planet_block   = '<tr>';
 
         while ($user_planet = parent::$db->fetchArray($planets_query)) {
             if ($user_planet['planet_id'] != $this->_current_user['user_current_planet'] && $user_planet['planet_type'] != 3) {
@@ -408,7 +390,7 @@ class Overview extends XGPCore
         $planet_block .= '</tr>';
 
         // CLEAN SOME MEMORY
-        parent::$db->freeResult($planets_query);
+        $this->Overview_Model->clearResults($planets_query);
 
         return $planet_block;
     }
