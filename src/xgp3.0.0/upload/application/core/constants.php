@@ -38,6 +38,9 @@ define('PUBLIC_PATH', 'public/');
 define('VENDOR_PATH', 'vendor/');
 define('DATA_PATH', 'data/');
 
+// MODELS PATH
+define('MODELS_PATH', APP_PATH . 'models/');
+
 // VISUAL DEFAULT PATHS
 define('TEMPLATE_DIR', APP_PATH . 'views/');
 define('CSS_PATH', APP_PATH . 'styles/css/');
