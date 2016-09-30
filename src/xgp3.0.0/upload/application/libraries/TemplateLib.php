@@ -315,33 +315,22 @@ class TemplateLib
         $parse['image']         = $this->current_planet['planet_image'];
         $parse['planetlist']    = FunctionsLib::buildPlanetList($this->current_user);
 
-        // When both modes are active we give priority to the delete mode
-        if ($this->current_user['setting_vacations_status'] && $this->current_user['setting_delete_account']) {
+        $parse['show_umod_notice'] = '';
+        
+        // When vacation mode did not expire
+        if ($this->current_user['setting_vacations_status']) {
 
-            $parse['color']     = 'red';
-            $parse['message']   = $this->langs['tn_delete_mode'] . date(
+            $parse['color']     = '#1DF0F0';
+            $parse['message']   = $this->langs['tn_vacation_mode'] . date(
                 FunctionsLib::readConfig('date_format_extended'),
-                $this->current_user['setting_delete_account'] + (60 * 60 * 24 * 7)
+                $this->current_user['setting_vacations_until']
             );
-            $parse['jump_line'] = '';
-            
-            $parse['show_umod_notice']  = $this->current_user['setting_delete_account'] ?
-                $this->parseTemplate($this->getTemplate('general/notices_view'), $parse) : '';
-        } else {
+            $parse['jump_line'] = '<br/>';
 
-            // When vacation mode did not expire
-            if ($this->current_user['setting_vacations_status'] < time()) {
+            $parse['show_umod_notice']  .= $this->parseTemplate($this->getTemplate('general/notices_view'), $parse);
+        }
 
-                $parse['color']     = '#1DF0F0';
-                $parse['message']   = $this->langs['tn_vacation_mode'] . date(
-                    FunctionsLib::readConfig('date_format_extended'),
-                    $this->current_user['setting_vacations_until']
-                );
-                $parse['jump_line'] = '<br/>';
-
-                $parse['show_umod_notice']  = $this->current_user['setting_vacations_status'] ?
-                    $this->parseTemplate($this->getTemplate('general/notices_view'), $parse) : '';
-            }
+        if ($this->current_user['setting_delete_account']) {
 
             // When it is in delete mode
             $parse['color']     = 'red';
@@ -350,9 +339,8 @@ class TemplateLib
                 $this->current_user['setting_delete_account'] + (60 * 60 * 24 * 7)
             );
             $parse['jump_line'] = '';
-            
-            $parse['show_umod_notice']  = $this->current_user['setting_delete_account'] ?
-                $this->parseTemplate($this->getTemplate('general/notices_view'), $parse) : '';
+
+            $parse['show_umod_notice']  .= $this->parseTemplate($this->getTemplate('general/notices_view'), $parse);
         }
 
         // RESOURCES FORMAT

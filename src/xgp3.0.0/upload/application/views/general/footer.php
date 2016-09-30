@@ -14,7 +14,7 @@ contentbox = document.getElementById('content');
 </div>
 
 <script>
-headerHeight = 81;
+headerHeight = document.getElementById("header_top");
 errorbox.style.top=parseInt(headerHeight+messagebox.offsetHeight+5)+'px';
 contentbox.style.top=parseInt(headerHeight+errorbox.offsetHeight+messagebox.offsetHeight+10)+'px';
 if (navigator.appName=='Netscape'){if (window.innerWidth<1020){document.body.scroll='no';}   contentbox.style.height=parseInt(window.innerHeight)-messagebox.offsetHeight-errorbox.offsetHeight-headerHeight-20;
