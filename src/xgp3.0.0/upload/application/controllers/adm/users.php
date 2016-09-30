@@ -17,6 +17,7 @@ namespace application\controllers\adm;
 use application\core\XGPCore;
 use application\libraries\adm\AdministrationLib;
 use application\libraries\FunctionsLib;
+use application\libraries\StatisticsLib;
 
 /**
  * Users Class
@@ -874,6 +875,9 @@ class Users extends XGPCore
         // RUN THE QUERY
         parent::$db->query($query_string);
 
+        // Points rebuild
+        StatisticsLib::rebuildPoints($this->_id, 0, 'research');
+        
         // RETURN THE ALERT
         $this->_alert_info = $this->_lang['us_all_ok_message'];
         $this->_alert_type = 'ok';
@@ -1046,6 +1050,9 @@ class Users extends XGPCore
         // RUN THE QUERY
         parent::$db->query($query_string);
 
+        // Points rebuild
+        StatisticsLib::rebuildPoints($this->_id, $id_get, 'buildings');
+        
         // RETURN THE ALERT
         $this->_alert_info = $this->_lang['us_all_ok_message'];
         $this->_alert_type = 'ok';
@@ -1084,6 +1091,9 @@ class Users extends XGPCore
         // RUN THE QUERY
         parent::$db->query($query_string);
 
+        // Points rebuild
+        StatisticsLib::rebuildPoints($this->_id, $id_get, 'ships');
+        
         // RETURN THE ALERT
         $this->_alert_info = $this->_lang['us_all_ok_message'];
         $this->_alert_type = 'ok';
@@ -1122,6 +1132,9 @@ class Users extends XGPCore
         // RUN THE QUERY
         parent::$db->query($query_string);
 
+        // Points rebuild
+        StatisticsLib::rebuildPoints($this->_id, $id_get, 'defenses');
+        
         // RETURN THE ALERT
         $this->_alert_info = $this->_lang['us_all_ok_message'];
         $this->_alert_type = 'ok';

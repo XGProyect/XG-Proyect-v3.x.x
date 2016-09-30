@@ -62,6 +62,79 @@ class StatisticsLib extends XGPCore
 
         return $points;
     }
+    
+    /**
+     * Rebuild the user points for the current planet and specific structure type.
+     * 
+     * @param int    $user_id   The user ID
+     * @param int    $planet_id The planet ID
+     * @param string $what      The structure type (buildings|defenses|research|ships)
+     * 
+     * @return boolean
+     */
+    public static function rebuildPoints($user_id, $planet_id, $what)
+    {
+        if (!in_array(DB_PREFIX . $what, [BUILDINGS, DEFENSES, RESEARCH, SHIPS])) {
+            return false;
+        }
+        
+        $points = 0;
+        $query  = '';
+        
+        if ($what == 'research') {
+            
+            $query  = "SELECT * 
+                        FROM `" . RESEARCH . "` ttu
+                        WHERE ttu.research_user_id = '" . $user_id . "';";
+        } else {
+            
+            $query  = "SELECT * 
+                        FROM `" . DB_PREFIX . $what . "` ttu
+                        WHERE ttu." . rtrim($what, 's') . "_planet_id = '" . $planet_id . "';";
+        }
+        
+        
+        $objectsToUpdate    = parent::$db->queryFetch($query);
+        $objects            = parent::$objects->getObjects();
+
+        if (!is_null($objects)) {
+            
+            foreach ($objects as $id => $object) {
+                
+                if (isset($objectsToUpdate[$object])) {
+                    
+                    $price  = parent::$objects->getPrice($id);
+                    $total  = $price['metal'] + $price['crystal'] + $price['deuterium'];
+                    $level  = $objectsToUpdate[$object];
+                    
+                    if ($price['factor'] > 1) {
+
+                        $s  = (pow($price['factor'], $level) - 1) / ($price['factor'] - 1);
+                    } else {
+
+                        $s  = $price['factor'] * $level;
+                    }
+
+                    $points += ($total * $s) / 1000;
+                }
+            }
+            
+            if ($points >= 0) {
+
+                $what   = strtr($what, ['research' => 'technology']);
+
+                parent::$db->query(
+                    "UPDATE " . USERS_STATISTICS . " SET 
+                        `user_statistic_" . $what . "_points` = '" . $points . "' 
+                    WHERE `user_statistic_user_id` = '" . $user_id . "'"
+                );
+
+                return true;
+            }
+        }
+        
+        return false;
+    }
 
     /**
      * makeStats
