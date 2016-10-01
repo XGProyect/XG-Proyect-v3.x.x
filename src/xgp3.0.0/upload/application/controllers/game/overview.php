@@ -47,12 +47,12 @@ class Overview extends XGPCore
     {
         parent::__construct();
         
-        // load Model
-        parent::loadModel('game/overview');
-        
         // check if session is active
         parent::$users->checkSession();
 
+        // load Model
+        parent::loadModel('game/overview');
+        
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 

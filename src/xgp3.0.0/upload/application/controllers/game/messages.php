@@ -55,6 +55,9 @@ class Messages extends XGPCore
         // check if session is active
         parent::$users->checkSession();
 
+        // load Model
+        parent::loadModel('game/messages');
+        
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
@@ -64,16 +67,6 @@ class Messages extends XGPCore
 
         // build the page
         $this->buildPage();
-    }
-
-    /**
-     * method __destruct
-     * param
-     * return close db connection
-     */
-    public function __destruct()
-    {
-        parent::$db->closeConnection();
     }
 
     /**
@@ -93,7 +86,9 @@ class Messages extends XGPCore
             $get_messages = '';
 
             foreach ($_GET as $field => $value) {
+
                 if (FunctionsLib::inMultiarray($field, $this->message_type)) {
+
                     $type_id = FunctionsLib::recursiveArraySearch($field, $this->message_type);
                     $get_messages .= $type_id . ',';
                     $active[$type_id] = 1;
@@ -101,22 +96,12 @@ class Messages extends XGPCore
             }
 
             // get list of messages
-            $message_list = parent::$db->query(
-                "SELECT *
-                FROM `" . MESSAGES . "`
-                WHERE `message_receiver` = " . $this->current_user['user_id'] . "
-                        AND `message_type` IN (" . rtrim($get_messages, ',') . ")
-                ORDER BY `message_time` DESC;"
-            );
+            $message_list = $this->Messages_Model->getByUserIdAndType($this->current_user['user_id'], $get_messages);
 
             // set messages as read
-            parent::$db->query(
-                "UPDATE `" . MESSAGES . "`
-                SET `message_read` = '1'
-                WHERE `message_receiver` = " . $this->current_user['user_id'] . "
-                        AND `message_type` IN (" . rtrim($get_messages, ',') . ");"
-            );
+            $this->Messages_Model->markAsReadByType($this->current_user['user_id'], $get_messages);
         } else {
+
             $mode = isset($_GET['mode']) ? $_GET['mode'] : null;
         }
 
@@ -138,13 +123,8 @@ class Messages extends XGPCore
 
                     FunctionsLib::redirect('game.php?page=messages');
                 } else {
-
-                    $OwnerHome = parent::$db->queryFetch(
-                        "SELECT u.`user_name`, p.`planet_galaxy`, p.`planet_system`, p.`planet_planet`
-                        FROM " . PLANETS . " AS p
-                        INNER JOIN " . USERS . " as u ON p.planet_user_id = u.user_id
-                        WHERE p.`planet_user_id` = '" . (int) $write_to . "';"
-                    );
+                    
+                    $OwnerHome  = $this->Messages_Model->getHomePlanet($write_to);
 
                     if (!$OwnerHome) {
                         FunctionsLib::redirect('game.php?page=messages');
@@ -222,11 +202,7 @@ class Messages extends XGPCore
             case 'delete':
                 if ($to_delete == 'deleteall') {
 
-                    parent::$db->query(
-                        "DELETE FROM " . MESSAGES . "
-                        WHERE `message_receiver` = '" . $this->current_user['user_id'] . "';"
-                    );
-
+                    $this->Messages_Model->deleteAllByOwner($this->current_user['user_id']);
                 } elseif ($to_delete == 'deletemarked') {
 
                     foreach ($_POST as $Message => $Answer) {
@@ -234,46 +210,21 @@ class Messages extends XGPCore
                         if (preg_match("/delmes/i", $Message) && $Answer == 'on') {
 
                             $MessId = str_replace("delmes", "", $Message);
-                            $MessHere = parent::$db->queryFetch(
-                                "SELECT *
-                                FROM " . MESSAGES . "
-                                WHERE `message_id` = '" . (int) $MessId . "' AND
-                                    `message_receiver` = '" . $this->current_user['user_id'] . "';"
-                            );
 
-                            if ($MessHere) {
-
-                                parent::$db->query(
-                                    "DELETE FROM " . MESSAGES . "
-                                    WHERE `message_id` = '" . (int) $MessId . "';"
-                                );
-                            }
+                            $this->Messages_Model->deleteByOwnerAndId($this->current_user['user_id'], $MessId);
                         }
                     }
                 } elseif ($to_delete == 'deleteunmarked') {
 
                     foreach ($_POST as $Message => $Answer) {
 
-                        $CurMess = preg_match("/showmes/i", $Message);
-                        $MessId = str_replace("showmes", "", $Message);
-                        $Selected = "delmes" . $MessId;
+                        $MessId     = str_replace("showmes", "", $Message);
+                        $Selected   = "delmes" . $MessId;
                         $IsSelected = $_POST[$Selected];
 
                         if (preg_match("/showmes/i", $Message) && !isset($IsSelected)) {
 
-                            $MessHere = parent::$db->queryFetch(
-                                "SELECT *
-                                FROM " . MESSAGES . "
-                                WHERE `message_id` = '" . (int) $MessId . "' AND
-                                    `message_receiver` = '" . $this->current_user['user_id'] . "';"
-                            );
-
-                            if ($MessHere) {
-                                parent::$db->queryFetch(
-                                    "DELETE FROM " . MESSAGES . "
-                                    WHERE `message_id` = '" . (int) $MessId . "';"
-                                );
-                            }
+                            $this->Messages_Model->deleteByOwnerAndId($this->current_user['user_id'], $MessId);
                         }
                     }
                 }
@@ -355,20 +306,12 @@ class Messages extends XGPCore
                     $parse['delete_options']    = isset($_GET['dsp']) ? $this->loadDeleteBox() : '';
                     
                 } else {
-                    // get list of messages
-                    $message_list = parent::$db->query(
-                        "SELECT *
-                        FROM `" . MESSAGES . "`
-                        WHERE `message_receiver` = " . $this->current_user['user_id'] . " 
-                        ORDER BY `message_time` DESC;"
-                    );
                     
+                    // get list of messages
+                    $message_list = $this->Messages_Model->getByUserId($this->current_user['user_id']);
+
                     // set messages as read
-                    parent::$db->query(
-                        "UPDATE `" . MESSAGES . "`
-                        SET `message_read` = '1'
-                        WHERE `message_receiver` = " . $this->current_user['user_id'] . ";"
-                    );
+                    $this->Messages_Model->markAsRead($this->current_user['user_id']);
 
                     $single_message_template    = parent::$page->getTemplate('messages/messages_list_row_view');
                     $list_of_messages           = '';
@@ -447,42 +390,8 @@ class Messages extends XGPCore
      */
     private function makeCounts()
     {
-        $this->_messages_count = parent::$db->query(
-            "SELECT 
-                `message_type`,
-                COUNT(`message_type`) AS message_type_count,
-                SUM(`message_read` = 0) AS unread_count
-            FROM " . MESSAGES . "
-            WHERE `message_receiver` = '" . $this->current_user['user_id'] . "'
-            GROUP BY `message_type`"
-        );
-
-        $this->_extra_count = parent::$db->queryFetch(
-            "SELECT
-                ( SELECT COUNT(`user_id`)
-                    FROM `" . USERS . "`
-                    WHERE `user_ally_id` = '" . $this->current_user['user_ally_id'] . "' 
-                        AND `user_ally_id` <> 0
-                        AND `user_id` <> '" . $this->current_user['user_id'] . "'
-                 ) AS alliance_count,
-
-                 ( SELECT COUNT(`buddy_id`)
-                    FROM `" . BUDDY . "`
-                    WHERE `buddy_sender` = '" . $this->current_user['user_id'] . "' 
-                        OR `buddy_receiver` = '" . $this->current_user['user_id'] . "'
-                 ) AS buddys_count,
-
-                 ( SELECT COUNT(`note_id`)
-                    FROM `" . NOTES . "`
-                    WHERE `note_owner` = '" . $this->current_user['user_id'] . "'
-                 ) AS notes_count,
-
-                 ( SELECT COUNT(`user_id`)
-                    FROM " . USERS . "
-                    WHERE user_authlevel <> 0
-                        AND `user_id` <> '" . $this->current_user['user_id'] . "'
-                 ) AS operators_count"
-        );
+        $this->_messages_count  = $this->Messages_Model->countMessages($this->current_user['user_id']);
+        $this->_extra_count     = $this->Messages_Model->countAddressBookAndNotes($this->current_user['user_id'], $this->current_user['user_ally_id']);
     }
 
     /**
@@ -509,16 +418,7 @@ class Messages extends XGPCore
     private function buildFriendsAddressBook()
     {
         $list_of_friends  = '';
-        $friends_list     = parent::$db->query(
-            "SELECT 
-                u.`user_id`,
-                u.`user_name`,
-                u.`user_email`
-            FROM " . BUDDY . " b
-            LEFT JOIN " . USERS . " u ON u.user_id = IF(`buddy_sender` = '" . $this->current_user['user_id'] . "', `buddy_receiver`, `buddy_sender`) 
-            WHERE `buddy_sender`='" . $this->current_user['user_id'] . "' 
-                OR `buddy_receiver`='" . $this->current_user['user_id'] . "'"
-        );
+        $friends_list     = $this->Messages_Model->getFriends($this->current_user['user_id']);
 
         while ($friends = parent::$db->fetchArray($friends_list)) {
 
@@ -537,12 +437,7 @@ class Messages extends XGPCore
     private function buildAllinaceAddressBook()
     {
         $list_of_members  = '';
-        $members_list     = parent::$db->query(
-            "SELECT `user_id`, `user_name`, `user_email` 
-            FROM " . USERS . " 
-            WHERE user_ally_id = '" . $this->current_user['user_ally_id'] . "'
-                AND `user_id` <> '" . $this->current_user['user_id'] . "';"
-        );
+        $members_list     = $this->Messages_Model->getAllianceMembers($this->current_user['user_id'], $this->current_user['user_ally_id']);
 
         while ($members = parent::$db->fetchArray($members_list)) {
 
@@ -561,12 +456,7 @@ class Messages extends XGPCore
     private function buildOperatorsAddressBook()
     {
         $list_of_operators  = '';
-        $operators_list     = parent::$db->query(
-            "SELECT `user_name`, `user_email` 
-            FROM " . USERS . " 
-            WHERE user_authlevel > '0'
-                AND `user_id` <> '" . $this->current_user['user_id'] . "';"
-        );
+        $operators_list     = $this->Messages_Model->getOperators($this->current_user['user_id']);
 
         while ($operator = parent::$db->fetchArray($operators_list)) {
 
@@ -585,11 +475,7 @@ class Messages extends XGPCore
     private function buildNotes()
     {
         $list_of_notes  = '';
-        $notes_list     = parent::$db->query(
-            "SELECT `note_id`, `note_priority`, `note_title`
-            FROM `" . NOTES . "`
-            WHERE `note_owner` = '" . $this->current_user['user_id'] . "';"
-        );
+        $notes_list     = $this->Messages_Model->getNotes($this->current_user['user_id']);
 
         while ($notes = parent::$db->fetchArray($notes_list)) {
 
