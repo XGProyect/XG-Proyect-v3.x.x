@@ -85,29 +85,33 @@ class Notes extends XGPCore
 
             if ($s == 1) {
                 parent::$db->query("INSERT INTO " . NOTES . " SET
-										note_owner=" . intval($this->_current_user['user_id']) . ",
-										note_time=$time,
-										note_priority=$priority,
-										note_title='$title',
-										note_text='$text'");
+                    note_owner=" . intval($this->_current_user['user_id']) . ",
+                    note_time=$time,
+                    note_priority=$priority,
+                    note_title='$title',
+                    note_text='$text'"
+                );
 
                 FunctionsLib::redirect('game.php?page=notes');
             } elseif ($s == 2) {
                 $id = intval($_POST['n']);
-                $note_query = parent::$db->query("SELECT *
-													FROM " . NOTES . "
-													WHERE note_id=" . intval($id) . " AND
-															note_owner=" . intval($this->_current_user['user_id']) . "");
+                $note_query = parent::$db->query(
+                    "SELECT *
+                    FROM " . NOTES . "
+                    WHERE note_id=" . intval($id) . " AND
+                                    note_owner=" . intval($this->_current_user['user_id']) . ""
+                );
 
                 if (!$note_query)
                     FunctionsLib::redirect('game.php?page=notes');
 
                 parent::$db->query("UPDATE `" . NOTES . "` SET
-										note_time=$time,
-										note_priority=$priority,
-										note_title='$title',
-										note_text='$text'
-										WHERE note_id=" . intval($id) . "");
+                    note_time=$time,
+                    note_priority=$priority,
+                    note_title='$title',
+                    note_text='$text'
+                    WHERE note_id=" . intval($id) . ""
+                );
 
                 FunctionsLib::redirect('game.php?page=notes');
             }

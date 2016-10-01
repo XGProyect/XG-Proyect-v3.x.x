@@ -198,9 +198,9 @@ class Buddy extends XGPCore
             default:
 
                 $getBuddys = parent::$db->query("SELECT *
-														FROM " . BUDDY . "
-														WHERE `buddy_sender`='" . intval($this->_current_user['user_id']) . "' OR
-																`buddy_receiver`='" . intval($this->_current_user['user_id']) . "'");
+                    FROM " . BUDDY . "
+                    WHERE `buddy_sender`='" . intval($this->_current_user['user_id']) . "' OR
+                                    `buddy_receiver`='" . intval($this->_current_user['user_id']) . "'");
 
                 $subTemplate = parent::$page->getTemplate('buddy/buddy_row');
 
