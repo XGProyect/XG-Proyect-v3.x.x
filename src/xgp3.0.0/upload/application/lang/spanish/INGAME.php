@@ -135,6 +135,7 @@ $lang['ov_fields']							= 'Campos';
 
 //----------------------------------------------------------------------------//
 //GALAXY
+$lang['gl_no_access_vm_on']                     = '¡No puedes utilizar la vista de la galaxia, mientras que el modo de vacaciones se encuentre activo o cuando su cuenta no ha sido validada!';
 $lang['gl_no_deuterium_to_view_galaxy']		= '¡No hay suficiente deuterio!';
 $lang['gl_legend']							= 'Leyenda';
 $lang['gl_strong_player']					= 'Jugador fuerte';

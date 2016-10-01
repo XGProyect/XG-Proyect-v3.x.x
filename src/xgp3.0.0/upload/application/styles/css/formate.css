@@ -340,8 +340,8 @@ h1
 	height:100%;
 }
 #header_top {
-	height:auto;
-	position:relative;
+	height:66px;
+	position:absolute;
 	left:190px;
 	scrollbars:none;
 	overflow:visible;

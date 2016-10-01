@@ -66,6 +66,12 @@ class Galaxy extends XGPCore
         $this->_noob = FunctionsLib::loadLibrary('NoobsProtectionLib');
         $this->_galaxyLib = FunctionsLib::loadLibrary('GalaxyLib');
 
+        
+        if ($this->_current_user['setting_vacations_status']) {
+
+            FunctionsLib::message($this->_lang['gl_no_access_vm_on'], '', '');
+        }
+
         $this->build_page();
     }
 
@@ -98,9 +104,11 @@ class Galaxy extends XGPCore
         $CurrentPlID = $this->_current_planet['planet_id'];
         $CurrentSP = $this->_current_planet['ship_espionage_probe'];
 
-        $maxfleet = parent::$db->query("SELECT `fleet_id`
-												FROM " . FLEETS . "
-												WHERE `fleet_owner` = '" . intval($this->_current_user['user_id']) . "';");
+        $maxfleet = parent::$db->query(
+            "SELECT `fleet_id`
+            FROM " . FLEETS . "
+            WHERE `fleet_owner` = '" . intval($this->_current_user['user_id']) . "';"
+        );
 
         $maxfleet_count = parent::$db->numRows($maxfleet);
 

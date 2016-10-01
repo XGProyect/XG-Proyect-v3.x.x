@@ -327,7 +327,7 @@ class TemplateLib
             );
             $parse['jump_line'] = '<br/>';
 
-            $parse['show_umod_notice']  .= $this->parseTemplate($this->getTemplate('general/notices_view'), $parse);
+            $parse['show_umod_notice']  = $this->parseTemplate($this->getTemplate('general/notices_view'), $parse);
         }
 
         if ($this->current_user['setting_delete_account']) {
@@ -340,7 +340,7 @@ class TemplateLib
             );
             $parse['jump_line'] = '';
 
-            $parse['show_umod_notice']  .= $this->parseTemplate($this->getTemplate('general/notices_view'), $parse);
+            $parse['show_umod_notice']  = $this->parseTemplate($this->getTemplate('general/notices_view'), $parse);
         }
 
         // RESOURCES FORMAT
