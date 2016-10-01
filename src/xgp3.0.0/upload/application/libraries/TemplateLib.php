@@ -30,6 +30,7 @@ class TemplateLib
     private $current_planet;
     private $langs;
     private $current_year;
+    private $template;
 
     /**
      * __construct
@@ -189,6 +190,58 @@ class TemplateLib
         }
     }
 
+    /**
+     * parse the data into the provided template
+     *
+     * @param array  $array    Values to parse
+     * @param string $template Template
+     *
+     * @return void
+     */
+    public function parse($array = array(), $template = '')
+    {
+        return preg_replace_callback(
+            '#\{([a-z0-9\-_]*?)\}#Ssi',
+            function ($matches) use ($array) {
+                return ((isset($array[$matches[1]])) ? $array[$matches[1]] : '');
+            },
+            ($template == '' ? $this->template : $template)
+        );
+    }
+
+    /**
+     * get the provided template
+     *
+     * @param string $template_name Template name
+     *
+     * @return string
+     */
+    public function get($template_name)
+    {
+        try {
+            $route      = XGP_ROOT . TEMPLATE_DIR . $template_name . '.php';
+            $template   = @file_get_contents($route);
+            
+            if ($template) { // We got something
+
+                $this->template = $template;
+
+                return $this;
+            }
+            
+            // not found
+            throw new \Exception(
+                'Template not found or empty: <strong>' . $template_name . '</strong><br />
+                Location: <strong>' . $route . '</strong>'
+            );
+
+        } catch (\Exception $e) {
+
+            // Throw Exception
+            die($e->getMessage());
+        } 
+    }
+    
     /**
      * installHeader
      *

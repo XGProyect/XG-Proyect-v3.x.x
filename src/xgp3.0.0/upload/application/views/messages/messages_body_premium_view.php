@@ -44,23 +44,23 @@
      <th>{mg_amount_title}</th>
     </tr>
     <tr>
-     <th><input type="checkbox" name="owncontactsopen"></th>
+     <th><input type="checkbox" name="owncontactsopen"{owncontactsopen}></th>
      <th colspan="2">{mg_friends_list} </th>
      <th>{buddys_count}</th>
     </tr>
-
+    {mg_ab_friends}
     <tr>
-     <th><input type="checkbox" name="ownallyopen"></th>
+     <th><input type="checkbox" name="ownallyopen"{ownallyopen}></th>
      <th colspan="2">{mg_alliance}</th>
      <th>{alliance_count}</th>
     </tr>
-
+    {mg_ab_members}
     <tr>
-     <th><input type="checkbox" name="gameoperatorsopen"></th>
+     <th><input type="checkbox" name="gameoperatorsopen"{gameoperatorsopen}></th>
      <th colspan="2">{mg_operators}</th>
      <th>{operators_count}</th>
     </tr>
-
+    {mg_ab_operators}
 
         <tr>
      <th colspan="4">
@@ -81,10 +81,10 @@
     <th colspan="2">{mg_amount_title}</th>
     </tr>
     <tr>
-     <th colspan="2"><input type="checkbox" name="noticesopen"></th>
+     <th colspan="2"><input type="checkbox" name="noticesopen"{noticesopen}></th>
      <th colspan="2">{notes_count}</th>
     </tr>
-
+    {mg_notes_rows}
 
     <tr>
      <th colspan="4">

@@ -317,8 +317,43 @@ class Messages extends XGPCore
                     $parse['alliance_count']    = $this->_extra_count['alliance_count'];
                     $parse['operators_count']   = $this->_extra_count['operators_count'];
                     $parse['notes_count']       = $this->_extra_count['notes_count'];
+                    
+                    $parse['mg_ab_friends']     = '';
+                    $parse['mg_ab_members']     = '';
+                    $parse['mg_ab_operators']   = '';
+                    $parse['mg_notes_rows']     = '';
+                    $parse['owncontactsopen']   = '';
+                    $parse['ownallyopen']       = '';
+                    $parse['gameoperatorsopen'] = '';
+                    $parse['noticesopen']       = '';
+                    
+                    if (isset($_POST['owncontactsopen']) && $_POST['owncontactsopen'] == 'on') {
+                        
+                        $parse['owncontactsopen']   = 'checked="1"';
+                        $parse['mg_ab_friends']     = $this->buildFriendsAddressBook();
+                    }
+                    
+                    if (isset($_POST['ownallyopen']) && $_POST['ownallyopen'] == 'on') {
+                        
+                        $parse['ownallyopen']       = 'checked="1"';
+                        $parse['mg_ab_members']     = $this->buildAllinaceAddressBook();   
+                    }
+                    
+                    if (isset($_POST['gameoperatorsopen']) && $_POST['gameoperatorsopen'] == 'on') {
+                        
+                        $parse['gameoperatorsopen'] = 'checked="1"';
+                        $parse['mg_ab_operators']   = $this->buildOperatorsAddressBook();
+                    }
+                    
+                    if (isset($_POST['noticesopen']) && $_POST['noticesopen'] == 'on') {
+                        
+                        $parse['noticesopen']   = 'checked="1"';
+                        $parse['mg_notes_rows'] = $this->buildNotes();
+                    }
+                    
                     $parse['message_list']      = isset($message_list) ? $this->loadMessages($message_list) : '';
                     $parse['delete_options']    = isset($_GET['dsp']) ? $this->loadDeleteBox() : '';
+                    
                 } else {
                     // get list of messages
                     $message_list = parent::$db->query(
@@ -327,7 +362,7 @@ class Messages extends XGPCore
                         WHERE `message_receiver` = " . $this->current_user['user_id'] . " 
                         ORDER BY `message_time` DESC;"
                     );
-
+                    
                     // set messages as read
                     parent::$db->query(
                         "UPDATE `" . MESSAGES . "`
@@ -349,7 +384,8 @@ class Messages extends XGPCore
                         $list_of_messages   .= parent::$page->parseTemplate($single_message_template, $message);
                     }
 
-                    $parse['message_list']  = $list_of_messages;
+                    $parse['message_list']      = $list_of_messages;
+                    $parse['show_operators']    = $this->buildOperatorsBlock();
                 }
 
                 parent::$page->display(
@@ -425,23 +461,26 @@ class Messages extends XGPCore
             "SELECT
                 ( SELECT COUNT(`user_id`)
                     FROM `" . USERS . "`
-                    WHERE `user_ally_id` = '" . $this->current_user['user_ally_id'] . "' AND `user_ally_id` <> 0
+                    WHERE `user_ally_id` = '" . $this->current_user['user_ally_id'] . "' 
+                        AND `user_ally_id` <> 0
+                        AND `user_id` <> '" . $this->current_user['user_id'] . "'
                  ) AS alliance_count,
 
                  ( SELECT COUNT(`buddy_id`)
                     FROM `" . BUDDY . "`
-                    WHERE `buddy_sender` = '" . $this->current_user['user_ally_id'] . "' 
-                        OR `buddy_receiver` = '" . $this->current_user['user_ally_id'] . "'
+                    WHERE `buddy_sender` = '" . $this->current_user['user_id'] . "' 
+                        OR `buddy_receiver` = '" . $this->current_user['user_id'] . "'
                  ) AS buddys_count,
 
                  ( SELECT COUNT(`note_id`)
                     FROM `" . NOTES . "`
-                    WHERE `note_owner` = '" . $this->current_user['user_ally_id'] . "'
+                    WHERE `note_owner` = '" . $this->current_user['user_id'] . "'
                  ) AS notes_count,
 
                  ( SELECT COUNT(`user_id`)
                     FROM " . USERS . "
                     WHERE user_authlevel <> 0
+                        AND `user_id` <> '" . $this->current_user['user_id'] . "'
                  ) AS operators_count"
         );
     }
@@ -460,6 +499,106 @@ class Messages extends XGPCore
 
             return parent::$page->getTemplate('messages/messages_body_common_view');
         }
+    }
+    
+    /**
+     * Build the friends block to display
+     * 
+     * @return string
+     */
+    private function buildFriendsAddressBook()
+    {
+        $list_of_friends  = '';
+        $friends_list     = parent::$db->query(
+            "SELECT 
+                u.`user_id`,
+                u.`user_name`,
+                u.`user_email`
+            FROM " . BUDDY . " b
+            LEFT JOIN " . USERS . " u ON u.user_id = IF(`buddy_sender` = '" . $this->current_user['user_id'] . "', `buddy_receiver`, `buddy_sender`) 
+            WHERE `buddy_sender`='" . $this->current_user['user_id'] . "' 
+                OR `buddy_receiver`='" . $this->current_user['user_id'] . "'"
+        );
+
+        while ($friends = parent::$db->fetchArray($friends_list)) {
+
+            $friends['dpath']   = DPATH;
+            $list_of_friends  .= parent::$page->get('messages/messages_ab_user_row_view')->parse($friends);
+        }
+        
+        return $list_of_friends;
+    }
+    
+    /**
+     * Build the alliance members block to display
+     * 
+     * @return string
+     */
+    private function buildAllinaceAddressBook()
+    {
+        $list_of_members  = '';
+        $members_list     = parent::$db->query(
+            "SELECT `user_id`, `user_name`, `user_email` 
+            FROM " . USERS . " 
+            WHERE user_ally_id = '" . $this->current_user['user_ally_id'] . "'
+                AND `user_id` <> '" . $this->current_user['user_id'] . "';"
+        );
+
+        while ($members = parent::$db->fetchArray($members_list)) {
+
+            $members['dpath']   = DPATH;
+            $list_of_members  .= parent::$page->get('messages/messages_ab_user_row_view')->parse($members);
+        }
+        
+        return $list_of_members;
+    }
+    
+    /**
+     * Build the operators block to display
+     * 
+     * @return string
+     */
+    private function buildOperatorsAddressBook()
+    {
+        $list_of_operators  = '';
+        $operators_list     = parent::$db->query(
+            "SELECT `user_name`, `user_email` 
+            FROM " . USERS . " 
+            WHERE user_authlevel > '0'
+                AND `user_id` <> '" . $this->current_user['user_id'] . "';"
+        );
+
+        while ($operator = parent::$db->fetchArray($operators_list)) {
+
+            $operator['dpath']   = DPATH;
+            $list_of_operators  .= parent::$page->get('messages/messages_ab_adm_row_view')->parse($operator);
+        }
+        
+        return $list_of_operators;
+    }
+    
+    /**
+     * Build the notes block to display
+     * 
+     * @return string
+     */
+    private function buildNotes()
+    {
+        $list_of_notes  = '';
+        $notes_list     = parent::$db->query(
+            "SELECT `note_id`, `note_priority`, `note_title`
+            FROM `" . NOTES . "`
+            WHERE `note_owner` = '" . $this->current_user['user_id'] . "';"
+        );
+
+        while ($notes = parent::$db->fetchArray($notes_list)) {
+
+            $notes['dpath'] = DPATH;
+            $notes['color'] = ($notes['note_priority'] == 0) ? 'lime' : (($notes['note_priority'] == 1) ? 'yellow' : 'red');
+            $list_of_notes .= parent::$page->get('messages/messages_notes_row_view')->parse($notes);
+        }
+        
+        return $list_of_notes;
     }
 }
 
