@@ -233,17 +233,16 @@ class Galaxy extends XGPCore
         $parse['actions'] = '';
 
         while ($row_data = parent::$db->fetchArray($this->_galaxy_data)) {
+            
             for ($current_planet = $start; $current_planet < 1 + ( MAX_PLANET_IN_SYSTEM ); $current_planet++) {
+            
                 if ($row_data['planet_galaxy'] == $this->_galaxy && $row_data['planet_system'] == $this->_system && $row_data['planet_planet'] == $current_planet) {
+                
                     if ($row_data['id_planet'] != 0) {
-                        if ($row_data['planet_destroyed'] != 0 && $row_data['planet_user_id'] != '' && $row_data['id_planet'] != '') {
-                            $this->check_planet_state($row_data);
-                        } else {
+                    
+                        if ($row_data['planet_destroyed'] == 0) {
+                        
                             $this->_planet_count++;
-                        }
-
-                        if ($row_data['id_luna'] != 0 && $row_data['destroyed_moon'] != 0) {
-                            $this->check_moon_state($row_data);
                         }
                     }
 
@@ -253,6 +252,7 @@ class Galaxy extends XGPCore
                     $start++;
                     break;
                 } else {
+                
                     $parse['pos'] = $start;
                     $rows .= parent::$page->parseTemplate($template, $parse);
                     $start++;
@@ -261,6 +261,7 @@ class Galaxy extends XGPCore
         }
 
         for ($i = $start; $i <= MAX_PLANET_IN_SYSTEM; $i++) {
+
             $parse['pos'] = $i;
             $rows .= parent::$page->parseTemplate($template, $parse);
         }
@@ -777,38 +778,6 @@ class Galaxy extends XGPCore
         parent::$db->query("UPDATE " . PLANETS . " SET
 								`planet_deuterium` = `planet_deuterium` -  10
 								WHERE `planet_id` = '" . $this->_current_planet['planet_id'] . "' LIMIT 1");
-    }
-
-    /**
-     * method check_moon_state
-     * param $lunarow
-     * return
-     */
-    private function check_moon_state($lunarow)
-    {
-        if (( $lunarow['planet_destroyed'] + 172800 ) <= time() && $lunarow['planet_destroyed'] != 0 && $lunarow['planet_type'] == 3) {
-            parent::$db->query("DELETE p,b,d,s FROM " . PLANETS . " AS p
-									INNER JOIN " . BUILDINGS . " AS b ON b.building_planet_id = p.`planet_id`
-									INNER JOIN " . DEFENSES . " AS d ON d.defense_planet_id = p.`planet_id`
-									INNER JOIN " . SHIPS . " AS s ON s.ship_planet_id = p.`planet_id`
-									WHERE `planet_id` = '" . intval($lunarow['id']) . "';");
-        }
-    }
-
-    /**
-     * method check_planet_state
-     * param $planet
-     * return validates the position setted by the user
-     */
-    private function check_planet_state($planet)
-    {
-        if ($planet['planet_destroyed'] <= time() && $planet['planet_type'] == 1) {
-            parent::$db->query("DELETE p,b,d,s FROM " . PLANETS . " AS p
-									INNER JOIN " . BUILDINGS . " AS b ON b.building_planet_id = p.`planet_id`
-									INNER JOIN " . DEFENSES . " AS d ON d.defense_planet_id = p.`planet_id`
-									INNER JOIN " . SHIPS . " AS s ON s.ship_planet_id = p.`planet_id`
-									WHERE `planet_id` = '" . $planet['id_planet'] . "';");
-        }
     }
 }
 
