@@ -1028,6 +1028,7 @@ $lang['op_cant_activate_vacation_mode']		= 'Si estás construyendo o moviendo fl
 $lang['op_password_changed']				= 'La contraseña ha sido cambiada.<br /><a href="index.php" target="_top">Volver</a>';
 $lang['op_username_changed']				= 'El nombre de usuario ha sido cambiado.<br /><a href="index.php" target="_top">Volver</a>';
 $lang['op_options_changed']					= 'Los cambios se han guardado.<br /><a href="game.php?page=options">Volver</a>';
+$lang['op_vacation_mode_title']			= 'Modo vacaciones';
 $lang['op_vacation_mode_active_message']	= 'El modo vacaciones se ha encendido. Tendra que estar de vacaciones como mínimo hasta el: ';
 $lang['op_end_vacation_mode']				= 'Finalizar modo vacaciones';
 $lang['op_save_changes']					= 'Guardar cambios';

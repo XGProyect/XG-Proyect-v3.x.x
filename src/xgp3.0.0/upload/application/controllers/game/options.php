@@ -73,25 +73,28 @@ class Options extends XGPCore
         $mode = isset($_GET['mode']) ? $_GET['mode'] : NULL;
 
         if ($_POST && $mode == 'exit') {
-            if (isset($_POST['exit_modus']) && $_POST['exit_modus'] == 'on' and $this->_current_user['setting_vacations_until'] <= time()) {
-                $urlaubs_modus = '0';
+
+            if (isset($_POST['exit_modus']) && $_POST['exit_modus'] == 'on' && $this->_current_user['setting_vacations_until'] <= time()) {
 
                 parent::$db->query("UPDATE " . SETTINGS . ", " . PLANETS . " SET
-										`setting_vacations_status` = '0',
-										`setting_vacations_until` = '0',
-										planet_building_metal_mine_percent = '10',
-										planet_building_crystal_mine_percent = '10',
-										planet_building_deuterium_sintetizer_percent = '10',
-										planet_building_solar_plant_percent = '10',
-										planet_building_fusion_reactor_percent = '10',
-										planet_ship_solar_satellite_percent = '10'
-										WHERE `setting_user_id` = '" . intval($this->_current_user['user_id']) . "' AND planet_user_id = '" . intval($this->_current_user['user_id']) . "'");
-
-                FunctionsLib::redirect('game.php?page=options');
-            } else {
-                $urlaubs_modus = '1';
-                FunctionsLib::redirect('game.php?page=options');
+                    `setting_vacations_status` = '0',
+                    `setting_vacations_until` = '0',
+                    planet_building_metal_mine_percent = '10',
+                    planet_building_crystal_mine_percent = '10',
+                    planet_building_deuterium_sintetizer_percent = '10',
+                    planet_building_solar_plant_percent = '10',
+                    planet_building_fusion_reactor_percent = '10',
+                    planet_ship_solar_satellite_percent = '10'
+                    WHERE `setting_user_id` = '" . intval($this->_current_user['user_id']) . "' AND planet_user_id = '" . intval($this->_current_user['user_id']) . "'");
             }
+            
+            parent::$db->query(
+                "UPDATE `" . SETTINGS . "` AS s SET
+                    s.`setting_delete_account` = '" . ($_POST['db_deaktjava'] == 'on' ? time() : 0) . "'
+                WHERE s.`setting_user_id` = '" . $this->_current_user['user_id'] . "'"
+            );
+            
+            FunctionsLib::redirect('game.php?page=options');
         }
 
         if ($_POST && $mode == "change") {
@@ -244,10 +247,30 @@ class Options extends XGPCore
             $parse['dpath'] = DPATH;
 
             if ($this->_current_user['setting_vacations_status']) {
-                $parse['opt_modev_data'] = ($this->_current_user['setting_vacations_status'] == 1) ? " checked='checked'/" : '';
-                $parse['opt_modev_exit'] = ($this->_current_user['setting_vacations_status'] == 0) ? " checked='1'/" : '';
-                $parse['vacation_until'] = date(FunctionsLib::readConfig('date_format_extended'), $this->_current_user['setting_vacations_until']);
+                
+                $opt_modev_exit = ($this->_current_user['setting_vacations_status'] == 0) ? " checked='1'/" : '';
+                $vacation_until = date(FunctionsLib::readConfig('date_format_extended'), $this->_current_user['setting_vacations_until']);
+                
+                if ($this->_current_user['setting_vacations_until'] <= time()) {
+                    
+                    $parse['op_finish_vac_mode']    = '<th>' . $this->_lang['op_end_vacation_mode'] . '</th>';
+                    $parse['op_finish_vac_mode']   .= '<th><input type="checkbox" name="exit_modus" ' . $opt_modev_exit . '/></th>';
+                } else {
 
+                    $parse['op_vac_mode_msg']       = '<th colspan="2">' . $this->_lang['op_vacation_mode_active_message'] . '<br> ' . $vacation_until . '</th>';
+                }
+
+                $parse['db_deaktjava']      = '';
+                $parse['db_deaktjava_until']= '';
+                $parse['verify']            = '';
+                
+                if ($this->_current_user['setting_delete_account'] > 0) {
+                    
+                    $parse['db_deaktjava']      = " checked='checked'";
+                    $parse['db_deaktjava_until']= date(FunctionsLib::readConfig('date_format_extended'), ($this->_current_user['setting_delete_account'] + 60 * 60 * 24 * 7));
+                    $parse['verify']            = '<input type="hidden" name="loeschen_am" value="' . $this->_current_user['setting_delete_account'] . '">';
+                }
+                
                 parent::$page->display(parent::$page->parseTemplate(parent::$page->getTemplate('options/options_body_vmode'), $parse));
             } else {
                 $parse['opt_lst_ord_data'] = "<option value =\"0\"" . (($this->_current_user['setting_planet_sort'] == 0) ? " selected" : "") . ">" . $this->_lang['op_sort_colonization'] . "</option>";
@@ -276,19 +299,20 @@ class Options extends XGPCore
     private function CheckIfIsBuilding()
     {
         $activity = parent::$db->queryFetch("SELECT (
-															(
-																SELECT COUNT( fleet_id ) AS quantity
-																	FROM " . FLEETS . "
-																		WHERE fleet_owner = '" . intval($this->_current_user['user_id']) . "'
-															)
-														+
-															(
-																SELECT COUNT(planet_id) AS quantity
-																	FROM " . PLANETS . "
-																		WHERE planet_user_id = '" . intval($this->_current_user['user_id']) . "' AND
-																		(planet_b_building <> 0 OR planet_b_tech <> 0 OR planet_b_hangar <> 0)
-															)
-														) as total");
+                (
+                        SELECT COUNT( fleet_id ) AS quantity
+                                FROM " . FLEETS . "
+                                        WHERE fleet_owner = '" . intval($this->_current_user['user_id']) . "'
+                )
+            +
+                (
+                        SELECT COUNT(planet_id) AS quantity
+                                FROM " . PLANETS . "
+                                        WHERE planet_user_id = '" . intval($this->_current_user['user_id']) . "' AND
+                                        (planet_b_building <> 0 OR planet_b_tech <> 0 OR planet_b_hangar <> 0)
+                )
+            ) as total"
+        );
 
         if ($activity['total'] > 0) {
             return true;

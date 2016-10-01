@@ -64,7 +64,7 @@ $lang['tech_rc'] = array (
 //TOPNAV
 $lang['tn_vacation_mode']					= 'Vacation mode active until ';
 $lang['tn_vacation_mode_active'] 			= "Vacation mode active";
-$lang['tn_delete_mode']						= 'Your account is in erase mode. The same will be deleted the ';
+$lang['tn_delete_mode']						= 'Your account was set for deletion. Deletion date: ';
 
 //----------------------------------------------------------------------------//
 //LEFT MENU
@@ -1021,7 +1021,8 @@ $lang['op_cant_activate_vacation_mode']		= 'If you\'re building or moving fleets
 $lang['op_password_changed']				= 'Password has been changed<br /><a href="index.php" target="_top">Back</a>';
 $lang['op_username_changed']				= 'Username changed<br /><a href="index.php" target="_top">Back</a>';
 $lang['op_options_changed']					= 'Changes saved.<br /><a href="game.php?page=options">Back</a>';
-$lang['op_vacation_mode_active_message']	= 'The vacation mode is turned on. Have to be on vacation at least until: ';
+$lang['op_vacation_mode_title']			= 'Vacation mode';
+$lang['op_vacation_mode_active_message']	= 'Vacation mode has been turned on. Vacation until at least:';
 $lang['op_end_vacation_mode']				= 'Finish vacation mode';
 $lang['op_save_changes']					= 'save changes';
 $lang['op_user_data']						= 'User Data';
