@@ -84,8 +84,8 @@ if (!defined('IN_INSTALL')) {
     } else {
 
         // Only for Betas, it's going to be changed
-        ini_set('display_errors', 1);
-        error_reporting(E_ALL);
+        ini_set('display_errors', 0);
+        error_reporting(0);
     }
 
     $current_page   = isset($_GET['page']) ? $_GET['page'] : '';
