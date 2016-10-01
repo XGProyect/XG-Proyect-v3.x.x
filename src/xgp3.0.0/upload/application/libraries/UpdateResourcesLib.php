@@ -95,17 +95,17 @@ class UpdateResourcesLib extends XGPCore
 
             // PRODUCTION
             $Caps['planet_metal_perhour']       += ProductionLib::currentProduction(
-                ProductionLib::productionAmount($metal_prod, $geologe_boost),
+                ProductionLib::productionAmount($metal_prod, $geologe_boost, $game_resource_multiplier),
                 $post_percent
             );
 
             $Caps['planet_crystal_perhour']     += ProductionLib::currentProduction(
-                ProductionLib::productionAmount($crystal_prod, $geologe_boost),
+                ProductionLib::productionAmount($crystal_prod, $geologe_boost, $game_resource_multiplier),
                 $post_percent
             );
 
             $Caps['planet_deuterium_perhour']   += ProductionLib::currentProduction(
-                ProductionLib::productionAmount($deuterium_prod, $geologe_boost),
+                ProductionLib::productionAmount($deuterium_prod, $geologe_boost, $game_resource_multiplier),
                 $post_percent
             );
 
@@ -115,10 +115,20 @@ class UpdateResourcesLib extends XGPCore
                     continue;
                 }
 
-                $Caps['planet_energy_max']  += ProductionLib::productionAmount($energy_prod, $engineer_boost, true);
+                $Caps['planet_energy_max']  += ProductionLib::productionAmount(
+                    $energy_prod,
+                    $engineer_boost,
+                    0,
+                    true
+                );
             } else {
 
-                $Caps['planet_energy_used'] += ProductionLib::productionAmount($energy_prod, 1, true);
+                $Caps['planet_energy_used'] += ProductionLib::productionAmount(
+                    $energy_prod,
+                    1,
+                    0,
+                    true
+                );
             }
         }
 

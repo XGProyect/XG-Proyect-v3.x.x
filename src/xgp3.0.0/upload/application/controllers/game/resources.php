@@ -129,14 +129,14 @@ class Resources extends XGPCore
                 $energy_prod = eval($this->_prod_grid[$ProdID]['formule']['energy']);
 
                 // PRODUCTION
-                $metal = ProductionLib::productionAmount($metal_prod, $geologe_boost);
-                $crystal = ProductionLib::productionAmount($crystal_prod, $geologe_boost);
-                $deuterium = ProductionLib::productionAmount($deuterium_prod, $geologe_boost);
+                $metal = ProductionLib::productionAmount($metal_prod, $geologe_boost, $game_resource_multiplier);
+                $crystal = ProductionLib::productionAmount($crystal_prod, $geologe_boost, $game_resource_multiplier);
+                $deuterium = ProductionLib::productionAmount($deuterium_prod, $geologe_boost, $game_resource_multiplier);
 
                 if ($ProdID >= 4) {
-                    $energy = ProductionLib::productionAmount($energy_prod, $engineer_boost, true);
+                    $energy = ProductionLib::productionAmount($energy_prod, $engineer_boost, 0, true);
                 } else {
-                    $energy = ProductionLib::productionAmount($energy_prod, 1, true);
+                    $energy = ProductionLib::productionAmount($energy_prod, 1, 0, true);
                 }
 
                 if ($energy > 0) {

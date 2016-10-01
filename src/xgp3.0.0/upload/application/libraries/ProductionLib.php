@@ -72,18 +72,19 @@ class ProductionLib
      *
      * @param int     $production Production amoint
      * @param int     $boost      Boost by officiers
+     * @param int     $mult       Multiplier based on game speed
      * @param boolean $is_energy  Is energy?
      *
      * @return int
      */
-    public static function productionAmount($production, $boost, $is_energy = false)
+    public static function productionAmount($production, $boost, $mult = 0, $is_energy = false)
     {
         if ($is_energy) {
 
             return floor($production * $boost);
         } else {
 
-            return floor($production * FunctionsLib::readConfig('resource_multiplier') * $boost);
+            return floor($production * $mult * $boost);
         }
     }
 
