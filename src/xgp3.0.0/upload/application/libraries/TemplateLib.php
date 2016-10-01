@@ -333,7 +333,7 @@ class TemplateLib
         if ($this->current_user['setting_delete_account']) {
 
             // When it is in delete mode
-            $parse['color']     = 'red';
+            $parse['color']     = '#FF0000';
             $parse['message']   = $this->langs['tn_delete_mode'] . date(
                 FunctionsLib::readConfig('date_format_extended'),
                 $this->current_user['setting_delete_account'] + (60 * 60 * 24 * 7)
