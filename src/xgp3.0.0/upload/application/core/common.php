@@ -76,16 +76,16 @@ if (!defined('IN_INSTALL')) {
     date_default_timezone_set(FunctionsLib::readConfig('date_time_zone'));
 
     // For debugging
-    if (DEBUG_MODE == 1) {
+    if (DEBUG_MODE or ($_SERVER['HTTP_HOST'] == 'localhost')) {
 
         // Show all errors
         ini_set('display_errors', 1);
         error_reporting(E_ALL);
     } else {
 
-        // Only for Betas, it's going to be changed
+        // Hide all errors
         ini_set('display_errors', 0);
-        error_reporting(0);
+        error_reporting(0);   
     }
 
     $current_page   = isset($_GET['page']) ? $_GET['page'] : '';
