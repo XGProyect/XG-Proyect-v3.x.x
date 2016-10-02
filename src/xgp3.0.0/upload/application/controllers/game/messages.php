@@ -328,7 +328,7 @@ class Messages extends XGPCore
                     }
 
                     $parse['message_list']      = $list_of_messages;
-                    $parse['show_operators']    = $this->buildOperatorsBlock();
+                    $parse['show_operators']    = $this->buildOperatorsAddressBook();
                 }
 
                 parent::$page->display(
