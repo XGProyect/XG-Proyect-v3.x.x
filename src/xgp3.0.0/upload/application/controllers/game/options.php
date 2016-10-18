@@ -228,16 +228,16 @@ class Options extends XGPCore
             // < --------------------------------------------- CAMBIO DE NOMBRE DE USUARIO --------------------------------------------- >
             if ($this->_current_user['user_name'] != $_POST['db_character']) {
                 $query = parent::$db->queryFetch("SELECT `user_id`
-														FROM `" . USERS . "`
-														WHERE user_name = '" . parent::$db->escapeValue($_POST['db_character']) . "'");
+                    FROM `" . USERS . "`
+                    WHERE user_name = '" . parent::$db->escapeValue($_POST['db_character']) . "'");
 
                 if (!$query) {
                     parent::$db->query("UPDATE `" . USERS . "` SET
-											`user_name` = '" . parent::$db->escapeValue($username) . "'
-											WHERE `user_id` = '" . $this->_current_user['user_id'] . "'
-											LIMIT 1");
+                        `user_name` = '" . parent::$db->escapeValue($username) . "'
+                        WHERE `user_id` = '" . $this->_current_user['user_id'] . "'
+                        LIMIT 1");
 
-                    $_SESSION['user_name']  = parent::$db->escapeValue($username);
+                    session_destroy();
                     FunctionsLib::message($this->_lang['op_username_changed'], "game.php?page=options", 1);
                 }
             }
