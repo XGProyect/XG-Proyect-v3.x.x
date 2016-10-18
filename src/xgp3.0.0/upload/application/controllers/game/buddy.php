@@ -135,11 +135,11 @@ class Buddy extends XGPCore
                     case 3:
 
                         $query = parent::$db->queryFetch("SELECT `buddy_id`
-																FROM " . BUDDY . "
-																WHERE (`buddy_receiver`='" . intval($this->_current_user['user_id']) . "' AND
-																		`buddy_sender`='" . intval($_POST['user']) . "') OR
-																		(`buddy_receiver`='" . intval($_POST['user']) . "' AND
-																			`buddy_sender`='" . intval($this->_current_user['user_id']) . "')");
+                            FROM " . BUDDY . "
+                            WHERE (`buddy_receiver`='" . intval($this->_current_user['user_id']) . "' AND
+                                            `buddy_sender`='" . intval($_POST['user']) . "') OR
+                                            (`buddy_receiver`='" . intval($_POST['user']) . "' AND
+                                                    `buddy_sender`='" . intval($this->_current_user['user_id']) . "')");
 
                         if (!$query) {
 
@@ -148,10 +148,10 @@ class Buddy extends XGPCore
                             FunctionsLib::sendMessage(intval($_POST['user']), $this->_current_user['user_id'], '', 5, $this->_current_user['user_name'], $this->_lang['bu_to_accept_title'], str_replace('%u', $this->_current_user['user_name'], $this->_lang['bu_to_accept_text']));
 
                             parent::$db->query("INSERT INTO " . BUDDY . " SET
-													`buddy_sender`='" . intval($this->_current_user['user_id']) . "',
-													`buddy_receiver`='" . intval($_POST['user']) . "',
-													`buddy_status`='0',
-													`buddy_request_text`='" . $text . "'");
+                                `buddy_sender`='" . intval($this->_current_user['user_id']) . "',
+                                `buddy_receiver`='" . intval($_POST['user']) . "',
+                                `buddy_status`='0',
+                                `buddy_request_text`='" . $text . "'");
 
                             FunctionsLib::redirect('game.php?page=buddy');
                         } else {
@@ -178,15 +178,15 @@ class Buddy extends XGPCore
                 } else {
                     // SEARCH THE PLAYER
                     $player = parent::$db->queryFetch("SELECT `user_name`
-																		FROM " . USERS . "
-																		WHERE `user_id`='" . intval($user) . "'");
+                        FROM " . USERS . "
+                        WHERE `user_id`='" . intval($user) . "'");
 
                     // IF PLAYER EXISTS, PROCEED
                     if ($player) {
                         $parse['user'] = $user;
                         $parse['player'] = $player['user_name'];
 
-                        parent::$page->display(parent::$page->parseTemplate(parent::$page->getTemplate('buddy/buddy_request'), $parse));
+                        parent::$page->display(parent::$page->parseTemplate(parent::$page->getTemplate('buddy/buddy_request'), $parse), false, '', false);
                     } else { // EXIT
                         FunctionsLib::redirect('game.php?page=buddy');
                     }
