@@ -83,6 +83,7 @@ class UpdateLib extends XGPCore
 
             parent::$db->query("DELETE FROM " . MESSAGES . " WHERE `message_time` < '". $del_before ."';");
             parent::$db->query("DELETE FROM " . REPORTS . " WHERE `report_time` < '". $del_before ."';");
+            parent::$db->query("DELETE FROM " . SESSIONS . " WHERE `session_last_accessed` < '". date('Y-m-d H:i:s', $del_planets) ."';");
             parent::$db->query(
                 "DELETE p,b,d,s FROM " . PLANETS . " AS p
                 INNER JOIN " . BUILDINGS . " AS b ON b.building_planet_id = p.`planet_id`
