@@ -439,10 +439,13 @@ class Messages extends XGPCore
         $list_of_members  = '';
         $members_list     = $this->Messages_Model->getAllianceMembers($this->current_user['user_id'], $this->current_user['user_ally_id']);
 
-        while ($members = parent::$db->fetchArray($members_list)) {
+        if ($members_list) {
 
-            $members['dpath']   = DPATH;
-            $list_of_members  .= parent::$page->get('messages/messages_ab_user_row_view')->parse($members);
+            while ($members = parent::$db->fetchArray($members_list)) {
+
+                $members['dpath']   = DPATH;
+                $list_of_members  .= parent::$page->get('messages/messages_ab_user_row_view')->parse($members);
+            }   
         }
         
         return $list_of_members;
@@ -458,10 +461,12 @@ class Messages extends XGPCore
         $list_of_operators  = '';
         $operators_list     = $this->Messages_Model->getOperators($this->current_user['user_id']);
 
-        while ($operator = parent::$db->fetchArray($operators_list)) {
+        if ($operators_list) {
+            while ($operator = parent::$db->fetchArray($operators_list)) {
 
-            $operator['dpath']   = DPATH;
-            $list_of_operators  .= parent::$page->get('messages/messages_ab_adm_row_view')->parse($operator);
+                $operator['dpath']   = DPATH;
+                $list_of_operators  .= parent::$page->get('messages/messages_ab_adm_row_view')->parse($operator);
+            }   
         }
         
         return $list_of_operators;
@@ -477,11 +482,13 @@ class Messages extends XGPCore
         $list_of_notes  = '';
         $notes_list     = $this->Messages_Model->getNotes($this->current_user['user_id']);
 
-        while ($notes = parent::$db->fetchArray($notes_list)) {
+        if ($notes_list) {
+            while ($notes = parent::$db->fetchArray($notes_list)) {
 
-            $notes['dpath'] = DPATH;
-            $notes['color'] = ($notes['note_priority'] == 0) ? 'lime' : (($notes['note_priority'] == 1) ? 'yellow' : 'red');
-            $list_of_notes .= parent::$page->get('messages/messages_notes_row_view')->parse($notes);
+                $notes['dpath'] = DPATH;
+                $notes['color'] = ($notes['note_priority'] == 0) ? 'lime' : (($notes['note_priority'] == 1) ? 'yellow' : 'red');
+                $list_of_notes .= parent::$page->get('messages/messages_notes_row_view')->parse($notes);
+            }   
         }
         
         return $list_of_notes;

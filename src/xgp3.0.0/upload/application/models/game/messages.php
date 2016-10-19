@@ -237,7 +237,7 @@ class Messages
      */
     public function countAddressBookAndNotes($user_id, $user_ally_id)
     {
-        if ((int)$user_id > 0 && (int)$user_ally_id > 0) {
+        if ((int)$user_id > 0 && (int)$user_ally_id >= 0) {
 
             return $this->db->queryFetch(
                 "SELECT
