@@ -186,7 +186,7 @@ class Buddy extends XGPCore
                         $parse['user'] = $user;
                         $parse['player'] = $player['user_name'];
 
-                        parent::$page->display(parent::$page->parseTemplate(parent::$page->getTemplate('buddy/buddy_request'), $parse), false, '', false);
+                        parent::$page->display(parent::$page->parseTemplate(parent::$page->getTemplate('buddy/buddy_request'), $parse));
                     } else { // EXIT
                         FunctionsLib::redirect('game.php?page=buddy');
                     }

@@ -419,10 +419,10 @@ class GalaxyLib extends XGPCore
             ));
             $parse['actions']   .= "</td></tr><tr><td>";
             $parse['actions']   .= str_replace('"', '', FunctionsLib::setUrl(
-                "&quot;#&quot; onClick=&quot;f&#40;\'game.php?page=buddy&mode=2&u=" . $this->row_data['user_id'] .
-                "\', \'" . $this->langs['gl_buddy_request'] . "\'&#41;&quot;",
+                "game.php?page=buddy&mode=2&u=" . $this->row_data['user_id'],
                 '',
-                $this->langs['gl_buddy_request']
+                $this->langs['gl_buddy_request'],
+                ''
             ));
             $parse['actions'] .= "</td></tr><tr>";
         
@@ -530,10 +530,9 @@ class GalaxyLib extends XGPCore
 
             if ($this->current_user['setting_galaxy_buddy'] == '1') {
 
-                $image      = FunctionsLib::setImage(DPATH . 'img/b.gif', $this->langs['gl_buddy_request']);
-                $attributes = "onClick=\"f('game.php?page=buddy&mode=2&u=" . $this->row_data['user_id'] . "', '" .
-                    $this->langs['gl_buddy_request'] . "')\"";
-                $links      .= FunctionsLib::setUrl('', '', $image, $attributes) . '&nbsp;';
+                $image  = FunctionsLib::setImage(DPATH . 'img/b.gif', $this->langs['gl_buddy_request']);
+                $url    = "game.php?page=buddy&mode=2&u=" . $this->row_data['user_id'];
+                $links  .= FunctionsLib::setUrl($url, '', $image, '') . '&nbsp;';
             }
 
             if ($this->current_user['setting_galaxy_missile'] == '1' && $this->isMissileActive()) {
