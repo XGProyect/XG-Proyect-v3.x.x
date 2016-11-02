@@ -24,6 +24,7 @@ include_once XGP_ROOT . 'application/libraries/adm/AdministrationLib.php';
 
 // check if SSL is setted
 AdministrationLib::secureConnection();
+AdministrationLib::updateRequired();
 
 $page       = isset($_GET['page']) ? $_GET['page'] : 'home';
 $file_name  = XGP_ROOT . ADMIN_PATH . $page . '.php';
@@ -39,6 +40,8 @@ if (file_exists($file_name)) {
 
     include $file_name;
 
+    
+    
     $class_name = 'application\controllers\adm\\' . ucfirst($page);
 
     new $class_name();

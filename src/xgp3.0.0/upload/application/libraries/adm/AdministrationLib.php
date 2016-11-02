@@ -338,6 +338,24 @@ class AdministrationLib extends XGPCore
             return true;
         }
     }
+    
+    /**
+     * Check if an update is required
+     * 
+     * @return void
+     */
+    public static function updateRequired()
+    {
+        if (SYSTEM_VERSION != FunctionsLib::readConfig('version')) {
+
+            $exclude_pages  = ['', 'home', 'update', 'logout'];
+            
+            if (isset($_GET['page']) && !in_array($_GET['page'], $exclude_pages)) {
+
+                FunctionsLib::redirect(XGP_ROOT . 'admin.php?page=update');
+            }
+        }
+    }
 }
 
 /* end of AdministrationLib.php */
