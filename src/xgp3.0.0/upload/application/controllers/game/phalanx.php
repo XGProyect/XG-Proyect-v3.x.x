@@ -92,6 +92,8 @@ class Phalanx extends XGPCore
             FunctionsLib::redirect('game.php?page=galaxy');
         }
 
+        $TargetName = '';
+        
         /* main page */
         if ($this->_current_planet['planet_deuterium'] > 10000) {
             parent::$db->query("UPDATE " . PLANETS . " SET
@@ -198,8 +200,8 @@ class Phalanx extends XGPCore
 
         $parse['phl_pl_galaxy'] = $Galaxy;
         $parse['phl_pl_system'] = $System;
-        $parse['phl_pl_place'] = $Planet;
-        $parse['phl_pl_name'] = $TargetName;
+        $parse['phl_pl_place']  = $Planet;
+        $parse['phl_pl_name']   = $TargetName;
 
         parent::$page->display(parent::$page->parseTemplate(parent::$page->getTemplate('galaxy/phalanx_body'), $parse), false, '', false);
     }
