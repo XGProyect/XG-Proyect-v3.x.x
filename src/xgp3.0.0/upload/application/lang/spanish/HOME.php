@@ -19,6 +19,7 @@ $lang['hm_username_spaces_continued']		= 'No puedes utilizar dos o m\u00e1s espa
 $lang['hm_username_available']				= 'Este nombre de usuario est\u00e1 disponible.';
 $lang['hm_username_loading']				= 'Cargando... Por favor, espera';
 $lang['hm_username_not_available']			= 'Este nombre de usuario ya no est\u00e1 disponible.';
+$lang['hm_email_not_available']                                 = '¡La dirección de E-mail ya está en uso!';
 $lang['hm_only_characters']					= 'Utilizar s\u00f3lo caracteres.';
 $lang['hm_hidden_title']					= 'XGProyect - Conquista el universo';
 $lang['hm_login_button']					= 'Entrar';

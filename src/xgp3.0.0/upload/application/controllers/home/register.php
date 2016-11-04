@@ -33,6 +33,13 @@ class Register extends XGPCore
     private $creator;
     private $langs;
     private $current_user;
+            
+    /**
+     * Contains the error 
+     * 
+     * @var int
+     */
+    private $error_id;
 
     /**
      * __construct()
@@ -76,7 +83,15 @@ class Register extends XGPCore
 
             if (!$this->runValidations()) {
 
-                FunctionsLib::redirect('index.php');
+                if ($this->error_id != '') {
+                    
+                    $url    = 'index.php?character=' . $_POST['character'] . '&email=' . $_POST['email'] . '&error=' . $this->error_id;
+                } else {
+                    
+                    $url    = 'index.php';
+                }
+                
+                FunctionsLib::redirect($url);
             } else {
 
                 $user_password      = $_POST['password'];
@@ -179,9 +194,9 @@ class Register extends XGPCore
                      WHERE `user_id` = '" . $user_id . "' LIMIT 1;"
                 );
 
-                $from = $this->langs['re_welcome_message_from'];
-                $subject = $this->langs['re_welcome_message_subject'];
-                $message = str_replace('%s', $user_name, $this->langs['re_welcome_message_content']);
+                $from       = $this->langs['re_welcome_message_from'];
+                $subject    = $this->langs['re_welcome_message_subject'];
+                $message    = str_replace('%s', $user_name, $this->langs['re_welcome_message_content']);
 
                 // Send Welcome Message to the user if the feature is enabled
                 if (FunctionsLib::readConfig('reg_welcome_message')) {
@@ -270,10 +285,12 @@ class Register extends XGPCore
 
         if ($this->checkUser()) {
             $errors++;
+            $this->error_id = 1;
         }
 
         if ($this->checkEmail()) {
             $errors++;
+            $this->error_id = 2;
         }
 
         if ($errors > 0) {

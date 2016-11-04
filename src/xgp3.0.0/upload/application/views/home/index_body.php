@@ -110,11 +110,13 @@
             }
         }
     })(jQuery);
+    var universeDistinctions = [];
 
     $(document).ready(function() {
         $(".zebra tr:odd").addClass("alt");
         $.validationEngineLanguage.newLang()
-            });
+        {extra_js_error}
+                    });
     // ]]>
 
     </script>
@@ -210,7 +212,7 @@
 						<div class="black-border">
 
                             <!-- validate options dürfen nicht umgebrochen werden, da das plugin sonst nicht mehr funktioniert  -->
-                            <input id="username" class="js_userName validate[required,custom[noSpecialCharacters],custom[noBeginOrEndUnderscore],custom[noBeginOrEndWhitespace],custom[noBeginOrEndHyphen],custom[notMoreThanThreeUnderscores],custom[notMoreThanThreeWhitespaces],custom[notMoreThanThreeHyphen],custom[noCollocateUnderscores],custom[noCollocateWhitespaces],custom[noCollocateHyphen],length[3,20]]" type="text" name="character" value="">
+                            <input id="username" class="js_userName validate[required,custom[noSpecialCharacters],custom[noBeginOrEndUnderscore],custom[noBeginOrEndWhitespace],custom[noBeginOrEndHyphen],custom[notMoreThanThreeUnderscores],custom[notMoreThanThreeWhitespaces],custom[notMoreThanThreeHyphen],custom[noCollocateUnderscores],custom[noCollocateWhitespaces],custom[noCollocateHyphen],length[3,20]]" type="text" name="character" value="{user_name}">
 						</div>
 					</div>
                     <div class="input-wrap">
@@ -222,7 +224,7 @@
 					<div class="input-wrap">
                         <label for="email">{hm_mail_address}</label>
 						<div class="black-border">
-                            <input class="validate[required,custom[email],length[0,255]]" type="text" id="email" name="email" value="">
+                            <input class="validate[required,custom[email],length[0,255]]" type="text" id="email" name="email" value="{user_email}">
 						</div>
 					</div>
 					<div class="input-wrap">

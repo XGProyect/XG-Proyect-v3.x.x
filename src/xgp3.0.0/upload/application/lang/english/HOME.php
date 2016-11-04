@@ -19,6 +19,7 @@ $lang['hm_username_spaces_continued']		= 'You may not use two or more spaces one
 $lang['hm_username_available']				= 'This username is available.';
 $lang['hm_username_loading']				= 'Please wait, loading...';
 $lang['hm_username_not_available']			= 'This username is not available anymore';
+$lang['hm_email_not_available']                                 = 'The E-mail address is already in use!';
 $lang['hm_only_characters']					= 'Use characters only.';
 $lang['hm_hidden_title']					= 'XGProyect - Conquer the universe';
 $lang['hm_login_button']					= 'Login';

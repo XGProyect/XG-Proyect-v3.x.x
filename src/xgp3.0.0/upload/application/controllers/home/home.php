@@ -112,6 +112,32 @@ class Home extends XGPCore
             $parse['css_path']      = CSS_PATH . 'home/';
             $parse['img_path']      = IMG_PATH . 'home/';
             $parse['base_path']     = BASE_PATH;
+            $parse['extra_js_error']= '';
+            $parse['user_name']     = isset($_GET['character']) ? $_GET['character'] : '';
+            $parse['user_email']    = isset($_GET['email']) ? $_GET['email'] : '';
+            
+            if (isset($_GET['error']) && $_GET['error'] > 0) {
+
+                switch($_GET['error']) {
+
+                    case 1:
+                        $div_id     = '#username';
+                        $message    = $this->langs['hm_username_not_available'];
+                        break;
+
+                    case 2:
+                        $div_id     = '#email';
+                        $message    = $this->langs['hm_email_not_available'];
+                        break;
+
+                    default:
+                        $div_id     = '';
+                        $message    = '';
+                        break;
+                }
+                
+                $parse['extra_js_error']    = '$.validationEngine.buildPrompt("' . $div_id . '", "' . $message . '", "error");';
+            }
 
             parent::$page->display(
                 parent::$page->parseTemplate(parent::$page->getTemplate('home/index_body'), $parse),
