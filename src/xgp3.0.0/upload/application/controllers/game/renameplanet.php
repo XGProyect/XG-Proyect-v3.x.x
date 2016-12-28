@@ -124,6 +124,7 @@ class Renameplanet extends XGPCore
 									SET `planet_name` = '" . $new_name . "'
 									WHERE `planet_id` = '" . intval($this->_current_user['user_current_planet']) . "'
 									LIMIT 1;");
+		FunctionsLib::message($this->_lang['ov_planet_name_changed'], "game.php?page=renameplanet", 2);
         }
     }
 
