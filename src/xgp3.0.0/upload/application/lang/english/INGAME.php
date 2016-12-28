@@ -90,12 +90,10 @@ $lang['lm_statistics']						= 'Statistics';
 $lang['lm_search']							= 'Search';
 $lang['lm_options']							= 'Options';
 $lang['lm_banned']							= 'Banned';
-$lang['lm_contact']							= 'Contact';
 $lang['lm_forums']							= 'Forum';
 $lang['lm_logout']							= 'Logout';
 $lang['lm_administration']					= 'Administration';
 $lang['lm_module_not_accesible']			= 'The requested page it\'s not available right now';
-
 
 //----------------------------------------------------------------------------//
 //OVERVIEW
@@ -132,6 +130,7 @@ $lang['ov_planet_name']						= 'Name';
 $lang['ov_actions']							= 'Functions';
 $lang['ov_planet_rename']					= 'rename';
 $lang['ov_planet_rename_action']			= 'rename';
+$lang['ov_planet_name_changed']				= 'Planet name has been changed<br /><a href="index.php" target="_top">Back</a>';
 $lang['ov_abandon_planet_not_possible']		= 'It\'s not possible abandon a planet where are fleets moving';
 $lang['ov_fields']							= 'Fields';
 
