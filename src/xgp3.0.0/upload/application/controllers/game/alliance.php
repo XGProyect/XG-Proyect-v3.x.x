@@ -347,7 +347,7 @@ class Alliance extends XGPCore
                     parent::$db->query(
                             "UPDATE " . USERS . " SET
                         `user_ally_request` = '" . (int) $alliance_id . "' ,
-                        `user_ally_request_text` = '" . parent::$db->escapeValue(strip_tags($_POST['text'])) . "',
+                        `user_ally_request_text` = '" . $_POST['text'] . "',
                         `user_ally_register_time` = '" . time() . "'
                         WHERE `user_id`='" . $this->_current_user['user_id'] . "'"
                     );
@@ -620,7 +620,7 @@ class Alliance extends XGPCore
             if (isset($_GET['sendmail']) && $_GET['sendmail'] == 1) {
                 $list = '';
                 $_POST['r'] = (int) $_POST['r'];
-                $_POST['text'] = FunctionsLib::formatText($_POST['text']);
+                $_POST['text'] = $_POST['text'];
 
                 if ($_POST['r'] == 0) {
                     $sq = parent::$db->query("SELECT `user_id`, `user_name`
@@ -1034,9 +1034,6 @@ class Alliance extends XGPCore
 
                     if (isset($_POST['action']) && ( $_POST['action'] == $this->_lang['al_acept_request'] )) {
 
-                        $_POST['text'] = trim(nl2br(strip_tags($_POST['text'], '<br>')));
-                        $_POST['text'] = str_replace('rn', '\\r\\n', $_POST['text']);
-
                         parent::$db->query(
                             "UPDATE " . USERS . " SET
                             user_ally_request_text = '',
@@ -1049,8 +1046,6 @@ class Alliance extends XGPCore
 
                         FunctionsLib::redirect('game.php?page=alliance&mode=admin&edit=ally');
                     } elseif (isset($_POST['action']) && ( $_POST['action'] == $this->_lang['al_decline_request'] ) && $_POST['action'] != '') {
-                        $_POST['text'] = trim(nl2br(strip_tags($_POST['text'], '<br>')));
-                        $_POST['text'] = str_replace('rn', '\\r\\n', $_POST['text']);
 
                         parent::$db->query("UPDATE " . USERS . " SET
                                                                                             user_ally_request_text='',

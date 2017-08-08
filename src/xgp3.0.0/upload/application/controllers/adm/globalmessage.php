@@ -92,7 +92,7 @@ class Globalmessage extends XGPCore
                     $time = time();
                     $from = '<font color="' . $color . '">' . $level . ' ' . $this->_current_user['user_name'] . '</font>';
                     $subject = '<font color="' . $color . '">' . $_POST['temat'] . '</font>';
-                    $message = '<font color="' . $color . '"><b>' . FunctionsLib::formatText($_POST['tresc']) . '</b></font>';
+                    $message = '<font color="' . $color . '"><b>' . $_POST['tresc'] . '</b></font>';
 
                     while ($u = parent::$db->fetchArray($sq)) {
                         FunctionsLib::sendMessage($u['user_id'], $this->_current_user['user_id'], $time, 5, $from, $subject, $message);

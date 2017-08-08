@@ -64,7 +64,7 @@ class Messages extends XGPCore
         $this->langs        = parent::$lang;
         $this->current_user = parent::$users->getUserData();
         $this->have_premium = OfficiersLib::isOfficierActive($this->current_user['premium_officier_commander']);
-
+        
         // build the page
         $this->buildPage();
     }
@@ -171,7 +171,7 @@ class Messages extends XGPCore
                             $this->current_user['user_planet']
                         );
                         $Subject    = $_POST['subject'];
-                        $Message    = FunctionsLib::formatText($_POST['text']);
+                        $Message    = $_POST['text'];
 
                         FunctionsLib::sendMessage($Owner, $Sender, '', 4, $From, $Subject, $Message);
 

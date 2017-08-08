@@ -172,7 +172,7 @@ class Spy extends Missions
                             $SpyMessage = $TargetTechnos . "<br />" . $AttackLink . $MessageEnd;
                         }
 
-                        FunctionsLib::sendMessage($fleet_row['fleet_owner'], '', $fleet_row['fleet_start_time'], 0, $this->langs['sys_mess_qg'], $this->langs['sys_mess_spy_report'], $SpyMessage);
+                        FunctionsLib::sendMessage($fleet_row['fleet_owner'], '', $fleet_row['fleet_start_time'], 0, $this->langs['sys_mess_qg'], $this->langs['sys_mess_spy_report'], $SpyMessage, true);
 
                         $TargetMessage = $this->langs['sys_mess_spy_ennemyfleet'] . " " . $current_data['planet_name'];
                         $TargetMessage .= " <a href=\"game.php?page=galaxy&mode=3&galaxy=" . $current_data['planet_galaxy'] . "&system=" . $current_data['planet_system'] . "\">";
@@ -181,7 +181,7 @@ class Spy extends Missions
                         $TargetMessage .= " <a href=\"game.php?page=galaxy&mode=3&galaxy=" . $target_data['planet_galaxy'] . "&system=" . $target_data['planet_system'] . "\">";
                         $TargetMessage .= "[" . $target_data['planet_galaxy'] . ":" . $target_data['planet_system'] . ":" . $target_data['planet_planet'] . "]</a>.";
 
-                        FunctionsLib::sendMessage($target_data['planet_user_id'], '', $fleet_row['fleet_start_time'], 0, $this->langs['sys_mess_spy_control'], $this->langs['sys_mess_spy_activity'], $TargetMessage . ' ' . sprintf($this->langs['sys_mess_spy_lostproba'], $TargetChances));
+                        FunctionsLib::sendMessage($target_data['planet_user_id'], '', $fleet_row['fleet_start_time'], 0, $this->langs['sys_mess_spy_control'], $this->langs['sys_mess_spy_activity'], $TargetMessage . ' ' . sprintf($this->langs['sys_mess_spy_lostproba'], $TargetChances), true);
 
                         if ($TargetChances >= $SpyerChances) {
 
