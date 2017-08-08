@@ -141,7 +141,9 @@ class PlanetLib extends XGPCore
                     'planet_crystal' => BUILD_CRISTAL,
                     'planet_crystal_perhour' => FunctionsLib::readConfig('crystal_basic_income'),
                     'planet_deuterium' => BUILD_DEUTERIUM,
-                    'planet_deuterium_perhour' => FunctionsLib::readConfig('deuterium_basic_income')
+                    'planet_deuterium_perhour' => FunctionsLib::readConfig('deuterium_basic_income'),
+                    'planet_b_building_id' => '0',
+                    'planet_b_hangar_id' => '0'
                 ]
             );
 
@@ -209,7 +211,9 @@ class PlanetLib extends XGPCore
                     'planet_diameter' => $size,
                     'planet_field_max' => $max_fields,
                     'planet_temp_min' => $min_temp == 0 ? $temp['min'] : $min_temp,
-                    'planet_temp_max' => $max_temp == 0 ? $temp['max'] : $max_temp
+                    'planet_temp_max' => $max_temp == 0 ? $temp['max'] : $max_temp,
+                    'planet_b_building_id' => '0',
+                    'planet_b_hangar_id' => '0'
                 ]
             );
         
