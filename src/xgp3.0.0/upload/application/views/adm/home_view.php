@@ -85,6 +85,14 @@
             </div><!--/row-->
             <div class="hero-unit" align="justify">
               <h1>{hm_credits}</h1>
-              <p><strong>{hm_proyect_leader}</strong> <br/>lucky <br/><br/><strong>{hm_principal_contributors}</strong> <br/>adri93, Alberto14, angelus_ira, Anghelito, Arali, BeReal, Borboco, Calzon, cyberghoser1, cyberrichy, edering, Gmir17, Green, JonaMix, jstar, jtsamper, Kloud, LordPretender, Loucouss, medel, MSW, Neko, Neurus, Nickolay, Pada, pele87, PowerMaster, privatethedawn, quaua, Razican, Tarta, Think, thyphoon, tomtom, Tonique, Trojan, Saint, shoghicp, slaver7, war4head, zebulonbof, zorro2666</p>
+              <p><strong>{hm_proyect_leader}</strong> <br/>
+              lucky<br/> BeReal
+              <br/><br/>
+              <strong>{hm_extensions}</strong> <br/>
+              <a href="https://github.com/jstar88/opbe">jstar - OPBE</a> <br>
+              <a href="https://codeigniter.com/">CodeIgniter</a>
+              <br/><br/>
+              <strong>{hm_principal_contributors}</strong> <br/>
+              adri93, Alberto14, angelus_ira, Anghelito, Arali, Borboco, Calzon, cyberghoser1, cyberrichy, edering, Gmir17, Green, JonaMix, jtsamper, Kloud, LordPretender, Loucouss, medel, MSW, Neko, Neurus, Nickolay, Pada, pele87, PowerMaster, privatethedawn, quaua, Razican, Tarta, Think, thyphoon, tomtom, Tonique, Trojan, Saint, shoghicp, slaver7, war4head, zebulonbof, zorro2666</p>
             </div>
         </div><!--/span-->

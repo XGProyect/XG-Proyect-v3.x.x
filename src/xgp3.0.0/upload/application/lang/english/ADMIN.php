@@ -79,7 +79,8 @@ $lang['hm_old_version']										= 'A new version is available. Click <a href="h
 $lang['hm_all_ok']											= 'No updates or alerts';
 $lang['hm_update_required']                                                     = 'Your system and DB versions are different, <a href="admin.php?page=update"><strong>Update now!</strong></a> to avoid issues.';
 $lang['hm_credits']											= 'Credits';
-$lang['hm_proyect_leader']									= 'Project Leader';
+$lang['hm_proyect_leader']									= 'Project Leads';
+$lang['hm_extensions']                                                                  = 'Libraries / Extensions';
 $lang['hm_principal_contributors']							= 'Main contributors';
 
 // PERMISSIONS
