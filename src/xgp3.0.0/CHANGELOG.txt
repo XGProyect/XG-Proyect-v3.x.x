@@ -1,6 +1,7 @@
 '3.0.4' =>
 CORE
 [#115] Error while inserting default values in some linux versions.-
+[#172] Several fixes on messages filtering, and some refacting was made to improve how it works, new class Messenger.-
 [#000] Updated projects leads in the admin home.-
 
 OVERVIEW

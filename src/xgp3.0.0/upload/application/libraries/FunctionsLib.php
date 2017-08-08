@@ -389,31 +389,46 @@ abstract class FunctionsLib extends XGPCore
      */
     public static function sendMessage($to, $sender, $time = '', $type = '', $from = '', $subject = '', $message = '', $allowHtml = false)
     {
-        if ($time == '') {
+        $options    = new MessageOptions();
+        $options->setTo($to);
+        $options->setSender($sender);
+        $options->setTime($time);
 
-            $time   = time();
+        switch($type) {
+            case 0:
+                $type   = MessagesTypes::espio;
+                break;
+            case 1:
+                $type   = MessagesTypes::combat;
+                break;
+            case 2:
+                $type   = MessagesTypes::exp;
+                break;
+            case 3:
+                $type   = MessagesTypes::ally;
+                break;
+            case 4:
+                $type   = MessagesTypes::user;
+                break;
+            default:
+            case 5:
+                $type   = MessagesTypes::general;
+                break;
         }
 
-        $message    = (strpos($message, '/admin.php/') === false) ? $message : '';
-        
+        $options->setType($type);
+        $options->setFrom($from);
+        $options->setSubject($subject);
+
         if ($allowHtml) {
 
-            $message    = parent::$db->escapeValue($message);
-        } else {
-
-            $message    = FunctionsLib::formatText($message);
+            $options->setMessageFormat(MessagesFormat::html);
         }
 
-        parent::$db->query(
-            "INSERT INTO " . MESSAGES . " SET
-            `message_receiver` = '" . $to . "',
-            `message_sender` = '" . $sender . "',
-            `message_time` = '" . $time . "',
-            `message_type` = '" . $type . "',
-            `message_from` = '" . $from . "',
-            `message_subject` = '" . $subject . "',
-            `message_text` 	= '" . $message . "';"
-        );
+        $options->setMessageText($message);
+
+        $messenger = new Messenger();
+        $messenger->sendMessage($options);
     }
     
     /**

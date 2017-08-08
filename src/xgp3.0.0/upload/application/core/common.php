@@ -12,7 +12,6 @@
  * @version  3.0.0
  */
 
-use application\core\Database;
 use application\core\Hooks;
 use application\core\Sessions;
 use application\libraries\FunctionsLib;
@@ -34,6 +33,7 @@ require_once XGP_ROOT . CORE_PATH . 'Database.php';
 require_once XGP_ROOT . CORE_PATH . 'XGPCore.php';
 require_once XGP_ROOT . CORE_PATH . 'Options.php';
 require_once XGP_ROOT . CORE_PATH . 'Xml.php';
+require_once XGP_ROOT . LIB_PATH . 'Messenger.php';
 require_once XGP_ROOT . LIB_PATH . 'FormatLib.php';
 require_once XGP_ROOT . LIB_PATH . 'OfficiersLib.php';
 require_once XGP_ROOT . LIB_PATH . 'ProductionLib.php';
