@@ -95,7 +95,7 @@ class FleetsLib extends XGPCore
     public static function missionDuration($percentage, $max_fleet_speed, $distance, $speed_factor)
     {
         // original formula: 3500 / Factor(percentage) * sqrt($distance * 10 / $max_fleet_speed) + 10)
-        return round((35000 / $percentage * sqrt($distance * 10 / $max_fleet_speed) + 10) / $speed_factor);
+        return (35000 / $percentage * sqrt($distance * 10 / $max_fleet_speed) + 10) / $speed_factor;
     }
 
     /**
@@ -224,16 +224,16 @@ class FleetsLib extends XGPCore
             if ($ship > 0) {
 
                 $ship_speed         = self::fleetMaxSpeed("", $ship, $user);
-                $ship_consumption   = self::shipConsumption($ship, $user);
+                $ship_consumption   = self::shipConsumption($ship, $user);                
                 $spd                = 35000 / ($mission_duration * $speed_factor - 10)
                     * sqrt($mission_distance * 10 / $ship_speed);
-                $basic_consumption  = $ship_consumption * $count;
-                $consumption        += $basic_consumption * $mission_distance / 35000
-                    * (($spd / 10) + 1) * (($spd / 10) + 1);
+                
+                $basic_consumption  = $spd + $count * $ship_consumption * pow((($spd / 10) + 1), 2);
+                $consumption        += $basic_consumption * $mission_distance / 35000 + 1;
             }
         }
 
-        return (round($consumption) + 1);
+        return round($consumption);
     }
 
     /**

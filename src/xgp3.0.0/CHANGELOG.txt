@@ -1,3 +1,87 @@
+'3.0.4' =>
+CORE
+[#115] Error while inserting default values in some linux versions.-
+[#000] Updated projects leads in the admin home.-
+
+OVERVIEW
+[#165] Fixed issue that was causing planet renaming problems.-
+
+FLEETS
+[#000] Fixed fuel consumption formulas.-
+
+'3.0.3' => 10/11/2016
+GALAXY
+[#0161] Replaced the pop up to open the buddy list for a normal page, also fixed the back button.-
+
+ADMIN CP
+[#0000] Now the system forces the user to update the DB before been able to continue using the panel.-
+
+HOME / REGISTRATION
+[#0153] Fixed issue that was causing not to show error messages when a username or email was already taken.-
+
+PHALANX
+[#0164] Fixed notice when an user didn’t have deuterium.-
+
+'3.0.2' => 26/10/2016
+MESSAGES
+[#119] Implemented the remaining functions for the premium view, adding the address book, notes and fixing issues on the counting.-
+[#125] Fixed issue that was causing wrong date formats on the messages page, not considering what the admin chose.-
+[#000] Implemented model class.-
+
+MISSIONS
+[#129] Fixed issue that was causing fleets to return even after being lost during an expedition.-
+[#131] Fixed issue causing that after an attack the repaired defenses of the attacked player overrides the defense of all players (Thanks to Bustux).-
+[#000] Some texts improvements were made to the expeditions message, in English, with result of nothing 1 and 2, and new ships.-
+
+BATTLE REPORT
+[#133] Fixed issue that was causing errors on the battle report layout.-
+[#137] Fixed issue where users couldn’t see the whole battle report (Thanks to FedePuratich).-
+[#000] Several fixes and improvements over the battle report.-
+
+BUDDYS
+[#152] Fixed issue that was showing the menu and header for the buddy request popup.-
+[#000] Removed page as a pop-up, and set it by itself like any other page (like classic ogame).-
+
+FLEETS
+[#140] Fixed warning that was blocking users to send recyclers from the fleet page.-
+
+REGISTRATION
+[#130] Fixed issue that was causing invalid HTML format for the registration email.-
+[#000] Improvements over the registration module and registration mailing.-
+
+INSTALLATION
+[#134] Added missing English language line on the installation process (Thanks to JonaMiX).-
+
+SEARCH
+[#135] Fixed issue on the search page that was not showing colonies for the planet search.-
+[#000] Now is possible to configure how many results should be displayed in the search results.-
+
+CORE
+[#136] Fixed query issue that was being caused during user’s clean up.-
+[#138][#146] Fixed issue that was causing not to shown vacation mode block to alert user.-
+[#000] Improvements over the deleted account and vacation mode alerts.-
+[#000] Model implementation, migrated game/overview.php.-
+[#000] Right values for not debug mode, no errors will be displayed if DEBUG_MODE is off.-
+[#000] Improvements on notifications boxes (delete mode and vacation mode).-
+[#000] Global reduction of the amount of queries done to calculate the resources gain.-
+[#000] Added sessions clean up, they will be removed from the sessions table after 24hs, if those were not active.-
+
+GALAXY
+[#139] Fixed issue that was causing to display a wrong character in the galaxy view (Thanks to imleyenda).-
+[#147] Blocked galaxy view while on vacation mode.-
+[#000] Removed planet and moons clean up.-
+
+OPTIONS
+[#147] Added support so users are able to delete their account while on vacation mode, also mimic old ogame behavior.-
+[#151] When an user changes their name, it will be logged out instead of keeping him logged in.-
+
+ADMIN PANEL
+[#103] Fixed issue that wasn’t updating the points after adding buildings, defenses, research and ships.-
+[#141] Fixed issue that wasn’t allowing an user to set their own battle debris.-
+[#000] Improvements over the server page.-
+[#000] Fixed issue that was replicating the moon in the planet list.-
+[#000] Fixed issue when an user was saving an empty planet.-
+
 '3.0.1' => '26/05/2016
 - [#075] Fixed issue on deploy mission where the fleet didn't return half of the deuterium when arrived to the destination planet (Thanks BeReal86).-
 - [#104] Recover password page implemented, some minor fixes and improvements.-
