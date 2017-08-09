@@ -389,7 +389,7 @@ abstract class FunctionsLib extends XGPCore
      */
     public static function sendMessage($to, $sender, $time = '', $type = '', $from = '', $subject = '', $message = '', $allowHtml = false)
     {
-        $options    = new MessageOptions();
+        $options    = new MessagesOptions();
         $options->setTo($to);
         $options->setSender($sender);
         $options->setTime($time);

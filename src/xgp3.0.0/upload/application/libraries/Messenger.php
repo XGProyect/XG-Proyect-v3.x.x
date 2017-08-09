@@ -39,9 +39,9 @@ final class Messenger extends XGPCore
     /**
      * Send a message with the provided options
      *
-     * @param \application\libraries\MessageOptions $options
+     * @param \application\libraries\MessagesOptions $options
      */
-    public function sendMessage(MessageOptions $options)
+    public function sendMessage(MessagesOptions $options)
     {
         // TODO: call a model instead of this
         parent::$db->query(
@@ -57,7 +57,17 @@ final class Messenger extends XGPCore
     }
 }
 
-final class MessageOptions
+/**
+ * MessagesOptions Class
+ *
+ * @category Class
+ * @package  Libraries
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.0.4
+ */
+final class MessagesOptions
 {
     /**
      *
