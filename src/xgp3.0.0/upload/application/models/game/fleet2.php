@@ -58,9 +58,7 @@ class Fleet2_Model
     {
         return $this->db->query(
             "SELECT * FROM " . ACS_FLEETS
-        );   
-        
-        return null;
+        );
     }
 }
 
