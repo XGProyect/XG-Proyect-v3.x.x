@@ -28,7 +28,7 @@ if (file_exists($config_file)) {
 }
 
 // Require some stuff
-require_once XGP_ROOT . 'application/core/constants.php';
+require_once XGP_ROOT . 'application/config/constants.php';
 require_once XGP_ROOT . CORE_PATH . 'Database.php';
 require_once XGP_ROOT . CORE_PATH . 'XGPCore.php';
 require_once XGP_ROOT . CORE_PATH . 'Options.php';
