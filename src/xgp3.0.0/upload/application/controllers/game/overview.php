@@ -294,9 +294,9 @@ class Overview extends XGPCore
 
             ######################################
             #
-                    # other fleets
+            # other fleets
             #
-                    ######################################
+            ######################################
 
             if ($fleets['fleet_owner'] != $this->_current_user['user_id']) {
                 if ($fleets['fleet_mission'] != 8) {
