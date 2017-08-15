@@ -132,7 +132,7 @@ class Attack extends Missions
             // If we have a ACS attack
             if ($fleet_row['fleet_group'] != 0) {
                     
-                $fleets     = parent::$db->queryFetch(
+                $fleets     = parent::$db->query(
                     "SELECT * FROM `" . FLEETS . "` WHERE `fleet_group` = '" . $fleet_row['fleet_group'] . "';"
                 );
 
@@ -431,7 +431,7 @@ class Attack extends Missions
                 
                 $playerGroup->addPlayer($player);
                 
-                if($targetUser['planet_id'] == $idPlayer) {
+                if($target_user['planet_id'] == $idPlayer) {
 
                     $playerGroup->getPlayer($idPlayer)->addFleet($fleet);	
                 }

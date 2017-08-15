@@ -47,6 +47,9 @@ class Fleet2 extends XGPCore
         // check if session is active
         parent::$users->checkSession();
 
+        // load Model
+        parent::loadModel('game/fleet2');
+
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
@@ -82,9 +85,7 @@ class Fleet2 extends XGPCore
         // SOME DEFAULT VALUES
         #####################################################################################################
         // QUERYS
-        $getCurrentAcs = parent::$db->query("SELECT *
-														FROM " . ACS_FLEETS . "
-														WHERE acs_fleet_members = '" . $this->_current_user['user_id'] . "'");
+        $getCurrentAcs  = $this->Fleet2_Model->getOngoingAcs($this->_current_user['user_id']);
 
         // ARRAYS
         $speed_values = array(10 => 100, 9 => 90, 8 => 80, 7 => 70, 6 => 60, 5 => 50, 4 => 40, 3 => 30, 2 => 20, 1 => 10);
@@ -267,7 +268,7 @@ class Fleet2 extends XGPCore
         $acs_fleets = '';
 
         while ($row = parent::$db->fetchArray($getCurrentAcs)) {
-            $members = explode(",", $row['acs_fleet_invited']);
+            $members    = explode(",", $row['acs_fleet_invited']);
 
             foreach ($members as $a => $b) {
                 if ($b == $this->_current_user['user_id']) {
