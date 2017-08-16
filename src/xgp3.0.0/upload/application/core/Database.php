@@ -178,15 +178,15 @@ class Database
     }
     
     /**
-     * createPlanetWithOptions
+     * closeConnection
      *
-     * @param array $data Data
+     * @param
      *
      * @return boolean
      */
     public function closeConnection()
     {
-        if (is_resource($this->connection) or is_object($this->connection)) {
+        if (isset($this->connection) && (is_resource($this->connection) or is_object($this->connection))) {
 
             $this->connection->close();
             unset($this->connection);
