@@ -3,6 +3,8 @@ CORE
 [#115] Error while inserting default values in some linux versions [By MahmutHizal].-
 [#172] Several fixes on messages filtering, and some refacting was made to improve how it works, new class Messenger.-
 [#000] Updated projects leads in the admin home.-
+[#000] Fleet1 page refactor to include model, did the same to Fleet2 page.-
+[#000] Fixed some PHP7 notices and warnings.-
 
 OVERVIEW
 [#165] Fixed issue that was causing planet renaming problems [By MahmutHizal & BeReal].-
