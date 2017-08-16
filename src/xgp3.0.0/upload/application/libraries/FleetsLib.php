@@ -110,12 +110,11 @@ class FleetsLib extends XGPCore
     public static function fleetMaxSpeed($fleet_array, $fleet, $user)
     {
         $pricelist  = parent::$objects->getPrice();
-
-        $speed_all = array();
+        $speed_all  = [];
 
         if ($fleet != 0) {
-
-            $fleet_array[$fleet] = 1;
+            $fleet_array            = [];
+            $fleet_array[$fleet]    = 1;
         }
 
         foreach ($fleet_array as $ship => $count) {
