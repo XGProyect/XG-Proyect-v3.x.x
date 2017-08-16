@@ -24,7 +24,7 @@ Point you browser to your localhost and follow the step by step instructions pro
 
 ## Who is using XG Proyect?
 
-We are happy to deliver this software giving others the possibility to have a good OGame Clon. 
+We are happy to deliver this software giving others the possibility to have a good OGame Clon.  
 On the other hand, it's a pleasure to see people using XG Proyect.  
 Send me a PM in the forum so I can put your game logo here!  
 
