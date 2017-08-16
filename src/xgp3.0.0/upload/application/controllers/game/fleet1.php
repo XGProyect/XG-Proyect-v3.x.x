@@ -47,6 +47,9 @@ class Fleet1 extends XGPCore
         // check if session is active
         parent::$users->checkSession();
 
+        // load Model
+        parent::loadModel('game/fleet1');
+
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
@@ -74,23 +77,14 @@ class Fleet1 extends XGPCore
      */
     private function build_page()
     {
-        $resource = parent::$objects->getObjects();
-        $reslist = parent::$objects->getObjectsList();
+        $resource   = parent::$objects->getObjects();
+        $reslist    = parent::$objects->getObjectsList();
 
         #####################################################################################################
         // SOME DEFAULT VALUES
         #####################################################################################################
         // QUERYS
-        $count = parent::$db->queryFetch("SELECT
-															(SELECT COUNT(fleet_owner) AS `actcnt`
-																FROM " . FLEETS . "
-																WHERE `fleet_owner` = '" . (int) $this->_current_user['user_id'] . "') AS max_fleet,
-															(SELECT COUNT(fleet_owner) AS `expedi`
-																FROM " . FLEETS . "
-																WHERE `fleet_owner` = '" . (int) $this->_current_user['user_id'] . "'
-																	AND `fleet_mission` = '15') AS max_expeditions");
-
-
+        $count  = $this->Fleet1_Model->getCounts($this->_current_user['user_id']);
 
         // LOAD TEMPLATES REQUIRED
         $inputs_template = parent::$page->getTemplate('fleet/fleet1_inputs');
