@@ -9,7 +9,7 @@
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
- * @version  3.0.2
+ * @version  3.0.4
  */
 
 namespace application\models\game;
@@ -22,7 +22,7 @@ namespace application\models\game;
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
- * @version  3.0.2
+ * @version  3.0.4
  */
 class Fleet2
 {
