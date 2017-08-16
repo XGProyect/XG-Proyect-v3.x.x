@@ -1,14 +1,16 @@
 '3.0.4' =>
 CORE
-[#115] Error while inserting default values in some linux versions.-
+[#115] Error while inserting default values in some linux versions [By MahmutHizal].-
 [#172] Several fixes on messages filtering, and some refacting was made to improve how it works, new class Messenger.-
 [#000] Updated projects leads in the admin home.-
 
 OVERVIEW
-[#165] Fixed issue that was causing planet renaming problems.-
+[#165] Fixed issue that was causing planet renaming problems [By MahmutHizal & BeReal].-
 
 FLEETS
+[#175] Fixed ACS invitations issues [By Neko].-
 [#000] Fixed fuel consumption formulas.-
+[#000] PHP 7.1 fleet1 page compatibility issues fixed.-
 
 '3.0.3' => 10/11/2016
 GALAXY
