@@ -1,14 +1,5 @@
 <?php
-define('PATH_BASE', '../upload/application');
+include_once('../upload/application/core/AutoLoader.php');
 
-chdir(PATH_BASE);
-
-spl_autoload_register(function($name) {
-
-    // Autoload anything in the mywebapplication namespace
-    if (0 === strpos("application\\", $name)) {
-        $name = strreplace("\\", '/', $name);
-        require $name;
-    }
-
-}, true, true);
+// Register the directory to your include files
+AutoLoader::registerDirectory('../upload/application/libraries');
