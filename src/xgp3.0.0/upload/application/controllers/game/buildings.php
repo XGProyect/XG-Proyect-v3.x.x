@@ -424,6 +424,7 @@ class Buildings extends XGPCore
         $CurrentQueue   = $this->_current_planet['planet_b_building_id'];
         $queue          = $this->showQueue();
         $max_fields     = DevelopmentsLib::maxFields($this->_current_planet);
+        $QueueArray     = [];
 
         if ($AddMode) {
             if (($this->_current_planet['planet_field_current'] >= ($max_fields - $queue['lenght']))) {
@@ -500,7 +501,8 @@ class Buildings extends XGPCore
                 }
 
                 if ($QueueID == 1) {
-                    $BuildEndTime = time() + $BuildTime;
+                    $QueueArray     = [];
+                    $BuildEndTime   = time() + $BuildTime;
                 } else {
                     $PrevBuild = explode(",", $QueueArray[$ActualCount - 1]);
                     $BuildEndTime = $PrevBuild[3] + $BuildTime;
