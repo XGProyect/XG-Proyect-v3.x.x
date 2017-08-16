@@ -1,6 +1,6 @@
 <?php
 /**
- * Functions Library
+ * Messenger Library
  *
  * PHP Version 5.5+
  *
@@ -12,50 +12,7 @@
  * @version  3.0.4
  */
 
-namespace application\libraries;
-
-use application\core\XGPCore;
-
-/**
- * FunctionsLib Class
- *
- * @category Classes
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.4
- */
-final class Messenger extends XGPCore
-{
-    /**
-     * 
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
-     * Send a message with the provided options
-     *
-     * @param \application\libraries\MessagesOptions $options
-     */
-    public function sendMessage(MessagesOptions $options)
-    {
-        // TODO: call a model instead of this
-        parent::$db->query(
-            "INSERT INTO " . MESSAGES . " SET
-            `message_receiver` = '" . $options->getTo() . "',
-            `message_sender` = '" . $options->getSender() . "',
-            `message_time` = '" . $options->getTime() . "',
-            `message_type` = '" . $options->getType() . "',
-            `message_from` = '" . $options->getFrom() . "',
-            `message_subject` = '" . $options->getSubject() . "',
-            `message_text` 	= '" . $options->getMessageText() . "';"
-        );
-    }
-}
+namespace application\libraries\messenger;
 
 /**
  * MessagesOptions Class
@@ -215,40 +172,4 @@ final class MessagesOptions
     }
 }
 
-/**
- * MessagesTypes Class
- *
- * @category Enumerator
- * @package  Libraries
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.4
- */
-abstract class MessagesTypes
-{
-    const espio   = 0;
-    const combat  = 1;
-    const exp     = 2;
-    const ally    = 3;
-    const user    = 4;
-    const general = 5;
-}
-
-/**
- * MessagesFormat Class
- *
- * @category Enumerator
- * @package  Libraries
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.4
- */
-abstract class MessagesFormat
-{
-    const simple    = 0;
-    const html      = 1;
-}
-
-/* end of Messenger.php */
+/* end of MessengesOptions.php */
