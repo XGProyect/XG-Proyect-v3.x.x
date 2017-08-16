@@ -29,17 +29,11 @@ if (file_exists($config_file)) {
 
 // Require some stuff
 require_once XGP_ROOT . 'application/config/constants.php';
-require_once XGP_ROOT . CORE_PATH . 'Database.php';
-require_once XGP_ROOT . CORE_PATH . 'XGPCore.php';
-require_once XGP_ROOT . CORE_PATH . 'Options.php';
-require_once XGP_ROOT . CORE_PATH . 'Xml.php';
-require_once XGP_ROOT . LIB_PATH . 'Messenger.php';
-require_once XGP_ROOT . LIB_PATH . 'FormatLib.php';
-require_once XGP_ROOT . LIB_PATH . 'OfficiersLib.php';
-require_once XGP_ROOT . LIB_PATH . 'ProductionLib.php';
-require_once XGP_ROOT . LIB_PATH . 'FleetsLib.php';
-require_once XGP_ROOT . LIB_PATH . 'DevelopmentsLib.php';
-require_once XGP_ROOT . LIB_PATH . 'FunctionsLib.php';
+require_once XGP_ROOT . CORE_PATH . 'AutoLoader.php';
+
+// Auto load a few things
+AutoLoader::registerDirectory(XGP_ROOT . CORE_PATH);
+AutoLoader::registerDirectory(XGP_ROOT . LIB_PATH);
 
 // some values by default
 $lang   = array();
@@ -65,12 +59,6 @@ if ($installed == false && !defined('IN_INSTALL')) {
 
 // when we are not in the install section
 if (!defined('IN_INSTALL')) {
-    
-    require_once XGP_ROOT . CORE_PATH . 'Sessions.php';
-    require_once XGP_ROOT . CORE_PATH . 'Hooks.php';
-    require_once XGP_ROOT . LIB_PATH . 'StatisticsLib.php';
-    require_once XGP_ROOT . LIB_PATH . 'UpdateResourcesLib.php';
-    require_once XGP_ROOT . LIB_PATH . 'UpdateLib.php';
 
     // set time zone
     date_default_timezone_set(FunctionsLib::readConfig('date_time_zone'));
@@ -101,7 +89,6 @@ if (!defined('IN_INSTALL')) {
 
     if (!defined('IN_LOGIN') or 'IN_LOGIN' != true) {
 
-        require_once XGP_ROOT . LIB_PATH . 'SecurePageLib.php';
         $exclude    = array('editor');
 
         if (!in_array($current_page, $exclude)) {

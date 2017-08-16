@@ -1,3 +1,10 @@
+'3.1.0' =>
+CORE
+[#000] Reworked project structure.-
+
+TEST
+[#000] Created testing structure to implement Unit Testing.-
+
 '3.0.4' =>
 CORE
 [#115] Error while inserting default values in some linux versions [By MahmutHizal].-
