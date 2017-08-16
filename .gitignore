@@ -1,3 +1,3 @@
-src/xgp3.0.0/upload/application/config/config.php
-src/xgp3.0.0/upload/data/logs/ErrorLog.php
-/src/xgp3.0.0/tests/build/
+src/upload/application/config/config.php
+src/upload/data/logs/ErrorLog.php
+/src/tests/build/
