@@ -24,7 +24,7 @@ namespace application\models\game;
  * @link     http://www.xgproyect.org
  * @version  3.0.2
  */
-class Fleet2_Model
+class Fleet2
 {
     private $db = null;
     
