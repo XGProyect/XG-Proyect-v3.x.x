@@ -231,7 +231,7 @@ $tables['options_insert'] =
 (37, 'auto_backup', '0'),
 (38, 'last_backup', '0'),
 (39, 'last_cleanup', '0'),
-(40, 'version', '3.0.0'),
+(40, 'version', '" . SYSTEM_VERSION . "'),
 (41, 'lastsettedgalaxypos', '1'),
 (42, 'lastsettedsystempos', '1'),
 (43, 'lastsettedplanetpos', '1');";

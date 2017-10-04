@@ -8,7 +8,7 @@ ADMIN
 [#000] Modified config.php file writable alert.-
 
 BUILDINGS
-[#000] Rewriten the code to handle the buildings queue, created new buildings library.-
+[#000] Rewritten the code to handle the buildings queue, created new buildings library.-
 [#000] Reworked buildings page structure.-
 
 TEST
