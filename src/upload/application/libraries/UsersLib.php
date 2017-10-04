@@ -60,7 +60,7 @@ class UsersLib extends XGPCore
             UpdateResourcesLib::updateResources($this->user_data, $this->planet_data, time());
 
             // Update buildings queue
-            UpdateLib::updateBuildingsQueue($this->planet_data, $this->user_data);
+            Update::updateBuildingsQueue($this->planet_data, $this->user_data);
         }
     }
 

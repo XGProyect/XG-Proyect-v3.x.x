@@ -42,6 +42,13 @@ class Buildings extends Controller
     private $_building = null;
     
     /**
+     * List of currently available buildings
+     * 
+     * @var array
+     */
+    private $_allowed_buildings = [];
+    
+    /**
      * Constructor
      * 
      * @return void
@@ -50,9 +57,18 @@ class Buildings extends Controller
     {
         parent::__construct();
 
+        // load Model
+        parent::loadModel('game/buildings');
+        
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
+        // init a new building object with the current building queue
+        $this->setUpBuildings();
+        
+        // time to do something
+        $this->runAction();
+        
         // build the page
         $this->buildPage();
     }
@@ -68,15 +84,93 @@ class Buildings extends Controller
     }
     
     /**
+     * Creates a new building object that will handle all the building
+     * creation methods and actions
+     * 
+     * @return void
+     */
+    private function setUpBuildings()
+    {
+        $this->_building = new Building(
+            $this->getPlanetData(),
+            $this->getUserData(),
+            $this->getObjects()
+        );
+        
+        $this->_allowed_buildings = $this->getAllowedBuildings();
+    }
+    
+    /**
+     * Run an action
+     * 
+     * @return void
+     */
+    private function runAction()
+    {
+        try {
+            $action             = filter_input(INPUT_GET, 'cmd');
+            $reload             = filter_input(INPUT_GET, 'r');
+            $building           = filter_input(INPUT_GET, 'building', FILTER_VALIDATE_INT);
+            $list_id            = filter_input(INPUT_GET, 'listid', FILTER_VALIDATE_INT);
+            $allowed_actions    = ['cancel', 'destroy', 'insert', 'remove'];
+            $new_queue          = '';
+            
+            if (!is_null($action)) {
+ 
+                if (in_array($action, $allowed_actions)) {
+
+                    if ($this->canInitBuildAction($building, $list_id)) {
+
+                        switch ($action) {
+                            case 'cancel':
+                                $this->_building->cancelBuilding();
+                                break;
+                            
+                            case 'destroy':
+                                $this->_building->tearDownBuilding($building);
+                                break;
+
+                            case 'insert':
+                                $this->_building->addBuilding($building);
+                                break;
+                            
+                            case 'remove':
+                                $this->_building->removeBuilding($list_id);
+                                break;
+                        }
+                        
+                        $this->Buildings_Model->updatePlanetBuildingQueue(
+                            $building,
+                            $this->_building->getNewQueue(),
+                            $this->getPlanetData()['planet_id']
+                        );
+                    }
+                    
+                    if ($reload == 'overview') {
+
+                        header('location:game.php?page=overview');
+                    } else {
+
+                        header('location:game.php?page=' . $this->getCurrentPage());
+                    }
+                }
+
+                throw new Exception('"cancel", "destroy", "insert", and "remove" are the valid options');
+            }
+
+        } catch (Exception $e) {
+            
+            die('Caught exception: ' . $e->getMessage() . "\n");
+        }
+    }
+    
+    /**
      * Build the page
      * 
      * @return void
      */
     private function buildPage()
-    {
-        // init a new building object with the current building queue
-        $this->createNewBuilding();
-        
+    {        
         /**
          * Parse the items
          */
@@ -90,32 +184,17 @@ class Buildings extends Controller
     }
     
     /**
-     * Creates a new building object that will handle all the building
-     * creation methods and actions
-     * 
-     * @return void
-     */
-    private function createNewBuilding()
-    {
-        $this->_building = new Building(
-            $this->getPlanetData()['planet_b_building'],
-            $this->getUserData()
-        );
-    }
-    
-    /**
      * Build the list of buildings
      * 
      * @return string
      */
     private function buildListOfBuildings()
     {
-        $buildings      = $this->getAllowedBuildings();
         $buildings_list = '';
         
-        if (!is_null($buildings)) {
+        if (!is_null($this->_allowed_buildings)) {
             
-            foreach ($buildings as $building_id) {
+            foreach ($this->_allowed_buildings as $building_id) {
                 
                 $buildings_list .= parent::$page->get('buildings/buildings_builds_row')->parse(
                     $this->setListOfBuildingsItem($building_id)
@@ -126,6 +205,13 @@ class Buildings extends Controller
         return $buildings_list;
     }
     
+    /**
+     * Build each building block
+     * 
+     * @param int $building_id Building ID
+     * 
+     * @return array
+     */
     private function setListOfBuildingsItem($building_id)
     {
         $item_to_parse  = [];
@@ -205,7 +291,7 @@ class Buildings extends Controller
         $is_on_vacations        = parent::$users->isOnVacations($this->getUserData());
         $have_fields            = DevelopmentsLib::areFieldsAvailable($this->getPlanetData());
         $is_queue_full          = $this->_building->isQueueFull();
-        $queue_element          = $this->_building->getElementsOnQueue();
+        $queue_element          = $this->_building->getCountElementsOnQueue();
 
         // check fields
         if (!$have_fields) {
@@ -233,6 +319,28 @@ class Buildings extends Controller
         
         // any other case
         return FunctionsLib::setUrl($build_url, '', $this->buildButton('allowed'));
+    }
+    
+    /**
+     * 
+     * @param int $building_id  Building ID
+     * @param int $list_id      List ID
+     * 
+     * @return boolean
+     */
+    private function canInitBuildAction($building_id, $list_id)
+    {
+        if (!in_array($building_id, $this->_allowed_buildings)) {
+            
+            return false;
+        }
+
+        if ($this->isWorkInProgress($building_id)) {
+
+            return false;
+        }
+
+        return true;
     }
     
     /**
@@ -347,11 +455,17 @@ class Buildings extends Controller
     private function getAllowedBuildings()
     {
         $allowed_buildings = [
-            'resources' => [1, 2, 3, 4, 12, 22, 23, 24],
-            'station'   => [14, 15, 21, 31, 33, 34, 44]
+            'resources' => [
+                1 => [1, 2, 3, 4, 12, 22, 23, 24],
+                3 => [12, 22, 23, 24]
+            ],
+            'station'   => [
+                1 => [14, 15, 21, 31, 33, 34, 44],
+                3 => [14, 21, 41, 42, 43]
+            ]
         ];
-        
-        return array_filter($allowed_buildings[$this->getCurrentPage()], function($value) {
+
+        return array_filter($allowed_buildings[$this->getCurrentPage()][$this->getPlanetData()['planet_type']], function($value) {
             return DevelopmentsLib::isDevelopmentAllowed(
                 $this->getUserData(),
                 $this->getPlanetData(),

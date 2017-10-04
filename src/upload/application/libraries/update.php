@@ -1,6 +1,6 @@
 <?php
 /**
- * Update Libray
+ * Update Library
  *
  * PHP Version 5.5+
  *
@@ -17,7 +17,7 @@ namespace application\libraries;
 use application\core\XGPCore;
 
 /**
- * UpdateLib Class
+ * Update Class
  *
  * @category Classes
  * @package  Application
@@ -26,7 +26,7 @@ use application\core\XGPCore;
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
-class UpdateLib extends XGPCore
+class Update extends XGPCore
 {
     /**
      * __construct
@@ -37,6 +37,9 @@ class UpdateLib extends XGPCore
     {
         parent::__construct();
 
+        // load Model
+        parent::loadModel('libraries/update');
+        
         // Other stuff
         $this->cleanUp();
         $this->createBackup();
@@ -65,13 +68,7 @@ class UpdateLib extends XGPCore
             $del_deleted    = time() - (60 * 60 * 24 * 7); // 1 WEEK
 
             // USERS TO DELETE
-            $ChooseToDelete = parent::$db->query(
-                "SELECT u.`user_id`
-                FROM `" . USERS . "` AS u
-                INNER JOIN `" . SETTINGS . "` AS s ON s.setting_user_id = u.user_id
-                WHERE (s.`setting_delete_account` < '".$del_deleted."' AND s.`setting_delete_account` <> 0) OR
-                (u.`user_onlinetime` < '".$del_inactive."' AND u.`user_onlinetime` <> 0 AND u.`user_authlevel` <> 3)"
-            );
+            $ChooseToDelete = $this->Update_Model->deleteUsersByDeletedAndInactive($del_deleted, $del_inactive);
 
             if ($ChooseToDelete) {
                 
@@ -80,17 +77,12 @@ class UpdateLib extends XGPCore
                     parent::$users->deleteUser($delete['user_id']);
                 }
             }
-
-            parent::$db->query("DELETE FROM " . MESSAGES . " WHERE `message_time` < '". $del_before ."';");
-            parent::$db->query("DELETE FROM " . REPORTS . " WHERE `report_time` < '". $del_before ."';");
-            parent::$db->query("DELETE FROM " . SESSIONS . " WHERE `session_last_accessed` < '". date('Y-m-d H:i:s', $del_planets) ."';");
-            parent::$db->query(
-                "DELETE p,b,d,s FROM " . PLANETS . " AS p
-                INNER JOIN " . BUILDINGS . " AS b ON b.building_planet_id = p.`planet_id`
-                INNER JOIN " . DEFENSES . " AS d ON d.defense_planet_id = p.`planet_id`
-                INNER JOIN " . SHIPS . " AS s ON s.ship_planet_id = p.`planet_id`
-                WHERE `planet_destroyed` < '" . $del_planets . "' AND `planet_destroyed` <> 0;"
-            );
+            
+            // Misc deletions
+            $this->Update_Model->deleteMessages($del_before);
+            $this->Update_Model->deleteReports($del_before);
+            $this->Update_Model->deleteSessions(date('Y-m-d H:i:s', $del_planets));
+            $this->Update_Model->deleteDestroyedPlanets($del_planets);
             
             FunctionsLib::updateConfig('last_cleanup', time());
         }
@@ -111,7 +103,7 @@ class UpdateLib extends XGPCore
         // CHECK TIME
         if ((time() >= ($last_backup + (3600 * $update_interval))) &&  ($auto_backup == 1)) {
             
-            parent::$db->backupDb(); // MAKE BACKUP
+            $this->Update_Model->generateBackUp(); // MAKE BACKUP
 
             FunctionsLib::updateConfig('last_backup', time());
         }
@@ -165,16 +157,7 @@ class UpdateLib extends XGPCore
         
         include_once XGP_ROOT . LIB_PATH . 'MissionControlLib.php';
 
-        $_fleets    = parent::$db->query(
-            "SELECT 
-            fleet_start_galaxy, 
-            fleet_start_system, 
-            fleet_start_planet, 
-            fleet_start_type
-            FROM " . FLEETS . "
-            WHERE `fleet_start_time` <= '" . time() . "' AND `fleet_mess` ='0'
-            ORDER BY fleet_id ASC;"
-        );
+        $_fleets    = $this->Update_Model->getStartFleets();
 
         while ($row = parent::$db->fetchArray($_fleets)) {
             
@@ -187,18 +170,9 @@ class UpdateLib extends XGPCore
             new MissionControlLib($array);
         }
 
-        parent::$db->freeResult($_fleets);
+        $this->Update_Model->clearResults($_fleets);
 
-        $_fleets    = parent::$db->query(
-            "SELECT 
-            fleet_end_galaxy, 
-            fleet_end_system, 
-            fleet_end_planet, 
-            fleet_end_type
-            FROM " . FLEETS . "
-            WHERE `fleet_end_time` <= '" . time() . "
-            ORDER BY fleet_id ASC';"
-        );
+        $_fleets    = $this->Update_Model->getEndFleets();
 
         while ($row = parent::$db->fetchArray($_fleets)) {
             $array                  = array();
@@ -210,8 +184,7 @@ class UpdateLib extends XGPCore
             new MissionControlLib($array);
         }
 
-        parent::$db->freeResult($_fleets);
-
+        $this->Update_Model->clearResults($_fleets);
         unset($_fleets);
     }
 
@@ -332,18 +305,10 @@ class UpdateLib extends XGPCore
                     $current_planet[$resource[$element]]
                 );
 
-                parent::$db->query(
-                    "UPDATE " . PLANETS . " AS p
-                    INNER JOIN " . USERS_STATISTICS . " AS s ON s.user_statistic_user_id = p.planet_user_id
-                    INNER JOIN " . BUILDINGS . " AS b ON b.building_planet_id = p.`planet_id` SET
-                    `".$resource[$element]."` = '".$current_planet[$resource[$element]]."',
-                    `user_statistic_buildings_points` = `user_statistic_buildings_points` + '" .
-                        $current_planet['building_points'] . "',
-                    `planet_b_building` = '". $current_planet['planet_b_building'] ."',
-                    `planet_b_building_id` = '". $current_planet['planet_b_building_id'] ."',
-                    `planet_field_current` = '" . $current_planet['planet_field_current'] . "',
-                    `planet_field_max` = '" . $current_planet['planet_field_max'] . "'
-                    WHERE `planet_id` = '" . $current_planet['planet_id'] . "';"
+                $this->Update_Model->updatePlanet(
+                    $resource[$element],
+                    $current_planet[$resource[$element]],
+                    $current_planet
                 );
                 
                 $ret_value = true;
@@ -355,12 +320,7 @@ class UpdateLib extends XGPCore
             $current_planet['planet_b_building']    = 0;
             $current_planet['planet_b_building_id'] = 0;
 
-            parent::$db->query(
-                "UPDATE " . PLANETS . " SET
-                `planet_b_building` = '". $current_planet['planet_b_building'] ."',
-                `planet_b_building_id` = '". $current_planet['planet_b_building_id'] ."'
-                WHERE `planet_id` = '" . $current_planet['planet_id'] . "';"
-            );
+            $this->Update_Model->updateBuildingsQueue($current_planet);
 
             $ret_value = false;
         }
@@ -369,4 +329,4 @@ class UpdateLib extends XGPCore
     }
 }
 
-/* end of UpdateLib.php */
+/* end of Update.php */
