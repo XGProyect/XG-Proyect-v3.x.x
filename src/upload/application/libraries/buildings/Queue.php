@@ -193,6 +193,26 @@ final class Queue
 
         return [];
     }
+    
+    /**
+     * Count the amount of elements of the current queue
+     * 
+     * @return int
+     */
+    public function countQueueElements()
+    {
+        if (isset($this->_queue)) {
+
+            if (!is_array($this->_queue)) {
+
+                $this->breakDownCurrentQueue();
+            }
+            
+            return count($this->_queue);
+        }
+
+        return 0;
+    }
 }
 
 /* end of Queue.php */

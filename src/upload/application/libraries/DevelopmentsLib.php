@@ -619,6 +619,26 @@ class DevelopmentsLib extends XGPCore
     {
         return ($current_planet['planet_b_hangar'] != 0);
     }
+    
+    /**
+     * Check if there are any fields available
+     * 
+     * @param type $current_planet
+     * 
+     * @return boolean
+     */
+    public static function areFieldsAvailable($current_planet)
+    {
+        if ($current_planet['planet_field_current'] 
+            < self::maxFields($current_planet)
+        ) {
+
+            return true;
+        } else {
+
+            return false;
+        }
+    }
 }
 
 /* end of DevelopmentsLib.php */

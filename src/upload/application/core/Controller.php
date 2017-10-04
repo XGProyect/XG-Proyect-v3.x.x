@@ -50,6 +50,12 @@ abstract class Controller extends XGPCore
      */
     private $_objects = [];
     
+    /**
+     * Contains the whole set of language lines
+     * 
+     * @var array 
+     */
+    private $_langs = [];
     
     /**
      * Constructor
@@ -116,7 +122,8 @@ abstract class Controller extends XGPCore
      */
     protected function getPlanetData()
     {
-        return new Planet($this->_current_planet);
+        //return new Planet($this->_current_planet);
+        return $this->_current_planet;
     }
     
     /**

@@ -9,6 +9,7 @@ ADMIN
 
 BUILDINGS
 [#000] Rewriten the code to handle the buildings queue, created new buildings library.-
+[#000] Reworked buildings page structure.-
 
 TEST
 [#000] Created testing structure to implement Unit Testing.-

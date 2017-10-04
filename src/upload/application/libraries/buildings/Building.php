@@ -1,6 +1,6 @@
 <?php
 /**
- * Buildings
+ * Building
  *
  * PHP Version 5.5+
  *
@@ -16,18 +16,19 @@ namespace application\libraries\buildings;
 
 use application\libraries\buildings\Queue;
 use application\libraries\buildings\QueueElements;
+use application\libraries\OfficiersLib;
 
 /**
  * Buildings Class
  *
  * @category Classes
- * @package  buildings
+ * @package  building
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-class Buildings
+class Building
 {
     /**
      *
@@ -35,6 +36,12 @@ class Buildings
      */
     private $_queue = '';
 
+    /**
+     *
+     * @var array $_user User
+     */
+    private $_user  = '';
+    
     /**
      *
      * @var int $_building building ID
@@ -57,18 +64,13 @@ class Buildings
      * Init the class with some values
      *
      * @param type $current_queue  Current Queue
-     * @param type $building       Building ID
-     * @param type $level          Current building level
-     * @param type $time           Building Time
      *
      * @return void
      */
-    public function __construct($current_queue, $building, $level, $time)
+    public function __construct($current_queue, $user)
     {
-        $this->_queue           = new Queue($current_queue);
-        $this->_building        = $building;
-        $this->_build_level     = $level;
-        $this->_build_time      = $time;
+        $this->_queue   = new Queue($current_queue);
+        $this->_user    = $user;
     }
 
     /**
@@ -109,6 +111,38 @@ class Buildings
         $this->queueElementToTearDown();
     }
 
+    /**
+     * Count current elements in the queue
+     * 
+     * @return int
+     */
+    public function getElementsOnQueue()
+    {
+        return $this->_queue->countQueueElements();
+    }
+    
+    /**
+     * Check if the queue is full
+     * 
+     * @return boolean
+     */
+    public function isQueueFull()
+    {
+        $queue_size = 1;
+        
+        if (OfficiersLib::isOfficierActive($this->_user['premium_officier_commander'])) {
+
+            $queue_size = MAX_BUILDING_QUEUE_SIZE;
+        }
+        
+        if ($this->getElementsOnQueue() < $queue_size) {
+            
+            return false;
+        }
+        
+        return true;
+    }
+    
     /**
      * Create a new QueueElements block
      *
@@ -171,7 +205,7 @@ class Buildings
     {
         $this->removeElementFromBuildingQueue(0);
     }
-
+    
     /**
      *
      * @return type

@@ -389,4 +389,54 @@ class QueueTest extends TestCase
             ]
         );
     }
+    
+    /**
+     * @covers application\libraries\buildings\Queue::countQueueElements
+     */
+    public function testCountQueueElements(): void
+    {
+        $object         = new Queue();
+        $current_time   = time();
+
+        // add first element
+        $queue_elements = new QueueElements;
+        $queue_elements->building = 1;
+        $queue_elements->build_level = 1;
+        $queue_elements->build_time = 20;
+        $queue_elements->build_end_time = $current_time;
+        $queue_elements->build_mode = 'build';
+
+        $object->addElementToQueue($queue_elements);
+
+        // add second element
+        $queue_elements = new QueueElements;
+        $queue_elements->building = 2;
+        $queue_elements->build_level = 5;
+        $queue_elements->build_time = 90;
+        $queue_elements->build_end_time = $current_time;
+        $queue_elements->build_mode = 'destroy';
+
+        $object->addElementToQueue($queue_elements);
+
+        // add third element
+        $queue_elements = new QueueElements;
+        $queue_elements->building = 3;
+        $queue_elements->build_level = 10;
+        $queue_elements->build_time = 120;
+        $queue_elements->build_end_time = $current_time;
+        $queue_elements->build_mode = 'build';
+
+        $object->addElementToQueue($queue_elements);
+        
+        // Remove the following lines when you implement this test.
+        $this->assertInternalType(
+            PHPUnit_IsType::TYPE_ARRAY,
+            $object->returnQueueAsArray()
+        );
+
+        $this->assertEquals(
+            $object->countQueueElements(),
+            3
+        );
+    }
 }
