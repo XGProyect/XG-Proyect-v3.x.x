@@ -21,7 +21,7 @@ use application\libraries\UpdateLib;
 $config_file    = XGP_ROOT . 'application/config/config.php';
 $installed      = false;
 
-if (file_exists($config_file)) {
+if (file_exists($config_file) && filesize($config_file) > 0) {
 
     require $config_file;
     $installed  = true;

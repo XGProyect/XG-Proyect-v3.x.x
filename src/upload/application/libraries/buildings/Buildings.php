@@ -9,7 +9,7 @@
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
- * @version  3.0.4
+ * @version  3.1.0
  */
 
 namespace application\libraries\buildings;
@@ -25,7 +25,7 @@ use application\libraries\buildings\QueueElements;
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
- * @version  3.0.4
+ * @version  3.1.0
  */
 class Buildings
 {

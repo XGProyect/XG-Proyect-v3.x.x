@@ -1,6 +1,14 @@
 '3.1.0' =>
 CORE
+[#000] Reworked project structure, some files were moved around and relocated for better comprehension.-
+[#000] Reworked how the core and libraries are loaded. AutoLoader class is now being used.-
 [#000] Reworked project structure.-
+
+ADMIN
+[#000] Modified config.php file writable alert.-
+
+BUILDINGS
+[#000] Rewriten the code to handle the buildings queue, created new buildings library.-
 
 TEST
 [#000] Created testing structure to implement Unit Testing.-

@@ -61,7 +61,7 @@ class DevelopmentsLib extends XGPCore
      *
      * @return void
      */
-    public static function maxFields(&$current_planet)
+    public static function maxFields($current_planet)
     {
         return $current_planet['planet_field_max'] + (
             $current_planet[parent::$objects->getObjects(33)] * FIELDS_BY_TERRAFORMER

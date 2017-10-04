@@ -73,7 +73,7 @@ $lang['hm_errors']											= '¡Alerta!';
 $lang['hm_warning']											= '¡Advertencia!';
 $lang['hm_ok']												= '¡Ok!';
 $lang['hm_install_file_detected']							= 'Se detecto el directorio install/. Por razones se seguridad recomendamos eliminarlo.';
-$lang['hm_config_file_writable']							= 'El archivo config.php puede ser escrito, es recomendable que sea colocado en chmod 440 (sólo lectura).';
+$lang['hm_config_file_writable']							= 'Tu archivo config.php puede ser escrito. Te recomendamos que cambies los permisos a 640 o al menos a 644.';
 $lang['hm_database_errors']									= 'Hay errores en tu base de datos. Puedes verlos haciendo <a href="admin.php?page=errors">click aquí</a>';
 $lang['hm_old_version']										= 'Hay una nueva versión disponible. Haz click <a href="http://www.xgproyect.org/downloads/" target="_blank">aquí</a> para descargarla';
 $lang['hm_all_ok']											= 'No hay actualizaciones ni advertencias';
