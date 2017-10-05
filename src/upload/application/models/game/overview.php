@@ -46,18 +46,6 @@ class Overview
     {
         $this->db->closeConnection();
     }
-
-    /**
-     * Clear query results
-     * 
-     * @return boolean
-     */
-    public function clearResults($query_result)
-    {
-        $this->db->freeResult($query_result);
-        
-        return true;
-    }
     
     /**
      * Get own fleets
@@ -70,12 +58,12 @@ class Overview
     {
         if ((int)$user_id > 0) {
 
-            return $this->db->query(
+            return $this->db->queryFetchAll(
                 "SELECT *
                 FROM " . FLEETS . "
                 WHERE `fleet_owner` = '" . $user_id . "' OR 
                     `fleet_target_owner` = '" . $user_id . "';"
-            );   
+            );
         }
         
         return null;
@@ -92,7 +80,7 @@ class Overview
     {
         if ((int)$user_id > 0) {
 
-            return $this->db->query(
+            return $this->db->queryFetchAll(
                 "SELECT *
                     FROM " . PLANETS . " AS p
                     INNER JOIN " . BUILDINGS . " AS b ON b.building_planet_id = p.`planet_id`

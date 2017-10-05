@@ -210,8 +210,7 @@ class Overview extends XGPCore
 
         $own_fleets = $this->Overview_Model->getOwnFleets($this->_current_user['user_id']);
         
-        while ($fleets = $this->_db->fetchArray($own_fleets)) {
-
+        foreach ($own_fleets as $fleets) {
             ######################################
             #
             # own fleets
@@ -320,7 +319,7 @@ class Overview extends XGPCore
             }
         }
 
-        $this->Overview_Model->clearResults($own_fleets);
+        unset($own_fleets);
 
         if (count($fleet_row) > 0 && $fleet_row != '') {
             ksort($fleet_row);
@@ -368,7 +367,7 @@ class Overview extends XGPCore
         $planets_query  = $this->Overview_Model->getPlanets($this->_current_user['user_id']);
         $planet_block   = '<tr>';
 
-        while ($user_planet = $this->_db->fetchArray($planets_query)) {
+        foreach ($planets_query as $user_planet) {
             if ($user_planet['planet_id'] != $this->_current_user['user_current_planet'] && $user_planet['planet_type'] != 3) {
                 $url = 'game.php?page=overview&cp=' . $user_planet['planet_id'] . '&re=0';
                 $image = DPATH . 'planets/small/s_' . $user_planet['planet_image'] . '.jpg';
@@ -392,7 +391,7 @@ class Overview extends XGPCore
         $planet_block .= '</tr>';
 
         // CLEAN SOME MEMORY
-        $this->Overview_Model->clearResults($planets_query);
+        unset($planets_query);
 
         return $planet_block;
     }
