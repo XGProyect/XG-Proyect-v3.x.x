@@ -15,7 +15,7 @@
 namespace application\core;
 
 use application\libraries\TemplateLib;
-use application\libraries\UsersLib;
+use application\libraries\Users;
 use application\models;
 
 /**
@@ -80,8 +80,8 @@ abstract class XGPCore
      */
     private function setUsersClass()
     {
-        require_once XGP_ROOT . '/application/libraries/UsersLib.php';
-        self::$users    = new UsersLib();
+        require_once XGP_ROOT . '/application/libraries/users.php';
+        self::$users    = new Users();
     }
 
     /**

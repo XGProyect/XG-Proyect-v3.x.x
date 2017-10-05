@@ -17,7 +17,7 @@ namespace application\libraries;
 use application\core\XGPCore;
 
 /**
- * UsersLib Class
+ * Users Class
  *
  * @category Classes
  * @package  Application
@@ -26,7 +26,7 @@ use application\core\XGPCore;
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
-class UsersLib extends XGPCore
+class Users extends XGPCore
 {
 
     private $user_data;
@@ -44,6 +44,8 @@ class UsersLib extends XGPCore
 
         if ($this->isSessionSet()) {
 
+            parent::loadModel('libraries/users');
+            
             // Get user data and check it
             $this->setUserData();
 
@@ -512,4 +514,4 @@ class UsersLib extends XGPCore
     }
 }
 
-/* end of UsersLib.php */
+/* end of Users.php */
