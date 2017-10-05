@@ -15,6 +15,7 @@
 namespace application\libraries;
 
 use application\core\XGPCore;
+use application\libraries\update;
 
 /**
  * Users Class

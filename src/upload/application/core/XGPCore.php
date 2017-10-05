@@ -16,7 +16,6 @@ namespace application\core;
 
 use application\libraries\TemplateLib;
 use application\libraries\Users;
-use application\models;
 
 /**
  * XGPCore Class
