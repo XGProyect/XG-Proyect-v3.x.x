@@ -26,18 +26,8 @@ use application\core\XGPCore;
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
-class FormulaLib extends XGPCore
+class FormulaLib
 {
-    /**
-     * __construct
-     *
-     * return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
     /**
      * phalanxRange
      *

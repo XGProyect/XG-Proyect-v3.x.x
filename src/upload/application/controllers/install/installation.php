@@ -17,6 +17,7 @@ namespace application\controllers\install;
 use application\core\Database;
 use application\core\XGPCore;
 use application\libraries\FunctionsLib;
+use application\libraries\PlanetLib;
 
 /**
  * Installation Class
@@ -48,8 +49,10 @@ class Installation extends XGPCore
 
         $this->_db      = new Database();
         $this->langs    = parent::$lang;
-        $this->_planet  = FunctionsLib::loadLibrary('PlanetLib');
-
+        $this->_planet  = new PlanetLib();
+        
+        parent::loadModel('install/installation');
+        
         if ($this->serverRequirementes()) {
             
             $this->buildPage();
@@ -57,16 +60,6 @@ class Installation extends XGPCore
 
             die(FunctionsLib::message($this->langs['ins_no_server_requirements'], '', '', false, false));
         }
-    }
-
-    /**
-     * __destruct
-     *
-     * @return void
-     */
-    public function __destruct()
-    {
-        $this->_db->closeConnection();
     }
 
     /**
@@ -305,7 +298,7 @@ class Installation extends XGPCore
      */
     private function serverRequirementes()
     {
-        if (version_compare(PHP_VERSION, '5.5.0', '<')) {
+        if (version_compare(PHP_VERSION, '7.0.0', '<')) {
             
             return false;
         } else {
@@ -342,7 +335,7 @@ class Installation extends XGPCore
         }
         
         // if no db object
-        if ($this->_db == null) {
+        if (!defined('DB_NAME')) {
 
             return false;
         }
@@ -369,13 +362,17 @@ class Installation extends XGPCore
      */
     private function tablesExists()
     {
-        $result = $this->_db->query("SHOW TABLES FROM " . DB_NAME);
+        $result = $this->Installation_Model->getListOfTables(DB_NAME);
         $arr    = [];
-        
-        while ($row = $this->_db->fetchArray($result)) {
 
-            if (strpos($row[0], DB_PREFIX) !== false) {
-                $arr[]  = $row[0];
+        foreach($result as $row) {
+            
+            foreach ($row as $table) {
+
+                if (strpos($table, DB_PREFIX) !== false) {
+
+                    $arr[]  = $table;
+                }   
             }
         }
 
@@ -393,11 +390,8 @@ class Installation extends XGPCore
      * @return boolean
      */
     private function adminExists()
-    {
-        return $this->_db->queryFetch(
-            "SELECT COUNT(`user_id`) as count FROM " . USERS . " 
-                WHERE `user_id` = '1' OR `user_authlevel` = '3';"
-        )['count'] >= 1;
+    {        
+        return $this->Installation_Model->getAdmin()['count'] >= 1;
     }
     
     /**
@@ -407,7 +401,7 @@ class Installation extends XGPCore
      */
     private function tryConnection()
     {
-        return $this->_db->tryConnection($this->host, $this->user, $this->password);
+        return $this->Installation_Model->tryConnection($this->host, $this->user, $this->password);
     }
     
     /**
@@ -417,7 +411,7 @@ class Installation extends XGPCore
      */
     private function tryDatabase()
     {
-        return $this->_db->tryDatabase($this->name);
+        return $this->Installation_Model->tryDatabase($this->name);
     }
 
     /**
@@ -474,11 +468,8 @@ class Installation extends XGPCore
         require_once XGP_ROOT . 'install/databaseinfos.php';
 
         if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-            // Store the current sql_mode
-            $this->_db->query("set @orig_mode = @@global.sql_mode");
-
-            // Set sql_mode to one that won't trigger errors...
-            $this->_db->query('set @@global.sql_mode = "MYSQL40"');   
+            
+            $this->Installation_Model->setWindowsSqlMode();
         }
 
         /**
@@ -487,7 +478,7 @@ class Installation extends XGPCore
         foreach ($tables as $table => $query) {
             
             // run query for each table
-            $status[$table] = $this->_db->query($query);
+            $status[$table] = $this->Installation_Model->runSimpleQuery($query);
 
             // if something fails... return false
             if ($status[$table] != 1) {
@@ -495,8 +486,8 @@ class Installation extends XGPCore
             }
         }
         if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-            // Change it back to original sql_mode
-            $this->_db->query('set @@global.sql_mode = @orig_mode');
+            
+            $this->Installation_Model->setNormalMode();
         }
 
         // ok!

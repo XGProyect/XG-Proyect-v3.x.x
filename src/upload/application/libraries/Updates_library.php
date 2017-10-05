@@ -26,7 +26,7 @@ use application\core\XGPCore;
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
-class Update extends XGPCore
+class Updates_library extends XGPCore
 {
     private $Update_Model;
     
@@ -40,7 +40,7 @@ class Update extends XGPCore
         parent::__construct();
 
         // load Model
-        $this->Update_Model = FunctionsLib::modelLoader('libraries/update');
+        $this->Update_Model = FunctionsLib::modelLoader('libraries/updates_library');
         
         // Other stuff
         $this->cleanUp();

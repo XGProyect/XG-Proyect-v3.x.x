@@ -20,7 +20,7 @@ use application\libraries\DevelopmentsLib;
 use application\libraries\FleetsLib;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
-use application\libraries\Update;
+use application\libraries\Updates_library;
 
 /**
  * Overview Class
@@ -137,7 +137,7 @@ class Overview extends XGPCore
 
         if (!$is_current_planet) {
             // UPDATE THE PLANET INFORMATION FIRST, MAY BE SOMETHING HAS JUST FINISHED
-            Update::updateBuildingsQueue($user_planet, $this->_current_user);
+            Updates_library::updateBuildingsQueue($user_planet, $this->_current_user);
         }
 
         if ($user_planet['planet_b_building'] != 0) {

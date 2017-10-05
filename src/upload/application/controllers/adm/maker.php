@@ -19,6 +19,7 @@ use application\core\XGPCore;
 use application\libraries\adm\AdministrationLib;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
+use application\libraries\PlanetLib;
 
 /**
  * Maker Class
@@ -49,7 +50,7 @@ class Maker extends XGPCore
 
         $this->_db = new Database();
         $this->_lang = parent::$lang;
-        $this->_creator = FunctionsLib::loadLibrary('PlanetLib');
+        $this->_creator = new PlanetLib();
         $this->_current_user = parent::$users->getUserData();
 
         // Check if the user is allowed to access

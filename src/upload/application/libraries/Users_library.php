@@ -9,13 +9,10 @@
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
- * @version  3.0.0
+ * @version  3.1.0
  */
 
 namespace application\libraries;
-
-use application\core\XGPCore;
-use application\libraries\update;
 
 /**
  * Users Class
@@ -25,9 +22,9 @@ use application\libraries\update;
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
- * @version  3.0.0
+ * @version  3.1.0
  */
-class Users
+class Users_library
 {
     private $user_data;
     private $planet_data;
@@ -40,10 +37,10 @@ class Users
      */
     public function __construct()
     {
+        $this->Users_Model = FunctionsLib::modelLoader('libraries/users_library');
+        
         if ($this->isSessionSet()) {
 
-            $this->Users_Model  = FunctionsLib::modelLoader('libraries/users');
-            
             // Get user data and check it
             $this->setUserData();
 
@@ -60,7 +57,7 @@ class Users
             UpdateResourcesLib::updateResources($this->user_data, $this->planet_data, time());
 
             // Update buildings queue
-            Update::updateBuildingsQueue($this->planet_data, $this->user_data);
+            Updates_library::updateBuildingsQueue($this->planet_data, $this->user_data);
         }
     }
 

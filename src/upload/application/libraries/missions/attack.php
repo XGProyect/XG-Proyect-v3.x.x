@@ -17,6 +17,7 @@ namespace application\libraries\missions;
 use application\libraries\FleetsLib;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
+use application\libraries\PlanetLib;
 use application\libraries\UpdateResourcesLib;
 use Battle;
 use DebugManager;
@@ -482,7 +483,7 @@ class Attack extends Missions
         extract($moon);
 
         // create the moon
-        $_creator   = FunctionsLib::loadLibrary('PlanetLib');
+        $_creator   = new PlanetLib();
         $_creator->setNewMoon($galaxy, $system, $planet, $target_userId, '', '', $size);
     }
 

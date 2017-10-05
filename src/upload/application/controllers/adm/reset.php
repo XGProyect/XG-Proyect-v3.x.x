@@ -17,7 +17,7 @@ namespace application\controllers\adm;
 use application\core\Database;
 use application\core\XGPCore;
 use application\libraries\adm\AdministrationLib;
-use application\libraries\FunctionsLib;
+use application\libraries\PlanetLib;
 
 /**
  * Reset Class
@@ -52,7 +52,7 @@ class Reset extends XGPCore
         // Check if the user is allowed to access
         if (AdministrationLib::haveAccess($this->_current_user['user_authlevel']) && $this->_current_user['user_authlevel'] == 3) {
 
-            $this->_creator = FunctionsLib::loadLibrary('PlanetLib');
+            $this->_creator = new PlanetLib();
 
             $this->build_page();
         } else {

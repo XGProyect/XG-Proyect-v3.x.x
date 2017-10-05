@@ -52,7 +52,7 @@ class PlanetLib extends XGPCore
         
         $this->_db      = new Database();
         $this->langs    = parent::$lang;
-        $this->formula  = FunctionsLib::loadLibrary('FormulaLib');
+        $this->formula  = new FormulaLib();
     }
     
     /**
@@ -63,7 +63,7 @@ class PlanetLib extends XGPCore
      *
      * @return void
      */
-    public static function createPlanetWithOptions($data, $full_insert = true)
+    public function createPlanetWithOptions($data, $full_insert = true)
     {
         if (is_array($data)) {
             
@@ -232,7 +232,7 @@ class PlanetLib extends XGPCore
      *
      * @return void
      */
-    public static function createBuildings($planet_id)
+    public function createBuildings($planet_id)
     {
         $this->_db->query(
             "INSERT INTO " . BUILDINGS . " SET `building_planet_id` = '".$planet_id."';"
@@ -246,7 +246,7 @@ class PlanetLib extends XGPCore
      *
      * @return void
      */
-    public static function createDefenses($planet_id)
+    public function createDefenses($planet_id)
     {
         $this->_db->query(
             "INSERT INTO " . DEFENSES . " SET `defense_planet_id` = '".$planet_id."';"
@@ -260,7 +260,7 @@ class PlanetLib extends XGPCore
      *
      * @return void
      */
-    public static function createShips($planet_id)
+    public function createShips($planet_id)
     {
         $this->_db->query(
             "INSERT INTO " . SHIPS . " SET `ship_planet_id` = '".$planet_id."';"
@@ -274,7 +274,7 @@ class PlanetLib extends XGPCore
      *
      * @return void
      */
-    public static function deletePlanetById($planet_id)
+    public function deletePlanetById($planet_id)
     {
     }
     
@@ -288,7 +288,7 @@ class PlanetLib extends XGPCore
      *
      * @return void
      */
-    public static function deletePlanetByCoords($galaxy, $system, $planet, $type)
+    public function deletePlanetByCoords($galaxy, $system, $planet, $type)
     {
     }
 }

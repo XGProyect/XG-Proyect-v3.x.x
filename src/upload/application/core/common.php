@@ -16,7 +16,7 @@ use application\core\Hooks;
 use application\core\Sessions;
 use application\libraries\FunctionsLib;
 use application\libraries\SecurePageLib;
-use application\libraries\update;
+use application\libraries\Updates_library;
 
 $config_file    = XGP_ROOT . 'application/config/config.php';
 $installed      = false;
@@ -102,7 +102,7 @@ if (!defined('IN_INSTALL')) {
         define('DEFENSE_DEBRIS_FACTOR', FunctionsLib::readConfig('defs_cdr') / 100);
         
         // Several updates
-        new Update();
+        new Updates_library();
     }
 }
 

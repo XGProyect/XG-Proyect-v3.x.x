@@ -18,6 +18,7 @@ namespace application\controllers\home;
 use application\core\Database;
 use application\core\XGPCore;
 use application\libraries\FunctionsLib;
+use application\libraries\PlanetLib;
 
 /**
  * Register Class
@@ -54,7 +55,7 @@ class Register extends XGPCore
 
         if (FunctionsLib::readConfig('reg_enable') == 1) {
 
-            $this->creator      = FunctionsLib::loadLibrary('PlanetLib');
+            $this->creator      = new PlanetLib();
             $this->current_user = parent::$users;
             
             $this->buildPage();

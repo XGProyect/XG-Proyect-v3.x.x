@@ -1,6 +1,6 @@
 <?php
 /**
- * Users Model
+ * Users_library Model
  *
  * PHP Version 5.5+
  *
@@ -9,13 +9,13 @@
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
- * @version  3.0.2
+ * @version  3.1.0
  */
 
 namespace application\models\libraries;
 
 /**
- * Users Class
+ * Users_library Class
  *
  * @category Classes
  * @package  Application
@@ -24,7 +24,7 @@ namespace application\models\libraries;
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-class Users
+class Users_library
 {
     private $db = null;
     
