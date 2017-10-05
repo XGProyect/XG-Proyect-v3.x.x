@@ -57,7 +57,7 @@ class Update
      */
     public function deleteUsersByDeletedAndInactive($del_deleted, $del_inactive)
     {
-        return $this->db->query (
+        return $this->db->queryFetchAll (
             "SELECT u.`user_id`
             FROM `" . USERS . "` AS u
             INNER JOIN `" . SETTINGS . "` AS s ON s.setting_user_id = u.user_id
@@ -137,7 +137,7 @@ class Update
      */
     public function getStartFleets()
     {
-        return $this->db->query(
+        return $this->db->queryFetchAll(
             "SELECT 
             fleet_start_galaxy, 
             fleet_start_system, 
@@ -156,7 +156,7 @@ class Update
      */
     public function getEndFleets()
     {
-        return $this->db->query(
+        return $this->db->queryFetchAll(
             "SELECT 
             fleet_end_galaxy, 
             fleet_end_system, 
@@ -166,18 +166,6 @@ class Update
             WHERE `fleet_end_time` <= '" . time() . "
             ORDER BY fleet_id ASC';"
         );
-    }
-    
-    /**
-     * Clear query results
-     * 
-     * @return boolean
-     */
-    public function clearResults($query_result)
-    {
-        $this->db->freeResult($query_result);
-        
-        return true;
     }
     
     /**

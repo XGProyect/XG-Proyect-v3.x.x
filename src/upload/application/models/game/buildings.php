@@ -56,7 +56,7 @@ class Buildings
      * 
      * @return void
      */
-    public function updatePlanetBuildingQueue($building_id, $queue, $planet_id)
+    public function updatePlanetBuildingQueue($queue, $building_id, $planet_id)
     {
         $this->db->query(
             "UPDATE " . PLANETS . " SET

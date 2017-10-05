@@ -27,12 +27,11 @@ use application\libraries\update;
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
-class Users extends XGPCore
+class Users
 {
-
     private $user_data;
     private $planet_data;
-    private $langs;
+    private $Users_Model;
 
     /**
      * __construct
@@ -41,11 +40,9 @@ class Users extends XGPCore
      */
     public function __construct()
     {
-        $this->langs    = parent::$lang;
-
         if ($this->isSessionSet()) {
 
-            parent::loadModel('libraries/users');
+            $this->Users_Model  = FunctionsLib::modelLoader('libraries/users');
             
             // Get user data and check it
             $this->setUserData();
@@ -224,23 +221,7 @@ class Users extends XGPCore
     {
         $user_row = $this->Users_Model->setUserDataByUserName($_SESSION['user_name']);
 
-        if ($user_row['user_id'] != $_SESSION['user_id'] && !defined('IN_LOGIN')) {
-
-            FunctionsLib::message($this->langs['ccs_other_user'], XGP_ROOT, 3, false, false);
-        }
-
-        if (sha1($user_row['user_password'] . "-" . SECRETWORD) != $_SESSION['user_password'] && !defined('IN_LOGIN')) {
-
-            FunctionsLib::message($this->langs['css_different_password'], XGP_ROOT, 5, false, false);
-        }
-
-        if ($user_row['user_banned'] > 0) {
-
-            $parse                  = $this->langs;
-            $parse['banned_until']  = date(FunctionsLib::readConfig('date_format_extended'), $user_row['user_banned']);
-
-            die(parent::$page->get('home/banned_message')->parse($parse));
-        }
+        FunctionsLib::displayLoginErrors($user_row);
 
         // update user activity data
         $this->Users_Model->updateUserActivityData(

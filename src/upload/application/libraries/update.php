@@ -14,7 +14,6 @@
 
 namespace application\libraries;
 
-use application\core\Database;
 use application\core\XGPCore;
 
 /**
@@ -29,6 +28,8 @@ use application\core\XGPCore;
  */
 class Update extends XGPCore
 {
+    private $Update_Model;
+    
     /**
      * __construct
      *
@@ -39,9 +40,7 @@ class Update extends XGPCore
         parent::__construct();
 
         // load Model
-        parent::loadModel('libraries/update');
-        
-        $this->_db = new Database();
+        $this->Update_Model = FunctionsLib::modelLoader('libraries/update');
         
         // Other stuff
         $this->cleanUp();
@@ -75,8 +74,8 @@ class Update extends XGPCore
 
             if ($ChooseToDelete) {
                 
-                while ($delete = $this->_db->fetchArray($ChooseToDelete)) {
-                    
+                foreach($ChooseToDelete as $delete) {
+
                     parent::$users->deleteUser($delete['user_id']);
                 }
             }
@@ -160,9 +159,9 @@ class Update extends XGPCore
         
         include_once XGP_ROOT . LIB_PATH . 'MissionControlLib.php';
 
-        $_fleets    = $this->Update_Model->getStartFleets();
+        $_fleets = $this->Update_Model->getStartFleets();
 
-        while ($row = $this->_db->fetchArray($_fleets)) {
+        foreach ($_fleets as $row) {
             
             $array                  = array();
             $array['planet_galaxy'] = $row['fleet_start_galaxy'];
@@ -173,11 +172,10 @@ class Update extends XGPCore
             new MissionControlLib($array);
         }
 
-        $this->Update_Model->clearResults($_fleets);
+        $_fleets = $this->Update_Model->getEndFleets();
 
-        $_fleets    = $this->Update_Model->getEndFleets();
+        foreach ($_fleets as $row) {
 
-        while ($row = $this->_db->fetchArray($_fleets)) {
             $array                  = array();
             $array['planet_galaxy'] = $row['fleet_end_galaxy'];
             $array['planet_system'] = $row['fleet_end_system'];
@@ -187,7 +185,6 @@ class Update extends XGPCore
             new MissionControlLib($array);
         }
 
-        $this->Update_Model->clearResults($_fleets);
         unset($_fleets);
     }
 
@@ -220,6 +217,7 @@ class Update extends XGPCore
      */
     private static function checkBuildingQueue(&$current_planet, &$current_user)
     {
+        $db         = FunctionsLib::modelLoader('libraries/update');
         $resource   = parent::$objects->getObjects();
         $ret_value  = false;
 
@@ -308,7 +306,7 @@ class Update extends XGPCore
                     $current_planet[$resource[$element]]
                 );
 
-                $this->Update_Model->updatePlanet(
+                $db->updatePlanet(
                     $resource[$element],
                     $current_planet[$resource[$element]],
                     $current_planet
@@ -323,7 +321,7 @@ class Update extends XGPCore
             $current_planet['planet_b_building']    = 0;
             $current_planet['planet_b_building_id'] = 0;
 
-            $this->Update_Model->updateBuildingsQueue($current_planet);
+            $db->updateBuildingsQueue($current_planet);
 
             $ret_value = false;
         }

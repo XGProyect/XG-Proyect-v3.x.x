@@ -58,6 +58,31 @@ abstract class FunctionsLib extends XGPCore
             return false;
         }
     }
+    
+    /**
+     * loadModel
+     *
+     * @param string $model Model
+     *
+     * @return boolean
+     */
+    public static function modelLoader($model = '')
+    {
+        if (!empty($model)) {
+
+            // Require file
+            require_once XGP_ROOT . MODELS_PATH . $model . '.php';
+
+            $class_name = 'application\models\\' . strtr($model, ['/' => '\\']);
+            
+            // Create new $library object
+            return new $class_name(new Database());
+        } else {
+
+            // ups!
+            return false;
+        }
+    }
 
     /**
      * formatText
@@ -705,6 +730,34 @@ abstract class FunctionsLib extends XGPCore
 
             self::message(stripslashes(FunctionsLib::readConfig('close_reason')), '', '', false, false);
             die();
+        }
+    }
+    
+    /**
+     * Display login errors
+     * 
+     * @param array $user_row User Row
+     * 
+     * @return void
+     */
+    public static function displayLoginErrors($user_row)
+    {
+        if ($user_row['user_id'] != $_SESSION['user_id'] && !defined('IN_LOGIN')) {
+
+            FunctionsLib::message(parent::$lang['ccs_other_user'], XGP_ROOT, 3, false, false);
+        }
+
+        if (sha1($user_row['user_password'] . "-" . SECRETWORD) != $_SESSION['user_password'] && !defined('IN_LOGIN')) {
+
+            FunctionsLib::message(parent::$lang['css_different_password'], XGP_ROOT, 5, false, false);
+        }
+
+        if ($user_row['user_banned'] > 0) {
+
+            $parse                  = parent::$lang;
+            $parse['banned_until']  = date(FunctionsLib::readConfig('date_format_extended'), $user_row['user_banned']);
+
+            die(parent::$page->get('home/banned_message')->parse($parse));
         }
     }
 }
