@@ -1169,7 +1169,6 @@ $lang['sys_stay_mess_bend']         		= " and offers ";
 
 //----------------------------------------------------------------------------//
 //class.CheckSession.php
-$lang['ccs_multiple_users']					= 'Cookie error! There are several users with this name! You must delete your cookies. In case of problems contact the administrator.';
 $lang['ccs_other_user']						= 'Cookie error! Your cookie does not match the user! You must delete your cookies. In case of problems contact the administrator';
 $lang['css_different_password']				= 'Cookie error! Session error, must connect again! You must delete your cookies. In case of problems contact the administrator.';
 $lang['css_account_banned_message']			= 'YOUR ACCOUNT HAS BEEN SUSPENDED';

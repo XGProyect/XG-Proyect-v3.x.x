@@ -132,20 +132,11 @@ class Users extends XGPCore
      */
     public function deleteUser($user_id)
     {
-        $user_data  = parent::$db->queryFetch(
-            "SELECT `user_ally_id` FROM " . USERS . " WHERE `user_id` = '" . $user_id . "';"
-        );
-
+        $user_data  = $this->Users_Model->getAllyIdByUserId($user_id);
+        
         if ($user_data['user_ally_id'] != 0) {
 
-            $alliance = parent::$db->queryFetch(
-                "SELECT a.`alliance_id`, a.`alliance_ranks`,
-                    (SELECT COUNT(user_id) AS `ally_members` 
-                        FROM `" . USERS . "` 
-                        WHERE `user_ally_id` = '" . $user_data['user_ally_id'] . "') AS `ally_members`
-                FROM " . ALLIANCE . " AS a
-                WHERE a.`alliance_id` = '" . $user_data['user_ally_id'] . "';"
-            );
+            $alliance = $this->Users_Model->getAllianceDataByAllianceId($user_data['user_ally_id']);
 
             if ($alliance['ally_members'] > 1 
                 && (isset($alliance['alliance_ranks']) && !is_null($alliance['alliance_ranks']))) {
@@ -165,82 +156,22 @@ class Users extends XGPCore
                 
                 // check and update
                 if (is_numeric($userRank)) {
-                    parent::$db->query(
-                        "UPDATE `" . ALLIANCE . "` SET 
-                            `alliance_owner` = 
-                            (
-                                    SELECT `user_id` 
-                                FROM `" . USERS . "`
-                                WHERE `user_ally_rank_id` = '" . $userRank . "'
-                                    AND `user_ally_id` = '" . $alliance['alliance_id'] . "'
-                                LIMIT 1
-                            )
-                        WHERE `alliance_id` = '" . $alliance['alliance_id'] . "';"
-                    );
+                    
+                    $this->Users_Model->updateAllianceOwner($alliance['alliance_id'], $userRank);
                 } else {
 
-                    $this->deleteAlliance($alliance['alliance_id']);
+                    $this->Users_Model->deleteAlliance($alliance['alliance_id']);
                 }
             } else {
 
-                $this->deleteAlliance($alliance['alliance_id']);
+                $this->Users_Model->deleteAlliance($alliance['alliance_id']);
             }
         }
 
-        parent::$db->query(
-            "DELETE p,b,d,s FROM " . PLANETS . " AS p
-            INNER JOIN " . BUILDINGS . " AS b ON b.building_planet_id = p.`planet_id`
-            INNER JOIN " . DEFENSES . " AS d ON d.defense_planet_id = p.`planet_id`
-            INNER JOIN " . SHIPS . " AS s ON s.ship_planet_id = p.`planet_id`
-            WHERE `planet_user_id` = '" . $user_id . "';"
-        );
-
-        parent::$db->query(
-            "DELETE FROM " . MESSAGES . " 
-                WHERE `message_sender` = '" . $user_id . "' OR `message_receiver` = '" . $user_id . "';"
-        );
-
-        parent::$db->query(
-            "DELETE FROM " . BUDDY . " 
-                WHERE `buddy_sender` = '" . $user_id . "' OR `buddy_receiver` = '" . $user_id . "';"
-        );
-
-        parent::$db->query(
-            "DELETE r,f,n,p,se,s,u FROM " . USERS . " AS u
-            INNER JOIN " . RESEARCH . " AS r ON r.research_user_id = u.user_id
-            LEFT JOIN " . FLEETS . " AS f ON f.fleet_owner = u.user_id
-            LEFT JOIN " . NOTES . " AS n ON n.note_owner = u.user_id
-            INNER JOIN " . PREMIUM . " AS p ON p.premium_user_id = u.user_id
-            INNER JOIN " . SETTINGS . " AS se ON se.setting_user_id = u.user_id
-            INNER JOIN " . USERS_STATISTICS . " AS s ON s.user_statistic_user_id = u.user_id
-            WHERE u.`user_id` = '" . $user_id . "';"
-        );
-    }
-
-    /**
-     * deleteAlliance
-     * 
-     * @param Int $alliance_id Alliance ID
-     * 
-     * @return void
-     */
-    private function deleteAlliance($alliance_id)
-    {
-        parent::$db->query(
-            "DELETE ass, a FROM " . ALLIANCE . " AS a
-            INNER JOIN " . ALLIANCE_STATISTICS . " AS ass ON ass.alliance_statistic_alliance_id = a.alliance_id
-            WHERE a.`alliance_id` = '" . $alliance_id . "';"
-        );
-
-        parent::$db->query(
-            "UPDATE `" . USERS . "` SET 
-                `user_ally_id` = '0',
-                `user_ally_request` = '0',
-                `user_ally_request_text` = '',
-                `user_ally_register_time` = '',
-                `user_ally_rank_id` = '0'
-            WHERE `user_ally_id` = '" . $alliance_id . "';"
-        );
+        $this->Users_Model->deletePlanetsAndRelatedDataByUserId($user_id);
+        $this->Users_Model->deleteMessagesByUserId($user_id);
+        $this->Users_Model->deleteBuddysByUserId($user_id);
+        $this->Users_Model->deleteUserDataById($user_id);
     }
     
     /**
@@ -284,41 +215,13 @@ class Users extends XGPCore
     }
 
     /**
-     * setUserData
+     * Set the user data after some session and security validations
      *
      * @return void
      */
     private function setUserData()
     {
-        $user_row   = array();
-
-        $this->user_data = parent::$db->query(
-            "SELECT u.*,
-                pre.*,
-                se.*,
-                usul.user_statistic_total_rank,
-                usul.user_statistic_total_points,
-                r.*,
-                a.alliance_name,
-                (SELECT COUNT(`message_id`) AS `new_message` 
-                FROM `" . MESSAGES . "` 
-                WHERE `message_receiver` = u.`user_id` AND `message_read` = 0) AS `new_message`
-            FROM " . USERS . " AS u
-            INNER JOIN " . SETTINGS . " AS se ON se.setting_user_id = u.user_id
-            INNER JOIN " . USERS_STATISTICS . " AS usul ON usul.user_statistic_user_id = u.user_id
-            INNER JOIN " . PREMIUM . " AS pre ON pre.premium_user_id = u.user_id
-            INNER JOIN " . RESEARCH . " AS r ON r.research_user_id = u.user_id
-            LEFT JOIN " . ALLIANCE . " AS a ON a.alliance_id = u.user_ally_id
-            WHERE (u.user_name = '" . parent::$db->escapeValue($_SESSION['user_name']) . "')
-            LIMIT 1;"
-        );
-
-        if (parent::$db->numRows($this->user_data) != 1 && !defined('IN_LOGIN')) {
-
-            FunctionsLib::message($this->langs['ccs_multiple_users'], XGP_ROOT, 3, false, false);
-        }
-
-        $user_row   = parent::$db->fetchArray($this->user_data);
+        $user_row = $this->Users_Model->setUserDataByUserName($_SESSION['user_name']);
 
         if ($user_row['user_id'] != $_SESSION['user_id'] && !defined('IN_LOGIN')) {
 
@@ -335,16 +238,16 @@ class Users extends XGPCore
             $parse                  = $this->langs;
             $parse['banned_until']  = date(FunctionsLib::readConfig('date_format_extended'), $user_row['user_banned']);
 
-            die(parent::$page->parseTemplate(parent::$page->getTemplate('home/banned_message'), $parse));
+            die(parent::$page->get('home/banned_message')->parse($parse));
         }
 
-        parent::$db->query("UPDATE " . USERS . " SET
-            					`user_onlinetime` = '" . time() . "',
-            					`user_current_page` = '" . parent::$db->escapeValue($_SERVER['REQUEST_URI']) . "',
-            					`user_lastip` = '" . parent::$db->escapeValue($_SERVER['REMOTE_ADDR']) . "',
-            					`user_agent` = '" . parent::$db->escapeValue($_SERVER['HTTP_USER_AGENT']) . "'
-            					WHERE `user_id` = '" . parent::$db->escapeValue($_SESSION['user_id']) . "'
-            					LIMIT 1;");
+        // update user activity data
+        $this->Users_Model->updateUserActivityData(
+            $_SERVER['REQUEST_URI'],
+            $_SERVER['REMOTE_ADDR'],
+            $_SERVER['HTTP_USER_AGENT'],
+            $_SESSION['user_id']
+        );
 
         // pass the data
         $this->user_data = $user_row;
