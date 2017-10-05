@@ -240,6 +240,28 @@ class Database
 
         return false;
     }
+    
+    /**
+     * queryFetchAll
+     *
+     * @param string $sql SQL String
+     *
+     * @return mixed
+     */
+    public function queryFetchAll($sql = false)
+    {
+        if ($sql != false) {
+
+            $this->last_query   = $sql;
+            $result             = @$this->connection->query($sql);
+
+            $this->confirmQuery($result);
+
+            return $this->fetchAll($result);
+        }
+
+        return false;
+    }
 
     /**
      * escapeValue
@@ -269,6 +291,18 @@ class Database
     public function fetchArray($result_set)
     {
         return $result_set->fetch_array();
+    }
+    
+    /**
+     * fetchAll
+     *
+     * @param array $result_set Result set
+     *
+     * @return array
+     */
+    public function fetchAll($result_set)
+    {
+        return $result_set->fetch_all(MYSQLI_ASSOC);
     }
 
     /**
