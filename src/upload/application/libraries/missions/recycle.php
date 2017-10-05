@@ -63,7 +63,7 @@ class Recycle extends Missions
 
             if ($fleet_row['fleet_start_time'] <= time()) {
                 
-                parent::$db->query(
+                $this->_db->query(
                     "UPDATE " . PLANETS . ", " . FLEETS . " SET
                     `planet_debris_metal` = `planet_debris_metal` - '" . $recycled_resources['metal'] . "',
                     `planet_debris_crystal` = `planet_debris_crystal` - '" . $recycled_resources['crystal'] . "',
@@ -126,7 +126,7 @@ class Recycle extends Missions
      */
     private function calculateCapacity($fleet_row)
     {
-        $target_planet = parent::$db->queryFetch(
+        $target_planet = $this->_db->queryFetch(
             "SELECT 
                 `planet_name` AS target_name, 
                 `planet_debris_metal`, 

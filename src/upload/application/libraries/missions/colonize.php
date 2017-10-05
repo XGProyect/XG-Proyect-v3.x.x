@@ -48,7 +48,7 @@ class Colonize extends Missions
     public function colonizeMission($fleet_row)
     {
         if ($fleet_row['fleet_mess'] == 0) {
-            $colonization_check = parent::$db->queryFetch("SELECT
+            $colonization_check = $this->_db->queryFetch("SELECT
                                                                                                                                     (SELECT COUNT(*)
                                                                                                                                             FROM " . PLANETS . " AS pc1
                                                                                                                                             WHERE pc1.`planet_user_id` = '" . $fleet_row['fleet_owner'] . "' AND
@@ -89,7 +89,7 @@ class Colonize extends Missions
                         $this->colonize_message($fleet_row['fleet_owner'], $message[2], $fleet_row['fleet_start_time']);
 
                         if ($fleet_row['fleet_amount'] == 1) {
-                            parent::$db->query("UPDATE " . USERS_STATISTICS . " AS us SET
+                            $this->_db->query("UPDATE " . USERS_STATISTICS . " AS us SET
                                                                                                     us.`user_statistic_ships_points` = us.`user_statistic_ships_points` - " . StatisticsLib::calculatePoints(208, 1) . "
                                                                                                     WHERE us.`user_statistic_user_id` = (SELECT p.planet_user_id FROM " . PLANETS . " AS p
                                                                                                                                                                                     WHERE p.planet_galaxy = '" . $fleet_row['fleet_start_galaxy'] . "' AND
@@ -102,7 +102,7 @@ class Colonize extends Missions
                         } else {
                             parent::storeResources($fleet_row);
 
-                            parent::$db->query("UPDATE " . FLEETS . ", " . USERS_STATISTICS . " SET
+                            $this->_db->query("UPDATE " . FLEETS . ", " . USERS_STATISTICS . " SET
                                                                                                     `fleet_array` = '" . $this->build_new_fleet($fleet_row['fleet_array']) . "',
                                                                                                     `fleet_amount` = `fleet_amount` - 1,
                                                                                                     `fleet_resource_metal` = '0',

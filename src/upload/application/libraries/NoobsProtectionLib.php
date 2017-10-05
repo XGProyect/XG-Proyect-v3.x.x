@@ -14,6 +14,7 @@
 
 namespace application\libraries;
 
+use application\core\Database;
 use application\core\XGPCore;
 
 /**
@@ -38,6 +39,8 @@ class NoobsProtectionLib extends XGPCore
      */
     public function __construct()
     {
+        
+        $this->_db  = new Database();
         $configs    = FunctionsLib::readConfig('', true);
         
         $this->protection       = $configs['noobprotection'];
@@ -116,7 +119,7 @@ class NoobsProtectionLib extends XGPCore
      */
     public function returnPoints($current_user_id, $other_user_id)
     {
-        $user_points    = parent::$db->queryFetch(
+        $user_points    = $this->_db->queryFetch(
             "SELECT
             (SELECT user_statistic_total_points
                     FROM " . USERS_STATISTICS . "

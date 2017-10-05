@@ -48,7 +48,7 @@ class Stay extends Missions
      */
     public function stayMission($fleet_row)
     {
-        $transport_check = parent::$db->queryFetch(
+        $transport_check = $this->_db->queryFetch(
             "SELECT pc1.`planet_user_id` AS start_id,
                 pc1.`planet_name` AS start_name,
                 pc2.`planet_user_id` AS target_id,
@@ -151,7 +151,7 @@ class Stay extends Missions
      */
     private function startStay($fleet_id)
     {
-        parent::$db->query(
+        $this->_db->query(
             "UPDATE " . FLEETS . " SET
             `fleet_mess` = 2
             WHERE `fleet_id` = '" . $fleet_id . "' LIMIT 1 ;"

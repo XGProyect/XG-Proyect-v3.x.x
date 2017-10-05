@@ -14,6 +14,7 @@
 
 namespace application\controllers\adm;
 
+use application\core\Database;
 use application\core\XGPCore;
 use application\libraries\adm\AdministrationLib;
 use application\libraries\FormatLib;
@@ -44,6 +45,7 @@ class Information extends XGPCore
         // check if session is active
         AdministrationLib::checkSession();
 
+        $this->_db = new Database();
         $this->_lang = parent::$lang;
         $this->_current_user = parent::$users->getUserData();
 
@@ -62,7 +64,7 @@ class Information extends XGPCore
      */
     public function __destruct()
     {
-        parent::$db->closeConnection();
+        $this->_db->closeConnection();
     }
 
     /**
@@ -88,7 +90,7 @@ class Information extends XGPCore
 
         // LOAD STATISTICS
         $inactive_time = ( time() - 60 * 60 * 24 * 7 );
-        $users_count = parent::$db->queryFetch("SELECT (
+        $users_count = $this->_db->queryFetch("SELECT (
                     SELECT COUNT(user_id)
                             FROM " . USERS . "
              ) AS users_count,
@@ -118,10 +120,10 @@ class Information extends XGPCore
              ) AS fleets_count");
 
         // LOAD STATISTICS
-        $db_tables = parent::$db->query("SHOW TABLE STATUS");
+        $db_tables = $this->_db->query("SHOW TABLE STATUS");
         $db_size = 0;
 
-        while ($row = parent::$db->fetchArray($db_tables)) {
+        while ($row = $this->_db->fetchArray($db_tables)) {
             $db_size += $row['Data_length'] + $row['Index_length'];
         }
 
@@ -137,7 +139,7 @@ class Information extends XGPCore
         $parse['info_banned_users'] = $users_count['banned_users'];
         $parse['info_flying_fleets'] = $users_count['fleets_count'];
         $parse['info_database_size'] = round($db_size / 1024, 1) . ' kb';
-        $parse['info_database_server'] = 'MySQL ' . parent::$db->serverInfo();
+        $parse['info_database_server'] = 'MySQL ' . $this->_db->serverInfo();
 
         parent::$page->display(parent::$page->parseTemplate(parent::$page->getTemplate("adm/information_view"), $parse));
     }

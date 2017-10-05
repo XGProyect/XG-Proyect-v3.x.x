@@ -14,6 +14,7 @@
 
 namespace application\controllers\adm;
 
+use application\core\Database;
 use application\core\XGPCore;
 use application\libraries\adm\AdministrationLib;
 use application\libraries\FormatLib;
@@ -44,6 +45,7 @@ class Home extends XGPCore
         // check if session is active
         AdministrationLib::checkSession();
 
+        $this->_db = new Database();
         $this->_lang = parent::$lang;
         $this->_current_user = parent::$users->getUserData();
 
@@ -62,7 +64,10 @@ class Home extends XGPCore
      */
     public function __destruct()
     {
-        parent::$db->closeConnection();
+        if (isset($this->_db)) {
+
+            $this->_db->closeConnection();
+        }
     }
 
     /**
@@ -128,8 +133,8 @@ class Home extends XGPCore
         $parse['php_max_post_size']         = FormatLib::prettyBytes((int)(str_replace('M', '', ini_get('post_max_size')) * 1024 * 1024));
         $parse['php_upload_max_filesize']   = FormatLib::prettyBytes((int)(str_replace('M', '', ini_get('upload_max_filesize')) * 1024 * 1024));
         $parse['php_memory_limit']          = FormatLib::prettyBytes((int)(str_replace('M', '', ini_get('memory_limit')) * 1024 * 1024));
-        $parse['mysql_version']             = parent::$db->serverInfo();
-        $parse['mysql_packet_size']         = FormatLib::prettyBytes(parent::$db->queryFetch("SHOW VARIABLES LIKE 'max_allowed_packet'")[1]);
+        $parse['mysql_version']             = $this->_db->serverInfo();
+        $parse['mysql_packet_size']         = FormatLib::prettyBytes($this->_db->queryFetch("SHOW VARIABLES LIKE 'max_allowed_packet'")[1]);
         $db_stats                           = $this->getDbStats();
         $parse['data_usage']                = FormatLib::prettyBytes($db_stats['Data_Usage']);
         $parse['index_usage']               = FormatLib::prettyBytes($db_stats['Index_Usage']);
@@ -226,12 +231,12 @@ class Home extends XGPCore
      */
     private function getDbStats()
     {
-        return parent::$db->queryFetch(
+        return $this->_db->queryFetch(
             "SELECT 
                 SUM(`data_length`) AS `Data_Usage`,
                 SUM(`index_length`) AS `Index_Usage`
             FROM information_schema.TABLES 
-            WHERE table_schema = '" . parent::$db->escapeValue(DB_NAME) . "';"
+            WHERE table_schema = '" . $this->_db->escapeValue(DB_NAME) . "';"
         );
     }
     
@@ -242,7 +247,7 @@ class Home extends XGPCore
      */
     private function getUsersStats()
     {
-        return parent::$db->queryFetch(
+        return $this->_db->queryFetch(
             "SELECT 
                 (
                         SELECT 

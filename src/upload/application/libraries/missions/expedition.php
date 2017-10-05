@@ -180,7 +180,7 @@ class Expedition extends Missions
                     $fleet_row['fleet_end_stay']
                 );
 
-                parent::$db->query(
+                $this->_db->query(
                     "UPDATE " . FLEETS . " SET
                     `fleet_array` = '" . $new_ships . "',
                     `fleet_mess` = '1'
@@ -240,7 +240,7 @@ class Expedition extends Missions
             $found_darkmatter = ( $fleet_capacity > 10000 ) ? intval(3 * log($fleet_capacity / 10000) * 100) : 0;
             $found_darkmatter = mt_rand($found_darkmatter / 2, $found_darkmatter);
 
-            parent::$db->query(
+            $this->_db->query(
                 "UPDATE " . FLEETS . " AS f
                 INNER JOIN " . PREMIUM . " AS pr ON pr.premium_user_id = f.fleet_owner SET
                 `fleet_resource_metal` = `fleet_resource_metal` + '" . $found_metal . "',
@@ -308,7 +308,7 @@ class Expedition extends Missions
             }
         }
 
-        parent::$db->query(
+        $this->_db->query(
             "UPDATE " . FLEETS . " SET
             `fleet_array` = '" . $new_ships . "',
             `fleet_mess` = '1'

@@ -14,6 +14,7 @@
 
 namespace application\controllers\game;
 
+use application\core\Database;
 use application\core\XGPCore;
 use application\libraries\FunctionsLib;
 use application\libraries\OfficiersLib;
@@ -48,6 +49,7 @@ class Fleetshortcuts extends XGPCore
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
+        $this->_db              = new Database();
         $this->_current_user    = parent::$users->getUserData();
         $this->_lang            = parent::$lang;
         
@@ -67,7 +69,7 @@ class Fleetshortcuts extends XGPCore
      */
     public function __destruct()
     {
-        parent::$db->closeConnection();
+        $this->_db->closeConnection();
     }
 
     /**
@@ -81,9 +83,9 @@ class Fleetshortcuts extends XGPCore
             $mode = $_GET['mode'];
 
             if ($mode == "add" && !empty($_POST['galaxy']) && !empty($_POST['system']) && !empty($_POST['planet'])) {
-                $this->addFleetShortcuts(parent::$db->escapeValue(strip_tags($_POST['name'])), (int) $_POST['galaxy'], (int) $_POST['system'], (int) $_POST['planet'], (int) $_POST['moon']);
+                $this->addFleetShortcuts($this->_db->escapeValue(strip_tags($_POST['name'])), (int) $_POST['galaxy'], (int) $_POST['system'], (int) $_POST['planet'], (int) $_POST['moon']);
             } elseif ($mode == "edit" && isset($_GET['a']) && !empty($_POST['galaxy']) && !empty($_POST['system']) && !empty($_POST['planet'])) {
-                $this->saveFleetShortcuts((int) $_GET['a'], parent::$db->escapeValue(strip_tags($_POST['name'])), (int) $_POST['galaxy'], (int) $_POST['system'], (int) $_POST['planet'], (int) $_POST['moon']);
+                $this->saveFleetShortcuts((int) $_GET['a'], $this->_db->escapeValue(strip_tags($_POST['name'])), (int) $_POST['galaxy'], (int) $_POST['system'], (int) $_POST['planet'], (int) $_POST['moon']);
             } elseif ($mode == "delete" && isset($_GET['a'])) {
                 $this->deleteFleetShortcuts((int) $_GET['a']);
             } elseif (isset($_GET['a'])) {
@@ -131,7 +133,7 @@ class Fleetshortcuts extends XGPCore
 
         $this->_current_user['user_fleet_shortcuts'] = implode(";", $scarray);
 
-        parent::$db->query("UPDATE " . USERS . " SET
+        $this->_db->query("UPDATE " . USERS . " SET
 								user_fleet_shortcuts='" . ($this->_current_user['user_fleet_shortcuts']) . "'
 								WHERE user_id=" . ($this->_current_user['user_id']));
 
@@ -142,7 +144,7 @@ class Fleetshortcuts extends XGPCore
     {
         $this->_current_user['user_fleet_shortcuts'] .= "{$name},{$galaxy},{$system},{$planet},{$moon};";
 
-        parent::$db->query("UPDATE " . USERS . " SET
+        $this->_db->query("UPDATE " . USERS . " SET
 								user_fleet_shortcuts='" . ($this->_current_user['user_fleet_shortcuts']) . "'
 								WHERE user_id=" . ($this->_current_user['user_id']));
 
@@ -157,7 +159,7 @@ class Fleetshortcuts extends XGPCore
 
         $this->_current_user['user_fleet_shortcuts'] = implode(";", $scarray);
 
-        parent::$db->query("UPDATE " . USERS . " SET
+        $this->_db->query("UPDATE " . USERS . " SET
 							user_fleet_shortcuts='" . ($this->_current_user['user_fleet_shortcuts']) . "'
 							WHERE user_id=" . ($this->_current_user['user_id']));
 

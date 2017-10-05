@@ -51,7 +51,7 @@ class Destroy extends Missions
     {
         if ($fleet_row['fleet_mess'] == 0 && $fleet_row['fleet_start_time'] <= time()) {
 
-            $current_data = parent::$db->queryFetch(
+            $current_data = $this->_db->queryFetch(
                 "SELECT p.planet_name, r.research_weapons_technology, r.research_shielding_technology, r.research_armour_technology, u.user_name, u.user_id
                 FROM " . PLANETS . " AS p
                 INNER JOIN " . USERS . " AS u ON u.user_id = p.planet_user_id
@@ -63,7 +63,7 @@ class Destroy extends Missions
                                 p.`planet_type` = " . $fleet_row['fleet_start_type'] . ";"
             );
 
-            $target_data = parent::$db->queryFetch(
+            $target_data = $this->_db->queryFetch(
                 "SELECT s.*, d.*, p.`planet_id`, p.planet_diameter, p.planet_user_id, u.user_name, u.user_current_planet, r.research_weapons_technology, r.research_shielding_technology, r.research_armour_technology
                 FROM " . PLANETS . " AS p
                 INNER JOIN " . SHIPS . " AS s ON s.ship_planet_id = p.`planet_id`
@@ -157,24 +157,24 @@ class Destroy extends Missions
                     $resultat = '1';
                     $finmess = $this->langs['sys_destruc_reussi'];
 
-                    parent::$db->query("UPDATE " . FLEETS . " AS f1 SET
+                    $this->_db->query("UPDATE " . FLEETS . " AS f1 SET
 											f1.`fleet_start_type` = '1'
 											WHERE f1.`fleet_start_galaxy` = '" . $fleet_row['fleet_end_galaxy'] . "' AND
 													f1.`fleet_start_system` = '" . $fleet_row['fleet_end_system'] . "' AND
 													f1.`fleet_start_planet` = '" . $fleet_row['fleet_end_planet'] . "';");
 
-                    parent::$db->query("UPDATE " . FLEETS . " AS f2 SET
+                    $this->_db->query("UPDATE " . FLEETS . " AS f2 SET
 											f2.`fleet_end_type` = '1'
 											WHERE f2.`fleet_end_galaxy` = '" . $fleet_row['fleet_end_galaxy'] . "' AND
 													f2.`fleet_end_system` = '" . $fleet_row['fleet_end_system'] . "' AND
 													f2.`fleet_end_planet` = '" . $fleet_row['fleet_end_planet'] . "';");
 
-                    parent::$db->query("UPDATE " . PLANETS . " AS p SET
+                    $this->_db->query("UPDATE " . PLANETS . " AS p SET
 											`planet_destroyed` = '" . time() . "'
 											WHERE p.`planet_id` = '" . $target_data['planet_id'] . "';");
 
                     if ($target_data['user_current_planet'] == $target_data['planet_id']) {
-                        parent::$db->query("UPDATE " . USERS . " SET
+                        $this->_db->query("UPDATE " . USERS . " SET
 												`user_current_planet` = (SELECT `planet_id`
 																	FROM " . PLANETS . "
 																	WHERE `planet_galaxy` = '" . $fleet_row['fleet_end_galaxy'] . "' AND
@@ -208,7 +208,7 @@ class Destroy extends Missions
 
             $introdestruc = sprintf($this->langs['sys_destruc_mess'], $current_data['planet_name'], $fleet_row['fleet_start_galaxy'], $fleet_row['fleet_start_system'], $fleet_row['fleet_start_planet'], $fleet_row['fleet_end_galaxy'], $fleet_row['fleet_end_system'], $fleet_row['fleet_end_planet']);
 
-            parent::$db->query("UPDATE " . PLANETS . " AS p
+            $this->_db->query("UPDATE " . PLANETS . " AS p
                 INNER JOIN " . SHIPS . " AS s ON s.ship_planet_id = p.`planet_id`
                 INNER JOIN " . DEFENSES . " AS d ON d.defense_planet_id = p.`planet_id` SET
                 $TargetPlanetUpd
@@ -360,7 +360,7 @@ class Destroy extends Missions
 
             $owners = $fleet_row['fleet_owner'] . "," . $target_data['planet_user_id'];
 
-            parent::$db->query(
+            $this->_db->query(
                 "INSERT INTO `" . REPORTS . "` SET
                 `report_owners` = '" . $owners . "',
                 `report_rid` = '" . $rid . "',
@@ -378,7 +378,7 @@ class Destroy extends Missions
                 $fleet_row['fleet_end_planet']
             );
 
-            parent::$db->query(
+            $this->_db->query(
                 "UPDATE " . FLEETS . " SET
                 `fleet_amount` = '" . $FleetAmount . "',
                 `fleet_array` = '" . $FleetArray . "',

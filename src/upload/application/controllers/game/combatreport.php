@@ -14,6 +14,7 @@
 
 namespace application\controllers\game;
 
+use application\core\Database;
 use application\core\XGPCore;
 use application\libraries\FunctionsLib;
 
@@ -49,6 +50,7 @@ class Combatreport extends XGPCore
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
+        $this->_db          = new Database();
         $this->langs        = parent::$lang;
         $this->current_user = parent::$users->getUserData();
 
@@ -62,7 +64,7 @@ class Combatreport extends XGPCore
      */
     public function __destruct()
     {
-        parent::$db->closeConnection();
+        $this->_db->closeConnection();
     }
 
     /**
@@ -73,10 +75,10 @@ class Combatreport extends XGPCore
     private function buildPage()
     {
         $report     = isset($_GET['report']) ? $_GET['report'] : die();
-        $reportrow  = parent::$db->queryFetch(
+        $reportrow  = $this->_db->queryFetch(
             "SELECT *
             FROM " .  REPORTS . "
-            WHERE `report_rid` = '" . (parent::$db->escapeValue($report)) . "';"
+            WHERE `report_rid` = '" . ($this->_db->escapeValue($report)) . "';"
         );
         
         // Get owners

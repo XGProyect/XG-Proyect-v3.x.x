@@ -14,6 +14,7 @@
 
 namespace application\controllers\game;
 
+use application\core\Database;
 use application\core\XGPCore;
 use application\libraries\FleetsLib;
 use application\libraries\FormatLib;
@@ -56,6 +57,7 @@ class Galaxy extends XGPCore
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
+        $this->_db = new Database();
         $this->_current_user = parent::$users->getUserData();
         $this->_current_planet = parent::$users->getPlanetData();
         $this->_lang = parent::$lang;
@@ -82,7 +84,7 @@ class Galaxy extends XGPCore
      */
     public function __destruct()
     {
-        parent::$db->closeConnection();
+        $this->_db->closeConnection();
     }
 
     /**
@@ -104,13 +106,13 @@ class Galaxy extends XGPCore
         $CurrentPlID = $this->_current_planet['planet_id'];
         $CurrentSP = $this->_current_planet['ship_espionage_probe'];
 
-        $maxfleet = parent::$db->query(
+        $maxfleet = $this->_db->query(
             "SELECT `fleet_id`
             FROM " . FLEETS . "
             WHERE `fleet_owner` = '" . intval($this->_current_user['user_id']) . "';"
         );
 
-        $maxfleet_count = parent::$db->numRows($maxfleet);
+        $maxfleet_count = $this->_db->numRows($maxfleet);
 
         if (!isset($mode)) {
             if (isset($_GET['mode'])) {
@@ -138,7 +140,7 @@ class Galaxy extends XGPCore
         }
         // END FIX BY alivan
 
-        $this->_galaxy_data = parent::$db->query(
+        $this->_galaxy_data = $this->_db->query(
             "SELECT
                 (SELECT CONCAT ( GROUP_CONCAT(buddy_receiver) , ',' , GROUP_CONCAT(buddy_sender) ) AS buddys FROM " . BUDDY . " AS b WHERE (b.buddy_receiver = u.user_id OR b.buddy_sender = u.user_id ) ) AS buddys,
                 p.planet_debris_metal AS metal,
@@ -232,7 +234,7 @@ class Galaxy extends XGPCore
         $parse['alliance'] = '';
         $parse['actions'] = '';
 
-        while ($row_data = parent::$db->fetchArray($this->_galaxy_data)) {
+        while ($row_data = $this->_db->fetchArray($this->_galaxy_data)) {
             
             for ($current_planet = $start; $current_planet < 1 + ( MAX_PLANET_IN_SYSTEM ); $current_planet++) {
             
@@ -403,7 +405,7 @@ class Galaxy extends XGPCore
         $tempvar1 = abs($s - $this->_current_planet['planet_system']);
         $tempvar2 = $this->_formula->missileRange($this->_current_user['research_impulse_drive']);
 
-        $tempvar3 = parent::$db->queryFetch(
+        $tempvar3 = $this->_db->queryFetch(
                 "SELECT u.`user_id`,u.`user_onlinetime`,s.`setting_vacations_status`
             FROM " . USERS . " AS u
             INNER JOIN " . SETTINGS . " AS s ON s.setting_user_id = u.user_id
@@ -497,7 +499,7 @@ class Galaxy extends XGPCore
         );
 
 
-        parent::$db->query("INSERT INTO " . FLEETS . " SET
+        $this->_db->query("INSERT INTO " . FLEETS . " SET
 								fleet_owner = " . $this->_current_user['user_id'] . ",
 								fleet_mission = 10,
 								fleet_amount = " . $anz . ",
@@ -522,7 +524,7 @@ class Galaxy extends XGPCore
 								fleet_mess = 0,
 								fleet_creation = " . time() . ";");
 
-        parent::$db->query("UPDATE " . DEFENSES . " SET
+        $this->_db->query("UPDATE " . DEFENSES . " SET
 								defense_interplanetary_missile = defense_interplanetary_missile - " . $anz . "
 								WHERE defense_planet_id =  '" . $this->_current_user['user_current_planet'] . "'");
 
@@ -615,23 +617,23 @@ class Galaxy extends XGPCore
         }
 
 
-        $CurrentFlyingFleets = parent::$db->queryFetch("SELECT COUNT(fleet_id) AS `Nbre`
+        $CurrentFlyingFleets = $this->_db->queryFetch("SELECT COUNT(fleet_id) AS `Nbre`
 																FROM " . FLEETS . "
 																WHERE `fleet_owner` = '" . $this->_current_user['user_id'] . "';");
 
         $CurrentFlyingFleets = $CurrentFlyingFleets['Nbre'];
 
-        $TargetRow = parent::$db->queryFetch("SELECT *
+        $TargetRow = $this->_db->queryFetch("SELECT *
 																FROM " . PLANETS . "
-																WHERE `planet_galaxy` = '" . parent::$db->escapeValue($_POST['galaxy']) . "' AND
-																		`planet_system` = '" . parent::$db->escapeValue($_POST['system']) . "' AND
-																		`planet_planet` = '" . parent::$db->escapeValue($_POST['planet']) . "' AND
-																		`planet_type` = '" . parent::$db->escapeValue($_POST['planettype']) . "';");
+																WHERE `planet_galaxy` = '" . $this->_db->escapeValue($_POST['galaxy']) . "' AND
+																		`planet_system` = '" . $this->_db->escapeValue($_POST['system']) . "' AND
+																		`planet_planet` = '" . $this->_db->escapeValue($_POST['planet']) . "' AND
+																		`planet_type` = '" . $this->_db->escapeValue($_POST['planettype']) . "';");
 
         if ($TargetRow['planet_user_id'] == '') {
             $TargetUser = $this->_current_user;
         } elseif ($TargetRow['planet_user_id'] != '') {
-            $TargetUser = parent::$db->queryFetch("SELECT u.`user_id`, u.`user_onlinetime`, u.`user_authlevel`, s.`setting_vacations_status`
+            $TargetUser = $this->_db->queryFetch("SELECT u.`user_id`, u.`user_onlinetime`, u.`user_authlevel`, s.`setting_vacations_status`
 														FROM " . USERS . " AS u
 														INNER JOIN " . SETTINGS . " AS s ON s.setting_user_id = u.user_id
 														WHERE `user_id` = '" . $TargetRow['planet_user_id'] . "';");
@@ -639,11 +641,11 @@ class Galaxy extends XGPCore
 
         // invisible debris by jstar
         if ($order == 8) {
-            $TargetGPlanet = parent::$db->queryFetch("SELECT planet_invisible_start_time, planet_debris_metal, planet_debris_crystal
+            $TargetGPlanet = $this->_db->queryFetch("SELECT planet_invisible_start_time, planet_debris_metal, planet_debris_crystal
 																FROM " . PLANETS . "
-																WHERE planet_galaxy = '" . parent::$db->escapeValue($_POST['galaxy']) . "' AND
-																		planet_system = '" . parent::$db->escapeValue($_POST['system']) . "' AND
-																		planet_planet = '" . parent::$db->escapeValue($_POST['planet']) . "' AND
+																WHERE planet_galaxy = '" . $this->_db->escapeValue($_POST['galaxy']) . "' AND
+																		planet_system = '" . $this->_db->escapeValue($_POST['system']) . "' AND
+																		planet_planet = '" . $this->_db->escapeValue($_POST['planet']) . "' AND
 																		planet_type = 1;");
 
             if ($TargetGPlanet['planet_debris_metal'] == 0 && $TargetGPlanet['planet_debris_crystal'] == 0 && time() > ( $TargetGPlanet['planet_invisible_start_time'] + DEBRIS_LIFE_TIME )) {
@@ -727,7 +729,7 @@ class Galaxy extends XGPCore
             die("601 ");
         }
 
-        parent::$db->query("INSERT INTO " . FLEETS . " SET
+        $this->_db->query("INSERT INTO " . FLEETS . " SET
 								`fleet_owner` = '" . $this->_current_user['user_id'] . "',
 								`fleet_mission` = '" . intval($order) . "',
 								`fleet_amount` = '" . $FleetShipCount . "',
@@ -747,7 +749,7 @@ class Galaxy extends XGPCore
 
         $UserDeuterium -= $consumption;
 
-        parent::$db->query("UPDATE " . PLANETS . " AS p
+        $this->_db->query("UPDATE " . PLANETS . " AS p
 								INNER JOIN " . SHIPS . " AS s ON s.ship_planet_id = p.`planet_id` SET
 								$FleetSubQRY
 								p.`planet_deuterium` = '" . ( ( $UserDeuterium < 1 ) ? 0 : $UserDeuterium ) . "'
@@ -775,7 +777,7 @@ class Galaxy extends XGPCore
      */
     private function reduce_deuterium()
     {
-        parent::$db->query("UPDATE " . PLANETS . " SET
+        $this->_db->query("UPDATE " . PLANETS . " SET
 								`planet_deuterium` = `planet_deuterium` -  10
 								WHERE `planet_id` = '" . $this->_current_planet['planet_id'] . "' LIMIT 1");
     }

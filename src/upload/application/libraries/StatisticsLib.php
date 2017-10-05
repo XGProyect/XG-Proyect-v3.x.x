@@ -14,6 +14,7 @@
 
 namespace application\libraries;
 
+use application\core\Database;
 use application\core\XGPCore;
 
 /**
@@ -28,9 +29,8 @@ use application\core\XGPCore;
  */
 class StatisticsLib extends XGPCore
 {
-
     private static $time;
-
+    
     /**
      * calculatePoints
      *
@@ -94,7 +94,9 @@ class StatisticsLib extends XGPCore
         }
         
         
-        $objectsToUpdate    = parent::$db->queryFetch($query);
+        
+        $db                 = new Database();
+        $objectsToUpdate    = $db->queryFetch($query);
         $objects            = parent::$objects->getObjects();
 
         if (!is_null($objects)) {
@@ -123,7 +125,7 @@ class StatisticsLib extends XGPCore
 
                 $what   = strtr($what, ['research' => 'technology']);
 
-                parent::$db->query(
+                $db->query(
                     "UPDATE " . USERS_STATISTICS . " SET 
                         `user_statistic_" . $what . "_points` = '" . $points . "' 
                     WHERE `user_statistic_user_id` = '" . $user_id . "'"
@@ -180,8 +182,10 @@ class StatisticsLib extends XGPCore
      */
     private static function makeUserRank()
     {
+        $db = new Database();
+        
         // GET ALL DATA FROM THE USERS TO UPDATE
-        $all_stats_data = parent::$db->query(
+        $all_stats_data = $db->query(
             "SELECT `user_statistic_user_id`,
             `user_statistic_technology_rank`,
             `user_statistic_technology_points`,
@@ -202,7 +206,7 @@ class StatisticsLib extends XGPCore
         );
 
         // BUILD ALL THE ARRAYS
-        while ($CurUser = parent::$db->fetchAssoc($all_stats_data)) {
+        while ($CurUser = $db->fetchAssoc($all_stats_data)) {
 
             $tech['old_rank'][$CurUser['user_statistic_user_id']]   = $CurUser['user_statistic_technology_rank'];
             $tech['points'][$CurUser['user_statistic_user_id']]     = $CurUser['user_statistic_technology_points'];
@@ -347,7 +351,7 @@ class StatisticsLib extends XGPCore
 								user_statistic_update_time = VALUES(user_statistic_update_time);';
 
         // RUN QUERY
-        parent::$db->query($update_query);
+        $db->query($update_query);
 
         // MEMORY CLEAN UP
         unset($all_stats_data, $build, $defs, $ships, $tech, $rank, $update_query, $values);
@@ -360,8 +364,10 @@ class StatisticsLib extends XGPCore
      */
     private static function makeAllyRank()
     {
+        $db = new Database();
+        
         // GET ALL DATA FROM THE USERS TO UPDATE
-        $all_stats_data = parent::$db->query(
+        $all_stats_data = $db->query(
             "SELECT a.`alliance_id`,
             ass.alliance_statistic_technology_rank,
             ass.alliance_statistic_buildings_rank,
@@ -381,13 +387,13 @@ class StatisticsLib extends XGPCore
         );
 
         // ANY ALLIANCE ?
-        if (empty($all_stats_data) or parent::$db->numRows($all_stats_data) == 0) {
+        if (empty($all_stats_data) or $db->numRows($all_stats_data) == 0) {
 
             return;
         }
 
         // BUILD ALL THE ARRAYS
-        while ($CurAlliance = parent::$db->fetchAssoc($all_stats_data)) {
+        while ($CurAlliance = $db->fetchAssoc($all_stats_data)) {
 
             $tech['old_rank'][$CurAlliance['alliance_id']]  = $CurAlliance['alliance_statistic_technology_rank'];
             $tech['points'][$CurAlliance['alliance_id']]    = $CurAlliance['technology_points'];
@@ -544,7 +550,7 @@ class StatisticsLib extends XGPCore
                             alliance_statistic_update_time = VALUES(alliance_statistic_update_time);';
 
         // RUN QUERY
-        parent::$db->query($update_query);
+        $db->query($update_query);
 
         // MEMORY CLEAN UP
         unset($all_stats_data, $build, $defs, $ships, $tech, $rank, $update_query, $values);

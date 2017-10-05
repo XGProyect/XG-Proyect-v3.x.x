@@ -14,6 +14,7 @@
 
 namespace application\controllers\adm;
 
+use application\core\Database;
 use application\core\XGPCore;
 use application\libraries\adm\AdministrationLib;
 use application\libraries\FunctionsLib;
@@ -43,6 +44,7 @@ class Globalmessage extends XGPCore
         // check if session is active
         AdministrationLib::checkSession();
 
+        $this->_db = new Database();
         $this->_lang = parent::$lang;
         $this->_current_user = parent::$users->getUserData();
 
@@ -61,7 +63,7 @@ class Globalmessage extends XGPCore
      */
     public function __destruct()
     {
-        parent::$db->closeConnection();
+        $this->_db->closeConnection();
     }
 
     /**
@@ -85,7 +87,7 @@ class Globalmessage extends XGPCore
             $level = $this->_lang['user_level'][$this->_current_user['user_authlevel']];
 
             if (( isset($_POST['tresc']) && $_POST['tresc'] != '' ) && ( isset($_POST['temat']) && $_POST['temat'] != '' ) && ( isset($_POST['message']) or isset($_POST['mail']) )) {
-                $sq = parent::$db->query("SELECT `user_id` , `user_name`, `user_email`
+                $sq = $this->_db->query("SELECT `user_id` , `user_name`, `user_email`
 														FROM " . USERS . "");
 
                 if (isset($_POST['message'])) {
@@ -94,7 +96,7 @@ class Globalmessage extends XGPCore
                     $subject = '<font color="' . $color . '">' . $_POST['temat'] . '</font>';
                     $message = '<font color="' . $color . '"><b>' . $_POST['tresc'] . '</b></font>';
 
-                    while ($u = parent::$db->fetchArray($sq)) {
+                    while ($u = $this->_db->fetchArray($sq)) {
                         FunctionsLib::sendMessage($u['user_id'], $this->_current_user['user_id'], $time, 5, $from, $subject, $message);
                         $_POST['tresc'] = str_replace(":name:", $u['user_name'], $_POST['tresc']);
                     }
@@ -107,7 +109,7 @@ class Globalmessage extends XGPCore
                         'name' => FunctionsLib::readConfig('game_name')
                     ];
                     
-                    while ($u = parent::$db->fetchArray($sq)) {
+                    while ($u = $this->_db->fetchArray($sq)) {
                         
                         FunctionsLib::sendEmail(
                             $u['user_email'],

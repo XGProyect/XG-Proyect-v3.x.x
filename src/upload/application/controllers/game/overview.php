@@ -14,6 +14,7 @@
 
 namespace application\controllers\game;
 
+use application\core\Database;
 use application\core\XGPCore;
 use application\libraries\DevelopmentsLib;
 use application\libraries\FleetsLib;
@@ -56,6 +57,7 @@ class Overview extends XGPCore
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
+        $this->_db = new Database();
         $this->_lang = parent::$lang;
         $this->_current_user = parent::$users->getUserData();
         $this->_current_planet = parent::$users->getPlanetData();
@@ -208,7 +210,7 @@ class Overview extends XGPCore
 
         $own_fleets = $this->Overview_Model->getOwnFleets($this->_current_user['user_id']);
         
-        while ($fleets = parent::$db->fetchArray($own_fleets)) {
+        while ($fleets = $this->_db->fetchArray($own_fleets)) {
 
             ######################################
             #
@@ -366,7 +368,7 @@ class Overview extends XGPCore
         $planets_query  = $this->Overview_Model->getPlanets($this->_current_user['user_id']);
         $planet_block   = '<tr>';
 
-        while ($user_planet = parent::$db->fetchArray($planets_query)) {
+        while ($user_planet = $this->_db->fetchArray($planets_query)) {
             if ($user_planet['planet_id'] != $this->_current_user['user_current_planet'] && $user_planet['planet_type'] != 3) {
                 $url = 'game.php?page=overview&cp=' . $user_planet['planet_id'] . '&re=0';
                 $image = DPATH . 'planets/small/s_' . $user_planet['planet_image'] . '.jpg';

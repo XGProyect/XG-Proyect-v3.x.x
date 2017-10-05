@@ -15,6 +15,7 @@
 
 namespace application\controllers\home;
 
+use application\core\Database;
 use application\core\XGPCore;
 use application\libraries\FunctionsLib;
 
@@ -45,6 +46,7 @@ class Mail extends XGPCore
     {
         parent::__construct();
 
+        $this->_db      = new Database();
         $this->langs    = parent::$lang;
         
         $this->buildPage();
@@ -57,7 +59,7 @@ class Mail extends XGPCore
      */
     public function __destruct()
     {
-        parent::$db->closeConnection();
+        $this->_db->closeConnection();
     }
 
     /**
@@ -127,10 +129,10 @@ class Mail extends XGPCore
      */
     private function processRequest($mail)
     {
-        $ExistMail  = parent::$db->queryFetch(
+        $ExistMail  = $this->_db->queryFetch(
             "SELECT `user_name`
             FROM " . USERS . "
-            WHERE `user_email` = '" . parent::$db->escapeValue($mail) . "' 
+            WHERE `user_email` = '" . $this->_db->escapeValue($mail) . "' 
             LIMIT 1;"
         );
 
@@ -140,10 +142,10 @@ class Mail extends XGPCore
         } else {
             $new_password = $this->sendPassEmail($mail, $ExistMail['user_name']);
 
-            parent::$db->query(
+            $this->_db->query(
                 "UPDATE " . USERS . " SET
                 `user_password` ='" . sha1($new_password) . "'
-                WHERE `user_email`='" . parent::$db->escapeValue($mail) . "' 
+                WHERE `user_email`='" . $this->_db->escapeValue($mail) . "' 
                 LIMIT 1;"
             );
             

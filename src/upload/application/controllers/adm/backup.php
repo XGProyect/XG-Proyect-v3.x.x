@@ -14,6 +14,7 @@
 
 namespace application\controllers\adm;
 
+use application\core\Database;
 use application\core\XGPCore;
 use application\libraries\adm\AdministrationLib;
 use application\libraries\FunctionsLib;
@@ -43,6 +44,7 @@ class Backup extends XGPCore
         // check if session is active
         AdministrationLib::checkSession();
 
+        $this->_db = new Database();
         $this->_lang = parent::$lang;
         $this->_current_user = parent::$users->getUserData();
 
@@ -61,7 +63,7 @@ class Backup extends XGPCore
      */
     public function __destruct()
     {
-        parent::$db->closeConnection();
+        $this->_db->closeConnection();
     }
 
     /**
@@ -82,7 +84,7 @@ class Backup extends XGPCore
 
             // BACKUP DATABASE RIGHT NOW
             if (isset($_POST['backup']) && $_POST['backup']) {
-                $result = parent::$db->backupDb();
+                $result = $this->_db->backupDb();
 
                 if ($result != false) {
                     $parse['alert'] = AdministrationLib::saveMessage('ok', str_replace('%s', round($result / 1024, 2), $this->_lang['bku_backup_done']));

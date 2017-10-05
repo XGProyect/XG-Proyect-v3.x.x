@@ -14,6 +14,7 @@
 
 namespace application\libraries;
 
+use application\core\Database;
 use application\core\XGPCore;
 
 /**
@@ -400,6 +401,7 @@ class DevelopmentsLib extends XGPCore
      */
     public static function setFirstElement(&$current_planet, $current_user)
     {
+        $db         = new Database();
         $lang       = parent::$lang;
         $resource   = parent::$objects->getObjects();
 
@@ -538,7 +540,7 @@ class DevelopmentsLib extends XGPCore
             $current_planet['planet_b_building']    = $build_end_time;
             $current_planet['planet_b_building_id'] = $new_queue;
 
-            parent::$db->query(
+            $db->query(
                 "UPDATE " . PLANETS . " SET
                 `planet_metal` = '" . $current_planet['planet_metal'] . "',
                 `planet_crystal` = '" . $current_planet['planet_crystal'] . "',

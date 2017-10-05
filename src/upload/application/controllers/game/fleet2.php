@@ -14,6 +14,7 @@
 
 namespace application\controllers\game;
 
+use application\core\Database;
 use application\core\XGPCore;
 use application\libraries\FleetsLib;
 use application\libraries\FunctionsLib;
@@ -53,6 +54,7 @@ class Fleet2 extends XGPCore
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
+        $this->_db = new Database();
         $this->_lang = parent::$lang;
         $this->_current_user = parent::$users->getUserData();
         $this->_current_planet = parent::$users->getPlanetData();
@@ -67,7 +69,7 @@ class Fleet2 extends XGPCore
      */
     public function __destruct()
     {
-        parent::$db->closeConnection();
+        $this->_db->closeConnection();
     }
 
     /**
@@ -267,7 +269,7 @@ class Fleet2 extends XGPCore
         #####################################################################################################
         $acs_fleets = '';
 
-        while ($row = parent::$db->fetchArray($getCurrentAcs)) {
+        while ($row = $this->_db->fetchArray($getCurrentAcs)) {
             $members    = explode(",", $row['acs_fleet_invited']);
 
             foreach ($members as $a => $b) {

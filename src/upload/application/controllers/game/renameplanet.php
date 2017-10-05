@@ -14,6 +14,7 @@
 
 namespace application\controllers\game;
 
+use application\core\Database;
 use application\core\XGPCore;
 use application\libraries\FunctionsLib;
 
@@ -48,6 +49,7 @@ class Renameplanet extends XGPCore
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
+        $this->_db = new Database();
         $this->_lang = parent::$lang;
         $this->_current_user = parent::$users->getUserData();
         $this->_current_planet = parent::$users->getPlanetData();
@@ -62,7 +64,7 @@ class Renameplanet extends XGPCore
      */
     public function __destruct()
     {
-        parent::$db->closeConnection();
+        $this->_db->closeConnection();
     }
 
     /**
@@ -113,14 +115,14 @@ class Renameplanet extends XGPCore
      */
     private function rename_planet($new_name)
     {
-        $new_name = parent::$db->escapeValue(strip_tags(trim($new_name)));
+        $new_name = $this->_db->escapeValue(strip_tags(trim($new_name)));
 
         if (preg_match("/[^A-z0-9_\- ]/", $new_name) == 1) {
             FunctionsLib::message($this->_lang['ov_newname_error'], "game.php?page=renameplanet", 2);
         }
 
         if ($new_name != "") {
-            parent::$db->query("UPDATE " . PLANETS . "
+            $this->_db->query("UPDATE " . PLANETS . "
 									SET `planet_name` = '" . $new_name . "'
 									WHERE `planet_id` = '" . intval($this->_current_user['user_current_planet']) . "'
 									LIMIT 1;");
@@ -137,7 +139,7 @@ class Renameplanet extends XGPCore
     {
         $own_fleet = 0;
         $enemy_fleet = 0;
-        $fleets_incoming = parent::$db->query("SELECT *
+        $fleets_incoming = $this->_db->query("SELECT *
 														FROM " . FLEETS . "
 														WHERE ( fleet_owner = '" . intval($this->_current_user['user_id']) . "' AND
 																fleet_start_galaxy='" . intval($this->_current_planet['planet_galaxy']) . "' AND
@@ -148,7 +150,7 @@ class Renameplanet extends XGPCore
 																fleet_end_system='" . intval($this->_current_planet['planet_system']) . "' AND
 																fleet_end_planet='" . intval($this->_current_planet['planet_planet']) . "')");
 
-        while ($fleet = parent::$db->fetchArray($fleets_incoming)) {
+        while ($fleet = $this->_db->fetchArray($fleets_incoming)) {
             $own_fleet = $fleet['fleet_owner'];
             $enemy_fleet = $fleet['fleet_target_owner'];
 
@@ -170,7 +172,7 @@ class Renameplanet extends XGPCore
 
                 if ($this->_current_planet['moon_id'] != 0) {
 
-                    parent::$db->query(
+                    $this->_db->query(
                         "UPDATE " . PLANETS . " AS p, " . PLANETS . " AS m, " . USERS . " AS u SET
                         p.`planet_destroyed` = '" . (time() + (PLANETS_LIFE_TIME * 3600)) . "',
                         m.`planet_destroyed` = '" . (time() + (PLANETS_LIFE_TIME * 3600)) . "',
@@ -183,7 +185,7 @@ class Renameplanet extends XGPCore
                             u.`user_id` = '" . $this->_current_user['user_id'] . "';"
                     );
                 } else {
-                    parent::$db->query(
+                    $this->_db->query(
                         "UPDATE " . PLANETS . " AS p, " . USERS . " AS u SET
                         p.`planet_destroyed` = '" . (time() + (PLANETS_LIFE_TIME * 3600)) . "',
                         u.`user_current_planet` = u.`user_home_planet_id`

@@ -14,6 +14,7 @@
 
 namespace application\controllers\game;
 
+use application\core\Database;
 use application\core\XGPCore;
 use application\libraries\DevelopmentsLib;
 use application\libraries\FormatLib;
@@ -52,6 +53,7 @@ class Defense extends XGPCore
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
+        $this->_db = new Database();
         $this->_lang = parent::$lang;
         $this->_resource = parent::$objects->getObjects();
         $this->_price = parent::$objects->getPrice();
@@ -68,7 +70,7 @@ class Defense extends XGPCore
      */
     public function __destruct()
     {
-        parent::$db->closeConnection();
+        $this->_db->closeConnection();
     }
 
     public function build_page()
@@ -156,7 +158,7 @@ class Defense extends XGPCore
             }
 
             if ($totalCount > 0) {
-                parent::$db->query("UPDATE " . PLANETS . " AS p SET
+                $this->_db->query("UPDATE " . PLANETS . " AS p SET
                                                                             p.`planet_b_hangar_id` = '" . $this->_current_planet['planet_b_hangar_id'] . "',
                                                                             p.`planet_metal` = '" . $this->_current_planet['planet_metal'] . "',
                                                                             p.`planet_crystal` = '" . $this->_current_planet['planet_crystal'] . "',

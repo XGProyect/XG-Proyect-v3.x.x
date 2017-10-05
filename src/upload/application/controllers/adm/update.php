@@ -14,9 +14,11 @@
 
 namespace application\controllers\adm;
 
+use application\core\Database;
 use application\core\XGPCore;
 use application\libraries\adm\AdministrationLib;
 use application\libraries\FunctionsLib;
+
 
 /**
  * Update Class
@@ -49,6 +51,7 @@ class Update extends XGPCore
         // check if session is active
         AdministrationLib::checkSession();
 
+        $this->_db          = new Database();
         $this->langs        = parent::$lang;
         $this->current_user = parent::$users->getUserData();
 
@@ -71,7 +74,7 @@ class Update extends XGPCore
      */
     public function __destruct()
     {
-        parent::$db->closeConnection();
+        $this->_db->closeConnection();
     }
 
     /**
@@ -214,7 +217,7 @@ class Update extends XGPCore
                 
                 if (!$this->demo) {
 
-                    $this->output[] = parent::$db->query($query);
+                    $this->output[] = $this->_db->query($query);
                 } else {
                     
                     $this->output[] = $query;

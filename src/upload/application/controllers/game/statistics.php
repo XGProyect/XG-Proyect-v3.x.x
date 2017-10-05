@@ -14,9 +14,11 @@
 
 namespace application\controllers\game;
 
+use application\core\Database;
 use application\core\XGPCore;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
+
 
 /**
  * Statistics Class
@@ -49,6 +51,7 @@ class Statistics extends XGPCore
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
+        $this->_db = new Database();
         $this->_lang = parent::$lang;
         $this->_current_user = parent::$users->getUserData();
         $this->_current_planet = parent::$users->getPlanetData();
@@ -63,7 +66,7 @@ class Statistics extends XGPCore
      */
     public function __destruct()
     {
-        parent::$db->closeConnection();
+        $this->_db->closeConnection();
     }
 
     /**
@@ -94,13 +97,13 @@ class Statistics extends XGPCore
         $OldRank = $data['oldrank'];
 
         if ($who == 2) {
-            $MaxAllys = parent::$db->queryFetch("SELECT COUNT(`alliance_id`) AS `count`
+            $MaxAllys = $this->_db->queryFetch("SELECT COUNT(`alliance_id`) AS `count`
 														FROM " . ALLIANCE . ";");
 
             $parse['range'] = $this->build_range_list($MaxAllys['count'], $range);
             $parse['stat_header'] = parent::$page->parseTemplate(parent::$page->getTemplate('stat/stat_alliancetable_header'), $parse);
             $start = floor($range / 100 % 100) * 100;
-            $query = parent::$db->query(
+            $query = $this->_db->query(
                 'SELECT s.*,
                 a.alliance_id,
                 a.alliance_tag,
@@ -119,7 +122,7 @@ class Statistics extends XGPCore
             $parse['stat_values'] = "";
             $StatAllianceTableTPL = parent::$page->getTemplate('stat/stat_alliancetable');
 
-            while ($StatRow = parent::$db->fetchAssoc($query)) {
+            while ($StatRow = $this->_db->fetchAssoc($query)) {
                 $parse['ally_rank'] = $start;
                 $ranking = $StatRow['alliance_statistic_' . $OldRank] - $StatRow['alliance_statistic_' . $Rank];
                 $parse['ally_rankplus'] = $this->rank_difference($ranking);
@@ -137,7 +140,7 @@ class Statistics extends XGPCore
             $parse['stat_header'] = parent::$page->parseTemplate(parent::$page->getTemplate('stat/stat_playertable_header'), $parse);
 
             $start = floor($range / 100 % 100) * 100;
-            $query = parent::$db->query(
+            $query = $this->_db->query(
                 'SELECT s.*, 
                         u.user_id, 
                         u.user_name, 
@@ -157,7 +160,7 @@ class Statistics extends XGPCore
             $previusId = 0;
             $StatPlayerTableTPL = parent::$page->getTemplate('stat/stat_playertable');
 
-            while ($StatRow = parent::$db->fetchAssoc($query)) {
+            while ($StatRow = $this->_db->fetchAssoc($query)) {
                 $parse['player_rank'] = $start;
                 $ranking = $StatRow['user_statistic_' . $OldRank] - $StatRow['user_statistic_' . $Rank];
 

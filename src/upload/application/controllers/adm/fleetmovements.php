@@ -14,6 +14,7 @@
 
 namespace application\controllers\adm;
 
+use application\core\Database;
 use application\core\XGPCore;
 use application\libraries\adm\AdministrationLib;
 use application\libraries\FleetsLib;
@@ -46,6 +47,7 @@ class Fleetmovements extends XGPCore
         // check if session is active
         AdministrationLib::checkSession();
 
+        $this->_db = new Database();
         $this->_lang = parent::$lang;
         $this->_current_user = parent::$users->getUserData();
 
@@ -64,7 +66,7 @@ class Fleetmovements extends XGPCore
      */
     public function __destruct()
     {
-        parent::$db->closeConnection();
+        $this->_db->closeConnection();
     }
 
     /**
@@ -74,7 +76,7 @@ class Fleetmovements extends XGPCore
      */
     private function build_page()
     {
-        $this->_flying_fleets = parent::$db->query("SELECT f.*,
+        $this->_flying_fleets = $this->_db->query("SELECT f.*,
 															(SELECT `user_name`
 																FROM `" . USERS . "`
 																WHERE `user_id` = f.fleet_owner) AS fleet_username,
@@ -100,7 +102,7 @@ class Fleetmovements extends XGPCore
         $table = '';
         $i = 0;
 
-        while ($fleet = parent::$db->fetchArray($this->_flying_fleets)) {
+        while ($fleet = $this->_db->fetchArray($this->_flying_fleets)) {
             $block['num'] = ++$i;
             $block['mission'] = $this->resources_pop_up($this->_lang['ff_type_mission'][$fleet['fleet_mission']] . ' ' . ( FleetsLib::isFleetReturning($fleet) ? $this->_lang['ff_r'] : $this->_lang['ff_a'] ), $fleet);
             $block['amount'] = $this->ships_pop_up($this->_lang['ff_ships'], $fleet);

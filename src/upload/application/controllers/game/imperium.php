@@ -14,6 +14,7 @@
 
 namespace application\controllers\game;
 
+use application\core\Database;
 use application\core\XGPCore;
 use application\libraries\DevelopmentsLib;
 use application\libraries\FormatLib;
@@ -51,6 +52,7 @@ class Imperium extends XGPCore
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
+        $this->_db = new Database();
         $this->_lang = parent::$lang;
         $this->_current_user = parent::$users->getUserData();
 
@@ -68,7 +70,7 @@ class Imperium extends XGPCore
      */
     public function __destruct()
     {
-        parent::$db->closeConnection();
+        $this->_db->closeConnection();
     }
 
     /**
@@ -81,7 +83,7 @@ class Imperium extends XGPCore
         $resource = parent::$objects->getObjects();
         $reslist = parent::$objects->getObjectsList();
 
-        $planetsrow = parent::$db->query("SELECT `planet_id`,
+        $planetsrow = $this->_db->query("SELECT `planet_id`,
 													`planet_name`,
 													`planet_galaxy`,
 													`planet_system`,
@@ -155,7 +157,7 @@ class Imperium extends XGPCore
         $m = array('build', 'tech', 'fleet', 'defense');
         $n = array('building_row', 'technology_row', 'fleet_row', 'defense_row');
 
-        while ($p = parent::$db->fetchArray($planetsrow)) {
+        while ($p = $this->_db->fetchArray($planetsrow)) {
             $planet[] = $p;
         }
 

@@ -48,7 +48,7 @@ class Transport extends Missions
      */
     public function transportMission($fleet_row)
     {
-        $transport_check = parent::$db->queryFetch(
+        $transport_check = $this->_db->queryFetch(
             "SELECT pc1.`planet_user_id` AS start_id,
             pc1.`planet_name` AS start_name,
             pc2.`planet_user_id` AS target_id,
@@ -127,7 +127,7 @@ class Transport extends Missions
                     );
                 }
 
-                parent::$db->query(
+                $this->_db->query(
                     "UPDATE " . FLEETS . " SET
                     `fleet_resource_metal` = '0' ,
                     `fleet_resource_crystal` = '0' ,

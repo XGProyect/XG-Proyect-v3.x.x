@@ -14,6 +14,7 @@
 
 namespace application\controllers\adm;
 
+use application\core\Database;
 use application\core\XGPCore;
 use application\libraries\adm\AdministrationLib;
 use application\libraries\FunctionsLib;
@@ -44,6 +45,7 @@ class Messages extends XGPCore
         // check if session is active
         AdministrationLib::checkSession();
 
+        $this->_db = new Database();
         $this->_lang = parent::$lang;
         $this->_current_user = parent::$users->getUserData();
 
@@ -62,7 +64,7 @@ class Messages extends XGPCore
      */
     public function __destruct()
     {
-        parent::$db->closeConnection();
+        $this->_db->closeConnection();
     }
 
     /**
@@ -100,13 +102,13 @@ class Messages extends XGPCore
     private function do_search()
     {
         // build the query, run the query and return the result
-        $search_result = parent::$db->query($this->build_search_query());
+        $search_result = $this->_db->query($this->build_search_query());
         $template = parent::$page->getTemplate('adm/messages_row_view');
         $results = '';
 
         if ($search_result !== false) {
             // loop thru the results
-            while ($search_data = parent::$db->fetchArray($search_result)) {
+            while ($search_data = $this->_db->fetchArray($search_result)) {
                 $search_data['mg_show_hide'] = $this->_lang['mg_show_hide'];
                 $search_data['message_time'] = date(FunctionsLib::readConfig('date_format_extended'), $search_data['message_time']);
                 $search_data['message_text'] = stripslashes(nl2br($search_data['message_text']));
@@ -138,7 +140,7 @@ class Messages extends XGPCore
         }
 
         // delete messages
-        parent::$db->query("DELETE FROM `" . MESSAGES . "`
+        $this->_db->query("DELETE FROM `" . MESSAGES . "`
 								WHERE `message_id` IN (" . rtrim($ids_array, ',') . ")");
 
         // show alert

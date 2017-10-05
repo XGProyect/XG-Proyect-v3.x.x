@@ -14,6 +14,7 @@
 
 namespace application\libraries\adm;
 
+use application\core\Database;
 use application\core\XGPCore;
 use application\libraries\FunctionsLib;
 
@@ -29,16 +30,6 @@ use application\libraries\FunctionsLib;
  */
 class AdministrationLib extends XGPCore
 {
-    /**
-     * __construct
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
     /**
      * haveAccess
      *
@@ -267,14 +258,15 @@ class AdministrationLib extends XGPCore
     {
         if (!self::isSessionSet()) {
 
+            $db     = new Database();
             $parse  = parent::$lang;
 
             if ($_POST) {
 
-                $login  = parent::$db->queryFetch(
+                $login  = $db->queryFetch(
                     "SELECT `user_id`, `user_name`, `user_password`
                     FROM " . USERS . "
-                    WHERE `user_email` = '" . parent::$db->escapeValue($_POST['inputEmail']) . "'
+                    WHERE `user_email` = '" . $db->escapeValue($_POST['inputEmail']) . "'
                         AND `user_password` = '" . sha1($_POST['inputPassword']) . "'
                         AND `user_authlevel` >= '1'
                         LIMIT 1"

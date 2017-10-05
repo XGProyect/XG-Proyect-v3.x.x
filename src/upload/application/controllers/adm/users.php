@@ -14,6 +14,7 @@
 
 namespace application\controllers\adm;
 
+use application\core\Database;
 use application\core\XGPCore;
 use application\libraries\adm\AdministrationLib;
 use application\libraries\FunctionsLib;
@@ -52,6 +53,7 @@ class Users extends XGPCore
         // check if session is active
         AdministrationLib::checkSession();
 
+        $this->_db = new Database();
         $this->_lang = parent::$lang;
         $this->_current_user = parent::$users->getUserData();
 
@@ -70,7 +72,7 @@ class Users extends XGPCore
      */
     public function __destruct()
     {
-        parent::$db->closeConnection();
+        $this->_db->closeConnection();
     }
 
     ######################################
@@ -103,7 +105,7 @@ class Users extends XGPCore
                 $user = '';
             } else {
 
-                $this->_user_query = parent::$db->queryFetch(
+                $this->_user_query = $this->_db->queryFetch(
                         "SELECT u.*,
                             p.*,
                             se.*,
@@ -121,7 +123,7 @@ class Users extends XGPCore
                     $this->save_data($type);
                 }
 
-                $this->_user_query = parent::$db->queryFetch(
+                $this->_user_query = $this->_db->queryFetch(
                         "SELECT u.*,
                             p.*,
                             se.*,
@@ -482,7 +484,7 @@ class Users extends XGPCore
             $sub_query = ' AND p.`planet_id` = ' . $this->_planet;
         }
 
-        $planets_query = parent::$db->query("SELECT {$get_query}
+        $planets_query = $this->_db->query("SELECT {$get_query}
             FROM " . PLANETS . " AS p
             INNER JOIN " . BUILDINGS . " AS b ON b.building_planet_id = p.`planet_id`
             INNER JOIN " . DEFENSES . " AS d ON d.defense_planet_id = p.`planet_id`
@@ -531,7 +533,7 @@ class Users extends XGPCore
 
             case 'delete':
 
-                parent::$db->query(
+                $this->_db->query(
                     "UPDATE " . PLANETS . " AS p, " . PLANETS . " AS m, " . USERS . " AS u SET
                     p.`planet_destroyed` = '" . (time() + (PLANETS_LIFE_TIME * 3600)) . "',
                     m.`planet_destroyed` = '" . (time() + (PLANETS_LIFE_TIME * 3600)) . "',
@@ -608,7 +610,7 @@ class Users extends XGPCore
             $sub_query = ' AND m.`planet_id` = ' . $this->_moon;
         }
 
-        $moons_query = parent::$db->query(
+        $moons_query = $this->_db->query(
             "SELECT {$get_query}
             FROM " . PLANETS . " AS m
             INNER JOIN " . BUILDINGS . " AS b ON b.building_planet_id = m.planet_id
@@ -653,7 +655,7 @@ class Users extends XGPCore
 
             case 'delete':
 
-                parent::$db->query("UPDATE " . PLANETS . " AS m, " . USERS . " AS u SET
+                $this->_db->query("UPDATE " . PLANETS . " AS m, " . USERS . " AS u SET
                     m.`planet_destroyed` = '" . (time() + (PLANETS_LIFE_TIME * 3600)) . "',
                     u.`user_current_planet` = u.`user_home_planet_id`
                     WHERE m.`planet_id` = '" . (int) $this->_moon . "' AND
@@ -743,7 +745,7 @@ class Users extends XGPCore
             $this->_alert_info = $errors;
             $this->_alert_type = 'error';
         } else {
-            parent::$db->query("UPDATE " . USERS . " SET
+            $this->_db->query("UPDATE " . USERS . " SET
                 `user_name` = '" . $username . "',
                 `user_password` = " . $password . ",
                 `user_email` = '" . $email . "',
@@ -760,7 +762,7 @@ class Users extends XGPCore
             } else {
                 
                 // clean up
-                parent::$db->query(
+                $this->_db->query(
                     "DELETE FROM `" . SESSIONS . "` WHERE session_data LIKE '%user_id|s:1:\"" . $this->_id . "\"%'"
                 );
             }
@@ -829,7 +831,7 @@ class Users extends XGPCore
             $vacation_query = '';
         }
 
-        parent::$db->query("UPDATE " . SETTINGS . " AS s{$vacation_head} SET
+        $this->_db->query("UPDATE " . SETTINGS . " AS s{$vacation_head} SET
 									{$vacation_query}
 									s.`setting_no_ip_check` = '{$setting_no_ip_check}',
 									s.`setting_planet_sort` = '{$setting_planet_sort}',
@@ -862,7 +864,7 @@ class Users extends XGPCore
         foreach ($_POST as $tech => $level) {
             if (strpos($tech, 'research_') !== false) {
                 $level = ( isset($level) ? $level : 0 );
-                $query_string .= "`{$tech}` = '" . parent::$db->escapeValue($level) . "',";
+                $query_string .= "`{$tech}` = '" . $this->_db->escapeValue($level) . "',";
             }
         }
 
@@ -870,10 +872,10 @@ class Users extends XGPCore
         $query_string = substr_replace($query_string, '', -1);
 
         // QUERY END
-        $query_string .= " WHERE `research_user_id` = '" . parent::$db->escapeValue($this->_id) . "';";
+        $query_string .= " WHERE `research_user_id` = '" . $this->_db->escapeValue($this->_id) . "';";
 
         // RUN THE QUERY
-        parent::$db->query($query_string);
+        $this->_db->query($query_string);
 
         // Points rebuild
         StatisticsLib::rebuildPoints($this->_id, 0, 'research');
@@ -924,7 +926,7 @@ class Users extends XGPCore
                 }
 
                 // BUILD THE QUERY STRING WITH THE DATA
-                $query_string .= "`{$premium}` = '" . parent::$db->escapeValue($data) . "',";
+                $query_string .= "`{$premium}` = '" . $this->_db->escapeValue($data) . "',";
             }
         }
 
@@ -932,10 +934,10 @@ class Users extends XGPCore
         $query_string = substr_replace($query_string, '', -1);
 
         // QUERY END
-        $query_string .= " WHERE `premium_user_id` = '" . parent::$db->escapeValue($this->_id) . "';";
+        $query_string .= " WHERE `premium_user_id` = '" . $this->_db->escapeValue($this->_id) . "';";
 
         // RUN THE QUERY
-        parent::$db->query($query_string);
+        $this->_db->query($query_string);
 
         // RETURN THE ALERT
         $this->_alert_info = $this->_lang['us_all_ok_message'];
@@ -990,7 +992,7 @@ class Users extends XGPCore
                 case '':
                 default:
 
-                    $query_string .= "`{$field}` = '" . parent::$db->escapeValue($value) . "',";
+                    $query_string .= "`{$field}` = '" . $this->_db->escapeValue($value) . "',";
 
                     break;
             }
@@ -1000,10 +1002,10 @@ class Users extends XGPCore
         $query_string = substr_replace($query_string, '', -1);
 
         // QUERY END
-        $query_string .= " WHERE `planet_id` = '" . parent::$db->escapeValue($id_get) . "';";
+        $query_string .= " WHERE `planet_id` = '" . $this->_db->escapeValue($id_get) . "';";
 
         // RUN THE QUERY
-        parent::$db->query($query_string);
+        $this->_db->query($query_string);
 
         // RETURN THE ALERT
         $this->_alert_info = $this->_lang['us_all_ok_message'];
@@ -1034,7 +1036,7 @@ class Users extends XGPCore
         foreach ($_POST as $building => $level) {
             if (strpos($building, 'building_') !== false) {
                 $level = ( isset($level) ? $level : 0 );
-                $query_string .= "`{$building}` = '" . parent::$db->escapeValue($level) . "',";
+                $query_string .= "`{$building}` = '" . $this->_db->escapeValue($level) . "',";
                 $total_fields += $level;
             }
         }
@@ -1044,11 +1046,11 @@ class Users extends XGPCore
         // QUERY END
         $query_string .= " `planet_field_current` = '" . $total_fields . "', ";
         $query_string .= " `planet_field_max` = IF(`planet_type` = 3, 1 + `building_mondbasis` * " . FIELDS_BY_MOONBASIS_LEVEL . ", `planet_field_max`) ";
-        $query_string .= " WHERE `building_planet_id` = '" . parent::$db->escapeValue($id_get) . "' 
-                            AND `planet_id` = '" . parent::$db->escapeValue($id_get) . "';";
+        $query_string .= " WHERE `building_planet_id` = '" . $this->_db->escapeValue($id_get) . "' 
+                            AND `planet_id` = '" . $this->_db->escapeValue($id_get) . "';";
 
         // RUN THE QUERY
-        parent::$db->query($query_string);
+        $this->_db->query($query_string);
 
         // Points rebuild
         StatisticsLib::rebuildPoints($this->_id, $id_get, 'buildings');
@@ -1078,7 +1080,7 @@ class Users extends XGPCore
         foreach ($_POST as $ship => $amount) {
             if (strpos($ship, 'ship_') !== false) {
                 $level = ( isset($amount) ? $amount : 0 );
-                $query_string .= "`{$ship}` = '" . parent::$db->escapeValue($amount) . "',";
+                $query_string .= "`{$ship}` = '" . $this->_db->escapeValue($amount) . "',";
             }
         }
 
@@ -1086,10 +1088,10 @@ class Users extends XGPCore
         $query_string = substr_replace($query_string, '', -1);
 
         // QUERY END
-        $query_string .= " WHERE `ship_planet_id` = '" . parent::$db->escapeValue($id_get) . "';";
+        $query_string .= " WHERE `ship_planet_id` = '" . $this->_db->escapeValue($id_get) . "';";
 
         // RUN THE QUERY
-        parent::$db->query($query_string);
+        $this->_db->query($query_string);
 
         // Points rebuild
         StatisticsLib::rebuildPoints($this->_id, $id_get, 'ships');
@@ -1119,7 +1121,7 @@ class Users extends XGPCore
         foreach ($_POST as $defense => $amount) {
             if (strpos($defense, 'defense_') !== false) {
                 $level = ( isset($amount) ? $amount : 0 );
-                $query_string .= "`{$defense}` = '" . parent::$db->escapeValue($amount) . "',";
+                $query_string .= "`{$defense}` = '" . $this->_db->escapeValue($amount) . "',";
             }
         }
 
@@ -1127,10 +1129,10 @@ class Users extends XGPCore
         $query_string = substr_replace($query_string, '', -1);
 
         // QUERY END
-        $query_string .= " WHERE `defense_planet_id` = '" . parent::$db->escapeValue($id_get) . "';";
+        $query_string .= " WHERE `defense_planet_id` = '" . $this->_db->escapeValue($id_get) . "';";
 
         // RUN THE QUERY
-        parent::$db->query($query_string);
+        $this->_db->query($query_string);
 
         // Points rebuild
         StatisticsLib::rebuildPoints($this->_id, $id_get, 'defenses');
@@ -1154,10 +1156,10 @@ class Users extends XGPCore
     private function build_users_combo($user_id)
     {
         $combo_rows = '';
-        $users = parent::$db->query("SELECT `user_id`, `user_name`
+        $users = $this->_db->query("SELECT `user_id`, `user_name`
 												FROM " . USERS . ";");
 
-        while ($users_row = parent::$db->fetchArray($users)) {
+        while ($users_row = $this->_db->fetchArray($users)) {
             $combo_rows .= '<option value="' . $users_row['user_id'] . '" ' . ( $users_row['user_id'] == $user_id ? ' selected' : '' ) . '>' . $users_row['user_name'] . '</option>';
         }
 
@@ -1173,11 +1175,11 @@ class Users extends XGPCore
     private function build_planet_combo($user_data, $id_field)
     {
         $combo_rows = '';
-        $planets = parent::$db->query("SELECT `planet_id`, `planet_name`, `planet_galaxy`, `planet_system`, `planet_planet`
+        $planets = $this->_db->query("SELECT `planet_id`, `planet_name`, `planet_galaxy`, `planet_system`, `planet_planet`
 												FROM " . PLANETS . "
 												WHERE planet_user_id = '" . $this->_id . "';");
 
-        while ($planets_row = parent::$db->fetchArray($planets)) {
+        while ($planets_row = $this->_db->fetchArray($planets)) {
             if ($user_data[$id_field] == $planets_row['planet_id']) {
                 $combo_rows .= '<option value="' . $planets_row['planet_id'] . '" selected>' . $planets_row['planet_name'] . ' [' . $planets_row['planet_galaxy'] . ':' . $planets_row['planet_system'] . ':' . $planets_row['planet_planet'] . ']' . '</option>';
             } else {
@@ -1196,10 +1198,10 @@ class Users extends XGPCore
     private function build_alliance_combo($user_data)
     {
         $combo_rows = '';
-        $alliances = parent::$db->query("SELECT `alliance_id`, `alliance_name`, `alliance_tag`
+        $alliances = $this->_db->query("SELECT `alliance_id`, `alliance_name`, `alliance_tag`
 												FROM " . ALLIANCE . ";");
 
-        while ($alliance_row = parent::$db->fetchArray($alliances)) {
+        while ($alliance_row = $this->_db->fetchArray($alliances)) {
             if ($user_data['user_ally_id'] == $alliance_row['alliance_id']) {
                 $combo_rows .= '<option value="' . $alliance_row['alliance_id'] . '" selected>' . $alliance_row['alliance_name'] . ' [' . $alliance_row['alliance_tag'] . ']' . '</option>';
             } else {
@@ -1462,7 +1464,7 @@ class Users extends XGPCore
         $template = parent::$page->getTemplate("adm/users_planets_table_view");
         $prepare_table = '';
         
-        while ($planets = parent::$db->fetchAssoc($planets_data)) {
+        while ($planets = $this->_db->fetchAssoc($planets_data)) {
 
             $parse['planet_id'] = $planets['planet_id'];
             $parse['planet_name'] = $planets['planet_name'];
@@ -1513,7 +1515,7 @@ class Users extends XGPCore
         $template = parent::$page->getTemplate('adm/users_moons_table_view');
         $prepare_table = '';
 
-        while ($moons = parent::$db->fetchAssoc($moons_data)) {
+        while ($moons = $this->_db->fetchAssoc($moons_data)) {
             $parse['moon_id'] = $moons['planet_id'];
             $parse['moon_name'] = str_replace('%s', $moons['planet_name'], $this->_lang['us_user_moon_title']);
             $parse['moon_image'] = $moons['planet_image'];
@@ -1545,7 +1547,7 @@ class Users extends XGPCore
     private function edit_main($planets_data)
     {
         $parse = $this->_lang;
-        $parse += parent::$db->fetchArray($planets_data);
+        $parse += $this->_db->fetchArray($planets_data);
         $parse['planet_user_id'] = $this->build_users_combo($parse['planet_user_id']);
         $parse['planet_last_update'] = date(FunctionsLib::readConfig('date_format_extended'), $parse['planet_last_update']);
         $parse['type1'] = $parse['planet_type'] == 1 ? ' selected' : '';
@@ -1589,7 +1591,7 @@ class Users extends XGPCore
         $flag = 1;
 
 
-        foreach (parent::$db->fetchAssoc($planets_data) as $building => $level) {
+        foreach ($this->_db->fetchAssoc($planets_data) as $building => $level) {
             if (strpos($building, 'building_') !== false && !in_array($building, $exclude_buildings)) {
                 if ($flag <= 2) { // SKIP NOT REQUIRED FIELDS
                     $flag++;
@@ -1617,7 +1619,7 @@ class Users extends XGPCore
         $prepare_table = '';
         $flag = 1;
 
-        foreach (parent::$db->fetchAssoc($planets_data) as $ship => $amount) {
+        foreach ($this->_db->fetchAssoc($planets_data) as $ship => $amount) {
             if (strpos($ship, 'ship_') !== false) {
                 if ($flag <= 2) { // SKIP NOT REQUIRED FIELDS
                     $flag++;
@@ -1652,7 +1654,7 @@ class Users extends XGPCore
         $prepare_table = '';
         $flag = 1;
 
-        foreach (parent::$db->fetchAssoc($planets_data) as $defense => $amount) {
+        foreach ($this->_db->fetchAssoc($planets_data) as $defense => $amount) {
             if (strpos($defense, 'defense_') !== false && !in_array($defense, $exclude_buildings)) {
                 if ($flag <= 2) { // SKIP NOT REQUIRED FIELDS
                     $flag++;
@@ -1690,7 +1692,7 @@ class Users extends XGPCore
         
         $this->delete_moon();
         
-        parent::$db->query(
+        $this->_db->query(
             "DELETE p,b,d,s FROM " . PLANETS . " AS p
             INNER JOIN " . BUILDINGS . " AS b ON b.building_planet_id = p.`planet_id`
             INNER JOIN " . DEFENSES . " AS d ON d.defense_planet_id = p.`planet_id`
@@ -1713,7 +1715,7 @@ class Users extends XGPCore
             $id_moon    = $this->_moon;
         }
         
-        parent::$db->query(
+        $this->_db->query(
             "DELETE m,b,d,s FROM " . PLANETS . " AS m
             INNER JOIN " . BUILDINGS . " AS b ON b.building_planet_id = m.`planet_id`
             INNER JOIN " . DEFENSES . " AS d ON d.defense_planet_id = m.`planet_id`
@@ -1736,7 +1738,7 @@ class Users extends XGPCore
      */
     private function check_user($user)
     {
-        $user_query = parent::$db->queryFetch("SELECT `user_id`, `user_authlevel`
+        $user_query = $this->_db->queryFetch("SELECT `user_id`, `user_authlevel`
 													FROM " . USERS . "
 													WHERE `user_name` = '" . $user . "' OR
 															`user_email` = '" . $user . "' OR
@@ -1771,7 +1773,7 @@ class Users extends XGPCore
      */
     private function check_username($username)
     {
-        return parent::$db->queryFetch("SELECT `user_id`
+        return $this->_db->queryFetch("SELECT `user_id`
 											FROM `" . USERS . "`
 											WHERE `user_name` = '" . $username . "' AND
 													`user_id` <> '" . $this->_id . "';");
@@ -1791,7 +1793,7 @@ class Users extends XGPCore
             $email_type = 'user_email';
         }
 
-        return parent::$db->queryFetch("SELECT `user_id`
+        return $this->_db->queryFetch("SELECT `user_id`
 												FROM `" . USERS . "`
 												WHERE `{$email_type}` = '{$email}' AND
 													`user_id` <> '{$this->_id}';");

@@ -14,6 +14,7 @@
 
 namespace application\libraries;
 
+use application\core\Database;
 use application\core\XGPCore;
 
 /**
@@ -39,7 +40,8 @@ class MissionControlLib extends XGPCore
         
         include_once XGP_ROOT . 'application/libraries/missions/missions.php';
         
-        parent::$db->query(
+        $this->_db = new Database();
+        $this->_db->query(
             "LOCK TABLE " . ACS_FLEETS . " WRITE,
             " . ALLIANCE . " AS a WRITE,
             " . REPORTS . " WRITE,
@@ -76,7 +78,7 @@ class MissionControlLib extends XGPCore
             " . USERS . " AS u WRITE"
         );
 
-        $all_fleets = parent::$db->query(
+        $all_fleets = $this->_db->query(
             "SELECT *
             FROM " . FLEETS . "
             WHERE (
@@ -122,7 +124,7 @@ class MissionControlLib extends XGPCore
         );
 
         // Process missions
-        while ($fleet = parent::$db->fetchArray($all_fleets)) {
+        while ($fleet = $this->_db->fetchArray($all_fleets)) {
 
             $name           = $missions[$fleet['fleet_mission']];
             $file_name      = strtolower($name);
@@ -135,7 +137,7 @@ class MissionControlLib extends XGPCore
             $mission->$mission_name($fleet);
         }
 
-        parent::$db->query("UNLOCK TABLES");
+        $this->_db->query("UNLOCK TABLES");
     }
 }
 

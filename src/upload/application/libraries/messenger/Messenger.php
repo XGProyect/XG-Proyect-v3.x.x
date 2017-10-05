@@ -14,6 +14,7 @@
 
 namespace application\libraries\messenger;
 
+use application\core\Database;
 use application\core\XGPCore;
 
 /**
@@ -34,6 +35,8 @@ final class Messenger extends XGPCore
     public function __construct()
     {
         parent::__construct();
+        
+        $this->_db = new Database();
     }
 
     /**
@@ -44,7 +47,7 @@ final class Messenger extends XGPCore
     public function sendMessage(MessagesOptions $options)
     {
         // TODO: call a model instead of this
-        parent::$db->query(
+        $this->_db->query(
             "INSERT INTO " . MESSAGES . " SET
             `message_receiver` = '" . $options->getTo() . "',
             `message_sender` = '" . $options->getSender() . "',

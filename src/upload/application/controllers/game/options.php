@@ -14,6 +14,7 @@
 
 namespace application\controllers\game;
 
+use application\core\Database;
 use application\core\XGPCore;
 use application\libraries\FunctionsLib;
 
@@ -47,6 +48,7 @@ class Options extends XGPCore
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
+        $this->_db = new Database();
         $this->_lang = parent::$lang;
         $this->_current_user = parent::$users->getUserData();
 
@@ -60,7 +62,7 @@ class Options extends XGPCore
      */
     public function __destruct()
     {
-        parent::$db->closeConnection();
+        $this->_db->closeConnection();
     }
 
     /**
@@ -76,7 +78,7 @@ class Options extends XGPCore
 
             if (isset($_POST['exit_modus']) && $_POST['exit_modus'] == 'on' && $this->_current_user['setting_vacations_until'] <= time()) {
 
-                parent::$db->query("UPDATE " . SETTINGS . ", " . PLANETS . " SET
+                $this->_db->query("UPDATE " . SETTINGS . ", " . PLANETS . " SET
                     `setting_vacations_status` = '0',
                     `setting_vacations_until` = '0',
                     planet_building_metal_mine_percent = '10',
@@ -88,7 +90,7 @@ class Options extends XGPCore
                     WHERE `setting_user_id` = '" . intval($this->_current_user['user_id']) . "' AND planet_user_id = '" . intval($this->_current_user['user_id']) . "'");
             }
             
-            parent::$db->query(
+            $this->_db->query(
                 "UPDATE `" . SETTINGS . "` AS s SET
                     s.`setting_delete_account` = '" . ($_POST['db_deaktjava'] == 'on' ? time() : 0) . "'
                 WHERE s.`setting_user_id` = '" . $this->_current_user['user_id'] . "'"
@@ -106,16 +108,16 @@ class Options extends XGPCore
             }
             // < ------------------------------------------------- NOMBRE DE USUARIO --------------------------------------------------- >
             if (isset($_POST['db_character']) && $_POST['db_character'] != '') {
-                $username = parent::$db->escapeValue($_POST['db_character']);
+                $username = $this->_db->escapeValue($_POST['db_character']);
             } else {
-                $username = parent::$db->escapeValue($this->_current_user['user_name']);
+                $username = $this->_db->escapeValue($this->_current_user['user_name']);
             }
             // < ------------------------------------------------- DIRECCION DE EMAIL -------------------------------------------------- >
 
             if (isset($_POST['db_email']) && $_POST['db_email'] != '') {
-                $db_email = parent::$db->escapeValue($_POST['db_email']);
+                $db_email = $this->_db->escapeValue($_POST['db_email']);
             } else {
-                $db_email = parent::$db->escapeValue($this->_current_user['user_email']);
+                $db_email = $this->_db->escapeValue($this->_current_user['user_email']);
             }
             // < ------------------------------------------------- CANTIDAD DE SONDAS -------------------------------------------------- >
             if (isset($_POST['spio_anz']) && is_numeric($_POST['spio_anz'])) {
@@ -168,7 +170,7 @@ class Options extends XGPCore
 
                 $urlaubs_modus = '1';
                 $time = FunctionsLib::getDefaultVacationTime();
-                parent::$db->query("UPDATE " . SETTINGS . ", " . PLANETS . " SET
+                $this->_db->query("UPDATE " . SETTINGS . ", " . PLANETS . " SET
 										`setting_vacations_status` = '$urlaubs_modus',
 										`setting_vacations_until` = '$time',
 										planet_metal_perhour = '" . FunctionsLib::readConfig('metal_basic_income') . "',
@@ -193,11 +195,11 @@ class Options extends XGPCore
                 $db_deaktjava = '0';
             }
 
-            $SetSort = parent::$db->escapeValue($_POST['settings_sort']);
-            $SetOrder = parent::$db->escapeValue($_POST['settings_order']);
+            $SetSort = $this->_db->escapeValue($_POST['settings_sort']);
+            $SetOrder = $this->_db->escapeValue($_POST['settings_order']);
             //// < -------------------------------------- ACTUALIZAR TODO LO SETEADO ANTES --------------------------------------------- >
 
-            parent::$db->query("UPDATE " . USERS . " AS u, " . SETTINGS . " AS s SET
+            $this->_db->query("UPDATE " . USERS . " AS u, " . SETTINGS . " AS s SET
 									u.`user_email` = '$db_email',
 									s.`setting_no_ip_check` = '$noipcheck',
 									s.`setting_planet_sort` = '$SetSort',
@@ -217,7 +219,7 @@ class Options extends XGPCore
                 if ($_POST['newpass1'] == $_POST['newpass2']) {
                     if ($_POST['newpass1'] != '') {
                         $newpass = sha1($_POST['newpass1']);
-                        parent::$db->query("UPDATE " . USERS . " SET
+                        $this->_db->query("UPDATE " . USERS . " SET
 												`user_password` = '{$newpass}'
 												WHERE `user_id` = '" . intval($this->_current_user['user_id']) . "' LIMIT 1");
 
@@ -227,13 +229,13 @@ class Options extends XGPCore
             }
             // < --------------------------------------------- CAMBIO DE NOMBRE DE USUARIO --------------------------------------------- >
             if ($this->_current_user['user_name'] != $_POST['db_character']) {
-                $query = parent::$db->queryFetch("SELECT `user_id`
+                $query = $this->_db->queryFetch("SELECT `user_id`
                     FROM `" . USERS . "`
-                    WHERE user_name = '" . parent::$db->escapeValue($_POST['db_character']) . "'");
+                    WHERE user_name = '" . $this->_db->escapeValue($_POST['db_character']) . "'");
 
                 if (!$query) {
-                    parent::$db->query("UPDATE `" . USERS . "` SET
-                        `user_name` = '" . parent::$db->escapeValue($username) . "'
+                    $this->_db->query("UPDATE `" . USERS . "` SET
+                        `user_name` = '" . $this->_db->escapeValue($username) . "'
                         WHERE `user_id` = '" . $this->_current_user['user_id'] . "'
                         LIMIT 1");
 
@@ -298,7 +300,7 @@ class Options extends XGPCore
 
     private function CheckIfIsBuilding()
     {
-        $activity = parent::$db->queryFetch("SELECT (
+        $activity = $this->_db->queryFetch("SELECT (
                 (
                         SELECT COUNT( fleet_id ) AS quantity
                                 FROM " . FLEETS . "

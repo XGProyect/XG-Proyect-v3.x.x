@@ -52,7 +52,7 @@ class Spy extends Missions
     public function spyMission($fleet_row)
     {
         if ($fleet_row['fleet_mess'] == 0 && $fleet_row['fleet_start_time'] <= time()) {
-            $current_data = parent::$db->queryFetch("SELECT p.planet_name, p.planet_galaxy, p.planet_system, p.planet_planet, u.user_name, r.research_espionage_technology, pr.premium_officier_technocrat
+            $current_data = $this->_db->queryFetch("SELECT p.planet_name, p.planet_galaxy, p.planet_system, p.planet_planet, u.user_name, r.research_espionage_technology, pr.premium_officier_technocrat
 															FROM " . PLANETS . " AS p
 															INNER JOIN " . USERS . " AS u ON u.user_id = p.planet_user_id
 															INNER JOIN " . PREMIUM . " AS pr ON pr.premium_user_id = p.planet_user_id
@@ -62,7 +62,7 @@ class Spy extends Missions
 																	p.`planet_planet` = " . $fleet_row['fleet_start_planet'] . " AND
 																	p.`planet_type` = " . $fleet_row['fleet_start_type'] . ";");
 
-            $target_data = parent::$db->queryFetch("SELECT p.`planet_id`, p.planet_user_id, p.planet_name, p.planet_galaxy, p.planet_system, p.planet_planet, p.planet_metal, p.planet_crystal, p.planet_deuterium, p.planet_energy_max, s.*, d.*, b.*, r.*, pr.premium_officier_technocrat
+            $target_data = $this->_db->queryFetch("SELECT p.`planet_id`, p.planet_user_id, p.planet_name, p.planet_galaxy, p.planet_system, p.planet_planet, p.planet_metal, p.planet_crystal, p.planet_deuterium, p.planet_energy_max, s.*, d.*, b.*, r.*, pr.premium_officier_technocrat
 															FROM " . PLANETS . " AS p
 															INNER JOIN " . SHIPS . " AS s ON s.ship_planet_id = p.`planet_id`
 															INNER JOIN " . DEFENSES . " AS d ON d.defense_planet_id = p.`planet_id`
@@ -185,7 +185,7 @@ class Spy extends Missions
 
                         if ($TargetChances >= $SpyerChances) {
 
-                            parent::$db->query(
+                            $this->_db->query(
                                 "UPDATE " . PLANETS . " SET
                                 `planet_invisible_start_time` = '" . time() . "',
                                 `planet_debris_crystal` = `planet_debris_crystal` + '" . (0 + $SpyToolDebris) . "'

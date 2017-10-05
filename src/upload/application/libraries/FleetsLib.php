@@ -14,6 +14,7 @@
 
 namespace application\libraries;
 
+use application\core\Database;
 use application\core\XGPCore;
 use application\libraries\FunctionsLib;
 
@@ -29,7 +30,7 @@ use application\libraries\FunctionsLib;
  *
  */
 class FleetsLib extends XGPCore
-{
+{    
     /**
      * bbCode function.
      *
@@ -477,13 +478,13 @@ class FleetsLib extends XGPCore
      */
     public static function enemyLink($fleet_row)
     {
-        $enemy_name = parent::$db->queryFetch(
+        $db = new Database();
+        $enemy_name = $db->queryFetch(
             "SELECT `user_name`
             FROM " . USERS . "
             WHERE `user_id` = '" . intval($fleet_row['fleet_owner']) . "';"
         );
 
-        
         $url    = 'game.php?page=messages&mode=write&id=' . $fleet_row['fleet_owner'];
         $image  = FunctionsLib::setImage(DPATH . '/img/m.gif', parent::$lang['write_message']);
         $link   = $enemy_name['user_name'] . ' ' . FunctionsLib::setUrl($url, '', $image);
@@ -530,7 +531,8 @@ class FleetsLib extends XGPCore
             $current_user
         );
 
-        $planet_name    = parent::$db->queryFetch(
+        $db = new Database();
+        $planet_name    = $db->queryFetch(
             "SELECT
                 (SELECT `planet_name`
                 FROM " . PLANETS . "

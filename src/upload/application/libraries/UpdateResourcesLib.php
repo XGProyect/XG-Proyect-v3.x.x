@@ -14,6 +14,7 @@
 
 namespace application\libraries;
 
+use application\core\Database;
 use application\core\XGPCore;
 
 /**
@@ -27,7 +28,7 @@ use application\core\XGPCore;
  * @version  3.0.0
  */
 class UpdateResourcesLib extends XGPCore
-{
+{ 
     /**
      * updateResources
      *
@@ -251,6 +252,9 @@ class UpdateResourcesLib extends XGPCore
 
         if ($Simul == false) {
 
+            // new DB Object
+            $db = new Database();
+            
             // SHIPS AND DEFENSES UPDATE
             $builded        = self::buildingQueue($current_user, $current_planet, $ProductionTime);
             $ship_points    = 0;
@@ -305,7 +309,7 @@ class UpdateResourcesLib extends XGPCore
                 $tech_query = "";
             }
 
-            parent::$db->query(
+            $db->query(
                 "UPDATE " . PLANETS . " AS p
                 INNER JOIN " . USERS_STATISTICS . " AS us ON us.user_statistic_user_id = p.planet_user_id
                 INNER JOIN " . DEFENSES . " AS d ON d.defense_planet_id = p.`planet_id`

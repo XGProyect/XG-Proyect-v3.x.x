@@ -14,6 +14,7 @@
 
 namespace application\controllers\game;
 
+use application\core\Database;
 use application\core\XGPCore;
 use application\libraries\FunctionsLib;
 
@@ -46,6 +47,7 @@ class Banned extends XGPCore
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
+        $this->_db = new Database();
         $this->_lang = parent::$lang;
 
         $this->build_page();
@@ -58,7 +60,7 @@ class Banned extends XGPCore
      */
     public function __destruct()
     {
-        parent::$db->closeConnection();
+        $this->_db->closeConnection();
     }
 
     /**
@@ -69,7 +71,7 @@ class Banned extends XGPCore
     private function build_page()
     {
         $parse = $this->_lang;
-        $query = parent::$db->query("SELECT *
+        $query = $this->_db->query("SELECT *
 											FROM " . BANNED . "
 											ORDER BY `banned_id`;");
 
@@ -77,7 +79,7 @@ class Banned extends XGPCore
         $sub_template = parent::$page->getTemplate('banned/banned_row');
         $body = '';
 
-        while ($u = parent::$db->fetchArray($query)) {
+        while ($u = $this->_db->fetchArray($query)) {
             $parse['player'] = $u[1];
             $parse['reason'] = $u[2];
             $parse['since'] = date(FunctionsLib::readConfig('date_format_extended'), $u[4]);

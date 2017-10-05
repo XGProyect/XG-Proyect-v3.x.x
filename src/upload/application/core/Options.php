@@ -14,6 +14,8 @@
 
 namespace application\core;
 
+use application\core\Database;
+
 /**
  * Options Class
  *
@@ -40,6 +42,8 @@ class Options extends XGPCore
     public function __construct()
     {
         parent::__construct();
+        
+        $this->_db = new Database();
     }
     
     /**
@@ -70,12 +74,12 @@ class Options extends XGPCore
     {
         if ($option == '') {
 
-            return parent::$db->query(
+            return $this->_db->query(
                 "SELECT * FROM `" . OPTIONS . "`;"
             );
         } else {
 
-            return parent::$db->queryFetch(
+            return $this->_db->queryFetch(
                 "SELECT * 
                     FROM `" . OPTIONS . "` 
                     WHERE `option_name` = '" . $option . "';"
@@ -95,7 +99,7 @@ class Options extends XGPCore
     {
         if ($option != '') {
             
-            if (parent::$db->query(
+            if ($this->_db->query(
                 "UPDATE `" . OPTIONS . "` 
                     SET `option_value` = '" . $value . "' 
                     WHERE `option_name` = '" . $option . "';"
@@ -119,7 +123,7 @@ class Options extends XGPCore
     {
         if ($option != '') {
             
-            if (parent::$db->query(
+            if ($this->_db->query(
                 "INSERT INTO `" . OPTIONS . "` 
                     (`option_name`, `option_value`) VALUES('" . $option . "', '" . $value . "');"
             )) {
@@ -142,7 +146,7 @@ class Options extends XGPCore
     {
         if ($option != '') {
             
-            if (parent::$db->query(
+            if ($this->_db->query(
                 "DELETE `" . OPTIONS . "` 
                     WHERE `option_name` = '" . $option . "';"
             )) {

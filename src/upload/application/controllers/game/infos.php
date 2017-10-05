@@ -14,6 +14,7 @@
 
 namespace application\controllers\game;
 
+use application\core\Database;
 use application\core\XGPCore;
 use application\libraries\DevelopmentsLib;
 use application\libraries\FleetsLib;
@@ -58,6 +59,7 @@ class Infos extends XGPCore
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
+        $this->_db = new Database();
         $this->_lang = parent::$lang;
         $this->_resource = parent::$objects->getObjects();
         $this->_pricelist = parent::$objects->getPrice();
@@ -77,7 +79,7 @@ class Infos extends XGPCore
      */
     public function __destruct()
     {
-        parent::$db->closeConnection();
+        $this->_db->closeConnection();
     }
 
     /**
@@ -340,7 +342,7 @@ class Infos extends XGPCore
                     $RetMessage = $this->_lang['in_jump_gate_error_data'];
                 }
                 
-                $TargetGate     = parent::$db->queryFetch(
+                $TargetGate     = $this->_db->queryFetch(
                     "SELECT p.`planet_id`, b.`building_jump_gate`, p.`planet_last_jump_time`
                     FROM `" . PLANETS . "` AS p
                     INNER JOIN `" . BUILDINGS . "` AS b ON b.`building_planet_id` = p.`planet_id`
@@ -383,7 +385,7 @@ class Infos extends XGPCore
                         }
                         if ($SubQueryOri != "") {
 
-                            parent::$db->query(
+                            $this->_db->query(
                                 "UPDATE " . PLANETS . ", " . USERS . ", " . SHIPS . " SET
                                     $SubQueryOri
                                     `planet_last_jump_time` = '" . $JumpTime . "',
@@ -393,7 +395,7 @@ class Infos extends XGPCore
                                     AND `user_id` = '" . $this->_current_user['user_id'] . "';"
                             );
 
-                            parent::$db->query(
+                            $this->_db->query(
                                 "UPDATE " . PLANETS . ", " . SHIPS . " SET
                                 $SubQueryDes
                                 `planet_last_jump_time` = '" . $JumpTime . "'
@@ -452,7 +454,7 @@ class Infos extends XGPCore
 
     private function BuildJumpableMoonCombo()
     {
-        $MoonList = parent::$db->query(
+        $MoonList = $this->_db->query(
             "SELECT *
             FROM `" . PLANETS . "` AS m
             INNER JOIN `" . BUILDINGS . "` AS b ON b.building_planet_id = m.planet_id
@@ -462,7 +464,7 @@ class Infos extends XGPCore
         
         $Combo  = "";
 
-        while ($CurMoon = parent::$db->fetchAssoc($MoonList)) {
+        while ($CurMoon = $this->_db->fetchAssoc($MoonList)) {
             if ($CurMoon['planet_id'] != $this->_current_planet['planet_id']) {
                 $RestString = $this->GetNextJumpWaitTime($CurMoon);
                 if ($CurMoon[$this->_resource[43]] >= 1)

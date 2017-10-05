@@ -14,6 +14,7 @@
 
 namespace application\controllers\adm;
 
+use application\core\Database;
 use application\core\XGPCore;
 use application\libraries\adm\AdministrationLib;
 use application\libraries\FunctionsLib;
@@ -45,6 +46,7 @@ class Ban extends XGPCore
         // check if session is active
         AdministrationLib::checkSession();
 
+        $this->_db = new Database();
         $this->_lang = parent::$lang;
         $this->_current_user = parent::$users->getUserData();
 
@@ -63,7 +65,7 @@ class Ban extends XGPCore
      */
     public function __destruct()
     {
-        parent::$db->closeConnection();
+        $this->_db->closeConnection();
     }
 
     /**
@@ -102,12 +104,12 @@ class Ban extends XGPCore
         $parse['js_path'] = XGP_ROOT . JS_PATH;
 
         if (isset($_POST['unban_name']) && $_POST['unban_name']) {
-            $username = parent::$db->escapeValue($_POST['unban_name']);
+            $username = $this->_db->escapeValue($_POST['unban_name']);
 
-            parent::$db->query("DELETE FROM `" . BANNED . "`
+            $this->_db->query("DELETE FROM `" . BANNED . "`
 									WHERE `banned_who` = '" . $username . "'");
 
-            parent::$db->query("UPDATE `" . USERS . "` SET
+            $this->_db->query("UPDATE `" . USERS . "` SET
 									`user_banned` = '0'
 									WHERE `user_name` = '" . $username . "'
 									LIMIT 1");
@@ -132,7 +134,7 @@ class Ban extends XGPCore
     {
         $parse = $this->_lang;
         $parse['js_path'] = XGP_ROOT . JS_PATH;
-        $ban_name = isset($_GET['ban_name']) ? parent::$db->escapeValue($_GET['ban_name']) : NULL;
+        $ban_name = isset($_GET['ban_name']) ? $this->_db->escapeValue($_GET['ban_name']) : NULL;
 
         if (isset($_GET['banuser']) && isset($_GET['ban_name'])) {
             $parse['name'] = $ban_name;
@@ -140,7 +142,7 @@ class Ban extends XGPCore
             $parse['changedate'] = $this->_lang['bn_auto_lift_ban_message'];
             $parse['vacation'] = '';
 
-            $banned_user = parent::$db->queryFetch("SELECT b.*, s.`setting_user_id`, s.`setting_vacations_status`
+            $banned_user = $this->_db->queryFetch("SELECT b.*, s.`setting_user_id`, s.`setting_vacations_status`
 																	FROM `" . BANNED . "` AS b
 																	INNER JOIN `" . SETTINGS . "` AS s
 																		ON s.`setting_user_id` = (SELECT `user_id`
@@ -180,7 +182,7 @@ class Ban extends XGPCore
                     }
 
                     if ($banned_user) {
-                        parent::$db->query("UPDATE " . BANNED . "  SET
+                        $this->_db->query("UPDATE " . BANNED . "  SET
 											`banned_who` = '" . $ban_name . "',
 											`banned_theme` = '" . $reas . "',
 											`banned_who2` = '" . $ban_name . "',
@@ -190,7 +192,7 @@ class Ban extends XGPCore
 											`banned_email` = '" . $admin_mail . "'
 											WHERE `banned_who2` = '" . $ban_name . "';");
                     } else {
-                        parent::$db->query("INSERT INTO " . BANNED . " SET
+                        $this->_db->query("INSERT INTO " . BANNED . " SET
 											`banned_who` = '" . $ban_name . "',
 											`banned_theme` = '" . $reas . "',
 											`banned_who2` = '" . $ban_name . "',
@@ -200,11 +202,11 @@ class Ban extends XGPCore
 											`banned_email` = '" . $admin_mail . "';");
                     }
 
-                    $user_id = parent::$db->queryFetch("SELECT `user_id`
+                    $user_id = $this->_db->queryFetch("SELECT `user_id`
 																FROM " . USERS . "
 																WHERE `user_name` = '" . $ban_name . "' LIMIT 1");
 
-                    parent::$db->query("UPDATE " . USERS . " AS u, " . SETTINGS . " AS s, " . PLANETS . " AS p SET
+                    $this->_db->query("UPDATE " . USERS . " AS u, " . SETTINGS . " AS s, " . PLANETS . " AS p SET
 											u.`user_banned` = '" . $banned_until . "',
 											s.`setting_vacations_status` = '" . ( isset($_POST['vacat']) ? 1 : 0 ) . "',
 											p.`planet_building_metal_mine_percent` = '0',
@@ -249,12 +251,12 @@ class Ban extends XGPCore
         }
 
         // get the users according to the filters
-        $users_query = parent::$db->query("SELECT `user_id`, `user_name`, `user_banned`
+        $users_query = $this->_db->query("SELECT `user_id`, `user_name`, `user_banned`
 																FROM `" . USERS . "`
 																" . $where_authlevel . " " . $where_banned . "
 																ORDER BY " . $query_order . " ASC");
 
-        while ($user = parent::$db->fetchArray($users_query)) {
+        while ($user = $this->_db->fetchArray($users_query)) {
             $status = '';
 
             if ($user['user_banned'] == 1) {
@@ -266,7 +268,7 @@ class Ban extends XGPCore
             $this->_users_count++;
         }
 
-        parent::$db->freeResult($users_query); // free resources
+        $this->_db->freeResult($users_query); // free resources
 
         return $users_list; // return builded list
     }
@@ -282,18 +284,18 @@ class Ban extends XGPCore
         $banned_list = '';
 
         // get the banned users
-        $banned_query = parent::$db->query("SELECT `user_id`, `user_name`
+        $banned_query = $this->_db->query("SELECT `user_id`, `user_name`
 													FROM `" . USERS . "`
 													WHERE `user_banned` <> '0'
 													ORDER BY " . $order . " ASC");
 
-        while ($user = parent::$db->fetchArray($banned_query)) {
+        while ($user = $this->_db->fetchArray($banned_query)) {
             $banned_list .= '<option value="' . $user['user_name'] . '">' . $user['user_name'] . '&nbsp;&nbsp;(ID:&nbsp;' . $user['user_id'] . ')</option>';
 
             $this->_banned_count++;
         }
 
-        parent::$db->freeResult($banned_query); // free resources
+        $this->_db->freeResult($banned_query); // free resources
 
         return $banned_list; // return builded list
     }

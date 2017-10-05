@@ -14,8 +14,8 @@
 
 namespace application\libraries\missions;
 
+use application\core\Database;
 use application\core\XGPCore;
-use application\libraries\FleetsLib;
 use application\libraries\UpdateResourcesLib;
 
 /**
@@ -34,6 +34,7 @@ class Missions extends XGPCore
     protected $resource;
     protected $pricelist;
     protected $combat_caps;
+    protected $_db;
 
     /**
      * bbCode function.
@@ -46,6 +47,7 @@ class Missions extends XGPCore
     {
         parent::__construct();
 
+        $this->_db          = new Database();
         $this->langs        = parent::$lang;
         $this->resource     = parent::$objects->getObjects();
         $this->pricelist    = parent::$objects->getPrice();

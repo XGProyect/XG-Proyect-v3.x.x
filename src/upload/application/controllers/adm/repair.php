@@ -14,6 +14,7 @@
 
 namespace application\controllers\adm;
 
+use application\core\Database;
 use application\core\XGPCore;
 use application\libraries\adm\AdministrationLib;
 use application\libraries\FormatLib;
@@ -46,6 +47,7 @@ class Repair extends XGPCore
         // check if session is active
         AdministrationLib::checkSession();
 
+        $this->_db          = new Database();
         $this->langs        = parent::$lang;
         $this->current_user = parent::$users->getUserData();
 
@@ -65,7 +67,7 @@ class Repair extends XGPCore
      */
     public function __destruct()
     {
-        parent::$db->closeConnection();
+        $this->_db->closeConnection();
     }
 
     /**
@@ -84,7 +86,7 @@ class Repair extends XGPCore
 
         if (!$_POST) {
 
-            $tables     = parent::$db->query(
+            $tables     = $this->_db->query(
                 "SELECT 
                     `table_name`,
                     `data_length`,
@@ -98,7 +100,7 @@ class Repair extends XGPCore
             $parse['head']      = parent::$page->parseTemplate($template_head, $this->langs);
             $parse['tables']    = '';
 
-            while ($row = parent::$db->fetchArray($tables)) {
+            while ($row = $this->_db->fetchArray($tables)) {
 
                 $row['row']             = $row['table_name'];
                 $row['data']            = FormatLib::prettyBytes($row['data_length']);
@@ -124,18 +126,18 @@ class Repair extends XGPCore
                     
                     $parse['row']   = $table;
 
-                    parent::$db->query("CHECK TABLE " . $table);
+                    $this->_db->query("CHECK TABLE " . $table);
                     $parse['result']    = $this->langs['db_check_ok'];
                     $result_rows        .= parent::$page->parseTemplate($result_tpl, $parse);
                     
                     if (isset($_POST['Optimize']) && $_POST['Optimize'] == 'yes') {
-                        parent::$db->query("OPTIMIZE TABLE " . $table);
+                        $this->_db->query("OPTIMIZE TABLE " . $table);
                         $parse['result']    = $this->langs['db_opt'];
                         $result_rows        .= parent::$page->parseTemplate($result_tpl, $parse);
                     }
 
                     if (isset($_POST['Repair']) && $_POST['Repair'] == 'yes') {
-                        parent::$db->query("REPAIR TABLE " . $table);
+                        $this->_db->query("REPAIR TABLE " . $table);
                         $parse['result']    = $this->langs['db_rep'];
                         $result_rows        .= parent::$page->parseTemplate($result_tpl, $parse);
                     }

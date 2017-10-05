@@ -14,6 +14,7 @@
 
 namespace application\controllers\home;
 
+use application\core\Database;
 use application\core\XGPCore;
 use application\libraries\FunctionsLib;
 
@@ -44,6 +45,7 @@ class Home extends XGPCore
     {
         parent::__construct();
 
+        $this->_db      = new Database();
         $this->langs    = parent::$lang;
 
         $this->buildPage();
@@ -56,7 +58,7 @@ class Home extends XGPCore
      */
     public function __destruct()
     {
-        parent::$db->closeConnection();
+        $this->_db->closeConnection();
     }
 
     /**
@@ -70,11 +72,11 @@ class Home extends XGPCore
 
         if ($_POST) {
 
-            $login  = parent::$db->queryFetch(
+            $login  = $this->_db->queryFetch(
                 "SELECT `user_id`, `user_name`, `user_password`, `user_banned`
                 FROM " . USERS . "
-                WHERE (`user_name` = '" . parent::$db->escapeValue($_POST['login']) . "'
-                    OR `user_email` = '" . parent::$db->escapeValue($_POST['login']) . "')
+                WHERE (`user_name` = '" . $this->_db->escapeValue($_POST['login']) . "'
+                    OR `user_email` = '" . $this->_db->escapeValue($_POST['login']) . "')
                     AND `user_password` = '" . sha1($_POST['pass']) . "'
                 LIMIT 1"
             );
@@ -89,7 +91,7 @@ class Home extends XGPCore
                 if (parent::$users->userLogin($login['user_id'], $login['user_name'], $login['user_password'])) {
 
                     // Update current planet
-                    parent::$db->query(
+                    $this->_db->query(
                         "UPDATE " . USERS . " SET
                         `user_current_planet` = `user_home_planet_id`
                         WHERE `user_id` ='" . $login['user_id'] . "'"
@@ -157,13 +159,13 @@ class Home extends XGPCore
      */
     private function removeBan($user_name)
     {
-        parent::$db->query(
+        $this->_db->query(
             "UPDATE " . USERS . " SET
             `user_banned` = '0'
             WHERE `user_name` = '" . $user_name . "' LIMIT 1;"
         );
 
-        parent::$db->query(
+        $this->_db->query(
             "DELETE FROM " . BANNED . "
             WHERE `banned_who` = '" . $user_name . "'"
         );

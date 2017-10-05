@@ -14,6 +14,7 @@
 
 namespace application\controllers\game;
 
+use application\core\Database;
 use application\core\XGPCore;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
@@ -50,6 +51,7 @@ class Search extends XGPCore
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
+        $this->_db = new Database();
         $this->_lang = parent::$lang;
         $this->_current_user = parent::$users->getUserData();
         $this->_noob = FunctionsLib::loadLibrary('NoobsProtectionLib');
@@ -66,7 +68,7 @@ class Search extends XGPCore
      */
     public function __destruct()
     {
-        parent::$db->closeConnection();
+        $this->_db->closeConnection();
     }
 
     /**
@@ -78,7 +80,7 @@ class Search extends XGPCore
     {
         $parse              = $this->_lang;
         $type               = isset($_POST['type']) ? $_POST['type'] : '';
-        $searchtext         = parent::$db->escapeValue(isset($_POST['searchtext']) ? $_POST['searchtext'] : '' );
+        $searchtext         = $this->_db->escapeValue(isset($_POST['searchtext']) ? $_POST['searchtext'] : '' );
         $search_results     = '';
         
         if ($_POST) {
@@ -87,7 +89,7 @@ class Search extends XGPCore
                 default:
                     $table = parent::$page->getTemplate('search/search_user_table');
                     $row = parent::$page->getTemplate('search/search_user_row');
-                    $search = parent::$db->query("SELECT u.user_id AS user_id, u.user_name, u.user_authlevel, p.planet_name, p.planet_galaxy, p.planet_system, p.planet_planet, s.user_statistic_total_rank AS rank, a.alliance_id, a.alliance_name
+                    $search = $this->_db->query("SELECT u.user_id AS user_id, u.user_name, u.user_authlevel, p.planet_name, p.planet_galaxy, p.planet_system, p.planet_planet, s.user_statistic_total_rank AS rank, a.alliance_id, a.alliance_name
 														FROM " . USERS . " AS u
 														INNER JOIN " . USERS_STATISTICS . " AS s ON s.user_statistic_user_id = u.user_id
 														INNER JOIN " . PLANETS . " AS p ON p.`planet_id` = u.user_home_planet_id
@@ -97,7 +99,7 @@ class Search extends XGPCore
                 case 'planetname':
                     $table = parent::$page->getTemplate('search/search_user_table');
                     $row = parent::$page->getTemplate('search/search_user_row');
-                    $search = parent::$db->query("SELECT u.user_id AS user_id, u.user_name, u.user_authlevel, p.planet_name, p.planet_galaxy, p.planet_system, p.planet_planet, s.user_statistic_total_rank AS rank, a.alliance_id, a.alliance_name
+                    $search = $this->_db->query("SELECT u.user_id AS user_id, u.user_name, u.user_authlevel, p.planet_name, p.planet_galaxy, p.planet_system, p.planet_planet, s.user_statistic_total_rank AS rank, a.alliance_id, a.alliance_name
 														FROM " . USERS . " AS u
 														INNER JOIN " . USERS_STATISTICS . " AS s ON s.user_statistic_user_id = u.user_id
 														INNER JOIN " . PLANETS . " AS p ON p.`planet_user_id` = u.user_id
@@ -108,7 +110,7 @@ class Search extends XGPCore
                 case 'allytag':
                     $table = parent::$page->getTemplate('search/search_ally_table');
                     $row = parent::$page->getTemplate('search/search_ally_row');
-                    $search = parent::$db->query("SELECT a.alliance_id,
+                    $search = $this->_db->query("SELECT a.alliance_id,
                     									a.alliance_name,
                     									a.alliance_tag,
                     									s.alliance_statistic_total_points as points,
@@ -121,7 +123,7 @@ class Search extends XGPCore
                 case 'allyname':
                     $table = parent::$page->getTemplate('search/search_ally_table');
                     $row = parent::$page->getTemplate('search/search_ally_row');
-                    $search = parent::$db->query("SELECT a.alliance_id,
+                    $search = $this->_db->query("SELECT a.alliance_id,
                     										a.alliance_name,
                     										a.alliance_tag,
                     										s.alliance_statistic_total_points as points,
@@ -136,7 +138,7 @@ class Search extends XGPCore
         if (isset($searchtext) && isset($type) && isset($search)) {
             $result_list = '';
 
-            while ($s = parent::$db->fetchArray($search)) {
+            while ($s = $this->_db->fetchArray($search)) {
                 if ($type == 'playername' or $type == 'planetname') {
                     if ($this->_current_user['user_id'] != $s['user_id']) {
                         $s['actions'] = '<a href="game.php?page=messages&mode=write&id=' . $s['user_id'] . '" title="' . $this->_lang['write_message'] . '"><img src="' . DPATH . 'img/m.gif"/></a>&nbsp;';

@@ -52,7 +52,7 @@ class Missile extends Missions
 
             if ($fleet_row['fleet_mess'] == 0) {
 
-                $attacker_data  = parent::$db->queryFetch(
+                $attacker_data  = $this->_db->queryFetch(
                     "SELECT p.`planet_name`, r.`research_weapons_technology`
                     FROM " . PLANETS . " AS p
                     INNER JOIN " . RESEARCH . " AS r ON r.research_user_id = p.planet_user_id
@@ -62,7 +62,7 @@ class Missile extends Missions
                         `planet_type` = " . $fleet_row['fleet_start_type'] . ";"
                 );
 
-                $target_data = parent::$db->queryFetch(
+                $target_data = $this->_db->queryFetch(
                     "SELECT p.`planet_id`, p.`planet_name`, p.`planet_user_id`, d.*, r.`research_shielding_technology`
                     FROM " . PLANETS . " AS p
                     INNER JOIN " . DEFENSES . " AS d ON d.defense_planet_id = p.`planet_id`
@@ -129,7 +129,7 @@ class Missile extends Missions
 
                     if ($destroyed_query != '') {
 
-                        parent::$db->query(
+                        $this->_db->query(
                             "UPDATE " . DEFENSES . " SET
                             {$destroyed_query}
                             `defense_anti-ballistic_missile` = '" . $amount . "'

@@ -14,6 +14,7 @@
 
 namespace application\controllers\game;
 
+use application\core\Database;
 use application\core\XGPCore;
 use application\libraries\FunctionsLib;
 use application\libraries\ProductionLib;
@@ -54,6 +55,7 @@ class Trader extends XGPCore
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
+        $this->_db              = new Database();
         $this->langs            = parent::$lang;
         $this->resource         = parent::$objects->getObjects();
         $this->tr_dark_matter   = FunctionsLib::readConfig('trader_darkmatter');
@@ -70,7 +72,7 @@ class Trader extends XGPCore
      */
     public function __destruct()
     {
-        parent::$db->closeConnection();
+        $this->_db->closeConnection();
     }
 
     /**
@@ -122,7 +124,7 @@ class Trader extends XGPCore
 
                         if ($this->current_planet['planet_metal'] > $necessaire) {
 
-                            parent::$db->query(
+                            $this->_db->query(
                                 "UPDATE " . PLANETS . " SET
                                 `planet_metal` = `planet_metal` - " . round($necessaire) . ",
                                 `planet_crystal` = `planet_crystal` + " . round($_POST['cristal']) . ",
@@ -167,7 +169,7 @@ class Trader extends XGPCore
 
                         if ($this->current_planet['planet_crystal'] > $necessaire) {
 
-                            parent::$db->query(
+                            $this->_db->query(
                                 "UPDATE " . PLANETS . " SET
                                 `planet_metal` = `planet_metal` + " . round($_POST['metal']) . ",
                                 `planet_crystal` = `planet_crystal` - " . round($necessaire) . ",
@@ -209,7 +211,7 @@ class Trader extends XGPCore
 
                         if ($this->current_planet['planet_deuterium'] > $necessaire) {
 
-                            parent::$db->query(
+                            $this->_db->query(
                                 "UPDATE " . PLANETS . " SET
                                 `planet_metal` = `planet_metal` + " . round($_POST['metal']) . ",
                                 `planet_crystal` = `planet_crystal` + " . round($_POST['cristal']) . ",
@@ -344,7 +346,7 @@ class Trader extends XGPCore
      */
     private function discountDarkMatter()
     {
-        parent::$db->query(
+        $this->_db->query(
             "UPDATE `" . PREMIUM . "` SET
             `premium_dark_matter` = `premium_dark_matter` - " . $this->tr_dark_matter . "
             WHERE `premium_user_id` = " . $this->current_user['user_id'] . ""

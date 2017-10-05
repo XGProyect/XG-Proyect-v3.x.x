@@ -14,6 +14,7 @@
 
 namespace application\controllers\game;
 
+use application\core\Database;
 use application\core\XGPCore;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
@@ -53,6 +54,7 @@ class Alliance extends XGPCore
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
         // DEFAULT VALUES
+        $this->_db              = new Database();
         $this->_current_user    = parent::$users->getUserData();
         $this->_lang            = parent::$lang;
         $this->bbcode           = FunctionsLib::loadLibrary('BBCodeLib');
@@ -78,7 +80,7 @@ class Alliance extends XGPCore
      */
     public function __destruct()
     {
-        parent::$db->closeConnection();
+        $this->_db->closeConnection();
     }
 
     /**
@@ -175,7 +177,7 @@ class Alliance extends XGPCore
 
         // VALIDATE AND GET ALLIANCE DATA
         if (is_numeric($ally_id) && $ally_id != 0) {
-            $alliance_data = parent::$db->queryFetch(
+            $alliance_data = $this->_db->queryFetch(
                 "SELECT a.`alliance_id`,
                         a.`alliance_image`,
                         a.`alliance_name`,
@@ -227,19 +229,19 @@ class Alliance extends XGPCore
                 $alliance_tag = $this->check_tag($_POST['atag']);
                 $alliance_name = $this->check_name($_POST['aname']);
 
-                parent::$db->query("INSERT INTO " . ALLIANCE . " SET
+                $this->_db->query("INSERT INTO " . ALLIANCE . " SET
                                                                             `alliance_name`='" . $alliance_name . "',
                                                                             `alliance_tag`='" . $alliance_tag . "' ,
                                                                             `alliance_owner`='" . (int) $this->_current_user['user_id'] . "',
                                                                             `alliance_owner_range` = '" . $this->_lang['al_alliance_founder_rank'] . "',
                                                                             `alliance_register_time`='" . time() . "'");
 
-                $new_ally_id = parent::$db->insertId();
+                $new_ally_id = $this->_db->insertId();
 
-                parent::$db->query("INSERT INTO " . ALLIANCE_STATISTICS . " SET
+                $this->_db->query("INSERT INTO " . ALLIANCE_STATISTICS . " SET
                                                                             `alliance_statistic_alliance_id`='" . $new_ally_id . "'");
 
-                parent::$db->query("UPDATE " . USERS . " SET
+                $this->_db->query("UPDATE " . USERS . " SET
                                                                             `user_ally_id`='" . $new_ally_id . "',
                                                                             `user_ally_register_time`='" . time() . "'
                                                                             WHERE `user_id`='" . (int) $this->_current_user['user_id'] . "'");
@@ -270,19 +272,19 @@ class Alliance extends XGPCore
             $parse['result'] = '';
 
             if ($_POST) {
-                $search = parent::$db->query(
+                $search = $this->_db->query(
                         "SELECT a.*,
                     (SELECT COUNT(user_id) AS `ally_members` 
                         FROM `" . USERS . "` 
                         WHERE `user_ally_id` = a.`alliance_id`) AS `ally_members`
                 FROM " . ALLIANCE . " AS a
-                WHERE a.alliance_name LIKE '%" . parent::$db->escapeValue($_POST['searchtext']) . "%' OR
-                        a.alliance_tag LIKE '%" . parent::$db->escapeValue($_POST['searchtext']) . "%' LIMIT 30"
+                WHERE a.alliance_name LIKE '%" . $this->_db->escapeValue($_POST['searchtext']) . "%' OR
+                        a.alliance_tag LIKE '%" . $this->_db->escapeValue($_POST['searchtext']) . "%' LIMIT 30"
                 );
 
-                if (parent::$db->numRows($search) != 0) {
+                if ($this->_db->numRows($search) != 0) {
 
-                    while ($s = parent::$db->fetchArray($search)) {
+                    while ($s = $this->_db->fetchArray($search)) {
 
                         $search_data = [];
                         $search_data['ally_tag'] = "<a href=\"game.php?page=alliance&mode=apply&allyid=" . $s['alliance_id'] . "\">" . $s['alliance_tag'] . "</a>";
@@ -314,7 +316,7 @@ class Alliance extends XGPCore
 
         if ($this->_current_user['user_ally_id'] == 0 && $this->_current_user['user_ally_request'] == 0) {
             if ($_GET['allyid'] != NULL) {
-                $alianza = parent::$db->queryFetch(
+                $alianza = $this->_db->queryFetch(
                         "SELECT *
                     FROM " . ALLIANCE . "
                     WHERE alliance_id = '" . (int) $_GET['allyid'] . "'"
@@ -331,7 +333,7 @@ class Alliance extends XGPCore
                     FunctionsLib::redirect('game.php?page=alliance');
                 }
 
-                $allyrow = parent::$db->queryFetch(
+                $allyrow = $this->_db->queryFetch(
                         "SELECT alliance_id, alliance_tag, alliance_request
                     FROM " . ALLIANCE . "
                     WHERE alliance_id = '" . (int) $_GET['allyid'] . "'"
@@ -344,7 +346,7 @@ class Alliance extends XGPCore
                 extract($allyrow);
 
                 if (isset($_POST['enviar']) && ( $_POST['enviar'] == $this->_lang['al_applyform_send'] )) {
-                    parent::$db->query(
+                    $this->_db->query(
                             "UPDATE " . USERS . " SET
                         `user_ally_request` = '" . (int) $alliance_id . "' ,
                         `user_ally_request_text` = '" . $_POST['text'] . "',
@@ -380,14 +382,14 @@ class Alliance extends XGPCore
         # DEFAULT PART WITHOUT ALLIANCE
         ##############################################################################################
         if ($this->_current_user['user_ally_id'] == 0 && $this->_current_user['user_ally_request'] != 0) {
-            $allyquery = parent::$db->queryFetch("SELECT `alliance_tag`
+            $allyquery = $this->_db->queryFetch("SELECT `alliance_tag`
                                                                                                         FROM " . ALLIANCE . "
                                                                                                         WHERE alliance_id = '" . (int) $this->_current_user['user_ally_request'] . "' ORDER BY `alliance_id`");
 
             extract($allyquery);
 
             if (isset($_POST['bcancel'])) {
-                parent::$db->query("UPDATE " . USERS . "
+                $this->_db->query("UPDATE " . USERS . "
                                                                         SET `user_ally_request` = '0'
                                                                         WHERE `user_id`= " . (int) $this->_current_user['user_id']);
 
@@ -447,7 +449,7 @@ class Alliance extends XGPCore
             }
 
             // REQUESTS
-            $request_count = parent::$db->numRows(parent::$db->query("SELECT `user_id`
+            $request_count = $this->_db->numRows($this->_db->query("SELECT `user_id`
                                                                                                                                                     FROM `" . USERS . "`
                                                                                                                                                     WHERE `user_ally_request` = '" . (int) $this->_ally['alliance_id'] . "'"));
 
@@ -493,7 +495,7 @@ class Alliance extends XGPCore
             }
 
             if (isset($_GET['yes']) && $_GET['yes'] == 1) {
-                parent::$db->query("UPDATE `" . USERS . "` SET
+                $this->_db->query("UPDATE `" . USERS . "` SET
                                                                             `user_ally_id` = 0,
                                                                             `user_ally_rank_id` = 0
                                                                             WHERE `user_id`='" . $this->_current_user['user_id'] . "'");
@@ -539,7 +541,7 @@ class Alliance extends XGPCore
                 $sort = '';
             }
 
-            $listuser = parent::$db->query(
+            $listuser = $this->_db->query(
                     "SELECT u.user_id, 
                                 u.user_onlinetime, 
                                 u.user_name, 
@@ -557,7 +559,7 @@ class Alliance extends XGPCore
             $i = 0;
             $page_list = '';
 
-            while ($u = parent::$db->fetchArray($listuser)) {
+            while ($u = $this->_db->fetchArray($listuser)) {
                 $i++;
                 $u['i'] = $i;
 
@@ -623,17 +625,17 @@ class Alliance extends XGPCore
                 $_POST['text'] = $_POST['text'];
 
                 if ($_POST['r'] == 0) {
-                    $sq = parent::$db->query("SELECT `user_id`, `user_name`
+                    $sq = $this->_db->query("SELECT `user_id`, `user_name`
                                                                                             FROM `" . USERS . "`
                                                                                             WHERE `user_ally_id` = '" . $this->_current_user['user_ally_id'] . "'");
                 } else {
-                    $sq = parent::$db->query("SELECT `user_id`, `user_name`
+                    $sq = $this->_db->query("SELECT `user_id`, `user_name`
                                                                                                     FROM `" . USERS . "`
                                                                                                     WHERE `user_ally_id` = '" . $this->_current_user['user_ally_id'] . "' AND
                                                                                                                     `user_ally_rank_id` = '" . (int) $_POST['r'] . "'");
                 }
 
-                while ($u = parent::$db->fetchArray($sq)) {
+                while ($u = $this->_db->fetchArray($sq)) {
                     FunctionsLib::sendMessage($u['user_id'], $this->_current_user['user_id'], '', 3, $this->_ally['alliance_tag'], $this->_current_user['user_name'], $_POST['text']);
 
                     $list .= "<br>{$u['user_name']} ";
@@ -677,7 +679,7 @@ class Alliance extends XGPCore
                     $alliance_ranks = unserialize($this->_ally['alliance_ranks']);
 
                     if (!empty($_POST['newrangname'])) {
-                        $name = parent::$db->escapeValue(strip_tags($_POST['newrangname']));
+                        $name = $this->_db->escapeValue(strip_tags($_POST['newrangname']));
 
                         $alliance_ranks[] = array(
                             'name' => $name,
@@ -694,7 +696,7 @@ class Alliance extends XGPCore
 
                         $ranks = serialize($alliance_ranks);
 
-                        parent::$db->query("UPDATE " . ALLIANCE . " SET
+                        $this->_db->query("UPDATE " . ALLIANCE . " SET
                                                                                             `alliance_ranks`='" . $ranks . "'
                                                                                             WHERE `alliance_id` = " . (int) $this->_ally['alliance_id']);
 
@@ -720,7 +722,7 @@ class Alliance extends XGPCore
 
                         $ranks = serialize($ally_ranks_new);
 
-                        parent::$db->query("UPDATE " . ALLIANCE . " SET
+                        $this->_db->query("UPDATE " . ALLIANCE . " SET
                                                                                             `alliance_ranks`='" . $ranks . "'
                                                                                             WHERE `alliance_id`= " . $this->_ally['alliance_id']);
 
@@ -732,7 +734,7 @@ class Alliance extends XGPCore
 
                         $this->_ally['ally_rank'] = serialize($alliance_ranks);
 
-                        parent::$db->query("UPDATE " . ALLIANCE . " SET
+                        $this->_db->query("UPDATE " . ALLIANCE . " SET
                                                                                             `alliance_ranks`='" . $this->_ally['ally_rank'] . "'
                                                                                             WHERE `alliance_id` = " . $this->_ally['alliance_id'] . "");
                     }
@@ -790,16 +792,16 @@ class Alliance extends XGPCore
                     }
 
                     if (isset($_POST['options'])) {
-                        $this->_ally['alliance_owner_range']    = parent::$db->escapeValue(strip_tags($_POST['owner_range']));
-                        $this->_ally['alliance_web']            = parent::$db->escapeValue(htmlspecialchars(strip_tags($_POST['web'])));
-                        $this->_ally['alliance_image']          = parent::$db->escapeValue(htmlspecialchars(strip_tags($_POST['image'])));
+                        $this->_ally['alliance_owner_range']    = $this->_db->escapeValue(strip_tags($_POST['owner_range']));
+                        $this->_ally['alliance_web']            = $this->_db->escapeValue(htmlspecialchars(strip_tags($_POST['web'])));
+                        $this->_ally['alliance_image']          = $this->_db->escapeValue(htmlspecialchars(strip_tags($_POST['image'])));
                         $this->_ally['alliance_request_notallow'] = (int) $_POST['request_notallow'];
 
                         if ($this->_ally['alliance_request_notallow'] != 0 && $this->_ally['alliance_request_notallow'] != 1) {
                             FunctionsLib::redirect('game.php?page=alliance?mode=admin&edit=ally');
                         }
 
-                        parent::$db->query("UPDATE " . ALLIANCE . " SET
+                        $this->_db->query("UPDATE " . ALLIANCE . " SET
                                                                                             `alliance_owner_range`='" . $this->_ally['alliance_owner_range'] . "',
                                                                                             `alliance_image`='" . $this->_ally['alliance_image'] . "',
                                                                                             `alliance_web`='" . $this->_ally['alliance_web'] . "',
@@ -809,7 +811,7 @@ class Alliance extends XGPCore
                         if ($t == 3) {
                             $this->_ally['alliance_request'] = $_POST['text'];
 
-                            parent::$db->query("UPDATE " . ALLIANCE . " SET
+                            $this->_db->query("UPDATE " . ALLIANCE . " SET
                                                                                                     `alliance_request`='" . $this->_ally['alliance_request'] . "'
                                                                                                     WHERE `alliance_id` = '" . $this->_ally['alliance_id'] . "'");
 
@@ -817,7 +819,7 @@ class Alliance extends XGPCore
                         } elseif ($t == 2) {
                             $this->_ally['alliance_text'] = $_POST['text'];
 
-                            parent::$db->query("UPDATE " . ALLIANCE . " SET
+                            $this->_db->query("UPDATE " . ALLIANCE . " SET
                                                                                                     `alliance_text`='" . $this->_ally['alliance_text'] . "'
                                                                                                     WHERE `alliance_id` = '" . $this->_ally['alliance_id'] . "'");
 
@@ -825,7 +827,7 @@ class Alliance extends XGPCore
                         } else {
                             $this->_ally['alliance_description'] = $_POST['text'];
 
-                            parent::$db->query("UPDATE " . ALLIANCE . " SET
+                            $this->_db->query("UPDATE " . ALLIANCE . " SET
                                                                                                     `alliance_description`='" . $this->_ally['alliance_description'] . "'
                                                                                                     WHERE `alliance_id` = '" . $this->_ally['alliance_id'] . "'");
 
@@ -877,7 +879,7 @@ class Alliance extends XGPCore
                     if (isset($kick)) {
                         $this->have_access($this->_ally['alliance_owner'], $this->permissions['kick_users']);
 
-                        $u = parent::$db->queryFetch(
+                        $u = $this->_db->queryFetch(
                                 "SELECT `user_ally_id`, `user_id`
                             FROM `" . USERS . "`
                             WHERE `user_id` = '" . (int) $kick . "'
@@ -886,7 +888,7 @@ class Alliance extends XGPCore
 
                         if ($u['user_ally_id'] == $this->_ally['alliance_id'] && $u['user_id'] != $this->_ally['alliance_owner']) {
 
-                            parent::$db->query(
+                            $this->_db->query(
                                     "UPDATE " . USERS . " SET
                                 `user_ally_id`='0',
                                 `user_ally_rank_id` = 0
@@ -896,7 +898,7 @@ class Alliance extends XGPCore
                     } elseif (isset($_POST['newrang'])) {
 
                         $u = isset($id) ? $id : '';
-                        $q = parent::$db->queryFetch(
+                        $q = $this->_db->queryFetch(
                                 "SELECT `user_id`
                             FROM " . USERS . "
                             WHERE `user_id` = '" . (int) $u . "'
@@ -904,9 +906,9 @@ class Alliance extends XGPCore
                         );
 
                         if ((isset($alliance_ranks[$_POST['newrang'] - 1]) or $_POST['newrang'] == 0 ) && ( $q['user_id'] != $this->_ally['alliance_owner'] )) {
-                            parent::$db->query(
+                            $this->_db->query(
                                     "UPDATE " . USERS . " SET
-                                `user_ally_rank_id` = '" . parent::$db->escapeValue($_POST['newrang']) . "'
+                                `user_ally_rank_id` = '" . $this->_db->escapeValue($_POST['newrang']) . "'
                                 WHERE `user_id`='" . $q['user_id'] . "'"
                             );
                         }
@@ -920,7 +922,7 @@ class Alliance extends XGPCore
                         $sort = '';
                     }
 
-                    $listuser = parent::$db->query(
+                    $listuser = $this->_db->query(
                             "SELECT u.user_id, 
                                 u.user_onlinetime, 
                                 u.user_name, 
@@ -938,11 +940,11 @@ class Alliance extends XGPCore
                     $i = 0;
                     $r = $this->_lang;
                     $s = $this->_lang;
-                    $this->_lang['i'] = parent::$db->numRows($listuser);
+                    $this->_lang['i'] = $this->_db->numRows($listuser);
                     $page_list = '';
                     $r['options'] = '';
 
-                    while ($u = parent::$db->fetchArray($listuser)) {
+                    while ($u = $this->_db->fetchArray($listuser)) {
 
                         $u['i'] = ++$i;
                         $u['points'] = FormatLib::prettyNumber($u['user_statistic_total_points']);
@@ -1034,7 +1036,7 @@ class Alliance extends XGPCore
 
                     if (isset($_POST['action']) && ( $_POST['action'] == $this->_lang['al_acept_request'] )) {
 
-                        parent::$db->query(
+                        $this->_db->query(
                             "UPDATE " . USERS . " SET
                             user_ally_request_text = '',
                             user_ally_request = '0',
@@ -1047,7 +1049,7 @@ class Alliance extends XGPCore
                         FunctionsLib::redirect('game.php?page=alliance&mode=admin&edit=ally');
                     } elseif (isset($_POST['action']) && ( $_POST['action'] == $this->_lang['al_decline_request'] ) && $_POST['action'] != '') {
 
-                        parent::$db->query("UPDATE " . USERS . " SET
+                        $this->_db->query("UPDATE " . USERS . " SET
                                                                                             user_ally_request_text='',
                                                                                             user_ally_request='0',
                                                                                             user_ally_id='0'
@@ -1059,7 +1061,7 @@ class Alliance extends XGPCore
                     }
 
                     $i = 0;
-                    $query = parent::$db->query(
+                    $query = $this->_db->query(
                             "SELECT user_id, user_name, user_ally_request_text, user_ally_register_time
                         FROM " . USERS . "
                         WHERE user_ally_request = '" . $this->_ally['alliance_id'] . "'"
@@ -1068,7 +1070,7 @@ class Alliance extends XGPCore
                     $s = [];
                     $parse['list'] = '';
 
-                    while ($r = parent::$db->fetchArray($query)) {
+                    while ($r = $this->_db->fetchArray($query)) {
 
                         if (isset($show) && $r['user_id'] == $show) {
 
@@ -1125,7 +1127,7 @@ class Alliance extends XGPCore
                     if ($_POST) {
                         $alliance_name = $this->check_name($_POST['nametag']);
 
-                        parent::$db->query("UPDATE " . ALLIANCE . " AS a SET
+                        $this->_db->query("UPDATE " . ALLIANCE . " AS a SET
                                                                                             a.`alliance_name` = '" . $alliance_name . "',
                                                                                             WHERE a.`alliance_id` = '" . $this->_ally['alliance_id'] . "';");
                     }
@@ -1144,7 +1146,7 @@ class Alliance extends XGPCore
                     if ($_POST) {
                         $alliance_tag = $this->check_tag($_POST['nametag']);
 
-                        parent::$db->query("UPDATE " . ALLIANCE . " SET
+                        $this->_db->query("UPDATE " . ALLIANCE . " SET
                                                                                             `alliance_tag` = '" . $alliance_tag . "'
                                                                                             WHERE `alliance_id` = '" . $this->_current_user['user_ally_id'] . "';");
                     }
@@ -1158,11 +1160,11 @@ class Alliance extends XGPCore
 
                 case ( $edit == 'exit' && $this->have_access($this->_ally['alliance_owner'], $this->permissions['disolve_alliance']) === true ):
 
-                    parent::$db->query("UPDATE `" . USERS . "` SET
+                    $this->_db->query("UPDATE `" . USERS . "` SET
                                                                                     `user_ally_id` = '0'
                                                                                     WHERE `user_ally_id` = '" . $this->_ally['alliance_id'] . "'");
 
-                    parent::$db->query("DELETE FROM " . ALLIANCE . "
+                    $this->_db->query("DELETE FROM " . ALLIANCE . "
                                                                                     WHERE `alliance_id` = '" . $this->_ally['alliance_id'] . "'
                                                                                     LIMIT 1");
 
@@ -1173,13 +1175,13 @@ class Alliance extends XGPCore
                 case ( $edit == 'transfer' && $this->have_access($this->_ally['alliance_owner'], $this->permissions['admin_alliance']) === true ):
 
                     if (isset($_POST['newleader'])) {
-                        parent::$db->query("UPDATE " . USERS . " AS u1, " . ALLIANCE . " AS a, " . USERS . " AS u2 SET
+                        $this->_db->query("UPDATE " . USERS . " AS u1, " . ALLIANCE . " AS a, " . USERS . " AS u2 SET
                                                                                             u1.`user_ally_rank_id` = '0',
-                                                                                            a.`alliance_owner` = '" . parent::$db->escapeValue(strip_tags($_POST['newleader'])) . "',
+                                                                                            a.`alliance_owner` = '" . $this->_db->escapeValue(strip_tags($_POST['newleader'])) . "',
                                                                                             u2.`user_ally_rank_id` = '0'
                                                                                             WHERE u1.`user_id`=" . $this->_current_user['user_id'] . " AND
                                                                                                             a.`alliance_id`=" . $this->_current_user['user_ally_id'] . " AND
-                                                                                                            u2.user_id`='" . parent::$db->escapeValue(strip_tags($_POST['newleader'])) . "'");
+                                                                                                            u2.user_id`='" . $this->_db->escapeValue(strip_tags($_POST['newleader'])) . "'");
 
                         FunctionsLib::redirect('game.php?page=alliance');
                     }
@@ -1189,12 +1191,12 @@ class Alliance extends XGPCore
                     if ($this->_ally['alliance_owner'] != $this->_current_user['user_id']) {
                         FunctionsLib::redirect('game.php?page=alliance');
                     } else {
-                        $listuser = parent::$db->query("SELECT *
+                        $listuser = $this->_db->query("SELECT *
                                                                                                                                     FROM " . USERS . "
                                                                                                                                     WHERE user_ally_id = '" . $this->_current_user['user_ally_id'] . "'");
                         $righthand = $this->_lang;
 
-                        while ($u = parent::$db->fetchArray($listuser)) {
+                        while ($u = $this->_db->fetchArray($listuser)) {
                             if ($this->_ally['alliance_owner'] != $u['user_id']) {
                                 if ($u['ally_rank_id'] != 0) {
                                     if ($alliance_ranks[$u['user_ally_rank_id'] - 1]['rechtehand'] == 1) {
@@ -1408,9 +1410,9 @@ class Alliance extends XGPCore
             exit;
         }
 
-        $alliance_tag = parent::$db->escapeValue($alliance_tag);
+        $alliance_tag = $this->_db->escapeValue($alliance_tag);
 
-        $check_tag = parent::$db->queryFetch("SELECT `alliance_tag`
+        $check_tag = $this->_db->queryFetch("SELECT `alliance_tag`
                                                                                                                     FROM `" . ALLIANCE . "`
                                                                                                                     WHERE `alliance_tag` = '" . $alliance_tag . "'");
         if ($check_tag) {
@@ -1436,9 +1438,9 @@ class Alliance extends XGPCore
             exit;
         }
 
-        $alliance_name = parent::$db->escapeValue($alliance_name);
+        $alliance_name = $this->_db->escapeValue($alliance_name);
 
-        $check_name = parent::$db->queryFetch("SELECT `alliance_name`
+        $check_name = $this->_db->queryFetch("SELECT `alliance_name`
                                                                                                             FROM `" . ALLIANCE . "`
                                                                                                             WHERE `alliance_name` = '" . $alliance_name . "'");
 
@@ -1461,7 +1463,7 @@ class Alliance extends XGPCore
             // GET ALLIANCE DATA
 
             if (!isset($this->_ally['alliance_id']) or $this->_ally['alliance_id'] <= 0) {
-                $this->_ally = parent::$db->queryFetch(
+                $this->_ally = $this->_db->queryFetch(
                         "SELECT a.*,
                             (SELECT COUNT(user_id) AS `ally_members` 
                                 FROM `" . USERS . "` 

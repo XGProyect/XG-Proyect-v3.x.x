@@ -14,6 +14,7 @@
 
 namespace application\controllers\game;
 
+use application\core\Database;
 use application\core\XGPCore;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
@@ -61,6 +62,7 @@ class Messages extends XGPCore
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
+        $this->_db          = new Database();
         $this->langs        = parent::$lang;
         $this->current_user = parent::$users->getUserData();
         $this->have_premium = OfficiersLib::isOfficierActive($this->current_user['premium_officier_commander']);
@@ -243,7 +245,7 @@ class Messages extends XGPCore
                     $type_row_template      = parent::$page->getTemplate('messages/messages_body_premium_row_view');
                     $rows                   = '';
                     
-                    while ($messages_list = parent::$db->fetchAssoc($this->_messages_count)) {
+                    while ($messages_list = $this->_db->fetchAssoc($this->_messages_count)) {
 
                         $this->message_type[$messages_list['message_type']]['count']
                             = $messages_list['message_type_count'];
@@ -316,7 +318,7 @@ class Messages extends XGPCore
                     $single_message_template    = parent::$page->getTemplate('messages/messages_list_row_view');
                     $list_of_messages           = '';
 
-                    while ($message = parent::$db->fetchArray($message_list)) {
+                    while ($message = $this->_db->fetchArray($message_list)) {
 
                         $message['message_text']    = nl2br($message['message_text']);
                         $message['message_time']    = date(
@@ -351,7 +353,7 @@ class Messages extends XGPCore
         $single_message_template    = parent::$page->getTemplate('messages/messages_list_row_view');
         $list_of_messages           = '';
 
-        while ($message = parent::$db->fetchArray($messages)) {
+        while ($message = $this->_db->fetchArray($messages)) {
 
             $message['message_text']    = nl2br($message['message_text']);
             $message['message_time']    = date(
@@ -420,7 +422,7 @@ class Messages extends XGPCore
         $list_of_friends  = '';
         $friends_list     = $this->Messages_Model->getFriends($this->current_user['user_id']);
 
-        while ($friends = parent::$db->fetchArray($friends_list)) {
+        while ($friends = $this->_db->fetchArray($friends_list)) {
 
             $friends['dpath']   = DPATH;
             $list_of_friends  .= parent::$page->get('messages/messages_ab_user_row_view')->parse($friends);
@@ -441,7 +443,7 @@ class Messages extends XGPCore
 
         if ($members_list) {
 
-            while ($members = parent::$db->fetchArray($members_list)) {
+            while ($members = $this->_db->fetchArray($members_list)) {
 
                 $members['dpath']   = DPATH;
                 $list_of_members  .= parent::$page->get('messages/messages_ab_user_row_view')->parse($members);
@@ -462,7 +464,7 @@ class Messages extends XGPCore
         $operators_list     = $this->Messages_Model->getOperators($this->current_user['user_id']);
 
         if ($operators_list) {
-            while ($operator = parent::$db->fetchArray($operators_list)) {
+            while ($operator = $this->_db->fetchArray($operators_list)) {
 
                 $operator['dpath']   = DPATH;
                 $list_of_operators  .= parent::$page->get('messages/messages_ab_adm_row_view')->parse($operator);
@@ -483,7 +485,7 @@ class Messages extends XGPCore
         $notes_list     = $this->Messages_Model->getNotes($this->current_user['user_id']);
 
         if ($notes_list) {
-            while ($notes = parent::$db->fetchArray($notes_list)) {
+            while ($notes = $this->_db->fetchArray($notes_list)) {
 
                 $notes['dpath'] = DPATH;
                 $notes['color'] = ($notes['note_priority'] == 0) ? 'lime' : (($notes['note_priority'] == 1) ? 'yellow' : 'red');

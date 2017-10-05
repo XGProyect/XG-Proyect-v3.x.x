@@ -14,6 +14,7 @@
 
 namespace application\controllers\adm;
 
+use application\core\Database;
 use application\core\XGPCore;
 use application\libraries\adm\AdministrationLib;
 use application\libraries\FormatLib;
@@ -46,6 +47,7 @@ class Maker extends XGPCore
         // check if session is active
         AdministrationLib::checkSession();
 
+        $this->_db = new Database();
         $this->_lang = parent::$lang;
         $this->_creator = FunctionsLib::loadLibrary('PlanetLib');
         $this->_current_user = parent::$users->getUserData();
@@ -65,7 +67,7 @@ class Maker extends XGPCore
      */
     public function __destruct()
     {
-        parent::$db->closeConnection();
+        $this->_db->closeConnection();
     }
 
     /**
@@ -126,29 +128,29 @@ class Maker extends XGPCore
         $parse['founders_combo'] = $this->build_alliance_users_combo();
 
         if (isset($_POST['add_alliance']) && $_POST['add_alliance']) {
-            $alliance_name = parent::$db->escapeValue((string) $_POST['name']);
-            $alliance_tag = parent::$db->escapeValue((string) $_POST['tag']);
+            $alliance_name = $this->_db->escapeValue((string) $_POST['name']);
+            $alliance_tag = $this->_db->escapeValue((string) $_POST['tag']);
             $alliance_founder = (int) $_POST['founder'];
 
-            $check_alliance = parent::$db->queryFetch("SELECT `alliance_id`
+            $check_alliance = $this->_db->queryFetch("SELECT `alliance_id`
 																FROM `" . ALLIANCE . "`
 																WHERE `alliance_name` = '" . $alliance_name . "'
 																	OR `alliance_tag` = '" . $alliance_tag . "';");
 
             if (!$check_alliance && !empty($alliance_founder) && $alliance_founder > 0) {
-                parent::$db->query("INSERT INTO `" . ALLIANCE . "` SET
+                $this->_db->query("INSERT INTO `" . ALLIANCE . "` SET
 										`alliance_name`='" . $alliance_name . "',
 										`alliance_tag`='" . $alliance_tag . "' ,
 										`alliance_owner`='" . $alliance_founder . "',
 										`alliance_owner_range` = '" . $this->_lang['mk_alliance_founder_rank'] . "',
 										`alliance_register_time`='" . time() . "'");
 
-                $new_alliance_id = parent::$db->insertId();
+                $new_alliance_id = $this->_db->insertId();
 
-                parent::$db->query("INSERT INTO " . ALLIANCE_STATISTICS . " SET
+                $this->_db->query("INSERT INTO " . ALLIANCE_STATISTICS . " SET
 										`alliance_statistic_alliance_id`='" . $new_alliance_id . "'");
 
-                parent::$db->query("UPDATE `" . USERS . "` SET
+                $this->_db->query("UPDATE `" . USERS . "` SET
 										`user_ally_id`='" . $new_alliance_id . "',
 										`user_ally_register_time`='" . time() . "'
 										WHERE `user_id`='" . $alliance_founder . "'");
@@ -180,7 +182,7 @@ class Maker extends XGPCore
             $temp_max = (int) $_POST['planet_temp_max'];
             $max_fields = (int) $_POST['planet_field_max'];
 
-            $moon_planet = parent::$db->queryFetch(
+            $moon_planet = $this->_db->queryFetch(
                 "SELECT p.*, (SELECT `planet_id`
                 FROM " . PLANETS . "
                 WHERE `planet_galaxy` = (SELECT `planet_galaxy`
@@ -280,13 +282,13 @@ class Maker extends XGPCore
             $field_max = (int) $_POST['planet_field_max'];
             $i = 0;
 
-            $planet_query = parent::$db->queryFetch("SELECT *
+            $planet_query = $this->_db->queryFetch("SELECT *
 																FROM " . PLANETS . "
 																WHERE `planet_galaxy` = '" . $galaxy . "' AND
 																		`planet_system` = '" . $system . "' AND
 																		`planet_planet` = '" . $planet . "'");
 
-            $user_query = parent::$db->queryFetch("SELECT *
+            $user_query = $this->_db->queryFetch("SELECT *
 															FROM " . USERS . "
 															WHERE `user_id` = '" . $user_id . "'");
 
@@ -312,7 +314,7 @@ class Maker extends XGPCore
 
                     $this->_creator->setNewPlanet($galaxy, $system, $planet, $user_id, '', '', false);
 
-                    parent::$db->query("UPDATE " . PLANETS . " SET
+                    $this->_db->query("UPDATE " . PLANETS . " SET
 											`planet_field_max` = '" . $field_max . "',
 											`planet_name` = '" . $name . "'
 											WHERE `planet_galaxy` = '" . $galaxy . "'
@@ -354,17 +356,17 @@ class Maker extends XGPCore
             $i = 0;
             $error = '';
 
-            $check_user = parent::$db->queryFetch("SELECT `user_name`
+            $check_user = $this->_db->queryFetch("SELECT `user_name`
 														FROM " . USERS . "
-														WHERE `user_name` = '" . parent::$db->escapeValue($_POST['name']) . "'
+														WHERE `user_name` = '" . $this->_db->escapeValue($_POST['name']) . "'
 														LIMIT 1");
 
-            $check_email = parent::$db->queryFetch("SELECT `user_email`
+            $check_email = $this->_db->queryFetch("SELECT `user_email`
 														FROM " . USERS . "
-														WHERE `user_email` = '" . parent::$db->escapeValue($_POST['email']) . "'
+														WHERE `user_email` = '" . $this->_db->escapeValue($_POST['email']) . "'
 														LIMIT 1");
 
-            $check_planet = parent::$db->queryFetch("SELECT COUNT(planet_id) AS count
+            $check_planet = $this->_db->queryFetch("SELECT COUNT(planet_id) AS count
 														FROM " . PLANETS . "
 														WHERE `planet_galaxy` = '" . $galaxy . "' AND
 																`planet_system` = '" . $system . "' AND
@@ -415,10 +417,10 @@ class Maker extends XGPCore
 
             if ($i == 0) {
 
-                parent::$db->query("INSERT INTO " . USERS . " SET
-										`user_name` = '" . parent::$db->escapeValue(strip_tags($name)) . "',
-										`user_email` = '" . parent::$db->escapeValue($email) . "',
-										`user_email_permanent` = '" . parent::$db->escapeValue($email) . "',
+                $this->_db->query("INSERT INTO " . USERS . " SET
+										`user_name` = '" . $this->_db->escapeValue(strip_tags($name)) . "',
+										`user_email` = '" . $this->_db->escapeValue($email) . "',
+										`user_email_permanent` = '" . $this->_db->escapeValue($email) . "',
 										`user_ip_at_reg` = '" . $_SERVER['REMOTE_ADDR'] . "',
 										`user_home_planet_id` = '0',
 										`user_register_time` = '" . $time . "',
@@ -426,13 +428,13 @@ class Maker extends XGPCore
 										`user_authlevel` = '" . $auth . "',
 										`user_password`='" . sha1($pass) . "';");
 
-                $last_user_id = parent::$db->insertId();
+                $last_user_id = $this->_db->insertId();
 
                 $this->_creator->setNewPlanet($galaxy, $system, $planet, $last_user_id, '', true);
 
-                $last_planet_id = parent::$db->insertId();
+                $last_planet_id = $this->_db->insertId();
 
-                parent::$db->query("UPDATE " . USERS . " SET
+                $this->_db->query("UPDATE " . USERS . " SET
 										`user_home_planet_id` = '" . $last_planet_id . "',
 										`user_current_planet` = '" . $last_planet_id . "',
 										`user_galaxy` = '" . $galaxy . "',
@@ -441,16 +443,16 @@ class Maker extends XGPCore
 										WHERE `user_id` = '" . $last_user_id . "'
 										LIMIT 1;");
 
-                parent::$db->query("INSERT INTO " . RESEARCH . " SET
+                $this->_db->query("INSERT INTO " . RESEARCH . " SET
 										`research_user_id` = '" . $last_user_id . "';");
 
-                parent::$db->query("INSERT INTO " . USERS_STATISTICS . " SET
+                $this->_db->query("INSERT INTO " . USERS_STATISTICS . " SET
 										`user_statistic_user_id` = '" . $last_user_id . "';");
 
-                parent::$db->query("INSERT INTO " . PREMIUM . " SET
+                $this->_db->query("INSERT INTO " . PREMIUM . " SET
 										`premium_user_id` = '" . $last_user_id . "';");
 
-                parent::$db->query("INSERT INTO " . SETTINGS . " SET
+                $this->_db->query("INSERT INTO " . SETTINGS . " SET
 										`setting_user_id` = '" . $last_user_id . "';");
 
                 $this->_alert = AdministrationLib::saveMessage('ok', str_replace('%s', $pass, $this->_lang['mk_user_added']));
@@ -470,10 +472,10 @@ class Maker extends XGPCore
     private function build_users_combo()
     {
         $combo_rows = '';
-        $users = parent::$db->query("SELECT `user_id`, `user_name`
+        $users = $this->_db->query("SELECT `user_id`, `user_name`
 												FROM " . USERS . ";");
 
-        while ($users_row = parent::$db->fetchArray($users)) {
+        while ($users_row = $this->_db->fetchArray($users)) {
             if (isset($_GET['user']) && $_GET['user'] > 0) {
                 $combo_rows .= '<option value="' . $users_row['user_id'] . '" ' . ( $_GET['user'] == $users_row['user_id'] ? ' selected' : '' ) . '>' . $users_row['user_name'] . '</option>';
             } else {
@@ -492,12 +494,12 @@ class Maker extends XGPCore
     private function build_planet_combo()
     {
         $combo_rows = '';
-        $planets = parent::$db->query("SELECT `planet_id`, `planet_name`, `planet_galaxy`, `planet_system`, `planet_planet`
+        $planets = $this->_db->query("SELECT `planet_id`, `planet_name`, `planet_galaxy`, `planet_system`, `planet_planet`
 												FROM `" . PLANETS . "`
 												WHERE `planet_destroyed` = '0'
 													AND `planet_type` = '1';");
 
-        while ($planets_row = parent::$db->fetchArray($planets)) {
+        while ($planets_row = $this->_db->fetchArray($planets)) {
             if (isset($_GET['planet']) && $_GET['planet'] > 0) {
                 $combo_rows .= '<option value="' . $planets_row['planet_id'] . '" ' . ( $_GET['planet'] == $planets_row['planet_id'] ? 'selected' : '' ) . ' >' . $planets_row['planet_name'] . ' [' . $planets_row['planet_galaxy'] . ':' . $planets_row['planet_system'] . ':' . $planets_row['planet_planet'] . ']' . '</option>';
             } else {
@@ -532,12 +534,12 @@ class Maker extends XGPCore
     private function build_alliance_users_combo()
     {
         $combo_rows = '';
-        $users = parent::$db->query("SELECT `user_id`, `user_name`
+        $users = $this->_db->query("SELECT `user_id`, `user_name`
 												FROM `" . USERS . "`
 												WHERE `user_ally_id` = '0'
 													AND `user_ally_request` = '0';");
 
-        while ($users_row = parent::$db->fetchArray($users)) {
+        while ($users_row = $this->_db->fetchArray($users)) {
             $combo_rows .= '<option value="' . $users_row['user_id'] . '">' . $users_row['user_name'] . '</option>';
         }
 

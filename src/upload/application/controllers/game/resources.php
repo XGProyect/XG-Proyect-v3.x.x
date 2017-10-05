@@ -14,6 +14,7 @@
 
 namespace application\controllers\game;
 
+use application\core\Database;
 use application\core\XGPCore;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
@@ -54,8 +55,8 @@ class Resources extends XGPCore
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
+        $this->_db = new Database();
         $this->_lang = parent::$lang;
-
         $this->_resource = parent::$objects->getObjects();
         $this->_prod_grid = parent::$objects->getProduction();
         $this->_reslist = parent::$objects->getObjectsList();
@@ -72,7 +73,7 @@ class Resources extends XGPCore
      */
     public function __destruct()
     {
-        parent::$db->closeConnection();
+        $this->_db->closeConnection();
     }
 
     /**
@@ -228,7 +229,7 @@ class Resources extends XGPCore
                 }
             }
 
-            parent::$db->query("UPDATE " . PLANETS . " SET
+            $this->_db->query("UPDATE " . PLANETS . " SET
 									`planet_id` = '" . $this->_current_planet['planet_id'] . "'
 									$SubQry
 									WHERE `planet_id` = '" . $this->_current_planet['planet_id'] . "';");

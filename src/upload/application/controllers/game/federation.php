@@ -14,6 +14,7 @@
 
 namespace application\controllers\game;
 
+use application\core\Database;
 use application\core\XGPCore;
 use application\libraries\FunctionsLib;
 
@@ -48,6 +49,7 @@ class Federation extends XGPCore
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
+        $this->_db = new Database();
         $this->_lang = parent::$lang;
         $this->_current_user = parent::$users->getUserData();
 
@@ -61,7 +63,7 @@ class Federation extends XGPCore
      */
     public function __destruct()
     {
-        parent::$db->closeConnection();
+        $this->_db->closeConnection();
     }
 
     /**
@@ -90,7 +92,7 @@ class Federation extends XGPCore
         }
 
         // QUERY
-        $fleet = parent::$db->queryFetch(
+        $fleet = $this->_db->queryFetch(
                 "SELECT `fleet_id`,
             `fleet_start_time`,
             `fleet_end_time`,
@@ -104,7 +106,7 @@ class Federation extends XGPCore
             WHERE fleet_id = '" . intval($this->_fleet_id) . "'"
         );
 
-        $query_buddies = parent::$db->query("SELECT `user_id`, `user_name`
+        $query_buddies = $this->_db->query("SELECT `user_id`, `user_name`
             FROM " . BUDDY . " AS b
             LEFT JOIN " . USERS . " AS u ON ((u.user_id = b.buddy_sender) OR (u.user_id = b.buddy_receiver))
             WHERE (`buddy_sender` = '" . $this->_current_user['user_id'] . "' OR
@@ -147,7 +149,7 @@ class Federation extends XGPCore
             $acs_code = "AG" . $rand;
             $federation_invited = intval($this->_current_user['user_id']);
 
-            parent::$db->query("INSERT INTO " . ACS_FLEETS . " SET
+            $this->_db->query("INSERT INTO " . ACS_FLEETS . " SET
                 `acs_fleet_name` = '" . $acs_code . "',
                 `acs_fleet_members` = '" . $this->_current_user['user_id'] . "',
                 `acs_fleet_fleets` = '" . $this->_fleet_id . "',
@@ -158,8 +160,8 @@ class Federation extends XGPCore
                 `acs_fleet_invited` = '" . $federation_invited . "'"
             );
 
-            $acs_id = parent::$db->insertId();
-            $acs_madnessred = parent::$db->query(
+            $acs_id = $this->_db->insertId();
+            $acs_madnessred = $this->_db->query(
                     "SELECT `acs_fleet_invited`, `acs_fleet_name`
             FROM " . ACS_FLEETS . "
             WHERE `acs_fleet_name` = '" . $acs_code . "' AND
@@ -171,21 +173,21 @@ class Federation extends XGPCore
                             `acs_fleet_invited` = '" . $this->_current_user['user_id'] . "'"
             );
 
-            parent::$db->query(
+            $this->_db->query(
                     "UPDATE " . FLEETS . "
                 SET fleet_group = '" . $acs_id . "'
                 WHERE fleet_id = '" . intval($this->_fleet_id) . "'"
             );
         } else {
 
-            $acs_madnessred = parent::$db->query(
+            $acs_madnessred = $this->_db->query(
                     "SELECT `acs_fleet_invited`, `acs_fleet_name`
                 FROM " . ACS_FLEETS . "
                 WHERE acs_fleet_id = '" . intval($fleet['fleet_group']) . "'"
             );
         }
 
-        $row = parent::$db->fetchArray($acs_madnessred);
+        $row = $this->_db->fetchArray($acs_madnessred);
         $federation_invited = $row['acs_fleet_invited'];
         $parse['acs_code'] = $row['acs_fleet_name'];
         $members = explode(",", $federation_invited);
@@ -196,13 +198,13 @@ class Federation extends XGPCore
 
             if ($b != '') {
 
-                $member_qry = parent::$db->query(
+                $member_qry = $this->_db->query(
                         "SELECT `user_name`
                     FROM " . USERS . "
                     WHERE `user_id` ='" . intval($b) . "' ;"
                 );
 
-                while ($row = parent::$db->fetchArray($member_qry)) {
+                while ($row = $this->_db->fetchArray($member_qry)) {
                     $members_option['value'] = $row['user_name'];
                     $members_option['selected'] = '';
                     $members_option['title'] = $row['user_name'];
@@ -214,7 +216,7 @@ class Federation extends XGPCore
 
         $friends_row = '';
 
-        while ($buddies = parent::$db->fetchArray($query_buddies)) {
+        while ($buddies = $this->_db->fetchArray($query_buddies)) {
             if ($buddies['user_id'] != $this->_current_user['user_id']) {
                 $members_option['value'] = $buddies['user_name'];
                 $members_option['selected'] = '';
@@ -242,8 +244,8 @@ class Federation extends XGPCore
         $name_len = strlen($acs_name);
 
         if ($name_len >= 3 && $name_len <= 20) {
-            parent::$db->query("UPDATE " . ACS_FLEETS . "
-									SET `acs_fleet_name` = '" . parent::$db->escapeValue($acs_name) . "'
+            $this->_db->query("UPDATE " . ACS_FLEETS . "
+									SET `acs_fleet_name` = '" . $this->_db->escapeValue($acs_name) . "'
 									WHERE acs_fleet_members = '" . intval($this->_current_user['user_id']) . "';");
         }
 
@@ -262,14 +264,14 @@ class Federation extends XGPCore
         }
 
         $added_user_id = 0;
-        $member_qry = parent::$db->queryFetch("SELECT `user_id`
+        $member_qry = $this->_db->queryFetch("SELECT `user_id`
 															FROM " . USERS . "
-															WHERE `user_name` ='" . parent::$db->escapeValue($member_name) . "';");
+															WHERE `user_name` ='" . $this->_db->escapeValue($member_name) . "';");
 
         if (( $member_qry['user_id'] != NULL ) && ( $this->members_count($_POST['federation_invited']) < 5 ) && ( $member_qry['user_id'] != $this->_current_user['user_id'] )) {
-            $new_member_string = parent::$db->escapeValue($_POST['federation_invited']) . ',' . $member_qry['user_id'];
+            $new_member_string = $this->_db->escapeValue($_POST['federation_invited']) . ',' . $member_qry['user_id'];
 
-            parent::$db->query("UPDATE " . ACS_FLEETS . " SET
+            $this->_db->query("UPDATE " . ACS_FLEETS . " SET
 									`acs_fleet_invited` = '" . $new_member_string . "'
 									WHERE `acs_fleet_fleets` = '" . $this->_fleet_id . "';");
 
@@ -290,9 +292,9 @@ class Federation extends XGPCore
     private function remove_user($member_name = '')
     {
         $remove_user_id = 0;
-        $member_qry = parent::$db->queryFetch("SELECT `user_id`
+        $member_qry = $this->_db->queryFetch("SELECT `user_id`
 															FROM " . USERS . "
-															WHERE `user_name` ='" . parent::$db->escapeValue($member_name) . "';");
+															WHERE `user_name` ='" . $this->_db->escapeValue($member_name) . "';");
 
         if (( $member_qry['user_id'] != NULL ) && ( $this->members_count($_POST['federation_invited']) >= 1 ) && ( $member_qry['user_id'] != $this->_current_user['user_id'] )) {
 
@@ -307,7 +309,7 @@ class Federation extends XGPCore
 
             $new_member_string = substr_replace($new_member_string, '', -1);
 
-            parent::$db->query("UPDATE " . ACS_FLEETS . " SET
+            $this->_db->query("UPDATE " . ACS_FLEETS . " SET
 									`acs_fleet_invited` = '" . $new_member_string . "'
 									WHERE `acs_fleet_fleets` = '" . $this->_fleet_id . "';");
 

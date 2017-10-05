@@ -14,6 +14,7 @@
 
 namespace application\controllers\game;
 
+use application\core\Database;
 use application\core\XGPCore;
 use application\libraries\FleetsLib;
 use application\libraries\FormatLib;
@@ -49,6 +50,7 @@ class Movement extends XGPCore
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
+        $this->_db = new Database();
         $this->_lang = parent::$lang;
         $this->_current_user = parent::$users->getUserData();
 
@@ -63,7 +65,7 @@ class Movement extends XGPCore
      */
     public function __destruct()
     {
-        parent::$db->closeConnection();
+        $this->_db->closeConnection();
     }
 
     /**
@@ -80,7 +82,7 @@ class Movement extends XGPCore
         $resource = parent::$objects->getObjects();
 
         // QUERYS
-        $count = parent::$db->queryFetch("SELECT
+        $count = $this->_db->queryFetch("SELECT
 															(SELECT COUNT(fleet_owner) AS `actcnt`
 																FROM " . FLEETS . "
 																WHERE `fleet_owner` = '" . $this->_current_user['user_id'] . "') AS max_fleet,
@@ -117,11 +119,11 @@ class Movement extends XGPCore
 
         if ($count['max_fleet'] <> 0 or $MaxExpedition <> 0) {
 
-            $fq = parent::$db->query("SELECT *
+            $fq = $this->_db->query("SELECT *
 										FROM " . FLEETS . "
 										WHERE fleet_owner = '" . $this->_current_user['user_id'] . "'");
 
-            while ($f = parent::$db->fetchArray($fq)) {
+            while ($f = $this->_db->fetchArray($fq)) {
                 $i++;
 
                 $parse['num'] = $i;
@@ -215,28 +217,28 @@ class Movement extends XGPCore
 
             $fleet_id = (int) $_POST['fleetid'];
             $i = 0;
-            $fleet_row = parent::$db->queryFetch("SELECT *
+            $fleet_row = $this->_db->queryFetch("SELECT *
 														FROM " . FLEETS . "
 														WHERE `fleet_id` = '" . $fleet_id . "';");
 
             if ($fleet_row['fleet_owner'] == $this->_current_user['user_id']) {
                 if ($fleet_row['fleet_mess'] == 0 or $fleet_row['fleet_mess'] == 2) {
                     if ($fleet_row['fleet_group'] > 0) {
-                        $acs = parent::$db->queryFetch("SELECT `acs_fleet_members`
+                        $acs = $this->_db->queryFetch("SELECT `acs_fleet_members`
 																FROM `" . ACS_FLEETS . "`
 																WHERE `acs_fleet_id` = '" . $fleet_row['fleet_group'] . "';");
 
                         if ($acs['acs_fleet_members'] == $fleet_row['fleet_owner'] && $fleet_row['fleet_mission'] == 1) {
-                            parent::$db->query("DELETE FROM `" . ACS_FLEETS . "`
+                            $this->_db->query("DELETE FROM `" . ACS_FLEETS . "`
 													WHERE `acs_fleet_id` ='" . $fleet_row['fleet_group'] . "';");
 
-                            parent::$db->query("UPDATE " . FLEETS . " SET
+                            $this->_db->query("UPDATE " . FLEETS . " SET
 													`fleet_group` = '0'
 													WHERE `fleet_group` = '" . $fleet_row['fleet_group'] . "';");
                         }
 
                         if ($fleet_row['fleet_mission'] == 2) {
-                            parent::$db->query("UPDATE " . FLEETS . " SET
+                            $this->_db->query("UPDATE " . FLEETS . " SET
 												`fleet_group` = '0'
 												WHERE `fleet_id` = '" . $fleet_id . "';");
                         }
@@ -247,7 +249,7 @@ class Movement extends XGPCore
                     $ReturnFlyingTime = ( $fleet_row['fleet_end_stay'] != 0 && $CurrentFlyingTime > $fleetLeght ) ? $fleetLeght + time() : $CurrentFlyingTime + time();
 
 
-                    parent::$db->query("UPDATE " . FLEETS . " SET
+                    $this->_db->query("UPDATE " . FLEETS . " SET
 											`fleet_start_time` = '" . (time() - 1) . "',
 											`fleet_end_stay` = '0',
 											`fleet_end_time` = '" . ($ReturnFlyingTime + 1) . "',

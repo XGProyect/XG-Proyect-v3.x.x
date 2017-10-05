@@ -14,6 +14,7 @@
 
 namespace application\controllers\game;
 
+use application\core\Database;
 use application\core\XGPCore;
 use application\libraries\DevelopmentsLib;
 use application\libraries\FormatLib;
@@ -54,6 +55,7 @@ class Research extends XGPCore
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
+        $this->_db = new Database();
         $this->_current_user = parent::$users->getUserData();
         $this->_current_planet = parent::$users->getPlanetData();
         $this->_lang = parent::$lang;
@@ -76,7 +78,7 @@ class Research extends XGPCore
      */
     public function __destruct()
     {
-        parent::$db->closeConnection();
+        $this->_db->closeConnection();
     }
 
     /**
@@ -233,7 +235,7 @@ class Research extends XGPCore
 
                 if ($update_data == true) {
 
-                    parent::$db->query(
+                    $this->_db->query(
                         "UPDATE " . PLANETS . " AS p, " . RESEARCH . " AS r SET
                         p.`planet_b_tech_id` = '" . $working_planet['planet_b_tech_id'] . "',
                         p.`planet_b_tech` = '" . $working_planet['planet_b_tech'] . "',
@@ -318,7 +320,7 @@ class Research extends XGPCore
 
         if ($this->_current_user['research_current_research'] != 0) {
             if ($this->_current_user['research_current_research'] != $this->_current_planet['planet_id']) {
-                $working_planet = parent::$db->queryFetch("SELECT `planet_id`, `planet_name`, `planet_b_tech`, `planet_b_tech_id`, `planet_galaxy`, `planet_system`, `planet_planet`
+                $working_planet = $this->_db->queryFetch("SELECT `planet_id`, `planet_name`, `planet_b_tech`, `planet_b_tech_id`, `planet_galaxy`, `planet_system`, `planet_planet`
 																FROM " . PLANETS . "
 																WHERE `planet_id` = '" . (int) $this->_current_user['research_current_research'] . "';");
             }
@@ -355,7 +357,7 @@ class Research extends XGPCore
     private function set_labs_amount()
     {
         $labs_limit = $this->_current_user[$this->_resource[123]] + 1;
-        $labs_level = parent::$db->queryFetch(
+        $labs_level = $this->_db->queryFetch(
             "SELECT SUM(`building_laboratory`) AS `total_level`
             FROM " . BUILDINGS . " AS b
             INNER JOIN " . PLANETS . " AS p ON p.`planet_id` = b.building_planet_id

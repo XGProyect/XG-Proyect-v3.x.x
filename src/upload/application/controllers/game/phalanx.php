@@ -14,6 +14,7 @@
 
 namespace application\controllers\game;
 
+use application\core\Database;
 use application\core\XGPCore;
 use application\libraries\FleetsLib;
 use application\libraries\FunctionsLib;
@@ -50,6 +51,7 @@ class Phalanx extends XGPCore
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
+        $this->_db = new Database();
         $this->_lang = parent::$lang;
         $this->_current_user = parent::$users->getUserData();
         $this->_current_planet = parent::$users->getPlanetData();
@@ -65,7 +67,7 @@ class Phalanx extends XGPCore
      */
     public function __destruct()
     {
-        parent::$db->closeConnection();
+        $this->_db->closeConnection();
     }
 
     /**
@@ -96,11 +98,11 @@ class Phalanx extends XGPCore
         
         /* main page */
         if ($this->_current_planet['planet_deuterium'] > 10000) {
-            parent::$db->query("UPDATE " . PLANETS . " SET
+            $this->_db->query("UPDATE " . PLANETS . " SET
             						`planet_deuterium` = `planet_deuterium` - '10000'
             						WHERE `planet_id` = '" . $this->_current_user['user_current_planet'] . "';");
 
-            $TargetInfo = parent::$db->queryFetch("SELECT `planet_name`, `planet_user_id`
+            $TargetInfo = $this->_db->queryFetch("SELECT `planet_name`, `planet_user_id`
             												FROM " . PLANETS . "
             												WHERE `planet_galaxy` = '" . $Galaxy . "' AND
             														`planet_system` = '" . $System . "' AND
@@ -109,7 +111,7 @@ class Phalanx extends XGPCore
 
             $TargetID = $TargetInfo['planet_user_id'];
             $TargetName = $TargetInfo['planet_name'];
-            $TargetInfo = parent::$db->queryFetch("SELECT `planet_destroyed`
+            $TargetInfo = $this->_db->queryFetch("SELECT `planet_destroyed`
             												FROM " . PLANETS . "
             												WHERE `planet_galaxy` = '" . $Galaxy . "' AND
             														`planet_system` = '" . $System . "' AND
@@ -123,7 +125,7 @@ class Phalanx extends XGPCore
             }
 
 
-            $FleetToTarget = parent::$db->query("SELECT *
+            $FleetToTarget = $this->_db->query("SELECT *
             										FROM " . FLEETS . "
             										WHERE ( ( `fleet_start_galaxy` = '" . $Galaxy . "' AND
             													`fleet_start_system` = '" . $System . "' AND
@@ -135,7 +137,7 @@ class Phalanx extends XGPCore
 
             $Record = 0;
             $fpage = array();
-            while ($FleetRow = parent::$db->fetchArray($FleetToTarget)) {
+            while ($FleetRow = $this->_db->fetchArray($FleetToTarget)) {
                 $Record++;
 
                 $ArrivetoTargetTime = $FleetRow['fleet_start_time'];

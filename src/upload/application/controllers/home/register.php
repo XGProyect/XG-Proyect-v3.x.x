@@ -15,6 +15,7 @@
 
 namespace application\controllers\home;
 
+use application\core\Database;
 use application\core\XGPCore;
 use application\libraries\FunctionsLib;
 
@@ -48,7 +49,8 @@ class Register extends XGPCore
     {
         parent::__construct();
 
-        $this->langs = parent::$lang;
+        $this->_db      = new Database();
+        $this->langs    = parent::$lang;
 
         if (FunctionsLib::readConfig('reg_enable') == 1) {
 
@@ -69,7 +71,7 @@ class Register extends XGPCore
      */
     public function __destruct()
     {
-        parent::$db->closeConnection();
+        $this->_db->closeConnection();
     }
 
     /**
@@ -101,9 +103,9 @@ class Register extends XGPCore
 
                 $user_id            = $this->current_user->createUserWithOptions(
                     [
-                        'user_name' => parent::$db->escapeValue(strip_tags($user_name)),
-                        'user_email' => parent::$db->escapeValue($user_email),
-                        'user_email_permanent' => parent::$db->escapeValue($user_email),
+                        'user_name' => $this->_db->escapeValue(strip_tags($user_name)),
+                        'user_email' => $this->_db->escapeValue($user_email),
+                        'user_email_permanent' => $this->_db->escapeValue($user_email),
                         'user_ip_at_reg' => $_SERVER['REMOTE_ADDR'],
                         'user_agent' => $_SERVER['HTTP_USER_AGENT'],
                         'user_home_planet_id' => 0,
@@ -155,7 +157,7 @@ class Register extends XGPCore
                         break;
                     }
 
-                    $planet_row = parent::$db->queryFetch("SELECT *
+                    $planet_row = $this->_db->queryFetch("SELECT *
                         FROM " . PLANETS . "
                         WHERE `planet_galaxy` = '" . $galaxy . "' AND
                                         `planet_system` = '" . $system . "' AND
@@ -178,7 +180,7 @@ class Register extends XGPCore
                     }
                 }
 
-                parent::$db->query(
+                $this->_db->query(
                     "UPDATE " . USERS . " SET
                     `user_home_planet_id` = (SELECT `planet_id` 
                         FROM " . PLANETS . " 
@@ -307,10 +309,10 @@ class Register extends XGPCore
      * */
     private function checkUser()
     {
-        return parent::$db->queryFetch(
+        return $this->_db->queryFetch(
             "SELECT `user_name`
             FROM " . USERS . "
-            WHERE `user_name` = '" . parent::$db->escapeValue($_POST['character']) . "'
+            WHERE `user_name` = '" . $this->_db->escapeValue($_POST['character']) . "'
             LIMIT 1;"
         );
     }
@@ -322,10 +324,10 @@ class Register extends XGPCore
      **/
     private function checkEmail()
     {
-        return parent::$db->queryFetch(
+        return $this->_db->queryFetch(
             "SELECT `user_email`
             FROM " . USERS . "
-            WHERE `user_email` = '" . parent::$db->escapeValue($_POST['email']) . "'
+            WHERE `user_email` = '" . $this->_db->escapeValue($_POST['email']) . "'
             LIMIT 1;"
         );
     }

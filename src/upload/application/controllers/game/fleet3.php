@@ -14,6 +14,7 @@
 
 namespace application\controllers\game;
 
+use application\core\Database;
 use application\core\XGPCore;
 use application\libraries\FleetsLib;
 use application\libraries\FunctionsLib;
@@ -51,6 +52,7 @@ class Fleet3 extends XGPCore
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
+        $this->_db              = new Database();
         $this->langs            = parent::$lang;
         $this->current_user     = parent::$users->getUserData();
         $this->current_planet   = parent::$users->getPlanetData();
@@ -65,7 +67,7 @@ class Fleet3 extends XGPCore
      */
     public function __destruct()
     {
-        parent::$db->closeConnection();
+        $this->_db->closeConnection();
     }
 
     /**
@@ -113,7 +115,7 @@ class Fleet3 extends XGPCore
         $missiontype        = [];
         
         // QUERYS
-        $select = parent::$db->queryFetch(
+        $select = $this->_db->queryFetch(
             "SELECT `planet_user_id`
             FROM `" . PLANETS . "`
             WHERE `planet_galaxy` = '" . $galaxy . "'
@@ -369,7 +371,7 @@ class Fleet3 extends XGPCore
      */
     private function acsExists($fleet_acs, $galaxy, $system, $planet, $planettype)
     {
-        $acs = parent::$db->queryFetch(
+        $acs = $this->_db->queryFetch(
             "SELECT 
                 COUNT(`acs_fleet_id`) AS `amount`
             FROM `" . ACS_FLEETS . "`

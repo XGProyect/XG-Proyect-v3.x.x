@@ -14,6 +14,7 @@
 
 namespace application\controllers\game;
 
+use application\core\Database;
 use application\core\XGPCore;
 use application\libraries\FunctionsLib;
 
@@ -47,6 +48,7 @@ class Notes extends XGPCore
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
+        $this->_db = new Database();
         $this->_lang = parent::$lang;
         $this->_current_user = parent::$users->getUserData();
 
@@ -60,7 +62,7 @@ class Notes extends XGPCore
      */
     public function __destruct()
     {
-        parent::$db->closeConnection();
+        $this->_db->closeConnection();
     }
 
     /**
@@ -80,11 +82,11 @@ class Notes extends XGPCore
         if ($s == 1 or $s == 2) {
             $time = time();
             $priority = intval($_POST['u']);
-            $title = ( $_POST['title'] ) ? parent::$db->escapeValue(strip_tags($_POST['title'])) : "Sin t&iacute;tulo";
+            $title = ( $_POST['title'] ) ? $this->_db->escapeValue(strip_tags($_POST['title'])) : "Sin t&iacute;tulo";
             $text = $_POST['text'] ? FunctionsLib::formatText($_POST['text']) : $this->_lang['nt_no_text'];
 
             if ($s == 1) {
-                parent::$db->query("INSERT INTO " . NOTES . " SET
+                $this->_db->query("INSERT INTO " . NOTES . " SET
                     note_owner=" . intval($this->_current_user['user_id']) . ",
                     note_time=$time,
                     note_priority=$priority,
@@ -95,7 +97,7 @@ class Notes extends XGPCore
                 FunctionsLib::redirect('game.php?page=notes');
             } elseif ($s == 2) {
                 $id = intval($_POST['n']);
-                $note_query = parent::$db->query(
+                $note_query = $this->_db->query(
                     "SELECT *
                     FROM " . NOTES . "
                     WHERE note_id=" . intval($id) . " AND
@@ -105,7 +107,7 @@ class Notes extends XGPCore
                 if (!$note_query)
                     FunctionsLib::redirect('game.php?page=notes');
 
-                parent::$db->query("UPDATE `" . NOTES . "` SET
+                $this->_db->query("UPDATE `" . NOTES . "` SET
                     note_time=$time,
                     note_priority=$priority,
                     note_title='$title',
@@ -120,13 +122,13 @@ class Notes extends XGPCore
             foreach ($_POST as $a => $b) {
                 if (preg_match("/delmes/i", $a) && $b == "y") {
                     $id = str_replace("delmes", "", $a);
-                    $note_query = parent::$db->query("SELECT *
+                    $note_query = $this->_db->query("SELECT *
 															FROM `" . NOTES . "`
 															WHERE `note_id` = " . (int) $id . "
 																AND `note_owner` = " . $this->_current_user['user_id'] . "");
 
                     if ($note_query) {
-                        parent::$db->query("DELETE FROM `" . NOTES . "`
+                        $this->_db->query("DELETE FROM `" . NOTES . "`
 												WHERE `note_id` = " . (int) $id . ";");
                     }
                 }
@@ -147,7 +149,7 @@ class Notes extends XGPCore
                 $SELECTED['1'] = '';
                 $SELECTED['2'] = '';
 
-                $note = parent::$db->queryFetch("SELECT *
+                $note = $this->_db->queryFetch("SELECT *
 														FROM `" . NOTES . "`
 														WHERE `note_owner` = " . $this->_current_user['user_id'] . "
 															AND `note_id` = " . (int) $n . ";");
@@ -170,7 +172,7 @@ class Notes extends XGPCore
 
                 parent::$page->display(parent::$page->parseTemplate(parent::$page->getTemplate('notes/notes_form'), $parse), false, '', false);
             } else {
-                $notes_query = parent::$db->query("SELECT *
+                $notes_query = $this->_db->query("SELECT *
 														FROM `" . NOTES . "`
 														WHERE `note_owner` = " . $this->_current_user['user_id'] . "
 														ORDER BY `note_time` DESC");
@@ -179,7 +181,7 @@ class Notes extends XGPCore
                 $NotesBodyEntryTPL = parent::$page->getTemplate('notes/notes_body_entry');
                 $list = '';
 
-                while ($note = parent::$db->fetchArray($notes_query)) {
+                while ($note = $this->_db->fetchArray($notes_query)) {
                     $count++;
 
                     $parse['NOTE_COLOR'] = $this->return_priority($note['note_priority']);

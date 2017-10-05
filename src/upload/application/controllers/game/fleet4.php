@@ -14,6 +14,7 @@
 
 namespace application\controllers\game;
 
+use application\core\Database;
 use application\core\XGPCore;
 use application\libraries\FleetsLib;
 use application\libraries\FormatLib;
@@ -52,6 +53,7 @@ class Fleet4 extends XGPCore
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
+        $this->_db = new Database();
         $this->_lang = parent::$lang;
         $this->_current_user = parent::$users->getUserData();
         $this->_current_planet = parent::$users->getPlanetData();
@@ -67,7 +69,7 @@ class Fleet4 extends XGPCore
      */
     public function __destruct()
     {
-        parent::$db->closeConnection();
+        $this->_db->closeConnection();
     }
 
     /**
@@ -96,7 +98,7 @@ class Fleet4 extends XGPCore
                         't' . (int) $_POST['planettype'];
 
                 if ($_POST['acs_target_mr'] == $target) {
-                    $aks_count_mr = parent::$db->query("SELECT COUNT(`acs_fleet_id`)
+                    $aks_count_mr = $this->_db->query("SELECT COUNT(`acs_fleet_id`)
 															FROM `" . ACS_FLEETS . "`
 															WHERE `acs_fleet_id` = '" . (int) $_POST['fleet_group'] . "'");
 
@@ -111,7 +113,7 @@ class Fleet4 extends XGPCore
             $_POST['mission'] = 1;
         }
 
-        $TargetPlanet = parent::$db->queryFetch(
+        $TargetPlanet = $this->_db->queryFetch(
             "SELECT `planet_user_id`,`planet_destroyed`
             FROM `" . PLANETS . "`
              WHERE `planet_galaxy` = '" . (int) $_POST['galaxy'] . "' AND
@@ -120,7 +122,7 @@ class Fleet4 extends XGPCore
                             `planet_type` = '" . (int) $_POST['planettype'] . "';"
         );
 
-        $MyDBRec = parent::$db->queryFetch(
+        $MyDBRec = $this->_db->queryFetch(
             "SELECT u.`user_id`, u.`user_onlinetime`, u.`user_ally_id`, s.`setting_vacations_status`
             FROM " . USERS . " AS u, " . SETTINGS . " AS s
             WHERE u.`user_id` = '" . $this->_current_user['user_id'] . "'
@@ -165,7 +167,7 @@ class Fleet4 extends XGPCore
         if ($fleetmission == 8) {
             $YourPlanet = false;
             $UsedPlanet = false;
-            $select = parent::$db->queryFetch("SELECT COUNT(*) AS count, p.*
+            $select = $this->_db->queryFetch("SELECT COUNT(*) AS count, p.*
 														FROM `" . PLANETS . "` AS p
 														WHERE `planet_galaxy` = '" . $galaxy . "' AND
 																`planet_system` = '" . $system . "' AND
@@ -178,7 +180,7 @@ class Fleet4 extends XGPCore
         } else {
             $YourPlanet = false;
             $UsedPlanet = false;
-            $select = parent::$db->queryFetch("SELECT COUNT(*) AS count, p.`planet_user_id`
+            $select = $this->_db->queryFetch("SELECT COUNT(*) AS count, p.`planet_user_id`
 														FROM `" . PLANETS . "` AS p
 														WHERE `planet_galaxy` = '" . $galaxy . "' AND
 																`planet_system` = '" . $system . "' AND
@@ -201,7 +203,7 @@ class Fleet4 extends XGPCore
             $MaxExpedition = $this->_current_user[$resource[124]];
 
             if ($MaxExpedition >= 1) {
-                $maxexpde = parent::$db->queryFetch("SELECT COUNT(fleet_owner) AS `expedi`
+                $maxexpde = $this->_db->queryFetch("SELECT COUNT(fleet_owner) AS `expedi`
 																	FROM " . FLEETS . "
 																	WHERE `fleet_owner` = '" . $this->_current_user['user_id'] . "'
 																		AND `fleet_mission` = '15';");
@@ -252,7 +254,7 @@ class Fleet4 extends XGPCore
         if ($TargetPlanet['planet_user_id'] == '') {
             $HeDBRec = $MyDBRec;
         } elseif ($TargetPlanet['planet_user_id'] != '') {
-            $HeDBRec = parent::$db->queryFetch(
+            $HeDBRec = $this->_db->queryFetch(
                 "SELECT u.`user_id`, u.`user_authlevel`, u.`user_onlinetime`, u.`user_ally_id`, s.`setting_vacations_status`
                 FROM " . USERS . " AS u, " . SETTINGS . " AS s
                 WHERE u.`user_id` = '" . $TargetPlanet['planet_user_id'] . "'
@@ -282,7 +284,7 @@ class Fleet4 extends XGPCore
             FunctionsLib::message("<font color=\"lime\"><b>" . $this->_lang['fl_in_vacation_player'] . "</b></font>", "game.php?page=movement", 2);
         }
 
-        $FlyingFleets = parent::$db->queryFetch("SELECT COUNT(fleet_id) as Number
+        $FlyingFleets = $this->_db->queryFetch("SELECT COUNT(fleet_id) as Number
 													FROM " . FLEETS . "
 													WHERE `fleet_owner`='" . $this->_current_user['user_id'] . "'");
         $ActualFleets = $FlyingFleets['Number'];
@@ -317,7 +319,7 @@ class Fleet4 extends XGPCore
             }
 
             if ($_POST['mission'] == 5) {
-                $buddy = parent::$db->queryFetch("SELECT COUNT( * ) AS buddys
+                $buddy = $this->_db->queryFetch("SELECT COUNT( * ) AS buddys
 														FROM  `" . BUDDY . "`
 															WHERE (
 																(
@@ -485,7 +487,7 @@ class Fleet4 extends XGPCore
         }
 
         if ($fleet_group_mr != 0) {
-            $AksStartTime = parent::$db->queryFetch("SELECT MAX(`fleet_start_time`) AS Start
+            $AksStartTime = $this->_db->queryFetch("SELECT MAX(`fleet_start_time`) AS Start
 														FROM " . FLEETS . "
 														WHERE `fleet_group` = '" . $fleet_group_mr . "';");
 
@@ -493,7 +495,7 @@ class Fleet4 extends XGPCore
                 $fleet['end_time'] += $AksStartTime['Start'] - $fleet['start_time'];
                 $fleet['start_time'] = $AksStartTime['Start'];
             } else {
-                parent::$db->query("UPDATE " . FLEETS . " SET
+                $this->_db->query("UPDATE " . FLEETS . " SET
 										`fleet_start_time` = '" . $fleet['start_time'] . "',
 										`fleet_end_time` = fleet_end_time + '" . ($fleet['start_time'] - $AksStartTime['Start']) . "'
 										WHERE `fleet_group` = '" . $fleet_group_mr . "';");
@@ -502,7 +504,7 @@ class Fleet4 extends XGPCore
             }
         }
 
-        parent::$db->query("INSERT INTO " . FLEETS . " SET
+        $this->_db->query("INSERT INTO " . FLEETS . " SET
 							`fleet_owner` = '" . $this->_current_user['user_id'] . "',
 							`fleet_mission` = '" . (int) $_POST['mission'] . "',
 							`fleet_amount` = '" . (int) $FleetShipCount . "',
@@ -526,7 +528,7 @@ class Fleet4 extends XGPCore
 							`fleet_group` = '" . (int) $fleet_group_mr . "',
 							`fleet_creation` = '" . time() . "';");
 
-        parent::$db->query("UPDATE `" . PLANETS . "` AS p
+        $this->_db->query("UPDATE `" . PLANETS . "` AS p
 								INNER JOIN " . SHIPS . " AS s ON s.ship_planet_id = p.`planet_id` SET
 								$FleetSubQRY
 								`planet_metal` = `planet_metal` - " . $TransMetal . ",

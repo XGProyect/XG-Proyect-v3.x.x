@@ -14,6 +14,7 @@
 
 namespace application\controllers\install;
 
+use application\core\Database;
 use application\core\XGPCore;
 use application\libraries\FunctionsLib;
 
@@ -45,6 +46,7 @@ class Installation extends XGPCore
     {
         parent::__construct();
 
+        $this->_db      = new Database();
         $this->langs    = parent::$lang;
         $this->_planet  = FunctionsLib::loadLibrary('PlanetLib');
 
@@ -64,7 +66,7 @@ class Installation extends XGPCore
      */
     public function __destruct()
     {
-        parent::$db->closeConnection();
+        $this->_db->closeConnection();
     }
 
     /**
@@ -340,7 +342,7 @@ class Installation extends XGPCore
         }
         
         // if no db object
-        if (parent::$db == null) {
+        if ($this->_db == null) {
 
             return false;
         }
@@ -367,10 +369,10 @@ class Installation extends XGPCore
      */
     private function tablesExists()
     {
-        $result = parent::$db->query("SHOW TABLES FROM " . DB_NAME);
+        $result = $this->_db->query("SHOW TABLES FROM " . DB_NAME);
         $arr    = [];
         
-        while ($row = parent::$db->fetchArray($result)) {
+        while ($row = $this->_db->fetchArray($result)) {
 
             if (strpos($row[0], DB_PREFIX) !== false) {
                 $arr[]  = $row[0];
@@ -392,7 +394,7 @@ class Installation extends XGPCore
      */
     private function adminExists()
     {
-        return parent::$db->queryFetch(
+        return $this->_db->queryFetch(
             "SELECT COUNT(`user_id`) as count FROM " . USERS . " 
                 WHERE `user_id` = '1' OR `user_authlevel` = '3';"
         )['count'] >= 1;
@@ -405,7 +407,7 @@ class Installation extends XGPCore
      */
     private function tryConnection()
     {
-        return parent::$db->tryConnection($this->host, $this->user, $this->password);
+        return $this->_db->tryConnection($this->host, $this->user, $this->password);
     }
     
     /**
@@ -415,7 +417,7 @@ class Installation extends XGPCore
      */
     private function tryDatabase()
     {
-        return parent::$db->tryDatabase($this->name);
+        return $this->_db->tryDatabase($this->name);
     }
 
     /**
@@ -473,10 +475,10 @@ class Installation extends XGPCore
 
         if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
             // Store the current sql_mode
-            parent::$db->query("set @orig_mode = @@global.sql_mode");
+            $this->_db->query("set @orig_mode = @@global.sql_mode");
 
             // Set sql_mode to one that won't trigger errors...
-            parent::$db->query('set @@global.sql_mode = "MYSQL40"');   
+            $this->_db->query('set @@global.sql_mode = "MYSQL40"');   
         }
 
         /**
@@ -485,7 +487,7 @@ class Installation extends XGPCore
         foreach ($tables as $table => $query) {
             
             // run query for each table
-            $status[$table] = parent::$db->query($query);
+            $status[$table] = $this->_db->query($query);
 
             // if something fails... return false
             if ($status[$table] != 1) {
@@ -494,7 +496,7 @@ class Installation extends XGPCore
         }
         if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
             // Change it back to original sql_mode
-            parent::$db->query('set @@global.sql_mode = @orig_mode');
+            $this->_db->query('set @@global.sql_mode = @orig_mode');
         }
 
         // ok!
@@ -520,8 +522,8 @@ class Installation extends XGPCore
         }
 
         // some default values
-        $adm_name   = parent::$db->escapeValue($_POST['adm_user']);
-        $adm_email  = parent::$db->escapeValue($_POST['adm_email']);
+        $adm_name   = $this->_db->escapeValue($_POST['adm_user']);
+        $adm_email  = $this->_db->escapeValue($_POST['adm_email']);
         $adm_pass   = sha1($_POST['adm_pass']);
 
         // create user and its planet

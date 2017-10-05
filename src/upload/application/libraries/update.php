@@ -14,6 +14,7 @@
 
 namespace application\libraries;
 
+use application\core\Database;
 use application\core\XGPCore;
 
 /**
@@ -39,6 +40,8 @@ class Update extends XGPCore
 
         // load Model
         parent::loadModel('libraries/update');
+        
+        $this->_db = new Database();
         
         // Other stuff
         $this->cleanUp();
@@ -72,7 +75,7 @@ class Update extends XGPCore
 
             if ($ChooseToDelete) {
                 
-                while ($delete = parent::$db->fetchArray($ChooseToDelete)) {
+                while ($delete = $this->_db->fetchArray($ChooseToDelete)) {
                     
                     parent::$users->deleteUser($delete['user_id']);
                 }
@@ -159,7 +162,7 @@ class Update extends XGPCore
 
         $_fleets    = $this->Update_Model->getStartFleets();
 
-        while ($row = parent::$db->fetchArray($_fleets)) {
+        while ($row = $this->_db->fetchArray($_fleets)) {
             
             $array                  = array();
             $array['planet_galaxy'] = $row['fleet_start_galaxy'];
@@ -174,7 +177,7 @@ class Update extends XGPCore
 
         $_fleets    = $this->Update_Model->getEndFleets();
 
-        while ($row = parent::$db->fetchArray($_fleets)) {
+        while ($row = $this->_db->fetchArray($_fleets)) {
             $array                  = array();
             $array['planet_galaxy'] = $row['fleet_end_galaxy'];
             $array['planet_system'] = $row['fleet_end_system'];

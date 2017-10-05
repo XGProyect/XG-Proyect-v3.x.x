@@ -14,6 +14,7 @@
 
 namespace application\controllers\game;
 
+use application\core\Database;
 use application\core\XGPCore;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
@@ -52,6 +53,7 @@ class Officier extends XGPCore
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
+        $this->_db = new Database();
         $this->_lang = parent::$lang;
         $this->_current_user = parent::$users->getUserData();
         $this->_resource = parent::$objects->getObjects();
@@ -68,7 +70,7 @@ class Officier extends XGPCore
      */
     public function __destruct()
     {
-        parent::$db->closeConnection();
+        $this->_db->closeConnection();
     }
 
     /**
@@ -103,7 +105,7 @@ class Officier extends XGPCore
                         $this->_current_user[$this->_resource[$Selected]] = time() + $set_time; // SET TIME
                     }
 
-                    parent::$db->query("UPDATE " . PREMIUM . " SET
+                    $this->_db->query("UPDATE " . PREMIUM . " SET
 											`premium_dark_matter` = '" . $this->_current_user['premium_dark_matter'] . "',
 											`" . $this->_resource[$Selected] . "` = '" . $this->_current_user[$this->_resource[$Selected]] . "'
 											WHERE `premium_user_id` = '" . $this->_current_user['user_id'] . "';");

@@ -14,6 +14,7 @@
 
 namespace application\libraries;
 
+use application\core\Database;
 use application\core\XGPCore;
 
 /**
@@ -49,6 +50,7 @@ class PlanetLib extends XGPCore
     {
         parent::__construct();
         
+        $this->_db      = new Database();
         $this->langs    = parent::$lang;
         $this->formula  = FunctionsLib::loadLibrary('FormulaLib');
     }
@@ -74,13 +76,13 @@ class PlanetLib extends XGPCore
             // Remove last comma
             $insert_query   = substr_replace($insert_query, '', -2) . ';';
             
-            parent::$db->query($insert_query);
+            $this->_db->query($insert_query);
             
             // insert extra required tables
             if ($full_insert) {
 
                 // get the last inserted planet id
-                $planet_id  = parent::$db->insertId();
+                $planet_id  = $this->_db->insertId();
                 
                 // create the buildings, defenses and ships tables
                 self::createBuildings($planet_id);
@@ -104,7 +106,7 @@ class PlanetLib extends XGPCore
      */
     public function setNewPlanet($galaxy, $system, $position, $owner, $name = '', $main = false)
     {
-        $planet_exist   = parent::$db->queryFetch(
+        $planet_exist   = $this->_db->queryFetch(
             "SELECT `planet_id`
             FROM " . PLANETS . "
             WHERE `planet_galaxy` = '" . $galaxy . "' AND
@@ -172,7 +174,7 @@ class PlanetLib extends XGPCore
      */
     public function setNewMoon($galaxy, $system, $position, $owner, $name = '', $chance = 0, $size = 0, $max_fields = 1, $min_temp = 0, $max_temp = 0)
     {
-        $MoonPlanet = parent::$db->queryFetch(
+        $MoonPlanet = $this->_db->queryFetch(
             "SELECT pm2.`planet_id`,
             pm2.`planet_name`,
             pm2.`planet_temp_max`,
@@ -232,7 +234,7 @@ class PlanetLib extends XGPCore
      */
     public static function createBuildings($planet_id)
     {
-        parent::$db->query(
+        $this->_db->query(
             "INSERT INTO " . BUILDINGS . " SET `building_planet_id` = '".$planet_id."';"
         );
     }
@@ -246,7 +248,7 @@ class PlanetLib extends XGPCore
      */
     public static function createDefenses($planet_id)
     {
-        parent::$db->query(
+        $this->_db->query(
             "INSERT INTO " . DEFENSES . " SET `defense_planet_id` = '".$planet_id."';"
         );
     }
@@ -260,7 +262,7 @@ class PlanetLib extends XGPCore
      */
     public static function createShips($planet_id)
     {
-        parent::$db->query(
+        $this->_db->query(
             "INSERT INTO " . SHIPS . " SET `ship_planet_id` = '".$planet_id."';"
         );
     }

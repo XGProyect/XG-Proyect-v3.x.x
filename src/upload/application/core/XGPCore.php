@@ -29,7 +29,6 @@ use application\libraries\Users;
  */
 abstract class XGPCore
 {
-    protected static $db;
     protected static $lang;
     protected static $users;
     protected static $objects;
@@ -42,22 +41,10 @@ abstract class XGPCore
      */
     public function __construct()
     {
-        $this->setDbClass(); // DATABASE
         $this->setLangClass(); // LANGUAGE
         $this->setUsersClass(); // USERS
         $this->setObjectsClass(); // OBJECTS
         $this->setTemplateClass(); // TEMPLATE
-    }
-
-    /**
-     * setDbClass
-     *
-     * @return void
-     */
-    private function setDbClass()
-    {
-        require_once XGP_ROOT. '/application/core/Database.php';
-        self::$db   = new Database();
     }
 
     /**
@@ -117,7 +104,6 @@ abstract class XGPCore
     protected function loadModel($class)
     {
         try {
-            
             // some validations
             if ((string)$class && $class != '' && !is_null($class)) {
                 
@@ -131,7 +117,7 @@ abstract class XGPCore
                     require_once $model_file;
                     
                     $class_route                    = strtr(MODELS_PATH . $class_route . '/' . $class_name, ['/' => '\\']);
-                    $this->{$class_name . '_Model'} = new $class_route(self::$db);
+                    $this->{$class_name . '_Model'} = new $class_route(new Database());
                     return;
                 }
             }

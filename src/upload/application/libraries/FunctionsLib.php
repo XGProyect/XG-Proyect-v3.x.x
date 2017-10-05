@@ -14,8 +14,13 @@
 
 namespace application\libraries;
 
-use application\core\XGPCore;
+use application\core\Database;
 use application\core\Options;
+use application\core\XGPCore;
+use application\libraries\messenger\MessagesFormat;
+use application\libraries\messenger\MessagesOptions;
+use application\libraries\messenger\MessagesTypes;
+use application\libraries\messenger\Messenger;
 
 /**
  * FunctionsLib Class
@@ -29,16 +34,6 @@ use application\core\Options;
  */
 abstract class FunctionsLib extends XGPCore
 {
-    /**
-     * __construct
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
     /**
      * loadLibrary
      *
@@ -73,7 +68,8 @@ abstract class FunctionsLib extends XGPCore
      */
     public static function formatText($text)
     {
-        $text   = parent::$db->escapeValue($text);
+        $db     = new Database();
+        $text   = $db->escapeValue($text);
         $text   = trim(nl2br(strip_tags($text, '<br>')));
         $text   = preg_replace('|[\r][\n]|', '\\r\\n', $text);
 
@@ -284,6 +280,7 @@ abstract class FunctionsLib extends XGPCore
      */
     public static function sortPlanets($current_user)
     {
+        $db     = new Database();
         $order  = $current_user['setting_planet_order'] == 1 ? "DESC" : "ASC";
         $sort   = $current_user['setting_planet_sort'];
 
@@ -309,7 +306,7 @@ abstract class FunctionsLib extends XGPCore
                 break;
         }
 
-        return parent::$db->query($planets);
+        return $db->query($planets);
     }
 
     /**
@@ -322,6 +319,7 @@ abstract class FunctionsLib extends XGPCore
      */
     public static function buildPlanetList($current_user, $current_planet_id = 0)
     {
+        $db             = new Database();
         $list           = '';
         $user_planets   = self::sortPlanets($current_user);
 
@@ -331,7 +329,7 @@ abstract class FunctionsLib extends XGPCore
 
         if ($user_planets) {
 
-            while ($planets = parent::$db->fetchArray($user_planets)) {
+            while ($planets = $db->fetchArray($user_planets)) {
 
                 if ($current_planet_id != $planets['planet_id']) {
 
@@ -461,7 +459,7 @@ abstract class FunctionsLib extends XGPCore
         // use CI library
         require_once $mail_library_path;
         
-        $mail   = new \CI_Email();
+        $mail   = new CI_Email();
         
         if ($format === 'text' or $format === 'html') {
 
@@ -652,8 +650,10 @@ abstract class FunctionsLib extends XGPCore
      */
     public static function setCurrentLanguage($lang = '')
     {
+        $db = new Database();
+        
         // set the user language reading the config file
-        if (parent::$db != null && parent::$db->testConnection() && !isset($_COOKIE['current_lang'])) {
+        if ($db != null && $db->testConnection() && !isset($_COOKIE['current_lang'])) {
 
             self::updateConfig('lang', $lang);
         }

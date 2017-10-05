@@ -14,6 +14,7 @@
 
 namespace application\controllers\game;
 
+use application\core\Database;
 use application\core\XGPCore;
 use application\libraries\DevelopmentsLib;
 use application\libraries\FormatLib;
@@ -53,6 +54,7 @@ class Buildings extends XGPCore
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
+        $this->_db = new Database();
         $this->_current_user = parent::$users->getUserData();
         $this->_current_planet = parent::$users->getPlanetData();
         $this->_current_page = isset($_GET['page']) ? $_GET['page'] : null;
@@ -87,7 +89,7 @@ class Buildings extends XGPCore
      */
     public function __destruct()
     {
-        parent::$db->closeConnection();
+        $this->_db->closeConnection();
     }
 
     /**
@@ -282,7 +284,7 @@ class Buildings extends XGPCore
      */
     private function startBuilding()
     {
-        parent::$db->query(
+        $this->_db->query(
             "UPDATE " . PLANETS . " SET
             `planet_b_building_id` = '" . $this->_current_planet['planet_b_building_id'] . "',
             `planet_b_building` = '" . $this->_current_planet['planet_b_building'] . "'
