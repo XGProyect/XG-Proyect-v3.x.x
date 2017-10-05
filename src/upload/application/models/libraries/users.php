@@ -230,6 +230,16 @@ class Users
         );
     }
     
+    /**
+     * Update some data
+     * 
+     * @param string $request_uri Requested URL
+     * @param string $remote_addr Remote IP Address
+     * @param string $user_agent  User agent/browser
+     * @param int    $user_id     User ID
+     * 
+     * @return void
+     */
     public function updateUserActivityData($request_uri, $remote_addr, $user_agent, $user_id)
     {
         $this->db->query(
@@ -240,6 +250,146 @@ class Users
                 `user_agent` = '" . $this->db->escapeValue($user_agent) . "'
             WHERE `user_id` = '" . $this->db->escapeValue($user_id) . "'
             LIMIT 1;"
+        );
+    }
+    
+    /**
+     * Set the user current planet data
+     * 
+     * @param int $planet_id   Planet ID
+     * @param int $admin_level Admin Level
+     * 
+     * @return type
+     */
+    public function setPlanetData($planet_id, $admin_level)
+    {
+        return $this->db->queryFetch(
+            "SELECT p.*, b.*, d.*, s.*,
+            m.planet_id AS moon_id,
+            m.planet_name AS moon_name,
+            m.planet_image AS moon_image,
+            m.planet_destroyed AS moon_destroyed,
+            m.planet_image AS moon_image,
+            (SELECT COUNT(user_statistic_user_id) AS stats_users 
+                FROM `" . USERS_STATISTICS . "` AS s
+                INNER JOIN " . USERS . " AS u ON u.user_id = s.user_statistic_user_id
+                WHERE u.`user_authlevel` <= " . $admin_level . ") AS stats_users
+            FROM " . PLANETS . " AS p
+            INNER JOIN " . BUILDINGS . " AS b ON b.building_planet_id = p.`planet_id`
+            INNER JOIN " . DEFENSES . " AS d ON d.defense_planet_id = p.`planet_id`
+            INNER JOIN " . SHIPS . " AS s ON s.ship_planet_id = p.`planet_id`
+            LEFT JOIN " . PLANETS . " AS m ON m.planet_id = (SELECT mp.`planet_id`
+                FROM " . PLANETS . " AS mp
+                WHERE (mp.planet_galaxy=p.planet_galaxy AND
+                                mp.planet_system=p.planet_system AND
+                                mp.planet_planet=p.planet_planet AND
+                                mp.planet_type=3))
+            WHERE p.`planet_id` = '" . $planet_id . "';"
+        );
+    }
+    
+    /**
+     * Validate if the requested planet belongs to the current user
+     * 
+     * @param int $planet_id Planet ID
+     * @param int $user_id   User ID
+     * 
+     * @return array
+     */
+    public function getUserPlanetByIdAndUserId($planet_id, $user_id)
+    {
+        return $this->db->queryFetch(
+            "SELECT `planet_id`
+            FROM " . PLANETS . "
+            WHERE `planet_id` = '" . $planet_id . "'
+            AND `planet_user_id` = '" . $user_id . "';"
+        );
+    }
+           
+    /**
+     * Change the user current planet
+     * 
+     * @param int $planet_id Planet ID
+     * @param int $user_id   User ID
+     * 
+     * @return void
+     */
+    public function changeUserPlanetByUserId($planet_id, $user_id)
+    {
+        $this->db->query(
+            "UPDATE " . USERS . " SET
+            `user_current_planet` = '" . $planet_id . "'
+            WHERE `user_id` = '" . $user_id . "';"
+        );
+    }
+    
+    /**
+     * Insert a new user and return their ID
+     * 
+     * @param string $insert_query Insert Query
+     * 
+     * @return int
+     */
+    public function createNewUser($insert_query)
+    {
+        $this->db->query($insert_query);
+        
+        return $this->db->insertId();
+    }
+    
+    /**
+     * Create premium record
+     * 
+     * @param type $user_id The user id
+     * 
+     * @return void
+     */
+    public function createPremium($user_id)
+    {
+        $this->db->query(
+            "INSERT INTO " . PREMIUM . " SET `premium_user_id` = '" . $user_id . "';"
+        );
+    }
+    
+    /**
+     * Create research record
+     * 
+     * @param type $user_id The user id
+     * 
+     * @return void
+     */
+    public function createResearch($user_id)
+    {
+        $this->db->query(
+            "INSERT INTO " . RESEARCH . " SET `research_user_id` = '" . $user_id . "';"
+        );
+    }
+    
+    /**
+     * Create settings record
+     * 
+     * @param type $user_id The user id
+     * 
+     * @return void
+     */
+    public function createSettings($user_id)
+    {
+        $this->db->query(
+            "INSERT INTO " . SETTINGS . " SET `setting_user_id` = '" . $user_id . "';"
+        );
+    }
+    
+    /**
+     * Create statistics record
+     * 
+     * @param type $user_id The user id
+     * 
+     * @return void
+     */
+    public function createUserStatistics($user_id)
+    {
+        $this->db->query(
+            "INSERT INTO " . USERS_STATISTICS . " SET `user_statistic_user_id` = '" . $user_id . "';"
         );
     }
 }

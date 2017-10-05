@@ -263,28 +263,9 @@ class Users extends XGPCore
      */
     private function setPlanetData()
     {
-        $this->planet_data = parent::$db->queryFetch(
-            "SELECT p.*, b.*, d.*, s.*,
-            m.planet_id AS moon_id,
-            m.planet_name AS moon_name,
-            m.planet_image AS moon_image,
-            m.planet_destroyed AS moon_destroyed,
-            m.planet_image AS moon_image,
-            (SELECT COUNT(user_statistic_user_id) AS stats_users 
-                FROM `" . USERS_STATISTICS . "` AS s
-                INNER JOIN " . USERS . " AS u ON u.user_id = s.user_statistic_user_id
-                WHERE u.`user_authlevel` <= " . FunctionsLib::readConfig('stat_admin_level') . ") AS stats_users
-            FROM " . PLANETS . " AS p
-            INNER JOIN " . BUILDINGS . " AS b ON b.building_planet_id = p.`planet_id`
-            INNER JOIN " . DEFENSES . " AS d ON d.defense_planet_id = p.`planet_id`
-            INNER JOIN " . SHIPS . " AS s ON s.ship_planet_id = p.`planet_id`
-            LEFT JOIN " . PLANETS . " AS m ON m.planet_id = (SELECT mp.`planet_id`
-                FROM " . PLANETS . " AS mp
-                WHERE (mp.planet_galaxy=p.planet_galaxy AND
-                                mp.planet_system=p.planet_system AND
-                                mp.planet_planet=p.planet_planet AND
-                                mp.planet_type=3))
-            WHERE p.`planet_id` = '" . $this->user_data['user_current_planet'] . "';"
+        $this->planet_data = $this->Users_Model->setPlanetData(
+            $this->user_data['user_current_planet'],
+            FunctionsLib::readConfig('stat_admin_level')
         );
     }
 
@@ -300,22 +281,12 @@ class Users extends XGPCore
 
         if (isset($select) && is_numeric($select) && isset($restore) && $restore == 0 && $select != 0) {
 
-            $owned = parent::$db->queryFetch(
-                "SELECT `planet_id`
-                FROM " . PLANETS . "
-                WHERE `planet_id` = '" . $select . "'
-                AND `planet_user_id` = '" . $this->user_data['user_id'] . "';"
-            );
+            $owned = $this->Users_Model->getUserPlanetByIdAndUserId($select, $this->user_data['user_id']); 
 
             if ($owned) {
 
                 $this->user_data['current_planet'] = $select;
-
-                parent::$db->query(
-                    "UPDATE " . USERS . " SET
-                    `user_current_planet` = '" . $select . "'
-                    WHERE `user_id` = '" . $this->user_data['user_id'] . "';"
-                );
+                $this->Users_Model->changeUserPlanetByUserId($select, $this->user_data['user_id']);
             }
         }
     }
@@ -339,81 +310,23 @@ class Users extends XGPCore
             }
                 
             // Remove last comma
-            $insert_query   = substr_replace($insert_query, '', -2) . ';';
-            
-            parent::$db->query($insert_query);
+            $insert_query = substr_replace($insert_query, '', -2) . ';';
             
             // get the last inserted user id
-            $user_id  = parent::$db->insertId();
+            $user_id = $this->Users_Model->createNewUser($insert_query);
             
             // insert extra required tables
             if ($full_insert) {
                 
                 // create the buildings, defenses and ships tables
-                self::createPremium($user_id);
-                self::createResearch($user_id);
-                self::createSettings($user_id);
-                self::createUserStatistics($user_id);
+                $this->Users_Model->createPremium($user_id);
+                $this->Users_Model->createResearch($user_id);
+                $this->Users_Model->createSettings($user_id);
+                $this->Users_Model->createUserStatistics($user_id);
             }
             
             return $user_id;
         }
-    }
-    
-    /**
-     * createPremium
-     * 
-     * @param type $user_id The user id
-     * 
-     * @return void
-     */
-    public function createPremium($user_id)
-    {
-        parent::$db->query(
-            "INSERT INTO " . PREMIUM . " SET `premium_user_id` = '" . $user_id . "';"
-        );
-    }
-    
-    /**
-     * createResearch
-     * 
-     * @param type $user_id The user id
-     * 
-     * @return void
-     */
-    public function createResearch($user_id)
-    {
-        parent::$db->query(
-            "INSERT INTO " . RESEARCH . " SET `research_user_id` = '" . $user_id . "';"
-        );
-    }
-    
-    /**
-     * createSettings
-     * 
-     * @param type $user_id The user id
-     * 
-     * @return void
-     */
-    public function createSettings($user_id)
-    {
-        parent::$db->query(
-            "INSERT INTO " . SETTINGS . " SET `setting_user_id` = '" . $user_id . "';"
-        );
-    }
-    
-    /**
-     * createUserStatistics
-     * 
-     * @param type $user_id The user id
-     * 
-     * @return void
-     */
-    public function createUserStatistics($user_id)
-    {
-        parent::$db->query(
-            "INSERT INTO " . USERS_STATISTICS . " SET `user_statistic_user_id` = '" . $user_id . "';"
-        );
     }
 }
 
