@@ -72,16 +72,6 @@ class Buildings extends Controller
         // build the page
         $this->buildPage();
     }
-
-    /**
-     * Close DB Connection
-     * 
-     * @return void
-     */
-    public function __destruct()
-    {
-        parent::$db->closeConnection();
-    }
     
     /**
      * Creates a new building object that will handle all the building

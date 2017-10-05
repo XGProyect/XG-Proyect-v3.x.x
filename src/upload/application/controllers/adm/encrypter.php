@@ -60,16 +60,6 @@ class Encrypter extends XGPCore
     }
 
     /**
-     * __destruct
-     *
-     * @return void
-     */
-    public function __destruct()
-    {
-        parent::$db->closeConnection();
-    }
-
-    /**
      * buildPage
      *
      * @return void

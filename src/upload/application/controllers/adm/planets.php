@@ -58,16 +58,6 @@ class Planets extends XGPCore
     }
 
     /**
-     * method __destruct
-     * param
-     * return close db connection
-     */
-    public function __destruct()
-    {
-        parent::$db->closeConnection();
-    }
-
-    /**
      * method build_page
      * param
      * return main method, loads everything

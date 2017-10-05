@@ -45,16 +45,6 @@ class Home extends XGPCore
     }
 
     /**
-     * __destructor
-     *
-     * @return void
-     */
-    public function __destruct()
-    {
-        parent::$db->closeConnection();
-    }
-
-    /**
      * buildPage
      *
      * @return void

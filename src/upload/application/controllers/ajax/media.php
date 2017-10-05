@@ -43,16 +43,6 @@ class Media extends XGPCore
 
         $this->buildPage();
     }
-
-    /**
-     * __destructor
-     *
-     * @return void
-     */
-    public function __destruct()
-    {
-        parent::$db->closeConnection();
-    }
     
     /**
      * buildPage
