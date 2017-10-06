@@ -649,8 +649,8 @@ class Updates_library extends XGPCore
 
         if ($current_planet['planet_b_hangar_id'] != 0) {
 
-            $Builded    = array();
-            $BuildArray = array();
+            $Builded    = [];
+            $BuildArray = [];
             $BuildQueue = explode(';', $current_planet['planet_b_hangar_id']);
             
             $current_planet['planet_b_hangar']  += $ProductionTime;
