@@ -262,9 +262,11 @@ class Defense extends XGPCore
                 }
             }
         }
+        
+        if ($this->_current_planet['planet_b_hangar_id'] != 0) {
 
-        if ($this->_current_planet['planet_b_hangar_id'] != '')
             $BuildQueue .= $this->ElementBuildListBox('defenses');
+        }
 
         $parse['buildlist'] = $PageTable;
         $parse['buildinglist'] = $BuildQueue;
@@ -320,14 +322,19 @@ class Defense extends XGPCore
         $TimePerType = '';
         $QueueTime = 0;
 
-        foreach ($ElementQueue as $ElementLine => $Element) {
-            if ($Element != '') {
-                $Element = explode(',', $Element);
-                $ElementTime = DevelopmentsLib::developmentTime($this->_current_user, $this->_current_planet, $Element[0]);
-                $QueueTime += $ElementTime * $Element[1];
-                $TimePerType .= "" . $ElementTime . ",";
-                $NamePerType .= "'" . html_entity_decode($this->_lang['tech'][$Element[0]], ENT_COMPAT, "utf-8") . "',";
-                $NbrePerType .= "" . $Element[1] . ",";
+        if ($ElementQueue) {
+            
+            foreach ($ElementQueue as $ElementLine => $Element) {
+
+                if (is_array($Element)) {
+
+                    $Element = explode(',', $Element);
+                    $ElementTime = DevelopmentsLib::developmentTime($this->_current_user, $this->_current_planet, $Element[0]);
+                    $QueueTime += $ElementTime * $Element[1];
+                    $TimePerType .= "" . $ElementTime . ",";
+                    $NamePerType .= "'" . html_entity_decode($this->_lang['tech'][$Element[0]], ENT_COMPAT, "utf-8") . "',";
+                    $NbrePerType .= "" . $Element[1] . ",";
+                }
             }
         }
 
