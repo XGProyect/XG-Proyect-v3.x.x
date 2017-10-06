@@ -51,7 +51,7 @@ class Statistics_library extends XGPCore
      *
      * @return int
      */
-    public function calculatePoints($element, $level, $type = '')
+    public static function calculatePoints($element, $level, $type = '')
     {
         switch ($type) {
             case 'tech':

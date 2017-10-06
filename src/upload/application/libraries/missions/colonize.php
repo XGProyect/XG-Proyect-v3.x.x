@@ -88,12 +88,10 @@ class Colonize extends Missions
                 } else {
                     if ($this->start_creation($fleet_row)) {
                         $this->colonize_message($fleet_row['fleet_owner'], $message[2], $fleet_row['fleet_start_time']);
-
-                        $stats  = new Statistics_library();
                         
                         if ($fleet_row['fleet_amount'] == 1) {
                             $this->_db->query("UPDATE " . USERS_STATISTICS . " AS us SET
-                                                                                                    us.`user_statistic_ships_points` = us.`user_statistic_ships_points` - " . $stats->calculatePoints(208, 1) . "
+                                                                                                    us.`user_statistic_ships_points` = us.`user_statistic_ships_points` - " . Statistics_library::calculatePoints(208, 1) . "
                                                                                                     WHERE us.`user_statistic_user_id` = (SELECT p.planet_user_id FROM " . PLANETS . " AS p
                                                                                                                                                                                     WHERE p.planet_galaxy = '" . $fleet_row['fleet_start_galaxy'] . "' AND
                                                                                                                                                                                                     p.planet_system = '" . $fleet_row['fleet_start_system'] . "' AND
@@ -112,7 +110,7 @@ class Colonize extends Missions
                                                                                                     `fleet_resource_crystal` = '0',
                                                                                                     `fleet_resource_deuterium` = '0',
                                                                                                     `fleet_mess` = '1',
-                                                                                                    `user_statistic_ships_points` = `user_statistic_ships_points` - " . $stats->calculatePoints(208, 1) . "
+                                                                                                    `user_statistic_ships_points` = `user_statistic_ships_points` - " . Statistics_library::calculatePoints(208, 1) . "
                                                                                                     WHERE `fleet_id` = '" . $fleet_row['fleet_id'] . "' AND
                                                                                                                     `user_statistic_user_id` = (SELECT planet_user_id FROM " . PLANETS . "
                                                                                                                                                                                     WHERE planet_galaxy = '" . $fleet_row['fleet_start_galaxy'] . "' AND
