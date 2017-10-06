@@ -5,6 +5,7 @@ CORE
 [#000] Converted database.php into a library, not longer attached to the core.-
 [#000] Created several models files to store in one places all the queries related to a controller or library.-
 [#000] Reworked how many libraries are included.-
+[#000] Fixed issue that was causing admins to be locked out when they set the game as disabled.-
 
 ADMIN
 [#000] Modified config.php file writable alert.-
@@ -13,13 +14,20 @@ BUILDINGS
 [#000] Rewritten the code to handle the buildings queue, created new buildings library.-
 [#000] Reworked buildings page structure.-
 
+SHIPYARD & DEFENSES
+[#177] Fixed several notices in the shipyard and defenses pages.-
+[#179] Fixed ship and defenses construction in the shipyard and defenses pages (also notices and warnings).-
+
+REGISTER
+[#176] Fixed registration issues
+
 TEST
 [#000] Created testing structure to implement Unit Testing.-
 
 '3.0.4' =>
 CORE
 [#115] Error while inserting default values in some linux versions [By MahmutHizal].-
-[#172] Several fixes on messages filtering, and some refacting was made to improve how it works, new class Messenger.-
+[#172] Several fixes on messages filtering, and some refactoring was made to improve how it works, new class Messenger.-
 [#000] Updated projects leads in the admin home.-
 [#000] Fleet1 page refactor to include model, did the same to Fleet2 page.-
 [#000] Fixed some PHP7 notices and warnings.-
