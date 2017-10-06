@@ -54,7 +54,6 @@ abstract class XGPCore
      */
     private function setLangClass()
     {
-        require_once XGP_ROOT. '/application/core/Language.php';
         $languages  = new Language();
         self::$lang = $languages->lang();
     }
@@ -66,7 +65,6 @@ abstract class XGPCore
      */
     private function setUsersClass()
     {
-        require_once XGP_ROOT . '/application/libraries/users_library.php';
         self::$users    = new Users_library();
     }
 
@@ -77,7 +75,6 @@ abstract class XGPCore
      */
     private function setObjectsClass()
     {
-        require_once XGP_ROOT. '/application/core/Objects.php';
         self::$objects  = new Objects();
     }
 
@@ -88,7 +85,6 @@ abstract class XGPCore
      */
     private function setTemplateClass()
     {
-        require_once XGP_ROOT. '/application/libraries/TemplateLib.php';
         self::$page = new TemplateLib(self::$lang, self::$users);
     }
 

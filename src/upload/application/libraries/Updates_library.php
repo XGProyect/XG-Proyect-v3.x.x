@@ -157,8 +157,6 @@ class Updates_library extends XGPCore
         if (!defined('IN_GAME')) {
             define('IN_GAME', true);
         }
-        
-        include_once XGP_ROOT . LIB_PATH . 'MissionControlLib.php';
 
         $_fleets = $this->Update_Model->getStartFleets();
 
