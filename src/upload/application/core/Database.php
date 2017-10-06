@@ -302,7 +302,19 @@ class Database
      */
     public function fetchAll($result_set)
     {
-        return $result_set->fetch_all(MYSQLI_ASSOC);
+        if (function_exists('mysqli_fetch_all')) {
+
+            return $result_set->fetch_all(MYSQLI_ASSOC);
+        }
+
+        $results_array  = [];
+
+        while ($row = $this->fetchAssoc($result_set)) {
+
+            $results_array[] = $row;
+        }
+
+        return $results_array;  
     }
 
     /**
