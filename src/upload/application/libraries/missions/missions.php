@@ -16,7 +16,7 @@ namespace application\libraries\missions;
 
 use application\core\Database;
 use application\core\XGPCore;
-use application\libraries\UpdateResourcesLib;
+use application\libraries\Updates_library;
 
 /**
  * Missions Class
@@ -214,7 +214,7 @@ class Missions extends XGPCore
             WHERE u.`user_id` = " . $target_planet['planet_user_id']
         );
 
-        UpdateResourcesLib::updateResources($target_user, $target_planet, time());
+        Updates_library::updatePlanetResources($target_user, $target_planet, time());
     }
 }
 

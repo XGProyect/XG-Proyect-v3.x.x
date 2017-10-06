@@ -18,7 +18,7 @@ use application\libraries\FleetsLib;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
 use application\libraries\PlanetLib;
-use application\libraries\UpdateResourcesLib;
+use application\models\libraries\Updates_library;
 use Battle;
 use DebugManager;
 use Defense;
@@ -124,7 +124,7 @@ class Attack extends Missions
 
             $target_userID  = $targetUser['user_id'];
 
-            UpdateResourcesLib::updateResources($targetUser, $target_planet, time());
+            Updates_library::updatePlanetResources($targetUser, $target_planet, time());
 
             //----------------------- prepare players for battle ----------------------
             // attackers fleet sum

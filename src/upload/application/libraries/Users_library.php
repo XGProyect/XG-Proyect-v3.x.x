@@ -54,7 +54,7 @@ class Users_library
             $this->setPlanetData();
 
             // Update resources, ships, defenses & technologies
-            UpdateResourcesLib::updateResources($this->user_data, $this->planet_data, time());
+            Updates_library::updatePlanetResources($this->user_data, $this->planet_data, time());
 
             // Update buildings queue
             Updates_library::updateBuildingsQueue($this->planet_data, $this->user_data);
