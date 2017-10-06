@@ -217,7 +217,7 @@ class Updates_library extends XGPCore
      */
     private static function checkBuildingQueue(&$current_planet, &$current_user)
     {
-        $db         = FunctionsLib::modelLoader('libraries/update');
+        $db         = FunctionsLib::modelLoader('libraries/updates_library');
         $resource   = parent::$objects->getObjects();
         $ret_value  = false;
 
