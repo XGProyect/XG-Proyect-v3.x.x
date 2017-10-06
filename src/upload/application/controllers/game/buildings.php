@@ -582,7 +582,7 @@ class Buildings extends Controller
                 $QueueArray = explode(";", $CurrentQueue);
                 $ActualCount = count($QueueArray);
                 if ($ActualCount < 2) {
-                    FunctionsLib::redirect('game.php?page=' . $this->_current_page);
+                    FunctionsLib::redirect('game.php?page=' . $this->getCurrentPage());
                 }
 
                 //  finding the buildings time
@@ -635,7 +635,7 @@ class Buildings extends Controller
 
         if ($AddMode) {
             if (($this->_planet['planet_field_current'] >= ($max_fields - $queue['lenght']))) {
-                FunctionsLib::redirect('game.php?page=' . $this->_current_page);
+                FunctionsLib::redirect('game.php?page=' . $this->getCurrentPage());
             }
         }
 
@@ -792,7 +792,7 @@ class Buildings extends Controller
                             $ListIDRow .= "		<strong color=\"lime\"><br><font color=\"lime\">" . date(FunctionsLib::readConfig('date_format_extended'), $BuildEndTime) . "</font></strong>";
                         } else {
                             $ListIDRow .= "		<font color=\"red\">";
-                            $ListIDRow .= "		<a href=\"game.php?page=" . $this->_current_page . "&listid=" . $ListID . "&amp;cmd=remove&amp;planet=" . $PlanetID . "\">" . $this->getLang()['bd_cancel'] . "</a></font>";
+                            $ListIDRow .= "		<a href=\"game.php?page=" . $this->getCurrentPage() . "&listid=" . $ListID . "&amp;cmd=remove&amp;planet=" . $PlanetID . "\">" . $this->getLang()['bd_cancel'] . "</a></font>";
                         }
 
                         $ListIDRow .= "	</td>";
