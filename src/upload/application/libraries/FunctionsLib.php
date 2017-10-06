@@ -21,6 +21,7 @@ use application\libraries\messenger\MessagesFormat;
 use application\libraries\messenger\MessagesOptions;
 use application\libraries\messenger\MessagesTypes;
 use application\libraries\messenger\Messenger;
+use application\libraries\users\UsersTypes;
 use CI_Email;
 
 /**
@@ -727,7 +728,7 @@ abstract class FunctionsLib extends XGPCore
      */
     public static function checkServer($current_user)
     {
-        if (self::readConfig('game_enable') == 0 && $current_user['user_authlevel'] == 3) {
+        if (self::readConfig('game_enable') == 0 && $current_user['user_authlevel'] < UsersTypes::admin) {
 
             self::message(stripslashes(FunctionsLib::readConfig('close_reason')), '', '', false, false);
             die();
