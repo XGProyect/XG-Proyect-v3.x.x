@@ -26,6 +26,6 @@ Point you browser to your localhost and follow the step by step instructions pro
 
 We are happy to deliver this software giving others the possibility to have a good OGame Clon.  
 On the other hand, it's a pleasure to see people using XG Proyect.  
-Send me a PM in the forum so I can put your game logo here!  
+<a href="http://www.xgproyect.org/privatemessage/new/1" target="_blank">Send me a PM</a> in the forum so I can put your game logo here!  
 
 ![xgproyect](http://www.xgproyect.org/images/misc/xg-logo.png)

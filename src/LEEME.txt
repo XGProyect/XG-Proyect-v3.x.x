@@ -16,9 +16,9 @@
 #
 #############################################################################
 
-REQUERIMIENTOS
+REQUERIMIENTOS RECOMENDADOS
 + PHP 5.5+
-+ MySQL 
++ MySQL 5.5+
 
 OPCIONES
 + Instalar

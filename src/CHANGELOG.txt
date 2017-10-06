@@ -4,6 +4,7 @@ CORE
 [#000] Reworked how the core and libraries are loaded. AutoLoader class is now being used.-
 [#000] Converted database.php into a library, not longer attached to the core.-
 [#000] Created several models files to store in one places all the queries related to a controller or library.-
+[#000] Reworked how many libraries are included.-
 
 ADMIN
 [#000] Modified config.php file writable alert.-

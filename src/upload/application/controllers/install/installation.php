@@ -298,7 +298,7 @@ class Installation extends XGPCore
      */
     private function serverRequirementes()
     {
-        if (version_compare(PHP_VERSION, '7.0.0', '<')) {
+        if (version_compare(PHP_VERSION, '5.5.0', '<')) {
             
             return false;
         } else {
