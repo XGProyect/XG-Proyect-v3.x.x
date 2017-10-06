@@ -169,8 +169,9 @@ class Defense extends XGPCore
             FunctionsLib::redirect('game.php?page=defense');
         }
 
-        if ($this->_current_planet[$this->_resource[21]] == 0)
+        if ($this->_current_planet[$this->_resource[21]] == 0) {
             FunctionsLib::message($this->_lang['bd_shipyard_required'], '', '', true);
+        }
 
         $NotBuilding = true;
 

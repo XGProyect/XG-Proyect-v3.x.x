@@ -154,7 +154,6 @@ class Shipyard extends XGPCore
                         }   
                     }
                 }
-                // END - FIX
             } else {
 
                 $CurrentBuilding = $CurrentQueue;
@@ -256,9 +255,9 @@ class Shipyard extends XGPCore
     private function ElementBuildListBox($current_page)
     {
         $ElementQueue = explode(';', $this->_current_planet['planet_b_hangar_id']);
-        $NbrePerType = "";
-        $NamePerType = "";
-        $TimePerType = "";
+        $NbrePerType = '';
+        $NamePerType = '';
+        $TimePerType = '';
         $QueueTime = 0;
 
         if ($ElementQueue) {
@@ -266,7 +265,7 @@ class Shipyard extends XGPCore
             foreach ($ElementQueue as $ElementLine => $Element) {
 
                 if (!empty($Element)) {
-                    
+
                     $Element = explode(',', $Element);
                     $ElementTime = DevelopmentsLib::developmentTime($this->_current_user, $this->_current_planet, $Element[0]);
                     $QueueTime += $ElementTime * $Element[1];
@@ -274,7 +273,7 @@ class Shipyard extends XGPCore
                     $NamePerType .= "'" . html_entity_decode($this->_lang['tech'][$Element[0]], ENT_COMPAT, "utf-8") . "',";
                     $NbrePerType .= "" . $Element[1] . ",";
                 }
-            }   
+            }
         }
 
         $parse = $this->_lang;
