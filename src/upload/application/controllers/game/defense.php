@@ -196,7 +196,6 @@ class Defense extends XGPCore
                         }   
                     }
                 }
-                // END - FIX
             } else {
 
                 $CurrentBuilding = $CurrentQueue;
@@ -326,7 +325,7 @@ class Defense extends XGPCore
             
             foreach ($ElementQueue as $ElementLine => $Element) {
 
-                if (is_array($Element)) {
+                if (!empty($Element)) {
 
                     $Element = explode(',', $Element);
                     $ElementTime = DevelopmentsLib::developmentTime($this->_current_user, $this->_current_planet, $Element[0]);
@@ -345,7 +344,7 @@ class Defense extends XGPCore
         $parse['b_hangar_id_plus'] = $this->_current_planet['planet_b_hangar'];
         $parse['current_page'] = $current_page;
         $parse['pretty_time_b_hangar'] = FormatLib::prettyTime($QueueTime - $this->_current_planet['planet_b_hangar']);
-
+        
         return parent::$page->parseTemplate(parent::$page->getTemplate('buildings/buildings_script'), $parse);
     }
 

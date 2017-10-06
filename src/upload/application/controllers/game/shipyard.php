@@ -265,7 +265,7 @@ class Shipyard extends XGPCore
             
             foreach ($ElementQueue as $ElementLine => $Element) {
 
-                if (is_array($Element)) {
+                if (!empty($Element)) {
                     
                     $Element = explode(',', $Element);
                     $ElementTime = DevelopmentsLib::developmentTime($this->_current_user, $this->_current_planet, $Element[0]);
