@@ -253,7 +253,8 @@ class UpdateResourcesLib extends XGPCore
         if ($Simul == false) {
 
             // new DB Object
-            $db = new Database();
+            $db     = new Database();
+            $stats  = new Statistics_library();
             
             // SHIPS AND DEFENSES UPDATE
             $builded        = self::buildingQueue($current_user, $current_planet, $ProductionTime);
@@ -270,11 +271,11 @@ class UpdateResourcesLib extends XGPCore
                         switch ($element) {
 
                             case (($element >= 202) && ($element <= 215)):
-                                $ship_points    += StatisticsLib::calculatePoints($element, $count) * $count;
+                                $ship_points    += $stats->calculatePoints($element, $count) * $count;
                                 break;
 
                             case (($element >= 401) && ($element <= 503)):
-                                $defense_points += StatisticsLib::calculatePoints($element, $count) * $count;
+                                $defense_points += $stats->calculatePoints($element, $count) * $count;
                                 break;
 
                             default:
@@ -289,7 +290,7 @@ class UpdateResourcesLib extends XGPCore
             // RESEARCH UPDATE
             if ($current_planet['planet_b_tech'] <= time() && $current_planet['planet_b_tech_id'] != 0) {
 
-                $current_user['research_points']    = StatisticsLib::calculatePoints(
+                $current_user['research_points']    = $stats->calculatePoints(
                     $current_planet['planet_b_tech_id'],
                     $current_user[$resource[$current_planet['planet_b_tech_id']]],
                     'tech'

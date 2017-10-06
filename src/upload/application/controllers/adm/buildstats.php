@@ -17,7 +17,7 @@ namespace application\controllers\adm;
 use application\core\XGPCore;
 use application\libraries\adm\AdministrationLib;
 use application\libraries\FunctionsLib;
-use application\libraries\StatisticsLib;
+use application\libraries\Statistics_library;
 
 /**
  * Buildstats Class
@@ -63,8 +63,9 @@ class Buildstats extends XGPCore
     private function build_page()
     {
         // RUN STATISTICS SCRIPT AND THE SET THE RESULT
-        $result = StatisticsLib::makeStats();
-
+        $slObject   = new Statistics_library();
+        $result     = $slObject->makeStats();
+        
         // PREPARE DATA TO PARSE
         $parse = $this->_lang;
         $parse['memory_p'] = str_replace(array("%p", "%m"), $result['memory_peak'], $this->_lang['sb_top_memory']);

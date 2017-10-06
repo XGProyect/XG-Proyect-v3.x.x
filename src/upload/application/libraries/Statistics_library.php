@@ -1,6 +1,6 @@
 <?php
 /**
- * Statistics Library
+ * Statistics_library Library
  *
  * PHP Version 5.5+
  *
@@ -9,27 +9,38 @@
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
- * @version  3.0.0
+ * @version  3.1.0
  */
 
 namespace application\libraries;
 
-use application\core\Database;
 use application\core\XGPCore;
 
 /**
- * StatisticsLib Class
+ * Statistics_library Class
  *
  * @category Classes
  * @package  Application
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
- * @version  3.0.0
+ * @version  3.1.0
  */
-class StatisticsLib extends XGPCore
+class Statistics_library extends XGPCore
 {
-    private static $time;
+    private $time;
+    
+    /**
+     * Constructor
+     * 
+     * @return void
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        
+        $this->loadModel('libraries/Statistics_library');
+    }
     
     /**
      * calculatePoints
@@ -40,7 +51,7 @@ class StatisticsLib extends XGPCore
      *
      * @return int
      */
-    public static function calculatePoints($element, $level, $type = '')
+    public function calculatePoints($element, $level, $type = '')
     {
         switch ($type) {
             case 'tech':
@@ -72,32 +83,22 @@ class StatisticsLib extends XGPCore
      * 
      * @return boolean
      */
-    public static function rebuildPoints($user_id, $planet_id, $what)
+    public function rebuildPoints($user_id, $planet_id, $what)
     {
         if (!in_array(DB_PREFIX . $what, [BUILDINGS, DEFENSES, RESEARCH, SHIPS])) {
             return false;
         }
         
-        $points = 0;
-        $query  = '';
+        $points     = 0;
+        $objects    = parent::$objects->getObjects();
         
         if ($what == 'research') {
             
-            $query  = "SELECT * 
-                        FROM `" . RESEARCH . "` ttu
-                        WHERE ttu.research_user_id = '" . $user_id . "';";
+            $objectsToUpdate = $this->Statistics_library_Model->getResearchToUpdate($user_id);
         } else {
             
-            $query  = "SELECT * 
-                        FROM `" . DB_PREFIX . $what . "` ttu
-                        WHERE ttu." . rtrim($what, 's') . "_planet_id = '" . $planet_id . "';";
+            $objectsToUpdate = $this->Statistics_library_Model->getPlanetElementToUpdate($what, $planet_id);
         }
-        
-        
-        
-        $db                 = new Database();
-        $objectsToUpdate    = $db->queryFetch($query);
-        $objects            = parent::$objects->getObjects();
 
         if (!is_null($objects)) {
             
@@ -125,12 +126,8 @@ class StatisticsLib extends XGPCore
 
                 $what   = strtr($what, ['research' => 'technology']);
 
-                $db->query(
-                    "UPDATE " . USERS_STATISTICS . " SET 
-                        `user_statistic_" . $what . "_points` = '" . $points . "' 
-                    WHERE `user_statistic_user_id` = '" . $user_id . "'"
-                );
-
+                $this->Statistics_library_Model->updatePoints($what, $points, $user_id);
+                
                 return true;
             }
         }
@@ -143,14 +140,14 @@ class StatisticsLib extends XGPCore
      *
      * @return array
      */
-    public static function makeStats()
+    public function makeStats()
     {
         // INITIAL TIME
         $mtime      = microtime();
         $mtime      = explode(' ', $mtime);
         $mtime      = $mtime[1] + $mtime[0];
         $starttime  = $mtime;
-        self::$time = time();
+        $this->time = time();
 
         // INITIAL MEMORY
         $result['initial_memory'] = [round(memory_get_usage() / 1024, 1), round(memory_get_usage(1) / 1024, 1)];
@@ -167,7 +164,7 @@ class StatisticsLib extends XGPCore
         $mtime      = $mtime[1] + $mtime[0];
         $endtime    = $mtime;
 
-        $result['stats_time']   = self::$time;
+        $result['stats_time']   = $this->time;
         $result['totaltime']    = ($endtime - $starttime);
         $result['memory_peak']  = [round(memory_get_peak_usage() / 1024, 1), round(memory_get_peak_usage(1) / 1024, 1)];
         $result['end_memory']   = [round(memory_get_usage() / 1024, 1), round(memory_get_usage(1) / 1024, 1)];
@@ -180,34 +177,14 @@ class StatisticsLib extends XGPCore
      *
      * @return void
      */
-    private static function makeUserRank()
-    {
-        $db = new Database();
-        
+    private function makeUserRank()
+    {   
         // GET ALL DATA FROM THE USERS TO UPDATE
-        $all_stats_data = $db->query(
-            "SELECT `user_statistic_user_id`,
-            `user_statistic_technology_rank`,
-            `user_statistic_technology_points`,
-            `user_statistic_buildings_rank`,
-            `user_statistic_buildings_points`,
-            `user_statistic_defenses_rank`,
-            `user_statistic_defenses_points`,
-            `user_statistic_ships_rank`,
-            `user_statistic_ships_points`,
-            `user_statistic_total_rank`,
-            (user_statistic_buildings_points 
-                + user_statistic_defenses_points 
-                + user_statistic_ships_points 
-                + user_statistic_technology_points
-            ) AS total_points
-            FROM " . USERS_STATISTICS . "
-            ORDER BY `user_statistic_user_id` ASC;"
-        );
+        $all_stats_data = $this->Statistics_library_Model->getAllUserStatsData();
 
         // BUILD ALL THE ARRAYS
-        while ($CurUser = $db->fetchAssoc($all_stats_data)) {
-
+        foreach($all_stats_data as $CurUser) {
+            
             $tech['old_rank'][$CurUser['user_statistic_user_id']]   = $CurUser['user_statistic_technology_rank'];
             $tech['points'][$CurUser['user_statistic_user_id']]     = $CurUser['user_statistic_technology_points'];
 
@@ -304,7 +281,6 @@ class StatisticsLib extends XGPCore
 
         // SET VARIABLES
         $values = '';
-        $update = '';
 
         // TOTAL POINTS
         // UPDATE QUERY DYNAMIC BLOCK
@@ -326,7 +302,7 @@ class StatisticsLib extends XGPCore
                                 ' . $total['points'][$user_id] . ',
                                 ' . $total['old_rank'][$user_id] . ',
                                 ' . $rank['tota'] ++ . ',
-                                ' . self::$time . '),';
+                                ' . $this->time . '),';
                 }
             }
         }
@@ -351,7 +327,7 @@ class StatisticsLib extends XGPCore
 								user_statistic_update_time = VALUES(user_statistic_update_time);';
 
         // RUN QUERY
-        $db->query($update_query);
+        $this->Statistics_library_Model->runSingleQuery($update_query);
 
         // MEMORY CLEAN UP
         unset($all_stats_data, $build, $defs, $ships, $tech, $rank, $update_query, $values);
@@ -362,29 +338,10 @@ class StatisticsLib extends XGPCore
      *
      * @return void
      */
-    private static function makeAllyRank()
+    private function makeAllyRank()
     {
-        $db = new Database();
-        
         // GET ALL DATA FROM THE USERS TO UPDATE
-        $all_stats_data = $db->query(
-            "SELECT a.`alliance_id`,
-            ass.alliance_statistic_technology_rank,
-            ass.alliance_statistic_buildings_rank,
-            ass.alliance_statistic_defenses_rank,
-            ass.alliance_statistic_ships_rank,
-            ass.alliance_statistic_total_rank,
-            SUM(us.user_statistic_buildings_points) AS buildings_points,
-            SUM(us.user_statistic_defenses_points) AS defenses_points,
-            SUM(us.user_statistic_ships_points) AS ships_points,
-            SUM(us.user_statistic_technology_points) AS technology_points,
-            SUM(us.user_statistic_total_points) AS total_points
-            FROM " . ALLIANCE . " AS a
-            LEFT JOIN " . USERS . " AS u ON a.`alliance_id` = u.`user_ally_id`
-            LEFT JOIN " . USERS_STATISTICS . " AS us ON us.`user_statistic_user_id` = u.`user_id`
-            LEFT JOIN " . ALLIANCE_STATISTICS . " AS ass ON ass.`alliance_statistic_alliance_id` = a.`alliance_id`
-            GROUP BY alliance_id"
-        );
+        $all_stats_data = $this->Statistics_library_Model->getAllAllianceStatsData();
 
         // ANY ALLIANCE ?
         if (empty($all_stats_data) or $db->numRows($all_stats_data) == 0) {
@@ -521,7 +478,7 @@ class StatisticsLib extends XGPCore
                                 ' . $total['points'][$alliance_id] . ',
                                 ' . $total['old_rank'][$alliance_id] . ',
                                 ' . $rank['tota'] ++ . ',
-                                ' . self::$time . '),';
+                                ' . $this->time . '),';
                 }
             }
         }
@@ -550,11 +507,11 @@ class StatisticsLib extends XGPCore
                             alliance_statistic_update_time = VALUES(alliance_statistic_update_time);';
 
         // RUN QUERY
-        $db->query($update_query);
+        $this->Statistics_library_Model->runSingleQuery($update_query);
 
         // MEMORY CLEAN UP
         unset($all_stats_data, $build, $defs, $ships, $tech, $rank, $update_query, $values);
     }
 }
 
-/* end of StatisticsLib.php */
+/* end of Statistics_library.php */

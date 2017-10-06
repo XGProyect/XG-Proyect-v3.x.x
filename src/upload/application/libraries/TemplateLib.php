@@ -155,6 +155,8 @@ class TemplateLib
      * @param array $array     Values to parse
      *
      * @return void
+     * 
+     * @deprecated since version v3.0.2
      */
     public function parseTemplate($template, $array)
     {
@@ -173,6 +175,8 @@ class TemplateLib
      * @param string $template_name Template name
      *
      * @return string
+     * 
+     * @deprecated since version v3.0.2
      */
     public function getTemplate($template_name)
     {

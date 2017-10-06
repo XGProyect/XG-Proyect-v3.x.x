@@ -201,9 +201,9 @@ class Updates_library extends XGPCore
 
         if ((time() >= ($stat_last_update + (60 * $update_interval)))) {
 
-            $result = StatisticsLib::makeStats();
+            $result = new Statistics_library();
 
-            FunctionsLib::updateConfig('stat_last_update', $result['stats_time']);
+            FunctionsLib::updateConfig('stat_last_update', $result->makeStats()['stats_time']);
         }
     }
 
@@ -297,11 +297,13 @@ class Updates_library extends XGPCore
                     $new_queue = implode(';', $queue_array);
                 }
 
+                $stats  = new Statistics_library();
+                
                 $current_planet['planet_b_building']    = 0;
                 $current_planet['planet_b_building_id'] = $new_queue;
                 $current_planet['planet_field_current'] = $current;
                 $current_planet['planet_field_max']     = $max;
-                $current_planet['building_points']      = StatisticsLib::calculatePoints(
+                $current_planet['building_points']      = $stats->calculatePoints(
                     $element,
                     $current_planet[$resource[$element]]
                 );

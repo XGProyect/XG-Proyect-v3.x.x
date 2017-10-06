@@ -18,7 +18,7 @@ use application\core\Database;
 use application\core\XGPCore;
 use application\libraries\adm\AdministrationLib;
 use application\libraries\FunctionsLib;
-use application\libraries\StatisticsLib;
+use application\libraries\Statistics_library;
 
 /**
  * Users Class
@@ -42,6 +42,7 @@ class Users extends XGPCore
     private $_alert_type;
     private $_user_query;
     private $_current_user;
+    private $_stats;
 
     /**
      * __construct()
@@ -56,7 +57,8 @@ class Users extends XGPCore
         $this->_db = new Database();
         $this->_lang = parent::$lang;
         $this->_current_user = parent::$users->getUserData();
-
+        $this->_stats = new Statistics_library();
+        
         // Check if the user is allowed to access
         if (AdministrationLib::haveAccess($this->_current_user['user_authlevel']) && AdministrationLib::authorization($this->_current_user['user_authlevel'], 'edit_users') == 1) {
             $this->build_page();
@@ -878,7 +880,7 @@ class Users extends XGPCore
         $this->_db->query($query_string);
 
         // Points rebuild
-        StatisticsLib::rebuildPoints($this->_id, 0, 'research');
+        $this->_stats->rebuildPoints($this->_id, 0, 'research');
         
         // RETURN THE ALERT
         $this->_alert_info = $this->_lang['us_all_ok_message'];
@@ -1053,7 +1055,7 @@ class Users extends XGPCore
         $this->_db->query($query_string);
 
         // Points rebuild
-        StatisticsLib::rebuildPoints($this->_id, $id_get, 'buildings');
+        $this->_stats->rebuildPoints($this->_id, $id_get, 'buildings');
         
         // RETURN THE ALERT
         $this->_alert_info = $this->_lang['us_all_ok_message'];
@@ -1094,7 +1096,7 @@ class Users extends XGPCore
         $this->_db->query($query_string);
 
         // Points rebuild
-        StatisticsLib::rebuildPoints($this->_id, $id_get, 'ships');
+        $this->_stats->rebuildPoints($this->_id, $id_get, 'ships');
         
         // RETURN THE ALERT
         $this->_alert_info = $this->_lang['us_all_ok_message'];
@@ -1135,7 +1137,7 @@ class Users extends XGPCore
         $this->_db->query($query_string);
 
         // Points rebuild
-        StatisticsLib::rebuildPoints($this->_id, $id_get, 'defenses');
+        $this->_stats->rebuildPoints($this->_id, $id_get, 'defenses');
         
         // RETURN THE ALERT
         $this->_alert_info = $this->_lang['us_all_ok_message'];
