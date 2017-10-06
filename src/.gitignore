@@ -1,1 +1,3 @@
 upload/application/config/config.php
+upload/data/logs/ErrorLog.php
+upload/tests/build/
