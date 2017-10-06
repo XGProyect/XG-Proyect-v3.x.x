@@ -14,6 +14,8 @@
 
 namespace application\libraries\messenger;
 
+use application\libraries\FunctionsLib;
+
 /**
  * MessagesOptions Class
  *

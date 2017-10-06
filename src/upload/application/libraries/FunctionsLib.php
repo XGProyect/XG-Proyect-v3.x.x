@@ -21,6 +21,7 @@ use application\libraries\messenger\MessagesFormat;
 use application\libraries\messenger\MessagesOptions;
 use application\libraries\messenger\MessagesTypes;
 use application\libraries\messenger\Messenger;
+use CI_Email;
 
 /**
  * FunctionsLib Class
