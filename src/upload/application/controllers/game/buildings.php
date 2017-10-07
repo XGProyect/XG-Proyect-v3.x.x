@@ -93,7 +93,6 @@ class Buildings extends Controller
         $this->_allowed_buildings = $this->getAllowedBuildings();
     }    
     
-    
     /**
      * Run an action
      * 
@@ -241,7 +240,7 @@ class Buildings extends Controller
     }
     
     /**
-     * Expects a building ID to format the level
+     * Expects a building ID to calculate and format the level
      * 
      * @param int $building_id Building ID
      * 
@@ -273,7 +272,7 @@ class Buildings extends Controller
     }  
     
     /**
-     * Expects a building ID to format the level
+     * Expects a building ID to calculate and format the time
      * 
      * @param int $building_id Building ID
      * 
@@ -284,7 +283,36 @@ class Buildings extends Controller
         return DevelopmentsLib::formatedDevelopmentTime(
             $this->getBuildingTime($building_id)
         );
-    }   
+    }
+    
+    /**
+     * Expects a building ID to calculate the building level
+     * 
+     * @param int $building_id Building ID
+     * 
+     * @return int
+     */
+    private function getBuildingLevel($building_id)
+    {        
+        return $this->_planet[$this->getObjects()->getObjects()[$building_id]];
+    }
+    
+    /**
+     * Expects a building ID to calculate the building time
+     * 
+     * @param int $building_id Building ID
+     * 
+     * @return int
+     */
+    private function getBuildingTime($building_id)
+    {
+        return DevelopmentsLib::developmentTime(
+            $this->_user,
+            $this->_planet,
+            $building_id,
+            $this->getBuildingLevel($building_id)
+        );
+    }
     
     /**
      * Expects a building ID, runs several validations and then returns a button,
@@ -358,35 +386,6 @@ class Buildings extends Controller
         }
 
         return true;
-    }
-    
-    /**
-     * Expects a building ID to calculate the building level
-     * 
-     * @param int $building_id Building ID
-     * 
-     * @return int
-     */
-    private function getBuildingLevel($building_id)
-    {        
-        return $this->_planet[$this->getObjects()->getObjects()[$building_id]];
-    }
-    
-    /**
-     * Expects a building ID to calculate the building time
-     * 
-     * @param int $building_id Building ID
-     * 
-     * @return int
-     */
-    private function getBuildingTime($building_id)
-    {
-        return DevelopmentsLib::developmentTime(
-            $this->_user,
-            $this->_planet,
-            $building_id,
-            $this->getBuildingLevel($building_id)
-        );
     }
     
     /**
