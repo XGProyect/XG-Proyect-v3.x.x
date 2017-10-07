@@ -32,7 +32,8 @@ $page   = strtr(
         'station'           => 'buildings',
         'federationlayer'   => 'federation',
         'shortcuts'         => 'fleetshortcuts',
-        'forums'            => 'forum'
+        'forums'            => 'forum',
+        'defense'           => 'shipyard',
     )
 );
 

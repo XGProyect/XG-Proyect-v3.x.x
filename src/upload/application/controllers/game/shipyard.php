@@ -9,16 +9,16 @@
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
- * @version  3.0.0
+ * @version  3.1.0
  */
 
 namespace application\controllers\game;
 
-use application\core\Database;
-use application\core\XGPCore;
+use application\core\Controller;
 use application\libraries\DevelopmentsLib;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
+use Exception;
 
 /**
  * Shipyard Class
@@ -28,263 +28,535 @@ use application\libraries\FunctionsLib;
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
- * @version  3.0.0
+ * @version  3.1.0
  */
-class Shipyard extends XGPCore
+class Shipyard extends Controller
 {
     const MODULE_ID = 7;
-
-    private $_lang;
-    private $_resource;
-    private $_price;
-    private $_current_user;
-    private $_current_planet;
+    
+    /**
+     * List of currently available buildings
+     * 
+     * @var array
+     */
+    private $_allowed_items = [];
 
     /**
-     * __construct()
+     * Store if we are currently building or not
+     * 
+     * @var boolean
+     */
+    private $_building_in_progress = false;
+    
+    /**
+     * Constructor
+     * 
+     * @return void
      */
     public function __construct()
     {
         parent::__construct();
 
-        // check if session is active
-        parent::$users->checkSession();
-
+        // load Model
+        parent::loadModel('game/shipyard');
+        
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
-        $this->_db = new Database();
-        $this->_lang = parent::$lang;
-        $this->_resource = parent::$objects->getObjects();
-        $this->_price = parent::$objects->getPrice();
-        $this->_current_user = parent::$users->getUserData();
-        $this->_current_planet = parent::$users->getPlanetData();
-
-        $this->build_page();
+        $this->_user    = $this->getUserData();
+        $this->_planet  = $this->getPlanetData();
+        
+        // init a new building object with the current building queue
+        $this->setUpShipyard();
+        
+        // time to do something
+        $this->runAction();
+        
+        // build the page
+        $this->buildPage();
     }
-
+    
     /**
-     * method __destruct
-     * param
-     * return close db connection
+     * Creates a new building object that will handle all the building
+     * creation methods and actions
+     * 
+     * @return void
      */
-    public function __destruct()
-    {
-        $this->_db->closeConnection();
+    private function setUpShipyard()
+    {/*
+        $this->_building = new Building(
+            $this->_planet,
+            $this->_user,
+            $this->getObjects()
+        );*/
+        
+        // validate and display
+        $this->showShipyardRequiredMessage();
+        
+        // set a list of allowed items
+        $this->setAllowedItems();
+        
+        // check if any facility is working
+        $this->isAnyFacilityWorking();
     }
-
-    public function build_page()
+    
+    /**
+     * Run an action
+     * 
+     * @return void
+     */
+    private function runAction()
     {
-        $parse = $this->_lang;
+        $items  = filter_input(INPUT_POST, 'fmenge', FILTER_DEFAULT , FILTER_REQUIRE_ARRAY);
 
-        if (isset($_POST['fmenge'])) {
-            $AddedInQueue = false;
-            $totalCount = 0;
+        if(!is_null($items) && $items !== false) {
 
-            foreach ($_POST['fmenge'] as $Element => $Count) {
-                if ($Element < 200 OR $Element > 300) {
+            $total_items_to_build   = 0;
+            $shipyard_queue         = '';
+            $resources_consumed     = [
+                'metal' => 0,
+                'crystal' => 0,
+                'deuterium' => 0,
+            ];
+            
+            foreach ($items as $item => $amount) {
+                
+                // avoid elements that not match the criteria
+                if (!in_array($item, $this->_allowed_items) 
+                    or $amount <= 0) {
+
                     continue;
                 }
 
-                $Element = (int) $Element;
-                $Count = (int) $Count;
-                $totalCount += $Count;
+                $item   = (int)$item;
+                $amount = (int)$amount;
+                
+                // calculate the max amount of elements that can be build
+                $amount = $this->getMaxBuildableItems($item, $amount);
 
-                if ($Count > MAX_FLEET_OR_DEFS_PER_ROW) {
-                    $Count = MAX_FLEET_OR_DEFS_PER_ROW;
-                }
+                // If after every validation, the amount of items to build, is more than 0
+                if ($amount > 0) {
+                    $resources_needed                    = $this->getItemNeededResourcesByAmount($item, $amount);
+                    $resources_consumed['metal']        -= $resources_needed['metal'];
+                    $resources_consumed['crystal']      -= $resources_needed['crystal'];
+                    $resources_consumed['deuterium']    -= $resources_needed['deuterium'];
+                    $shipyard_queue                     .= $item . ',' . $amount . ';';
 
-                if ($Count != 0) {
-                    if (DevelopmentsLib::isDevelopmentAllowed($this->_current_user, $this->_current_planet, $Element)) {
-                        $MaxElements = $this->GetMaxConstructibleElements($Element, $this->_current_planet);
-
-                        if ($Count > $MaxElements) {
-                            $Count = $MaxElements;
-                        }
-
-                        $Ressource = $this->GetElementRessources($Element, $Count);
-
-                        if ($Count >= 1) {
-                            $this->_current_planet['planet_metal'] -= $Ressource['metal'];
-                            $this->_current_planet['planet_crystal'] -= $Ressource['crystal'];
-                            $this->_current_planet['planet_deuterium'] -= $Ressource['deuterium'];
-                            $this->_current_planet['planet_b_hangar_id'] .= '' . $Element . ',' . $Count . ';';
-                        }
-                    }
+                    $total_items_to_build += $amount;   
                 }
             }
-
-            if ($totalCount > 0) {
-                $this->_db->query("UPDATE " . PLANETS . " AS p SET
-                                                                            p.`planet_b_hangar_id` = '" . $this->_current_planet['planet_b_hangar_id'] . "',
-                                                                            p.`planet_metal` = '" . $this->_current_planet['planet_metal'] . "',
-                                                                            p.`planet_crystal` = '" . $this->_current_planet['planet_crystal'] . "',
-                                                                            p.`planet_deuterium` = '" . $this->_current_planet['planet_deuterium'] . "'
-                                                                            WHERE p.`planet_id` = '" . $this->_current_planet['planet_id'] . "';");
+            
+            if ($total_items_to_build > 0) {
+                
+                $this->Shipyard_Model->insertItemsToBuild(
+                    $resources_consumed,
+                    $shipyard_queue,
+                    $this->_planet['planet_id']
+                );
             }
-
-            FunctionsLib::redirect('game.php?page=shipyard');
+            
+            FunctionsLib::redirect('game.php?page=' .  $this->getCurrentPage());
         }
+    }
 
-        if ($this->_current_planet[$this->_resource[21]] == 0) {
-            FunctionsLib::message($this->_lang['bd_shipyard_required'], '', '', true);
+
+    /**
+     * Build the page
+     * 
+     * @return void
+     */
+    private function buildPage()
+    {        
+        /**
+         * Parse the items
+         */
+        $page                   = [];
+        $page['message']        = $this->showShipyardUpgradeMessage();
+        $page['items_rows']     = $this->buildListOfItems();
+        $page['build_button']   = $this->getBuildItemsButton();
+        $page['building_list']  = $this->buildItemsQueue();
+        
+        // display the page
+        parent::$page->display(
+            parent::$page->get('shipyard/shipyard_table')->parse($page)
+        );
+    }
+    
+    /**
+     * Show a message that indicates that the shipyard is being upgraded
+     * 
+     * @return string
+     */
+    private function showShipyardUpgradeMessage()
+    {
+        if ($this->_building_in_progress) {
+            
+            return FormatLib::colorRed($this->getLang()['bd_building_shipyard']);
         }
+        
+        return '';
+    }
+    
+    /**
+     * Build the list of ships and defenses
+     * 
+     * @return string
+     */
+    private function buildListOfItems()
+    {
+        $buildings_list = '';
+        
+        if (!is_null($this->_allowed_items)) {
+            
+            foreach ($this->_allowed_items as $item_id) {
+                
+                $buildings_list .= parent::$page->get('shipyard/shipyard_table_row')->parse(
+                    $this->setListOfShipyardItem($item_id)
+                );
+            }
+        }
+        
+        return $buildings_list;
+    }
+    
+    /**
+     * Build each building block
+     * 
+     * @param int $item_id Building ID
+     * 
+     * @return array
+     */
+    private function setListOfShipyardItem($item_id)
+    {
+        $item_to_parse  = [];
+        
+        $item_to_parse['dpath']                 = DPATH;
+        $item_to_parse['element']               = $item_id;
+        $item_to_parse['element_name']          = $this->getLang()['tech'][$item_id];
+        $item_to_parse['element_description']   = $this->getLang()['res']['descriptions'][$item_id];
+        $item_to_parse['element_price']         = $this->getItemPriceWithFormat($item_id);
+        $item_to_parse['building_time']         = $this->getItemTimeWithFormat($item_id);
+        $item_to_parse['element_nbre']          = $this->getItemAmountWithFormat($item_id);
+        $item_to_parse['add_element']           = $this->getItemInsertBlock($item_id);
+                
+        return $item_to_parse;
+    }
+    
+    /**
+     * Expects a item ID (ship or defense) to calculate and format the price
+     * 
+     * @param int $item_id Building ID
+     * 
+     * @return string
+     */
+    private function getItemPriceWithFormat($item_id)
+    {        
+        return DevelopmentsLib::formatedDevelopmentPrice(
+            $this->_user,
+            $this->_planet,
+            $item_id,
+            false
+        );
+    }
+    
+    /**
+     * Expects a item ID (ship or defense) to calculate and format the time
+     * 
+     * @param int $item_id Item ID
+     * 
+     * @return string
+     */
+    private function getItemTimeWithFormat($item_id)
+    {
+        return DevelopmentsLib::formatedDevelopmentTime(
+            $this->getItemTime($item_id)
+        );
+    }
+    
+    
+    /**
+     * Expects a item ID (ship or defense) to calculate the construction time
+     * 
+     * @param int $item_id Item ID
+     * 
+     * @return int
+     */
+    private function getItemTime($item_id)
+    {
+        return DevelopmentsLib::developmentTime(
+            $this->_user,
+            $this->_planet,
+            $item_id
+        );
+    }
+    
+    /**
+     * Expects an item ID to calculate and format the item current amount
+     * 
+     * @param int $item_id Item ID
+     * 
+     * @return string
+     */
+    private function getItemAmountWithFormat($item_id)
+    {
+        $amount = $this->getItemAmount($item_id);
+        
+        if ($amount == 0) {
+            
+            return '';
+        }
+        
+        return ' (' . $this->getLang()['bd_available'] . FormatLib::prettyNumber($amount) . ')';
+    }
+    
+    /**
+     * Insert the item box that allows new item inserts
+     * 
+     * @param int $item_id Item ID
+     * 
+     * @return string
+     */
+    private function getItemInsertBlock($item_id)
+    {
+        if (!$this->_building_in_progress && !parent::$users->isOnVacations($this->_user)) {
+            
+            $box_data               = [];
+            $box_data['item_id']    = $item_id;
+            $box_data['tab_index']  = $item_id;
 
-        $NotBuilding = true;
-
-        if ($this->_current_planet['planet_b_building_id'] != 0) {
-
-            $CurrentQueue       = $this->_current_planet['planet_b_building_id'];
-            $Element            = 0;
-            $CurrentBuilding    = 0;
-
-            if (strpos($CurrentQueue, ";")) {
-
-                $QueueArray = explode(";", $CurrentQueue);
-
-                for ($i = 0; $i < MAX_BUILDING_QUEUE_SIZE; $i++) {
-
-                    if (isset($QueueArray[$i])) {
-
-                        $ListIDArray = explode(",", $QueueArray[$i]);
-                        $Element = $ListIDArray[0];
-
-                        if (($Element == 21) or ($Element == 14) or ($Element == 15)) {
-                            break;
-                        }   
-                    }
+            return parent::$page->parseTemplate(
+                parent::$page->getTemplate('shipyard/shipyard_build_box'),
+                $box_data
+            );
+        }
+        
+        return '';
+    }
+    
+    /**
+     * Expects an item ID to calculate the item current amount
+     * 
+     * @param int $item_id Item ID
+     * 
+     * @return int
+     */
+    private function getItemAmount($item_id)
+    {
+        return $this->_planet[$this->getObjects()->getObjects()[$item_id]];
+    }
+    
+    /**
+     * Get build items button, if the shipyard is not being improved
+     * 
+     * @return string
+     */
+    private function getBuildItemsButton()
+    {
+        if (!$this->_building_in_progress && !parent::$users->isOnVacations($this->_user)) {
+            return parent::$page->get('shipyard/shipyard_build_button')->parse(
+                $this->getLang()
+            );   
+        }
+        
+        return '';
+    }
+    
+    /**
+     * 
+     * @return type
+     */
+    private function buildItemsQueue()
+    {
+        $queue                  = explode(';', $this->_planet['planet_b_hangar_id']);
+        $queue_time             = 0;
+        $item_time_per_type     = '';
+        $item_name_per_type     = '';
+        $item_amount_per_type   = '';
+        
+        if (!is_null($queue)) {
+            
+            foreach ($queue as $item_data) {
+                
+                if(!empty($item_data)) {
+                    
+                    $item_values    = explode(',', $item_data);
+                    
+                    // $item_values[0] = item ID
+                    $item_time      = $this->getItemTime($item_values[0]);
+                    
+                    $item_time_per_type     .= $item_time . ',';
+                    $item_name_per_type     .= '\'' . html_entity_decode($this->getLang()['tech'][$item_values[0]], ENT_COMPAT, "utf-8") . '\',';
+                    $item_amount_per_type   .= $item_values[1] . ',';
+                    
+                    // $item_values[1] = amount
+                    $queue_time    += $item_time * $item_values[1];
                 }
-            } else {
-
-                $CurrentBuilding = $CurrentQueue;
-            }
-
-            if ((($CurrentBuilding == 21) or ($CurrentBuilding == 14) or ($CurrentBuilding == 15)) or (($Element == 21) or ($Element == 14) or ($Element == 15))) {
-
-                $parse['message'] = "<font color=\"red\">" . $this->_lang['bd_building_shipyard'] . "</font>";
-                $NotBuilding = false;
             }
         }
 
-        $TabIndex = 0;
-        $PageTable = '';
-        $BuildQueue = '';
+        $block                          = $this->getLang();
+        $block['a']                     = $item_amount_per_type;
+        $block['b']                     = $item_name_per_type;
+        $block['c']                     = $item_time_per_type;
+        $block['b_hangar_id_plus']      = $this->_planet['planet_b_hangar'];
+        $block['current_page']          = $this->getCurrentPage();
+        $block['pretty_time_b_hangar']  = FormatLib::prettyTime($queue_time - $this->_planet['planet_b_hangar']);
 
-        foreach ($this->_lang['tech'] as $Element => $ElementName) {
-            if ($Element > 201 && $Element <= 399) {
-                if (DevelopmentsLib::isDevelopmentAllowed($this->_current_user, $this->_current_planet, $Element)) {
-                    $CanBuildOne = DevelopmentsLib::isDevelopmentPayable($this->_current_user, $this->_current_planet, $Element, false);
-                    $BuildOneElementTime = DevelopmentsLib::developmentTime($this->_current_user, $this->_current_planet, $Element);
-                    $ElementCount = $this->_current_planet[$this->_resource[$Element]];
-                    $ElementNbre = ( $ElementCount == 0 ) ? "" : " (" . $this->_lang['bd_available'] . FormatLib::prettyNumber($ElementCount) . ")";
+        return parent::$page->get('shipyard/shipyard_script')->parse($block);
+    }
+    
+    /**
+     * Determine the current page and validate it
+     * 
+     * @return array
+     * 
+     * @throws Exception
+     */
+    private function getCurrentPage()
+    {
+        try {
+            $get_value      = filter_input(INPUT_GET, 'page');
+            $allowed_pages  = ['shipyard', 'defense'];
 
-                    $parse['dpath'] = DPATH;
-                    $parse['add_element'] = '';
-                    $parse['element'] = $Element;
-                    $parse['element_name'] = $ElementName;
-                    $parse['element_description'] = $this->_lang['res']['descriptions'][$Element];
-                    $parse['element_price'] = DevelopmentsLib::formatedDevelopmentPrice($this->_current_user, $this->_current_planet, $Element, false);
-                    $parse['building_time'] = DevelopmentsLib::formatedDevelopmentTime($BuildOneElementTime);
-                    $parse['element_nbre'] = $ElementNbre;
+            if (in_array($get_value, $allowed_pages)) {
 
-                    if ($CanBuildOne && $NotBuilding && !parent::$users->isOnVacations($this->_current_user)) {
-                        $TabIndex++;
-                        $parse['add_element'] = '<input type=text name=fmenge[' . $Element . '] alt="' . $this->_lang['tech'][$Element] . '" size=6 maxlength=6 value=0 tabindex=' . $TabIndex . '>';
-                    }
+                return $get_value;
+            }
+            
+            throw new Exception('"shipyard" and "defense" are the valid options');
 
-                    if ($NotBuilding) {
-                        $parse['build_fleet'] = '<tr><td class="c" colspan="2" align="center"><input type="submit" value="' . $this->_lang['bd_build_ships'] . '"></td></tr>';
-                    }
+        } catch (Exception $e) {
+            
+            die('Caught exception: ' . $e->getMessage() . "\n");
+        }
+    }
+    
+    /**
+     * Get an array with an allowed set of items for the current page,
+     * filtering by page and available technologies
+     * 
+     * @return array
+     */
+    private function setAllowedItems()
+    {
+        $allowed_buildings = [
+            'shipyard'  => [202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215],
+            'defense'   => [401, 402, 403, 404, 405, 406, 407, 408, 502, 503]
+        ];
 
-                    $PageTable .= parent::$page->parseTemplate(parent::$page->getTemplate('buildings/buildings_fleet_row'), $parse);
+        $this->_allowed_items = array_filter($allowed_buildings[$this->getCurrentPage()], function($value) {
+            return DevelopmentsLib::isDevelopmentAllowed(
+                $this->_user,
+                $this->_planet,
+                $value
+            );
+        });
+    }
+    
+    /**
+     * Display a message that indicating that the shipyard building is required
+     * 
+     * @return void
+     */
+    private function showShipyardRequiredMessage()
+    {
+        if ($this->_planet[$this->getObjects()->getObjects(21)] == 0) {
+
+            FunctionsLib::message($this->getLang()['bd_shipyard_required'], '', '', true);
+        }
+    }
+    
+    /**
+     * Check if the robot factory, nanobots factory or hangar is being built
+     * 
+     * @return void
+     */
+    private function isAnyFacilityWorking()
+    {
+        // by default is false ...
+        $this->_building_in_progress = false;
+        
+        // unless ...
+        if ($this->_planet['planet_b_building_id'] != 0) {
+            
+            $queue          = explode(';', $this->_planet['planet_b_building_id']);
+            $not_allowed    = [14, 15, 21];
+            
+            foreach ($queue as $building_data) {
+                
+                $building   = explode (',', $building_data);
+                
+                // $building[0] = Building ID
+                if (in_array($building[0], $not_allowed)) {
+
+                    $this->_building_in_progress = true;
+                    break; // any of the "banned" buildings is being built
                 }
             }
         }
-
-        if ($this->_current_planet['planet_b_hangar_id'] != 0) {
-
-            $BuildQueue .= $this->ElementBuildListBox('shipyard');
+    }
+    
+    /**
+     * Get the maximum amount of items that can be build
+     * 
+     * @param int $item_id          Item ID
+     * @param int $amount_requested Amount of items requested
+     *
+     * @return int The max amount of buildable items
+     */
+    private function getMaxBuildableItems($item_id, $amount_requested)
+    {
+        $buildable          = [];
+        $price_metal        = $this->getObjects()->getPrice($item_id, 'metal');
+        $price_crystal      = $this->getObjects()->getPrice($item_id, 'crystal');
+        $price_deuterium    = $this->getObjects()->getPrice($item_id, 'deuterium');
+        $price_energy       = $this->getObjects()->getPrice($item_id, 'energy');
+        
+        if ($price_metal != 0) {
+            $buildable['metal']     = floor($this->_planet['planet_metal'] / $price_metal);
         }
 
-        $parse['buildlist'] = $PageTable;
-        $parse['buildinglist'] = $BuildQueue;
+        if ($price_crystal != 0) {
+            $buildable['crystal']   = floor($this->_planet['planet_crystal'] / $price_crystal);
+        }
 
-        parent::$page->display(parent::$page->parseTemplate(parent::$page->getTemplate('buildings/buildings_fleet'), $parse));
+        if ($price_deuterium != 0) {
+            $buildable['deuterium'] = floor($this->_planet['planet_deuterium'] / $price_deuterium);
+        }
+
+        if ($price_energy != 0) {
+            $buildable['energy']    = floor($this->_planet['planet_energy_max'] / $price_energy);
+        }
+
+        $max_buildable_by_resource  = max(min($buildable), 0);
+        
+        if ($amount_requested > $max_buildable_by_resource) {
+            
+            $amount_requested = $max_buildable_by_resource;
+        }
+        
+        if ($amount_requested > MAX_FLEET_OR_DEFS_PER_ROW) {
+
+            $amount_requested = MAX_FLEET_OR_DEFS_PER_ROW;
+        }
+
+        return $amount_requested;
     }
 
     /**
-     * GetMaxConstructibleElements
+     * Get the maximum amount of items that can be build
      * 
-     * @param array $Element    Element
-     * @param array $Ressources Resources
+     * @param int $item_id Item ID
      *
-     * @return int
+     * @return array
      */
-    private function GetMaxConstructibleElements($Element, $Ressources)
+    private function getItemNeededResourcesByAmount($item_id, $amount)
     {
-        $Buildable = array();
-
-        if ($this->_price[$Element]['metal'] != 0) {
-            $Buildable['metal'] = floor($Ressources['planet_metal'] / $this->_price[$Element]['metal']);
-        }
-
-        if ($this->_price[$Element]['crystal'] != 0) {
-            $Buildable['crystal'] = floor($Ressources['planet_crystal'] / $this->_price[$Element]['crystal']);
-        }
-
-        if ($this->_price[$Element]['deuterium'] != 0) {
-            $Buildable['deuterium'] = floor($Ressources['planet_deuterium'] / $this->_price[$Element]['deuterium']);
-        }
-
-        if ($this->_price[$Element]['energy'] != 0) {
-            $Buildable['energy'] = floor($Ressources['planet_energy_max'] / $this->_price[$Element]['energy']);
-        }
-
-        return max(min($Buildable), 0);
-    }
-
-    private function GetElementRessources($Element, $Count)
-    {
-        $ResType['metal'] = ($this->_price[$Element]['metal'] * $Count);
-        $ResType['crystal'] = ($this->_price[$Element]['crystal'] * $Count);
-        $ResType['deuterium'] = ($this->_price[$Element]['deuterium'] * $Count);
-
-        return $ResType;
-    }
-
-    private function ElementBuildListBox($current_page)
-    {
-        $ElementQueue = explode(';', $this->_current_planet['planet_b_hangar_id']);
-        $NbrePerType = '';
-        $NamePerType = '';
-        $TimePerType = '';
-        $QueueTime = 0;
-
-        if ($ElementQueue) {
-            
-            foreach ($ElementQueue as $ElementLine => $Element) {
-
-                if (!empty($Element)) {
-
-                    $Element = explode(',', $Element);
-                    $ElementTime = DevelopmentsLib::developmentTime($this->_current_user, $this->_current_planet, $Element[0]);
-                    $QueueTime += $ElementTime * $Element[1];
-                    $TimePerType .= "" . $ElementTime . ",";
-                    $NamePerType .= "'" . html_entity_decode($this->_lang['tech'][$Element[0]], ENT_COMPAT, "utf-8") . "',";
-                    $NbrePerType .= "" . $Element[1] . ",";
-                }
-            }
-        }
-
-        $parse = $this->_lang;
-        $parse['a'] = $NbrePerType;
-        $parse['b'] = $NamePerType;
-        $parse['c'] = $TimePerType;
-        $parse['b_hangar_id_plus'] = $this->_current_planet['planet_b_hangar'];
-        $parse['current_page'] = $current_page;
-        $parse['pretty_time_b_hangar'] = FormatLib::prettyTime($QueueTime - $this->_current_planet['planet_b_hangar']);
-
-        return parent::$page->parseTemplate(parent::$page->getTemplate('buildings/buildings_script'), $parse);
+        return [
+            'metal'     => ($this->getObjects()->getPrice($item_id, 'metal') * $amount),
+            'crystal'   => ($this->getObjects()->getPrice($item_id, 'crystal') * $amount),
+            'deuterium' => ($this->getObjects()->getPrice($item_id, 'deuterium') * $amount)
+        ];
     }
 }
 

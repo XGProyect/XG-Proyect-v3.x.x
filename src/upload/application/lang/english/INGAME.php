@@ -356,7 +356,6 @@ $lang['bd_building_shipyard']				= 'You can not build ships when the shipyard is
 $lang['bd_available']						= 'Available: ';
 $lang['bd_build_ships']						= 'Build';
 $lang['bd_protection_shield_only_one']		= 'The shield can be built only once!';
-$lang['bd_build_defenses']					= 'Build';
 $lang['bd_actual_production']				= 'Actual production:';
 $lang['bd_completed']						= 'Completed';
 $lang['bd_operating']						= '(Working)';

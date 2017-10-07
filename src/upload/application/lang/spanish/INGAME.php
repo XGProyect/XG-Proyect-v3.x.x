@@ -357,7 +357,6 @@ $lang['bd_building_shipyard']				= 'No puedes fabricar durante la ampliación de
 $lang['bd_available']						= 'Disponible: ';
 $lang['bd_build_ships']						= 'Construir';
 $lang['bd_protection_shield_only_one']		= '¡El escudo de protección sólo se puede construir una vez!';
-$lang['bd_build_defenses']					= 'Construir';
 $lang['bd_actual_production']				= 'Producción actual:';
 $lang['bd_completed']						= 'Completado';
 $lang['bd_operating']						= '(En funcionamiento)';
