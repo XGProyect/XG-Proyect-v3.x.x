@@ -17,6 +17,7 @@ BUILDINGS
 SHIPYARD & DEFENSES
 [#177] Fixed several notices in the shipyard and defenses pages.-
 [#179] Fixed ship and defenses construction in the shipyard and defenses pages (also notices and warnings).-
+[#000] Rewritten and merged into a single page, similar behavior to buildings pages (resources, facilities).-
 
 REGISTER
 [#176] Fixed registration issues
