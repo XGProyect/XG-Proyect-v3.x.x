@@ -35,6 +35,41 @@ class Shipyard extends Controller
     const MODULE_ID = 7;
     
     /**
+     * Count variable that we'll use to build the missile queue
+     * 
+     * @var array 
+     */
+    private $_missiles = [
+        502 => 0,
+        503 => 0
+    ];
+    
+    /**
+     * The amount of resources that will need to decrease
+     * 
+     * @var array
+     */
+    private $_resources_consumed = [
+        'metal' => 0,
+        'crystal' => 0,
+        'deuterium' => 0
+    ];
+    
+    /**
+     * User data
+     * 
+     * @var array 
+     */
+    private $_user;
+
+    /**
+     * Planet data
+     * 
+     * @var array 
+     */
+    private $_planet;
+    
+    /**
      * List of currently available buildings
      * 
      * @var array
@@ -71,7 +106,7 @@ class Shipyard extends Controller
         
         // time to do something
         $this->runAction();
-        
+     
         // build the page
         $this->buildPage();
     }
@@ -83,13 +118,7 @@ class Shipyard extends Controller
      * @return void
      */
     private function setUpShipyard()
-    {/*
-        $this->_building = new Building(
-            $this->_planet,
-            $this->_user,
-            $this->getObjects()
-        );*/
-        
+    {
         // validate and display
         $this->showShipyardRequiredMessage();
         
@@ -107,23 +136,24 @@ class Shipyard extends Controller
      */
     private function runAction()
     {
-        $items  = filter_input(INPUT_POST, 'fmenge', FILTER_DEFAULT , FILTER_REQUIRE_ARRAY);
+        $items  = filter_input(INPUT_POST, 'fmenge', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 
         if(!is_null($items) && $items !== false) {
 
             $total_items_to_build   = 0;
             $shipyard_queue         = '';
-            $resources_consumed     = [
-                'metal' => 0,
-                'crystal' => 0,
-                'deuterium' => 0,
-            ];
+            
+            // set resources before build
+            $this->_resources_consumed['metal']     = $this->_planet['planet_metal'];
+            $this->_resources_consumed['crystal']   = $this->_planet['planet_crystal'];
+            $this->_resources_consumed['deuterium'] = $this->_planet['planet_deuterium'];
             
             foreach ($items as $item => $amount) {
                 
                 // avoid elements that not match the criteria
                 if (!in_array($item, $this->_allowed_items) 
-                    or $amount <= 0) {
+                    or ($amount <= 0)
+                    or $this->isShieldDomeAvailable($item)) {
 
                     continue;
                 }
@@ -136,20 +166,19 @@ class Shipyard extends Controller
 
                 // If after every validation, the amount of items to build, is more than 0
                 if ($amount > 0) {
-                    $resources_needed                    = $this->getItemNeededResourcesByAmount($item, $amount);
-                    $resources_consumed['metal']        -= $resources_needed['metal'];
-                    $resources_consumed['crystal']      -= $resources_needed['crystal'];
-                    $resources_consumed['deuterium']    -= $resources_needed['deuterium'];
-                    $shipyard_queue                     .= $item . ',' . $amount . ';';
-
-                    $total_items_to_build += $amount;   
+                    $resources_needed                        = $this->getItemNeededResourcesByAmount($item, $amount);
+                    $this->_resources_consumed['metal']     -= $resources_needed['metal'];
+                    $this->_resources_consumed['crystal']   -= $resources_needed['crystal'];
+                    $this->_resources_consumed['deuterium'] -= $resources_needed['deuterium'];
+                    $shipyard_queue                         .= $item . ',' . $amount . ';';
+                    $total_items_to_build                   += $amount;
                 }
             }
             
             if ($total_items_to_build > 0) {
                 
                 $this->Shipyard_Model->insertItemsToBuild(
-                    $resources_consumed,
+                    $this->_resources_consumed,
                     $shipyard_queue,
                     $this->_planet['planet_id']
                 );
@@ -318,16 +347,23 @@ class Shipyard extends Controller
      */
     private function getItemInsertBlock($item_id)
     {
-        if (!$this->_building_in_progress && !parent::$users->isOnVacations($this->_user)) {
-            
-            $box_data               = [];
-            $box_data['item_id']    = $item_id;
-            $box_data['tab_index']  = $item_id;
+        if (!$this->_building_in_progress 
+            && !parent::$users->isOnVacations($this->_user)
+        ) {
+            if ($this->isShieldDomeAvailable($item_id)) {
+                
+                return FormatLib::colorRed($this->getLang()['bd_protection_shield_only_one']);
+            } else {
+                
+                $box_data               = [];
+                $box_data['item_id']    = $item_id;
+                $box_data['tab_index']  = $item_id;
 
-            return parent::$page->parseTemplate(
-                parent::$page->getTemplate('shipyard/shipyard_build_box'),
-                $box_data
-            );
+                return parent::$page->parseTemplate(
+                    parent::$page->getTemplate('shipyard/shipyard_build_box'),
+                    $box_data
+                );
+            }
         }
         
         return '';
@@ -352,7 +388,9 @@ class Shipyard extends Controller
      */
     private function getBuildItemsButton()
     {
-        if (!$this->_building_in_progress && !parent::$users->isOnVacations($this->_user)) {
+        if (!$this->_building_in_progress 
+            && !parent::$users->isOnVacations($this->_user)
+        ) {
             return parent::$page->get('shipyard/shipyard_build_button')->parse(
                 $this->getLang()
             );   
@@ -362,8 +400,9 @@ class Shipyard extends Controller
     }
     
     /**
+     * Build the block that will display the queue of items
      * 
-     * @return type
+     * @return string
      */
     private function buildItemsQueue()
     {
@@ -372,8 +411,8 @@ class Shipyard extends Controller
         $item_time_per_type     = '';
         $item_name_per_type     = '';
         $item_amount_per_type   = '';
-        
-        if (!is_null($queue)) {
+
+        if (!is_null($queue[0]) && !empty($queue[0])) {
             
             foreach ($queue as $item_data) {
                 
@@ -392,17 +431,17 @@ class Shipyard extends Controller
                     $queue_time    += $item_time * $item_values[1];
                 }
             }
+        
+            $block                          = $this->getLang();
+            $block['a']                     = $item_amount_per_type;
+            $block['b']                     = $item_name_per_type;
+            $block['c']                     = $item_time_per_type;
+            $block['b_hangar_id_plus']      = $this->_planet['planet_b_hangar'];
+            $block['current_page']          = $this->getCurrentPage();
+            $block['pretty_time_b_hangar']  = FormatLib::prettyTime($queue_time - $this->_planet['planet_b_hangar']);
+
+            return parent::$page->get('shipyard/shipyard_script')->parse($block);    
         }
-
-        $block                          = $this->getLang();
-        $block['a']                     = $item_amount_per_type;
-        $block['b']                     = $item_name_per_type;
-        $block['c']                     = $item_time_per_type;
-        $block['b_hangar_id_plus']      = $this->_planet['planet_b_hangar'];
-        $block['current_page']          = $this->getCurrentPage();
-        $block['pretty_time_b_hangar']  = FormatLib::prettyTime($queue_time - $this->_planet['planet_b_hangar']);
-
-        return parent::$page->get('shipyard/shipyard_script')->parse($block);
     }
     
     /**
@@ -506,40 +545,154 @@ class Shipyard extends Controller
      */
     private function getMaxBuildableItems($item_id, $amount_requested)
     {
+        // set construction limit based on resources
+        $max_by_resource    = $this->getMaxBuildableItemsByResource($item_id);
+        
+        // set construction limit based system config
+        $max_by_system      = $this->getMaxBuildableItemsBySystemLimit();
+        
+        // set the construction limit for shields
+        if (in_array($item_id, [407, 408])) {
+            
+            $max_shields    = $this->getShieldDomeItemLimit($item_id, $amount_requested);
+            
+            if ($amount_requested > $max_shields) {
+
+                $amount_requested = $max_shields;
+            }
+        }
+        
+        // set the construction limit for missiles
+        if (in_array($item_id, [502, 503])) {
+            
+            $max_missiles   = $this->getMissilesItemLimit($item_id, $amount_requested);
+            
+            if ($amount_requested > $max_missiles) {
+
+                $amount_requested = $max_missiles;
+                echo '1:';var_dump($max_missiles);
+            }
+        }
+        
+        //validations
+        if ($amount_requested > $max_by_resource) {
+            
+            $amount_requested = $max_by_resource;
+        }
+        
+        if ($amount_requested > $max_by_system) {
+            
+            $amount_requested = $max_by_system;
+        }
+
+        // last verification for missiles, 
+        // I'm sure I can do all this process better
+        if (in_array($item_id, [502, 503])) {
+
+            // keep track of the amount of missiles
+            $this->_missiles[$item_id]  += $amount_requested;
+        }
+        
+        return $amount_requested;
+    }
+    
+    /**
+     * Get max amount of buildable items based on the planet current resources
+     * 
+     * @param int $item_id Item ID
+     * 
+     * @return int
+     */
+    private function getMaxBuildableItemsByResource($item_id)
+    {
         $buildable          = [];
         $price_metal        = $this->getObjects()->getPrice($item_id, 'metal');
         $price_crystal      = $this->getObjects()->getPrice($item_id, 'crystal');
         $price_deuterium    = $this->getObjects()->getPrice($item_id, 'deuterium');
-        $price_energy       = $this->getObjects()->getPrice($item_id, 'energy');
         
         if ($price_metal != 0) {
-            $buildable['metal']     = floor($this->_planet['planet_metal'] / $price_metal);
+            $buildable['metal']     = floor($this->_resources_consumed['metal'] / $price_metal);
         }
 
         if ($price_crystal != 0) {
-            $buildable['crystal']   = floor($this->_planet['planet_crystal'] / $price_crystal);
+            $buildable['crystal']   = floor($this->_resources_consumed['crystal'] / $price_crystal);
         }
 
         if ($price_deuterium != 0) {
-            $buildable['deuterium'] = floor($this->_planet['planet_deuterium'] / $price_deuterium);
+            $buildable['deuterium'] = floor($this->_resources_consumed['deuterium'] / $price_deuterium);
         }
 
-        if ($price_energy != 0) {
-            $buildable['energy']    = floor($this->_planet['planet_energy_max'] / $price_energy);
-        }
-
-        $max_buildable_by_resource  = max(min($buildable), 0);
+        return max(min($buildable), 0);
+    }
+    
+    /**
+     * Get max amount of buildable items based on the system configuration
+     * 
+     * @param int $amount_requested Amount of items requested
+     * 
+     * @return int
+     */
+    private function getMaxBuildableItemsBySystemLimit()
+    {
+        return MAX_FLEET_OR_DEFS_PER_ROW;
+    }
+    
+    /**
+     * Return the max amount of buildable shield domes 
+     * 
+     * @param int $item_id Item ID
+     * 
+     * @return int
+     */
+    private function getShieldDomeItemLimit($item_id)
+    {
+        // set construction limit for shield dome
+        $shields_ids = [407, 408];
         
-        if ($amount_requested > $max_buildable_by_resource) {
+        if (in_array($item_id, $shields_ids)) {
+        
+            if (!$this->isShieldDomeAvailable($item_id)) {
+
+                return 1;
+            }
             
-            $amount_requested = $max_buildable_by_resource;
+            return 0;
+        }
+    }
+    
+    /**
+     * Return the max amount of buildable missiles
+     * 
+     * @param int $item_id Item ID
+     * 
+     * @return int
+     */
+    private function getMissilesItemLimit($item_id, $amount_requested)
+    {
+        // calculate missile amount
+        $this->calculateMissilesAmount();
+        
+        // start applying formulas
+        $silo_size          = $this->_planet[$this->getObjects()->getObjects(44)] * 10;
+        $taken_space        = $this->_missiles[502] + ($this->_missiles[503] * 2);
+        $max_amount         = $silo_size - $taken_space;
+        $amount             = 0; 
+
+        if ($item_id == 502) {
+
+            $amount = $max_amount;
+        }
+
+        if ($item_id == 503) {
+            
+            $amount = floor($max_amount / 2);
         }
         
-        if ($amount_requested > MAX_FLEET_OR_DEFS_PER_ROW) {
-
-            $amount_requested = MAX_FLEET_OR_DEFS_PER_ROW;
+        if ($amount_requested > $amount) {
+            
+            $amount_requested = $amount;
         }
-
+        
         return $amount_requested;
     }
 
@@ -557,6 +710,100 @@ class Shipyard extends Controller
             'crystal'   => ($this->getObjects()->getPrice($item_id, 'crystal') * $amount),
             'deuterium' => ($this->getObjects()->getPrice($item_id, 'deuterium') * $amount)
         ];
+    }
+    
+    /**
+     * Check if any of the shield domes are currently available in the planet
+     * 
+     * @param int $item_id Item ID
+     * @return boolean
+     */
+    private function isShieldDomeAvailable($item_id)
+    {
+        if (in_array($item_id, [407, 408])) {
+            
+            // check if something is already built
+            if ($this->_planet[$this->getObjects()->getObjects($item_id)] >= 1) {
+                
+                return true;
+            }
+            
+            // check if something is being built
+            $in_queue = strpos($this->_planet['planet_b_hangar_id'], $item_id . ',');
+            
+            if ($in_queue !== false) {
+                
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    /**
+     * Calculate missiles amount considering the planet current storage and queue
+     * 
+     * @return array
+     */
+    private function calculateMissilesAmount()
+    {
+        // get the amount of missiles stored in the planet
+        $planet_missiles = [
+            502 => $this->_planet[$this->getObjects()->getObjects(502)],
+            503 => $this->_planet[$this->getObjects()->getObjects(503)]
+        ];
+        
+        // get the amount of missiles in the current queue
+        $current_queue  = $this->processQueueToArray();
+        $queue_missiles = [
+            502 => 0,
+            503 => 0
+        ];
+        
+        foreach ($current_queue as $item => $amount) {
+            
+            if ($item == 502 or $item == 503) {
+                
+                $queue_missiles[$item] += $amount; 
+            }
+        }
+        
+        // add the amount of missiles stored in the planet, and the amount of 
+        // missiles in the current queue, and finally the amount of missiles in
+        //  the queue that's being developed.
+        $this->_missiles[502]   += $planet_missiles[502] + $queue_missiles[502];
+        $this->_missiles[503]   += $planet_missiles[503] + $queue_missiles[503];
+    }
+    
+    /**
+     * Convert the queue from string to array
+     * 
+     * @return array
+     */
+    private function processQueueToArray()
+    {        
+        $queue          = explode(';', $this->_planet['planet_b_hangar_id']);
+        $array_queue    = [];
+        
+        if (!empty($queue[0])) {
+
+            foreach ($queue as $item_data) {
+                
+                if (!empty($item_data[0])) {
+
+                    $item   = explode (',', $item_data);
+
+                    if (!isset($array_queue[$item[0]])) {
+
+                        $array_queue[$item[0]] = 0;
+                    }
+                    
+                    $array_queue[$item[0]]  += $item[1];
+                }
+            }   
+        }
+
+        return $array_queue;
     }
 }
 

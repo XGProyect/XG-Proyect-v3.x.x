@@ -59,9 +59,9 @@ class Shipyard
         $this->db->query(
             "UPDATE " . PLANETS . " AS p SET
                 p.`planet_b_hangar_id` = CONCAT(p.`planet_b_hangar_id`, '" . $shipyard_queue . "'),
-                p.`planet_metal` = p.`planet_metal` - '" . $resources['metal'] . "',
-                p.`planet_crystal` = p.`planet_crystal` - '" . $resources['crystal'] . "',
-                p.`planet_deuterium` = p.`planet_deuterium` - '" . $resources['deuterium'] . "'
+                p.`planet_metal` = '" . $resources['metal'] . "',
+                p.`planet_crystal` = '" . $resources['crystal'] . "',
+                p.`planet_deuterium` = '" . $resources['deuterium'] . "'
             WHERE p.`planet_id` = '" . $planet_id . "';"
         );
     }
