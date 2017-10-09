@@ -57,6 +57,9 @@ class Buildings extends Controller
     {
         parent::__construct();
 
+        // check if session is active
+        parent::$users->checkSession();
+
         // load Model
         parent::loadModel('game/buildings');
         
@@ -162,12 +165,13 @@ class Buildings extends Controller
         /**
          * Parse the items
          */
-        $page                   = [];
-        $page['BuildingsList']  = $this->buildListOfBuildings();
+        $page                       = [];
+        $page['list_of_buildings']  = $this->buildListOfBuildings();
         
         // display the page
         parent::$page->display(
-            parent::$page->get('buildings/buildings_builds')->parse(
+            $this->getTemplate()->set(
+                'buildings/buildings_builds', 
                 array_merge($page, $this->buildQueueBlock())
             )
         );
@@ -180,15 +184,13 @@ class Buildings extends Controller
      */
     private function buildListOfBuildings()
     {
-        $buildings_list = '';
+        $buildings_list = [];
         
         if (!is_null($this->_allowed_buildings)) {
             
             foreach ($this->_allowed_buildings as $building_id) {
                 
-                $buildings_list .= parent::$page->get('buildings/buildings_builds_row')->parse(
-                    $this->setListOfBuildingsItem($building_id)
-                );
+                $buildings_list[]   = $this->setListOfBuildingsItem($building_id);
             }
         }
         
