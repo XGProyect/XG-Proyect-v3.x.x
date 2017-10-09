@@ -92,6 +92,9 @@ class Shipyard extends Controller
     {
         parent::__construct();
 
+        // check if session is active
+        parent::$users->checkSession();
+        
         // load Model
         parent::loadModel('game/shipyard');
         
@@ -201,13 +204,13 @@ class Shipyard extends Controller
          */
         $page                   = [];
         $page['message']        = $this->showShipyardUpgradeMessage();
-        $page['items_rows']     = $this->buildListOfItems();
+        $page['list_of_items']  = $this->buildListOfItems();
         $page['build_button']   = $this->getBuildItemsButton();
         $page['building_list']  = $this->buildItemsQueue();
         
         // display the page
         parent::$page->display(
-            parent::$page->get('shipyard/shipyard_table')->parse($page)
+            $this->getTemplate()->set('shipyard/shipyard_table', $page)
         );
     }
     
@@ -229,22 +232,20 @@ class Shipyard extends Controller
     /**
      * Build the list of ships and defenses
      * 
-     * @return string
+     * @return array
      */
     private function buildListOfItems()
     {
-        $buildings_list = '';
+        $buildings_list = [];
         
         if (!is_null($this->_allowed_items)) {
             
             foreach ($this->_allowed_items as $item_id) {
                 
-                $buildings_list .= parent::$page->get('shipyard/shipyard_table_row')->parse(
-                    $this->setListOfShipyardItem($item_id)
-                );
+                $buildings_list[] = $this->setListOfShipyardItem($item_id);
             }
         }
-        
+
         return $buildings_list;
     }
     
@@ -359,8 +360,8 @@ class Shipyard extends Controller
                 $box_data['item_id']    = $item_id;
                 $box_data['tab_index']  = $item_id;
 
-                return parent::$page->parseTemplate(
-                    parent::$page->getTemplate('shipyard/shipyard_build_box'),
+                return $this->getTemplate()->set(
+                    'shipyard/shipyard_build_box',
                     $box_data
                 );
             }
@@ -391,9 +392,11 @@ class Shipyard extends Controller
         if (!$this->_building_in_progress 
             && !parent::$users->isOnVacations($this->_user)
         ) {
-            return parent::$page->get('shipyard/shipyard_build_button')->parse(
+
+            return $this->getTemplate()->set(
+                'shipyard/shipyard_build_button',
                 $this->getLang()
-            );   
+            );
         }
         
         return '';
@@ -440,7 +443,7 @@ class Shipyard extends Controller
             $block['current_page']          = $this->getCurrentPage();
             $block['pretty_time_b_hangar']  = FormatLib::prettyTime($queue_time - $this->_planet['planet_b_hangar']);
 
-            return parent::$page->get('shipyard/shipyard_script')->parse($block);    
+            return $this->getTemplate()->set('shipyard/shipyard_script', $block);  
         }
     }
     
