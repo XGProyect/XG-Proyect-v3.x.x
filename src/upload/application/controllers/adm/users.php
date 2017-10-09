@@ -14,8 +14,8 @@
 
 namespace application\controllers\adm;
 
+use application\core\Controller;
 use application\core\Database;
-use application\core\XGPCore;
 use application\libraries\adm\AdministrationLib;
 use application\libraries\FunctionsLib;
 use application\libraries\Statistics_library;
@@ -28,9 +28,9 @@ use application\libraries\Statistics_library;
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
- * @version  3.0.0
+ * @version  3.1.0
  */
-class Users extends XGPCore
+class Users extends Controller
 {
     private $_lang;
     private $_edit;

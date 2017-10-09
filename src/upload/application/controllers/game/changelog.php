@@ -14,7 +14,7 @@
 
 namespace application\controllers\game;
 
-use application\core\XGPCore;
+use application\core\Controller;
 use application\libraries\FunctionsLib;
 
 define('IN_CHANGELOG', true);
@@ -27,9 +27,9 @@ define('IN_CHANGELOG', true);
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
- * @version  3.0.0
+ * @version  3.1.0
  */
-class Changelog extends XGPCore
+class Changelog extends Controller
 {
     const MODULE_ID = 0;
 

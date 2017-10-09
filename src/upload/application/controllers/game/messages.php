@@ -14,8 +14,8 @@
 
 namespace application\controllers\game;
 
+use application\core\Controller;
 use application\core\Database;
-use application\core\XGPCore;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
 use application\libraries\OfficiersLib;
@@ -28,9 +28,9 @@ use application\libraries\OfficiersLib;
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
- * @version  3.0.0
+ * @version  3.1.0
  */
-class Messages extends XGPCore
+class Messages extends Controller
 {
     const MODULE_ID = 18;
 

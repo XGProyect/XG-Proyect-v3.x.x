@@ -14,8 +14,8 @@
 
 namespace application\controllers\game;
 
+use application\core\Controller;
 use application\core\Database;
-use application\core\XGPCore;
 use application\libraries\FleetsLib;
 use application\libraries\FunctionsLib;
 
@@ -27,9 +27,9 @@ use application\libraries\FunctionsLib;
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
- * @version  3.0.0
+ * @version  3.1.0
  */
-class Fleet3 extends XGPCore
+class Fleet3 extends Controller
 {
     const MODULE_ID = 8;
 

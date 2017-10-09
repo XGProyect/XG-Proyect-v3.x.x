@@ -14,8 +14,8 @@
 
 namespace application\controllers\game;
 
+use application\core\Controller;
 use application\core\Database;
-use application\core\XGPCore;
 use application\libraries\DevelopmentsLib;
 use application\libraries\FleetsLib;
 use application\libraries\FormatLib;
@@ -30,9 +30,9 @@ use application\libraries\Updates_library;
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
- * @version  3.0.0
+ * @version  3.1.0
  */
-class Overview extends XGPCore
+class Overview extends Controller
 {
     const MODULE_ID = 1;
 

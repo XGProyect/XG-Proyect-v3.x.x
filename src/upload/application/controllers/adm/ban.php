@@ -14,8 +14,8 @@
 
 namespace application\controllers\adm;
 
+use application\core\Controller;
 use application\core\Database;
-use application\core\XGPCore;
 use application\libraries\adm\AdministrationLib;
 use application\libraries\FunctionsLib;
 
@@ -27,9 +27,9 @@ use application\libraries\FunctionsLib;
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
- * @version  3.0.0
+ * @version  3.1.0
  */
-class Ban extends XGPCore
+class Ban extends Controller
 {
     private $_lang;
     private $_current_user;

@@ -14,7 +14,7 @@
 
 namespace application\controllers\adm;
 
-use application\core\XGPCore;
+use application\core\Controller;
 use application\libraries\adm\AdministrationLib;
 use mysqli;
 
@@ -26,9 +26,9 @@ use mysqli;
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
- * @version  3.0.0
+ * @version  3.1.0
  */
-class Queries extends XGPCore
+class Queries extends Controller
 {
     private $langs;
     private $current_user;

@@ -14,7 +14,7 @@
 
 namespace application\controllers\ajax;
 
-use application\core\XGPCore;
+use application\core\Controller;
 
 /**
  * Info Class
@@ -24,9 +24,9 @@ use application\core\XGPCore;
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
- * @version  3.0.0
+ * @version  3.1.0
  */
-class Info extends XGPCore
+class Info extends Controller
 {
     private $langs;
 

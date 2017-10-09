@@ -14,8 +14,6 @@
 
 namespace application\core;
 
-use application\core\entities\Planet;
-
 /**
  * XGPCore Class
  *
@@ -58,19 +56,23 @@ abstract class Controller extends XGPCore
     private $_langs = [];
     
     /**
+     *
+     * @var type 
+     */
+    private $_template = null;
+    
+    /**
      * Constructor
      */
     public function __construct()
     {
         parent::__construct();
         
-        // check if session is active
-        parent::$users->checkSession();
-        
         $this->setUserData();
         $this->setPlanetData();
         $this->setObjects();
         $this->setLang();
+        $this->setTemplate();
     }
     
     /**
@@ -106,6 +108,14 @@ abstract class Controller extends XGPCore
     }
     
     /**
+     * Set languages data
+     */
+    private function setTemplate()
+    {
+        $this->_template        = new Template();
+    }
+    
+    /**
      * Return the user data
      * 
      * @return array
@@ -122,7 +132,6 @@ abstract class Controller extends XGPCore
      */
     protected function getPlanetData()
     {
-        //return new Planet($this->_current_planet);
         return $this->_current_planet;
     }
     
@@ -144,6 +153,15 @@ abstract class Controller extends XGPCore
     protected function getLang()
     {
         return $this->_langs;
+    }
+    
+    /**
+     * 
+     * @return type
+     */
+    protected function getTemplate()
+    {
+        return $this->_template;
     }
 }
 

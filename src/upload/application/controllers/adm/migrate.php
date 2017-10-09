@@ -14,8 +14,8 @@
 
 namespace application\controllers\adm;
 
+use application\core\Controller;
 use application\core\Database;
-use application\core\XGPCore;
 use application\libraries\adm\AdministrationLib;
 
 /**
@@ -26,9 +26,9 @@ use application\libraries\adm\AdministrationLib;
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
- * @version  3.0.0
+ * @version  3.1.0
  */
-class Migrate extends XGPCore
+class Migrate extends Controller
 {
     private $langs;
     private $current_user;
