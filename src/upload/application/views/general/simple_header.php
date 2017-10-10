@@ -1,7 +1,7 @@
 <html>
 <head>
 <title>{game_title}</title>
-<link rel="shortcut icon" href="{root_path}favicon.ico">
+<link rel="shortcut icon" href="favicon.ico">
 <link rel="stylesheet" type="text/css" href="{css_path}default.css">
 <link rel="stylesheet" type="text/css" href="{css_path}formate.css">
 <link rel="stylesheet" type="text/css" href="{skin_path}formate.css">
