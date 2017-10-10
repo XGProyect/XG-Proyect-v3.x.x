@@ -214,7 +214,7 @@ class Register extends Controller
                 // User login
                 if (parent::$users->userLogin($user_id, $user_name, $hashed_password)) {
                     // Redirect to game
-                    FunctionsLib::redirect('game.php?page=overview');
+                    FunctionsLib::redirect(SYSTEM_ROOT . 'game.php?page=overview');
                 }
             }
         }
