@@ -43,12 +43,14 @@ define('DATA_PATH', 'data/');
 define('MODELS_PATH', APP_PATH . 'models/');
 
 // VISUAL DEFAULT PATHS
-define('TEMPLATE_DIR', APP_PATH . 'views/');
-define('CSS_PATH', APP_PATH . 'styles/css/');
-define('SKIN_PATH', APP_PATH . 'styles/skins/');
-define('DEFAULT_SKINPATH', APP_PATH . 'styles/skins/xgproyect/');
-define('IMG_PATH', APP_PATH . 'styles/images/');
+define('CSS_PATH', PUBLIC_PATH . 'css/');
+define('IMG_PATH', PUBLIC_PATH . 'images/');
 define('JS_PATH', PUBLIC_PATH . 'js/');
+
+// TEMPLATE DEFAULTS
+define('TEMPLATE_DIR', APP_PATH . 'views/');
+define('SKIN_PATH', PUBLIC_PATH . 'upload/skins/');
+define('DEFAULT_SKINPATH', SKIN_PATH . 'xgproyect/');
 
 // APPLICATION PATHS
 define('CONFIGS_PATH', APP_PATH . 'config/');

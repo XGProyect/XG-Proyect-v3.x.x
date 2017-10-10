@@ -13,7 +13,7 @@
  */
 
 define('IN_LOGIN', true);
-define('XGP_ROOT', './');
+define('XGP_ROOT', '../');
 
 include XGP_ROOT . 'application/core/common.php';
 

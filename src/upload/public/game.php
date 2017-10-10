@@ -15,7 +15,7 @@
 use application\libraries\FunctionsLib;
 
 define('IN_GAME', true);
-define('XGP_ROOT', './');
+define('XGP_ROOT', '../');
 
 require XGP_ROOT . 'application/core/common.php';
 

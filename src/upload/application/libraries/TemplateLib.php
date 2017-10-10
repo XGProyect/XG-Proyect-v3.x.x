@@ -356,9 +356,9 @@ class TemplateLib
         $parse['game_title']    = FunctionsLib::readConfig('game_name');
         $parse['root_path']     = XGP_ROOT;
         $parse['version']       = SYSTEM_VERSION;
-        $parse['css_path']      = XGP_ROOT . CSS_PATH;
-        $parse['skin_path']     = XGP_ROOT . DPATH;
-        $parse['js_path']       = XGP_ROOT . JS_PATH;
+        $parse['css_path']      = CSS_PATH;
+        $parse['skin_path']     = DPATH;
+        $parse['js_path']       = JS_PATH;
         $parse['meta_tags']     = ($metatags) ? $metatags : "";
 
         return $this->parseTemplate($this->getTemplate('general/simple_header'), $parse);
