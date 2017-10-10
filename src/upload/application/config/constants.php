@@ -35,7 +35,8 @@ define('ADMIN_ACCESS_QUERY', true);
 // GLOBAL PATHS
 define('APP_PATH', 'application/');
 define('PUBLIC_PATH', 'public/');
-define('VENDOR_PATH', 'vendor/');
+define('VENDOR_PATH', 'third_party/');
+define('SYSTEM_PATH', 'system/');
 define('DATA_PATH', 'data/');
 
 // MODELS PATH
@@ -56,6 +57,8 @@ define('CORE_PATH', APP_PATH . 'core/');
 define('HOOKS_PATH', APP_PATH . 'hooks/');
 define('LANG_PATH', APP_PATH . 'lang/');
 define('LIB_PATH', APP_PATH . 'libraries/');
+
+// CONTROLLERS PATHS
 define('ADMIN_PATH', CONTROLLERS_PATH . 'adm/');
 define('AJAX_PATH', CONTROLLERS_PATH . 'ajax/');
 define('GAME_PATH', CONTROLLERS_PATH . 'game/');
