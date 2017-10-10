@@ -283,7 +283,7 @@ class AdministrationLib extends XGPCore
                 }
 
                 // If login fails
-                FunctionsLib::redirect(XGP_ROOT . 'admin.php?error=1');
+                FunctionsLib::redirect(SYSTEM_ROOT . 'admin.php?error=1');
             } else {
 
                 $parse['alert'] = '';

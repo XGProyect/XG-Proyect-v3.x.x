@@ -114,7 +114,7 @@ class Users_library
     {
         if (!$this->isSessionSet()) {
 
-            FunctionsLib::redirect(XGP_ROOT);
+            FunctionsLib::redirect(SYSTEM_ROOT);
         }
     }
 

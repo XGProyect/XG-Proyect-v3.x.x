@@ -84,6 +84,9 @@ define(
         )
 );
 
+// SYSTEM ROOT, IGNORING PUBLIC
+define('SYSTEM_ROOT', 'http://' . strtr(BASE_PATH, ['public' => '']));
+
 // UNIVERSE DATA, GALAXY, SYSTEMS AND PLANETS || DEFAULT 9-499-15 RESPECTIVELY
 define('MAX_GALAXY_IN_WORLD', 9);
 define('MAX_SYSTEM_IN_GALAXY', 499);

@@ -44,7 +44,7 @@ if (isset($page)) {
     // logout
     if ($page == 'logout') {
         $session->delete();
-        FunctionsLib::redirect(XGP_ROOT);
+        FunctionsLib::redirect(SYSTEM_ROOT);
     }
     
     // other pages
