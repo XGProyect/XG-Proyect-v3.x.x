@@ -101,7 +101,7 @@ class Ban extends Controller
     private function show_default()
     {
         $parse = $this->_lang;
-        $parse['js_path'] = XGP_ROOT . JS_PATH;
+        $parse['js_path'] = JS_PATH;
 
         if (isset($_POST['unban_name']) && $_POST['unban_name']) {
             $username = $this->_db->escapeValue($_POST['unban_name']);
@@ -133,7 +133,7 @@ class Ban extends Controller
     private function show_ban()
     {
         $parse = $this->_lang;
-        $parse['js_path'] = XGP_ROOT . JS_PATH;
+        $parse['js_path'] = JS_PATH;
         $ban_name = isset($_GET['ban_name']) ? $this->_db->escapeValue($_GET['ban_name']) : NULL;
 
         if (isset($_GET['banuser']) && isset($_GET['ban_name'])) {

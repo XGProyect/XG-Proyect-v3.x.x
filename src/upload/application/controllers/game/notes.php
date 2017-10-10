@@ -72,7 +72,7 @@ class Notes extends Controller
      */
     private function build_page()
     {
-        $this->_lang['js_path'] = XGP_ROOT . JS_PATH;
+        $this->_lang['js_path'] = JS_PATH;
         $parse = $this->_lang;
 
         $a = isset($_GET['a']) ? intval($_GET['a']) : NULL;

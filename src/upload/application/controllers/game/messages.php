@@ -80,7 +80,7 @@ class Messages extends Controller
     {
         // some values by default
         $parse = $this->langs;
-        $parse['js_path'] = XGP_ROOT . JS_PATH;
+        $parse['js_path'] = JS_PATH;
 
         // display an specific category of items
         if (isset($_GET['dsp']) && $_GET['dsp'] == 1 && $this->have_premium) {

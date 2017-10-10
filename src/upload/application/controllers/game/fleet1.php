@@ -81,7 +81,7 @@ class Fleet1 extends Controller
         $ships_row_template = parent::$page->getTemplate('fleet/fleet1_row_ships');
 
         // LANGUAGE
-        $this->_lang['js_path'] = XGP_ROOT . JS_PATH;
+        $this->_lang['js_path'] = JS_PATH;
         $parse = $this->_lang;
 
         $MaxFlyingFleets = $count['max_fleet'];

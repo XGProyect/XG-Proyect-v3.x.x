@@ -63,8 +63,8 @@ class Alliance extends Controller
 
         // SOME REQUIRED PATHS
         $this->_lang['dpath']       = DPATH;
-        $this->_lang['img_path']    = XGP_ROOT . IMG_PATH;
-        $this->_lang['js_path']     = XGP_ROOT . JS_PATH;
+        $this->_lang['img_path']    = IMG_PATH;
+        $this->_lang['js_path']     = JS_PATH;
 
         // SET THE PERMISSIONS
         $this->setPermissions();

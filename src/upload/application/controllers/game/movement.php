@@ -92,7 +92,7 @@ class Movement extends Controller
 																	AND `fleet_mission` = '15') AS max_expeditions");
 
         // LANGUAGE
-        $this->_lang['js_path'] = XGP_ROOT . JS_PATH;
+        $this->_lang['js_path'] = JS_PATH;
         $parse = $this->_lang;
 
         $MaxFlyingFleets = $count['max_fleet'];

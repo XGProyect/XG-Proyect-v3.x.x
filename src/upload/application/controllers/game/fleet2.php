@@ -102,7 +102,7 @@ class Fleet2 extends Controller
         $shortcut_acs_row = parent::$page->getTemplate('fleet/fleet2_shortcut_acs_row');
 
         // LANGUAGE
-        $this->_lang['js_path'] = XGP_ROOT . JS_PATH;
+        $this->_lang['js_path'] = JS_PATH;
         $parse = $this->_lang;
 
         // COORDS

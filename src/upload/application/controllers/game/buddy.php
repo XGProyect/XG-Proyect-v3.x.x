@@ -76,7 +76,7 @@ class Buddy extends Controller
         $bid = isset($_GET['bid']) ? intval($_GET['bid']) : NULL;
         $sm = isset($_GET['sm']) ? intval($_GET['sm']) : NULL;
         $user = isset($_GET['u']) ? intval($_GET['u']) : NULL;
-        $this->_lang['js_path'] = XGP_ROOT . JS_PATH;
+        $this->_lang['js_path'] = JS_PATH;
         $parse = $this->_lang;
         $requestsSended = '';
         $requestsReceived = '';

@@ -93,7 +93,7 @@ class Fleet3 extends Controller
         $hold_values    = array(0, 1, 2, 4, 8, 16, 32);
 
         // LANG
-        $this->langs['js_path'] = XGP_ROOT . JS_PATH;
+        $this->langs['js_path'] = JS_PATH;
         $parse                  = $this->langs;
 
         // LOAD TEMPLATES REQUIRED

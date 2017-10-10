@@ -13,7 +13,7 @@
  */
 
 define('IN_INSTALL', true);
-define('XGP_ROOT', './../');
+define('XGP_ROOT', '../../');
 
 require XGP_ROOT . 'application/core/common.php';
 

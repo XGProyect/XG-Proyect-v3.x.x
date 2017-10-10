@@ -258,8 +258,8 @@ class TemplateLib
     private function installHeader()
     {
         $parse['title']     = 'Install';
-        $parse['js_path']   = JS_PATH;
-        $parse['css_path']  = CSS_PATH;
+        $parse['js_path']   = '../js/';
+        $parse['css_path']  = '../css/';
 
         return $this->parseTemplate($this->getTemplate('install/simple_header'), $parse);
     }

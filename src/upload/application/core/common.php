@@ -54,7 +54,7 @@ define('DEFAULT_LANG', FunctionsLib::getCurrentLanguage($set));
 // check if is installed
 if ($installed == false && !defined('IN_INSTALL')) {
     
-    FunctionsLib::redirect(XGP_ROOT .  'install/');
+    FunctionsLib::redirect(SYSTEM_ROOT .  'install/');
 }
 
 // when we are not in the install section

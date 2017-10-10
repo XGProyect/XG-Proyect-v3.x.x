@@ -193,7 +193,7 @@ class Galaxy extends Controller
         );
 
         $parse = $this->_lang;
-        $parse['js_path'] = XGP_ROOT . JS_PATH;
+        $parse['js_path'] = JS_PATH;
         $parse['galaxy'] = $this->_galaxy;
         $parse['system'] = $this->_system;
         $parse['planet'] = $planet;

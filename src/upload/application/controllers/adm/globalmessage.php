@@ -74,7 +74,7 @@ class Globalmessage extends Controller
     private function build_page()
     {
         $parse = $this->_lang;
-        $parse['js_path'] = XGP_ROOT . JS_PATH;
+        $parse['js_path'] = JS_PATH;
 
         if (isset($_POST) && $_POST && $_GET['mode'] == "change") {
             $info = array(
