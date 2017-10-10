@@ -67,16 +67,6 @@ class Users extends Controller
         }
     }
 
-    /**
-     * method __destruct
-     * param
-     * return close db connection
-     */
-    public function __destruct()
-    {
-        $this->_db->closeConnection();
-    }
-
     ######################################
     #
     # main methods
