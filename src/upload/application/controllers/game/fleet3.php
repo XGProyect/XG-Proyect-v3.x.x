@@ -89,8 +89,8 @@ class Fleet3 extends Controller
         // SOME DEFAULT VALUES
         #####################################################################################################
         // ARRAYS
-        $exp_values     = array(1, 2, 3, 4, 5);
-        $hold_values    = array(0, 1, 2, 4, 8, 16, 32);
+        $exp_values     = [1, 2, 3, 4, 5];
+        $hold_values    = [0, 1, 2, 4, 8, 16, 32];
 
         // LANG
         $this->langs['js_path'] = JS_PATH;

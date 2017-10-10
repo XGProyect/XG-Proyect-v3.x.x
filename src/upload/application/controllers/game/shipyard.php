@@ -573,7 +573,6 @@ class Shipyard extends Controller
             if ($amount_requested > $max_missiles) {
 
                 $amount_requested = $max_missiles;
-                echo '1:';var_dump($max_missiles);
             }
         }
         
