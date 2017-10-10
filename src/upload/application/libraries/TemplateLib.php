@@ -354,7 +354,6 @@ class TemplateLib
     private function gameHeader($metatags = '')
     {
         $parse['game_title']    = FunctionsLib::readConfig('game_name');
-        $parse['root_path']     = XGP_ROOT;
         $parse['version']       = SYSTEM_VERSION;
         $parse['css_path']      = CSS_PATH;
         $parse['skin_path']     = DPATH;
@@ -589,9 +588,8 @@ class TemplateLib
     private function adminHeader($metatags = '')
     {
         $parse['title']         = 'Admin CP';
-        $parse['xgp_root']      = XGP_ROOT;
-        $parse['js_path']       = XGP_ROOT . JS_PATH;
-        $parse['css_path']      = XGP_ROOT . CSS_PATH;
+        $parse['js_path']       = JS_PATH;
+        $parse['css_path']      = CSS_PATH;
         $parse['secure_url']    = FunctionsLib::readConfig('ssl_enabled') == 1 ? 'https://' : 'http://';
         $parse['-meta-']        = $metatags ? $metatags : '';
 
