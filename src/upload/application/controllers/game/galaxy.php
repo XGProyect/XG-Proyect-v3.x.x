@@ -543,11 +543,11 @@ class Galaxy extends Controller
         $UserRecycles = $this->_current_planet['ship_recycler'];
         $UserDeuterium = $this->_current_planet['planet_deuterium'];
         $UserMissiles = $this->_current_planet['defense_interplanetary_missile'];
-        $fleet = array();
-        $speedalls = array();
+        $fleet = [];
+        $speedalls = [];
         $PartialFleet = false;
         $PartialCount = 0;
-        $order = isset($_POST['order']) ? $_POST['order'] : NULL;
+        $order = isset($_POST['order']) ? $_POST['order'] : null;
         $ResultMessage = '';
         $fleet['fleetlist'] = '';
         $fleet['amount'] = '';
@@ -566,25 +566,34 @@ class Galaxy extends Controller
                 break;
         }
 
-        foreach ($this->_reslist['fleet'] as $Node => $ShipID) {
-            $TName = "ship" . $ShipID;
+        $fleet['amount'] = 0;
+        
+        foreach ($this->_reslist['fleet'] as $ship_id) {
 
-            if (isset($_POST[$TName]) && $ShipID > 200 && $ShipID < 300 && $_POST[$TName] > 0) {
-                if ($_POST[$TName] > $this->_current_planet[$this->_resource[$ShipID]]) {
-                    $fleet['fleetarray'][$ShipID] = $this->_current_planet[$this->_resource[$ShipID]];
-                    $fleet['fleetlist'] .= $ShipID . "," . $this->_current_planet[$this->_resource[$ShipID]] . ";";
-                    $fleet['amount'] += $this->_current_planet[$this->_resource[$ShipID]];
-                    $PartialCount += $this->_current_planet[$this->_resource[$ShipID]];
+            $TName          = "ship" . $ship_id;
+            $ship_amount    = isset($_POST[$TName]) ? (int)$_POST[$TName] : 0;
+            
+            if ($ship_id > 200 && $ship_id < 300 && $ship_amount > 0) {
+
+                if ($ship_amount > $this->_current_planet[$this->_resource[$ship_id]]) {
+
+                    $fleet['fleetarray'][$ship_id]= (int)$this->_current_planet[$this->_resource[$ship_id]];
+                    $fleet['fleetlist']             .= $ship_id . "," . $this->_current_planet[$this->_resource[$ship_id]] . ";";
+                    $fleet['amount']                += (int)$this->_current_planet[$this->_resource[$ship_id]];
+                    $PartialCount                   += (int)$this->_current_planet[$this->_resource[$ship_id]];
+                    
+                    // we sent less that the amount requested
                     $PartialFleet = true;
                 } else {
-                    $fleet['fleetarray'][$ShipID] = $_POST[$TName];
-                    $fleet['fleetlist'] .= $ShipID . "," . $_POST[$TName] . ";";
-                    $fleet['amount'] += $_POST[$TName];
-                    $speedalls[$ShipID] = $_POST[$TName];
+                    
+                    $fleet['fleetarray'][$ship_id]  = $ship_amount;
+                    $fleet['fleetlist']             .= $ship_id . "," . $ship_amount . ";";
+                    $fleet['amount']                += $ship_amount;
+                    $speedalls[$ship_id]            = $ship_amount;
                 }
             }
         }
-
+        
         $errors_types = array(
             600 => $this->_lang['gl_success'],
             601 => $this->_lang['gl_error'],
@@ -616,37 +625,44 @@ class Galaxy extends Controller
             die("614 ");
         }
 
-
-        $CurrentFlyingFleets = $this->_db->queryFetch("SELECT COUNT(fleet_id) AS `Nbre`
-																FROM " . FLEETS . "
-																WHERE `fleet_owner` = '" . $this->_current_user['user_id'] . "';");
+        $CurrentFlyingFleets = $this->_db->queryFetch(
+            "SELECT COUNT(fleet_id) AS `Nbre`
+            FROM " . FLEETS . "
+            WHERE `fleet_owner` = '" . $this->_current_user['user_id'] . "';"
+        );
 
         $CurrentFlyingFleets = $CurrentFlyingFleets['Nbre'];
 
-        $TargetRow = $this->_db->queryFetch("SELECT *
-																FROM " . PLANETS . "
-																WHERE `planet_galaxy` = '" . $this->_db->escapeValue($_POST['galaxy']) . "' AND
-																		`planet_system` = '" . $this->_db->escapeValue($_POST['system']) . "' AND
-																		`planet_planet` = '" . $this->_db->escapeValue($_POST['planet']) . "' AND
-																		`planet_type` = '" . $this->_db->escapeValue($_POST['planettype']) . "';");
+        $TargetRow = $this->_db->queryFetch(
+            "SELECT *
+            FROM " . PLANETS . "
+            WHERE `planet_galaxy` = '" . $this->_db->escapeValue($_POST['galaxy']) . "' AND
+                `planet_system` = '" . $this->_db->escapeValue($_POST['system']) . "' AND
+                `planet_planet` = '" . $this->_db->escapeValue($_POST['planet']) . "' AND
+                `planet_type` = '" . $this->_db->escapeValue($_POST['planettype']) . "';"
+        );
 
         if ($TargetRow['planet_user_id'] == '') {
             $TargetUser = $this->_current_user;
         } elseif ($TargetRow['planet_user_id'] != '') {
-            $TargetUser = $this->_db->queryFetch("SELECT u.`user_id`, u.`user_onlinetime`, u.`user_authlevel`, s.`setting_vacations_status`
-														FROM " . USERS . " AS u
-														INNER JOIN " . SETTINGS . " AS s ON s.setting_user_id = u.user_id
-														WHERE `user_id` = '" . $TargetRow['planet_user_id'] . "';");
+            $TargetUser = $this->_db->queryFetch(
+                "SELECT u.`user_id`, u.`user_onlinetime`, u.`user_authlevel`, s.`setting_vacations_status`
+                FROM " . USERS . " AS u
+                INNER JOIN " . SETTINGS . " AS s ON s.setting_user_id = u.user_id
+                WHERE `user_id` = '" . $TargetRow['planet_user_id'] . "';"
+            );
         }
 
         // invisible debris by jstar
         if ($order == 8) {
-            $TargetGPlanet = $this->_db->queryFetch("SELECT planet_invisible_start_time, planet_debris_metal, planet_debris_crystal
-																FROM " . PLANETS . "
-																WHERE planet_galaxy = '" . $this->_db->escapeValue($_POST['galaxy']) . "' AND
-																		planet_system = '" . $this->_db->escapeValue($_POST['system']) . "' AND
-																		planet_planet = '" . $this->_db->escapeValue($_POST['planet']) . "' AND
-																		planet_type = 1;");
+            $TargetGPlanet = $this->_db->queryFetch(
+                "SELECT planet_invisible_start_time, planet_debris_metal, planet_debris_crystal
+                FROM " . PLANETS . "
+                WHERE planet_galaxy = '" . $this->_db->escapeValue($_POST['galaxy']) . "' AND
+                                planet_system = '" . $this->_db->escapeValue($_POST['system']) . "' AND
+                                planet_planet = '" . $this->_db->escapeValue($_POST['planet']) . "' AND
+                                planet_type = 1;"
+            );
 
             if ($TargetGPlanet['planet_debris_metal'] == 0 && $TargetGPlanet['planet_debris_crystal'] == 0 && time() > ( $TargetGPlanet['planet_invisible_start_time'] + DEBRIS_LIFE_TIME )) {
                 die();
@@ -715,7 +731,7 @@ class Galaxy extends Controller
                 $consumption += $basicConsumption * $Distance / 35000 * ( ( $spd / 10 ) + 1 ) * ( ( $spd / 10 ) + 1 );
                 $FleetShipCount += $Count;
                 $FleetDBArray .= $Ship . "," . $Count . ";";
-                $FleetSubQRY .= "`" . $this->_resource[$Ship] . "` = `" . $this->_resource[$Ship] . "` - " . $Count . " , ";
+                $FleetSubQRY .= "`" . $this->_resource[$Ship] . "` = `" . $this->_resource[$Ship] . "` - " . $Count . ", ";
             }
         }
 
@@ -729,31 +745,35 @@ class Galaxy extends Controller
             die("601 ");
         }
 
-        $this->_db->query("INSERT INTO " . FLEETS . " SET
-								`fleet_owner` = '" . $this->_current_user['user_id'] . "',
-								`fleet_mission` = '" . intval($order) . "',
-								`fleet_amount` = '" . $FleetShipCount . "',
-								`fleet_array` = '" . $FleetDBArray . "',
-								`fleet_start_time` = '" . $fleet['start_time'] . "',
-								`fleet_start_galaxy` = '" . $this->_current_planet['planet_galaxy'] . "',
-								`fleet_start_system` = '" . $this->_current_planet['planet_system'] . "',
-								`fleet_start_planet` = '" . $this->_current_planet['planet_planet'] . "',
-								`fleet_start_type` = '" . $this->_current_planet['planet_type'] . "',
-								`fleet_end_time` = '" . $fleet['end_time'] . "',
-								`fleet_end_galaxy` = '" . intval($_POST['galaxy']) . "',
-								`fleet_end_system` = '" . intval($_POST['system']) . "',
-								`fleet_end_planet` = '" . intval($_POST['planet']) . "',
-								`fleet_end_type` = '" . intval($_POST['planettype']) . "',
-								`fleet_target_owner` = '" . $TargetRow['planet_user_id'] . "',
-								`fleet_creation` = '" . time() . "';");
+        $this->_db->query(
+            "INSERT INTO " . FLEETS . " SET
+            `fleet_owner` = '" . $this->_current_user['user_id'] . "',
+            `fleet_mission` = '" . intval($order) . "',
+            `fleet_amount` = '" . $FleetShipCount . "',
+            `fleet_array` = '" . $FleetDBArray . "',
+            `fleet_start_time` = '" . $fleet['start_time'] . "',
+            `fleet_start_galaxy` = '" . $this->_current_planet['planet_galaxy'] . "',
+            `fleet_start_system` = '" . $this->_current_planet['planet_system'] . "',
+            `fleet_start_planet` = '" . $this->_current_planet['planet_planet'] . "',
+            `fleet_start_type` = '" . $this->_current_planet['planet_type'] . "',
+            `fleet_end_time` = '" . $fleet['end_time'] . "',
+            `fleet_end_galaxy` = '" . intval($_POST['galaxy']) . "',
+            `fleet_end_system` = '" . intval($_POST['system']) . "',
+            `fleet_end_planet` = '" . intval($_POST['planet']) . "',
+            `fleet_end_type` = '" . intval($_POST['planettype']) . "',
+            `fleet_target_owner` = '" . $TargetRow['planet_user_id'] . "',
+            `fleet_creation` = '" . time() . "';"
+        );
 
         $UserDeuterium -= $consumption;
 
-        $this->_db->query("UPDATE " . PLANETS . " AS p
-								INNER JOIN " . SHIPS . " AS s ON s.ship_planet_id = p.`planet_id` SET
-								$FleetSubQRY
-								p.`planet_deuterium` = '" . ( ( $UserDeuterium < 1 ) ? 0 : $UserDeuterium ) . "'
-								WHERE p.`planet_id` = '" . $this->_current_planet['planet_id'] . "';");
+        $this->_db->query(
+            "UPDATE " . PLANETS . " AS p
+            INNER JOIN " . SHIPS . " AS s ON s.ship_planet_id = p.`planet_id` SET
+            $FleetSubQRY
+            p.`planet_deuterium` = '" . ( ( $UserDeuterium < 1 ) ? 0 : $UserDeuterium ) . "'
+            WHERE p.`planet_id` = '" . $this->_current_planet['planet_id'] . "';"
+        );
 
         $CurrentFlyingFleets++;
 
@@ -777,9 +797,11 @@ class Galaxy extends Controller
      */
     private function reduce_deuterium()
     {
-        $this->_db->query("UPDATE " . PLANETS . " SET
-								`planet_deuterium` = `planet_deuterium` -  10
-								WHERE `planet_id` = '" . $this->_current_planet['planet_id'] . "' LIMIT 1");
+        $this->_db->query(
+            "UPDATE " . PLANETS . " SET
+            `planet_deuterium` = `planet_deuterium` -  10
+            WHERE `planet_id` = '" . $this->_current_planet['planet_id'] . "' LIMIT 1"
+        );
     }
 }
 
