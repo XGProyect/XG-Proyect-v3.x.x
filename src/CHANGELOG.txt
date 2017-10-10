@@ -6,6 +6,9 @@ CORE
 [#000] Created several models files to store in one places all the queries related to a controller or library.-
 [#000] Reworked how many libraries are included.-
 [#000] Fixed issue that was causing admins to be locked out when they set the game as disabled.-
+[#000] Improved file access security.-
+[#000] Vendors was relocated to third_party.-
+[#000] New system folder created, to adapt to future plans.-
 
 ADMIN
 [#000] Modified config.php file writable alert.-
