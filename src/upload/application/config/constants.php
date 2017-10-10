@@ -10,13 +10,19 @@
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
- * @version  3.0.0
+ * @version  3.1.0
  */
 ###########################################################################
 #
 # Constants should not be changed, unless you know what you are doing!
 #
 ###########################################################################
+
+/**
+ * 
+ * SYSTEM CONFIGURATION
+ * 
+ */
 // GAME FILES VERSION
 define('SYSTEM_VERSION', '3.1.0');
 
@@ -32,51 +38,11 @@ define('ERROR_LOGS_MAIL', '');
 // RUN QUERIES FLAG
 define('ADMIN_ACCESS_QUERY', true);
 
-// GLOBAL PATHS
-define('APP_PATH', 'application/');
-define('PUBLIC_PATH', 'public/');
-define('VENDOR_PATH', 'third_party/');
-define('SYSTEM_PATH', 'system/');
-define('DATA_PATH', 'data/');
-
-// MODELS PATH
-define('MODELS_PATH', APP_PATH . 'models/');
-
-// VISUAL DEFAULT PATHS
-define('CSS_PATH', PUBLIC_PATH . 'css/');
-define('IMG_PATH', PUBLIC_PATH . 'images/');
-define('JS_PATH', PUBLIC_PATH . 'js/');
-
-// TEMPLATE DEFAULTS
-define('TEMPLATE_DIR', APP_PATH . 'views/');
-define('SKIN_PATH', PUBLIC_PATH . 'upload/skins/');
-define('DEFAULT_SKINPATH', SKIN_PATH . 'xgproyect/');
-
-// APPLICATION PATHS
-define('CONFIGS_PATH', APP_PATH . 'config/');
-define('CONTROLLERS_PATH', APP_PATH . 'controllers/');
-define('CORE_PATH', APP_PATH . 'core/');
-define('HOOKS_PATH', APP_PATH . 'hooks/');
-define('LANG_PATH', APP_PATH . 'lang/');
-define('LIB_PATH', APP_PATH . 'libraries/');
-
-// CONTROLLERS PATHS
-define('ADMIN_PATH', CONTROLLERS_PATH . 'adm/');
-define('AJAX_PATH', CONTROLLERS_PATH . 'ajax/');
-define('GAME_PATH', CONTROLLERS_PATH . 'game/');
-define('HOME_PATH', CONTROLLERS_PATH . 'home/');
-define('INSTALL_PATH', CONTROLLERS_PATH . 'install/');
-
-// OTHER PATHS
-define('LOGS_PATH', DATA_PATH . 'logs/');
-define('BACKUP_PATH', DATA_PATH . 'backups/');
-
-// default skin path
-define('DPATH', DEFAULT_SKINPATH);
-
-// GAME URL
-define('GAMEURL', "http://" . $_SERVER['HTTP_HOST'] . "/");
-
+/**
+ * 
+ * SYSTEM PATHS CONFIGURATION
+ * 
+ */
 // BASE PATH
 define(
         'BASE_PATH', $_SERVER['HTTP_HOST'] . str_replace(
@@ -86,6 +52,84 @@ define(
 
 // SYSTEM ROOT, IGNORING PUBLIC
 define('SYSTEM_ROOT', 'http://' . strtr(BASE_PATH, ['public' => '']));
+
+// GAME URL
+define('GAMEURL', "http://" . $_SERVER['HTTP_HOST'] . "/");
+
+// ADMIN PATHS
+define('ADM_URL', 'http://' . strtr(BASE_PATH, ['public' => '']));
+define('ADM_SECURE_URL', 'https://' . strtr(BASE_PATH, ['public' => '']));
+
+/**
+ * 
+ * GLOBAL DIRECTORY STRUCTURE
+ * 
+ */
+define('APP_PATH', 'application/');
+define('DATA_PATH', 'data/');
+define('PUBLIC_PATH', 'public/');
+define('SYSTEM_PATH', 'system/');
+
+/**
+ * 
+ * APPLICATION DIRECTORY STRUCTURE
+ * 
+ */
+define('CONFIGS_PATH', APP_PATH . 'config/');
+define('CONTROLLERS_PATH', APP_PATH . 'controllers/');
+define('CORE_PATH', APP_PATH . 'core/');
+define('HOOKS_PATH', APP_PATH . 'hooks/');
+define('LANG_PATH', APP_PATH . 'lang/');
+define('LIB_PATH', APP_PATH . 'libraries/');
+//define('LOGS_PATH', APP_PATH . 'logs/');
+define('MODELS_PATH', APP_PATH . 'models/');
+define('VENDOR_PATH', APP_PATH . 'third_party/');
+define('TEMPLATE_DIR', APP_PATH . 'views/');
+
+/**
+ * 
+ * CONTROLLERS DIRECTORY STRUCTURE
+ * 
+ */
+define('ADMIN_PATH', CONTROLLERS_PATH . 'adm/');
+define('AJAX_PATH', CONTROLLERS_PATH . 'ajax/');
+define('GAME_PATH', CONTROLLERS_PATH . 'game/');
+define('HOME_PATH', CONTROLLERS_PATH . 'home/');
+define('INSTALL_PATH', CONTROLLERS_PATH . 'install/');
+
+/**
+ * 
+ * DATA DIRECTORY STRUCTURE
+ * 
+ */
+define('LOGS_PATH', DATA_PATH . 'logs/');
+define('BACKUP_PATH', DATA_PATH . 'backups/');
+
+/**
+ * 
+ * PUBLIC DIRECTORY STRUCTURE
+ * 
+ */
+define('CSS_PATH', PUBLIC_PATH . 'css/');
+define('IMG_PATH', PUBLIC_PATH . 'images/');
+define('JS_PATH', PUBLIC_PATH . 'js/');
+define('UPLOAD_PATH', PUBLIC_PATH . 'upload/');
+
+/**
+ * 
+ * SKIN DIRECTORY STRUCTURE
+ * 
+ */
+define('SKIN_PATH', UPLOAD_PATH . 'skins/');
+define('DEFAULT_SKINPATH', SKIN_PATH . 'xgproyect/');
+define('DPATH', DEFAULT_SKINPATH);
+
+/**
+ * 
+ * GAME MECHANICS RELATED
+ * You can change almost anything below without breaking the game
+ * 
+ */
 
 // UNIVERSE DATA, GALAXY, SYSTEMS AND PLANETS || DEFAULT 9-499-15 RESPECTIVELY
 define('MAX_GALAXY_IN_WORLD', 9);
@@ -129,8 +173,22 @@ define('DEBRIS_MIN_VISIBLE_SIZE', 300);
 
 // DESTROYED PLANETS LIFE TIME
 define('PLANETS_LIFE_TIME', 24); // IN HOURS
+
 // VACATION TIME THAT AN USER HAS TO BE ON VACATION MODE BEFORE IT CAN REMOVE IT
 define('VACATION_TIME_FORCED', 2); // IN DAYS
+
+/**
+ * 
+ * DATABASE RELATED 
+ * 
+ */
+
+###########################################################################
+#
+# Constants should not be changed, unless you know what you are doing!
+#
+###########################################################################
+
 // TO PREVENT ERRORS
 if (!defined('DB_PREFIX')) {
 

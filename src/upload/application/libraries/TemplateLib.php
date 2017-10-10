@@ -258,9 +258,8 @@ class TemplateLib
     private function installHeader()
     {
         $parse['title']     = 'Install';
-        $parse['xgp_root']  = XGP_ROOT;
-        $parse['js_path']   = XGP_ROOT . JS_PATH;
-        $parse['css_path']  = XGP_ROOT . CSS_PATH;
+        $parse['js_path']   = JS_PATH;
+        $parse['css_path']  = CSS_PATH;
 
         return $this->parseTemplate($this->getTemplate('install/simple_header'), $parse);
     }
@@ -621,7 +620,7 @@ class TemplateLib
         $items          = '';
         $flag           = '';
         $pages = array(
-            ['', $this->langs['mn_index'], '1'],
+            ['home', $this->langs['mn_index'], '1'],
             ['moderation', $this->langs['mn_permissions'], '1'],
             ['reset', $this->langs['mn_reset_universe'], '1'],
             ['queries', $this->langs['mn_sql_queries'], '1'],
@@ -668,14 +667,14 @@ class TemplateLib
             // URL
             if (FunctionsLib::readConfig('ssl_enabled') == 1) {
 
-                $url = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'];
+                $url = ADM_SECURE_URL;
             } else {
 
-                $url = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'];
+                $url = ADM_URL;
             }
 
             $items  .= '<li' . ($current_page == $data[0] ?' class="active"' : '') . '>
-                <a href="' . $url . '?page=' . $data[0] . '" ' . $extra . '>' . $data[1] . '</a></li>';
+                <a href="' . $url . 'admin.php?page=' . $data[0] . '" ' . $extra . '>' . $data[1] . '</a></li>';
 
             $parse_block[$data[2]] = $items;
         }
