@@ -49,22 +49,15 @@ class Colonize extends Missions
     public function colonizeMission($fleet_row)
     {
         if ($fleet_row['fleet_mess'] == 0) {
-            $colonization_check = $this->_db->queryFetch("SELECT
-                                                                                                                                    (SELECT COUNT(*)
-                                                                                                                                            FROM " . PLANETS . " AS pc1
-                                                                                                                                            WHERE pc1.`planet_user_id` = '" . $fleet_row['fleet_owner'] . "' AND
-                                                                                                                                                            pc1.`planet_type` = '1' AND
-                                                                                                                                                            pc1.`planet_destroyed` = '0') AS planet_count,
-                                                                                                                                    (SELECT COUNT(*)
-                                                                                                                                            FROM " . PLANETS . " AS pc2
-                                                                                                                                            WHERE pc2.`planet_galaxy` = '" . $fleet_row['fleet_end_galaxy'] . "' AND
-                                                                                                                                                            pc2.`planet_system` = '" . $fleet_row['fleet_end_system'] . "' AND
-                                                                                                                                                            pc2.`planet_planet` = '" . $fleet_row['fleet_end_planet'] . " AND
-                                                                                                                                                            pc2.`planet_type` = 1') AS galaxy_count,
-                                                                                                                                    (SELECT `research_astrophysics`
-                                                                                                                                            FROM " . RESEARCH . "
-                                                                                                                                            WHERE `research_user_id` = '" . $fleet_row['fleet_owner'] . "') AS astro_level"
-            );
+            
+            $colonization_check = $this->Missions_Model->getPlanetAndUserCountsCounts([
+                'user_id' => $fleet_row['fleet_owner'],
+                'coords' => [
+                    'galaxy' => $fleet_row['fleet_end_galaxy'],
+                    'system' => $fleet_row['fleet_end_system'],
+                    'planet' => $fleet_row['fleet_end_planet'],
+                ]
+            ]);
 
             // SOME REQUIRED VALUES
             $target_coords = sprintf($this->langs['sys_adress_planet'], $fleet_row['fleet_end_galaxy'], $fleet_row['fleet_end_system'], $fleet_row['fleet_end_planet']);
@@ -90,33 +83,33 @@ class Colonize extends Missions
                         $this->colonize_message($fleet_row['fleet_owner'], $message[2], $fleet_row['fleet_start_time']);
                         
                         if ($fleet_row['fleet_amount'] == 1) {
-                            $this->_db->query("UPDATE " . USERS_STATISTICS . " AS us SET
-                                                                                                    us.`user_statistic_ships_points` = us.`user_statistic_ships_points` - " . Statistics_library::calculatePoints(208, 1) . "
-                                                                                                    WHERE us.`user_statistic_user_id` = (SELECT p.planet_user_id FROM " . PLANETS . " AS p
-                                                                                                                                                                                    WHERE p.planet_galaxy = '" . $fleet_row['fleet_start_galaxy'] . "' AND
-                                                                                                                                                                                                    p.planet_system = '" . $fleet_row['fleet_start_system'] . "' AND
-                                                                                                                                                                                                    p.planet_planet = '" . $fleet_row['fleet_start_planet'] . "' AND
-                                                                                                                                                                                                    p.planet_type = '" . $fleet_row['fleet_start_type'] . "');");
-
+                            $this->Missions_Model->updateColonizationStatistics([
+                                'points' => Statistics_library::calculatePoints(208, 1),
+                                'coords' => [
+                                    'galaxy' => $fleet_row['fleet_start_galaxy'],
+                                    'system' => $fleet_row['fleet_start_system'],
+                                    'planet' => $fleet_row['fleet_start_planet'],
+                                    'type' => $fleet_row['fleet_start_type']
+                                ]
+                            ]);
                             parent::storeResources($fleet_row);
                             parent::removeFleet($fleet_row['fleet_id']);
                         } else {
                             parent::storeResources($fleet_row);
 
-                            $this->_db->query("UPDATE " . FLEETS . ", " . USERS_STATISTICS . " SET
-                                                                                                    `fleet_array` = '" . $this->build_new_fleet($fleet_row['fleet_array']) . "',
-                                                                                                    `fleet_amount` = `fleet_amount` - 1,
-                                                                                                    `fleet_resource_metal` = '0',
-                                                                                                    `fleet_resource_crystal` = '0',
-                                                                                                    `fleet_resource_deuterium` = '0',
-                                                                                                    `fleet_mess` = '1',
-                                                                                                    `user_statistic_ships_points` = `user_statistic_ships_points` - " . Statistics_library::calculatePoints(208, 1) . "
-                                                                                                    WHERE `fleet_id` = '" . $fleet_row['fleet_id'] . "' AND
-                                                                                                                    `user_statistic_user_id` = (SELECT planet_user_id FROM " . PLANETS . "
-                                                                                                                                                                                    WHERE planet_galaxy = '" . $fleet_row['fleet_start_galaxy'] . "' AND
-                                                                                                                                                                                                    planet_system = '" . $fleet_row['fleet_start_system'] . "' AND
-                                                                                                                                                                                                    planet_planet = '" . $fleet_row['fleet_start_planet'] . "' AND
-                                                                                                                                                                                                    planet_type = '" . $fleet_row['fleet_start_type'] . "');");
+                            $this->Missions_Model->updateColonizatonReturningFleet([
+                                'ships' => $this->build_new_fleet($fleet_row['fleet_array']),
+                                'points' => Statistics_library::calculatePoints(208, 1),
+                                'fleet_id' => $fleet_row['fleet_id'],
+                                'coords' => [
+                                    'galaxy' => $fleet_row['fleet_start_galaxy'],
+                                    'system' => $fleet_row['fleet_start_system'],
+                                    'planet' => $fleet_row['fleet_start_planet'],
+                                    'type' => $fleet_row['fleet_start_type']
+                                ]
+                            ]);
+                            
+
                         }
                     } else {
                         $this->colonize_message($fleet_row['fleet_owner'], $message[3], $fleet_row['fleet_end_time']);

@@ -494,6 +494,96 @@ class Missions
         
 
     }
+
+    /**
+     * Get planet and user data before colonization can take place
+     * 
+     * @param array $data User and Planet data
+     * 
+     * @return array
+     */
+    public function getPlanetAndUserCountsCounts($data = [])
+    {
+        if (is_array($data)) {
+        
+            return $this->db->queryFetch(
+                "SELECT
+                    (SELECT COUNT(*)
+                            FROM " . PLANETS . " AS pc1
+                            WHERE pc1.`planet_user_id` = '" . $data['user_id'] . "' AND
+                                            pc1.`planet_type` = '1' AND
+                                            pc1.`planet_destroyed` = '0') AS planet_count,
+                    (SELECT COUNT(*)
+                            FROM " . PLANETS . " AS pc2
+                            WHERE pc2.`planet_galaxy` = '" . $data['coords']['galaxy'] . "' AND
+                                            pc2.`planet_system` = '" . $data['coords']['system'] . "' AND
+                                            pc2.`planet_planet` = '" . $data['coords']['fleet_end_planet'] . " AND
+                                            pc2.`planet_type` = 1') AS galaxy_count,
+                    (SELECT `research_astrophysics`
+                            FROM " . RESEARCH . "
+                            WHERE `research_user_id` = '" . $data['user_id'] . "') AS astro_level"
+            );
+        }
+        
+        return [];
+    }
+    
+    /**
+     * Updates the points after the colonization took place
+     * 
+     * @param array $data Data to update
+     * 
+     * @return void
+     */
+    public function updateColonizationStatistics($data = [])
+    {
+        if (is_array($data)) {
+
+            $this->db->query(
+                "UPDATE " . USERS_STATISTICS . " AS us SET
+                us.`user_statistic_ships_points` = us.`user_statistic_ships_points` - " . $data['points'] . "
+                WHERE us.`user_statistic_user_id` = (
+                    SELECT p.planet_user_id FROM " . PLANETS . " AS p
+                    WHERE p.planet_galaxy = '" . $data['coords']['galaxy'] . "' AND
+                        p.planet_system = '" . $data['coords']['system'] . "' AND
+                        p.planet_planet = '" . $data['coords']['planet'] . "' AND
+                        p.planet_type = '" . $data['coords']['type'] . "'
+                );"
+            );   
+        }
+    }
+    
+    /**
+     * Updates the fleet array and points by fleet id and coords
+     * 
+     * @param array $data Data to update
+     * 
+     * @return void
+     */
+    public function updateColonizatonReturningFleet($data = [])
+    {
+        if (is_array($data)) {
+            
+            $this->db->query(
+                "UPDATE " . FLEETS . ", " . USERS_STATISTICS . " SET
+                `fleet_array` = '" . $data['ships'] . "',
+                `fleet_amount` = `fleet_amount` - 1,
+                `fleet_resource_metal` = '0',
+                `fleet_resource_crystal` = '0',
+                `fleet_resource_deuterium` = '0',
+                `fleet_mess` = '1',
+                `user_statistic_ships_points` = `user_statistic_ships_points` - " . $data['points'] . "
+                WHERE `fleet_id` = '" . $data['fleet_id'] . "' AND
+                    `user_statistic_user_id` = (
+                    SELECT planet_user_id FROM " . PLANETS . "
+                    WHERE planet_galaxy = '" . $data['coords']['galaxy'] . "' AND
+                        planet_system = '" . $data['coords']['system'] . "' AND
+                        planet_planet = '" . $data['coords']['planet'] . "' AND
+                        planet_type = '" . $data['coords']['type'] . "'
+                );"
+            );
+        }
+    }
 }
 
 /* end of missions.php */
