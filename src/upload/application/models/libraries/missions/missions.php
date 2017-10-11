@@ -529,6 +529,12 @@ class Missions
     }
     
     /**
+     * 
+     * COLONIZATION
+     * 
+     */
+    
+    /**
      * Updates the points after the colonization took place
      * 
      * @param array $data Data to update
@@ -581,6 +587,64 @@ class Missions
                         planet_planet = '" . $data['coords']['planet'] . "' AND
                         planet_type = '" . $data['coords']['type'] . "'
                 );"
+            );
+        }
+    }
+    
+    /**
+     * 
+     * DESTROY
+     * 
+     */
+    
+    
+    /**
+     * 
+     * 
+     * EXPEDITION
+     * 
+     */
+    
+    /**
+     * Updates the fleet array and points by fleet id and coords
+     * 
+     * @param array $data Data to update
+     * 
+     * @return void
+     */
+    public function updateFleetArrayById($data = [])
+    {
+        if (is_array($data)) {
+
+            $this->db->query(
+                "UPDATE " . FLEETS . " SET
+                `fleet_array` = '" . $data['ships'] . "',
+                `fleet_mess` = '1'
+                WHERE `fleet_id` = '" . (int)$data['fleet_id'] . "';"
+            );
+        }
+    }
+    
+    /**
+     * Updates the fleet resources with what we found on the expedition
+     * 
+     * @param array $data Data to update
+     * 
+     * @return void
+     */
+    public function updateFleetResourcesById($data = [])
+    {
+        if (is_array($data)) {
+
+            $this->db->query(
+                "UPDATE " . FLEETS . " AS f
+                INNER JOIN " . PREMIUM . " AS pr ON pr.premium_user_id = f.fleet_owner SET
+                `fleet_resource_metal` = `fleet_resource_metal` + '" . $data['found']['metal'] . "',
+                `fleet_resource_crystal` = `fleet_resource_crystal` + '" . $data['found']['crystal'] . "',
+                `fleet_resource_deuterium` = `fleet_resource_deuterium` + '" . $data['found']['deuterium'] . "',
+                `premium_dark_matter` = `premium_dark_matter` + '" . $data['found']['darkmatter'] . "',
+                `fleet_mess` = '1'
+                WHERE `fleet_id` = '" . (int)$data['fleet_id'] . "';"
             );
         }
     }

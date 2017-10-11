@@ -180,12 +180,11 @@ class Expedition extends Missions
                     $fleet_row['fleet_end_stay']
                 );
 
-                $this->_db->query(
-                    "UPDATE " . FLEETS . " SET
-                    `fleet_array` = '" . $new_ships . "',
-                    `fleet_mess` = '1'
-                    WHERE `fleet_id` = '" . $fleet_row['fleet_id'] . "';"
-                );
+                $this->Missions_Model->updateFleetArrayById([
+                    'ships' => $new_ships,
+                    'fleet_id' => $fleet_row['fleet_id']
+                ]);
+
             } else {
                 $this->expeditionMessage(
                     $fleet_row['fleet_owner'],
@@ -240,16 +239,15 @@ class Expedition extends Missions
             $found_darkmatter = ( $fleet_capacity > 10000 ) ? intval(3 * log($fleet_capacity / 10000) * 100) : 0;
             $found_darkmatter = mt_rand($found_darkmatter / 2, $found_darkmatter);
 
-            $this->_db->query(
-                "UPDATE " . FLEETS . " AS f
-                INNER JOIN " . PREMIUM . " AS pr ON pr.premium_user_id = f.fleet_owner SET
-                `fleet_resource_metal` = `fleet_resource_metal` + '" . $found_metal . "',
-                `fleet_resource_crystal` = `fleet_resource_crystal` + '" . $found_crystal . "',
-                `fleet_resource_deuterium` = `fleet_resource_deuterium` + '" . $found_deuterium . "',
-                `premium_dark_matter` = `premium_dark_matter` + '" . $found_darkmatter . "',
-                `fleet_mess` = '1'
-                WHERE `fleet_id` = '" . $fleet_row['fleet_id'] . "';"
-            );
+            $this->Missions_Model->updateFleetResourcesById([
+                'found' => [
+                    'metal' => $found_metal,
+                    'crystal' => $found_crystal,
+                    'deuterium' => $found_deuterium,
+                    'darkmatter' => $found_darkmatter
+                ],
+                'fleet_id' => $fleet_row['fleet_id']
+            ]);
 
             $message = sprintf(
                 $this->langs['sys_expe_found_goods'],
@@ -308,12 +306,10 @@ class Expedition extends Missions
             }
         }
 
-        $this->_db->query(
-            "UPDATE " . FLEETS . " SET
-            `fleet_array` = '" . $new_ships . "',
-            `fleet_mess` = '1'
-            WHERE `fleet_id` = '" . $fleet_row['fleet_id'] . "';"
-        );
+        $this->Missions_Model->updateFleetArrayById([
+            'ships' => $new_ships,
+            'fleet_id' => $fleet_row['fleet_id']
+        ]);
 
         $message = $this->langs['sys_expe_found_ships'] . $found_ship_message;
 
