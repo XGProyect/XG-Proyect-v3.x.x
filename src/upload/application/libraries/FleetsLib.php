@@ -478,16 +478,9 @@ class FleetsLib extends XGPCore
      */
     public static function enemyLink($fleet_row)
     {
-        $db = new Database();
-        $enemy_name = $db->queryFetch(
-            "SELECT `user_name`
-            FROM " . USERS . "
-            WHERE `user_id` = '" . intval($fleet_row['fleet_owner']) . "';"
-        );
-
         $url    = 'game.php?page=messages&mode=write&id=' . $fleet_row['fleet_owner'];
         $image  = FunctionsLib::setImage(DPATH . '/img/m.gif', parent::$lang['write_message']);
-        $link   = $enemy_name['user_name'] . ' ' . FunctionsLib::setUrl($url, '', $image);
+        $link   = $fleet_row['target_planet_user'] . ' ' . FunctionsLib::setUrl($url, '', $image);
 
         return $link;
     }
@@ -531,23 +524,6 @@ class FleetsLib extends XGPCore
             $current_user
         );
 
-        $db = new Database();
-        $planet_name    = $db->queryFetch(
-            "SELECT
-                (SELECT `planet_name`
-                FROM " . PLANETS . "
-                WHERE `planet_galaxy` = '" . intval($fleet_row['fleet_start_galaxy']) . "' AND
-                    `planet_system` = '" . intval($fleet_row['fleet_start_system']) . "' AND
-                    `planet_planet` = '" . intval($fleet_row['fleet_start_planet']) . "' AND
-                    `planet_type` = '" . intval($fleet_row['fleet_start_type']) . "') AS start_planet_name,
-                (SELECT `planet_name`
-                FROM " . PLANETS . "
-                WHERE `planet_galaxy` = '" . intval($fleet_row['fleet_end_galaxy']) . "' AND
-                    `planet_system` = '" . intval($fleet_row['fleet_end_system']) . "' AND
-                    `planet_planet` = '" . intval($fleet_row['fleet_end_planet']) . "' AND
-                    `planet_type` = '" . intval($fleet_row['fleet_end_type']) . "') AS target_planet_name"
-        );
-
         $StartType  = $fleet_row['fleet_start_type'];
         $TargetType = $fleet_row['fleet_end_type'];
 
@@ -561,7 +537,7 @@ class FleetsLib extends XGPCore
                 $StartID    = parent::$lang['cff_from_the_moon'];
             }
 
-            $StartID    .= $planet_name['start_planet_name'] . " ";
+            $StartID    .= $fleet_row['start_planet_name'] . " ";
             $StartID    .= FleetsLib::startLink($fleet_row, $FleetPrefix . $FleetStyle[$MissionType]);
 
             if ($MissionType != 15) {
@@ -585,7 +561,7 @@ class FleetsLib extends XGPCore
             }
 
 
-            $TargetID   .= $planet_name['target_planet_name'] . " ";
+            $TargetID   .= $fleet_row['target_planet_name'] . " ";
             $TargetID   .= FleetsLib::targetLink($fleet_row, $FleetPrefix . $FleetStyle[$MissionType]);
         } else {
 
@@ -597,7 +573,7 @@ class FleetsLib extends XGPCore
                 $StartID    = parent::$lang['cff_the_moon'];
             }
 
-            $StartID    .= $planet_name['start_planet_name'] . " ";
+            $StartID    .= $fleet_row['start_planet_name'] . " ";
             $StartID    .= FleetsLib::startLink($fleet_row, $FleetPrefix . $FleetStyle[$MissionType]);
 
             if ($MissionType != 15) {
@@ -620,7 +596,7 @@ class FleetsLib extends XGPCore
                 $TargetID   = parent::$lang['cff_from_position'];
             }
 
-            $TargetID .= $planet_name['target_planet_name'] . " ";
+            $TargetID .= $fleet_row['target_planet_name'] . " ";
             $TargetID .= FleetsLib::targetLink($fleet_row, $FleetPrefix . $FleetStyle[$MissionType]);
         }
 
