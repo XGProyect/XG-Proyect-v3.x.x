@@ -34,7 +34,6 @@ class Missions extends XGPCore
     protected $resource;
     protected $pricelist;
     protected $combat_caps;
-    protected $_db;
 
     /**
      * bbCode function.
@@ -47,7 +46,9 @@ class Missions extends XGPCore
     {
         parent::__construct();
 
-        $this->_db          = new Database();
+        // load model
+        parent::loadModel('libraries/missions/missions');
+        
         $this->langs        = parent::$lang;
         $this->resource     = parent::$objects->getObjects();
         $this->pricelist    = parent::$objects->getPrice();
@@ -63,7 +64,7 @@ class Missions extends XGPCore
      */
     protected function removeFleet($fleet_id)
     {
-        $this->_db->query("DELETE FROM " . FLEETS . " WHERE `fleet_id` = " . (int) $fleet_id);
+        $this->Missions_Model->deleteFleetById($fleet_id);
     }
 
     /**
@@ -75,11 +76,8 @@ class Missions extends XGPCore
      */
     protected function returnFleet($fleet_id)
     {
-        $this->_db->query(
-            "UPDATE " . FLEETS . " SET
-            `fleet_mess` = '1'
-            WHERE `fleet_id` = " . (int)$fleet_id
-        );
+        $this->Missions_Model->updateFleetStatusById($fleet_id);
+        
     }
 
     /**
@@ -111,7 +109,7 @@ class Missions extends XGPCore
         $ships          = explode(';', $fleet_row['fleet_array']);
         $ships_fields   = '';
 
-        foreach ($ships as $item => $group) {
+        foreach ($ships as $group) {
 
             if ($group != '') {
 
@@ -128,18 +126,22 @@ class Missions extends XGPCore
             $fuel_return = $fleet_row['fleet_fuel'] / 2;
         }
         
-        $this->_db->query(
-            "UPDATE " . PLANETS . " AS p
-            INNER JOIN " . SHIPS . " AS s ON s.ship_planet_id = p.`planet_id` SET
-            {$ships_fields}
-            `planet_metal` = `planet_metal` + '" . $fleet_row['fleet_resource_metal'] . "',
-            `planet_crystal` = `planet_crystal` + '" . $fleet_row['fleet_resource_crystal'] . "',
-            `planet_deuterium` = `planet_deuterium` + '" . ($fleet_row['fleet_resource_deuterium'] + $fuel_return) . "'
-            WHERE `planet_galaxy` = '" . $galaxy . "' AND
-                `planet_system` = '" . $system . "' AND
-                `planet_planet` = '" . $planet . "' AND
-                `planet_type` = '" . $type . "'"
-        );
+        $update_array = [
+            'resources' => [
+                'metal' => $fleet_row['fleet_resource_metal'],
+                'crystal' => $fleet_row['fleet_resource_crystal'],
+                'deuterium' => ($fleet_row['fleet_resource_deuterium'] + $fuel_return) 
+            ],
+            'ships' => $ships_fields,
+            'coords' => [
+                'galaxy' => $galaxy,
+                'system' => $system,
+                'planet' => $planet,
+                'type' => $type
+            ]
+        ];
+        
+        $this->Missions_Model->updatePlanetsShipsByCoords($update_array);
     }
 
     /**
@@ -168,23 +170,26 @@ class Missions extends XGPCore
 
         self::makeUpdate($fleet_row, $galaxy, $system, $planet, $type);
 
-        $this->_db->query(
-            "UPDATE " . PLANETS . " SET
-            `planet_metal` = `planet_metal` + '" . $fleet_row['fleet_resource_metal'] . "',
-            `planet_crystal` = `planet_crystal` + '" . $fleet_row['fleet_resource_crystal'] . "',
-            `planet_deuterium` = `planet_deuterium` + '" . $fleet_row['fleet_resource_deuterium'] . "'
-            WHERE `planet_galaxy` = '" . $galaxy . "' AND
-                `planet_system` = '" . $system . "' AND
-                `planet_planet` = '" . $planet . "' AND
-                `planet_type` = '" . $type . "'
-                LIMIT 1;"
-        );
+        $update_array = [
+            'resources' => [
+                'metal' => $fleet_row['fleet_resource_metal'],
+                'crystal' => $fleet_row['fleet_resource_crystal'],
+                'deuterium' => $fleet_row['fleet_resource_deuterium'] 
+            ],
+            'coords' => [
+                'galaxy' => $galaxy,
+                'system' => $system,
+                'planet' => $planet,
+                'type' => $type
+            ]
+        ];
+        
+        $this->Missions_Model->updatePlanetResourcesByCoords($update_array);
     }
 
     /**
      * makeUpdate
      *
-     * @param array $fleet_row Fleet row
      * @param int   $galaxy    Galaxy
      * @param int   $system    System
      * @param int   $planet    Planet
@@ -192,7 +197,7 @@ class Missions extends XGPCore
      *
      * @return void
      */
-    protected function makeUpdate($fleet_row, $galaxy, $system, $planet, $type)
+    protected function makeUpdate($galaxy, $system, $planet, $type)
     {
         $target_planet = $this->_db->queryFetch(
             "SELECT *
