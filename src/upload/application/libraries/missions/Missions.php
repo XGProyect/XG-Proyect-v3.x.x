@@ -207,7 +207,7 @@ class Missions extends XGPCore
             ]
         ]);
 
-        $target_user    = $this->Missions_Model->getAllPlanetDataByCoords(
+        $target_user    = $this->Missions_Model->getAllUserDataByUserId(
             $target_planet['planet_user_id']
         );
 
