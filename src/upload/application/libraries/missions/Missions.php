@@ -14,7 +14,6 @@
 
 namespace application\libraries\missions;
 
-use application\core\Database;
 use application\core\XGPCore;
 use application\libraries\Updates_library;
 
