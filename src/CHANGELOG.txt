@@ -9,9 +9,13 @@ CORE
 [#000] Improved file access security.-
 [#000] Vendors was relocated to third_party.-
 [#000] New system folder created, to adapt to future plans.-
+[#000] Reworked missions system.-
 
 ADMIN
 [#000] Modified config.php file writable alert.-
+
+MISSIONS
+[#000] Fixed duplicates issue.-
 
 BUILDINGS
 [#000] Rewritten the code to handle the buildings queue, created new buildings library.-
