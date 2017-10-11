@@ -72,7 +72,7 @@ class AdministrationLib extends XGPCore
      */
     public static function installDirExists()
     {
-        if (file_exists(XGP_ROOT . 'install/')) {
+        if (file_exists(XGP_ROOT . PUBLIC_PATH . 'install/')) {
 
             return true;
         } else {
