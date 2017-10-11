@@ -75,7 +75,7 @@ class Spy extends Missions
             $TargetSpyLvl = OfficiersLib::getMaxEspionage($target_data['research_espionage_technology'], $target_data['premium_officier_technocrat']);
             $fleet = explode(';', $fleet_row['fleet_array']);
             
-            parent::makeUpdate($fleet_row, $fleet_row['fleet_end_galaxy'], $fleet_row['fleet_end_system'], $fleet_row['fleet_end_planet'], $fleet_row['fleet_end_type']);
+            parent::makeUpdate($fleet_row['fleet_end_galaxy'], $fleet_row['fleet_end_system'], $fleet_row['fleet_end_planet'], $fleet_row['fleet_end_type']);
 
             foreach ($fleet as $a => $b) {
                 if ($b != '') {
