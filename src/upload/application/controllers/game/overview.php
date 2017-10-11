@@ -203,14 +203,15 @@ class Overview extends Controller
      * return fleets movements rows
      */
     private function get_fleet_movements()
-    {
-        $fleet = '';
-        $fleet_row = '';
-        $record = 0;
+    {        
+        $fleet      = '';
+        $fleet_row  = [];
+        $record     = 0;
 
         $own_fleets = $this->Overview_Model->getOwnFleets($this->_current_user['user_id']);
         
         foreach ($own_fleets as $fleets) {
+
             ######################################
             #
             # own fleets
@@ -218,43 +219,49 @@ class Overview extends Controller
             ######################################
 
             $start_time = $fleets['fleet_start_time'];
-            $stay_time = $fleets['fleet_end_stay'];
-            $end_time = $fleets['fleet_end_time'];
+            $stay_time  = $fleets['fleet_end_stay'];
+            $end_time   = $fleets['fleet_end_time'];
 
-            $target_galaxy = $fleets['fleet_end_galaxy'];
-            $target_system = $fleets['fleet_end_system'];
-            $target_planet = $fleets['fleet_end_planet'];
-            $fleet_status = $fleets['fleet_mess'];
-            $fleet_group = $fleets['fleet_group'];
-            $id = $fleets['fleet_id'];
+            $fleet_status   = $fleets['fleet_mess'];
+            $fleet_group    = $fleets['fleet_group'];
+            $id             = $fleets['fleet_id'];
 
             if ($fleets['fleet_owner'] == $this->_current_user['user_id']) {
 
                 $record++;
 
                 $label = 'fs';
-
+                $start_block_id = (string)$start_time.$id;
+                $stay_block_id  = (string)$stay_time.$id;
+                $end_block_id   = (string)$end_time.$id;
+                
+                $fleet_row[$start_block_id] = !isset($fleet_row[$start_block_id]) ? '' : $fleet_row[$start_block_id];
+                $fleet_row[$stay_block_id] = !isset($fleet_row[$stay_block_id]) ? '' : $fleet_row[$stay_block_id];
+                $fleet_row[$end_block_id] = !isset($fleet_row[$end_block_id]) ? '' : $fleet_row[$end_block_id];
+                
+                
                 if ($start_time > time()) {
 
-                    $fleet_row[$start_time . $id] = FleetsLib::flyingFleetsTable($fleets, 0, true, $label, $record, $this->_current_user);
+                    $fleet_row[$start_block_id] = FleetsLib::flyingFleetsTable($fleets, 0, true, $label, $record, $this->_current_user);
                 }
 
                 if (( $fleets['fleet_mission'] != 4 ) && ( $fleets['fleet_mission'] != 10 )) {
                     $label = 'ft';
 
                     if ($stay_time > time()) {
-                        $fleet_row[$stay_time . $id] = FleetsLib::flyingFleetsTable($fleets, 1, true, $label, $record, $this->_current_user);
+
+                        $fleet_row[$stay_block_id] = FleetsLib::flyingFleetsTable($fleets, 1, true, $label, $record, $this->_current_user);
                     }
 
                     $label = 'fe';
 
                     if ($end_time > time()) {
-                        $fleet_row[$end_time . $id] = FleetsLib::flyingFleetsTable($fleets, 2, true, $label, $record, $this->_current_user);
+                        $fleet_row[$end_block_id] = FleetsLib::flyingFleetsTable($fleets, 2, true, $label, $record, $this->_current_user);
                     }
                 }
 
                 if ($fleets['fleet_mission'] == 4 && $start_time < time() && $end_time > time()) {
-                    $fleet_row[$end_time . $id] = FleetsLib::flyingFleetsTable($fleets, 2, true, 'none', $record, $this->_current_user);
+                    $fleet_row[$end_block_id] = FleetsLib::flyingFleetsTable($fleets, 2, true, 'none', $record, $this->_current_user);
                 }
             }
 
@@ -264,16 +271,19 @@ class Overview extends Controller
             #
             ######################################
             if ($fleets['fleet_owner'] != $this->_current_user['user_id']) {
-
+                
                 if ($fleets['fleet_mission'] == 2) {
 
                     $record++;
                     $start_time = ($fleet_status > 0) ? '' : $fleets['fleet_start_time'];
 
+                    $start_block_id = (string)$start_time.$id;
+                    $fleet_row[$start_block_id] = !isset($fleet_row[$start_block_id]) ? '' : $fleet_row[$start_block_id];
+                    
                     if ($start_time > time()) {
 
-                        $fleet_row[$start_time . $id] = FleetsLib::flyingFleetsTable(
-                                        $fleets, 0, false, 'ofs', $record, $this->_current_user
+                        $fleet_row[$start_block_id] = FleetsLib::flyingFleetsTable(
+                            $fleets, 0, false, 'ofs', $record, $this->_current_user
                         );
                     }
                 }
@@ -287,8 +297,11 @@ class Overview extends Controller
                         $start_time = $fleets['fleet_start_time'];
                     }
 
+                    $start_block_id = (string)$start_time.$id;
+                    $fleet_row[$start_block_id] = !isset($fleet_row[$start_block_id]) ? '' : $fleet_row[$start_block_id];
+                    
                     if ($start_time > time()) {
-                        $fleet_row[$start_time . $id] = FleetsLib::flyingFleetsTable($fleets, 0, false, 'ofs', $record, $this->_current_user);
+                        $fleet_row[$start_block_id] = FleetsLib::flyingFleetsTable($fleets, 0, false, 'ofs', $record, $this->_current_user);
                     }
                 }
             }
@@ -307,12 +320,18 @@ class Overview extends Controller
                     $stay_time = $fleets['fleet_end_stay'];
                     $id = $fleets['fleet_id'];
 
+                    $start_block_id = (string)$start_time.$id;
+                    $stay_block_id  = (string)$stay_time.$id;
+
+                    $fleet_row[$start_block_id] = !isset($fleet_row[$start_block_id]) ? '' : $fleet_row[$start_block_id];
+                    $fleet_row[$stay_block_id] = !isset($fleet_row[$stay_block_id]) ? '' : $fleet_row[$stay_block_id];
+                    
                     if ($start_time > time()) {
-                        $fleet_row[$start_time . $id] = FleetsLib::flyingFleetsTable($fleets, 0, false, 'ofs', $record, $this->_current_user);
+                        $fleet_row[$start_block_id] = FleetsLib::flyingFleetsTable($fleets, 0, false, 'ofs', $record, $this->_current_user);
                     }
                     if ($fleets['fleet_mission'] == 5) {
                         if ($stay_time > time()) {
-                            $fleet_row[$stay_time . $id] = FleetsLib::flyingFleetsTable($fleets, 1, false, 'oft', $record, $this->_current_user);
+                            $fleet_row[$stay_block_id] = FleetsLib::flyingFleetsTable($fleets, 1, false, 'oft', $record, $this->_current_user);
                         }
                     }
                 }
@@ -322,11 +341,15 @@ class Overview extends Controller
         unset($own_fleets);
 
         if (count($fleet_row) > 0 && $fleet_row != '') {
+
             ksort($fleet_row);
 
             foreach ($fleet_row as $time => $content) {
+
                 $fleet .= $content . "\n";
             }
+            
+            unset($fleet_row);
         }
 
         return $fleet;
