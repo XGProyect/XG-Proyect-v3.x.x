@@ -517,7 +517,7 @@ class Missions
                             FROM " . PLANETS . " AS pc2
                             WHERE pc2.`planet_galaxy` = '" . $data['coords']['galaxy'] . "' AND
                                             pc2.`planet_system` = '" . $data['coords']['system'] . "' AND
-                                            pc2.`planet_planet` = '" . $data['coords']['fleet_end_planet'] . " AND
+                                            pc2.`planet_planet` = '" . $data['coords']['planet'] . " AND
                                             pc2.`planet_type` = 1') AS galaxy_count,
                     (SELECT `research_astrophysics`
                             FROM " . RESEARCH . "
@@ -669,10 +669,10 @@ class Missions
                 "SELECT p.`planet_name`, r.`research_weapons_technology`
                 FROM " . PLANETS . " AS p
                 INNER JOIN " . RESEARCH . " AS r ON r.research_user_id = p.planet_user_id
-                WHERE `planet_galaxy` = " . $data['galaxy'] . " AND
-                    `planet_system` = " . $data['system'] . " AND
-                    `planet_planet` = " . $data['planet'] . " AND
-                    `planet_type` = " . $data['type'] . ";"
+                WHERE `planet_galaxy` = " . $data['coords']['galaxy'] . " AND
+                    `planet_system` = " . $data['coords']['system'] . " AND
+                    `planet_planet` = " . $data['coords']['planet'] . " AND
+                    `planet_type` = " . $data['coords']['type'] . ";"
             );
         }
     }
@@ -694,10 +694,10 @@ class Missions
                 FROM " . PLANETS . " AS p
                 INNER JOIN " . DEFENSES . " AS d ON d.defense_planet_id = p.`planet_id`
                 INNER JOIN " . RESEARCH . " AS r ON r.research_user_id = p.planet_user_id
-                WHERE `planet_galaxy` = " . $data['galaxy'] . " AND
-                    `planet_system` = " . $data['system'] . " AND
-                    `planet_planet` = " . $data['planet'] . " AND
-                    `planet_type` = " . $data['type'] . ";"
+                WHERE `planet_galaxy` = " . $data['coords']['galaxy'] . " AND
+                    `planet_system` = " . $data['coords']['system'] . " AND
+                    `planet_planet` = " . $data['coords']['planet'] . " AND
+                    `planet_type` = " . $data['coords']['type'] . ";"
             );
         }
     }

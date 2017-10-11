@@ -55,7 +55,7 @@ class Colonize extends Missions
                 'coords' => [
                     'galaxy' => $fleet_row['fleet_end_galaxy'],
                     'system' => $fleet_row['fleet_end_system'],
-                    'planet' => $fleet_row['fleet_end_planet'],
+                    'planet' => $fleet_row['fleet_end_planet']
                 ]
             ]);
 
