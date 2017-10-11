@@ -600,7 +600,6 @@ class Missions
     
     /**
      * 
-     * 
      * EXPEDITION
      * 
      */
@@ -648,6 +647,88 @@ class Missions
             );
         }
     }
+    
+    /**
+     * 
+     * MISSILE
+     * 
+     */
+
+    /**
+     * Get all missiles attacker data by coords
+     * 
+     * @param array $data Coords
+     * 
+     * @return void
+     */
+    public function getMissileAttackerDataByCoords($data = [])
+    {
+        if (is_array($data)) {
+
+            return $this->db->queryFetch(
+                "SELECT p.`planet_name`, r.`research_weapons_technology`
+                FROM " . PLANETS . " AS p
+                INNER JOIN " . RESEARCH . " AS r ON r.research_user_id = p.planet_user_id
+                WHERE `planet_galaxy` = " . $data['galaxy'] . " AND
+                    `planet_system` = " . $data['system'] . " AND
+                    `planet_planet` = " . $data['planet'] . " AND
+                    `planet_type` = " . $data['type'] . ";"
+            );
+        }
+    }
+    
+    /**
+     * Get all missiles target data by coords
+     * 
+     * @param array $data Coords
+     * 
+     * @return void
+     */
+    public function getMissileTargetDataByCoords($data = [])
+    {
+        if (is_array($data)) {
+
+            return $this->db->queryFetch(
+
+                "SELECT p.`planet_id`, p.`planet_name`, p.`planet_user_id`, d.*, r.`research_shielding_technology`
+                FROM " . PLANETS . " AS p
+                INNER JOIN " . DEFENSES . " AS d ON d.defense_planet_id = p.`planet_id`
+                INNER JOIN " . RESEARCH . " AS r ON r.research_user_id = p.planet_user_id
+                WHERE `planet_galaxy` = " . $data['galaxy'] . " AND
+                    `planet_system` = " . $data['system'] . " AND
+                    `planet_planet` = " . $data['planet'] . " AND
+                    `planet_type` = " . $data['type'] . ";"
+            );
+        }
+    }
+    
+    /**
+     * Update planet target defenses based on the attack result
+     * 
+     * @param array $data Data to update
+     * 
+     * @return void
+     */
+    public function updatePlanetDefenses($data = [])
+    {
+        if (is_array($data)) {
+
+            $this->db->query(
+                "UPDATE " . DEFENSES . " SET
+                {$data['destroyed_query']}
+                `defense_anti-ballistic_missile` = '" . $data['amount'] . "'
+                WHERE defense_planet_id = '" . (int)$data['planet_id'] . "';"
+            );
+        }
+    }
+    
+    
+    
+
+
+
+                
+
 }
 
 /* end of missions.php */

@@ -52,28 +52,23 @@ class Missile extends Missions
 
             if ($fleet_row['fleet_mess'] == 0) {
 
-                $attacker_data  = $this->_db->queryFetch(
-                    "SELECT p.`planet_name`, r.`research_weapons_technology`
-                    FROM " . PLANETS . " AS p
-                    INNER JOIN " . RESEARCH . " AS r ON r.research_user_id = p.planet_user_id
-                    WHERE `planet_galaxy` = " . $fleet_row['fleet_start_galaxy'] . " AND
-                        `planet_system` = " . $fleet_row['fleet_start_system'] . " AND
-                        `planet_planet` = " . $fleet_row['fleet_start_planet'] . " AND
-                        `planet_type` = " . $fleet_row['fleet_start_type'] . ";"
-                );
+                $attacker_data  = $this->Missions_Model->getMissileAttackerDataByCoords([
+                    'coords' => [
+                        'galaxy' => $fleet_row['fleet_start_galaxy'],
+                        'system' => $fleet_row['fleet_start_system'],
+                        'planet' => $fleet_row['fleet_start_planet'],
+                        'type' => $fleet_row['fleet_start_type'],
+                    ]
+                ]);
 
-                $target_data = $this->_db->queryFetch(
-                    "SELECT p.`planet_id`, p.`planet_name`, p.`planet_user_id`, d.*, r.`research_shielding_technology`
-                    FROM " . PLANETS . " AS p
-                    INNER JOIN " . DEFENSES . " AS d ON d.defense_planet_id = p.`planet_id`
-                    INNER JOIN " . RESEARCH . " AS r ON r.research_user_id = p.planet_user_id
-                    WHERE `planet_galaxy` = " . $fleet_row['fleet_end_galaxy'] . " AND
-                                    `planet_system` = " . $fleet_row['fleet_end_system'] . " AND
-                                    `planet_planet` = " . $fleet_row['fleet_end_planet'] . " AND
-                                    `planet_type` = " . $fleet_row['fleet_end_type'] . ";"
-                );
-
-
+                $target_data  = $this->Missions_Model->getMissileTargetDataByCoords([
+                    'coords' => [
+                        'galaxy' => $fleet_row['fleet_end_galaxy'],
+                        'system' => $fleet_row['fleet_end_system'],
+                        'planet' => $fleet_row['fleet_end_planet'],
+                        'type' => $fleet_row['fleet_end_type'],
+                    ]
+                ]);
 
                 if ($target_data['defense_anti-ballistic_missile'] >= $fleet_row['fleet_amount']) {
 
@@ -129,12 +124,11 @@ class Missile extends Missions
 
                     if ($destroyed_query != '') {
 
-                        $this->_db->query(
-                            "UPDATE " . DEFENSES . " SET
-                            {$destroyed_query}
-                            `defense_anti-ballistic_missile` = '" . $amount . "'
-                            WHERE defense_planet_id = '" . $target_data['planet_id'] . "';"
-                        );
+                        $this->Missions_Model->updatePlanetDefenses([
+                            'destroyed_query' => $destroyed_query,
+                            'amount' => $amount,
+                            'planet_id' => $target_data['planet_id']
+                        ]);
                     }
                 }
 
