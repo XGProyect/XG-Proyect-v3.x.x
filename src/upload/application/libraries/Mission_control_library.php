@@ -76,7 +76,7 @@ class Mission_control_library
      * @return void
      */
     private function processMissions($all_fleets = [])
-    {
+    {        
         // validate
         if (!is_array($all_fleets) or empty($all_fleets)) {
             

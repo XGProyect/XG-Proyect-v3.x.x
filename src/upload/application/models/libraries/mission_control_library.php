@@ -84,6 +84,7 @@ class Mission_control_library
                 sf.`fleet_start_time` <= '" . time() . "' 
                     AND sf.`fleet_mess` ='0' 
             )
+            GROUP BY f.`fleet_id`
             ORDER BY f.`fleet_id` ASC"
         );
     }
@@ -124,6 +125,7 @@ class Mission_control_library
             (
                 ef.`fleet_start_time` <= '" . time() . "'
             )
+            GROUP BY f.`fleet_id`
             ORDER BY f.`fleet_id` ASC"
         );
     }
