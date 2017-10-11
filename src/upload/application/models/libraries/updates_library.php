@@ -131,44 +131,6 @@ class Updates_library
     }
     
     /**
-     * Get start fleets
-     * 
-     * @return array
-     */
-    public function getStartFleets()
-    {
-        return $this->db->queryFetchAll(
-            "SELECT 
-            fleet_start_galaxy, 
-            fleet_start_system, 
-            fleet_start_planet, 
-            fleet_start_type
-            FROM " . FLEETS . "
-            WHERE `fleet_start_time` <= '" . time() . "' AND `fleet_mess` ='0'
-            ORDER BY fleet_id ASC;"
-        );  
-    }
-    
-    /**
-     * Get end fleets
-     * 
-     * @return array
-     */
-    public function getEndFleets()
-    {
-        return $this->db->queryFetchAll(
-            "SELECT 
-            fleet_end_galaxy, 
-            fleet_end_system, 
-            fleet_end_planet, 
-            fleet_end_type
-            FROM " . FLEETS . "
-            WHERE `fleet_end_time` <= '" . time() . "
-            ORDER BY fleet_id ASC';"
-        );
-    }
-    
-    /**
      * Update planet buildings, queue, fields and statistics
      * 
      * @param string $building_name Building Name

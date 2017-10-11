@@ -17,16 +17,16 @@ namespace application\libraries\missions;
 use Lang;
 
 /**
- * AttackLang Class
+ * Attack_lang Class
  *
  * @category Classes
  * @package  Application
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
- * @version  3.0.0
+ * @version  3.1.0
  */
-class AttackLang implements Lang
+class Attack_lang implements Lang
 {
     private $lang;
 

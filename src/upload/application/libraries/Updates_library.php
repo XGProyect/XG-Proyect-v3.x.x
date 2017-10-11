@@ -155,36 +155,14 @@ class Updates_library extends XGPCore
     {
         // language issues if is not present
         if (!defined('IN_GAME')) {
+
             define('IN_GAME', true);
         }
 
-        $_fleets = $this->Update_Model->getStartFleets();
-
-        foreach ($_fleets as $row) {
-            
-            $array                  = array();
-            $array['planet_galaxy'] = $row['fleet_start_galaxy'];
-            $array['planet_system'] = $row['fleet_start_system'];
-            $array['planet_planet'] = $row['fleet_start_planet'];
-            $array['planet_type']   = $row['fleet_start_type'];
-
-            new MissionControlLib($array);
-        }
-
-        $_fleets = $this->Update_Model->getEndFleets();
-
-        foreach ($_fleets as $row) {
-
-            $array                  = array();
-            $array['planet_galaxy'] = $row['fleet_end_galaxy'];
-            $array['planet_system'] = $row['fleet_end_system'];
-            $array['planet_planet'] = $row['fleet_end_planet'];
-            $array['planet_type']   = $row['fleet_end_type'];
-
-            new MissionControlLib($array);
-        }
-
-        unset($_fleets);
+        // let's start the missions control process
+        $mission_control = new Mission_control_library();
+        $mission_control->arrivingFleets();
+        $mission_control->returningFleets();
     }
 
     /**

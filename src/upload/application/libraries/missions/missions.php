@@ -63,7 +63,7 @@ class Missions extends XGPCore
      */
     protected function removeFleet($fleet_id)
     {
-        parent::$db->query("DELETE FROM " . FLEETS . " WHERE `fleet_id` = " . (int) $fleet_id);
+        $this->_db->query("DELETE FROM " . FLEETS . " WHERE `fleet_id` = " . (int) $fleet_id);
     }
 
     /**
@@ -75,7 +75,7 @@ class Missions extends XGPCore
      */
     protected function returnFleet($fleet_id)
     {
-        parent::$db->query(
+        $this->_db->query(
             "UPDATE " . FLEETS . " SET
             `fleet_mess` = '1'
             WHERE `fleet_id` = " . (int)$fleet_id
@@ -128,7 +128,7 @@ class Missions extends XGPCore
             $fuel_return = $fleet_row['fleet_fuel'] / 2;
         }
         
-        parent::$db->query(
+        $this->_db->query(
             "UPDATE " . PLANETS . " AS p
             INNER JOIN " . SHIPS . " AS s ON s.ship_planet_id = p.`planet_id` SET
             {$ships_fields}
@@ -168,7 +168,7 @@ class Missions extends XGPCore
 
         self::makeUpdate($fleet_row, $galaxy, $system, $planet, $type);
 
-        parent::$db->query(
+        $this->_db->query(
             "UPDATE " . PLANETS . " SET
             `planet_metal` = `planet_metal` + '" . $fleet_row['fleet_resource_metal'] . "',
             `planet_crystal` = `planet_crystal` + '" . $fleet_row['fleet_resource_crystal'] . "',
@@ -194,7 +194,7 @@ class Missions extends XGPCore
      */
     protected function makeUpdate($fleet_row, $galaxy, $system, $planet, $type)
     {
-        $target_planet = parent::$db->queryFetch(
+        $target_planet = $this->_db->queryFetch(
             "SELECT *
             FROM `" . PLANETS . "` AS p
             LEFT JOIN `" . BUILDINGS . "` AS b ON b.building_planet_id = p.`planet_id`
@@ -206,7 +206,7 @@ class Missions extends XGPCore
                 `planet_type` = " . $type . ";"
         );
 
-        $target_user = parent::$db->queryFetch(
+        $target_user = $this->_db->queryFetch(
             "SELECT *
             FROM `" . USERS . "` AS u
             INNER JOIN " . RESEARCH . " AS r ON r.research_user_id = u.user_id

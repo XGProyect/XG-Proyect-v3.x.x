@@ -93,7 +93,7 @@ class Attack extends Missions
                     'missions' . DIRECTORY_SEPARATOR . 'attackLang.php';
             
             // set language for the reports
-            LangManager::getInstance()->setImplementation(new AttackLang($this->langs));
+            LangManager::getInstance()->setImplementation(new Attack_lang($this->langs));
             
             if ($fleet_row['fleet_group'] > 0) {
 
