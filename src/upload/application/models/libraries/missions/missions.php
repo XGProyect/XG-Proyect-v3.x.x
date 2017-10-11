@@ -722,13 +722,106 @@ class Missions
         }
     }
     
+    /**
+     * 
+     * RECYCLE
+     * 
+     */
+    
+    /**
+     * 
+     * SPY
+     * 
+     */
+
+    /**
+     * Get user data that's going to start the spy process
+     * 
+     * @param array $data Data to update
+     * 
+     * @return array
+     */
+    public function getSpyUserDataByCords($data = [])
+    {
+        if (is_array($data)) {
+
+            return $this->db->queryFetch(
+                "SELECT p.planet_name, p.planet_galaxy, p.planet_system, p.planet_planet, u.user_name, r.research_espionage_technology, pr.premium_officier_technocrat
+                    FROM " . PLANETS . " AS p
+                    INNER JOIN " . USERS . " AS u ON u.user_id = p.planet_user_id
+                    INNER JOIN " . PREMIUM . " AS pr ON pr.premium_user_id = p.planet_user_id
+                    INNER JOIN " . RESEARCH . " AS r ON r.research_user_id = p.planet_user_id
+                    WHERE p.`planet_galaxy` = " . $data['coords']['galaxy'] . " AND
+                        p.`planet_system` = " . $data['coords']['system'] . " AND
+                        p.`planet_planet` = " . $data['coords']['planet'] . " AND
+                        p.`planet_type` = " . $data['coords']['type'] . ";");
+        }
+        
+        return [];
+    }
+    
+    /**
+     * Get user data that's going to be inquired (spied)
+     * 
+     * @param array $data Data to update
+     * 
+     * @return array
+     */
+    public function getInquiredUserDataByCords($data = [])
+    {
+        if (is_array($data)) {
+
+            return $this->db->queryFetch(
+                "SELECT p.`planet_id`, p.planet_user_id, p.planet_name, p.planet_galaxy, p.planet_system, p.planet_planet, p.planet_metal, p.planet_crystal, p.planet_deuterium, p.planet_energy_max, s.*, d.*, b.*, r.*, pr.premium_officier_technocrat
+                    FROM " . PLANETS . " AS p
+                    INNER JOIN " . SHIPS . " AS s ON s.ship_planet_id = p.`planet_id`
+                    INNER JOIN " . DEFENSES . " AS d ON d.defense_planet_id = p.`planet_id`
+                    INNER JOIN " . BUILDINGS . " AS b ON b.building_planet_id = p.`planet_id`
+                    INNER JOIN " . USERS . " AS u ON u.user_id = p.planet_user_id
+                    INNER JOIN " . PREMIUM . " AS pr ON pr.premium_user_id = p.planet_user_id
+                    INNER JOIN " . RESEARCH . " AS r ON r.research_user_id = p.planet_user_id
+                    WHERE p.`planet_galaxy` = '" . $data['coords']['galaxy'] . "' AND
+                        p.`planet_system` = '" . $data['coords']['system'] . "' AND
+                        p.`planet_planet` = '" . $data['coords']['planet'] . "' AND
+                        p.`planet_type` = '" . $data['coords']['type'] . "';");
+        }
+        
+        return [];
+    }
+    
+    /**
+     * Update planet target defenses based on the attack result
+     * 
+     * @param array $data Data to update
+     * 
+     * @return void
+     */
+    public function updateCrystalDebrisByPlanetId($data = [])
+    {
+        if (is_array($data)) {
+
+            $this->db->query(
+                "UPDATE " . PLANETS . " SET
+                `planet_invisible_start_time` = '" . $data['time'] . "',
+                `planet_debris_crystal` = `planet_debris_crystal` + '" . $data['crystal'] . "'
+                WHERE `planet_id` = '" . $data['planet_id'] . "';"
+            );
+        }
+    }
     
     
-
-
-
+    /**
+     * 
+     * STAY
+     * 
+     */
                 
-
+    /**
+     * 
+     * TRANSPORT
+     * 
+     */
+    
 }
 
 /* end of missions.php */

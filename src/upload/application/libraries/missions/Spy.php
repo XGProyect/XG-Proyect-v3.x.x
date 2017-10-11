@@ -52,30 +52,24 @@ class Spy extends Missions
     public function spyMission($fleet_row)
     {        
         if ($fleet_row['fleet_mess'] == 0 && $fleet_row['fleet_start_time'] <= time()) {
-            $current_data = $this->_db->queryFetch(
-                "SELECT p.planet_name, p.planet_galaxy, p.planet_system, p.planet_planet, u.user_name, r.research_espionage_technology, pr.premium_officier_technocrat
-                    FROM " . PLANETS . " AS p
-                    INNER JOIN " . USERS . " AS u ON u.user_id = p.planet_user_id
-                    INNER JOIN " . PREMIUM . " AS pr ON pr.premium_user_id = p.planet_user_id
-                    INNER JOIN " . RESEARCH . " AS r ON r.research_user_id = p.planet_user_id
-                    WHERE p.`planet_galaxy` = " . $fleet_row['fleet_start_galaxy'] . " AND
-                        p.`planet_system` = " . $fleet_row['fleet_start_system'] . " AND
-                        p.`planet_planet` = " . $fleet_row['fleet_start_planet'] . " AND
-                        p.`planet_type` = " . $fleet_row['fleet_start_type'] . ";");
+            
+            $current_data = $this->Missions_Model->getSpyUserDataByCords([
+                'coords' => [
+                    'galaxy' => $fleet_row['fleet_start_galaxy'],
+                    'system' => $fleet_row['fleet_start_system'],
+                    'planet' => $fleet_row['fleet_start_planet'],
+                    'type' => $fleet_row['fleet_start_type']
+                ]
+             ]);
 
-            $target_data = $this->_db->queryFetch(
-                "SELECT p.`planet_id`, p.planet_user_id, p.planet_name, p.planet_galaxy, p.planet_system, p.planet_planet, p.planet_metal, p.planet_crystal, p.planet_deuterium, p.planet_energy_max, s.*, d.*, b.*, r.*, pr.premium_officier_technocrat
-                    FROM " . PLANETS . " AS p
-                    INNER JOIN " . SHIPS . " AS s ON s.ship_planet_id = p.`planet_id`
-                    INNER JOIN " . DEFENSES . " AS d ON d.defense_planet_id = p.`planet_id`
-                    INNER JOIN " . BUILDINGS . " AS b ON b.building_planet_id = p.`planet_id`
-                    INNER JOIN " . USERS . " AS u ON u.user_id = p.planet_user_id
-                    INNER JOIN " . PREMIUM . " AS pr ON pr.premium_user_id = p.planet_user_id
-                    INNER JOIN " . RESEARCH . " AS r ON r.research_user_id = p.planet_user_id
-                    WHERE p.`planet_galaxy` = '" . $fleet_row['fleet_end_galaxy'] . "' AND
-                        p.`planet_system` = '" . $fleet_row['fleet_end_system'] . "' AND
-                        p.`planet_planet` = '" . $fleet_row['fleet_end_planet'] . "' AND
-                        p.`planet_type` = '" . $fleet_row['fleet_end_type'] . "';");
+            $target_data = $this->Missions_Model->getInquiredUserDataByCords([
+                'coords' => [
+                    'galaxy' => $fleet_row['fleet_end_galaxy'],
+                    'system' => $fleet_row['fleet_end_system'],
+                    'planet' => $fleet_row['fleet_end_planet'],
+                    'type' => $fleet_row['fleet_end_type']
+                ]
+             ]);
 
             $CurrentSpyLvl = OfficiersLib::getMaxEspionage($current_data['research_espionage_technology'], $current_data['premium_officier_technocrat']);
             $TargetSpyLvl = OfficiersLib::getMaxEspionage($target_data['research_espionage_technology'], $target_data['premium_officier_technocrat']);
@@ -186,12 +180,11 @@ class Spy extends Missions
 
                         if ($TargetChances >= $SpyerChances) {
 
-                            $this->_db->query(
-                                "UPDATE " . PLANETS . " SET
-                                `planet_invisible_start_time` = '" . time() . "',
-                                `planet_debris_crystal` = `planet_debris_crystal` + '" . (0 + $SpyToolDebris) . "'
-                                WHERE `planet_id` = '" . $target_data['planet_id'] . "';"
-                            );
+                            $this->Missions_Model->updateCrystalDebrisByPlanetId([
+                                'time' => time(),
+                                'crystal' => (0 + $SpyToolDebris),
+                                'planet_id' => $target_data['planet_id']
+                            ]);
 
                             parent::removeFleet($fleet_row['fleet_id']);
                         } else {
