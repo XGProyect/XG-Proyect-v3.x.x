@@ -146,9 +146,11 @@ class Missions
     }
     
     /**
+     * Update planet ships by the provided coords and with the provided data
      * 
+     * @param array $data Data to update
      * 
-     * @param type $data
+     * @return void
      */
     public function updatePlanetsShipsByCoords($data = [])
     {
@@ -170,6 +172,13 @@ class Missions
         }
     }
     
+    /**
+     * Update planet resources by the provided coords and with the provided data
+     * 
+     * @param array $data Data to update
+     * 
+     * @return void
+     */
     public function updatePlanetResourcesByCoords($data = [])
     {
         if (is_array($data)) {
@@ -183,6 +192,54 @@ class Missions
                     `planet_system` = '" . $data['coords']['system'] . "' AND
                     `planet_planet` = '" . $data['coords']['planet'] . "' AND
                     `planet_type` = '" . $data['coords']['type'] . "'
+                LIMIT 1;"
+            );
+        }
+    }
+    
+    /**
+     * Get all planet data
+     * 
+     * @param array $data Data to update
+     * 
+     * @return array
+     */
+    public function getAllPlanetDataByCoords($data = [])
+    {
+        if (is_array($data)) {
+
+            return $this->db->queryFetch(
+                "SELECT *
+                FROM `" . PLANETS . "` AS p
+                LEFT JOIN `" . BUILDINGS . "` AS b ON b.building_planet_id = p.`planet_id`
+                LEFT JOIN `" . DEFENSES . "` AS d ON d.defense_planet_id = p.`planet_id`
+                LEFT JOIN `" . SHIPS . "` AS s ON s.ship_planet_id = p.`planet_id`
+                WHERE `planet_galaxy` = '" . $data['coords']['galaxy'] . "' AND
+                    `planet_system` = '" . $data['coords']['system'] . "' AND
+                    `planet_planet` = '" . $data['coords']['planet'] . "' AND
+                    `planet_type` = '" . $data['coords']['type'] . "'
+                LIMIT 1;"
+            );
+        }
+    }
+    
+    /**
+     * Get all user data by user ID
+     * 
+     * @param int $user_id User ID
+     * 
+     * @return array
+     */
+    public function getAllUserDataByUserId($user_id)
+    {
+        if ((int)$user_id > 0) {
+
+            return $this->db->queryFetch(
+                "SELECT *
+                FROM `" . USERS . "` AS u
+                INNER JOIN " . RESEARCH . " AS r ON r.research_user_id = u.user_id
+                INNER JOIN " . PREMIUM . " AS pr ON pr.premium_user_id = u.user_id
+                WHERE u.`user_id` = '" . $user_id . "'
                 LIMIT 1;"
             );
         }

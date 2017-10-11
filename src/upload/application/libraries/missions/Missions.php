@@ -188,37 +188,31 @@ class Missions extends XGPCore
     }
 
     /**
-     * makeUpdate
+     * Update planet resources, ships, and queues
      *
      * @param int   $galaxy    Galaxy
      * @param int   $system    System
      * @param int   $planet    Planet
-     * @param int   $type      Type
+     * @param int   $type      Planet Type
      *
      * @return void
      */
     protected function makeUpdate($galaxy, $system, $planet, $type)
     {
-        $target_planet = $this->_db->queryFetch(
-            "SELECT *
-            FROM `" . PLANETS . "` AS p
-            LEFT JOIN `" . BUILDINGS . "` AS b ON b.building_planet_id = p.`planet_id`
-            LEFT JOIN `" . DEFENSES . "` AS d ON d.defense_planet_id = p.`planet_id`
-            LEFT JOIN `" . SHIPS . "` AS s ON s.ship_planet_id = p.`planet_id`
-            WHERE `planet_galaxy` = " . $galaxy . " AND
-                `planet_system` = " . $system . " AND
-                `planet_planet` = " . $planet . " AND
-                `planet_type` = " . $type . ";"
+        $target_planet  = $this->Missions_Model->getAllPlanetDataByCoords([
+            'coords' => [
+                'galaxy' => $galaxy,
+                'system' => $system,
+                'planet' => $planet,
+                'type' => $type
+            ]
+        ]);
+
+        $target_user    = $this->Missions_Model->getAllPlanetDataByCoords(
+            $target_planet['planet_user_id']
         );
 
-        $target_user = $this->_db->queryFetch(
-            "SELECT *
-            FROM `" . USERS . "` AS u
-            INNER JOIN " . RESEARCH . " AS r ON r.research_user_id = u.user_id
-            INNER JOIN " . PREMIUM . " AS pr ON pr.premium_user_id = u.user_id
-            WHERE u.`user_id` = " . $target_planet['planet_user_id']
-        );
-
+        // update planet resources and queues
         Updates_library::updatePlanetResources($target_user, $target_planet, time());
     }
 }
