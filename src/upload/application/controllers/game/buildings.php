@@ -377,12 +377,17 @@ class Buildings extends Controller
             return true;
         }
         
-        if (!in_array($building_id, $this->_allowed_buildings)) {
+        if ($this->_building->isQueueFull()) {
+            
+            return false;
+        }
+        
+        if ($this->isWorkInProgress($building_id)) {
 
             return false;
         }
-
-        if ($this->isWorkInProgress($building_id)) {
+        
+        if (!in_array($building_id, $this->_allowed_buildings)) {
 
             return false;
         }
