@@ -48,61 +48,6 @@ class Mission_control_library
     }
     
     /**
-     * Lock all the required tables
-     * 
-     * @return void
-     */
-    public function lockTables()
-    {
-        $this->db->query(
-            "LOCK TABLE " . ACS_FLEETS . " WRITE,
-            " . ALLIANCE . " AS a WRITE,
-            " . REPORTS . " WRITE,
-            " . MESSAGES . " WRITE,
-            " . FLEETS . " WRITE,
-            " . FLEETS . " AS f WRITE,
-            " . FLEETS . " AS f1 WRITE,
-            " . FLEETS . " AS f2 WRITE,
-            " . PLANETS . " WRITE,
-            " . PLANETS . " AS pc1 WRITE,
-            " . PLANETS . " AS pc2 WRITE,
-            " . PLANETS . " AS p WRITE,
-            " . PLANETS . " AS m WRITE,
-            " . PLANETS . " AS mp WRITE,
-            " . PLANETS . " AS pm WRITE,
-            " . PLANETS . " AS pm2 WRITE,
-            " . PREMIUM . " WRITE,
-            " . PREMIUM . " AS pr WRITE,
-            " . PREMIUM . " AS pre WRITE,
-            " . SETTINGS . " WRITE,
-            " . SETTINGS . " AS se WRITE,
-            " . SHIPS . " WRITE,
-            " . SHIPS . " AS s WRITE,
-            " . BUILDINGS . " WRITE,
-            " . BUILDINGS . " AS b WRITE,
-            " . DEFENSES . " WRITE,
-            " . DEFENSES . " AS d WRITE,
-            " . RESEARCH . " WRITE,
-            " . RESEARCH . " AS r WRITE,
-            " . USERS_STATISTICS . " WRITE,
-            " . USERS_STATISTICS . " AS us WRITE,
-            " . USERS_STATISTICS . " AS usul WRITE,
-            " . USERS . " WRITE,
-            " . USERS . " AS u WRITE"
-        );
-    }
-    
-    /**
-     * Unlock previously locked tables
-     * 
-     * @return void
-     */
-    public function unlockTables()
-    {
-        $this->db->query("UNLOCK TABLES");
-    }
-    
-    /**
      * Return a list of all the arriving fleets that are going 
      * to be processed at this time.
      * 

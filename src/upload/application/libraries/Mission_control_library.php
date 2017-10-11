@@ -41,7 +41,7 @@ class Mission_control_library
     public function __construct()
     {        
         // load the required model
-        $this->Mission_control_library_Model = FunctionsLib::modelLoader('libraries/Mission_control_library');
+        $this->_Mission_control_library_Model = FunctionsLib::modelLoader('libraries/Mission_control_library');
     }
     
     /**
@@ -52,7 +52,7 @@ class Mission_control_library
     public function arrivingFleets()
     {
         $this->processMissions(
-            $this->Mission_control_library_Model->getArrivingFleets()
+            $this->_Mission_control_library_Model->getArrivingFleets()
         );
     }
     
@@ -64,7 +64,7 @@ class Mission_control_library
     public function returningFleets()
     {
         $this->processMissions(
-            $this->Mission_control_library_Model->getReturningFleets()
+            $this->_Mission_control_library_Model->getReturningFleets()
         );
     }
     
@@ -82,9 +82,6 @@ class Mission_control_library
             
             return;
         }
-        
-        // lock all tables
-        //$this->Mission_control_library_Model->lockTables();
 
         // missions list
         $missions   = [
@@ -111,9 +108,6 @@ class Mission_control_library
             $mission    = new $class_name();
             $mission->$mission_name($fleet);
         }
-
-        // unlock all tables
-        //$this->Mission_control_library_Model->unlockTables();
     }
 }
 
