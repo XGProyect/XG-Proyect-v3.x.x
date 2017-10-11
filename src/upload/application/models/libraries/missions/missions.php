@@ -166,8 +166,7 @@ class Missions
                 WHERE `planet_galaxy` = '" . $data['coords']['galaxy'] . "' AND
                     `planet_system` = '" . $data['coords']['system'] . "' AND
                     `planet_planet` = '" . $data['coords']['planet'] . "' AND
-                    `planet_type` = '" . $data['coords']['type'] . "'
-                LIMIT 1;"
+                    `planet_type` = '" . $data['coords']['type'] . "'"
             );   
         }
     }
