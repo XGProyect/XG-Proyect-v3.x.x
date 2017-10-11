@@ -84,7 +84,7 @@ class Mission_control_library
         }
         
         // lock all tables
-        $this->Mission_control_library_Model->lockTables();
+        //$this->Mission_control_library_Model->lockTables();
 
         // missions list
         $missions   = [
@@ -113,7 +113,7 @@ class Mission_control_library
         }
 
         // unlock all tables
-        $this->Mission_control_library_Model->unlockTables();
+        //$this->Mission_control_library_Model->unlockTables();
     }
 }
 
