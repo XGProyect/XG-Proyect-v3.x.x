@@ -63,6 +63,7 @@ class Missions
     {
         $this->db->query(
             "LOCK TABLE " . ACS_FLEETS . " WRITE,
+            " . ALLIANCE . " AS a WRITE,    
             " . REPORTS . " WRITE,
             " . MESSAGES . " WRITE,
             " . FLEETS . " WRITE,
