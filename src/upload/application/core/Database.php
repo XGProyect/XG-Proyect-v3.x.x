@@ -264,6 +264,28 @@ class Database
     }
 
     /**
+     * Multi Query
+     *
+     * @param string $sql SQL String
+     * 
+     * @return mixed
+     */
+    public function queryMulty($sql = false)
+    {
+        if ($sql != false) {
+
+            $this->last_query   = $sql;
+            $result             = @$this->connection->multi_query($sql);
+            
+            $this->confirmQuery($result);
+
+            return $result;
+        }
+
+        return false;
+    }
+    
+    /**
      * escapeValue
      *
      * @param mixed $value Value to escape
