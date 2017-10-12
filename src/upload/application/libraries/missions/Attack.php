@@ -87,7 +87,7 @@ class Attack extends Missions
 
             // require language implementation
             require XGP_ROOT . LIB_PATH .
-                    'missions' . DIRECTORY_SEPARATOR . 'attackLang.php';
+                    'missions' . DIRECTORY_SEPARATOR . 'Attack_lang.php';
             
             // set language for the reports
             LangManager::getInstance()->setImplementation(new Attack_lang($this->langs));

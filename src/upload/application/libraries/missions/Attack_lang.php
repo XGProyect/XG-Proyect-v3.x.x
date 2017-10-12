@@ -211,4 +211,4 @@ class Attack_lang implements Lang
     }
 }
 
-/* end of attackLang.php */
+/* end of Attack_lang.php */
