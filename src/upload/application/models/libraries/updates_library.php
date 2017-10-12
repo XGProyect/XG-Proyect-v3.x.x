@@ -172,6 +172,43 @@ class Updates_library
             WHERE `planet_id` = '" . $planet['planet_id'] . "';"
         );
     }
+    
+    /**
+     * Update all planet data, before any action takes place
+     * 
+     * @param type $data Planet data to update
+     * 
+     * @return void
+     */
+    public function updateAllPlanetData($data = [])
+    {
+        if (is_array($data)) {
+
+            $this->db->query(
+                "UPDATE " . PLANETS . " AS p
+                INNER JOIN " . USERS_STATISTICS . " AS us ON us.user_statistic_user_id = p.planet_user_id
+                INNER JOIN " . DEFENSES . " AS d ON d.defense_planet_id = p.`planet_id`
+                INNER JOIN " . SHIPS . " AS s ON s.ship_planet_id = p.`planet_id`
+                INNER JOIN " . RESEARCH . " AS r ON r.research_user_id = p.planet_user_id SET
+                    `planet_metal` = '" . $data['planet']['planet_metal'] . "',
+                    `planet_crystal` = '" . $data['planet']['planet_crystal'] ."',
+                    `planet_deuterium` = '" . $data['planet']['planet_deuterium'] . "',
+                    `planet_last_update` = '" . $data['planet']['planet_last_update'] . "',
+                    `planet_b_hangar_id` = '" . $data['planet']['planet_b_hangar_id'] . "',
+                    `planet_metal_perhour` = '" . $data['planet']['planet_metal_perhour'] . "',
+                    `planet_crystal_perhour` = '" . $data['planet']['planet_crystal_perhour'] . "',
+                    `planet_deuterium_perhour` = '" . $data['planet']['planet_deuterium_perhour'] . "',
+                    `planet_energy_used` = '" . $data['planet']['planet_energy_used'] . "',
+                    `planet_energy_max` = '" . $data['planet']['planet_energy_max'] . "',
+                    `user_statistic_ships_points` = `user_statistic_ships_points` + '" . $data['ship_points'] . "',
+                    `user_statistic_defenses_points` = `user_statistic_defenses_points`  + '" . $data['defense_points'] . "',
+                    {$data['sub_query']}
+                    {$data['tech_query']}
+                    `planet_b_hangar` = '" . $data['planet']['planet_b_hangar'] . "'
+                WHERE `planet_id` = '" . $data['planet']['planet_id'] . "';"
+            );  
+        }
+    }
 }
 
 /* end of update.php */

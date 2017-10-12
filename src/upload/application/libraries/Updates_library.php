@@ -530,7 +530,7 @@ class Updates_library extends XGPCore
         if ($Simul == false) {
 
             // new DB Object
-            $db     = new Database();
+            $db = FunctionsLib::modelLoader('libraries/updates_library');
             
             // SHIPS AND DEFENSES UPDATE
             $builded        = self::updateHangarQueue($current_user, $current_planet, $ProductionTime);
@@ -586,29 +586,13 @@ class Updates_library extends XGPCore
                 $tech_query = "";
             }
 
-            $db->query(
-                "UPDATE " . PLANETS . " AS p
-                INNER JOIN " . USERS_STATISTICS . " AS us ON us.user_statistic_user_id = p.planet_user_id
-                INNER JOIN " . DEFENSES . " AS d ON d.defense_planet_id = p.`planet_id`
-                INNER JOIN " . SHIPS . " AS s ON s.ship_planet_id = p.`planet_id`
-                INNER JOIN " . RESEARCH . " AS r ON r.research_user_id = p.planet_user_id SET
-                `planet_metal` = '" . $current_planet['planet_metal'] . "',
-                `planet_crystal` = '" . $current_planet['planet_crystal'] ."',
-                `planet_deuterium` = '" . $current_planet['planet_deuterium'] . "',
-                `planet_last_update` = '" . $current_planet['planet_last_update'] . "',
-                `planet_b_hangar_id` = '" . $current_planet['planet_b_hangar_id'] . "',
-                `planet_metal_perhour` = '" . $current_planet['planet_metal_perhour'] . "',
-                `planet_crystal_perhour` = '" . $current_planet['planet_crystal_perhour'] . "',
-                `planet_deuterium_perhour` = '" . $current_planet['planet_deuterium_perhour'] . "',
-                `planet_energy_used` = '" . $current_planet['planet_energy_used'] . "',
-                `planet_energy_max` = '" . $current_planet['planet_energy_max'] . "',
-                `user_statistic_ships_points` = `user_statistic_ships_points` + '" . $ship_points . "',
-                `user_statistic_defenses_points` = `user_statistic_defenses_points`  + '" . $defense_points . "',
-                {$sub_query}
-                {$tech_query}
-                `planet_b_hangar` = '" . $current_planet['planet_b_hangar'] . "'
-                WHERE `planet_id` = '" . $current_planet['planet_id'] . "';"
-            );
+            $db->updateAllPlanetData([
+                'planet' => $current_planet,
+                'ship_points' => $ship_points,
+                'defense_points' => $defense_points,
+                'sub_query' => $sub_query,
+                'tech_query' => $tech_query
+            ]);
         }
     }
 
