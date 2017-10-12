@@ -14,7 +14,6 @@
 
 namespace application\libraries;
 
-use application\core\Database;
 use application\core\XGPCore;
 use application\libraries\FunctionsLib;
 
@@ -67,7 +66,7 @@ class FleetsLib extends XGPCore
         $orig_planet,
         $dest_planet
     ) {
-        $distance   = 0;
+        $distance   = 5;
 
         if (($orig_galaxy - $dest_galaxy) != 0) {
 
@@ -232,7 +231,7 @@ class FleetsLib extends XGPCore
                 $consumption        += $basic_consumption * $mission_distance / 35000 + 1;
             }
         }
-
+        
         return round($consumption);
     }
 
