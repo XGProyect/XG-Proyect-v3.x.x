@@ -75,8 +75,7 @@ class Missions extends XGPCore
      */
     protected function returnFleet($fleet_id)
     {
-        $this->Missions_Model->updateFleetStatusById($fleet_id);
-        
+        $this->Missions_Model->updateFleetStatusToReturnById($fleet_id);
     }
 
     /**

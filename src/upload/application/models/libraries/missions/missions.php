@@ -127,19 +127,38 @@ class Missions
     }
     
     /**
-     * Update fleet status by ID
+     * Update fleet status to return by ID
      * 
      * @param int $fleet_id Fleet ID
      * 
      * @return void
      */
-    public function updateFleetStatusById($fleet_id)
+    public function updateFleetStatusToReturnById($fleet_id)
     {
         if ((int)$fleet_id > 0) {
 
             $this->db->query(
                 "UPDATE " . FLEETS . " SET
                     `fleet_mess` = '1'
+                WHERE `fleet_id` = '" . $fleet_id . "'"
+            );
+        }
+    }
+    
+    /**
+     * Update fleet status to stay by ID
+     * 
+     * @param int $fleet_id Fleet ID
+     * 
+     * @return void
+     */
+    public function updateFleetStatusToStayById($fleet_id)
+    {
+        if ((int)$fleet_id > 0) {
+
+            $this->db->query(
+                "UPDATE " . FLEETS . " SET
+                    `fleet_mess` = '2'
                 WHERE `fleet_id` = '" . $fleet_id . "'"
             );
         }
@@ -435,7 +454,7 @@ class Missions
      * 
      * @return void
      */
-    public function updateReturningFleetResources($data = [])
+    public function updateReturningFleetData($data = [])
     {
         if (is_array($data)) {
 
@@ -525,6 +544,35 @@ class Missions
         }
         
         return [];
+    }
+    
+    /**
+     * Get friendly planet data
+     * 
+     * @param array $data Data to update
+     * 
+     * @return void
+     */
+    public function getFriendlyPlanetData($data = [])
+    {
+        if (is_array($data)) {
+
+            return $this->db->queryFetch(
+                "SELECT pc1.`planet_user_id` AS start_id,
+                    pc1.`planet_name` AS start_name,
+                    pc2.`planet_user_id` AS target_id,
+                    pc2.`planet_name` AS target_name
+                FROM " . PLANETS . " AS pc1, " . PLANETS . " AS pc2
+                WHERE pc1.planet_galaxy = '" . $data['fleet_start_galaxy'] . "' AND
+                    pc1.`planet_system` = '" . $data['fleet_start_system'] . "' AND
+                    pc1.`planet_planet` = '" . $data['fleet_start_planet'] . "' AND
+                    pc1.`planet_type` = '" . $data['fleet_start_type'] . "' AND
+                    pc2.`planet_galaxy` = '" . $data['fleet_end_galaxy'] . "' AND
+                    pc2.`planet_system` = '" . $data['fleet_end_system'] . "' AND
+                    pc2.`planet_planet` = '" . $data['fleet_end_planet'] . "' AND
+                    pc2.`planet_type` = '" . $data['fleet_end_type'] . "'"
+            );
+        }
     }
     
     /**
@@ -808,19 +856,34 @@ class Missions
         }
     }
     
-    
-    /**
-     * 
-     * STAY
-     * 
-     */
-                
     /**
      * 
      * TRANSPORT
      * 
      */
     
+    /**
+     * Update planet target defenses based on the attack result
+     * 
+     * @param array $data Data to update
+     * 
+     * @return void
+     */
+    public function updateReturningFleetResources($fleet_id = 0)
+    {
+        if ((int)$user_id > 0) {
+
+            $this->db->query(
+                "UPDATE " . FLEETS . " SET
+                `fleet_resource_metal` = '0' ,
+                `fleet_resource_crystal` = '0' ,
+                `fleet_resource_deuterium` = '0' ,
+                `fleet_mess` = '1'
+                WHERE `fleet_id` = '" . $fleet_id . "'
+                LIMIT 1 ;"
+            );
+        }
+    }    
 }
 
 /* end of missions.php */

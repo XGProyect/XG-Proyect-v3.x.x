@@ -48,27 +48,28 @@ class Transport extends Missions
      */
     public function transportMission($fleet_row)
     {
-        $transport_check = $this->_db->queryFetch(
-            "SELECT pc1.`planet_user_id` AS start_id,
-            pc1.`planet_name` AS start_name,
-            pc2.`planet_user_id` AS target_id,
-            pc2.`planet_name` AS target_name
-            FROM " . PLANETS . " AS pc1, " . PLANETS . " AS pc2
-            WHERE pc1.planet_galaxy = '" . $fleet_row['fleet_start_galaxy'] . "' AND
-            pc1.`planet_system` = '" . $fleet_row['fleet_start_system'] . "' AND
-            pc1.`planet_planet` = '" . $fleet_row['fleet_start_planet'] . "' AND
-            pc1.`planet_type` = '" . $fleet_row['fleet_start_type'] . "' AND
-            pc2.`planet_galaxy` = '" . $fleet_row['fleet_end_galaxy'] . "' AND
-            pc2.`planet_system` = '" . $fleet_row['fleet_end_system'] . "' AND
-            pc2.`planet_planet` = '" . $fleet_row['fleet_end_planet'] . "' AND
-            pc2.`planet_type` = '" . $fleet_row['fleet_end_type'] . "'"
-        );
+        $friendly_planet = $this->Missions_Model->getFriendlyPlanetData([
+            'coords' => [
+                'start' => [
+                    'galaxy' => $fleet_row['fleet_start_galaxy'],
+                    'system' => $fleet_row['fleet_start_system'],
+                    'planet' => $fleet_row['fleet_start_planet'],
+                    'type' => $fleet_row['fleet_start_type']
+                ],
+                'end' => [
+                    'galaxy' => $fleet_row['fleet_end_galaxy'],
+                    'system' => $fleet_row['fleet_end_system'],
+                    'planet' => $fleet_row['fleet_end_planet'],
+                    'type' => $fleet_row['fleet_end_type']
+                ]
+            ]
+        ]);
 
         // SOME REQUIRED VALUES
-        $start_name         = $transport_check['start_name'];
-        $start_owner_id     = $transport_check['start_id'];
-        $target_name        = $transport_check['target_name'];
-        $target_owner_id    = $transport_check['target_id'];
+        $start_name         = $friendly_planet['start_name'];
+        $start_owner_id     = $friendly_planet['start_id'];
+        $target_name        = $friendly_planet['target_name'];
+        $target_owner_id    = $friendly_planet['target_id'];
 
         // DIFFERENT TYPES OF MESSAGES
         $message[1] = sprintf(
@@ -127,15 +128,7 @@ class Transport extends Missions
                     );
                 }
 
-                $this->_db->query(
-                    "UPDATE " . FLEETS . " SET
-                    `fleet_resource_metal` = '0' ,
-                    `fleet_resource_crystal` = '0' ,
-                    `fleet_resource_deuterium` = '0' ,
-                    `fleet_mess` = '1'
-                    WHERE `fleet_id` = '" . (int) $fleet_row['fleet_id'] . "'
-                    LIMIT 1 ;"
-                );
+                $this->Missions_Model->updateReturningFleetResources($fleet_row['fleet_id']);
             }
         } elseif ($fleet_row['fleet_end_time'] < time()) {
 

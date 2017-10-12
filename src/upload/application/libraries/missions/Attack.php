@@ -653,7 +653,7 @@ class Attack extends Missions
                         $steal['deuterium']     += $fleetSteal['deuterium'];
                     }
 
-                    $this->Missions_Model->updateReturningFleetResources([
+                    $this->Missions_Model->updateReturningFleetData([
                         'ships' => substr($fleetArray, 0, -1),
                         'amount' => $totalCount,
                         'stolen' => [
