@@ -19,6 +19,7 @@ use application\libraries\buildings\Building;
 use application\libraries\DevelopmentsLib;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
+use application\libraries\OfficiersLib;
 use Exception;
 
 /**
@@ -48,6 +49,13 @@ class Buildings extends Controller
      */
     private $_allowed_buildings = [];
 
+    /**
+     * Status of the commander officier
+     * 
+     * @var boolean 
+     */
+    private $_commander_active = false;
+    
     /**
      * Constructor
      * 
@@ -93,7 +101,8 @@ class Buildings extends Controller
             $this->getObjects()
         );
         
-        $this->_allowed_buildings = $this->getAllowedBuildings();
+        $this->_allowed_buildings   = $this->getAllowedBuildings();
+        $this->_commander_active    = OfficiersLib::isOfficierActive($this->_user['premium_officier_commander']);
     }    
     
     /**
@@ -209,7 +218,7 @@ class Buildings extends Controller
         
         $queue = $this->showQueue();
         
-        if ($queue['lenght'] > 0) {
+        if ($this->_commander_active && $queue['lenght'] > 0) {
 
             $return['BuildListScript']   = DevelopmentsLib::currentBuilding($this->getCurrentPage());
             $return['BuildList']         = $queue['buildlist'];
@@ -334,33 +343,78 @@ class Buildings extends Controller
         $have_fields            = DevelopmentsLib::areFieldsAvailable($this->_planet);
         $is_queue_full          = $this->_building->isQueueFull();
         $queue_element          = $this->_building->getCountElementsOnQueue();
-
+        
         // check fields
         if (!$have_fields) {
 
+            // block all if we don't have any
             return $this->buildButton('all_occupied');
         }
-            
-        // check queue, payable and vacations
-        if ($is_queue_full or !$is_development_payable or $is_on_vacations) {
+         
+        // check payable and vacations
+        if (!$is_development_payable or $is_on_vacations) {
 
+            // block all or some
             return $this->buildButton('not_allowed'); 
         }
         
         // check if there's any work in progress
         if ($this->isWorkInProgress($building_id)) {
             
+            // block some
             return $this->buildButton('work_in_progress'); 
         }
         
         // if a queue was already set
-        if ($queue_element > 0) {
-
-            return FunctionsLib::setUrl($build_url, '', $this->buildButton('allowed_for_queue'));
+        if ($this->_commander_active) {
+            
+            if ($is_queue_full) {
+                
+                return $this->buildButton('not_allowed'); 
+            }
+            
+            if ($queue_element > 0) {
+                
+                return FunctionsLib::setUrl($build_url, '', $this->buildButton('allowed_for_queue'));
+            }
         }
         
-        // any other case
+        if (!$this->_commander_active) {
+        
+            if ($queue_element > 0) {
+
+                return $this->buildCountDownClock($building_id);
+            }
+        }
+        
         return FunctionsLib::setUrl($build_url, '', $this->buildButton('allowed'));
+    }
+    
+    /**
+     * Build the countdown clock for that usually appears
+     * 
+     * @param int $building_id Building ID
+     * 
+     * @return string
+     */
+    private function buildCountDownClock($building_id)
+    {
+        $first_queued_element   = (int)$this->_building->getNewQueueAsArray()[0][0];
+        
+        if ($first_queued_element == $building_id) {
+           
+            $block = [
+                'build_time' => ($this->_planet['planet_b_building'] - time()),
+                'call_program' => $this->getCurrentPage()
+            ];
+
+            return $this->getTemplate()->set(
+                'buildings/buildings_build_script', 
+                array_merge($block, $this->getLang())
+            );
+        }
+        
+        return '<center>-</center>';
     }
     
     /**

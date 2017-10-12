@@ -82,7 +82,7 @@ class Building
      */
     public function __construct($planet, $user, $objects)
     {
-        $this->_queue   = new Queue($planet['planet_b_building']);
+        $this->_queue   = new Queue($planet['planet_b_building_id']);
         $this->_planet  = $planet;
         $this->_user    = $user;
         $this->_objects = $objects;
@@ -149,13 +149,23 @@ class Building
     }
     
     /**
-     * Get the updated queue
+     * Get the updated queue as a string
      * 
      * @return string
      */
-    public function getNewQueue()
+    public function getNewQueueAsString()
     {
         return $this->_queue->returnQueueAsString();
+    }
+    
+    /**
+     * Get the updated queue as an array
+     * 
+     * @return string
+     */
+    public function getNewQueueAsArray()
+    {
+        return $this->_queue->returnQueueAsArray();
     }
     
     /**
