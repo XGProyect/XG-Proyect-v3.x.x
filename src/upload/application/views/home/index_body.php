@@ -12,6 +12,7 @@
     <meta name="robots" content="index,follow">
     <meta name="Revisit" content="After 14 days">
     <title>{servername}</title>
+    <link rel="shortcut icon" href="favicon.ico">
     <link rel="stylesheet" type="text/css" href="{css_path}reset.css">
     <link rel="stylesheet" type="text/css" href="{css_path}forms.css">
 
