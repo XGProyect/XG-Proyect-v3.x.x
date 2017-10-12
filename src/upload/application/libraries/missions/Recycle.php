@@ -63,19 +63,18 @@ class Recycle extends Missions
 
             if ($fleet_row['fleet_start_time'] <= time()) {
                 
-                $this->_db->query(
-                    "UPDATE " . PLANETS . ", " . FLEETS . " SET
-                    `planet_debris_metal` = `planet_debris_metal` - '" . $recycled_resources['metal'] . "',
-                    `planet_debris_crystal` = `planet_debris_crystal` - '" . $recycled_resources['crystal'] . "',
-                    `fleet_resource_metal` = `fleet_resource_metal` + '" . $recycled_resources['metal'] . "',
-                    `fleet_resource_crystal` = `fleet_resource_crystal` + '" . $recycled_resources['crystal'] . "',
-                    `fleet_mess` = '1'
-                    WHERE `planet_galaxy` = '" . $fleet_row['fleet_end_galaxy'] . "' AND
-                                    `planet_system` = '" . $fleet_row['fleet_end_system'] . "' AND
-                                    `planet_planet` = '" . $fleet_row['fleet_end_planet'] . "' AND
-                                    `planet_type` = 1 AND
-                                    `fleet_id` = '" . (int) $fleet_row['fleet_id'] . "'"
-                );
+                $this->Missions_Model->updatePlanetDebrisFieldAndFleet([
+                    'recycled' => [
+                        'metal' => $recycled_resources['metal'],
+                        'crystal' => $recycled_resources['crystal']
+                    ],
+                    'coords' => [
+                        'galaxy' => $fleet_row['fleet_end_galaxy'],
+                        'system' => $fleet_row['fleet_end_system'],
+                        'planet' => $fleet_row['fleet_end_planet']
+                    ],
+                    'fleet_id' => $fleet_row['fleet_id']
+                ]);
 
                 $message    = sprintf(
                     $this->langs['sys_recy_gotten'],
@@ -126,18 +125,13 @@ class Recycle extends Missions
      */
     private function calculateCapacity($fleet_row)
     {
-        $target_planet = $this->_db->queryFetch(
-            "SELECT 
-                `planet_name` AS target_name, 
-                `planet_debris_metal`, 
-                `planet_debris_crystal`
-            FROM " . PLANETS . "
-            WHERE `planet_galaxy` = '" . $fleet_row['fleet_end_galaxy'] . "' AND
-                `planet_system` = '" . $fleet_row['fleet_end_system'] . "' AND
-                `planet_planet` = '" . $fleet_row['fleet_end_planet'] . "' AND
-                `planet_type` = 1
-            LIMIT 1;"
-        );
+        $target_planet = $this->Missions_Model->updatePlanetDebrisFieldAndFleet([
+             'coords' => [
+                 'galaxy' => $fleet_row['fleet_end_galaxy'],
+                 'system' => $fleet_row['fleet_end_system'],
+                 'planet' => $fleet_row['fleet_end_planet']
+             ]       
+        ]);
 
         $this->planet_name  = $target_planet['target_name'];
         

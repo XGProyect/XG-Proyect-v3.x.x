@@ -774,6 +774,61 @@ class Missions
      * RECYCLE
      * 
      */
+
+    /**
+     * Update planet debris field and make the fleet return
+     * 
+     * @param array $data Data to update
+     * 
+     * @return void
+     */
+    public function updatePlanetDebrisFieldAndFleet($data = [])
+    {
+        if (is_array($data)) {
+
+            $this->db->query(
+                "UPDATE " . PLANETS . ", " . FLEETS . " SET
+                `planet_debris_metal` = `planet_debris_metal` - '" . $data['recycled']['metal'] . "',
+                `planet_debris_crystal` = `planet_debris_crystal` - '" . $data['recycled']['crystal'] . "',
+                `fleet_resource_metal` = `fleet_resource_metal` + '" . $data['recycled']['metal'] . "',
+                `fleet_resource_crystal` = `fleet_resource_crystal` + '" . $data['recycled']['crystal'] . "',
+                `fleet_mess` = '1'
+                WHERE `planet_galaxy` = '" . $data['coords']['fleet_end_galaxy'] . "' AND
+                    `planet_system` = '" . $data['coords']['fleet_end_system'] . "' AND
+                    `planet_planet` = '" . $data['coords']['fleet_end_planet'] . "' AND
+                    `planet_type` = 1 AND
+                    `fleet_id` = '" . (int)$data['fleet_id'] . "'"
+            );
+        }
+    }
+
+    /**
+     * Update planet debris field and make the fleet return
+     * 
+     * @param array $data Data to update
+     * 
+     * @return void
+     */
+    public function getPlanetDebris($data = [])
+    {
+        if (is_array($data)) {
+
+            return $this->db->queryFetch(
+                "SELECT 
+                    `planet_name` AS target_name, 
+                    `planet_debris_metal`, 
+                    `planet_debris_crystal`
+                FROM " . PLANETS . "
+                WHERE `planet_galaxy` = '" . $data['coords']['galaxy'] . "' AND
+                    `planet_system` = '" . $data['coords']['system'] . "' AND
+                    `planet_planet` = '" . $data['coords']['planet'] . "' AND
+                    `planet_type` = 1
+                LIMIT 1;"
+            );
+        }
+        
+        return [];
+    }
     
     /**
      * 
@@ -865,13 +920,13 @@ class Missions
     /**
      * Update planet target defenses based on the attack result
      * 
-     * @param array $data Data to update
+     * @param int $fleet_id Fleet ID
      * 
      * @return void
      */
     public function updateReturningFleetResources($fleet_id = 0)
     {
-        if ((int)$user_id > 0) {
+        if ((int)$fleet_id > 0) {
 
             $this->db->query(
                 "UPDATE " . FLEETS . " SET
