@@ -51,33 +51,26 @@ class Destroy extends Missions
     {
         if ($fleet_row['fleet_mess'] == 0 && $fleet_row['fleet_start_time'] <= time()) {
 
-            $current_data = $this->_db->queryFetch(
-                "SELECT p.planet_name, r.research_weapons_technology, r.research_shielding_technology, r.research_armour_technology, u.user_name, u.user_id
-                FROM " . PLANETS . " AS p
-                INNER JOIN " . USERS . " AS u ON u.user_id = p.planet_user_id
-                INNER JOIN " . PREMIUM . " AS pr ON pr.premium_user_id = p.planet_user_id
-                INNER JOIN " . RESEARCH . " AS r ON r.research_user_id = p.planet_user_id
-                WHERE p.`planet_galaxy` = " . $fleet_row['fleet_start_galaxy'] . " AND
-                                p.`planet_system` = " . $fleet_row['fleet_start_system'] . " AND
-                                p.`planet_planet` = " . $fleet_row['fleet_start_planet'] . " AND
-                                p.`planet_type` = " . $fleet_row['fleet_start_type'] . ";"
-            );
+            $current_data = $this->Missions_Model->getDestroyerData([
+                'coords' => [
+                    'galaxy' => $fleet_row['fleet_start_galaxy'],
+                    'system' => $fleet_row['fleet_start_system'],
+                    'planet' => $fleet_row['fleet_start_planet'],
+                    'type' => $fleet_row['fleet_start_type']
+                ]
+            ]);
 
-            $target_data = $this->_db->queryFetch(
-                "SELECT s.*, d.*, p.`planet_id`, p.planet_diameter, p.planet_user_id, u.user_name, u.user_current_planet, r.research_weapons_technology, r.research_shielding_technology, r.research_armour_technology
-                FROM " . PLANETS . " AS p
-                INNER JOIN " . SHIPS . " AS s ON s.ship_planet_id = p.`planet_id`
-                INNER JOIN " . DEFENSES . " AS d ON d.defense_planet_id = p.`planet_id`
-                INNER JOIN " . USERS . " AS u ON u.user_id = p.planet_user_id
-                INNER JOIN " . PREMIUM . " AS pr ON pr.premium_user_id = p.planet_user_id
-                INNER JOIN " . RESEARCH . " AS r ON r.research_user_id = p.planet_user_id
-                WHERE p.`planet_galaxy` = '" . $fleet_row['fleet_end_galaxy'] . "' AND
-                                p.`planet_system` = '" . $fleet_row['fleet_end_system'] . "' AND
-                                p.`planet_planet` = '" . $fleet_row['fleet_end_planet'] . "' AND
-                                p.`planet_type` = '" . $fleet_row['fleet_end_type'] . "';"
-            );
+            $target_data = $this->Missions_Model->getTargetToDestroyData([
+                'coords' => [
+                    'galaxy' => $fleet_row['fleet_end_galaxy'],
+                    'system' => $fleet_row['fleet_end_system'],
+                    'planet' => $fleet_row['fleet_end_planet'],
+                    'type' => $fleet_row['fleet_end_type']
+                ]
+            ]);
 
             $target_ships   = [];
+            $current_ships  = [];
             
             for ($i = self::DEFENSE_MIN_ID; $i <= self::DEFENSE_MAX_ID; $i++) {
 
@@ -154,34 +147,30 @@ class Destroy extends Missions
                 $probalune = sprintf($this->langs['sys_destruc_lune'], $chance);
 
                 if ($tirage <= $chance) {
+
                     $resultat = '1';
                     $finmess = $this->langs['sys_destruc_reussi'];
 
-                    $this->_db->query("UPDATE " . FLEETS . " AS f1 SET
-											f1.`fleet_start_type` = '1'
-											WHERE f1.`fleet_start_galaxy` = '" . $fleet_row['fleet_end_galaxy'] . "' AND
-													f1.`fleet_start_system` = '" . $fleet_row['fleet_end_system'] . "' AND
-													f1.`fleet_start_planet` = '" . $fleet_row['fleet_end_planet'] . "';");
-
-                    $this->_db->query("UPDATE " . FLEETS . " AS f2 SET
-											f2.`fleet_end_type` = '1'
-											WHERE f2.`fleet_end_galaxy` = '" . $fleet_row['fleet_end_galaxy'] . "' AND
-													f2.`fleet_end_system` = '" . $fleet_row['fleet_end_system'] . "' AND
-													f2.`fleet_end_planet` = '" . $fleet_row['fleet_end_planet'] . "';");
-
-                    $this->_db->query("UPDATE " . PLANETS . " AS p SET
-											`planet_destroyed` = '" . time() . "'
-											WHERE p.`planet_id` = '" . $target_data['planet_id'] . "';");
+                    $this->Missions_Model->updateFleetsStatusToMakeThemReturn([
+                        'coords' => [
+                            'galaxy' => $fleet_row['fleet_end_galaxy'],
+                            'system' => $fleet_row['fleet_end_system'],
+                            'planet' => $fleet_row['fleet_end_planet']
+                        ],
+                        'time' => time(),
+                        'planet_id' => $target_data['planet_id']
+                    ]);
 
                     if ($target_data['user_current_planet'] == $target_data['planet_id']) {
-                        $this->_db->query("UPDATE " . USERS . " SET
-												`user_current_planet` = (SELECT `planet_id`
-																	FROM " . PLANETS . "
-																	WHERE `planet_galaxy` = '" . $fleet_row['fleet_end_galaxy'] . "' AND
-																			`planet_system` = '" . $fleet_row['fleet_end_system'] . "' AND
-																			`planet_planet` = '" . $fleet_row['fleet_end_planet'] . "' AND
-																			`planet_type` = '1')
-												WHERE `user_id` = '" . $target_data['planet_user_id'] . "';");
+                        
+                        $this->Missions_Model->updateUserCurrentPlanetByCoordsAndUserId([
+                            'coords' => [
+                                'galaxy' => $fleet_row['fleet_end_galaxy'],
+                                'system' => $fleet_row['fleet_end_system'],
+                                'planet' => $fleet_row['fleet_end_planet']
+                            ],
+                            'planet_user_id' => $target_data['planet_user_id']
+                        ]);
                     }
                 } else {
                     $resultat = '0';
@@ -208,18 +197,20 @@ class Destroy extends Missions
 
             $introdestruc = sprintf($this->langs['sys_destruc_mess'], $current_data['planet_name'], $fleet_row['fleet_start_galaxy'], $fleet_row['fleet_start_system'], $fleet_row['fleet_start_planet'], $fleet_row['fleet_end_galaxy'], $fleet_row['fleet_end_system'], $fleet_row['fleet_end_planet']);
 
-            $this->_db->query("UPDATE " . PLANETS . " AS p
-                INNER JOIN " . SHIPS . " AS s ON s.ship_planet_id = p.`planet_id`
-                INNER JOIN " . DEFENSES . " AS d ON d.defense_planet_id = p.`planet_id` SET
-                $TargetPlanetUpd
-                `planet_invisible_start_time` = '" . time() . "',
-                `planet_debris_metal` = `planet_debris_metal` + '" . $zlom['metal'] . "',
-                `planet_debris_crystal` = `planet_debris_crystal` + '" . $zlom['crystal'] . "'
-                WHERE `planet_galaxy` = '" . $fleet_row['fleet_end_galaxy'] . "' AND
-                                `planet_system` = '" . $fleet_row['fleet_end_system'] . "' AND
-                                `planet_planet` = '" . $fleet_row['fleet_end_planet'] . "' AND
-                                `planet_type` = '" . $fleet_row['fleet_end_type'] . "';"
-            );
+            $this->Missions_Model->updatePlanetDataAfterDestruction([
+                'data_to_update' => $TargetPlanetUpd,
+                'time' => time(),
+                'debris' => [
+                    'metal' => $zlom['metal'],
+                    'crystal' => $zlom['crystal'],
+                ],
+                'coords' => [
+                    'galaxy' => $fleet_row['fleet_end_galaxy'],
+                    'system' => $fleet_row['fleet_end_system'],
+                    'planet' => $fleet_row['fleet_end_planet'],
+                    'type' => $fleet_row['fleet_end_type'],
+                ]
+            ]);
 
             $StrAttackerUnits = sprintf($this->langs['sys_attacker_lostunits'], $zlom['attacker']);
             $StrDefenderUnits = sprintf($this->langs['sys_defender_lostunits'], $zlom['enemy']);
@@ -230,7 +221,6 @@ class Destroy extends Missions
             $title = sprintf($this->langs['sys_destruc_title'], $AttackDate);
             $raport = "<center><table><tr><td>" . $title . "<br />";
             $zniszczony = FALSE;
-            $a_zestrzelona = 0;
             $AttackTechon['A'] = $current_data['research_weapons_technology'] * 10;
             $AttackTechon['B'] = $current_data['research_shielding_technology'] * 10;
             $AttackTechon['C'] = $current_data['research_armour_technology'] * 10;
@@ -271,10 +261,6 @@ class Destroy extends Missions
                     $raport5 .= "</tr>";
                     $raport .= $raport1 . $raport2 . $raport3 . $raport4 . $raport5;
                 } else {
-                    if ($a == 2) {
-                        $a_zestrzelona = 1;
-                    }
-
                     $zniszczony = TRUE;
                     $raport .= "<br />" . $this->langs['sys_destroyed'];
                 }
@@ -360,15 +346,12 @@ class Destroy extends Missions
 
             $owners = $fleet_row['fleet_owner'] . "," . $target_data['planet_user_id'];
 
-            $this->_db->query(
-                "INSERT INTO `" . REPORTS . "` SET
-                `report_owners` = '" . $owners . "',
-                `report_rid` = '" . $rid . "',
-                `report_content` = '" . addslashes($raport) . "',
-                `report_destroyed` = '" . $a_zestrzelona . "',
-                `report_time` = '" . time() . "'"
-            );
-
+            $this->Missions_Model->insertReport([
+                'owners'    => $owners,
+                'rid'       => $rid,
+                'content'   => addslashes($raport),
+                'time'      => time()
+            ]);
 
             $raport = $this->buildReportLink(
                 $this->set_report_color($FleetResult),
@@ -378,13 +361,11 @@ class Destroy extends Missions
                 $fleet_row['fleet_end_planet']
             );
 
-            $this->_db->query(
-                "UPDATE " . FLEETS . " SET
-                `fleet_amount` = '" . $FleetAmount . "',
-                `fleet_array` = '" . $FleetArray . "',
-                `fleet_mess` = '1'
-                WHERE fleet_id = '" . (int) $fleet_row['fleet_id'] . "';"
-            );
+            $this->Missions_Model->updateFleetDataToReturn([
+                'amount' => $FleetAmount,
+                'ships' => $FleetArray,
+                'fleet_id' => $fleet_row['fleet_id']
+            ]);
 
             $this->destroy_message($current_data['user_id'], $raport, $fleet_row['fleet_start_time']);
 

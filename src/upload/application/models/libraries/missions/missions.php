@@ -644,6 +644,180 @@ class Missions
      * 
      */
     
+    /**
+     * Get destroyer data
+     * 
+     * @param array $data Data to update
+     * 
+     * @return array
+     */
+    public function getDestroyerData($data = [])
+    {
+        if (is_array($data)) {
+
+            return $this->db->queryFetch(
+                "SELECT 
+                    p.planet_name,
+                    r.research_weapons_technology,
+                    r.research_shielding_technology,
+                    r.research_armour_technology,
+                    u.user_name,
+                    u.user_id
+                FROM " . PLANETS . " AS p
+                INNER JOIN " . USERS . " AS u ON u.user_id = p.planet_user_id
+                INNER JOIN " . PREMIUM . " AS pr ON pr.premium_user_id = p.planet_user_id
+                INNER JOIN " . RESEARCH . " AS r ON r.research_user_id = p.planet_user_id
+                WHERE p.`planet_galaxy` = " . $data['coords']['galaxy'] . " AND
+                                p.`planet_system` = " . $data['coords']['system'] . " AND
+                                p.`planet_planet` = " . $data['coords']['planet'] . " AND
+                                p.`planet_type` = " . $data['coords']['type'] . ";"
+            );
+        }
+        
+        return [];
+    }
+    
+    /**
+     * Get target to destroy data
+     * 
+     * @param array $data Data to update
+     * 
+     * @return array
+     */
+    public function getTargetToDestroyData($data = [])
+    {
+        if (is_array($data)) {
+
+            return $this->db->queryFetch(
+                "SELECT 
+                    s.*, 
+                    d.*, 
+                    p.`planet_id`, 
+                    p.planet_diameter, 
+                    p.planet_user_id, 
+                    u.user_name, 
+                    u.user_current_planet, 
+                    r.research_weapons_technology, 
+                    r.research_shielding_technology, 
+                    r.research_armour_technology
+                FROM " . PLANETS . " AS p
+                INNER JOIN " . SHIPS . " AS s ON s.ship_planet_id = p.`planet_id`
+                INNER JOIN " . DEFENSES . " AS d ON d.defense_planet_id = p.`planet_id`
+                INNER JOIN " . USERS . " AS u ON u.user_id = p.planet_user_id
+                INNER JOIN " . PREMIUM . " AS pr ON pr.premium_user_id = p.planet_user_id
+                INNER JOIN " . RESEARCH . " AS r ON r.research_user_id = p.planet_user_id
+                WHERE p.`planet_galaxy` = '" . $data['coords']['galaxy'] . "' AND
+                                p.`planet_system` = '" . $data['coords']['system'] . "' AND
+                                p.`planet_planet` = '" . $data['coords']['planet'] . "' AND
+                                p.`planet_type` = '" . $data['coords']['type'] . "';"
+            );
+        }
+
+        return [];
+    }
+    
+    /**
+     * 
+     * 
+     * @param array $data Data to update
+     * 
+     * @return void
+     */
+    public function updateFleetsStatusToMakeThemReturn($data = [])
+    {
+        if (is_array($data)) {
+
+            $this->db->queryMulty(
+                "UPDATE `" . FLEETS . "` AS f SET
+                    f.`fleet_start_type` = '1'
+                WHERE f.`fleet_start_galaxy` = '" . $data['coords']['galaxy'] . "'
+                    AND f.`fleet_start_system` = '" . $data['coords']['system'] . "'
+                    AND f.`fleet_start_planet` = '" . $data['coords']['planet'] . "';
+                UPDATE `" . FLEETS . "` AS f SET
+                    f.`fleet_end_type` = '1'
+                WHERE f.`fleet_end_galaxy` = '" . $data['coords']['galaxy'] . "'
+                    AND f.`fleet_end_system` = '" . $data['coords']['system'] . "'
+                    AND f.`fleet_end_planet` = '" . $data['coords']['planet'] . "';
+                UPDATE `" . PLANETS . "` AS p SET
+                    `planet_destroyed` = '" . $data['time'] . "'
+                WHERE p.`planet_id` = '" . $data['planet_id'] . "';
+                "
+            ); 
+        }
+    }
+    
+    /**
+     * Update user current planet, to avoid that they get stuck on a deleted moon
+     * 
+     * @param array $data Data to update
+     * 
+     * @return void
+     */
+    public function updateUserCurrentPlanetByCoordsAndUserId($data = [])
+    {
+        if (is_array($data)) {
+
+            $this->db->query(
+                "UPDATE " . USERS . " SET
+                    `user_current_planet` = (
+                        SELECT `planet_id`
+                        FROM " . PLANETS . "
+                        WHERE `planet_galaxy` = '" . $data['coords']['fleet_end_galaxy'] . "' AND
+                            `planet_system` = '" . $data['coords']['fleet_end_system'] . "' AND
+                            `planet_planet` = '" . $data['coords']['fleet_end_planet'] . "' AND
+                            `planet_type` = '1')
+                WHERE `user_id` = '" . $data['planet_user_id'] . "';"
+            );   
+        }
+    }
+    
+    /**
+     * Update planet data after its destruction
+     * 
+     * @param array $data Data to update
+     * 
+     * @return void
+     */
+    public function updatePlanetDataAfterDestruction($data = [])
+    {
+        if (is_array($data)) {
+
+            $this->db->query(
+                "UPDATE " . PLANETS . " AS p
+                INNER JOIN " . SHIPS . " AS s ON s.ship_planet_id = p.`planet_id`
+                INNER JOIN " . DEFENSES . " AS d ON d.defense_planet_id = p.`planet_id` SET
+                {$data['data_to_update']}
+                `planet_invisible_start_time` = '" . $data['time'] . "',
+                `planet_debris_metal` = `planet_debris_metal` + '" . $data['debris']['metal'] . "',
+                `planet_debris_crystal` = `planet_debris_crystal` + '" . $data['debris']['crystal'] . "'
+                WHERE `planet_galaxy` = '" . $data['coords']['galaxy'] . "' AND
+                    `planet_system` = '" . $data['coords']['system'] . "' AND
+                    `planet_planet` = '" . $data['coords']['planet'] . "' AND
+                    `planet_type` = '" . $data['coords']['type'] . "';"
+            );
+        }   
+    }
+    
+    /**
+     * Update destroy fleet data and make it return
+     * 
+     * @param array $data Data to update
+     * 
+     * @return void
+     */
+    public function updateFleetDataToReturn($data = [])
+    {
+        if (is_array($data)) {
+
+            $this->db->query(
+                "UPDATE " . FLEETS . " SET
+                `fleet_amount` = '" . $data['amount'] . "',
+                `fleet_array` = '" . $data['ships'] . "',
+                `fleet_mess` = '1'
+                WHERE fleet_id = '" . (int)$data['fleet_id'] . "';"
+            );      
+        }
+    }
     
     /**
      * 
@@ -652,7 +826,7 @@ class Missions
      */
     
     /**
-     * Updates the fleet array and points by fleet id and coords
+     * 
      * 
      * @param array $data Data to update
      * 
