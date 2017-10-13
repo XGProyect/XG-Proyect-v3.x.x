@@ -561,14 +561,14 @@ class Missions
                     pc2.`planet_user_id` AS target_id,
                     pc2.`planet_name` AS target_name
                 FROM " . PLANETS . " AS pc1, " . PLANETS . " AS pc2
-                WHERE pc1.planet_galaxy = '" . $data['fleet_start_galaxy'] . "' AND
-                    pc1.`planet_system` = '" . $data['fleet_start_system'] . "' AND
-                    pc1.`planet_planet` = '" . $data['fleet_start_planet'] . "' AND
-                    pc1.`planet_type` = '" . $data['fleet_start_type'] . "' AND
-                    pc2.`planet_galaxy` = '" . $data['fleet_end_galaxy'] . "' AND
-                    pc2.`planet_system` = '" . $data['fleet_end_system'] . "' AND
-                    pc2.`planet_planet` = '" . $data['fleet_end_planet'] . "' AND
-                    pc2.`planet_type` = '" . $data['fleet_end_type'] . "'"
+                WHERE pc1.planet_galaxy = '" . $data['start']['galaxy'] . "' AND
+                    pc1.`planet_system` = '" . $data['start']['system'] . "' AND
+                    pc1.`planet_planet` = '" . $data['start']['planet'] . "' AND
+                    pc1.`planet_type` = '" . $data['start']['type'] . "' AND
+                    pc2.`planet_galaxy` = '" . $data['end']['galaxy'] . "' AND
+                    pc2.`planet_system` = '" . $data['end']['system'] . "' AND
+                    pc2.`planet_planet` = '" . $data['end']['planet'] . "' AND
+                    pc2.`planet_type` = '" . $data['end']['type'] . "'"
             );
         }
     }

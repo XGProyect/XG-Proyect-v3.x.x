@@ -104,32 +104,29 @@ class Transport extends Missions
             FleetsLib::startLink($fleet_row, '')
         );
 
-        if ($fleet_row['fleet_mess'] == 0) {
+        if ($fleet_row['fleet_mess'] == 0 && $fleet_row['fleet_start_time'] <= time()) {
 
-            if ($fleet_row['fleet_start_time'] < time()) {
+            parent::storeResources($fleet_row, false);
 
-                parent::storeResources($fleet_row, false);
+            $this->transportMessage(
+                $start_owner_id,
+                $message[1],
+                $fleet_row['fleet_start_time'],
+                $this->langs['sys_mess_transport']
+            );
+
+            // MESSAGE FOR THE OTHER USER, IN CASE WE ARE TRANSPORTING TO ANOTHER USER
+            if ($target_owner_id <> $start_owner_id) {
 
                 $this->transportMessage(
-                    $start_owner_id,
-                    $message[1],
+                    $target_owner_id,
+                    $message[2],
                     $fleet_row['fleet_start_time'],
                     $this->langs['sys_mess_transport']
                 );
-
-                // MESSAGE FOR THE OTHER USER, IN CASE WE ARE TRANSPORTING TO ANOTHER USER
-                if ($target_owner_id <> $start_owner_id) {
-
-                    $this->transportMessage(
-                        $target_owner_id,
-                        $message[2],
-                        $fleet_row['fleet_start_time'],
-                        $this->langs['sys_mess_transport']
-                    );
-                }
-
-                $this->Missions_Model->updateReturningFleetResources($fleet_row['fleet_id']);
             }
+
+            $this->Missions_Model->updateReturningFleetResources($fleet_row['fleet_id']);
         } elseif ($fleet_row['fleet_end_time'] < time()) {
 
             $this->transportMessage(
