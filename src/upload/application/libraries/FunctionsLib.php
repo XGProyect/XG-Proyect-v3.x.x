@@ -73,8 +73,8 @@ abstract class FunctionsLib extends XGPCore
         if (!empty($model)) {
 
             // Require file
-            require_once XGP_ROOT . MODELS_PATH . $model . '.php';
-
+            require_once XGP_ROOT . MODELS_PATH . strtolower($model) . '.php';
+            
             $class_name = 'application\models\\' . strtr($model, ['/' => '\\']);
             
             // Create new $library object
