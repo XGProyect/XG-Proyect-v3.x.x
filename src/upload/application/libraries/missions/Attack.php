@@ -18,7 +18,7 @@ use application\libraries\FleetsLib;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
 use application\libraries\PlanetLib;
-use application\models\libraries\Updates_library;
+use application\libraries\Updates_library;
 use Battle;
 use DebugManager;
 use Defense;
