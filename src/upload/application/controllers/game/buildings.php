@@ -351,13 +351,6 @@ class Buildings extends Controller
             return $this->buildButton('all_occupied');
         }
          
-        // check payable and vacations
-        if (!$is_development_payable or $is_on_vacations) {
-
-            // block all or some
-            return $this->buildButton('not_allowed'); 
-        }
-        
         // check if there's any work in progress
         if ($this->isWorkInProgress($building_id)) {
             
@@ -365,6 +358,13 @@ class Buildings extends Controller
             return $this->buildButton('work_in_progress'); 
         }
         
+        // check vacations
+        if ($is_on_vacations) {
+
+            // block all or some
+            return $this->buildButton('not_allowed'); 
+        }
+
         // if a queue was already set
         if ($this->_commander_active) {
             
@@ -379,12 +379,18 @@ class Buildings extends Controller
             }
         }
         
+        // if something is being build
         if (!$this->_commander_active) {
         
             if ($queue_element > 0) {
 
                 return $this->buildCountDownClock($building_id);
             }
+        }
+        
+        if (!$is_development_payable) {
+
+            return $this->buildButton('not_allowed');
         }
         
         return FunctionsLib::setUrl($build_url, '', $this->buildButton('allowed'));
