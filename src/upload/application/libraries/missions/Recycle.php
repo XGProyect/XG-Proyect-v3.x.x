@@ -26,7 +26,7 @@ use application\libraries\FunctionsLib;
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
- * @version  3.0.0
+ * @version  3.1.0
  */
 class Recycle extends Missions
 {
@@ -59,37 +59,35 @@ class Recycle extends Missions
     {
         $recycled_resources = $this->calculateCapacity($fleet_row);
 
-        if ($fleet_row['fleet_mess'] == '0') {
-
-            if ($fleet_row['fleet_start_time'] <= time()) {
+        if ($fleet_row['fleet_mess'] == 0 && $fleet_row['fleet_start_time'] <= time()) {
                 
-                $this->Missions_Model->updatePlanetDebrisFieldAndFleet([
-                    'recycled' => [
-                        'metal' => $recycled_resources['metal'],
-                        'crystal' => $recycled_resources['crystal']
-                    ],
-                    'coords' => [
-                        'galaxy' => $fleet_row['fleet_end_galaxy'],
-                        'system' => $fleet_row['fleet_end_system'],
-                        'planet' => $fleet_row['fleet_end_planet']
-                    ],
-                    'fleet_id' => $fleet_row['fleet_id']
-                ]);
+            $this->Missions_Model->updatePlanetDebrisFieldAndFleet([
+                'recycled' => [
+                    'metal' => $recycled_resources['metal'],
+                    'crystal' => $recycled_resources['crystal']
+                ],
+                'coords' => [
+                    'galaxy' => $fleet_row['fleet_end_galaxy'],
+                    'system' => $fleet_row['fleet_end_system'],
+                    'planet' => $fleet_row['fleet_end_planet']
+                ],
+                'fleet_id' => $fleet_row['fleet_id']
+            ]);
 
-                $message    = sprintf(
-                    $this->langs['sys_recy_gotten'],
-                    FormatLib::prettyNumber($recycled_resources['metal']),
-                    $this->langs['Metal'],
-                    FormatLib::prettyNumber($recycled_resources['crystal']),
-                    $this->langs['Crystal']
-                );
-                $this->recycleMessage(
-                    $fleet_row['fleet_owner'],
-                    $message,
-                    $fleet_row['fleet_start_time'],
-                    $this->langs['sys_recy_report']
-                );
-            }
+            $message    = sprintf(
+                $this->langs['sys_recy_gotten'],
+                FormatLib::prettyNumber($recycled_resources['metal']),
+                $this->langs['Metal'],
+                FormatLib::prettyNumber($recycled_resources['crystal']),
+                $this->langs['Crystal']
+            );
+
+            $this->recycleMessage(
+                $fleet_row['fleet_owner'],
+                $message,
+                $fleet_row['fleet_start_time'],
+                $this->langs['sys_recy_report']
+            );
         } elseif ($fleet_row['fleet_end_time'] <= time()) {
 
             $message    = sprintf(
@@ -125,7 +123,7 @@ class Recycle extends Missions
      */
     private function calculateCapacity($fleet_row)
     {
-        $target_planet = $this->Missions_Model->updatePlanetDebrisFieldAndFleet([
+        $target_planet = $this->Missions_Model->getPlanetDebris([
              'coords' => [
                  'galaxy' => $fleet_row['fleet_end_galaxy'],
                  'system' => $fleet_row['fleet_end_system'],

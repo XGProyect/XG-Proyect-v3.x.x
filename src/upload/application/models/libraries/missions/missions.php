@@ -965,9 +965,9 @@ class Missions
                 `fleet_resource_metal` = `fleet_resource_metal` + '" . $data['recycled']['metal'] . "',
                 `fleet_resource_crystal` = `fleet_resource_crystal` + '" . $data['recycled']['crystal'] . "',
                 `fleet_mess` = '1'
-                WHERE `planet_galaxy` = '" . $data['coords']['fleet_end_galaxy'] . "' AND
-                    `planet_system` = '" . $data['coords']['fleet_end_system'] . "' AND
-                    `planet_planet` = '" . $data['coords']['fleet_end_planet'] . "' AND
+                WHERE `planet_galaxy` = '" . $data['coords']['galaxy'] . "' AND
+                    `planet_system` = '" . $data['coords']['system'] . "' AND
+                    `planet_planet` = '" . $data['coords']['planet'] . "' AND
                     `planet_type` = 1 AND
                     `fleet_id` = '" . (int)$data['fleet_id'] . "'"
             );
