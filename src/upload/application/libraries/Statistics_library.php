@@ -344,13 +344,13 @@ class Statistics_library extends XGPCore
         $all_stats_data = $this->Statistics_library_Model->getAllAllianceStatsData();
 
         // ANY ALLIANCE ?
-        if (empty($all_stats_data) or $db->numRows($all_stats_data) == 0) {
+        if (empty($all_stats_data) or count($all_stats_data) == 0) {
 
             return;
         }
 
         // BUILD ALL THE ARRAYS
-        while ($CurAlliance = $db->fetchAssoc($all_stats_data)) {
+        foreach ($all_stats_data as $CurAlliance) {
 
             $tech['old_rank'][$CurAlliance['alliance_id']]  = $CurAlliance['alliance_statistic_technology_rank'];
             $tech['points'][$CurAlliance['alliance_id']]    = $CurAlliance['technology_points'];
