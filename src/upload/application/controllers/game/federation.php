@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
-
 namespace application\controllers\game;
 
 use application\core\Controller;
@@ -30,6 +29,7 @@ use application\libraries\FunctionsLib;
  */
 class Federation extends Controller
 {
+
     const MODULE_ID = 8;
 
     private $_lang;
@@ -93,7 +93,7 @@ class Federation extends Controller
 
         // QUERY
         $fleet = $this->_db->queryFetch(
-                "SELECT `fleet_id`,
+            "SELECT `fleet_id`,
             `fleet_start_time`,
             `fleet_end_time`,
             `fleet_mess`,
@@ -162,7 +162,7 @@ class Federation extends Controller
 
             $acs_id = $this->_db->insertId();
             $acs_madnessred = $this->_db->query(
-                    "SELECT `acs_fleet_invited`, `acs_fleet_name`
+                "SELECT `acs_fleet_invited`, `acs_fleet_name`
             FROM " . ACS_FLEETS . "
             WHERE `acs_fleet_name` = '" . $acs_code . "' AND
                             `acs_fleet_members` = '" . $this->_current_user['user_id'] . "' AND
@@ -174,14 +174,14 @@ class Federation extends Controller
             );
 
             $this->_db->query(
-                    "UPDATE " . FLEETS . "
+                "UPDATE " . FLEETS . "
                 SET fleet_group = '" . $acs_id . "'
                 WHERE fleet_id = '" . intval($this->_fleet_id) . "'"
             );
         } else {
 
             $acs_madnessred = $this->_db->query(
-                    "SELECT `acs_fleet_invited`, `acs_fleet_name`
+                "SELECT `acs_fleet_invited`, `acs_fleet_name`
                 FROM " . ACS_FLEETS . "
                 WHERE acs_fleet_id = '" . intval($fleet['fleet_group']) . "'"
             );
@@ -199,7 +199,7 @@ class Federation extends Controller
             if ($b != '') {
 
                 $member_qry = $this->_db->query(
-                        "SELECT `user_name`
+                    "SELECT `user_name`
                     FROM " . USERS . "
                     WHERE `user_id` ='" . intval($b) . "' ;"
                 );

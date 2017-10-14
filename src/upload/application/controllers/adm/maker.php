@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
-
 namespace application\controllers\adm;
 
 use application\core\Controller;
@@ -33,6 +32,7 @@ use application\libraries\PlanetLib;
  */
 class Maker extends Controller
 {
+
     private $_current_user;
     private $_creator;
     private $_alert;
@@ -207,20 +207,20 @@ class Maker extends Controller
 
             if ($moon_planet && is_numeric($planet_id)) {
                 if ($moon_planet['id_moon'] == '' && $moon_planet['planet_type'] == 1 && $moon_planet['planet_destroyed'] == 0) {
-                    
+
                     $galaxy = $moon_planet['planet_galaxy'];
                     $system = $moon_planet['planet_system'];
                     $planet = $moon_planet['planet_planet'];
-                    $owner  = $moon_planet['planet_user_id'];
+                    $owner = $moon_planet['planet_user_id'];
 
-                    $size       = 0;
-                    $errors     = 0;
-                    $mintemp    = 0;
-                    $maxtemp    = 0;
+                    $size = 0;
+                    $errors = 0;
+                    $mintemp = 0;
+                    $maxtemp = 0;
 
                     if (!isset($_POST['diameter_check'])) {
                         if (is_numeric($diameter)) {
-                            $size   = $diameter;
+                            $size = $diameter;
                         } else {
                             $errors++;
                             $this->_alert = AdministrationLib::saveMessage('warning', $this->_lang['mk_moon_only_numbers']);
@@ -229,28 +229,19 @@ class Maker extends Controller
 
                     if (!isset($_POST['temp_check'])) {
                         if (is_numeric($temp_max) && is_numeric($temp_min)) {
-                            $mintemp    = $temp_min;
-                            $maxtemp    = $temp_max;
+                            $mintemp = $temp_min;
+                            $maxtemp = $temp_max;
                         } else {
                             $errors++;
                             $this->_alert = AdministrationLib::saveMessage('warning', $this->_lang['mk_moon_only_numbers']);
-                        }   
+                        }
                     }
-                    
+
                     if ($errors == 0) {
                         $this->_creator->setNewMoon(
-                            $galaxy,
-                            $system,
-                            $planet,
-                            $owner,
-                            $moon_name,
-                            0,
-                            $size,
-                            $max_fields,
-                            $mintemp,
-                            $maxtemp
+                            $galaxy, $system, $planet, $owner, $moon_name, 0, $size, $max_fields, $mintemp, $maxtemp
                         );
-                        
+
                         $this->_alert = AdministrationLib::saveMessage('ok', $this->_lang['mk_moon_added']);
                     }
                 } else {

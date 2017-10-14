@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.4
  */
-
 namespace application\libraries\messenger;
 
 use application\core\enumerators\MessagesEnumerator;
@@ -29,6 +28,7 @@ use application\libraries\FunctionsLib;
  */
 final class MessagesOptions
 {
+
     /**
      *
      * @var type
@@ -77,7 +77,6 @@ final class MessagesOptions
      */
     private $_message_format;
 
-
     public function getTo()
     {
         return $this->_to;
@@ -95,7 +94,7 @@ final class MessagesOptions
 
     public function getType()
     {
-        if ($this->_type == '' or !is_object($this->_type)) {
+        if ($this->_type == '' or ! is_object($this->_type)) {
 
             return MessagesEnumerator::general;
         }
@@ -162,10 +161,10 @@ final class MessagesOptions
     {
         if ($this->_message_format == 1) {
 
-            $this->_message_text    = stripslashes($message_text);
+            $this->_message_text = stripslashes($message_text);
         } else {
 
-            $this->_message_text    = FunctionsLib::formatText($message_text);
+            $this->_message_text = FunctionsLib::formatText($message_text);
         }
     }
 

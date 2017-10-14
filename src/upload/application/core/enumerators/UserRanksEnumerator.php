@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.4
  */
-
 namespace application\core\enumerators;
 
 /**
@@ -26,10 +25,12 @@ namespace application\core\enumerators;
  */
 abstract class UserRanksEnumerator
 {
-    const player    = 0;
-    const go        = 1;
-    const sgo       = 2;
-    const admin     = 3;
+
+    const player = 0;
+    const go = 1;
+    const sgo = 2;
+    const admin = 3;
+
 }
 
 /* end of UserRanksEnumerator.php */

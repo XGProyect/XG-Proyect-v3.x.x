@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
-
 namespace application\controllers\game;
 
 use application\core\Controller;
@@ -30,6 +29,7 @@ use application\libraries\FunctionsLib;
  */
 class Options extends Controller
 {
+
     const MODULE_ID = 21;
 
     private $_current_user;
@@ -89,13 +89,13 @@ class Options extends Controller
                     planet_ship_solar_satellite_percent = '10'
                     WHERE `setting_user_id` = '" . intval($this->_current_user['user_id']) . "' AND planet_user_id = '" . intval($this->_current_user['user_id']) . "'");
             }
-            
+
             $this->_db->query(
                 "UPDATE `" . SETTINGS . "` AS s SET
                     s.`setting_delete_account` = '" . ($_POST['db_deaktjava'] == 'on' ? time() : 0) . "'
                 WHERE s.`setting_user_id` = '" . $this->_current_user['user_id'] . "'"
             );
-            
+
             FunctionsLib::redirect('game.php?page=options');
         }
 
@@ -249,30 +249,30 @@ class Options extends Controller
             $parse['dpath'] = DPATH;
 
             if ($this->_current_user['setting_vacations_status']) {
-                
+
                 $opt_modev_exit = ($this->_current_user['setting_vacations_status'] == 0) ? " checked='1'/" : '';
                 $vacation_until = date(FunctionsLib::readConfig('date_format_extended'), $this->_current_user['setting_vacations_until']);
-                
+
                 if ($this->_current_user['setting_vacations_until'] <= time()) {
-                    
-                    $parse['op_finish_vac_mode']    = '<th>' . $this->_lang['op_end_vacation_mode'] . '</th>';
-                    $parse['op_finish_vac_mode']   .= '<th><input type="checkbox" name="exit_modus" ' . $opt_modev_exit . '/></th>';
+
+                    $parse['op_finish_vac_mode'] = '<th>' . $this->_lang['op_end_vacation_mode'] . '</th>';
+                    $parse['op_finish_vac_mode'] .= '<th><input type="checkbox" name="exit_modus" ' . $opt_modev_exit . '/></th>';
                 } else {
 
-                    $parse['op_vac_mode_msg']       = '<th colspan="2">' . $this->_lang['op_vacation_mode_active_message'] . '<br> ' . $vacation_until . '</th>';
+                    $parse['op_vac_mode_msg'] = '<th colspan="2">' . $this->_lang['op_vacation_mode_active_message'] . '<br> ' . $vacation_until . '</th>';
                 }
 
-                $parse['db_deaktjava']      = '';
-                $parse['db_deaktjava_until']= '';
-                $parse['verify']            = '';
-                
+                $parse['db_deaktjava'] = '';
+                $parse['db_deaktjava_until'] = '';
+                $parse['verify'] = '';
+
                 if ($this->_current_user['setting_delete_account'] > 0) {
-                    
-                    $parse['db_deaktjava']      = " checked='checked'";
-                    $parse['db_deaktjava_until']= date(FunctionsLib::readConfig('date_format_extended'), ($this->_current_user['setting_delete_account'] + 60 * 60 * 24 * 7));
-                    $parse['verify']            = '<input type="hidden" name="loeschen_am" value="' . $this->_current_user['setting_delete_account'] . '">';
+
+                    $parse['db_deaktjava'] = " checked='checked'";
+                    $parse['db_deaktjava_until'] = date(FunctionsLib::readConfig('date_format_extended'), ($this->_current_user['setting_delete_account'] + 60 * 60 * 24 * 7));
+                    $parse['verify'] = '<input type="hidden" name="loeschen_am" value="' . $this->_current_user['setting_delete_account'] . '">';
                 }
-                
+
                 parent::$page->display(parent::$page->parseTemplate(parent::$page->getTemplate('options/options_body_vmode'), $parse));
             } else {
                 $parse['opt_lst_ord_data'] = "<option value =\"0\"" . (($this->_current_user['setting_planet_sort'] == 0) ? " selected" : "") . ">" . $this->_lang['op_sort_colonization'] . "</option>";

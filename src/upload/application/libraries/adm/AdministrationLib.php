@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
-
 namespace application\libraries\adm;
 
 use application\core\Database;
@@ -30,6 +29,7 @@ use application\libraries\FunctionsLib;
  */
 class AdministrationLib extends XGPCore
 {
+
     /**
      * haveAccess
      *
@@ -47,7 +47,7 @@ class AdministrationLib extends XGPCore
             return false;
         }
     }
-    
+
     /**
      * noAccessMessage
      *
@@ -58,10 +58,7 @@ class AdministrationLib extends XGPCore
     public static function noAccessMessage($mes = '')
     {
         FunctionsLib::message(
-            self::saveMessage('error', $mes, false),
-            '',
-            '',
-            true
+            self::saveMessage('error', $mes, false), '', '', true
         );
     }
 
@@ -91,11 +88,11 @@ class AdministrationLib extends XGPCore
      */
     public static function authorization($user_level, $permission)
     {
-        $QueryModeration    = FunctionsLib::readConfig('moderation');
-        $QueryModerationEx  = explode(";", $QueryModeration);
-        $Moderator          = explode(",", $QueryModerationEx[0]);
-        $Operator           = explode(",", $QueryModerationEx[1]);
-        $Administrator      = explode(",", $QueryModerationEx[2]);
+        $QueryModeration = FunctionsLib::readConfig('moderation');
+        $QueryModerationEx = explode(";", $QueryModeration);
+        $Moderator = explode(",", $QueryModerationEx[0]);
+        $Operator = explode(",", $QueryModerationEx[1]);
+        $Administrator = explode(",", $QueryModerationEx[2]);
 
         if ($user_level == 1) {
             $permissions['observation'] = $Moderator[0];
@@ -155,9 +152,9 @@ class AdministrationLib extends XGPCore
 
         if (!$dismissible) {
 
-            $parse['dismissible']   = 'hide';
+            $parse['dismissible'] = 'hide';
         }
-        
+
         return parent::$page->parseTemplate(parent::$page->getTemplate('adm/save_message_view'), $parse);
     }
 
@@ -215,14 +212,12 @@ class AdministrationLib extends XGPCore
      */
     public static function secureConnection()
     {
-        if ((FunctionsLib::readConfig('ssl_enabled') == 1)
-            && ($_SERVER['SERVER_PORT'] !== 443)
-            && (empty($_SERVER['HTTPS']) or $_SERVER['HTTPS'] === 'off')) {
+        if ((FunctionsLib::readConfig('ssl_enabled') == 1) && ($_SERVER['SERVER_PORT'] !== 443) && (empty($_SERVER['HTTPS']) or $_SERVER['HTTPS'] === 'off')) {
 
             FunctionsLib::redirect('https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
         }
     }
-    
+
     /**
      * adminLogin
      *
@@ -237,10 +232,10 @@ class AdministrationLib extends XGPCore
         if ($admin_id != 0 && !empty($admin_name) && !empty($password)) {
 
             parent::$users->userLogin($admin_id, $admin_name, $password);
-            
-            $_SESSION['admin_id']        = $admin_id;
-            $_SESSION['admin_name']      = $admin_name;
-            $_SESSION['admin_password']  = sha1($password . '-' . SECRETWORD);
+
+            $_SESSION['admin_id'] = $admin_id;
+            $_SESSION['admin_name'] = $admin_name;
+            $_SESSION['admin_password'] = sha1($password . '-' . SECRETWORD);
 
             return true;
         } else {
@@ -248,7 +243,7 @@ class AdministrationLib extends XGPCore
             return false;
         }
     }
-    
+
     /**
      * checkSession
      *
@@ -258,12 +253,12 @@ class AdministrationLib extends XGPCore
     {
         if (!self::isSessionSet()) {
 
-            $db     = new Database();
-            $parse  = parent::$lang;
+            $db = new Database();
+            $parse = parent::$lang;
 
             if ($_POST) {
 
-                $login  = $db->queryFetch(
+                $login = $db->queryFetch(
                     "SELECT `user_id`, `user_name`, `user_password`
                     FROM " . USERS . "
                     WHERE `user_email` = '" . $db->escapeValue($_POST['inputEmail']) . "'
@@ -287,22 +282,19 @@ class AdministrationLib extends XGPCore
             } else {
 
                 $parse['alert'] = '';
-                
+
                 if (isset($_GET['error']) && $_GET['error'] == 1) {
 
                     $parse['alert'] = self::saveMessage('error', parent::$lang['lg_error_wrong_data'], false);
                 }
-                
+
                 parent::$page->display(
-                    parent::$page->parseTemplate(parent::$page->getTemplate('adm/login_view'), $parse),
-                    false,
-                    '',
-                    false
+                    parent::$page->parseTemplate(parent::$page->getTemplate('adm/login_view'), $parse), false, '', false
                 );
             }
         }
     }
-    
+
     /**
      * closeSession
      *
@@ -314,7 +306,7 @@ class AdministrationLib extends XGPCore
         unset($_SESSION['admin_name']);
         unset($_SESSION['admin_password']);
     }
-    
+
     /**
      * isSessionSet
      *
@@ -322,7 +314,7 @@ class AdministrationLib extends XGPCore
      */
     private static function isSessionSet()
     {
-        if (!isset($_SESSION['admin_id']) or !isset($_SESSION['admin_name']) or !isset($_SESSION['admin_password'])) {
+        if (!isset($_SESSION['admin_id']) or ! isset($_SESSION['admin_name']) or ! isset($_SESSION['admin_password'])) {
 
             return false;
         } else {
@@ -330,7 +322,7 @@ class AdministrationLib extends XGPCore
             return true;
         }
     }
-    
+
     /**
      * Check if an update is required
      * 
@@ -340,8 +332,8 @@ class AdministrationLib extends XGPCore
     {
         if (SYSTEM_VERSION != FunctionsLib::readConfig('version')) {
 
-            $exclude_pages  = ['', 'home', 'update', 'logout'];
-            
+            $exclude_pages = ['', 'home', 'update', 'logout'];
+
             if (isset($_GET['page']) && !in_array($_GET['page'], $exclude_pages)) {
 
                 FunctionsLib::redirect(XGP_ROOT . 'admin.php?page=update');

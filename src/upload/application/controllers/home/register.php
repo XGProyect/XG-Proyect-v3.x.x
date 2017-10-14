@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Register Controller
  *
@@ -12,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
-
 namespace application\controllers\home;
 
 use application\core\Controller;
@@ -32,10 +30,11 @@ use application\libraries\PlanetLib;
  */
 class Register extends Controller
 {
+
     private $creator;
     private $langs;
     private $current_user;
-            
+
     /**
      * Contains the error 
      * 
@@ -50,14 +49,14 @@ class Register extends Controller
     {
         parent::__construct();
 
-        $this->_db      = new Database();
-        $this->langs    = parent::$lang;
+        $this->_db = new Database();
+        $this->langs = parent::$lang;
 
         if (FunctionsLib::readConfig('reg_enable') == 1) {
 
-            $this->creator      = new PlanetLib();
+            $this->creator = new PlanetLib();
             $this->current_user = parent::$users;
-            
+
             $this->buildPage();
         } else {
 
@@ -87,22 +86,22 @@ class Register extends Controller
             if (!$this->runValidations()) {
 
                 if ($this->error_id != '') {
-                    
-                    $url    = 'index.php?character=' . $_POST['character'] . '&email=' . $_POST['email'] . '&error=' . $this->error_id;
+
+                    $url = 'index.php?character=' . $_POST['character'] . '&email=' . $_POST['email'] . '&error=' . $this->error_id;
                 } else {
-                    
-                    $url    = 'index.php';
+
+                    $url = 'index.php';
                 }
-                
+
                 FunctionsLib::redirect($url);
             } else {
 
-                $user_password      = $_POST['password'];
-                $user_name          = $_POST['character'];
-                $user_email         = $_POST['email'];
-                $hashed_password    = sha1($user_password);
+                $user_password = $_POST['password'];
+                $user_name = $_POST['character'];
+                $user_email = $_POST['email'];
+                $hashed_password = sha1($user_password);
 
-                $user_id            = $this->current_user->createUserWithOptions(
+                $user_id = $this->current_user->createUserWithOptions(
                     [
                         'user_name' => $this->_db->escapeValue(strip_tags($user_name)),
                         'user_email' => $this->_db->escapeValue($user_email),
@@ -197,9 +196,9 @@ class Register extends Controller
                      WHERE `user_id` = '" . $user_id . "' LIMIT 1;"
                 );
 
-                $from       = $this->langs['re_welcome_message_from'];
-                $subject    = $this->langs['re_welcome_message_subject'];
-                $message    = str_replace('%s', $user_name, $this->langs['re_welcome_message_content']);
+                $from = $this->langs['re_welcome_message_from'];
+                $subject = $this->langs['re_welcome_message_subject'];
+                $message = str_replace('%s', $user_name, $this->langs['re_welcome_message_content']);
 
                 // Send Welcome Message to the user if the feature is enabled
                 if (FunctionsLib::readConfig('reg_welcome_message')) {
@@ -230,28 +229,24 @@ class Register extends Controller
      * param2 $password
      *
      * return prepare the email and return mail status, delivered or not
-     **/
+     * */
     private function sendPassEmail($emailaddress, $user_name, $password)
     {
         $game_name = FunctionsLib::readConfig('game_name');
 
-        $parse                          = $this->langs;
-        $parse['user_name']             = $user_name;
-        $parse['user_pass']             = $password;
-        $parse['game_url']              = GAMEURL;
-        $parse['re_mail_text_part1']    = str_replace('%s', $game_name, $this->langs['re_mail_text_part1']);
-        $parse['re_mail_text_part7']    = str_replace('%s', $game_name, $this->langs['re_mail_text_part7']);
+        $parse = $this->langs;
+        $parse['user_name'] = $user_name;
+        $parse['user_pass'] = $password;
+        $parse['game_url'] = GAMEURL;
+        $parse['re_mail_text_part1'] = str_replace('%s', $game_name, $this->langs['re_mail_text_part1']);
+        $parse['re_mail_text_part7'] = str_replace('%s', $game_name, $this->langs['re_mail_text_part7']);
 
         $email = parent::$page->parseTemplate(parent::$page->getTemplate('home/email_template'), $parse);
         $status = FunctionsLib::sendEmail(
-            $emailaddress,
-            $this->langs['re_mail_register_at'] . FunctionsLib::readConfig('game_name'),
-            $email,
-            [
+                $emailaddress, $this->langs['re_mail_register_at'] . FunctionsLib::readConfig('game_name'), $email, [
                 'mail' => FunctionsLib::readConfig('admin_email'),
                 'name' => $game_name
-            ],
-            'html'
+                ], 'html'
         );
 
         return $status;
@@ -311,7 +306,7 @@ class Register extends Controller
     private function checkUser()
     {
         return $this->_db->queryFetch(
-            "SELECT `user_name`
+                "SELECT `user_name`
             FROM " . USERS . "
             WHERE `user_name` = '" . $this->_db->escapeValue($_POST['character']) . "'
             LIMIT 1;"
@@ -322,11 +317,11 @@ class Register extends Controller
      * checkEmail()
      *
      * @return boolean
-     **/
+     * */
     private function checkEmail()
     {
         return $this->_db->queryFetch(
-            "SELECT `user_email`
+                "SELECT `user_email`
             FROM " . USERS . "
             WHERE `user_email` = '" . $this->_db->escapeValue($_POST['email']) . "'
             LIMIT 1;"

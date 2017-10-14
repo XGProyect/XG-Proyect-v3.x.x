@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-
 namespace application\libraries\enumerators;
 
 /**
@@ -26,8 +25,10 @@ namespace application\libraries\enumerators;
  */
 abstract class SwitchIntEnumerator
 {
+
     const on = 1;
-    const off = 0;  
+    const off = 0;
+
 }
 
 /**
@@ -42,8 +43,10 @@ abstract class SwitchIntEnumerator
  */
 abstract class SwitchBoolEnumerator
 {
+
     const on = true;
-    const off = false;  
+    const off = false;
+
 }
 
 /* end of SwitchEnumerator.php */

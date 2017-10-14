@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
-
 namespace application\core;
 
 /**
@@ -26,6 +25,7 @@ namespace application\core;
  */
 class Objects
 {
+
     private $objects;
     private $relations;
     private $price;
@@ -44,11 +44,11 @@ class Objects
         require XGP_ROOT . CORE_PATH . 'objects_collection.php';
 
         // SET THE ARRAY ELEMENTS TO A PARTICULAR PROPERTY
-        $this->objects      = $resource;
-        $this->relations    = $requeriments;
-        $this->price        = $pricelist;
+        $this->objects = $resource;
+        $this->relations = $requeriments;
+        $this->price = $pricelist;
         $this->combat_specs = $CombatCaps;
-        $this->production   = $ProdGrid;
+        $this->production = $ProdGrid;
         $this->objects_list = $reslist;
     }
 
@@ -62,7 +62,7 @@ class Objects
     public function getObjects($object_id = null)
     {
         if (!empty($object_id)) {
-            
+
             return $this->objects[$object_id];
         } else {
 

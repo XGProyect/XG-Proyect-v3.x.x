@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
-
 namespace application\controllers\adm;
 
 use application\core\Controller;
@@ -31,6 +30,7 @@ use application\libraries\PlanetLib;
  */
 class Reset extends Controller
 {
+
     private $_current_user;
     private $_creator;
     private $_lang;

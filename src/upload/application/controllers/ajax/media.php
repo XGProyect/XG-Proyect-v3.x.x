@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
-
 namespace application\controllers\ajax;
 
 use application\core\Controller;
@@ -28,6 +27,7 @@ use application\core\Controller;
  */
 class Media extends Controller
 {
+
     private $langs;
 
     /**
@@ -39,11 +39,11 @@ class Media extends Controller
     {
         parent::__construct();
 
-        $this->langs    = parent::$lang;
+        $this->langs = parent::$lang;
 
         $this->buildPage();
     }
-    
+
     /**
      * buildPage
      *
@@ -52,10 +52,7 @@ class Media extends Controller
     private function buildPage()
     {
         parent::$page->display(
-            parent::$page->parseTemplate(parent::$page->getTemplate('ajax/media_view'), $this->langs),
-            false,
-            '',
-            false
+            parent::$page->parseTemplate(parent::$page->getTemplate('ajax/media_view'), $this->langs), false, '', false
         );
     }
 }

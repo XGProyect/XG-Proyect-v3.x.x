@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
-
 namespace application\libraries\missions;
 
 use Lang;
@@ -28,6 +27,7 @@ use Lang;
  */
 class Attack_lang implements Lang
 {
+
     private $lang;
 
     /**
@@ -76,7 +76,7 @@ class Attack_lang implements Lang
      */
     public function getDefendersDefendingDescr($damage)
     {
-        return $this->lang['fleet_attack_2'] .' '. $damage . ' ' . $this->lang['damage'];
+        return $this->lang['fleet_attack_2'] . ' ' . $damage . ' ' . $this->lang['damage'];
     }
 
     /**
@@ -101,7 +101,7 @@ class Attack_lang implements Lang
      */
     public function getAttackersDefendingDescr($damage)
     {
-        return $this->lang['fleet_defs_2']. ' ' . $damage . ' ' . $this->lang['damage'];
+        return $this->lang['fleet_defs_2'] . ' ' . $damage . ' ' . $this->lang['damage'];
     }
 
     /**

@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
-
 namespace application\controllers\adm;
 
 use application\core\Controller;
@@ -31,6 +30,7 @@ use application\libraries\FunctionsLib;
  */
 class Alliances extends Controller
 {
+
     private $_lang;
     private $_edit;
     private $_planet;
@@ -72,7 +72,6 @@ class Alliances extends Controller
     {
         $this->_db->closeConnection();
     }
-
     ######################################
     #
 	# main methods
@@ -184,7 +183,6 @@ class Alliances extends Controller
                 break;
         }
     }
-
     ######################################
     #
 	# get_data methods
@@ -257,24 +255,22 @@ class Alliances extends Controller
      */
     private function get_data_members()
     {
-        $parse                          = $this->_lang;
-        $parse['al_alliance_members']   = str_replace(
-            '%s',
-            $this->_alliance_query['alliance_name'],
-            $this->_lang['al_alliance_members']
+        $parse = $this->_lang;
+        $parse['al_alliance_members'] = str_replace(
+            '%s', $this->_alliance_query['alliance_name'], $this->_lang['al_alliance_members']
         );
-        $all_members                    = $this->get_members();
-        $alliance_ranks                 = unserialize($this->_alliance_query['alliance_ranks']);
-        $template                       = parent::$page->getTemplate('adm/alliances_members_row_view');
-        $members                        = '';
+        $all_members = $this->get_members();
+        $alliance_ranks = unserialize($this->_alliance_query['alliance_ranks']);
+        $template = parent::$page->getTemplate('adm/alliances_members_row_view');
+        $members = '';
 
         if (!empty($all_members)) {
 
             while ($member = $this->_db->fetchAssoc($all_members)) {
 
-                $member['alliance_request']         = ( $member['user_ally_request'] ) ? $this->_lang['al_request_yes'] : $this->_lang['al_request_no'];
-                $member['ally_request_text']        = ( $member['user_ally_request_text'] ) ? $this->_lang['ally_request_text'] : '-';
-                $member['alliance_register_time']   = date(FunctionsLib::readConfig('date_format_extended'), $member['user_ally_register_time']);
+                $member['alliance_request'] = ( $member['user_ally_request'] ) ? $this->_lang['al_request_yes'] : $this->_lang['al_request_no'];
+                $member['ally_request_text'] = ( $member['user_ally_request_text'] ) ? $this->_lang['ally_request_text'] : '-';
+                $member['alliance_register_time'] = date(FunctionsLib::readConfig('date_format_extended'), $member['user_ally_register_time']);
 
                 if ($member['user_id'] == $member['alliance_owner']) {
 
@@ -299,7 +295,6 @@ class Alliances extends Controller
 
         return parent::$page->parseTemplate(parent::$page->getTemplate("adm/alliances_members_view"), $parse);
     }
-
     ######################################
     #
 	# save / update methods
@@ -469,7 +464,7 @@ class Alliances extends Controller
                         $ids_array .= $user_id . ',';
                     }
                 }
-                
+
                 $amount = $this->_db->queryFetch(
                     "SELECT 
                         COUNT(`user_id`) AS `Amount`
@@ -484,12 +479,11 @@ class Alliances extends Controller
                         `user_ally_request` = 0,
                         `user_ally_request_text` = '',
                         `user_ally_rank_id` = 0
-                        WHERE `user_id` IN (" . rtrim($ids_array, ',') . ")");  
+                        WHERE `user_id` IN (" . rtrim($ids_array, ',') . ")");
 
                     // RETURN THE ALERT
                     $this->_alert_info = $this->_lang['us_all_ok_message'];
                     $this->_alert_type = 'ok';
-
                 } else {
                     // RETURN THE ALERT
                     $this->_alert_info = $this->_lang['al_cant_delete_last_one'];
@@ -498,7 +492,6 @@ class Alliances extends Controller
             }
         }
     }
-
     ######################################
     #
 	# build combo methods
@@ -522,7 +515,6 @@ class Alliances extends Controller
 
         return $combo_rows;
     }
-
     ######################################
     #
 	# other required methods
@@ -626,7 +618,7 @@ class Alliances extends Controller
     private function get_members()
     {
         return $this->_db->query(
-            "SELECT u.`user_id`,
+                "SELECT u.`user_id`,
                 u.`user_name`,
                 u.`user_ally_request`,
                 u.`user_ally_request_text`,

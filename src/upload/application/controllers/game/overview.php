@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
-
 namespace application\controllers\game;
 
 use application\core\Controller;
@@ -33,6 +32,7 @@ use application\libraries\Updates_library;
  */
 class Overview extends Controller
 {
+
     const MODULE_ID = 1;
 
     private $_lang;
@@ -46,13 +46,13 @@ class Overview extends Controller
     public function __construct()
     {
         parent::__construct();
-        
+
         // check if session is active
         parent::$users->checkSession();
 
         // load Model
         parent::loadModel('game/overview');
-        
+
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
@@ -201,13 +201,13 @@ class Overview extends Controller
      * return fleets movements rows
      */
     private function get_fleet_movements()
-    {        
-        $fleet      = '';
-        $fleet_row  = [];
-        $record     = 0;
+    {
+        $fleet = '';
+        $fleet_row = [];
+        $record = 0;
 
         $own_fleets = $this->Overview_Model->getOwnFleets($this->_current_user['user_id']);
-        
+
         foreach ($own_fleets as $fleets) {
 
             ######################################
@@ -217,27 +217,27 @@ class Overview extends Controller
             ######################################
 
             $start_time = $fleets['fleet_start_time'];
-            $stay_time  = $fleets['fleet_end_stay'];
-            $end_time   = $fleets['fleet_end_time'];
+            $stay_time = $fleets['fleet_end_stay'];
+            $end_time = $fleets['fleet_end_time'];
 
-            $fleet_status   = $fleets['fleet_mess'];
-            $fleet_group    = $fleets['fleet_group'];
-            $id             = $fleets['fleet_id'];
+            $fleet_status = $fleets['fleet_mess'];
+            $fleet_group = $fleets['fleet_group'];
+            $id = $fleets['fleet_id'];
 
             if ($fleets['fleet_owner'] == $this->_current_user['user_id']) {
 
                 $record++;
 
                 $label = 'fs';
-                $start_block_id = (string)$start_time.$id;
-                $stay_block_id  = (string)$stay_time.$id;
-                $end_block_id   = (string)$end_time.$id;
-                
+                $start_block_id = (string) $start_time . $id;
+                $stay_block_id = (string) $stay_time . $id;
+                $end_block_id = (string) $end_time . $id;
+
                 $fleet_row[$start_block_id] = !isset($fleet_row[$start_block_id]) ? '' : $fleet_row[$start_block_id];
                 $fleet_row[$stay_block_id] = !isset($fleet_row[$stay_block_id]) ? '' : $fleet_row[$stay_block_id];
                 $fleet_row[$end_block_id] = !isset($fleet_row[$end_block_id]) ? '' : $fleet_row[$end_block_id];
-                
-                
+
+
                 if ($start_time > time()) {
 
                     $fleet_row[$start_block_id] = FleetsLib::flyingFleetsTable($fleets, 0, true, $label, $record, $this->_current_user);
@@ -269,19 +269,19 @@ class Overview extends Controller
             #
             ######################################
             if ($fleets['fleet_owner'] != $this->_current_user['user_id']) {
-                
+
                 if ($fleets['fleet_mission'] == 2) {
 
                     $record++;
                     $start_time = ($fleet_status > 0) ? '' : $fleets['fleet_start_time'];
 
-                    $start_block_id = (string)$start_time.$id;
+                    $start_block_id = (string) $start_time . $id;
                     $fleet_row[$start_block_id] = !isset($fleet_row[$start_block_id]) ? '' : $fleet_row[$start_block_id];
-                    
+
                     if ($start_time > time()) {
 
                         $fleet_row[$start_block_id] = FleetsLib::flyingFleetsTable(
-                            $fleets, 0, false, 'ofs', $record, $this->_current_user
+                                $fleets, 0, false, 'ofs', $record, $this->_current_user
                         );
                     }
                 }
@@ -295,9 +295,9 @@ class Overview extends Controller
                         $start_time = $fleets['fleet_start_time'];
                     }
 
-                    $start_block_id = (string)$start_time.$id;
+                    $start_block_id = (string) $start_time . $id;
                     $fleet_row[$start_block_id] = !isset($fleet_row[$start_block_id]) ? '' : $fleet_row[$start_block_id];
-                    
+
                     if ($start_time > time()) {
                         $fleet_row[$start_block_id] = FleetsLib::flyingFleetsTable($fleets, 0, false, 'ofs', $record, $this->_current_user);
                     }
@@ -318,12 +318,12 @@ class Overview extends Controller
                     $stay_time = $fleets['fleet_end_stay'];
                     $id = $fleets['fleet_id'];
 
-                    $start_block_id = (string)$start_time.$id;
-                    $stay_block_id  = (string)$stay_time.$id;
+                    $start_block_id = (string) $start_time . $id;
+                    $stay_block_id = (string) $stay_time . $id;
 
                     $fleet_row[$start_block_id] = !isset($fleet_row[$start_block_id]) ? '' : $fleet_row[$start_block_id];
                     $fleet_row[$stay_block_id] = !isset($fleet_row[$stay_block_id]) ? '' : $fleet_row[$stay_block_id];
-                    
+
                     if ($start_time > time()) {
                         $fleet_row[$start_block_id] = FleetsLib::flyingFleetsTable($fleets, 0, false, 'ofs', $record, $this->_current_user);
                     }
@@ -346,7 +346,7 @@ class Overview extends Controller
 
                 $fleet .= $content . "\n";
             }
-            
+
             unset($fleet_row);
         }
 
@@ -384,9 +384,9 @@ class Overview extends Controller
     private function get_planets()
     {
         $colony = 1;
-        
-        $planets_query  = $this->Overview_Model->getPlanets($this->_current_user['user_id']);
-        $planet_block   = '<tr>';
+
+        $planets_query = $this->Overview_Model->getPlanets($this->_current_user['user_id']);
+        $planet_block = '<tr>';
 
         foreach ($planets_query as $user_planet) {
             if ($user_planet['planet_id'] != $this->_current_user['user_current_planet'] && $user_planet['planet_type'] != 3) {

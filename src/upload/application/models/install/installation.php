@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-
 namespace application\models\install;
 
 /**
@@ -26,15 +25,16 @@ namespace application\models\install;
  */
 class Installation
 {
+
     private $db = null;
-    
+
     /**
      * __construct()
      */
     public function __construct($db)
-    {        
+    {
         // use this to make queries
-        $this->db   = $db;
+        $this->db = $db;
     }
 
     /**
@@ -46,7 +46,7 @@ class Installation
     {
         $this->db->closeConnection();
     }
-    
+
     /**
      * Get a list of tables
      * 
@@ -57,10 +57,10 @@ class Installation
     public function getListOfTables($db_name)
     {
         return $this->db->queryFetchAll(
-            "SHOW TABLES FROM " . $db_name
+                "SHOW TABLES FROM " . $db_name
         );
     }
-    
+
     /**
      * Get a count of admins
      * 
@@ -69,11 +69,11 @@ class Installation
     public function getAdmin()
     {
         return $this->db->queryFetch(
-            "SELECT COUNT(`user_id`) as count FROM " . USERS . " 
+                "SELECT COUNT(`user_id`) as count FROM " . USERS . " 
                 WHERE `user_id` = '1' OR `user_authlevel` = '3';"
         );
     }
-    
+
     /**
      * Check if the connection can be stablish
      * 
@@ -87,7 +87,7 @@ class Installation
     {
         return $this->db->tryConnection($host, $user, $password);
     }
-    
+
     /**
      * Check if the database name exists
      * 
@@ -99,7 +99,7 @@ class Installation
     {
         return $this->db->tryDatabase($db_name);
     }
-    
+
     /**
      * Set for windows sql mode to MYSQL40
      * 
@@ -111,9 +111,9 @@ class Installation
         $this->db->query("set @orig_mode = @@global.sql_mode");
 
         // Set sql_mode to one that won't trigger errors...
-        $this->db->query('set @@global.sql_mode = "MYSQL40"'); 
+        $this->db->query('set @@global.sql_mode = "MYSQL40"');
     }
-    
+
     /**
      * Run a simple insert query
      * 

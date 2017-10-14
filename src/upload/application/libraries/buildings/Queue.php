@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-
 namespace application\libraries\buildings;
 
 use application\libraries\buildings\QueueElements;
@@ -28,8 +27,9 @@ use application\libraries\buildings\QueueElements;
  */
 final class Queue
 {
-    const QUEUE_SEPARATOR   = ';';
-    const ITEM_SEPARATOR    = ',';
+
+    const QUEUE_SEPARATOR = ';';
+    const ITEM_SEPARATOR = ',';
 
     /**
      * @var array $_queue Queue in array format
@@ -45,7 +45,7 @@ final class Queue
      */
     public function __construct($current_queue = [])
     {
-        $this->_queue   = $current_queue;
+        $this->_queue = $current_queue;
     }
 
     /**
@@ -56,8 +56,8 @@ final class Queue
     private function breakDownCurrentQueue()
     {
         // extract elements and filter empty values
-        $elements   = array_filter(explode(self::QUEUE_SEPARATOR, $this->_queue));
-        $queue      = [];
+        $elements = array_filter(explode(self::QUEUE_SEPARATOR, $this->_queue));
+        $queue = [];
 
         if (is_array($elements)) {
 
@@ -67,7 +67,7 @@ final class Queue
             }
         }
 
-        $this->_queue   = $queue;
+        $this->_queue = $queue;
     }
 
     /**
@@ -78,15 +78,15 @@ final class Queue
     private function makeUpCurrentQueue()
     {
         if (isset($this->_queue)) {
-            
-            $queue  = $this->_queue;
+
+            $queue = $this->_queue;
 
             foreach ($queue as $element_id => $content) {
 
                 $queue[$element_id] = implode(self::ITEM_SEPARATOR, $content);
             }
 
-            $this->_queue   = implode(self::QUEUE_SEPARATOR, $queue);
+            $this->_queue = implode(self::QUEUE_SEPARATOR, $queue);
         }
     }
 
@@ -107,7 +107,7 @@ final class Queue
             }
 
             // convert the object to an array and put it to the end
-            array_push($this->_queue, (array)$queue_elements);
+            array_push($this->_queue, (array) $queue_elements);
         }
     }
 
@@ -187,13 +187,13 @@ final class Queue
 
                 $this->breakDownCurrentQueue();
             }
-            
+
             return $this->_queue;
         }
 
         return [];
     }
-    
+
     /**
      * Count the amount of elements of the current queue
      * 
@@ -207,7 +207,7 @@ final class Queue
 
                 $this->breakDownCurrentQueue();
             }
-            
+
             return count($this->_queue);
         }
 

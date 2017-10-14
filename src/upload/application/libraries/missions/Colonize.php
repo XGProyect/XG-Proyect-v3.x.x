@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
-
 namespace application\libraries\missions;
 
 use application\libraries\FleetsLib;
@@ -31,6 +30,7 @@ use application\libraries\Statistics_library;
  */
 class Colonize extends Missions
 {
+
     /**
      * __construct()
      */
@@ -49,7 +49,7 @@ class Colonize extends Missions
     public function colonizeMission($fleet_row)
     {
         if ($fleet_row['fleet_mess'] == 0) {
-            
+
             $colonization_check = $this->Missions_Model->getPlanetAndUserCountsCounts([
                 'user_id' => $fleet_row['fleet_owner'],
                 'coords' => [
@@ -81,7 +81,7 @@ class Colonize extends Missions
                 } else {
                     if ($this->start_creation($fleet_row)) {
                         $this->colonize_message($fleet_row['fleet_owner'], $message[2], $fleet_row['fleet_start_time']);
-                        
+
                         if ($fleet_row['fleet_amount'] == 1) {
                             $this->Missions_Model->updateColonizationStatistics([
                                 'points' => Statistics_library::calculatePoints(208, 1),
@@ -108,8 +108,6 @@ class Colonize extends Missions
                                     'type' => $fleet_row['fleet_start_type']
                                 ]
                             ]);
-                            
-
                         }
                     } else {
                         $this->colonize_message($fleet_row['fleet_owner'], $message[3], $fleet_row['fleet_end_time']);

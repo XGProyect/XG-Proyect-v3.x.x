@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.4
  */
-
 namespace application\core\enumerators;
 
 /**
@@ -26,12 +25,14 @@ namespace application\core\enumerators;
  */
 abstract class MessagesEnumerator
 {
-    const espio   = 0;
-    const combat  = 1;
-    const exp     = 2;
-    const ally    = 3;
-    const user    = 4;
+
+    const espio = 0;
+    const combat = 1;
+    const exp = 2;
+    const ally = 3;
+    const user = 4;
     const general = 5;
+
 }
 
 /* end of MessagesEnumerator.php */

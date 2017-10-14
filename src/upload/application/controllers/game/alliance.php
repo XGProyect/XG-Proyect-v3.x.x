@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
-
 namespace application\controllers\game;
 
 use application\core\Controller;
@@ -31,6 +30,7 @@ use application\libraries\FunctionsLib;
  */
 class Alliance extends Controller
 {
+
     const MODULE_ID = 13;
 
     private $_current_user;
@@ -52,22 +52,22 @@ class Alliance extends Controller
 
         // load Model
         parent::loadModel('game/alliance');
-        
+
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
         // DEFAULT VALUES
-        $this->_db              = new Database();
-        $this->_current_user    = $this->getUserData();
-        $this->_lang            = $this->getLang();
-        $this->bbcode           = FunctionsLib::loadLibrary('BBCodeLib');
-        $this->_ally            = '';
-        $this->_permissions     = array();
+        $this->_db = new Database();
+        $this->_current_user = $this->getUserData();
+        $this->_lang = $this->getLang();
+        $this->bbcode = FunctionsLib::loadLibrary('BBCodeLib');
+        $this->_ally = '';
+        $this->_permissions = array();
 
         // SOME REQUIRED PATHS
-        $this->_lang['dpath']       = DPATH;
-        $this->_lang['img_path']    = IMG_PATH;
-        $this->_lang['js_path']     = JS_PATH;
+        $this->_lang['dpath'] = DPATH;
+        $this->_lang['img_path'] = IMG_PATH;
+        $this->_lang['js_path'] = JS_PATH;
 
         // SET THE PERMISSIONS
         $this->setPermissions();
@@ -175,8 +175,8 @@ class Alliance extends Controller
     private function ally_info()
     {
         // GET ALLY ID
-        $ally_id    = isset($_GET['allyid']) ? (int) $_GET['allyid'] : NULL;
-        $id         = isset($_GET['id']) ? (int) $_GET['id'] : NULL;
+        $ally_id = isset($_GET['allyid']) ? (int) $_GET['allyid'] : NULL;
+        $id = isset($_GET['id']) ? (int) $_GET['id'] : NULL;
 
         // VALIDATE AND GET ALLIANCE DATA
         if (is_numeric($ally_id) && $ally_id != 0) {
@@ -207,19 +207,17 @@ class Alliance extends Controller
 
         // PARSE PAGE WITH THE PASSED VALUES
         return $this->getTemplate()->set(
-            'alliance/alliance_ainfo',
-            array_merge(
-                $this->getLang(),
-                [
-                    'alliance_image' => $this->image_block($alliance_image),
-                    'alliance_tag' => $alliance_tag,
-                    'alliance_name' => $alliance_name,
-                    'ally_member_scount' => $ally_members,
-                    'alliance_description' => $this->description_block($alliance_description),
-                    'alliance_web' => $this->web_block($alliance_web),
-                    'alliance_request' => $this->request_block($alliance_id, $alliance_request_notallow)
-                ]
-            )
+                'alliance/alliance_ainfo', array_merge(
+                    $this->getLang(), [
+                'alliance_image' => $this->image_block($alliance_image),
+                'alliance_tag' => $alliance_tag,
+                'alliance_name' => $alliance_name,
+                'ally_member_scount' => $ally_members,
+                'alliance_description' => $this->description_block($alliance_description),
+                'alliance_web' => $this->web_block($alliance_web),
+                'alliance_request' => $this->request_block($alliance_id, $alliance_request_notallow)
+                    ]
+                )
         );
     }
 
@@ -271,15 +269,15 @@ class Alliance extends Controller
     {
         if ($this->_current_user['user_ally_id'] == 0 && $this->_current_user['user_ally_request'] == 0) {
 
-            $parse                  = $this->_lang;
-            $parse['searchtext']    = '';
-            $parse['result']        = '';
+            $parse = $this->_lang;
+            $parse['searchtext'] = '';
+            $parse['result'] = '';
 
             $page = $this->getTemplate()->set('alliance/alliance_searchform', $parse);
 
             if ($_POST) {
                 $search = $this->_db->query(
-                        "SELECT a.*,
+                    "SELECT a.*,
                     (SELECT COUNT(user_id) AS `ally_members` 
                         FROM `" . USERS . "` 
                         WHERE `user_ally_id` = a.`alliance_id`) AS `ally_members`
@@ -319,7 +317,7 @@ class Alliance extends Controller
         if ($this->_current_user['user_ally_id'] == 0 && $this->_current_user['user_ally_request'] == 0) {
             if ($_GET['allyid'] != NULL) {
                 $alianza = $this->_db->queryFetch(
-                        "SELECT *
+                    "SELECT *
                     FROM " . ALLIANCE . "
                     WHERE alliance_id = '" . (int) $_GET['allyid'] . "'"
                 );
@@ -336,7 +334,7 @@ class Alliance extends Controller
                 }
 
                 $allyrow = $this->_db->queryFetch(
-                        "SELECT alliance_id, alliance_tag, alliance_request
+                    "SELECT alliance_id, alliance_tag, alliance_request
                     FROM " . ALLIANCE . "
                     WHERE alliance_id = '" . (int) $_GET['allyid'] . "'"
                 );
@@ -349,7 +347,7 @@ class Alliance extends Controller
 
                 if (isset($_POST['enviar']) && ( $_POST['enviar'] == $this->_lang['al_applyform_send'] )) {
                     $this->_db->query(
-                            "UPDATE " . USERS . " SET
+                        "UPDATE " . USERS . " SET
                         `user_ally_request` = '" . (int) $alliance_id . "' ,
                         `user_ally_request_text` = '" . $_POST['text'] . "',
                         `user_ally_register_time` = '" . time() . "'
@@ -378,7 +376,7 @@ class Alliance extends Controller
      */
     private function ally_main()
     {
-        $parse          = $this->_lang;
+        $parse = $this->_lang;
 
         ##############################################################################################
         # DEFAULT PART WITHOUT ALLIANCE
@@ -404,7 +402,7 @@ class Alliance extends Controller
 
             return $this->getTemplate()->set('alliance/alliance_apply_waitform', $this->_lang);
         } elseif ($this->_current_user['user_ally_id'] == 0 && $this->_current_user['user_ally_request'] == 0) {
-            
+
             return $this->getTemplate()->set('alliance/alliance_defaultmenu', $this->_lang);
         }
 
@@ -414,7 +412,7 @@ class Alliance extends Controller
         if ($this->_current_user['user_ally_id'] != 0 && $this->_current_user['user_ally_request'] == 0) {
 
             $alliance_ranks = unserialize($this->_ally['alliance_ranks']);
-            
+
             // IMAGE
             if ($this->_ally['alliance_ranks'] != '') {
                 $parse['alliance_image'] = $this->image_block($this->_ally['alliance_image']);
@@ -505,18 +503,12 @@ class Alliance extends Controller
 
                 $this->_lang['Go_out_welldone'] = str_replace("%s", $this->_ally['alliance_name'], $this->_lang['al_leave_sucess']);
                 $page = $this->message_box(
-                    $this->_lang['Go_out_welldone'],
-                    "<br>",
-                    "game.php?page=alliance",
-                    $this->_lang['al_continue']
+                    $this->_lang['Go_out_welldone'], "<br>", "game.php?page=alliance", $this->_lang['al_continue']
                 );
             } else {
                 $this->_lang['Want_go_out'] = str_replace("%s", $this->_ally['alliance_name'], $this->_lang['al_do_you_really_want_to_go_out']);
                 $page = $this->message_box(
-                    $this->_lang['Want_go_out'],
-                    "<br>",
-                    "game.php?page=alliance&mode=exit&yes=1",
-                    $this->_lang['al_go_out_yes']
+                    $this->_lang['Want_go_out'], "<br>", "game.php?page=alliance&mode=exit&yes=1", $this->_lang['al_go_out_yes']
                 );
             }
 
@@ -545,7 +537,7 @@ class Alliance extends Controller
             }
 
             $listuser = $this->_db->query(
-                    "SELECT u.user_id, 
+                "SELECT u.user_id, 
                                 u.user_onlinetime, 
                                 u.user_name, 
                                 u.user_galaxy, 
@@ -794,9 +786,9 @@ class Alliance extends Controller
                     }
 
                     if (isset($_POST['options'])) {
-                        $this->_ally['alliance_owner_range']    = $this->_db->escapeValue(strip_tags($_POST['owner_range']));
-                        $this->_ally['alliance_web']            = $this->_db->escapeValue(htmlspecialchars(strip_tags($_POST['web'])));
-                        $this->_ally['alliance_image']          = $this->_db->escapeValue(htmlspecialchars(strip_tags($_POST['image'])));
+                        $this->_ally['alliance_owner_range'] = $this->_db->escapeValue(strip_tags($_POST['owner_range']));
+                        $this->_ally['alliance_web'] = $this->_db->escapeValue(htmlspecialchars(strip_tags($_POST['web'])));
+                        $this->_ally['alliance_image'] = $this->_db->escapeValue(htmlspecialchars(strip_tags($_POST['image'])));
                         $this->_ally['alliance_request_notallow'] = (int) $_POST['request_notallow'];
 
                         if ($this->_ally['alliance_request_notallow'] != 0 && $this->_ally['alliance_request_notallow'] != 1) {
@@ -857,12 +849,12 @@ class Alliance extends Controller
                         $this->_lang['text'] = $this->_ally['alliance_request'];
                     }
 
-                    $this->_lang['t']                           = $t;
-                    $this->_lang['alliance_web']                = $this->_ally['alliance_web'];
-                    $this->_lang['alliance_image']              = $this->_ally['alliance_image'];
+                    $this->_lang['t'] = $t;
+                    $this->_lang['alliance_web'] = $this->_ally['alliance_web'];
+                    $this->_lang['alliance_image'] = $this->_ally['alliance_image'];
                     $this->_lang['alliance_request_notallow_0'] = (($this->_ally['alliance_request_notallow'] == 1) ? ' SELECTED' : '');
                     $this->_lang['alliance_request_notallow_1'] = (($this->_ally['alliance_request_notallow'] == 0) ? ' SELECTED' : '');
-                    $this->_lang['alliance_owner_range']        = $this->_ally['alliance_owner_range'];
+                    $this->_lang['alliance_owner_range'] = $this->_ally['alliance_owner_range'];
 
                     return $this->getTemplate()->set('alliance/alliance_admin', $this->_lang);
 
@@ -882,7 +874,7 @@ class Alliance extends Controller
                         $this->have_access($this->_ally['alliance_owner'], $this->permissions['kick_users']);
 
                         $u = $this->_db->queryFetch(
-                                "SELECT `user_ally_id`, `user_id`
+                            "SELECT `user_ally_id`, `user_id`
                             FROM `" . USERS . "`
                             WHERE `user_id` = '" . (int) $kick . "'
                             LIMIT 1"
@@ -891,7 +883,7 @@ class Alliance extends Controller
                         if ($u['user_ally_id'] == $this->_ally['alliance_id'] && $u['user_id'] != $this->_ally['alliance_owner']) {
 
                             $this->_db->query(
-                                    "UPDATE " . USERS . " SET
+                                "UPDATE " . USERS . " SET
                                 `user_ally_id`='0',
                                 `user_ally_rank_id` = 0
                                 WHERE `user_id`='" . (int) $u['user_id'] . "' LIMIT 1;"
@@ -901,7 +893,7 @@ class Alliance extends Controller
 
                         $u = isset($id) ? $id : '';
                         $q = $this->_db->queryFetch(
-                                "SELECT `user_id`
+                            "SELECT `user_id`
                             FROM " . USERS . "
                             WHERE `user_id` = '" . (int) $u . "'
                             LIMIT 1"
@@ -909,7 +901,7 @@ class Alliance extends Controller
 
                         if ((isset($alliance_ranks[$_POST['newrang'] - 1]) or $_POST['newrang'] == 0 ) && ( $q['user_id'] != $this->_ally['alliance_owner'] )) {
                             $this->_db->query(
-                                    "UPDATE " . USERS . " SET
+                                "UPDATE " . USERS . " SET
                                 `user_ally_rank_id` = '" . $this->_db->escapeValue($_POST['newrang']) . "'
                                 WHERE `user_id`='" . $q['user_id'] . "'"
                             );
@@ -925,7 +917,7 @@ class Alliance extends Controller
                     }
 
                     $listuser = $this->_db->query(
-                            "SELECT u.user_id, 
+                        "SELECT u.user_id, 
                                 u.user_onlinetime, 
                                 u.user_name, 
                                 u.user_galaxy, 
@@ -1060,7 +1052,7 @@ class Alliance extends Controller
 
                     $i = 0;
                     $query = $this->_db->query(
-                            "SELECT user_id, user_name, user_ally_request_text, user_ally_register_time
+                        "SELECT user_id, user_name, user_ally_request_text, user_ally_register_time
                         FROM " . USERS . "
                         WHERE user_ally_request = '" . $this->_ally['alliance_id'] . "'"
                     );
@@ -1081,7 +1073,7 @@ class Alliance extends Controller
                         $r['id'] = $r['user_id'];
 
                         $r['time'] = date(
-                                FunctionsLib::readConfig('date_format_extended'), $r['user_ally_register_time']
+                            FunctionsLib::readConfig('date_format_extended'), $r['user_ally_register_time']
                         );
 
                         $parse['list'] .= $this->getTemplate()->set('alliance/alliance_admin_request_row', $r);
@@ -1097,11 +1089,10 @@ class Alliance extends Controller
                     if (isset($show) && $show != 0 && $parse['list'] != '') {
 
                         $s[$show]['Request_from'] = str_replace(
-                                '%s', $s[$show]['username'], $this->_lang['al_request_from']
+                            '%s', $s[$show]['username'], $this->_lang['al_request_from']
                         );
                         $parse['request'] = $this->getTemplate()->set(
-                            'alliance/alliance_admin_request_form',
-                            array_merge($s[$show], $this->_lang)
+                            'alliance/alliance_admin_request_form', array_merge($s[$show], $this->_lang)
                         );
                     } else {
 
@@ -1112,8 +1103,7 @@ class Alliance extends Controller
                     $parse['There_is_hanging_request'] = str_replace('%n', $i, $this->_lang['al_no_request_pending']);
 
                     return $this->getTemplate()->set(
-                        'alliance/alliance_admin_request_table',
-                        $parse
+                            'alliance/alliance_admin_request_table', $parse
                     );
                     break;
 
@@ -1133,7 +1123,7 @@ class Alliance extends Controller
                     $parse['caso_titulo'] = $this->_lang['al_new_name'];
 
                     return $this->getTemplate()->set('alliance/alliance_admin_rename', $parse);
-                    
+
                     break;
 
                 case ( $edit == 'tag' && $this->have_access($this->_ally['alliance_owner'], $this->permissions['admin_alliance']) === true ):
@@ -1152,7 +1142,7 @@ class Alliance extends Controller
                     $parse['caso_titulo'] = $this->_lang['al_new_tag'];
 
                     return $this->getTemplate()->set('alliance/alliance_admin_rename', $parse);
-                    
+
                     break;
 
                 case ( $edit == 'exit' && $this->have_access($this->_ally['alliance_owner'], $this->permissions['disolve_alliance']) === true ):
@@ -1461,7 +1451,7 @@ class Alliance extends Controller
 
             if (!isset($this->_ally['alliance_id']) or $this->_ally['alliance_id'] <= 0) {
                 $this->_ally = $this->_db->queryFetch(
-                        "SELECT a.*,
+                    "SELECT a.*,
                             (SELECT COUNT(user_id) AS `ally_members` 
                                 FROM `" . USERS . "` 
                                 WHERE `user_ally_id` = a.`alliance_id`) AS `ally_members`

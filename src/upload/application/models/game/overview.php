@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.2
  */
-
 namespace application\models\game;
 
 /**
@@ -26,15 +25,16 @@ namespace application\models\game;
  */
 class Overview
 {
+
     private $db = null;
-    
+
     /**
      * __construct()
      */
     public function __construct($db)
-    {        
+    {
         // use this to make queries
-        $this->db   = $db;
+        $this->db = $db;
     }
 
     /**
@@ -46,7 +46,7 @@ class Overview
     {
         $this->db->closeConnection();
     }
-    
+
     /**
      * Get own fleets
      * 
@@ -56,10 +56,10 @@ class Overview
      */
     public function getOwnFleets($user_id)
     {
-        if ((int)$user_id > 0) {
+        if ((int) $user_id > 0) {
 
             return $this->db->queryFetchAll(
-                "SELECT 
+                    "SELECT 
                     f.*, 
                     po.`planet_name` AS `start_planet_name`, 
                     pt.`planet_name` AS `target_planet_name`,
@@ -90,10 +90,10 @@ class Overview
                     f.`fleet_target_owner` = '" . $user_id . "'"
             );
         }
-        
+
         return null;
     }
-    
+
     /**
      * Get own fleets
      * 
@@ -103,10 +103,10 @@ class Overview
      */
     public function getPlanets($user_id)
     {
-        if ((int)$user_id > 0) {
+        if ((int) $user_id > 0) {
 
             return $this->db->queryFetchAll(
-                "SELECT *
+                    "SELECT *
                     FROM " . PLANETS . " AS p
                     INNER JOIN " . BUILDINGS . " AS b ON b.building_planet_id = p.`planet_id`
                     INNER JOIN " . DEFENSES . " AS d ON d.defense_planet_id = p.`planet_id`
@@ -115,7 +115,7 @@ class Overview
                             AND `planet_destroyed` = 0;"
             );
         }
-        
+
         return null;
     }
 }

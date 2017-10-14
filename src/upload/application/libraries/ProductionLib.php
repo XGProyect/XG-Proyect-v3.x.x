@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
-
 namespace application\libraries;
 
 /**
@@ -26,6 +25,7 @@ namespace application\libraries;
  */
 class ProductionLib
 {
+
     /**
      * maxStorable
      *
@@ -35,7 +35,7 @@ class ProductionLib
      */
     public static function maxStorable($storage_level)
     {
-        return (int)(2.5 * pow(M_E, (20 * ($storage_level) / 33))) * 5000;
+        return (int) (2.5 * pow(M_E, (20 * ($storage_level) / 33))) * 5000;
     }
 
     /**

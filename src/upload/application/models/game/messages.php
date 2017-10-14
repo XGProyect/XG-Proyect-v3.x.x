@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.2
  */
-
 namespace application\models\game;
 
 /**
@@ -26,15 +25,16 @@ namespace application\models\game;
  */
 class Messages
 {
+
     private $db = null;
-    
+
     /**
      * __construct()
      */
     public function __construct($db)
-    {        
+    {
         // use this to make queries
-        $this->db   = $db;
+        $this->db = $db;
     }
 
     /**
@@ -46,7 +46,7 @@ class Messages
     {
         $this->db->closeConnection();
     }
-    
+
     /**
      * Get the list of messages by user id and type
      * 
@@ -57,20 +57,20 @@ class Messages
      */
     public function getByUserIdAndType($user_id, $msg_type_string)
     {
-        if ((int)$user_id > 0 && !empty($msg_type_string)) {
+        if ((int) $user_id > 0 && !empty($msg_type_string)) {
 
             return $this->db->query(
-                "SELECT *
+                    "SELECT *
                 FROM `" . MESSAGES . "`
                 WHERE `message_receiver` = " . $user_id . "
                         AND `message_type` IN (" . rtrim($msg_type_string, ',') . ")
                 ORDER BY `message_time` DESC;"
             );
         }
-        
+
         return null;
     }
-    
+
     /**
      * Get the list of messages by user id
      * 
@@ -80,19 +80,19 @@ class Messages
      */
     public function getByUserId($user_id)
     {
-        if ((int)$user_id > 0) {
+        if ((int) $user_id > 0) {
 
             return $this->db->query(
-                "SELECT *
+                    "SELECT *
                 FROM `" . MESSAGES . "`
                 WHERE `message_receiver` = " . $user_id . "
                 ORDER BY `message_time` DESC;"
             );
         }
-        
+
         return null;
     }
-    
+
     /**
      * Mark messages as read by user id and type
      * 
@@ -103,19 +103,19 @@ class Messages
      */
     public function markAsReadByType($user_id, $msg_type_string)
     {
-        if ((int)$user_id > 0 && !empty($msg_type_string)) {
+        if ((int) $user_id > 0 && !empty($msg_type_string)) {
 
             return $this->db->query(
-                "UPDATE `" . MESSAGES . "` SET 
+                    "UPDATE `" . MESSAGES . "` SET 
                     `message_read` = '1'
                 WHERE `message_receiver` = " . $user_id . "
                         AND `message_type` IN (" . rtrim($msg_type_string, ',') . ");"
             );
         }
-        
+
         return null;
     }
-    
+
     /**
      * Mark messages as read by user id and type
      * 
@@ -126,15 +126,15 @@ class Messages
      */
     public function markAsRead($user_id)
     {
-        if ((int)$user_id > 0) {
+        if ((int) $user_id > 0) {
 
             return $this->db->query(
-                "UPDATE `" . MESSAGES . "` SET 
+                    "UPDATE `" . MESSAGES . "` SET 
                     `message_read` = '1'
                 WHERE `message_receiver` = " . $user_id . ";"
             );
         }
-        
+
         return null;
     }
 
@@ -147,19 +147,19 @@ class Messages
      */
     public function getHomePlanet($planet_id)
     {
-        if ((int)$planet_id > 0) {
+        if ((int) $planet_id > 0) {
 
             return $this->db->queryFetch(
-                "SELECT u.`user_name`, p.`planet_galaxy`, p.`planet_system`, p.`planet_planet`
+                    "SELECT u.`user_name`, p.`planet_galaxy`, p.`planet_system`, p.`planet_planet`
                 FROM " . PLANETS . " AS p
                 INNER JOIN " . USERS . " as u ON p.planet_user_id = u.user_id
                 WHERE p.`planet_user_id` = '" . $planet_id . "';"
             );
         }
-        
+
         return null;
     }
-    
+
     /**
      * Delete all messages for the current user
      * 
@@ -169,17 +169,17 @@ class Messages
      */
     public function deleteAllByOwner($user_id)
     {
-        if ((int)$user_id > 0) {
+        if ((int) $user_id > 0) {
 
             return $this->db->query(
-                "DELETE FROM " . MESSAGES . "
+                    "DELETE FROM " . MESSAGES . "
                 WHERE `message_receiver` = '" . $user_id . "';"
             );
         }
-        
+
         return null;
     }
-    
+
     /**
      * Delete message by id and current user
      * 
@@ -190,18 +190,18 @@ class Messages
      */
     public function deleteByOwnerAndId($user_id, $msg_id)
     {
-        if ((int)$user_id > 0 && (int)$msg_id > 0) {
+        if ((int) $user_id > 0 && (int) $msg_id > 0) {
 
             return $this->db->query(
-                "DELETE FROM " . MESSAGES . "
+                    "DELETE FROM " . MESSAGES . "
                 WHERE `message_id` = '" . $msg_id . "' 
                     AND `message_receiver` = '" . $user_id . "';"
             );
         }
-        
+
         return null;
     }
-    
+
     /**
      * Count messages sum by type
      * 
@@ -211,22 +211,22 @@ class Messages
      */
     public function countMessages($user_id)
     {
-        if ((int)$user_id > 0) {
+        if ((int) $user_id > 0) {
 
             return $this->db->query(
-                "SELECT 
+                    "SELECT 
                     `message_type`,
                     COUNT(`message_type`) AS message_type_count,
                     SUM(`message_read` = 0) AS unread_count
                 FROM " . MESSAGES . "
                 WHERE `message_receiver` = '" . $user_id . "'
                 GROUP BY `message_type`"
-            ); 
+            );
         }
-        
-        return null; 
+
+        return null;
     }
-    
+
     /**
      * Count alliance members, buddys, operators and notes
      * 
@@ -237,10 +237,10 @@ class Messages
      */
     public function countAddressBookAndNotes($user_id, $user_ally_id)
     {
-        if ((int)$user_id > 0 && (int)$user_ally_id >= 0) {
+        if ((int) $user_id > 0 && (int) $user_ally_id >= 0) {
 
             return $this->db->queryFetch(
-                "SELECT
+                    "SELECT
                     ( SELECT COUNT(`user_id`)
                         FROM `" . USERS . "`
                         WHERE `user_ally_id` = '" . $user_ally_id . "' 
@@ -266,10 +266,10 @@ class Messages
                      ) AS operators_count"
             );
         }
-        
+
         return null;
     }
-    
+
     /**
      * Get all the user friends
      * 
@@ -279,10 +279,10 @@ class Messages
      */
     public function getFriends($user_id)
     {
-        if ((int)$user_id > 0) {
+        if ((int) $user_id > 0) {
 
             return $this->db->query(
-                "SELECT 
+                    "SELECT 
                     u.`user_id`,
                     u.`user_name`,
                     u.`user_email`
@@ -292,10 +292,10 @@ class Messages
                     OR `buddy_receiver`='" . $user_id . "'"
             );
         }
-        
+
         return null;
     }
-    
+
     /**
      * Get all alliance members that the user can contact
      * 
@@ -306,19 +306,19 @@ class Messages
      */
     public function getAllianceMembers($user_id, $user_ally_id)
     {
-        if ((int)$user_id > 0 && (int)$user_ally_id > 0) {
+        if ((int) $user_id > 0 && (int) $user_ally_id > 0) {
 
             return $this->db->query(
-                "SELECT `user_id`, `user_name`, `user_email` 
+                    "SELECT `user_id`, `user_name`, `user_email` 
                 FROM " . USERS . " 
                 WHERE user_ally_id = '" . $user_ally_id . "'
                     AND `user_id` <> '" . $user_id . "';"
             );
         }
-        
+
         return null;
     }
-    
+
     /**
      * Get all the game operators
      * 
@@ -328,19 +328,19 @@ class Messages
      */
     public function getOperators($user_id)
     {
-        if ((int)$user_id > 0) {
+        if ((int) $user_id > 0) {
 
             return $this->db->query(
-                "SELECT `user_name`, `user_email` 
+                    "SELECT `user_name`, `user_email` 
                 FROM " . USERS . " 
                 WHERE user_authlevel > '0'
                     AND `user_id` <> '" . $user_id . "';"
             );
         }
-        
+
         return null;
     }
-    
+
     /**
      * Get all the user notes
      * 
@@ -350,15 +350,15 @@ class Messages
      */
     public function getNotes($user_id)
     {
-        if ((int)$user_id > 0) {
+        if ((int) $user_id > 0) {
 
             return $this->db->query(
-                "SELECT `note_id`, `note_priority`, `note_title`
+                    "SELECT `note_id`, `note_priority`, `note_title`
                 FROM `" . NOTES . "`
                 WHERE `note_owner` = '" . $user_id . "';"
             );
         }
-        
+
         return null;
     }
 }

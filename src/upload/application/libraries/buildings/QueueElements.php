@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-
 namespace application\libraries\buildings;
 
 /**
@@ -26,6 +25,7 @@ namespace application\libraries\buildings;
  */
 final class QueueElements
 {
+
     /**
      *
      * @var int
@@ -55,6 +55,7 @@ final class QueueElements
      * @var string
      */
     public $build_mode = '';
+
 }
 
 /* end of QueueElements.php */

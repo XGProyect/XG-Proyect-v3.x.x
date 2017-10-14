@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
-
 namespace application\libraries;
 
 use application\core\XGPCore;
@@ -29,7 +28,8 @@ use application\libraries\FunctionsLib;
  *
  */
 class FleetsLib extends XGPCore
-{    
+{
+
     /**
      * bbCode function.
      *
@@ -59,24 +59,20 @@ class FleetsLib extends XGPCore
      * @return int
      */
     public static function targetDistance(
-        $orig_galaxy,
-        $dest_galaxy,
-        $orig_system,
-        $dest_system,
-        $orig_planet,
-        $dest_planet
-    ) {
-        $distance   = 5;
+    $orig_galaxy, $dest_galaxy, $orig_system, $dest_system, $orig_planet, $dest_planet
+    )
+    {
+        $distance = 5;
 
         if (($orig_galaxy - $dest_galaxy) != 0) {
 
-            $distance   = abs($orig_galaxy - $dest_galaxy) * 20000;
+            $distance = abs($orig_galaxy - $dest_galaxy) * 20000;
         } elseif (( $orig_system - $dest_system ) != 0) {
 
-            $distance   = abs($orig_system - $dest_system) * 5 * 19 + 2700;
+            $distance = abs($orig_system - $dest_system) * 5 * 19 + 2700;
         } elseif (( $orig_planet - $dest_planet ) != 0) {
 
-            $distance   = abs($orig_planet - $dest_planet) * 5 + 1000;
+            $distance = abs($orig_planet - $dest_planet) * 5 + 1000;
         }
 
         return $distance;
@@ -109,12 +105,12 @@ class FleetsLib extends XGPCore
      */
     public static function fleetMaxSpeed($fleet_array, $fleet, $user)
     {
-        $pricelist  = parent::$objects->getPrice();
-        $speed_all  = [];
+        $pricelist = parent::$objects->getPrice();
+        $speed_all = [];
 
         if ($fleet != 0) {
-            $fleet_array            = [];
-            $fleet_array[$fleet]    = 1;
+            $fleet_array = [];
+            $fleet_array[$fleet] = 1;
         }
 
         foreach ($fleet_array as $ship => $count) {
@@ -126,72 +122,62 @@ class FleetsLib extends XGPCore
 
                 if ($user['research_impulse_drive'] >= 5) {
 
-                    $speed_all[$ship]   = $pricelist[$ship]['speed2']
-                        + ($pricelist[$ship]['speed2'] * $user['research_impulse_drive'] * 0.2);
+                    $speed_all[$ship] = $pricelist[$ship]['speed2'] + ($pricelist[$ship]['speed2'] * $user['research_impulse_drive'] * 0.2);
                 } else {
 
-                    $speed_all[$ship]   = $pricelist[$ship]['speed']
-                        + (($pricelist[$ship]['speed'] * $user['research_combustion_drive'] ) * 0.1);
+                    $speed_all[$ship] = $pricelist[$ship]['speed'] + (($pricelist[$ship]['speed'] * $user['research_combustion_drive'] ) * 0.1);
                 }
             }
-            
+
             /**
              * Special condition for Recycler
              */
             if ($ship == 209) {
 
-                $speed_all[$ship]   = $pricelist[$ship]['speed']
-                    + (($pricelist[$ship]['speed'] * $user['research_combustion_drive'] ) * 0.1);
-                
+                $speed_all[$ship] = $pricelist[$ship]['speed'] + (($pricelist[$ship]['speed'] * $user['research_combustion_drive'] ) * 0.1);
+
                 if ($user['research_impulse_drive'] >= 17) {
 
-                    $speed_all[$ship]   = $pricelist[$ship]['speed2']
-                        + (($pricelist[$ship]['speed2'] * $user['research_impulse_drive'] ) * 0.2);
+                    $speed_all[$ship] = $pricelist[$ship]['speed2'] + (($pricelist[$ship]['speed2'] * $user['research_impulse_drive'] ) * 0.2);
                 }
-                
+
                 if ($user['research_hyperspace_drive'] >= 15) {
 
-                    $speed_all[$ship]   = $pricelist[$ship]['speed2']
-                        + (($pricelist[$ship]['speed2'] * $user['research_hyperspace_drive'] ) * 0.3);
+                    $speed_all[$ship] = $pricelist[$ship]['speed2'] + (($pricelist[$ship]['speed2'] * $user['research_hyperspace_drive'] ) * 0.3);
                 }
             }
 
             if ($ship == 203 or $ship == 204 or $ship == 210) {
 
-                $speed_all[$ship]   = $pricelist[$ship]['speed']
-                    + (($pricelist[$ship]['speed'] * $user['research_combustion_drive']) * 0.1);
+                $speed_all[$ship] = $pricelist[$ship]['speed'] + (($pricelist[$ship]['speed'] * $user['research_combustion_drive']) * 0.1);
             }
 
             if ($ship == 205 or $ship == 206 or $ship == 208) {
 
-                $speed_all[$ship]   = $pricelist[$ship]['speed']
-                    + (($pricelist[$ship]['speed'] * $user['research_impulse_drive']) * 0.2);
+                $speed_all[$ship] = $pricelist[$ship]['speed'] + (($pricelist[$ship]['speed'] * $user['research_impulse_drive']) * 0.2);
             }
 
             if ($ship == 211) {
 
                 if ($user['research_hyperspace_drive'] >= 8) {
 
-                    $speed_all[$ship]   = $pricelist[$ship]['speed2']
-                        + (($pricelist[$ship]['speed2'] * $user['research_hyperspace_drive']) * 0.3);
+                    $speed_all[$ship] = $pricelist[$ship]['speed2'] + (($pricelist[$ship]['speed2'] * $user['research_hyperspace_drive']) * 0.3);
                 } else {
 
-                    $speed_all[$ship]   = $pricelist[$ship]['speed']
-                        + (($pricelist[$ship]['speed'] * $user['research_hyperspace_drive']) * 0.2);
+                    $speed_all[$ship] = $pricelist[$ship]['speed'] + (($pricelist[$ship]['speed'] * $user['research_hyperspace_drive']) * 0.2);
                 }
             }
 
             if ($ship == 207 or $ship == 213 or $ship == 214 or $ship == 215) {
 
-                $speed_all[$ship]   = $pricelist[$ship]['speed']
-                    + (($pricelist[$ship]['speed'] * $user['research_hyperspace_drive']) * 0.3);
+                $speed_all[$ship] = $pricelist[$ship]['speed'] + (($pricelist[$ship]['speed'] * $user['research_hyperspace_drive']) * 0.3);
             }
         }
 
         if ($fleet != 0) {
 
             $ship_speed = isset($speed_all[$ship]) ? $speed_all[$ship] : 0;
-            $speed_all  = $ship_speed;
+            $speed_all = $ship_speed;
         }
 
         return $speed_all;
@@ -209,29 +195,25 @@ class FleetsLib extends XGPCore
      * @return int
      */
     public static function fleetConsumption(
-        $fleet_array,
-        $speed_factor,
-        $mission_duration,
-        $mission_distance,
-        $user
-    ) {
-        $consumption        = 0;
-        $basic_consumption  = 0;
+    $fleet_array, $speed_factor, $mission_duration, $mission_distance, $user
+    )
+    {
+        $consumption = 0;
+        $basic_consumption = 0;
 
         foreach ($fleet_array as $ship => $count) {
 
             if ($ship > 0) {
 
-                $ship_speed         = self::fleetMaxSpeed("", $ship, $user);
-                $ship_consumption   = self::shipConsumption($ship, $user);                
-                $spd                = 35000 / ($mission_duration * $speed_factor - 10)
-                    * sqrt($mission_distance * 10 / $ship_speed);
-                
-                $basic_consumption  = $spd + $count * $ship_consumption * pow((($spd / 10) + 1), 2);
-                $consumption        += $basic_consumption * $mission_distance / 35000 + 1;
+                $ship_speed = self::fleetMaxSpeed("", $ship, $user);
+                $ship_consumption = self::shipConsumption($ship, $user);
+                $spd = 35000 / ($mission_duration * $speed_factor - 10) * sqrt($mission_distance * 10 / $ship_speed);
+
+                $basic_consumption = $spd + $count * $ship_consumption * pow((($spd / 10) + 1), 2);
+                $consumption += $basic_consumption * $mission_distance / 35000 + 1;
             }
         }
-        
+
         return round($consumption);
     }
 
@@ -314,14 +296,12 @@ class FleetsLib extends XGPCore
     public static function startLink($fleet_row, $fleet_type)
     {
         $coords = FormatLib::prettyCoords(
-            $fleet_row['fleet_start_galaxy'],
-            $fleet_row['fleet_start_system'],
-            $fleet_row['fleet_start_planet']
+                $fleet_row['fleet_start_galaxy'], $fleet_row['fleet_start_system'], $fleet_row['fleet_start_planet']
         );
-        
-        $link   = "game.php?page=galaxy&mode=3&galaxy=" .
+
+        $link = "game.php?page=galaxy&mode=3&galaxy=" .
             $fleet_row['fleet_start_galaxy'] . "&system=" . $fleet_row['fleet_start_system'];
-        
+
         return FunctionsLib::setUrl($link, '', $coords, $fleet_type);
     }
 
@@ -336,14 +316,12 @@ class FleetsLib extends XGPCore
     public static function targetLink($fleet_row, $fleet_type)
     {
         $coords = FormatLib::prettyCoords(
-            $fleet_row['fleet_end_galaxy'],
-            $fleet_row['fleet_end_system'],
-            $fleet_row['fleet_end_planet']
+                $fleet_row['fleet_end_galaxy'], $fleet_row['fleet_end_system'], $fleet_row['fleet_end_planet']
         );
-        
-        $link   = "game.php?page=galaxy&mode=3&galaxy=" .
+
+        $link = "game.php?page=galaxy&mode=3&galaxy=" .
             $fleet_row['fleet_end_galaxy'] . "&system=" . $fleet_row['fleet_end_system'];
-        
+
         return FunctionsLib::setUrl($link, '', $coords, $fleet_type);
     }
 
@@ -358,21 +336,19 @@ class FleetsLib extends XGPCore
      */
     public static function fleetResourcesPopup($fleet_row, $text, $fleet_type)
     {
-        $total_resources    = $fleet_row['fleet_resource_metal']
-            + $fleet_row['fleet_resource_crystal'] + $fleet_row['fleet_resource_deuterium'];
+        $total_resources = $fleet_row['fleet_resource_metal'] + $fleet_row['fleet_resource_crystal'] + $fleet_row['fleet_resource_deuterium'];
 
         if ($total_resources <> 0) {
 
-            $popup['Metal']                     = parent::$lang['Metal'];
-            $popup['Crystal']                   = parent::$lang['Crystal'];
-            $popup['Deuterium']                 = parent::$lang['Deuterium'];
-            $popup['fleet_resource_metal']      = FormatLib::prettyNumber($fleet_row['fleet_resource_metal']);
-            $popup['fleet_resource_crystal']    = FormatLib::prettyNumber($fleet_row['fleet_resource_crystal']);
-            $popup['fleet_resource_deuterium']  = FormatLib::prettyNumber($fleet_row['fleet_resource_deuterium']);
-            
-            $resources_popup    = parent::$page->parseTemplate(
-                parent::$page->jsReady(parent::$page->getTemplate('general/fleet_resources_popup_view')),
-                $popup
+            $popup['Metal'] = parent::$lang['Metal'];
+            $popup['Crystal'] = parent::$lang['Crystal'];
+            $popup['Deuterium'] = parent::$lang['Deuterium'];
+            $popup['fleet_resource_metal'] = FormatLib::prettyNumber($fleet_row['fleet_resource_metal']);
+            $popup['fleet_resource_crystal'] = FormatLib::prettyNumber($fleet_row['fleet_resource_crystal']);
+            $popup['fleet_resource_deuterium'] = FormatLib::prettyNumber($fleet_row['fleet_resource_deuterium']);
+
+            $resources_popup = parent::$page->parseTemplate(
+                parent::$page->jsReady(parent::$page->getTemplate('general/fleet_resources_popup_view')), $popup
             );
         } else {
 
@@ -403,21 +379,19 @@ class FleetsLib extends XGPCore
      */
     public static function fleetShipsPopup($fleet_row, $text, $fleet_type, $current_user = '')
     {
-        $ships  = explode(";", $fleet_row['fleet_array']);
+        $ships = explode(";", $fleet_row['fleet_array']);
         $pop_up = "<a href='#' onmouseover=\"return overlib('";
         $pop_up .= "<table width=200>";
 
         $espionage_tech = OfficiersLib::getMaxEspionage(
-            $current_user['research_espionage_technology'],
-            $current_user['premium_officier_technocrat']
+                $current_user['research_espionage_technology'], $current_user['premium_officier_technocrat']
         );
 
         if ($espionage_tech < 2 && $fleet_row['fleet_owner'] != $current_user['user_id']) {
 
             $pop_up .= "<tr><td width=50% align=left><font color=white>" .
                 parent::$lang['cff_no_fleet_data'] . "<font></td></tr>";
-        } elseif ($espionage_tech >= 2 && $espionage_tech < 4
-            && $fleet_row['fleet_owner'] != $current_user['user_id']) {
+        } elseif ($espionage_tech >= 2 && $espionage_tech < 4 && $fleet_row['fleet_owner'] != $current_user['user_id']) {
 
             $pop_up .= "<tr><td width=50% align=left><font color=white>" .
                 parent::$lang['cff_aproaching'] . $fleet_row['fleet_amount'] .
@@ -477,9 +451,9 @@ class FleetsLib extends XGPCore
      */
     public static function enemyLink($fleet_row)
     {
-        $url    = 'game.php?page=messages&mode=write&id=' . $fleet_row['fleet_owner'];
-        $image  = FunctionsLib::setImage(DPATH . '/img/m.gif', parent::$lang['write_message']);
-        $link   = $fleet_row['start_planet_user'] . ' ' . FunctionsLib::setUrl($url, '', $image);
+        $url = 'game.php?page=messages&mode=write&id=' . $fleet_row['fleet_owner'];
+        $image = FunctionsLib::setImage(DPATH . '/img/m.gif', parent::$lang['write_message']);
+        $link = $fleet_row['start_planet_user'] . ' ' . FunctionsLib::setUrl($url, '', $image);
 
         return $link;
     }
@@ -499,100 +473,97 @@ class FleetsLib extends XGPCore
     public static function flyingFleetsTable($fleet_row, $Status, $Owner, $Label, $Record, $current_user)
     {
         $FleetStyle = [
-            1   => 'attack',
-            2   => 'federation',
-            3   => 'transport',
-            4   => 'deploy',
-            5   => 'hold',
-            6   => 'espionage',
-            7   => 'colony',
-            8   => 'harvest',
-            9   => 'destroy',
-            10  => 'missile',
-            15  => 'transport'
+            1 => 'attack',
+            2 => 'federation',
+            3 => 'transport',
+            4 => 'deploy',
+            5 => 'hold',
+            6 => 'espionage',
+            7 => 'colony',
+            8 => 'harvest',
+            9 => 'destroy',
+            10 => 'missile',
+            15 => 'transport'
         ];
 
-        $FleetStatus    = [0 => 'flight', 1 => 'holding', 2 => 'return'];
-        $FleetPrefix    = ($Owner) ? 'own' : '';
-        $RowsTPL        = parent::$page->getTemplate('overview/overview_fleet_event');
-        $MissionType    = $fleet_row['fleet_mission'];
-        $FleetContent   = self::fleetShipsPopup(
-            $fleet_row,
-            parent::$lang['cff_flotte'],
-            $FleetPrefix . $FleetStyle[$MissionType],
-            $current_user
+        $FleetStatus = [0 => 'flight', 1 => 'holding', 2 => 'return'];
+        $FleetPrefix = ($Owner) ? 'own' : '';
+        $RowsTPL = parent::$page->getTemplate('overview/overview_fleet_event');
+        $MissionType = $fleet_row['fleet_mission'];
+        $FleetContent = self::fleetShipsPopup(
+                $fleet_row, parent::$lang['cff_flotte'], $FleetPrefix . $FleetStyle[$MissionType], $current_user
         );
 
-        $StartType  = $fleet_row['fleet_start_type'];
+        $StartType = $fleet_row['fleet_start_type'];
         $TargetType = $fleet_row['fleet_end_type'];
 
         if ($Status != 2) {
 
             if ($StartType == 1) {
 
-                $StartID    = parent::$lang['cff_from_the_planet'];
+                $StartID = parent::$lang['cff_from_the_planet'];
             } elseif ($StartType == 3) {
 
-                $StartID    = parent::$lang['cff_from_the_moon'];
+                $StartID = parent::$lang['cff_from_the_moon'];
             }
 
-            $StartID    .= $fleet_row['start_planet_name'] . " ";
-            $StartID    .= FleetsLib::startLink($fleet_row, $FleetPrefix . $FleetStyle[$MissionType]);
+            $StartID .= $fleet_row['start_planet_name'] . " ";
+            $StartID .= FleetsLib::startLink($fleet_row, $FleetPrefix . $FleetStyle[$MissionType]);
 
             if ($MissionType != 15) {
 
                 switch ($TargetType) {
                     case 1:
-                        $TargetID   = parent::$lang['cff_the_planet'];
+                        $TargetID = parent::$lang['cff_the_planet'];
                         break;
 
                     case 2:
-                        $TargetID   = parent::$lang['cff_debris_field'];
+                        $TargetID = parent::$lang['cff_debris_field'];
                         break;
 
                     case 3:
-                        $TargetID   = parent::$lang['cff_to_the_moon'];
+                        $TargetID = parent::$lang['cff_to_the_moon'];
                         break;
                 }
             } else {
 
-                $TargetID   = parent::$lang['cff_the_position'];
+                $TargetID = parent::$lang['cff_the_position'];
             }
 
 
-            $TargetID   .= $fleet_row['target_planet_name'] . " ";
-            $TargetID   .= FleetsLib::targetLink($fleet_row, $FleetPrefix . $FleetStyle[$MissionType]);
+            $TargetID .= $fleet_row['target_planet_name'] . " ";
+            $TargetID .= FleetsLib::targetLink($fleet_row, $FleetPrefix . $FleetStyle[$MissionType]);
         } else {
 
             if ($StartType == 1) {
 
-                $StartID    = parent::$lang['cff_to_the_planet'];
+                $StartID = parent::$lang['cff_to_the_planet'];
             } elseif ($StartType == 3) {
 
-                $StartID    = parent::$lang['cff_the_moon'];
+                $StartID = parent::$lang['cff_the_moon'];
             }
 
-            $StartID    .= $fleet_row['start_planet_name'] . " ";
-            $StartID    .= FleetsLib::startLink($fleet_row, $FleetPrefix . $FleetStyle[$MissionType]);
+            $StartID .= $fleet_row['start_planet_name'] . " ";
+            $StartID .= FleetsLib::startLink($fleet_row, $FleetPrefix . $FleetStyle[$MissionType]);
 
             if ($MissionType != 15) {
 
                 switch ($TargetType) {
                     case 1:
-                        $TargetID   = parent::$lang['cff_from_planet'];
+                        $TargetID = parent::$lang['cff_from_planet'];
                         break;
 
                     case 2:
-                        $TargetID   = parent::$lang['cff_from_debris_field'];
+                        $TargetID = parent::$lang['cff_from_debris_field'];
                         break;
 
                     case 3:
-                        $TargetID   = parent::$lang['cff_from_the_moon'];
+                        $TargetID = parent::$lang['cff_from_the_moon'];
                         break;
                 }
             } else {
 
-                $TargetID   = parent::$lang['cff_from_position'];
+                $TargetID = parent::$lang['cff_from_position'];
             }
 
             $TargetID .= $fleet_row['target_planet_name'] . " ";
@@ -601,76 +572,74 @@ class FleetsLib extends XGPCore
 
         if ($MissionType == 10) {
 
-            $EventString    = parent::$lang['cff_missile_attack'] .
+            $EventString = parent::$lang['cff_missile_attack'] .
                 " ( " . preg_replace("(503,)i", "", $fleet_row['fleet_array']) . " ) ";
-            $Time           = $fleet_row['fleet_start_time'];
-            $Rest           = $Time - time();
+            $Time = $fleet_row['fleet_start_time'];
+            $Rest = $Time - time();
 
-            $EventString    .= $StartID;
-            $EventString    .= parent::$lang['cff_to'];
-            $EventString    .= $TargetID;
-            $EventString    .= ".";
+            $EventString .= $StartID;
+            $EventString .= parent::$lang['cff_to'];
+            $EventString .= $TargetID;
+            $EventString .= ".";
         } else {
             if ($Owner == true) {
 
-                $EventString    = parent::$lang['cff_one_of_your'];
-                $EventString    .= $FleetContent;
+                $EventString = parent::$lang['cff_one_of_your'];
+                $EventString .= $FleetContent;
             } else {
 
-                $EventString    = parent::$lang['cff_a'];
-                $EventString    .= $FleetContent;
-                $EventString    .= parent::$lang['cff_of'];
-                $EventString    .= self::enemyLink($fleet_row);
+                $EventString = parent::$lang['cff_a'];
+                $EventString .= $FleetContent;
+                $EventString .= parent::$lang['cff_of'];
+                $EventString .= self::enemyLink($fleet_row);
             }
 
             switch ($Status) {
                 case 0:
-                    $Time   = $fleet_row['fleet_start_time'];
-                    $Rest   = $Time - time();
+                    $Time = $fleet_row['fleet_start_time'];
+                    $Rest = $Time - time();
 
-                    $EventString    .= parent::$lang['cff_goes'];
-                    $EventString    .= $StartID;
-                    $EventString    .= parent::$lang['cff_toward'];
-                    $EventString    .= $TargetID;
-                    $EventString    .= parent::$lang['cff_with_the_mission_of'];
+                    $EventString .= parent::$lang['cff_goes'];
+                    $EventString .= $StartID;
+                    $EventString .= parent::$lang['cff_toward'];
+                    $EventString .= $TargetID;
+                    $EventString .= parent::$lang['cff_with_the_mission_of'];
                     break;
 
                 case 1:
-                    $Time   = $fleet_row['fleet_end_stay'];
-                    $Rest   = $Time - time();
+                    $Time = $fleet_row['fleet_end_stay'];
+                    $Rest = $Time - time();
 
-                    $EventString    .= parent::$lang['cff_goes'];
-                    $EventString    .= $StartID;
-                    $EventString    .= parent::$lang['cff_to_explore'];
-                    $EventString    .= $TargetID;
-                    $EventString    .= parent::$lang['cff_with_the_mission_of'];
+                    $EventString .= parent::$lang['cff_goes'];
+                    $EventString .= $StartID;
+                    $EventString .= parent::$lang['cff_to_explore'];
+                    $EventString .= $TargetID;
+                    $EventString .= parent::$lang['cff_with_the_mission_of'];
                     break;
 
                 case 2:
-                    $Time   = $fleet_row['fleet_end_time'];
-                    $Rest   = $Time - time();
+                    $Time = $fleet_row['fleet_end_time'];
+                    $Rest = $Time - time();
 
-                    $EventString    .= parent::$lang['cff_comming_back'];
-                    $EventString    .= $TargetID;
-                    $EventString    .= $StartID;
-                    $EventString    .= parent::$lang['cff_with_the_mission_of'];
+                    $EventString .= parent::$lang['cff_comming_back'];
+                    $EventString .= $TargetID;
+                    $EventString .= $StartID;
+                    $EventString .= parent::$lang['cff_with_the_mission_of'];
                     break;
             }
 
-            $EventString    .= self::fleetResourcesPopup(
-                $fleet_row,
-                parent::$lang['type_mission'][$MissionType],
-                $FleetPrefix . $FleetStyle[$MissionType]
+            $EventString .= self::fleetResourcesPopup(
+                    $fleet_row, parent::$lang['type_mission'][$MissionType], $FleetPrefix . $FleetStyle[$MissionType]
             );
         }
 
-        $bloc['fleet_status']   = $FleetStatus[$Status];
-        $bloc['fleet_prefix']   = $FleetPrefix;
-        $bloc['fleet_style']    = $FleetStyle[$MissionType];
-        $bloc['fleet_javai']    = FunctionsLib::chronoApplet($Label, $Record, $Rest, true);
-        $bloc['fleet_order']    = $Label . $Record;
-        $bloc['fleet_descr']    = $EventString;
-        $bloc['fleet_javas']    = FunctionsLib::chronoApplet($Label, $Record, $Rest, false);
+        $bloc['fleet_status'] = $FleetStatus[$Status];
+        $bloc['fleet_prefix'] = $FleetPrefix;
+        $bloc['fleet_style'] = $FleetStyle[$MissionType];
+        $bloc['fleet_javai'] = FunctionsLib::chronoApplet($Label, $Record, $Rest, true);
+        $bloc['fleet_order'] = $Label . $Record;
+        $bloc['fleet_descr'] = $EventString;
+        $bloc['fleet_javas'] = FunctionsLib::chronoApplet($Label, $Record, $Rest, false);
 
         return parent::$page->parseTemplate($RowsTPL, $bloc);
     }

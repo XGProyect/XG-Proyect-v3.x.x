@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.4
  */
-
 namespace application\libraries\messenger;
 
 /**
@@ -26,8 +25,10 @@ namespace application\libraries\messenger;
  */
 abstract class MessagesFormat
 {
-    const simple    = 0;
-    const html      = 1;
+
+    const simple = 0;
+    const html = 1;
+
 }
 
 /* end of MessagesFormat.php */

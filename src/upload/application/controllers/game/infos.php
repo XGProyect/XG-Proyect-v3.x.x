@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
-
 namespace application\controllers\game;
 
 use application\core\Controller;
@@ -35,6 +34,7 @@ use application\libraries\ProductionLib;
  */
 class Infos extends Controller
 {
+
     const MODULE_ID = 24;
 
     private $_lang;
@@ -299,8 +299,8 @@ class Infos extends Controller
 
     private function GetNextJumpWaitTime($CurMoon)
     {
-        $JumpGateLevel  = $CurMoon[$this->_resource[43]];
-        $LastJumpTime   = $CurMoon['planet_last_jump_time'];
+        $JumpGateLevel = $CurMoon[$this->_resource[43]];
+        $LastJumpTime = $CurMoon['planet_last_jump_time'];
         if ($JumpGateLevel > 0) {
             $WaitBetweenJmp = (60 * 60) * (1 / $JumpGateLevel);
             $NextJumpTime = $LastJumpTime + $WaitBetweenJmp;
@@ -320,7 +320,7 @@ class Infos extends Controller
 
         return $RetValue;
     }
-    
+
     /**
      * doFleetJump
      * 
@@ -330,19 +330,19 @@ class Infos extends Controller
     {
         if ($_POST) {
 
-            $RestString     = $this->GetNextJumpWaitTime($this->_current_planet);
-            $NextJumpTime   = $RestString['value'];
-            $JumpTime       = time();
+            $RestString = $this->GetNextJumpWaitTime($this->_current_planet);
+            $NextJumpTime = $RestString['value'];
+            $JumpTime = time();
 
             if ($NextJumpTime == 0) {
 
-                $TargetPlanet   = isset($_POST['jmpto']) ? $_POST['jmpto'] : '';
-                
+                $TargetPlanet = isset($_POST['jmpto']) ? $_POST['jmpto'] : '';
+
                 if (!is_int($TargetPlanet)) {
                     $RetMessage = $this->_lang['in_jump_gate_error_data'];
                 }
-                
-                $TargetGate     = $this->_db->queryFetch(
+
+                $TargetGate = $this->_db->queryFetch(
                     "SELECT p.`planet_id`, b.`building_jump_gate`, p.`planet_last_jump_time`
                     FROM `" . PLANETS . "` AS p
                     INNER JOIN `" . BUILDINGS . "` AS b ON b.`building_planet_id` = p.`planet_id`
@@ -351,28 +351,28 @@ class Infos extends Controller
 
                 if ($TargetGate['building_jump_gate'] > 0) {
 
-                    $RestString     = $this->GetNextJumpWaitTime($TargetGate);
-                    $NextDestTime   = $RestString['value'];
+                    $RestString = $this->GetNextJumpWaitTime($TargetGate);
+                    $NextDestTime = $RestString['value'];
 
                     if ($NextDestTime == 0) {
 
-                        $ShipArray      = array();
-                        $SubQueryOri    = '';
-                        $SubQueryDes    = '';
+                        $ShipArray = array();
+                        $SubQueryOri = '';
+                        $SubQueryDes = '';
 
                         for ($Ship = 200; $Ship < 300; $Ship++) {
 
-                            $ShipLabel      = "c" . $Ship;
-                            $gemi_kontrol   = isset($_POST[$ShipLabel]) ? $_POST[$ShipLabel] : null;
+                            $ShipLabel = "c" . $Ship;
+                            $gemi_kontrol = isset($_POST[$ShipLabel]) ? $_POST[$ShipLabel] : null;
 
                             if (is_numeric($gemi_kontrol)) {
 
                                 if ($gemi_kontrol > $this->_current_planet[$this->_resource[$Ship]]) {
 
-                                    $ShipArray[$Ship]   = $this->_current_planet[$this->_resource[$Ship]];
+                                    $ShipArray[$Ship] = $this->_current_planet[$this->_resource[$Ship]];
                                 } else {
 
-                                    $ShipArray[$Ship]   = $gemi_kontrol;
+                                    $ShipArray[$Ship] = $gemi_kontrol;
                                 }
 
 
@@ -461,8 +461,8 @@ class Infos extends Controller
             WHERE m.`planet_type` = '3' AND
                 m.`planet_user_id` = '" . $this->_current_user['user_id'] . "';"
         );
-        
-        $Combo  = "";
+
+        $Combo = "";
 
         while ($CurMoon = $this->_db->fetchAssoc($MoonList)) {
             if ($CurMoon['planet_id'] != $this->_current_planet['planet_id']) {
@@ -503,8 +503,8 @@ class Infos extends Controller
         $CurrentBuildtLvl = $this->_current_planet[$this->_resource[$this->_element_id]];
         $BuildLevel = ($CurrentBuildtLvl > 0) ? $CurrentBuildtLvl : 1;
         $BuildEnergy = $this->_current_user['research_energy_technology'];
-        $game_resource_multiplier   = FunctionsLib::readConfig('resource_multiplier');
-        
+        $game_resource_multiplier = FunctionsLib::readConfig('resource_multiplier');
+
         // BOOST
         $geologe_boost = 1 + ( 1 * ( OfficiersLib::isOfficierActive($this->_current_user['premium_officier_geologist']) ? GEOLOGUE : 0 ) );
         $engineer_boost = 1 + ( 1 * ( OfficiersLib::isOfficierActive($this->_current_user['premium_officier_engineer']) ? ENGINEER_ENERGY : 0 ) );

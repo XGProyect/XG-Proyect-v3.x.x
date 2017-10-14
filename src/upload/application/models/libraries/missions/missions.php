@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-
 namespace application\models\libraries\missions;
 
 /**
@@ -26,16 +25,17 @@ namespace application\models\libraries\missions;
  */
 class Missions
 {
+
     private $db = null;
-    
+
     /**
      * __construct()
      */
     public function __construct($db)
-    {        
+    {
         // use this to make queries
-        $this->db   = $db;
-        
+        $this->db = $db;
+
         // lock tables
         //$this->lockTables();
     }
@@ -49,7 +49,6 @@ class Missions
     {
         // unlock tables
         //$this->unlockTables();
-        
         // close connection
         $this->db->closeConnection();
     }
@@ -96,7 +95,7 @@ class Missions
             " . USERS . " AS u WRITE"
         );
     }
-    
+
     /**
      * Unlock previously locked tables
      * 
@@ -106,7 +105,7 @@ class Missions
     {
         $this->db->query("UNLOCK TABLES");
     }
-    
+
     /**
      * Delete a fleet by its ID
      * 
@@ -116,14 +115,14 @@ class Missions
      */
     public function deleteFleetById($fleet_id)
     {
-        if ((int)$fleet_id > 0) {
+        if ((int) $fleet_id > 0) {
 
             $this->db->query(
                 "DELETE FROM " . FLEETS . " WHERE `fleet_id` = '" . $fleet_id . "'"
             );
         }
     }
-    
+
     /**
      * Update fleet status to return by ID
      * 
@@ -133,7 +132,7 @@ class Missions
      */
     public function updateFleetStatusToReturnById($fleet_id)
     {
-        if ((int)$fleet_id > 0) {
+        if ((int) $fleet_id > 0) {
 
             $this->db->query(
                 "UPDATE " . FLEETS . " SET
@@ -142,7 +141,7 @@ class Missions
             );
         }
     }
-    
+
     /**
      * Update fleet status to stay by ID
      * 
@@ -152,7 +151,7 @@ class Missions
      */
     public function updateFleetStatusToStayById($fleet_id)
     {
-        if ((int)$fleet_id > 0) {
+        if ((int) $fleet_id > 0) {
 
             $this->db->query(
                 "UPDATE " . FLEETS . " SET
@@ -161,7 +160,7 @@ class Missions
             );
         }
     }
-    
+
     /**
      * Update planet ships by the provided coords and with the provided data
      * 
@@ -184,10 +183,10 @@ class Missions
                     `planet_system` = '" . $data['coords']['system'] . "' AND
                     `planet_planet` = '" . $data['coords']['planet'] . "' AND
                     `planet_type` = '" . $data['coords']['type'] . "'"
-            );   
+            );
         }
     }
-    
+
     /**
      * Update planet resources by the provided coords and with the provided data
      * 
@@ -212,7 +211,7 @@ class Missions
             );
         }
     }
-    
+
     /**
      * Get all planet data
      * 
@@ -225,22 +224,22 @@ class Missions
         if (is_array($data)) {
 
             return $this->db->queryFetch(
-                "SELECT *
+                    "SELECT *
                 FROM `" . PLANETS . "` AS p
                 LEFT JOIN `" . BUILDINGS . "` AS b ON b.building_planet_id = p.`planet_id`
                 LEFT JOIN `" . DEFENSES . "` AS d ON d.defense_planet_id = p.`planet_id`
                 LEFT JOIN `" . SHIPS . "` AS s ON s.ship_planet_id = p.`planet_id`
-                WHERE `planet_galaxy` = '" . (int)$data['coords']['galaxy'] . "' AND
-                    `planet_system` = '" . (int)$data['coords']['system'] . "' AND
-                    `planet_planet` = '" . (int)$data['coords']['planet'] . "' AND
-                    `planet_type` = '" . (int)$data['coords']['type'] . "'
+                WHERE `planet_galaxy` = '" . (int) $data['coords']['galaxy'] . "' AND
+                    `planet_system` = '" . (int) $data['coords']['system'] . "' AND
+                    `planet_planet` = '" . (int) $data['coords']['planet'] . "' AND
+                    `planet_type` = '" . (int) $data['coords']['type'] . "'
                 LIMIT 1;"
             );
         }
-        
+
         return [];
     }
-    
+
     /**
      * Get all user data by user ID
      * 
@@ -250,10 +249,10 @@ class Missions
      */
     public function getAllUserDataByUserId($user_id)
     {
-        if ((int)$user_id > 0) {
+        if ((int) $user_id > 0) {
 
             return $this->db->queryFetch(
-                "SELECT u.*,
+                    "SELECT u.*,
                     r.*,
                     pr.*
                 FROM `" . USERS . "` AS u
@@ -263,10 +262,10 @@ class Missions
                 LIMIT 1;"
             );
         }
-        
+
         return [];
     }
-    
+
     /**
      * Delete ACS fleet by ID
      * 
@@ -276,7 +275,7 @@ class Missions
      */
     public function deleteAcsFleetById($fleet_group_id)
     {
-        if ((int)$fleet_group_id > 0) {
+        if ((int) $fleet_group_id > 0) {
 
             $this->db->query(
                 "DELETE FROM `" . ACS_FLEETS . "`
@@ -284,7 +283,7 @@ class Missions
             );
         }
     }
-    
+
     /**
      * Update ACS fleet status by ID
      * 
@@ -294,7 +293,7 @@ class Missions
      */
     public function updateAcsFleetStatusByGroupId($fleet_group_id)
     {
-        if ((int)$fleet_group_id > 0) {
+        if ((int) $fleet_group_id > 0) {
 
             $this->db->query(
                 "UPDATE `" . FLEETS . "` SET
@@ -303,7 +302,7 @@ class Missions
             );
         }
     }
-    
+
     /**
      * Get all fleets by ACS fleet ID
      * 
@@ -313,18 +312,18 @@ class Missions
      */
     public function getAllAcsFleetsByGroupId($fleet_group_id)
     {
-        if ((int)$fleet_group_id > 0) {
+        if ((int) $fleet_group_id > 0) {
 
             return $this->db->queryFetchAll(
-                "SELECT * 
+                    "SELECT * 
                 FROM `" . FLEETS . "`
                 WHERE `fleet_group` = '" . $fleet_group_id . "';"
             );
         }
-        
+
         return null;
     }
-    
+
     /**
      * Get all fleets by end coordinates, start time and stay time
      * 
@@ -337,20 +336,20 @@ class Missions
         if (is_array($data)) {
 
             return $this->db->queryFetchAll(
-                "SELECT * 
+                    "SELECT * 
                 FROM `" . FLEETS . "` 
-                WHERE `fleet_end_galaxy` = '" . (int)$data['coords']['galaxy'] . "' AND 
-                    `fleet_end_system` = '" . (int)$data['coords']['system'] . "' AND  
-                    `fleet_end_planet` = '" . (int)$data['coords']['planet'] . "' AND
-                    `fleet_end_type` = '" . (int)$data['coords']['type'] . "' AND
+                WHERE `fleet_end_galaxy` = '" . (int) $data['coords']['galaxy'] . "' AND 
+                    `fleet_end_system` = '" . (int) $data['coords']['system'] . "' AND  
+                    `fleet_end_planet` = '" . (int) $data['coords']['planet'] . "' AND
+                    `fleet_end_type` = '" . (int) $data['coords']['type'] . "' AND
                     `fleet_start_time` < '" . $data['time'] . "' AND 
                     `fleet_end_stay` >= '" . $data['time'] . "';"
             );
         }
-        
+
         return [];
     }
-    
+
     /**
      * Update planet debris by coordinates
      * 
@@ -367,15 +366,15 @@ class Missions
                     `planet_invisible_start_time` = '" . $data['time'] . "',
                     `planet_debris_metal` = `planet_debris_metal` + '" . $data['debris']['metal'] . "',
                     `planet_debris_crystal` = `planet_debris_crystal` + '" . $data['debris']['crystal'] . "'
-                WHERE `planet_galaxy` = '" . (int)$data['coords']['galaxy'] . "' AND
-                    `planet_system` = '" . (int)$data['coords']['system'] . "' AND
-                    `planet_planet` = '" . (int)$data['coords']['planet'] . "' AND
+                WHERE `planet_galaxy` = '" . (int) $data['coords']['galaxy'] . "' AND
+                    `planet_system` = '" . (int) $data['coords']['system'] . "' AND
+                    `planet_planet` = '" . (int) $data['coords']['planet'] . "' AND
                     `planet_type` = 1
                 LIMIT 1;"
             );
         }
     }
-    
+
     /**
      * Get user technologies by the provided user ID
      * 
@@ -385,10 +384,10 @@ class Missions
      */
     public function getTechnologiesByUserId($user_id)
     {
-        if ((int)$user_id > 0) {
+        if ((int) $user_id > 0) {
 
             return $this->db->queryFetch(
-                "SELECT u.user_name,
+                    "SELECT u.user_name,
                     r.research_weapons_technology,
                     r.research_shielding_technology,
                     r.research_armour_technology
@@ -399,7 +398,7 @@ class Missions
             );
         }
     }
-    
+
     /**
      * Get moon id by coords
      * 
@@ -412,18 +411,18 @@ class Missions
         if (is_array($data)) {
 
             return $this->db->queryFetch(
-                "SELECT `planet_id`
+                    "SELECT `planet_id`
                 FROM `" . PLANETS . "`
                 WHERE `planet_galaxy` = '" . $data['coords']['galaxy'] . "'
                     AND `planet_system` = '" . $data['coords']['system'] . "'
                     AND `planet_planet` = '" . $data['coords']['planet'] . "'
                     AND `planet_type` = '3';"
-            );   
+            );
         }
-        
+
         return [];
     }
-    
+
     /**
      * Insert a new record in the reports table
      * 
@@ -441,10 +440,10 @@ class Missions
                 `report_rid` = '" . $data['rid'] . "',
                 `report_content` = '" . $data['content'] . "',
                 `report_time` = '" . $data['time'] . "'"
-            );   
+            );
         }
     }
-    
+
     /**
      * Update returning fleet steal resources
      * 
@@ -465,10 +464,10 @@ class Missions
                 `fleet_resource_crystal` = `fleet_resource_crystal` + '" . $data['stolen']['crystal'] . "' ,
                 `fleet_resource_deuterium` = `fleet_resource_deuterium` + '" . $data['stolen']['deuterium'] . "'
                 WHERE `fleet_id` = '" . $data['fleet_id'] . "';"
-            );   
+            );
         }
     }
-    
+
     /**
      * Delete multiple fleets by a set of provided ids
      * 
@@ -483,7 +482,7 @@ class Missions
             WHERE `fleet_id` IN (" . $id_string . ")"
         );
     }
-    
+
     /**
      * Update planet losses by Id
      * 
@@ -507,8 +506,6 @@ class Missions
                     `defense_planet_id` = '" . $data['planet_id'] . "'"
             );
         }
-        
-
     }
 
     /**
@@ -521,9 +518,9 @@ class Missions
     public function getPlanetAndUserCountsCounts($data = [])
     {
         if (is_array($data)) {
-        
+
             return $this->db->queryFetch(
-                "SELECT
+                    "SELECT
                     (SELECT COUNT(*)
                             FROM " . PLANETS . " AS pc1
                             WHERE pc1.`planet_user_id` = '" . $data['user_id'] . "' AND
@@ -540,10 +537,10 @@ class Missions
                             WHERE `research_user_id` = '" . $data['user_id'] . "') AS astro_level"
             );
         }
-        
+
         return [];
     }
-    
+
     /**
      * Get friendly planet data
      * 
@@ -556,7 +553,7 @@ class Missions
         if (is_array($data)) {
 
             return $this->db->queryFetch(
-                "SELECT pc1.`planet_user_id` AS start_id,
+                    "SELECT pc1.`planet_user_id` AS start_id,
                     pc1.`planet_name` AS start_name,
                     pc2.`planet_user_id` AS target_id,
                     pc2.`planet_name` AS target_name
@@ -572,13 +569,12 @@ class Missions
             );
         }
     }
-    
     /**
      * 
      * COLONIZATION
      * 
      */
-    
+
     /**
      * Updates the points after the colonization took place
      * 
@@ -600,10 +596,10 @@ class Missions
                         p.planet_planet = '" . $data['coords']['planet'] . "' AND
                         p.planet_type = '" . $data['coords']['type'] . "'
                 );"
-            );   
+            );
         }
     }
-    
+
     /**
      * Updates the fleet array and points by fleet id and coords
      * 
@@ -614,7 +610,7 @@ class Missions
     public function updateColonizatonReturningFleet($data = [])
     {
         if (is_array($data)) {
-            
+
             $this->db->query(
                 "UPDATE " . FLEETS . ", " . USERS_STATISTICS . " SET
                 `fleet_array` = '" . $data['ships'] . "',
@@ -635,13 +631,12 @@ class Missions
             );
         }
     }
-    
     /**
      * 
      * DESTROY
      * 
      */
-    
+
     /**
      * Get destroyer data
      * 
@@ -654,7 +649,7 @@ class Missions
         if (is_array($data)) {
 
             return $this->db->queryFetch(
-                "SELECT 
+                    "SELECT 
                     p.planet_name,
                     r.research_weapons_technology,
                     r.research_shielding_technology,
@@ -671,10 +666,10 @@ class Missions
                                 p.`planet_type` = " . $data['coords']['type'] . ";"
             );
         }
-        
+
         return [];
     }
-    
+
     /**
      * Get target to destroy data
      * 
@@ -687,7 +682,7 @@ class Missions
         if (is_array($data)) {
 
             return $this->db->queryFetch(
-                "SELECT 
+                    "SELECT 
                     s.*, 
                     d.*, 
                     p.`planet_id`, 
@@ -713,7 +708,7 @@ class Missions
 
         return [];
     }
-    
+
     /**
      * 
      * 
@@ -740,10 +735,10 @@ class Missions
                     `planet_destroyed` = '" . $data['time'] . "'
                 WHERE p.`planet_id` = '" . $data['planet_id'] . "';
                 "
-            ); 
+            );
         }
     }
-    
+
     /**
      * Update user current planet, to avoid that they get stuck on a deleted moon
      * 
@@ -765,10 +760,10 @@ class Missions
                             `planet_planet` = '" . $data['coords']['fleet_end_planet'] . "' AND
                             `planet_type` = '1')
                 WHERE `user_id` = '" . $data['planet_user_id'] . "';"
-            );   
+            );
         }
     }
-    
+
     /**
      * Update planet data after its destruction
      * 
@@ -793,9 +788,9 @@ class Missions
                     `planet_planet` = '" . $data['coords']['planet'] . "' AND
                     `planet_type` = '" . $data['coords']['type'] . "';"
             );
-        }   
+        }
     }
-    
+
     /**
      * Update destroy fleet data and make it return
      * 
@@ -812,17 +807,16 @@ class Missions
                 `fleet_amount` = '" . $data['amount'] . "',
                 `fleet_array` = '" . $data['ships'] . "',
                 `fleet_mess` = '1'
-                WHERE fleet_id = '" . (int)$data['fleet_id'] . "';"
-            );      
+                WHERE fleet_id = '" . (int) $data['fleet_id'] . "';"
+            );
         }
     }
-    
     /**
      * 
      * EXPEDITION
      * 
      */
-    
+
     /**
      * 
      * 
@@ -838,11 +832,11 @@ class Missions
                 "UPDATE " . FLEETS . " SET
                 `fleet_array` = '" . $data['ships'] . "',
                 `fleet_mess` = '1'
-                WHERE `fleet_id` = '" . (int)$data['fleet_id'] . "';"
+                WHERE `fleet_id` = '" . (int) $data['fleet_id'] . "';"
             );
         }
     }
-    
+
     /**
      * Updates the fleet resources with what we found on the expedition
      * 
@@ -862,11 +856,10 @@ class Missions
                 `fleet_resource_deuterium` = `fleet_resource_deuterium` + '" . $data['found']['deuterium'] . "',
                 `premium_dark_matter` = `premium_dark_matter` + '" . $data['found']['darkmatter'] . "',
                 `fleet_mess` = '1'
-                WHERE `fleet_id` = '" . (int)$data['fleet_id'] . "';"
+                WHERE `fleet_id` = '" . (int) $data['fleet_id'] . "';"
             );
         }
     }
-    
     /**
      * 
      * MISSILE
@@ -885,7 +878,7 @@ class Missions
         if (is_array($data)) {
 
             return $this->db->queryFetch(
-                "SELECT p.`planet_name`, r.`research_weapons_technology`
+                    "SELECT p.`planet_name`, r.`research_weapons_technology`
                 FROM " . PLANETS . " AS p
                 INNER JOIN " . RESEARCH . " AS r ON r.research_user_id = p.planet_user_id
                 WHERE `planet_galaxy` = " . $data['coords']['galaxy'] . " AND
@@ -895,7 +888,7 @@ class Missions
             );
         }
     }
-    
+
     /**
      * Get all missiles target data by coords
      * 
@@ -908,8 +901,7 @@ class Missions
         if (is_array($data)) {
 
             return $this->db->queryFetch(
-
-                "SELECT p.`planet_id`, p.`planet_name`, p.`planet_user_id`, d.*, r.`research_shielding_technology`
+                    "SELECT p.`planet_id`, p.`planet_name`, p.`planet_user_id`, d.*, r.`research_shielding_technology`
                 FROM " . PLANETS . " AS p
                 INNER JOIN " . DEFENSES . " AS d ON d.defense_planet_id = p.`planet_id`
                 INNER JOIN " . RESEARCH . " AS r ON r.research_user_id = p.planet_user_id
@@ -920,7 +912,7 @@ class Missions
             );
         }
     }
-    
+
     /**
      * Update planet target defenses based on the attack result
      * 
@@ -936,11 +928,10 @@ class Missions
                 "UPDATE " . DEFENSES . " SET
                 {$data['destroyed_query']}
                 `defense_anti-ballistic_missile` = '" . $data['amount'] . "'
-                WHERE defense_planet_id = '" . (int)$data['planet_id'] . "';"
+                WHERE defense_planet_id = '" . (int) $data['planet_id'] . "';"
             );
         }
     }
-    
     /**
      * 
      * RECYCLE
@@ -969,7 +960,7 @@ class Missions
                     `planet_system` = '" . $data['coords']['system'] . "' AND
                     `planet_planet` = '" . $data['coords']['planet'] . "' AND
                     `planet_type` = 1 AND
-                    `fleet_id` = '" . (int)$data['fleet_id'] . "'"
+                    `fleet_id` = '" . (int) $data['fleet_id'] . "'"
             );
         }
     }
@@ -986,7 +977,7 @@ class Missions
         if (is_array($data)) {
 
             return $this->db->queryFetch(
-                "SELECT 
+                    "SELECT 
                     `planet_name` AS target_name, 
                     `planet_debris_metal`, 
                     `planet_debris_crystal`
@@ -998,10 +989,9 @@ class Missions
                 LIMIT 1;"
             );
         }
-        
+
         return [];
     }
-    
     /**
      * 
      * SPY
@@ -1020,7 +1010,7 @@ class Missions
         if (is_array($data)) {
 
             return $this->db->queryFetch(
-                "SELECT p.planet_name, p.planet_galaxy, p.planet_system, p.planet_planet, u.user_name, r.research_espionage_technology, pr.premium_officier_technocrat
+                    "SELECT p.planet_name, p.planet_galaxy, p.planet_system, p.planet_planet, u.user_name, r.research_espionage_technology, pr.premium_officier_technocrat
                     FROM " . PLANETS . " AS p
                     INNER JOIN " . USERS . " AS u ON u.user_id = p.planet_user_id
                     INNER JOIN " . PREMIUM . " AS pr ON pr.premium_user_id = p.planet_user_id
@@ -1030,10 +1020,10 @@ class Missions
                         p.`planet_planet` = " . $data['coords']['planet'] . " AND
                         p.`planet_type` = " . $data['coords']['type'] . ";");
         }
-        
+
         return [];
     }
-    
+
     /**
      * Get user data that's going to be inquired (spied)
      * 
@@ -1046,7 +1036,7 @@ class Missions
         if (is_array($data)) {
 
             return $this->db->queryFetch(
-                "SELECT p.`planet_id`, p.planet_user_id, p.planet_name, p.planet_galaxy, p.planet_system, p.planet_planet, p.planet_metal, p.planet_crystal, p.planet_deuterium, p.planet_energy_max, s.*, d.*, b.*, r.*, pr.premium_officier_technocrat
+                    "SELECT p.`planet_id`, p.planet_user_id, p.planet_name, p.planet_galaxy, p.planet_system, p.planet_planet, p.planet_metal, p.planet_crystal, p.planet_deuterium, p.planet_energy_max, s.*, d.*, b.*, r.*, pr.premium_officier_technocrat
                     FROM " . PLANETS . " AS p
                     INNER JOIN " . SHIPS . " AS s ON s.ship_planet_id = p.`planet_id`
                     INNER JOIN " . DEFENSES . " AS d ON d.defense_planet_id = p.`planet_id`
@@ -1059,10 +1049,10 @@ class Missions
                         p.`planet_planet` = '" . $data['coords']['planet'] . "' AND
                         p.`planet_type` = '" . $data['coords']['type'] . "';");
         }
-        
+
         return [];
     }
-    
+
     /**
      * Update planet target defenses based on the attack result
      * 
@@ -1082,13 +1072,12 @@ class Missions
             );
         }
     }
-    
     /**
      * 
      * TRANSPORT
      * 
      */
-    
+
     /**
      * Update planet target defenses based on the attack result
      * 
@@ -1098,7 +1087,7 @@ class Missions
      */
     public function updateReturningFleetResources($fleet_id = 0)
     {
-        if ((int)$fleet_id > 0) {
+        if ((int) $fleet_id > 0) {
 
             $this->db->query(
                 "UPDATE " . FLEETS . " SET
@@ -1110,7 +1099,7 @@ class Missions
                 LIMIT 1 ;"
             );
         }
-    }    
+    }
 }
 
 /* end of missions.php */

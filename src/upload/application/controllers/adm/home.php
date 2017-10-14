@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
-
 namespace application\controllers\adm;
 
 use application\core\Controller;
@@ -32,6 +31,7 @@ use application\libraries\FunctionsLib;
  */
 class Home extends Controller
 {
+
     private $_lang;
     private $_current_user;
 
@@ -84,7 +84,7 @@ class Home extends Controller
         $message[3] = '';
         $message[4] = '';
         $message[5] = '';
-        
+
         // VERIFICATIONS
         if ($this->_current_user['user_authlevel'] >= 3) {
             if (is_writable(XGP_ROOT . CONFIGS_PATH . 'config.php')) {
@@ -106,7 +106,7 @@ class Home extends Controller
                 $message[4] = $this->_lang['hm_install_file_detected'] . '<br />';
                 $error++;
             }
-            
+
             if (SYSTEM_VERSION != FunctionsLib::readConfig('version')) {
                 $message[5] = $this->_lang['hm_update_required'] . '<br />';
                 $error++;
@@ -127,23 +127,23 @@ class Home extends Controller
             $parse['error_type'] = $this->_lang['hm_ok'];
         }
 
-        $parse['server_type']               = PHP_OS;
-        $parse['web_server']                = $this->getWebServer();
-        $parse['php_version']               = PHP_VERSION;
-        $parse['php_max_post_size']         = FormatLib::prettyBytes((int)(str_replace('M', '', ini_get('post_max_size')) * 1024 * 1024));
-        $parse['php_upload_max_filesize']   = FormatLib::prettyBytes((int)(str_replace('M', '', ini_get('upload_max_filesize')) * 1024 * 1024));
-        $parse['php_memory_limit']          = FormatLib::prettyBytes((int)(str_replace('M', '', ini_get('memory_limit')) * 1024 * 1024));
-        $parse['mysql_version']             = $this->_db->serverInfo();
-        $parse['mysql_packet_size']         = FormatLib::prettyBytes($this->_db->queryFetch("SHOW VARIABLES LIKE 'max_allowed_packet'")[1]);
-        $db_stats                           = $this->getDbStats();
-        $parse['data_usage']                = FormatLib::prettyBytes($db_stats['Data_Usage']);
-        $parse['index_usage']               = FormatLib::prettyBytes($db_stats['Index_Usage']);
-        $user_stats                         = $this->getUsersStats();
-        $parse['unique_visitors_today']     = $user_stats['unique_visitors_today'];
-        $parse['new_users_today']           = $user_stats['new_users_today'];
-        $parse['new_messages_today']        = $user_stats['new_messages_today'];
-        $parse['new_reports_today']         = $user_stats['new_reports_today'];
-        
+        $parse['server_type'] = PHP_OS;
+        $parse['web_server'] = $this->getWebServer();
+        $parse['php_version'] = PHP_VERSION;
+        $parse['php_max_post_size'] = FormatLib::prettyBytes((int) (str_replace('M', '', ini_get('post_max_size')) * 1024 * 1024));
+        $parse['php_upload_max_filesize'] = FormatLib::prettyBytes((int) (str_replace('M', '', ini_get('upload_max_filesize')) * 1024 * 1024));
+        $parse['php_memory_limit'] = FormatLib::prettyBytes((int) (str_replace('M', '', ini_get('memory_limit')) * 1024 * 1024));
+        $parse['mysql_version'] = $this->_db->serverInfo();
+        $parse['mysql_packet_size'] = FormatLib::prettyBytes($this->_db->queryFetch("SHOW VARIABLES LIKE 'max_allowed_packet'")[1]);
+        $db_stats = $this->getDbStats();
+        $parse['data_usage'] = FormatLib::prettyBytes($db_stats['Data_Usage']);
+        $parse['index_usage'] = FormatLib::prettyBytes($db_stats['Index_Usage']);
+        $user_stats = $this->getUsersStats();
+        $parse['unique_visitors_today'] = $user_stats['unique_visitors_today'];
+        $parse['new_users_today'] = $user_stats['new_users_today'];
+        $parse['new_messages_today'] = $user_stats['new_messages_today'];
+        $parse['new_reports_today'] = $user_stats['new_reports_today'];
+
         parent::$page->display(parent::$page->parseTemplate(parent::$page->getTemplate('adm/home_view'), $parse));
     }
 
@@ -155,26 +155,24 @@ class Home extends Controller
     private function checkUpdates()
     {
         if (function_exists('file_get_contents')) {
-            
-            $system_v   = FunctionsLib::readConfig('version');
-            $last_v     = @json_decode(
-                @file_get_contents(
-                    'http://xgproyect.org/current.php',
-                    false,
-                    stream_context_create(
-                        ['http'=>
-                            [
-                                'timeout' => 1, // one second
+
+            $system_v = FunctionsLib::readConfig('version');
+            $last_v = @json_decode(
+                    @file_get_contents(
+                        'http://xgproyect.org/current.php', false, stream_context_create(
+                            ['http' =>
+                                [
+                                    'timeout' => 1, // one second
+                                ]
                             ]
-                        ]
+                        )
                     )
-                )
-            )->version;
-            
+                )->version;
+
             return version_compare($system_v, $last_v, '<');
         }
     }
-    
+
     /**
      * getWebServer
      * 
@@ -182,48 +180,36 @@ class Home extends Controller
      */
     private function getWebServer()
     {
-        $sapi_name  = php_sapi_name();
-        $addsapi    = false;
-        
-        if (preg_match('#(Apache)/([0-9\.]+)\s#siU', $_SERVER['SERVER_SOFTWARE'], $wsregs))
-        {
-            $webserver  = "$wsregs[1] v$wsregs[2]";
-            if ($sapi_name == 'cgi' or $sapi_name == 'cgi-fcgi')
-            {
-                $addsapi    = true;
-            }
-        }
-        else if (preg_match('#Microsoft-IIS/([0-9\.]+)#siU', $_SERVER['SERVER_SOFTWARE'], $wsregs))
-        {
-            $webserver  = "IIS v$wsregs[1]";
-            $addsapi    = true;
-        }
-        else if (preg_match('#Zeus/([0-9\.]+)#siU', $_SERVER['SERVER_SOFTWARE'], $wsregs))
-        {
-            $webserver  = "Zeus v$wsregs[1]";
-            $addsapi    = true;
-        }
-        else if (strtoupper($_SERVER['SERVER_SOFTWARE']) == 'APACHE')
-        {
-            $webserver  = 'Apache';
-            if ($sapi_name == 'cgi' or $sapi_name == 'cgi-fcgi')
-            {
+        $sapi_name = php_sapi_name();
+        $addsapi = false;
+
+        if (preg_match('#(Apache)/([0-9\.]+)\s#siU', $_SERVER['SERVER_SOFTWARE'], $wsregs)) {
+            $webserver = "$wsregs[1] v$wsregs[2]";
+            if ($sapi_name == 'cgi' or $sapi_name == 'cgi-fcgi') {
                 $addsapi = true;
             }
-        }
-        else
-        {
-            $webserver  = $sapi_name;
+        } else if (preg_match('#Microsoft-IIS/([0-9\.]+)#siU', $_SERVER['SERVER_SOFTWARE'], $wsregs)) {
+            $webserver = "IIS v$wsregs[1]";
+            $addsapi = true;
+        } else if (preg_match('#Zeus/([0-9\.]+)#siU', $_SERVER['SERVER_SOFTWARE'], $wsregs)) {
+            $webserver = "Zeus v$wsregs[1]";
+            $addsapi = true;
+        } else if (strtoupper($_SERVER['SERVER_SOFTWARE']) == 'APACHE') {
+            $webserver = 'Apache';
+            if ($sapi_name == 'cgi' or $sapi_name == 'cgi-fcgi') {
+                $addsapi = true;
+            }
+        } else {
+            $webserver = $sapi_name;
         }
 
-        if ($addsapi)
-        {
-            $webserver  .= ' (' . $sapi_name . ')';
+        if ($addsapi) {
+            $webserver .= ' (' . $sapi_name . ')';
         }
-        
+
         return $webserver;
     }
-    
+
     /**
      * Get some tables statistics from the database
      *
@@ -232,14 +218,14 @@ class Home extends Controller
     private function getDbStats()
     {
         return $this->_db->queryFetch(
-            "SELECT 
+                "SELECT 
                 SUM(`data_length`) AS `Data_Usage`,
                 SUM(`index_length`) AS `Index_Usage`
             FROM information_schema.TABLES 
             WHERE table_schema = '" . $this->_db->escapeValue(DB_NAME) . "';"
         );
     }
-    
+
     /**
      * Get some user statistics from the database
      * 
@@ -248,7 +234,7 @@ class Home extends Controller
     private function getUsersStats()
     {
         return $this->_db->queryFetch(
-            "SELECT 
+                "SELECT 
                 (
                         SELECT 
                                 COUNT(`user_id`) AS `unique_visitors_today` 

@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
-
 namespace application\core;
 
 /**
@@ -26,17 +25,18 @@ namespace application\core;
  */
 class Sessions extends XGPCore
 {
+
     /**
      *
      * @var boolean
      */
-    private $alive  = true;
-    
+    private $alive = true;
+
     /**
      *
      * @var Database
      */
-    private $_db    = null;
+    private $_db = null;
 
     /**
      * __construct
@@ -47,15 +47,10 @@ class Sessions extends XGPCore
     {
         parent::__construct();
 
-        $this->_db  = new Database();
+        $this->_db = new Database();
 
         session_set_save_handler(
-            array (&$this, 'open'),
-            array (&$this, 'close'),
-            array (&$this, 'read'),
-            array (&$this, 'write'),
-            array (&$this, 'delete'),
-            array (&$this, 'clean')
+            array(&$this, 'open'), array(&$this, 'close'), array(&$this, 'read'), array(&$this, 'write'), array(&$this, 'delete'), array(&$this, 'clean')
         );
 
         if (session_id() == '') {
@@ -74,7 +69,7 @@ class Sessions extends XGPCore
         if ($this->alive) {
 
             session_write_close();
-            $this->alive    = false;
+            $this->alive = false;
         }
     }
 
@@ -89,13 +84,7 @@ class Sessions extends XGPCore
 
             $params = session_get_cookie_params();
             setcookie(
-                session_name(),
-                '',
-                time() - 42000,
-                $params['path'],
-                $params['domain'],
-                $params['secure'],
-                $params['httponly']
+                session_name(), '', time() - 42000, $params['path'], $params['domain'], $params['secure'], $params['httponly']
             );
         }
 
@@ -105,7 +94,7 @@ class Sessions extends XGPCore
             @session_destroy();
         }
 
-        $this->alive    = false;
+        $this->alive = false;
     }
 
     /**
@@ -137,10 +126,10 @@ class Sessions extends XGPCore
      */
     private function read($sid)
     {
-        $row    = $this->_db->query(
+        $row = $this->_db->query(
             "SELECT `session_data`
             FROM " . SESSIONS . "
-            WHERE `session_id` = '" .  $this->_db->escapeValue($sid) . "'
+            WHERE `session_id` = '" . $this->_db->escapeValue($sid) . "'
             LIMIT 1"
         );
 
@@ -187,7 +176,7 @@ class Sessions extends XGPCore
             WHERE `session_id` = '" . $this->_db->escapeValue($sid) . "'"
         );
 
-        $_SESSION   = array();
+        $_SESSION = array();
 
         return $this->_db->affectedRows();
     }
@@ -203,7 +192,7 @@ class Sessions extends XGPCore
     {
         $this->_db->query(
             "DELETE FROM `" . SESSIONS . "`
-            WHERE DATE_ADD(`session_last_accessed`, INTERVAL " . (int)$expire . " SECOND) < NOW()"
+            WHERE DATE_ADD(`session_last_accessed`, INTERVAL " . (int) $expire . " SECOND) < NOW()"
         );
 
         return $this->_db->affectedRows();

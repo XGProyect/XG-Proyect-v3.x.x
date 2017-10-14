@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
-
 namespace application\libraries\missions;
 
 /**
@@ -26,6 +25,7 @@ namespace application\libraries\missions;
  */
 class Acs extends Missions
 {
+
     /**
      * __construct
      *

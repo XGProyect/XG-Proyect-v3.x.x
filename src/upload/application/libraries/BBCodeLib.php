@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
-
 namespace application\libraries;
 
 /**
@@ -26,6 +25,7 @@ namespace application\libraries;
  */
 class BBCodeLib
 {
+
     /**
      * bbCode function.
      *
@@ -34,8 +34,8 @@ class BBCodeLib
      * @return void
      */
     public function bbCode($string = '')
-    {        
-        $bbcodes    = [
+    {
+        $bbcodes = [
             '/\\n/' => '$this->setLineJump()',
             '/\\r/' => '$this->setReturn()',
             '/\[list\](.*?)\[\/list\]/is' => '$this->setList(\'\\1\')',
@@ -53,22 +53,20 @@ class BBCodeLib
             '/\[bg=(.*?)\](.*?)\[\/bg\]/is' => '$this->setBackgroundColor(\'\\1\',\'\\2\')',
             '/\[size=(.*?)\](.*?)\[\/size\]/is' => '$this->setFontSize(\'\\1\',\'\\2\')'
         ];
-        
+
         $string = stripslashes($string);
-        
+
         foreach ($bbcodes as $bbcode => $html) {
             $string = preg_replace_callback(
-                $bbcode,
-                function ($matches) use ($html) {
-                    return $this->getBbCode($matches, $html);
-                },
-                $string
+                $bbcode, function ($matches) use ($html) {
+                return $this->getBbCode($matches, $html);
+            }, $string
             );
         }
 
         return $string;
     }
-    
+
     /**
      * Recover the different stuff and choose the right one
      *
@@ -81,7 +79,7 @@ class BBCodeLib
     {
         if (isset($matches[1])) {
 
-            $replacements   = [
+            $replacements = [
                 '\1' => isset($matches[1]) ? $matches[1] : '',
                 '\2' => isset($matches[2]) ? $matches[2] : ''
             ];
@@ -102,7 +100,7 @@ class BBCodeLib
     {
         return '<br/>';
     }
-    
+
     /**
      * Set return
      *
@@ -112,7 +110,7 @@ class BBCodeLib
     {
         return '';
     }
-    
+
     /**
      * Set list for a block of text.
      *
@@ -122,8 +120,8 @@ class BBCodeLib
      */
     private function setList($string)
     {
-        $tmp    = explode('[*]', stripslashes($string));
-        $out    = null;
+        $tmp = explode('[*]', stripslashes($string));
+        $out = null;
 
         foreach ($tmp as $list) {
 
@@ -147,7 +145,7 @@ class BBCodeLib
     {
         return '<span style="font-weight: bold;">' . stripslashes($string) . '</span>';
     }
-    
+
     /**
      * Set italic for a piece of text.
      *
@@ -159,7 +157,7 @@ class BBCodeLib
     {
         return '<span style="font-style: italic;">' . stripslashes($string) . '</span>';
     }
-    
+
     /**
      * Set underline for a piece of text.
      *
@@ -171,7 +169,7 @@ class BBCodeLib
     {
         return '<span style="text-decoration: underline;">' . stripslashes($string) . '</span>';
     }
-    
+
     /**
      * Set line through for a piece of text.
      *
@@ -183,7 +181,7 @@ class BBCodeLib
     {
         return '<span style="text-decoration: line-through;">' . stripslashes($string) . '</span>';
     }
-    
+
     /**
      * Set the url for a piece of text.
      *
@@ -194,18 +192,18 @@ class BBCodeLib
      */
     private function setUrl($url, $title)
     {
-        $title      = htmlspecialchars(stripslashes($title), ENT_QUOTES);
-        $url        = trim($url);
-        $exclude    = [
+        $title = htmlspecialchars(stripslashes($title), ENT_QUOTES);
+        $url = trim($url);
+        $exclude = [
             'data', 'file', 'javascript', 'jar', '#'
         ];
 
         if (in_array(strstr($url, ':', true), $exclude) == false) {
 
-            return '<a  href="' . $url . '" title="'.$title.'">'.$title.'</a>';
+            return '<a  href="' . $url . '" title="' . $title . '">' . $title . '</a>';
         }
     }
-    
+
     /**
      * Set an email for a piece of text
      *
@@ -218,7 +216,7 @@ class BBCodeLib
     {
         return '<a href="mailto:' . $mail . '" title="' . $mail . '">' . stripslashes($title) . '</a>';
     }
-    
+
     /**
      * Set an image
      *
@@ -247,7 +245,7 @@ class BBCodeLib
     {
         return '<span style="color:' . $color . '">' . stripslashes($title) . '</span>';
     }
-    
+
     /**
      * Set the font family for a piece of text.
      *

@@ -3,7 +3,7 @@
  * Trader Controller
  *
  * PHP Version 5.5+
- *
+ *ﬁ
  * @category Controller
  * @package  Application
  * @author   XG Proyect Team

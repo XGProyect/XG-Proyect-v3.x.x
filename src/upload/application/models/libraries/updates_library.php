@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-
 namespace application\models\libraries;
 
 /**
@@ -26,15 +25,16 @@ namespace application\models\libraries;
  */
 class Updates_library
 {
+
     private $db = null;
-    
+
     /**
      * __construct()
      */
     public function __construct($db)
-    {        
+    {
         // use this to make queries
-        $this->db   = $db;
+        $this->db = $db;
     }
 
     /**
@@ -46,7 +46,7 @@ class Updates_library
     {
         $this->db->closeConnection();
     }
-    
+
     /**
      * Delete deleted users and inactive users
      * 
@@ -57,15 +57,15 @@ class Updates_library
      */
     public function deleteUsersByDeletedAndInactive($del_deleted, $del_inactive)
     {
-        return $this->db->queryFetchAll (
-            "SELECT u.`user_id`
+        return $this->db->queryFetchAll(
+                "SELECT u.`user_id`
             FROM `" . USERS . "` AS u
             INNER JOIN `" . SETTINGS . "` AS s ON s.setting_user_id = u.user_id
-            WHERE (s.`setting_delete_account` < '".$del_deleted."' AND s.`setting_delete_account` <> 0) OR
-            (u.`user_onlinetime` < '".$del_inactive."' AND u.`user_onlinetime` <> 0 AND u.`user_authlevel` <> 3)"
+            WHERE (s.`setting_delete_account` < '" . $del_deleted . "' AND s.`setting_delete_account` <> 0) OR
+            (u.`user_onlinetime` < '" . $del_inactive . "' AND u.`user_onlinetime` <> 0 AND u.`user_authlevel` <> 3)"
         );
     }
-    
+
     /**
      * Delete old messages
      * 
@@ -75,9 +75,9 @@ class Updates_library
      */
     public function deleteMessages($del_before)
     {
-        $this->db->query("DELETE FROM " . MESSAGES . " WHERE `message_time` < '". $del_before ."';");
+        $this->db->query("DELETE FROM " . MESSAGES . " WHERE `message_time` < '" . $del_before . "';");
     }
-    
+
     /**
      * Delete old reports
      * 
@@ -87,9 +87,9 @@ class Updates_library
      */
     public function deleteReports($del_before)
     {
-        $this->db->query("DELETE FROM " . REPORTS . " WHERE `report_time` < '". $del_before ."';");
+        $this->db->query("DELETE FROM " . REPORTS . " WHERE `report_time` < '" . $del_before . "';");
     }
-    
+
     /**
      * Delete old sessions
      * 
@@ -99,9 +99,9 @@ class Updates_library
      */
     public function deleteSessions($del_before)
     {
-        $this->db->query("DELETE FROM " . SESSIONS . " WHERE `session_last_accessed` < '". $del_before ."';");
+        $this->db->query("DELETE FROM " . SESSIONS . " WHERE `session_last_accessed` < '" . $del_before . "';");
     }
-    
+
     /**
      * Delete old planets
      * 
@@ -118,8 +118,8 @@ class Updates_library
             INNER JOIN " . SHIPS . " AS s ON s.ship_planet_id = p.`planet_id`
             WHERE `planet_destroyed` < '" . $del_before . "' AND `planet_destroyed` <> 0;"
         );
-    } 
-    
+    }
+
     /**
      * Generate an SQL Backup
      * 
@@ -129,7 +129,7 @@ class Updates_library
     {
         $this->db->query->backupDb();
     }
-    
+
     /**
      * Update planet buildings, queue, fields and statistics
      * 
@@ -145,17 +145,17 @@ class Updates_library
             "UPDATE " . PLANETS . " AS p
             INNER JOIN " . USERS_STATISTICS . " AS s ON s.user_statistic_user_id = p.planet_user_id
             INNER JOIN " . BUILDINGS . " AS b ON b.building_planet_id = p.`planet_id` SET
-            `".$building_name."` = '".$amount."',
+            `" . $building_name . "` = '" . $amount . "',
             `user_statistic_buildings_points` = `user_statistic_buildings_points` + '" .
-                $planet['building_points'] . "',
-            `planet_b_building` = '". $planet['planet_b_building'] ."',
-            `planet_b_building_id` = '". $planet['planet_b_building_id'] ."',
+            $planet['building_points'] . "',
+            `planet_b_building` = '" . $planet['planet_b_building'] . "',
+            `planet_b_building_id` = '" . $planet['planet_b_building_id'] . "',
             `planet_field_current` = '" . $planet['planet_field_current'] . "',
             `planet_field_max` = '" . $planet['planet_field_max'] . "'
             WHERE `planet_id` = '" . $planet['planet_id'] . "';"
         );
     }
-    
+
     /**
      * Update planet building queue
      * 
@@ -167,12 +167,12 @@ class Updates_library
     {
         $this->db->query(
             "UPDATE " . PLANETS . " SET
-            `planet_b_building` = '". $planet['planet_b_building'] ."',
-            `planet_b_building_id` = '". $planet['planet_b_building_id'] ."'
+            `planet_b_building` = '" . $planet['planet_b_building'] . "',
+            `planet_b_building_id` = '" . $planet['planet_b_building_id'] . "'
             WHERE `planet_id` = '" . $planet['planet_id'] . "';"
         );
     }
-    
+
     /**
      * Update all planet data, before any action takes place
      * 
@@ -191,7 +191,7 @@ class Updates_library
                 INNER JOIN " . SHIPS . " AS s ON s.ship_planet_id = p.`planet_id`
                 INNER JOIN " . RESEARCH . " AS r ON r.research_user_id = p.planet_user_id SET
                     `planet_metal` = '" . $data['planet']['planet_metal'] . "',
-                    `planet_crystal` = '" . $data['planet']['planet_crystal'] ."',
+                    `planet_crystal` = '" . $data['planet']['planet_crystal'] . "',
                     `planet_deuterium` = '" . $data['planet']['planet_deuterium'] . "',
                     `planet_last_update` = '" . $data['planet']['planet_last_update'] . "',
                     `planet_b_hangar_id` = '" . $data['planet']['planet_b_hangar_id'] . "',
@@ -206,7 +206,7 @@ class Updates_library
                     {$data['tech_query']}
                     `planet_b_hangar` = '" . $data['planet']['planet_b_hangar'] . "'
                 WHERE `planet_id` = '" . $data['planet']['planet_id'] . "';"
-            );  
+            );
         }
     }
 }

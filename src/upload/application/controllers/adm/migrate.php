@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
-
 namespace application\controllers\adm;
 
 use application\core\Controller;
@@ -30,6 +29,7 @@ use application\libraries\adm\AdministrationLib;
  */
 class Migrate extends Controller
 {
+
     private $langs;
     private $current_user;
     private $dbObject;
@@ -54,14 +54,14 @@ class Migrate extends Controller
         // check if session is active
         AdministrationLib::checkSession();
 
-        $this->langs        = parent::$lang;
+        $this->langs = parent::$lang;
         $this->current_user = parent::$users->getUserData();
 
         // Check if the user is allowed to access
         if (AdministrationLib::haveAccess(
-            $this->current_user['user_authlevel']
-        ) && $this->current_user['user_authlevel'] == 3) {
-            
+                $this->current_user['user_authlevel']
+            ) && $this->current_user['user_authlevel'] == 3) {
+
             $this->buildPage();
         } else {
 
@@ -76,79 +76,78 @@ class Migrate extends Controller
      */
     private function buildPage()
     {
-        $parse      = $this->langs;
-        $continue   = true;
-        
+        $parse = $this->langs;
+        $continue = true;
+
         $parse['versions_list'] = $this->getVersionsList();
-        
+
         if ($_POST) {
-            
-            $this->host     = isset($_POST['host']) ? $_POST['host'] : null;
-            $this->user     = isset($_POST['user']) ? $_POST['user'] : null;
+
+            $this->host = isset($_POST['host']) ? $_POST['host'] : null;
+            $this->user = isset($_POST['user']) ? $_POST['user'] : null;
             $this->password = isset($_POST['password']) ? $_POST['password'] : null;
-            $this->name     = isset($_POST['db']) ? $_POST['db'] : null;
-            $this->prefix   = isset($_POST['prefix']) ? $_POST['prefix'] : null;
-            $this->version  = $_POST['version_select'];
-            $this->demo     = (isset($_POST['demo_mode']) && $_POST['demo_mode'] == 'on') ? true : false;
-            
+            $this->name = isset($_POST['db']) ? $_POST['db'] : null;
+            $this->prefix = isset($_POST['prefix']) ? $_POST['prefix'] : null;
+            $this->version = $_POST['version_select'];
+            $this->demo = (isset($_POST['demo_mode']) && $_POST['demo_mode'] == 'on') ? true : false;
+
             if (!$this->validateDbData()) {
 
-                $alerts     = $this->langs['mi_empty_fields_error'];
-                $continue   = false;
+                $alerts = $this->langs['mi_empty_fields_error'];
+                $continue = false;
             }
-            
+
             if (!$this->checkVersion() && $continue) {
 
-                $alerts     = $this->langs['mi_no_migration_file'];
-                $continue   = false;
+                $alerts = $this->langs['mi_no_migration_file'];
+                $continue = false;
             }
-            
+
             // New database object
             $this->dbObject = new Database();
-            
+
             if (!$this->tryConnection() && $continue) {
 
-                $alerts     = $this->langs['mi_not_connected_error'];
-                $continue   = false;
+                $alerts = $this->langs['mi_not_connected_error'];
+                $continue = false;
             }
 
             if (!$this->tryDatabase() && $continue) {
-                $alerts     = $this->langs['mi_db_not_exists'];
-                $continue   = false;
+                $alerts = $this->langs['mi_db_not_exists'];
+                $continue = false;
             }
-            
+
             if ($continue) {
 
                 $this->startMigration();
-                
+
                 $parse['alert'] = AdministrationLib::saveMessage('ok', $this->langs['mi_success']);
-                
+
                 if ($this->demo) {
-                    
-                    $parse['result']    = print_r($this->output, true);
-                    
-                    parent::$page->display(    
+
+                    $parse['result'] = print_r($this->output, true);
+
+                    parent::$page->display(
                         parent::$page->parseTemplate(
-                            parent::$page->getTemplate('adm/migrate_result_view'),
-                            $parse
+                            parent::$page->getTemplate('adm/migrate_result_view'), $parse
                         )
                     );
                 }
             } else {
 
-                $parse['alert']     = AdministrationLib::saveMessage('warning', $alerts);
-                $parse['v_host']    = $this->host;
-                $parse['v_db']      = $this->name;
-                $parse['v_user']    = $this->user;
-                $parse['v_prefix']  = $this->prefix;
+                $parse['alert'] = AdministrationLib::saveMessage('warning', $alerts);
+                $parse['v_host'] = $this->host;
+                $parse['v_db'] = $this->name;
+                $parse['v_user'] = $this->user;
+                $parse['v_prefix'] = $this->prefix;
             }
         }
-        
+
         parent::$page->display(
             parent::$page->parseTemplate(parent::$page->getTemplate('adm/migrate_view'), $parse)
         );
     }
-    
+
     /**
      * getVersionsList
      * 
@@ -156,7 +155,7 @@ class Migrate extends Controller
      */
     private function getVersionsList()
     {
-        $versions   = [
+        $versions = [
             '290' => '2.9.0',
             '291' => '2.9.1',
             '292' => '2.9.2',
@@ -179,23 +178,23 @@ class Migrate extends Controller
             '2108' => '2.10.8',
             '2109' => '2.10.9'
         ];
-        
-        $version_options    = '';
-        
+
+        $version_options = '';
+
         foreach ($versions as $id => $version) {
-            
+
             if ($id == $this->version) {
                 $select = 'selected="selected"';
             } else {
                 $select = '';
             }
-            
-            $version_options    .= '<option value="' . $id . '" ' . $select . '>' . 'v' . $version . '</option>';
+
+            $version_options .= '<option value="' . $id . '" ' . $select . '>' . 'v' . $version . '</option>';
         }
-        
+
         return $version_options;
     }
-    
+
     /**
      * validateDbData
      *
@@ -204,19 +203,19 @@ class Migrate extends Controller
     private function validateDbData()
     {
         return !empty($this->host) && !empty($this->name) &&
-                !empty($this->user) && !empty($this->prefix);
+            !empty($this->user) && !empty($this->prefix);
     }
-    
+
     /**
      * checkVersion
      * 
      * @return boolean
      */
     private function checkVersion()
-    {   
+    {
         return file_exists(XGP_ROOT . 'install/migration/migrate_' . $this->version . '.php');
     }
-    
+
     /**
      * tryConnection
      *
@@ -226,7 +225,7 @@ class Migrate extends Controller
     {
         return $this->dbObject->tryConnection($this->host, $this->user, $this->password);
     }
-    
+
     /**
      * tryDatabase
      *
@@ -236,7 +235,7 @@ class Migrate extends Controller
     {
         return $this->dbObject->tryDatabase($this->name);
     }
-    
+
     /**
      * startMigration
      * 
@@ -250,7 +249,7 @@ class Migrate extends Controller
          * Update old DB to latest in its current branch
          */
         $this->firstStep();
-        
+
         /**
          * 2º Step
          * At this point the DB and the configs files are like the last stable 2.10.x.
@@ -258,7 +257,7 @@ class Migrate extends Controller
          */
         $this->secondStep();
     }
-    
+
     /**
      * firstStep
      * 
@@ -268,28 +267,28 @@ class Migrate extends Controller
     {
         // Define some stuff
         $migration_path = XGP_ROOT . 'install/migration/migrate_' . $this->version . '.php';
-        $queries        = [];
-        
+        $queries = [];
+
         require_once $migration_path;
-        
+
         // Check if there was something
         if (isset($queries) && count($queries) > 0) {
             foreach ($queries as $query) {
-                
+
                 // set the prefix
-                $query          = strtr($query, ['{prefix}' => $this->prefix]);
-                
+                $query = strtr($query, ['{prefix}' => $this->prefix]);
+
                 if (!$this->demo) {
 
                     $this->output[] = $this->dbObject->query($query);
                 } else {
-                    
+
                     $this->output[] = $query;
                 }
             }
         }
     }
-    
+
     /**
      * secondStep
      * 
@@ -299,28 +298,28 @@ class Migrate extends Controller
     {
         // Define some stuff
         $migration_path = XGP_ROOT . 'install/migration/migrate_common.php';
-        $queries        = [];
-        $password       = $this->current_user['user_password'];
-        
+        $queries = [];
+        $password = $this->current_user['user_password'];
+
         require_once $migration_path;
-        
+
         // Check if there was something/*
         if (isset($queries) && count($queries) > 0) {
             foreach ($queries as $query) {
-                
+
                 // set the prefix
-                $query          = strtr($query, ['{prefix}' => $this->prefix]);
-                
+                $query = strtr($query, ['{prefix}' => $this->prefix]);
+
                 if (!$this->demo) {
 
                     $this->output[] = $this->dbObject->query($query);
                 } else {
-                    
+
                     $this->output[] = $query;
                 }
             }
         }
-        
+
         unset($password);
     }
 }

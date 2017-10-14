@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
-
 namespace application\controllers\adm;
 
 use application\core\Controller;
@@ -32,6 +31,7 @@ use application\libraries\Statistics_library;
  */
 class Users extends Controller
 {
+
     private $_lang;
     private $_edit;
     private $_planet;
@@ -58,7 +58,7 @@ class Users extends Controller
         $this->_lang = parent::$lang;
         $this->_current_user = parent::$users->getUserData();
         $this->_stats = new Statistics_library();
-        
+
         // Check if the user is allowed to access
         if (AdministrationLib::haveAccess($this->_current_user['user_authlevel']) && AdministrationLib::authorization($this->_current_user['user_authlevel'], 'edit_users') == 1) {
             $this->build_page();
@@ -66,7 +66,6 @@ class Users extends Controller
             die(AdministrationLib::noAccessMessage($this->_lang['ge_no_permissions']));
         }
     }
-
     ######################################
     #
     # main methods
@@ -98,7 +97,7 @@ class Users extends Controller
             } else {
 
                 $this->_user_query = $this->_db->queryFetch(
-                        "SELECT u.*,
+                    "SELECT u.*,
                             p.*,
                             se.*,
                             r.*
@@ -108,7 +107,7 @@ class Users extends Controller
                         INNER JOIN " . RESEARCH . " AS r ON r.research_user_id = u.user_id
                     WHERE (u.user_id = '{$this->_id}') LIMIT 1;"
                 );
-                
+
                 // save the data
                 if (isset($_POST['send_data']) && $_POST['send_data']) {
 
@@ -116,7 +115,7 @@ class Users extends Controller
                 }
 
                 $this->_user_query = $this->_db->queryFetch(
-                        "SELECT u.*,
+                    "SELECT u.*,
                             p.*,
                             se.*,
                             r.*
@@ -136,7 +135,7 @@ class Users extends Controller
 
             $parse['alert'] = AdministrationLib::saveMessage('ok', $this->_lang['us_user_deleted']);
         }
-        
+
         $parse['type'] = ($type != '') ? $type : 'info';
         $parse['user'] = ($user != '') ? $user : '';
         $parse['status'] = ($user != '') ? '' : ' disabled';
@@ -296,7 +295,7 @@ class Users extends Controller
                 break;
         }
     }
-    
+
     /**
      * delete_data
      * 
@@ -306,16 +305,15 @@ class Users extends Controller
      */
     private function delete_data($type)
     {
-        switch($type)
-        {
+        switch ($type) {
             case 'planet':
                 //$this->delete_planet();
-                
+
                 break;
-            
+
             case 'moon':
                 //$this->delete_moon();
-                
+
                 break;
         }
     }
@@ -335,7 +333,6 @@ class Users extends Controller
         // REDIRECTION
         FunctionsLib::redirect("admin.php{$page}{$type}{$user}");
     }
-
     ######################################
     #
     # get_data methods
@@ -348,7 +345,7 @@ class Users extends Controller
      * return the information page for the current user
      */
     private function get_data_info()
-    {        
+    {
         $parse = $this->_lang;
         $parse += (array) $this->_user_query;
         $parse['information'] = str_replace('%s', $this->_user_query['user_name'], $this->_lang['us_user_information']);
@@ -669,7 +666,6 @@ class Users extends Controller
 
         return $view;
     }
-
     ######################################
     #
     # save / update methods
@@ -749,16 +745,16 @@ class Users extends Controller
                 WHERE `user_id` = '" . $this->_id . "';");
 
             if ($this->_current_user['user_id'] == $this->_id) {
-                 
-                $_SESSION['user_name']  = $username;
+
+                $_SESSION['user_name'] = $username;
             } else {
-                
+
                 // clean up
                 $this->_db->query(
                     "DELETE FROM `" . SESSIONS . "` WHERE session_data LIKE '%user_id|s:1:\"" . $this->_id . "\"%'"
                 );
             }
-            
+
             $this->_alert_info = $this->_lang['us_all_ok_message'];
             $this->_alert_type = 'ok';
         }
@@ -871,7 +867,7 @@ class Users extends Controller
 
         // Points rebuild
         $this->_stats->rebuildPoints($this->_id, 0, 'research');
-        
+
         // RETURN THE ALERT
         $this->_alert_info = $this->_lang['us_all_ok_message'];
         $this->_alert_type = 'ok';
@@ -949,10 +945,10 @@ class Users extends Controller
             $id_get = $this->_moon;
         }
 
-        if ((int)$id_get <= 0) {
+        if ((int) $id_get <= 0) {
             return;
         }
-        
+
         // QUERY START
         $query_string = "UPDATE " . PLANETS . " SET ";
 
@@ -1046,7 +1042,7 @@ class Users extends Controller
 
         // Points rebuild
         $this->_stats->rebuildPoints($this->_id, $id_get, 'buildings');
-        
+
         // RETURN THE ALERT
         $this->_alert_info = $this->_lang['us_all_ok_message'];
         $this->_alert_type = 'ok';
@@ -1087,7 +1083,7 @@ class Users extends Controller
 
         // Points rebuild
         $this->_stats->rebuildPoints($this->_id, $id_get, 'ships');
-        
+
         // RETURN THE ALERT
         $this->_alert_info = $this->_lang['us_all_ok_message'];
         $this->_alert_type = 'ok';
@@ -1128,12 +1124,11 @@ class Users extends Controller
 
         // Points rebuild
         $this->_stats->rebuildPoints($this->_id, $id_get, 'defenses');
-        
+
         // RETURN THE ALERT
         $this->_alert_info = $this->_lang['us_all_ok_message'];
         $this->_alert_type = 'ok';
     }
-
     ######################################
     #
     # build combo methods
@@ -1374,7 +1369,6 @@ class Users extends Controller
 
         return $images_options;
     }
-
     ######################################
     #
 	# sub tables methods
@@ -1455,25 +1449,25 @@ class Users extends Controller
         $parse['user'] = $this->_user_query['user_name'];
         $template = parent::$page->getTemplate("adm/users_planets_table_view");
         $prepare_table = '';
-        
+
         while ($planets = $this->_db->fetchAssoc($planets_data)) {
 
             $parse['planet_id'] = $planets['planet_id'];
             $parse['planet_name'] = $planets['planet_name'];
             $parse['planet_image'] = $planets['planet_image'];
-            $style  = '';
-            
+            $style = '';
+
             if ($planets['planet_destroyed'] != 0) {
 
                 $parse['planet_status'] = '<strong><a title="' . $this->_lang['us_user_planets_destroyed'] . '">
                 (' . $this->_lang['us_user_planets_destroyed_short'] . ')</a></strong>';
-                $parse['planet_image_style']    = 'class="greyout"';  
+                $parse['planet_image_style'] = 'class="greyout"';
             }
 
-            $parse['moon_id']       = '';
-            $parse['moon_name']     = '';
-            $parse['moon_image']    = '';
-            
+            $parse['moon_id'] = '';
+            $parse['moon_name'] = '';
+            $parse['moon_image'] = '';
+
             if (isset($planets['moon_id'])) {
 
                 $parse['moon_id'] = $planets['moon_id'];
@@ -1482,10 +1476,10 @@ class Users extends Controller
                 if ($planets['moon_destroyed'] != 0) {
                     $parse['moon_status'] = '<strong><a title="' . $this->_lang['us_user_planets_destroyed'] . '">
                     (' . $this->_lang['us_user_planets_destroyed_short'] . ')</a></strong>';
-                    $style  = 'class="greyout"';  
+                    $style = 'class="greyout"';
                 }
-                
-                $parse['moon_image'] = "<img src=\"{$parse['image_path']}{$planets['moon_image']}.jpg\" alt=\"{$planets['moon_image']}.jpg\" title=\"{$planets['moon_image']}.jpg\" border=\"0\" ".$style.">";
+
+                $parse['moon_image'] = "<img src=\"{$parse['image_path']}{$planets['moon_image']}.jpg\" alt=\"{$planets['moon_image']}.jpg\" title=\"{$planets['moon_image']}.jpg\" border=\"0\" " . $style . ">";
             }
 
             $prepare_table .= parent::$page->parseTemplate($template, $parse);
@@ -1516,15 +1510,14 @@ class Users extends Controller
 
                 $parse['moon_status'] = '<strong><a title="' . $this->_lang['us_user_planets_destroyed'] . '">
                 (' . $this->_lang['us_user_planets_destroyed_short'] . ')</a></strong>';
-                $parse['moon_image_style']  = 'class="greyout"';  
+                $parse['moon_image_style'] = 'class="greyout"';
             }
-            
+
             $prepare_table .= parent::$page->parseTemplate($template, $parse);
         }
 
         return $prepare_table;
     }
-
     ######################################
     #
     # edition methods (pages)
@@ -1662,13 +1655,12 @@ class Users extends Controller
 
         return $prepare_table;
     }
-
     ######################################
     #
     # edition methods (pages)
     #
     ######################################
-    
+
     /**
      * delete_planet
      * 
@@ -1679,11 +1671,11 @@ class Users extends Controller
     private function delete_planet($id_planet = 0)
     {
         if ($id_planet == 0) {
-            $id_planet  = $this->_planet;
+            $id_planet = $this->_planet;
         }
-        
+
         $this->delete_moon();
-        
+
         $this->_db->query(
             "DELETE p,b,d,s FROM " . PLANETS . " AS p
             INNER JOIN " . BUILDINGS . " AS b ON b.building_planet_id = p.`planet_id`
@@ -1693,7 +1685,7 @@ class Users extends Controller
                 AND `planet_type`= 1;"
         );
     }
-    
+
     /**
      * delete_moon
      * 
@@ -1704,9 +1696,9 @@ class Users extends Controller
     private function delete_moon($id_moon = 0)
     {
         if ($id_moon == 0) {
-            $id_moon    = $this->_moon;
+            $id_moon = $this->_moon;
         }
-        
+
         $this->_db->query(
             "DELETE m,b,d,s FROM " . PLANETS . " AS m
             INNER JOIN " . BUILDINGS . " AS b ON b.building_planet_id = m.`planet_id`
@@ -1716,7 +1708,6 @@ class Users extends Controller
                 AND `planet_type` = 3;"
         );
     }
-    
     ######################################
     #
     # other required methods

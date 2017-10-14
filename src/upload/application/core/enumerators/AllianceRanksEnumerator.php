@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-
 namespace application\libraries\enumerators;
 
 /**
@@ -26,6 +25,7 @@ namespace application\libraries\enumerators;
  */
 abstract class AllianceRanksEnumerator
 {
+
     const name = 1;
     const mail = 2;
     const delete = 3;
@@ -35,7 +35,8 @@ abstract class AllianceRanksEnumerator
     const application_management = 7;
     const view_member_list = 8;
     const online_status = 9;
-    const right_hand = 10;    
+    const right_hand = 10;
+
 }
 
 /* end of AllianceRanksEnumerator.php */

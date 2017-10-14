@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Mail Controller
  *
@@ -12,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
-
 namespace application\controllers\home;
 
 use application\core\Controller;
@@ -31,6 +29,7 @@ use application\libraries\FunctionsLib;
  */
 class Mail extends Controller
 {
+
     /**
      *
      * @var array
@@ -46,9 +45,9 @@ class Mail extends Controller
     {
         parent::__construct();
 
-        $this->_db      = new Database();
-        $this->langs    = parent::$lang;
-        
+        $this->_db = new Database();
+        $this->langs = parent::$lang;
+
         $this->buildPage();
     }
 
@@ -69,33 +68,30 @@ class Mail extends Controller
      */
     private function buildPage()
     {
-        $parse      = $this->langs;
-        $game_name  = FunctionsLib::readConfig('game_name');
+        $parse = $this->langs;
+        $game_name = FunctionsLib::readConfig('game_name');
 
-        $parse['game_name']         = $game_name;
+        $parse['game_name'] = $game_name;
         $parse['lp_send_pwd_title'] = strtr($this->langs['lp_send_pwd_title'], ['%s' => $game_name]);
-        $parse['display']           = 'display: none';
-        $parse['error_msg']         = '';
-        $parse['css_path']          = XGP_ROOT . CSS_PATH . 'home/';
-        
+        $parse['display'] = 'display: none';
+        $parse['error_msg'] = '';
+        $parse['css_path'] = XGP_ROOT . CSS_PATH . 'home/';
+
         if ($_POST) {
 
-            $parse['display']   = 'display: block';
-            
+            $parse['display'] = 'display: block';
+
             if ($this->processRequest($_POST['email'])) {
 
                 $parse['error_msg'] = $this->langs['lp_sent'];
             } else {
 
                 $parse['error_msg'] = $this->langs['lp_error'];
-            } 
+            }
         }
 
         parent::$page->display(
-            parent::$page->parseTemplate(parent::$page->getTemplate('home/mail_view'), $parse),
-            false,
-            '',
-            false
+            parent::$page->parseTemplate(parent::$page->getTemplate('home/mail_view'), $parse), false, '', false
         );
     }
 
@@ -129,7 +125,7 @@ class Mail extends Controller
      */
     private function processRequest($mail)
     {
-        $ExistMail  = $this->_db->queryFetch(
+        $ExistMail = $this->_db->queryFetch(
             "SELECT `user_name`
             FROM " . USERS . "
             WHERE `user_email` = '" . $this->_db->escapeValue($mail) . "' 
@@ -148,7 +144,7 @@ class Mail extends Controller
                 WHERE `user_email`='" . $this->_db->escapeValue($mail) . "' 
                 LIMIT 1;"
             );
-            
+
             return true;
         }
     }
@@ -165,24 +161,21 @@ class Mail extends Controller
     {
         $game_name = FunctionsLib::readConfig('game_name');
 
-        $parse                          = $this->langs;
-        $parse['user_name']             = $UserName;
-        $parse['user_pass']             = $this->generatePassword();
-        $parse['game_url']              = GAMEURL;
-        $parse['re_mail_text_part1']    = str_replace('%s', $game_name, $this->langs['re_mail_text_part1']);
-        $parse['re_mail_text_part7']    = str_replace('%s', $game_name, $this->langs['re_mail_text_part7']);
+        $parse = $this->langs;
+        $parse['user_name'] = $UserName;
+        $parse['user_pass'] = $this->generatePassword();
+        $parse['game_url'] = GAMEURL;
+        $parse['re_mail_text_part1'] = str_replace('%s', $game_name, $this->langs['re_mail_text_part1']);
+        $parse['re_mail_text_part7'] = str_replace('%s', $game_name, $this->langs['re_mail_text_part7']);
 
-        $email  = parent::$page->parseTemplate(
+        $email = parent::$page->parseTemplate(
             parent::$page->getTemplate('home/recover_password_email_template_view'), $parse
         );
 
         FunctionsLib::sendEmail(
-            $emailaddress,
-            $this->langs['lp_mail_title'],
-            $email,
-            [
-                'mail' => FunctionsLib::readConfig('admin_email'),
-                'name' => $game_name
+            $emailaddress, $this->langs['lp_mail_title'], $email, [
+            'mail' => FunctionsLib::readConfig('admin_email'),
+            'name' => $game_name
             ]
         );
 

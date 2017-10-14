@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
-
 namespace application\controllers\game;
 
 use application\core\Controller;
@@ -31,6 +30,7 @@ use application\libraries\FunctionsLib;
  */
 class Phalanx extends Controller
 {
+
     const MODULE_ID = 11;
 
     private $_lang;
@@ -95,7 +95,7 @@ class Phalanx extends Controller
         }
 
         $TargetName = '';
-        
+
         /* main page */
         if ($this->_current_planet['planet_deuterium'] > 10000) {
             $this->_db->query("UPDATE " . PLANETS . " SET
@@ -152,9 +152,9 @@ class Phalanx extends Controller
                 $isTheTarget = $FleetRow['fleet_end_galaxy'] == $Galaxy && $FleetRow['fleet_end_system'] == $System && $FleetRow['fleet_end_planet'] == $Planet;
 
                 $fpage[$ArrivetoTargetTime] = '';
-                $fpage[$EndStayTime]        = '';
-                $fpage[$ReturnTime]         = '';
-                
+                $fpage[$EndStayTime] = '';
+                $fpage[$ReturnTime] = '';
+
                 /* 1)the arrive to target fleet table event
                  * you can see start-fleet event only if this is a planet(or destroyed moon)
                  * and if the fleet mission started from this planet is different from hold
@@ -202,8 +202,8 @@ class Phalanx extends Controller
 
         $parse['phl_pl_galaxy'] = $Galaxy;
         $parse['phl_pl_system'] = $System;
-        $parse['phl_pl_place']  = $Planet;
-        $parse['phl_pl_name']   = $TargetName;
+        $parse['phl_pl_place'] = $Planet;
+        $parse['phl_pl_name'] = $TargetName;
 
         parent::$page->display(parent::$page->parseTemplate(parent::$page->getTemplate('galaxy/phalanx_body'), $parse), false, '', false);
     }

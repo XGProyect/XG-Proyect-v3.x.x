@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
-
 namespace application\controllers\adm;
 
 use application\core\Controller;
@@ -29,6 +28,7 @@ use application\libraries\adm\AdministrationLib;
  */
 class Encrypter extends Controller
 {
+
     private $langs;
     private $current_user;
 
@@ -44,12 +44,11 @@ class Encrypter extends Controller
         // check if session is active
         AdministrationLib::checkSession();
 
-        $this->langs        = parent::$lang;
+        $this->langs = parent::$lang;
         $this->current_user = parent::$users->getUserData();
 
         // Check if the user is allowed to access
-        if (AdministrationLib::haveAccess($this->current_user['user_authlevel'])
-            && AdministrationLib::authorization($this->current_user['user_authlevel'], 'use_tools') == 1) {
+        if (AdministrationLib::haveAccess($this->current_user['user_authlevel']) && AdministrationLib::authorization($this->current_user['user_authlevel'], 'use_tools') == 1) {
 
             $this->buildPage();
         } else {
@@ -65,7 +64,7 @@ class Encrypter extends Controller
      */
     private function buildPage()
     {
-        $parse              = $this->langs;
+        $parse = $this->langs;
         $parse['uncrypted'] = '';
         $parse['encrypted'] = sha1('');
 

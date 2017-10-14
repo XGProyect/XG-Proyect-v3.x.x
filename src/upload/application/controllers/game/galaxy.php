@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
-
 namespace application\controllers\game;
 
 use application\core\Controller;
@@ -32,6 +31,7 @@ use application\libraries\FunctionsLib;
  */
 class Galaxy extends Controller
 {
+
     const MODULE_ID = 11;
 
     private $_planet_count = 0;
@@ -68,7 +68,7 @@ class Galaxy extends Controller
         $this->_noob = FunctionsLib::loadLibrary('NoobsProtectionLib');
         $this->_galaxyLib = FunctionsLib::loadLibrary('GalaxyLib');
 
-        
+
         if ($this->_current_user['setting_vacations_status']) {
 
             FunctionsLib::message($this->_lang['gl_no_access_vm_on'], '', '');
@@ -235,15 +235,15 @@ class Galaxy extends Controller
         $parse['actions'] = '';
 
         while ($row_data = $this->_db->fetchArray($this->_galaxy_data)) {
-            
+
             for ($current_planet = $start; $current_planet < 1 + ( MAX_PLANET_IN_SYSTEM ); $current_planet++) {
-            
+
                 if ($row_data['planet_galaxy'] == $this->_galaxy && $row_data['planet_system'] == $this->_system && $row_data['planet_planet'] == $current_planet) {
-                
+
                     if ($row_data['id_planet'] != 0) {
-                    
+
                         if ($row_data['planet_destroyed'] == 0) {
-                        
+
                             $this->_planet_count++;
                         }
                     }
@@ -254,7 +254,7 @@ class Galaxy extends Controller
                     $start++;
                     break;
                 } else {
-                
+
                     $parse['pos'] = $start;
                     $rows .= parent::$page->parseTemplate($template, $parse);
                     $start++;
@@ -406,7 +406,7 @@ class Galaxy extends Controller
         $tempvar2 = $this->_formula->missileRange($this->_current_user['research_impulse_drive']);
 
         $tempvar3 = $this->_db->queryFetch(
-                "SELECT u.`user_id`,u.`user_onlinetime`,s.`setting_vacations_status`
+            "SELECT u.`user_id`,u.`user_onlinetime`,s.`setting_vacations_status`
             FROM " . USERS . " AS u
             INNER JOIN " . SETTINGS . " AS s ON s.setting_user_id = u.user_id
             WHERE u.user_id = (SELECT `planet_user_id`
@@ -567,33 +567,33 @@ class Galaxy extends Controller
         }
 
         $fleet['amount'] = 0;
-        
+
         foreach ($this->_reslist['fleet'] as $ship_id) {
 
-            $TName          = "ship" . $ship_id;
-            $ship_amount    = isset($_POST[$TName]) ? (int)$_POST[$TName] : 0;
-            
+            $TName = "ship" . $ship_id;
+            $ship_amount = isset($_POST[$TName]) ? (int) $_POST[$TName] : 0;
+
             if ($ship_id > 200 && $ship_id < 300 && $ship_amount > 0) {
 
                 if ($ship_amount > $this->_current_planet[$this->_resource[$ship_id]]) {
 
-                    $fleet['fleetarray'][$ship_id]= (int)$this->_current_planet[$this->_resource[$ship_id]];
-                    $fleet['fleetlist']             .= $ship_id . "," . $this->_current_planet[$this->_resource[$ship_id]] . ";";
-                    $fleet['amount']                += (int)$this->_current_planet[$this->_resource[$ship_id]];
-                    $PartialCount                   += (int)$this->_current_planet[$this->_resource[$ship_id]];
-                    
+                    $fleet['fleetarray'][$ship_id] = (int) $this->_current_planet[$this->_resource[$ship_id]];
+                    $fleet['fleetlist'] .= $ship_id . "," . $this->_current_planet[$this->_resource[$ship_id]] . ";";
+                    $fleet['amount'] += (int) $this->_current_planet[$this->_resource[$ship_id]];
+                    $PartialCount += (int) $this->_current_planet[$this->_resource[$ship_id]];
+
                     // we sent less that the amount requested
                     $PartialFleet = true;
                 } else {
-                    
-                    $fleet['fleetarray'][$ship_id]  = $ship_amount;
-                    $fleet['fleetlist']             .= $ship_id . "," . $ship_amount . ";";
-                    $fleet['amount']                += $ship_amount;
-                    $speedalls[$ship_id]            = $ship_amount;
+
+                    $fleet['fleetarray'][$ship_id] = $ship_amount;
+                    $fleet['fleetlist'] .= $ship_id . "," . $ship_amount . ";";
+                    $fleet['amount'] += $ship_amount;
+                    $speedalls[$ship_id] = $ship_amount;
                 }
             }
         }
-        
+
         $errors_types = array(
             600 => $this->_lang['gl_success'],
             601 => $this->_lang['gl_error'],

@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
-
 namespace application\controllers\game;
 
 use application\core\Controller;
@@ -32,6 +31,7 @@ use application\libraries\FunctionsLib;
  */
 class Research extends Controller
 {
+
     const MODULE_ID = 6;
 
     private $_current_user;
@@ -103,15 +103,15 @@ class Research extends Controller
 
                 if (DevelopmentsLib::isDevelopmentAllowed($this->_current_user, $this->_current_planet, $tech)) {
 
-                    $RowParse['dpath']          = DPATH;
-                    $RowParse['tech_id']        = $tech;
-                    $building_level             = $this->_current_user[$this->_resource[$tech]];
-                    $RowParse['tech_level']     = DevelopmentsLib::setLevelFormat($building_level, $tech, $this->_current_user);
-                    $RowParse['tech_name']      = $tech_name;
-                    $RowParse['tech_descr']     = $this->_lang['res']['descriptions'][$tech];
-                    $RowParse['tech_price']     = DevelopmentsLib::formatedDevelopmentPrice($this->_current_user, $this->_current_planet, $tech);
-                    $SearchTime                 = DevelopmentsLib::developmentTime($this->_current_user, $this->_current_planet, $tech, false, $this->_lab_level);
-                    $RowParse['search_time']    = DevelopmentsLib::formatedDevelopmentTime($SearchTime);
+                    $RowParse['dpath'] = DPATH;
+                    $RowParse['tech_id'] = $tech;
+                    $building_level = $this->_current_user[$this->_resource[$tech]];
+                    $RowParse['tech_level'] = DevelopmentsLib::setLevelFormat($building_level, $tech, $this->_current_user);
+                    $RowParse['tech_name'] = $tech_name;
+                    $RowParse['tech_descr'] = $this->_lang['res']['descriptions'][$tech];
+                    $RowParse['tech_price'] = DevelopmentsLib::formatedDevelopmentPrice($this->_current_user, $this->_current_planet, $tech);
+                    $SearchTime = DevelopmentsLib::developmentTime($this->_current_user, $this->_current_planet, $tech, false, $this->_lab_level);
+                    $RowParse['search_time'] = DevelopmentsLib::formatedDevelopmentTime($SearchTime);
 
                     if (!$this->_is_working['is_working']) {
 
@@ -132,7 +132,7 @@ class Research extends Controller
 
                         if ($this->_is_working['working_on']['planet_b_tech_id'] == $tech) {
 
-                            $bloc   = $this->_lang;
+                            $bloc = $this->_lang;
 
                             if ($this->_is_working['working_on']['planet_id'] != $this->_current_planet['planet_id']) {
 
@@ -142,10 +142,10 @@ class Research extends Controller
                                 $bloc['tech_id'] = $this->_is_working['working_on']['planet_b_tech_id'];
                             } else {
 
-                                $bloc['tech_time']  = $this->_current_planet['planet_b_tech'] - time();
-                                $bloc['tech_name']  = '';
-                                $bloc['tech_home']  = $this->_current_planet['planet_id'];
-                                $bloc['tech_id']    = $this->_current_planet['planet_b_tech_id'];
+                                $bloc['tech_time'] = $this->_current_planet['planet_b_tech'] - time();
+                                $bloc['tech_name'] = '';
+                                $bloc['tech_home'] = $this->_current_planet['planet_id'];
+                                $bloc['tech_id'] = $this->_current_planet['planet_b_tech_id'];
                             }
                             $action_link = parent::$page->parseTemplate($tech_script_template, $bloc);
                         } else {
@@ -204,30 +204,23 @@ class Research extends Controller
                     // start a research
                     case 'search':
 
-                        if (DevelopmentsLib::isDevelopmentAllowed($this->_current_user, $working_planet, $technology)
-                            && DevelopmentsLib::isDevelopmentPayable($this->_current_user, $working_planet, $technology)
-                            && !parent::$users->isOnVacations($this->_current_user)) {
-                            
-                            $costs  = DevelopmentsLib::developmentPrice(
-                                $this->_current_user,
-                                $working_planet,
-                                $technology
+                        if (DevelopmentsLib::isDevelopmentAllowed($this->_current_user, $working_planet, $technology) && DevelopmentsLib::isDevelopmentPayable($this->_current_user, $working_planet, $technology) && !parent::$users->isOnVacations($this->_current_user)) {
+
+                            $costs = DevelopmentsLib::developmentPrice(
+                                    $this->_current_user, $working_planet, $technology
                             );
 
-                            $working_planet['planet_metal']     -= $costs['metal'];
-                            $working_planet['planet_crystal']   -= $costs['crystal'];
+                            $working_planet['planet_metal'] -= $costs['metal'];
+                            $working_planet['planet_crystal'] -= $costs['crystal'];
                             $working_planet['planet_deuterium'] -= $costs['deuterium'];
                             $working_planet['planet_b_tech_id'] = $technology;
-                            $working_planet['planet_b_tech']    = time() + DevelopmentsLib::developmentTime(
-                                $this->_current_user, $working_planet,
-                                $technology,
-                                false,
-                                $this->_lab_level
+                            $working_planet['planet_b_tech'] = time() + DevelopmentsLib::developmentTime(
+                                    $this->_current_user, $working_planet, $technology, false, $this->_lab_level
                             );
 
-                            $this->_current_user['research_current_research']   = $working_planet['planet_id'];
-                            $update_data                        = true;
-                            $this->_is_working['is_working']    = true;
+                            $this->_current_user['research_current_research'] = $working_planet['planet_id'];
+                            $update_data = true;
+                            $this->_is_working['is_working'] = true;
                         }
 
                         break;
@@ -248,18 +241,18 @@ class Research extends Controller
                     );
                 }
 
-                $this->_current_planet  = $working_planet;
+                $this->_current_planet = $working_planet;
 
                 if (is_array($this->_is_working['working_on'])) {
 
-                    $this->_is_working['working_on']    = $working_planet;
+                    $this->_is_working['working_on'] = $working_planet;
                 } else {
 
-                    $this->_current_planet  = $working_planet;
+                    $this->_current_planet = $working_planet;
 
                     if ($cmd == 'search') {
 
-                        $this->_is_working['working_on']    = $this->_current_planet;
+                        $this->_is_working['working_on'] = $this->_current_planet;
                     }
                 }
             }
@@ -286,14 +279,14 @@ class Research extends Controller
                 $queue = explode(';', $current_queue);
 
                 for ($i = 0; $i < MAX_BUILDING_QUEUE_SIZE; $i++) {
-                    
+
                     if (isset($queue[$i])) {
                         $element_data = explode(",", $queue[$i]);
                         $element_id = $element_data[0];
 
                         if ($element_id == 31) {
                             break;
-                        }   
+                        }
                     }
                 }
             } else {

@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
-
 namespace application\controllers\adm;
 
 use application\core\Controller;
@@ -30,6 +29,7 @@ use application\libraries\FunctionsLib;
  */
 class Statistics extends Controller
 {
+
     private $langs;
     private $current_user;
 
@@ -43,12 +43,11 @@ class Statistics extends Controller
         // check if session is active
         AdministrationLib::checkSession();
 
-        $this->langs        = parent::$lang;
+        $this->langs = parent::$lang;
         $this->current_user = parent::$users->getUserData();
 
         // Check if the user is allowed to access
-        if (AdministrationLib::haveAccess($this->current_user['user_authlevel'])
-            && AdministrationLib::authorization($this->current_user['user_authlevel'], 'config_game') == 1) {
+        if (AdministrationLib::haveAccess($this->current_user['user_authlevel']) && AdministrationLib::authorization($this->current_user['user_authlevel'], 'config_game') == 1) {
 
             $this->buildPage();
         } else {
@@ -64,10 +63,10 @@ class Statistics extends Controller
      */
     private function buildPage()
     {
-        $game_stat_level        = FunctionsLib::readConfig('stat_admin_level');
-        $game_stat_settings     = FunctionsLib::readConfig('stat_points');
-        $game_stat_update_time  = FunctionsLib::readConfig('stat_update_time');
-        $this->langs['alert']   = '';
+        $game_stat_level = FunctionsLib::readConfig('stat_admin_level');
+        $game_stat_settings = FunctionsLib::readConfig('stat_points');
+        $game_stat_update_time = FunctionsLib::readConfig('stat_update_time');
+        $this->langs['alert'] = '';
 
         if (isset($_POST['save']) && ($_POST['save'] == $this->langs['cs_save_changes'])) {
 
@@ -75,8 +74,8 @@ class Statistics extends Controller
 
                 FunctionsLib::updateConfig('stat_admin_level', $_POST['stat_admin_level']);
 
-                $game_stat_level    = $_POST['stat_admin_level'];
-                $ASD1               = $_POST['stat_admin_level'];
+                $game_stat_level = $_POST['stat_admin_level'];
+                $ASD1 = $_POST['stat_admin_level'];
             }
 
             if (isset($_POST['stat_points']) && is_numeric($_POST['stat_points']) && $_POST['stat_points'] != $game_stat_settings) {
@@ -89,25 +88,24 @@ class Statistics extends Controller
 
                 FunctionsLib::updateConfig('stat_update_time', $_POST['stat_update_time']);
 
-                $game_stat_update_time  = $_POST['stat_update_time'];
+                $game_stat_update_time = $_POST['stat_update_time'];
             }
 
-            $this->langs['alert']   = AdministrationLib::saveMessage('ok', $this->langs['cs_all_ok_message']);
+            $this->langs['alert'] = AdministrationLib::saveMessage('ok', $this->langs['cs_all_ok_message']);
         }
 
-        $this->langs['stat_admin_level']    = $game_stat_level;
-        $this->langs['stat_points']         = $game_stat_settings;
-        $this->langs['stat_update_time']    = $game_stat_update_time;
-        $this->langs['yes']                 = $this->langs['cs_yes'][1];
-        $this->langs['no']                  = $this->langs['cs_no'][0];
-        $this->langs['admin_levels']        = $this->adminLevels($game_stat_level);
-        
+        $this->langs['stat_admin_level'] = $game_stat_level;
+        $this->langs['stat_points'] = $game_stat_settings;
+        $this->langs['stat_update_time'] = $game_stat_update_time;
+        $this->langs['yes'] = $this->langs['cs_yes'][1];
+        $this->langs['no'] = $this->langs['cs_no'][0];
+        $this->langs['admin_levels'] = $this->adminLevels($game_stat_level);
+
         parent::$page->display(
-            parent::$page->parseTemplate(parent::$page->getTemplate('adm/statistics_view'),
-            $this->langs)
+            parent::$page->parseTemplate(parent::$page->getTemplate('adm/statistics_view'), $this->langs)
         );
     }
-    
+
     /**
      * adminLevels
      * 
@@ -117,19 +115,19 @@ class Statistics extends Controller
      */
     private function adminLevels($selected)
     {
-        $options    = '';
+        $options = '';
 
         foreach ($this->langs['user_level'] as $id => $name) {
 
             if ($selected == $id) {
-                $sel    = 'selected="selected"';
+                $sel = 'selected="selected"';
             } else {
-                $sel    = '';
+                $sel = '';
             }
-            
-            $options    .= '<option value="' . $id . '" ' . $sel . '>' . $name . '</option>\n';
+
+            $options .= '<option value="' . $id . '" ' . $sel . '>' . $name . '</option>\n';
         }
-        
+
         return $options;
     }
 }

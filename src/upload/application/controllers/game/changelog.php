@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
-
 namespace application\controllers\game;
 
 use application\core\Controller;
@@ -20,7 +19,7 @@ use application\libraries\FunctionsLib;
 define('IN_CHANGELOG', true);
 
 /**
- * Changelog Class
+ * Change log Class
  *
  * @category Classes
  * @package  Application
@@ -31,6 +30,7 @@ define('IN_CHANGELOG', true);
  */
 class Changelog extends Controller
 {
+
     const MODULE_ID = 0;
 
     private $_lang;

@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
-
 namespace application\core;
 
 /**
@@ -26,95 +25,95 @@ namespace application\core;
  */
 abstract class Controller extends XGPCore
 {
-    
+
     /**
      * Contains the current user data
      * 
      * @var array 
      */
     private $_current_user = [];
-    
+
     /**
      * Contains the current planet data
      * 
      * @var array 
      */
     private $_current_planet = [];
-    
+
     /**
      * Contains the whole set of objects by request
      * 
      * @var array 
      */
     private $_objects = [];
-    
+
     /**
      * Contains the whole set of language lines
      * 
      * @var array 
      */
     private $_langs = [];
-    
+
     /**
      *
      * @var type 
      */
     private $_template = null;
-    
+
     /**
      * Constructor
      */
     public function __construct()
     {
         parent::__construct();
-        
+
         $this->setUserData();
         $this->setPlanetData();
         $this->setObjects();
         $this->setLang();
         $this->setTemplate();
     }
-    
+
     /**
      * Set the user Data
      */
     private function setUserData()
     {
-        $this->_current_user    = parent::$users->getUserData();
+        $this->_current_user = parent::$users->getUserData();
     }
-    
+
     /**
      * Set the planet Data
      */
     private function setPlanetData()
     {
-        $this->_current_planet  = parent::$users->getPlanetData();
+        $this->_current_planet = parent::$users->getPlanetData();
     }
-    
+
     /**
      * Set objects data
      */
     private function setObjects()
     {
-        $this->_objects         = parent::$objects;
+        $this->_objects = parent::$objects;
     }
-    
+
     /**
      * Set languages data
      */
     private function setLang()
     {
-        $this->_langs           = parent::$lang;
+        $this->_langs = parent::$lang;
     }
-    
+
     /**
      * Set languages data
      */
     private function setTemplate()
     {
-        $this->_template        = new Template();
+        $this->_template = new Template();
     }
-    
+
     /**
      * Return the user data
      * 
@@ -124,7 +123,7 @@ abstract class Controller extends XGPCore
     {
         return $this->_current_user;
     }
-    
+
     /**
      * Return the planet data
      * 
@@ -134,7 +133,7 @@ abstract class Controller extends XGPCore
     {
         return $this->_current_planet;
     }
-    
+
     /**
      * Return the objects data
      * 
@@ -144,7 +143,7 @@ abstract class Controller extends XGPCore
     {
         return $this->_objects;
     }
-    
+
     /**
      * Return the languages
      * 
@@ -154,7 +153,7 @@ abstract class Controller extends XGPCore
     {
         return $this->_langs;
     }
-    
+
     /**
      * 
      * @return type

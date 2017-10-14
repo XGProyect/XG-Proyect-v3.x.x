@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
-
 namespace application\core;
 
 use Exception;
@@ -34,18 +33,19 @@ use SimpleXMLElement;
  */
 class Xml
 {
+
     /**
      *
      * @var Xml
      */
     private static $instance = null;
-    
+
     /**
      *
      * @var string
      */
     private $path;
-    
+
     /**
      *
      * @var SimpleXMLElement
@@ -61,8 +61,8 @@ class Xml
      */
     private function __construct($sheet)
     {
-        $this->path     = XGP_ROOT . 'application' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . $sheet;
-        $this->config   = simplexml_load_file($this->path);
+        $this->path = XGP_ROOT . 'application' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . $sheet;
+        $this->config = simplexml_load_file($this->path);
     }
 
     /**
@@ -94,9 +94,9 @@ class Xml
 
             throw new Exception(sprintf('Item with id "%s" does not exists or is not unique.', $config_name));
         }
-        
-        list($result)   = $result;
-        
+
+        list($result) = $result;
+
         return $result;
     }
 
@@ -121,13 +121,13 @@ class Xml
     public function getConfigs()
     {
         $config = array();
-        $x      = $this->config->children();
-        
+        $x = $this->config->children();
+
         foreach ($x as $xmlObject) {
 
-            $config[(string)$xmlObject->name]   = (string)$xmlObject->value;
+            $config[(string) $xmlObject->name] = (string) $xmlObject->value;
         }
-        
+
         return $config;
     }
 
@@ -143,14 +143,14 @@ class Xml
     {
         //if $config_name is an array, then we wont update all values and do single save task at the end
         if (is_array($config_name)) {
-            
+
             foreach ($config_name as $key => $value) {
-                
-                $this->getXmlEntity($key)->value    = $value;
+
+                $this->getXmlEntity($key)->value = $value;
             }
         } else {
 
-            $this->getXmlEntity($config_name)->value    = $config_value;
+            $this->getXmlEntity($config_name)->value = $config_value;
         }
 
         $this->config->asXML($this->path);
@@ -166,9 +166,9 @@ class Xml
     public static function getInstance($sheet)
     {
         if (self::$instance == null) {
-            
+
             //make new istance of this class and save it to field for next usage
-            $c  = __class__;
+            $c = __class__;
             self::$instance = new $c($sheet);
         }
 

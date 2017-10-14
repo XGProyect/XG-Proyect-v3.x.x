@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.4
  */
-
 namespace application\models\game;
 
 /**
@@ -26,15 +25,16 @@ namespace application\models\game;
  */
 class Fleet2
 {
+
     private $db = null;
-    
+
     /**
      * __construct()
      */
     public function __construct($db)
-    {        
+    {
         // use this to make queries
-        $this->db   = $db;
+        $this->db = $db;
     }
 
     /**
@@ -46,7 +46,7 @@ class Fleet2
     {
         $this->db->closeConnection();
     }
-    
+
     /**
      * Get ongoing ACS attacks
      * 
@@ -57,7 +57,7 @@ class Fleet2
     public function getOngoingAcs()
     {
         return $this->db->query(
-            "SELECT * FROM " . ACS_FLEETS
+                "SELECT * FROM " . ACS_FLEETS
         );
     }
 }

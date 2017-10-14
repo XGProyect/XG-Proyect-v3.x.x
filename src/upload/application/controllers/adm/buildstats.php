@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
-
 namespace application\controllers\adm;
 
 use application\core\Controller;
@@ -31,6 +30,7 @@ use application\libraries\Statistics_library;
  */
 class Buildstats extends Controller
 {
+
     private $_lang;
     private $_current_user;
 
@@ -63,9 +63,9 @@ class Buildstats extends Controller
     private function build_page()
     {
         // RUN STATISTICS SCRIPT AND THE SET THE RESULT
-        $slObject   = new Statistics_library();
-        $result     = $slObject->makeStats();
-        
+        $slObject = new Statistics_library();
+        $result = $slObject->makeStats();
+
         // PREPARE DATA TO PARSE
         $parse = $this->_lang;
         $parse['memory_p'] = str_replace(array("%p", "%m"), $result['memory_peak'], $this->_lang['sb_top_memory']);

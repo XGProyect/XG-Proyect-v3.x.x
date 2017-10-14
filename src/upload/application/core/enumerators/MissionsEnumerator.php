@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-
 namespace application\core\enumerators;
 
 /**
@@ -26,17 +25,19 @@ namespace application\core\enumerators;
  */
 abstract class MissionsEnumerator
 {
-    const attack        = 1;
-    const acs           = 2;
-    const transport     = 3;
-    const deploy        = 4;
-    const stay          = 5;
-    const spy           = 6;
-    const colonize      = 7;
-    const recycle       = 8;
-    const destroy       = 9;
-    const missile       = 10;
-    const expedition    = 15;
+
+    const attack = 1;
+    const acs = 2;
+    const transport = 3;
+    const deploy = 4;
+    const stay = 5;
+    const spy = 6;
+    const colonize = 7;
+    const recycle = 8;
+    const destroy = 9;
+    const missile = 10;
+    const expedition = 15;
+
 }
 
 /* end of MissionsEnumerator.php */

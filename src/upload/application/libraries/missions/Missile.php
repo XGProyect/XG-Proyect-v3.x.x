@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
-
 namespace application\libraries\missions;
 
 use application\libraries\FormatLib;
@@ -29,6 +28,7 @@ use application\libraries\FunctionsLib;
  */
 class Missile extends Missions
 {
+
     /**
      * __construct
      *
@@ -52,7 +52,7 @@ class Missile extends Missions
 
             if ($fleet_row['fleet_mess'] == 0) {
 
-                $attacker_data  = $this->Missions_Model->getMissileAttackerDataByCoords([
+                $attacker_data = $this->Missions_Model->getMissileAttackerDataByCoords([
                     'coords' => [
                         'galaxy' => $fleet_row['fleet_start_galaxy'],
                         'system' => $fleet_row['fleet_start_system'],
@@ -61,7 +61,7 @@ class Missile extends Missions
                     ]
                 ]);
 
-                $target_data  = $this->Missions_Model->getMissileTargetDataByCoords([
+                $target_data = $this->Missions_Model->getMissileTargetDataByCoords([
                     'coords' => [
                         'galaxy' => $fleet_row['fleet_end_galaxy'],
                         'system' => $fleet_row['fleet_end_system'],
@@ -72,51 +72,48 @@ class Missile extends Missions
 
                 if ($target_data['defense_anti-ballistic_missile'] >= $fleet_row['fleet_amount']) {
 
-                    $message    = $this->langs['ma_all_destroyed'] . '<br>';
-                    $amount     = $fleet_row['fleet_amount'];
+                    $message = $this->langs['ma_all_destroyed'] . '<br>';
+                    $amount = $fleet_row['fleet_amount'];
                 } else {
 
                     $amount = 0;
 
                     if ($target_data['defense_anti-ballistic_missile'] > 0) {
 
-                        $message    = $target_data['defense_anti-ballistic_missile'] .
+                        $message = $target_data['defense_anti-ballistic_missile'] .
                             $this->langs['ma_some_destroyed'] . " <br>";
                     }
 
-                    $attack             = floor(
-                        ($fleet_row['fleet_amount'] - $target_data['defense_anti-ballistic_missile'])
-                        * ($this->combat_caps[503]['attack']
-                        * (1 + ($attacker_data['research_weapons_technology'] / 10)))
+                    $attack = floor(
+                        ($fleet_row['fleet_amount'] - $target_data['defense_anti-ballistic_missile']) * ($this->combat_caps[503]['attack'] * (1 + ($attacker_data['research_weapons_technology'] / 10)))
                     );
-                    $attack_order       = $this->setAttackOrder($fleet_row['fleet_target_obj']);
-                    $destroyed_query    = '';
-                    $message            = '';
-                    
+                    $attack_order = $this->setAttackOrder($fleet_row['fleet_target_obj']);
+                    $destroyed_query = '';
+                    $message = '';
+
                     // PROCESS THE MISSILE ATTACK
                     for ($t = 0; $t < count($attack_order); $t++) {
 
-                        $n  = $attack_order[$t];
+                        $n = $attack_order[$t];
 
                         if ($target_data[$this->resource[$n]]) {
 
-                            $defense    = (($this->pricelist[$n]['metal'] + $this->pricelist[$n]['crystal']) / 10)
-                                * (1 + ( $target_data['research_shielding_technology'] / 10));
+                            $defense = (($this->pricelist[$n]['metal'] + $this->pricelist[$n]['crystal']) / 10) * (1 + ( $target_data['research_shielding_technology'] / 10));
 
                             if ($attack >= ($defense * $target_data[$this->resource[$n]])) {
 
-                                $destroyed  = $target_data[$this->resource[$n]];
+                                $destroyed = $target_data[$this->resource[$n]];
                             } else {
 
-                                $destroyed  = floor($attack / $defense);
+                                $destroyed = floor($attack / $defense);
                             }
 
                             $attack -= $destroyed * $defense;
 
                             if ($destroyed != 0) {
 
-                                $message            .= $this->langs['tech'][$n] . " (-" . $destroyed . ")<br>";
-                                $destroyed_query    .= "`" . $this->resource[$n] . "` = `" .
+                                $message .= $this->langs['tech'][$n] . " (-" . $destroyed . ")<br>";
+                                $destroyed_query .= "`" . $this->resource[$n] . "` = `" .
                                     $this->resource[$n] . "` - " . $destroyed . ",";
                             }
                         }
@@ -132,36 +129,26 @@ class Missile extends Missions
                     }
                 }
 
-                $search     = ['%1%', '%2%', '%3%'];
-                $replace    = [
+                $search = ['%1%', '%2%', '%3%'];
+                $replace = [
                     $fleet_row['fleet_amount'],
                     $attacker_data['planet_name'] . ' ' . FormatLib::prettyCoords(
-                        $fleet_row['fleet_start_galaxy'],
-                        $fleet_row['fleet_start_system'],
-                        $fleet_row['fleet_start_planet']
+                        $fleet_row['fleet_start_galaxy'], $fleet_row['fleet_start_system'], $fleet_row['fleet_start_planet']
                     ),
                     $target_data['planet_name'] . ' ' . FormatLib::prettyCoords(
-                        $fleet_row['fleet_end_galaxy'],
-                        $fleet_row['fleet_end_system'],
-                        $fleet_row['fleet_end_planet']
+                        $fleet_row['fleet_end_galaxy'], $fleet_row['fleet_end_system'], $fleet_row['fleet_end_planet']
                     ),
                 ];
-                $message_vorlage    = str_replace($search, $replace, $this->langs['ma_missile_string']);
+                $message_vorlage = str_replace($search, $replace, $this->langs['ma_missile_string']);
 
                 if (empty($message) or $message == '') {
 
-                    $message    = $this->langs['ma_planet_without_defens'];
+                    $message = $this->langs['ma_planet_without_defens'];
                 }
 
                 // send message to the enemy
                 FunctionsLib::sendMessage(
-                    $target_data['planet_user_id'],
-                    '',
-                    $fleet_row['fleet_end_time'],
-                    5,
-                    $this->langs['sys_mess_tower'],
-                    $this->langs['gl_missile_attack'],
-                    $message_vorlage . $message
+                    $target_data['planet_user_id'], '', $fleet_row['fleet_end_time'], 5, $this->langs['sys_mess_tower'], $this->langs['gl_missile_attack'], $message_vorlage . $message
                 );
 
                 parent::removeFleet($fleet_row['fleet_id']);
@@ -189,7 +176,7 @@ class Missile extends Missions
             7 => [408, 401, 402, 403, 404, 405, 406, 407, 503],
             8 => [401, 402, 403, 404, 405, 406, 407, 408, 503]
         ];
-        
+
         return $objectives[$primary_objective];
     }
 }

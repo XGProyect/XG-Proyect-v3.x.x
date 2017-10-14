@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
-
 namespace application\controllers\game;
 
 use application\core\Controller;
@@ -32,6 +31,7 @@ use application\libraries\OfficiersLib;
  */
 class Fleet2 extends Controller
 {
+
     const MODULE_ID = 8;
 
     private $_lang;
@@ -87,7 +87,7 @@ class Fleet2 extends Controller
         // SOME DEFAULT VALUES
         #####################################################################################################
         // QUERYS
-        $getCurrentAcs  = $this->Fleet2_Model->getOngoingAcs($this->_current_user['user_id']);
+        $getCurrentAcs = $this->Fleet2_Model->getOngoingAcs($this->_current_user['user_id']);
 
         // ARRAYS
         $speed_values = array(10 => 100, 9 => 90, 8 => 80, 7 => 70, 6 => 60, 5 => 50, 4 => 40, 3 => 30, 2 => 20, 1 => 10);
@@ -213,8 +213,8 @@ class Fleet2 extends Controller
 
             if ($this->_current_user['user_fleet_shortcuts']) {
 
-                $shortcut['shortcut_options']   = '';
-                $scarray                        = explode(";", $this->_current_user['user_fleet_shortcuts']);
+                $shortcut['shortcut_options'] = '';
+                $scarray = explode(";", $this->_current_user['user_fleet_shortcuts']);
 
                 foreach ($scarray as $a => $b) {
                     if ($b != "") {
@@ -270,7 +270,7 @@ class Fleet2 extends Controller
         $acs_fleets = '';
 
         while ($row = $this->_db->fetchArray($getCurrentAcs)) {
-            $members    = explode(",", $row['acs_fleet_invited']);
+            $members = explode(",", $row['acs_fleet_invited']);
 
             foreach ($members as $a => $b) {
                 if ($b == $this->_current_user['user_id']) {

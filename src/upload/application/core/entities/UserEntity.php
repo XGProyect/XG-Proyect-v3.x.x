@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-
 namespace application\core\entities;
 
 /**
@@ -26,12 +25,13 @@ namespace application\core\entities;
  */
 class UserEntity
 {
+
     /**
      *
      * @var array
      */
     private $_user = [];
-    
+
     /**
      * Init with the current user data
      * 
@@ -41,7 +41,7 @@ class UserEntity
     {
         $this->setUser($curret_user);
     }
-    
+
     /**
      * Set the current user
      * 
@@ -54,15 +54,14 @@ class UserEntity
     private function setUser($curret_user)
     {
         try {
-            
+
             if (!is_array($curret_user)) {
                 throw new Exception('Must be an array');
-            } 
-            
-            $this->_user  = $curret_user;
-            
-        } catch(Exception $e) {
-            
+            }
+
+            $this->_user = $curret_user;
+        } catch (Exception $e) {
+
             die('Caught exception: ' . $e->getMessage() . "\n");
         }
     }

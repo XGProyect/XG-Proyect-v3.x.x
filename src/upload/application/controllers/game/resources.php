@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
-
 namespace application\controllers\game;
 
 use application\core\Controller;
@@ -33,6 +32,7 @@ use application\libraries\ProductionLib;
  */
 class Resources extends Controller
 {
+
     const MODULE_ID = 4;
 
     private $_lang;

@@ -6,13 +6,14 @@ use application\core\XGPCore;
 //HOOK EXAMPLE
 class MyClass extends XGPCore
 {
+
     public function __construct()
     {
         parent::__construct();
-        
+
         $this->_db = new Database();
     }
-    
+
     function MyMethod($params = array())
     {
         $query = $this->_db->queryFetch('SELECT `user_name` FROM ' . USERS . ' WHERE user_id = 1');
@@ -21,7 +22,6 @@ class MyClass extends XGPCore
 
         echo '<br/>Yeah!';
     }
-
 }
 
 /* end of MyClass.php */

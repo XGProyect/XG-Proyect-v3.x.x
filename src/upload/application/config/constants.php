@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Constants
  *
@@ -45,9 +44,9 @@ define('ADMIN_ACCESS_QUERY', true);
  */
 // BASE PATH
 define(
-        'BASE_PATH', $_SERVER['HTTP_HOST'] . str_replace(
-                '/' . basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']
-        )
+    'BASE_PATH', $_SERVER['HTTP_HOST'] . str_replace(
+        '/' . basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']
+    )
 );
 
 // SYSTEM ROOT, IGNORING PUBLIC
@@ -130,7 +129,6 @@ define('DPATH', DEFAULT_SKINPATH);
  * You can change almost anything below without breaking the game
  * 
  */
-
 // UNIVERSE DATA, GALAXY, SYSTEMS AND PLANETS || DEFAULT 9-499-15 RESPECTIVELY
 define('MAX_GALAXY_IN_WORLD', 9);
 define('MAX_SYSTEM_IN_GALAXY', 499);
@@ -173,7 +171,6 @@ define('DEBRIS_MIN_VISIBLE_SIZE', 300);
 
 // DESTROYED PLANETS LIFE TIME
 define('PLANETS_LIFE_TIME', 24); // IN HOURS
-
 // VACATION TIME THAT AN USER HAS TO BE ON VACATION MODE BEFORE IT CAN REMOVE IT
 define('VACATION_TIME_FORCED', 2); // IN DAYS
 
@@ -182,13 +179,11 @@ define('VACATION_TIME_FORCED', 2); // IN DAYS
  * DATABASE RELATED 
  * 
  */
-
 ###########################################################################
 #
 # Constants should not be changed, unless you know what you are doing!
 #
 ###########################################################################
-
 // TO PREVENT ERRORS
 if (!defined('DB_PREFIX')) {
 

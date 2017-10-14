@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
-
 namespace application\libraries\missions;
 
 use application\libraries\FormatLib;
@@ -30,6 +29,7 @@ use application\libraries\OfficiersLib;
  */
 class Spy extends Missions
 {
+
     /**
      * bbCode function.
      *
@@ -50,9 +50,9 @@ class Spy extends Missions
      * @return void
      */
     public function spyMission($fleet_row)
-    {        
+    {
         if ($fleet_row['fleet_mess'] == 0 && $fleet_row['fleet_start_time'] <= time()) {
-            
+
             $current_data = $this->Missions_Model->getSpyUserDataByCords([
                 'coords' => [
                     'galaxy' => $fleet_row['fleet_start_galaxy'],
@@ -60,7 +60,7 @@ class Spy extends Missions
                     'planet' => $fleet_row['fleet_start_planet'],
                     'type' => $fleet_row['fleet_start_type']
                 ]
-             ]);
+            ]);
 
             $target_data = $this->Missions_Model->getInquiredUserDataByCords([
                 'coords' => [
@@ -69,12 +69,12 @@ class Spy extends Missions
                     'planet' => $fleet_row['fleet_end_planet'],
                     'type' => $fleet_row['fleet_end_type']
                 ]
-             ]);
+            ]);
 
             $CurrentSpyLvl = OfficiersLib::getMaxEspionage($current_data['research_espionage_technology'], $current_data['premium_officier_technocrat']);
             $TargetSpyLvl = OfficiersLib::getMaxEspionage($target_data['research_espionage_technology'], $target_data['premium_officier_technocrat']);
             $fleet = explode(';', $fleet_row['fleet_array']);
-            
+
             parent::makeUpdate($fleet_row['fleet_end_galaxy'], $fleet_row['fleet_end_system'], $fleet_row['fleet_end_planet'], $fleet_row['fleet_end_type']);
 
             foreach ($fleet as $a => $b) {

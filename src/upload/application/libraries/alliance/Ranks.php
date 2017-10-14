@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-
 namespace application\libraries\buildings;
 
 use application\libraries\enumerators\AllianceRanksEnumerator;
@@ -29,13 +28,14 @@ use application\libraries\enumerators\SwitchIntEnumerator;
  */
 class Ranks
 {
+
     /**
      * Contains the ranks 
      * 
      * @var array rank => flag
      */
     private $_ranks = [];
-    
+
     /**
      * Constructor
      * 
@@ -46,11 +46,10 @@ class Ranks
     public function __construct($alliance_ranks = [])
     {
         if (is_array($alliance_ranks) && !empty($alliance_ranks)) {
-            
-            $this->_ranks = $alliance_ranks;
 
+            $this->_ranks = $alliance_ranks;
         } else {
-            
+
             $this->_ranks = [
                 AllianceRanksEnumerator::name => SwitchIntEnumerator::off,
                 AllianceRanksEnumerator::mail => SwitchIntEnumerator::off,
@@ -62,10 +61,10 @@ class Ranks
                 AllianceRanksEnumerator::view_member_list => SwitchIntEnumerator::off,
                 AllianceRanksEnumerator::online_status => SwitchIntEnumerator::off,
                 AllianceRanksEnumerator::right_hand => SwitchIntEnumerator::off,
-            ]; 
+            ];
         }
     }
-    
+
     /**
      * 
      * @param RanksTypes $rank
@@ -77,7 +76,7 @@ class Ranks
     {
         
     }
-    
+
     /**
      * 
      * @param RanksTypes $rank
@@ -89,7 +88,7 @@ class Ranks
     {
         
     }
-    
+
     /**
      * 
      * @param RanksTypes $rank
@@ -101,7 +100,7 @@ class Ranks
     {
         
     }
-    
+
     /**
      * Get all the ranks
      * 
@@ -111,7 +110,7 @@ class Ranks
     {
         return $this->_ranks;
     }
-    
+
     /**
      * Get the ranks by rank name
      * 
@@ -125,7 +124,7 @@ class Ranks
 
             return $this->_ranks[$rank];
         }
-        
+
         return 0;
     }
 }

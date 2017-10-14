@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.4
  */
-
 namespace application\models\game;
 
 /**
@@ -26,15 +25,16 @@ namespace application\models\game;
  */
 class Banned
 {
+
     private $db = null;
-    
+
     /**
      * __construct()
      */
     public function __construct($db)
-    {        
+    {
         // use this to make queries
-        $this->db   = $db;
+        $this->db = $db;
     }
 
     /**
@@ -46,7 +46,7 @@ class Banned
     {
         $this->db->closeConnection();
     }
-    
+
     /**
      * Get banned users
      * 
@@ -55,7 +55,7 @@ class Banned
     public function getBannedUsers()
     {
         return $this->db->queryFetchAll(
-            "SELECT *
+                "SELECT *
             FROM " . BANNED . "
             ORDER BY `banned_id`;"
         );

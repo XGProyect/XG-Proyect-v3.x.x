@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
-
 namespace application\libraries;
 
 /**
@@ -25,25 +24,26 @@ namespace application\libraries;
  * @version  3.1.0
  */
 class Mission_control_library
-{    
+{
+
     /**
      * Contains the model Mission_control_library
      * 
      * @var \Mission_control_library 
      */
     private $_Mission_control_library_Model = null;
-    
+
     /**
      * __construct
      *
      * @return void
      */
     public function __construct()
-    {        
+    {
         // load the required model
         $this->_Mission_control_library_Model = FunctionsLib::modelLoader('libraries/Mission_control_library');
     }
-    
+
     /**
      * Get all the fleets that should be arriving by now
      * 
@@ -55,7 +55,7 @@ class Mission_control_library
             $this->_Mission_control_library_Model->getArrivingFleets()
         );
     }
-    
+
     /**
      * Get all the fleets that should be returning by now
      * 
@@ -67,7 +67,7 @@ class Mission_control_library
             $this->_Mission_control_library_Model->getReturningFleets()
         );
     }
-    
+
     /**
      * Process the mission based on the provided fleets
      * 
@@ -76,36 +76,36 @@ class Mission_control_library
      * @return void
      */
     private function processMissions($all_fleets = [])
-    {        
+    {
         // validate
         if (!is_array($all_fleets) or empty($all_fleets)) {
-            
+
             return;
         }
 
         // missions list
-        $missions   = [
-            1   => 'Attack',
-            2   => 'Acs',
-            3   => 'Transport',
-            4   => 'Deploy',
-            5   => 'Stay',
-            6   => 'Spy',
-            7   => 'Colonize',
-            8   => 'Recycle',
-            9   => 'Destroy',
-            10  => 'Missile',
-            15  => 'Expedition',
+        $missions = [
+            1 => 'Attack',
+            2 => 'Acs',
+            3 => 'Transport',
+            4 => 'Deploy',
+            5 => 'Stay',
+            6 => 'Spy',
+            7 => 'Colonize',
+            8 => 'Recycle',
+            9 => 'Destroy',
+            10 => 'Missile',
+            15 => 'Expedition',
         ];
 
         // Process missions
-        foreach($all_fleets as $fleet) {
+        foreach ($all_fleets as $fleet) {
 
-            $name           = $missions[$fleet['fleet_mission']];
-            $mission_name   = $name . 'Mission';
-            $class_name     = '\application\libraries\missions\\' . $name;
-            
-            $mission    = new $class_name();
+            $name = $missions[$fleet['fleet_mission']];
+            $mission_name = $name . 'Mission';
+            $class_name = '\application\libraries\missions\\' . $name;
+
+            $mission = new $class_name();
             $mission->$mission_name($fleet);
         }
     }

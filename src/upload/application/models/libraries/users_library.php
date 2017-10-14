@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-
 namespace application\models\libraries;
 
 /**
@@ -26,15 +25,16 @@ namespace application\models\libraries;
  */
 class Users_library
 {
+
     private $db = null;
-    
+
     /**
      * __construct()
      */
     public function __construct($db)
-    {        
+    {
         // use this to make queries
-        $this->db   = $db;
+        $this->db = $db;
     }
 
     /**
@@ -46,7 +46,7 @@ class Users_library
     {
         $this->db->closeConnection();
     }
-    
+
     /**
      * Get alliance ID
      * 
@@ -57,10 +57,10 @@ class Users_library
     public function getAllyIdByUserId($user_id)
     {
         return $this->db->queryFetch(
-            "SELECT `user_ally_id` FROM " . USERS . " WHERE `user_id` = '" . $user_id . "';"
+                "SELECT `user_ally_id` FROM " . USERS . " WHERE `user_id` = '" . $user_id . "';"
         );
     }
-    
+
     /**
      * Get alliance data
      * 
@@ -71,7 +71,7 @@ class Users_library
     public function getAllianceDataByAllianceId($alliance_id)
     {
         return $this->db->queryFetch(
-            "SELECT a.`alliance_id`, a.`alliance_ranks`,
+                "SELECT a.`alliance_id`, a.`alliance_ranks`,
                 (SELECT COUNT(user_id) AS `ally_members` 
                     FROM `" . USERS . "` 
                     WHERE `user_ally_id` = '" . $alliance_id . "') AS `ally_members`
@@ -79,7 +79,7 @@ class Users_library
             WHERE a.`alliance_id` = '" . $alliance_id . "';"
         );
     }
-    
+
     /**
      * Update the alliance owner
      * 
@@ -91,7 +91,7 @@ class Users_library
     public function updateAllianceOwner($alliance_id, $user_rank)
     {
         return $this->db->query(
-            "UPDATE `" . ALLIANCE . "` SET 
+                "UPDATE `" . ALLIANCE . "` SET 
                 `alliance_owner` = 
                 (
                     SELECT `user_id` 
@@ -103,7 +103,7 @@ class Users_library
             WHERE `alliance_id` = '" . $alliance_id . "';"
         );
     }
-    
+
     /**
      * Delete alliance
      * 
@@ -129,7 +129,7 @@ class Users_library
             WHERE `user_ally_id` = '" . $alliance_id . "';"
         );
     }
-    
+
     /**
      * Delete the planet and its related data like buildings, defenses and ships.
      * 
@@ -147,7 +147,7 @@ class Users_library
             WHERE `planet_user_id` = '" . $user_id . "';"
         );
     }
-    
+
     /**
      * Delete the planet and its related data like buildings, defenses and ships.
      * 
@@ -162,7 +162,7 @@ class Users_library
                 WHERE `message_sender` = '" . $user_id . "' OR `message_receiver` = '" . $user_id . "';"
         );
     }
-    
+
     /**
      * Delete the planet and its related data like buildings, defenses and ships.
      * 
@@ -177,7 +177,7 @@ class Users_library
                 WHERE `buddy_sender` = '" . $user_id . "' OR `buddy_receiver` = '" . $user_id . "';"
         );
     }
-    
+
     /**
      * Delete the planet and its related data like buildings, defenses and ships.
      * 
@@ -198,7 +198,7 @@ class Users_library
             WHERE u.`user_id` = '" . $user_id . "';"
         );
     }
-    
+
     /**
      * Get the user data by user name
      * 
@@ -209,7 +209,7 @@ class Users_library
     public function setUserDataByUserName($user_name)
     {
         return $this->db->queryFetch(
-            "SELECT u.*,
+                "SELECT u.*,
                 pre.*,
                 se.*,
                 usul.user_statistic_total_rank,
@@ -229,7 +229,7 @@ class Users_library
             LIMIT 1;"
         );
     }
-    
+
     /**
      * Update some data
      * 
@@ -252,7 +252,7 @@ class Users_library
             LIMIT 1;"
         );
     }
-    
+
     /**
      * Set the user current planet data
      * 
@@ -264,7 +264,7 @@ class Users_library
     public function setPlanetData($planet_id, $admin_level)
     {
         return $this->db->queryFetch(
-            "SELECT p.*, b.*, d.*, s.*,
+                "SELECT p.*, b.*, d.*, s.*,
             m.planet_id AS moon_id,
             m.planet_name AS moon_name,
             m.planet_image AS moon_image,
@@ -287,7 +287,7 @@ class Users_library
             WHERE p.`planet_id` = '" . $planet_id . "';"
         );
     }
-    
+
     /**
      * Validate if the requested planet belongs to the current user
      * 
@@ -299,13 +299,13 @@ class Users_library
     public function getUserPlanetByIdAndUserId($planet_id, $user_id)
     {
         return $this->db->queryFetch(
-            "SELECT `planet_id`
+                "SELECT `planet_id`
             FROM " . PLANETS . "
             WHERE `planet_id` = '" . $planet_id . "'
             AND `planet_user_id` = '" . $user_id . "';"
         );
     }
-           
+
     /**
      * Change the user current planet
      * 
@@ -322,7 +322,7 @@ class Users_library
             WHERE `user_id` = '" . $user_id . "';"
         );
     }
-    
+
     /**
      * Insert a new user and return their ID
      * 
@@ -333,10 +333,10 @@ class Users_library
     public function createNewUser($insert_query)
     {
         $this->db->query($insert_query);
-        
+
         return $this->db->insertId();
     }
-    
+
     /**
      * Create premium record
      * 
@@ -350,7 +350,7 @@ class Users_library
             "INSERT INTO " . PREMIUM . " SET `premium_user_id` = '" . $user_id . "';"
         );
     }
-    
+
     /**
      * Create research record
      * 
@@ -364,7 +364,7 @@ class Users_library
             "INSERT INTO " . RESEARCH . " SET `research_user_id` = '" . $user_id . "';"
         );
     }
-    
+
     /**
      * Create settings record
      * 
@@ -378,7 +378,7 @@ class Users_library
             "INSERT INTO " . SETTINGS . " SET `setting_user_id` = '" . $user_id . "';"
         );
     }
-    
+
     /**
      * Create statistics record
      * 

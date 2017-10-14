@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
-
 namespace application\controllers\game;
 
 use application\core\Controller;
@@ -31,6 +30,7 @@ use application\libraries\FunctionsLib;
  */
 class Search extends Controller
 {
+
     const MODULE_ID = 17;
 
     private $_current_user;
@@ -57,7 +57,7 @@ class Search extends Controller
         $this->_noob = FunctionsLib::loadLibrary('NoobsProtectionLib');
 
         $this->max_results = MAX_SEARCH_RESULTS;
-        
+
         $this->build_page();
     }
 
@@ -78,11 +78,11 @@ class Search extends Controller
      */
     private function build_page()
     {
-        $parse              = $this->_lang;
-        $type               = isset($_POST['type']) ? $_POST['type'] : '';
-        $searchtext         = $this->_db->escapeValue(isset($_POST['searchtext']) ? $_POST['searchtext'] : '' );
-        $search_results     = '';
-        
+        $parse = $this->_lang;
+        $type = isset($_POST['type']) ? $_POST['type'] : '';
+        $searchtext = $this->_db->escapeValue(isset($_POST['searchtext']) ? $_POST['searchtext'] : '');
+        $search_results = '';
+
         if ($_POST) {
             switch ($type) {
                 case 'playername':
@@ -173,7 +173,7 @@ class Search extends Controller
 
         parent::$page->display(parent::$page->parseTemplate(parent::$page->getTemplate('search/search_body'), $parse));
     }
-    
+
     /**
      * Set the user position or not based on its level
      * 

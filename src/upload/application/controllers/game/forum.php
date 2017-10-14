@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
-
 namespace application\controllers\game;
 
 use application\core\Controller;
@@ -29,6 +28,7 @@ use application\libraries\FunctionsLib;
  */
 class Forum extends Controller
 {
+
     /**
      * @var int Module ID
      */

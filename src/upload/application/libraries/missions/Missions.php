@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
-
 namespace application\libraries\missions;
 
 use application\core\XGPCore;
@@ -29,6 +28,7 @@ use application\libraries\Updates_library;
  */
 class Missions extends XGPCore
 {
+
     protected $langs;
     protected $resource;
     protected $pricelist;
@@ -47,11 +47,11 @@ class Missions extends XGPCore
 
         // load model
         parent::loadModel('libraries/missions/missions');
-        
-        $this->langs        = parent::$lang;
-        $this->resource     = parent::$objects->getObjects();
-        $this->pricelist    = parent::$objects->getPrice();
-        $this->combat_caps  = parent::$objects->getCombatSpecs();
+
+        $this->langs = parent::$lang;
+        $this->resource = parent::$objects->getObjects();
+        $this->pricelist = parent::$objects->getPrice();
+        $this->combat_caps = parent::$objects->getCombatSpecs();
     }
 
     /**
@@ -93,42 +93,42 @@ class Missions extends XGPCore
             $galaxy = $fleet_row['fleet_start_galaxy'];
             $system = $fleet_row['fleet_start_system'];
             $planet = $fleet_row['fleet_start_planet'];
-            $type   = $fleet_row['fleet_start_type'];
+            $type = $fleet_row['fleet_start_type'];
         } else {
 
             $galaxy = $fleet_row['fleet_end_galaxy'];
             $system = $fleet_row['fleet_end_system'];
             $planet = $fleet_row['fleet_end_planet'];
-            $type   = $fleet_row['fleet_end_type'];
+            $type = $fleet_row['fleet_end_type'];
         }
 
         self::makeUpdate($galaxy, $system, $planet, $type);
 
-        $ships          = explode(';', $fleet_row['fleet_array']);
-        $ships_fields   = '';
+        $ships = explode(';', $fleet_row['fleet_array']);
+        $ships_fields = '';
 
         foreach ($ships as $group) {
 
             if ($group != '') {
 
-                $ship           = explode(",", $group);
-                $ships_fields   .= "`" . $this->resource[$ship[0]] . "` = `" .
+                $ship = explode(",", $group);
+                $ships_fields .= "`" . $this->resource[$ship[0]] . "` = `" .
                     $this->resource[$ship[0]] . "` + '" . $ship[1] . "', ";
             }
         }
 
         $fuel_return = 0;
-        
+
         if ($fleet_row['fleet_mission'] == 4 && !$start) {
 
             $fuel_return = $fleet_row['fleet_fuel'] / 2;
         }
-        
+
         $update_array = [
             'resources' => [
                 'metal' => $fleet_row['fleet_resource_metal'],
                 'crystal' => $fleet_row['fleet_resource_crystal'],
-                'deuterium' => ($fleet_row['fleet_resource_deuterium'] + $fuel_return) 
+                'deuterium' => ($fleet_row['fleet_resource_deuterium'] + $fuel_return)
             ],
             'ships' => $ships_fields,
             'coords' => [
@@ -138,7 +138,7 @@ class Missions extends XGPCore
                 'type' => $type
             ]
         ];
-        
+
         $this->Missions_Model->updatePlanetsShipsByCoords($update_array);
     }
 
@@ -157,13 +157,13 @@ class Missions extends XGPCore
             $galaxy = $fleet_row['fleet_start_galaxy'];
             $system = $fleet_row['fleet_start_system'];
             $planet = $fleet_row['fleet_start_planet'];
-            $type   = $fleet_row['fleet_start_type'];
+            $type = $fleet_row['fleet_start_type'];
         } else {
 
             $galaxy = $fleet_row['fleet_end_galaxy'];
             $system = $fleet_row['fleet_end_system'];
             $planet = $fleet_row['fleet_end_planet'];
-            $type   = $fleet_row['fleet_end_type'];
+            $type = $fleet_row['fleet_end_type'];
         }
 
         self::makeUpdate($galaxy, $system, $planet, $type);
@@ -172,7 +172,7 @@ class Missions extends XGPCore
             'resources' => [
                 'metal' => $fleet_row['fleet_resource_metal'],
                 'crystal' => $fleet_row['fleet_resource_crystal'],
-                'deuterium' => $fleet_row['fleet_resource_deuterium'] 
+                'deuterium' => $fleet_row['fleet_resource_deuterium']
             ],
             'coords' => [
                 'galaxy' => $galaxy,
@@ -181,7 +181,7 @@ class Missions extends XGPCore
                 'type' => $type
             ]
         ];
-        
+
         $this->Missions_Model->updatePlanetResourcesByCoords($update_array);
     }
 
@@ -197,7 +197,7 @@ class Missions extends XGPCore
      */
     protected function makeUpdate($galaxy, $system, $planet, $type)
     {
-        $target_planet  = $this->Missions_Model->getAllPlanetDataByCoords([
+        $target_planet = $this->Missions_Model->getAllPlanetDataByCoords([
             'coords' => [
                 'galaxy' => $galaxy,
                 'system' => $system,
@@ -206,7 +206,7 @@ class Missions extends XGPCore
             ]
         ]);
 
-        $target_user    = $this->Missions_Model->getAllUserDataByUserId(
+        $target_user = $this->Missions_Model->getAllUserDataByUserId(
             $target_planet['planet_user_id']
         );
 

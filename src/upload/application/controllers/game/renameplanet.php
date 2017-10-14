@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
-
 namespace application\controllers\game;
 
 use application\core\Controller;
@@ -30,6 +29,7 @@ use application\libraries\FunctionsLib;
  */
 class Renameplanet extends Controller
 {
+
     const MODULE_ID = 1;
 
     private $_lang;
@@ -126,7 +126,7 @@ class Renameplanet extends Controller
 									SET `planet_name` = '" . $new_name . "'
 									WHERE `planet_id` = '" . intval($this->_current_user['user_current_planet']) . "'
 									LIMIT 1;");
-		FunctionsLib::message($this->_lang['ov_planet_name_changed'], "game.php?page=renameplanet", 2);
+            FunctionsLib::message($this->_lang['ov_planet_name_changed'], "game.php?page=renameplanet", 2);
         }
     }
 
@@ -167,8 +167,7 @@ class Renameplanet extends Controller
             FunctionsLib::message($this->_lang['ov_abandon_planet_not_possible'], 'game.php?page=renameplanet');
         } else {
 
-            if (sha1($_POST['pw']) == $this->_current_user['user_password'] 
-                && $this->_current_user['user_home_planet_id'] != $this->_current_user['user_current_planet']) {
+            if (sha1($_POST['pw']) == $this->_current_user['user_password'] && $this->_current_user['user_home_planet_id'] != $this->_current_user['user_current_planet']) {
 
                 if ($this->_current_planet['moon_id'] != 0) {
 

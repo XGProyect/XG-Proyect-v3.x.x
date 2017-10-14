@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-
 namespace application\models\libraries;
 
 /**
@@ -26,15 +25,16 @@ namespace application\models\libraries;
  */
 class Mission_control_library
 {
+
     private $db = null;
-    
+
     /**
      * __construct()
      */
     public function __construct($db)
-    {        
+    {
         // use this to make queries
-        $this->db   = $db;
+        $this->db = $db;
     }
 
     /**
@@ -46,7 +46,7 @@ class Mission_control_library
     {
         $this->db->closeConnection();
     }
-    
+
     /**
      * Return a list of all the arriving fleets that are going 
      * to be processed at this time.
@@ -56,7 +56,7 @@ class Mission_control_library
     public function getArrivingFleets()
     {
         return $this->db->queryFetchAll(
-            "SELECT f.*
+                "SELECT f.*
             FROM `" . FLEETS . "` f, `" . FLEETS . "` sf
             WHERE 
             (
@@ -88,7 +88,7 @@ class Mission_control_library
             ORDER BY f.`fleet_id` ASC"
         );
     }
-    
+
     /**
      * Return a list of all the returning fleets that are going 
      * to be processed at this time.
@@ -98,7 +98,7 @@ class Mission_control_library
     public function getReturningFleets()
     {
         return $this->db->queryFetchAll(
-            "SELECT f.*
+                "SELECT f.*
             FROM `" . FLEETS . "` f, `" . FLEETS . "` ef
             WHERE 
             (

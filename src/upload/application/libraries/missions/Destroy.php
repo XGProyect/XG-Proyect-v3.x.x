@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
-
 namespace application\libraries\missions;
 
 use application\libraries\FormatLib;
@@ -29,11 +28,12 @@ use application\libraries\FunctionsLib;
  */
 class Destroy extends Missions
 {
-    const SHIP_MIN_ID       = 202;
-    const SHIP_MAX_ID       = 215;
-    const DEFENSE_MIN_ID    = 401;
-    const DEFENSE_MAX_ID    = 408;
-    
+
+    const SHIP_MIN_ID = 202;
+    const SHIP_MAX_ID = 215;
+    const DEFENSE_MIN_ID = 401;
+    const DEFENSE_MAX_ID = 408;
+
     /**
      * __construct()
      */
@@ -69,16 +69,16 @@ class Destroy extends Missions
                 ]
             ]);
 
-            $target_ships   = [];
-            $current_ships  = [];
-            
+            $target_ships = [];
+            $current_ships = [];
+
             for ($i = self::DEFENSE_MIN_ID; $i <= self::DEFENSE_MAX_ID; $i++) {
 
                 if (isset($this->resource[$i]) && isset($target_planet[$this->resource[$i]])) {
 
                     if ($target_planet[$this->resource[$i]] != 0) {
 
-                        $target_ships[$SetItem]['count']    = $target_data[$this->resource[$SetItem]];
+                        $target_ships[$SetItem]['count'] = $target_data[$this->resource[$SetItem]];
                     }
                 }
             }
@@ -89,7 +89,7 @@ class Destroy extends Missions
 
                     if ($target_planet[$this->resource[$i]] != 0) {
 
-                        $target_ships[$SetItem]['count']    = $target_data[$this->resource[$SetItem]];
+                        $target_ships[$SetItem]['count'] = $target_data[$this->resource[$SetItem]];
                     }
                 }
             }
@@ -100,20 +100,20 @@ class Destroy extends Missions
 
                 if ($b != '') {
 
-                    $a                              = explode(",", $b);
-                    $current_ships[$a[0]]['count']  = $a[1];
+                    $a = explode(",", $b);
+                    $current_ships[$a[0]]['count'] = $a[1];
                 }
             }
 
-            $attack         = $this->attack($current_ships, $target_ships, $current_data, $target_data);
-            $current_ships  = $attack['attacker'];
-            $target_ships   = $attack['enemy'];
-            $FleetResult    = $attack['win'];
-            $dane_do_rw     = $attack['data_for_rw'];
-            $zlom           = $attack['debris'];
-            $FleetArray     = '';
-            $FleetAmount    = 0;
-            $FleetStorage   = 0;
+            $attack = $this->attack($current_ships, $target_ships, $current_data, $target_data);
+            $current_ships = $attack['attacker'];
+            $target_ships = $attack['enemy'];
+            $FleetResult = $attack['win'];
+            $dane_do_rw = $attack['data_for_rw'];
+            $zlom = $attack['debris'];
+            $FleetArray = '';
+            $FleetAmount = 0;
+            $FleetStorage = 0;
 
             foreach ($current_ships as $Ship => $Count) {
                 $FleetStorage += $this->pricelist[$Ship]['capacity'] * $Count['count'];
@@ -129,13 +129,13 @@ class Destroy extends Missions
                 }
             }
 
-            $probarip   = '';
-            
+            $probarip = '';
+
             if ($FleetResult == "a") {
 
-                $destructionl1  = 100 - sqrt($target_data['planet_diameter']);
+                $destructionl1 = 100 - sqrt($target_data['planet_diameter']);
                 $destructionl21 = $destructionl1 * sqrt($current_ships['214']['count']);
-                $destructionl2  = $destructionl21 / 1;
+                $destructionl2 = $destructionl21 / 1;
 
                 if ($destructionl2 > 100) {
                     $chance = '100';
@@ -162,7 +162,7 @@ class Destroy extends Missions
                     ]);
 
                     if ($target_data['user_current_planet'] == $target_data['planet_id']) {
-                        
+
                         $this->Missions_Model->updateUserCurrentPlanetByCoordsAndUserId([
                             'coords' => [
                                 'galaxy' => $fleet_row['fleet_end_galaxy'],
@@ -347,18 +347,14 @@ class Destroy extends Missions
             $owners = $fleet_row['fleet_owner'] . "," . $target_data['planet_user_id'];
 
             $this->Missions_Model->insertReport([
-                'owners'    => $owners,
-                'rid'       => $rid,
-                'content'   => addslashes($raport),
-                'time'      => time()
+                'owners' => $owners,
+                'rid' => $rid,
+                'content' => addslashes($raport),
+                'time' => time()
             ]);
 
             $raport = $this->buildReportLink(
-                $this->set_report_color($FleetResult),
-                $rid,
-                $fleet_row['fleet_end_galaxy'],
-                $fleet_row['fleet_end_system'],
-                $fleet_row['fleet_end_planet']
+                $this->set_report_color($FleetResult), $rid, $fleet_row['fleet_end_galaxy'], $fleet_row['fleet_end_system'], $fleet_row['fleet_end_planet']
             );
 
             $this->Missions_Model->updateFleetDataToReturn([
@@ -369,12 +365,8 @@ class Destroy extends Missions
 
             $this->destroy_message($current_data['user_id'], $raport, $fleet_row['fleet_start_time']);
 
-            $raport2    = $this->buildReportLink(
-                $this->set_report_color($FleetResult, false),
-                $rid,
-                $fleet_row['fleet_end_galaxy'],
-                $fleet_row['fleet_end_system'],
-                $fleet_row['fleet_end_planet']
+            $raport2 = $this->buildReportLink(
+                $this->set_report_color($FleetResult, false), $rid, $fleet_row['fleet_end_galaxy'], $fleet_row['fleet_end_system'], $fleet_row['fleet_end_planet']
             );
 
             $this->destroy_message($target_data['planet_user_id'], $raport2, $fleet_row['fleet_start_time']);
@@ -437,17 +429,17 @@ class Destroy extends Missions
 
             if (!is_null($current_ships)) {
                 foreach ($current_ships as $a => $b) {
-                    $current_ships[$a]['defense']   = $current_ships[$a]['count'] * ( $this->pricelist[$a]['metal'] + $this->pricelist[$a]['crystal'] ) / 10 * ( 1 + ( 0.1 * ( $current_tech['research_shielding_technology'] ) ) );
-                    $rand                           = mt_rand(80, 120) / 100;
-                    $current_ships[$a]['shield']    = $current_ships[$a]['count'] * $this->combat_caps[$a]['shield'] * ( 1 + ( 0.1 * $current_tech['research_armour_technology'] ) ) * $rand;
-                    $atak_statku                    = $this->combat_caps[$a]['attack'];
-                    $technologie                    = ( 1 + ( 0.1 * $current_tech['research_weapons_technology'] ) );
-                    $rand                           = mt_rand(80, 120) / 100;
-                    $number                         = $current_ships[$a]['count'];
-                    $current_ships[$a]['attack']    = $number * $atak_statku * $technologie * $rand;
-                    $attacker_attack                = $attacker_attack + $current_ships[$a]['attack'];
-                    $attacker_defense               = $attacker_defense + $current_ships[$a]['defense'];
-                    $attacker_amount                = $attacker_amount + $current_ships[$a]['count'];
+                    $current_ships[$a]['defense'] = $current_ships[$a]['count'] * ( $this->pricelist[$a]['metal'] + $this->pricelist[$a]['crystal'] ) / 10 * ( 1 + ( 0.1 * ( $current_tech['research_shielding_technology'] ) ) );
+                    $rand = mt_rand(80, 120) / 100;
+                    $current_ships[$a]['shield'] = $current_ships[$a]['count'] * $this->combat_caps[$a]['shield'] * ( 1 + ( 0.1 * $current_tech['research_armour_technology'] ) ) * $rand;
+                    $atak_statku = $this->combat_caps[$a]['attack'];
+                    $technologie = ( 1 + ( 0.1 * $current_tech['research_weapons_technology'] ) );
+                    $rand = mt_rand(80, 120) / 100;
+                    $number = $current_ships[$a]['count'];
+                    $current_ships[$a]['attack'] = $number * $atak_statku * $technologie * $rand;
+                    $attacker_attack = $attacker_attack + $current_ships[$a]['attack'];
+                    $attacker_defense = $attacker_defense + $current_ships[$a]['defense'];
+                    $attacker_amount = $attacker_amount + $current_ships[$a]['count'];
                 }
             } else {
                 $attacker_amount = 0;
@@ -456,17 +448,17 @@ class Destroy extends Missions
 
             if (!is_null($target_ships)) {
                 foreach ($target_ships as $a => $b) {
-                    $target_ships[$a]['defense']    = $target_ships[$a]['count'] * ( $this->pricelist[$a]['metal'] + $this->pricelist[$a]['crystal'] ) / 10 * ( 1 + ( 0.1 * ( $target_tech['research_shielding_technology'] ) ) );
-                    $rand                           = mt_rand(80, 120) / 100;
-                    $target_ships[$a]['shield']     = $target_ships[$a]['count'] * $this->combat_caps[$a]['shield'] * ( 1 + ( 0.1 * $target_tech['research_armour_technology'] ) ) * $rand;
-                    $atak_statku                    = $this->combat_caps[$a]['attack'];
-                    $technologie                    = ( 1 + ( 0.1 * $target_tech['research_weapons_technology'] ) );
-                    $rand                           = mt_rand(80, 120) / 100;
-                    $number                         = $target_ships[$a]['count'];
-                    $target_ships[$a]['attack']     = $number * $atak_statku * $technologie * $rand;
-                    $enemy_attack                   = $enemy_attack + $target_ships[$a]['attack'];
-                    $enemy_defense                  = $enemy_defense + $target_ships[$a]['defense'];
-                    $enemy_amount                   = $enemy_amount + $target_ships[$a]['count'];
+                    $target_ships[$a]['defense'] = $target_ships[$a]['count'] * ( $this->pricelist[$a]['metal'] + $this->pricelist[$a]['crystal'] ) / 10 * ( 1 + ( 0.1 * ( $target_tech['research_shielding_technology'] ) ) );
+                    $rand = mt_rand(80, 120) / 100;
+                    $target_ships[$a]['shield'] = $target_ships[$a]['count'] * $this->combat_caps[$a]['shield'] * ( 1 + ( 0.1 * $target_tech['research_armour_technology'] ) ) * $rand;
+                    $atak_statku = $this->combat_caps[$a]['attack'];
+                    $technologie = ( 1 + ( 0.1 * $target_tech['research_weapons_technology'] ) );
+                    $rand = mt_rand(80, 120) / 100;
+                    $number = $target_ships[$a]['count'];
+                    $target_ships[$a]['attack'] = $number * $atak_statku * $technologie * $rand;
+                    $enemy_attack = $enemy_attack + $target_ships[$a]['attack'];
+                    $enemy_defense = $enemy_defense + $target_ships[$a]['defense'];
+                    $enemy_amount = $enemy_amount + $target_ships[$a]['count'];
                 }
             } else {
                 $enemy_amount = 0;
@@ -705,16 +697,10 @@ class Destroy extends Missions
     private function destroy_message($owner, $message, $time)
     {
         FunctionsLib::sendMessage(
-            $owner,
-            '',
-            $time,
-            1,
-            $this->langs['sys_mess_tower'],
-            $message,
-            ''
+            $owner, '', $time, 1, $this->langs['sys_mess_tower'], $message, ''
         );
     }
-    
+
     /**
      * buildReportLink
      *
@@ -728,15 +714,12 @@ class Destroy extends Missions
      */
     private function buildReportLink($color, $rid, $g, $s, $p)
     {
-        $style      = 'style="color:' . $color . ';"';
-        $js         = "OnClick=\'f(\"game.php?page=combatreport&report=" . $rid . "\", \"\");\'";
-        $content    = $this->langs['sys_mess_destruc_report'] . ' ' . FormatLib::prettyCoords($g, $s, $p);
-        
+        $style = 'style="color:' . $color . ';"';
+        $js = "OnClick=\'f(\"game.php?page=combatreport&report=" . $rid . "\", \"\");\'";
+        $content = $this->langs['sys_mess_destruc_report'] . ' ' . FormatLib::prettyCoords($g, $s, $p);
+
         return FunctionsLib::setUrl(
-            '',
-            '',
-            $content,
-            $style . ' ' . $js
+                '', '', $content, $style . ' ' . $js
         );
     }
 }

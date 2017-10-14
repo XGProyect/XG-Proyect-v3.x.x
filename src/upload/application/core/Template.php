@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-
 namespace application\core;
 
 use CI_Parser;
@@ -28,12 +27,13 @@ use CI_Parser;
  */
 class Template
 {
+
     /**
      *
      * @var CI_Parser CodeIgniter Parser Class 
      */
     private $_parserObject = null;
-    
+
     /**
      * Constructor
      */
@@ -41,7 +41,7 @@ class Template
     {
         $this->createNewParser();
     }
-    
+
     /**
      * Get the template that we'll need
      * 
@@ -51,11 +51,10 @@ class Template
      */
     public function get($template)
     {
-        $route      = XGP_ROOT . TEMPLATE_DIR . $template . '.php';
-        $template   = @file_get_contents($route);
+        $route = XGP_ROOT . TEMPLATE_DIR . $template . '.php';
+        $template = @file_get_contents($route);
 
         if ($template) { // We got something
-
             return $template; // Return
         } else {
 
@@ -64,7 +63,7 @@ class Template
                 Location: <strong>' . $route . '</strong>');
         }
     }
-    
+
     /**
      * 
      * @param type $template
@@ -75,7 +74,7 @@ class Template
     {
         return $this->_parserObject->parse($this->get($template), $data, $return);
     }
-    
+
     /**
      * Create a new parser object that we'll need from now on
      * 
@@ -84,22 +83,22 @@ class Template
     private function createNewParser()
     {
         // require email library
-        $parser_library_path  = XGP_ROOT . SYSTEM_PATH . 'libraries/Parser.php';
-        
+        $parser_library_path = XGP_ROOT . SYSTEM_PATH . 'libraries/Parser.php';
+
         if (!file_exists($parser_library_path)) {
-            
+
             return;
         }
-        
+
         // required by the library
         if (!defined('BASEPATH')) {
 
             define('BASEPATH', true);
         }
-        
+
         // use CI library
         require_once $parser_library_path;
-        
+
         $this->_parserObject = new CI_Parser();
     }
 }

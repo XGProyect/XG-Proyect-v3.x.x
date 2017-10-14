@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
-
 namespace application\controllers\game;
 
 use application\core\Controller;
@@ -93,9 +92,9 @@ class Fleet4 extends Controller
         if ($_POST['fleet_group'] > 0) {
             if ($_POST['mission'] == 2) {
                 $target = 'g' . (int) $_POST['galaxy'] .
-                        's' . (int) $_POST['system'] .
-                        'p' . (int) $_POST['planet'] .
-                        't' . (int) $_POST['planettype'];
+                    's' . (int) $_POST['system'] .
+                    'p' . (int) $_POST['planet'] .
+                    't' . (int) $_POST['planettype'];
 
                 if ($_POST['acs_target_mr'] == $target) {
                     $aks_count_mr = $this->_db->query("SELECT COUNT(`acs_fleet_id`)
@@ -189,7 +188,7 @@ class Fleet4 extends Controller
         }
 
         if ($this->_current_planet['planet_galaxy'] == $galaxy && $this->_current_planet['planet_system'] == $system &&
-                $this->_current_planet['planet_planet'] == $planet && $this->_current_planet['planet_type'] == $planettype) {
+            $this->_current_planet['planet_planet'] == $planet && $this->_current_planet['planet_type'] == $planettype) {
             FunctionsLib::redirect('game.php?page=movement');
         }
 
@@ -268,14 +267,14 @@ class Fleet4 extends Controller
 
         if ($HeDBRec['user_onlinetime'] >= (time() - 60 * 60 * 24 * 7)) {
             if ($this->_noob->isWeak($MyGameLevel, $HeGameLevel) &&
-                    $TargetPlanet['planet_user_id'] != '' &&
-                    ($_POST['mission'] == 1 or $_POST['mission'] == 6 or $_POST['mission'] == 9)) {
+                $TargetPlanet['planet_user_id'] != '' &&
+                ($_POST['mission'] == 1 or $_POST['mission'] == 6 or $_POST['mission'] == 9)) {
                 FunctionsLib::message("<font color=\"lime\"><b>" . $this->_lang['fl_week_player'] . "</b></font>", "game.php?page=movement", 2);
             }
 
             if ($this->_noob->isStrong($MyGameLevel, $HeGameLevel) &&
-                    $TargetPlanet['planet_user_id'] != '' &&
-                    ($_POST['mission'] == 1 or $_POST['mission'] == 5 or $_POST['mission'] == 6 or $_POST['mission'] == 9)) {
+                $TargetPlanet['planet_user_id'] != '' &&
+                ($_POST['mission'] == 1 or $_POST['mission'] == 5 or $_POST['mission'] == 6 or $_POST['mission'] == 9)) {
                 FunctionsLib::message("<font color=\"red\"><b>" . $this->_lang['fl_strong_player'] . "</b></font>", "game.php?page=movement", 2);
             }
         }
@@ -371,9 +370,9 @@ class Fleet4 extends Controller
         }
 
         if ($_POST['thisgalaxy'] != $this->_current_planet['planet_galaxy'] |
-                $_POST['thissystem'] != $this->_current_planet['planet_system'] |
-                $_POST['thisplanet'] != $this->_current_planet['planet_planet'] |
-                $_POST['thisplanettype'] != $this->_current_planet['planet_type']) {
+            $_POST['thissystem'] != $this->_current_planet['planet_system'] |
+            $_POST['thisplanet'] != $this->_current_planet['planet_planet'] |
+            $_POST['thisplanettype'] != $this->_current_planet['planet_type']) {
             FunctionsLib::redirect('game.php?page=movement');
         }
 

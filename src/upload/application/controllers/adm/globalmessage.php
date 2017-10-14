@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
-
 namespace application\controllers\adm;
 
 use application\core\Controller;
@@ -31,6 +30,7 @@ use application\libraries\FunctionsLib;
  */
 class Globalmessage extends Controller
 {
+
     private $_lang;
     private $_current_user;
 
@@ -103,19 +103,16 @@ class Globalmessage extends Controller
                 }
 
                 if (isset($_POST['mail'])) {
-                    $i      = 0;
-                    $from   = [
+                    $i = 0;
+                    $from = [
                         'mail' => FunctionsLib::readConfig('admin_email'),
                         'name' => FunctionsLib::readConfig('game_name')
                     ];
-                    
+
                     while ($u = $this->_db->fetchArray($sq)) {
-                        
+
                         FunctionsLib::sendEmail(
-                            $u['user_email'],
-                            $_POST['temat'],
-                            $_POST['tresc'],
-                            $from
+                            $u['user_email'], $_POST['temat'], $_POST['tresc'], $from
                         );
 
                         // 20 per row

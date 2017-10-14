@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-
 namespace application\models\libraries;
 
 /**
@@ -26,15 +25,16 @@ namespace application\models\libraries;
  */
 class Statistics_library
 {
+
     private $db = null;
-    
+
     /**
      * __construct()
      */
     public function __construct($db)
-    {        
+    {
         // use this to make queries
-        $this->db   = $db;
+        $this->db = $db;
     }
 
     /**
@@ -46,7 +46,7 @@ class Statistics_library
     {
         $this->db->closeConnection();
     }
-    
+
     /**
      * 
      * @param type $user_id
@@ -56,12 +56,12 @@ class Statistics_library
     public function getResearchToUpdate($user_id)
     {
         return $this->db->queryFetch(
-            "SELECT * 
+                "SELECT * 
             FROM `" . RESEARCH . "` ttu
             WHERE ttu.research_user_id = '" . $user_id . "';"
         );
     }
-    
+
     /**
      * 
      * @param string $what      What
@@ -72,12 +72,12 @@ class Statistics_library
     public function getPlanetElementToUpdate($what, $planet_id)
     {
         return $this->db->queryFetch(
-            "SELECT * 
+                "SELECT * 
             FROM `" . DB_PREFIX . $what . "` ttu
             WHERE ttu." . rtrim($what, 's') . "_planet_id = '" . $planet_id . "';"
         );
     }
-    
+
     /**
      * Update points based on the provided parameters
      * 
@@ -95,7 +95,7 @@ class Statistics_library
             WHERE `user_statistic_user_id` = '" . $user_id . "'"
         );
     }
-    
+
     /**
      * Fetch all users statistics
      * 
@@ -104,7 +104,7 @@ class Statistics_library
     public function getAllUserStatsData()
     {
         return $this->db->queryFetchAll(
-            "SELECT `user_statistic_user_id`,
+                "SELECT `user_statistic_user_id`,
             `user_statistic_technology_rank`,
             `user_statistic_technology_points`,
             `user_statistic_buildings_rank`,
@@ -123,7 +123,7 @@ class Statistics_library
             ORDER BY `user_statistic_user_id` ASC;"
         );
     }
-    
+
     /**
      * Fetch all alliance statistics
      * 
@@ -132,7 +132,7 @@ class Statistics_library
     public function getAllAllianceStatsData()
     {
         return $this->db->queryFetchAll(
-            "SELECT a.`alliance_id`,
+                "SELECT a.`alliance_id`,
             ass.alliance_statistic_technology_rank,
             ass.alliance_statistic_buildings_rank,
             ass.alliance_statistic_defenses_rank,
@@ -150,7 +150,7 @@ class Statistics_library
             GROUP BY alliance_id"
         );
     }
-    
+
     /**
      * Run a single query based on a provided query string
      * 

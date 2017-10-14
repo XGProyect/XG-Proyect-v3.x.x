@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
-
 /**
  * MODES
  * before_loads
@@ -19,12 +18,12 @@
  * new_page
  */
 // INSERT HOOKS AFTER THIS LINE
-$hook['before_page']  = [
-    'class'    => 'MyClass',
+$hook['before_page'] = [
+    'class' => 'MyClass',
     'function' => 'MyMethod',
     'filename' => 'MyClass.php',
     'filepath' => 'hooks',
-    'params'   => ['beer', 'wine', 'snacks']
+    'params' => ['beer', 'wine', 'snacks']
 ];
 
 /**

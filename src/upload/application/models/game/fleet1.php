@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.4
  */
-
 namespace application\models\game;
 
 /**
@@ -26,15 +25,16 @@ namespace application\models\game;
  */
 class Fleet1
 {
+
     private $db = null;
-    
+
     /**
      * __construct()
      */
     public function __construct($db)
-    {        
+    {
         // use this to make queries
-        $this->db   = $db;
+        $this->db = $db;
     }
 
     /**
@@ -46,7 +46,7 @@ class Fleet1
     {
         $this->db->closeConnection();
     }
-    
+
     /**
      * Get on going fleet movements count
      * 
@@ -56,10 +56,10 @@ class Fleet1
      */
     public function getCounts($user_id)
     {
-        if ((int)$user_id > 0) {
+        if ((int) $user_id > 0) {
 
             return $this->db->queryFetch(
-               "SELECT
+                    "SELECT
                    (SELECT COUNT(fleet_owner) AS `actcnt`
                            FROM " . FLEETS . "
                            WHERE `fleet_owner` = '" . (int) $user_id . "') AS max_fleet,
@@ -67,7 +67,7 @@ class Fleet1
                            FROM " . FLEETS . "
                            WHERE `fleet_owner` = '" . (int) $user_id . "'
                                    AND `fleet_mission` = '15') AS max_expeditions"
-           );
+            );
         }
 
         return null;

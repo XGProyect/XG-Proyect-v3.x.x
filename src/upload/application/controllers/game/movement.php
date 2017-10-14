@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
-
 namespace application\controllers\game;
 
 use application\core\Controller;
@@ -32,6 +31,7 @@ use application\libraries\FunctionsLib;
  */
 class Movement extends Controller
 {
+
     const MODULE_ID = 9;
 
     private $_lang;
@@ -148,7 +148,7 @@ class Movement extends Controller
                         $parse['fleet'] .= $this->_lang['tech'][$a[0]] . ":" . $a[1] . "\n";
 
                         if ($e > 1) {
-                            $parse['fleet'].= "\t";
+                            $parse['fleet'] .= "\t";
                         }
                     }
                 }

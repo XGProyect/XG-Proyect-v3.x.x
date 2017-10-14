@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
-
 namespace application\libraries;
 
 use application\core\Database;
@@ -36,6 +35,7 @@ use CI_Email;
  */
 abstract class FunctionsLib extends XGPCore
 {
+
     /**
      * loadLibrary
      *
@@ -60,7 +60,7 @@ abstract class FunctionsLib extends XGPCore
             return false;
         }
     }
-    
+
     /**
      * loadModel
      *
@@ -74,9 +74,9 @@ abstract class FunctionsLib extends XGPCore
 
             // Require file
             require_once XGP_ROOT . MODELS_PATH . strtolower($model) . '.php';
-            
+
             $class_name = 'application\models\\' . strtr($model, ['/' => '\\']);
-            
+
             // Create new $library object
             return new $class_name(new Database());
         } else {
@@ -95,10 +95,10 @@ abstract class FunctionsLib extends XGPCore
      */
     public static function formatText($text)
     {
-        $db     = new Database();
-        $text   = $db->escapeValue($text);
-        $text   = trim(nl2br(strip_tags($text, '<br>')));
-        $text   = preg_replace('|[\r][\n]|', '\\r\\n', $text);
+        $db = new Database();
+        $text = $db->escapeValue($text);
+        $text = trim(nl2br(strip_tags($text, '<br>')));
+        $text = preg_replace('|[\r][\n]|', '\\r\\n', $text);
 
         return $text;
     }
@@ -123,8 +123,8 @@ abstract class FunctionsLib extends XGPCore
             $template = parent::$page->getTemplate('general/chrono_applet');
         }
 
-        $parse['type']  = $type;
-        $parse['ref']   = $ref;
+        $parse['type'] = $type;
+        $parse['ref'] = $ref;
         $parse['value'] = $value;
 
         return parent::$page->parseTemplate($template, $parse);
@@ -144,10 +144,10 @@ abstract class FunctionsLib extends XGPCore
 
         if ($all) {
 
-            foreach ($configs->getOptions()  as $row) {
-                $return[$row['option_name']]   = $row['option_value'];
+            foreach ($configs->getOptions() as $row) {
+                $return[$row['option_name']] = $row['option_value'];
             }
-            
+
             return $return;
         } else {
 
@@ -178,9 +178,8 @@ abstract class FunctionsLib extends XGPCore
     public static function validEmail($address)
     {
         return (!preg_match(
-            "/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix",
-            $address
-        )) ? false : true;
+                "/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix", $address
+            )) ? false : true;
     }
 
     /**
@@ -199,7 +198,7 @@ abstract class FunctionsLib extends XGPCore
 
         if (substr($url, 0, 7) != 'http://' && substr($url, 0, 8) != 'https://') {
 
-            $url    = 'http://' . $url;
+            $url = 'http://' . $url;
         }
 
         return $url;
@@ -231,33 +230,27 @@ abstract class FunctionsLib extends XGPCore
     {
         define('IN_MESSAGE', true);
 
-        $parse['mes']       = $mes;
-        $parse['middle1']   = '';
-        $parse['middle2']   = '';
+        $parse['mes'] = $mes;
+        $parse['middle1'] = '';
+        $parse['middle2'] = '';
 
         if ($center) {
 
-            $parse['middle1']   = '<div id="content">';
-            $parse['middle2']   = '</div>';
+            $parse['middle1'] = '<div id="content">';
+            $parse['middle2'] = '</div>';
         }
 
-        $page   = parent::$page->parseTemplate(parent::$page->getTemplate('general/message_body'), $parse);
+        $page = parent::$page->parseTemplate(parent::$page->getTemplate('general/message_body'), $parse);
 
         if (!defined('IN_ADMIN')) {
 
             parent::$page->display(
-                $page,
-                $topnav,
-                (($dest != "") ? "<meta http-equiv=\"refresh\" content=\"$time;URL=$dest\">" : ""),
-                $menu
+                $page, $topnav, (($dest != "") ? "<meta http-equiv=\"refresh\" content=\"$time;URL=$dest\">" : ""), $menu
             );
         } else {
 
             parent::$page->display(
-                $page,
-                $topnav,
-                (($dest != "") ? "<meta http-equiv=\"refresh\" content=\"$time;URL=$dest\">" : ""),
-                $menu
+                $page, $topnav, (($dest != "") ? "<meta http-equiv=\"refresh\" content=\"$time;URL=$dest\">" : ""), $menu
             );
         }
     }
@@ -271,8 +264,8 @@ abstract class FunctionsLib extends XGPCore
      */
     public static function isModuleAccesible($module_id = 0)
     {
-        $modules_array  = self::readConfig('modules');
-        $modules_array  = explode(';', $modules_array);
+        $modules_array = self::readConfig('modules');
+        $modules_array = explode(';', $modules_array);
 
         if ($module_id == 0) {
 
@@ -307,9 +300,9 @@ abstract class FunctionsLib extends XGPCore
      */
     public static function sortPlanets($current_user)
     {
-        $db     = new Database();
-        $order  = $current_user['setting_planet_order'] == 1 ? "DESC" : "ASC";
-        $sort   = $current_user['setting_planet_sort'];
+        $db = new Database();
+        $order = $current_user['setting_planet_order'] == 1 ? "DESC" : "ASC";
+        $sort = $current_user['setting_planet_sort'];
 
         $planets = "SELECT `planet_id`, `planet_name`, `planet_galaxy`, `planet_system`, `planet_planet`, `planet_type`
                     FROM " . PLANETS . "
@@ -318,17 +311,17 @@ abstract class FunctionsLib extends XGPCore
 
         switch ($sort) {
             case 0:
-                $planets    .= "`planet_id` " . $order;
+                $planets .= "`planet_id` " . $order;
 
                 break;
 
             case 1:
-                $planets    .= "`planet_galaxy`, `planet_system`, `planet_planet`, `planet_type` " . $order;
+                $planets .= "`planet_galaxy`, `planet_system`, `planet_planet`, `planet_type` " . $order;
 
                 break;
 
             case 2:
-                $planets    .= "`planet_name` " . $order;
+                $planets .= "`planet_name` " . $order;
 
                 break;
         }
@@ -346,13 +339,13 @@ abstract class FunctionsLib extends XGPCore
      */
     public static function buildPlanetList($current_user, $current_planet_id = 0)
     {
-        $db             = new Database();
-        $list           = '';
-        $user_planets   = self::sortPlanets($current_user);
+        $db = new Database();
+        $list = '';
+        $user_planets = self::sortPlanets($current_user);
 
-        $page   = isset($_GET['page']) ? $_GET['page'] : '';
-        $gid    = isset($_GET['gid']) ? $_GET['gid'] : '';
-        $mode   = isset($_GET['mode']) ? $_GET['mode'] : '';
+        $page = isset($_GET['page']) ? $_GET['page'] : '';
+        $gid = isset($_GET['gid']) ? $_GET['gid'] : '';
+        $mode = isset($_GET['mode']) ? $_GET['mode'] : '';
 
         if ($user_planets) {
 
@@ -360,8 +353,8 @@ abstract class FunctionsLib extends XGPCore
 
                 if ($current_planet_id != $planets['planet_id']) {
 
-                    $list   .= "\n<option ";
-                    $list   .= (($planets['planet_id'] == $current_user['user_current_planet'] ) ?
+                    $list .= "\n<option ";
+                    $list .= (($planets['planet_id'] == $current_user['user_current_planet'] ) ?
                         'selected="selected" ' : '');
 
                     // FOR TOPNAVIGATION BAR PLANET LIST
@@ -374,12 +367,11 @@ abstract class FunctionsLib extends XGPCore
                     } else {
 
                         // FOR FLEETS2 PAGE COLONIES SHORTCUTS
-                        $list   .= "value=\"" . $planets['planet_galaxy'] . ';' . $planets['planet_system'] . ';' .
+                        $list .= "value=\"" . $planets['planet_galaxy'] . ';' . $planets['planet_system'] . ';' .
                             $planets['planet_planet'] . ';' . $planets['planet_type'] . "\">";
                     }
 
-                    $list .= (($planets['planet_type'] != 3)
-                        ? $planets['planet_name'] : $planets['planet_name'] . ' (' . parent::$lang['fcm_moon'] . ')');
+                    $list .= (($planets['planet_type'] != 3) ? $planets['planet_name'] : $planets['planet_name'] . ' (' . parent::$lang['fcm_moon'] . ')');
                     $list .= "&nbsp;[" . $planets['planet_galaxy'] . ":";
                     $list .= $planets['planet_system'] . ":";
                     $list .= $planets['planet_planet'];
@@ -414,30 +406,30 @@ abstract class FunctionsLib extends XGPCore
      */
     public static function sendMessage($to, $sender, $time = '', $type = '', $from = '', $subject = '', $message = '', $allowHtml = false)
     {
-        $options    = new MessagesOptions();
+        $options = new MessagesOptions();
         $options->setTo($to);
         $options->setSender($sender);
         $options->setTime($time);
 
-        switch($type) {
+        switch ($type) {
             case 0:
-                $type   = MessagesEnumerator::espio;
+                $type = MessagesEnumerator::espio;
                 break;
             case 1:
-                $type   = MessagesEnumerator::combat;
+                $type = MessagesEnumerator::combat;
                 break;
             case 2:
-                $type   = MessagesEnumerator::exp;
+                $type = MessagesEnumerator::exp;
                 break;
             case 3:
-                $type   = MessagesEnumerator::ally;
+                $type = MessagesEnumerator::ally;
                 break;
             case 4:
-                $type   = MessagesEnumerator::user;
+                $type = MessagesEnumerator::user;
                 break;
             default:
             case 5:
-                $type   = MessagesEnumerator::general;
+                $type = MessagesEnumerator::general;
                 break;
         }
 
@@ -455,7 +447,7 @@ abstract class FunctionsLib extends XGPCore
         $messenger = new Messenger();
         $messenger->sendMessage($options);
     }
-    
+
     /**
      * Send and email
      * 
@@ -470,29 +462,29 @@ abstract class FunctionsLib extends XGPCore
     public static function sendEmail($to, $subject, $body, $from, $format = 'text', $headers = '')
     {
         // require email library
-        $mail_library_path  = XGP_ROOT . SYSTEM_PATH . 'libraries/Email.php';
-        
+        $mail_library_path = XGP_ROOT . SYSTEM_PATH . 'libraries/Email.php';
+
         if (!file_exists($mail_library_path)) {
-            
+
             return;
         }
-        
+
         // required by the library
         if (!defined('BASEPATH')) {
 
             define('BASEPATH', true);
         }
-        
+
         // use CI library
         require_once $mail_library_path;
-        
-        $mail   = new CI_Email();
-        
+
+        $mail = new CI_Email();
+
         if ($format === 'text' or $format === 'html') {
 
             $mail->set_mailtype($format);
         }
-        
+
         // from
         if (is_array($from)) {
 
@@ -504,23 +496,23 @@ abstract class FunctionsLib extends XGPCore
 
         // headers
         if (is_array($headers)) {
-            
+
             foreach ($headers as $header => $value) {
 
                 $mail->set_header($header, $value);
             }
         }
-        
+
         // subject
         $mail->subject($subject);
-        
+
         // message body
         $mail->message($body);
 
         // send!
         $mail->send();
     }
-    
+
     /**
      * getDefaultVacationTime
      *
@@ -621,7 +613,7 @@ abstract class FunctionsLib extends XGPCore
 
             $current_key = $key;
 
-            if ($needle === $value or (is_array($value) && self::recursiveArraySearch($needle, $value) !== false )) {
+            if ($needle === $value or ( is_array($value) && self::recursiveArraySearch($needle, $value) !== false )) {
 
                 return $current_key;
             }
@@ -652,11 +644,11 @@ abstract class FunctionsLib extends XGPCore
         if ($installed) {
             return self::readConfig('lang');
         }
-        
+
         // set the user language reading the config file
         if ($installed && !isset($_COOKIE['current_lang'])) {
 
-            $_COOKIE['current_lang']    = self::readConfig('lang');
+            $_COOKIE['current_lang'] = self::readConfig('lang');
         }
 
         // get the language from the session
@@ -664,10 +656,10 @@ abstract class FunctionsLib extends XGPCore
 
             return $_COOKIE['current_lang'];
         }
-        
+
         return 'english'; // the universal language if nothing was set
     }
-    
+
     /**
      * setCurrentLanguage
      * 
@@ -678,16 +670,16 @@ abstract class FunctionsLib extends XGPCore
     public static function setCurrentLanguage($lang = '')
     {
         $db = new Database();
-        
+
         // set the user language reading the config file
         if ($db != null && $db->testConnection() && !isset($_COOKIE['current_lang'])) {
 
             self::updateConfig('lang', $lang);
         }
-        
+
         setcookie('current_lang', $lang);
     }
-    
+
     /**
      * getLanguages
      *
@@ -697,22 +689,22 @@ abstract class FunctionsLib extends XGPCore
      */
     public static function getLanguages($current_lang)
     {
-        $langs_dir      = opendir(XGP_ROOT . LANG_PATH);
-        $exceptions     = ['.', '..', '.htaccess', 'index.html', '.DS_Store'];
-        $lang_options   = '';
+        $langs_dir = opendir(XGP_ROOT . LANG_PATH);
+        $exceptions = ['.', '..', '.htaccess', 'index.html', '.DS_Store'];
+        $lang_options = '';
 
         while (($lang_dir = readdir($langs_dir)) !== false) {
 
             if (!in_array($lang_dir, $exceptions)) {
 
-                $lang_options   .= '<option ';
+                $lang_options .= '<option ';
 
                 if ($current_lang == $lang_dir) {
 
                     $lang_options .= 'selected = selected';
                 }
 
-                $lang_options   .= ' value="' . $lang_dir . '">' . $lang_dir . '</option>';
+                $lang_options .= ' value="' . $lang_dir . '">' . $lang_dir . '</option>';
             }
         }
 
@@ -734,7 +726,7 @@ abstract class FunctionsLib extends XGPCore
             die();
         }
     }
-    
+
     /**
      * Display login errors
      * 
@@ -756,8 +748,8 @@ abstract class FunctionsLib extends XGPCore
 
         if ($user_row['user_banned'] > 0) {
 
-            $parse                  = parent::$lang;
-            $parse['banned_until']  = date(FunctionsLib::readConfig('date_format_extended'), $user_row['user_banned']);
+            $parse = parent::$lang;
+            $parse['banned_until'] = date(FunctionsLib::readConfig('date_format_extended'), $user_row['user_banned']);
 
             die(parent::$page->get('home/banned_message')->parse($parse));
         }

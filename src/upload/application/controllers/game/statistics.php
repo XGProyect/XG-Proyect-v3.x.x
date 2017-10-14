@@ -11,14 +11,12 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
-
 namespace application\controllers\game;
 
 use application\core\Controller;
 use application\core\Database;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
-
 
 /**
  * Statistics Class
@@ -32,6 +30,7 @@ use application\libraries\FunctionsLib;
  */
 class Statistics extends Controller
 {
+
     const MODULE_ID = 16;
 
     private $_lang;

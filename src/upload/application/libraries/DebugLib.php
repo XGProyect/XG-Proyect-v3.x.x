@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
-
 namespace application\libraries;
 
 use application\core\XGPCore;
@@ -28,6 +27,7 @@ use application\core\XGPCore;
  */
 class DebugLib extends XGPCore
 {
+
     private $log;
     private $numqueries;
     private $langs;
@@ -39,9 +39,9 @@ class DebugLib extends XGPCore
      */
     public function __construct()
     {
-        $this->vars         = $this->log    = '';
-        $this->numqueries   = 0;
-        $this->langs        = parent::$lang;
+        $this->vars = $this->log = '';
+        $this->numqueries = 0;
+        $this->langs = parent::$lang;
     }
 
     /**
@@ -54,7 +54,7 @@ class DebugLib extends XGPCore
     private function dump($var)
     {
         $result = var_export($var, true);
-        $loc    = whereCalled();
+        $loc = whereCalled();
 
         return "\n<pre>Dump: $loc\n$result</pre>";
     }
@@ -68,9 +68,9 @@ class DebugLib extends XGPCore
      */
     private function whereCalled($level = 1)
     {
-        $trace  = debug_backtrace();
-        $file   = $trace[$level]['file'];
-        $line   = $trace[$level]['line'];
+        $trace = debug_backtrace();
+        $file = $trace[$level]['file'];
+        $line = $trace[$level]['line'];
         $object = $trace[$level]['object'];
 
         if (is_object($object)) {
@@ -78,8 +78,8 @@ class DebugLib extends XGPCore
             $object = get_class($object);
         }
 
-        $break  = Explode('/', $file);
-        $pfile  = $break[count($break) - 1];
+        $break = Explode('/', $file);
+        $pfile = $break[count($break) - 1];
 
         return "Where called: line $line of $object <br/>(in $pfile)";
     }
@@ -106,15 +106,15 @@ class DebugLib extends XGPCore
      */
     public function echoLog()
     {
-        return  '<br>
+        return '<br>
                     <table>
                         <tr>
                             <td class="k" colspan="2">
                                 <a href="' . XGP_ROOT . 'admin.php?page=settings">Debug Log</a>:
                             </td>
                         </tr>'
-                        . $this->log .
-                    '</table>';
+            . $this->log .
+            '</table>';
     }
 
     /**
@@ -129,29 +129,26 @@ class DebugLib extends XGPCore
     {
         if (DEBUG_MODE == true) {
 
-            echo '<h2>'.$title.'</h2><br><font color="red">' . $message . '</font><br><hr>';
+            echo '<h2>' . $title . '</h2><br><font color="red">' . $message . '</font><br><hr>';
             echo $this->echoLog();
             echo $this->whereCalled(3);
         } else {
 
-            $user_ip    = $_SERVER['REMOTE_ADDR'];
+            $user_ip = $_SERVER['REMOTE_ADDR'];
 
             // format log
-            $log    = '|' . $user_ip . '|'. $title .'|' . $message . '|' . $this->whereCalled(3) . '|';
+            $log = '|' . $user_ip . '|' . $title . '|' . $message . '|' . $this->whereCalled(3) . '|';
 
             // log the error
             $this->writeErrors($log, "ErrorLog");
-            
+
             // notify administrator
             if (defined('ERROR_LOGS_MAIL') && ERROR_LOGS_MAIL != '') {
 
                 FunctionsLib::sendEmail(
-                    ERROR_LOGS_MAIL,
-                    '[DEBUG][' . $title . ']',
-                    $this->whereCalled(3),
-                    [
-                        'mail' => ERROR_LOGS_MAIL,
-                        'name' => 'XG Proyect'
+                    ERROR_LOGS_MAIL, '[DEBUG][' . $title . ']', $this->whereCalled(3), [
+                    'mail' => ERROR_LOGS_MAIL,
+                    'name' => 'XG Proyect'
                     ]
                 );
             }
@@ -193,7 +190,7 @@ class DebugLib extends XGPCore
      */
     private function writeErrors($text, $log_file)
     {
-        $file   = XGP_ROOT . LOGS_PATH . $log_file . ".php";
+        $file = XGP_ROOT . LOGS_PATH . $log_file . ".php";
 
         if (!file_exists($file) && is_writable($file)) {
 
@@ -201,9 +198,9 @@ class DebugLib extends XGPCore
             @fclose(fopen($file, "w+"));
         }
 
-        $fp     =   @fopen($file, "a");
-        $date   =   $text;
-        $date   .=  date('Y/m/d H:i:s', time()) . "||\n";
+        $fp = @fopen($file, "a");
+        $date = $text;
+        $date .= date('Y/m/d H:i:s', time()) . "||\n";
 
         @fwrite($fp, $date);
         @fclose($fp);

@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-
 namespace application\core\entities;
 
 /**
@@ -26,12 +25,13 @@ namespace application\core\entities;
  */
 class PlanetEntity
 {
+
     /**
      *
      * @var array
      */
     private $_planet = [];
-    
+
     /**
      * Init with the current planet data
      * 
@@ -41,7 +41,7 @@ class PlanetEntity
     {
         $this->setPlanet($current_planet);
     }
-    
+
     /**
      * Set the current planet
      * 
@@ -51,19 +51,18 @@ class PlanetEntity
     private function setPlanet($current_planet)
     {
         try {
-            
+
             if (!is_array($current_planet)) {
                 throw new Exception('Must be an array');
-            } 
-            
-            $this->_planet  = $current_planet;
-            
-        } catch(Exception $e) {
-            
+            }
+
+            $this->_planet = $current_planet;
+        } catch (Exception $e) {
+
             die('Caught exception: ' . $e->getMessage() . "\n");
         }
     }
-    
+
     /**
      *  Return the planet id
      */
@@ -71,7 +70,7 @@ class PlanetEntity
     {
         return $this->_planet['planet_id'];
     }
-    
+
     /**
      *  Return the planet name
      */
@@ -79,7 +78,7 @@ class PlanetEntity
     {
         return $this->_planet['planet_name'];
     }
-    
+
     /**
      *  Return the planet user id
      */
@@ -87,7 +86,7 @@ class PlanetEntity
     {
         return $this->_planet['planet_user_id'];
     }
-    
+
     /**
      *  Return the planet galaxy
      */
@@ -95,7 +94,7 @@ class PlanetEntity
     {
         return $this->_planet['planet_galaxy'];
     }
-    
+
     /**
      *  Return the planet system
      */
@@ -103,7 +102,7 @@ class PlanetEntity
     {
         return $this->_planet['planet_system'];
     }
-    
+
     /**
      *  Return the planet position
      */
@@ -111,7 +110,7 @@ class PlanetEntity
     {
         return $this->_planet['planet_planet'];
     }
-    
+
     /**
      *  Return the planet latest activity
      */
@@ -127,7 +126,7 @@ class PlanetEntity
     {
         return $this->_planet['planet_type'];
     }
-    
+
     /**
      * Return the planet status
      */
@@ -135,7 +134,7 @@ class PlanetEntity
     {
         return $this->_planet['planet_destroyed'];
     }
-    
+
     /**
      * Return the planet building Queue
      */
@@ -143,7 +142,7 @@ class PlanetEntity
     {
         return $this->_planet['planet_b_building'];
     }
-    
+
     /**
      * Return the planet current building ID
      */
@@ -151,7 +150,7 @@ class PlanetEntity
     {
         return $this->_planet['planet_b_building_id'];
     }
-    
+
     /**
      * Return the planet technology queue
      */
@@ -159,7 +158,7 @@ class PlanetEntity
     {
         return $this->_planet['planet_b_tech'];
     }
-    
+
     /**
      * Return the planet current technology ID
      */
@@ -167,7 +166,7 @@ class PlanetEntity
     {
         return $this->_planet['planet_b_tech_id'];
     }
-    
+
     /**
      * Return the planet hangar queue
      */
@@ -175,7 +174,7 @@ class PlanetEntity
     {
         return $this->_planet['planet_b_hangar'];
     }
-    
+
     /**
      * Return the planet current hangar ID
      */
@@ -183,7 +182,7 @@ class PlanetEntity
     {
         return $this->_planet['planet_b_hangar_id'];
     }
-    
+
     /**
      * Return the planet image
      */
@@ -191,7 +190,7 @@ class PlanetEntity
     {
         return $this->_planet['planet_image'];
     }
-    
+
     /**
      * Return the planet diameter
      */
@@ -199,7 +198,7 @@ class PlanetEntity
     {
         return $this->_planet['planet_diameter'];
     }
-    
+
     /**
      * Return the planet busy fields
      */
@@ -207,7 +206,7 @@ class PlanetEntity
     {
         return $this->_planet['planet_field_current'];
     }
-    
+
     /**
      * Return the planet maximum amount of fields
      */
@@ -215,7 +214,7 @@ class PlanetEntity
     {
         return $this->_planet['planet_field_max'];
     }
-    
+
     /**
      * Return the planet minimum temperature
      */
@@ -223,15 +222,15 @@ class PlanetEntity
     {
         return $this->_planet['planet_temp_min'];
     }
-    
+
     /**
      * Return the planet maximum temperature
      */
     public function getPlanetTempMax()
     {
-        return $this->_planet['planet_temp_max']; 
+        return $this->_planet['planet_temp_max'];
     }
-    
+
     /**
      * Return the planet current amount of metal
      */
@@ -239,7 +238,7 @@ class PlanetEntity
     {
         return $this->_planet['planet_metal'];
     }
-    
+
     /**
      * Return the planet current metal production per hour
      */
@@ -247,7 +246,7 @@ class PlanetEntity
     {
         return $this->_planet['planet_metal_perhour'];
     }
-    
+
     /**
      * Return the planet metal capacity
      */
@@ -255,7 +254,7 @@ class PlanetEntity
     {
         return $this->_planet['planet_metal_max'];
     }
-    
+
     /**
      * Return the planet current amount of crystal
      */
@@ -263,7 +262,7 @@ class PlanetEntity
     {
         return $this->_planet['planet_crystal'];
     }
-    
+
     /**
      * Return the planet current crystal production per hour
      */
@@ -271,7 +270,7 @@ class PlanetEntity
     {
         return $this->_planet['planet_crystal_perhour'];
     }
-    
+
     /**
      * Return the planet crystal capacity
      */
@@ -287,7 +286,7 @@ class PlanetEntity
     {
         return $this->_planet['planet_deuterium'];
     }
-    
+
     /**
      * Return the planet current deuterium production per hour
      */
@@ -295,7 +294,7 @@ class PlanetEntity
     {
         return $this->_planet['planet_deuterium_perhour'];
     }
-    
+
     /**
      * Return the planet deuterium capacity
      */
@@ -311,8 +310,7 @@ class PlanetEntity
     {
         return $this->_planet['planet_energy_used'];
     }
-    
-    
+
     /**
      * Return the planet max energy
      */
@@ -320,7 +318,7 @@ class PlanetEntity
     {
         return $this->_planet['planet_energy_max'];
     }
-    
+
     /**
      * Return the planet production percentage for the metal mine
      */
@@ -328,7 +326,7 @@ class PlanetEntity
     {
         return $this->_planet['planet_building_metal_mine_percent'];
     }
-    
+
     /**
      * Return the planet production percentage for crystal mine
      */
@@ -336,7 +334,7 @@ class PlanetEntity
     {
         return $this->_planet['planet_building_crystal_mine_percent'];
     }
-    
+
     /**
      * Return the planet production percentage for deuterium sintetizer
      */
@@ -344,7 +342,7 @@ class PlanetEntity
     {
         return $this->_planet['planet_building_deuterium_sintetizer_percent'];
     }
-    
+
     /**
      * Return the planet production percentage for the solar plant
      */
@@ -352,7 +350,7 @@ class PlanetEntity
     {
         return $this->_planet['planet_building_solar_plant_percent'];
     }
-    
+
     /**
      * Return the planet production percentage for the fusion reactor
      */
@@ -360,7 +358,7 @@ class PlanetEntity
     {
         return $this->_planet['planet_building_fusion_reactor_percent'];
     }
-    
+
     /**
      * Return the planet production percentage for the solar satellite
      */
@@ -368,7 +366,7 @@ class PlanetEntity
     {
         return $this->_planet['planet_ship_solar_satellite_percent'];
     }
-    
+
     /**
      * Return the planet latest jump time
      */
@@ -376,7 +374,7 @@ class PlanetEntity
     {
         return $this->_planet['planet_last_jump_time'];
     }
-    
+
     /**
      * Return the planet amount of metal debris
      */
@@ -384,7 +382,7 @@ class PlanetEntity
     {
         return $this->_planet['planet_debris_metal'];
     }
-    
+
     /**
      * Return the planet amount of crystal debris
      */
@@ -392,7 +390,7 @@ class PlanetEntity
     {
         return $this->_planet['planet_debris_crystal'];
     }
-    
+
     /**
      * Return the planet invisible start time
      */

@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.4
  */
-
 namespace application\libraries\messenger;
 
 use application\core\Database;
@@ -29,13 +28,14 @@ use application\core\XGPCore;
  */
 final class Messenger extends XGPCore
 {
+
     /**
      * 
      */
     public function __construct()
     {
         parent::__construct();
-        
+
         $this->_db = new Database();
     }
 

@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
-
 namespace application\core;
 
 /**
@@ -26,12 +25,13 @@ namespace application\core;
  */
 class Language
 {
+
     /**
      *
      * @var array
      */
     private $lang;
-    
+
     /**
      *
      * @var string
@@ -45,13 +45,13 @@ class Language
      */
     public function __construct()
     {
-        $languages_loaded   = $this->getFileName();
+        $languages_loaded = $this->getFileName();
 
         if (defined('DEFAULT_LANG')) {
 
             foreach ($languages_loaded as $load) {
 
-                $route  = XGP_ROOT . LANG_PATH . DEFAULT_LANG . '/' . $load . '.' . $this->lang_extension;
+                $route = XGP_ROOT . LANG_PATH . DEFAULT_LANG . '/' . $load . '.' . $this->lang_extension;
 
                 // WE GOT SOMETHING
                 if (file_exists($route)) {
@@ -60,7 +60,7 @@ class Language
                     include $route;
                 }
             }
-            
+
             // WE GOT SOMETHING
             if (!empty($lang)) {
 

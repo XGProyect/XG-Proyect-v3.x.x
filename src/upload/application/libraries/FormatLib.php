@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
-
 namespace application\libraries;
 
 /**
@@ -26,6 +25,7 @@ namespace application\libraries;
  */
 class FormatLib
 {
+
     /**
      * prettyTime
      *
@@ -35,10 +35,10 @@ class FormatLib
      */
     public static function prettyTime($seconds)
     {
-        $day    = floor($seconds / (24 * 3600));
-        $hs     = floor($seconds / 3600 % 24);
-        $ms     = floor($seconds / 60 % 60);
-        $sr     = floor($seconds / 1 % 60);
+        $day = floor($seconds / (24 * 3600));
+        $hs = floor($seconds / 3600 % 24);
+        $ms = floor($seconds / 60 % 60);
+        $sr = floor($seconds / 1 % 60);
 
         if ($hs < 10) {
 
@@ -62,16 +62,16 @@ class FormatLib
             $ss = $sr;
         }
 
-        $time   = '';
+        $time = '';
 
         if ($day != 0) {
 
-            $time   .= $day . 'd ';
+            $time .= $day . 'd ';
         }
 
         if ($hs != 0) {
 
-            $time   .= $hh . 'h ';
+            $time .= $hh . 'h ';
         } else {
 
             $time .= '00h ';
@@ -79,13 +79,13 @@ class FormatLib
 
         if ($ms != 0) {
 
-            $time   .= $mm . 'm ';
+            $time .= $mm . 'm ';
         } else {
 
-            $time   .= '00m ';
+            $time .= '00m ';
         }
 
-        $time   .= $ss . 's';
+        $time .= $ss . 's';
 
         return $time;
     }
@@ -99,8 +99,8 @@ class FormatLib
      */
     public static function prettyTimeHour($seconds)
     {
-        $min    = floor($seconds / 60 % 60);
-        $time   = '';
+        $min = floor($seconds / 60 % 60);
+        $time = '';
 
         if ($min != 0) {
             $time .= $min . 'min ';
@@ -123,29 +123,28 @@ class FormatLib
 
             if ($s != '') {
 
-                $s  = self::colorGreen($s);
+                $s = self::colorGreen($s);
             } else {
 
-                $s  = self::colorGreen($n);
+                $s = self::colorGreen($n);
             }
-
         } elseif ($n < 0) {
 
             if ($s != '') {
 
-                $s  = self::colorRed($s);
+                $s = self::colorRed($s);
             } else {
 
-                $s  = self::colorRed($n);
+                $s = self::colorRed($n);
             }
         } else {
 
             if ($s != '') {
 
-                $s  = $s;
+                $s = $s;
             } else {
 
-                $s  = $n;
+                $s = $n;
             }
         }
 
@@ -187,7 +186,7 @@ class FormatLib
     public static function prettyNumber($n, $floor = true)
     {
         if ($floor) {
-            $n  = floor($n);
+            $n = floor($n);
         }
 
         return number_format($n, 0, ",", ".");
@@ -236,10 +235,8 @@ class FormatLib
     public static function floatToString($numeric, $pro = 0, $output = false)
     {
         return ($output) ? str_replace(
-            ",",
-            ".",
-            sprintf("%." . $pro . "f", $numeric)
-        ) : sprintf("%." . $pro . "f", $numeric);
+                ",", ".", sprintf("%." . $pro . "f", $numeric)
+            ) : sprintf("%." . $pro . "f", $numeric);
     }
 
     /**
@@ -299,21 +296,21 @@ class FormatLib
      * @return int
      */
     public static function prettyBytes($bytes, $precision = 2, $bitwise = false)
-    { 
-        $units  = array('Bytes', 'KB', 'MB', 'GB', 'TB'); 
+    {
+        $units = array('Bytes', 'KB', 'MB', 'GB', 'TB');
 
-        $bytes  = max($bytes, 0); 
-        $pow    = floor(($bytes ? log($bytes) : 0) / log(1024)); 
-        $pow    = min($pow, count($units) - 1); 
+        $bytes = max($bytes, 0);
+        $pow = floor(($bytes ? log($bytes) : 0) / log(1024));
+        $pow = min($pow, count($units) - 1);
 
         if ($bitwise) {
-            $bytes  /= (1 << (10 * $pow));
+            $bytes /= (1 << (10 * $pow));
         } else {
-            $bytes  /= pow(1024, $pow);
+            $bytes /= pow(1024, $pow);
         }
 
-        return round($bytes, $precision) . ' ' . $units[$pow]; 
-    } 
+        return round($bytes, $precision) . ' ' . $units[$pow];
+    }
 }
 
 /* end of FormatLib.php */

@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
-
 namespace application\controllers\install;
 
 use application\core\Controller;
@@ -31,6 +30,7 @@ use application\libraries\PlanetLib;
  */
 class Installation extends Controller
 {
+
     private $host;
     private $name;
     private $user;
@@ -47,14 +47,14 @@ class Installation extends Controller
     {
         parent::__construct();
 
-        $this->_db      = new Database();
-        $this->langs    = parent::$lang;
-        $this->_planet  = new PlanetLib();
-        
+        $this->_db = new Database();
+        $this->langs = parent::$lang;
+        $this->_planet = new PlanetLib();
+
         parent::loadModel('install/installation');
-        
+
         if ($this->serverRequirementes()) {
-            
+
             $this->buildPage();
         } else {
 
@@ -69,14 +69,14 @@ class Installation extends Controller
      */
     private function buildPage()
     {
-        $parse      = $this->langs;
-        $continue   = true;
+        $parse = $this->langs;
+        $continue = true;
 
         // VERIFICATION - WE NEED THE config DIR WRITABLE
         if (!$this->isWritable()) {
             die(FunctionsLib::message($this->langs['ins_not_writable'], '', '', false, false));
         }
-        
+
         // VERIFICATION - WE DON'T WANT ANOTHER INSTALLATION
         if ($this->isInstalled()) {
             die(FunctionsLib::message($this->langs['ins_already_installed'], '', '', false, false));
@@ -85,48 +85,47 @@ class Installation extends Controller
         // ACTION FOR THE CURRENT PAGE
         switch ((isset($_POST['page']) ? $_POST['page'] : '')) {
             case 'step1':
-                
-                $this->host     = isset($_POST['host']) ? $_POST['host'] : null;
-                $this->user     = isset($_POST['user']) ? $_POST['user'] : null;
+
+                $this->host = isset($_POST['host']) ? $_POST['host'] : null;
+                $this->user = isset($_POST['user']) ? $_POST['user'] : null;
                 $this->password = isset($_POST['password']) ? $_POST['password'] : null;
-                $this->name     = isset($_POST['db']) ? $_POST['db'] : null;
-                $this->prefix   = isset($_POST['prefix']) ? $_POST['prefix'] : null;
+                $this->name = isset($_POST['db']) ? $_POST['db'] : null;
+                $this->prefix = isset($_POST['prefix']) ? $_POST['prefix'] : null;
 
                 if (!$this->validateDbData()) {
-                    $alerts     = $this->langs['ins_empty_fields_error'];
-                    $continue   = false;
+                    $alerts = $this->langs['ins_empty_fields_error'];
+                    $continue = false;
                 }
 
                 if ($continue && !$this->tryConnection()) {
-                    $alerts     = $this->langs['ins_not_connected_error'];
-                    $continue   = false;
+                    $alerts = $this->langs['ins_not_connected_error'];
+                    $continue = false;
                 }
 
                 if ($continue && !$this->tryDatabase()) {
-                    $alerts     = $this->langs['ins_db_not_exists'];
-                    $continue   = false;
+                    $alerts = $this->langs['ins_db_not_exists'];
+                    $continue = false;
                 }
 
                 if ($continue && !$this->writeConfigFile()) {
-                    $alerts     = $this->langs['ins_write_config_error'];
-                    $continue   = false;
+                    $alerts = $this->langs['ins_write_config_error'];
+                    $continue = false;
                 }
 
                 if ($continue) {
                     FunctionsLib::redirect('?page=installation&mode=step2');
                 }
 
-                $parse['alert']     = $this->saveMessage($alerts, 'warning');
-                $parse['v_host']    = $this->host;
-                $parse['v_db']      = $this->name;
-                $parse['v_user']    = $this->user;
-                $parse['v_prefix']  = $this->prefix;
-                
-                $current_page   = parent::$page->parseTemplate(
-                    parent::$page->getTemplate('install/in_database_view'),
-                    $parse
+                $parse['alert'] = $this->saveMessage($alerts, 'warning');
+                $parse['v_host'] = $this->host;
+                $parse['v_db'] = $this->name;
+                $parse['v_user'] = $this->user;
+                $parse['v_prefix'] = $this->prefix;
+
+                $current_page = parent::$page->parseTemplate(
+                    parent::$page->getTemplate('install/in_database_view'), $parse
                 );
-                
+
                 break;
 
             case 'step2':
@@ -135,28 +134,26 @@ class Installation extends Controller
                 }
 
                 $parse['alert'] = $this->saveMessage($alerts, 'warning');
-                $current_page   = parent::$page->parseTemplate(
-                    parent::$page->getTemplate('install/in_database_view'),
-                    $parse
+                $current_page = parent::$page->parseTemplate(
+                    parent::$page->getTemplate('install/in_database_view'), $parse
                 );
 
                 break;
 
             case 'step3':
                 if (!$this->insertDbData()) {
-                    $alerts     = $this->langs['ins_insert_tables_error'];
-                    $continue   = false;
+                    $alerts = $this->langs['ins_insert_tables_error'];
+                    $continue = false;
                 }
 
                 if ($continue) {
-                    
+
                     FunctionsLib::redirect('?page=installation&mode=step4');
                 }
 
                 $parse['alert'] = $this->saveMessage($alerts, 'warning');
-                $current_page   = parent::$page->parseTemplate(
-                    parent::$page->getTemplate('install/in_database_view'),
-                    $parse
+                $current_page = parent::$page->parseTemplate(
+                    parent::$page->getTemplate('install/in_database_view'), $parse
                 );
                 break;
 
@@ -172,37 +169,35 @@ class Installation extends Controller
                     // Failure
                     if ($create_account_status == -1) {
 
-                        $error_message  = $this->langs['ins_adm_empty_fields_error'];
+                        $error_message = $this->langs['ins_adm_empty_fields_error'];
                     } else {
 
-                        $error_message  = $this->langs['ins_adm_invalid_email_address'];
+                        $error_message = $this->langs['ins_adm_invalid_email_address'];
                     }
-                    
+
                     $parse['alert'] = $this->saveMessage($error_message, 'warning');
 
-                    $current_page   = parent::$page->parseTemplate(
-                        parent::$page->getTemplate('install/in_create_admin_view'),
-                        $parse
+                    $current_page = parent::$page->parseTemplate(
+                        parent::$page->getTemplate('install/in_create_admin_view'), $parse
                     );
 
-                    $continue       = false;
+                    $continue = false;
                 }
 
                 if ($continue) {
 
                     // set last stat update
                     FunctionsLib::updateConfig('stat_last_update', time());
-                    
+
                     // set the installation language to the game language
                     FunctionsLib::updateConfig('lang', FunctionsLib::getCurrentLanguage());
-                    
-                    $current_page   = parent::$page->parseTemplate(
-                        parent::$page->getTemplate('install/in_create_admin_done_view'),
-                        $this->langs
+
+                    $current_page = parent::$page->parseTemplate(
+                        parent::$page->getTemplate('install/in_create_admin_done_view'), $this->langs
                     );
-                    
+
                     // This will continue on false meaning "This is the end of the installation, no else where to go"
-                    $continue       = false;
+                    $continue = false;
                 }
                 break;
 
@@ -216,62 +211,56 @@ class Installation extends Controller
             switch ((isset($_GET['mode']) ? $_GET['mode'] : '')) {
 
                 case 'step1':
-                    $current_page   = parent::$page->parseTemplate(
-                        parent::$page->getTemplate('install/in_database_view'),
-                        $this->langs
+                    $current_page = parent::$page->parseTemplate(
+                        parent::$page->getTemplate('install/in_database_view'), $this->langs
                     );
 
                     break;
 
                 case 'step2':
-                    $parse['step']              = 'step2';
-                    $parse['done_config']       = '';
-                    $parse['done_connected']    = $this->langs['ins_done_connected'];
-                    $parse['done_insert']       = '';
-                    $current_page               = parent::$page->parseTemplate(
-                        parent::$page->getTemplate('install/in_done_actions_view'),
-                        $parse
+                    $parse['step'] = 'step2';
+                    $parse['done_config'] = '';
+                    $parse['done_connected'] = $this->langs['ins_done_connected'];
+                    $parse['done_insert'] = '';
+                    $current_page = parent::$page->parseTemplate(
+                        parent::$page->getTemplate('install/in_done_actions_view'), $parse
                     );
 
                     break;
 
                 case 'step3':
-                    $parse['step']              = 'step3';
-                    $parse['done_config']       = $this->langs['ins_done_config'];
-                    $parse['done_connected']    = '';
-                    $parse['done_insert']       = '';
-                    $current_page               = parent::$page->parseTemplate(
-                        parent::$page->getTemplate('install/in_done_actions_view'),
-                        $parse
+                    $parse['step'] = 'step3';
+                    $parse['done_config'] = $this->langs['ins_done_config'];
+                    $parse['done_connected'] = '';
+                    $parse['done_insert'] = '';
+                    $current_page = parent::$page->parseTemplate(
+                        parent::$page->getTemplate('install/in_done_actions_view'), $parse
                     );
 
                     break;
 
                 case 'step4':
-                    $parse['step']              = 'step4';
-                    $parse['done_config']       = '';
-                    $parse['done_connected']    = '';
-                    $parse['done_insert']       = $this->langs['ins_done_insert'];
-                    $current_page               = parent::$page->parseTemplate(
-                        parent::$page->getTemplate('install/in_done_actions_view'),
-                        $parse
+                    $parse['step'] = 'step4';
+                    $parse['done_config'] = '';
+                    $parse['done_connected'] = '';
+                    $parse['done_insert'] = $this->langs['ins_done_insert'];
+                    $current_page = parent::$page->parseTemplate(
+                        parent::$page->getTemplate('install/in_done_actions_view'), $parse
                     );
 
                     break;
 
                 case 'step5':
-                    $parse['step']  = 'step5';
-                    $current_page   = parent::$page->parseTemplate(
-                        parent::$page->getTemplate('install/in_create_admin_view'),
-                        $parse
+                    $parse['step'] = 'step5';
+                    $current_page = parent::$page->parseTemplate(
+                        parent::$page->getTemplate('install/in_create_admin_view'), $parse
                     );
 
                     break;
 
                 case 'license':
-                    $current_page   = parent::$page->parseTemplate(
-                        parent::$page->getTemplate('install/in_license_view'),
-                        $this->langs
+                    $current_page = parent::$page->parseTemplate(
+                        parent::$page->getTemplate('install/in_license_view'), $this->langs
                     );
 
                     break;
@@ -279,9 +268,8 @@ class Installation extends Controller
                 case '':
                 case 'overview':
                 default:
-                    $current_page   = parent::$page->parseTemplate(
-                        parent::$page->getTemplate('install/in_welcome_view'),
-                        $this->langs
+                    $current_page = parent::$page->parseTemplate(
+                        parent::$page->getTemplate('install/in_welcome_view'), $this->langs
                     );
 
                     break;
@@ -299,10 +287,10 @@ class Installation extends Controller
     private function serverRequirementes()
     {
         if (version_compare(PHP_VERSION, '5.5.0', '<')) {
-            
+
             return false;
         } else {
-            
+
             return true;
         }
     }
@@ -314,11 +302,11 @@ class Installation extends Controller
      */
     private function isWritable()
     {
-        $config_dir    = XGP_ROOT . 'application/config/';
-        
+        $config_dir = XGP_ROOT . 'application/config/';
+
         return is_writable($config_dir);
     }
-    
+
     /**
      * isInstalled
      *
@@ -327,31 +315,31 @@ class Installation extends Controller
     private function isInstalled()
     {
         // if file not exists
-        $config_file    = XGP_ROOT . 'application/config/config.php';
+        $config_file = XGP_ROOT . 'application/config/config.php';
 
         if (!file_exists($config_file) or filesize($config_file) == 0) {
-            
+
             return false;
         }
-        
+
         // if no db object
         if (!defined('DB_NAME')) {
 
             return false;
         }
-        
+
         // check if tables exist
         if (!$this->tablesExists()) {
-            
+
             return false;
         }
-        
+
         // check for admin account
         if (!$this->adminExists()) {
-            
+
             return false;
         }
-        
+
         return true;
     }
 
@@ -363,16 +351,16 @@ class Installation extends Controller
     private function tablesExists()
     {
         $result = $this->Installation_Model->getListOfTables(DB_NAME);
-        $arr    = [];
+        $arr = [];
 
-        foreach($result as $row) {
-            
+        foreach ($result as $row) {
+
             foreach ($row as $table) {
 
                 if (strpos($table, DB_PREFIX) !== false) {
 
-                    $arr[]  = $table;
-                }   
+                    $arr[] = $table;
+                }
             }
         }
 
@@ -380,20 +368,20 @@ class Installation extends Controller
 
             return true;
         }
-        
+
         return false;
     }
-    
+
     /**
      * adminExists
      *
      * @return boolean
      */
     private function adminExists()
-    {        
+    {
         return $this->Installation_Model->getAdmin()['count'] >= 1;
     }
-    
+
     /**
      * tryConnection
      *
@@ -403,7 +391,7 @@ class Installation extends Controller
     {
         return $this->Installation_Model->tryConnection($this->host, $this->user, $this->password);
     }
-    
+
     /**
      * tryDatabase
      *
@@ -421,36 +409,36 @@ class Installation extends Controller
      */
     private function writeConfigFile()
     {
-        $config_file    = @fopen(XGP_ROOT . CONFIGS_PATH . 'config.php', "w");
+        $config_file = @fopen(XGP_ROOT . CONFIGS_PATH . 'config.php', "w");
 
         if (!$config_file) {
-            
+
             return false;
         }
 
-        $data   = "<?php\n";
-        $data   .= "defined('DB_HOST') ? NULL : define('DB_HOST', '".$this->host."');\n";
-        $data   .= "defined('DB_USER') ? NULL : define('DB_USER', '".$this->user."');\n";
-        $data   .= "defined('DB_PASS') ? NULL : define('DB_PASS', '".$this->password."');\n";
-        $data   .= "defined('DB_NAME') ? NULL : define('DB_NAME', '".$this->name."');\n";
-        $data   .= "defined('DB_PREFIX') ? NULL : define('DB_PREFIX', '".$this->prefix."');\n";
-        $data   .= "defined('SECRETWORD') ? NULL : define('SECRETWORD', 'xgp-".$this->generateToken()."');\n";
-        $data   .= "?>";
+        $data = "<?php\n";
+        $data .= "defined('DB_HOST') ? NULL : define('DB_HOST', '" . $this->host . "');\n";
+        $data .= "defined('DB_USER') ? NULL : define('DB_USER', '" . $this->user . "');\n";
+        $data .= "defined('DB_PASS') ? NULL : define('DB_PASS', '" . $this->password . "');\n";
+        $data .= "defined('DB_NAME') ? NULL : define('DB_NAME', '" . $this->name . "');\n";
+        $data .= "defined('DB_PREFIX') ? NULL : define('DB_PREFIX', '" . $this->prefix . "');\n";
+        $data .= "defined('SECRETWORD') ? NULL : define('SECRETWORD', 'xgp-" . $this->generateToken() . "');\n";
+        $data .= "?>";
 
         // create the new file
         if (fwrite($config_file, $data)) {
 
             fclose($config_file);
-            
+
             return true;
         }
-        
+
         // check if something was created and delete it
         if (file_exists($config_file)) {
 
             unlink($config_file);
         }
-        
+
         return false;
     }
 
@@ -463,12 +451,12 @@ class Installation extends Controller
     {
         // init
         $tables = [];
-        
+
         // get the database structure
         require_once XGP_ROOT . PUBLIC_PATH . 'install/databaseinfos.php';
 
         if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-            
+
             $this->Installation_Model->setWindowsSqlMode();
         }
 
@@ -476,7 +464,7 @@ class Installation extends Controller
          * Do table creations here...
          */
         foreach ($tables as $table => $query) {
-            
+
             // run query for each table
             $status[$table] = $this->Installation_Model->runSimpleQuery($query);
 
@@ -486,7 +474,7 @@ class Installation extends Controller
             }
         }
         if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-            
+
             $this->Installation_Model->setNormalMode();
         }
 
@@ -507,15 +495,15 @@ class Installation extends Controller
         if (empty($_POST['adm_user']) || empty($_POST['adm_pass']) || empty($_POST['adm_email'])) {
             return -1;
         }
-            
+
         if (!FunctionsLib::validEmail($_POST['adm_email'])) {
             return -2;
         }
 
         // some default values
-        $adm_name   = $this->_db->escapeValue($_POST['adm_user']);
-        $adm_email  = $this->_db->escapeValue($_POST['adm_email']);
-        $adm_pass   = sha1($_POST['adm_pass']);
+        $adm_name = $this->_db->escapeValue($_POST['adm_user']);
+        $adm_email = $this->_db->escapeValue($_POST['adm_email']);
+        $adm_pass = sha1($_POST['adm_pass']);
 
         // create user and its planet
         parent::$users->createUserWithOptions(
@@ -536,7 +524,7 @@ class Installation extends Controller
                 'user_current_page' => ''
             ]
         );
-        
+
         $this->_planet->setNewPlanet(1, 1, 1, 1, $adm_name);
 
         // write the new admin email for support
@@ -553,7 +541,7 @@ class Installation extends Controller
     private function validateDbData()
     {
         return !empty($this->host) && !empty($this->name) &&
-                !empty($this->user) && !empty($this->prefix);
+            !empty($this->user) && !empty($this->prefix);
     }
 
     /**
@@ -564,14 +552,14 @@ class Installation extends Controller
     private function generateToken()
     {
         $characters = 'aazertyuiopqsdfghjklmwxcvbnAZERTYUIOPQSDFGHJKLMWXCVBN1234567890';
-        $count      = strlen($characters);
-        $new_token  = '';
-        $lenght     = 16;
-        srand((double)microtime() * 1000000);
+        $count = strlen($characters);
+        $new_token = '';
+        $lenght = 16;
+        srand((double) microtime() * 1000000);
 
         for ($i = 0; $i < $lenght; $i++) {
-            $character_boucle   = mt_rand(0, $count - 1);
-            $new_token          = $new_token . substr($characters, $character_boucle, 1);
+            $character_boucle = mt_rand(0, $count - 1);
+            $new_token = $new_token . substr($characters, $character_boucle, 1);
         }
 
         return $new_token;
@@ -589,26 +577,25 @@ class Installation extends Controller
     {
         switch ($result) {
             case 'ok':
-                $parse['color']     = 'alert-success';
-                $parse['status']    = $this->langs['ins_ok_title'];
+                $parse['color'] = 'alert-success';
+                $parse['status'] = $this->langs['ins_ok_title'];
                 break;
 
             case 'error':
-                $parse['color']     = 'alert-error';
-                $parse['status']    = $this->langs['ins_error_title'];
+                $parse['color'] = 'alert-error';
+                $parse['status'] = $this->langs['ins_error_title'];
                 break;
 
             case 'warning':
-                $parse['color']     = 'alert-block';
-                $parse['status']    = $this->langs['ins_warning_title'];
+                $parse['color'] = 'alert-block';
+                $parse['status'] = $this->langs['ins_warning_title'];
                 break;
         }
 
-        $parse['message']   = $message;
+        $parse['message'] = $message;
 
         return parent::$page->parseTemplate(
-            parent::$page->getTemplate('adm/save_message_view'),
-            $parse
+                parent::$page->getTemplate('adm/save_message_view'), $parse
         );
     }
 }

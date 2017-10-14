@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
-
 namespace application\controllers\adm;
 
 use application\core\Controller;
@@ -30,6 +29,7 @@ use mysqli;
  */
 class Queries extends Controller
 {
+
     private $langs;
     private $current_user;
 
@@ -43,13 +43,13 @@ class Queries extends Controller
         // check if session is active
         AdministrationLib::checkSession();
 
-        $this->langs        = parent::$lang;
+        $this->langs = parent::$lang;
         $this->current_user = parent::$users->getUserData();
 
         // Check if the user is allowed to access
         if (AdministrationLib::haveAccess(
-            $this->current_user['user_authlevel']
-        ) && $this->current_user['user_authlevel'] == 3 && ADMIN_ACCESS_QUERY === true) {
+                $this->current_user['user_authlevel']
+            ) && $this->current_user['user_authlevel'] == 3 && ADMIN_ACCESS_QUERY === true) {
 
             $this->buildPage();
         } else {
@@ -65,17 +65,17 @@ class Queries extends Controller
      */
     private function buildPage()
     {
-        $parse  = $this->langs;
-        $query  = isset($_POST['querie']) ? $_POST['querie'] : null;
+        $parse = $this->langs;
+        $query = isset($_POST['querie']) ? $_POST['querie'] : null;
 
         if (isset($_POST) && !empty($query)) {
 
             // clean
-            $query      = str_replace("\'", "'", str_replace('\"', '"', $query));
+            $query = str_replace("\'", "'", str_replace('\"', '"', $query));
 
             // connect
             $connection = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
-            
+
             // do
             if (!$connection->query($query)) {
 

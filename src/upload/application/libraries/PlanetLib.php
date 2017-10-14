@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
-
 namespace application\libraries;
 
 use application\core\Database;
@@ -29,18 +28,19 @@ use application\core\XGPCore;
  */
 class PlanetLib extends XGPCore
 {
+
     /**
      *
      * @var FormulaLib
      */
     private $formula;
-    
+
     /**
      *
      * @var array
      */
     private $langs;
-    
+
     /**
      * __construct
      *
@@ -49,12 +49,12 @@ class PlanetLib extends XGPCore
     public function __construct()
     {
         parent::__construct();
-        
-        $this->_db      = new Database();
-        $this->langs    = parent::$lang;
-        $this->formula  = new FormulaLib();
+
+        $this->_db = new Database();
+        $this->langs = parent::$lang;
+        $this->formula = new FormulaLib();
     }
-    
+
     /**
      * createPlanetWithOptions
      *
@@ -66,24 +66,24 @@ class PlanetLib extends XGPCore
     public function createPlanetWithOptions($data, $full_insert = true)
     {
         if (is_array($data)) {
-            
-            $insert_query   = 'INSERT INTO ' . PLANETS . ' SET ';
-            
+
+            $insert_query = 'INSERT INTO ' . PLANETS . ' SET ';
+
             foreach ($data as $column => $value) {
                 $insert_query .= "`" . $column . "` = '" . $value . "', ";
             }
-                
+
             // Remove last comma
-            $insert_query   = substr_replace($insert_query, '', -2) . ';';
-            
+            $insert_query = substr_replace($insert_query, '', -2) . ';';
+
             $this->_db->query($insert_query);
-            
+
             // insert extra required tables
             if ($full_insert) {
 
                 // get the last inserted planet id
-                $planet_id  = $this->_db->insertId();
-                
+                $planet_id = $this->_db->insertId();
+
                 // create the buildings, defenses and ships tables
                 self::createBuildings($planet_id);
                 self::createDefenses($planet_id);
@@ -91,7 +91,7 @@ class PlanetLib extends XGPCore
             }
         }
     }
-    
+
     /**
      * setNewPlanet
      *
@@ -106,7 +106,7 @@ class PlanetLib extends XGPCore
      */
     public function setNewPlanet($galaxy, $system, $position, $owner, $name = '', $main = false)
     {
-        $planet_exist   = $this->_db->queryFetch(
+        $planet_exist = $this->_db->queryFetch(
             "SELECT `planet_id`
             FROM " . PLANETS . "
             WHERE `planet_galaxy` = '" . $galaxy . "' AND
@@ -117,13 +117,13 @@ class PlanetLib extends XGPCore
         if (!$planet_exist) {
 
             $planet = $this->formula->getPlanetSize($position, $main);
-            $temp   = $this->formula->setPlanetTemp($position);
-            $name   = ($name == '') ? $this->langs['ge_colony'] : $name;
-            
+            $temp = $this->formula->setPlanetTemp($position);
+            $name = ($name == '') ? $this->langs['ge_colony'] : $name;
+
             if ($main == true) {
-                $name   = $this->langs['ge_home_planet'];
+                $name = $this->langs['ge_home_planet'];
             }
-            
+
             $this->createPlanetWithOptions(
                 [
                     'planet_name' => $name,
@@ -151,11 +151,10 @@ class PlanetLib extends XGPCore
 
             return true;
         }
-        
+
         return false;
     }
-    
-    
+
     /**
      * setNewMoon
      *
@@ -181,25 +180,25 @@ class PlanetLib extends XGPCore
             pm2.`planet_temp_min`,
             (SELECT pm.`planet_id` AS `id_moon`
                     FROM " . PLANETS . " AS pm
-                    WHERE pm.`planet_galaxy` = '". $galaxy ."' AND
-                                    pm.`planet_system` = '". $system ."' AND
-                                    pm.`planet_planet` = '". $position ."' AND
+                    WHERE pm.`planet_galaxy` = '" . $galaxy . "' AND
+                                    pm.`planet_system` = '" . $system . "' AND
+                                    pm.`planet_planet` = '" . $position . "' AND
                                     pm.`planet_type` = 3) AS `id_moon`
             FROM " . PLANETS . " AS pm2
-            WHERE pm2.`planet_galaxy` = '". $galaxy ."' AND
-                    pm2.`planet_system` = '". $system ."' AND
-                    pm2.`planet_planet` = '". $position ."';"
+            WHERE pm2.`planet_galaxy` = '" . $galaxy . "' AND
+                    pm2.`planet_system` = '" . $system . "' AND
+                    pm2.`planet_planet` = '" . $position . "';"
         );
 
         if ($MoonPlanet['id_moon'] == '' && $MoonPlanet['planet_id'] != 0) {
 
-            $SizeMin    = 2000 + ($chance * 100);
-            $SizeMax    = 6000 + ($chance * 200);
-            $temp       = $this->formula->setPlanetTemp($position);
-            $size       = $chance == 0 ? $size : mt_rand($SizeMin, $SizeMax);
-            $size       = $size == 0 ? mt_rand(2000, 6000) : $size;
+            $SizeMin = 2000 + ($chance * 100);
+            $SizeMax = 6000 + ($chance * 200);
+            $temp = $this->formula->setPlanetTemp($position);
+            $size = $chance == 0 ? $size : mt_rand($SizeMin, $SizeMax);
+            $size = $size == 0 ? mt_rand(2000, 6000) : $size;
             $max_fields = $max_fields == 0 ? 1 : $max_fields;
-            
+
             $this->createPlanetWithOptions(
                 [
                     'planet_name' => $name == '' ? $this->langs['fcm_moon'] : $name,
@@ -218,13 +217,13 @@ class PlanetLib extends XGPCore
                     'planet_b_hangar_id' => ''
                 ]
             );
-        
+
             return true;
         }
-        
+
         return false;
     }
-    
+
     /**
      * createBuildings
      *
@@ -235,10 +234,10 @@ class PlanetLib extends XGPCore
     public function createBuildings($planet_id)
     {
         $this->_db->query(
-            "INSERT INTO " . BUILDINGS . " SET `building_planet_id` = '".$planet_id."';"
+            "INSERT INTO " . BUILDINGS . " SET `building_planet_id` = '" . $planet_id . "';"
         );
     }
-    
+
     /**
      * createDefenses
      *
@@ -249,10 +248,10 @@ class PlanetLib extends XGPCore
     public function createDefenses($planet_id)
     {
         $this->_db->query(
-            "INSERT INTO " . DEFENSES . " SET `defense_planet_id` = '".$planet_id."';"
+            "INSERT INTO " . DEFENSES . " SET `defense_planet_id` = '" . $planet_id . "';"
         );
     }
-    
+
     /**
      * createShips
      *
@@ -263,10 +262,10 @@ class PlanetLib extends XGPCore
     public function createShips($planet_id)
     {
         $this->_db->query(
-            "INSERT INTO " . SHIPS . " SET `ship_planet_id` = '".$planet_id."';"
+            "INSERT INTO " . SHIPS . " SET `ship_planet_id` = '" . $planet_id . "';"
         );
     }
-    
+
     /**
      * deletePlanetById
      *
@@ -276,8 +275,9 @@ class PlanetLib extends XGPCore
      */
     public function deletePlanetById($planet_id)
     {
+        
     }
-    
+
     /**
      * deletePlanetByCoords
      *
@@ -290,6 +290,7 @@ class PlanetLib extends XGPCore
      */
     public function deletePlanetByCoords($galaxy, $system, $planet, $type)
     {
+        
     }
 }
 

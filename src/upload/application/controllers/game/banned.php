@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
-
 namespace application\controllers\game;
 
 use application\core\Controller;
@@ -29,6 +28,7 @@ use application\libraries\FunctionsLib;
  */
 class Banned extends Controller
 {
+
     /**
      * @var int Module ID
      */
@@ -54,9 +54,9 @@ class Banned extends Controller
 
         // load Model
         parent::loadModel('game/banned');
-        
+
         $this->_lang = $this->getLang();
-        
+
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
@@ -71,21 +71,21 @@ class Banned extends Controller
      */
     private function buildPage()
     {
-        $parse  = $this->_lang;
+        $parse = $this->_lang;
         $result = $this->Banned_Model->getBannedUsers();
 
-        $parse['banned_msg']        = $this->_lang['bn_no_players_banned'];
-        $parse['banned_players']    = [];
+        $parse['banned_msg'] = $this->_lang['bn_no_players_banned'];
+        $parse['banned_players'] = [];
 
         if (!empty($result)) {
 
-            $body               = [];
-            $parse['player']    = '';
-            $parse['reason']    = '';
-            $parse['since']     = '';
-            $parse['until']     = '';
-            $parse['by']        = '';
-            
+            $body = [];
+            $parse['player'] = '';
+            $parse['reason'] = '';
+            $parse['since'] = '';
+            $parse['until'] = '';
+            $parse['by'] = '';
+
             foreach ($result as $u) {
 
                 $body[] = [
@@ -95,8 +95,8 @@ class Banned extends Controller
                     'until' => date(FunctionsLib::readConfig('date_format_extended'), $u['banned_longer']),
                     'by' => FunctionsLib::setUrl('mailto:' . $u['banned_email'], $u['banned_author'], $u['banned_author'])
                 ];
-            }  
-            
+            }
+
             $parse['banned_players'] = $body;
         }
 

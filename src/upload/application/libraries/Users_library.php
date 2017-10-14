@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-
 namespace application\libraries;
 
 /**
@@ -26,6 +25,7 @@ namespace application\libraries;
  */
 class Users_library
 {
+
     private $user_data;
     private $planet_data;
     private $Users_Model;
@@ -38,7 +38,7 @@ class Users_library
     public function __construct()
     {
         $this->Users_Model = FunctionsLib::modelLoader('libraries/users_library');
-        
+
         if ($this->isSessionSet()) {
 
             // Get user data and check it
@@ -74,9 +74,9 @@ class Users_library
     {
         if ($user_id != 0 && !empty($user_name) && !empty($password)) {
 
-            $_SESSION['user_id']        = $user_id;
-            $_SESSION['user_name']      = $user_name;
-            $_SESSION['user_password']  = sha1($password . '-' . SECRETWORD);
+            $_SESSION['user_id'] = $user_id;
+            $_SESSION['user_name'] = $user_name;
+            $_SESSION['user_password'] = sha1($password . '-' . SECRETWORD);
 
             return true;
         } else {
@@ -127,31 +127,30 @@ class Users_library
      */
     public function deleteUser($user_id)
     {
-        $user_data  = $this->Users_Model->getAllyIdByUserId($user_id);
-        
+        $user_data = $this->Users_Model->getAllyIdByUserId($user_id);
+
         if ($user_data['user_ally_id'] != 0) {
 
             $alliance = $this->Users_Model->getAllianceDataByAllianceId($user_data['user_ally_id']);
 
-            if ($alliance['ally_members'] > 1 
-                && (isset($alliance['alliance_ranks']) && !is_null($alliance['alliance_ranks']))) {
-                
-                $ranks      = unserialize($alliance['alliance_ranks']);
-                $userRank   = null;
-                
+            if ($alliance['ally_members'] > 1 && (isset($alliance['alliance_ranks']) && !is_null($alliance['alliance_ranks']))) {
+
+                $ranks = unserialize($alliance['alliance_ranks']);
+                $userRank = null;
+
                 // search for an user that has permission to receive the alliance.
                 foreach ($ranks as $id => $rank) {
 
                     if ($rank['rechtehand'] == 1) {
 
-                        $userRank   = $id;
+                        $userRank = $id;
                         break;
                     }
                 }
-                
+
                 // check and update
                 if (is_numeric($userRank)) {
-                    
+
                     $this->Users_Model->updateAllianceOwner($alliance['alliance_id'], $userRank);
                 } else {
 
@@ -168,7 +167,7 @@ class Users_library
         $this->Users_Model->deleteBuddysByUserId($user_id);
         $this->Users_Model->deleteUserDataById($user_id);
     }
-    
+
     /**
      * isOnVacations
      *
@@ -186,7 +185,6 @@ class Users_library
             return false;
         }
     }
-
     ###########################################################################
     #
     # Private Methods
@@ -200,7 +198,7 @@ class Users_library
      */
     private function isSessionSet()
     {
-        if (!isset($_SESSION['user_id']) or !isset($_SESSION['user_name']) or !isset($_SESSION['user_password'])) {
+        if (!isset($_SESSION['user_id']) or ! isset($_SESSION['user_name']) or ! isset($_SESSION['user_password'])) {
 
             return false;
         } else {
@@ -222,10 +220,7 @@ class Users_library
 
         // update user activity data
         $this->Users_Model->updateUserActivityData(
-            $_SERVER['REQUEST_URI'],
-            $_SERVER['REMOTE_ADDR'],
-            $_SERVER['HTTP_USER_AGENT'],
-            $_SESSION['user_id']
+            $_SERVER['REQUEST_URI'], $_SERVER['REMOTE_ADDR'], $_SERVER['HTTP_USER_AGENT'], $_SESSION['user_id']
         );
 
         // pass the data
@@ -243,8 +238,7 @@ class Users_library
     private function setPlanetData()
     {
         $this->planet_data = $this->Users_Model->setPlanetData(
-            $this->user_data['user_current_planet'],
-            FunctionsLib::readConfig('stat_admin_level')
+            $this->user_data['user_current_planet'], FunctionsLib::readConfig('stat_admin_level')
         );
     }
 
@@ -255,12 +249,12 @@ class Users_library
      */
     private function setPlanet()
     {
-        $select     = isset($_GET['cp']) ? (int)$_GET['cp'] : '';
-        $restore    = isset($_GET['re']) ? (int)$_GET['re'] : '';
+        $select = isset($_GET['cp']) ? (int) $_GET['cp'] : '';
+        $restore = isset($_GET['re']) ? (int) $_GET['re'] : '';
 
         if (isset($select) && is_numeric($select) && isset($restore) && $restore == 0 && $select != 0) {
 
-            $owned = $this->Users_Model->getUserPlanetByIdAndUserId($select, $this->user_data['user_id']); 
+            $owned = $this->Users_Model->getUserPlanetByIdAndUserId($select, $this->user_data['user_id']);
 
             if ($owned) {
 
@@ -269,7 +263,7 @@ class Users_library
             }
         }
     }
-    
+
     /**
      * createUserWithOptions
      *
@@ -281,29 +275,29 @@ class Users_library
     public function createUserWithOptions($data, $full_insert = true)
     {
         if (is_array($data)) {
-            
-            $insert_query   = 'INSERT INTO ' . USERS . ' SET ';
-            
+
+            $insert_query = 'INSERT INTO ' . USERS . ' SET ';
+
             foreach ($data as $column => $value) {
                 $insert_query .= "`" . $column . "` = '" . $value . "', ";
             }
-                
+
             // Remove last comma
             $insert_query = substr_replace($insert_query, '', -2) . ';';
-            
+
             // get the last inserted user id
             $user_id = $this->Users_Model->createNewUser($insert_query);
-            
+
             // insert extra required tables
             if ($full_insert) {
-                
+
                 // create the buildings, defenses and ships tables
                 $this->Users_Model->createPremium($user_id);
                 $this->Users_Model->createResearch($user_id);
                 $this->Users_Model->createSettings($user_id);
                 $this->Users_Model->createUserStatistics($user_id);
             }
-            
+
             return $user_id;
         }
     }

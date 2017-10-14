@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
-
 namespace application\controllers\game;
 
 use application\core\Controller;
@@ -31,6 +30,7 @@ use application\libraries\FunctionsLib;
  */
 class Fleet1 extends Controller
 {
+
     const MODULE_ID = 8;
 
     private $_lang;
@@ -67,14 +67,14 @@ class Fleet1 extends Controller
      */
     private function build_page()
     {
-        $resource   = parent::$objects->getObjects();
-        $reslist    = parent::$objects->getObjectsList();
+        $resource = parent::$objects->getObjects();
+        $reslist = parent::$objects->getObjectsList();
 
         #####################################################################################################
         // SOME DEFAULT VALUES
         #####################################################################################################
         // QUERYS
-        $count  = $this->Fleet1_Model->getCounts($this->_current_user['user_id']);
+        $count = $this->Fleet1_Model->getCounts($this->_current_user['user_id']);
 
         // LOAD TEMPLATES REQUIRED
         $inputs_template = parent::$page->getTemplate('fleet/fleet1_inputs');

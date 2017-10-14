@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
-
 namespace application\controllers\game;
 
 use application\core\Controller;
@@ -31,6 +30,7 @@ use application\libraries\OfficiersLib;
  */
 class Fleetshortcuts extends Controller
 {
+
     const MODULE_ID = 8;
 
     private $_current_user;
@@ -49,10 +49,10 @@ class Fleetshortcuts extends Controller
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
-        $this->_db              = new Database();
-        $this->_current_user    = parent::$users->getUserData();
-        $this->_lang            = parent::$lang;
-        
+        $this->_db = new Database();
+        $this->_current_user = parent::$users->getUserData();
+        $this->_lang = parent::$lang;
+
         if (!OfficiersLib::isOfficierActive($this->_current_user['premium_officier_commander'])) {
 
             FunctionsLib::redirect('game.php?page=officier');
@@ -172,12 +172,12 @@ class Fleetshortcuts extends Controller
 
         if ($this->_current_user['user_fleet_shortcuts']) {
 
-            $scarray                = explode(";", $this->_current_user['user_fleet_shortcuts']);
-            $sx                     = true;
-            $e                      = 0;
-            $ShortcutsRowTPL        = parent::$page->getTemplate("shortcuts/shortcuts_row");
-            $parse['block_rows']    = '';
-            
+            $scarray = explode(";", $this->_current_user['user_fleet_shortcuts']);
+            $sx = true;
+            $e = 0;
+            $ShortcutsRowTPL = parent::$page->getTemplate("shortcuts/shortcuts_row");
+            $parse['block_rows'] = '';
+
             foreach ($scarray as $a => $b) {
                 if (!empty($b)) {
                     $c = explode(',', $b);
