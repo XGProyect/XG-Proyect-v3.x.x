@@ -170,12 +170,12 @@ class Attack extends Missions
                 );
 
                 $player->setName($targetUser['user_name']);
-                
+
                 $defenders->addPlayer($player);
             } else {
 
                 $defenders->getPlayer($target_userID)->addDefense($homeFleet);
-            }
+            } 
             //-------------------------------------------------------------------------
 
             //------------------------------ battle -----------------------------------
@@ -341,70 +341,68 @@ class Attack extends Missions
      * @return \PlayerGroup
      */
     private function getPlayerGroupFromQuery($result, $target_user = false)
-    {
-        if ($result == null) {
-            return;
-        }
+    {        
+        $playerGroup = new PlayerGroup();
         
-        $playerGroup    = new PlayerGroup();
-        
-        
-        foreach ($result as $fleet_row) {
+        if (!is_null($result)) {
+            
+            foreach ($result as $fleet_row) {
 
-            //making the current fleet object
-            $serializedTypes    = explode(';', $fleet_row['fleet_array']);
-            $idPlayer           = $fleet_row['fleet_owner'];
-            $fleet              = new Fleet($fleet_row['fleet_id']);
+                //making the current fleet object
+                $serializedTypes    = explode(';', $fleet_row['fleet_array']);
+                $idPlayer           = $fleet_row['fleet_owner'];
+                $fleet              = new Fleet($fleet_row['fleet_id']);
 
-            foreach ($serializedTypes as $serializedType) {
+                foreach ($serializedTypes as $serializedType) {
 
-                if (!empty($serializedType)) {
-                    
-                    list ( $id , $count ) = explode(',', $serializedType);
+                    if (!empty($serializedType)) {
 
-                    if ($id != 0 && $count != 0) {
-                        $fleet->addShipType($this->getShipType($id, $count));
+                        list ( $id , $count ) = explode(',', $serializedType);
+
+                        if ($id != 0 && $count != 0) {
+                            $fleet->addShipType($this->getShipType($id, $count));
+                        }
                     }
                 }
-            }
 
-            //making the player object and add it to playerGroup object
-            if (!$playerGroup->existPlayer($idPlayer)) {
+                //making the player object and add it to playerGroup object
+                if (!$playerGroup->existPlayer($idPlayer)) {
 
-                if ($target_user !== false && $target_user['user_id'] == $idPlayer) {
+                    if ($target_user !== false && $target_user['user_id'] == $idPlayer) {
 
-                    $player_info    = $target_user;
+                        $player_info    = $target_user;
+                    } else {
+
+                        $player_info    = $this->Missions_Model->getTechnologiesByUserId($idPlayer);
+                    }
+
+                    if($target_user['planet_id'] == $idPlayer) {
+
+                        $fleetSouther   = new Fleet();
+                        $player         = new Player($idPlayer, [$fleetSouther]);
+                    } else {
+
+                        $player         = new Player($idPlayer, [$fleet]);
+                    }
+
+                    $player->setTech(
+                        $player_info['research_weapons_technology'],
+                        $player_info['research_shielding_technology'],
+                        $player_info['research_armour_technology']
+                    );
+
+                    $player->setName($player_info['user_name']);
+
+                    $playerGroup->addPlayer($player);
+
+                    if($target_user['planet_id'] == $idPlayer) {
+
+                        $playerGroup->getPlayer($idPlayer)->addFleet($fleet);	
+                    }
                 } else {
 
-                    $player_info    = $this->Missions_Model->getTechnologiesByUserId($idPlayer);
+                    $playerGroup->getPlayer($idPlayer)->addFleet($fleet);
                 }
-                
-                if($target_user['planet_id'] == $idPlayer) {
-
-                    $fleetSouther   = new Fleet();
-                    $player         = new Player($idPlayer, [$fleetSouther]);
-                } else {
-
-                    $player         = new Player($idPlayer, [$fleet]);
-                }
-
-                $player->setTech(
-                    $player_info['research_weapons_technology'],
-                    $player_info['research_shielding_technology'],
-                    $player_info['research_armour_technology']
-                );
-
-                $player->setName($player_info['user_name']);
-                
-                $playerGroup->addPlayer($player);
-                
-                if($target_user['planet_id'] == $idPlayer) {
-
-                    $playerGroup->getPlayer($idPlayer)->addFleet($fleet);	
-                }
-            } else {
-
-                $playerGroup->getPlayer($idPlayer)->addFleet($fleet);
             }
         }
 
