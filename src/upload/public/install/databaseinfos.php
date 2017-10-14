@@ -259,7 +259,7 @@ $tables['planets'] =
 `planet_b_tech` int(11) NOT NULL DEFAULT '0',
 `planet_b_tech_id` int(11) NOT NULL DEFAULT '0',
 `planet_b_hangar` int(11) NOT NULL DEFAULT '0',
-`planet_b_hangar_id` text NOT NULL,
+`planet_b_hangar_id` text  DEFAULT NULL,
 `planet_image` varchar(32) NOT NULL DEFAULT 'normaltempplanet01',
 `planet_diameter` int(11) NOT NULL DEFAULT '12800',
 `planet_field_current` int(11) NOT NULL DEFAULT '0',

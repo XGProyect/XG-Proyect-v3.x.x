@@ -584,7 +584,7 @@ class Updates_library extends XGPCore
     {
         $resource = parent::$objects->getObjects();
 
-        if ($current_planet['planet_b_hangar_id'] != 0) {
+        if ($current_planet['planet_b_hangar_id'] != "") {
 
             $Builded = [];
             $BuildArray = [];
