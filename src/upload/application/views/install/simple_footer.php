@@ -1,12 +1,12 @@
 
-</div><!--/row-->
+      </div><!--/row-->
 
-<hr>
+      <hr>
 
-<footer>
-    <p>&copy; XG Proyect {year}</p>
-</footer>
+      <footer>
+        <p>&copy; XG Proyect {year}</p>
+      </footer>
 
-</div><!--/.fluid-container-->
-</body>
+    </div><!--/.fluid-container-->
+  </body>
 </html>

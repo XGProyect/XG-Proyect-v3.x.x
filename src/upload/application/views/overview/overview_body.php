@@ -2,24 +2,24 @@
 <div id="content">
     <table width="519">
         <tr>
-            <td class="c" colspan="4"><a href="game.php?page=renameplanet" title="{Planet_menu}">{ov_planet} "{planet_name}"</a> ({user_name})</td>
+        	<td class="c" colspan="4"><a href="game.php?page=renameplanet" title="{Planet_menu}">{ov_planet} "{planet_name}"</a> ({user_name})</td>
         </tr>
-        {Have_new_message}
+            {Have_new_message}
         <tr>
-            <th>{ov_server_time}</th>
-            <th colspan="3">{date_time}</th>
+        	<th>{ov_server_time}</th>
+        	<th colspan="3">{date_time}</th>
         </tr>
         <tr>
-            <td colspan="4" class="c">{ov_events}</td>
+        	<td colspan="4" class="c">{ov_events}</td>
         </tr>
-        {fleet_list}
+        	{fleet_list}
         <tr>
-            <th>{moon_img}<br>{moon}</th>
-            <th colspan="2"><img src="{dpath}planets/{planet_image}.jpg" height="200" width="200"><br>{building}</th>
-            <th class="s">
-                <table class="s" align="top" border="0">
-                    <tr>{anothers_planets}</tr>
-                </table>
+        	<th>{moon_img}<br>{moon}</th>
+        	<th colspan="2"><img src="{dpath}planets/{planet_image}.jpg" height="200" width="200"><br>{building}</th>
+        	<th class="s">
+            	<table class="s" align="top" border="0">
+                	<tr>{anothers_planets}</tr>
+               </table>
             </th>
         </tr>
         <tr>

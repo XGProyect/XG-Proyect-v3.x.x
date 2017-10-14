@@ -15,7 +15,7 @@
             <th><a href="game.php?page=alliance&mode=admin&edit=members&sort1=5&sort2={s}">{al_estate}</a></th>
             <th>{al_actions}</th>
         </tr>
-        {memberslist}
+            {memberslist}
         <tr>
             <td class="c" colspan="9"><a href="game.php?page=alliance&mode=admin&edit=ally">{al_back}</a></td>
         </tr>

@@ -1,3 +1,3 @@
 <th width="75">
-    {text}
+	{text}
 </th>
