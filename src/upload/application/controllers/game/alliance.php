@@ -205,17 +205,20 @@ class Alliance extends Controller
         extract($alliance_data);
 
         // PARSE PAGE WITH THE PASSED VALUES
-        return parent::$page->parseTemplate(
-                        parent::$page->getTemplate('alliance/alliance_ainfo'), $this->_lang +
-                        [
-                            'alliance_image' => $this->image_block($alliance_image),
-                            'alliance_tag' => $alliance_tag,
-                            'alliance_name' => $alliance_name,
-                            'ally_member_scount' => $ally_members,
-                            'alliance_description' => $this->description_block($alliance_description),
-                            'alliance_web' => $this->web_block($alliance_web),
-                            'alliance_request' => $this->request_block($alliance_id, $alliance_request_notallow)
-                        ]
+        return $this->getTemplate()->set(
+            'alliance/alliance_ainfo',
+            array_merge(
+                $this->getLang(),
+                [
+                    'alliance_image' => $this->image_block($alliance_image),
+                    'alliance_tag' => $alliance_tag,
+                    'alliance_name' => $alliance_name,
+                    'ally_member_scount' => $ally_members,
+                    'alliance_description' => $this->description_block($alliance_description),
+                    'alliance_web' => $this->web_block($alliance_web),
+                    'alliance_request' => $this->request_block($alliance_id, $alliance_request_notallow)
+                ]
+            )
         );
     }
 
@@ -251,7 +254,7 @@ class Alliance extends Controller
                 $message = str_replace(array('%s', '%d'), array($alliance_name, $alliance_tag), $this->_lang['al_created']);
                 $page = $this->message_box($message, $message . "<br/><br/>", 'game.php?page=alliance', $this->_lang['al_continue']);
             } else {
-                $page = parent::$page->parseTemplate(parent::$page->getTemplate('alliance/alliance_make'), $this->_lang);
+                $page = $this->getTemplate()->set('alliance/alliance_make', $this->_lang);
             }
 
             return $page;
@@ -267,11 +270,11 @@ class Alliance extends Controller
     {
         if ($this->_current_user['user_ally_id'] == 0 && $this->_current_user['user_ally_request'] == 0) {
 
-            $parse = $this->_lang;
-            $page = parent::$page->parseTemplate(
-                    parent::$page->getTemplate('alliance/alliance_searchform'), $parse
-            );
-            $parse['result'] = '';
+            $parse                  = $this->_lang;
+            $parse['searchtext']    = '';
+            $parse['result']        = '';
+
+            $page = $this->getTemplate()->set('alliance/alliance_searchform', $parse);
 
             if ($_POST) {
                 $search = $this->_db->query(
@@ -293,14 +296,10 @@ class Alliance extends Controller
                         $search_data['alliance_name'] = $s['alliance_name'];
                         $search_data['ally_members'] = $s['ally_members'];
 
-                        $parse['result'] .= parent::$page->parseTemplate(
-                                parent::$page->getTemplate('alliance/alliance_searchresult_row'), $search_data
-                        );
+                        $parse['result'] .= $this->getTemplate()->set('alliance/alliance_searchresult_row', $search_data);
                     }
 
-                    $page .= parent::$page->parseTemplate(
-                            parent::$page->getTemplate('alliance/alliance_searchresult_table'), $parse
-                    );
+                    $page .= $this->getTemplate()->set('alliance/alliance_searchresult_table', $parse);
                 }
             }
             return $page;
@@ -366,7 +365,7 @@ class Alliance extends Controller
                 $parse['text_apply'] = $text_apply;
                 $parse['Write_to_alliance'] = str_replace('%s', $alliance_tag, $this->_lang['al_write_request']);
 
-                return parent::$page->parseTemplate(parent::$page->getTemplate('alliance/alliance_applyform'), $parse);
+                return $this->getTemplate()->set('alliance/alliance_applyform', $parse);
             }
         }
     }
@@ -402,9 +401,10 @@ class Alliance extends Controller
                 $this->_lang['button_text'] = $this->_lang['al_delete_request'];
             }
 
-            return parent::$page->parseTemplate(parent::$page->getTemplate('alliance/alliance_apply_waitform'), $this->_lang);
+            return $this->getTemplate()->set('alliance/alliance_apply_waitform', $this->_lang);
         } elseif ($this->_current_user['user_ally_id'] == 0 && $this->_current_user['user_ally_request'] == 0) {
-            return parent::$page->parseTemplate(parent::$page->getTemplate('alliance/alliance_defaultmenu'), $this->_lang);
+            
+            return $this->getTemplate()->set('alliance/alliance_defaultmenu', $this->_lang);
         }
 
         ##############################################################################################
@@ -417,7 +417,7 @@ class Alliance extends Controller
             // IMAGE
             if ($this->_ally['alliance_ranks'] != '') {
                 $parse['alliance_image'] = $this->image_block($this->_ally['alliance_image']);
-                $this->_ally['alliance_ranks'] = parent::$page->parseTemplate(parent::$page->getTemplate('alliance/alliance_image_row'), $parse);
+                $this->_ally['alliance_ranks'] = $this->getTemplate()->set('alliance/alliance_image_row', $parse);
             }
 
             // RANKS
@@ -445,7 +445,7 @@ class Alliance extends Controller
 
             // CIRCULAR MESSAGE
             if ($this->_ally['alliance_owner'] == $this->_current_user['user_id'] or $alliance_ranks[$this->_current_user['user_ally_rank_id'] - 1]['mails'] != 0) {
-                $this->_lang['send_circular_mail'] = parent::$page->parseTemplate(parent::$page->getTemplate('alliance/alliance_circular_row'), $parse);
+                $this->_lang['send_circular_mail'] = $this->getTemplate()->set('alliance/alliance_circular_row', $parse);
             } else {
                 $this->_lang['send_circular_mail'] = '';
             }
@@ -454,16 +454,16 @@ class Alliance extends Controller
             $request_count = $this->_db->numRows($this->_db->query("SELECT `user_id`
                                                                                                                                                     FROM `" . USERS . "`
                                                                                                                                                     WHERE `user_ally_request` = '" . (int) $this->_ally['alliance_id'] . "'"));
-
+            $this->_lang['requests'] = '';
             if ($request_count != 0) {
                 if ($this->_ally['alliance_owner'] == $this->_current_user['user_id'] or $alliance_ranks[$this->_current_user['user_ally_rank_id'] - 1]['bewerbungen'] != 0) {
                     $parse['request_count'] = $request_count;
-                    $this->_lang['requests'] = parent::$page->parseTemplate(parent::$page->getTemplate('alliance/alliance_requests_row'), $parse);
+                    $this->_lang['requests'] = $this->getTemplate()->set('alliance/alliance_circular_row', $parse);
                 }
             }
             // EXIT ALLIANCE
             if ($this->_ally['alliance_owner'] != $this->_current_user['user_id']) {
-                $this->_lang['alliance_owner'] = parent::$page->parseTemplate(parent::$page->getTemplate('alliance/alliance_abandon_alliance'), $parse);
+                $this->_lang['alliance_owner'] = $this->getTemplate()->set('alliance/alliance_abandon_alliance', $parse);
             } else {
                 $this->_lang['alliance_owner'] = '';
             }
@@ -478,7 +478,7 @@ class Alliance extends Controller
             $this->_lang['ally_members'] = $this->_ally['ally_members'];
             $this->_lang['alliance_name'] = $this->_ally['alliance_name'];
 
-            return parent::$page->parseTemplate(parent::$page->getTemplate('alliance/alliance_frontpage'), $this->_lang);
+            return $this->getTemplate()->set('alliance/alliance_frontpage', $this->_lang);
         }
     }
 
@@ -588,7 +588,7 @@ class Alliance extends Controller
                     $u['user_ally_register_time'] = "-";
                 }
 
-                $page_list .= parent::$page->parseTemplate(parent::$page->getTemplate('alliance/alliance_memberslist_row'), $u);
+                $page_list .= $this->getTemplate()->set('alliance/alliance_memberslist_row', $u);
             }
 
             switch ($sort2) {
@@ -607,7 +607,7 @@ class Alliance extends Controller
             $parse['s'] = $s;
             $parse['list'] = $page_list;
 
-            return parent::$page->parseTemplate(parent::$page->getTemplate('alliance/alliance_memberslist_table'), $parse);
+            return $this->getTemplate()->set('alliance/alliance_memberslist_table', $parse);
         }
     }
 
@@ -658,7 +658,7 @@ class Alliance extends Controller
                 }
             }
 
-            return parent::$page->parseTemplate(parent::$page->getTemplate('alliance/alliance_circular'), $this->_lang);
+            return $this->getTemplate()->set('alliance/alliance_circular', $this->_lang);
         }
     }
 
@@ -766,15 +766,14 @@ class Alliance extends Controller
                             $this->_lang['r8'] = "<input type=checkbox name=\"u{$a}r7\"" . (($b['mails'] == 1) ? ' checked="checked"' : '') . ">";
                             $this->_lang['r9'] = "<input type=checkbox name=\"u{$a}r8\"" . (($b['rechtehand'] == 1) ? ' checked="checked"' : '') . ">";
 
-                            $list .= parent::$page->parseTemplate(parent::$page->getTemplate('alliance/alliance_admin_laws_row'), $this->_lang);
+                            $list .= $this->getTemplate()->set('alliance/alliance_admin_laws_row', $this->_lang);
                         }
                     }
 
                     $this->_lang['list'] = $list;
                     $this->_lang['dpath'] = DPATH;
 
-                    return parent::$page->parseTemplate(parent::$page->getTemplate('alliance/alliance_admin_laws'), $this->_lang);
-
+                    return $this->getTemplate()->set('alliance/alliance_admin_laws', $this->_lang);
                     break;
 
                 case '':
@@ -864,7 +863,7 @@ class Alliance extends Controller
                     $this->_lang['alliance_request_notallow_1'] = (($this->_ally['alliance_request_notallow'] == 0) ? ' SELECTED' : '');
                     $this->_lang['alliance_owner_range']        = $this->_ally['alliance_owner_range'];
 
-                    return parent::$page->parseTemplate(parent::$page->getTemplate('alliance/alliance_admin'), $this->_lang);
+                    return $this->getTemplate()->set('alliance/alliance_admin', $this->_lang);
 
                     break;
 
@@ -999,9 +998,7 @@ class Alliance extends Controller
                             }
 
                             $r['user_id'] = $u['user_id'];
-                            $editar_miembros = parent::$page->parseTemplate(
-                                    parent::$page->getTemplate('alliance/alliance_admin_members_row_edit'), $r
-                            );
+                            $editar_miembros = $this->getTemplate()->set('alliance/alliance_admin_members_row_edit', $r);
                         }
 
                         if ($rank != $u['user_id']) {
@@ -1012,9 +1009,7 @@ class Alliance extends Controller
                             $u['user_ally_range'] = $editar_miembros;
                         }
 
-                        $page_list .= parent::$page->parseTemplate(
-                                parent::$page->getTemplate('alliance/alliance_admin_members_row'), $u
-                        );
+                        $page_list .= $this->getTemplate()->set('alliance/alliance_admin_members_row', $u);
                     }
 
                     if ($sort2 == 1) {
@@ -1028,7 +1023,7 @@ class Alliance extends Controller
                     $this->_lang['memberslist'] = $page_list;
                     $this->_lang['s'] = $s;
 
-                    return parent::$page->parseTemplate(parent::$page->getTemplate('alliance/alliance_admin_members_table'), $this->_lang);
+                    return $this->getTemplate()->set('alliance/alliance_admin_members_table', $this->_lang);
 
                     break;
 
@@ -1088,9 +1083,7 @@ class Alliance extends Controller
                                 FunctionsLib::readConfig('date_format_extended'), $r['user_ally_register_time']
                         );
 
-                        $parse['list'] .= parent::$page->parseTemplate(
-                                parent::$page->getTemplate('alliance/alliance_admin_request_row'), $r
-                        );
+                        $parse['list'] .= $this->getTemplate()->set('alliance/alliance_admin_request_row', $r);
 
                         $i++;
                     }
@@ -1105,8 +1098,9 @@ class Alliance extends Controller
                         $s[$show]['Request_from'] = str_replace(
                                 '%s', $s[$show]['username'], $this->_lang['al_request_from']
                         );
-                        $parse['request'] = parent::$page->parseTemplate(
-                                parent::$page->getTemplate('alliance/alliance_admin_request_form'), array_merge($s[$show], $this->_lang)
+                        $parse['request'] = $this->getTemplate()->set(
+                            'alliance/alliance_admin_request_form',
+                            array_merge($s[$show], $this->_lang)
                         );
                     } else {
 
@@ -1116,10 +1110,10 @@ class Alliance extends Controller
                     $parse['ally_tag'] = $this->_ally['alliance_tag'];
                     $parse['There_is_hanging_request'] = str_replace('%n', $i, $this->_lang['al_no_request_pending']);
 
-                    return parent::$page->parseTemplate(
-                                    parent::$page->getTemplate('alliance/alliance_admin_request_table'), $parse
+                    return $this->getTemplate()->set(
+                        'alliance/alliance_admin_request_table',
+                        $parse
                     );
-
                     break;
 
                 case ( $edit == 'name' && $this->have_access($this->_ally['alliance_owner'], $this->permissions['admin_alliance']) === true ):
@@ -1137,8 +1131,8 @@ class Alliance extends Controller
                     $parse['caso'] = ( $alliance_name == '' ) ? str_replace('%s', $this->_ally['alliance_name'], $this->_lang['al_change_title']) : str_replace('%s', $alliance_name, $this->_lang['al_change_title']);
                     $parse['caso_titulo'] = $this->_lang['al_new_name'];
 
-                    return parent::$page->parseTemplate(parent::$page->getTemplate('alliance/alliance_admin_rename'), $parse);
-
+                    return $this->getTemplate()->set('alliance/alliance_admin_rename', $parse);
+                    
                     break;
 
                 case ( $edit == 'tag' && $this->have_access($this->_ally['alliance_owner'], $this->permissions['admin_alliance']) === true ):
@@ -1156,8 +1150,8 @@ class Alliance extends Controller
                     $parse['caso'] = ( $alliance_tag == '' ) ? str_replace('%s', $this->_ally['alliance_tag'], $this->_lang['al_change_title']) : str_replace('%s', $alliance_tag, $this->_lang['al_change_title']);
                     $parse['caso_titulo'] = $this->_lang['al_new_tag'];
 
-                    return parent::$page->parseTemplate(parent::$page->getTemplate('alliance/alliance_admin_rename'), $parse);
-
+                    return $this->getTemplate()->set('alliance/alliance_admin_rename', $parse);
+                    
                     break;
 
                 case ( $edit == 'exit' && $this->have_access($this->_ally['alliance_owner'], $this->permissions['disolve_alliance']) === true ):
@@ -1213,10 +1207,10 @@ class Alliance extends Controller
                             $righthand['dpath'] = DPATH;
                         }
 
-                        $page_list .= parent::$page->parseTemplate(parent::$page->getTemplate('alliance/alliance_admin_transfer_row'), $righthand);
+                        $page_list .= $this->getTemplate()->set('alliance/alliance_admin_transfer_row', $righthand);
                         $parse['list'] = $page_list;
 
-                        return parent::$page->parseTemplate(parent::$page->getTemplate('alliance/alliance_admin_transfer'), $parse);
+                        return $this->getTemplate()->set('alliance/alliance_admin_transfer', $parse);
                     }
 
                     break;
@@ -1307,9 +1301,9 @@ class Alliance extends Controller
         $parse['button'] = $button;
         $template = ( $two_lines ) ? 'alliance_message_box_row_two' : 'alliance_message_box_row_one';
 
-        $parse['message_box_row'] = parent::$page->parseTemplate(parent::$page->getTemplate('alliance/' . $template), $parse);
+        $parse['message_box_row'] = $this->getTemplate()->set('alliance/' . $template, $parse);
 
-        return parent::$page->parseTemplate(parent::$page->getTemplate('alliance/alliance_message_box'), $parse);
+        return $this->getTemplate()->set('alliance/alliance_message_box', $parse);
     }
 
     /**
