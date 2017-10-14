@@ -57,8 +57,8 @@ class Alliance extends Controller
 
         // DEFAULT VALUES
         $this->_db              = new Database();
-        $this->_current_user    = parent::$users->getUserData();
-        $this->_lang            = parent::$lang;
+        $this->_current_user    = $this->getUserData();
+        $this->_lang            = $this->getLang();
         $this->bbcode           = FunctionsLib::loadLibrary('BBCodeLib');
         $this->_ally            = '';
         $this->_permissions     = array();
