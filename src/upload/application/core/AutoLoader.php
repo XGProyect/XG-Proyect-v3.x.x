@@ -24,8 +24,8 @@
  *
  * @author      Helge Söderström <helge.soderstrom@schibsted.se>
  */
-
-class AutoLoader {
+class AutoLoader
+{
 
     /**
      * An array keeping class names as key and their path as the value for classes registered with
@@ -43,7 +43,6 @@ class AutoLoader {
      */
     protected static $directoryClassNames = array();
 
-
     /**
      * Store the filename (sans extension) & full path to all ".php" files found for a namespace.
      * The parameter should contain the root namespace as the key and the directory as a value.
@@ -52,9 +51,10 @@ class AutoLoader {
      * @param string $dirName
      * @return void
      */
-    public static function registerNamespace($namespace, $dirName) {
+    public static function registerNamespace($namespace, $dirName)
+    {
         $directoryContents = new \DirectoryIterator($dirName);
-        foreach($directoryContents as $file) {
+        foreach ($directoryContents as $file) {
             if ($file->isDir() && !$file->isLink() && !$file->isDot()) {
                 $newNamespace = $namespace . "_" . $file->getFileName();
                 $newDirName = $dirName . "/" . $file->getFilename();
@@ -68,7 +68,6 @@ class AutoLoader {
         }
     }
 
-
     /**
      * Store the filename (sans extension) & full path of all ".php" files found.
      *
@@ -79,7 +78,8 @@ class AutoLoader {
      * @param string $dirName
      * @return void
      */
-    public static function registerDirectory($dirName) {
+    public static function registerDirectory($dirName)
+    {
         $directoryContents = new \DirectoryIterator($dirName);
         foreach ($directoryContents as $file) {
             if ($file->isDir() && !$file->isLink() && !$file->isDot()) {
@@ -93,7 +93,6 @@ class AutoLoader {
         }
     }
 
-
     /**
      * Caches a found class with the class name as key and its path as value for use when loading
      * on the fly. The class is registered with its class name only, no namespace.
@@ -102,10 +101,10 @@ class AutoLoader {
      * @param string $fileName
      * @return void
      */
-    public static function registerClass($className, $fileName) {
+    public static function registerClass($className, $fileName)
+    {
         AutoLoader::$directoryClassNames[$className] = $fileName;
     }
-
 
     /**
      * Includes a found class in the runtime environment. Strips namespaces.
@@ -113,7 +112,8 @@ class AutoLoader {
      * @param string $className
      * @return void
      */
-    public static function loadClass($className) {
+    public static function loadClass($className)
+    {
         // First, see if we've registered the entire namespace.
         $namespacedClassName = str_replace('\\', '_', $className);
         if (isset(static::$namespaceClassNames[$namespacedClassName])) {
@@ -123,9 +123,9 @@ class AutoLoader {
 
         // Nope. Have we registered it as a directory?
         $psrDirectorySeparators = array('\\', '_');
-        foreach($psrDirectorySeparators as $separator) {
+        foreach ($psrDirectorySeparators as $separator) {
             $separatorOccurrence = strrpos($className, $separator);
-            if($separatorOccurrence !== false) {
+            if ($separatorOccurrence !== false) {
                 $className = substr($className, $separatorOccurrence + 1);
                 break;
             }
@@ -135,7 +135,6 @@ class AutoLoader {
             require_once(AutoLoader::$directoryClassNames[$className]);
         }
     }
-
 }
 
 // Register our AutoLoad class as the system auto loader.
