@@ -50,6 +50,7 @@ class Alliance extends Controller
         // check if session is active
         parent::$users->checkSession();
 
+        // load Model
         parent::loadModel('game/alliance');
         
         // Check module access
