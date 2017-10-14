@@ -1,6 +1,6 @@
 <?php
 /**
- * XGPCore
+ * Planet entity
  *
  * PHP Version 5.5+
  *
@@ -9,22 +9,22 @@
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
- * @version  3.0.0
+ * @version  3.1.0
  */
 
 namespace application\core\entities;
 
 /**
- * XGPCore Class
+ * Planet Class
  *
- * @category Classes
- * @package  Application
+ * @category Entity
+ * @package  Core
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
- * @version  3.0.0
+ * @version  3.1.0
  */
-class Planet
+class PlanetEntity
 {
     /**
      *
