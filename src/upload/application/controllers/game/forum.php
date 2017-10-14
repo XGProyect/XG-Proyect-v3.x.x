@@ -29,11 +29,14 @@ use application\libraries\FunctionsLib;
  */
 class Forum extends Controller
 {
+    /**
+     * @var int Module ID
+     */
     const MODULE_ID = 14;
 
     /**
-     * __construct
-     *
+     * Constructor
+     * 
      * @return void
      */
     public function __construct()
@@ -46,12 +49,13 @@ class Forum extends Controller
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
+        // build the page
         $this->buildPage();
     }
 
     /**
-     * buildPage
-     *
+     * Build the page
+     * 
      * @return void
      */
     private function buildPage()
