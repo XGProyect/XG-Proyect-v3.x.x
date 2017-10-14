@@ -26,7 +26,7 @@
  * @version 21-03-2015
  * @link https://github.com/jstar88/opbe
  */
-class FireManager extends Iterable
+class FireManager extends IterableUtil
 {
     protected $array = array();
     public function add(Fire $fire)

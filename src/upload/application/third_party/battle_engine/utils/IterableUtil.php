@@ -26,7 +26,7 @@
  * @version alpha(2013-2-4)
  * @link https://github.com/jstar88/opbe
  */
-class Iterable implements Iterator
+class IterableUtil implements Iterator
 {
 
     /* Iterator functions */

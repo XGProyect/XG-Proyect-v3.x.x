@@ -26,7 +26,7 @@
  * @version beta(26-10-2013)
  * @link https://github.com/jstar88/opbe
  */
-class PlayerGroup extends Iterable
+class PlayerGroup extends IterableUtil
 {
 
     protected $array = array();

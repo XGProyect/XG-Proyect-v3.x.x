@@ -26,7 +26,7 @@
  * @version 23-3-2015)
  * @link https://github.com/jstar88/opbe
  */
-class Fleet extends Iterable
+class Fleet extends IterableUtil
 {
     protected $array = array();
     private $count;
