@@ -15,7 +15,6 @@
 namespace application\controllers\game;
 
 use application\core\Controller;
-use application\core\Database;
 use application\libraries\FunctionsLib;
 
 /**
@@ -30,12 +29,21 @@ use application\libraries\FunctionsLib;
  */
 class Banned extends Controller
 {
+    /**
+     * @var int Module ID
+     */
     const MODULE_ID = 22;
 
+    /**
+     *
+     * @var array Language data
+     */
     private $_lang;
 
     /**
-     * __construct()
+     * Constructor
+     * 
+     * @return void
      */
     public function __construct()
     {
@@ -44,62 +52,62 @@ class Banned extends Controller
         // check if session is active
         parent::$users->checkSession();
 
+        // load Model
+        parent::loadModel('game/banned');
+        
+        $this->_lang = $this->getLang();
+        
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
-        $this->_db = new Database();
-        $this->_lang = parent::$lang;
-
-        $this->build_page();
+        // build the page
+        $this->buildPage();
     }
 
     /**
-     * method __destruct
-     * param
-     * return close db connection
+     * Build the page
+     * 
+     * @return void
      */
-    public function __destruct()
+    private function buildPage()
     {
-        $this->_db->closeConnection();
-    }
+        $parse  = $this->_lang;
+        $result = $this->Banned_Model->getBannedUsers();
 
-    /**
-     * method build_page
-     * param
-     * return main method, loads everything
-     */
-    private function build_page()
-    {
-        $parse = $this->_lang;
-        $query = $this->_db->query("SELECT *
-											FROM " . BANNED . "
-											ORDER BY `banned_id`;");
+        $parse['banned_msg']        = $this->_lang['bn_no_players_banned'];
+        $parse['banned_players']    = [];
 
-        $i = 0;
-        $sub_template = parent::$page->getTemplate('banned/banned_row');
-        $body = '';
+        if (!empty($result)) {
 
-        while ($u = $this->_db->fetchArray($query)) {
-            $parse['player'] = $u[1];
-            $parse['reason'] = $u[2];
-            $parse['since'] = date(FunctionsLib::readConfig('date_format_extended'), $u[4]);
-            $parse['until'] = date(FunctionsLib::readConfig('date_format_extended'), $u[5]);
-            $parse['by'] = $u[6];
+            $body               = [];
+            $parse['player']    = '';
+            $parse['reason']    = '';
+            $parse['since']     = '';
+            $parse['until']     = '';
+            $parse['by']        = '';
+            
+            foreach ($result as $u) {
 
-            $i++;
-
-            $body .= parent::$page->parseTemplate($sub_template, $parse);
+                $body[] = [
+                    'player' => $u['banned_who'],
+                    'reason' => $u['banned_theme'],
+                    'since' => date(FunctionsLib::readConfig('date_format_extended'), $u['banned_time']),
+                    'until' => date(FunctionsLib::readConfig('date_format_extended'), $u['banned_longer']),
+                    'by' => FunctionsLib::setUrl('mailto:' . $u['banned_email'], $u['banned_author'], $u['banned_author'])
+                ];
+            }  
+            
+            $parse['banned_players'] = $body;
         }
 
-        if ($i == 0) {
-            $parse['banned_msg'] = $this->_lang['bn_no_players_banned'];
-        } else {
+        if (count($result) > 0) {
+
             $parse['banned_msg'] = $this->_lang['bn_exists'] . $i . $this->_lang['bn_players_banned'];
         }
 
-        $parse['banned_players'] = $body;
-
-        parent::$page->display(parent::$page->parseTemplate(parent::$page->getTemplate('banned/banned_body'), $parse));
+        parent::$page->display(
+            $this->getTemplate()->set('banned/banned_view', $parse)
+        );
     }
 }
 

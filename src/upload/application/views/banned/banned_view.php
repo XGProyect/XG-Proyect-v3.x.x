@@ -11,6 +11,14 @@
         <th>{bn_by}</th>
     </tr>
     {banned_players}
+        <tr>
+            <th class="b">{player}</td>
+            <th class="b">{reason}</td>
+            <th class="b">{since}</td>
+            <th class="b">{until}</td>
+            <th class="b">{by}</td>
+        </tr>
+    {/banned_players}
     <tr>
     	<th class="5" colspan="5">{banned_msg}</th>
     </tr>
