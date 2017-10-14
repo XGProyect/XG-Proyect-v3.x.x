@@ -1,6 +1,6 @@
 <?php
 /**
- * Missions Library
+ * Missions enumerator
  *
  * PHP Version 5.5+
  *
@@ -12,19 +12,19 @@
  * @version  3.1.0
  */
 
-namespace application\libraries\missions;
+namespace application\core\enumerators;
 
 /**
- * MissionsTypes Class
+ * MissionsEnumerator Class
  *
  * @category Enumerator
- * @package  Libraries
+ * @package  Core
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-abstract class MissionsTypes
+abstract class MissionsEnumerator
 {
     const attack        = 1;
     const acs           = 2;
@@ -39,4 +39,4 @@ abstract class MissionsTypes
     const expedition    = 15;
 }
 
-/* end of MissionsTypes.php */
+/* end of MissionsEnumerator.php */

@@ -1,6 +1,6 @@
 <?php
 /**
- * Users Library
+ * User ranks enumerator
  *
  * PHP Version 5.5+
  *
@@ -12,19 +12,19 @@
  * @version  3.0.4
  */
 
-namespace application\libraries\users;
+namespace application\core\enumerators;
 
 /**
- * UsersTypes Class
+ * UserRanksEnumerator Class
  *
  * @category Enumerator
- * @package  Libraries
+ * @package  Core
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-abstract class UsersTypes
+abstract class UserRanksEnumerator
 {
     const player    = 0;
     const go        = 1;
@@ -32,4 +32,4 @@ abstract class UsersTypes
     const admin     = 3;
 }
 
-/* end of MessagesTypes.php */
+/* end of UserRanksEnumerator.php */

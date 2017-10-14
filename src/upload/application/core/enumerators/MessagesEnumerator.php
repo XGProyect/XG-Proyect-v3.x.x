@@ -1,6 +1,6 @@
 <?php
 /**
- * Messenger Library
+ * Messages enumerator
  *
  * PHP Version 5.5+
  *
@@ -12,19 +12,19 @@
  * @version  3.0.4
  */
 
-namespace application\libraries\messenger;
+namespace application\core\enumerators;
 
 /**
- * MessagesTypes Class
+ * MessagesEnumerator Class
  *
  * @category Enumerator
- * @package  Libraries
+ * @package  Core
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
- * @version  3.0.4
+ * @version  3.1.0
  */
-abstract class MessagesTypes
+abstract class MessagesEnumerator
 {
     const espio   = 0;
     const combat  = 1;
@@ -34,4 +34,4 @@ abstract class MessagesTypes
     const general = 5;
 }
 
-/* end of MessagesTypes.php */
+/* end of MessagesEnumerator.php */

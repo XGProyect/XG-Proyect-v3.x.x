@@ -14,6 +14,7 @@
 
 namespace application\libraries\messenger;
 
+use application\core\enumerators\MessagesEnumerator;
 use application\libraries\FunctionsLib;
 
 /**
@@ -96,7 +97,7 @@ final class MessagesOptions
     {
         if ($this->_type == '' or !is_object($this->_type)) {
 
-            return MessagesTypes::general;
+            return MessagesEnumerator::general;
         }
 
         return $this->_type;

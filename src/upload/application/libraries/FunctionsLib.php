@@ -15,11 +15,11 @@
 namespace application\libraries;
 
 use application\core\Database;
+use application\core\enumerators\MessagesEnumerator;
 use application\core\Options;
 use application\core\XGPCore;
 use application\libraries\messenger\MessagesFormat;
 use application\libraries\messenger\MessagesOptions;
-use application\libraries\messenger\MessagesTypes;
 use application\libraries\messenger\Messenger;
 use application\libraries\users\UsersTypes;
 use CI_Email;
@@ -421,23 +421,23 @@ abstract class FunctionsLib extends XGPCore
 
         switch($type) {
             case 0:
-                $type   = MessagesTypes::espio;
+                $type   = MessagesEnumerator::espio;
                 break;
             case 1:
-                $type   = MessagesTypes::combat;
+                $type   = MessagesEnumerator::combat;
                 break;
             case 2:
-                $type   = MessagesTypes::exp;
+                $type   = MessagesEnumerator::exp;
                 break;
             case 3:
-                $type   = MessagesTypes::ally;
+                $type   = MessagesEnumerator::ally;
                 break;
             case 4:
-                $type   = MessagesTypes::user;
+                $type   = MessagesEnumerator::user;
                 break;
             default:
             case 5:
-                $type   = MessagesTypes::general;
+                $type   = MessagesEnumerator::general;
                 break;
         }
 
