@@ -3,7 +3,7 @@
  * Trader Controller
  *
  * PHP Version 5.5+
- * 
+ *ﬁ
  * @category Controller
  * @package  Application
  * @author   XG Proyect Team
@@ -11,6 +11,7 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
+
 namespace application\controllers\game;
 
 use application\core\Controller;
@@ -31,7 +32,6 @@ use Exception;
  */
 class Trader extends Controller
 {
-
     const MODULE_ID = 5;
 
     private $langs;
@@ -55,12 +55,12 @@ class Trader extends Controller
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
-        $this->_db = new Database();
-        $this->langs = parent::$lang;
-        $this->resource = parent::$objects->getObjects();
-        $this->tr_dark_matter = FunctionsLib::readConfig('trader_darkmatter');
-        $this->current_user = parent::$users->getUserData();
-        $this->current_planet = parent::$users->getPlanetData();
+        $this->_db              = new Database();
+        $this->langs            = parent::$lang;
+        $this->resource         = parent::$objects->getObjects();
+        $this->tr_dark_matter   = FunctionsLib::readConfig('trader_darkmatter');
+        $this->current_user     = parent::$users->getUserData();
+        $this->current_planet   = parent::$users->getPlanetData();
 
         $this->buildPage();
     }
@@ -82,14 +82,19 @@ class Trader extends Controller
      */
     private function buildPage()
     {
-        $parse = $this->langs;
+        $parse  = $this->langs;
 
         if ($this->current_user['premium_dark_matter'] < $this->tr_dark_matter) {
 
             FunctionsLib::message(
                 str_replace(
-                    '%s', $this->tr_dark_matter, $this->langs['tr_darkmatter_needed']
-                ), '', '', true
+                    '%s',
+                    $this->tr_dark_matter,
+                    $this->langs['tr_darkmatter_needed']
+                ),
+                '',
+                '',
+                true
             );
 
             die();
@@ -127,9 +132,12 @@ class Trader extends Controller
                                 WHERE `planet_id` = '" . $this->current_planet['planet_id'] . "';"
                             );
 
-                            $this->current_planet['planet_metal'] -= $necessaire;
-                            $this->current_planet['planet_crystal'] += isset($_POST['cristal']) ? $_POST['cristal'] : 0;
-                            $this->current_planet['planet_deuterium'] += isset($_POST['deut']) ? $_POST['deut'] : 0;
+                            $this->current_planet['planet_metal']
+                                -= $necessaire;
+                            $this->current_planet['planet_crystal']
+                                += isset($_POST['cristal']) ? $_POST['cristal'] : 0;
+                            $this->current_planet['planet_deuterium']
+                                += isset($_POST['deut']) ? $_POST['deut'] : 0;
 
                             $this->discountDarkMatter(); // REDUCE DARKMATTER
                         } else {
@@ -146,13 +154,13 @@ class Trader extends Controller
                     } else {
 
                         $necessaire = ((abs($_POST['metal']) * 0.5) + (abs($_POST['deut']) * 2));
-                        $amout = array(
-                            'metal' => $_POST['metal'],
-                            'crystal' => 0,
+                        $amout  = array(
+                            'metal'     => $_POST['metal'],
+                            'crystal'   => 0,
                             'deuterium' => $_POST['deut']
                         );
 
-                        $storage = $this->checkStorage($amout);
+                        $storage    = $this->checkStorage($amout);
 
                         if (is_string($storage)) {
 
@@ -169,9 +177,9 @@ class Trader extends Controller
                                 WHERE `planet_id` = '" . $this->current_planet['planet_id'] . "';"
                             );
 
-                            $this->current_planet['planet_metal'] += isset($_POST['metal']) ? $_POST['metal'] : 0;
-                            $this->current_planet['planet_crystal'] -= $necessaire;
-                            $this->current_planet['planet_deuterium'] += isset($_POST['deut']) ? $_POST['deut'] : 0;
+                            $this->current_planet['planet_metal']       += isset($_POST['metal']) ? $_POST['metal'] : 0;
+                            $this->current_planet['planet_crystal']     -= $necessaire;
+                            $this->current_planet['planet_deuterium']   += isset($_POST['deut']) ? $_POST['deut'] : 0;
 
                             $this->discountDarkMatter(); // REDUCE DARKMATTER
                         } else {
@@ -188,7 +196,7 @@ class Trader extends Controller
                     } else {
 
                         $necessaire = ((abs($_POST['metal']) * 0.25) + (abs($_POST['cristal']) * 0.5));
-                        $amout = array(
+                        $amout  = array(
                             'metal' => $_POST['metal'],
                             'crystal' => $_POST['cristal'],
                             'deuterium' => 0
@@ -211,9 +219,12 @@ class Trader extends Controller
                                 WHERE `planet_id` = '" . $this->current_planet['planet_id'] . "';"
                             );
 
-                            $this->current_planet['planet_metal'] += isset($_POST['metal']) ? $_POST['metal'] : 0;
-                            $this->current_planet['planet_crystal'] += isset($_POST['cristal']) ? $_POST['cristal'] : 0;
-                            $this->current_planet['planet_deuterium'] -= $necessaire;
+                            $this->current_planet['planet_metal']
+                                += isset($_POST['metal']) ? $_POST['metal'] : 0;
+                            $this->current_planet['planet_crystal']
+                                += isset($_POST['cristal']) ? $_POST['cristal'] : 0;
+                            $this->current_planet['planet_deuterium']
+                                -= $necessaire;
 
                             $this->discountDarkMatter(); // REDUCE DARKMATTER
                         } else {
@@ -231,31 +242,31 @@ class Trader extends Controller
 
             if (isset($_POST['action'])) {
 
-                $parse['mod_ma_res'] = '1';
+                $parse['mod_ma_res']    = '1';
 
                 switch ((isset($_POST['choix']) ? $_POST['choix'] : null)) {
 
                     case 'metal':
-                        $template = parent::$page->getTemplate('trader/trader_metal');
+                        $template   = parent::$page->getTemplate('trader/trader_metal');
 
-                        $parse['mod_ma_res_a'] = '2';
-                        $parse['mod_ma_res_b'] = '4';
+                        $parse['mod_ma_res_a']  = '2';
+                        $parse['mod_ma_res_b']  = '4';
 
                         break;
 
                     case 'cristal':
-                        $template = parent::$page->getTemplate('trader/trader_cristal');
+                        $template   = parent::$page->getTemplate('trader/trader_cristal');
 
-                        $parse['mod_ma_res_a'] = '0.5';
-                        $parse['mod_ma_res_b'] = '2';
+                        $parse['mod_ma_res_a']  = '0.5';
+                        $parse['mod_ma_res_b']  = '2';
 
                         break;
 
                     case 'deut':
-                        $template = parent::$page->getTemplate('trader/trader_deuterium');
+                        $template   = parent::$page->getTemplate('trader/trader_deuterium');
 
-                        $parse['mod_ma_res_a'] = '0.25';
-                        $parse['mod_ma_res_b'] = '0.5';
+                        $parse['mod_ma_res_a']  = '0.25';
+                        $parse['mod_ma_res_b']  = '0.5';
 
                         break;
                 }
@@ -281,13 +292,14 @@ class Trader extends Controller
         }
 
         $hangar = array('metal' => 22, 'crystal' => 23, 'deuterium' => 24);
-        $check = array();
+        $check  = array();
 
         foreach ($hangar as $k => $v) {
 
             if (!empty($amount[$k])) {
 
-                if ($this->current_planet["planet_" . $k] + $amount[$k] >= ProductionLib::maxStorable($this->current_planet[$this->resource[$v]])) {
+                if ($this->current_planet["planet_" . $k] + $amount[$k] >=
+                    ProductionLib::maxStorable($this->current_planet[$this->resource[$v]])) {
 
                     $check[$k] = false;
                 } else {
@@ -312,7 +324,8 @@ class Trader extends Controller
                     if ($check[$k] === false) {
 
                         return sprintf(
-                            $this->langs['tr_full_storage'], strtolower($this->langs['info'][$v]['name'])
+                            $this->langs['tr_full_storage'],
+                            strtolower($this->langs['info'][$v]['name'])
                         );
                     } else {
 
