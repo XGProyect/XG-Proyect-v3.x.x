@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
-
 use application\libraries\FunctionsLib;
 
 define('IN_GAME', true);
@@ -21,32 +20,31 @@ require XGP_ROOT . 'application/core/common.php';
 
 $hooks->call_hook('before_page');
 
-$page   = isset($_GET['page']) ? $_GET['page'] : FunctionsLib::redirect('game.php?page=overview');
+$page = isset($_GET['page']) ? $_GET['page'] : FunctionsLib::redirect('game.php?page=overview');
 
 // some replacements to adapt the pages
-$page   = strtr(
-    $page,
-    array(
-        'resources'         => 'buildings',
-        'resourceSettings'  => 'resources',
-        'station'           => 'buildings',
-        'federationlayer'   => 'federation',
-        'shortcuts'         => 'fleetshortcuts',
-        'forums'            => 'forum',
-        'defense'           => 'shipyard',
+$page = strtr(
+    $page, array(
+    'resources' => 'buildings',
+    'resourceSettings' => 'resources',
+    'station' => 'buildings',
+    'federationlayer' => 'federation',
+    'shortcuts' => 'fleetshortcuts',
+    'forums' => 'forum',
+    'defense' => 'shipyard',
     )
 );
 
-$file_name  = XGP_ROOT . GAME_PATH . $page . '.php';
+$file_name = XGP_ROOT . GAME_PATH . $page . '.php';
 
 if (isset($page)) {
-    
+
     // logout
     if ($page == 'logout') {
         $session->delete();
         FunctionsLib::redirect(SYSTEM_ROOT);
     }
-    
+
     // other pages
     if (file_exists($file_name)) {
 

@@ -11,7 +11,6 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
-
 use application\libraries\adm\AdministrationLib;
 use application\libraries\FunctionsLib;
 
@@ -26,8 +25,8 @@ include_once XGP_ROOT . 'application/libraries/adm/AdministrationLib.php';
 AdministrationLib::secureConnection();
 AdministrationLib::updateRequired();
 
-$page       = isset($_GET['page']) ? $_GET['page'] : 'home';
-$file_name  = XGP_ROOT . ADMIN_PATH . $page . '.php';
+$page = isset($_GET['page']) ? $_GET['page'] : 'home';
+$file_name = XGP_ROOT . ADMIN_PATH . $page . '.php';
 
 // logout
 if ($page == 'logout') {
@@ -40,8 +39,8 @@ if (file_exists($file_name)) {
 
     include $file_name;
 
-    
-    
+
+
     $class_name = 'application\controllers\adm\\' . ucfirst($page);
 
     new $class_name();

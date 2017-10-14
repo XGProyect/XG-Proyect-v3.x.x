@@ -11,15 +11,14 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
-
 define('IN_LOGIN', true);
 define('XGP_ROOT', '../');
 
 require XGP_ROOT . 'application/core/common.php';
 
-$page   = (isset($_GET['page']) ? $_GET['page'] : 'home');
+$page = (isset($_GET['page']) ? $_GET['page'] : 'home');
 
-$file_name  = XGP_ROOT . HOME_PATH . $page . '.php';
+$file_name = XGP_ROOT . HOME_PATH . $page . '.php';
 
 if (file_exists($file_name)) {
 
