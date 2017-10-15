@@ -17,6 +17,10 @@ ADMIN
 MISSIONS
 [#000] Fixed duplicates issue.-
 
+DEBUG
+[#000] Added PHP Errors tracking, will be saved into the data/logs directory.-
+[#000] Improved how error reporting and logging works. New LOG_ERRORS constant allows to keep track of PHP errors and DB errors, all or none.
+
 BUILDINGS
 [#000] Rewritten the code to handle the buildings queue, created new buildings library.-
 [#000] Reworked buildings page structure.-

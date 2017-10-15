@@ -39,7 +39,7 @@
             </tr>
             <tr>
                 <td>{ia_database_size}</td>
-                <td>{info_database_size} <a href="admin.php?page=database"><i class="icon-wrench"></i></a></td>
+                <td>{info_database_size} <a href="admin.php?page=repair"><i class="icon-wrench"></i></a></td>
             </tr>
             <tr>
                 <td>{ia_database_server}</td>
