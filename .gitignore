@@ -1,4 +1,4 @@
 src/upload/application/config/config.php
 src/upload/tests/build/
 src/docs/
-src/upload/data/logs/
+src/upload/data/logs/*.txt

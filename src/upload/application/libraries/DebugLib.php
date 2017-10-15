@@ -139,16 +139,7 @@ class DebugLib
             if (defined('LOG_ERRORS') && LOG_ERRORS != '') {
              
                 // log the error
-                if ($type == 'db') {
-
-                    $this->writeDBErrors($log, "ErrorLog");
-                }
-
-                // log php error
-                if ($type = 'php') {
-
-                    $this->writePHPErrors($log);   
-                }
+                $this->writeErrors($log, $type);   
             }
             
             // notify administrator
@@ -188,44 +179,18 @@ class DebugLib
 
         die();
     }
-
-    /**
-     * writeErrors
-     *
-     * @param string $text     Text
-     * @param string $log_file Log title
-     *
-     * @return void
-     */
-    private function writeDBErrors($text, $log_file)
-    {
-        $file = XGP_ROOT . LOGS_PATH . $log_file . ".php";
-
-        if (!file_exists($file) && is_writable($file)) {
-
-            @fopen($file, "w+");
-            @fclose(fopen($file, "w+"));
-        }
-
-        $fp = @fopen($file, "a");
-        $date = $text;
-        $date .= date('Y/m/d H:i:s', time()) . "||\n";
-
-        @fwrite($fp, $date);
-        @fclose($fp);
-    }
     
     /**
-     * Log php errors
+     * Log errors
      * 
-     * @param type $message Error message
-     * @param type $title   Error code
+     * @param string $text Text
+     * @param string $type Type
      * 
      * @return void
      */
-    private function writePHPErrors($text)
+    private function writeErrors($text, $type)
     {
-        $file_name = XGP_ROOT . LOGS_PATH . 'system-error-' . date('Ymd') . '-' . time() . '-' . (sha1($text)) . '.txt';
+        $file_name = XGP_ROOT . LOGS_PATH . $type . '-error-' . date('Ymd') . '-' . time() . '-' . (sha1($text)) . '.txt';
         
         if (!file_exists($file_name) && is_writable($file_name)) {
 
