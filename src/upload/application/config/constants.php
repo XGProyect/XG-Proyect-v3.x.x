@@ -31,6 +31,9 @@ define('HOOKS_ENABLED', false);
 // DEBUG MODE
 define('DEBUG_MODE', false);
 
+// LOG DB AND PHP ERRORS
+define('LOG_ERRORS', true);
+
 // ERROR LOGS MAIL
 define('ERROR_LOGS_MAIL', '');
 

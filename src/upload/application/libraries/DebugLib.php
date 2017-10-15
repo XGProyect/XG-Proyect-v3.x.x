@@ -136,23 +136,26 @@ class DebugLib
             // format log
             $log = '|' . $user_ip . '|' . $title . '|' . $message . '|' . $this->whereCalled(3) . '|';
 
-            // log the error
-            if ($type == 'db') {
-                
-                $this->writeDBErrors($log, "ErrorLog");
-            }
+            if (defined('LOG_ERRORS') && LOG_ERRORS != '') {
+             
+                // log the error
+                if ($type == 'db') {
 
-            // log php error
-            if ($type = 'php') {
-                
-                $this->writePHPErrors($log);   
+                    $this->writeDBErrors($log, "ErrorLog");
+                }
+
+                // log php error
+                if ($type = 'php') {
+
+                    $this->writePHPErrors($log);   
+                }
             }
             
             // notify administrator
             if (defined('ERROR_LOGS_MAIL') && ERROR_LOGS_MAIL != '') {
 
                 FunctionsLib::sendEmail(
-                    ERROR_LOGS_MAIL, '[DEBUG][' . $title . ']', $this->whereCalled(3), [
+                    ERROR_LOGS_MAIL, '[DEBUG][' . $title . ']', $log, [
                     'mail' => ERROR_LOGS_MAIL,
                     'name' => 'XG Proyect'
                     ]
