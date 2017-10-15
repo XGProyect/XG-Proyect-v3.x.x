@@ -30,11 +30,22 @@ use application\libraries\FunctionsLib;
 class Errors extends Controller
 {
 
+    /**
+     *
+     * @var array Language data
+     */
     private $_lang;
-    private $_current_user;
 
     /**
-     * __construct()
+     *
+     * @var array User data 
+     */
+    private $_user;
+
+    /**
+     * Constructor
+     * 
+     * @return void
      */
     public function __construct()
     {
@@ -43,55 +54,109 @@ class Errors extends Controller
         // check if session is active
         AdministrationLib::checkSession();
 
-        $this->_lang = parent::$lang;
-        $this->_current_user = parent::$users->getUserData();
+        $this->_lang = $this->getLang();
+        $this->_user = $this->getUserData();
 
         // Check if the user is allowed to access
-        if (AdministrationLib::haveAccess($this->_current_user['user_authlevel']) && AdministrationLib::authorization($this->_current_user['user_authlevel'], 'config_game') == 1) {
-            $this->build_page();
+        if (AdministrationLib::haveAccess($this->_user['user_authlevel']) && AdministrationLib::authorization($this->_user['user_authlevel'], 'config_game') == 1) {
+
+            // time to do something
+            $this->runAction();
+            
+            // build the page
+            $this->buildPage();
         } else {
+
             die(AdministrationLib::noAccessMessage($this->_lang['ge_no_permissions']));
         }
     }
 
     /**
-     * method build_page
-     * param
-     * return main method, loads everything
+     * Process deleteall request
+     * 
+     * @return void
      */
-    private function build_page()
+    private function runAction()
     {
-        $parse = $this->_lang;
-        $load_template = parent::$page->getTemplate('adm/errors_row_view');
-        $deleteall = isset($_GET['deleteall']) ? $_GET['deleteall'] : '';
-        $file = XGP_ROOT . LOGS_PATH . 'ErrorLog.php';
-        $errors_all = @file_get_contents($file);
-        $i = 0;
-        $parse['errors_list'] = '';
+        $delete_all = filter_input(INPUT_GET, 'deleteall', FILTER_DEFAULT);
+        
+        if ($delete_all == 'yes') {
+            
+            $files  = $this->getListOfLogFiles();
+            
+            if ($files != '') {
 
-        if ($errors_all != "") {
-            $errors_all = explode('||', $errors_all);
+                foreach($files as $file_name) {
+                    
+                    unlink($file_name);
+                }
+            }
+            
+            FunctionsLib::redirect('admin.php?page=errors');
+        }
+    }
+    
+    /**
+     * Build the page
+     * 
+     * @return void
+     */
+    private function buildPage()
+    {
+        $parse                  = $this->_lang;
+        $list_of_errors         = $this->processErrorsLogs();
+        
+        $parse['alert']             = '';
+        $parse['errors_list']       = $list_of_errors;
+        $parse['errors_list_resume']= count($list_of_errors) . $this->_lang['er_errors'];
 
-            foreach ($errors_all as $error) {
-                $errors_row = explode('|', $error);
+        parent::$page->display(
+            $this->getTemplate()->set('adm/errors_view', $parse)
+        );
+    }
+    
+    /**
+     * Get a list of log files and parse them
+     * 
+     * @return array
+     */
+    private function processErrorsLogs()
+    {        
+        // list of log files
+        $files          = $this->getListOfLogFiles();
+        $list_of_errors = [];
+        
+        if ($files != '') {
+            
+            foreach($files as $file_name) {
+                
+                $contents = file_get_contents($file_name);
 
-                if (isset($errors_row[3])) {
-                    $i++;
+                if ($contents) {
 
-                    $parse['errors_list'] .= parent::$page->parseTemplate($load_template, $errors_row);
+                    $error_columns  = explode('|', $contents);
+
+                    $list_of_errors[] = [
+                        'user_ip' => $error_columns[1],
+                        'error_type' => $error_columns[2],
+                        'error_code' => $error_columns[3],
+                        'error_message' => $error_columns[4],
+                        'error_trace' => $error_columns[5],
+                        'error_datetime' => $error_columns[6]
+                    ];   
                 }
             }
         }
-
-        $parse['errors_list_resume'] = $i . $this->_lang['er_errors'];
-
-        if ($deleteall == 'yes') {
-            $fh = fopen($file, 'w');
-            fclose($fh);
-            FunctionsLib::redirect('admin.php?page=errors');
-        }
-
-        parent::$page->display(parent::$page->parseTemplate(parent::$page->getTemplate('adm/errors_view'), $parse));
+        
+        return $list_of_errors;
+    }
+    
+    private function getListOfLogFiles()
+    {
+        $logs_path  = XGP_ROOT . LOGS_PATH;
+        
+        // list of log files
+        return glob($logs_path . '*.txt');
     }
 }
 

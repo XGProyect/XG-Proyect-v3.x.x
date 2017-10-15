@@ -134,7 +134,7 @@ class DebugLib
             $user_ip = $_SERVER['REMOTE_ADDR'];
 
             // format log
-            $log = '|' . $user_ip . '|' . $title . '|' . $message . '|' . $this->whereCalled(3) . '|';
+            $log = '|' . $user_ip . '|' . $type . '|' . $title . '|' . $message . '|' . $this->whereCalled(3) . '|';
 
             if (defined('LOG_ERRORS') && LOG_ERRORS != '') {
              
@@ -190,17 +190,19 @@ class DebugLib
      */
     private function writeErrors($text, $type)
     {
-        $file_name = XGP_ROOT . LOGS_PATH . $type . '-error-' . date('Ymd') . '-' . time() . '-' . (sha1($text)) . '.txt';
+        $file_name  = $type . '-error-' . date('Ymd') . '-' . time();
+        $file_code  = sha1($file_name . $text);
+        $file       = XGP_ROOT . LOGS_PATH . $file_name . '-' . $file_code . '.txt';
         
-        if (!file_exists($file_name) && is_writable($file_name)) {
+        if (!file_exists($file)) {
 
-            @fopen($file_name, "w+");
-            @fclose(fopen($file_name, "w+"));
+            @fopen($file, "w+");
+            @fclose(fopen($file, "w+"));
         }
 
-        $fp = @fopen($file_name, "a");
+        $fp = @fopen($file, "a");
         $date = $text;
-        $date .= date('Y/m/d H:i:s', time()) . "||\n";
+        $date .= date('Y/m/d H:i:s', time()) . "|\n";
 
         @fwrite($fp, $date);
         @fclose($fp);
