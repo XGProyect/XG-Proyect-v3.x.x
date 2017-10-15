@@ -76,10 +76,15 @@ class Editor extends Controller
                 $parse['alert'] = AdministrationLib::saveMessage('ok', $this->_lang['ce_all_ok_message']);
             }
         }
-
+        
         $parse['language_files'] = $this->get_files();
         $parse['contents'] = empty($this->_current_file) ? '' : $this->get_contents();
 
+        if ($parse['contents'] == '') {
+            
+            $parse['alert'] = AdministrationLib::saveMessage('error', $this->_lang['ce_all_error_reading']);
+        }
+        
         parent::$page->display(parent::$page->parseTemplate(parent::$page->getTemplate('adm/editor_view'), $parse));
     }
 
@@ -94,15 +99,18 @@ class Editor extends Controller
         $changelog_file = XGP_ROOT . LANG_PATH . DEFAULT_LANG . '/' . $this->_current_file;
 
         // OPEN THE FILE
-        $fs = fopen($changelog_file, 'a+') or die('File not found!');
+        $fs = @fopen($changelog_file, 'a+');
         $contents = '';
+        
+        if ($fs) {
 
-        // LOOP THRU THE FILE TO GET ITS CONTENT
-        while (!feof($fs)) {
-            $contents .= fgets($fs, 1024);
+            // LOOP THRU THE FILE TO GET ITS CONTENT
+            while (!feof($fs)) {
+                $contents .= fgets($fs, 1024);
+            }
+
+            fclose($fs);
         }
-
-        fclose($fs);
 
         // RETURN CONTENT
         return $contents;
@@ -116,14 +124,17 @@ class Editor extends Controller
     private function save_contents($file_data)
     {
         // GET THE FILE
-        $changelog_file = XGP_ROOT . LANG_PATH . DEFAULT_LANG . '/' . $this->_current_file;
+        $file = XGP_ROOT . LANG_PATH . DEFAULT_LANG . '/' . $this->_current_file;
 
         // OPEN THE FILE
-        $fs = fopen($changelog_file, 'w') or die('File not found!');
+        $fs = @fopen($file, 'w');
 
-        fwrite($fs, $file_data);
+        if ($fs && $file_data != '') {
 
-        fclose($fs);
+            fwrite($fs, $file_data);
+
+            fclose($fs);
+        }
     }
 
     /**
