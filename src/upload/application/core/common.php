@@ -59,7 +59,6 @@ set_error_handler(function($code, $description, $file = null, $line = null, $con
     $debug = new application\libraries\DebugLib();
     $debug->error($description, $code, 'php');
 });
-echo $asfsdfsdfsdF;
 
 // some values by default
 $lang = array();
