@@ -12,11 +12,16 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
+
 use application\core\Hooks;
 use application\core\Sessions;
 use application\libraries\FunctionsLib;
 use application\libraries\SecurePageLib;
 use application\libraries\Updates_library;
+
+// report all errors
+error_reporting(E_ALL);
+ini_set('display_errors', 0);
 
 $config_file = XGP_ROOT . 'application/config/config.php';
 $installed = false;
@@ -34,6 +39,27 @@ require_once XGP_ROOT . CORE_PATH . 'AutoLoader.php';
 // Auto load a few things
 AutoLoader::registerDirectory(XGP_ROOT . CORE_PATH);
 AutoLoader::registerDirectory(XGP_ROOT . LIB_PATH);
+
+// For debugging
+if (DEBUG_MODE or ( $_SERVER['HTTP_HOST'] == 'localhost')) {
+
+    // Show all errors
+    ini_set('display_errors', 1);
+}
+
+// We should use our custom function to handle errors.
+set_error_handler(function($code, $description, $file = null, $line = null, $context = null) {
+
+    $displayErrors = strtolower(ini_get("display_errors"));
+
+    if (error_reporting() === 0 || $displayErrors === "on") {
+        return false;
+    }
+
+    $debug = new application\libraries\DebugLib();
+    $debug->error($description, $code, 'php');
+});
+echo $asfsdfsdfsdF;
 
 // some values by default
 $lang = array();
@@ -62,19 +88,6 @@ if (!defined('IN_INSTALL')) {
 
     // set time zone
     date_default_timezone_set(FunctionsLib::readConfig('date_time_zone'));
-
-    // For debugging
-    if (DEBUG_MODE or ( $_SERVER['HTTP_HOST'] == 'localhost')) {
-
-        // Show all errors
-        ini_set('display_errors', 1);
-        error_reporting(E_ALL);
-    } else {
-
-        // Hide all errors
-        ini_set('display_errors', 0);
-        error_reporting(0);
-    }
 
     $current_page = isset($_GET['page']) ? $_GET['page'] : '';
 

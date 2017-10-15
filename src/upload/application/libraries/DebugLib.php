@@ -13,8 +13,6 @@
  */
 namespace application\libraries;
 
-use application\core\XGPCore;
-
 /**
  * DebugLib Class
  *
@@ -23,14 +21,13 @@ use application\core\XGPCore;
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
- * @version  3.0.0
+ * @version  3.1.0
  */
-class DebugLib extends XGPCore
+class DebugLib
 {
 
     private $log;
     private $numqueries;
-    private $langs;
 
     /**
      * __construct
@@ -41,7 +38,6 @@ class DebugLib extends XGPCore
     {
         $this->vars = $this->log = '';
         $this->numqueries = 0;
-        $this->langs = parent::$lang;
     }
 
     /**
@@ -68,10 +64,11 @@ class DebugLib extends XGPCore
      */
     private function whereCalled($level = 1)
     {
+        
         $trace = debug_backtrace();
-        $file = $trace[$level]['file'];
-        $line = $trace[$level]['line'];
-        $object = $trace[$level]['object'];
+        $file = isset($trace[$level]['file']) ? $trace[$level]['file'] : '';
+        $line = isset($trace[$level]['line']) ? $trace[$level]['line'] : '';
+        $object = isset($trace[$level]['object']) ? $trace[$level]['object'] : '';
 
         if (is_object($object)) {
 
@@ -125,7 +122,7 @@ class DebugLib extends XGPCore
      *
      * @return void
      */
-    public function error($message, $title)
+    public function error($message, $title, $type = 'db')
     {
         if (DEBUG_MODE == true) {
 
@@ -140,8 +137,17 @@ class DebugLib extends XGPCore
             $log = '|' . $user_ip . '|' . $title . '|' . $message . '|' . $this->whereCalled(3) . '|';
 
             // log the error
-            $this->writeErrors($log, "ErrorLog");
+            if ($type == 'db') {
+                
+                $this->writeDBErrors($log, "ErrorLog");
+            }
 
+            // log php error
+            if ($type = 'php') {
+                
+                $this->writePHPErrors($log);   
+            }
+            
             // notify administrator
             if (defined('ERROR_LOGS_MAIL') && ERROR_LOGS_MAIL != '') {
 
@@ -188,7 +194,7 @@ class DebugLib extends XGPCore
      *
      * @return void
      */
-    private function writeErrors($text, $log_file)
+    private function writeDBErrors($text, $log_file)
     {
         $file = XGP_ROOT . LOGS_PATH . $log_file . ".php";
 
@@ -199,6 +205,32 @@ class DebugLib extends XGPCore
         }
 
         $fp = @fopen($file, "a");
+        $date = $text;
+        $date .= date('Y/m/d H:i:s', time()) . "||\n";
+
+        @fwrite($fp, $date);
+        @fclose($fp);
+    }
+    
+    /**
+     * Log php errors
+     * 
+     * @param type $message Error message
+     * @param type $title   Error code
+     * 
+     * @return void
+     */
+    private function writePHPErrors($text)
+    {
+        $file_name = XGP_ROOT . LOGS_PATH . 'system-error-' . date('Ymd') . '-' . time() . '-' . (sha1($text)) . '.txt';
+        
+        if (!file_exists($file_name) && is_writable($file_name)) {
+
+            @fopen($file_name, "w+");
+            @fclose(fopen($file_name, "w+"));
+        }
+
+        $fp = @fopen($file_name, "a");
         $date = $text;
         $date .= date('Y/m/d H:i:s', time()) . "||\n";
 
