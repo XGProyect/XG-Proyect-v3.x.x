@@ -39,7 +39,7 @@ $lang['mn_premium'] = 'Premium';
 $lang['mn_config_changelog'] = 'Languages edition';
 $lang['mn_info_title'] = 'Information';
 $lang['mn_info_general'] = 'General';
-$lang['mn_info_db'] = 'DB errors';
+$lang['mn_info_db'] = 'System Errors';
 $lang['mn_info_fleets'] = 'Flying fleets';
 $lang['mn_info_messages'] = 'Messages list';
 $lang['mn_edition_title'] = 'Edition';
@@ -269,6 +269,7 @@ $lang['ce_warning'] = 'Making a wrong change in this file may cause your game to
 $lang['ce_sure'] = 'Are you sure you want to continue?';
 $lang['ce_save_changes'] = 'Save changes';
 $lang['ce_all_ok_message'] = 'Changes saved successfully!';
+$lang['ce_all_error_reading'] = 'Couldn\'t read the language file, verify its permissions!';
 
 // INFORMATION
 $lang['ia_title'] = 'Additional information';
@@ -292,11 +293,12 @@ $lang['ia_db_data'] = 'Database information';
 $lang['ia_database_size'] = 'Dtabase size';
 $lang['ia_database_server'] = 'MySQL version';
 
-// DB ERRORS
-$lang['er_error_list'] = 'DB errors';
+// ERRORS
+$lang['er_error_list'] = 'System Errors';
 $lang['er_dlte_all'] = 'Delete all';
-$lang['er_user_id'] = 'User (IP)';
+$lang['er_user_id'] = 'IP';
 $lang['er_type'] = 'Type';
+$lang['er_code'] = 'Code';
 $lang['er_data'] = 'Date';
 $lang['er_track'] = 'Line / Class / File';
 $lang['er_errors'] = ' error/s';

@@ -39,7 +39,7 @@ $lang['mn_premium'] = 'Premium';
 $lang['mn_config_changelog'] = 'Editar lenguajes';
 $lang['mn_info_title'] = 'Información';
 $lang['mn_info_general'] = 'General';
-$lang['mn_info_db'] = 'Errores BD';
+$lang['mn_info_db'] = 'Errores del sistema';
 $lang['mn_info_fleets'] = 'Flotas en vuelo';
 $lang['mn_info_messages'] = 'Lista de mensajes';
 $lang['mn_edition_title'] = 'Edición';
@@ -268,6 +268,7 @@ $lang['ce_warning'] = 'Realizar un cambio erróneo en este archivo puede provoca
 $lang['ce_sure'] = '¿Estás seguro que deseas continuar?';
 $lang['ce_save_changes'] = 'Guardar cambios';
 $lang['ce_all_ok_message'] = '¡Cambios guardados con éxito!';
+$lang['ce_all_error_reading'] = '¡No se pudo leer el archivo de idioma. Verifique los permisos!';
 
 // INFORMATION
 $lang['ia_title'] = 'Información ampliada';
@@ -291,11 +292,12 @@ $lang['ia_db_data'] = 'Información de la base';
 $lang['ia_database_size'] = 'Tamaño de la base';
 $lang['ia_database_server'] = 'Versión MySQL';
 
-// DB ERRORS
-$lang['er_error_list'] = 'Lista de errores';
+// ERRORS
+$lang['er_error_list'] = 'Errores del sistema';
 $lang['er_dlte_all'] = 'Eliminar todos';
-$lang['er_user_id'] = 'Usuario (IP)';
+$lang['er_user_id'] = 'IP';
 $lang['er_type'] = 'Tipo';
+$lang['er_code'] = 'Código';
 $lang['er_data'] = 'Fecha';
 $lang['er_track'] = 'Línea / Class / Archivo';
 $lang['er_errors'] = ' error/es';
