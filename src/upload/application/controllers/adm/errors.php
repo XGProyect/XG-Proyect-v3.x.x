@@ -116,7 +116,7 @@ class Errors extends Controller
     }
     
     /**
-     * Get a list of log files and parse them
+     * Parse the recovered log files
      * 
      * @return array
      */
@@ -151,6 +151,11 @@ class Errors extends Controller
         return $list_of_errors;
     }
     
+    /**
+     * Get a list of the log files
+     * 
+     * @return array
+     */
     private function getListOfLogFiles()
     {
         $logs_path  = XGP_ROOT . LOGS_PATH;

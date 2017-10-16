@@ -28,31 +28,36 @@ use application\core\Controller;
 class Media extends Controller
 {
 
-    private $langs;
+    /**
+     *
+     * @var array Language data
+     */
+    private $_lang;
 
     /**
-     * __construct
-     *
+     * Constructor
+     * 
      * @return void
      */
     public function __construct()
     {
         parent::__construct();
 
-        $this->langs = parent::$lang;
+        $this->_lang = $this->getLang();
 
+        // build the page
         $this->buildPage();
     }
 
     /**
-     * buildPage
-     *
+     * Build the page
+     * 
      * @return void
      */
     private function buildPage()
     {
         parent::$page->display(
-            parent::$page->parseTemplate(parent::$page->getTemplate('ajax/media_view'), $this->langs), false, '', false
+            $this->getTemplate()->set('ajax/media_view', $this->_lang), false, '', false
         );
     }
 }
