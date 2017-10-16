@@ -595,10 +595,14 @@ class Updates_library extends XGPCore
             foreach ($BuildQueue as $Node => $Array) {
                 if ($Array != '') {
                     $Item = explode(',', $Array);
-                    $AcumTime = DevelopmentsLib::developmentTime(
+
+                    if (isset($Item[0]) && $Item[0] != 0) {
+
+                        $AcumTime = DevelopmentsLib::developmentTime(
                             $current_user, $current_planet, $Item[0]
-                    );
-                    $BuildArray[$Node] = array($Item[0], $Item[1], $AcumTime);
+                        );
+                        $BuildArray[$Node] = array($Item[0], $Item[1], $AcumTime);
+                    }
                 }
             }
 
