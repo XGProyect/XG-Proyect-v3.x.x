@@ -50,7 +50,7 @@ class Sessions extends XGPCore
         $this->_db = new Database();
 
         session_set_save_handler(
-            array(&$this, 'open'), array(&$this, 'close'), array(&$this, 'read'), array(&$this, 'write'), array(&$this, 'delete'), array(&$this, 'clean')
+            [&$this, 'open'], [&$this, 'close'], [&$this, 'read'], [&$this, 'write'], [&$this, 'destroy'], [&$this, 'clean']
         );
 
         if (session_id() == '') {
@@ -102,7 +102,7 @@ class Sessions extends XGPCore
      *
      * @return Database
      */
-    private function open()
+    public function open()
     {
         return $this->_db->openConnection();
     }
@@ -112,7 +112,7 @@ class Sessions extends XGPCore
      *
      * @return void
      */
-    private function close()
+    public function close()
     {
         return $this->_db->closeConnection();
     }
@@ -152,7 +152,7 @@ class Sessions extends XGPCore
      *
      * @return array
      */
-    private function write($sid, $data)
+    public function write($sid, $data)
     {
         $this->_db->query(
             "REPLACE INTO `" . SESSIONS . "` (`session_id`, `session_data`)
@@ -169,15 +169,13 @@ class Sessions extends XGPCore
      *
      * @return array
      */
-    private function destroy($sid)
+    public function destroy($sid)
     {
         $this->_db->query(
             "DELETE FROM `" . SESSIONS . "`
             WHERE `session_id` = '" . $this->_db->escapeValue($sid) . "'"
         );
-
-        $_SESSION = array();
-
+        
         return $this->_db->affectedRows();
     }
 
@@ -188,7 +186,7 @@ class Sessions extends XGPCore
      *
      * @return array
      */
-    private function clean($expire)
+    public function clean($expire)
     {
         $this->_db->query(
             "DELETE FROM `" . SESSIONS . "`
