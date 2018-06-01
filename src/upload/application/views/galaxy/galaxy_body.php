@@ -269,9 +269,9 @@
                 </tr>
                 {galaxyrows}
                 <tr>
-                    <th width="30">16</th>
+                    <th width="30">{outerspace_slot}</th>
                     <th colspan="7">
-                        <a href="game.php?page=fleet1&galaxy={galaxy}&amp;system={system}&amp;planet=16&amp;planettype=1&amp;target_mission=15">{gl_out_space}</a>
+                        <a href="game.php?page=fleet1&amp;galaxy={galaxy}&amp;system={system}&amp;planet=16&amp;planettype=1&amp;target_mission=15">{gl_out_space}</a>
                     </th>
                 </tr>
                 <tr>
