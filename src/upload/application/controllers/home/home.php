@@ -113,7 +113,7 @@ class Home extends Controller
             $parse['js_path'] = JS_PATH . 'home/';
             $parse['css_path'] = CSS_PATH . 'home/';
             $parse['img_path'] = IMG_PATH . 'home/';
-            $parse['base_path'] = BASE_PATH;
+            $parse['base_path'] = SYSTEM_ROOT;
             $parse['extra_js_error'] = '';
             $parse['user_name'] = isset($_GET['character']) ? $_GET['character'] : '';
             $parse['user_email'] = isset($_GET['email']) ? $_GET['email'] : '';

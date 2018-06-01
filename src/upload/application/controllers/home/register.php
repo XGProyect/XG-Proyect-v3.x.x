@@ -108,6 +108,7 @@ class Register extends Controller
                         'user_email_permanent' => $this->_db->escapeValue($user_email),
                         'user_ip_at_reg' => $_SERVER['REMOTE_ADDR'],
                         'user_agent' => $_SERVER['HTTP_USER_AGENT'],
+                        'user_current_page' => $this->_db->escapeValue($_SERVER['REQUEST_URI']),
                         'user_home_planet_id' => 0,
                         'user_register_time' => time(),
                         'user_password' => $hashed_password
