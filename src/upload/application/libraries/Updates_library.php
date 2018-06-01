@@ -535,7 +535,10 @@ class Updates_library extends XGPCore
                                 break;
                         }
 
-                        $sub_query .= "`" . $resource[$element] . "` = '" . $current_planet[$resource[$element]] . "', ";
+                        if($resource[$element] != ''){
+
+                            $sub_query .= "`" . $resource[$element] . "` = '" . $current_planet[$resource[$element]] . "', ";
+                        }
                     }
                 }
             }
