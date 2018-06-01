@@ -197,6 +197,7 @@ class Galaxy extends Controller
         $parse['galaxy'] = $this->_galaxy;
         $parse['system'] = $this->_system;
         $parse['planet'] = $planet;
+        $parse['outerspace_slot'] = MAX_PLANET_IN_SYSTEM + 1;
         $parse['currentmip'] = $this->_current_planet['defense_interplanetary_missile'];
         $parse['maxfleetcount'] = $maxfleet_count;
         $parse['fleetmax'] = $fleetmax;
