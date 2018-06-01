@@ -127,7 +127,7 @@ class Updates_library
      */
     public function generateBackUp()
     {
-        $this->db->query->backupDb();
+        $this->db->backupDb();
     }
 
     /**
