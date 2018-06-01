@@ -17,9 +17,9 @@ use application\libraries\FunctionsLib;
 define('IN_ADMIN', true);
 define('XGP_ROOT', realpath(dirname(__DIR__)) . DIRECTORY_SEPARATOR);
 
-require XGP_ROOT . 'application/core/common.php';
+require XGP_ROOT . 'application' . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'common.php';
 
-include_once XGP_ROOT . 'application/libraries/adm/AdministrationLib.php';
+include_once XGP_ROOT . 'application' . DIRECTORY_SEPARATOR . 'libraries' . DIRECTORY_SEPARATOR . 'adm' . DIRECTORY_SEPARATOR . 'AdministrationLib.php';
 
 // check if SSL is setted
 AdministrationLib::secureConnection();

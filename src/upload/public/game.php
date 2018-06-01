@@ -16,7 +16,7 @@ use application\libraries\FunctionsLib;
 define('IN_GAME', true);
 define('XGP_ROOT', realpath(dirname(__DIR__)) . DIRECTORY_SEPARATOR);
 
-require XGP_ROOT . 'application/core/common.php';
+require XGP_ROOT . 'application' . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'common.php';
 
 $hooks->call_hook('before_page');
 

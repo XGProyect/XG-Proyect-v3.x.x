@@ -15,7 +15,7 @@
 define('IN_INSTALL', true);
 define('XGP_ROOT', '../../');
 
-require XGP_ROOT . 'application/core/common.php';
+require XGP_ROOT . 'application' . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'common.php';
 
 $page       = isset($_GET['page']) ? $_GET['page'] : 'installation';
 $file_name  = XGP_ROOT . INSTALL_PATH . $page . '.php';

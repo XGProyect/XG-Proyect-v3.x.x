@@ -14,7 +14,7 @@
 define('IN_LOGIN', true);
 define('XGP_ROOT', realpath(dirname(__DIR__)) . DIRECTORY_SEPARATOR);
 
-require XGP_ROOT . 'application/core/common.php';
+require XGP_ROOT . 'application' . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'common.php';
 
 $page = (isset($_GET['page']) ? $_GET['page'] : 'home');
 
