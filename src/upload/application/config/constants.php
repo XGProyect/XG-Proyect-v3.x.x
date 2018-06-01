@@ -48,7 +48,7 @@ define('ADMIN_ACCESS_QUERY', true);
 // BASE PATH
 define(
     'BASE_PATH', $_SERVER['HTTP_HOST'] . str_replace(
-        '/' . basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']
+        DIRECTORY_SEPARATOR . basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']
     )
 );
 
@@ -56,7 +56,7 @@ define(
 define('SYSTEM_ROOT', 'http://' . strtr(BASE_PATH, ['public' => '']));
 
 // GAME URL
-define('GAMEURL', "http://" . $_SERVER['HTTP_HOST'] . "/");
+define('GAMEURL', "http://" . $_SERVER['HTTP_HOST'] . DIRECTORY_SEPARATOR);
 
 // ADMIN PATHS
 define('ADM_URL', 'http://' . strtr(BASE_PATH, ['public' => '']));
@@ -67,63 +67,63 @@ define('ADM_SECURE_URL', 'https://' . strtr(BASE_PATH, ['public' => '']));
  * GLOBAL DIRECTORY STRUCTURE
  * 
  */
-define('APP_PATH', 'application/');
-define('DATA_PATH', 'data/');
-define('PUBLIC_PATH', 'public/');
-define('SYSTEM_PATH', 'system/');
+define('APP_PATH', 'application' . DIRECTORY_SEPARATOR);
+define('DATA_PATH', 'data' . DIRECTORY_SEPARATOR);
+define('PUBLIC_PATH', 'public' . DIRECTORY_SEPARATOR);
+define('SYSTEM_PATH', 'system' . DIRECTORY_SEPARATOR);
 
 /**
  * 
  * APPLICATION DIRECTORY STRUCTURE
  * 
  */
-define('CONFIGS_PATH', APP_PATH . 'config/');
-define('CONTROLLERS_PATH', APP_PATH . 'controllers/');
-define('CORE_PATH', APP_PATH . 'core/');
-define('HOOKS_PATH', APP_PATH . 'hooks/');
-define('LANG_PATH', APP_PATH . 'lang/');
-define('LIB_PATH', APP_PATH . 'libraries/');
-//define('LOGS_PATH', APP_PATH . 'logs/');
-define('MODELS_PATH', APP_PATH . 'models/');
-define('VENDOR_PATH', APP_PATH . 'third_party/');
-define('TEMPLATE_DIR', APP_PATH . 'views/');
+define('CONFIGS_PATH', APP_PATH . 'config' . DIRECTORY_SEPARATOR);
+define('CONTROLLERS_PATH', APP_PATH . 'controllers' . DIRECTORY_SEPARATOR);
+define('CORE_PATH', APP_PATH . 'core' . DIRECTORY_SEPARATOR);
+define('HOOKS_PATH', APP_PATH . 'hooks' . DIRECTORY_SEPARATOR);
+define('LANG_PATH', APP_PATH . 'lang' . DIRECTORY_SEPARATOR);
+define('LIB_PATH', APP_PATH . 'libraries' . DIRECTORY_SEPARATOR);
+//define('LOGS_PATH', APP_PATH . 'logs' . DIRECTORY_SEPARATOR);
+define('MODELS_PATH', APP_PATH . 'models' . DIRECTORY_SEPARATOR);
+define('VENDOR_PATH', APP_PATH . 'third_party' . DIRECTORY_SEPARATOR);
+define('TEMPLATE_DIR', APP_PATH . 'views' . DIRECTORY_SEPARATOR);
 
 /**
  * 
  * CONTROLLERS DIRECTORY STRUCTURE
  * 
  */
-define('ADMIN_PATH', CONTROLLERS_PATH . 'adm/');
-define('AJAX_PATH', CONTROLLERS_PATH . 'ajax/');
-define('GAME_PATH', CONTROLLERS_PATH . 'game/');
-define('HOME_PATH', CONTROLLERS_PATH . 'home/');
-define('INSTALL_PATH', CONTROLLERS_PATH . 'install/');
+define('ADMIN_PATH', CONTROLLERS_PATH . 'adm' . DIRECTORY_SEPARATOR);
+define('AJAX_PATH', CONTROLLERS_PATH . 'ajax' . DIRECTORY_SEPARATOR);
+define('GAME_PATH', CONTROLLERS_PATH . 'game' . DIRECTORY_SEPARATOR);
+define('HOME_PATH', CONTROLLERS_PATH . 'home' . DIRECTORY_SEPARATOR);
+define('INSTALL_PATH', CONTROLLERS_PATH . 'install' . DIRECTORY_SEPARATOR);
 
 /**
  * 
  * DATA DIRECTORY STRUCTURE
  * 
  */
-define('LOGS_PATH', DATA_PATH . 'logs/');
-define('BACKUP_PATH', DATA_PATH . 'backups/');
+define('LOGS_PATH', DATA_PATH . 'logs' . DIRECTORY_SEPARATOR);
+define('BACKUP_PATH', DATA_PATH . 'backups' . DIRECTORY_SEPARATOR);
 
 /**
  * 
  * PUBLIC DIRECTORY STRUCTURE
  * 
  */
-define('CSS_PATH', PUBLIC_PATH . 'css/');
-define('IMG_PATH', PUBLIC_PATH . 'images/');
-define('JS_PATH', PUBLIC_PATH . 'js/');
-define('UPLOAD_PATH', PUBLIC_PATH . 'upload/');
+define('CSS_PATH', PUBLIC_PATH . 'css' . DIRECTORY_SEPARATOR);
+define('IMG_PATH', PUBLIC_PATH . 'images' . DIRECTORY_SEPARATOR);
+define('JS_PATH', PUBLIC_PATH . 'js' . DIRECTORY_SEPARATOR);
+define('UPLOAD_PATH', PUBLIC_PATH . 'upload' . DIRECTORY_SEPARATOR);
 
 /**
  * 
  * SKIN DIRECTORY STRUCTURE
  * 
  */
-define('SKIN_PATH', UPLOAD_PATH . 'skins/');
-define('DEFAULT_SKINPATH', SKIN_PATH . 'xgproyect/');
+define('SKIN_PATH', UPLOAD_PATH . 'skins' . DIRECTORY_SEPARATOR);
+define('DEFAULT_SKINPATH', SKIN_PATH . 'xgproyect' . DIRECTORY_SEPARATOR);
 define('DPATH', DEFAULT_SKINPATH);
 
 /**

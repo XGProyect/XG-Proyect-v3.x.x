@@ -62,7 +62,7 @@ class Database
      */
     public function __construct()
     {
-        require_once XGP_ROOT . 'application/libraries/DebugLib.php';
+        require_once XGP_ROOT . 'application' . DIRECTORY_SEPARATOR . 'libraries' . DIRECTORY_SEPARATOR . 'DebugLib.php';
 
         $this->debug = new DebugLib();
         $this->openConnection();

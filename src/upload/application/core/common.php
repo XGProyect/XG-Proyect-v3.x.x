@@ -23,7 +23,7 @@ use application\libraries\Updates_library;
 error_reporting(E_ALL);
 ini_set('display_errors', 0);
 
-$config_file = XGP_ROOT . 'application/config/config.php';
+$config_file = XGP_ROOT . 'application' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'config.php';
 $installed = false;
 
 if (file_exists($config_file) && filesize($config_file) > 0) {
@@ -33,7 +33,7 @@ if (file_exists($config_file) && filesize($config_file) > 0) {
 }
 
 // Require some stuff
-require_once XGP_ROOT . 'application/config/constants.php';
+require_once XGP_ROOT . 'application' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'constants.php';
 require_once XGP_ROOT . CORE_PATH . 'AutoLoader.php';
 
 // Auto load a few things

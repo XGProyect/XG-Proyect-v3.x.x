@@ -53,8 +53,8 @@ class Hooks
         }
 
         // GRAB THE HOOKS FILE, IF THERE ARE NO HOOKS, WE'RE DONE
-        if (is_file(XGP_ROOT . 'application/config/hooks.php')) {
-            include ( XGP_ROOT . 'application/config/hooks.php' );
+        if (is_file(XGP_ROOT . 'application' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'hooks.php')) {
+            include ( XGP_ROOT . 'application' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'hooks.php' );
         }
 
         if (!isset($hook) or ! is_array($hook)) {

@@ -12,7 +12,7 @@
  * @version  3.0.0
  */
 define('IN_LOGIN', true);
-define('XGP_ROOT', '../');
+define('XGP_ROOT', realpath(dirname(__DIR__)) . DIRECTORY_SEPARATOR);
 
 require XGP_ROOT . 'application/core/common.php';
 

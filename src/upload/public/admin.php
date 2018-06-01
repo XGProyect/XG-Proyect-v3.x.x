@@ -15,7 +15,7 @@ use application\libraries\adm\AdministrationLib;
 use application\libraries\FunctionsLib;
 
 define('IN_ADMIN', true);
-define('XGP_ROOT', '../');
+define('XGP_ROOT', realpath(dirname(__DIR__)) . DIRECTORY_SEPARATOR);
 
 require XGP_ROOT . 'application/core/common.php';
 
