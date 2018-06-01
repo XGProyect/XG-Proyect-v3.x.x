@@ -100,6 +100,7 @@ class Updates_library extends XGPCore
         $auto_backup = FunctionsLib::readConfig('auto_backup');
         $last_backup = FunctionsLib::readConfig('last_backup');
         $update_interval = 6; // 6 HOURS
+
         // CHECK TIME
         if ((time() >= ($last_backup + (3600 * $update_interval))) && ($auto_backup == 1)) {
 
@@ -124,10 +125,6 @@ class Updates_library extends XGPCore
             while ($current_planet['planet_b_building_id'] != 0) {
 
                 if ($current_planet['planet_b_building'] <= time()) {
-
-                    self::updatePlanetResources(
-                        $current_user, $current_planet, $current_planet['planet_b_building'], false
-                    );
 
                     if (self::checkBuildingQueue($current_planet, $current_user)) {
 
@@ -218,13 +215,14 @@ class Updates_library extends XGPCore
             if ($build_end_time <= time()) {
 
                 $needed = DevelopmentsLib::developmentPrice(
-                        $current_user, $current_planet, $element, true, $for_destroy
+                    $current_user, $current_planet, $element, true, $for_destroy
                 );
 
                 $units = $needed['metal'] + $needed['crystal'] + $needed['deuterium'];
                 $current = (int) $current_planet['planet_field_current'];
                 $max = (int) $current_planet['planet_field_max'];
-
+                $message = '';
+                
                 if ($current_planet['planet_type'] == 3) {
                     if ($element == 41) {
 
@@ -233,6 +231,41 @@ class Updates_library extends XGPCore
                         $current_planet[$resource[$element]] ++;
                     } elseif ($element != 0) {
 
+                        if (DevelopmentsLib::isDevelopmentPayable($current_user, $current_planet, $element, true, $for_destroy)) {
+                        
+                            if ($for_destroy == false) {
+
+                                $current += 1;
+                                $current_planet[$resource[$element]] ++;
+                            } else {
+
+                                $current -= 1;
+                                $current_planet[$resource[$element]] --;
+                            }
+                        } else {
+
+                            $message    = sprintf(
+                                parent::$lang['sys_notenough_money'],
+                                parent::$lang['tech'][$element],
+                                FormatLib::prettyNumber($current_planet['planet_metal']),
+                                parent::$lang['Metal'],
+                                FormatLib::prettyNumber($current_planet['planet_crystal']),
+                                parent::$lang['Crystal'],
+                                FormatLib::prettyNumber($current_planet['planet_deuterium']),
+                                parent::$lang['Deuterium'],
+                                FormatLib::prettyNumber($needed['metal']),
+                                parent::$lang['Metal'],
+                                FormatLib::prettyNumber($needed['crystal']),
+                                parent::$lang['Crystal'],
+                                FormatLib::prettyNumber($needed['deuterium']),
+                                parent::$lang['Deuterium']
+                            );
+                        }
+                    }
+                } elseif ($current_planet['planet_type'] == 1) {
+
+                    if (DevelopmentsLib::isDevelopmentPayable($current_user, $current_planet, $element, true, $for_destroy)) {
+                     
                         if ($for_destroy == false) {
 
                             $current += 1;
@@ -242,17 +275,24 @@ class Updates_library extends XGPCore
                             $current -= 1;
                             $current_planet[$resource[$element]] --;
                         }
-                    }
-                } elseif ($current_planet['planet_type'] == 1) {
-
-                    if ($for_destroy == false) {
-
-                        $current += 1;
-                        $current_planet[$resource[$element]] ++;
                     } else {
-
-                        $current -= 1;
-                        $current_planet[$resource[$element]] --;
+                        
+                        $message    = sprintf(
+                            parent::$lang['sys_notenough_money'],
+                            parent::$lang['tech'][$element],
+                            FormatLib::prettyNumber($current_planet['planet_metal']),
+                            parent::$lang['Metal'],
+                            FormatLib::prettyNumber($current_planet['planet_crystal']),
+                            parent::$lang['Crystal'],
+                            FormatLib::prettyNumber($current_planet['planet_deuterium']),
+                            parent::$lang['Deuterium'],
+                            FormatLib::prettyNumber($needed['metal']),
+                            parent::$lang['Metal'],
+                            FormatLib::prettyNumber($needed['crystal']),
+                            parent::$lang['Crystal'],
+                            FormatLib::prettyNumber($needed['deuterium']),
+                            parent::$lang['Deuterium']
+                        );
                     }
                 }
 
@@ -276,6 +316,11 @@ class Updates_library extends XGPCore
                     $resource[$element], $current_planet[$resource[$element]], $current_planet
                 );
 
+                if ($message != '') {
+                    
+                    FunctionsLib::sendMessage($current_user['user_id'], '', '', 5, parent::$lang['sys_buildlist'], parent::$lang['sys_buildlist_fail'], $message); 
+                }
+                
                 $ret_value = true;
             } else {
 
