@@ -180,21 +180,7 @@ class Alliance extends Controller
 
         // VALIDATE AND GET ALLIANCE DATA
         if (is_numeric($ally_id) && $ally_id != 0) {
-            $alliance_data = $this->_db->queryFetch(
-                "SELECT a.`alliance_id`,
-                        a.`alliance_image`,
-                        a.`alliance_name`,
-                        a.`alliance_tag`,
-                        a.`alliance_description`,
-                        a.`alliance_web`,
-                        a.`alliance_request_notallow`,
-                    (SELECT COUNT(user_id) AS `ally_members` 
-                        FROM `" . USERS . "` 
-                        WHERE `user_ally_id` = a.`alliance_id`) AS `ally_members`
-                FROM `" . ALLIANCE . "` AS a
-                WHERE a.`alliance_id` = '{$ally_id}'
-                LIMIT 1;"
-            );
+            $alliance_data = $this->Alliance_Model->getAllianceDataById($ally_id);
         }
 
         // LET'S GET OUT OF HERE IF WE DIDN'T GET SOMETHING
@@ -207,8 +193,7 @@ class Alliance extends Controller
 
         // PARSE PAGE WITH THE PASSED VALUES
         return $this->getTemplate()->set(
-                'alliance/alliance_ainfo', array_merge(
-                    $this->getLang(), [
+            'alliance/alliance_ainfo', array_merge($this->getLang(), [
                 'alliance_image' => $this->image_block($alliance_image),
                 'alliance_tag' => $alliance_tag,
                 'alliance_name' => $alliance_name,
@@ -216,8 +201,8 @@ class Alliance extends Controller
                 'alliance_description' => $this->description_block($alliance_description),
                 'alliance_web' => $this->web_block($alliance_web),
                 'alliance_request' => $this->request_block($alliance_id, $alliance_request_notallow)
-                    ]
-                )
+                ]
+            )
         );
     }
 
@@ -233,22 +218,12 @@ class Alliance extends Controller
                 $alliance_tag = $this->check_tag($_POST['atag']);
                 $alliance_name = $this->check_name($_POST['aname']);
 
-                $this->_db->query("INSERT INTO " . ALLIANCE . " SET
-                                                                            `alliance_name`='" . $alliance_name . "',
-                                                                            `alliance_tag`='" . $alliance_tag . "' ,
-                                                                            `alliance_owner`='" . (int) $this->_current_user['user_id'] . "',
-                                                                            `alliance_owner_range` = '" . $this->_lang['al_alliance_founder_rank'] . "',
-                                                                            `alliance_register_time`='" . time() . "'");
-
-                $new_ally_id = $this->_db->insertId();
-
-                $this->_db->query("INSERT INTO " . ALLIANCE_STATISTICS . " SET
-                                                                            `alliance_statistic_alliance_id`='" . $new_ally_id . "'");
-
-                $this->_db->query("UPDATE " . USERS . " SET
-                                                                            `user_ally_id`='" . $new_ally_id . "',
-                                                                            `user_ally_register_time`='" . time() . "'
-                                                                            WHERE `user_id`='" . (int) $this->_current_user['user_id'] . "'");
+                $this->Alliance_Model->createNewAlliance(
+                    $alliance_name,
+                    $alliance_tag,
+                    $this->_current_user['user_id'],
+                    $this->_lang['al_alliance_founder_rank']
+                );
 
                 $message = str_replace(array('%s', '%d'), array($alliance_name, $alliance_tag), $this->_lang['al_created']);
                 $page = $this->message_box($message, $message . "<br/><br/>", 'game.php?page=alliance', $this->_lang['al_continue']);
@@ -276,15 +251,7 @@ class Alliance extends Controller
             $page = $this->getTemplate()->set('alliance/alliance_searchform', $parse);
 
             if ($_POST) {
-                $search = $this->_db->query(
-                    "SELECT a.*,
-                    (SELECT COUNT(user_id) AS `ally_members` 
-                        FROM `" . USERS . "` 
-                        WHERE `user_ally_id` = a.`alliance_id`) AS `ally_members`
-                FROM " . ALLIANCE . " AS a
-                WHERE a.alliance_name LIKE '%" . $this->_db->escapeValue($_POST['searchtext']) . "%' OR
-                        a.alliance_tag LIKE '%" . $this->_db->escapeValue($_POST['searchtext']) . "%' LIMIT 30"
-                );
+                $search = $this->Alliance_Model->searchAllianceByNameTag($_POST['searchtext']);
 
                 if ($this->_db->numRows($search) != 0) {
 
@@ -315,47 +282,34 @@ class Alliance extends Controller
         $parse = $this->_lang;
 
         if ($this->_current_user['user_ally_id'] == 0 && $this->_current_user['user_ally_request'] == 0) {
+
             if ($_GET['allyid'] != NULL) {
-                $alianza = $this->_db->queryFetch(
-                    "SELECT *
-                    FROM " . ALLIANCE . "
-                    WHERE alliance_id = '" . (int) $_GET['allyid'] . "'"
-                );
+
+                $allyrow = $this->Alliance_Model->getAllianceDataById($_GET['allyid']);
             }
 
-            if ($alianza['alliance_request_notallow'] == 1) {
+            if ($allyrow['alliance_request_notallow'] == 1) {
 
                 FunctionsLib::message($this->_lang['al_alliance_closed'], "game.php?page=alliance", 2);
             } else {
 
-                if (!is_numeric($_GET['allyid']) or ! $_GET['allyid'] or $this->_current_user['user_ally_request'] != 0 or $this->_current_user['user_ally_id'] != 0) {
+                if (!is_numeric($_GET['allyid']) or !$_GET['allyid'] or $this->_current_user['user_ally_request'] != 0 or $this->_current_user['user_ally_id'] != 0) {
 
-                    FunctionsLib::redirect('game.php?page=alliance');
-                }
-
-                $allyrow = $this->_db->queryFetch(
-                    "SELECT alliance_id, alliance_tag, alliance_request
-                    FROM " . ALLIANCE . "
-                    WHERE alliance_id = '" . (int) $_GET['allyid'] . "'"
-                );
-
-                if (!$allyrow) {
                     FunctionsLib::redirect('game.php?page=alliance');
                 }
 
                 extract($allyrow);
 
                 if (isset($_POST['enviar']) && ( $_POST['enviar'] == $this->_lang['al_applyform_send'] )) {
-                    $this->_db->query(
-                        "UPDATE " . USERS . " SET
-                        `user_ally_request` = '" . (int) $alliance_id . "' ,
-                        `user_ally_request_text` = '" . $_POST['text'] . "',
-                        `user_ally_register_time` = '" . time() . "'
-                        WHERE `user_id`='" . $this->_current_user['user_id'] . "'"
+                    $this->Alliance_Model->createNewUserRequest(
+                        $alliance_id,
+                        $_POST['text'],
+                        $this->_current_user['user_id']
                     );
 
                     FunctionsLib::message($this->_lang['al_request_confirmation_message'], "game.php?page=alliance", 2);
                 } else {
+
                     $text_apply = ( $alliance_request ) ? $alliance_request : $this->_lang['al_default_request_text'];
                 }
 
@@ -382,16 +336,12 @@ class Alliance extends Controller
         # DEFAULT PART WITHOUT ALLIANCE
         ##############################################################################################
         if ($this->_current_user['user_ally_id'] == 0 && $this->_current_user['user_ally_request'] != 0) {
-            $allyquery = $this->_db->queryFetch("SELECT `alliance_tag`
-                                                                                                        FROM " . ALLIANCE . "
-                                                                                                        WHERE alliance_id = '" . (int) $this->_current_user['user_ally_request'] . "' ORDER BY `alliance_id`");
+            $allyquery = $this->Alliance_Model->getAllianceDataById($this->_current_user['user_ally_request']);
 
             extract($allyquery);
 
             if (isset($_POST['bcancel'])) {
-                $this->_db->query("UPDATE " . USERS . "
-                                                                        SET `user_ally_request` = '0'
-                                                                        WHERE `user_id`= " . (int) $this->_current_user['user_id']);
+                $this->Alliance_Model->cancelUserRequestById($this->_current_user['user_id']);
 
                 $this->_lang['request_text'] = str_replace('%s', $alliance_tag, $this->_lang['al_request_deleted']);
                 $this->_lang['button_text'] = $this->_lang['al_continue'];
@@ -450,9 +400,10 @@ class Alliance extends Controller
             }
 
             // REQUESTS
-            $request_count = $this->_db->numRows($this->_db->query("SELECT `user_id`
-                                                                                                                                                    FROM `" . USERS . "`
-                                                                                                                                                    WHERE `user_ally_request` = '" . (int) $this->_ally['alliance_id'] . "'"));
+            $request_count = $this->Alliance_Model->getAllianceRequestsCount(
+                $this->_ally['alliance_id']
+            )['total_requests'];
+
             $this->_lang['requests'] = '';
             if ($request_count != 0) {
                 if ($this->_ally['alliance_owner'] == $this->_current_user['user_id'] or $alliance_ranks[$this->_current_user['user_ally_rank_id'] - 1]['bewerbungen'] != 0) {
@@ -496,12 +447,11 @@ class Alliance extends Controller
             }
 
             if (isset($_GET['yes']) && $_GET['yes'] == 1) {
-                $this->_db->query("UPDATE `" . USERS . "` SET
-                                                                            `user_ally_id` = 0,
-                                                                            `user_ally_rank_id` = 0
-                                                                            WHERE `user_id`='" . $this->_current_user['user_id'] . "'");
+
+                $this->Alliance_Model->exitAlliance($this->_current_user['user_id']);
 
                 $this->_lang['Go_out_welldone'] = str_replace("%s", $this->_ally['alliance_name'], $this->_lang['al_leave_sucess']);
+                
                 $page = $this->message_box(
                     $this->_lang['Go_out_welldone'], "<br>", "game.php?page=alliance", $this->_lang['al_continue']
                 );
@@ -530,25 +480,10 @@ class Alliance extends Controller
             $sort1 = isset($_GET['sort1']) ? (int) $_GET['sort1'] : NULL; // ORDEN 1
             $sort2 = isset($_GET['sort2']) ? (int) $_GET['sort2'] : NULL; // ORDEN 2
 
-            if ($sort2) {
-                $sort = $this->return_sort($sort1, $sort2);
-            } else {
-                $sort = '';
-            }
-
-            $listuser = $this->_db->query(
-                "SELECT u.user_id, 
-                                u.user_onlinetime, 
-                                u.user_name, 
-                                u.user_galaxy, 
-                                u.user_system, 
-                                u.user_planet, 
-                                u.user_ally_register_time, 
-                                u.user_ally_rank_id,
-                                s.user_statistic_total_points
-                        FROM `" . USERS . "` AS u
-                        INNER JOIN `" . USERS_STATISTICS . "`AS s ON u.user_id = s.user_statistic_user_id
-                        WHERE u.user_ally_id='" . $this->_current_user['user_ally_id'] . "'" . $sort
+            $listuser = $this->Alliance_Model->getAllianceMembers(
+                $this->_current_user['user_ally_id'],
+                $sort1,
+                $sort2
             );
 
             $i = 0;
@@ -620,14 +555,16 @@ class Alliance extends Controller
                 $_POST['text'] = $_POST['text'];
 
                 if ($_POST['r'] == 0) {
-                    $sq = $this->_db->query("SELECT `user_id`, `user_name`
-                                                                                            FROM `" . USERS . "`
-                                                                                            WHERE `user_ally_id` = '" . $this->_current_user['user_ally_id'] . "'");
+
+                    $sq = $this->Alliance_Model->getAllianceMembersById(
+                        $this->_current_user['user_ally_id']
+                    );
                 } else {
-                    $sq = $this->_db->query("SELECT `user_id`, `user_name`
-                                                                                                    FROM `" . USERS . "`
-                                                                                                    WHERE `user_ally_id` = '" . $this->_current_user['user_ally_id'] . "' AND
-                                                                                                                    `user_ally_rank_id` = '" . (int) $_POST['r'] . "'");
+
+                    $sq = $this->Alliance_Model->getAllianceMembersByIdAndRankId(
+                        $this->_current_user['user_ally_id'],
+                        $_POST['r']
+                    );
                 }
 
                 while ($u = $this->_db->fetchArray($sq)) {
@@ -674,29 +611,15 @@ class Alliance extends Controller
                     $alliance_ranks = unserialize($this->_ally['alliance_ranks']);
 
                     if (!empty($_POST['newrangname'])) {
-                        $name = $this->_db->escapeValue(strip_tags($_POST['newrangname']));
 
-                        $alliance_ranks[] = array(
-                            'name' => $name,
-                            'mails' => 0,
-                            'delete' => 0,
-                            'kick' => 0,
-                            'bewerbungen' => 0,
-                            'administrieren' => 0,
-                            'bewerbungenbearbeiten' => 0,
-                            'memberlist' => 0,
-                            'onlinestatus' => 0,
-                            'rechtehand' => 0
+                        $this->Alliance_Model->createNewAllianceRank(
+                            $this->_ally['alliance_id'],
+                            $alliance_ranks,
+                            $_POST['newrangname']
                         );
-
-                        $ranks = serialize($alliance_ranks);
-
-                        $this->_db->query("UPDATE " . ALLIANCE . " SET
-                                                                                            `alliance_ranks`='" . $ranks . "'
-                                                                                            WHERE `alliance_id` = " . (int) $this->_ally['alliance_id']);
-
-                        $goto = $_SERVER['PHP_SELF'] . "?" . str_replace('&amp;', '&', $_SERVER['QUERY_STRING']);
-
+                        
+                        $goto = 'game.php?' . str_replace('&amp;', '&', $_SERVER['QUERY_STRING']);
+                        
                         FunctionsLib::redirect($goto);
                     } elseif (isset($_POST['id']) && $_POST['id'] != '' && is_array($_POST['id'])) {
                         $ally_ranks_new = array();
@@ -717,11 +640,12 @@ class Alliance extends Controller
 
                         $ranks = serialize($ally_ranks_new);
 
-                        $this->_db->query("UPDATE " . ALLIANCE . " SET
-                                                                                            `alliance_ranks`='" . $ranks . "'
-                                                                                            WHERE `alliance_id`= " . $this->_ally['alliance_id']);
+                        $this->Alliance_Model->updateAllianceRanks(
+                            $this->_ally['alliance_id'],
+                            $ranks
+                        );
 
-                        $goto = $_SERVER['PHP_SELF'] . "?" . str_replace('&amp;', '&', $_SERVER['QUERY_STRING']);
+                        $goto = 'game.php?' . str_replace('&amp;', '&', $_SERVER['QUERY_STRING']);
 
                         FunctionsLib::redirect($goto);
                     } elseif (isset($d) && isset($alliance_ranks[$d])) {
@@ -729,9 +653,10 @@ class Alliance extends Controller
 
                         $this->_ally['ally_rank'] = serialize($alliance_ranks);
 
-                        $this->_db->query("UPDATE " . ALLIANCE . " SET
-                                                                                            `alliance_ranks`='" . $this->_ally['ally_rank'] . "'
-                                                                                            WHERE `alliance_id` = " . $this->_ally['alliance_id'] . "");
+                        $this->Alliance_Model->updateAllianceRanks(
+                            $this->_ally['alliance_id'],
+                            $this->_ally['ally_rank']
+                        );
                     }
 
                     $i = 0;
