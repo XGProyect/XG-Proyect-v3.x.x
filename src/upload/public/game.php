@@ -13,6 +13,13 @@
  */
 use application\libraries\FunctionsLib;
 
+if (!defined('DIRECTORY_SEPARATOR')) {
+
+    define('DIRECTORY_SEPARATOR',
+        strtoupper(substr(PHP_OS, 0, 3) == 'WIN') ? '\\' : '/'
+    );
+}
+
 define('IN_GAME', true);
 define('XGP_ROOT', realpath(dirname(__DIR__)) . DIRECTORY_SEPARATOR);
 

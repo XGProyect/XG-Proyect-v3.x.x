@@ -11,6 +11,14 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
+
+if (!defined('DIRECTORY_SEPARATOR')) {
+
+    define('DIRECTORY_SEPARATOR',
+        strtoupper(substr(PHP_OS, 0, 3) == 'WIN') ? '\\' : '/'
+    );
+}
+
 define('IN_LOGIN', true);
 define('XGP_ROOT', realpath(dirname(__DIR__)) . DIRECTORY_SEPARATOR);
 
