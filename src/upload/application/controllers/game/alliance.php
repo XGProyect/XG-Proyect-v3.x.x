@@ -409,6 +409,7 @@ class Alliance extends Controller
                 if ($this->_ally['alliance_owner'] == $this->_current_user['user_id'] or $alliance_ranks[$this->_current_user['user_ally_rank_id'] - 1]['bewerbungen'] != 0) {
                     $parse['request_count'] = $request_count;
                     $this->_lang['requests'] = $this->getTemplate()->set('alliance/alliance_circular_row', $parse);
+                    $this->_lang['requests'] = $this->getTemplate()->set('alliance/alliance_requests_row', $parse);
                 }
             }
             // EXIT ALLIANCE

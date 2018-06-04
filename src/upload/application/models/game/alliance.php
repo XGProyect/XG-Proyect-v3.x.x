@@ -432,7 +432,7 @@ class Alliance
                 `user_ally_request_text` = '',
                 `user_ally_request` = '0',
                 `user_ally_id` = '" . (int)$alliance_id . "'
-            WHERE `user_id = '" . (int)$user_id . "'"
+            WHERE `user_id` = '" . (int)$user_id . "'"
         );
     }
     
@@ -454,11 +454,11 @@ class Alliance
      * 
      * @param int $alliance_id Alliance ID
      * 
-     * @return void
+     * @return array
      */
     public function getAllianceRequests($alliance_id)
     {
-        $this->db->query(
+        return $this->db->query(
             "SELECT `user_id`, `user_name`, `user_ally_request_text`, `user_ally_register_time`
             FROM `" . USERS . "`
             WHERE `user_ally_request` = '" . $alliance_id . "'"

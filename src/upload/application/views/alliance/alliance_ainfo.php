@@ -7,7 +7,7 @@
         {alliance_image}
         <tr>
             <th>{al_ally_info_tag}</th>
-            <th>{ally_tag}</th>
+            <th>{alliance_tag}</th>
         </tr>
         <tr>
             <th>{al_ally_info_name}</th>
