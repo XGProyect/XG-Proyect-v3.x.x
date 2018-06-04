@@ -689,7 +689,10 @@ class GalaxyLib extends XGPCore
      */
     private function isPhalanxActive()
     {
-        if (($this->currentplanet['building_phalanx'] != 0) && ($this->row_data['user_id'] != $this->current_user['user_id']) && ($this->row_data['planet_galaxy'] == $this->currentplanet['planet_galaxy'])) {
+        if (($this->currentplanet['building_phalanx'] != 0) 
+            && ($this->row_data['user_id'] != $this->current_user['user_id']) 
+            && ($this->row_data['planet_galaxy'] == $this->currentplanet['planet_galaxy'])
+            && ($this->currentplanet['planet_type']) == 3) {
 
             return $this->isInRange($this->formula->phalanxRange($this->currentplanet['building_phalanx']));
         }
