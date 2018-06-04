@@ -62,7 +62,7 @@ class Alliance extends Controller
         $this->_lang = $this->getLang();
         $this->bbcode = FunctionsLib::loadLibrary('BBCodeLib');
         $this->_ally = '';
-        $this->_permissions = array();
+        $this->_permissions = [];
 
         // SOME REQUIRED PATHS
         $this->_lang['dpath'] = DPATH;
@@ -720,35 +720,26 @@ class Alliance extends Controller
                             FunctionsLib::redirect('game.php?page=alliance?mode=admin&edit=ally');
                         }
 
-                        $this->_db->query("UPDATE " . ALLIANCE . " SET
-                                                                                            `alliance_owner_range`='" . $this->_ally['alliance_owner_range'] . "',
-                                                                                            `alliance_image`='" . $this->_ally['alliance_image'] . "',
-                                                                                            `alliance_web`='" . $this->_ally['alliance_web'] . "',
-                                                                                            `alliance_request_notallow`='" . $this->_ally['alliance_request_notallow'] . "'
-                                                                                            WHERE `alliance_id` = '" . $this->_ally['alliance_id'] . "'");
+                        $this->Alliance_Model->updateAllianceSettings($this->_ally['alliance_id'], $this->_ally);
+
                     } elseif (isset($_POST['t'])) {
                         if ($t == 3) {
                             $this->_ally['alliance_request'] = $_POST['text'];
 
-                            $this->_db->query("UPDATE " . ALLIANCE . " SET
-                                                                                                    `alliance_request`='" . $this->_ally['alliance_request'] . "'
-                                                                                                    WHERE `alliance_id` = '" . $this->_ally['alliance_id'] . "'");
+                            
+                            $this->Alliance_Model->updateAllianceRequestText($this->_ally['alliance_id'], $this->_ally['alliance_request']);
 
                             FunctionsLib::redirect('game.php?page=alliance&mode=admin&edit=ally&t=3');
                         } elseif ($t == 2) {
                             $this->_ally['alliance_text'] = $_POST['text'];
 
-                            $this->_db->query("UPDATE " . ALLIANCE . " SET
-                                                                                                    `alliance_text`='" . $this->_ally['alliance_text'] . "'
-                                                                                                    WHERE `alliance_id` = '" . $this->_ally['alliance_id'] . "'");
+                            $this->Alliance_Model->updateAllianceText($this->_ally['alliance_id'], $this->_ally['alliance_text']);
 
                             FunctionsLib::redirect('game.php?page=alliance&mode=admin&edit=ally&t=2');
                         } else {
                             $this->_ally['alliance_description'] = $_POST['text'];
 
-                            $this->_db->query("UPDATE " . ALLIANCE . " SET
-                                                                                                    `alliance_description`='" . $this->_ally['alliance_description'] . "'
-                                                                                                    WHERE `alliance_id` = '" . $this->_ally['alliance_id'] . "'");
+                            $this->Alliance_Model->updateAllianceDescription($this->_ally['alliance_id'], $this->_ally['alliance_description']);
 
                             FunctionsLib::redirect('game.php?page=alliance&mode=admin&edit=ally&t=1');
                         }

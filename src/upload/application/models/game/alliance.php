@@ -307,6 +307,118 @@ class Alliance
             WHERE `alliance_id` = '" . (int)$alliance_id . "'"
         );
     }
+    
+    /**
+     * Update alliance settings
+     * 
+     * @param int $alliance_id     Alliance ID
+     * @param array $alliance_data Alliance Data
+     * 
+     * @return void
+     */
+    public function updateAllianceSettings($alliance_id, $alliance_data)
+    {
+        $this->db->query(
+            "UPDATE " . ALLIANCE . " SET
+                `alliance_owner_range`='" . $alliance_data['alliance_owner_range'] . "',
+                `alliance_image`='" . $alliance_data['alliance_image'] . "',
+                `alliance_web`='" . $alliance_data['alliance_web'] . "',
+                `alliance_request_notallow`='" . $alliance_data['alliance_request_notallow'] . "'
+            WHERE `alliance_id` = '" . $alliance_id . "'"
+        );
+    }
+    
+    /**
+     * 
+     * @param int    $alliance_id Alliance ID
+     * @param string $text        Text
+     * 
+     * @return void
+     */
+    public function updateAllianceRequestText($alliance_id, $text)
+    {
+        $this->db->query(
+            "UPDATE " . ALLIANCE . " SET
+                `alliance_request`='" .$text . "'
+            WHERE `alliance_id` = '" . (int)$alliance_id . "'"
+        );
+    }
+    
+    /**
+     * 
+     * @param int    $alliance_id Alliance ID
+     * @param string $text        Text
+     * 
+     * @return void
+     */
+    public function updateAllianceText($alliance_id, $text)
+    {
+        $this->db->query(
+            "UPDATE " . ALLIANCE . " SET
+                `alliance_text`='" . $text . "'
+            WHERE `alliance_id` = '" . (int)$alliance_id . "'"
+        );
+    }
+    
+    /**
+     * 
+     * @param int    $alliance_id Alliance ID
+     * @param string $text        Text
+     * 
+     * @return void
+     */
+    public function updateAllianceDescription($alliance_id, $text)
+    {
+        $this->db->query(
+            "UPDATE " . ALLIANCE . " SET
+                `alliance_description`='" . $text . "'
+            WHERE `alliance_id` = '" . (int)$alliance_id . "'"
+        );
+    }
+    
+    /**
+     * Return the sort method
+     * 
+     * @param int $sort1 Sort 1
+     * @param int $sort2 Sort 2
+     * 
+     * @return string
+     */
+    private function returnSort($sort1, $sort2)
+    {
+        // FIRST ORDER
+        switch ($sort1) {
+            case 1:
+                $sort = " ORDER BY `user_name`";
+                break;
+            case 2:
+                $sort = " ORDER BY `user_ally_rank_id`";
+                break;
+            case 3:
+                $sort = " ORDER BY `user_statistic_total_points`";
+                break;
+            case 4:
+                $sort = " ORDER BY `user_ally_register_time`";
+                break;
+            case 5:
+                $sort = " ORDER BY `user_onlinetime`";
+                break;
+            default:
+                $sort = " ORDER BY `user_id`";
+                break;
+        }
+
+        // SECOND ORDER
+        if ($sort2 == 1) {
+
+            $sort .= " DESC;";
+        } elseif ($sort2 == 2) {
+
+            $sort .= " ASC;";
+        }
+
+        return $sort;
+    }
 }
 
 /* end of buildings.php */
