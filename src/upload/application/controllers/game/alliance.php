@@ -824,28 +824,7 @@ class Alliance extends Controller
                         }
                     }
 
-                    if ($sort2) {
-
-                        $sort = $this->return_sort($sort1, $sort2);
-                    } else {
-
-                        $sort = '';
-                    }
-
-                    $listuser = $this->_db->query(
-                        "SELECT u.user_id, 
-                                u.user_onlinetime, 
-                                u.user_name, 
-                                u.user_galaxy, 
-                                u.user_system, 
-                                u.user_planet, 
-                                u.user_ally_register_time, 
-                                u.user_ally_rank_id, 
-                                s.user_statistic_total_points
-                        FROM `" . USERS . "` AS u
-                        INNER JOIN `" . USERS_STATISTICS . "`AS s ON u.user_id = s.user_statistic_user_id
-                        WHERE u.user_ally_id='" . $this->_current_user['user_ally_id'] . "'" . $sort
-                    );
+                    $listuser = $this->Alliance_Model->getAllianceMembers($this->_current_user['user_ally_id'], $sort1, $sort2);
 
                     $i = 0;
                     $r = $this->_lang;
@@ -1239,48 +1218,6 @@ class Alliance extends Controller
         } else {
             return '"red">' . $this->_lang['offline'] . '<';
         }
-    }
-
-    /**
-     * method return_sort
-     * param $sort1
-     * param $sort2
-     * return the requested order
-     */
-    private function return_sort($sort1, $sort2)
-    {
-        // FIRST ORDER
-        switch ($sort1) {
-            case 1:
-                $sort = " ORDER BY `user_name`";
-                break;
-            case 2:
-                $sort = " ORDER BY `user_ally_rank_id`";
-                break;
-            case 3:
-                $sort = " ORDER BY `user_statistic_total_points`";
-                break;
-            case 4:
-                $sort = " ORDER BY `user_ally_register_time`";
-                break;
-            case 5:
-                $sort = " ORDER BY `user_onlinetime`";
-                break;
-            default:
-                $sort = " ORDER BY `user_id`";
-                break;
-        }
-
-        // SECOND ORDER
-        if ($sort2 == 1) {
-
-            $sort .= " DESC;";
-        } elseif ($sort2 == 2) {
-
-            $sort .= " ASC;";
-        }
-
-        return $sort; // RETORNA LA FORMA DE ORDEN
     }
 
     /**
