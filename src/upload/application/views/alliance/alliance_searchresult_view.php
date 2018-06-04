@@ -7,6 +7,12 @@
         <td class="c">{al_ally_info_name}</td>
         <td class="c">{al_ally_info_members}</td>
     </tr>
-    {result}
+    {list_of_results}
+    <tr>
+        <th>{ally_tag}</th>
+        <th>{alliance_name}</th>
+        <th>{ally_members}</th>
+    </tr>
+    {/list_of_results}
 </table>
 </div>

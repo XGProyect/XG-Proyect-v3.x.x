@@ -246,14 +246,15 @@ class Alliance extends Controller
 
             $parse = $this->_lang;
             $parse['searchtext'] = '';
-            $parse['result'] = '';
+            $parse['result'] = [];
 
             $page = $this->getTemplate()->set('alliance/alliance_searchform', $parse);
 
             if ($_POST) {
+
                 $search = $this->Alliance_Model->searchAllianceByNameTag($_POST['searchtext']);
 
-                if ($this->_db->numRows($search) != 0) {
+                if ($search->num_rows != 0) {
 
                     while ($s = $this->_db->fetchArray($search)) {
 
@@ -262,10 +263,10 @@ class Alliance extends Controller
                         $search_data['alliance_name'] = $s['alliance_name'];
                         $search_data['ally_members'] = $s['ally_members'];
 
-                        $parse['result'] .= $this->getTemplate()->set('alliance/alliance_searchresult_row', $search_data);
+                        $parse['list_of_results'][] = $search_data;
                     }
 
-                    $page .= $this->getTemplate()->set('alliance/alliance_searchresult_table', $parse);
+                    $page .= $this->getTemplate()->set('alliance/alliance_searchresult_view', $parse);
                 }
             }
             return $page;
@@ -487,7 +488,7 @@ class Alliance extends Controller
             );
 
             $i = 0;
-            $page_list = '';
+            $page_list = [];
 
             while ($u = $this->_db->fetchArray($listuser)) {
                 $i++;
@@ -516,7 +517,7 @@ class Alliance extends Controller
                     $u['user_ally_register_time'] = "-";
                 }
 
-                $page_list .= $this->getTemplate()->set('alliance/alliance_memberslist_row', $u);
+                $page_list[] = $u;
             }
 
             switch ($sort2) {
@@ -533,9 +534,9 @@ class Alliance extends Controller
 
             $parse['i'] = $i;
             $parse['s'] = $s;
-            $parse['list'] = $page_list;
+            $parse['list_of_members'] = $page_list;
 
-            return $this->getTemplate()->set('alliance/alliance_memberslist_table', $parse);
+            return $this->getTemplate()->set('alliance/alliance_memberslist_view', $parse);
         }
     }
 
@@ -588,7 +589,7 @@ class Alliance extends Controller
                 }
             }
 
-            return $this->getTemplate()->set('alliance/alliance_circular', $this->_lang);
+            return $this->getTemplate()->set('alliance/alliance_circular_view', $this->_lang);
         }
     }
 
@@ -1016,6 +1017,8 @@ class Alliance extends Controller
 
                 case ( $edit == 'transfer' && $this->have_access($this->_ally['alliance_owner'], $this->permissions['admin_alliance']) === true ):
 
+                    $alliance_ranks = unserialize($this->_ally['alliance_ranks']);
+                    
                     if (isset($_POST['newleader'])) {
                         
                         $this->Alliance_Model->transferAlliance($this->_current_user['user_ally_id'], $this->_current_user['user_id'], $_POST['newleader']);
@@ -1023,14 +1026,15 @@ class Alliance extends Controller
                         FunctionsLib::redirect('game.php?page=alliance');
                     }
 
-                    $page_list = '';
+                    $parse['list_of_members'] = [];
 
                     if ($this->_ally['alliance_owner'] != $this->_current_user['user_id']) {
                         FunctionsLib::redirect('game.php?page=alliance');
                     } else {
                         $listuser = $this->Alliance_Model->getAllianceMembersById($this->_current_user['user_ally_id']);
                         $righthand = $this->_lang;
-
+                        $righthand['righthand'] = '';
+                        
                         while ($u = $this->_db->fetchArray($listuser)) {
                             if ($this->_ally['alliance_owner'] != $u['user_id']) {
                                 if ($u['user_ally_rank_id'] != 0) {
@@ -1046,10 +1050,9 @@ class Alliance extends Controller
                             $righthand['dpath'] = DPATH;
                         }
 
-                        $page_list .= $this->getTemplate()->set('alliance/alliance_admin_transfer_row', $righthand);
-                        $parse['list'] = $page_list;
+                        $parse['list_of_members'][] = $righthand;
 
-                        return $this->getTemplate()->set('alliance/alliance_admin_transfer', $parse);
+                        return $this->getTemplate()->set('alliance/alliance_admin_transfer_view', $parse);
                     }
 
                     break;
