@@ -16,7 +16,22 @@
                 <th><img src="{dpath}img/r8.png"></th>
                 <th><img src="{dpath}img/r9.png"></th>
             </tr>
-            {list}
+            {list_of_ranks}
+            <tr>
+                <th>{delete}</th>
+                <th>{r0}</th>
+                <input type="hidden" name="id[]" value="{a}">
+                <th>{r1}</th>
+                <th>{r2}</th>
+                <th>{r3}</th>
+                <th>{r4}</th>
+                <th>{r5}</th>
+                <th>{r6}</th>
+                <th>{r7}</th>
+                <th>{r8}</th>
+                <th>{r9}</th>
+            </tr>
+            {/list_of_ranks}
             <tr>
                 <th colspan="11"><input type="submit" value="{al_save}"></th>
             </tr>

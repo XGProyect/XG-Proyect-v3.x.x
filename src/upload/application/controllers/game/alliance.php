@@ -408,7 +408,6 @@ class Alliance extends Controller
             if ($request_count != 0) {
                 if ($this->_ally['alliance_owner'] == $this->_current_user['user_id'] or $alliance_ranks[$this->_current_user['user_ally_rank_id'] - 1]['bewerbungen'] != 0) {
                     $parse['request_count'] = $request_count;
-                    $this->_lang['requests'] = $this->getTemplate()->set('alliance/alliance_circular_row', $parse);
                     $this->_lang['requests'] = $this->getTemplate()->set('alliance/alliance_requests_row', $parse);
                 }
             }
@@ -660,8 +659,8 @@ class Alliance extends Controller
                         );
                     }
 
-                    $i = 0;
-                    $list = '';
+                    $i    = 0;
+                    $list = [];
 
                     if (count($alliance_ranks) != 0 && $alliance_ranks != '') {
                         foreach ($alliance_ranks as $a => $b) {
@@ -671,25 +670,25 @@ class Alliance extends Controller
                                 $r1 = "<b>-</b>";
                             }
 
-                            $this->_lang['id'] = $a;
-                            $this->_lang['r0'] = $b['name'];
-                            $this->_lang['delete'] = "<a href=\"game.php?page=alliance&mode=admin&edit=rights&d={$a}\"><img src=\"" . DPATH . "alliance/abort.gif\" border=0></a>";
-                            $this->_lang['a'] = $a;
-                            $this->_lang['r1'] = $r1;
-                            $this->_lang['r2'] = "<input type=checkbox name=\"u{$a}r1\"" . (($b['kick'] == 1) ? ' checked="checked"' : '') . ">";
-                            $this->_lang['r3'] = "<input type=checkbox name=\"u{$a}r2\"" . (($b['bewerbungen'] == 1) ? ' checked="checked"' : '') . ">";
-                            $this->_lang['r4'] = "<input type=checkbox name=\"u{$a}r3\"" . (($b['memberlist'] == 1) ? ' checked="checked"' : '') . ">";
-                            $this->_lang['r5'] = "<input type=checkbox name=\"u{$a}r4\"" . (($b['bewerbungenbearbeiten'] == 1) ? ' checked="checked"' : '') . ">";
-                            $this->_lang['r6'] = "<input type=checkbox name=\"u{$a}r5\"" . (($b['administrieren'] == 1) ? ' checked="checked"' : '') . ">";
-                            $this->_lang['r7'] = "<input type=checkbox name=\"u{$a}r6\"" . (($b['onlinestatus'] == 1) ? ' checked="checked"' : '') . ">";
-                            $this->_lang['r8'] = "<input type=checkbox name=\"u{$a}r7\"" . (($b['mails'] == 1) ? ' checked="checked"' : '') . ">";
-                            $this->_lang['r9'] = "<input type=checkbox name=\"u{$a}r8\"" . (($b['rechtehand'] == 1) ? ' checked="checked"' : '') . ">";
+                            $row['id'] = $a;
+                            $row['r0'] = $b['name'];
+                            $row['delete'] = "<a href=\"game.php?page=alliance&mode=admin&edit=rights&d={$a}\"><img src=\"" . DPATH . "alliance/abort.gif\" border=0></a>";
+                            $row['a'] = $a;
+                            $row['r1'] = $r1;
+                            $row['r2'] = "<input type=checkbox name=\"u{$a}r1\"" . (($b['kick'] == 1) ? ' checked="checked"' : '') . ">";
+                            $row['r3'] = "<input type=checkbox name=\"u{$a}r2\"" . (($b['bewerbungen'] == 1) ? ' checked="checked"' : '') . ">";
+                            $row['r4'] = "<input type=checkbox name=\"u{$a}r3\"" . (($b['memberlist'] == 1) ? ' checked="checked"' : '') . ">";
+                            $row['r5'] = "<input type=checkbox name=\"u{$a}r4\"" . (($b['bewerbungenbearbeiten'] == 1) ? ' checked="checked"' : '') . ">";
+                            $row['r6'] = "<input type=checkbox name=\"u{$a}r5\"" . (($b['administrieren'] == 1) ? ' checked="checked"' : '') . ">";
+                            $row['r7'] = "<input type=checkbox name=\"u{$a}r6\"" . (($b['onlinestatus'] == 1) ? ' checked="checked"' : '') . ">";
+                            $row['r8'] = "<input type=checkbox name=\"u{$a}r7\"" . (($b['mails'] == 1) ? ' checked="checked"' : '') . ">";
+                            $row['r9'] = "<input type=checkbox name=\"u{$a}r8\"" . (($b['rechtehand'] == 1) ? ' checked="checked"' : '') . ">";
 
-                            $list .= $this->getTemplate()->set('alliance/alliance_admin_laws_row', $this->_lang);
+                            $list[] = $row;
                         }
                     }
 
-                    $this->_lang['list'] = $list;
+                    $this->_lang['list_of_ranks'] = $list;
                     $this->_lang['dpath'] = DPATH;
 
                     return $this->getTemplate()->set('alliance/alliance_admin_laws', $this->_lang);
@@ -790,7 +789,6 @@ class Alliance extends Controller
                     if (isset($kick)) {
                         $this->have_access($this->_ally['alliance_owner'], $this->permissions['kick_users']);
 
-                        $u = $this->Allinace_Model->getUserToBeKickedById($kick);
                         $u = $this->Alliance_Model->getUserToBeKickedById($kick);
 
                         if ($u['user_ally_id'] == $this->_ally['alliance_id'] && $u['user_id'] != $this->_ally['alliance_owner']) {
@@ -800,12 +798,10 @@ class Alliance extends Controller
                     } elseif (isset($_POST['newrang'])) {
 
                         $u = isset($id) ? $id : '';
-                        $q = $this->Allinace_Model->getUserById($u);
                         $q = $this->Alliance_Model->getUserById($u);
 
                         if ((isset($alliance_ranks[$_POST['newrang'] - 1]) or $_POST['newrang'] == 0 ) && ( $q['user_id'] != $this->_ally['alliance_owner'] )) {
                             
-                            $this->Allinace_Model->updateUserRank($q['user_id'], $_POST['newrang']);
                             $this->Alliance_Model->updateUserRank($q['user_id'], $_POST['newrang']);
                         }
                     }
@@ -816,8 +812,8 @@ class Alliance extends Controller
                     $r = $this->_lang;
                     $s = $this->_lang;
                     $this->_lang['i'] = $this->_db->numRows($listuser);
-                    $page_list = '';
-                    $r['options'] = '';
+                    $page_list      = [];
+                    $r['options']   = '';
 
                     while ($u = $this->_db->fetchArray($listuser)) {
 
@@ -840,16 +836,16 @@ class Alliance extends Controller
 
                         if ($this->_ally['alliance_owner'] == $u['user_id'] or $rank == $u['user_id']) {
 
-                            $u['acciones'] = '-';
+                            $u['actions'] = '-';
                         } elseif ($this->return_rank('kick') == 1 && $this->return_rank('administrieren') == 1 or $this->_ally['alliance_owner'] == $this->_current_user['user_id']) {
 
-                            $u['acciones'] = "<a href=\"game.php?page=alliance&mode=admin&edit=members&kick=" . $u['user_id'] . "\" onclick=\"javascript:return confirm('" . str_replace('%s', $u['user_name'], $this->_lang['al_confirm_remove_member']) . "');\"><img src=\"" . DPATH . "alliance/abort.gif\" border=\"0\"></a> <a href=\"game.php?page=alliance&mode=admin&edit=members&rank=" . $u['user_id'] . "\"><img src=\"" . DPATH . "alliance/key.gif\" border=\"0\"></a>";
+                            $u['actions'] = "<a href=\"game.php?page=alliance&mode=admin&edit=members&kick=" . $u['user_id'] . "\" onclick=\"javascript:return confirm('" . str_replace('%s', $u['user_name'], $this->_lang['al_confirm_remove_member']) . "');\"><img src=\"" . DPATH . "alliance/abort.gif\" border=\"0\"></a> <a href=\"game.php?page=alliance&mode=admin&edit=members&rank=" . $u['user_id'] . "\"><img src=\"" . DPATH . "alliance/key.gif\" border=\"0\"></a>";
                         } elseif ($this->return_rank('administrieren') == 1) {
 
-                            $u['acciones'] = "<a href=\"game.php?page=alliance&mode=admin&edit=members&kick=" . $u['user_id'] . "\" onclick=\"javascript:return confirm('" . str_replace('%s', $u['user_name'], $this->_lang['al_confirm_remove_member']) . "');\"><img src=\"" . DPATH . "alliance/abort.gif\" border=\"0\"></a> <a href=\"game.php?page=alliance&mode=admin&edit=members&rank=" . $u['user_id'] . "\"><img src=\"" . DPATH . "alliance/key.gif\" border=\"0\"></a>";
+                            $u['actions'] = "<a href=\"game.php?page=alliance&mode=admin&edit=members&kick=" . $u['user_id'] . "\" onclick=\"javascript:return confirm('" . str_replace('%s', $u['user_name'], $this->_lang['al_confirm_remove_member']) . "');\"><img src=\"" . DPATH . "alliance/abort.gif\" border=\"0\"></a> <a href=\"game.php?page=alliance&mode=admin&edit=members&rank=" . $u['user_id'] . "\"><img src=\"" . DPATH . "alliance/key.gif\" border=\"0\"></a>";
                         } else {
 
-                            $u['acciones'] = '-';
+                            $u['actions'] = '-';
                         }
 
                         $u['dpath'] = DPATH;
@@ -883,7 +879,7 @@ class Alliance extends Controller
                             $u['user_ally_range'] = $editar_miembros;
                         }
 
-                        $page_list .= $this->getTemplate()->set('alliance/alliance_admin_members_row', $u);
+                        $page_list[] = $u;
                     }
 
                     if ($sort2 == 1) {
@@ -894,10 +890,10 @@ class Alliance extends Controller
                         $s = 1;
                     }
 
-                    $this->_lang['memberslist'] = $page_list;
+                    $this->_lang['list_of_members'] = $page_list;
                     $this->_lang['s'] = $s;
 
-                    return $this->getTemplate()->set('alliance/alliance_admin_members_table', $this->_lang);
+                    return $this->getTemplate()->set('alliance/alliance_admin_members_view', $this->_lang);
 
                     break;
 
