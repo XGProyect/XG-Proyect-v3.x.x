@@ -154,14 +154,14 @@ class TemplateLib
      *
      * @return void
      * 
-     * @deprecated since version v3.0.2, will be removed on v3.x.x
+     * @deprecated since version v3.0.2, will be removed on v3.4.x
      */
     public function parseTemplate($template, $array)
     {
         return preg_replace_callback(
             '#\{([a-z0-9\-_]*?)\}#Ssi', function ($matches) use ($array) {
-            return ((isset($array[$matches[1]])) ? $array[$matches[1]] : '');
-        }, $template
+                return ((isset($array[$matches[1]])) ? $array[$matches[1]] : '');
+            }, $template
         );
     }
 
@@ -172,7 +172,7 @@ class TemplateLib
      *
      * @return string
      * 
-     * @deprecated since version v3.0.2, will be removed on v3.x.x
+     * @deprecated since version v3.0.2, will be removed on v3.4.x
      */
     public function getTemplate($template_name)
     {
@@ -180,6 +180,7 @@ class TemplateLib
         $template = @file_get_contents($route);
 
         if ($template) { // We got something
+
             return $template; // Return
         } else {
 
@@ -197,14 +198,14 @@ class TemplateLib
      *
      * @return void
      * 
-     * @deprecated since version v3.1.0, will be removed on v3.x.x
+     * @deprecated since version v3.1.0, will be removed on v3.4.x
      */
     public function parse($array = array(), $template = '')
     {
         return preg_replace_callback(
             '#\{([a-z0-9\-_]*?)\}#Ssi', function ($matches) use ($array) {
-            return ((isset($array[$matches[1]])) ? $array[$matches[1]] : '');
-        }, ($template == '' ? $this->template : $template)
+                return ((isset($array[$matches[1]])) ? $array[$matches[1]] : '');
+            }, ($template == '' ? $this->template : $template)
         );
     }
 
@@ -215,7 +216,7 @@ class TemplateLib
      *
      * @return string
      * 
-     * @deprecated since version v3.1.0, will be removed on v3.x.x
+     * @deprecated since version v3.1.0, will be removed on v3.4.x
      */
     public function get($template_name)
     {
