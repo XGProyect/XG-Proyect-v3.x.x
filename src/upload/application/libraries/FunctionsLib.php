@@ -15,13 +15,14 @@ namespace application\libraries;
 
 use application\core\Database;
 use application\core\enumerators\MessagesEnumerator;
+use application\core\enumerators\UserRanksEnumerator;
 use application\core\Options;
 use application\core\XGPCore;
 use application\libraries\messenger\MessagesFormat;
 use application\libraries\messenger\MessagesOptions;
 use application\libraries\messenger\Messenger;
-use application\libraries\users\UsersTypes;
 use CI_Email;
+
 
 /**
  * FunctionsLib Class
@@ -720,7 +721,7 @@ abstract class FunctionsLib extends XGPCore
      */
     public static function checkServer($current_user)
     {
-        if (self::readConfig('game_enable') == 0 && $current_user['user_authlevel'] < UsersTypes::admin) {
+        if (self::readConfig('game_enable') == 0 && $current_user['user_authlevel'] < UserRanksEnumerator::admin) {
 
             self::message(stripslashes(FunctionsLib::readConfig('close_reason')), '', '', false, false);
             die();
