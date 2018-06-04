@@ -919,37 +919,42 @@ class Alliance extends Controller
 
                     $i = 0;
                     $query = $this->Alliance_Model->getAllianceRequests($this->_ally['alliance_id']);
-
+                    
                     $s = [];
-                    $parse['list'] = '';
+                    $parse['list_of_requests'] = [];
+                    $parse['request'] = '';
+                    $parse['no_requests'] = '';
 
-                    while ($r = $this->_db->fetchArray($query)) {
+                    if ($query->num_rows > 0) {
+                     
+                        while ($r = $this->_db->fetchArray($query)) {
 
-                        if (isset($show) && $r['user_id'] == $show) {
+                            if (isset($show) && $r['user_id'] == $show) {
 
-                            $s[$show]['username'] = $r['user_name'];
-                            $s[$show]['ally_request_text'] = nl2br($r['user_ally_request_text']);
-                            $s[$show]['id'] = $r['user_id'];
+                                $s[$show]['username'] = $r['user_name'];
+                                $s[$show]['ally_request_text'] = nl2br($r['user_ally_request_text']);
+                                $s[$show]['id'] = $r['user_id'];
+                            }
+
+                            $r['username'] = $r['user_name'];
+                            $r['id'] = $r['user_id'];
+
+                            $r['time'] = date(
+                                FunctionsLib::readConfig('date_format_extended'), $r['user_ally_register_time']
+                            );
+
+                            $parse['list_of_requests'][] = $r;
+
+                            $i++;
                         }
-
-                        $r['username'] = $r['user_name'];
-                        $r['id'] = $r['user_id'];
-
-                        $r['time'] = date(
-                            FunctionsLib::readConfig('date_format_extended'), $r['user_ally_register_time']
-                        );
-
-                        $parse['list'] .= $this->getTemplate()->set('alliance/alliance_admin_request_row', $r);
-
-                        $i++;
                     }
 
-                    if ($parse['list'] == '') {
+                    if (count($parse['list_of_requests']) == 0) {
 
-                        $parse['list'] = "<tr><th colspan=2>" . $this->_lang['al_no_requests'] . "</th></tr>";
+                        $parse['no_requests'] = "<tr><th colspan=2>" . $this->_lang['al_no_requests'] . "</th></tr>";
                     }
 
-                    if (isset($show) && $show != 0 && $parse['list'] != '') {
+                    if (isset($show) && $show != 0 && $query->num_rows != 0) {
 
                         $s[$show]['Request_from'] = str_replace(
                             '%s', $s[$show]['username'], $this->_lang['al_request_from']
@@ -957,16 +962,13 @@ class Alliance extends Controller
                         $parse['request'] = $this->getTemplate()->set(
                             'alliance/alliance_admin_request_form', array_merge($s[$show], $this->_lang)
                         );
-                    } else {
-
-                        $parse['request'] = '';
                     }
 
                     $parse['ally_tag'] = $this->_ally['alliance_tag'];
                     $parse['There_is_hanging_request'] = str_replace('%n', $i, $this->_lang['al_no_request_pending']);
 
                     return $this->getTemplate()->set(
-                            'alliance/alliance_admin_request_table', $parse
+                        'alliance/alliance_admin_request_view', $parse
                     );
                     break;
 
