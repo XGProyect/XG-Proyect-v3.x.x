@@ -51,7 +51,7 @@ class Template
      */
     public function get($template)
     {
-        $route = XGP_ROOT . TEMPLATE_DIR . $template . '.php';
+        $route = XGP_ROOT . TEMPLATE_DIR . strtr($template, ['/' => DIRECTORY_SEPARATOR]) . '.php';
         $template = @file_get_contents($route);
 
         if ($template) { // We got something
@@ -83,7 +83,7 @@ class Template
     private function createNewParser()
     {
         // require email library
-        $parser_library_path = XGP_ROOT . SYSTEM_PATH . 'libraries/Parser.php';
+        $parser_library_path = XGP_ROOT . SYSTEM_PATH . 'libraries' . DIRECTORY_SEPARATOR . 'Parser.php';
 
         if (!file_exists($parser_library_path)) {
 
