@@ -41,7 +41,8 @@ AutoLoader::registerDirectory(XGP_ROOT . CORE_PATH);
 AutoLoader::registerDirectory(XGP_ROOT . LIB_PATH);
 
 // For debugging
-if (DEBUG_MODE or ( $_SERVER['HTTP_HOST'] == 'localhost')) {
+
+if (DEBUG_MODE or (strpos($_SERVER['HTTP_HOST'], 'localhost') !== false)) {
 
     // Show all errors
     ini_set('display_errors', 1);
@@ -53,6 +54,7 @@ set_error_handler(function($code, $description, $file = null, $line = null, $con
     $displayErrors = strtolower(ini_get("display_errors"));
 
     if (error_reporting() === 0 || $displayErrors === "on") {
+
         return false;
     }
 
@@ -61,16 +63,20 @@ set_error_handler(function($code, $description, $file = null, $line = null, $con
 });
 
 // some values by default
-$lang = array();
+$lang = [];
 
 // DEFAULT LANGUAGE
 if ($installed) {
+
     if (defined('IN_INSTALL')) {
+
         $set = false;
     } else {
+
         $set = true;
     }
 } else {
+
     $set = false;
 }
 
@@ -101,9 +107,10 @@ if (!defined('IN_INSTALL')) {
 
     if (!defined('IN_LOGIN') or 'IN_LOGIN' != true) {
 
-        $exclude = array('editor');
+        $exclude = ['editor'];
 
         if (!in_array($current_page, $exclude)) {
+
             SecurePageLib::run();
         }
     }
