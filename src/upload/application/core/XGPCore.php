@@ -112,7 +112,7 @@ abstract class XGPCore
 
                     require_once $model_file;
 
-                    $class_route = strtr(MODELS_PATH . $class_route . '/' . $class_name, ['/' => '\\']);
+                    $class_route = strtr(MODELS_PATH . $class_route . DIRECTORY_SEPARATOR . $class_name, ['/' => '\\']);
                     $this->{$class_name . '_Model'} = new $class_route(new Database());
                     return;
                 }
