@@ -791,6 +791,7 @@ class Alliance extends Controller
                         $this->have_access($this->_ally['alliance_owner'], $this->permissions['kick_users']);
 
                         $u = $this->Allinace_Model->getUserToBeKickedById($kick);
+                        $u = $this->Alliance_Model->getUserToBeKickedById($kick);
 
                         if ($u['user_ally_id'] == $this->_ally['alliance_id'] && $u['user_id'] != $this->_ally['alliance_owner']) {
 
@@ -800,10 +801,12 @@ class Alliance extends Controller
 
                         $u = isset($id) ? $id : '';
                         $q = $this->Allinace_Model->getUserById($u);
+                        $q = $this->Alliance_Model->getUserById($u);
 
                         if ((isset($alliance_ranks[$_POST['newrang'] - 1]) or $_POST['newrang'] == 0 ) && ( $q['user_id'] != $this->_ally['alliance_owner'] )) {
                             
                             $this->Allinace_Model->updateUserRank($q['user_id'], $_POST['newrang']);
+                            $this->Alliance_Model->updateUserRank($q['user_id'], $_POST['newrang']);
                         }
                     }
 
