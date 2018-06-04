@@ -789,38 +789,20 @@ class Alliance extends Controller
                     if (isset($kick)) {
                         $this->have_access($this->_ally['alliance_owner'], $this->permissions['kick_users']);
 
-                        $u = $this->_db->queryFetch(
-                            "SELECT `user_ally_id`, `user_id`
-                            FROM `" . USERS . "`
-                            WHERE `user_id` = '" . (int) $kick . "'
-                            LIMIT 1"
-                        );
+                        $u = $this->Allinace_Model->getUserToBeKickedById($kick);
 
                         if ($u['user_ally_id'] == $this->_ally['alliance_id'] && $u['user_id'] != $this->_ally['alliance_owner']) {
 
-                            $this->_db->query(
-                                "UPDATE " . USERS . " SET
-                                `user_ally_id`='0',
-                                `user_ally_rank_id` = 0
-                                WHERE `user_id`='" . (int) $u['user_id'] . "' LIMIT 1;"
-                            );
+                            $this->Alliance_Model->exitAlliance($u['user_id']);
                         }
                     } elseif (isset($_POST['newrang'])) {
 
                         $u = isset($id) ? $id : '';
-                        $q = $this->_db->queryFetch(
-                            "SELECT `user_id`
-                            FROM " . USERS . "
-                            WHERE `user_id` = '" . (int) $u . "'
-                            LIMIT 1"
-                        );
+                        $q = $this->Allinace_Model->getUserById($u);
 
                         if ((isset($alliance_ranks[$_POST['newrang'] - 1]) or $_POST['newrang'] == 0 ) && ( $q['user_id'] != $this->_ally['alliance_owner'] )) {
-                            $this->_db->query(
-                                "UPDATE " . USERS . " SET
-                                `user_ally_rank_id` = '" . $this->_db->escapeValue($_POST['newrang']) . "'
-                                WHERE `user_id`='" . $q['user_id'] . "'"
-                            );
+                            
+                            $this->Allinace_Model->updateUserRank($q['user_id'], $_POST['newrang']);
                         }
                     }
 
@@ -921,24 +903,14 @@ class Alliance extends Controller
 
                     if (isset($_POST['action']) && ( $_POST['action'] == $this->_lang['al_acept_request'] )) {
 
-                        $this->_db->query(
-                            "UPDATE " . USERS . " SET
-                            user_ally_request_text = '',
-                            user_ally_request = '0',
-                            user_ally_id = '" . $this->_ally['alliance_id'] . "'
-                            WHERE user_id = '" . $show . "'"
-                        );
+                        $this->Alliance_Model->addUserToAlliance($show, $this->_ally['alliance_id']);
 
                         FunctionsLib::sendMessage($show, $this->_current_user['user_id'], '', 3, $this->_ally['alliance_tag'], $this->_lang['al_you_was_acceted'] . $this->_ally['alliance_name'], $this->_lang['al_hi_the_alliance'] . $this->_ally['alliance_name'] . $this->_lang['al_has_accepted'] . $_POST['text']);
 
                         FunctionsLib::redirect('game.php?page=alliance&mode=admin&edit=ally');
                     } elseif (isset($_POST['action']) && ( $_POST['action'] == $this->_lang['al_decline_request'] ) && $_POST['action'] != '') {
 
-                        $this->_db->query("UPDATE " . USERS . " SET
-                                                                                            user_ally_request_text='',
-                                                                                            user_ally_request='0',
-                                                                                            user_ally_id='0'
-                                                                                            WHERE user_id = '" . (int) $show . "'");
+                        $this->Alliance_Model->removeUserFromAlliance($show);
 
                         FunctionsLib::sendMessage($show, $this->_current_user['user_id'], '', 3, $this->_ally['alliance_tag'], $this->_lang['al_you_was_declined'] . $this->_ally['alliance_name'], $this->_lang['al_hi_the_alliance'] . $this->_ally['alliance_name'] . $this->_lang['al_has_declined'] . $_POST['text']);
 
@@ -946,11 +918,7 @@ class Alliance extends Controller
                     }
 
                     $i = 0;
-                    $query = $this->_db->query(
-                        "SELECT user_id, user_name, user_ally_request_text, user_ally_register_time
-                        FROM " . USERS . "
-                        WHERE user_ally_request = '" . $this->_ally['alliance_id'] . "'"
-                    );
+                    $query = $this->Alliance_Model->getAllianceRequests($this->_ally['alliance_id']);
 
                     $s = [];
                     $parse['list'] = '';
@@ -1009,9 +977,7 @@ class Alliance extends Controller
                     if ($_POST) {
                         $alliance_name = $this->check_name($_POST['nametag']);
 
-                        $this->_db->query("UPDATE " . ALLIANCE . " AS a SET
-                                                                                            a.`alliance_name` = '" . $alliance_name . "',
-                                                                                            WHERE a.`alliance_id` = '" . $this->_ally['alliance_id'] . "';");
+                        $this->Alliance_Model->updateAllianceName($this->_ally['alliance_id'], $alliance_name);
                     }
 
                     $parse['caso'] = ( $alliance_name == '' ) ? str_replace('%s', $this->_ally['alliance_name'], $this->_lang['al_change_title']) : str_replace('%s', $alliance_name, $this->_lang['al_change_title']);
@@ -1028,9 +994,7 @@ class Alliance extends Controller
                     if ($_POST) {
                         $alliance_tag = $this->check_tag($_POST['nametag']);
 
-                        $this->_db->query("UPDATE " . ALLIANCE . " SET
-                                                                                            `alliance_tag` = '" . $alliance_tag . "'
-                                                                                            WHERE `alliance_id` = '" . $this->_current_user['user_ally_id'] . "';");
+                        $this->Alliance_Model->updateAllianceTag($this->_ally['alliance_id'], $alliance_tag);
                     }
 
                     $parse['caso'] = ( $alliance_tag == '' ) ? str_replace('%s', $this->_ally['alliance_tag'], $this->_lang['al_change_title']) : str_replace('%s', $alliance_tag, $this->_lang['al_change_title']);
@@ -1042,13 +1006,7 @@ class Alliance extends Controller
 
                 case ( $edit == 'exit' && $this->have_access($this->_ally['alliance_owner'], $this->permissions['disolve_alliance']) === true ):
 
-                    $this->_db->query("UPDATE `" . USERS . "` SET
-                                                                                    `user_ally_id` = '0'
-                                                                                    WHERE `user_ally_id` = '" . $this->_ally['alliance_id'] . "'");
-
-                    $this->_db->query("DELETE FROM " . ALLIANCE . "
-                                                                                    WHERE `alliance_id` = '" . $this->_ally['alliance_id'] . "'
-                                                                                    LIMIT 1");
+                    $this->Alliance_Model->deleteAlliance($this->_ally['alliance_id']);
 
                     FunctionsLib::redirect('game.php?page=alliance');
 
@@ -1057,13 +1015,8 @@ class Alliance extends Controller
                 case ( $edit == 'transfer' && $this->have_access($this->_ally['alliance_owner'], $this->permissions['admin_alliance']) === true ):
 
                     if (isset($_POST['newleader'])) {
-                        $this->_db->query("UPDATE " . USERS . " AS u1, " . ALLIANCE . " AS a, " . USERS . " AS u2 SET
-                                                                                            u1.`user_ally_rank_id` = '0',
-                                                                                            a.`alliance_owner` = '" . $this->_db->escapeValue(strip_tags($_POST['newleader'])) . "',
-                                                                                            u2.`user_ally_rank_id` = '0'
-                                                                                            WHERE u1.`user_id`=" . $this->_current_user['user_id'] . " AND
-                                                                                                            a.`alliance_id`=" . $this->_current_user['user_ally_id'] . " AND
-                                                                                                            u2.user_id`='" . $this->_db->escapeValue(strip_tags($_POST['newleader'])) . "'");
+                        
+                        $this->Alliance_Model->transferAlliance($this->_current_user['user_ally_id'], $this->_current_user['user_id'], $_POST['newleader']);
 
                         FunctionsLib::redirect('game.php?page=alliance');
                     }
@@ -1073,14 +1026,12 @@ class Alliance extends Controller
                     if ($this->_ally['alliance_owner'] != $this->_current_user['user_id']) {
                         FunctionsLib::redirect('game.php?page=alliance');
                     } else {
-                        $listuser = $this->_db->query("SELECT *
-                                                                                                                                    FROM " . USERS . "
-                                                                                                                                    WHERE user_ally_id = '" . $this->_current_user['user_ally_id'] . "'");
+                        $listuser = $this->Alliance_Model->getAllianceMembersById($this->_current_user['user_ally_id']);
                         $righthand = $this->_lang;
 
                         while ($u = $this->_db->fetchArray($listuser)) {
                             if ($this->_ally['alliance_owner'] != $u['user_id']) {
-                                if ($u['ally_rank_id'] != 0) {
+                                if ($u['user_ally_rank_id'] != 0) {
                                     if ($alliance_ranks[$u['user_ally_rank_id'] - 1]['rechtehand'] == 1) {
                                         $righthand['righthand'] .= "\n<option value=\"" . $u['user_id'] . "\"";
                                         $righthand['righthand'] .= ">";
@@ -1250,11 +1201,8 @@ class Alliance extends Controller
             exit;
         }
 
-        $alliance_tag = $this->_db->escapeValue($alliance_tag);
-
-        $check_tag = $this->_db->queryFetch("SELECT `alliance_tag`
-                                                                                                                    FROM `" . ALLIANCE . "`
-                                                                                                                    WHERE `alliance_tag` = '" . $alliance_tag . "'");
+        $check_tag = $this->Alliance_Model->checkAllianceTag($alliance_tag);
+        
         if ($check_tag) {
             FunctionsLib::message(str_replace('%s', $alliance_tag, $this->_lang['al_tag_already_exists']), "game.php?page=alliance&mode=make", 2);
             exit;
@@ -1278,11 +1226,7 @@ class Alliance extends Controller
             exit;
         }
 
-        $alliance_name = $this->_db->escapeValue($alliance_name);
-
-        $check_name = $this->_db->queryFetch("SELECT `alliance_name`
-                                                                                                            FROM `" . ALLIANCE . "`
-                                                                                                            WHERE `alliance_name` = '" . $alliance_name . "'");
+        $check_name = $this->Alliance_Model->checkAllianceName($alliance_name);
 
         if ($check_name) {
             FunctionsLib::message(str_replace('%s', $alliance_name, $this->_lang['al_name_already_exists']), "game.php?page=alliance&mode=make", 2);
@@ -1303,14 +1247,7 @@ class Alliance extends Controller
             // GET ALLIANCE DATA
 
             if (!isset($this->_ally['alliance_id']) or $this->_ally['alliance_id'] <= 0) {
-                $this->_ally = $this->_db->queryFetch(
-                    "SELECT a.*,
-                            (SELECT COUNT(user_id) AS `ally_members` 
-                                FROM `" . USERS . "` 
-                                WHERE `user_ally_id` = a.`alliance_id`) AS `ally_members`
-                    FROM " . ALLIANCE . " AS a
-                    WHERE a.`alliance_id` = '" . (int) $this->_current_user['user_ally_id'] . "'"
-                );
+                $this->_ally = $this->Alliance_Model->getAllianceDataById($this->_current_user['user_ally_id']);
             }
 
             // CURRENT PERMISSIONS LIST

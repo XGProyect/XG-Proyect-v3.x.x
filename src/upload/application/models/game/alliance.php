@@ -57,13 +57,7 @@ class Alliance
     public function getAllianceDataById($alliance_id)
     {
         return $this->db->queryFetch(
-            "SELECT a.`alliance_id`,
-                    a.`alliance_image`,
-                    a.`alliance_name`,
-                    a.`alliance_tag`,
-                    a.`alliance_description`,
-                    a.`alliance_web`,
-                    a.`alliance_request_notallow`,
+            "SELECT a.*,
                     (SELECT COUNT(user_id) AS `ally_members` 
                         FROM `" . USERS . "` 
                         WHERE `user_ally_id` = a.`alliance_id`) AS `ally_members`
@@ -72,6 +66,7 @@ class Alliance
             LIMIT 1;"
         );
     }
+    
     
     /**
      * Create a new alliance with the provided params
@@ -175,8 +170,8 @@ class Alliance
     {
         $this->db->query(
             "UPDATE `" . USERS . "` SET
-            `user_ally_id` = '0',
-            `user_ally_rank_id` = '0'
+                `user_ally_id` = '0',
+                `user_ally_rank_id` = '0'
             WHERE `user_id`='" . (int)$user_id . "'"
         );
     }
@@ -238,7 +233,7 @@ class Alliance
     public function getAllianceMembersById($alliance_id)
     {
         return $this->db->query(
-            "SELECT `user_id`, `user_name`
+            "SELECT `user_id`, `user_name`, `user_ally_rank_id`
                 FROM `" . USERS . "`
                 WHERE `user_ally_id` = '" . (int)$alliance_id . "'"
         );
@@ -376,6 +371,199 @@ class Alliance
         );
     }
     
+    /**
+     * 
+     * @param int $user_id User ID
+     * 
+     * @return array
+     */
+    public function getUserToBeKickedById($user_id)
+    {
+        return $this->db->queryFetch(
+            "SELECT `user_ally_id`, `user_id`
+            FROM `" . USERS . "`
+            WHERE `user_id` = '" . (int)$user_id . "'
+            LIMIT 1"
+        );
+    }
+    
+    /**
+     * 
+     * @param int $user_id User ID
+     * 
+     * @return array
+     */
+    public function getUserById($user_id)
+    {
+        return $this->db->queryFetch(
+            "SELECT `user_id`
+            FROM " . USERS . "
+            WHERE `user_id` = '" . (int)$user_id . "'
+            LIMIT 1"
+        );
+    }
+    
+    /**
+     * 
+     * @param int    $user_id User ID
+     * @param string $rank    Rank
+     */
+    public function updateUserRank($user_id, $rank)
+    {
+        $this->db->query(
+            "UPDATE " . USERS . " SET
+                `user_ally_rank_id` = '" . $this->db->escapeValue($rank) . "'
+            WHERE `user_id`='" . (int)$user_id . "'"
+        );
+    }
+    
+    /**
+     * Add an user to the alliance
+     * 
+     * @param int $user_id     User ID
+     * @param int $alliance_id Alliance ID
+     * 
+     * @return void
+     */
+    public function addUserToAlliance($user_id, $alliance_id)
+    {
+        $this->db->query(
+            "UPDATE `" . USERS . "` SET
+                `user_ally_request_text` = '',
+                `user_ally_request` = '0',
+                `user_ally_id` = '" . (int)$alliance_id . "'
+            WHERE `user_id = '" . (int)$user_id . "'"
+        );
+    }
+    
+    /**
+     * Remove user from alliance
+     * 
+     * @param int $user_id     User ID
+     * @param int $alliance_id Alliance ID
+     * 
+     * @return void
+     */
+    public function removeUserFromAlliance($user_id)
+    {
+        $this->addUserToAlliance($user_id, 0);
+    }
+    
+    /**
+     * Add an user to the alliance
+     * 
+     * @param int $alliance_id Alliance ID
+     * 
+     * @return void
+     */
+    public function getAllianceRequests($alliance_id)
+    {
+        $this->db->query(
+            "SELECT `user_id`, `user_name`, `user_ally_request_text`, `user_ally_register_time`
+            FROM `" . USERS . "`
+            WHERE `user_ally_request` = '" . $alliance_id . "'"
+        );
+    }
+    
+    /**
+     * 
+     * @param int    $alliance_id Alliance ID
+     * @param string $alliance_name Alliance Name
+     */
+    public function updateAllianceName($alliance_id, $alliance_name)
+    {
+        $this->db->query(
+            "UPDATE " . ALLIANCE . " AS a SET
+                a.`alliance_name` = '" . $alliance_name . "',
+            WHERE a.`alliance_id` = '" . $alliance_id . "';"
+        );
+    }
+    
+    /**
+     * 
+     * @param int    $alliance_id  Alliance ID
+     * @param string $alliance_tag Alliance Tag
+     */
+    public function updateAllianceTag($alliance_id, $alliance_tag)
+    {
+        $this->db->query(
+            "UPDATE " . ALLIANCE . " SET
+                `alliance_tag` = '" . $alliance_tag . "'
+            WHERE `alliance_id` = '" . $alliance_id . "';"
+        );
+    }
+    
+    /**
+     * @param int $alliance_id  Alliance ID
+     */
+    public function deleteAlliance($alliance_id)
+    {
+        $this->db->query(
+            "UPDATE `" . USERS . "` SET
+                `user_ally_id` = '0'
+            WHERE `user_ally_id` = '" . $alliance_id . "'"
+        );
+
+        $this->db->query(
+            "DELETE FROM `" . ALLIANCE . "`
+            WHERE `alliance_id` = '" . $alliance_id . "'
+            LIMIT 1"
+        );
+    }
+    
+    /**
+     * 
+     * @param int $alliance_id     Alliance ID
+     * @param int $current_user_id Current User ID
+     * @param int $new_leader      New Leader ID
+     * 
+     * @return void
+     */
+    public function transferAlliance($alliance_id, $current_user_id, $new_leader)
+    {
+        $this->db->query(
+            "UPDATE `" . USERS . "` AS u1, `" . ALLIANCE . "` AS a, `" . USERS . "` AS u2 SET
+                u1.`user_ally_rank_id` = '0',
+                a.`alliance_owner` = '" . (int)$new_leader . "',
+                u2.`user_ally_rank_id` = '0'
+            WHERE u1.`user_id`=" . $current_user_id . " AND
+                a.`alliance_id`=" . $alliance_id . " AND
+                u2.user_id`='" . (int)$new_leader . "'"
+        );
+    }
+    
+    /**
+     * Check alliance name
+     * 
+     * @param string $alliance_name Alliance Name
+     * 
+     * @return array
+     */
+    public function checkAllianceName($alliance_name)
+    {
+        return $this->db->queryFetch(
+            "SELECT `alliance_name`
+            FROM `" . ALLIANCE . "`
+            WHERE `alliance_tag` = '" . $this->db->escapeValue($alliance_name) . "'"
+        );
+    }
+    
+    /**
+     * Check alliance tag
+     * 
+     * @param string $alliance_tag Alliance Tag
+     * 
+     * @return array
+     */
+    public function checkAllianceTag($alliance_tag)
+    {
+        return $this->db->queryFetch(
+            "SELECT `alliance_tag`
+            FROM `" . ALLIANCE . "`
+            WHERE `alliance_tag` = '" . $this->db->escapeValue($alliance_tag) . "'"
+        );
+    }
+
     /**
      * Return the sort method
      * 
