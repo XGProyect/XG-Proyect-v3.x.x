@@ -2,14 +2,14 @@
 <br/>
 <div id="content">
     <form action="game.php?page=buddies&mode=1&sm=3" method="post">
-        <input type="hidden" name="user" value="{user}">
+        <input type="hidden" name="user" value="{user_id}">
         <table width="520">
             <tr>
                 <td class="c" colspan="2">{bu_request_message}</td>
             </tr>
             <tr>
                 <th>{bu_player}</th>
-                <th>{player}</th>
+                <th>{user_name}</th>
             </tr>
             <tr>
                 <th>

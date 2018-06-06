@@ -48,6 +48,22 @@ class Buddies
     }
     
     /**
+     * Get buddy data by ID
+     * 
+     * @param int $buddy_id Buddy ID
+     * 
+     * @return int $buddy_id Buddy ID
+     */
+    public function getBuddyDataByBuddyId($buddy_id)
+    {
+        return $this->db->queryFetch(
+            "SELECT *
+            FROM `" . BUDDY . "`
+            WHERE `buddy_id` = '" . (int)$buddy_id . "'"
+        );
+    }
+    
+    /**
      * 
      * @param int $user_id User ID
      * 
@@ -84,6 +100,100 @@ class Buddies
             FROM " . USERS . " AS u
             LEFT JOIN `" . ALLIANCE . "` AS a ON a.`alliance_id` = u.`user_ally_id`
             WHERE u.`user_id`='" . (int)$user_id . "'"
+        );
+    }
+    
+    /**
+     * Remove a buddy
+     * 
+     * @param int $buddy_id Buddy Id
+     * @param int $user_id  Current User Id
+     * 
+     * @return void
+     */
+    public function removeBuddyById($buddy_id, $user_id)
+    {
+        $this->db->query(
+            "DELETE FROM `" . BUDDY . "`
+            WHERE `buddy_id` = '" . (int)$buddy_id . "' 
+                AND (`buddy_receiver` = '" . (int)$user_id . "' 
+                        OR `buddy_sender` = '" . (int)$user_id . "') "
+        );
+    }
+    
+    /**
+     * Confirm player as a current user buddy
+     * 
+     * @param int $buddy_id Buddy Id
+     * @param int $user_id  Current User Id
+     * 
+     * @return void
+     */
+    public function setBuddyStatusById($buddy_id, $user_id)
+    {
+        $this->db->query(
+            "UPDATE `" . BUDDY . "`
+                SET `buddy_status` = '1'
+            WHERE `buddy_id` = '" . (int)$buddy_id . "' AND
+                    `buddy_receiver` = '" . (int)$user_id . "'"
+        );
+    }
+    
+    /**
+     * Get buddy ID based on receiver and sender, sort of validation
+     * 
+     * @param type $send_to
+     * @param type $user_id
+     * 
+     * @return array
+     */
+    public function getBuddyIdByReceiverAndSender($send_to, $user_id)
+    {
+        return $this->db->queryFetch(
+            "SELECT `buddy_id`
+            FROM `" . BUDDY . "`
+            WHERE (`buddy_receiver` = '" . (int)$user_id . "' AND
+                    `buddy_sender` = '" . (int)$send_to . "') OR
+                            (`buddy_receiver` = '" . (int)$send_to . "' AND
+                                    `buddy_sender` = '" . (int)$user_id . "')"
+        );
+    }
+    
+    /**
+     * Create a new buddy request
+     * 
+     * @param type $user    User ID
+     * @param type $user_id Current User ID
+     * @param type $text    Request Text
+     * 
+     * @return void
+     */
+    public function insertNewBuddyRequest($user, $user_id, $text)
+    {
+        $this->db->query(
+            "INSERT INTO `" . BUDDY . "` SET
+                `buddy_sender` = '" . (int)$user_id . "',
+                `buddy_receiver` = '" . (int)$user . "',
+                `buddy_status` = '0',
+                `buddy_request_text` = '" . $this->db->escapeValue(strip_tags($text)) . "'"
+        );
+    }
+    
+    /**
+     * Check if the user exists
+     * 
+     * @param int $user_id
+     * 
+     * @return string
+     */
+    public function checkIfBuddyExists($user_id)
+    {
+        return $this->db->queryFetch(
+            "SELECT 
+                `user_id`,
+                `user_name`
+                FROM `" . USERS . "`
+                WHERE `user_id` = '" . (int)$user_id . "'"
         );
     }
 }

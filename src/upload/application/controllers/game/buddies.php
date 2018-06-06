@@ -100,27 +100,214 @@ class Buddies extends Controller
     {
         $mode = filter_input(INPUT_GET, 'mode', FILTER_VALIDATE_INT);
         $sm = filter_input(INPUT_GET, 'sm', FILTER_VALIDATE_INT);
-        $bid = filter_input(INPUT_GET, 'bid', FILTER_VALIDATE_INT);
-        $user = filter_input(INPUT_GET, 'u', FILTER_VALIDATE_INT);
         
         $allowed_modes = [
-            1 => 'runAction',
-            2 => 'buddyRequest'
+            1 => 'execAction', // exec one of the allowed actions
+            2 => 'buildRequestForm' // show the send request form
         ];
         
         $allowed_actions = [
-            1 => 'rejectRequest',
-            2 => 'acceptRequest',
-            3 => 'sendRequest'
+            1 => 'removeRequest', // applies for reject or cancel
+            2 => 'acceptRequest', // accept an incoming request
+            3 => 'sendRequest' // send the request
         ];
         
-        if (in_array($mode, $allowed_modes)) {
-        
-            if (in_array($sm, $allowed_actions)) {
+        if (isset($allowed_modes[$mode])) {
+            
+            if (isset($allowed_actions[$sm])) {
 
-                $this->$allowed_modes[$mode]($allowed_actions[$sm]);
+                $this->{$allowed_modes[$mode]}($allowed_actions[$sm]);
+            } else {
+
+                if ($allowed_modes[$mode] == 'buildRequestForm') {
+
+                    $this->{$allowed_modes[$mode]}();
+                }
             }
         }
+    }
+    
+    /**
+     * Exec provided action
+     * 
+     * @param string $action Action
+     * 
+     * @throws Exception
+     */
+    private function execAction($action)
+    {
+        try {
+            
+            if (empty($action)) {
+                throw new Exception('Action cannot be empty');
+            }
+            
+            $this->{$action}();
+            
+            FunctionsLib::redirect('game.php?page=buddies');
+        } catch (Exception $e) {
+
+            die('Caught exception: ' . $e->getMessage() . "\n");
+        }
+    }
+    
+    /**
+     * Reject, Cancel, Delete or Remove a buddy request
+     * 
+     * @return void
+     */
+    private function removeRequest()
+    {
+        $bid = filter_input(INPUT_GET, 'bid', FILTER_VALIDATE_INT);
+        
+        $buddy = new BuddyEntity(
+            $this->Buddies_Model->getBuddyDataByBuddyId($bid)
+        );
+        
+        if ($buddy->getBuddyStatus() == BuddiesStatus::isNotBuddy) {
+            
+            if ($buddy->getBuddySender() != $this->_user['user_id']) {
+                
+                $this->sendMessage($buddy->getBuddySender(), 1);
+
+            } elseif($buddy->getBuddySender() == $this->_user['user_id']) {
+                
+                $this->sendMessage($buddy->getBuddyReceiver(), 1);
+            }   
+        } else {
+            if ($buddy->getBuddySender() != $this->_user['user_id']) {
+                
+                $this->sendMessage($buddy->getBuddySender(), 2);
+            } elseif ($buddy->getBuddySender() == $this->_user['user_id']) {
+                
+                $this->sendMessage($buddy->getBuddyReceiver(), 2);
+            }
+        }
+        
+        $this->Buddies_Model->removeBuddyById($bid, $this->_user['user_id']);
+    }
+    
+    /**
+     * Accept a buddy request
+     * 
+     * @return void
+     */
+    private function acceptRequest()
+    {
+        $bid = filter_input(INPUT_GET, 'bid', FILTER_VALIDATE_INT);
+        
+        $buddy = new BuddyEntity(
+            $this->Buddies_Model->getBuddyDataByBuddyId($bid)
+        );
+
+        $this->sendMessage($buddy->getBuddySender(), 3);
+        
+        $this->Buddies_Model->setBuddyStatusById($bid, $this->_user['user_id']);
+    }
+    
+    /**
+     * Send a buddy request
+     * 
+     * @return void
+     */
+    private function sendRequest()
+    {
+        $user = filter_input(INPUT_GET, 'user', FILTER_VALIDATE_INT);
+        $text = filter_input(INPUT_GET, 'text');
+        
+        $buddy = new BuddyEntity(
+            $this->Buddies_Model->getBuddyIdByReceiverAndSender($user, $this->_user['user_id'])
+        );
+
+        if ($buddy->getBuddyId() != null && $buddy->getBuddyId() != 0) {
+            
+            FunctionsLib::message($this->_lang['bu_request_exists'], 'game.php?page=buddies', 2, false, false, false);
+        }
+
+        $this->sendMessage($user, 4);
+        
+        $this->Buddies_Model->insertNewBuddyRequest(
+            $user,
+            $this->_user['user_id'],
+            $text
+        );
+    }
+    
+    /**
+     * Send message
+     * 
+     * @param int $to   To
+     * @param int $type Type
+     * 
+     * @return void
+     */
+    private function sendMessage($to, $type)
+    {
+        $types = [
+            1 => [
+                'title' => 'bu_rejected_title',
+                'text' => 'bu_rejected_text'
+            ],
+            2 => [
+                'title' => 'bu_deleted_title',
+                'text' => 'bu_deleted_text'
+            ],
+            3 => [
+                'title' => 'bu_accepted_title',
+                'text' => 'bu_accepted_text'
+            ],
+            4 => [
+                'title' => 'bu_to_accept_title',
+                'text' => 'bu_to_accept_text'
+            ]
+        ];
+
+        FunctionsLib::sendMessage(
+            $to, 
+            $this->_user['user_id'], 
+            '', 
+            5, 
+            $this->_user['user_name'], 
+            $this->getLang()[$types[$type]['title']], 
+            str_replace(
+                '%u', 
+                $this->_user['user_name'], 
+                $this->getLang()[$types[$type]['text']]
+            )
+        );
+    }
+    
+    /**
+     * Build the buddy request form page
+     * 
+     * @return void
+     */
+    private function buildRequestForm()
+    {
+        $user = filter_input(INPUT_GET, 'u', FILTER_VALIDATE_INT);
+        
+        if ($user == $this->_user['user_id']) {
+           
+            FunctionsLib::message($this->getLang()['bu_cannot_request_yourself'], 'game.php?page=buddies', 2, true);
+        }
+
+        $user = $this->Buddies_Model->checkIfBuddyExists($user); 
+        
+        if (!$user) {
+            
+            FunctionsLib::redirect('game.php?page=buddies');
+        }
+        
+        parent::$page->display(
+            $this->getTemplate()->set(
+                'buddies/buddies_request', 
+                array_merge(
+                    ['js_path' => JS_PATH],
+                    $user, 
+                    $this->getLang()
+                )
+            )
+        );
     }
     
     /**
@@ -144,130 +331,6 @@ class Buddies extends Controller
                 'buddies/buddies_view', array_merge($page, $this->getLang())
             )
         );
-
-        
-        $mode = isset($_GET['mode']) ? intval($_GET['mode']) : NULL;
-        $bid = isset($_GET['bid']) ? intval($_GET['bid']) : NULL;
-        $sm = isset($_GET['sm']) ? intval($_GET['sm']) : NULL;
-        $user = isset($_GET['u']) ? intval($_GET['u']) : NULL;
-        $this->_lang['js_path'] = JS_PATH;
-        $parse = $this->_lang;
-
-
-        switch ($mode) {
-            case 1:
-
-                switch ($sm) {
-                    // REJECT / CANCEL
-                    case 1:
-
-                        $senderID = $this->_db->queryFetch("SELECT *
-																	FROM " . BUDDY . "
-																	WHERE `buddy_id`='" . intval($bid) . "'");
-
-                        if ($senderID['buddy_status'] == 0) {
-                            if ($senderID['buddy_sender'] != $this->_current_user['user_id']) {
-                                FunctionsLib::sendMessage($senderID['buddy_sender'], $this->_current_user['user_id'], '', 5, $this->_current_user['user_name'], $this->_lang['bu_rejected_title'], str_replace('%u', $this->_current_user['user_name'], $this->_lang['bu_rejected_text']));
-                            } elseif ($senderID['buddy_sender'] == $this->_current_user['user_id']) {
-                                FunctionsLib::sendMessage($senderID['buddy_receiver'], $this->_current_user['user_id'], '', 5, $this->_current_user['user_name'], $this->_lang['bu_rejected_title'], str_replace('%u', $this->_current_user['user_name'], $this->_lang['bu_rejected_title']));
-                            }
-                        } else {
-                            if ($senderID['buddy_sender'] != $this->_current_user['user_id']) {
-                                FunctionsLib::sendMessage($senderID['buddy_sender'], $this->_current_user['user_id'], '', 5, $this->_current_user['user_name'], $this->_lang['bu_deleted_title'], str_replace('%u', $this->_current_user['user_name'], $this->_lang['bu_deleted_text']));
-                            } elseif ($senderID['buddy_sender'] == $this->_current_user['user_id']) {
-                                FunctionsLib::sendMessage($senderID['buddy_receiver'], $this->_current_user['user_id'], '', 5, $this->_current_user['user_name'], $this->_lang['bu_deleted_title'], str_replace('%u', $this->_current_user['user_name'], $this->_lang['bu_deleted_text']));
-                            }
-                        }
-
-                        $this->_db->query("DELETE FROM " . BUDDY . "
-												WHERE `buddy_id`='" . intval($bid) . "' AND
-														(`buddy_receiver`='" . $this->_current_user['user_id'] . "' OR `buddy_sender`='" . $this->_current_user['user_id'] . "') ");
-
-                        FunctionsLib::redirect('game.php?page=buddy');
-
-                        break;
-
-                    // ACCEPT
-                    case 2:
-
-                        $senderID = $this->_db->queryFetch("SELECT *
-																FROM " . BUDDY . "
-																WHERE `buddy_id`='" . intval($bid) . "'");
-
-                        FunctionsLib::sendMessage($senderID['buddy_sender'], $this->_current_user['user_id'], '', 5, $this->_current_user['user_name'], $this->_lang['bu_accepted_title'], str_replace('%u', $this->_current_user['user_name'], $this->_lang['bu_accepted_text']));
-
-                        $this->_db->query("UPDATE " . BUDDY . "
-												SET `buddy_status` = '1'
-												WHERE `buddy_id` ='" . intval($bid) . "' AND
-														`buddy_receiver`='" . $this->_current_user['user_id'] . "'");
-
-                        FunctionsLib::redirect('game.php?page=buddy');
-
-                        break;
-
-                    // SEND REQUEST
-                    case 3:
-
-                        $query = $this->_db->queryFetch("SELECT `buddy_id`
-                            FROM " . BUDDY . "
-                            WHERE (`buddy_receiver`='" . intval($this->_current_user['user_id']) . "' AND
-                                            `buddy_sender`='" . intval($_POST['user']) . "') OR
-                                            (`buddy_receiver`='" . intval($_POST['user']) . "' AND
-                                                    `buddy_sender`='" . intval($this->_current_user['user_id']) . "')");
-
-                        if (!$query) {
-
-                            $text = $this->_db->escapeValue(strip_tags($_POST['text']));
-
-                            FunctionsLib::sendMessage(intval($_POST['user']), $this->_current_user['user_id'], '', 5, $this->_current_user['user_name'], $this->_lang['bu_to_accept_title'], str_replace('%u', $this->_current_user['user_name'], $this->_lang['bu_to_accept_text']));
-
-                            $this->_db->query("INSERT INTO " . BUDDY . " SET
-                                `buddy_sender`='" . intval($this->_current_user['user_id']) . "',
-                                `buddy_receiver`='" . intval($_POST['user']) . "',
-                                `buddy_status`='0',
-                                `buddy_request_text`='" . $text . "'");
-
-                            FunctionsLib::redirect('game.php?page=buddy');
-                        } else {
-                            FunctionsLib::message($this->_lang['bu_request_exists'], 'game.php?page=buddy', 2, false, false, false);
-                        }
-
-                        break;
-                    // ANY OTHER OPTION EXIT
-                    default:
-
-                        FunctionsLib::redirect('game.php?page=buddy');
-
-                        break;
-                }
-
-                break;
-
-            // FRIENDSHIP REQUEST
-            case 2:
-
-                // IF USER = REQUESTED USER, SHOW ERROR.
-                if ($user == $this->_current_user['user_id']) {
-                    FunctionsLib::message($this->_lang['bu_cannot_request_yourself'], 'game.php?page=buddy', 2, false, false, false);
-                } else {
-                    // SEARCH THE PLAYER
-                    $player = $this->_db->queryFetch("SELECT `user_name`
-                        FROM " . USERS . "
-                        WHERE `user_id`='" . intval($user) . "'");
-
-                    // IF PLAYER EXISTS, PROCEED
-                    if ($player) {
-                        $parse['user'] = $user;
-                        $parse['player'] = $player['user_name'];
-
-                        parent::$page->display(parent::$page->parseTemplate(parent::$page->getTemplate('buddy/buddy_request'), $parse));
-                    } else { // EXIT
-                        FunctionsLib::redirect('game.php?page=buddy');
-                    }
-                }
-
-                break;
-        }
     }
     
     /**
@@ -455,7 +518,7 @@ class Buddies extends Controller
      */
     private function generateUrl($buddy_id, $sm, $lang_line)
     {
-        return '<a href="game.php?page=buddy&mode=1&sm=' . $sm . '&bid=' . $buddy_id . '">' . $lang_line . '</a>';
+        return '<a href="game.php?page=buddies&mode=1&sm=' . $sm . '&bid=' . $buddy_id . '">' . $lang_line . '</a>';
     }
     
     /**

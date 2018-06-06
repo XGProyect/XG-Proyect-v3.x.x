@@ -911,7 +911,7 @@ $lang['al_alliance_founder_rank'] = 'Leader';
 //----------------------------------------------------------------------------//
 //BUDDY
 $lang['bu_request_exists'] = 'There is already an application to that player!';
-$lang['bu_cannot_request_yourself'] = 'You can not ask you as a friend to yourself';
+$lang['bu_cannot_request_yourself'] = 'You can not ask yourself as a friend';
 $lang['bu_request_message'] = 'Request message';
 $lang['bu_player'] = 'Name';
 $lang['bu_request_text'] = 'Application Text';
