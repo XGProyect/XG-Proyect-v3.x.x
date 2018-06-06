@@ -9,7 +9,7 @@
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
- * @version  3.0.0
+ * @version  3.1.0
  */
 namespace application\controllers\game;
 
@@ -33,10 +33,10 @@ class Changelog extends Controller
 
     const MODULE_ID = 0;
 
-    private $_lang;
-
     /**
-     * __construct()
+     * Constructor
+     * 
+     * @return void
      */
     public function __construct()
     {
@@ -48,32 +48,32 @@ class Changelog extends Controller
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
-        $this->_lang = parent::$lang;
-
-        $this->build_page();
+        // build the page
+        $this->buildPage();
     }
 
     /**
-     * method build_page
-     * param
-     * return main method, loads everything
+     * Build the page
+     * 
+     * @return void
      */
-    private function build_page()
+    private function buildPage()
     {
-        $template = parent::$page->getTemplate('changelog/changelog_table');
-        $body = '';
+        $changes = [];
 
-        foreach ($this->_lang['changelog'] as $version => $description) {
-            $parse['version_number'] = $version;
-            $parse['description'] = nl2br($description);
+        foreach ($this->getLang()['changelog'] as $v => $d) {
 
-            $body .= parent::$page->parseTemplate($template, $parse);
+            $changes[] = [
+                'version_number' => $v,
+                'description' => nl2br($d)
+            ];
         }
 
-        $parse = $this->_lang;
-        $parse['body'] = $body;
-
-        parent::$page->display(parent::$page->parseTemplate(parent::$page->getTemplate('changelog/changelog_body'), $parse));
+        parent::$page->display(
+            $this->getTemplate()->set('changelog/changelog_view', array_merge(
+                $this->getLang(), ['list_of_changes' => $changes]
+            ))
+        );
     }
 }
 
