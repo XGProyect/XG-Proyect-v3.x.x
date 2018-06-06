@@ -84,11 +84,12 @@ KEY `ID` (`banned_id`)
 
 $tables['buddys'] =
 "CREATE TABLE `" . BUDDY . "` (
-  `buddy_id` int(10) unsigned NOT NULL,
+  `buddy_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `buddy_sender` int(10) unsigned NOT NULL,
   `buddy_receiver` int(10) unsigned NOT NULL,
   `buddy_status` tinyint(1) NOT NULL DEFAULT '0',
-  `buddy_request_text` text
+  `buddy_request_text` text,
+PRIMARY KEY (`buddy_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 
 $tables['buildings'] =
@@ -163,7 +164,7 @@ $tables['fleets'] =
 `fleet_mess` int(11) NOT NULL DEFAULT '0',
 `fleet_creation` int(11) DEFAULT NULL,
 PRIMARY KEY (`fleet_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;";
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;";
 
 $tables['messages'] =
 "CREATE TABLE `" . MESSAGES . "` (

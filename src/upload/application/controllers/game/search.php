@@ -142,7 +142,7 @@ class Search extends Controller
                 if ($type == 'playername' or $type == 'planetname') {
                     if ($this->_current_user['user_id'] != $s['user_id']) {
                         $s['actions'] = '<a href="game.php?page=messages&mode=write&id=' . $s['user_id'] . '" title="' . $this->_lang['write_message'] . '"><img src="' . DPATH . 'img/m.gif"/></a>&nbsp;';
-                        $s['actions'] .= '<a href="#" title="' . $this->_lang['sh_buddy_request'] . '" onClick="f(\'game.php?page=buddy&mode=2&u=' . $s['user_id'] . '\', \'' . $this->_lang['sh_buddy_request'] . '\')"><img src="' . DPATH . 'img/b.gif" border="0"></a>';
+                        $s['actions'] .= '<a href="#" title="' . $this->_lang['sh_buddy_request'] . '" onClick="f(\'game.php?page=buddies&mode=2&u=' . $s['user_id'] . '\', \'' . $this->_lang['sh_buddy_request'] . '\')"><img src="' . DPATH . 'img/b.gif" border="0"></a>';
                     }
 
                     $s['planet_name'] = $s['planet_name'];

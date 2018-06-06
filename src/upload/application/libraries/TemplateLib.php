@@ -482,7 +482,7 @@ class TemplateLib
             ['search', $this->langs['lm_search'], '', 'FFF', '', '2', '17'],
             ['messages', $this->langs['lm_messages'], '', 'FFF', '', '3', '18'],
             ['notes', $this->langs['lm_notes'], '', 'FFF', 'true', '3', '19'],
-            ['buddy', $this->langs['lm_buddylist'], '', 'FFF', '', '3', '20'],
+            ['buddies', $this->langs['lm_buddylist'], '', 'FFF', '', '3', '20'],
             ['options', $this->langs['lm_options'], '', 'FFF', '', '3', '21'],
             ['banned', $this->langs['lm_banned'], '', 'FFF', '', '3', '22'],
             ['logout', $this->langs['lm_logout'], '', 'FFF', '', '3', '']

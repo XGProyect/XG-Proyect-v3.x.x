@@ -1,6 +1,6 @@
 <?php
 /**
- * Buddy Controller
+ * Buddies Controller
  *
  * PHP Version 5.5+
  *
@@ -14,11 +14,11 @@
 namespace application\controllers\game;
 
 use application\core\Controller;
-use application\core\Database;
+use application\libraries\buddies\Buddy;
 use application\libraries\FunctionsLib;
 
 /**
- * Buddy Class
+ * Buddies Class
  *
  * @category Classes
  * @package  Application
@@ -27,16 +27,27 @@ use application\libraries\FunctionsLib;
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-class Buddy extends Controller
+class Buddies extends Controller
 {
 
     const MODULE_ID = 20;
 
-    private $_lang;
-    private $_current_user;
+    /**
+     *
+     * @var type \Users_library
+     */
+    private $_user;
 
     /**
-     * __construct()
+     *
+     * @var array
+     */
+    private $_buddy = null;
+    
+    /**
+     * Constructor
+     * 
+     * @return void
      */
     public function __construct()
     {
@@ -45,33 +56,93 @@ class Buddy extends Controller
         // check if session is active
         parent::$users->checkSession();
 
+        // load Model
+        parent::loadModel('game/buddies');
+
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
-        $this->_db = new Database();
-        $this->_lang = parent::$lang;
-        $this->_current_user = parent::$users->getUserData();
+        // set data
+        $this->_user = $this->getUserData();
 
-        $this->build_page();
+        // init a new buddy object
+        $this->setUpBudies();
+        
+        // time to do something
+        $this->runAction();
+        
+        // build the page
+        $this->buildPage();
     }
 
     /**
-     * method __destruct
-     * param
-     * return close db connection
+     * Creates a new buddy object that will handle all the buddies
+     * creation methods and actions
+     * 
+     * @return void
      */
-    public function __destruct()
+    private function setUpBudies()
     {
-        $this->_db->closeConnection();
+        $this->_buddy = new Buddy(
+            $this->Buddies_Model->getBuddiesByUserId($this->_user['user_id'])
+        );
     }
-
+    
     /**
-     * method build_page
-     * param
-     * return main method, loads everything
+     * Run an action
+     * 
+     * @return void
      */
-    private function build_page()
+    private function runAction()
     {
+        $mode = filter_input(INPUT_GET, 'mode', FILTER_VALIDATE_INT);
+        $sm = filter_input(INPUT_GET, 'sm', FILTER_VALIDATE_INT);
+        $bid = filter_input(INPUT_GET, 'bid', FILTER_VALIDATE_INT);
+        $user = filter_input(INPUT_GET, 'u', FILTER_VALIDATE_INT);
+        
+        $allowed_modes = [
+            1 => 'runAction',
+            2 => 'buddyRequest'
+        ];
+        
+        $allowed_actions = [
+            1 => 'rejectRequest',
+            2 => 'acceptRequest',
+            3 => 'sendRequest'
+        ];
+        
+        if (in_array($mode, $allowed_modes)) {
+        
+            if (in_array($sm, $allowed_actions)) {
+
+                $this->$allowed_modes[$mode]($allowed_actions[$sm]);
+            }
+        }
+    }
+    
+    /**
+     * Build the page
+     * 
+     * @return void
+     */
+    private function buildPage()
+    {
+        /**
+         * Parse the items
+         */
+        $page = [];
+        $page['list_of_requests_received'] = $this->buildListOfRequestsReceived();
+        $page['list_of_requests_sent'] = $this->buildListOfRequestsSent();
+        $page['list_of_buddies'] = $this->buildListOfBuddies();
+
+        // display the page
+        parent::$page->display(
+            $this->getTemplate()->set(
+                'buddies/buddies_view', array_merge($page, $this->getLang())
+            )
+        );
+
+        
         $mode = isset($_GET['mode']) ? intval($_GET['mode']) : NULL;
         $bid = isset($_GET['bid']) ? intval($_GET['bid']) : NULL;
         $sm = isset($_GET['sm']) ? intval($_GET['sm']) : NULL;
@@ -272,6 +343,81 @@ class Buddy extends Controller
 
                 break;
         }
+    }
+    
+    /**
+     * Build the list of requests received
+     * 
+     * @return string
+     */
+    private function buildListOfRequestsReceived()
+    {
+        $received_requests = $this->_buddy->getReceivedRequests();
+        $rows = [];
+        
+        if ($this->hasAny($received_requests)) {
+
+            foreach ($received_requests as $received) {
+                
+                $rows[] .= '';
+            }   
+        }
+        
+        return $rows;
+    }
+    
+    /**
+     * Build the list of requests sent
+     * 
+     * @return string
+     */
+    private function buildListOfRequestsSent()
+    {
+        $requests_sent = $this->_buddy->getSentRequests();
+        $rows = [];
+        
+        if ($this->hasAny($requests_sent)) {
+
+            foreach ($requests_sent as $sent) {
+
+                $rows[] .= '';
+            }   
+        }
+        
+        return $rows;
+    }
+
+    /**
+     * Build the list of buddies
+     * 
+     * @return string
+     */
+    private function buildListOfBuddies()
+    {
+        $buddies = $this->_buddy->getBuddies();
+        $rows = [];
+        
+        if ($this->hasAny($buddies)) {
+
+            foreach ($buddies as $buddy) {
+
+                $rows[] .= '';
+            }   
+        }
+        
+        return $rows;
+    }
+    
+    /**
+     * Check if there's anything
+     * 
+     * @param array $array Array
+     * 
+     * @return boolean
+     */
+    private function hasAny($array)
+    {
+        return (count($array) > 0);
     }
 }
 

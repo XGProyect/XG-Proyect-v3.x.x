@@ -13,6 +13,8 @@
  */
 namespace application\core\entities;
 
+use Exception;
+
 /**
  * Buddy Class
  *

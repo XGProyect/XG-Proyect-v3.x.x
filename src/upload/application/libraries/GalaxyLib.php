@@ -408,7 +408,7 @@ class GalaxyLib extends XGPCore
             ));
             $parse['actions'] .= "</td></tr><tr><td>";
             $parse['actions'] .= str_replace('"', '', FunctionsLib::setUrl(
-                    "game.php?page=buddy&mode=2&u=" . $this->row_data['user_id'], '', $this->langs['gl_buddy_request'], ''
+                    "game.php?page=buddies&mode=2&u=" . $this->row_data['user_id'], '', $this->langs['gl_buddy_request'], ''
             ));
             $parse['actions'] .= "</td></tr><tr>";
 
@@ -511,7 +511,7 @@ class GalaxyLib extends XGPCore
             if ($this->current_user['setting_galaxy_buddy'] == '1') {
 
                 $image = FunctionsLib::setImage(DPATH . 'img/b.gif', $this->langs['gl_buddy_request']);
-                $url = "game.php?page=buddy&mode=2&u=" . $this->row_data['user_id'];
+                $url = "game.php?page=buddies&mode=2&u=" . $this->row_data['user_id'];
                 $links .= FunctionsLib::setUrl($url, '', $image, '') . '&nbsp;';
             }
 
