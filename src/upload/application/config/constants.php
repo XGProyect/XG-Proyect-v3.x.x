@@ -48,7 +48,7 @@ define('ADMIN_ACCESS_QUERY', true);
 // BASE PATH
 define(
     'BASE_PATH', $_SERVER['HTTP_HOST'] . str_replace(
-        DIRECTORY_SEPARATOR . basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']
+        '/' . basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']
     )
 );
 
@@ -56,7 +56,7 @@ define(
 define('SYSTEM_ROOT', 'http://' . strtr(BASE_PATH, ['public' => '']));
 
 // GAME URL
-define('GAMEURL', "http://" . $_SERVER['HTTP_HOST'] . DIRECTORY_SEPARATOR);
+define('GAMEURL', "http://" . $_SERVER['HTTP_HOST'] . '/');
 
 // ADMIN PATHS
 define('ADM_URL', 'http://' . strtr(BASE_PATH, ['public' => '']));
