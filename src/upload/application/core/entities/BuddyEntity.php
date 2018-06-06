@@ -54,10 +54,6 @@ class BuddyEntity
     {
         try {
 
-            if (!is_array($buddy)) {
-                throw new Exception('Must be an array');
-            }
-
             $this->_buddy = $buddy;
         } catch (Exception $e) {
 
