@@ -9,16 +9,9 @@
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
- * @version  3.0.0
+ * @version  3.1.0
  */
 use application\libraries\FunctionsLib;
-
-if (!defined('DIRECTORY_SEPARATOR')) {
-
-    define('DIRECTORY_SEPARATOR',
-        strtoupper(substr(PHP_OS, 0, 3) == 'WIN') ? '\\' : '/'
-    );
-}
 
 define('IN_GAME', true);
 define('XGP_ROOT', realpath(dirname(__DIR__)) . DIRECTORY_SEPARATOR);
