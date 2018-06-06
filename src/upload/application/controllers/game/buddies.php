@@ -221,7 +221,7 @@ class Buddies extends Controller
         
         if ($buddy->getBuddyId() != 0) {
             
-            FunctionsLib::message($this->getLang()['bu_request_exists'], 'game.php?page=buddies', 2, false, false, false);
+            FunctionsLib::message($this->getLang()['bu_request_exists'], 'game.php?page=buddies', 2, true);
         }
 
         $this->sendMessage($user, 4);
