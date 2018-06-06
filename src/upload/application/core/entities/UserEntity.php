@@ -67,4 +67,4 @@ class UserEntity
     }
 }
 
-/* end of Controller.php */
+/* end of UserEntity.php */
