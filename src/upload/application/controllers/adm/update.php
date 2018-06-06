@@ -31,6 +31,7 @@ use application\libraries\FunctionsLib;
 class Update extends Controller
 {
 
+    private $_db;
     private $langs;
     private $current_user;
     private $system_version;
@@ -73,7 +74,10 @@ class Update extends Controller
      */
     public function __destruct()
     {
-        $this->_db->closeConnection();
+        if (isset($this->_db)) {
+            
+            $this->_db->closeConnection();
+        }
     }
 
     /**
