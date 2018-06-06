@@ -62,7 +62,7 @@ class Buildings extends Controller
     private $_allowed_buildings = [];
 
     /**
-     * Status of the commander officier
+     * Status of the commander officer
      * 
      * @var boolean 
      */
