@@ -38,6 +38,18 @@ class Buildings extends Controller
 
     /**
      *
+     * @var type \Users_library
+     */
+    private $_user;
+    
+    /**
+     *
+     * @var type \Users_library
+     */
+    private $_planet;
+    
+    /**
+     *
      * @var \Buildings
      */
     private $_building = null;
