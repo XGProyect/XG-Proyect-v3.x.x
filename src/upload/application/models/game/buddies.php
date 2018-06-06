@@ -62,6 +62,30 @@ class Buddies
                     OR `buddy_receiver` = '" . (int)$user_id . "'"
         );
     }
+    
+    /**
+     * Get Buddy data by Id
+     * 
+     * @param int $user_id User ID
+     * 
+     * @return array
+     */
+    public function getBuddyDataById($user_id)
+    {
+        return $this->db->queryFetch(
+            "SELECT u.`user_id`, 
+                    u.`user_name`, 
+                    u.`user_galaxy`, 
+                    u.`user_system`, 
+                    u.`user_planet`, 
+                    u.`user_onlinetime`, 
+                    a.`alliance_id`, 
+                    a.`alliance_name`
+            FROM " . USERS . " AS u
+            LEFT JOIN `" . ALLIANCE . "` AS a ON a.`alliance_id` = u.`user_ally_id`
+            WHERE u.`user_id`='" . (int)$user_id . "'"
+        );
+    }
 }
 
 /* end of buddies.php */

@@ -86,7 +86,8 @@ class Buddies extends Controller
     private function setUpBudies()
     {
         $this->_buddy = new Buddy(
-            $this->Buddies_Model->getBuddiesByUserId($this->_user['user_id'])
+            $this->Buddies_Model->getBuddiesByUserId($this->_user['user_id']),
+            $this->_user['user_id']
         );
     }
     
@@ -151,9 +152,7 @@ class Buddies extends Controller
         $user = isset($_GET['u']) ? intval($_GET['u']) : NULL;
         $this->_lang['js_path'] = JS_PATH;
         $parse = $this->_lang;
-        $requestsSended = '';
-        $requestsReceived = '';
-        $budys = '';
+
 
         switch ($mode) {
             case 1:
@@ -268,82 +267,6 @@ class Buddies extends Controller
                 }
 
                 break;
-
-            // NOTHING SELECTED
-            default:
-
-                $getBuddys = $this->_db->query("SELECT *
-                    FROM " . BUDDY . "
-                    WHERE `buddy_sender`='" . intval($this->_current_user['user_id']) . "' OR
-                                    `buddy_receiver`='" . intval($this->_current_user['user_id']) . "'");
-
-                $subTemplate = parent::$page->getTemplate('buddy/buddy_row');
-
-                while ($buddy = $this->_db->fetchAssoc($getBuddys)) {
-                    if ($buddy['buddy_status'] == 0) {
-                        if ($buddy['buddy_sender'] == $this->_current_user['user_id']) {
-                            $buddy_receiver = $this->_db->queryFetch("SELECT u.`user_id`, u.`user_name`, u.`user_galaxy`, u.`user_system`, u.`user_planet`, u.`user_ally_id`, a.`alliance_name`
-																			FROM " . USERS . " AS u
-																			LEFT JOIN `" . ALLIANCE . "` AS a ON a.`alliance_id` = u.`user_ally_id`
-																			WHERE u.`user_id`='" . intval($buddy['buddy_receiver']) . "'");
-
-                            $parse['id'] = $buddy_receiver['user_id'];
-                            $parse['username'] = $buddy_receiver['user_name'];
-                            $parse['ally_id'] = $buddy_receiver['user_ally_id'];
-                            $parse['alliance_name'] = $buddy_receiver['alliance_name'];
-                            $parse['galaxy'] = $buddy_receiver['user_galaxy'];
-                            $parse['system'] = $buddy_receiver['user_system'];
-                            $parse['planet'] = $buddy_receiver['user_planet'];
-                            $parse['text'] = $buddy['buddy_request_text'];
-                            $parse['action'] = '<a href="game.php?page=buddy&mode=1&sm=1&bid=' . $buddy['buddy_id'] . '">' . $this->_lang['bu_cancel_request'] . '</a>';
-
-                            $requestsSended .= parent::$page->parseTemplate($subTemplate, $parse);
-                        } else {
-                            $buddy_sender = $this->_db->queryFetch("SELECT u.`user_id`, u.`user_name`, u.`user_galaxy`, u.`user_system`, u.`user_planet`, u.`user_ally_id`, a.`alliance_name`
-																			FROM " . USERS . " as u
-																			LEFT JOIN `" . ALLIANCE . "` AS a ON a.`alliance_id` = u.`user_ally_id`
-																			WHERE `user_id`='" . intval($buddy['buddy_sender']) . "'");
-
-                            $parse['id'] = $buddy_sender['user_id'];
-                            $parse['username'] = $buddy_sender['user_name'];
-                            $parse['ally_id'] = $buddy_sender['user_ally_id'];
-                            $parse['alliance_name'] = $buddy_sender['alliance_name'];
-                            $parse['galaxy'] = $buddy_sender['user_galaxy'];
-                            $parse['system'] = $buddy_sender['user_system'];
-                            $parse['planet'] = $buddy_sender['user_planet'];
-                            $parse['text'] = $buddy['buddy_request_text'];
-                            $parse['action'] = '<a href="game.php?page=buddy&mode=1&sm=2&bid=' . $buddy['buddy_id'] . '">' . $this->_lang['bu_accept'] . '</a><br /><a href="game.php?page=buddy&mode=1&sm=1&bid=' . $buddy['buddy_id'] . '">' . $this->_lang['bu_decline'] . '</a>';
-
-                            $requestsReceived .= parent::$page->parseTemplate($subTemplate, $parse);
-                        }
-                    } else {
-                        $who = $buddy['buddy_sender'] == $this->_current_user['user_id'] ? intval($buddy['buddy_receiver']) : intval($buddy['buddy_sender']);
-                        $buddy_receiver = $this->_db->queryFetch("SELECT u.`user_id`, u.`user_name`, u.`user_galaxy`, u.`user_system`, u.`user_planet`, u.`user_onlinetime`, u.`user_ally_id`, a.`alliance_name`
-																			FROM " . USERS . " as u
-																			LEFT JOIN `" . ALLIANCE . "` AS a ON a.`alliance_id` = u.`user_ally_id`
-																			WHERE `user_id`='" . $who . "'");
-
-                        $parse['id'] = $buddy_receiver['user_id'];
-                        $parse['username'] = $buddy_receiver['user_name'];
-                        $parse['ally_id'] = $buddy_receiver['user_ally_id'];
-                        $parse['alliance_name'] = $buddy_receiver['alliance_name'];
-                        $parse['galaxy'] = $buddy_receiver['user_galaxy'];
-                        $parse['system'] = $buddy_receiver['user_system'];
-                        $parse['planet'] = $buddy_receiver['user_planet'];
-                        $parse['text'] = '<font color="' . ( ( $buddy_receiver['user_onlinetime'] + 60 * 10 >= time() ) ? 'lime">' . $this->_lang['bu_connected'] . '' : ( ( $buddy_receiver['user_onlinetime'] + 60 * 15 >= time() ) ? 'yellow">' . $this->_lang['bu_fifteen_minutes'] : 'red">' . $this->_lang['bu_disconnected'] ) ) . '</font>';
-                        $parse['action'] = '<a href="game.php?page=buddy&mode=1&sm=1&bid=' . $buddy['buddy_id'] . '">' . $this->_lang['bu_delete'] . '</a>';
-
-                        $budys .= parent::$page->parseTemplate($subTemplate, $parse);
-                    }
-                }
-
-                $parse['request_received'] = $requestsSended;
-                $parse['request_sended'] = $requestsReceived;
-                $parse['buddys'] = $budys;
-
-                parent::$page->display(parent::$page->parseTemplate(parent::$page->getTemplate('buddy/buddy_body'), $parse));
-
-                break;
         }
     }
     
@@ -419,16 +342,27 @@ class Buddies extends Controller
      */
     private function extractPlayerData(BuddyEntity $buddy)
     {
+        if ($buddy->getBuddySender() == $this->_user['user_id']) {
+
+            $id_to_get = $buddy->getBuddyReceiver();
+        } else {
+
+            $id_to_get = $buddy->getBuddySender();
+        }
+
+        // get user data
+        $user_data = $this->Buddies_Model->getBuddyDataById($id_to_get);
+        
         return [
-            'id' => '',
-            'username' => '',
-            'ally_id' => '',
-            'alliance_name' => '',
-            'galaxy' => '',
-            'system' => '',
-            'planet' => '',
-            'text' => $this->setText($buddy),
-            'action' => ''
+            'id' => $user_data['user_id'],
+            'username' => $user_data['user_name'],
+            'ally_id' => $user_data['alliance_id'],
+            'alliance_name' => $user_data['alliance_name'],
+            'galaxy' => $user_data['user_galaxy'],
+            'system' => $user_data['user_system'],
+            'planet' => $user_data['user_planet'],
+            'text' => $this->setText($buddy, $user_data['user_onlinetime']),
+            'action' => $this->setAction($buddy)
         ];
     }
     
@@ -439,20 +373,89 @@ class Buddies extends Controller
      * 
      * @return string
      */
-    private function setText(BuddyEntity $buddy)
+    private function setText(BuddyEntity $buddy, $online_time)
     {
         if ($buddy->getBuddyStatus() == BuddiesStatus::isBuddy) {
             
-            return $this->setOnlineStatus();
+            return $this->setOnlineStatus($online_time);
         } else {
             
             return $buddy->getRequestText();
         }
     }
-    
-    private function setOnlineStatus()
+
+    /**
+     * Return an string with the onlinetime formatted
+     * 
+     * @param int $online_time Online Time
+     * 
+     * @return string
+     */
+    private function setOnlineStatus($online_time)
     {
-        return '';
+        $color  = 'red';
+        $status = $this->getLang()['bu_disconnected'];
+        
+        if ($online_time + 60 * 15 >= time()) {
+            
+            $color  = 'yellow';
+            $status = $this->getLang()['bu_fifteen_minutes'];
+        }
+        
+        if ($online_time + 60 * 10 >= time()) {
+            
+            $color  = 'lime';
+            $status = $this->getLang()['bu_connected'];
+        }
+        
+        return '<font color="' . $color . '">' . $status . '</font>';
+    }
+    
+    /**
+     * Set action button based on the request status
+     * 
+     * @param BuddyEntity $buddy Buddy
+     * 
+     * @return string
+     */
+    private function setAction(BuddyEntity $buddy)
+    {
+        $bid = $buddy->getBuddyId();
+        
+        if ($buddy->getBuddyStatus() == BuddiesStatus::isBuddy) {
+            
+            $url = $this->generateUrl($bid, 1, $this->getLang()['bu_delete']);
+            
+        } else {
+            
+            if ($buddy->getBuddySender() == $this->_user['user_id']) {
+                
+                $url = $this->generateUrl($bid, 1, $this->getLang()['bu_cancel_request']);
+                
+            } else {
+                
+                $url = $this->generateUrl($bid, 2, $this->getLang()['bu_accept']);
+                $url .= '<br/>'; 
+                $url .= $this->generateUrl($bid, 1, $this->getLang()['bu_decline']);
+                
+            }
+        }
+        
+        return $url;
+    }
+    
+    /**
+     * Generate the URL
+     * 
+     * @param int    $buddy_id  Buddy ID
+     * @param int    $sm        Action
+     * @param string $lang_line Lang Line
+     * 
+     * @return string
+     */
+    private function generateUrl($buddy_id, $sm, $lang_line)
+    {
+        return '<a href="game.php?page=buddy&mode=1&sm=' . $sm . '&bid=' . $buddy_id . '">' . $lang_line . '</a>';
     }
     
     /**

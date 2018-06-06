@@ -28,19 +28,32 @@ use application\libraries\enumerators\BuddiesStatusEnumerator as BuddiesStatus;
  */
 class Buddy
 {
+    /**
+     *
+     * @var array 
+     */
+    private $_buddies = [];
     
+    /**
+     *
+     * @var int 
+     */
+    private $_current_user_id = 0;
+
     /**
      * Constructor
      * 
-     * @param array $buddies Buddies
+     * @param array $buddies         Buddies
+     * @param int   $current_user_id Current User ID
      * 
      * @return void
      */
-    public function __construct($buddies)
+    public function __construct($buddies, $current_user_id)
     {
         if (is_array($buddies)) {
             
             $this->setUp($buddies);
+            $this->setUserId($current_user_id);
         }
     }
     
@@ -49,14 +62,16 @@ class Buddy
      * 
      * @return array
      */
-    public function getReceivedRequests()
+    public function getSentRequests()
     {
         $list_of_buddies = [];
         
         foreach($this->_buddies as $buddy) {
             
-            if (($buddy instanceof BuddyEntity) && !$this->isBuddy($buddy)) {
-                
+            if (($buddy instanceof BuddyEntity) 
+                && !$this->isBuddy($buddy)
+                && $this->isOwnRequest($buddy)) {
+
                 $list_of_buddies[] = $buddy;
             }
         }
@@ -69,13 +84,15 @@ class Buddy
      * 
      * @return array
      */
-    public function getSentRequests()
+    public function getReceivedRequests()
     {
         $list_of_buddies = [];
         
         foreach($this->_buddies as $buddy) {
             
-            if (($buddy instanceof BuddyEntity) && !$this->isBuddy($buddy)) {
+            if (($buddy instanceof BuddyEntity) 
+                && !$this->isBuddy($buddy)
+                && !$this->isOwnRequest($buddy)) {
                 
                 $list_of_buddies[] = $buddy;
             }
@@ -111,9 +128,21 @@ class Buddy
      * 
      * @return boolean
      */
-    private function isBuddy($buddy)
+    private function isBuddy(BuddyEntity $buddy)
     {
         return ($buddy->getBuddyStatus() == BuddiesStatus::isBuddy);
+    }
+    
+    /**
+     * Check if is the request owner
+     * 
+     * @param BuddyEntity $buddy Buddy
+     * 
+     * @return boolean
+     */
+    private function isOwnRequest(BuddyEntity $buddy)
+    {
+        return ($buddy->getBuddySender() == $this->getUserId());
     }
     
     /**
@@ -127,6 +156,24 @@ class Buddy
 
             $this->_buddies[] = $this->createNewBuddyEntity($buddy);
         }
+    }
+    
+    /**
+     * 
+     * @param int $user_id User Id
+     */
+    private function setUserId($user_id)
+    {
+        $this->_current_user_id = $user_id;
+    }
+    
+    /**
+     * 
+     * @return int
+     */
+    private function getUserId()
+    {
+        return $this->_current_user_id;
     }
     
     /**
