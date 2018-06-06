@@ -9,12 +9,14 @@
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
- * @version  3.0.0
+ * @version  3.1.0
  */
 namespace application\controllers\game;
 
 use application\core\Controller;
+use application\core\entities\BuddyEntity;
 use application\libraries\buddies\Buddy;
+use application\libraries\enumerators\BuddiesStatusEnumerator as BuddiesStatus;
 use application\libraries\FunctionsLib;
 
 /**
@@ -359,7 +361,7 @@ class Buddies extends Controller
 
             foreach ($received_requests as $received) {
                 
-                $rows[] .= '';
+                $rows[] = $this->extractPlayerData($received);
             }   
         }
         
@@ -380,7 +382,7 @@ class Buddies extends Controller
 
             foreach ($requests_sent as $sent) {
 
-                $rows[] .= '';
+                $rows[] = $this->extractPlayerData($sent);
             }   
         }
         
@@ -390,7 +392,7 @@ class Buddies extends Controller
     /**
      * Build the list of buddies
      * 
-     * @return string
+     * @return array
      */
     private function buildListOfBuddies()
     {
@@ -401,11 +403,56 @@ class Buddies extends Controller
 
             foreach ($buddies as $buddy) {
 
-                $rows[] .= '';
+                $rows[] = $this->extractPlayerData($buddy);
             }   
         }
-        
+
         return $rows;
+    }
+    
+    /**
+     * Extract player data based on provided object
+     * 
+     * @param BuddyEntity $buddy Buddy Entity Object
+     * 
+     * @return arrau
+     */
+    private function extractPlayerData(BuddyEntity $buddy)
+    {
+        return [
+            'id' => '',
+            'username' => '',
+            'ally_id' => '',
+            'alliance_name' => '',
+            'galaxy' => '',
+            'system' => '',
+            'planet' => '',
+            'text' => $this->setText($buddy),
+            'action' => ''
+        ];
+    }
+    
+    /**
+     * Set the text
+     * 
+     * @param BuddyEntity $buddy Buddy
+     * 
+     * @return string
+     */
+    private function setText(BuddyEntity $buddy)
+    {
+        if ($buddy->getBuddyStatus() == BuddiesStatus::isBuddy) {
+            
+            return $this->setOnlineStatus();
+        } else {
+            
+            return $buddy->getRequestText();
+        }
+    }
+    
+    private function setOnlineStatus()
+    {
+        return '';
     }
     
     /**

@@ -44,14 +44,44 @@ class Buddy
         }
     }
     
+    /**
+     * Get all the players that received a request from this user
+     * 
+     * @return array
+     */
     public function getReceivedRequests()
     {
-
+        $list_of_buddies = [];
+        
+        foreach($this->_buddies as $buddy) {
+            
+            if (($buddy instanceof BuddyEntity) && !$this->isBuddy($buddy)) {
+                
+                $list_of_buddies[] = $buddy;
+            }
+        }
+        
+        return $list_of_buddies;
     }
     
+    /**
+     * Get all the players that sent a request to this user
+     * 
+     * @return array
+     */
     public function getSentRequests()
     {
+        $list_of_buddies = [];
         
+        foreach($this->_buddies as $buddy) {
+            
+            if (($buddy instanceof BuddyEntity) && !$this->isBuddy($buddy)) {
+                
+                $list_of_buddies[] = $buddy;
+            }
+        }
+        
+        return $list_of_buddies;
     }
     
     /**

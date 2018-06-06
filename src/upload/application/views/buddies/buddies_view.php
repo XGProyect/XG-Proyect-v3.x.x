@@ -76,6 +76,6 @@
                 {action}
             </th>
         </tr>
-        {/list_of_requests_sent}
+        {/list_of_buddies}
     </table>
 </div>
