@@ -86,6 +86,7 @@ class Buildings extends Controller
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
+        // set data
         $this->_user = $this->getUserData();
         $this->_planet = $this->getPlanetData();
 
