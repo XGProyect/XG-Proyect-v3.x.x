@@ -21,8 +21,7 @@ require XGP_ROOT . 'application' . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPA
 
 include_once XGP_ROOT . 'application' . DIRECTORY_SEPARATOR . 'libraries' . DIRECTORY_SEPARATOR . 'adm' . DIRECTORY_SEPARATOR . 'AdministrationLib.php';
 
-// check if SSL is setted
-AdministrationLib::secureConnection();
+// check updates
 AdministrationLib::updateRequired();
 
 $page = isset($_GET['page']) ? $_GET['page'] : 'home';

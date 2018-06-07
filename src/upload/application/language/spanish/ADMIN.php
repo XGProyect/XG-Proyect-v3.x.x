@@ -149,7 +149,6 @@ $lang['se_admin_email'] = 'Email del administrador';
 $lang['se_forum_link'] = 'Enlace del foro';
 $lang['se_server_op_close'] = 'Activar servidor';
 $lang['se_server_status_message'] = 'Mensaje del estado off-line';
-$lang['se_ssl_enabled'] = 'Activar SSL';
 $lang['se_date_time_zone'] = 'Zona Horaria';
 $lang['se_date_format'] = 'Fecha corta';
 $lang['se_date_format_extended'] = 'Fecha extendida';

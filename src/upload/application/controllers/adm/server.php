@@ -85,7 +85,6 @@ class Server extends Controller
             FunctionsLib::updateConfig('reg_enable', $this->_game_config['reg_enable']);
             FunctionsLib::updateConfig('game_enable', $this->_game_config['game_enable']);
             FunctionsLib::updateConfig('close_reason', $this->_game_config['close_reason']);
-            FunctionsLib::updateConfig('ssl_enabled', $this->_game_config['ssl_enabled']);
             FunctionsLib::updateConfig('date_time_zone', $this->_game_config['date_time_zone']);
             FunctionsLib::updateConfig('date_format', $this->_game_config['date_format']);
             FunctionsLib::updateConfig('date_format_extended', $this->_game_config['date_format_extended']);
@@ -109,7 +108,6 @@ class Server extends Controller
         $parse['forum_url'] = $this->_game_config['forum_url'];
         $parse['closed'] = $this->_game_config['game_enable'] == 1 ? " checked = 'checked' " : "";
         $parse['close_reason'] = stripslashes($this->_game_config['close_reason']);
-        $parse['ssl_enabled'] = $this->_game_config['ssl_enabled'] == 1 ? " checked = 'checked' " : "";
         $parse['date_time_zone'] = $this->time_zone_picker();
         $parse['date_format'] = $this->_game_config['date_format'];
         $parse['date_format_extended'] = $this->_game_config['date_format_extended'];
@@ -187,13 +185,6 @@ class Server extends Controller
         // OFF-LINE MESSAGE
         if (isset($_POST['close_reason']) && $_POST['close_reason'] != '') {
             $this->_game_config['close_reason'] = addslashes($_POST['close_reason']);
-        }
-
-        // SSL ENABLED
-        if (isset($_POST['ssl_enabled']) && $_POST['ssl_enabled'] == 'on') {
-            $this->_game_config['ssl_enabled'] = 1;
-        } else {
-            $this->_game_config['ssl_enabled'] = 0;
         }
 
         /*

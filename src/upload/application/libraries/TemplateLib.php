@@ -578,7 +578,6 @@ class TemplateLib
         $parse['title'] = 'Admin CP';
         $parse['js_path'] = JS_PATH;
         $parse['css_path'] = CSS_PATH;
-        $parse['secure_url'] = FunctionsLib::readConfig('ssl_enabled') == 1 ? 'https://' : 'http://';
         $parse['-meta-'] = $metatags ? $metatags : '';
 
         return $this->parseTemplate($this->getTemplate('adm/simple_header'), $parse);
@@ -653,17 +652,8 @@ class TemplateLib
                 $extra = '';
             }
 
-            // URL
-            if (FunctionsLib::readConfig('ssl_enabled') == 1) {
-
-                $url = ADM_SECURE_URL;
-            } else {
-
-                $url = ADM_URL;
-            }
-
             $items .= '<li' . ($current_page == $data[0] ? ' class="active"' : '') . '>
-                <a href="' . $url . 'admin.php?page=' . $data[0] . '" ' . $extra . '>' . $data[1] . '</a></li>';
+                <a href="' . ADM_URL . 'admin.php?page=' . $data[0] . '" ' . $extra . '>' . $data[1] . '</a></li>';
 
             $parse_block[$data[2]] = $items;
         }

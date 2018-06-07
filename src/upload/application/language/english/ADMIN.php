@@ -149,7 +149,6 @@ $lang['se_admin_email'] = 'Administrator email';
 $lang['se_forum_link'] = 'Forum link';
 $lang['se_server_op_close'] = 'Enable server';
 $lang['se_server_status_message'] = 'Disabled server message';
-$lang['se_ssl_enabled'] = 'Activate SSL';
 $lang['se_date_time_zone'] = 'Time Zone';
 $lang['se_date_format'] = 'Short Date';
 $lang['se_date_format_extended'] = 'Extended Date';

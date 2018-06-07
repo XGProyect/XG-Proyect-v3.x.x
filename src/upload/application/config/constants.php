@@ -45,6 +45,8 @@ define('ADMIN_ACCESS_QUERY', true);
  * SYSTEM PATHS CONFIGURATION
  * 
  */
+define('PROTOCOL', ($_SERVER['HTTPS'] == 'on' ? 'https://' : 'http://'));
+
 // BASE PATH
 define(
     'BASE_PATH', $_SERVER['HTTP_HOST'] . str_replace(
@@ -53,14 +55,13 @@ define(
 );
 
 // SYSTEM ROOT, IGNORING PUBLIC
-define('SYSTEM_ROOT', 'http://' . strtr(BASE_PATH, ['public' => '']));
+define('SYSTEM_ROOT', PROTOCOL . strtr(BASE_PATH, ['public' => '']));
 
 // GAME URL
-define('GAMEURL', "http://" . $_SERVER['HTTP_HOST'] . '/');
+define('GAMEURL', PROTOCOL . $_SERVER['HTTP_HOST'] . '/');
 
 // ADMIN PATHS
-define('ADM_URL', 'http://' . strtr(BASE_PATH, ['public' => '']));
-define('ADM_SECURE_URL', 'https://' . strtr(BASE_PATH, ['public' => '']));
+define('ADM_URL', PROTOCOL . strtr(BASE_PATH, ['public' => '']));
 
 /**
  * 

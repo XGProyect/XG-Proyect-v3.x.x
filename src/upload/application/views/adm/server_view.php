@@ -152,18 +152,6 @@
                     <li class="span3">
                         <div class="hover-group popup">
                             <div class="image-wrapper">
-                                <strong>{se_ssl_enabled}</strong>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
-            </label>
-            <input name="ssl_enabled"{ssl_enabled} type="checkbox" />
-            <label>
-                <ul class="popups">
-                    <li class="span3">
-                        <div class="hover-group popup">
-                            <div class="image-wrapper">
                                 <strong>{se_date_time_zone}</strong>
                             </div>
                         </div>

@@ -206,19 +206,6 @@ class AdministrationLib extends XGPCore
     }
 
     /**
-     * secureConnection
-     *
-     * @return void
-     */
-    public static function secureConnection()
-    {
-        if ((FunctionsLib::readConfig('ssl_enabled') == 1) && ($_SERVER['SERVER_PORT'] !== 443) && (empty($_SERVER['HTTPS']) or $_SERVER['HTTPS'] === 'off')) {
-
-            FunctionsLib::redirect('https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
-        }
-    }
-
-    /**
      * adminLogin
      *
      * @param int    $admin_id   Admin ID
