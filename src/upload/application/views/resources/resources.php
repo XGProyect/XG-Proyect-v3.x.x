@@ -27,7 +27,7 @@
                     <td class="k">-</td>
                     <td class="k"><input name="action" value="{rs_calculate}" type="submit"></td>
                 </tr><tr>
-                    <th height="22">{rs_sum}:</th>
+                    <th height="22">{rs_sum}</th>
                     <td class="k">{metal_total}</td>
                     <td class="k">{crystal_total}</td>
                     <td class="k">{deuterium_total}</td>
