@@ -456,7 +456,7 @@ class DevelopmentsLib extends XGPCore
                         }
 
                         FunctionsLib::sendMessage(
-                            $current_user['user_id'], '', '', 5, $lang['sys_buildlist'], $lang['sys_buildlist_fail'], $message
+                            $current_user['user_id'], 0, '', 5, $lang['sys_buildlist'], $lang['sys_buildlist_fail'], $message
                         );
 
                         array_shift($queue_array);

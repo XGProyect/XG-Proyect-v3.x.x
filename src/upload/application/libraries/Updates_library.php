@@ -318,7 +318,7 @@ class Updates_library extends XGPCore
 
                 if ($message != '') {
                     
-                    FunctionsLib::sendMessage($current_user['user_id'], '', '', 5, parent::$lang['sys_buildlist'], parent::$lang['sys_buildlist_fail'], $message); 
+                    FunctionsLib::sendMessage($current_user['user_id'], 0, '', 5, parent::$lang['sys_buildlist'], parent::$lang['sys_buildlist_fail'], $message); 
                 }
                 
                 $ret_value = true;
