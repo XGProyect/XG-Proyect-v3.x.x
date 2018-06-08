@@ -226,7 +226,7 @@ class BBCodeLib
      */
     private function setImage($img)
     {
-        if (substr($img, 0, 7) != 'http://') {
+        if ((substr($img, 0, 7) != 'http://') && (substr($img, 0, 8) != 'https://')) {
 
             $img = XGP_ROOT . IMG_PATH . $img;
         }

@@ -74,7 +74,7 @@ $lang['hm_ok'] = '¡Ok!';
 $lang['hm_install_file_detected'] = 'Se detecto el directorio install/. Por razones se seguridad recomendamos eliminarlo.';
 $lang['hm_config_file_writable'] = 'Tu archivo config.php puede ser escrito. Te recomendamos que cambies los permisos a 640 o al menos a 644.';
 $lang['hm_database_errors'] = 'Hay errores en tu base de datos. Puedes verlos haciendo <a href="admin.php?page=errors">click aquí</a>';
-$lang['hm_old_version'] = 'Hay una nueva versión disponible. Haz click <a href="http://www.xgproyect.org/downloads/" target="_blank">aquí</a> para descargarla';
+$lang['hm_old_version'] = 'Hay una nueva versión disponible. Haz click <a href="https://github.com/XGProyect/XG-Proyect-v3.x.x/releases" target="_blank">aquí</a> para descargarla';
 $lang['hm_all_ok'] = 'No hay actualizaciones ni advertencias';
 $lang['hm_update_required'] = 'La versión del sistema y la de tu DB no coinciden, <a href="admin.php?page=update"><strong>¡Actualiza ahora!</strong></a> para evitar errores.';
 $lang['hm_credits'] = 'Créditos';

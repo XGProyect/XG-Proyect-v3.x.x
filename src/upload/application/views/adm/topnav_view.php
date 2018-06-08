@@ -58,7 +58,7 @@
         $.getJSON('http://www.xgproyect.org/current.php', function (data) {
             $.each(data, function (index, element) {
                 if (compareversion('{version}', element)) {
-                    $('#old_version_alert').html('<a href="http://www.xgproyect.org/downloads/" target="_blank" style="display:inline-block;padding-right:0px;">{tn_last_version}' + element + ' {tn_update}</a> <i class="icon-download icon-white">');
+                    $('#old_version_alert').html('<a href="https://github.com/XGProyect/XG-Proyect-v3.x.x/releases" target="_blank" style="display:inline-block;padding-right:0px;">{tn_last_version}' + element + ' {tn_update}</a> <i class="icon-download icon-white">');
                 } else {
                     $('#old_version_alert').html('<a>{tn_last_version}' + element + '</a>');
                 }
