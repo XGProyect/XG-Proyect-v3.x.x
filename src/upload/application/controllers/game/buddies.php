@@ -42,7 +42,7 @@ class Buddies extends Controller
 
     /**
      *
-     * @var array
+     * @var \Buddy
      */
     private $_buddy = null;
     

@@ -16,7 +16,7 @@ namespace application\core\entities;
 use Exception;
 
 /**
- * Buddy Class
+ * Buddy Entity Class
  *
  * @category Entity
  * @package  Core
@@ -38,6 +38,8 @@ class BuddyEntity
      * Init with the buddy data
      * 
      * @param array $buddy Buddy
+     * 
+     * @return void
      */
     public function __construct($buddy)
     {
@@ -48,7 +50,10 @@ class BuddyEntity
      * Set the current planet
      * 
      * @param array $buddy Buddy
+     * 
      * @throws Exception
+     * 
+     * @return void
      */
     private function setBuddy($buddy)
     {
@@ -62,7 +67,9 @@ class BuddyEntity
     }
 
     /**
-     *  Return the buddy id
+     * Return the buddy id
+     * 
+     * @return string
      */
     public function getBuddyId()
     {
@@ -70,7 +77,9 @@ class BuddyEntity
     }
 
     /**
-     *  Return the buddy sender
+     * Return the buddy sender
+     * 
+     * @return string
      */
     public function getBuddySender()
     {
@@ -78,7 +87,9 @@ class BuddyEntity
     }
 
     /**
-     *  Return the buddy receiver
+     * Return the buddy receiver
+     * 
+     * @return string
      */
     public function getBuddyReceiver()
     {
@@ -86,7 +97,9 @@ class BuddyEntity
     }
 
     /**
-     *  Return the buddy status
+     * Return the buddy status
+     * 
+     * @return string
      */
     public function getBuddyStatus()
     {
@@ -94,7 +107,9 @@ class BuddyEntity
     }
 
     /**
-     *  Return the buddy request text
+     * Return the buddy request text
+     * 
+     * @return string
      */
     public function getRequestText()
     {
