@@ -1211,6 +1211,7 @@ $lang['cr_weapons'] = 'Weapons';
 $lang['cr_shields'] = 'Shields';
 $lang['cr_armor'] = 'Armor';
 $lang['cr_destroyed'] = 'Destroyed!';
+$lang['cr_no_access'] = 'The requested report doesn\'t exists';
 
 //----------------------------------------------------------------------------//
 // MissilesAjax.php

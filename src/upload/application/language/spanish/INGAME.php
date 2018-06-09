@@ -1223,6 +1223,7 @@ $lang['cr_weapons'] = 'Armas';
 $lang['cr_shields'] = 'Escudos';
 $lang['cr_armor'] = 'Blindaje';
 $lang['cr_destroyed'] = '¡Destruida!';
+$lang['cr_no_access'] = '¡El reporte solicitado no existe!';
 
 //----------------------------------------------------------------------------//
 // MissilesAjax.php

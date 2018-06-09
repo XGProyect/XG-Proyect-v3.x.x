@@ -14,7 +14,8 @@
 namespace application\controllers\game;
 
 use application\core\Controller;
-use application\core\Database;
+use application\libraries\combatreport\Report;
+use application\libraries\enumerators\ReportStatusEnumerator as ReportStatus;
 use application\libraries\FunctionsLib;
 
 /**
@@ -32,12 +33,21 @@ class Combatreport extends Controller
 
     const MODULE_ID = 23;
 
-    private $langs;
-    private $current_user;
+    /**
+     *
+     * @var type \Users_library
+     */
+    private $_user;
 
     /**
-     * __construct
      *
+     * @var \Report
+     */
+    private $_report = null;
+    
+    /**
+     * Constructor
+     * 
      * @return void
      */
     public function __construct()
@@ -47,81 +57,96 @@ class Combatreport extends Controller
         // check if session is active
         parent::$users->checkSession();
 
+        // load Model
+        parent::loadModel('game/combatreport');
+
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
-        $this->_db = new Database();
-        $this->langs = parent::$lang;
-        $this->current_user = parent::$users->getUserData();
+        // set data
+        $this->_user = $this->getUserData();
 
+        // init a new report object
+        $this->setUpReport();
+        
+        // time to do something
+        $this->runAction();
+        
+        // build the page
         $this->buildPage();
     }
 
     /**
-     * __destruct
-     *
+     * Creates a new report object that will handle all the report actions
+     * 
      * @return void
      */
-    public function __destruct()
+    private function setUpReport()
     {
-        $this->_db->closeConnection();
+        $this->_report = new Report(
+            $this->Combatreport_Model->getReportById(filter_input(INPUT_GET, 'report')),
+            $this->_user['user_id']
+        );   
     }
-
+    
     /**
-     * buildPage
-     *
+     * Run an action
+     * 
+     * @return void
+     */
+    private function runAction()
+    {
+        $owners = $this->_report->getFirstReportOwnersAsArray();
+
+        if (!in_array($this->_user['user_id'], $owners)) {
+            
+            FunctionsLib::message($this->getLang()['cr_no_access'], '', 0, false, false, false);
+        }
+    }
+    
+    /**
+     * Build the page
+     * 
      * @return void
      */
     private function buildPage()
     {
-        $report = isset($_GET['report']) ? $_GET['report'] : die();
-        $reportrow = $this->_db->queryFetch(
-            "SELECT *
-            FROM " . REPORTS . "
-            WHERE `report_rid` = '" . ($this->_db->escapeValue($report)) . "';"
+        parent::$page->display(
+            $this->getReportTemplate(), false, '', false
         );
-
-        // Get owners
-        $owners = explode(',', $reportrow['report_owners']);
-
-        // Block other people
-        if (!in_array($this->current_user['user_id'], $owners)) {
-            die();
-        }
-
+    }
+    
+    /**
+     * Get report template based on different conditions
+     * 
+     * @return string The template
+     */
+    private function getReportTemplate()
+    {
         // When the fleet was destroyed in the first row
-        if (($owners[0] == $this->current_user['user_id']) && ($reportrow['report_destroyed'] == 1)) {
-
-            $page = parent::$page->parseTemplate(
-                parent::$page->getTemplate('combatreport/combatreport_no_fleet_view'), $this->langs
-            );
-        } else {
-
-            // Any other case
-            $report = stripslashes($reportrow['report_content']);
-
-            foreach ($this->langs['tech_rc'] as $id => $s_name) {
-
-                $search = array($id);
-                $replace = array($s_name);
-                $report = str_replace($search, $replace, $report);
-            }
-
-            $no_fleet = parent::$page->parseTemplate(
-                parent::$page->getTemplate('combatreport/combatreport_no_fleet_view'), $this->langs
-            );
-
-            $destroyed = parent::$page->parseTemplate(
-                parent::$page->getTemplate('combatreport/combatreport_destroyed_view'), $this->langs
-            );
-
-            $search = array($no_fleet);
-            $replace = array($destroyed);
-            $report = str_replace($search, $replace, $report);
-            $page = $report;
+        if ($this->_report->getAllReportsOwnedByUserId()[0]->getReportDestroyed() == ReportStatus::fleetDestroyed) {
+            
+            return $this->getTemplate()->set('combatreport/combatreport_no_fleet_view', $this->getLang());
         }
+        
+        // any other case
+        $content = stripslashes($this->_report->getAllReports()[0]->getReportContent());
 
-        parent::$page->display($page, false, '', false);
+        foreach ($this->getLang()['tech_rc'] as $id => $s_name) {
+
+            $search     = [$id];
+            $replace    = [$s_name];
+            $content    = str_replace($search, $replace, $content);
+        }
+        
+        $no_fleet   = $this->getTemplate()->set('combatreport/combatreport_no_fleet_view', $this->getLang());
+        $destroyed  = $this->getTemplate()->set('combatreport/combatreport_destroyed_view', $this->getLang());
+
+        $search     = [$no_fleet];
+        $replace    = [$destroyed];
+        $content     = str_replace($search, $replace, $content);
+        
+        return $content;
     }
 }
 
