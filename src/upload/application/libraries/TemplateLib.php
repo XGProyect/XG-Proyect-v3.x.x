@@ -154,7 +154,7 @@ class TemplateLib
      *
      * @return void
      * 
-     * @deprecated since version v3.0.2, will be removed on v3.4.x
+     * @deprecated since version v3.0.2, will be removed on v3.2.0
      */
     public function parseTemplate($template, $array)
     {
@@ -172,7 +172,7 @@ class TemplateLib
      *
      * @return string
      * 
-     * @deprecated since version v3.0.2, will be removed on v3.4.x
+     * @deprecated since version v3.0.2, will be removed on v3.2.0
      */
     public function getTemplate($template_name)
     {
@@ -198,7 +198,7 @@ class TemplateLib
      *
      * @return void
      * 
-     * @deprecated since version v3.1.0, will be removed on v3.4.x
+     * @deprecated since version v3.1.0, will be removed on v3.2.0
      */
     public function parse($array = array(), $template = '')
     {
@@ -216,7 +216,7 @@ class TemplateLib
      *
      * @return string
      * 
-     * @deprecated since version v3.1.0, will be removed on v3.4.x
+     * @deprecated since version v3.1.0, will be removed on v3.2.0
      */
     public function get($template_name)
     {
