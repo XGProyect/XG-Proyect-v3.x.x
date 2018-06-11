@@ -51,15 +51,16 @@ class UserEntity
      * 
      * @return void
      */
-    private function setUser($curret_user)
+    private function setUser($user)
     {
         try {
 
-            if (!is_array($curret_user)) {
-                throw new Exception('Must be an array');
+            if (!is_array($user)) {
+                
+                return  null;
             }
 
-            $this->_user = $curret_user;
+            $this->_user = $user;
         } catch (Exception $e) {
 
             die('Caught exception: ' . $e->getMessage() . "\n");

@@ -59,6 +59,11 @@ class BuddyEntity
     {
         try {
 
+            if (!is_array($buddy)) {
+                
+                return  null;
+            }
+            
             $this->_buddy = $buddy;
         } catch (Exception $e) {
 

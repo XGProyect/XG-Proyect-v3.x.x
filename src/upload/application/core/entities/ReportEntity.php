@@ -57,6 +57,11 @@ class ReportEntity
     {
         try {
 
+            if (!is_array($report)) {
+                
+                return  null;
+            }
+            
             $this->_report = $report;
         } catch (Exception $e) {
 

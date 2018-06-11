@@ -52,11 +52,12 @@ class PlanetEntity
     {
         try {
 
-            if (!is_array($current_planet)) {
-                throw new Exception('Must be an array');
+            if (!is_array($planet)) {
+                
+                return  null;
             }
 
-            $this->_planet = $current_planet;
+            $this->_planet = $planet;
         } catch (Exception $e) {
 
             die('Caught exception: ' . $e->getMessage() . "\n");
