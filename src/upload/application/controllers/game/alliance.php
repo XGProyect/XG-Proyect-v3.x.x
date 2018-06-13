@@ -161,7 +161,20 @@ class Alliance extends Controller
     {
         $alliance_id = filter_input(INPUT_GET, 'allyid', FILTER_VALIDATE_INT);
 
-        return (!empty($alliance_id) && (int) $alliance_id != 0) ? $alliance_id : $this->_user['user_ally_id'];
+        if (!empty($alliance_id) && (int) $alliance_id != 0) {
+            
+            return $alliance_id;
+        }
+        
+        if ($this->_user['user_ally_id'] != 0) {
+            
+            return $this->_user['user_ally_id'];
+        }
+        
+        if ($this->_user['user_ally_request'] != 0) {
+            
+            return $this->_user['user_ally_request'];
+        }
     }
 
     /**
@@ -230,7 +243,27 @@ class Alliance extends Controller
      */
     public function getDefaultAwaitingApprovalSection()
     {
-        return 'getDefaultSectionForNotMembers';
+        $cancel = filter_input(INPUT_POST, 'bcancel');
+        $request_text = $this->getLang()['al_request_wait_message']; 
+        $button_text = $this->getLang()['al_delete_request'];
+        
+        if (!empty($cancel)) {
+            
+            $this->Alliance_Model->cancelUserRequestById($this->_user['user_id']);
+            $request_text = $this->getLang()['al_request_deleted'];
+            $button_text = $this->getLang()['al_continue'];
+        }
+        
+        return $this->getTemplate()->set(
+            'alliance/alliance_awaiting_view', 
+            array_merge(
+                [
+                    'request_text' => str_replace('%s', $this->_alliance->getCurrentAlliance()->getAllianceTag(), $request_text),
+                    'button_text' => $button_text
+                ], 
+                $this->getLang()
+            )
+        );
     }
 
     /**
@@ -705,112 +738,6 @@ class Alliance extends Controller
 
                 return $this->getTemplate()->set('alliance/alliance_applyform', $parse);
             }
-        }
-    }
-
-    /**
-     * method ally_main
-     * param
-     * return the main page for someone without an alliance
-     */
-    private function ally_main()
-    {
-        $parse = $this->getLang();
-
-        ##############################################################################################
-        # DEFAULT PART WITHOUT ALLIANCE
-        ##############################################################################################
-        if ($this->_user['user_ally_id'] == 0 && $this->_user['user_ally_request'] != 0) {
-            $allyquery = $this->Alliance_Model->getAllianceDataById($this->_user['user_ally_request']);
-
-            extract($allyquery);
-
-            if (isset($_POST['bcancel'])) {
-                $this->Alliance_Model->cancelUserRequestById($this->_user['user_id']);
-
-                $this->getLang()['request_text'] = str_replace('%s', $alliance_tag, $this->getLang()['al_request_deleted']);
-                $this->getLang()['button_text'] = $this->getLang()['al_continue'];
-            } else {
-                $this->getLang()['request_text'] = str_replace('%s', $alliance_tag, $this->getLang()['al_request_wait_message']);
-                $this->getLang()['button_text'] = $this->getLang()['al_delete_request'];
-            }
-
-            return $this->getTemplate()->set('alliance/alliance_apply_waitform', $this->getLang());
-        }
-
-        ##############################################################################################
-        # DEFAULT PART WITH ALLIANCE
-        ##############################################################################################
-        if ($this->_user['user_ally_id'] != 0 && $this->_user['user_ally_request'] == 0) {
-
-            $alliance_ranks = unserialize($this->_ally['alliance_ranks']);
-
-            // IMAGE
-            if ($this->_ally['alliance_ranks'] != '') {
-                $parse['alliance_image'] = $this->image_block($this->_ally['alliance_image']);
-                $this->_ally['alliance_ranks'] = $this->getTemplate()->set('alliance/alliance_image_row', $parse);
-            }
-
-            // RANKS
-            if ($this->_ally['alliance_owner'] == $this->_user['user_id']) {
-                $range = ( $this->_ally['alliance_owner_range'] != '' ) ? $this->_ally['alliance_owner_range'] : $this->getLang()['al_founder_rank_text'];
-            } elseif ($this->_user['user_ally_rank_id'] != 0 && isset($alliance_ranks[$this->_user['user_ally_rank_id'] - 1]['name'])) {
-                $range = $alliance_ranks[$this->_user['user_ally_rank_id'] - 1]['name'];
-            } else {
-                $range = $this->getLang()['al_new_member_rank_text'];
-            }
-
-            // MEMBER LIST
-            if ($this->_ally['alliance_owner'] == $this->_user['user_id'] or $alliance_ranks[$this->_user['user_ally_rank_id'] - 1]['memberlist'] != 0) {
-                $this->getLang()['members_list'] = " (<a href=\"game.php?page=alliance&mode=memberslist\">" . $this->getLang()['al_user_list'] . "</a>)";
-            } else {
-                $this->getLang()['members_list'] = '';
-            }
-
-            // ADMIN ALLIANCE
-            if ($this->_ally['alliance_owner'] == $this->_user['user_id'] or $alliance_ranks[$this->_user['user_ally_rank_id'] - 1]['administrieren'] != 0) {
-                $this->getLang()['alliance_admin'] = " (<a href=\"game.php?page=alliance&mode=admin&edit=ally\">" . $this->getLang()['al_manage_alliance'] . "</a>)";
-            } else {
-                $this->getLang()['alliance_admin'] = '';
-            }
-
-            // CIRCULAR MESSAGE
-            if ($this->_ally['alliance_owner'] == $this->_user['user_id'] or $alliance_ranks[$this->_user['user_ally_rank_id'] - 1]['mails'] != 0) {
-                $this->getLang()['send_circular_mail'] = $this->getTemplate()->set('alliance/alliance_circular_row', $parse);
-            } else {
-                $this->getLang()['send_circular_mail'] = '';
-            }
-
-            // REQUESTS
-            $request_count = $this->Alliance_Model->getAllianceRequestsCount(
-                    $this->_ally['alliance_id']
-                )['total_requests'];
-
-            $this->getLang()['requests'] = '';
-            if ($request_count != 0) {
-                if ($this->_ally['alliance_owner'] == $this->_user['user_id'] or $alliance_ranks[$this->_user['user_ally_rank_id'] - 1]['bewerbungen'] != 0) {
-                    $parse['request_count'] = $request_count;
-                    $this->getLang()['requests'] = $this->getTemplate()->set('alliance/alliance_requests_row', $parse);
-                }
-            }
-            // EXIT ALLIANCE
-            if ($this->_ally['alliance_owner'] != $this->_user['user_id']) {
-                $this->getLang()['alliance_owner'] = $this->getTemplate()->set('alliance/alliance_abandon_alliance', $parse);
-            } else {
-                $this->getLang()['alliance_owner'] = '';
-            }
-
-            // GENERAL INFORMATION
-            $this->getLang()['alliance_image'] = ( $this->_ally['alliance_image'] != '' ) ? "<tr><th colspan=2><img src=\"{$this->_ally['alliance_image']}\"></td></tr>" : '';
-            $this->getLang()['range'] = $range;
-            $this->getLang()['alliance_description'] = $this->description_block($this->_ally['alliance_description']);
-            $this->getLang()['alliance_text'] = nl2br($this->bbcode->bbCode($this->_ally['alliance_text']));
-            $this->getLang()['alliance_web'] = $this->web_block($this->_ally['alliance_web']);
-            $this->getLang()['ally_tag'] = $this->_ally['alliance_tag'];
-            $this->getLang()['ally_members'] = $this->_ally['ally_members'];
-            $this->getLang()['alliance_name'] = $this->_ally['alliance_name'];
-
-            return $this->getTemplate()->set('alliance/alliance_frontpage', $this->getLang());
         }
     }
 
