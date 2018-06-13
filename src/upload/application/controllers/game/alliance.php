@@ -240,14 +240,14 @@ class Alliance extends Controller
      */
     public function getDefaultIsMemberSection()
     {
-        $sections = [
+        $blocks = [
             'tag', 'name', 'members', 'rank', 'requests', 'circular', 'web'
         ];
         $details = [];
         
-        foreach ($sections as $section) {
+        foreach ($blocks as $block) {
             
-            $data = $this->{'build' . ucfirst($section) . 'Block'}();
+            $data = $this->{'build' . ucfirst($block) . 'Block'}();
             
             if (empty($data['detail_content'])) {
                 
@@ -264,7 +264,8 @@ class Alliance extends Controller
                 'description' => $this->buildDescriptionBlock(),
                 'text' => $this->buildTextBlock(),
                 'leave' => $this->buildLeaveBlock()
-            ], $this->getLang()));
+            ], $this->getLang())
+        );
     }
 
     /**
@@ -279,15 +280,13 @@ class Alliance extends Controller
             array_merge(
                 $this->getLang(), 
                 [
-                    'alliance_image' => $this->buildImageBlock(),
-                    'alliance_tag' => $this->_alliance->getCurrentAlliance()->getAllianceTag(),
-                    'alliance_name' => $this->_alliance->getCurrentAlliance()->getAllianceImage(),
-                    'ally_member_scount' => $this->_alliance->getCurrentAlliance()->getAllianceMembers(),
-                    'alliance_description' => $this->buildDescriptionBlock(),
-                    'alliance_web' => $this->web_block($this->_alliance->getCurrentAlliance()->getAllianceWeb()),
-                    'alliance_request' => $this->request_block(
-                        $this->_alliance->getCurrentAlliance()->getAllianceId(), $this->_alliance->getCurrentAlliance()->getAllianceRequestNotAllow()
-                    )
+                    'image' => $this->buildImageBlock(),
+                    'tag' => $this->_alliance->getCurrentAlliance()->getAllianceTag(),
+                    'name' => $this->_alliance->getCurrentAlliance()->getAllianceName(),
+                    'members' => $this->_alliance->getCurrentAlliance()->getAllianceMembers(),
+                    'description' => $this->buildDescriptionBlock(),
+                    'web' => $this->buildWebBlock()['detail_content'],
+                    'requests' => $this->buildPublicRequestsBlock()
                 ]
             )
         );
@@ -417,6 +416,28 @@ class Alliance extends Controller
      * BLOCKS
      * 
      */
+    
+    /**
+     * 
+     * @return string
+     */
+    private function buildPublicRequestsBlock()
+    {
+        if (!$this->_user['user_ally_id'] 
+            && !$this->_user['user_ally_request'] 
+            && !$this->_alliance->getCurrentAlliance()->getAllianceRequestNotAllow()) {
+
+            $url = FunctionsLib::setUrl(
+                'game.php?page=alliance&mode=apply&allyid=' . $this->getAllianceId(),
+                $this->getLang()['al_click_to_send_request'],
+                $this->getLang()['al_click_to_send_request']
+            );
+
+            return '<tr><th>' . $this->getLang()['al_request'] . '</th><th>' . $url . '</th></tr>';
+        }
+
+        return '';
+    }
     
     /**
      * Build the image block
@@ -1410,42 +1431,6 @@ class Alliance extends Controller
                     break;
             }
         }
-    }
-
-    /**
-     * method image_block
-     * param $alliance_web
-     * return shows the web block, if any
-     */
-    private function web_block($alliance_web)
-    {
-        if ($alliance_web != '') {
-            $alliance_web = FunctionsLib::prepUrl($alliance_web);
-            $alliance_web = FunctionsLib::setUrl($alliance_web, '', $alliance_web, 'target="_blank"');
-        } else {
-            $alliance_web = '-';
-        }
-
-        return '<tr><th>' . $this->getLang()['al_web_text'] . '</th><th>' . $alliance_web . '</th></tr>';
-    }
-
-    /**
-     * method image_block
-     * param $ally_id
-     * param $alliance_request
-     * return shows the request block, if any
-     */
-    private function request_block($ally_id, $alliance_request)
-    {
-        if (!$this->_user['user_ally_id'] && !$this->_user['user_ally_request'] && !$alliance_request) {
-
-            $url = 'game.php?page=alliance&mode=apply&allyid=' . $ally_id;
-            $url = FunctionsLib::setUrl($url, $this->getLang()['al_click_to_send_request'], $this->getLang()['al_click_to_send_request']);
-
-            return '<tr><th>' . $this->getLang()['al_request'] . '</th><th>' . $url . '</th></tr>';
-        }
-
-        return '';
     }
 
     /**
