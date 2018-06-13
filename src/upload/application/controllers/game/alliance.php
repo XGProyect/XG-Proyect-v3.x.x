@@ -38,6 +38,12 @@ class Alliance extends Controller
 
     /**
      *
+     * @var \BBCodeLib 
+     */
+    private $_bbcode = null;
+    
+    /**
+     *
      * @var type \Users_library
      */
     private $_user;
@@ -63,6 +69,9 @@ class Alliance extends Controller
         // load Model
         parent::loadModel('game/alliance');
 
+        // load Library
+        $this->_bbcode = FunctionsLib::loadLibrary('BBCodeLib');
+        
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
@@ -231,48 +240,31 @@ class Alliance extends Controller
      */
     public function getDefaultIsMemberSection()
     {
+        $sections = [
+            'tag', 'name', 'members', 'rank', 'requests', 'circular', 'web'
+        ];
+        $details = [];
+        
+        foreach ($sections as $section) {
+            
+            $data = $this->{'build' . ucfirst($section) . 'Block'}();
+            
+            if (empty($data['detail_content'])) {
+                
+                continue;
+            }
+            
+            $details[] = $data;
+        }
+        
         return $this->getTemplate()->set(
             'alliance/alliance_front_page_view', array_merge([
                 'image' => $this->buildImageBlock(),
-                'tag' => $this->buildTagBlock(),
-                'name' => $this->buildNameBlock(),
-                'members' => $this->buildMembersBlock(),
-                'rank' => $this->buildRankBlock(),
-                'requests' => $this->buildRequestsBlock(),
-                'circular' => $this->buildCircularBlock(),
-                'description' => $this->buildTagBlock(),
-                'web' => $this->buildTagBlock(),
-                'text' => $this->buildTagBlock(),
-                'owner' => $this->buildTagBlock()
+                'details' => $details,
+                'description' => $this->buildDescriptionBlock(),
+                'text' => $this->buildTextBlock(),
+                'leave' => $this->buildLeaveBlock()
             ], $this->getLang()));
-        
-        $alliance_ranks = unserialize($this->_alliance->getFirstAllianceRanks());
-
-        // REQUESTS
-        $request_count = $this->Alliance_Model->getAllianceRequestsCount(
-                $this->_ally['alliance_id']
-            )['total_requests'];
-
-        $this->getLang()['requests'] = '';
-        if ($request_count != 0) {
-            if ($this->_ally['alliance_owner'] == $this->_user['user_id'] or $alliance_ranks[$this->_user['user_ally_rank_id'] - 1]['bewerbungen'] != 0) {
-                $parse['request_count'] = $request_count;
-                $this->getLang()['requests'] = $this->getTemplate()->set('alliance/alliance_requests_row', $parse);
-            }
-        }
-        // EXIT ALLIANCE
-        if ($this->_ally['alliance_owner'] != $this->_user['user_id']) {
-            $this->getLang()['alliance_owner'] = $this->getTemplate()->set('alliance/alliance_abandon_alliance', $parse);
-        } else {
-            $this->getLang()['alliance_owner'] = '';
-        }
-
-        // GENERAL INFORMATION
-        
-        $this->getLang()['range'] = $range;
-        $this->getLang()['alliance_description'] = $this->description_block($this->_ally['alliance_description']);
-        $this->getLang()['alliance_text'] = nl2br($this->bbcode->bbCode($this->_ally['alliance_text']));
-        $this->getLang()['alliance_web'] = $this->web_block($this->_ally['alliance_web']);
     }
 
     /**
@@ -291,7 +283,7 @@ class Alliance extends Controller
                     'alliance_tag' => $this->_alliance->getCurrentAlliance()->getAllianceTag(),
                     'alliance_name' => $this->_alliance->getCurrentAlliance()->getAllianceImage(),
                     'ally_member_scount' => $this->_alliance->getCurrentAlliance()->getAllianceMembers(),
-                    'alliance_description' => $this->description_block($this->_alliance->getCurrentAlliance()->getAllianceDescription()),
+                    'alliance_description' => $this->buildDescriptionBlock(),
                     'alliance_web' => $this->web_block($this->_alliance->getCurrentAlliance()->getAllianceWeb()),
                     'alliance_request' => $this->request_block(
                         $this->_alliance->getCurrentAlliance()->getAllianceId(), $this->_alliance->getCurrentAlliance()->getAllianceRequestNotAllow()
@@ -385,7 +377,7 @@ class Alliance extends Controller
      * 
      * @return string
      */
-    public function getMemberlistSection()
+    public function getMemberslistSection()
     {
         return 'getMemberlistSection';
     }
@@ -429,7 +421,7 @@ class Alliance extends Controller
     /**
      * Build the image block
      * 
-     * @return string
+     * @return array
      */
     private function buildImageBlock()
     {
@@ -446,27 +438,33 @@ class Alliance extends Controller
     /**
      * Build the tag block
      * 
-     * @return string
+     * @return array
      */
     private function buildTagBlock()
     {
-        return $this->_alliance->getCurrentAlliance()->getAllianceTag();
+        return [
+            'detail_title' => $this->getLang()['al_ally_info_tag'],
+            'detail_content' => $this->_alliance->getCurrentAlliance()->getAllianceTag()
+        ];
     }
     
     /**
      * Build the name block
      * 
-     * @return string
+     * @return array
      */
     private function buildNameBlock()
     {
-        return $this->_alliance->getCurrentAlliance()->getAllianceName();
+        return [
+            'detail_title' => $this->getLang()['al_ally_info_name'],
+            'detail_content' => $this->_alliance->getCurrentAlliance()->getAllianceName()
+        ];
     }
     
     /**
      * Build the members block
      * 
-     * @return string
+     * @return array
      */
     private function buildMembersBlock()
     {
@@ -477,56 +475,147 @@ class Alliance extends Controller
             $list_of_members = ' (' . FunctionsLib::setUrl('game.php?page=alliance&mode=memberslist', '', $this->getLang()['al_user_list']) . ')';
         }
         
-        return $this->_alliance->getCurrentAlliance()->getAllianceMembers() . $list_of_members;
+        return [
+            'detail_title' => $this->getLang()['al_ally_info_members'],
+            'detail_content' => $this->_alliance->getCurrentAlliance()->getAllianceMembers() . $list_of_members
+        ];
     }
     
     /**
      * Build the ranks block
      * 
-     * @return string
+     * @return array
      */
     private function buildRankBlock()
     {
         $rank = $this->getLang()['al_new_member_rank_text'];
         $admin_area = '';
-            
+            /*
         if ($this->_alliance->isOwner()) {
 
             $rank = ( $this->_ally['alliance_owner_range'] != '' ) ? $this->_ally['alliance_owner_range'] : $this->getLang()['al_founder_rank_text'];
         } elseif ($this->_user['user_ally_rank_id'] != 0 && isset($alliance_ranks[$this->_user['user_ally_rank_id'] - 1]['name'])) {
 
             $rank = $alliance_ranks[$this->_user['user_ally_rank_id'] - 1]['name'];
-        }
+        }*/
 
         if ($this->_alliance->hasAccess(AllianceRanks::administration)) {
             
             $admin_area = ' (' . FunctionsLib::setUrl('game.php?page=alliance&mode=admin&edit=ally', '', $this->getLang()['al_manage_alliance']) . ')';
         }
         
-        return $rank . $admin_area;
+        return [
+            'detail_title' => $this->getLang()['al_rank'],
+            'detail_content' => $rank . $admin_area
+        ];
     }
     
     /**
      * Build the requests block
      * 
-     * @return string
+     * @return array
      */
     private function buildRequestsBlock()
     {
-        return '';
+        $requests = '';
+        $count = $this->Alliance_Model->getAllianceRequestsCount(
+                $this->_alliance->getCurrentAlliance()->getAllianceId()
+            )['total_requests'];
+
+        if ($this->_alliance->hasAccess(AllianceRanks::application_management) && $count != 0) {
+            
+            $requests = FunctionsLib::setUrl(
+                'game.php?page=alliance&mode=admin&edit=requests',
+                '',
+                $count . ' ' . $this->getLang()['al_new_requests']
+            );
+        }
+        
+        return [
+            'detail_title' => $this->getLang()['al_requests'],
+            'detail_content' => $requests 
+        ];
     }
     
     /**
      * Build the circular message block
      * 
-     * @return string
+     * @return array
      */
     private function buildCircularBlock()
     {
         if ($this->_alliance->hasAccess(AllianceRanks::send_circular)) {
             
-            return $this->getTemplate()->set('alliance/alliance_circular_row', $this->getLang());
+            return [
+                'detail_title' => $this->getLang()['al_circular_message'],
+                'detail_content' => FunctionsLib::setUrl('game.php?page=alliance&mode=circular', '', $this->getLang()['al_send_circular_message'])
+            ];
         }
+    }
+    
+    /**
+     * Build the description block
+     * 
+     * @return array
+     */
+    private function buildDescriptionBlock()
+    {
+        $description = $this->getLang()['al_description_message'];
+        $alliance_description = $this->_alliance->getCurrentAlliance()->getAllianceDescription();
+        
+        if ($alliance_description != '') {
+
+            $description = nl2br($this->_bbcode->bbCode($alliance_description)) . '</th></tr>';
+        }
+
+        return '<tr><th colspan="2" height="100px">' . $description . '</th></tr>';
+    }
+    
+    /**
+     * Build the web block
+     * 
+     * @return array
+     */
+    private function buildWebBlock()
+    {
+        $alliance_web = '-';
+        $alliance_web_url = $this->_alliance->getCurrentAlliance()->getAllianceWeb();
+        
+        if ($alliance_web_url != '') {
+
+            $url = FunctionsLib::prepUrl($alliance_web_url);
+            $alliance_web = FunctionsLib::setUrl($url, '', $url, 'target="_blank"');
+        }
+
+        return [
+            'detail_title' => $this->getLang()['al_web_text'],
+            'detail_content' => $alliance_web
+        ];
+    }
+    
+    /**
+     * Build the description block
+     * 
+     * @return array
+     */
+    private function buildTextBlock()
+    {
+        return nl2br($this->_bbcode->bbCode($this->_alliance->getCurrentAlliance()->getAllianceText()));
+    }
+    
+    /**
+     * Build the leave block
+     * 
+     * @return array
+     */
+    private function buildLeaveBlock()
+    {
+        if (!$this->_alliance->isOwner()) {
+            
+            return $this->getTemplate()->set('alliance/alliance_leave_view', $this->getLang());
+        }
+
+        return '';
     }
 
     
@@ -1321,22 +1410,6 @@ class Alliance extends Controller
                     break;
             }
         }
-    }
-
-    /**
-     * method image_block
-     * param $alliance_description
-     * return shows the description block, if any
-     */
-    private function description_block($alliance_description)
-    {
-        if ($alliance_description == '') {
-            $alliance_description = $this->getLang()['al_description_message'];
-        } else {
-            $alliance_description = nl2br($this->bbcode->bbCode($alliance_description)) . '</th></tr>';
-        }
-
-        return '<tr><th colspan="2" height="100px">' . $alliance_description . '</th></tr>';
     }
 
     /**

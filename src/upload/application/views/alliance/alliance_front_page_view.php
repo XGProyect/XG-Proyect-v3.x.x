@@ -2,29 +2,16 @@
 <div id="content">
     <table width="519px">
         <tr>
-            <td class=c colspan=2>{al_your_ally}</td>
+            <td class="c" colspan="2">{al_your_ally}</td>
         </tr>
         {image}
+        {details}
         <tr>
-            <th>{al_ally_info_tag}</th>
-            <th>{tag}</th>
+            <th>{detail_title}</th>
+            <th>{detail_content}</th>
         </tr>
-        <tr>
-            <th>{al_ally_info_name}</th>
-            <th>{name}</th>
-        </tr>
-        <tr>
-            <th>{al_ally_info_members}</th>
-            <th>{members}</th>
-        </tr>
-        <tr>
-            <th>{al_rank}</th>
-            <th>{rank}</th>
-        </tr>
-        {requests}
-        {circular}
+        {/details}
         {description}
-        {web}
         <tr>
             <td class="c" colspan="2">{al_inside_section}</th>
         </tr>
@@ -32,5 +19,5 @@
             <th colspan="2" height="100px">{text}</th>
         </tr>
     </table>
-    {owner}
+    {leave}
 </div>
