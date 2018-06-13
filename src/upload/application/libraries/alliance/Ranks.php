@@ -11,7 +11,7 @@
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-namespace application\libraries\buildings;
+namespace application\libraries\alliance;
 
 use application\libraries\enumerators\AllianceRanksEnumerator;
 use application\libraries\enumerators\SwitchIntEnumerator;
@@ -32,7 +32,7 @@ class Ranks
     /**
      * Contains the ranks 
      * 
-     * @var array rank => flag
+     * @var array
      */
     private $_ranks = [];
 
@@ -50,9 +50,9 @@ class Ranks
             $this->_ranks = $alliance_ranks;
         } else {
 
-            $this->_ranks = [
-                AllianceRanksEnumerator::name => SwitchIntEnumerator::off,
-                AllianceRanksEnumerator::mail => SwitchIntEnumerator::off,
+            $this->_ranks[] = [
+                AllianceRanksEnumerator::name => '',
+                AllianceRanksEnumerator::send_circular => SwitchIntEnumerator::off,
                 AllianceRanksEnumerator::delete => SwitchIntEnumerator::off,
                 AllianceRanksEnumerator::kick => SwitchIntEnumerator::off,
                 AllianceRanksEnumerator::applications => SwitchIntEnumerator::off,
@@ -72,7 +72,18 @@ class Ranks
      * 
      * @return void
      */
-    public function addNew(AllianceRanksEnumerator $rank, SwitchIntEnumerator $value)
+    public function addNew($ranks)
+    {
+        
+    }
+
+    /**
+     * 
+     * @param type $rank_id
+     * @param type $permission
+     * @param type $value
+     */
+    public function editRankById($rank_id, $ranks)
     {
         
     }
@@ -84,49 +95,54 @@ class Ranks
      * 
      * @return void
      */
-    public function editRank(AllianceRanksEnumerator $rank, SwitchIntEnumerator $value)
+    public function deleteRankById($rank_id)
     {
-        
+        array_splice($this->_ranks, $this->validateRankId($rank_id), 1);
     }
 
     /**
-     * 
-     * @param RanksTypes $rank
-     * @param SwitchTypes $value
-     * 
-     * @return void
-     */
-    public function deleteRank(AllianceRanksEnumerator $rank, SwitchIntEnumerator $value)
-    {
-        
-    }
-
-    /**
-     * Get all the ranks
+     * Get all the ranks permissions
      * 
      * @return array
      */
-    public function getRanks()
+    public function getAllRanks()
     {
         return $this->_ranks;
     }
-
+    
     /**
-     * Get the ranks by rank name
+     * Get the permission for a certain rank
      * 
-     * @param RanksTypes $rank Rank
+     * @param int $rank_id Rank ID
+     * 
+     * @return array
+     */
+    public function getRankById($rank_id)
+    {
+        return $this->_ranks[$this->validateRankId($rank_id)];
+    }
+    
+    /**
+     * Validate the rank ID
+     * 
+     * @param type $rank_id Rank ID
      * 
      * @return int
      */
-    public function getRankStatusByName(AllianceRanksEnumerator $rank)
+    private function validateRankId($rank_id)
     {
-        if (in_array($rank, $this->_ranks)) {
-
-            return $this->_ranks[$rank];
+        if ($rank_id <= 0) {
+            
+            return 0;
         }
 
-        return 0;
+        if ($rank_id > count($this->_ranks)) {
+            
+            return count($this->_ranks) - 1;
+        }
+        
+        return $rank_id - 1;
     }
 }
 
-/* end of Buildings.php */
+/* end of Ranks.php */

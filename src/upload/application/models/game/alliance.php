@@ -56,15 +56,17 @@ class Alliance
      */
     public function getAllianceDataById($alliance_id)
     {
-        return $this->db->queryFetch(
+        $result[] = $this->db->queryFetch(
             "SELECT a.*,
-                    (SELECT COUNT(user_id) AS `ally_members` 
+                    (SELECT COUNT(user_id) AS `alliance_members` 
                         FROM `" . USERS . "` 
-                        WHERE `user_ally_id` = a.`alliance_id`) AS `ally_members`
+                        WHERE `user_ally_id` = a.`alliance_id`) AS `alliance_members`
             FROM `" . ALLIANCE . "` AS a
             WHERE a.`alliance_id` = '" . (int)$alliance_id . "'
             LIMIT 1;"
         );
+        
+        return $result;
     }
     
     
@@ -112,11 +114,13 @@ class Alliance
      */
     public function searchAllianceByNameTag($name_tag)
     {
-        return $this->db->query(
-            "SELECT a.*,
-                (SELECT COUNT(user_id) AS `ally_members` 
+        return $this->db->queryFetchAll(
+            "SELECT a.alliance_id,
+                    a.alliance_tag,
+                    a.alliance_name,
+                (SELECT COUNT(user_id) AS `alliance_members` 
                     FROM `" . USERS . "` 
-                    WHERE `user_ally_id` = a.`alliance_id`) AS `ally_members`
+                    WHERE `user_ally_id` = a.`alliance_id`) AS `alliance_members`
             FROM " . ALLIANCE . " AS a
             WHERE a.alliance_name LIKE '%" . $this->db->escapeValue($name_tag) . "%' OR
                     a.alliance_tag LIKE '%" . $this->db->escapeValue($name_tag) . "%' LIMIT 30"

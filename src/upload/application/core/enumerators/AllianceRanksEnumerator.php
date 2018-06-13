@@ -27,7 +27,7 @@ abstract class AllianceRanksEnumerator
 {
 
     const name = 1;
-    const mail = 2;
+    const send_circular = 2;
     const delete = 3;
     const kick = 4;
     const applications = 5;
