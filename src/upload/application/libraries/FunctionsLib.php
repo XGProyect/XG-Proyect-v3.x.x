@@ -534,7 +534,7 @@ abstract class FunctionsLib extends XGPCore
      *
      * @return string
      */
-    public static function setUrl($url, $title, $content, $attributes = '')
+    public static function setUrl($url, $title = '', $content, $attributes = '')
     {
         if (empty($url)) {
 
