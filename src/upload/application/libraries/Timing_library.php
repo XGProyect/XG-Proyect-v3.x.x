@@ -50,8 +50,20 @@ abstract class Timing_library extends XGPCore
             $color  = 'lime';
             $status = parent::$lang['online'];
         }
-        
-        return '<font color="' . $color . '">' . $status . '</font>';
+
+        return FormatLib::customColor($status, $color);
+    }
+    
+    /**
+     * Format time based on system config
+     * 
+     * @param string $time Time
+     * 
+     * @return string
+     */
+    public static function formatTime($time)
+    {
+        return date(FunctionsLib::readConfig('date_format_extended'), $time);
     }
 }
 

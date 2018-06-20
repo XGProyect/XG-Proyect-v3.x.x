@@ -197,21 +197,14 @@ class Alliance
     /**
      * Get alliance members
      * 
-     * @param type $user_alliance_id
-     * 
+     * @param type $alliance_id
+     * @param type $sort_by_field
+     * @param type $sort_by_order
      * @return type
      */
-    public function getAllianceMembers($alliance_id, $sort1, $sort2)
+    public function getAllianceMembers($alliance_id, $sort_by_field, $sort_by_order)
     {
-        if ($sort2) {
-
-            $sort = $this->returnSort($sort1, $sort2);
-        } else {
-
-            $sort = '';
-        }
-        
-        return $this->db->query(
+        return $this->db->queryFetchAll(
             "SELECT u.user_id, 
                     u.user_onlinetime, 
                     u.user_name, 
@@ -223,7 +216,7 @@ class Alliance
                     s.user_statistic_total_points
             FROM `" . USERS . "` AS u
             INNER JOIN `" . USERS_STATISTICS . "`AS s ON u.user_id = s.user_statistic_user_id
-            WHERE u.user_ally_id='" . (int)$alliance_id . "'" . $sort
+            WHERE u.user_ally_id='" . (int)$alliance_id . "'" . $this->returnSort($sort_by_field, $sort_by_order)
         );
     }
     
@@ -236,7 +229,7 @@ class Alliance
      */
     public function getAllianceMembersById($alliance_id)
     {
-        return $this->db->query(
+        return $this->db->queryFetchAll(
             "SELECT `user_id`, `user_name`, `user_ally_rank_id`
                 FROM `" . USERS . "`
                 WHERE `user_ally_id` = '" . (int)$alliance_id . "'"
@@ -253,7 +246,7 @@ class Alliance
      */
     public function getAllianceMembersByIdAndRankId($alliance_id, $rank_id)
     {
-        return $this->db->query(
+        return $this->db->queryFetchAll(
             "SELECT `user_id`, `user_name`
             FROM `" . USERS . "`
             WHERE `user_ally_id` = '" . (int)$alliance_id . "' AND
@@ -540,15 +533,15 @@ class Alliance
     /**
      * Return the sort method
      * 
-     * @param int $sort1 Sort 1
-     * @param int $sort2 Sort 2
+     * @param int $sort_field Sort by field
+     * @param int $sort_order Sort by order [ASC|DESC]
      * 
      * @return string
      */
-    private function returnSort($sort1, $sort2)
+    private function returnSort($sort_field, $sort_order)
     {
         // FIRST ORDER
-        switch ($sort1) {
+        switch ($sort_field) {
             case 1:
                 $sort = " ORDER BY `user_name`";
                 break;
@@ -570,10 +563,10 @@ class Alliance
         }
 
         // SECOND ORDER
-        if ($sort2 == 1) {
+        if ($sort_order == 1) {
 
             $sort .= " DESC;";
-        } elseif ($sort2 == 2) {
+        } elseif ($sort_order == 2) {
 
             $sort .= " ASC;";
         }
@@ -582,4 +575,4 @@ class Alliance
     }
 }
 
-/* end of buildings.php */
+/* end of alliance.php */

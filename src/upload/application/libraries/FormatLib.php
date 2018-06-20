@@ -174,6 +174,19 @@ class FormatLib
     {
         return '<font color="#00ff00">' . $n . '</font>';
     }
+    
+    /**
+     * Return a provided color
+     * 
+     * @param string $string String
+     * @param string $color  Color
+     * 
+     * @return string
+     */
+    public static function customColor($string, $color)
+    {
+        return '<font color="' . $color . '">' . $string . '</font>';
+    }
 
     /**
      * prettyNumber

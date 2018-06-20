@@ -4,13 +4,16 @@
     <form action="game.php?page=alliance&mode=circular&sendmail=1" method="POST">
         <table width="530">
             <tr>
-                <td class="c" colspan=2>{al_circular_send_ciruclar}</td>
+                <td class="c" colspan="2">{al_circular_send_ciruclar}</td>
             </tr>
             <tr>
                 <th>{al_receiver}</th>
                 <th>
                     <select name="r">
-                        {r_list}
+                        <option value="0">{al_all_players}</option>
+                        {ranks_list}
+                        <option value="{value}">{name}</option>
+                        {/ranks_list}
                     </select>
                 </th>
             </tr>

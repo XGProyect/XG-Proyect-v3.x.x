@@ -14,6 +14,7 @@
 namespace application\libraries\alliance;
 
 use application\core\entities\AllianceEntity;
+use application\core\enumerators\SwitchIntEnumerator;
 use application\libraries\alliance\Ranks;
 
 /**
@@ -41,19 +42,27 @@ class Alliances
     private $_current_user_id = 0;
 
     /**
+     *
+     * @var int
+     */
+    private $_current_user_rank_id = 0;
+    
+    /**
      * Constructor
      * 
-     * @param array $alliances       Alliances
-     * @param int   $current_user_id Current User ID
+     * @param array $alliances            Alliances
+     * @param int   $current_user_id      Current User ID
+     * @param int   $current_user_rank_id Current User Rank Id
      * 
      * @return void
      */
-    public function __construct($alliances, $current_user_id)
+    public function __construct($alliances, $current_user_id, $current_user_rank_id = 0)
     {
         if (is_array($alliances)) {
             
             $this->setUp($alliances);
             $this->setUserId($current_user_id);
+            $this->setUserRankId($current_user_rank_id);
         }
     }
     
@@ -110,12 +119,16 @@ class Alliances
     }
     
     /**
+     * Check the rank for the current user
      * 
      * @return boolean
      */
     public function checkRank($rank)
     {
-        return true;
+        $ranks = $this->getCurrentAllianceRankObject();
+
+        return ($ranks->getAllRanksAsArray() != null
+            && $ranks->getAllRanksAsArray()[$this->getUserRankId() - 1]['rights'][$rank] == SwitchIntEnumerator::on);
     }
     
     /**
@@ -159,6 +172,24 @@ class Alliances
     private function getUserId()
     {
         return $this->_current_user_id;
+    }
+    
+    /**
+     * 
+     * @param int $user_rank_id User Rank Id
+     */
+    private function setUserRankId($user_rank_id)
+    {
+        $this->_current_user_rank_id = $user_rank_id;
+    }
+    
+    /**
+     * 
+     * @return int
+     */
+    private function getUserRankId()
+    {
+        return $this->_current_user_rank_id;
     }
     
     /**
