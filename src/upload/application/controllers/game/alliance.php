@@ -484,13 +484,13 @@ class Alliance extends Controller
                 'user_galaxy' => $member['user_galaxy'],
                 'user_system' => $member['user_system'],
                 'coords' => FormatLib::prettyCoords($member['user_galaxy'], $member['user_system'], $member['user_planet']),
-                'user_ally_register_time' => Timing_library::formatTime($member['user_ally_register_time']),
+                'user_ally_register_time' => Timing_library::formatDefaultTime($member['user_ally_register_time']),
                 'online_time' => $this->_alliance->hasAccess(AllianceRanks::online_status) ? Timing_library::setOnlineStatus($member['user_onlinetime']) : '-'
             ];
         }
         
         return $this->getTemplate()->set(
-            'alliance/alliance_members_list_view',
+            'alliance/alliance_members_view',
             array_merge(
                 $this->getLang(),
                 [
@@ -561,14 +561,13 @@ class Alliance extends Controller
                 true
             );
         }
-        
-        
+
         $ranks = $this->_alliance->getCurrentAllianceRankObject();
         $list_of_ranks = $ranks->getAllRanksAsArray();
             
         $ranks_list = [];
         
-        if (!is_null($list_of_ranks)) {
+        if (is_array($list_of_ranks)) {
 
             foreach ($list_of_ranks as $id => $rank) {
 
@@ -659,370 +658,6 @@ class Alliance extends Controller
         }
         
         FunctionsLib::redirect('game.php?page=alliance');
-        
-        /*
-        switch ($edit) {
-            case '':
-            case 'ally':
-            default:
-                $t = isset($_GET['t']) ? (int) $_GET['t'] : NULL;
-
-                if ($t != 1 && $t != 2 && $t != 3) {
-                    $t = 1;
-                }
-
-                if ($_POST) {
-                    $_POST['owner_range'] = isset($_POST['owner_range']) ? stripslashes($_POST['owner_range']) : '';
-                    $_POST['web'] = isset($_POST['web']) ? stripslashes($_POST['web']) : '';
-                    $_POST['image'] = isset($_POST['image']) ? stripslashes($_POST['image']) : '';
-                    $_POST['text'] = isset($_POST['text']) ? FunctionsLib::formatText($_POST['text']) : '';
-                }
-
-                if (isset($_POST['options'])) {
-                    $this->_ally['alliance_owner_range'] = $this->_db->escapeValue(strip_tags($_POST['owner_range']));
-                    $this->_ally['alliance_web'] = $this->_db->escapeValue(htmlspecialchars(strip_tags($_POST['web'])));
-                    $this->_ally['alliance_image'] = $this->_db->escapeValue(htmlspecialchars(strip_tags($_POST['image'])));
-                    $this->_ally['alliance_request_notallow'] = (int) $_POST['request_notallow'];
-
-                    if ($this->_ally['alliance_request_notallow'] != 0 && $this->_ally['alliance_request_notallow'] != 1) {
-                        FunctionsLib::redirect('game.php?page=alliance?mode=admin&edit=ally');
-                    }
-
-                    $this->Alliance_Model->updateAllianceSettings($this->_ally['alliance_id'], $this->_ally);
-                } elseif (isset($_POST['t'])) {
-                    if ($t == 3) {
-                        $this->_ally['alliance_request'] = $_POST['text'];
-
-
-                        $this->Alliance_Model->updateAllianceRequestText($this->_ally['alliance_id'], $this->_ally['alliance_request']);
-
-                        FunctionsLib::redirect('game.php?page=alliance&mode=admin&edit=ally&t=3');
-                    } elseif ($t == 2) {
-                        $this->_ally['alliance_text'] = $_POST['text'];
-
-                        $this->Alliance_Model->updateAllianceText($this->_ally['alliance_id'], $this->_ally['alliance_text']);
-
-                        FunctionsLib::redirect('game.php?page=alliance&mode=admin&edit=ally&t=2');
-                    } else {
-                        $this->_ally['alliance_description'] = $_POST['text'];
-
-                        $this->Alliance_Model->updateAllianceDescription($this->_ally['alliance_id'], $this->_ally['alliance_description']);
-
-                        FunctionsLib::redirect('game.php?page=alliance&mode=admin&edit=ally&t=1');
-                    }
-                }
-
-                $this->getLang()['dpath'] = DPATH;
-
-                if ($t == 3) {
-                    $this->getLang()['request_type'] = $this->getLang()['al_request_text'];
-                } elseif ($t == 2) {
-                    $this->getLang()['request_type'] = $this->getLang()['al_inside_text'];
-                } else {
-                    $this->getLang()['request_type'] = $this->getLang()['al_outside_text'];
-                }
-
-                if ($t == 2) {
-                    $this->getLang()['text'] = $this->_ally['alliance_text'];
-                } else {
-                    $this->getLang()['text'] = $this->_ally['alliance_description'];
-                }
-
-                if ($t == 3) {
-                    $this->getLang()['text'] = $this->_ally['alliance_request'];
-                }
-
-                $this->getLang()['t'] = $t;
-                $this->getLang()['alliance_web'] = $this->_ally['alliance_web'];
-                $this->getLang()['alliance_image'] = $this->_ally['alliance_image'];
-                $this->getLang()['alliance_request_notallow_0'] = (($this->_ally['alliance_request_notallow'] == 1) ? ' SELECTED' : '');
-                $this->getLang()['alliance_request_notallow_1'] = (($this->_ally['alliance_request_notallow'] == 0) ? ' SELECTED' : '');
-                $this->getLang()['alliance_owner_range'] = $this->_ally['alliance_owner_range'];
-
-                return $this->getTemplate()->set('alliance/alliance_admin', $this->getLang());
-
-                break;
-
-            case ( $edit == 'members' && $this->have_access($this->_ally['alliance_owner'], $this->permissions['admin_alliance']) === true ):
-
-                $rank = isset($_GET['rank']) ? (int) $_GET['rank'] : null;
-                $kick = isset($_GET['kick']) ? (int) $_GET['kick'] : null;
-                $id = isset($_GET['id']) ? (int) $_GET['id'] : null;
-                $sort1 = isset($_GET['sort1']) ? (int) $_GET['sort1'] : null;
-                $sort2 = isset($_GET['sort2']) ? (int) $_GET['sort2'] : null;
-
-                $alliance_ranks = unserialize($this->_ally['alliance_ranks']);
-
-                if (isset($kick)) {
-                    $this->have_access($this->_ally['alliance_owner'], $this->permissions['kick_users']);
-
-                    $u = $this->Alliance_Model->getUserToBeKickedById($kick);
-
-                    if ($u['user_ally_id'] == $this->_ally['alliance_id'] && $u['user_id'] != $this->_ally['alliance_owner']) {
-
-                        $this->Alliance_Model->exitAlliance($u['user_id']);
-                    }
-                } elseif (isset($_POST['newrang'])) {
-
-                    $u = isset($id) ? $id : '';
-                    $q = $this->Alliance_Model->getUserById($u);
-
-                    if ((isset($alliance_ranks[$_POST['newrang'] - 1]) or $_POST['newrang'] == 0 ) && ( $q['user_id'] != $this->_ally['alliance_owner'] )) {
-
-                        $this->Alliance_Model->updateUserRank($q['user_id'], $_POST['newrang']);
-                    }
-                }
-
-                $listuser = $this->Alliance_Model->getAllianceMembers($this->_user['user_ally_id'], $sort1, $sort2);
-
-                $i = 0;
-                $r = $this->getLang();
-                $s = $this->getLang();
-                $this->getLang()['i'] = $this->_db->numRows($listuser);
-                $page_list = [];
-                $r['options'] = '';
-
-                while ($u = $this->_db->fetchArray($listuser)) {
-
-                    $u['i'] = ++$i;
-                    $u['points'] = FormatLib::prettyNumber($u['user_statistic_total_points']);
-                    $days = floor(( time() - $u['user_onlinetime'] ) / ( 3600 * 24 ));
-
-                    $u['user_onlinetime'] = str_replace("%s", $days, "%s d");
-
-                    if ($this->_ally['alliance_owner'] == $u['user_id']) {
-
-                        $ally_range = ($this->_ally['alliance_owner_range'] == '' ) ? $this->getLang()['al_founder_rank_text'] : $this->_ally['alliance_owner_range'];
-                    } elseif ($u['user_ally_rank_id'] == 0 or ! $this->return_rank('name')) {
-
-                        $ally_range = $this->getLang()['al_new_member_rank_text'];
-                    } else {
-
-                        $ally_range = $alliance_ranks[$u['user_ally_rank_id'] - 1]['name'];
-                    }
-
-                    if ($this->_ally['alliance_owner'] == $u['user_id'] or $rank == $u['user_id']) {
-
-                        $u['actions'] = '-';
-                    } elseif ($this->return_rank('kick') == 1 && $this->return_rank('administrieren') == 1 or $this->_ally['alliance_owner'] == $this->_user['user_id']) {
-
-                        $u['actions'] = "<a href=\"game.php?page=alliance&mode=admin&edit=members&kick=" . $u['user_id'] . "\" onclick=\"javascript:return confirm('" . str_replace('%s', $u['user_name'], $this->getLang()['al_confirm_remove_member']) . "');\"><img src=\"" . DPATH . "alliance/abort.gif\" border=\"0\"></a> <a href=\"game.php?page=alliance&mode=admin&edit=members&rank=" . $u['user_id'] . "\"><img src=\"" . DPATH . "alliance/key.gif\" border=\"0\"></a>";
-                    } elseif ($this->return_rank('administrieren') == 1) {
-
-                        $u['actions'] = "<a href=\"game.php?page=alliance&mode=admin&edit=members&kick=" . $u['user_id'] . "\" onclick=\"javascript:return confirm('" . str_replace('%s', $u['user_name'], $this->getLang()['al_confirm_remove_member']) . "');\"><img src=\"" . DPATH . "alliance/abort.gif\" border=\"0\"></a> <a href=\"game.php?page=alliance&mode=admin&edit=members&rank=" . $u['user_id'] . "\"><img src=\"" . DPATH . "alliance/key.gif\" border=\"0\"></a>";
-                    } else {
-
-                        $u['actions'] = '-';
-                    }
-
-                    $u['dpath'] = DPATH;
-                    $u['user_ally_register_time'] = date(FunctionsLib::readConfig('date_format_extended'), $u['user_ally_register_time']);
-
-                    if ($rank == $u['user_id']) {
-                        $r['options'] .= "<option onclick=\"document.editar_usu_rango.submit();\" value=\"0\">" . $this->getLang()['al_new_member_rank_text'] . "</option>";
-
-                        if ($alliance_ranks != NULL) {
-                            foreach ($alliance_ranks as $a => $b) {
-
-                                $r['options'] .= "<option onclick=\"document.editar_usu_rango.submit();\" value=\"" . ($a + 1) . "\"";
-
-                                if ($u['user_ally_rank_id'] - 1 == $a) {
-                                    $r['options'] .= ' selected=selected';
-                                }
-
-                                $r['options'] .= ">{$b['name']}</option>";
-                            }
-                        }
-
-                        $r['user_id'] = $u['user_id'];
-                        $editar_miembros = $this->getTemplate()->set('alliance/alliance_admin_members_row_edit', $r);
-                    }
-
-                    if ($rank != $u['user_id']) {
-
-                        $u['user_ally_range'] = $ally_range;
-                    } else {
-
-                        $u['user_ally_range'] = $editar_miembros;
-                    }
-
-                    $page_list[] = $u;
-                }
-
-                if ($sort2 == 1) {
-                    $s = 2;
-                } elseif ($sort2 == 2) {
-                    $s = 1;
-                } else {
-                    $s = 1;
-                }
-
-                $this->getLang()['list_of_members'] = $page_list;
-                $this->getLang()['s'] = $s;
-
-                return $this->getTemplate()->set('alliance/alliance_admin_members_view', $this->getLang());
-
-                break;
-
-            case ($edit == 'requests' && $this->have_access($this->_ally['alliance_owner'], $this->permissions['check_requests']) === true):
-
-                $show = isset($_GET['show']) ? (int) $_GET['show'] : null;
-
-                if (isset($_POST['action']) && ( $_POST['action'] == $this->getLang()['al_acept_request'] )) {
-
-                    $this->Alliance_Model->addUserToAlliance($show, $this->_ally['alliance_id']);
-
-                    FunctionsLib::sendMessage($show, $this->_user['user_id'], '', 3, $this->_ally['alliance_tag'], $this->getLang()['al_you_was_acceted'] . $this->_ally['alliance_name'], $this->getLang()['al_hi_the_alliance'] . $this->_ally['alliance_name'] . $this->getLang()['al_has_accepted'] . $_POST['text']);
-
-                    FunctionsLib::redirect('game.php?page=alliance&mode=admin&edit=ally');
-                } elseif (isset($_POST['action']) && ( $_POST['action'] == $this->getLang()['al_decline_request'] ) && $_POST['action'] != '') {
-
-                    $this->Alliance_Model->removeUserFromAlliance($show);
-
-                    FunctionsLib::sendMessage($show, $this->_user['user_id'], '', 3, $this->_ally['alliance_tag'], $this->getLang()['al_you_was_declined'] . $this->_ally['alliance_name'], $this->getLang()['al_hi_the_alliance'] . $this->_ally['alliance_name'] . $this->getLang()['al_has_declined'] . $_POST['text']);
-
-                    FunctionsLib::redirect('game.php?page=alliance&mode=admin&edit=ally');
-                }
-
-                $i = 0;
-                $query = $this->Alliance_Model->getAllianceRequests($this->_ally['alliance_id']);
-
-                $s = [];
-                $parse['list_of_requests'] = [];
-                $parse['request'] = '';
-                $parse['no_requests'] = '';
-
-                if ($query->num_rows > 0) {
-
-                    while ($r = $this->_db->fetchArray($query)) {
-
-                        if (isset($show) && $r['user_id'] == $show) {
-
-                            $s[$show]['username'] = $r['user_name'];
-                            $s[$show]['ally_request_text'] = nl2br($r['user_ally_request_text']);
-                            $s[$show]['id'] = $r['user_id'];
-                        }
-
-                        $r['username'] = $r['user_name'];
-                        $r['id'] = $r['user_id'];
-
-                        $r['time'] = date(
-                            FunctionsLib::readConfig('date_format_extended'), $r['user_ally_register_time']
-                        );
-
-                        $parse['list_of_requests'][] = $r;
-
-                        $i++;
-                    }
-                }
-
-                if (count($parse['list_of_requests']) == 0) {
-
-                    $parse['no_requests'] = "<tr><th colspan=2>" . $this->getLang()['al_no_requests'] . "</th></tr>";
-                }
-
-                if (isset($show) && $show != 0 && $query->num_rows != 0) {
-
-                    $s[$show]['Request_from'] = str_replace(
-                        '%s', $s[$show]['username'], $this->getLang()['al_request_from']
-                    );
-                    $parse['request'] = $this->getTemplate()->set(
-                        'alliance/alliance_admin_request_form', array_merge($s[$show], $this->getLang())
-                    );
-                }
-
-                $parse['ally_tag'] = $this->_ally['alliance_tag'];
-                $parse['There_is_hanging_request'] = str_replace('%n', $i, $this->getLang()['al_no_request_pending']);
-
-                return $this->getTemplate()->set(
-                        'alliance/alliance_admin_request_view', $parse
-                );
-                break;
-
-            case ( $edit == 'name' && $this->have_access($this->_ally['alliance_owner'], $this->permissions['admin_alliance']) === true ):
-
-                $alliance_name = '';
-
-                if ($_POST) {
-                    $alliance_name = $this->validateName($_POST['nametag']);
-
-                    $this->Alliance_Model->updateAllianceName($this->_ally['alliance_id'], $alliance_name);
-                }
-
-                $parse['caso'] = ( $alliance_name == '' ) ? str_replace('%s', $this->_ally['alliance_name'], $this->getLang()['al_change_title']) : str_replace('%s', $alliance_name, $this->getLang()['al_change_title']);
-                $parse['caso_titulo'] = $this->getLang()['al_new_name'];
-
-                return $this->getTemplate()->set('alliance/alliance_admin_rename', $parse);
-
-                break;
-
-            case ( $edit == 'tag' && $this->have_access($this->_ally['alliance_owner'], $this->permissions['admin_alliance']) === true ):
-
-                $alliance_tag = '';
-
-                if ($_POST) {
-                    $alliance_tag = $this->validateTag($_POST['nametag']);
-
-                    $this->Alliance_Model->updateAllianceTag($this->_ally['alliance_id'], $alliance_tag);
-                }
-
-                $parse['caso'] = ( $alliance_tag == '' ) ? str_replace('%s', $this->_ally['alliance_tag'], $this->getLang()['al_change_title']) : str_replace('%s', $alliance_tag, $this->getLang()['al_change_title']);
-                $parse['caso_titulo'] = $this->getLang()['al_new_tag'];
-
-                return $this->getTemplate()->set('alliance/alliance_admin_rename', $parse);
-
-                break;
-
-            case ( $edit == 'exit' && $this->have_access($this->_ally['alliance_owner'], $this->permissions['disolve_alliance']) === true ):
-
-                $this->Alliance_Model->deleteAlliance($this->_ally['alliance_id']);
-
-                FunctionsLib::redirect('game.php?page=alliance');
-
-                break;
-
-            case ( $edit == 'transfer' && $this->have_access($this->_ally['alliance_owner'], $this->permissions['admin_alliance']) === true ):
-
-                $alliance_ranks = unserialize($this->_ally['alliance_ranks']);
-
-                if (isset($_POST['newleader'])) {
-
-                    $this->Alliance_Model->transferAlliance($this->_user['user_ally_id'], $this->_user['user_id'], $_POST['newleader']);
-
-                    FunctionsLib::redirect('game.php?page=alliance');
-                }
-
-                $parse['list_of_members'] = [];
-
-                if ($this->_ally['alliance_owner'] != $this->_user['user_id']) {
-                    FunctionsLib::redirect('game.php?page=alliance');
-                } else {
-                    $listuser = $this->Alliance_Model->getAllianceMembersById($this->_user['user_ally_id']);
-                    $righthand = $this->getLang();
-                    $righthand['righthand'] = '';
-
-                    while ($u = $this->_db->fetchArray($listuser)) {
-                        if ($this->_ally['alliance_owner'] != $u['user_id']) {
-                            if ($u['user_ally_rank_id'] != 0) {
-                                if ($alliance_ranks[$u['user_ally_rank_id'] - 1]['rechtehand'] == 1) {
-                                    $righthand['righthand'] .= "\n<option value=\"" . $u['user_id'] . "\"";
-                                    $righthand['righthand'] .= ">";
-                                    $righthand['righthand'] .= "" . $u['user_name'];
-                                    $righthand['righthand'] .= "&nbsp;[" . $alliance_ranks[$u['user_ally_rank_id'] - 1]['name'];
-                                    $righthand['righthand'] .= "]&nbsp;&nbsp;</option>";
-                                }
-                            }
-                        }
-                        $righthand['dpath'] = DPATH;
-                    }
-
-                    $parse['list_of_members'][] = $righthand;
-
-                    return $this->getTemplate()->set('alliance/alliance_admin_transfer_view', $parse);
-                }
-
-                break;
-        }*/
     }
 
     /**
@@ -1052,7 +687,77 @@ class Alliance extends Controller
      */
     private function getAdminMembersSection()
     {
-        return 'getAdminMembersSection';
+        $kick = filter_input(INPUT_GET, 'kick', FILTER_VALIDATE_INT);
+        $rank = filter_input(INPUT_GET, 'rank', FILTER_VALIDATE_INT);
+        $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+        $new_rank = filter_input(INPUT_POST, 'newrang', FILTER_VALIDATE_INT);
+        
+        if (isset($kick) 
+            && $this->_alliance->hasAccess(AllianceRanks::kick)
+            && $kick != $this->_alliance->getCurrentAlliance()->getAllianceOwner()) {
+            
+            $this->Alliance_Model->exitAlliance(
+                $this->getAllianceId(),
+                $kick
+            );
+            
+        }
+         
+        if (isset($new_rank) 
+            && isset($id) 
+            && $id != $this->_alliance->getCurrentAlliance()->getAllianceOwner()) {
+
+            $ranks = $this->_alliance->getCurrentAllianceRankObject();
+            
+            if ($ranks->getRankById($new_rank - 1) != null) {
+                
+                $this->Alliance_Model->updateUserRank($id, $new_rank);
+            }
+         }
+        
+        $sort_by_field = filter_input(INPUT_GET, 'sort1');
+        $sort_by_order = filter_input(INPUT_GET, 'sort2');
+        $sort_by_order_rules = [1 => 2, 2 => 1];
+        
+        $members = $this->Alliance_Model->getAllianceMembers(
+            $this->_user['user_ally_id'], $sort_by_field, $sort_by_order
+        );
+        
+        $position = 0;
+        $members_list = [];
+
+        foreach($members as $member) {
+            
+            $position++;
+
+            $members_list[] = [
+                'position' => $position,
+                'user_name' => $member['user_name'],
+                'user_id' => $member['user_id'],
+                'dpath' => DPATH,
+                'write_message' => $this->getLang()['write_message'],
+                'user_ally_range' => $this->buildAdminMembersRankBlock($member['user_id'], $member['user_ally_rank_id'], $rank),
+                'points' => FormatLib::prettyNumber($member['user_statistic_total_points']),
+                'user_galaxy' => $member['user_galaxy'],
+                'user_system' => $member['user_system'],
+                'coords' => FormatLib::prettyCoords($member['user_galaxy'], $member['user_system'], $member['user_planet']),
+                'user_ally_register_time' => Timing_library::formatDefaultTime($member['user_ally_register_time']),
+                'online_time' => Timing_library::formatDaysTime($member['user_onlinetime']),
+                'actions' => $this->buildAdminMembersActionBlock($member['user_id'], $member['user_name'], $rank)
+            ];
+        }
+        
+        return $this->getTemplate()->set(
+            'alliance/alliance_admin_members_view',
+            array_merge(
+                $this->getLang(),
+                [
+                    'total' => $position,
+                    's' => isset($sort_by_order_rules[$sort_by_order]) ? $sort_by_order_rules[$sort_by_order] : 1,
+                    'list_of_members' => $members_list
+                ]
+            )
+        );
     }
     
     /**
@@ -1457,6 +1162,97 @@ class Alliance extends Controller
     }
     
     /**
+     * Build the admin members rank block
+     * 
+     * @param int $member_id
+     * @param int $member_rank_id
+     * @param int $requested_rank
+     * 
+     * @return string
+     */
+    private function buildAdminMembersRankBlock($member_id, $member_rank_id, $requested_rank = 0)
+    {
+        $rank = $this->getUserRank($member_id, $member_rank_id);
+        
+        if ($requested_rank != $member_id) {
+            
+            return $rank;
+        }
+        
+        $ranks = $this->_alliance->getCurrentAllianceRankObject();
+        
+        $options = '<option onclick="document.edit_user_rank.submit();" value="0">' . $this->getLang()['al_new_member_rank_text'] . '</option>';
+        
+        if (is_array($ranks->getAllRanksAsArray())) {
+
+            foreach ($ranks->getAllRanksAsArray() as $id => $rank) {
+
+                $selected = '';
+                
+                if ($member_rank_id - 1 == $id) {
+                    
+                    $selected = ' selected=selected';
+                }
+                
+                $options = '<option onclick="document.edit_user_rank.submit();" value="' . ($id + 1) . '"' . $selected . '>' . $rank['rank'] . '</option>'; 
+            }
+        }
+            
+        return $this->getTemplate()->set(
+            'alliance/alliance_admin_members_edit', 
+            array_merge(
+                $this->getLang(),
+                [
+                    'options' => $options
+                ]
+            )
+        );
+    }
+    
+    /**
+     * Build the admin members action block
+     * 
+     * @param int    $member_id      Member ID
+     * @param string $member_name    Member Name
+     * @param int    $requested_rank Requested Rank
+     * 
+     * @return string
+     */
+    private function buildAdminMembersActionBlock($member_id, $member_name, $requested_rank = 0)
+    {
+        $kick_user = '';
+        $change_rank = '';
+        
+        if ($this->_alliance->getCurrentAlliance()->getAllianceOwner() == $member_id
+            or $requested_rank == $member_id) {
+            
+            return '-';
+        }
+        
+        if ($this->_alliance->hasAccess(AllianceRanks::kick)) {
+            
+            $action = 'game.php?page=alliance&mode=admin&edit=members&kick=' . $member_id; 
+            $content = FunctionsLib::setImage(DPATH . 'alliance/abort.gif');
+            $attributes = 'onclick="javascript:return confirm(\'' . strtr($this->getLang()['al_confirm_remove_member'], ['%s' => $member_name]) . '\');"';
+            $kick_user = FunctionsLib::setUrl($action, '', $content, $attributes);
+        }
+        
+        if ($this->_alliance->hasAccess(AllianceRanks::administration)) {
+
+            $action = 'game.php?page=alliance&mode=admin&edit=members&rank=' . $member_id; 
+            $content = FunctionsLib::setImage(DPATH . 'alliance/key.gif');
+            $change_rank = FunctionsLib::setUrl($action, '', $content);
+        }
+        
+        if (empty($kick_user) && empty($change_rank)) {
+            
+            return '-';
+        }
+        
+        return $kick_user . $change_rank;
+    }
+    
+    /**
      * 
      * OLD METHODS
      * OLD METHODS
@@ -1557,127 +1353,6 @@ class Alliance extends Controller
                     $this->getLang()['alliance_owner_range'] = $this->_ally['alliance_owner_range'];
 
                     return $this->getTemplate()->set('alliance/alliance_admin', $this->getLang());
-
-                    break;
-
-                case ( $edit == 'members' && $this->have_access($this->_ally['alliance_owner'], $this->permissions['admin_alliance']) === true ):
-
-                    $rank = isset($_GET['rank']) ? (int) $_GET['rank'] : null;
-                    $kick = isset($_GET['kick']) ? (int) $_GET['kick'] : null;
-                    $id = isset($_GET['id']) ? (int) $_GET['id'] : null;
-                    $sort1 = isset($_GET['sort1']) ? (int) $_GET['sort1'] : null;
-                    $sort2 = isset($_GET['sort2']) ? (int) $_GET['sort2'] : null;
-
-                    $alliance_ranks = unserialize($this->_ally['alliance_ranks']);
-
-                    if (isset($kick)) {
-                        $this->have_access($this->_ally['alliance_owner'], $this->permissions['kick_users']);
-
-                        $u = $this->Alliance_Model->getUserToBeKickedById($kick);
-
-                        if ($u['user_ally_id'] == $this->_ally['alliance_id'] && $u['user_id'] != $this->_ally['alliance_owner']) {
-
-                            $this->Alliance_Model->exitAlliance($u['user_id']);
-                        }
-                    } elseif (isset($_POST['newrang'])) {
-
-                        $u = isset($id) ? $id : '';
-                        $q = $this->Alliance_Model->getUserById($u);
-
-                        if ((isset($alliance_ranks[$_POST['newrang'] - 1]) or $_POST['newrang'] == 0 ) && ( $q['user_id'] != $this->_ally['alliance_owner'] )) {
-
-                            $this->Alliance_Model->updateUserRank($q['user_id'], $_POST['newrang']);
-                        }
-                    }
-
-                    $listuser = $this->Alliance_Model->getAllianceMembers($this->_user['user_ally_id'], $sort1, $sort2);
-
-                    $i = 0;
-                    $r = $this->getLang();
-                    $s = $this->getLang();
-                    $this->getLang()['i'] = $this->_db->numRows($listuser);
-                    $page_list = [];
-                    $r['options'] = '';
-
-                    while ($u = $this->_db->fetchArray($listuser)) {
-
-                        $u['i'] = ++$i;
-                        $u['points'] = FormatLib::prettyNumber($u['user_statistic_total_points']);
-                        $days = floor(( time() - $u['user_onlinetime'] ) / ( 3600 * 24 ));
-
-                        $u['user_onlinetime'] = str_replace("%s", $days, "%s d");
-
-                        if ($this->_ally['alliance_owner'] == $u['user_id']) {
-
-                            $ally_range = ($this->_ally['alliance_owner_range'] == '' ) ? $this->getLang()['al_founder_rank_text'] : $this->_ally['alliance_owner_range'];
-                        } elseif ($u['user_ally_rank_id'] == 0 or ! $this->return_rank('name')) {
-
-                            $ally_range = $this->getLang()['al_new_member_rank_text'];
-                        } else {
-
-                            $ally_range = $alliance_ranks[$u['user_ally_rank_id'] - 1]['name'];
-                        }
-
-                        if ($this->_ally['alliance_owner'] == $u['user_id'] or $rank == $u['user_id']) {
-
-                            $u['actions'] = '-';
-                        } elseif ($this->return_rank('kick') == 1 && $this->return_rank('administrieren') == 1 or $this->_ally['alliance_owner'] == $this->_user['user_id']) {
-
-                            $u['actions'] = "<a href=\"game.php?page=alliance&mode=admin&edit=members&kick=" . $u['user_id'] . "\" onclick=\"javascript:return confirm('" . str_replace('%s', $u['user_name'], $this->getLang()['al_confirm_remove_member']) . "');\"><img src=\"" . DPATH . "alliance/abort.gif\" border=\"0\"></a> <a href=\"game.php?page=alliance&mode=admin&edit=members&rank=" . $u['user_id'] . "\"><img src=\"" . DPATH . "alliance/key.gif\" border=\"0\"></a>";
-                        } elseif ($this->return_rank('administrieren') == 1) {
-
-                            $u['actions'] = "<a href=\"game.php?page=alliance&mode=admin&edit=members&kick=" . $u['user_id'] . "\" onclick=\"javascript:return confirm('" . str_replace('%s', $u['user_name'], $this->getLang()['al_confirm_remove_member']) . "');\"><img src=\"" . DPATH . "alliance/abort.gif\" border=\"0\"></a> <a href=\"game.php?page=alliance&mode=admin&edit=members&rank=" . $u['user_id'] . "\"><img src=\"" . DPATH . "alliance/key.gif\" border=\"0\"></a>";
-                        } else {
-
-                            $u['actions'] = '-';
-                        }
-
-                        $u['dpath'] = DPATH;
-                        $u['user_ally_register_time'] = date(FunctionsLib::readConfig('date_format_extended'), $u['user_ally_register_time']);
-
-                        if ($rank == $u['user_id']) {
-                            $r['options'] .= "<option onclick=\"document.editar_usu_rango.submit();\" value=\"0\">" . $this->getLang()['al_new_member_rank_text'] . "</option>";
-
-                            if ($alliance_ranks != NULL) {
-                                foreach ($alliance_ranks as $a => $b) {
-
-                                    $r['options'] .= "<option onclick=\"document.editar_usu_rango.submit();\" value=\"" . ($a + 1) . "\"";
-
-                                    if ($u['user_ally_rank_id'] - 1 == $a) {
-                                        $r['options'] .= ' selected=selected';
-                                    }
-
-                                    $r['options'] .= ">{$b['name']}</option>";
-                                }
-                            }
-
-                            $r['user_id'] = $u['user_id'];
-                            $editar_miembros = $this->getTemplate()->set('alliance/alliance_admin_members_row_edit', $r);
-                        }
-
-                        if ($rank != $u['user_id']) {
-
-                            $u['user_ally_range'] = $ally_range;
-                        } else {
-
-                            $u['user_ally_range'] = $editar_miembros;
-                        }
-
-                        $page_list[] = $u;
-                    }
-
-                    if ($sort2 == 1) {
-                        $s = 2;
-                    } elseif ($sort2 == 2) {
-                        $s = 1;
-                    } else {
-                        $s = 1;
-                    }
-
-                    $this->getLang()['list_of_members'] = $page_list;
-                    $this->getLang()['s'] = $s;
-
-                    return $this->getTemplate()->set('alliance/alliance_admin_members_view', $this->getLang());
 
                     break;
 

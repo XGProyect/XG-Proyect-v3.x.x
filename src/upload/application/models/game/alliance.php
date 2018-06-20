@@ -170,13 +170,14 @@ class Alliance
      * 
      * @retun void
      */
-    public function exitAlliance($user_id)
+    public function exitAlliance($alliance_id, $user_id)
     {
         $this->db->query(
             "UPDATE `" . USERS . "` SET
                 `user_ally_id` = '0',
                 `user_ally_rank_id` = '0'
-            WHERE `user_id`='" . (int)$user_id . "'"
+            WHERE `user_id` = '" . (int)$user_id . "' 
+                AND `user_ally_id` = '" . (int)$alliance_id . "'"
         );
     }
     
@@ -334,38 +335,6 @@ class Alliance
             "UPDATE " . ALLIANCE . " SET
                 `alliance_description`='" . $text . "'
             WHERE `alliance_id` = '" . (int)$alliance_id . "'"
-        );
-    }
-    
-    /**
-     * 
-     * @param int $user_id User ID
-     * 
-     * @return array
-     */
-    public function getUserToBeKickedById($user_id)
-    {
-        return $this->db->queryFetch(
-            "SELECT `user_ally_id`, `user_id`
-            FROM `" . USERS . "`
-            WHERE `user_id` = '" . (int)$user_id . "'
-            LIMIT 1"
-        );
-    }
-    
-    /**
-     * 
-     * @param int $user_id User ID
-     * 
-     * @return array
-     */
-    public function getUserById($user_id)
-    {
-        return $this->db->queryFetch(
-            "SELECT `user_id`
-            FROM " . USERS . "
-            WHERE `user_id` = '" . (int)$user_id . "'
-            LIMIT 1"
         );
     }
     

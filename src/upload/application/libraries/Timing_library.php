@@ -27,6 +27,7 @@ use application\core\XGPCore;
  */
 abstract class Timing_library extends XGPCore
 {
+
     /**
      * Return an string with the online time formatted
      * 
@@ -36,34 +37,48 @@ abstract class Timing_library extends XGPCore
      */
     public static function setOnlineStatus($online_time)
     {
-        $color  = 'red';
+        $color = 'red';
         $status = parent::$lang['offline'];
-        
+
         if ($online_time + 60 * 15 >= time()) {
-            
-            $color  = 'yellow';
+
+            $color = 'yellow';
             $status = parent::$lang['minutes'];
         }
-        
+
         if ($online_time + 60 * 10 >= time()) {
-            
-            $color  = 'lime';
+
+            $color = 'lime';
             $status = parent::$lang['online'];
         }
 
         return FormatLib::customColor($status, $color);
     }
-    
+
     /**
-     * Format time based on system config
+     * Format time based on system default config
      * 
      * @param string $time Time
      * 
      * @return string
      */
-    public static function formatTime($time)
+    public static function formatDefaultTime($time)
     {
         return date(FunctionsLib::readConfig('date_format_extended'), $time);
+    }
+
+    /**
+     * Format time on days format
+     * 
+     * @param string $time Time
+     * 
+     * @return string
+     */
+    public static function formatDaysTime($time)
+    {
+        $days = floor((time() - $time) / (3600 * 24));
+
+        return strtr("%s d", ["%s" => $days]);
     }
 }
 
