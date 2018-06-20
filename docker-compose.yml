@@ -37,4 +37,4 @@ services:
 
 networks:
     xgp_network:
-      driver: bridge
+      external: true
