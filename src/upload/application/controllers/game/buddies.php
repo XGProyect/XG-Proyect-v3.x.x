@@ -18,6 +18,10 @@ use application\core\entities\BuddyEntity;
 use application\libraries\buddies\Buddy;
 use application\libraries\enumerators\BuddiesStatusEnumerator as BuddiesStatus;
 use application\libraries\FunctionsLib;
+use application\libraries\Timing_library;
+
+use Exception;
+use const JS_PATH;
 
 /**
  * Buddies Class
@@ -440,38 +444,11 @@ class Buddies extends Controller
     {
         if ($buddy->getBuddyStatus() == BuddiesStatus::isBuddy) {
             
-            return $this->setOnlineStatus($online_time);
+            return Timing_library::setOnlineStatus($online_time);
         } else {
             
             return $buddy->getRequestText();
         }
-    }
-
-    /**
-     * Return an string with the onlinetime formatted
-     * 
-     * @param int $online_time Online Time
-     * 
-     * @return string
-     */
-    private function setOnlineStatus($online_time)
-    {
-        $color  = 'red';
-        $status = $this->getLang()['bu_disconnected'];
-        
-        if ($online_time + 60 * 15 >= time()) {
-            
-            $color  = 'yellow';
-            $status = $this->getLang()['bu_fifteen_minutes'];
-        }
-        
-        if ($online_time + 60 * 10 >= time()) {
-            
-            $color  = 'lime';
-            $status = $this->getLang()['bu_connected'];
-        }
-        
-        return '<font color="' . $color . '">' . $status . '</font>';
     }
     
     /**
