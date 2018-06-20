@@ -18,18 +18,18 @@
             </tr>
             {list_of_ranks}
             <tr>
-                <th>{delete}</th>
-                <th>{r0}</th>
-                <input type="hidden" name="id[]" value="{a}">
+                <th><a href="game.php?page=alliance&mode=admin&edit=rights&d={rank_id}"><img src="{dpath}alliance/abort.gif" border="0"></a></th>
+                <th>{rank_name}</th>
+                <input type="hidden" name="id[]" value="{rank_id}">
                 <th>{r1}</th>
-                <th>{r2}</th>
-                <th>{r3}</th>
-                <th>{r4}</th>
-                <th>{r5}</th>
-                <th>{r6}</th>
-                <th>{r7}</th>
-                <th>{r8}</th>
-                <th>{r9}</th>
+                <th><input type="checkbox" name="u{rank_id}r2" {checked_r2}></th>
+                <th><input type="checkbox" name="u{rank_id}r3" {checked_r3}></th>
+                <th><input type="checkbox" name="u{rank_id}r4" {checked_r4}></th>
+                <th><input type="checkbox" name="u{rank_id}r5" {checked_r5}></th>
+                <th><input type="checkbox" name="u{rank_id}r6" {checked_r6}></th>
+                <th><input type="checkbox" name="u{rank_id}r7" {checked_r7}></th>
+                <th><input type="checkbox" name="u{rank_id}r8" {checked_r8}></th>
+                <th><input type="checkbox" name="u{rank_id}r9" {checked_r9}></th>
             </tr>
             {/list_of_ranks}
             <tr>
@@ -38,7 +38,7 @@
         </form>
     </table>
     <br>
-    <form action="game.php?page=alliance&mode=admin&edit=rights&add=name" method="POST">
+    <form action="game.php?page=alliance&mode=admin&edit=rights" method="POST">
         <table width="519">
             <tr>
                 <td class="c" colspan="2">{al_create_new_rank}</td>
@@ -48,7 +48,7 @@
                 <th><input type="text" name="newrangname" size="20" maxlength="30"></th>
             </tr>
             <tr>
-                <th colspan=2><input type="submit" value="{al_create}"></th>
+                <th colspan="2"><input type="submit" name="create" value="{al_create}"></th>
             </tr>
         </table>
     </form>

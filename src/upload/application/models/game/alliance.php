@@ -264,45 +264,14 @@ class Alliance
     /**
      * Update alliance ranks
      * 
-     * @param int    $alliance_id    Alliance ID
-     * @param array  $alliance_ranks Alliance Ranks
-     * @param string $rank_name      Rank Name
-     * 
-     * @return void
-     */
-    public function createNewAllianceRank($alliance_id, $alliance_ranks, $rank_name)
-    {
-        $name   = $this->db->escapeValue(strip_tags($rank_name));
-
-        $alliance_ranks[] = [
-            'name' => $name,
-            'mails' => 0,
-            'delete' => 0,
-            'kick' => 0,
-            'bewerbungen' => 0,
-            'administrieren' => 0,
-            'bewerbungenbearbeiten' => 0,
-            'memberlist' => 0,
-            'onlinestatus' => 0,
-            'rechtehand' => 0
-        ];
-
-        $ranks = serialize($alliance_ranks);
-        
-        $this->updateAllianceRanks($alliance_id, $ranks);
-    }
-    
-    /**
-     * Update alliance ranks
-     * 
      * @param int    $alliance_id Alliance ID
      * @param string $ranks       Ranks
      */
     public function updateAllianceRanks($alliance_id, $ranks)
     {
         $this->db->query(
-            "UPDATE " . ALLIANCE . " SET
-                `alliance_ranks`='" . $ranks . "'
+            "UPDATE `" . ALLIANCE . "` SET
+                `alliance_ranks` = '" . $ranks . "'
             WHERE `alliance_id` = '" . (int)$alliance_id . "'"
         );
     }

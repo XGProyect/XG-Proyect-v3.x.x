@@ -14,6 +14,7 @@
 namespace application\libraries\alliance;
 
 use application\core\entities\AllianceEntity;
+use application\libraries\alliance\Ranks;
 
 /**
  * Alliance Class
@@ -84,6 +85,18 @@ class Alliances
     public function getCurrentAlliance()
     {
         return $this->_alliances[0];
+    }
+    
+    /**
+     * Get current alliance rank
+     * 
+     * @return Ranks
+     */
+    public function getCurrentAllianceRankObject()
+    {
+        $ranks = new Ranks($this->getCurrentAlliance()->getAllianceRanks());
+        
+        return $ranks;
     }
     
     /**

@@ -13,8 +13,10 @@
  */
 namespace application\libraries\alliance;
 
-use application\libraries\enumerators\AllianceRanksEnumerator;
-use application\libraries\enumerators\SwitchIntEnumerator;
+use application\core\enumerators\AllianceRanksEnumerator as AllianceRanks;
+use application\core\enumerators\SwitchIntEnumerator as SwitchInt;
+use application\libraries\FunctionsLib;
+use Exception;
 
 /**
  * Ranks Class
@@ -39,29 +41,120 @@ class Ranks
     /**
      * Constructor
      * 
-     * @param type $alliance_ranks List of ranks as an array
+     * @param string $alliance_ranks List of ranks as a JSON string
      * 
      * @return void
+     * 
+     * @throws Exception
      */
-    public function __construct($alliance_ranks = [])
+    public function __construct($alliance_ranks)
     {
-        if (is_array($alliance_ranks) && !empty($alliance_ranks)) {
+        try {
+            if (is_array($alliance_ranks)) {
 
-            $this->_ranks = $alliance_ranks;
-        } else {
+                throw new Exception('JSON Expected!');
+            }
+
+            $this->setRanks($alliance_ranks);
+        } catch (Exception $e) {
+
+            die('Caught exception: ' . $e->getMessage() . "\n");
+        }
+    }
+    
+    /**
+     * Set the ranks
+     * 
+     * @param string $ranks Ranks
+     */
+    private function setRanks($ranks)
+    {
+        if (is_null($ranks)) {
+            
+            //$ranks = [];
+        }
+        
+        $this->_ranks = json_decode($ranks, true);
+    }
+    
+    /**
+     * Get the ranks
+     * 
+     * @return string
+     */
+    private function getRanks()
+    {
+        return $this->_ranks;
+    }
+
+    /**
+     * Create a new rank
+     * 
+     * @param string $name Rank Name
+     * 
+     * @return array
+     */
+    public function addNew($name)
+    {
+        try {
+            if (empty($name) or is_null($name)) {
+                
+                throw new Exception('Name cannot be empty or null');
+            }
+
+            $filtered_name = FunctionsLib::escapeString(strip_tags($name));
 
             $this->_ranks[] = [
-                AllianceRanksEnumerator::name => '',
-                AllianceRanksEnumerator::send_circular => SwitchIntEnumerator::off,
-                AllianceRanksEnumerator::delete => SwitchIntEnumerator::off,
-                AllianceRanksEnumerator::kick => SwitchIntEnumerator::off,
-                AllianceRanksEnumerator::applications => SwitchIntEnumerator::off,
-                AllianceRanksEnumerator::administration => SwitchIntEnumerator::off,
-                AllianceRanksEnumerator::application_management => SwitchIntEnumerator::off,
-                AllianceRanksEnumerator::view_member_list => SwitchIntEnumerator::off,
-                AllianceRanksEnumerator::online_status => SwitchIntEnumerator::off,
-                AllianceRanksEnumerator::right_hand => SwitchIntEnumerator::off,
+                'rank' => $filtered_name,
+                'rights' => [
+                    AllianceRanks::delete => SwitchInt::off,
+                    AllianceRanks::kick => SwitchInt::off,
+                    AllianceRanks::applications => SwitchInt::off,
+                    AllianceRanks::view_member_list => SwitchInt::off,
+                    AllianceRanks::application_management => SwitchInt::off,
+                    AllianceRanks::administration => SwitchInt::off,
+                    AllianceRanks::online_status => SwitchInt::off,
+                    AllianceRanks::send_circular => SwitchInt::off,
+                    AllianceRanks::right_hand => SwitchInt::off
+                ]
             ];
+
+            return $this->getRanks();
+        } catch (Exception $e) {
+
+            die('Caught exception: ' . $e->getMessage() . "\n");
+        }
+    }
+
+    /**
+     * Edit ranks by ID
+     * 
+     * @param int   $rank_id
+     * @param array $rights
+     * 
+     * @throws Exception
+     * 
+     * @return array
+     */
+    public function editRankById($rank_id, $rights)
+    {
+        try {
+            if (!isset($this->getRanks()[$this->validateRankId($rank_id)])) {
+                
+                throw new Exception('Rank ID doesn\'t exists');
+            }
+
+            if (!is_array($rights) or count($rights) != 9) {
+
+                throw new Exception('Array of rights is invalid, not an array or not 9 elements');
+            }
+
+            $this->_ranks[$rank_id]['rights'] = $rights;
+
+            return $this->getRanks();
+        } catch (Exception $e) {
+
+            die('Caught exception: ' . $e->getMessage() . "\n");
         }
     }
 
@@ -70,44 +163,33 @@ class Ranks
      * @param RanksTypes $rank
      * @param SwitchTypes $value
      * 
-     * @return void
-     */
-    public function addNew($ranks)
-    {
-        
-    }
-
-    /**
-     * 
-     * @param type $rank_id
-     * @param type $permission
-     * @param type $value
-     */
-    public function editRankById($rank_id, $ranks)
-    {
-        
-    }
-
-    /**
-     * 
-     * @param RanksTypes $rank
-     * @param SwitchTypes $value
-     * 
-     * @return void
+     * @return array
      */
     public function deleteRankById($rank_id)
     {
         array_splice($this->_ranks, $this->validateRankId($rank_id), 1);
+        
+        return $this->getRanks();
     }
 
     /**
-     * Get all the ranks permissions
+     * Get all the ranks permissions as an Array
      * 
      * @return array
      */
-    public function getAllRanks()
+    public function getAllRanksAsArray()
     {
         return $this->_ranks;
+    }
+    
+    /**
+     * Get all the ranks permissions as a JSON
+     * 
+     * @return string
+     */
+    public function getAllRanksAsJsonString()
+    {
+        return json_encode($this->_ranks);
     }
     
     /**
@@ -131,7 +213,7 @@ class Ranks
      */
     private function validateRankId($rank_id)
     {
-        if ($rank_id <= 0) {
+        if ($rank_id < 0) {
             
             return 0;
         }
@@ -141,7 +223,7 @@ class Ranks
             return count($this->_ranks) - 1;
         }
         
-        return $rank_id - 1;
+        return $rank_id;
     }
 }
 

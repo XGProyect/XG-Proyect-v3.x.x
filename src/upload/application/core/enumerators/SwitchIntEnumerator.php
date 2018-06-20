@@ -1,6 +1,6 @@
 <?php
 /**
- * Switch enumerators
+ * Switch Int enumerator
  *
  * PHP Version 5.5+
  *
@@ -11,7 +11,7 @@
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-namespace application\libraries\enumerators;
+namespace application\core\enumerators;
 
 /**
  * SwitchIntEnumerator Class
@@ -31,22 +31,4 @@ abstract class SwitchIntEnumerator
 
 }
 
-/**
- * SwitchBoolEnumerator Class
- *
- * @category Enumerator
- * @package  Core
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
-abstract class SwitchBoolEnumerator
-{
-
-    const on = true;
-    const off = false;
-
-}
-
-/* end of SwitchEnumerator.php */
+/* end of SwitchIntEnumerator.php */

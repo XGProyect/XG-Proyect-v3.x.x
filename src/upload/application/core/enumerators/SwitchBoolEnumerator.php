@@ -1,6 +1,6 @@
 <?php
 /**
- * Alliance ranks Enumerator
+ * Switch Bool enumerator
  *
  * PHP Version 5.5+
  *
@@ -14,7 +14,7 @@
 namespace application\core\enumerators;
 
 /**
- * AllianceRanksEnumerator Class
+ * SwitchBoolEnumerator Class
  *
  * @category Enumerator
  * @package  Core
@@ -23,19 +23,12 @@ namespace application\core\enumerators;
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-abstract class AllianceRanksEnumerator
+abstract class SwitchBoolEnumerator
 {
 
-    const delete = 1;
-    const kick = 2;
-    const applications = 3;
-    const view_member_list = 4;
-    const application_management = 5;
-    const administration = 6;
-    const online_status = 7;
-    const send_circular = 8;
-    const right_hand = 9;
+    const on = true;
+    const off = false;
 
 }
 
-/* end of AllianceRanksEnumerator.php */
+/* end of SwitchBoolEnumerator.php */

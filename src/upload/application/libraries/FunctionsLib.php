@@ -757,6 +757,21 @@ abstract class FunctionsLib extends XGPCore
             die(parent::$page->get('home/banned_message')->parse($parse));
         }
     }
+    
+    /**
+     * Replicates the behavior of mysql_real_escape_string
+     * 
+     * @param string $value Value to escape
+     * 
+     * @return string
+     */
+    public static function escapeString($value) 
+    {
+        $search = ["\\",  "\x00", "\n",  "\r",  "'",  '"', "\x1a"];
+        $replace = ["\\\\","\\0","\\n", "\\r", "\'", '\"', "\\Z"];
+
+        return str_replace($search, $replace, $value);
+    }
 }
 
 /* end of FunctionsLib.php */
