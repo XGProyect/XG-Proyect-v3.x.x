@@ -409,7 +409,7 @@ class Alliance
     {
         $this->db->query(
             "UPDATE " . ALLIANCE . " AS a SET
-                a.`alliance_name` = '" . $alliance_name . "',
+                a.`alliance_name` = '" . $alliance_name . "'
             WHERE a.`alliance_id` = '" . $alliance_id . "';"
         );
     }
@@ -479,7 +479,7 @@ class Alliance
         return $this->db->queryFetch(
             "SELECT `alliance_name`
             FROM `" . ALLIANCE . "`
-            WHERE `alliance_tag` = '" . $this->db->escapeValue($alliance_name) . "'"
+            WHERE `alliance_name` = '" . $this->db->escapeValue($alliance_name) . "'"
         );
     }
     

@@ -772,6 +772,35 @@ abstract class FunctionsLib extends XGPCore
 
         return str_replace($search, $replace, $value);
     }
+    
+    /**
+     * Shows a message box
+     * 
+     * @param string $title     Box Tittle
+     * @param string $message   Box Message
+     * @param string $goto      Go to url
+     * @param string $button    Button text
+     * @param bool   $two_lines Set the message in two lines
+     * 
+     * @return string
+     */
+    public static function messageBox($title, $message, $goto = '', $button = ' ok ', $two_lines = false)
+    {        
+        return parent::$page->parseTemplate(
+            parent::$page->getTemplate('alliance/alliance_message_box'),
+            [
+                'message_box_row' => parent::$page->parseTemplate(
+                    parent::$page->getTemplate('alliance/alliance_message_box_row_' . ($two_lines ? 'two' : 'one')),
+                    [
+                        'goto' => $goto,
+                        'title' => $title,
+                        'message' => $message,
+                        'button' => $button
+                    ]
+                )
+            ]
+        );
+    }
 }
 
 /* end of FunctionsLib.php */
