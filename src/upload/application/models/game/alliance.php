@@ -281,11 +281,11 @@ class Alliance
     public function updateAllianceSettings($alliance_id, $alliance_data)
     {
         $this->db->query(
-            "UPDATE " . ALLIANCE . " SET
-                `alliance_owner_range`='" . $alliance_data['alliance_owner_range'] . "',
-                `alliance_image`='" . $alliance_data['alliance_image'] . "',
-                `alliance_web`='" . $alliance_data['alliance_web'] . "',
-                `alliance_request_notallow`='" . $alliance_data['alliance_request_notallow'] . "'
+            "UPDATE `" . ALLIANCE . "` SET
+                `alliance_owner_range` = '" . $alliance_data['alliance_owner_range'] . "',
+                `alliance_image` = '" . $alliance_data['alliance_image'] . "',
+                `alliance_web` = '" . $alliance_data['alliance_web'] . "',
+                `alliance_request_notallow` = '" . $alliance_data['alliance_request_notallow'] . "'
             WHERE `alliance_id` = '" . $alliance_id . "'"
         );
     }

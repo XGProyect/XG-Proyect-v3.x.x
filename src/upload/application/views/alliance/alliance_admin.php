@@ -1,19 +1,26 @@
 <script src="{js_path}cntchar-min.js" type="text/javascript"></script>
 <br />
 <div id="content">
-    <table width=519>
+    <table width="519px">
         <tr>
-            <td class=c colspan=2>{al_manage_alliance}</td>
+            <td class="c" colspan="2">{al_manage_alliance}</td>
         </tr>
         <tr>
-            <th colspan=2><a href="game.php?page=alliance&mode=admin&edit=rights">{al_manage_ranks}</a></th>
+            <th colspan="2"><a href="game.php?page=alliance&mode=admin&edit=rights">{al_manage_ranks}</a></th>
         </tr>
         <tr>
-            <th colspan=2><a href="game.php?page=alliance&mode=admin&edit=members">{al_manage_members}</a></th>
+            <th colspan="2"><a href="game.php?page=alliance&mode=admin&edit=members">{al_manage_members}</a></th>
         </tr>
         <tr>
-            <th colspan=2>
-                <a href="game.php?page=alliance&mode=admin&edit=tag"><img src="{dpath}alliance/appwiz.gif" border=0 alt="{al_manage_change_tag}"></a>&nbsp;<a href="game.php?page=alliance&mode=admin&edit=name"><img src="{dpath}alliance/appwiz.gif" border=0 alt="{al_manage_change_name}"></a></th>
+            <th colspan="2">
+                <a href="game.php?page=alliance&mode=admin&edit=tag">
+                    <img src="{dpath}alliance/appwiz.gif" border="0" alt="{al_manage_change_tag}">
+                </a>
+                &nbsp;
+                <a href="game.php?page=alliance&mode=admin&edit=name">
+                    <img src="{dpath}alliance/appwiz.gif" border="0" alt="{al_manage_change_name}">
+                </a>
+            </th>
         </tr>
     </table>
     <form action="" method="POST">
@@ -28,16 +35,16 @@
                 <th><a href="game.php?page=alliance&mode=admin&edit=ally&t=3">{al_request_text}</a></th>
             </tr>
             <tr>
-                <td class=c colspan=3>{al_message} (<span id="cntChars">0</span> / 5000 {al_characters})</td>
+                <td class="c" colspan=3>{al_message} (<span id="cntChars">0</span> / 5000 {al_characters})</td>
             </tr>
             <tr>
-                <th colspan="3"><textarea name="text" cols=70 rows=15 onkeyup="javascript:cntchar(5000)">{text}</textarea>
+                <th colspan="3"><textarea name="text" cols="70" rows="15" onkeyup="javascript:cntchar(5000)">{text}</textarea>
                     {request_type}
                 </th>
             </tr>
             <tr>
                 <th colspan=3>
-                    <input type="hidden" name=t value={t}><input type="reset" value="{al_circular_reset}">
+                    <input type="hidden" name="t" value="{t}"><input type="reset" value="{al_circular_reset}">
                     <input type="submit" value="{al_save}">
                 </th>
             </tr>
@@ -46,21 +53,23 @@
     <form action="" method="POST">
         <table width=519>
             <tr>
-                <td class=c colspan=2>{al_manage_options}</td>
+                <td class="c" colspan="2">{al_manage_options}</td>
             </tr>
             <tr>
                 <th>{al_web_site}</th>
-                <th><input type=text name="web" value="{alliance_web}" size="70"></th>
+                <th><input type="text" name="web" value="{alliance_web}" size="70"></th>
             </tr>
             <tr>
                 <th>{al_manage_image}</th>
-                <th><input type=text name="image" value="{alliance_image}" size="70"></th>
+                <th><input type="text" name="image" value="{alliance_image}" size="70"></th>
             </tr>
             <tr>
                 <th>{al_manage_requests}</th>
                 <th>
-                    <select name="request_notallow"><option value=1{alliance_request_notallow_0}>{al_requests_not_allowed}</option>
-                        <option value=0{alliance_request_notallow_1}>{al_requests_allowed}</option></select>
+                    <select name="request_notallow">
+                        <option value="1" {alliance_request_notallow_0}>{al_requests_not_allowed}</option>
+                        <option value="0" {alliance_request_notallow_1}>{al_requests_allowed}</option>
+                    </select>
                 </th>
             </tr>
             <tr>
@@ -68,7 +77,7 @@
                 <th><input type="text" name="owner_range" value="{alliance_owner_range}" size=30></th>
             </tr>
             <tr>
-                <th colspan=2><input type="submit" name="options" value="{al_save}"></th>
+                <th colspan="2"><input type="submit" name="options" value="{al_save}"></th>
             </tr>
         </table>
     </form>
