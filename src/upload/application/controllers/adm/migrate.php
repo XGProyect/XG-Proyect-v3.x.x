@@ -213,7 +213,7 @@ class Migrate extends Controller
      */
     private function checkVersion()
     {
-        return file_exists(XGP_ROOT . 'install' . DIRECTORY_SEPARATOR . 'migration' . DIRECTORY_SEPARATOR . 'migrate_' . $this->version . '.php');
+        return file_exists(XGP_ROOT . MIGRATION_PATH . 'migrate_' . $this->version . '.php');
     }
 
     /**
@@ -266,7 +266,7 @@ class Migrate extends Controller
     private function firstStep()
     {
         // Define some stuff
-        $migration_path = XGP_ROOT . 'install' . DIRECTORY_SEPARATOR . 'migration' . DIRECTORY_SEPARATOR . 'migrate_' . $this->version . '.php';
+        $migration_path = XGP_ROOT . MIGRATION_PATH . 'migrate_' . $this->version . '.php';
         $queries = [];
 
         require_once $migration_path;
@@ -297,7 +297,7 @@ class Migrate extends Controller
     private function secondStep()
     {
         // Define some stuff
-        $migration_path = XGP_ROOT . 'install' . DIRECTORY_SEPARATOR . 'migration' . DIRECTORY_SEPARATOR . 'migrate_common.php';
+        $migration_path = XGP_ROOT . MIGRATION_PATH . 'migrate_common.php';
         $queries = [];
         $password = $this->current_user['user_password'];
 

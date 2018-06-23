@@ -146,7 +146,7 @@ class Update extends Controller
     private function checkVersion()
     {
         return file_exists(
-            XGP_ROOT . 'install/update/update_common.php'
+            XGP_ROOT . UPDATE_PATH . 'update_common.php'
         );
     }
 
@@ -157,7 +157,7 @@ class Update extends Controller
      */
     private function startUpdate()
     {
-        $updates_dir = opendir(XGP_ROOT . 'install/update/');
+        $updates_dir = opendir(XGP_ROOT . UPDATE_PATH);
         $exceptions = ['.', '..', '.htaccess', 'index.html', '.DS_Store', 'update_common.php'];
         $files_to_read = [];
         $db_version = strtr($this->db_version, ['v' => '', '.' => '']);
@@ -206,7 +206,7 @@ class Update extends Controller
     private function executeFile($version)
     {
         // Define some stuff
-        $update_path = XGP_ROOT . 'install/update/update_' . $version . '.php';
+        $update_path = XGP_ROOT . UPDATE_PATH . 'update_' . $version . '.php';
         $queries = [];
 
         require_once $update_path;
