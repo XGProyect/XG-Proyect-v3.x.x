@@ -785,15 +785,15 @@ abstract class FunctionsLib extends XGPCore
      * @return string
      */
     public static function messageBox($title, $message, $goto = '', $button = ' ok ', $two_lines = false)
-    {        
+    {
         return parent::$page->parseTemplate(
             parent::$page->getTemplate('alliance/alliance_message_box'),
             [
+                'goto' => $goto,
+                'title' => $title,
                 'message_box_row' => parent::$page->parseTemplate(
                     parent::$page->getTemplate('alliance/alliance_message_box_row_' . ($two_lines ? 'two' : 'one')),
                     [
-                        'goto' => $goto,
-                        'title' => $title,
                         'message' => $message,
                         'button' => $button
                     ]

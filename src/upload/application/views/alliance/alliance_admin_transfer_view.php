@@ -10,7 +10,7 @@
                 <th>
                     <select name="newleader">
                         {list_of_members}
-                        <option value="{user_id}">{user_name} [{rank_name}]</option>
+                        <option value="{user_id}">{user_name} [{user_rank}]</option>
                         {/list_of_members}
                     </select>
                 </th>

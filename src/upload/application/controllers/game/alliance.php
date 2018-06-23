@@ -624,19 +624,22 @@ class Alliance extends Controller
 
         if ((bool) filter_input(INPUT_GET, 'yes', FILTER_VALIDATE_INT)) {
            
-            $this->Alliance_Model->exitAlliance($this->_user['user_id']);
+            $this->Alliance_Model->exitAlliance(
+                $this->getAllianceId(),
+                $this->_user['user_id']
+            );
             
             return FunctionsLib::messageBox(
-                strtr($this->getLang()['al_leave_sucess'], ["%s" => $this->_alliance->getCurrentAlliance()->getAllianceName()]),
+                strtr($this->getLang()['al_leave_sucess'], ['%s' => $this->_alliance->getCurrentAlliance()->getAllianceName()]),
                 '<br>',
                 'game.php?page=alliance',
                 $this->getLang()['al_continue']
             );
         }
-        
+
         return FunctionsLib::messageBox(
-            strtr($this->getLang()['al_do_you_really_want_to_go_out'], ["%s" => $this->_alliance->getCurrentAlliance()->getAllianceName()]),
-            '<br>',
+            strtr($this->getLang()['al_do_you_really_want_to_go_out'], ['%s' => $this->_alliance->getCurrentAlliance()->getAllianceName()]),
+            '<br/>',
             'game.php?page=alliance&mode=exit&yes=1',
             $this->getLang()['al_go_out_yes']
         );
@@ -1183,14 +1186,16 @@ class Alliance extends Controller
         $list_of_members = [];
 
         foreach ($users as $user) {
-            
+
+            $rank_name = $ranksObject->getRankById($user['user_ally_rank_id'] - 1)['rank'];
             $right_hand = $ranksObject->getRankById($user['user_ally_rank_id'] - 1)['rights'][AllianceRanks::right_hand];
             
             if (isset($right_hand) && $right_hand == SwitchInt::on) {
 
                 $list_of_members[] = [
                     'user_id' => $user['user_id'],
-                    'user_name' => $user['user_name']
+                    'user_name' => $user['user_name'],
+                    'user_rank' => $rank_name
                 ];
             }
         }    

@@ -464,9 +464,9 @@ class Alliance
                 u1.`user_ally_rank_id` = '0',
                 a.`alliance_owner` = '" . (int)$new_leader . "',
                 u2.`user_ally_rank_id` = '0'
-            WHERE u1.`user_id`=" . $current_user_id . " AND
-                a.`alliance_id`=" . $alliance_id . " AND
-                u2.user_id`='" . (int)$new_leader . "'"
+            WHERE u1.`user_id` = " . $current_user_id . " AND
+                a.`alliance_id` = " . $alliance_id . " AND
+                u2.`user_id` = '" . (int)$new_leader . "'"
         );
     }
     
