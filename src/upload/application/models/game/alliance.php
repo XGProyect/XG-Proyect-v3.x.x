@@ -393,8 +393,11 @@ class Alliance
      */
     public function getAllianceRequests($alliance_id)
     {
-        return $this->db->query(
-            "SELECT `user_id`, `user_name`, `user_ally_request_text`, `user_ally_register_time`
+        return $this->db->queryFetchAll(
+            "SELECT `user_id`, 
+                    `user_name`, 
+                    `user_ally_request_text`, 
+                    `user_ally_register_time`
             FROM `" . USERS . "`
             WHERE `user_ally_request` = '" . $alliance_id . "'"
         );

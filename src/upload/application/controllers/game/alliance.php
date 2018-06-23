@@ -917,7 +917,92 @@ class Alliance extends Controller
      */
     private function getAdminRequestsSection()
     {
-        return 'getAdminRequestsSection';
+        $show = filter_input(INPUT_GET, 'show', FILTER_VALIDATE_INT);
+        $accept = filter_input(INPUT_POST, 'accept');
+        $cancel = filter_input(INPUT_POST, 'cancel');
+        $text = filter_input(INPUT_POST, 'text');
+
+        if (isset($accept) && $show != 0) {
+            
+            $this->Alliance_Model->addUserToAlliance($show, $this->getAllianceId());
+
+            FunctionsLib::sendMessage(
+                $show,
+                $this->_user['user_id'],
+                '',
+                3,
+                $this->_alliance->getCurrentAlliance()->getAllianceTag(),
+                $this->getLang()['al_you_was_acceted'] . $this->_alliance->getCurrentAlliance()->getAllianceName(),
+                $this->getLang()['al_hi_the_alliance'] . $this->_alliance->getCurrentAlliance()->getAllianceName() . $this->getLang()['al_has_accepted'] . $text
+            );
+
+            FunctionsLib::redirect('game.php?page=alliance&mode=admin&edit=requests');
+        }
+        
+        if (isset($cancel) && $show != 0) {
+            
+            $this->Alliance_Model->removeUserFromAlliance($show);
+
+            FunctionsLib::sendMessage(
+                $show,
+                $this->_user['user_id'],
+                '',
+                3,
+                $this->_alliance->getCurrentAlliance()->getAllianceTag(),
+                $this->getLang()['al_you_was_declined'] . $this->_alliance->getCurrentAlliance()->getAllianceName(),
+                $this->getLang()['al_hi_the_alliance'] . $this->_alliance->getCurrentAlliance()->getAllianceName() . $this->getLang()['al_has_declined'] . $text
+            );
+
+            FunctionsLib::redirect('game.php?page=alliance&mode=admin&edit=requests');
+        }
+        
+        $requests = $this->Alliance_Model->getAllianceRequests($this->getAllianceId());
+        
+        $amount_of_requests = count($requests);
+        $list_of_requests = [];
+        $request_form = '';
+        
+        if ($requests) {
+            
+            foreach ($requests as $request) {
+
+                $list_of_requests[$request['user_id']] = [
+                    'id' => $request['user_id'],
+                    'username' => $request['user_name'],
+                    'time' => Timing_library::formatDefaultTime($request['user_ally_register_time']),
+                    'ally_request_text' => nl2br($request['user_ally_request_text'])
+                ];
+            }
+
+            if (isset($show) && isset($list_of_requests[$show])) {
+
+                $request_form = $this->getTemplate()->set(
+                    'alliance/alliance_admin_request_form',
+                    array_merge(
+                        $this->getLang(),
+                        [
+                            'js_path' => JS_PATH,
+                            'id' => $list_of_requests[$show]['id'],
+                            'request_from' => strtr($this->getLang()['al_request_from'], ['%s' => $list_of_requests[$show]['username']]),
+                            'request_text' => $list_of_requests[$show]['ally_request_text']
+                        ]
+                    )
+                );
+            } 
+        }
+        
+        return $this->getTemplate()->set(
+            'alliance/alliance_admin_request_view',
+            array_merge(
+                $this->getLang(),
+                [
+                    'request_form' => $request_form,
+                    'pending_message' => strtr($this->getLang()['al_no_request_pending'], ['%n' => $amount_of_requests]),
+                    'list_of_requests' => $list_of_requests,
+                    'no_requests' => $amount_of_requests <= 0 ? '<tr><th colspan="2">' . $this->getLang()['al_no_requests'] . '</th></tr>' : '',
+                ]
+            )
+        );
     }
     
     /**
@@ -1400,7 +1485,7 @@ class Alliance extends Controller
                     $selected = ' selected=selected';
                 }
                 
-                $options = '<option onclick="document.edit_user_rank.submit();" value="' . ($id + 1) . '"' . $selected . '>' . $rank['rank'] . '</option>'; 
+                $options .= '<option onclick="document.edit_user_rank.submit();" value="' . ($id + 1) . '"' . $selected . '>' . $rank['rank'] . '</option>'; 
             }
         }
             
@@ -1461,80 +1546,7 @@ class Alliance extends Controller
     private function ally_admin()
     {
         switch ($edit) {
-            case ($edit == 'requests' && $this->have_access($this->_ally['alliance_owner'], $this->permissions['check_requests']) === true):
 
-                $show = isset($_GET['show']) ? (int) $_GET['show'] : null;
-
-                if (isset($_POST['action']) && ( $_POST['action'] == $this->getLang()['al_acept_request'] )) {
-
-                    $this->Alliance_Model->addUserToAlliance($show, $this->_ally['alliance_id']);
-
-                    FunctionsLib::sendMessage($show, $this->_user['user_id'], '', 3, $this->_ally['alliance_tag'], $this->getLang()['al_you_was_acceted'] . $this->_ally['alliance_name'], $this->getLang()['al_hi_the_alliance'] . $this->_ally['alliance_name'] . $this->getLang()['al_has_accepted'] . $_POST['text']);
-
-                    FunctionsLib::redirect('game.php?page=alliance&mode=admin&edit=ally');
-                } elseif (isset($_POST['action']) && ( $_POST['action'] == $this->getLang()['al_decline_request'] ) && $_POST['action'] != '') {
-
-                    $this->Alliance_Model->removeUserFromAlliance($show);
-
-                    FunctionsLib::sendMessage($show, $this->_user['user_id'], '', 3, $this->_ally['alliance_tag'], $this->getLang()['al_you_was_declined'] . $this->_ally['alliance_name'], $this->getLang()['al_hi_the_alliance'] . $this->_ally['alliance_name'] . $this->getLang()['al_has_declined'] . $_POST['text']);
-
-                    FunctionsLib::redirect('game.php?page=alliance&mode=admin&edit=ally');
-                }
-
-                $i = 0;
-                $query = $this->Alliance_Model->getAllianceRequests($this->_ally['alliance_id']);
-
-                $s = [];
-                $parse['list_of_requests'] = [];
-                $parse['request'] = '';
-                $parse['no_requests'] = '';
-
-                if ($query->num_rows > 0) {
-
-                    while ($r = $this->_db->fetchArray($query)) {
-
-                        if (isset($show) && $r['user_id'] == $show) {
-
-                            $s[$show]['username'] = $r['user_name'];
-                            $s[$show]['ally_request_text'] = nl2br($r['user_ally_request_text']);
-                            $s[$show]['id'] = $r['user_id'];
-                        }
-
-                        $r['username'] = $r['user_name'];
-                        $r['id'] = $r['user_id'];
-
-                        $r['time'] = date(
-                            FunctionsLib::readConfig('date_format_extended'), $r['user_ally_register_time']
-                        );
-
-                        $parse['list_of_requests'][] = $r;
-
-                        $i++;
-                    }
-                }
-
-                if (count($parse['list_of_requests']) == 0) {
-
-                    $parse['no_requests'] = "<tr><th colspan=2>" . $this->getLang()['al_no_requests'] . "</th></tr>";
-                }
-
-                if (isset($show) && $show != 0 && $query->num_rows != 0) {
-
-                    $s[$show]['Request_from'] = str_replace(
-                        '%s', $s[$show]['username'], $this->getLang()['al_request_from']
-                    );
-                    $parse['request'] = $this->getTemplate()->set(
-                        'alliance/alliance_admin_request_form', array_merge($s[$show], $this->getLang())
-                    );
-                }
-
-                $parse['ally_tag'] = $this->_ally['alliance_tag'];
-                $parse['There_is_hanging_request'] = str_replace('%n', $i, $this->getLang()['al_no_request_pending']);
-
-                return $this->getTemplate()->set(
-                        'alliance/alliance_admin_request_view', $parse
-                );
-                break;
 
             case ( $edit == 'transfer' && $this->have_access($this->_ally['alliance_owner'], $this->permissions['admin_alliance']) === true ):
 
