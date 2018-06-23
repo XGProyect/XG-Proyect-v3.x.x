@@ -1494,6 +1494,7 @@ class Alliance extends Controller
             array_merge(
                 $this->getLang(),
                 [
+                    'user_id' => $member_id,
                     'options' => $options
                 ]
             )
