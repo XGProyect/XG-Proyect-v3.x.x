@@ -198,7 +198,7 @@
         <div id="uni_selection" style="display: none;">
                                     <script type="text/javascript">
                         <!--
-                            select_uni('{base_path}'.replace('http://', '').replace('https://', ''), '','');
+                            select_uni('{base_path}'.replace('http://', '').replace('https://', '').slice(0, -1), '','');
                         //-->
                         </script>
 
