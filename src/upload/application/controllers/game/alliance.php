@@ -669,7 +669,7 @@ class Alliance extends Controller
             'requests' => AllianceRanks::application_management,
             'rights' => AllianceRanks::right_hand,
             'tag' => AllianceRanks::administration,
-            'transfer' => AllianceRanks::administration
+            'transfer' => ''
         ];
         
         if (isset($admin_sections[$edit]) && $this->_alliance->hasAccess($admin_sections[$edit])) {
@@ -1161,7 +1161,49 @@ class Alliance extends Controller
      */
     private function getAdminTransferSection()
     {
-        return 'getAdminTransferSection';
+        $new_leader = filter_input(INPUT_POST, 'newleader', FILTER_VALIDATE_INT);
+
+        if (isset($new_leader) && $new_leader != 0) {
+            
+            $this->Alliance_Model->transferAlliance(
+                $this->_user['user_ally_id'],
+                $this->_user['user_id'],
+                $new_leader
+            );
+
+            FunctionsLib::redirect('game.php?page=alliance');
+        }
+        
+        $ranksObject = $this->_alliance->getCurrentAllianceRankObject();
+        
+        $users = $this->Alliance_Model->getAllianceMembersById(
+            $this->getAllianceId()
+        );
+        
+        $list_of_members = [];
+
+        foreach ($users as $user) {
+            
+            $right_hand = $ranksObject->getRankById($user['user_ally_rank_id'] - 1)['rights'][AllianceRanks::right_hand];
+            
+            if (isset($right_hand) && $right_hand == SwitchInt::on) {
+
+                $list_of_members[] = [
+                    'user_id' => $user['user_id'],
+                    'user_name' => $user['user_name']
+                ];
+            }
+        }    
+        
+        return $this->getTemplate()->set(
+            'alliance/alliance_admin_transfer_view',
+            array_merge(
+                $this->getLang(),
+                [
+                    'list_of_members' => $list_of_members
+                ]
+            )
+        );
     }
     
     
@@ -1542,55 +1584,6 @@ class Alliance extends Controller
         }
         
         return $kick_user . $change_rank;
-    }
-    
-    private function ally_admin()
-    {
-        switch ($edit) {
-
-
-            case ( $edit == 'transfer' && $this->have_access($this->_ally['alliance_owner'], $this->permissions['admin_alliance']) === true ):
-
-                $alliance_ranks = unserialize($this->_ally['alliance_ranks']);
-
-                if (isset($_POST['newleader'])) {
-
-                    $this->Alliance_Model->transferAlliance($this->_user['user_ally_id'], $this->_user['user_id'], $_POST['newleader']);
-
-                    FunctionsLib::redirect('game.php?page=alliance');
-                }
-
-                $parse['list_of_members'] = [];
-
-                if ($this->_ally['alliance_owner'] != $this->_user['user_id']) {
-                    FunctionsLib::redirect('game.php?page=alliance');
-                } else {
-                    $listuser = $this->Alliance_Model->getAllianceMembersById($this->_user['user_ally_id']);
-                    $righthand = $this->getLang();
-                    $righthand['righthand'] = '';
-
-                    while ($u = $this->_db->fetchArray($listuser)) {
-                        if ($this->_ally['alliance_owner'] != $u['user_id']) {
-                            if ($u['user_ally_rank_id'] != 0) {
-                                if ($alliance_ranks[$u['user_ally_rank_id'] - 1]['rechtehand'] == 1) {
-                                    $righthand['righthand'] .= "\n<option value=\"" . $u['user_id'] . "\"";
-                                    $righthand['righthand'] .= ">";
-                                    $righthand['righthand'] .= "" . $u['user_name'];
-                                    $righthand['righthand'] .= "&nbsp;[" . $alliance_ranks[$u['user_ally_rank_id'] - 1]['name'];
-                                    $righthand['righthand'] .= "]&nbsp;&nbsp;</option>";
-                                }
-                            }
-                        }
-                        $righthand['dpath'] = DPATH;
-                    }
-
-                    $parse['list_of_members'][] = $righthand;
-
-                    return $this->getTemplate()->set('alliance/alliance_admin_transfer_view', $parse);
-                }
-
-                break;
-        }
     }
 }
 
