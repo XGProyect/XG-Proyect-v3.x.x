@@ -219,13 +219,16 @@ class Buddies extends Controller
         $user = filter_input(INPUT_POST, 'user', FILTER_VALIDATE_INT);
         $text = filter_input(INPUT_POST, 'text');
 
-        $buddy = new BuddyEntity(
-            $this->Buddies_Model->getBuddyIdByReceiverAndSender($user, $this->_user['user_id'])
-        );
+        $buddy = null;
         
-        if ($buddy->getBuddyId() != 0) {
+        if ($buddy_data = $this->Buddies_Model->getBuddyIdByReceiverAndSender($user, $this->_user['user_id'])) {
             
-            FunctionsLib::message($this->getLang()['bu_request_exists'], 'game.php?page=buddies', 2, true);
+            $buddy = new BuddyEntity($buddy_data);
+        }
+
+        if (!is_null($buddy) && $buddy->getBuddyId() != 0) {
+            
+            FunctionsLib::message($this->getLang()['bu_request_exists'], 'game.php?page=buddies', 3, true);
         }
 
         $this->sendMessage($user, 4);
