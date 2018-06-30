@@ -69,11 +69,6 @@ class Ranks
      */
     private function setRanks($ranks)
     {
-        if (is_null($ranks)) {
-            
-            //$ranks = [];
-        }
-        
         $this->_ranks = json_decode($ranks, true);
     }
     
@@ -201,7 +196,19 @@ class Ranks
      */
     public function getRankById($rank_id)
     {
-        return $this->_ranks[$this->validateRankId($rank_id)];
+        return isset($this->_ranks[$rank_id]) ? $this->_ranks[$rank_id] : 0;
+    }
+    
+    /**
+     * Get the user rank by ID, it automatically decrements 1
+     * 
+     * @param int $rank_id Rank ID
+     * 
+     * @return array
+     */
+    public function getUserRankById($rank_id)
+    {
+        return $this->getRankById($rank_id - 1);
     }
     
     /**

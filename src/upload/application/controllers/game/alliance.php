@@ -292,7 +292,7 @@ class Alliance extends Controller
             'tag', 'name', 'members', 'rank', 'requests', 'circular', 'web'
         ];
         $details = [];
-        
+
         foreach ($blocks as $block) {
             
             $data = $this->{'build' . ucfirst($block) . 'Block'}();
@@ -304,7 +304,7 @@ class Alliance extends Controller
             
             $details[] = $data;
         }
-        
+
         return $this->getTemplate()->set(
             'alliance/alliance_front_page_view', array_merge([
                 'image' => $this->buildImageBlock(),
@@ -665,7 +665,7 @@ class Alliance extends Controller
         $edit = filter_input(INPUT_GET, 'edit');
 
         $admin_sections = [
-            'ally' => '',
+            'ally' => AllianceRanks::administration,
             'exit' => AllianceRanks::delete,
             'members' => AllianceRanks::administration,
             'name' => AllianceRanks::administration,
@@ -674,7 +674,7 @@ class Alliance extends Controller
             'tag' => AllianceRanks::administration,
             'transfer' => ''
         ];
-        
+
         if (isset($admin_sections[$edit]) && $this->_alliance->hasAccess($admin_sections[$edit])) {
             
             return $this->{'getAdmin' . ucfirst($edit) . 'Section'}();
@@ -817,8 +817,8 @@ class Alliance extends Controller
             && $id != $this->_alliance->getCurrentAlliance()->getAllianceOwner()) {
 
             $ranks = $this->_alliance->getCurrentAllianceRankObject();
-            
-            if ($ranks->getRankById($new_rank - 1) != null) {
+
+            if ($ranks->getUserRankById($new_rank) != null) {
                 
                 $this->Alliance_Model->updateUserRank($id, $new_rank);
             }
@@ -1187,8 +1187,8 @@ class Alliance extends Controller
 
         foreach ($users as $user) {
 
-            $rank_name = $ranksObject->getRankById($user['user_ally_rank_id'] - 1)['rank'];
-            $right_hand = $ranksObject->getRankById($user['user_ally_rank_id'] - 1)['rights'][AllianceRanks::right_hand];
+            $rank_name = $ranksObject->getUserRankById($user['user_ally_rank_id'])['rank'];
+            $right_hand = $ranksObject->getUserRankById($user['user_ally_rank_id'])['rights'][AllianceRanks::right_hand];
             
             if (isset($right_hand) && $right_hand == SwitchInt::on) {
 
@@ -1496,7 +1496,7 @@ class Alliance extends Controller
         
         $ranks = $this->_alliance->getCurrentAllianceRankObject();
         
-        return $ranks->getRankById($member_rank_id - 1)['rank'];
+        return $ranks->getUserRankById($member_rank_id)['rank'];
     }
     
     /**
