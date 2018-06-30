@@ -200,6 +200,8 @@ class Report
      * Set up the list of reports
      * 
      * @param array $reports Reports
+     * 
+     * @return void
      */
     private function setUp($reports)
     {
