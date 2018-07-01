@@ -45,16 +45,16 @@ class PlanetEntity
     /**
      * Set the current planet
      * 
-     * @param array $current_planet Current Planet
+     * @param array $planet Current Planet
      * @throws Exception
      */
-    private function setPlanet($current_planet)
+    private function setPlanet($planet)
     {
         try {
 
             if (!is_array($planet)) {
                 
-                return  null;
+                return null;
             }
 
             $this->_planet = $planet;

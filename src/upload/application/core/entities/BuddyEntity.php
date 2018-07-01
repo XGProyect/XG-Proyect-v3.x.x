@@ -47,7 +47,7 @@ class BuddyEntity
     }
 
     /**
-     * Set the current planet
+     * Set the current buddy
      * 
      * @param array $buddy Buddy
      * 
@@ -61,7 +61,7 @@ class BuddyEntity
 
             if (!is_array($buddy)) {
                 
-                return  null;
+                return null;
             }
             
             $this->_buddy = $buddy;

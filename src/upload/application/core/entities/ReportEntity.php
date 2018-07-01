@@ -45,7 +45,7 @@ class ReportEntity
     }
 
     /**
-     * Set the current planet
+     * Set the current report
      * 
      * @param array $report Report
      * 
@@ -59,7 +59,7 @@ class ReportEntity
 
             if (!is_array($report)) {
                 
-                return  null;
+                return null;
             }
             
             $this->_report = $report;

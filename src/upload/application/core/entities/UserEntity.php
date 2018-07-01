@@ -45,7 +45,7 @@ class UserEntity
     /**
      * Set the current user
      * 
-     * @param array $curret_user Current User
+     * @param array $user Current User
      * 
      * @throws Exception
      * 
@@ -57,7 +57,7 @@ class UserEntity
 
             if (!is_array($user)) {
                 
-                return  null;
+                return null;
             }
 
             $this->_user = $user;

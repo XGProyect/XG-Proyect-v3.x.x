@@ -47,7 +47,7 @@ class AllianceEntity
     }
 
     /**
-     * Set the current planet
+     * Set the current alliance
      * 
      * @param array $alliance Alliance
      * 
@@ -61,7 +61,7 @@ class AllianceEntity
 
             if (!is_array($alliance)) {
                 
-                return  null;
+                return null;
             }
             
             $this->_alliance = $alliance;
