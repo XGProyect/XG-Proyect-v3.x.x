@@ -14,6 +14,7 @@
 namespace application\controllers\game;
 
 use application\core\Controller;
+use application\libraries\FunctionsLib;
 
 /**
  * Fleet Class

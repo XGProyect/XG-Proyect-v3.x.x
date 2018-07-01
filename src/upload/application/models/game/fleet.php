@@ -48,8 +48,6 @@ class Fleet
     {
         $this->db->closeConnection();
     }
-    
-
 }
 
 /* end of fleet.php */
