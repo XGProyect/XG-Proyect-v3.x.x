@@ -12,7 +12,7 @@ XG Proyect
 Support: http://www.xgproyect.org/  
 Live Server: http://server.xgproyect.org/  
 
-Require PHP >= 5.4  
+Require PHP >= 5.6  
 Require MySQLi >= 5.0.0  
 
 ![Free](http://www.gnu.org/graphics/agplv3-155x51.png)
@@ -36,5 +36,7 @@ On the other hand, it's a pleasure to see people using XG Proyect.
 The following are tools or frameworks that we use to do our coding experience better!
 
 ![Codeigniter](http://codeigniter.com/assets/images/ci-logo.png) **Codeigniter**
+
+![PHPDocumentor](https://www.phpdoc.org/bundles/phpdocumentorwebsite/images/logo-icon.png) **PHP Documentor**
 
 [**PHP CompatInfo**](http://php5.laurent-laville.org/compatinfo/)
