@@ -13,7 +13,7 @@
  */
 namespace application\core\entities;
 
-use Exception;
+use application\core\Entity;
 
 /**
  * Fleet Entity Class
@@ -25,50 +25,19 @@ use Exception;
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-class FleetEntity
+class FleetEntity extends Entity
 {
 
     /**
-     *
-     * @var array
-     */
-    private $_fleet = [];
-
-    /**
-     * Init with the fleet data
+     * Constructor
      * 
-     * @param array $fleet Fleet
+     * @param array $data Data
      * 
      * @return void
      */
-    public function __construct($fleet)
+    public function __construct($data)
     {
-        $this->setFleet($fleet);
-    }
-
-    /**
-     * Set the current fleet
-     * 
-     * @param array $fleet Fleet
-     * 
-     * @throws Exception
-     * 
-     * @return void
-     */
-    private function setFleet($fleet)
-    {
-        try {
-
-            if (!is_array($fleet)) {
-                
-                return  null;
-            }
-            
-            $this->_fleet = $fleet;
-        } catch (Exception $e) {
-
-            die('Caught exception: ' . $e->getMessage() . "\n");
-        }
+        parent::__construct($data);
     }
 
     /**
@@ -78,7 +47,7 @@ class FleetEntity
      */
     public function getFleetId()
     {
-        return $this->_fleet['fleet_id'];
+        return $this->_data['fleet_id'];
     }
     
     /**
@@ -88,7 +57,7 @@ class FleetEntity
      */
     public function getFleetOwner()
     {
-        return $this->_fleet['fleet_owner'];
+        return $this->_data['fleet_owner'];
     }
     
     /**
@@ -98,7 +67,7 @@ class FleetEntity
      */
     public function getFleetMission()
     {
-        return $this->_fleet['fleet_mission'];
+        return $this->_data['fleet_mission'];
     }
     
     /**
@@ -108,7 +77,7 @@ class FleetEntity
      */
     public function getFleetAmount()
     {
-        return $this->_fleet['fleet_amount'];
+        return $this->_data['fleet_amount'];
     }
     
     /**
@@ -118,7 +87,7 @@ class FleetEntity
      */
     public function getFleetArray()
     {
-        return $this->_fleet['fleet_array'];
+        return $this->_data['fleet_array'];
     }
     
     /**
@@ -128,7 +97,7 @@ class FleetEntity
      */
     public function getFleetStartTime()
     {
-        return $this->_fleet['fleet_start_time'];
+        return $this->_data['fleet_start_time'];
     }
     
     /**
@@ -138,7 +107,7 @@ class FleetEntity
      */
     public function getFleetStartGalaxy()
     {
-        return $this->_fleet['fleet_start_galaxy'];
+        return $this->_data['fleet_start_galaxy'];
     }
     
     /**
@@ -148,7 +117,7 @@ class FleetEntity
      */
     public function getFleetStartSystem()
     {
-        return $this->_fleet['fleet_start_system'];
+        return $this->_data['fleet_start_system'];
     }
     
     /**
@@ -158,7 +127,7 @@ class FleetEntity
      */
     public function getFleetStartPlanet()
     {
-        return $this->_fleet['fleet_start_planet'];
+        return $this->_data['fleet_start_planet'];
     }
     
     /**
@@ -168,7 +137,7 @@ class FleetEntity
      */
     public function getFleetStartType()
     {
-        return $this->_fleet['fleet_start_type'];
+        return $this->_data['fleet_start_type'];
     }
     
     /**
@@ -178,7 +147,7 @@ class FleetEntity
      */
     public function getFleetEndTime()
     {
-        return $this->_fleet['fleet_end_time'];
+        return $this->_data['fleet_end_time'];
     }
     
     /**
@@ -188,7 +157,7 @@ class FleetEntity
      */
     public function getFleetEndStay()
     {
-        return $this->_fleet['fleet_end_stay'];
+        return $this->_data['fleet_end_stay'];
     }
     
     /**
@@ -198,7 +167,7 @@ class FleetEntity
      */
     public function getFleetEndGalaxy()
     {
-        return $this->_fleet['fleet_end_galaxy'];
+        return $this->_data['fleet_end_galaxy'];
     }
     
     /**
@@ -208,7 +177,7 @@ class FleetEntity
      */
     public function getFleetEndSystem()
     {
-        return $this->_fleet['fleet_end_system'];
+        return $this->_data['fleet_end_system'];
     }
     
     /**
@@ -218,7 +187,7 @@ class FleetEntity
      */
     public function getFleetEndPlanet()
     {
-        return $this->_fleet['fleet_end_planet'];
+        return $this->_data['fleet_end_planet'];
     }
     
     /**
@@ -228,7 +197,7 @@ class FleetEntity
      */
     public function getFleetEndType()
     {
-        return $this->_fleet['fleet_end_type'];
+        return $this->_data['fleet_end_type'];
     }
     
     /**
@@ -238,7 +207,7 @@ class FleetEntity
      */
     public function getFleetTargetObj()
     {
-        return $this->_fleet['fleet_target_obj'];
+        return $this->_data['fleet_target_obj'];
     }
     
     /**
@@ -248,7 +217,7 @@ class FleetEntity
      */
     public function getFleetResourceMetal()
     {
-        return $this->_fleet['fleet_resource_metal'];
+        return $this->_data['fleet_resource_metal'];
     }
     
     /**
@@ -258,7 +227,7 @@ class FleetEntity
      */
     public function getFleetResourceCrystal()
     {
-        return $this->_fleet['fleet_resource_crystal'];
+        return $this->_data['fleet_resource_crystal'];
     }
     
     /**
@@ -268,7 +237,7 @@ class FleetEntity
      */
     public function getFleetResourceDeuterium()
     {
-        return $this->_fleet['fleet_resource_deuterium'];
+        return $this->_data['fleet_resource_deuterium'];
     }
     
     /**
@@ -278,7 +247,7 @@ class FleetEntity
      */
     public function getFleetFuel()
     {
-        return $this->_fleet['fleet_fuel'];
+        return $this->_data['fleet_fuel'];
     }
     
     /**
@@ -288,7 +257,7 @@ class FleetEntity
      */
     public function getFleetTargetOwner()
     {
-        return $this->_fleet['fleet_target_owner'];
+        return $this->_data['fleet_target_owner'];
     }
     
     /**
@@ -298,7 +267,7 @@ class FleetEntity
      */
     public function getFleetGroup()
     {
-        return $this->_fleet['fleet_group'];
+        return $this->_data['fleet_group'];
     }
     
     /**
@@ -308,7 +277,7 @@ class FleetEntity
      */
     public function getFleetMess()
     {
-        return $this->_fleet['fleet_mess'];
+        return $this->_data['fleet_mess'];
     }
     
     /**
@@ -318,7 +287,7 @@ class FleetEntity
      */
     public function getFleetCreation()
     {
-        return $this->_fleet['fleet_creation'];
+        return $this->_data['fleet_creation'];
     }
 }
 

@@ -13,7 +13,7 @@
  */
 namespace application\core\entities;
 
-use Exception;
+use application\core\Entity;
 
 /**
  * Acs Fleet entity Class
@@ -25,50 +25,19 @@ use Exception;
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-class AcsFleetEntity
+class AcsFleetEntity extends Entity
 {
 
     /**
-     *
-     * @var array
-     */
-    private $_acs = [];
-
-    /**
-     * Init with the acs data
+     * Constructor
      * 
-     * @param array $acs Acs
+     * @param array $data Data
      * 
      * @return void
      */
-    public function __construct($acs)
+    public function __construct($data)
     {
-        $this->setAcsFleet($acs);
-    }
-
-    /**
-     * Set the current acs
-     * 
-     * @param array $acs Acs
-     * 
-     * @throws Exception
-     * 
-     * @return void
-     */
-    private function setAcsFleet($acs)
-    {
-        try {
-
-            if (!is_array($acs)) {
-                
-                return null;
-            }
-            
-            $this->_acs = $acs;
-        } catch (Exception $e) {
-
-            die('Caught exception: ' . $e->getMessage() . "\n");
-        }
+        parent::__construct($data);
     }
     
     /**
@@ -78,7 +47,7 @@ class AcsFleetEntity
      */
     public function getAcsFleetId()
     {
-        return $this->_acs['acs_fleet_id'];
+        return $this->_data['acs_fleet_id'];
     }
 
     /**
@@ -88,7 +57,7 @@ class AcsFleetEntity
      */
     public function getAcsFleetName()
     {
-        return $this->_acs['acs_fleet_name'];
+        return $this->_data['acs_fleet_name'];
     }
 
     /**
@@ -98,7 +67,7 @@ class AcsFleetEntity
      */
     public function getAcsFleetMembers()
     {
-        return $this->_acs['acs_fleet_members'];
+        return $this->_data['acs_fleet_members'];
     }
 
     /**
@@ -108,7 +77,7 @@ class AcsFleetEntity
      */
     public function getAcsFleetFleets()
     {
-        return $this->_acs['acs_fleet_fleets'];
+        return $this->_data['acs_fleet_fleets'];
     }
 
     /**
@@ -118,7 +87,7 @@ class AcsFleetEntity
      */
     public function getAcsFleetGalaxy()
     {
-        return $this->_acs['acs_fleet_galaxy'];
+        return $this->_data['acs_fleet_galaxy'];
     }
 
     /**
@@ -128,7 +97,7 @@ class AcsFleetEntity
      */
     public function getAcsFleetSystem()
     {
-        return $this->_acs['acs_fleet_system'];
+        return $this->_data['acs_fleet_system'];
     }
 
     /**
@@ -138,7 +107,7 @@ class AcsFleetEntity
      */
     public function getAcsFleetPlanet()
     {
-        return $this->_acs['acs_fleet_planet'];
+        return $this->_data['acs_fleet_planet'];
     }
 
     /**
@@ -148,7 +117,7 @@ class AcsFleetEntity
      */
     public function getAcsFleetPlanetType()
     {
-        return $this->_acs['acs_fleet_planet_type'];
+        return $this->_data['acs_fleet_planet_type'];
     }
 
     /**
@@ -158,7 +127,7 @@ class AcsFleetEntity
      */
     public function getAcsFleetInvited()
     {
-        return $this->_acs['acs_fleet_invited'];
+        return $this->_data['acs_fleet_invited'];
     }
 }
 /* end of AcsFleetEntity.php */

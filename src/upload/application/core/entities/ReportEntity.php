@@ -13,7 +13,7 @@
  */
 namespace application\core\entities;
 
-use Exception;
+use application\core\Entity;
 
 /**
  * Report Entity Class
@@ -25,48 +25,19 @@ use Exception;
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-class ReportEntity
+class ReportEntity extends Entity
 {
 
     /**
-     *
-     * @var array
-     */
-    private $_report = [];
-
-    /**
-     * Init with the report data
+     * Constructor
      * 
-     * @param array $report Report
+     * @param array $data Data
+     * 
+     * @return void
      */
-    public function __construct($report)
+    public function __construct($data)
     {
-        $this->setReport($report);
-    }
-
-    /**
-     * Set the current report
-     * 
-     * @param array $report Report
-     * 
-     * @throws Exception
-     * 
-     * @retun void
-     */
-    private function setReport($report)
-    {
-        try {
-
-            if (!is_array($report)) {
-                
-                return null;
-            }
-            
-            $this->_report = $report;
-        } catch (Exception $e) {
-
-            die('Caught exception: ' . $e->getMessage() . "\n");
-        }
+        parent::__construct($data);
     }
 
     /**
@@ -76,7 +47,7 @@ class ReportEntity
      */
     public function getReportOwners()
     {
-        return $this->_report['report_owners'];
+        return $this->_data['report_owners'];
     }
 
     /**
@@ -86,7 +57,7 @@ class ReportEntity
      */
     public function getReportId()
     {
-        return $this->_report['report_rid'];
+        return $this->_data['report_rid'];
     }
 
     /**
@@ -96,7 +67,7 @@ class ReportEntity
      */
     public function getReportContent()
     {
-        return $this->_report['report_content'];
+        return $this->_data['report_content'];
     }
 
     /**
@@ -106,7 +77,7 @@ class ReportEntity
      */
     public function getReportDestroyed()
     {
-        return $this->_report['report_destroyed'];
+        return $this->_data['report_destroyed'];
     }
 
     /**
@@ -116,7 +87,7 @@ class ReportEntity
      */
     public function getReportTime()
     {
-        return $this->_report['report_time'];
+        return $this->_data['report_time'];
     }
 }
 

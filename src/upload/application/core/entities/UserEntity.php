@@ -13,6 +13,8 @@
  */
 namespace application\core\entities;
 
+use application\core\Entity;
+
 /**
  * UserEntity Class
  *
@@ -23,48 +25,19 @@ namespace application\core\entities;
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-class UserEntity
+class UserEntity extends Entity
 {
 
     /**
-     *
-     * @var array
-     */
-    private $_user = [];
-
-    /**
-     * Init with the current user data
+     * Constructor
      * 
-     * @param array $curret_user Current User
-     */
-    public function __construct($curret_user)
-    {
-        $this->setUser($curret_user);
-    }
-
-    /**
-     * Set the current user
-     * 
-     * @param array $user Current User
-     * 
-     * @throws Exception
+     * @param array $data Data
      * 
      * @return void
      */
-    private function setUser($user)
+    public function __construct($data)
     {
-        try {
-
-            if (!is_array($user)) {
-                
-                return null;
-            }
-
-            $this->_user = $user;
-        } catch (Exception $e) {
-
-            die('Caught exception: ' . $e->getMessage() . "\n");
-        }
+        parent::__construct($data);
     }
 }
 
