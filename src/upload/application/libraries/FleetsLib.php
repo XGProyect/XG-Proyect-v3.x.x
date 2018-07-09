@@ -113,65 +113,68 @@ class FleetsLib extends XGPCore
             $fleet_array[$fleet] = 1;
         }
 
-        foreach ($fleet_array as $ship => $count) {
+        if (!empty($fleet_array) && !is_null($fleet_array)) {
 
-            /**
-             * Special condition for Small cargo
-             */
-            if ($ship == 202) {
+            foreach ($fleet_array as $ship => $count) {
 
-                if ($user['research_impulse_drive'] >= 5) {
+                /**
+                 * Special condition for Small cargo
+                 */
+                if ($ship == 202) {
 
-                    $speed_all[$ship] = $pricelist[$ship]['speed2'] + ($pricelist[$ship]['speed2'] * $user['research_impulse_drive'] * 0.2);
-                } else {
+                    if ($user['research_impulse_drive'] >= 5) {
+
+                        $speed_all[$ship] = $pricelist[$ship]['speed2'] + ($pricelist[$ship]['speed2'] * $user['research_impulse_drive'] * 0.2);
+                    } else {
+
+                        $speed_all[$ship] = $pricelist[$ship]['speed'] + (($pricelist[$ship]['speed'] * $user['research_combustion_drive'] ) * 0.1);
+                    }
+                }
+
+                /**
+                 * Special condition for Recycler
+                 */
+                if ($ship == 209) {
 
                     $speed_all[$ship] = $pricelist[$ship]['speed'] + (($pricelist[$ship]['speed'] * $user['research_combustion_drive'] ) * 0.1);
-                }
-            }
 
-            /**
-             * Special condition for Recycler
-             */
-            if ($ship == 209) {
+                    if ($user['research_impulse_drive'] >= 17) {
 
-                $speed_all[$ship] = $pricelist[$ship]['speed'] + (($pricelist[$ship]['speed'] * $user['research_combustion_drive'] ) * 0.1);
+                        $speed_all[$ship] = $pricelist[$ship]['speed2'] + (($pricelist[$ship]['speed2'] * $user['research_impulse_drive'] ) * 0.2);
+                    }
 
-                if ($user['research_impulse_drive'] >= 17) {
+                    if ($user['research_hyperspace_drive'] >= 15) {
 
-                    $speed_all[$ship] = $pricelist[$ship]['speed2'] + (($pricelist[$ship]['speed2'] * $user['research_impulse_drive'] ) * 0.2);
+                        $speed_all[$ship] = $pricelist[$ship]['speed2'] + (($pricelist[$ship]['speed2'] * $user['research_hyperspace_drive'] ) * 0.3);
+                    }
                 }
 
-                if ($user['research_hyperspace_drive'] >= 15) {
+                if ($ship == 203 or $ship == 204 or $ship == 210) {
 
-                    $speed_all[$ship] = $pricelist[$ship]['speed2'] + (($pricelist[$ship]['speed2'] * $user['research_hyperspace_drive'] ) * 0.3);
+                    $speed_all[$ship] = $pricelist[$ship]['speed'] + (($pricelist[$ship]['speed'] * $user['research_combustion_drive']) * 0.1);
                 }
-            }
 
-            if ($ship == 203 or $ship == 204 or $ship == 210) {
+                if ($ship == 205 or $ship == 206 or $ship == 208) {
 
-                $speed_all[$ship] = $pricelist[$ship]['speed'] + (($pricelist[$ship]['speed'] * $user['research_combustion_drive']) * 0.1);
-            }
-
-            if ($ship == 205 or $ship == 206 or $ship == 208) {
-
-                $speed_all[$ship] = $pricelist[$ship]['speed'] + (($pricelist[$ship]['speed'] * $user['research_impulse_drive']) * 0.2);
-            }
-
-            if ($ship == 211) {
-
-                if ($user['research_hyperspace_drive'] >= 8) {
-
-                    $speed_all[$ship] = $pricelist[$ship]['speed2'] + (($pricelist[$ship]['speed2'] * $user['research_hyperspace_drive']) * 0.3);
-                } else {
-
-                    $speed_all[$ship] = $pricelist[$ship]['speed'] + (($pricelist[$ship]['speed'] * $user['research_hyperspace_drive']) * 0.2);
+                    $speed_all[$ship] = $pricelist[$ship]['speed'] + (($pricelist[$ship]['speed'] * $user['research_impulse_drive']) * 0.2);
                 }
-            }
 
-            if ($ship == 207 or $ship == 213 or $ship == 214 or $ship == 215) {
+                if ($ship == 211) {
 
-                $speed_all[$ship] = $pricelist[$ship]['speed'] + (($pricelist[$ship]['speed'] * $user['research_hyperspace_drive']) * 0.3);
-            }
+                    if ($user['research_hyperspace_drive'] >= 8) {
+
+                        $speed_all[$ship] = $pricelist[$ship]['speed2'] + (($pricelist[$ship]['speed2'] * $user['research_hyperspace_drive']) * 0.3);
+                    } else {
+
+                        $speed_all[$ship] = $pricelist[$ship]['speed'] + (($pricelist[$ship]['speed'] * $user['research_hyperspace_drive']) * 0.2);
+                    }
+                }
+
+                if ($ship == 207 or $ship == 213 or $ship == 214 or $ship == 215) {
+
+                    $speed_all[$ship] = $pricelist[$ship]['speed'] + (($pricelist[$ship]['speed'] * $user['research_hyperspace_drive']) * 0.3);
+                }
+            }   
         }
 
         if ($fleet != 0) {

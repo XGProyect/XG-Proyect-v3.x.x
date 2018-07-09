@@ -48,29 +48,59 @@ class Fleet1
     }
 
     /**
-     * Get on going fleet movements count
+     * Get ships by planet id
      * 
-     * @param int $user_id User ID
+     * @param int $planet_id Planet ID
      * 
-     * @return mixed
+     * @return array
      */
-    public function getCounts($user_id)
+    public function getShipsByPlanetId($planet_id)
     {
-        if ((int) $user_id > 0) {
+        if ((int) $planet_id > 0) {
 
             return $this->db->queryFetch(
-                    "SELECT
-                   (SELECT COUNT(fleet_owner) AS `actcnt`
-                           FROM " . FLEETS . "
-                           WHERE `fleet_owner` = '" . (int) $user_id . "') AS max_fleet,
-                   (SELECT COUNT(fleet_owner) AS `expedi`
-                           FROM " . FLEETS . "
-                           WHERE `fleet_owner` = '" . (int) $user_id . "'
-                                   AND `fleet_mission` = '15') AS max_expeditions"
+                    "SELECT 
+                        s.`ship_small_cargo_ship`,
+                        s.`ship_big_cargo_ship`,
+                        s.`ship_light_fighter`,
+                        s.`ship_heavy_fighter`,
+                        s.`ship_cruiser`,
+                        s.`ship_battleship`,
+                        s.`ship_colony_ship`,
+                        s.`ship_recycler`,
+                        s.`ship_espionage_probe`,
+                        s.`ship_bomber`,
+                        s.`ship_solar_satellite`,
+                        s.`ship_destroyer`,
+                        s.`ship_deathstar`,
+                        s.`ship_battlecruiser`
+                    FROM `" . SHIPS . "` AS s 
+                    WHERE s.`ship_planet_id` = '" . $planet_id . "';"
             );
         }
 
-        return null;
+        return [];   
+    }
+    
+    /**
+     * Get all fleets by user id or owner
+     * 
+     * @param int $user_id User ID
+     * 
+     * @return array
+     */
+    public function getAllFleetsByUserId($user_id)
+    {
+        if ((int) $user_id > 0) {
+
+            return $this->db->queryFetchAll(
+                    "SELECT f.*
+                    FROM `" . FLEETS . "` AS f
+                    WHERE f.`fleet_owner` = '" . $user_id . "';"
+            );
+        }
+
+        return [];  
     }
 }
 

@@ -49,44 +49,186 @@ class ResearchEntity extends Entity
     {
         return $this->_data['research_id'];
     }
-    /*
+    
+    /**
+     * Return the research user id
+     * 
+     * @return string
+     */
+    public function getResearchUserId()
+    {
+        return $this->_data['research_user_id'];
+    }
+    
+    /**
+     * Return the research current research
+     * 
+     * @return string
+     */
+    public function getResearchCurrentResearch()
+    {
+        return $this->_data['research_current_research'];
+    }
+    
+    /**
+     * Return the research espionage technology
+     * 
+     * @return string
+     */
+    public function getResearchEspionageTechnology()
+    {
+        return $this->_data['research_espionage_technology'];
+    }
+    
+    /**
+     * Return the research computer technology
+     * 
+     * @return string
+     */
+    public function getResearchComputerTechnology()
+    {
+        return $this->_data['research_computer_technology'];
+    }
+    
+    /**
+     * Return the research weapons technology
+     * 
+     * @return string
+     */
+    public function getResearchWeaponsTechnology()
+    {
+        return $this->_data['research_weapons_technology'];
+    }
+    
+    /**
+     * Return the research id
+     * 
+     * @return string
+     */
+    public function getResearchShieldingTechnology()
+    {
+        return $this->_data['research_shielding_technology'];
+    }
+    
+    /**
+     * Return the research armour technology
+     * 
+     * @return string
+     */
+    public function getResearchArmourTechnology()
+    {
+        return $this->_data['research_armour_technology'];
+    }
+    
+    /**
+     * Return the research energy technology
+     * 
+     * @return string
+     */
+    public function getResearchEnergyTechnology()
+    {
+        return $this->_data['research_energy_technology'];
+    }
+    
+    /**
+     * Return the research hyperspace technology
+     * 
+     * @return string
+     */
+    public function getResearchHyperspaceTechnology()
+    {
+        return $this->_data['research_hyperspace_technology'];
+    }
+    
+    /**
+     * Return the research combustion drive
+     * 
+     * @return string
+     */
+    public function getResearchCombustionDrive()
+    {
+        return $this->_data['research_combustion_drive'];
+    }
+    
+    /**
+     * Return the research impulse drive
+     * 
+     * @return string
+     */
+    public function getResearchImpulseDrive()
+    {
+        return $this->_data['research_impulse_drive'];
+    }
+    
+    /**
+     * Return the research hyperspace drive
+     * 
+     * @return string
+     */
+    public function getResearchHyperspaceDrive()
+    {
+        return $this->_data['research_hyperspace_drive'];
+    }
+    
+    /**
+     * Return the research laser technology
+     * 
+     * @return string
+     */
+    public function getResearchLaserTechnology()
+    {
+        return $this->_data['research_laser_technology'];
+    }
 
-
-	2	research_user_idIndex	int(11)		UNSIGNED	No	None			 Change Change	 Drop Drop	
-More More
-	3	research_current_research	int(11)			No	0			 Change Change	 Drop Drop	
-More More
-	4	research_espionage_technology	int(11)			No	0			 Change Change	 Drop Drop	
-More More
-	5	research_computer_technology	int(11)			No	0			 Change Change	 Drop Drop	
-More More
-	6	research_weapons_technology	int(11)			No	0			 Change Change	 Drop Drop	
-More More
-	7	research_shielding_technology	int(11)			No	0			 Change Change	 Drop Drop	
-More More
-	8	research_armour_technology	int(11)			No	0			 Change Change	 Drop Drop	
-More More
-	9	research_energy_technology	int(11)			No	0			 Change Change	 Drop Drop	
-More More
-	10	research_hyperspace_technology	int(11)			No	0			 Change Change	 Drop Drop	
-More More
-	11	research_combustion_drive	int(11)			No	0			 Change Change	 Drop Drop	
-More More
-	12	research_impulse_drive	int(11)			No	0			 Change Change	 Drop Drop	
-More More
-	13	research_hyperspace_drive	int(11)			No	0			 Change Change	 Drop Drop	
-More More
-	14	research_laser_technology	int(11)			No	0			 Change Change	 Drop Drop	
-More More
-	15	research_ionic_technology	int(11)			No	0			 Change Change	 Drop Drop	
-More More
-	16	research_plasma_technology	int(11)			No	0			 Change Change	 Drop Drop	
-More More
-	17	research_intergalactic_research_network	int(11)			No	0			 Change Change	 Drop Drop	
-More More
-	18	research_astrophysics	int(11)			No	0			 Change Change	 Drop Drop	
-More More
-	19	research_graviton_technology*/
+    /**
+     * Return the research ionic technology
+     * 
+     * @return string
+     */
+    public function getResearchIonicTechnology()
+    {
+        return $this->_data['research_ionic_technology'];
+    }
+    
+    /**
+     * Return the research plasma technology
+     * 
+     * @return string
+     */
+    public function getResearchPlasmaTechnology()
+    {
+        return $this->_data['research_plasma_technology'];
+    }
+    
+    /**
+     * Return the research intergalactic research network
+     * 
+     * @return string
+     */
+    public function getResearchIntergalacticResearchNetwork()
+    {
+        return $this->_data['research_intergalactic_research_network'];
+    }
+    
+    /**
+     * Return the research astrophysics
+     * 
+     * @return string
+     */
+    public function getResearchAstrophysics()
+    {
+        return $this->_data['research_astrophysics'];
+    }
+    
+    /**
+     * Return the research graviton technology
+     * 
+     * @return string
+     */
+    public function getResearchGravitonTechnology()
+    {
+        return $this->_data['research_graviton_technology'];
+    }
 }
 
 /* end of ResearchEntity.php */

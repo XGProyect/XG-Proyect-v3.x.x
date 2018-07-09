@@ -1,6 +1,6 @@
 <?php
 /**
- * Fleets
+ * Premium
  *
  * PHP Version 5.5+
  *
@@ -11,27 +11,27 @@
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-namespace application\libraries\fleets;
+namespace application\libraries\premium;
 
-use application\core\entities\FleetEntity;
+use application\core\entities\PremiumEntity;
 
 /**
- * Fleets Class
+ * Premium Class
  *
  * @category Classes
- * @package  fleets
+ * @package  premium
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-class Fleets
+class Premium
 {
     /**
      *
      * @var array 
      */
-    private $_fleets = [];
+    private $_premium = [];
     
     /**
      *
@@ -42,52 +42,62 @@ class Fleets
     /**
      * Constructor
      * 
-     * @param array $fleets          Fleets
+     * @param array $premium         Premium
      * @param int   $current_user_id Current User ID
      * 
      * @return void
      */
-    public function __construct($fleets, $current_user_id)
+    public function __construct($premium, $current_user_id)
     {
-        if (is_array($fleets)) {
+        if (is_array($premium)) {
             
-            $this->setUp($fleets);
+            $this->setUp($premium);
             $this->setUserId($current_user_id);
         }
     }
     
     /**
-     * Get all the fleets
+     * Get all the premium
      * 
      * @return array
      */
-    public function getFleets()
+    public function getPremium()
     {
-        $list_of_fleets = [];
+        $list_of_premium = [];
         
-        foreach($this->_fleets as $fleets) {
+        foreach($this->_premium as $premium) {
             
-            if (($fleets instanceof FleetEntity)) {
+            if (($premium instanceof PremiumEntity)) {
                 
-                $list_of_fleets[] = $fleets;
+                $list_of_premium[] = $premium;
             }
         }
         
-        return $list_of_fleets;
+        return $list_of_premium;
     }
     
     /**
-     * Set up the list of fleets
+     * Get current premium
      * 
-     * @param array $fleets Fleets
+     * @return array
+     */
+    public function getCurrentPremium()
+    {
+        return $this->getPremium()[0];
+    }
+    
+    /**
+     * Set up the list of premium
+     * 
+     * @param array $premiums Premiums
      * 
      * @return void
      */
-    private function setUp($fleets)
+    private function setUp($premiums)
     {
-        foreach ($fleets as $fleet) {
+        foreach ($premiums as $premium) {
 
-            $this->_fleets[] = $this->createNewFleetEntity($fleet);
+            $this->_premium[] = $this->createNewPremiumEntity($premium);
         }
     }
     
@@ -110,16 +120,16 @@ class Fleets
     }
     
     /**
-     * Create a new instance of FleetEntity
+     * Create a new instance of PremiumEntity
      * 
-     * @param array $fleet Fleet
+     * @param array $premium Premium
      * 
-     * @return \FleetEntity
+     * @return \PremiumEntity
      */
-    private function createNewFleetEntity($fleet)
+    private function createNewPremiumEntity($premium)
     {   
-        return new FleetEntity($fleet);
+        return new PremiumEntity($premium);
     }
 }
 
-/* end of fleets.php */
+/* end of Premium.php */
