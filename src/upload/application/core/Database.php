@@ -310,7 +310,7 @@ class Database
      */
     public function fetchArray($result_set)
     {
-        return $result_set->fetch_array();
+        return $result_set->fetch_array(MYSQLI_ASSOC);
     }
 
     /**
