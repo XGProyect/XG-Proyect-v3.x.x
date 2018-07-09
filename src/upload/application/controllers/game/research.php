@@ -172,31 +172,37 @@ class Research extends Controller
     private function do_command()
     {
         $cmd = isset($_GET['cmd']) ? $_GET['cmd'] : NULL;
-
+        
         if (!is_null($cmd)) {
             $technology = (int) $_GET['tech'];
 
             if (in_array($technology, $this->_reslist['tech'])) {
+                
+                $update_data = false;
+                
                 if (is_array($this->_is_working['working_on'])) {
+                    
                     $working_planet = $this->_is_working['working_on'];
                 } else {
+
                     $working_planet = $this->_current_planet;
                 }
-
+                
                 switch ($cmd) {
                     // cancel a research
                     case 'cancel':
-
-                        if ($this->_is_working['working_on']['planet_b_tech_id'] == $technology) {
-                            $costs = DevelopmentsLib::developmentPrice($this->_current_user, $working_planet, $technology);
-                            $working_planet['planet_metal'] += $costs['metal'];
-                            $working_planet['planet_crystal'] += $costs['crystal'];
-                            $working_planet['planet_deuterium'] += $costs['deuterium'];
-                            $working_planet['planet_b_tech_id'] = 0;
-                            $working_planet['planet_b_tech'] = 0;
-                            $this->_current_user['research_current_research'] = 0;
-                            $update_data = true;
-                            $this->_is_working['is_working'] = false;
+                        if (!empty($this->_is_working['working_on'])) {
+                            if ($this->_is_working['working_on']['planet_b_tech_id'] == $technology) {
+                                $costs = DevelopmentsLib::developmentPrice($this->_current_user, $working_planet, $technology);
+                                $working_planet['planet_metal'] += $costs['metal'];
+                                $working_planet['planet_crystal'] += $costs['crystal'];
+                                $working_planet['planet_deuterium'] += $costs['deuterium'];
+                                $working_planet['planet_b_tech_id'] = 0;
+                                $working_planet['planet_b_tech'] = 0;
+                                $this->_current_user['research_current_research'] = 0;
+                                $update_data = true;
+                                $this->_is_working['is_working'] = false;
+                            }   
                         }
 
                         break;
