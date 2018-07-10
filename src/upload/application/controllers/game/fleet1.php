@@ -21,6 +21,9 @@ use application\libraries\FunctionsLib;
 use application\libraries\premium\Premium;
 use application\libraries\research\Researches;
 use const JS_PATH;
+use const MAX_GALAXY_IN_WORLD;
+use const MAX_PLANET_IN_SYSTEM;
+use const MAX_SYSTEM_IN_GALAXY;
 
 /**
  * Fleet1 Class
@@ -355,7 +358,7 @@ class Fleet1 extends Controller
         $data = filter_input_array(INPUT_GET, [
             'galaxy' => [
                 'filter'    => FILTER_VALIDATE_INT,
-                'options'   => array('min_range' => 1, 'max_range' => MAX_GALAXY_IN_WORLD)
+                'options'   => ['min_range' => 1, 'max_range' => MAX_GALAXY_IN_WORLD]
             ],
             'system' => [
                 'filter'    => FILTER_VALIDATE_INT,
