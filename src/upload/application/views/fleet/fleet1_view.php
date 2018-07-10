@@ -56,7 +56,5 @@
         <input type="hidden" name="planet" value="{planet}" />
         <input type="hidden" name="planet_type" value="{planettype}" />
         <input type="hidden" name="target_mission" value="{target_mission}" />
-        <input type="hidden" name="maxepedition" value="{max_expeditions}" />
-        <input type="hidden" name="curepedition" value="{expeditions}" />
     </form>
 </div>
