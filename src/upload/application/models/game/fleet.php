@@ -104,6 +104,33 @@ class Fleet
     }
     
     /**
+     * Get all user planets
+     * 
+     * @param int $user_id User ID
+     * 
+     * @return array
+     */
+    public function getAllPlanetsByUserId($user_id)
+    {
+        if ((int) $user_id > 0) {
+
+            return $this->db->queryFetchAll(
+                "SELECT 
+                    p.`planet_id`,
+                    p.`planet_name`,
+                    p.`planet_galaxy`,
+                    p.`planet_system`,
+                    p.`planet_planet`,
+                    p.`planet_type`
+                FROM `" . PLANETS . "` AS p
+                WHERE p.`planet_user_id` = '" . $user_id . "';"
+            );
+        }
+
+        return [];
+    }
+    
+    /**
      * Get ongoing ACS attacks
      * 
      * @param
@@ -112,10 +139,10 @@ class Fleet
      */
     public function getOngoingAcs()
     {
-        return $this->db->query(
-                "SELECT * FROM " . ACS_FLEETS
+        return $this->db->queryFetchAll(
+                "SELECT * FROM `" . ACS_FLEETS . "`"
         );
     }
 }
 
-/* end of fleet1.php */
+/* end of fleet.php */

@@ -199,7 +199,7 @@ class Fleet3 extends Controller
 
         $fleetarray = unserialize(base64_decode(str_rot13($_POST['usedfleet'])));
         $mission = $_POST['target_mission'];
-        $SpeedFactor = $_POST['speedfactor'];
+        $SpeedFactor = FunctionsLib::fleetSpeedFactor();
         $AllFleetSpeed = FleetsLib::fleetMaxSpeed($fleetarray, 0, $this->current_user);
         $GenFleetSpeed = $_POST['speed'];
         $MaxFleetSpeed = min($AllFleetSpeed);
@@ -221,7 +221,7 @@ class Fleet3 extends Controller
         $parse['deuterium'] = floor($this->current_planet['planet_deuterium']);
         $parse['consumption'] = $consumption;
         $parse['distance'] = $distance;
-        $parse['speedfactor'] = $_POST['speedfactor'];
+        $parse['speedfactor'] = FunctionsLib::fleetSpeedFactor();
         $parse['thisgalaxy'] = $_POST['thisgalaxy'];
         $parse['thissystem'] = $_POST['thissystem'];
         $parse['thisplanet'] = $_POST['thisplanet'];
@@ -232,7 +232,7 @@ class Fleet3 extends Controller
         $parse['planettype'] = $planettype;
         $parse['speedallsmin'] = $_POST['speedallsmin'];
         $parse['speed'] = $_POST['speed'];
-        $parse['speedfactor'] = $_POST['speedfactor'];
+        $parse['speedfactor'] = FunctionsLib::fleetSpeedFactor();
         $parse['usedfleet'] = $_POST['usedfleet'];
         $parse['maxepedition'] = $_POST['maxepedition'];
         $parse['curepedition'] = $_POST['curepedition'];
