@@ -16,10 +16,10 @@
 </script>
 <form action="game.php?page=fleet3" method="post" onsubmit='this.submit.disabled = true;'>
     {fleet_block}
-    <input type="hidden" name="consumption{ship_id}" value="{consumption}" />
-    <input type="hidden" name="speed{ship_id}" value="{speed}" />
-    <input type="hidden" name="capacity{ship_id}" value="{capacity}" />
-    <input type="hidden" name="ship{ship_id}" value="{ship}" />    
+        <input type="hidden" name="consumption{ship_id}" value="{consumption}" />
+        <input type="hidden" name="speed{ship_id}" value="{speed}" />
+        <input type="hidden" name="capacity{ship_id}" value="{capacity}" />
+        <input type="hidden" name="ship{ship_id}" value="{ship}" />    
     {/fleet_block}
     <input type="hidden" name="speedfactor" value="{speedfactor}" />
     <input type="hidden" name="speedallsmin" value="{speedallsmin}" />
