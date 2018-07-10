@@ -18,7 +18,6 @@ use application\libraries\fleets\Fleets;
 use application\libraries\FleetsLib;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
-use application\libraries\planet\Ships;
 use application\libraries\premium\Premium;
 use application\libraries\research\Researches;
 use const JS_PATH;
@@ -194,8 +193,6 @@ class Fleet1 extends Controller
         $price = parent::$objects->getPrice();
 
         $ships = $this->Fleet_Model->getShipsByPlanetId($this->_planet['planet_id']);
-        
-        $this->_ships = new Ships([$ships]);
 
         $list_of_ships = [];
         
