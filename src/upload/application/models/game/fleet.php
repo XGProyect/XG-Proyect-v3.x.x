@@ -1,6 +1,6 @@
 <?php
 /**
- * Fleet1 Model
+ * Fleet Model
  *
  * PHP Version 5.5+
  *
@@ -9,21 +9,21 @@
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
- * @version  3.0.4
+ * @version  3.1.0
  */
 namespace application\models\game;
 
 /**
- * Fleet1 Class
+ * Fleet Class
  *
  * @category Classes
  * @package  Application
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
- * @version  3.0.4
+ * @version  3.1.0
  */
-class Fleet1
+class Fleet
 {
 
     private $db = null;
@@ -101,6 +101,20 @@ class Fleet1
         }
 
         return [];  
+    }
+    
+    /**
+     * Get ongoing ACS attacks
+     * 
+     * @param
+     * 
+     * @return mixed
+     */
+    public function getOngoingAcs()
+    {
+        return $this->db->query(
+                "SELECT * FROM " . ACS_FLEETS
+        );
     }
 }
 

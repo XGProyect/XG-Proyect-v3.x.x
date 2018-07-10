@@ -87,7 +87,7 @@ class Fleet1 extends Controller
         parent::$users->checkSession();
 
         // load Model
-        parent::loadModel('game/fleet1');
+        parent::loadModel('game/fleet');
         
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
@@ -114,7 +114,7 @@ class Fleet1 extends Controller
     private function setUpFleets()
     {
         $this->_fleets = new Fleets(
-            $this->Fleet1_Model->getAllFleetsByUserId($this->_user['user_id']),
+            $this->Fleet_Model->getAllFleetsByUserId($this->_user['user_id']),
             $this->_user['user_id']
         );
         
@@ -192,7 +192,8 @@ class Fleet1 extends Controller
     {
         $objects = parent::$objects->getObjects();
         $price = parent::$objects->getPrice();
-        $ships = $this->Fleet1_Model->getShipsByPlanetId($this->_planet['planet_id']);
+
+        $ships = $this->Fleet_Model->getShipsByPlanetId($this->_planet['planet_id']);
         
         $this->_ships = new Ships([$ships]);
 
