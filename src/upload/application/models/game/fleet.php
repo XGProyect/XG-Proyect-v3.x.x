@@ -143,6 +143,31 @@ class Fleet
                 "SELECT * FROM `" . ACS_FLEETS . "`"
         );
     }
+    
+    /**
+     * acsExists
+     *
+     * @param int $fleet_acs    Fleet ACS ID
+     * @param int $galaxy       Galaxy
+     * @param int $system       System
+     * @param int $planet       Planet
+     * @param int $planettype   Planet Type
+     *
+     * @return boolean
+     */
+    private function acsExists($fleet_acs, $galaxy, $system, $planet, $planettype)
+    {
+        return $this->db->queryFetch(
+            "SELECT 
+                COUNT(`acs_fleet_id`) AS `amount`
+            FROM `" . ACS_FLEETS . "`
+            WHERE `acs_fleet_id` = '" . $fleet_acs . "' AND 
+                `acs_fleet_galaxy` = '" . $galaxy . "' AND 
+                `acs_fleet_system` = '" . $system . "' AND 
+                `acs_fleet_planet` = '" . $planet . "' AND 
+                `acs_fleet_planet_type` = '" . $planettype . "';"
+        )['amount'] > 0;
+    }
 }
 
 /* end of fleet.php */

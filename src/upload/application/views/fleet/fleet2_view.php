@@ -22,18 +22,11 @@
         <input type="hidden" name="ship{ship_id}" value="{ship}" />    
     {/fleet_block}
     <input type="hidden" name="speedfactor" value="{speedfactor}" />
-    <input type="hidden" name="speedallsmin" value="{speedallsmin}" />
-    <input type="hidden" name="usedfleet" value="{fleetarray}" />
     <input type="hidden" name="thisgalaxy" value="{galaxy}" />
     <input type="hidden" name="thissystem" value="{system}" />
     <input type="hidden" name="thisplanet" value="{planet}" />
     <input type="hidden" name="thisplanettype" value="{planet_type}" />
-    <input type="hidden" name="thisresource1" value="{metal}" />
-    <input type="hidden" name="thisresource2" value="{crystal}" />
-    <input type="hidden" name="thisresource3" value="{deuterium}" />
-    <input type="hidden" name="galaxyend" value="{galaxy_end}" />
-    <input type="hidden" name="systemend" value="{system_end}" />
-    <input type="hidden" name="planetend" value="{planet_end}" />
+    <input type="hidden" name="target_mission" value="{target_mission}" />
     <br />
     <div id="content">
         <table width="519" border="0" cellpadding="0" cellspacing="1">
@@ -115,6 +108,5 @@
             </tr>
         </table>
     </div>
-    <input type="hidden" name="target_mission" value="{target_mission}" />
 </form>
 <script>javascript:shortInfo();</script>

@@ -268,7 +268,7 @@ class Fleet1 extends Controller
             return null;
         }
         
-        return FunctionsLib::setUrl('#', '', $this->getLang()['fl_max'], 'onclick="javascript:maxShip(\'ship' . $ship_id . '\'); shortInfo();"');
+        return FunctionsLib::setUrl('#', '', $this->getLang()['fl_max'], 'onclick="javascript:maxShip(\'ship' . $ship_id . '\');"');
     }
     
     /**
@@ -285,7 +285,7 @@ class Fleet1 extends Controller
             return null;
         }
         
-        return '<input name="ship' . $ship_id . '" size="10" value="0" onfocus="javascript:if(this.value == \'0\') this.value=\'\';" onblur="javascript:if(this.value == \'0\') this.value=\'\';" onchange="shortInfo()" onkeyup="shortInfo()" />';
+        return '<input name="ship' . $ship_id . '" size="10" value="0" onfocus="javascript:if(this.value == \'0\') this.value=\'\';" onblur="javascript:if(this.value == \'0\') this.value=\'\';"/>';
     }
     
     /**
@@ -375,7 +375,9 @@ class Fleet1 extends Controller
             'target_mission' => FILTER_VALIDATE_INT
         ]);
         
-
+        // always reset, and define as array
+        $_SESSION['fleet_data'] = [];
+        
         return [
             'galaxy' => $data['galaxy'] ?? $this->_planet['planet_galaxy'],
             'system' => $data['system'] ?? $this->_planet['planet_system'],

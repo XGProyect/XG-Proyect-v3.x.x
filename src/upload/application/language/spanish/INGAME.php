@@ -1,5 +1,6 @@
 <?php
 $lang = [
+    // ships
     'ship_small_cargo_ship' => 'Nave pequeña de carga',
     'ship_big_cargo_ship' => 'Nave grande de carga',
     'ship_light_fighter' => 'Cazador ligero',
@@ -13,7 +14,14 @@ $lang = [
     'ship_solar_satellite' => 'Satélite solar',
     'ship_destroyer' => 'Destructor',
     'ship_deathstar' => 'Estrella de la muerte',
-    'ship_battlecruiser' => 'Acorazado'
+    'ship_battlecruiser' => 'Acorazado',
+    
+    // types of planets or galaxy objects
+    'planet_type' => [
+        1 => 'Planeta',
+        2 => 'Escombros',
+        3 => 'Luna'
+    ]
 ];
 
 /**

@@ -430,22 +430,23 @@ class Fleet2 extends Controller
             'target_mission' => FILTER_VALIDATE_INT
         ]);
 
-        if (is_null($data)) {
+        if (is_null($data) or count($this->_fleet_data['speed_all']) <= 0) {
             
             FunctionsLib::redirect('game.php?page=fleet1');
         }
         
-        return [
-            'speedfactor' => FunctionsLib::fleetSpeedFactor(),
+        // attach fleet data
+        $_SESSION['fleet_data'] = [
             'speedallsmin' => min($this->_fleet_data['speed_all']),
             'fleetarray' => str_rot13(base64_encode(serialize($this->_fleet_data['fleet_array']))),
+        ];
+
+        return [
+            'speedfactor' => FunctionsLib::fleetSpeedFactor(),
             'galaxy' => $this->_planet['planet_galaxy'],
             'system' => $this->_planet['planet_system'],
             'planet' => $this->_planet['planet_planet'],
             'planet_type' => $this->_planet['planet_type'],
-            'metal' => floor($this->_planet['planet_metal']),
-            'crystal' => floor($this->_planet['planet_crystal']),
-            'deuterium' => floor($this->_planet['planet_deuterium']),
             'galaxy_end' => $data['galaxy'] ?? $this->_planet['planet_galaxy'],
             'system_end' => $data['system'] ?? $this->_planet['planet_system'],
             'planet_end' => $data['planet'] ?? $this->_planet['planet_planet'],
