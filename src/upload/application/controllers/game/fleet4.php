@@ -122,7 +122,7 @@ class Fleet4 extends Controller
         );
 
         $MyDBRec = $this->_db->queryFetch(
-            "SELECT u.`user_id`, u.`user_onlinetime`, u.`user_ally_id`, s.`setting_vacations_status`
+            "SELECT u.`user_id`, u.`user_onlinetime`, u.`user_ally_id`, u.user_authlevel, s.`setting_vacations_status`
             FROM " . USERS . " AS u, " . SETTINGS . " AS s
             WHERE u.`user_id` = '" . $this->_current_user['user_id'] . "'
                     AND s.`setting_user_id` = '" . $this->_current_user['user_id'] . "';"
