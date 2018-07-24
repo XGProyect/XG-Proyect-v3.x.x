@@ -40,7 +40,16 @@
                         <tr height="20">
                             <td class="c" colspan="2">{fl_mission}</td>
                         </tr>
-                        {missionselector}
+                        {mission_selector}
+                        <tr height="20">
+                            <th>
+                                <input{id}type="radio" name="mission" value="{value}"{checked}/>
+                                <label for="{id}">{mission}</label>
+                                <br />
+                                {expedition_message}
+                            </th>
+                        </tr>
+                        {/mission_selector}
                     </table>
                 </th>
                 <th>

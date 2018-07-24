@@ -366,7 +366,7 @@ class Fleet1 extends Controller
             ],
             'planet' => [
                 'filter'    => FILTER_VALIDATE_INT,
-                'options'   => ['min_range' => 1, 'max_range' => MAX_PLANET_IN_SYSTEM]
+                'options'   => ['min_range' => 1, 'max_range' => (MAX_PLANET_IN_SYSTEM + 1)]
             ],
             'planettype' => [
                 'filter'    => FILTER_VALIDATE_INT,

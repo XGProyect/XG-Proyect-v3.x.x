@@ -155,7 +155,7 @@ class Fleet
      *
      * @return boolean
      */
-    private function acsExists($fleet_acs, $galaxy, $system, $planet, $planettype)
+    public function acsExists($fleet_acs, $galaxy, $system, $planet, $planettype)
     {
         return $this->db->queryFetch(
             "SELECT 
@@ -167,6 +167,28 @@ class Fleet
                 `acs_fleet_planet` = '" . $planet . "' AND 
                 `acs_fleet_planet_type` = '" . $planettype . "';"
         )['amount'] > 0;
+    }
+    
+    /**
+     * Get planet owner by coords
+     * 
+     * @param int $g    Galaxy
+     * @param int $s    System
+     * @param int $p    Planet
+     * @param int $pt   Planet Type
+     * 
+     * @return bool
+     */
+    public function getPlanetOwnerByCoords($g, $s, $p, $pt)
+    {
+        return $this->db->queryFetch(
+            "SELECT `planet_user_id`
+            FROM `" . PLANETS . "`
+            WHERE `planet_galaxy` = '" . $g . "'
+                AND `planet_system` = '" . $s . "'
+                AND `planet_planet` = '" . $p . "'
+                AND `planet_type` = '" . $pt . "';"
+        );
     }
 }
 

@@ -156,7 +156,7 @@ class ShipsEntity
      * 
      * @return string
      */
-    public function getship_colony_ship()
+    public function getShipColonyShip()
     {
         return $this->_ships['ship_colony_ship'];
     }
@@ -166,7 +166,7 @@ class ShipsEntity
      * 
      * @return string
      */
-    public function getship_recycler()
+    public function getShipRecycler()
     {
         return $this->_ships['ship_recycler'];
     }

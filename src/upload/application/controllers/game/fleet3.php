@@ -14,12 +14,11 @@
 namespace application\controllers\game;
 
 use application\core\Controller;
-use application\libraries\fleets\Fleets;
+use application\core\enumerators\MissionsEnumerator as Missions;
+use application\core\enumerators\PlanetTypesEnumerator as PlanetTypes;
 use application\libraries\FleetsLib;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
-use application\libraries\premium\Premium;
-use application\libraries\research\Researches;
 use const JS_PATH;
 use const MAX_GALAXY_IN_WORLD;
 use const MAX_PLANET_IN_SYSTEM;
@@ -52,35 +51,12 @@ class Fleet3 extends Controller
      * @var array
      */
     private $_planet;
-    
-    /**
-     *
-     * @var \Fleets
-     */
-    private $_fleets = null;
-    
-    /**
-     *
-     * @var \Fleets
-     */
-    private $_research = null;
-    
-    /**
-     *
-     * @var \Premium
-     */
-    private $_premium = null;
-    
+
     /**
      *
      * @var array
      */
-    private $_fleet_data = [
-        'fleet_array' => [],
-        'fleet_list' => '',
-        'amount' => 0,
-        'speed_all' => []
-    ];
+    private $_current_mission = 0;
     
     /**
      * Constructor
@@ -121,20 +97,7 @@ class Fleet3 extends Controller
      */
     private function setUpFleets()
     {
-        $this->_fleets = new Fleets(
-            $this->Fleet_Model->getAllFleetsByUserId($this->_user['user_id']),
-            $this->_user['user_id']
-        );
-        
-        $this->_research = new Researches(
-            [$this->_user],
-            $this->_user['user_id']
-        );
-        
-        $this->_premium = new Premium(
-            [$this->_user],
-            $this->_user['user_id']
-        );
+
     }
 
     /**
@@ -144,6 +107,8 @@ class Fleet3 extends Controller
      */
     private function buildPage()
     {
+        $inputs_data = $this->setInputsData();
+        
         /**
          * Parse the items
          */
@@ -151,6 +116,7 @@ class Fleet3 extends Controller
             'js_path' => JS_PATH,
             'fleet_block' => $this->buildFleetBlock(),
             'title' => $this->buildTitleBlock(),
+            'mission_selector' => $this->buildMissionBlock(),
         ];
 
         // display the page
@@ -158,7 +124,7 @@ class Fleet3 extends Controller
             $this->getTemplate()->set(
                 'fleet/fleet3_view',
                 array_merge(
-                    $this->getLang(), $page, $this->setInputsData()
+                    $this->getLang(), $page, $inputs_data
                 )
             )
         );
@@ -172,94 +138,6 @@ class Fleet3 extends Controller
 
         // OTHER VALUES
         $fleet_acs = (int) $_POST['fleet_group'];
-        $YourPlanet = false;
-        $UsedPlanet = false;
-        $MissionSelector = '';
-        $available_ships = $this->getAvailableShips($_POST);
-        $missiontype = [];
-
-        // QUERYS
-        $select = $this->_db->queryFetch(
-            "SELECT `planet_user_id`
-            FROM `" . PLANETS . "`
-            WHERE `planet_galaxy` = '" . $galaxy . "'
-            AND `planet_system` = '" . $system . "'
-            AND `planet_planet` = '" . $planet . "'
-            AND `planet_type` = '" . $planettype . "';"
-        );
-
-        if ($select) {
-
-            if ($select['planet_user_id'] == $this->current_user['user_id']) {
-
-                $YourPlanet = true;
-                $UsedPlanet = true;
-            } else {
-
-                $UsedPlanet = true;
-            }
-        }
-
-        if ($planettype == 2) {
-
-            if ($available_ships['ship209'] >= 1) {
-
-                $missiontype[8] = $this->getLang()['type_mission'][8];
-            } else {
-
-                $missiontype = [];
-            }
-        } elseif ($planettype == 1 or $planettype == 3) {
-
-            if ($available_ships['ship208'] >= 1 && !$UsedPlanet) {
-
-                $missiontype[7] = $this->getLang()['type_mission'][7];
-            } elseif ($available_ships['ship210'] >= 1 && !$YourPlanet) {
-
-                $missiontype[6] = $this->getLang()['type_mission'][6];
-            }
-
-            if ($available_ships['ship202'] >= 1 or
-                $available_ships['ship203'] >= 1 or
-                $available_ships['ship204'] >= 1 or
-                $available_ships['ship205'] >= 1 or
-                $available_ships['ship206'] >= 1 or
-                $available_ships['ship207'] >= 1 or
-                $available_ships['ship210'] >= 1 or
-                $available_ships['ship211'] >= 1 or
-                $available_ships['ship213'] >= 1 or
-                $available_ships['ship214'] >= 1 or
-                $available_ships['ship215'] >= 1) {
-
-                if (!$YourPlanet) {
-
-                    $missiontype[1] = $this->getLang()['type_mission'][1];
-                }
-
-                $missiontype[3] = $this->getLang()['type_mission'][3];
-                $missiontype[5] = $this->getLang()['type_mission'][5];
-            }
-        } elseif ($available_ships['ship209'] >= 1 or $available_ships['ship208']) {
-            $missiontype[3] = $this->getLang()['type_mission'][3];
-        }
-        
-        if ($YourPlanet) {
-
-            $missiontype[4] = $this->getLang()['type_mission'][4];
-        }
-
-        if ($planettype == 3 || $planettype == 1 && ($fleet_acs > 0) && $UsedPlanet) {
-
-            if ($this->Fleet_Model->acsExists($fleet_acs, $galaxy, $system, $planet, $planettype)) {
-
-                $missiontype[2] = $this->getLang()['type_mission'][2];
-            }
-        }
-
-        if ($planettype == 3 && $available_ships['ship214'] >= 1 && !$YourPlanet && $UsedPlanet) {
-
-            $missiontype[9] = $this->getLang()['type_mission'][9];
-        }
 
         $fleetarray = unserialize(base64_decode(str_rot13($_POST['usedfleet'])));
         $mission = $_POST['target_mission'];
@@ -285,40 +163,6 @@ class Fleet3 extends Controller
         $parse['fleet_group'] = $_POST['fleet_group'];
         $parse['acs_target_mr'] = $_POST['acs_target_mr'];
 
-        #####################################################################################################
-        // MISSION TYPES
-        #####################################################################################################
-        if (count($missiontype) > 0) {
-
-            if ($planet == 16) {
-
-                $parse_mission['value'] = 15;
-                $parse_mission['mission'] = $this->getLang()['type_mission'][15];
-                $parse_mission['expedition_message'] = $this->getLang()['fl_expedition_alert_message'];
-                $parse_mission['id'] = ' ';
-                $parse_mission['checked'] = ' checked="checked"';
-
-                $MissionSelector .= parent::$page->parseTemplate(fleet/fleet3_mission_row, $parse_mission);
-            } else {
-
-                $i = 0;
-
-                foreach ($missiontype as $a => $b) {
-
-                    $parse_mission['value'] = $a;
-                    $parse_mission['mission'] = $b;
-                    $parse_mission['expedition_message'] = '';
-                    $parse_mission['id'] = ' id="inpuT_' . $i . '" ';
-                    $parse_mission['checked'] = (($mission == $a) ? ' checked="checked"' : '');
-
-                    $i++;
-
-                    $MissionSelector .= parent::$page->parseTemplate(fleet/fleet3_mission_row, $parse_mission);
-                }
-            }
-        } else {
-            FunctionsLib::redirect('game.php?page=fleet1');
-        }
 
         #####################################################################################################
         // STAY / EXPEDITION BLOCKS
@@ -372,7 +216,7 @@ class Fleet3 extends Controller
         $ships = $this->Fleet_Model->getShipsByPlanetId($this->_planet['planet_id']);
 
         $list_of_ships = [];
-        $selected_fleet = filter_input_array(INPUT_POST);
+        $selected_fleet = $this->getSessionShips();
         
         if ($ships != null) {
             
@@ -382,13 +226,13 @@ class Fleet3 extends Controller
                     
                     $ship_id = array_search($ship_name, $objects);
                     
-                    if (!isset($selected_fleet['ship' . $ship_id])
-                        or $selected_fleet['ship' . $ship_id] == 0) {
+                    if (!isset($selected_fleet[$ship_id])
+                        or $selected_fleet[$ship_id] == 0) {
                         
                         continue;
                     }
                     
-                    $amount_to_set = $selected_fleet['ship' . $ship_id];
+                    $amount_to_set = $selected_fleet[$ship_id];
                     
                     if ($amount_to_set > $ship_amount) {
                         
@@ -424,35 +268,146 @@ class Fleet3 extends Controller
     }
     
     /**
-     * getAvailableShips
-     *
-     * @param array $post_data Post Data
-     *
+     * Build the missions block
+     * 
+     * @return string
+     */
+    private function buildMissionBlock()
+    {
+        $list_of_missions = $this->getAllowedMissions();
+        $mission_selector = [];
+        
+        if (count($list_of_missions)) {
+            
+            $i = 0;
+            
+            foreach ($list_of_missions as $mission) {
+                
+                $mission_selector[] = [
+                    'value' => $mission,
+                    'mission' => $this->getLang()['type_mission'][$mission],
+                    'expedition_message' => $mission == Missions::expedition ? $this->getLang()['fl_expedition_alert_message'] : '',
+                    'id' => $mission == Missions::expedition ? ' ' : ' id="inpuT_' . ++$i . '" ',
+                    'checked' => $mission == $this->_current_mission ? ' checked="checked"' : ''
+                ];
+            }
+        }
+        
+        return $mission_selector;
+    }
+    
+    /**
+     * Get allowed missions per ship and option
+     * 
      * @return array
      */
-    private function getAvailableShips($post_data)
+    private function getAllowedMissions()
     {
-        if (is_array($post_data)) {
+        $ships_rules = [
+            202 => [Missions::attack, Missions::acs, Missions::transport, Missions::deploy, Missions::stay, Missions::expedition],
+            203 => [Missions::attack, Missions::acs, Missions::transport, Missions::deploy, Missions::stay, Missions::expedition],
+            204 => [Missions::attack, Missions::acs, Missions::transport, Missions::deploy, Missions::stay, Missions::expedition],
+            205 => [Missions::attack, Missions::acs, Missions::transport, Missions::deploy, Missions::stay, Missions::expedition],
+            206 => [Missions::attack, Missions::acs, Missions::transport, Missions::deploy, Missions::stay, Missions::expedition],
+            207 => [Missions::attack, Missions::acs, Missions::transport, Missions::deploy, Missions::stay, Missions::expedition],
+            208 => [Missions::colonize, Missions::expedition],
+            209 => [Missions::recycle, Missions::expedition],
+            210 => [Missions::attack, Missions::acs, Missions::transport, Missions::deploy, Missions::stay, Missions::spy, Missions::expedition],
+            211 => [Missions::attack, Missions::acs, Missions::transport, Missions::deploy, Missions::stay, Missions::expedition],
+            212 => [],
+            213 => [Missions::attack, Missions::acs, Missions::transport, Missions::deploy, Missions::stay, Missions::expedition],
+            214 => [Missions::attack, Missions::acs, Missions::transport, Missions::deploy, Missions::stay, Missions::destroy, Missions::expedition],
+            215 => [Missions::attack, Missions::acs, Missions::transport, Missions::deploy, Missions::stay, Missions::expedition],
+        ];
 
-            $ships = array();
-            $resource = parent::$objects->getObjects();
+        $mission_rules = [
+            PlanetTypes::planet => [
+                'own' => [
+                    Missions::transport,
+                    Missions::deploy,
+                    Missions::stay
+                ],
+                'other' => [
+                    Missions::attack,
+                    Missions::acs,
+                    Missions::transport,
+                    Missions::stay,
+                    Missions::spy,
+                    Missions::colonize
+                ]
+            ],
+            PlanetTypes::debris => [
+                Missions::deploy,
+                Missions::recycle
+            ],
+            PlanetTypes::moon => [
+                'own' => [
+                    Missions::transport,
+                    Missions::deploy,
+                    Missions::stay
+                ],
+                'other' => [
+                    Missions::attack,
+                    Missions::acs,
+                    Missions::transport,
+                    Missions::stay,
+                    Missions::spy,
+                    Missions::destroy
+                ]
+            ]
+        ];
+        
+        $ships = $this->getSessionShips();
+        $missions = [];
+        $action_type = 'other';
+        $ocuppied = false;
 
-            foreach ($resource as $ship => $amount) {
+        $selected_planet = $this->Fleet_Model->getPlanetOwnerByCoords(
+            $_SESSION['fleet_data']['target']['galaxy'],
+            $_SESSION['fleet_data']['target']['system'],
+            $_SESSION['fleet_data']['target']['planet'],
+            $_SESSION['fleet_data']['target']['type']
+        );
+        
+        if ($selected_planet) {
 
-                if (strpos($amount, 'ship') !== false) {
+            $ocuppied = true;
+            
+            if ($selected_planet['planet_user_id'] == $this->_user['user_id']) {
 
-                    if (isset($post_data['ship' . $ship])) {
-                        $ships['ship' . $ship] = $post_data['ship' . $ship];
-                    } else {
-                        $ships['ship' . $ship] = 0;
-                    }
-                }
-            }
-
-            return $ships;
+                $action_type = 'own';
+            } 
         }
 
-        return array();
+        if ($_SESSION['fleet_data']['target']['planet'] == (MAX_PLANET_IN_SYSTEM + 1)) {
+            
+            $possible_missions = [Missions::expedition];
+        } else {
+            
+            $possible_missions = $mission_rules[$_SESSION['fleet_data']['target']['type']][$action_type];
+        }
+
+        if (count($ships) > 0) {
+        
+            foreach($ships as $ship_id => $amount) {
+                
+                if ($amount > 0) {
+
+                    $missions[] = array_intersect(
+                        $ships_rules[$ship_id],
+                        $possible_missions
+                    );   
+                }
+            }
+        }
+        
+        // merge for each ship, but made them unique
+        $missions_set = array_unique(array_merge(...$missions));
+        
+        // sort by value from lower to higher
+        sort($missions_set);
+
+        return $missions_set;
     }
     
     /**
@@ -473,7 +428,7 @@ class Fleet3 extends Controller
             ],
             'planet' => [
                 'filter'    => FILTER_VALIDATE_INT,
-                'options'   => ['min_range' => 1, 'max_range' => MAX_PLANET_IN_SYSTEM]
+                'options'   => ['min_range' => 1, 'max_range' => (MAX_PLANET_IN_SYSTEM + 1)]
             ],
             'planettype' => [
                 'filter'    => FILTER_VALIDATE_INT,
@@ -490,6 +445,8 @@ class Fleet3 extends Controller
             
             FunctionsLib::redirect('game.php?page=fleet1');
         }
+        
+        $this->_current_mission = $data['target_mission'];
         
         // attach speed and target data
         $_SESSION['fleet_data'] += [
@@ -521,6 +478,16 @@ class Fleet3 extends Controller
             'fleet_group' => '',
             'acs_target_mr' => ''
         ];
+    }
+    
+    /**
+     * Get session set ships
+     * 
+     * @return array
+     */
+    private function getSessionShips()
+    {
+        return unserialize(base64_decode(str_rot13($_SESSION['fleet_data']['fleetarray'])));
     }
 }
 

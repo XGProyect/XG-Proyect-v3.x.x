@@ -15,13 +15,11 @@ namespace application\controllers\game;
 
 use application\core\Controller;
 use application\core\enumerators\PlanetTypesEnumerator as PlanetTypes;
-use application\libraries\fleets\Fleets;
 use application\libraries\FleetsLib;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
 use application\libraries\OfficiersLib;
 use application\libraries\premium\Premium;
-use application\libraries\research\Researches;
 use const JS_PATH;
 use const MAX_GALAXY_IN_WORLD;
 use const MAX_PLANET_IN_SYSTEM;
@@ -53,18 +51,6 @@ class Fleet2 extends Controller
      * @var array
      */
     private $_planet;
-    
-    /**
-     *
-     * @var \Fleets
-     */
-    private $_fleets = null;
-    
-    /**
-     *
-     * @var \Fleets
-     */
-    private $_research = null;
     
     /**
      *
@@ -122,16 +108,6 @@ class Fleet2 extends Controller
      */
     private function setUpFleets()
     {
-        $this->_fleets = new Fleets(
-            $this->Fleet_Model->getAllFleetsByUserId($this->_user['user_id']),
-            $this->_user['user_id']
-        );
-        
-        $this->_research = new Researches(
-            [$this->_user],
-            $this->_user['user_id']
-        );
-        
         $this->_premium = new Premium(
             [$this->_user],
             $this->_user['user_id']
@@ -421,7 +397,7 @@ class Fleet2 extends Controller
             ],
             'planet' => [
                 'filter'    => FILTER_VALIDATE_INT,
-                'options'   => ['min_range' => 1, 'max_range' => MAX_PLANET_IN_SYSTEM]
+                'options'   => ['min_range' => 1, 'max_range' => (MAX_PLANET_IN_SYSTEM + 1)]
             ],
             'planet_type' => [
                 'filter'    => FILTER_VALIDATE_INT,
