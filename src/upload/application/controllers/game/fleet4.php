@@ -96,7 +96,7 @@ class Fleet4 extends Controller
                     'p' . (int) $_POST['planet'] .
                     't' . (int) $_POST['planettype'];
 
-                if ($_POST['acs_target_mr'] == $target) {
+                if ($_POST['acs_target'] == $target) {
                     $aks_count_mr = $this->_db->query("SELECT COUNT(`acs_fleet_id`)
 															FROM `" . ACS_FLEETS . "`
 															WHERE `acs_fleet_id` = '" . (int) $_POST['fleet_group'] . "'");

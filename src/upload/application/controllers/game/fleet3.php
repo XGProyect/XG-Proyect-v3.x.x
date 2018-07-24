@@ -19,11 +19,11 @@ use application\core\enumerators\PlanetTypesEnumerator as PlanetTypes;
 use application\libraries\FleetsLib;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
+use application\libraries\research\Researches;
 use const JS_PATH;
 use const MAX_GALAXY_IN_WORLD;
 use const MAX_PLANET_IN_SYSTEM;
 use const MAX_SYSTEM_IN_GALAXY;
-use const PLANETS;
 
 /**
  * Fleet3 Class
@@ -54,9 +54,21 @@ class Fleet3 extends Controller
 
     /**
      *
-     * @var array
+     * @var \Fleets
+     */
+    private $_research = null;
+    
+    /**
+     *
+     * @var int
      */
     private $_current_mission = 0;
+
+    /**
+     *
+     * @var array
+     */    
+    private $_allowed_missions = [];
     
     /**
      * Constructor
@@ -97,7 +109,10 @@ class Fleet3 extends Controller
      */
     private function setUpFleets()
     {
-
+        $this->_research = new Researches(
+            [$this->_user],
+            $this->_user['user_id']
+        );
     }
 
     /**
@@ -117,6 +132,7 @@ class Fleet3 extends Controller
             'fleet_block' => $this->buildFleetBlock(),
             'title' => $this->buildTitleBlock(),
             'mission_selector' => $this->buildMissionBlock(),
+            'stay_block' => $this->buildStayBlock()
         ];
 
         // display the page
@@ -128,79 +144,6 @@ class Fleet3 extends Controller
                 )
             )
         );
-
-        #####################################################################################################
-        // SOME DEFAULT VALUES
-        #####################################################################################################
-        // ARRAYS
-        $exp_values = [1, 2, 3, 4, 5];
-        $hold_values = [0, 1, 2, 4, 8, 16, 32];
-
-        // OTHER VALUES
-        $fleet_acs = (int) $_POST['fleet_group'];
-
-        $fleetarray = unserialize(base64_decode(str_rot13($_POST['usedfleet'])));
-        $mission = $_POST['target_mission'];
-        $SpeedFactor = FunctionsLib::fleetSpeedFactor();
-        $AllFleetSpeed = FleetsLib::fleetMaxSpeed($fleetarray, 0, $this->current_user);
-        $GenFleetSpeed = $_POST['speed'];
-        $MaxFleetSpeed = min($AllFleetSpeed);
-        $distance = FleetsLib::targetDistance(
-                $_POST['thisgalaxy'], $galaxy, $_POST['thissystem'], $system, $_POST['thisplanet'], $planet
-        );
-
-        $duration = FleetsLib::missionDuration($GenFleetSpeed, $MaxFleetSpeed, $distance, $SpeedFactor);
-
-        $consumption = FleetsLib::fleetConsumption(
-                $fleetarray, $SpeedFactor, $duration, $distance, $this->current_user
-        );
-
-        #####################################################################################################
-        // INPUTS DATA
-        #####################################################################################################
-        $parse['consumption'] = $consumption;
-        $parse['distance'] = $distance;
-        $parse['fleet_group'] = $_POST['fleet_group'];
-        $parse['acs_target_mr'] = $_POST['acs_target_mr'];
-
-
-        #####################################################################################################
-        // STAY / EXPEDITION BLOCKS
-        #####################################################################################################
-        $stay_row['options'] = '';
-        $StayBlock = '';
-
-        if ($planet == 16) {
-
-            $stay_row['stay_type'] = 'expeditiontime';
-
-            foreach ($exp_values as $value) {
-                $stay['value'] = $value;
-                $stay['selected'] = '';
-                $stay['title'] = $value;
-
-                $stay_row['options'] .= parent::$page->parseTemplate(fleet/fleet_options, $stay);
-            }
-
-            $StayBlock = parent::$page->parseTemplate(fleet/fleet3_stay_row, array_merge($stay_row, $this->getLang()));
-        } elseif (isset($missiontype[5])) {
-
-            $stay_row['stay_type'] = 'holdingtime';
-
-            foreach ($hold_values as $value) {
-
-                $stay['value'] = $value;
-                $stay['selected'] = (($value == 1) ? ' selected' : '');
-                $stay['title'] = $value;
-
-                $stay_row['options'] .= parent::$page->parseTemplate(fleet/fleet_options, $stay);
-            }
-
-            $StayBlock = parent::$page->parseTemplate(fleet/fleet3_stay_row, array_merge($stay_row, $this->getLang()));
-        }
-
-        $parse['missionselector'] = $MissionSelector;
-        $parse['stayblock'] = $StayBlock;
     }
 
     /**
@@ -278,16 +221,14 @@ class Fleet3 extends Controller
         $mission_selector = [];
         
         if (count($list_of_missions)) {
-            
-            $i = 0;
-            
+
             foreach ($list_of_missions as $mission) {
                 
                 $mission_selector[] = [
                     'value' => $mission,
                     'mission' => $this->getLang()['type_mission'][$mission],
                     'expedition_message' => $mission == Missions::expedition ? $this->getLang()['fl_expedition_alert_message'] : '',
-                    'id' => $mission == Missions::expedition ? ' ' : ' id="inpuT_' . ++$i . '" ',
+                    'id' => $mission == Missions::expedition ? ' ' : 'inpuT_' . $mission,
                     'checked' => $mission == $this->_current_mission ? ' checked="checked"' : ''
                 ];
             }
@@ -297,12 +238,71 @@ class Fleet3 extends Controller
     }
     
     /**
+     * Build the stay time block
+     * 
+     * @return string
+     */
+    private function buildStayBlock()
+    {
+        // by rule, expedition time is based on the astrophysics level, relation 1:1 level:hour
+        $max_exp_time = $this->_research->getCurrentResearch()->getResearchAstrophysics();
+        $hours = [0, 1, 2, 4, 8, 16, 32];
+        $options = [];
+        $stay_type = '';
+        
+        if (in_array(Missions::expedition, $this->_allowed_missions)) {
+            
+            $stay_type = 'expeditiontime';
+            
+            for($i = 1; $i <= $max_exp_time; $i++) {
+                
+                $options[] = [
+                    'value' => $i,
+                    'selected' => $i == 1 ? ' selected' : ''
+                ];
+            }
+        }
+        
+        if (in_array(Missions::stay, $this->_allowed_missions)) {
+            
+            $stay_type = 'holdingtime';
+            
+            foreach ($hours as $hour) {
+                
+                $options[] = [
+                    'value' => $hour,
+                    'selected' => $hour == 1 ? ' selected' : ''
+                ];
+            }
+        }
+        
+        if (count($options) > 0) {
+            
+            return $this->getTemplate()->set(
+                'fleet/fleet3_stay_row',
+                array_merge(
+                    $this->getLang(),
+                    [
+                        'stay_type' => $stay_type,
+                        'options' => $options
+                    ]
+                )
+            );
+        }
+        
+        return '';
+    }
+    
+    /**
      * Get allowed missions per ship and option
      * 
      * @return array
      */
     private function getAllowedMissions()
     {
+        /**
+         * rules
+         */
         $ships_rules = [
             202 => [Missions::attack, Missions::acs, Missions::transport, Missions::deploy, Missions::stay, Missions::expedition],
             203 => [Missions::attack, Missions::acs, Missions::transport, Missions::deploy, Missions::stay, Missions::expedition],
@@ -357,7 +357,18 @@ class Fleet3 extends Controller
             ]
         ];
         
+        /**
+         * data
+         */
         $ships = $this->getSessionShips();
+        $acs = $this->Fleet_Model->acsExists(
+            $_SESSION['fleet_data']['target']['group'],
+            $_SESSION['fleet_data']['target']['galaxy'],
+            $_SESSION['fleet_data']['target']['system'],
+            $_SESSION['fleet_data']['target']['planet'],
+            $_SESSION['fleet_data']['target']['type']
+        );
+        
         $missions = [];
         $action_type = 'other';
         $ocuppied = false;
@@ -385,6 +396,11 @@ class Fleet3 extends Controller
         } else {
             
             $possible_missions = $mission_rules[$_SESSION['fleet_data']['target']['type']][$action_type];
+
+            if (!$acs && in_array(Missions::acs, $possible_missions)) {
+
+                unset($possible_missions[array_search(Missions::acs, $possible_missions)]);
+            }
         }
 
         if (count($ships) > 0) {
@@ -406,6 +422,8 @@ class Fleet3 extends Controller
         
         // sort by value from lower to higher
         sort($missions_set);
+
+        $this->_allowed_missions = $missions_set;
 
         return $missions_set;
     }
@@ -439,6 +457,8 @@ class Fleet3 extends Controller
                 'options'   => ['min_range' => 1, 'max_range' => 10]
             ],
             'target_mission' => FILTER_VALIDATE_INT,
+            'fleet_group' => FILTER_VALIDATE_INT,
+            'acs_target' => FILTER_SANITIZE_STRING
         ]);
 
         if (is_null($data)) {
@@ -448,6 +468,32 @@ class Fleet3 extends Controller
         
         $this->_current_mission = $data['target_mission'];
         
+        $distance = FleetsLib::targetDistance(
+            $this->_planet['planet_galaxy'],
+            $data['galaxy'],
+            $this->_planet['planet_system'],
+            $data['system'],
+            $this->_planet['planet_planet'],
+            $data['planet']
+        );
+
+        $fleet = $this->getSessionShips();
+        $Speed_factor = FunctionsLib::fleetSpeedFactor();
+        $fleet_speed = FleetsLib::fleetMaxSpeed($fleet, 0, $this->_user);
+
+        $consumption = FleetsLib::fleetConsumption(
+            $fleet, 
+            $Speed_factor,
+            FleetsLib::missionDuration(
+                $data['speed'],
+                min($fleet_speed),
+                $distance,
+                $Speed_factor
+            ),
+            $distance,
+            $this->_user
+        );
+        
         // attach speed and target data
         $_SESSION['fleet_data'] += [
             'speed' => $data['speed'],
@@ -455,16 +501,18 @@ class Fleet3 extends Controller
                 'galaxy' => $data['galaxy'],
                 'system' => $data['system'],
                 'planet' => $data['planet'],
-                'type' => $data['planettype']
-            ]
+                'type' => $data['planettype'],
+                'group' => $data['fleet_group'],
+                'acs_target' => $data['acs_target']
+            ],
+            'distance' => $distance,
+            'consumption' => $consumption
         ];
 
         return [
             'metal' => floor($this->_planet['planet_metal']),
             'crystal' => floor($this->_planet['planet_crystal']),
             'deuterium' => floor($this->_planet['planet_deuterium']),
-            'consumption' => '',
-            'distance' => '',
             'this_galaxy' => $this->_planet['planet_galaxy'],
             'this_system' => $this->_planet['planet_system'],
             'this_planet' => $this->_planet['planet_planet'],
@@ -474,9 +522,7 @@ class Fleet3 extends Controller
             'planet_end' => $data['planet'] ?? $this->_planet['planet_planet'],
             'planet_type_end' => $data['planettype'] ?? $this->_planet['planet_type'],
             'speed' => $data['speed'] ?? 10,
-            'speedfactor' => FunctionsLib::fleetSpeedFactor(),
-            'fleet_group' => '',
-            'acs_target_mr' => ''
+            'speedfactor' => FunctionsLib::fleetSpeedFactor()
         ];
     }
     

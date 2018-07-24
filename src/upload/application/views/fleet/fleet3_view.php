@@ -8,8 +8,6 @@
     <input type="hidden" name="thisresource1"  value="{metal}" />
     <input type="hidden" name="thisresource2"  value="{crystal}" />
     <input type="hidden" name="thisresource3"  value="{deuterium}" />
-    <input type="hidden" name="consumption"    value="{consumption}" />
-    <input type="hidden" name="dist"           value="{distance}" />
     <input type="hidden" name="thisgalaxy"     value="{this_galaxy}" />
     <input type="hidden" name="thissystem"     value="{this_system}" />
     <input type="hidden" name="thisplanet"     value="{this_planet}" />
@@ -20,8 +18,6 @@
     <input type="hidden" name="planettype"     value="{planet_type_end}" />
     <input type="hidden" name="speed"          value="{speed}" />
     <input type="hidden" name="speedfactor"    value="{speedfactor}" />
-    <input type="hidden" name="fleet_group"    value="{fleet_group}" />
-    <input type="hidden" name="acs_target_mr"  value="{acs_target_mr}" />
     {fleet_block}
         <input type="hidden" name="consumption{ship_id}" value="{consumption}" />
         <input type="hidden" name="speed{ship_id}" value="{speed}" />
@@ -43,7 +39,7 @@
                         {mission_selector}
                         <tr height="20">
                             <th>
-                                <input{id}type="radio" name="mission" value="{value}"{checked}/>
+                                <input id="{id}" type="radio" name="mission" value="{value}"{checked}/>
                                 <label for="{id}">{mission}</label>
                                 <br />
                                 {expedition_message}
@@ -82,7 +78,7 @@
                         <tr height="20">
                             <th colspan="3">&nbsp;</th>
                         </tr>
-                        {stayblock}
+                        {stay_block}
                     </table>
                 </th>
             </tr>
