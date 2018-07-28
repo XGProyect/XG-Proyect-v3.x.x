@@ -169,7 +169,7 @@ class Users_library
     }
 
     /**
-     * isOnVacations
+     * Check if user is on vacations
      *
      * @param array $user User data
      *
@@ -177,13 +177,19 @@ class Users_library
      */
     public function isOnVacations($user)
     {
-        if ($user['setting_vacations_status'] == 1) {
-
-            return true;
-        } else {
-
-            return false;
-        }
+        return ($user['setting_vacations_status'] == 1);
+    }
+    
+    /**
+     * Check if user is inactive
+     *
+     * @param array $user User data
+     *
+     * @return boolean
+     */
+    public function isInactive($user)
+    {
+        return !($user['user_onlinetime'] >= (time() - ONE_WEEK));
     }
     ###########################################################################
     #

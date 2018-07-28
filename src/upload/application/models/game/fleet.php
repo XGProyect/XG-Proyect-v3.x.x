@@ -179,15 +179,47 @@ class Fleet
      * 
      * @return bool
      */
-    public function getPlanetOwnerByCoords($g, $s, $p, $pt)
+    public function getPlanetOwnerByCoords(int $g, int $s, int $p, int $pt): array
     {
         return $this->db->queryFetch(
-            "SELECT `planet_user_id`
+            "SELECT 
+                `planet_user_id`
             FROM `" . PLANETS . "`
             WHERE `planet_galaxy` = '" . $g . "'
                 AND `planet_system` = '" . $s . "'
                 AND `planet_planet` = '" . $p . "'
                 AND `planet_type` = '" . $pt . "';"
+        );
+    }
+    
+    /**
+     * Get target data by coords
+     * 
+     * @param int $g    Galaxy
+     * @param int $s    System
+     * @param int $p    Planet
+     * @param int $pt   Planet Type
+     * 
+     * @return type
+     */
+    public function getTargetDataByCoords(int $g, int $s, int $p, int $pt): array
+    {
+        return $this->db->queryFetch(
+            "SELECT 
+                p.`planet_user_id`,
+                u.`user_id`,
+                u.`user_authlevel`,
+                u.`user_onlinetime`,
+                u.`user_ally_id`,
+                s.`setting_vacations_status`
+            FROM `" . PLANETS . "` p
+            INNER JOIN `" . USERS . "` u ON u.`user_id` = p.`planet_user_id`
+            INNER JOIN `" . SETTINGS . "` s ON s.`setting_user_id` = u.`user_id`
+            WHERE p.`planet_galaxy` = '" . $g . "'
+                AND p.`planet_system` = '" . $s . "'
+                AND p.`planet_planet` = '" . $p . "'
+                AND p.`planet_type` = '" . $pt . "'
+                AND p.`planet_destroyed` = 0;"
         );
     }
     
