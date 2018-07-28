@@ -293,9 +293,16 @@ class Fleet4 extends Controller
             }
 
             if ($EnvoiMaxExpedition == 0) {
-                FunctionsLib::message("<font color=\"red\"><b>" . $this->getLang()['fl_expedition_tech_required'] . "</b></font>", "game.php?page=movement", 2);
+
+                $this->showMessage(
+                    FormatLib::colorRed($this->getLang()['fl_expedition_tech_required'])
+                );
+                
             } elseif ($ExpeditionEnCours >= $EnvoiMaxExpedition) {
-                FunctionsLib::message("<font color=\"red\"><b>" . $this->getLang()['fl_expedition_fleets_limit'] . "</b></font>", "game.php?page=movement", 2);
+
+                $this->showMessage(
+                    FormatLib::colorRed($this->getLang()['fl_expedition_fleets_limit'])
+                );                
             }
         }
 
@@ -337,13 +344,19 @@ class Fleet4 extends Controller
             if ($this->_noob->isWeak($MyGameLevel, $HeGameLevel) &&
                 $this->_target_data['planet_user_id'] != '' &&
                 ($_POST['mission'] == 1 or $_POST['mission'] == 6 or $_POST['mission'] == 9)) {
-                FunctionsLib::message("<font color=\"lime\"><b>" . $this->getLang()['fl_week_player'] . "</b></font>", "game.php?page=movement", 2);
+                
+                $this->showMessage(
+                    FormatLib::customColor($this->getLang()['fl_week_player'], 'lime')
+                );
             }
 
             if ($this->_noob->isStrong($MyGameLevel, $HeGameLevel) &&
                 $this->_target_data['planet_user_id'] != '' &&
                 ($_POST['mission'] == 1 or $_POST['mission'] == 5 or $_POST['mission'] == 6 or $_POST['mission'] == 9)) {
-                FunctionsLib::message("<font color=\"red\"><b>" . $this->getLang()['fl_strong_player'] . "</b></font>", "game.php?page=movement", 2);
+                
+                $this->showMessage(
+                    FormatLib::colorRed($this->getLang()['fl_strong_player'])
+                );
             }
         }
 
@@ -353,11 +366,17 @@ class Fleet4 extends Controller
         $ActualFleets = $FlyingFleets['Number'];
 
         if ((FleetsLib::getMaxFleets($this->_user[$resource[108]], $this->_user['premium_officier_admiral']) ) <= $ActualFleets) {
-            FunctionsLib::message($this->getLang()['fl_no_slots'], "game.php?page=movement", 1);
+            
+            $this->showMessage(
+                $this->getLang()['fl_no_slots']
+            );
         }
 
         if ($_POST['resource1'] + $_POST['resource2'] + $_POST['resource3'] < 1 && $_POST['mission'] == 3) {
-            FunctionsLib::message("<font color=\"lime\"><b>" . $this->getLang()['fl_empty_transport'] . "</b></font>", "game.php?page=movement", 1);
+            
+            $this->showMessage(
+                FormatLib::customColor($this->getLang()['fl_empty_transport'], 'lime')
+            );
         }
 
         if ($_POST['mission'] != 15) {
@@ -713,7 +732,7 @@ class Fleet4 extends Controller
      */
     private function getSessionShips()
     {
-        return unserialize(base64_decode(str_rot13($_SESSION['fleet_data']['fleetarray'])));
+        return unserialize(base64_decode(str_rot13($this->getFleetData()['fleetarray'])));
     }
     
     /**
