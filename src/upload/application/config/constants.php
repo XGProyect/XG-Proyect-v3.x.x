@@ -138,6 +138,15 @@ define('DPATH', DEFAULT_SKINPATH);
 
 /**
  * 
+ * TIMING CONSTANTS
+ * 
+ */
+define('ONE_DAY', (60 * 60 * 24)); // 1 DAY
+define('ONE_WEEK', (ONE_DAY * 7)); // 1 WEEK
+define('ONE_MONTH', (ONE_DAY * 30)); // 1 MONTH
+
+/**
+ * 
  * GAME MECHANICS RELATED
  * You can change almost anything below without breaking the game
  * 
