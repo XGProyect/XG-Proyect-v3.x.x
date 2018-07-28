@@ -145,17 +145,17 @@ class Fleet
     }
     
     /**
-     * acsExists
+     * Check if an acs exists
      *
      * @param int $fleet_acs    Fleet ACS ID
      * @param int $galaxy       Galaxy
      * @param int $system       System
      * @param int $planet       Planet
-     * @param int $planettype   Planet Type
+     * @param int $planet_type  Planet Type
      *
      * @return boolean
      */
-    public function acsExists($fleet_acs, $galaxy, $system, $planet, $planettype)
+    public function acsExists($fleet_acs, $galaxy, $system, $planet, $planet_type)
     {
         return $this->db->queryFetch(
             "SELECT 
@@ -165,7 +165,7 @@ class Fleet
                 `acs_fleet_galaxy` = '" . $galaxy . "' AND 
                 `acs_fleet_system` = '" . $system . "' AND 
                 `acs_fleet_planet` = '" . $planet . "' AND 
-                `acs_fleet_planet_type` = '" . $planettype . "';"
+                `acs_fleet_planet_type` = '" . $planet_type . "';"
         )['amount'] > 0;
     }
     

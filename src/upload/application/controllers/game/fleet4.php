@@ -17,6 +17,7 @@ use application\core\Controller;
 use application\libraries\FleetsLib;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
+use application\libraries\research\Researches;
 use const BUDDY;
 use const DEBRIS_LIFE_TIME;
 use const FLEETS;
@@ -25,7 +26,6 @@ use const MAX_PLANET_IN_SYSTEM;
 use const MAX_SYSTEM_IN_GALAXY;
 use const PLANETS;
 use const SETTINGS;
-use const SHIPS;
 use const USERS;
 
 /**
@@ -55,29 +55,46 @@ class Fleet4 extends Controller
      */
     private $_planet;
 
+    /**
+     *
+     * @var \Fleets
+     */
+    private $_research = null;
+    
+    /**
+     * Already filtered POST data
+     * 
+     * @var array
+     */
+    private $_clean_input_data = [];
+    
+    /**
+     *
+     * @var array
+     */
     private $_fleet_data = [
-        'fleet_owner',
-        'fleet_mission',
-        'fleet_amount',
-        'fleet_array',
-        'fleet_start_time',
-        'fleet_start_galaxy',
-        'fleet_start_system',
-        'fleet_start_planet',
-        'fleet_start_type',
-        'fleet_end_time',
-        'fleet_end_stay',
-        'fleet_end_galaxy',
-        'fleet_end_system',
-        'fleet_end_planet',
-        'fleet_end_type',
-        'fleet_resource_metal',
-        'fleet_resource_crystal',
-        'fleet_resource_deuterium',
-        'fleet_fuel',
-        'fleet_target_owner',
-        'fleet_group',
-        'fleet_creation'
+        'fleet_owner' => 0,
+        'fleet_mission' => 0,
+        'fleet_amount' => 0,
+        'fleet_array' => '',
+        'fleet_start_time' => 0,
+        'fleet_start_galaxy' => 0,
+        'fleet_start_system' => 0,
+        'fleet_start_planet' => 0,
+        'fleet_start_type' => 0,
+        'fleet_end_time' => 0,
+        'fleet_end_stay' => 0,
+        'fleet_end_galaxy' => 0,
+        'fleet_end_system' => 0,
+        'fleet_end_planet' => 0,
+        'fleet_end_type' => 0,
+        'fleet_resource_metal' => 0,
+        'fleet_resource_crystal' => 0,
+        'fleet_resource_deuterium' => 0,
+        'fleet_fuel' => 0,
+        'fleet_target_owner' => 0,
+        'fleet_group' => 0,
+        'fleet_creation' => 'NOW()'
     ];
     
     /**
@@ -119,6 +136,10 @@ class Fleet4 extends Controller
      */
     private function setUpFleets()
     {
+        $this->_research = new Researches(
+            [$this->_user],
+            $this->_user['user_id']
+        );
     }
 
     /**
@@ -128,11 +149,7 @@ class Fleet4 extends Controller
      */
     private function buildPage()
     {
-        $fleet_array = $this->getSessionShips();
-        
-        //var_dump($_POST);
-        //var_dump($_SESSION['fleet_data']);
-        var_dump($this->_user);
+        $this->setInputsData();
         die();
         
         $resource = parent::$objects->getObjects();
@@ -142,6 +159,18 @@ class Fleet4 extends Controller
             exit(FunctionsLib::message($this->_lang['fl_vacation_mode_active'], "game.php?page=overview", 2));
         }
 
+        $this->validateVacations();
+        
+        $this->validateAcs();
+        
+        $this->validateTarget();
+        
+        $this->validateShips();
+        
+        $this->validateMission();
+        
+        $this->validateNoobProtection();
+        
         $fleet_group = 0;
 
         if ($_POST['fleet_group'] > 0) {
@@ -383,19 +412,10 @@ class Fleet4 extends Controller
             }
         }
 
-        $speed_possible = array(10, 9, 8, 7, 6, 5, 4, 3, 2, 1);
         $AllFleetSpeed = FleetsLib::fleetMaxSpeed($fleetarray, 0, $this->_user);
-        $GenFleetSpeed = $_POST['speed'];
+        $GenFleetSpeed = $this->getFleetData()['speed'];
         $SpeedFactor = FunctionsLib::fleetSpeedFactor();
         $MaxFleetSpeed = min($AllFleetSpeed);
-
-        if (!in_array($GenFleetSpeed, $speed_possible)) {
-            FunctionsLib::redirect('game.php?page=movement');
-        }
-
-        if ($MaxFleetSpeed != $_POST['speedallsmin']) {
-            FunctionsLib::redirect('game.php?page=movement');
-        }
 
         if (!$_POST['planettype']) {
             FunctionsLib::redirect('game.php?page=movement');
@@ -550,6 +570,7 @@ class Fleet4 extends Controller
         // final step, send and redirect
         $this->sendFleet();
         
+        /*
         $this->_db->query("INSERT INTO " . FLEETS . " SET
 							`fleet_owner` = '" . $this->_user['user_id'] . "',
 							`fleet_mission` = '" . (int) $_POST['mission'] . "',
@@ -580,7 +601,7 @@ class Fleet4 extends Controller
 								`planet_metal` = `planet_metal` - " . $TransMetal . ",
 								`planet_crystal` = `planet_crystal` - " . $TransCrystal . ",
 								`planet_deuterium` = `planet_deuterium` - " . ($TransDeuterium + $consumption) . "
-								WHERE `planet_id` = " . $this->_planet['planet_id'] . ";");
+								WHERE `planet_id` = " . $this->_planet['planet_id'] . ";");*/
     }
     
     /**
@@ -590,52 +611,76 @@ class Fleet4 extends Controller
      */
     private function setInputsData()
     {
+        $exp_time = $this->_research->getCurrentResearch()->getResearchAstrophysics();
+        
+        $min_exp_time = $exp_time <= 0 ? 0 : 1;
+        $max_exp_time = $exp_time;
+        
         $data = filter_input_array(INPUT_POST, [
-            'galaxy' => [
+            'fleet_mission' => [
                 'filter'    => FILTER_VALIDATE_INT,
-                'options'   => ['min_range' => 1, 'max_range' => MAX_GALAXY_IN_WORLD]
+                'options'   => ['min_range' => 1, 'max_range' => 15]
             ],
-            'system' => [
+            'resource1' => [
                 'filter'    => FILTER_VALIDATE_INT,
-                'options'   => ['min_range' => 1, 'max_range' => MAX_SYSTEM_IN_GALAXY]
+                'options'   => ['min_range' => 0, 'max_range' => $this->_planet['planet_metal']]
             ],
-            'planet' => [
+            'resource2' => [
                 'filter'    => FILTER_VALIDATE_INT,
-                'options'   => ['min_range' => 1, 'max_range' => (MAX_PLANET_IN_SYSTEM + 1)]
+                'options'   => ['min_range' => 0, 'max_range' => $this->_planet['planet_crystal']]
             ],
-            'planettype' => [
+            'resource3' => [
                 'filter'    => FILTER_VALIDATE_INT,
-                'options'   => ['min_range' => 1, 'max_range' => 3]
+                'options'   => ['min_range' => 0, 'max_range' => $this->_planet['planet_deuterium']]
             ],
-            'speed' => [
+            'expeditiontime' => [
                 'filter'    => FILTER_VALIDATE_INT,
-                'options'   => ['min_range' => 1, 'max_range' => 10]
+                'options'   => ['min_range' => $min_exp_time, 'max_range' => $max_exp_time]
             ],
-            'target_mission' => FILTER_VALIDATE_INT,
-            'fleet_group' => FILTER_VALIDATE_INT,
-            'acs_target' => FILTER_SANITIZE_STRING
+            'holdingtime' => [
+                'filter'    => FILTER_VALIDATE_INT,
+                'options'   => ['min_range' => 0, 'max_range' => 32]
+            ]
         ]);
 
         if (is_null($data)) {
             
             FunctionsLib::redirect('game.php?page=fleet1');
         }
-
-        return [
-            '' => '',
-        ];
+        
+        $this->_clean_input_data = $data;
+    }
+    
+    /**
+     * Get fleet data
+     * 
+     * @return array
+     */
+    private function getFleetData()
+    {
+        return $_SESSION['fleet_data'];
     }
     
     /**
      * Get session set ships
      * 
-     * @return array
+     * @return string
      */
     private function getSessionShips()
     {
         return unserialize(base64_decode(str_rot13($_SESSION['fleet_data']['fleetarray'])));
     }
     
+    /**
+     * Get the target data
+     * 
+     * @return array
+     */
+    private function getTargetData()
+    {
+        return $_SESSION['fleet_data']['target'];
+    }
+
     /**
      * Send the fleet with the collected data
      */
