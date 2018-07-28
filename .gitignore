@@ -3,3 +3,4 @@ src/upload/application/logs/*.txt
 src/upload/tests/build/
 src/upload/tests/_reports/
 src/docs/
+data/xgp.sql
