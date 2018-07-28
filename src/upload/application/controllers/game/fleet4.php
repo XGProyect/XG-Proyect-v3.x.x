@@ -293,9 +293,9 @@ class Fleet4 extends Controller
             }
 
             if ($EnvoiMaxExpedition == 0) {
-                FunctionsLib::message("<font color=\"red\"><b>" . $this->_lang['fl_expedition_tech_required'] . "</b></font>", "game.php?page=movement", 2);
+                FunctionsLib::message("<font color=\"red\"><b>" . $this->getLang()['fl_expedition_tech_required'] . "</b></font>", "game.php?page=movement", 2);
             } elseif ($ExpeditionEnCours >= $EnvoiMaxExpedition) {
-                FunctionsLib::message("<font color=\"red\"><b>" . $this->_lang['fl_expedition_fleets_limit'] . "</b></font>", "game.php?page=movement", 2);
+                FunctionsLib::message("<font color=\"red\"><b>" . $this->getLang()['fl_expedition_fleets_limit'] . "</b></font>", "game.php?page=movement", 2);
             }
         }
 
@@ -337,13 +337,13 @@ class Fleet4 extends Controller
             if ($this->_noob->isWeak($MyGameLevel, $HeGameLevel) &&
                 $this->_target_data['planet_user_id'] != '' &&
                 ($_POST['mission'] == 1 or $_POST['mission'] == 6 or $_POST['mission'] == 9)) {
-                FunctionsLib::message("<font color=\"lime\"><b>" . $this->_lang['fl_week_player'] . "</b></font>", "game.php?page=movement", 2);
+                FunctionsLib::message("<font color=\"lime\"><b>" . $this->getLang()['fl_week_player'] . "</b></font>", "game.php?page=movement", 2);
             }
 
             if ($this->_noob->isStrong($MyGameLevel, $HeGameLevel) &&
                 $this->_target_data['planet_user_id'] != '' &&
                 ($_POST['mission'] == 1 or $_POST['mission'] == 5 or $_POST['mission'] == 6 or $_POST['mission'] == 9)) {
-                FunctionsLib::message("<font color=\"red\"><b>" . $this->_lang['fl_strong_player'] . "</b></font>", "game.php?page=movement", 2);
+                FunctionsLib::message("<font color=\"red\"><b>" . $this->getLang()['fl_strong_player'] . "</b></font>", "game.php?page=movement", 2);
             }
         }
 
@@ -353,11 +353,11 @@ class Fleet4 extends Controller
         $ActualFleets = $FlyingFleets['Number'];
 
         if ((FleetsLib::getMaxFleets($this->_user[$resource[108]], $this->_user['premium_officier_admiral']) ) <= $ActualFleets) {
-            FunctionsLib::message($this->_lang['fl_no_slots'], "game.php?page=movement", 1);
+            FunctionsLib::message($this->getLang()['fl_no_slots'], "game.php?page=movement", 1);
         }
 
         if ($_POST['resource1'] + $_POST['resource2'] + $_POST['resource3'] < 1 && $_POST['mission'] == 3) {
-            FunctionsLib::message("<font color=\"lime\"><b>" . $this->_lang['fl_empty_transport'] . "</b></font>", "game.php?page=movement", 1);
+            FunctionsLib::message("<font color=\"lime\"><b>" . $this->getLang()['fl_empty_transport'] . "</b></font>", "game.php?page=movement", 1);
         }
 
         if ($_POST['mission'] != 15) {
@@ -366,11 +366,17 @@ class Fleet4 extends Controller
             }
 
             if ($this->_target_data['planet_user_id'] != '' && $_POST['mission'] == 7) {
-                FunctionsLib::message("<font color=\"red\"><b>" . $this->_lang['fl_planet_populed'] . "</b></font>", "game.php?page=movement", 2);
+                
+                $this->showMessage(
+                    FormatLib::colorRed($this->getLang()['fl_planet_populed'])
+                );
             }
 
             if ($this->_target_data['user_ally_id'] != $this->_user['user_ally_id'] && $_POST['mission'] == 4) {
-                FunctionsLib::message("<font color=\"red\"><b>" . $this->_lang['fl_stay_not_on_enemy'] . "</b></font>", "game.php?page=movement", 2);
+                
+                $this->showMessage(
+                    FormatLib::colorRed($this->getLang()['fl_stay_not_on_enemy'])
+                );
             }
 
             if (($this->_target_data['planet_user_id'] == $this->_planet['planet_user_id']) && (($_POST['mission'] == 1) or ( $_POST['mission'] == 6))) {
@@ -378,7 +384,10 @@ class Fleet4 extends Controller
             }
 
             if (($this->_target_data['planet_user_id'] != $this->_planet['planet_user_id']) && ($_POST['mission'] == 4)) {
-                FunctionsLib::message("<font color=\"red\"><b>" . $this->_lang['fl_deploy_only_your_planets'] . "</b></font>", "game.php?page=movement", 2);
+                
+                $this->showMessage(
+                    FormatLib::colorRed($this->getLang()['fl_deploy_only_your_planets'])
+                );
             }
 
             if ($_POST['mission'] == 5) {
@@ -397,7 +406,10 @@ class Fleet4 extends Controller
 															AND buddy_status =1");
 
                 if ($this->_target_data['user_ally_id'] != $this->_user['user_ally_id'] && $buddy['buddys'] < 1) {
-                    FunctionsLib::message("<font color=\"red\"><b>" . $this->_lang['fl_stay_not_on_enemy'] . "</b></font>", "game.php?page=movement", 2);
+                    
+                    $this->showMessage(
+                        FormatLib::colorRed($this->getLang()['fl_stay_not_on_enemy'])
+                    );
                 }
             }
         }
@@ -406,29 +418,6 @@ class Fleet4 extends Controller
         $GenFleetSpeed = $this->getFleetData()['speed'];
         $SpeedFactor = FunctionsLib::fleetSpeedFactor();
         $MaxFleetSpeed = min($AllFleetSpeed);
-
-        if (!$_POST['planettype']) {
-            FunctionsLib::redirect(self::REDIRECT_TARGET);
-        }
-
-        if (!$_POST['galaxy'] || !is_numeric($_POST['galaxy']) || $_POST['galaxy'] > MAX_GALAXY_IN_WORLD || $_POST['galaxy'] < 1) {
-            FunctionsLib::redirect(self::REDIRECT_TARGET);
-        }
-
-        if (!$_POST['system'] || !is_numeric($_POST['system']) || $_POST['system'] > MAX_SYSTEM_IN_GALAXY || $_POST['system'] < 1) {
-            FunctionsLib::redirect(self::REDIRECT_TARGET);
-        }
-
-        if (!$_POST['planet'] || !is_numeric($_POST['planet']) || $_POST['planet'] > (MAX_PLANET_IN_SYSTEM + 1) || $_POST['planet'] < 1) {
-            FunctionsLib::redirect(self::REDIRECT_TARGET);
-        }
-
-        if ($_POST['thisgalaxy'] != $this->_planet['planet_galaxy'] |
-            $_POST['thissystem'] != $this->_planet['planet_system'] |
-            $_POST['thisplanet'] != $this->_planet['planet_planet'] |
-            $_POST['thisplanettype'] != $this->_planet['planet_type']) {
-            FunctionsLib::redirect(self::REDIRECT_TARGET);
-        }
 
         if (!isset($fleetarray)) {
             FunctionsLib::redirect(self::REDIRECT_TARGET);
@@ -528,15 +517,26 @@ class Fleet4 extends Controller
         }
 
         if (!$StockOk) {
-            FunctionsLib::message("<font color=\"red\"><b>" . $this->_lang['fl_no_enought_deuterium'] . FormatLib::prettyNumber($consumption) . "</b></font>", "game.php?page=movement", 2);
+
+            $this->showMessage(
+                FormatLib::colorRed($this->getLang()['fl_no_enought_deuterium'] . FormatLib::prettyNumber($consumption))
+            );
         }
 
         if ($StorageNeeded > $FleetStorage) {
-            FunctionsLib::message("<font color=\"red\"><b>" . $this->_lang['fl_no_enought_cargo_capacity'] . FormatLib::prettyNumber($StorageNeeded - $FleetStorage) . "</b></font>", "game.php?page=movement", 2);
+
+            $this->showMessage(
+                FormatLib::colorRed($this->getLang()['fl_no_enought_cargo_capacity'] . FormatLib::prettyNumber($StorageNeeded - $FleetStorage))
+            );
         }
 
-        if (FunctionsLib::readConfig('adm_attack') != 0 && $this->_target_data['user_authlevel'] >= 1 && $this->_user['user_authlevel'] == 0) {
-            FunctionsLib::message($this->_lang['fl_admins_cannot_be_attacked'], "game.php?page=movement", 2);
+        if (FunctionsLib::readConfig('adm_attack') != 0 
+            && $this->_target_data['user_authlevel'] >= 1 
+            && $this->_user['user_authlevel'] == 0) {
+
+            $this->showMessage(
+                $this->getLang()['fl_admins_cannot_be_attacked']
+            );
         }
 
         if ($fleet_group != 0) {
