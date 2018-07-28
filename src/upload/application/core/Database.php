@@ -452,6 +452,57 @@ class Database
     }
 
     /**
+     * Set the auto commit for transactions
+     * 
+     * @param bool $status
+     * 
+     * @return void
+     */
+    public function setAutoCommit(bool $status = true)
+    {
+        $this->connection->autocommit($status);
+    }
+    
+    /**
+     * Start a transaction
+     * 
+     * @return void
+     */
+    public function beginTransaction()
+    {
+        // disable auto commit
+        $this->setAutoCommit(false);
+        
+        $this->connection->begin_transaction();
+    }
+    
+    /**
+     * Confirm and commit a transaction
+     * 
+     * @return void
+     */
+    public function commitTransaction()
+    {
+        $this->connection->commit();
+        
+        // re enable after transaction end
+        $this->setAutoCommit();
+    }
+    
+    /**
+     * Rollback changes since transaction begin
+     * 
+     * @return void
+     */
+    public function rollbackTransaction()
+    {
+        $this->connection->rollback();
+        
+        // re enable after transaction end
+        $this->setAutoCommit();
+    }
+    
+    /**
      * backupDb
      *
      * @param array $tables Data
