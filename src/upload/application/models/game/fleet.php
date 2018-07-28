@@ -190,6 +190,81 @@ class Fleet
                 AND `planet_type` = '" . $pt . "';"
         );
     }
+    
+    /**
+     * Get ACS count
+     * 
+     * @param type $acs_fleet_id
+     * 
+     * @return int
+     */
+    public function getAcsCount($acs_fleet_id): int
+    {
+        return $this->db->queryFetch(
+            "SELECT COUNT(`acs_fleet_id`) AS `acs_amount`
+            FROM `" . ACS_FLEETS . "`
+            WHERE `acs_fleet_id` = '" . $acs_fleet_id . "'"
+        )['acs_amount'];
+    }
+
+    /**
+     * Insert a new fleet
+     * 
+     * @param array $fleet_data
+     * @param array $planet_data
+     * 
+     * @return boolean
+     */
+    public function insertNewFleet(array $fleet_data, array $planet_data): bool
+    {
+        try {
+            
+            $this->db->beginTransaction();
+            
+            // prepare the query
+            foreach ($fleet_data as $field => $value) {
+               
+                $sql[] = "`" . $field . "` = '" . $value . "'";
+            }
+
+            $this->db->query(
+                "INSERT INTO `" . FLEETS . "` SET" . join(',', $sql) . ';'
+            );
+            
+            // remove ships and resources
+            $this->updatePlanet($planet_data);   
+            
+            $this->db->commitTransaction();
+
+            return true;
+            
+        } catch(Exception $e) {
+            
+            $this->db->rollbackTransaction();
+            
+            return false;
+        }
+    }
+    
+    /**
+     * Update planet based on the received values
+     * 
+     * @param array $planet_data Planet Data
+     * 
+     * @return void
+     */
+    public function updatePlanet(array $planet_data)
+    {
+        $this->db->query(
+            "UPDATE `" . PLANETS . "` AS p
+            INNER JOIN " . SHIPS . " AS s ON s.ship_planet_id = p.`planet_id` SET
+            {$planet_data['sub_query']}
+            `planet_metal` = `planet_metal` - " . $planet_data['planet_metal'] . ",
+            `planet_crystal` = `planet_crystal` - " . $planet_data['planet_crystal'] . ",
+            `planet_deuterium` = `planet_deuterium` - " . ($planet_data['planet_deuterium'] + $planet_data['consumption']) . "
+            WHERE `planet_id` = " . $planet_data['planet_id'] . ";"
+        );
+    }
 }
 
 /* end of fleet.php */
