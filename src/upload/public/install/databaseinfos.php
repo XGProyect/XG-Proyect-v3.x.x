@@ -162,7 +162,7 @@ $tables['fleets'] =
 `fleet_target_owner` int(11) NOT NULL DEFAULT '0',
 `fleet_group` varchar(15) NOT NULL DEFAULT '0',
 `fleet_mess` int(11) NOT NULL DEFAULT '0',
-`fleet_creation` int(11) DEFAULT NULL,
+`fleet_creation` DATETIME NULL DEFAULT NULL,
 PRIMARY KEY (`fleet_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;";
 
