@@ -14,6 +14,7 @@
 namespace application\controllers\game;
 
 use application\core\Controller;
+use application\core\enumerators\ShipsEnumerator as Ships;
 use application\libraries\fleets\Fleets;
 use application\libraries\FleetsLib;
 use application\libraries\FormatLib;
@@ -60,7 +61,7 @@ class Fleet1 extends Controller
     
     /**
      *
-     * @var \Fleets
+     * @var \Research
      */
     private $_research = null;
     
@@ -263,7 +264,7 @@ class Fleet1 extends Controller
      */
     private function buildMaxShipsLink($ship_id)
     {   
-        if ($ship_id == 212) {
+        if ($ship_id == Ships::ship_solar_satellite) {
             
             return null;
         }
@@ -280,7 +281,7 @@ class Fleet1 extends Controller
      */
     private function buildShipsInput($ship_id)
     {
-        if ($ship_id == 212) {
+        if ($ship_id == Ships::ship_solar_satellite) {
             
             return null;
         }
