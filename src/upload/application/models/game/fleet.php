@@ -207,6 +207,10 @@ class Fleet
         return $this->db->queryFetch(
             "SELECT 
                 p.`planet_user_id`,
+                p.`planet_debris_metal`,
+                p.`planet_debris_crystal`,
+                p.`planet_invisible_start_time`,
+                p.`planet_destroyed`,
                 u.`user_id`,
                 u.`user_authlevel`,
                 u.`user_onlinetime`,
@@ -218,8 +222,7 @@ class Fleet
             WHERE p.`planet_galaxy` = '" . $g . "'
                 AND p.`planet_system` = '" . $s . "'
                 AND p.`planet_planet` = '" . $p . "'
-                AND p.`planet_type` = '" . $pt . "'
-                AND p.`planet_destroyed` = 0;"
+                AND p.`planet_type` = '" . $pt . "'"
         );
     }
     
@@ -296,6 +299,33 @@ class Fleet
             `planet_deuterium` = `planet_deuterium` - " . ($planet_data['planet_deuterium'] + $planet_data['consumption']) . "
             WHERE `planet_id` = " . $planet_data['planet_id'] . ";"
         );
+    }
+    
+    /**
+     * Get buddies
+     * 
+     * @param int $current_planet Current Planet ID
+     * @param int $target_planet  Target Planet ID
+     * 
+     * @return array
+     */
+    public function getBuddies(int $current_planet, int $target_planet): string
+    {
+        return $this->db->queryFetch(
+            "SELECT COUNT(*) AS buddies
+            FROM  `" . BUDDY . "`
+            WHERE (
+                (
+                    buddy_sender = '" . $current_planet . "'
+                    AND buddy_receiver = '" . $target_planet . "'
+                )
+                OR (
+                    buddy_sender = '" . $target_planet . "'
+                    AND buddy_receiver = '" . $current_planet . "'
+                )
+            )
+            AND buddy_status = 1"
+        )['buddies'];
     }
 }
 

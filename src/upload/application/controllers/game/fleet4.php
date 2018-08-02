@@ -15,17 +15,17 @@ namespace application\controllers\game;
 
 use application\core\Controller;
 use application\core\enumerators\MissionsEnumerator as Missions;
+use application\core\enumerators\PlanetTypesEnumerator as PlanetTypes;
+use application\core\enumerators\ShipsEnumerator as Ships;
+use application\libraries\fleets\Fleets;
 use application\libraries\FleetsLib;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
+use application\libraries\premium\Premium;
 use application\libraries\research\Researches;
 use const BUDDY;
 use const DEBRIS_LIFE_TIME;
 use const FLEETS;
-use const MAX_GALAXY_IN_WORLD;
-use const MAX_PLANET_IN_SYSTEM;
-use const MAX_SYSTEM_IN_GALAXY;
-use const PLANETS;
 
 /**
  * Fleet4 Class
@@ -68,7 +68,19 @@ class Fleet4 extends Controller
      *
      * @var \Fleets
      */
+    private $_fleets = null;
+    
+    /**
+     *
+     * @var \Research
+     */
     private $_research = null;
+    
+    /**
+     *
+     * @var \Premium
+     */
+    private $_premium = null;
     
     /**
      * Already filtered POST data
@@ -113,6 +125,18 @@ class Fleet4 extends Controller
     private $_target_data = [];
     
     /**
+     *
+     * @var boolean 
+     */
+    private $_own_planet = false;
+    
+    /**
+     *
+     * @var boolean 
+     */
+    private $_occupied_planet = false;
+    
+    /**
      * Constructor
      * 
      * @return void
@@ -151,7 +175,17 @@ class Fleet4 extends Controller
      */
     private function setUpFleets()
     {
+        $this->_fleets = new Fleets(
+            $this->Fleet_Model->getAllFleetsByUserId($this->_user['user_id']),
+            $this->_user['user_id']
+        );
+        
         $this->_research = new Researches(
+            [$this->_user],
+            $this->_user['user_id']
+        );
+        
+        $this->_premium = new Premium(
             [$this->_user],
             $this->_user['user_id']
         );
@@ -170,267 +204,26 @@ class Fleet4 extends Controller
         // get the target
         $this->getTarget();
         
-        // validate if any player is on vacations
-        $this->validateVacations();
+        // validate all the received data
+        if (!$this->runValidations()) {
+            
+            FunctionsLib::redirect(self::REDIRECT_TARGET);
+        }
         
-        die();
+        var_dump($this->_fleet_data);
+        die('ok');
         
-        $this->validateAcs();
-        
-        $this->validateTarget();
-        
-        $this->validateShips();
-        
-        $this->validateMission();
-        
-        $this->validateNoobProtection();
-        
+        // final step, send and redirect
+        $this->sendFleet();
         
         $resource = parent::$objects->getObjects();
         $pricelist = parent::$objects->getPrice();
-        
-        $fleet_group = 0;
-
-        if ($_POST['fleet_group'] > 0) {
-            if ($_POST['mission'] == 2) {
-                $target = 'g' . (int) $_POST['galaxy'] .
-                    's' . (int) $_POST['system'] .
-                    'p' . (int) $_POST['planet'] .
-                    't' . (int) $_POST['planettype'];
-
-                if ($_POST['acs_target'] == $target) {
-                    $aks_count = $this->Fleet_Model->getAcsCount($_POST['fleet_group']);
-
-                    if ($aks_count > 0) {
-                        $fleet_group = $_POST['fleet_group'];
-                    }
-                }
-            }
-        }
-
-        if (($_POST['fleet_group'] == 0) && ($_POST['mission'] == 2)) {
-            $_POST['mission'] = 1;
-        }
-
-        $fleetarray = $this->getSessionShips();
-
-        if (!is_array($fleetarray)) {
-            FunctionsLib::redirect(self::REDIRECT_TARGET);
-        }
-
-        foreach ($fleetarray as $Ship => $Count) {
-            $Count = intval($Count);
-
-            if ($Count > $this->_planet[$resource[$Ship]]) {
-                FunctionsLib::redirect(self::REDIRECT_TARGET);
-            }
-        }
-
-        $galaxy = (int) $_POST['galaxy'];
-        $system = (int) $_POST['system'];
-        $planet = (int) $_POST['planet'];
-        $planettype = (int) $_POST['planettype'];
-        $fleetmission = (int) $_POST['mission'];
-
-        //fix by jstar
-        if ($fleetmission == 7 && !isset($fleetarray[208])) {
-            FunctionsLib::redirect(self::REDIRECT_TARGET);
-        }
-
-        if ($planettype != 1 && $planettype != 2 && $planettype != 3) {
-            FunctionsLib::redirect(self::REDIRECT_TARGET);
-        }
-
-        //fix invisible debris like ogame by jstar
-        if ($fleetmission == 8) {
-            $YourPlanet = false;
-            $UsedPlanet = false;
-            $select = $this->_db->queryFetch("SELECT COUNT(*) AS count, p.*
-														FROM `" . PLANETS . "` AS p
-														WHERE `planet_galaxy` = '" . $galaxy . "' AND
-																`planet_system` = '" . $system . "' AND
-																`planet_planet` = '" . $planet . "' AND
-																`planet_type` = 1;");
-
-            if ($select['planet_debris_metal'] == 0 && $select['planet_debris_crystal'] == 0 && time() > ($select['planet_invisible_start_time'] + DEBRIS_LIFE_TIME)) {
-                FunctionsLib::redirect(self::REDIRECT_TARGET);
-            }
-        } else {
-            $YourPlanet = false;
-            $UsedPlanet = false;
-            $select = $this->_db->queryFetch("SELECT COUNT(*) AS count, p.`planet_user_id`
-														FROM `" . PLANETS . "` AS p
-														WHERE `planet_galaxy` = '" . $galaxy . "' AND
-																`planet_system` = '" . $system . "' AND
-																`planet_planet` = '" . $planet . "' AND
-																`planet_type` = '" . $planettype . "'");
-        }
-
-        if ($this->_planet['planet_galaxy'] == $galaxy && $this->_planet['planet_system'] == $system &&
-            $this->_planet['planet_planet'] == $planet && $this->_planet['planet_type'] == $planettype) {
-            FunctionsLib::redirect(self::REDIRECT_TARGET);
-        }
-
-        if ($_POST['mission'] != 15) {
-            if ($select['count'] < 1 && $fleetmission != 7) {
-                FunctionsLib::redirect(self::REDIRECT_TARGET);
-            } elseif ($fleetmission == 9 && $select['count'] < 1) {
-                FunctionsLib::redirect(self::REDIRECT_TARGET);
-            }
-        } else {
-            $MaxExpedition = $this->_user[$resource[124]];
-
-            if ($MaxExpedition >= 1) {
-                $maxexpde = $this->_db->queryFetch("SELECT COUNT(fleet_owner) AS `expedi`
-																	FROM " . FLEETS . "
-																	WHERE `fleet_owner` = '" . $this->_user['user_id'] . "'
-																		AND `fleet_mission` = '15';");
-                $ExpeditionEnCours = $maxexpde['expedi'];
-                $EnvoiMaxExpedition = FleetsLib::getMaxExpeditions($MaxExpedition);
-            } else {
-                $ExpeditionEnCours = 0;
-                $EnvoiMaxExpedition = 0;
-            }
-
-            if ($EnvoiMaxExpedition == 0) {
-
-                $this->showMessage(
-                    FormatLib::colorRed($this->getLang()['fl_expedition_tech_required'])
-                );
-                
-            } elseif ($ExpeditionEnCours >= $EnvoiMaxExpedition) {
-
-                $this->showMessage(
-                    FormatLib::colorRed($this->getLang()['fl_expedition_fleets_limit'])
-                );                
-            }
-        }
-
-        if ($select['planet_user_id'] == $this->_user['user_id']) {
-            $YourPlanet = true;
-            $UsedPlanet = true;
-        } elseif (!empty($select['planet_user_id'])) {
-            $YourPlanet = false;
-            $UsedPlanet = true;
-        } else {
-            $YourPlanet = false;
-            $UsedPlanet = false;
-        }
-
-        //fix by jstar
-        if ($fleetmission == 9) {
-            $countfleettype = count($fleetarray);
-
-            if ($YourPlanet or ! $UsedPlanet or $planettype != 3) {
-                FunctionsLib::redirect(self::REDIRECT_TARGET);
-            } elseif ($countfleettype == 1 && !( isset($fleetarray[214]) )) {
-                FunctionsLib::redirect(self::REDIRECT_TARGET);
-            } elseif ($countfleettype == 2 && !( isset($fleetarray[214]) )) {
-                FunctionsLib::redirect(self::REDIRECT_TARGET);
-            } elseif ($countfleettype > 2) {
-                FunctionsLib::redirect(self::REDIRECT_TARGET);
-            }
-        }
-
-        if (empty($fleetmission)) {
-            FunctionsLib::redirect(self::REDIRECT_TARGET);
-        }
-
-        $user_points = $this->_noob->returnPoints($this->_user['user_id'], $this->_target_data['user_id']);
-        $MyGameLevel = $user_points['user_points'];
-        $HeGameLevel = $user_points['target_points'];
-
-        if (parent::$users->isInactive($this->_target_data)) {
-            if ($this->_noob->isWeak($MyGameLevel, $HeGameLevel) &&
-                $this->_target_data['planet_user_id'] != '' &&
-                ($_POST['mission'] == 1 or $_POST['mission'] == 6 or $_POST['mission'] == 9)) {
-                
-                $this->showMessage(
-                    FormatLib::customColor($this->getLang()['fl_week_player'], 'lime')
-                );
-            }
-
-            if ($this->_noob->isStrong($MyGameLevel, $HeGameLevel) &&
-                $this->_target_data['planet_user_id'] != '' &&
-                ($_POST['mission'] == 1 or $_POST['mission'] == 5 or $_POST['mission'] == 6 or $_POST['mission'] == 9)) {
-                
-                $this->showMessage(
-                    FormatLib::colorRed($this->getLang()['fl_strong_player'])
-                );
-            }
-        }
-
-        $FlyingFleets = $this->_db->queryFetch("SELECT COUNT(fleet_id) as Number
-													FROM " . FLEETS . "
-													WHERE `fleet_owner`='" . $this->_user['user_id'] . "'");
-        $ActualFleets = $FlyingFleets['Number'];
-
-        if ((FleetsLib::getMaxFleets($this->_user[$resource[108]], $this->_user['premium_officier_admiral']) ) <= $ActualFleets) {
-            
-            $this->showMessage(
-                $this->getLang()['fl_no_slots']
-            );
-        }
 
         if ($_POST['resource1'] + $_POST['resource2'] + $_POST['resource3'] < 1 && $_POST['mission'] == 3) {
             
             $this->showMessage(
                 FormatLib::customColor($this->getLang()['fl_empty_transport'], 'lime')
             );
-        }
-
-        if ($_POST['mission'] != 15) {
-            if ($this->_target_data['planet_user_id'] == '' && $_POST['mission'] < 7) {
-                FunctionsLib::redirect(self::REDIRECT_TARGET);
-            }
-
-            if ($this->_target_data['planet_user_id'] != '' && $_POST['mission'] == 7) {
-                
-                $this->showMessage(
-                    FormatLib::colorRed($this->getLang()['fl_planet_populed'])
-                );
-            }
-
-            if ($this->_target_data['user_ally_id'] != $this->_user['user_ally_id'] && $_POST['mission'] == 4) {
-                
-                $this->showMessage(
-                    FormatLib::colorRed($this->getLang()['fl_stay_not_on_enemy'])
-                );
-            }
-
-            if (($this->_target_data['planet_user_id'] == $this->_planet['planet_user_id']) && (($_POST['mission'] == 1) or ( $_POST['mission'] == 6))) {
-                FunctionsLib::redirect(self::REDIRECT_TARGET);
-            }
-
-            if (($this->_target_data['planet_user_id'] != $this->_planet['planet_user_id']) && ($_POST['mission'] == 4)) {
-                
-                $this->showMessage(
-                    FormatLib::colorRed($this->getLang()['fl_deploy_only_your_planets'])
-                );
-            }
-
-            if ($_POST['mission'] == 5) {
-                $buddy = $this->_db->queryFetch("SELECT COUNT( * ) AS buddys
-														FROM  `" . BUDDY . "`
-															WHERE (
-																(
-																	buddy_sender ='" . intval($this->_planet['planet_user_id']) . "'
-																	AND buddy_receiver ='" . intval($this->_target_data['planet_user_id']) . "'
-																)
-																OR (
-																	buddy_sender ='" . intval($this->_target_data['planet_user_id']) . "'
-																	AND buddy_receiver ='" . intval($this->_planet['planet_user_id']) . "'
-																)
-															)
-															AND buddy_status =1");
-
-                if ($this->_target_data['user_ally_id'] != $this->_user['user_ally_id'] && $buddy['buddys'] < 1) {
-                    
-                    $this->showMessage(
-                        FormatLib::colorRed($this->getLang()['fl_stay_not_on_enemy'])
-                    );
-                }
-            }
         }
 
         $AllFleetSpeed = FleetsLib::fleetMaxSpeed($fleetarray, 0, $this->_user);
@@ -575,9 +368,6 @@ class Fleet4 extends Controller
                 $fleet['end_time'] += $fleet['start_time'] - $AksStartTime['Start'];
             }
         }
-
-        // final step, send and redirect
-        $this->sendFleet();
         
         /*
         $this->_db->query("INSERT INTO " . FLEETS . " SET
@@ -626,7 +416,7 @@ class Fleet4 extends Controller
         $max_exp_time = $exp_time;
         
         $data = filter_input_array(INPUT_POST, [
-            'fleet_mission' => [
+            'mission' => [
                 'filter'    => FILTER_VALIDATE_INT,
                 'options'   => ['min_range' => 1, 'max_range' => 15]
             ],
@@ -678,28 +468,63 @@ class Fleet4 extends Controller
 
         if ($target) {
 
-            // prepare coords
-            $this->_fleet_data['fleet_start_galaxy'] = $this->_planet['planet_galaxy'];
-            $this->_fleet_data['fleet_start_system'] = $this->_planet['planet_system'];
-            $this->_fleet_data['fleet_start_planet'] = $this->_planet['planet_planet'];
-            $this->_fleet_data['fleet_start_type'] = $this->_planet['planet_type'];
-            $this->_fleet_data['fleet_end_galaxy'] = $target_data['galaxy'];
-            $this->_fleet_data['fleet_end_system'] = $target_data['system'];
-            $this->_fleet_data['fleet_end_planet'] = $target_data['planet'];
-            $this->_fleet_data['fleet_end_type'] = $target_data['type'];
-
+            $this->_occupied_planet = true;
+            
             // set target data
             $this->_target_data = $target;
-        } else {
             
-            FunctionsLib::redirect(self::REDIRECT_TARGET);
+            // validate owner
+            if ($target['planet_user_id'] == $this->_user['user_id']) {
+                
+                $this->_own_planet = true;
+            }
+            
+            if ($target['planet_destroyed'] != 0) {
+                
+                FunctionsLib::redirect(self::REDIRECT_TARGET);
+            }
+            
+            // set target owner
+            $this->_fleet_data['fleet_target_owner'] = $target['planet_user_id'];
         }
+
+        // set coords data
+        $this->_fleet_data['fleet_start_galaxy'] = $this->_planet['planet_galaxy'];
+        $this->_fleet_data['fleet_start_system'] = $this->_planet['planet_system'];
+        $this->_fleet_data['fleet_start_planet'] = $this->_planet['planet_planet'];
+        $this->_fleet_data['fleet_start_type'] = $this->_planet['planet_type'];
+        $this->_fleet_data['fleet_end_galaxy'] = $target_data['galaxy'];
+        $this->_fleet_data['fleet_end_system'] = $target_data['system'];
+        $this->_fleet_data['fleet_end_planet'] = $target_data['planet'];
+        $this->_fleet_data['fleet_end_type'] = $target_data['type'];
+    }
+    
+    /**
+     * Run multiple validations
+     * 
+     * @return boolean
+     */
+    private function runValidations()
+    {
+        $validations = [
+            'vacations', 'acs', 'ships', 'mission', 'noobProtection', 'fleets'
+        ];
+        
+        foreach ($validations as $validation) {
+            
+            if (!$this->{'validate' . ucfirst($validation)}()) {
+                
+                return false;
+            }
+        }
+        
+        return true;
     }
     
     /**
      * Validate vacations for both players
      * 
-     * @return void
+     * @return boolean
      */
     private function validateVacations()
     {
@@ -708,11 +533,279 @@ class Fleet4 extends Controller
             $this->showMessage($this->getLang()['fl_vacation_mode_active']);
         }
 
-        if (parent::$users->isOnVacations($this->_target_data)
-            && $this->_clean_input_data['fleet_mission'] != Missions::recycle) {
+        if (isset($this->_target_data) 
+            && parent::$users->isOnVacations($this->_target_data)
+            && $this->_clean_input_data['mission'] != Missions::recycle) {
             
             $this->showMessage($this->getLang()['fl_in_vacation_player']);
         }
+        
+        // set owner
+        $this->_fleet_data['fleet_owner'] = $this->_user['user_id'];
+        
+        return true;
+    }
+    
+    /**
+     * Validate any current ACS
+     * 
+     * @return boolean
+     */
+    private function validateAcs()
+    {
+        $target_data = $this->getTargetData();
+        
+        if ($target_data['group'] > 0
+            && $this->_clean_input_data['mission'] == Missions::acs) {
+
+            $target_string =    'g' . (int)$target_data['galaxy'] . 
+                                's' . (int)$target_data['system'] .
+                                'p' . (int)$target_data['planet'] .
+                                't' . (int)$target_data['type'];
+
+            if ($target_data['acs_target'] == $target_string
+                && $this->Fleet_Model->getAcsCount($target_data['group']) > 0) {
+
+                // set acs group
+                $this->_fleet_data['fleet_group'] = $target_data['group'];
+
+                return true;
+            }
+            
+            return false;
+        }
+
+        return true;
+    }
+    
+    /**
+     * Validate if the received amount of ships is valid
+     * 
+     * @return boolean
+     */
+    private function validateShips()
+    {
+        // post/session fleet
+        $fleet = $this->getSessionShips();
+        
+        // planet ships
+        $planet_ships = $this->Fleet_Model->getShipsByPlanetId($this->_planet['planet_id']);
+        
+        // objects
+        $objects = parent::$objects->getObjects();
+        
+        if ($fleet) {
+
+            foreach ($fleet as $ship_id => $amount) {
+
+                if (!isset($planet_ships[$objects[$ship_id]]) 
+                    or ((int)$amount > $planet_ships[$objects[$ship_id]])) {
+                    
+                    return false;
+                }
+            }
+            
+            return true;
+        }
+        
+        return false;
+    }
+    
+    /**
+     * Validate the mission
+     * 
+     * @return boolean
+     */
+    private function validateMission()
+    {
+        // post/session fleet
+        $fleet = $this->getSessionShips();
+        
+        // clean data from post
+        $data = $this->_clean_input_data;
+        
+        // target data
+        $target = $this->_target_data;
+
+        if ($data['mission'] == Missions::attack
+            or $data['mission'] == Missions::spy) {
+            
+            if ($this->_own_planet) {
+                
+                return false;
+            }
+        }
+
+        if ($data['mission'] == Missions::deploy
+            && !$this->_own_planet) {
+            
+            $this->showMessage(
+                FormatLib::colorRed($this->getLang()['fl_deploy_only_your_planets'])
+            );
+        }
+        
+        if ($data['mission'] == Missions::stay) {
+            
+            $is_buddy = $this->Fleet_Model->getBuddies(
+                $this->_planet['planet_user_id'], $this->_target_data['planet_user_id']
+            ) >= 1;
+            
+            if ($this->_target_data['user_ally_id'] != $this->_user['user_ally_id'] && !$is_buddy) {
+                
+                $this->showMessage(
+                    FormatLib::colorRed($this->getLang()['fl_stay_not_on_enemy'])
+                );
+            }
+        }
+        
+        if ($data['mission'] == Missions::colonize) {
+            
+            if (!isset($fleet[Ships::ship_colony_ship])) {
+                
+                return false;
+            }
+            
+            if ($this->_occupied_planet) {
+                
+                $this->showMessage(
+                    FormatLib::colorRed($this->getLang()['fl_planet_populed'])
+                );
+            }
+        }
+        
+        if ($data['mission'] == Missions::recycle) {
+            
+            if ($target['planet_debris_metal'] == 0 
+                && $target['planet_debris_crystal'] == 0 
+                && time() > ($target['planet_invisible_start_time'] + DEBRIS_LIFE_TIME)) {
+
+                return false;
+            }
+        }
+
+        if ($data['mission'] == Missions::destroy) {
+            
+            if ($this->_own_planet
+                or $this->_occupied_planet
+                or ($target['type'] != PlanetTypes::moon)
+                or !isset($fleet[Ships::ship_deathstar])) {
+                
+                return false;
+            }
+        }
+        
+        if ($data['mission'] == Missions::expedition
+            && !$this->_occupied_planet) {
+            
+            $expeditions = $this->_fleets->getExpeditionsCount();
+            $max_expeditions = FleetsLib::getMaxExpeditions(
+                $this->_research->getCurrentResearch()->getResearchAstrophysics()
+            );
+            
+            if ($max_expeditions <= 0) {
+                
+                $this->showMessage(
+                    FormatLib::colorRed($this->getLang()['fl_expedition_tech_required'])
+                );
+            }
+            
+            if ($max_expeditions <= $expeditions) {
+                
+                $this->showMessage(
+                    FormatLib::colorRed($this->getLang()['fl_expedition_fleets_limit'])
+                );    
+            }
+        } else {
+
+            if ($data['mission'] != Missions::colonize
+                && !$this->_occupied_planet) {
+                
+                return false;
+            }
+        }
+
+        // add the fleet mission
+        $this->_fleet_data['fleet_mission'] = $data['mission'];
+        
+        return true;
+    }
+    
+    /**
+     * Validate noob protection
+     * 
+     * @return boolean
+     */
+    private function validateNoobProtection()
+    {
+        // skip if it's our own planet or it's an empty planet
+        if ($this->_own_planet
+            or !$this->_occupied_planet) {
+
+            return true;
+        }
+
+        if (!parent::$users->isInactive($this->_target_data)) {
+
+            $noob = FunctionsLib::loadLibrary('NoobsProtectionLib');
+
+            $points = $noob->returnPoints(
+                $this->_user['user_id'],
+                $this->_target_data['user_id']
+            );
+
+            $user_points = $points['user_points'];
+            $target_points = $points['target_points'];
+            
+            $disallow_weak = [
+                Missions::attack, Missions::acs, Missions::spy, Missions::destroy
+            ];
+            
+            $disallow_strong = [
+                Missions::attack, Missions::acs, Missions::stay, Missions::spy, Missions::destroy
+            ];
+            
+            if ($noob->isWeak($user_points, $target_points)
+                && in_array($this->_clean_input_data['mission'], $disallow_weak)) {
+                
+                $this->showMessage(
+                    FormatLib::customColor($this->getLang()['fl_week_player'], 'lime')
+                );
+            }
+
+            if ($noob->isStrong($user_points, $target_points)
+                && in_array($this->_clean_input_data['mission'], $disallow_strong)) {
+                
+                $this->showMessage(
+                    FormatLib::colorRed($this->getLang()['fl_strong_player'])
+                );
+            }
+        }
+        
+        return true;
+    }
+    
+    /**
+     * Validate the amount of fleets
+     * 
+     * @return boolean
+     */
+    private function validateFleets()
+    {
+        $fleets = $this->_fleets->getFleetsCount();
+
+        $max_fleets = FleetsLib::getMaxFleets(
+            $this->_research->getCurrentResearch()->getResearchComputerTechnology(),
+            $this->_premium->getCurrentPremium()->getPremiumOfficierAdmiral()
+        );
+
+        if ($max_fleets <= $fleets) {
+            
+            $this->showMessage(
+                $this->getLang()['fl_no_slots']
+            );
+        }
+        
+        return true;
     }
     
     /**

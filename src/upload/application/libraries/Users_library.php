@@ -189,7 +189,7 @@ class Users_library
      */
     public function isInactive($user)
     {
-        return !($user['user_onlinetime'] >= (time() - ONE_WEEK));
+        return ($user['user_onlinetime'] < (time() - ONE_WEEK));
     }
     ###########################################################################
     #
