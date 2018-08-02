@@ -219,7 +219,7 @@ class Fleet4 extends Controller
         $resource = parent::$objects->getObjects();
         $pricelist = parent::$objects->getPrice();
 
-        if ($_POST['resource1'] + $_POST['resource2'] + $_POST['resource3'] < 1 && $_POST['mission'] == 3) {
+        if ($_POST['resource1'] + $_POST['resource2'] + $_POST['resource3'] < 1 && $_POST['mission'] == Missions::transport) {
             
             $this->showMessage(
                 FormatLib::customColor($this->getLang()['fl_empty_transport'], 'lime')
@@ -242,7 +242,7 @@ class Fleet4 extends Controller
         $fleet['start_time'] = $duration + time();
 
         // START CODE BY JSTAR
-        if ($_POST['mission'] == 15) {
+        if ($_POST['mission'] == Missions::expedition) {
             $StayDuration = floor($_POST['expeditiontime']);
 
             if ($StayDuration > 0) {
@@ -252,7 +252,7 @@ class Fleet4 extends Controller
                 FunctionsLib::redirect(self::REDIRECT_TARGET);
             }
         } // END CODE BY JSTAR
-        elseif ($_POST['mission'] == 5) {
+        elseif ($_POST['mission'] == Missions::stay) {
             $StayDuration = $_POST['holdingtime'] * 3600;
             $StayTime = $fleet['start_time'] + $_POST['holdingtime'] * 3600;
         } else {
@@ -272,7 +272,7 @@ class Fleet4 extends Controller
         foreach ($fleetarray as $Ship => $Count) {
             $Count = intval($Count);
 
-            if ($Ship == 210) {
+            if ($Ship == Ships::ship_espionage_probe) {
                 $haveSpyProbos = true;
             }
 
@@ -282,7 +282,7 @@ class Fleet4 extends Controller
             $FleetSubQRY .= "`" . $resource[$Ship] . "` = `" . $resource[$Ship] . "` - " . $Count . ", ";
         }
 
-        if (!$haveSpyProbos && $_POST['mission'] == 6) {
+        if (!$haveSpyProbos && $_POST['mission'] == Missions::spy) {
             FunctionsLib::redirect(self::REDIRECT_TARGET);
         }
 
