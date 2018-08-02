@@ -810,12 +810,12 @@ class Fleet4 extends Controller
     {
         $fleet_data = $this->getFleetData();
 
-        $duration = FleetsLib::missionDuration(
+        $duration = floor(FleetsLib::missionDuration(
             $fleet_data['speed'],
             $fleet_data['fleet_speed'],
             $fleet_data['distance'],
             FunctionsLib::fleetSpeedFactor()
-        );
+        ));
 
         $base_time = time();
         $start_time = $duration + $base_time;
@@ -836,7 +836,7 @@ class Fleet4 extends Controller
         
         if ($this->getTargetData()['group'] != 0) {
 
-            $acs_start_time = $this->Fleet_model->getAcsMaxTime(
+            $acs_start_time = $this->Fleet_Model->getAcsMaxTime(
                 $this->getTargetData()['group']
             );
             
@@ -846,7 +846,7 @@ class Fleet4 extends Controller
                 $start_time = $acs_start_time;
             } else {
 
-                $this->Fleet_model->updateAcsFleets(
+                $this->Fleet_Model->updateAcsTimes(
                     $this->getTargetData()['group'],
                     $start_time,
                     ($start_time - $acs_start_time)
@@ -860,7 +860,7 @@ class Fleet4 extends Controller
         $this->_fleet_data['fleet_start_time'] = $start_time;
         $this->_fleet_data['fleet_end_time'] = $end_time;
         $this->_fleet_data['fleet_end_stay'] = $stay_time;
-        
+
         return true;
     }
     
