@@ -84,7 +84,7 @@ final class MessagesOptions
 
     public function getSender()
     {
-        return $this->_sender;
+        return $this->_sender == '' ? 0 : $this->_sender;
     }
 
     public function getTime()
