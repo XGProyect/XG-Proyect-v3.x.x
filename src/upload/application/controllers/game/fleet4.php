@@ -23,7 +23,6 @@ use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
 use application\libraries\premium\Premium;
 use application\libraries\research\Researches;
-use const BUDDY;
 use const DEBRIS_LIFE_TIME;
 use const FLEETS;
 
@@ -137,6 +136,18 @@ class Fleet4 extends Controller
     private $_occupied_planet = false;
     
     /**
+     * 
+     * @var int
+     */
+    private $_fleet_storage = 0;
+    
+    /**
+     *
+     * @var array
+     */
+    private $_fleet_ships = [];
+    
+    /**
      * Constructor
      * 
      * @return void
@@ -203,7 +214,7 @@ class Fleet4 extends Controller
         
         // get the target
         $this->getTarget();
-        
+
         // validate all the received data
         if (!$this->runValidations()) {
             
@@ -219,25 +230,19 @@ class Fleet4 extends Controller
         $resource = parent::$objects->getObjects();
         $pricelist = parent::$objects->getPrice();
 
-        if ($_POST['resource1'] + $_POST['resource2'] + $_POST['resource3'] < 1 && $_POST['mission'] == Missions::transport) {
-            
-            $this->showMessage(
-                FormatLib::customColor($this->getLang()['fl_empty_transport'], 'lime')
-            );
-        }
-
-        $AllFleetSpeed = FleetsLib::fleetMaxSpeed($fleetarray, 0, $this->_user);
-        $GenFleetSpeed = $this->getFleetData()['speed'];
+        $fleet_data = $this->getFleetData();
+        
+        $AllFleetSpeed = $fleet_data['fleet_speed'];
+        $GenFleetSpeed = $fleet_data['speed'];
         $SpeedFactor = FunctionsLib::fleetSpeedFactor();
         $MaxFleetSpeed = min($AllFleetSpeed);
 
-        if (!isset($fleetarray)) {
-            FunctionsLib::redirect(self::REDIRECT_TARGET);
-        }
-
-        $distance = FleetsLib::targetDistance($_POST['thisgalaxy'], $_POST['galaxy'], $_POST['thissystem'], $_POST['system'], $_POST['thisplanet'], $_POST['planet']);
-        $duration = FleetsLib::missionDuration($GenFleetSpeed, $MaxFleetSpeed, $distance, $SpeedFactor);
-        $consumption = FleetsLib::fleetConsumption($fleetarray, $SpeedFactor, $duration, $distance, $this->_user);
+        $duration = FleetsLib::missionDuration(
+            $GenFleetSpeed,
+            $MaxFleetSpeed,
+            $fleet_data['distance'],
+            $SpeedFactor
+        );
 
         $fleet['start_time'] = $duration + time();
 
@@ -265,82 +270,6 @@ class Fleet4 extends Controller
         $FleetShipCount = 0;
         $fleet_array = "";
         $FleetSubQRY = "";
-
-        //fix by jstar
-        $haveSpyProbos = false;
-
-        foreach ($fleetarray as $Ship => $Count) {
-            $Count = intval($Count);
-
-            if ($Ship == Ships::ship_espionage_probe) {
-                $haveSpyProbos = true;
-            }
-
-            $FleetStorage += $pricelist[$Ship]['capacity'] * $Count;
-            $FleetShipCount += $Count;
-            $fleet_array .= $Ship . "," . $Count . ";";
-            $FleetSubQRY .= "`" . $resource[$Ship] . "` = `" . $resource[$Ship] . "` - " . $Count . ", ";
-        }
-
-        if (!$haveSpyProbos && $_POST['mission'] == Missions::spy) {
-            FunctionsLib::redirect(self::REDIRECT_TARGET);
-        }
-
-        $FleetStorage -= $consumption;
-        $StorageNeeded = 0;
-
-        $_POST['resource1'] = max(0, (int) trim($_POST['resource1']));
-        $_POST['resource2'] = max(0, (int) trim($_POST['resource2']));
-        $_POST['resource3'] = max(0, (int) trim($_POST['resource3']));
-
-        if ($_POST['resource1'] < 1) {
-            $TransMetal = 0;
-        } else {
-            $TransMetal = $_POST['resource1'];
-            $StorageNeeded += $TransMetal;
-        }
-
-        if ($_POST['resource2'] < 1) {
-            $TransCrystal = 0;
-        } else {
-            $TransCrystal = $_POST['resource2'];
-            $StorageNeeded += $TransCrystal;
-        }
-        if ($_POST['resource3'] < 1) {
-            $TransDeuterium = 0;
-        } else {
-            $TransDeuterium = $_POST['resource3'];
-            $StorageNeeded += $TransDeuterium;
-        }
-
-        $StockMetal = $this->_planet['planet_metal'];
-        $StockCrystal = $this->_planet['planet_crystal'];
-        $StockDeuterium = $this->_planet['planet_deuterium'];
-        $StockDeuterium -= $consumption;
-
-        $StockOk = false;
-
-        if ($StockMetal >= $TransMetal) {
-            if ($StockCrystal >= $TransCrystal) {
-                if ($StockDeuterium >= $TransDeuterium) {
-                    $StockOk = true;
-                }
-            }
-        }
-
-        if (!$StockOk) {
-
-            $this->showMessage(
-                FormatLib::colorRed($this->getLang()['fl_no_enought_deuterium'] . FormatLib::prettyNumber($consumption))
-            );
-        }
-
-        if ($StorageNeeded > $FleetStorage) {
-
-            $this->showMessage(
-                FormatLib::colorRed($this->getLang()['fl_no_enought_cargo_capacity'] . FormatLib::prettyNumber($StorageNeeded - $FleetStorage))
-            );
-        }
 
         if (FunctionsLib::readConfig('adm_attack') != 0 
             && $this->_target_data['user_authlevel'] >= 1 
@@ -507,7 +436,7 @@ class Fleet4 extends Controller
     private function runValidations()
     {
         $validations = [
-            'vacations', 'acs', 'ships', 'mission', 'noobProtection', 'fleets'
+            'vacations', 'acs', 'ships', 'mission', 'noobProtection', 'fleets', 'resources'
         ];
         
         foreach ($validations as $validation) {
@@ -593,9 +522,12 @@ class Fleet4 extends Controller
         
         // objects
         $objects = parent::$objects->getObjects();
+        $price = parent::$objects->getPrice();
         
         if ($fleet) {
 
+            $total_ships = 0;
+            
             foreach ($fleet as $ship_id => $amount) {
 
                 if (!isset($planet_ships[$objects[$ship_id]]) 
@@ -603,8 +535,17 @@ class Fleet4 extends Controller
                     
                     return false;
                 }
+                
+                $total_ships += $amount;
+                $ships_string .= $ship_id . ',' . $amount . ';';
+                
+                $this->_fleet_storage += $price[$ship_id]['capacity'] * $amount;
+                $this->_fleet_ships[$objects[$ship_id]] = $amount;
             }
             
+            $this->_fleet_data['fleet_amount'] = $total_ships;
+            $this->_fleet_data['fleet_array'] = $ships_string;
+                
             return true;
         }
         
@@ -627,15 +568,27 @@ class Fleet4 extends Controller
         // target data
         $target = $this->_target_data;
 
-        if ($data['mission'] == Missions::attack
-            or $data['mission'] == Missions::spy) {
+        if ($data['mission'] == Missions::attack) {
             
             if ($this->_own_planet) {
                 
                 return false;
             }
         }
-
+        
+        if ($data['mission'] == Missions::spy) {
+            
+            if (!isset($fleet[Ships::ship_espionage_probe])) {
+                
+                return false;
+            }
+            
+            if ($this->_own_planet) {
+                
+                return false;
+            }
+        }
+        
         if ($data['mission'] == Missions::deploy
             && !$this->_own_planet) {
             
@@ -809,6 +762,101 @@ class Fleet4 extends Controller
     }
     
     /**
+     * Validate the resources
+     * 
+     * @return boolean
+     */
+    private function validateResources()
+    {
+        $metal = $this->_clean_input_data['resource1'];
+        $crystal = $this->_clean_input_data['resource2'];
+        $deuterium = $this->_clean_input_data['resource3'];
+        
+        if ($metal + $crystal + $deuterium < 1 
+            && $this->_clean_input_data['mission'] == Missions::transport) {
+            
+            $this->showMessage(
+                FormatLib::customColor($this->getLang()['fl_empty_transport'], 'lime')
+            );
+        }
+
+        $consumption = $this->getFleetData()['consumption'];
+        $storage_needed = 0;
+        
+        // reduce cargo storage
+        $this->_fleet_storage -= $consumption;
+
+        $metal = max(0, $metal);
+        $crystal = max(0, $crystal);
+        $deuterium = max(0, $deuterium);
+
+        if ($metal < 1) {
+
+            $transport_metal = 0;
+        } else {
+
+            $transport_metal = $metal;
+            $storage_needed += $transport_metal;
+        }
+
+        if ($crystal < 1) {
+
+            $transport_crystal = 0;
+        } else {
+
+            $transport_crystal = $crystal;
+            $storage_needed += $transport_crystal;
+        }
+        if ($deuterium < 1) {
+
+            $transport_deuterium = 0;
+        } else {
+
+            $transport_deuterium = $deuterium;
+            $storage_needed += $transport_deuterium;
+        }
+
+        $stock_metal = $this->_planet['planet_metal'];
+        $stock_crystal = $this->_planet['planet_crystal'];
+        $stock_deuterium = $this->_planet['planet_deuterium'];
+        $stock_deuterium -= $consumption;
+
+        $stock_valid = false;
+
+        if ($stock_metal >= $transport_metal) {
+
+            if ($stock_crystal >= $transport_crystal) {
+
+                if ($stock_deuterium >= $transport_deuterium) {
+
+                    $stock_valid = true;
+                }
+            }
+        }
+
+        if (!$stock_valid) {
+
+            $this->showMessage(
+                FormatLib::colorRed($this->getLang()['fl_no_enought_deuterium'] . FormatLib::prettyNumber($consumption))
+            );
+        }
+
+        if ($storage_needed > $this->_fleet_storage) {
+
+            $this->showMessage(
+                FormatLib::colorRed($this->getLang()['fl_no_enought_cargo_capacity'] . FormatLib::prettyNumber($storage_needed - $this->_fleet_storage))
+            );
+        }
+        
+        // add resources to fleet
+        $this->_fleet_data['fleet_resource_metal'] = $transport_metal;
+        $this->_fleet_data['fleet_resource_crystal'] = $transport_crystal;
+        $this->_fleet_data['fleet_resource_deuterium'] = $transport_deuterium;
+        
+        return true;
+    }
+    
+    /**
      * Get fleet data
      * 
      * @return array
@@ -863,7 +911,7 @@ class Fleet4 extends Controller
         // create the new fleet and
         // remove from the planet the ships and resources
         $this->Fleet_Model->insertNewFleet(
-            $this->_fleet_data, $this->_planet
+            $this->_fleet_data, $this->_planet, $this->_fleet_ships
         );
         
         // go to movements view

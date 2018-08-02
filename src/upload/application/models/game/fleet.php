@@ -250,7 +250,7 @@ class Fleet
      * 
      * @return boolean
      */
-    public function insertNewFleet(array $fleet_data, array $planet_data): bool
+    public function insertNewFleet(array $fleet_data, array $planet_data, array $fleet_ships): bool
     {
         try {
             
@@ -267,7 +267,7 @@ class Fleet
             );
             
             // remove ships and resources
-            $this->updatePlanet($planet_data);   
+            $this->updatePlanet($planet_data, $fleet_data, $fleet_ships);   
             
             $this->db->commitTransaction();
 
@@ -285,18 +285,26 @@ class Fleet
      * Update planet based on the received values
      * 
      * @param array $planet_data Planet Data
+     * @param array $fleet_data  Fleet Data
+     * @param array $fleet_ships Fleet Ships
      * 
      * @return void
      */
-    public function updatePlanet(array $planet_data)
+    public function updatePlanet(array $planet_data, array $fleet_data, array $fleet_ships)
     {
+        // prepare the query
+        foreach ($fleet_ships as $field => $value) {
+
+            $sql[] = "`" . $field . "` = `" . $field . "` - '" . $value . "'";
+        }
+        
         $this->db->query(
             "UPDATE `" . PLANETS . "` AS p
             INNER JOIN " . SHIPS . " AS s ON s.ship_planet_id = p.`planet_id` SET
-            {$planet_data['sub_query']}
-            `planet_metal` = `planet_metal` - " . $planet_data['planet_metal'] . ",
-            `planet_crystal` = `planet_crystal` - " . $planet_data['planet_crystal'] . ",
-            `planet_deuterium` = `planet_deuterium` - " . ($planet_data['planet_deuterium'] + $planet_data['consumption']) . "
+            " . join(',', $sql) . "
+            `planet_metal` = `planet_metal` - " . $fleet_data['fleet_resource_metal'] . ",
+            `planet_crystal` = `planet_crystal` - " . $fleet_data['fleet_resource_crystal'] . ",
+            `planet_deuterium` = `planet_deuterium` - " . ($fleet_data['fleet_resource_deuterium'] + $fleet_data['fleet_fuel']) . "
             WHERE `planet_id` = " . $planet_data['planet_id'] . ";"
         );
     }
