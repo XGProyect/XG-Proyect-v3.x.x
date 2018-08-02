@@ -24,7 +24,6 @@ use application\libraries\FunctionsLib;
 use application\libraries\premium\Premium;
 use application\libraries\research\Researches;
 use const DEBRIS_LIFE_TIME;
-use const FLEETS;
 
 /**
  * Fleet4 Class
@@ -113,8 +112,7 @@ class Fleet4 extends Controller
         'fleet_resource_deuterium' => 0,
         'fleet_fuel' => 0,
         'fleet_target_owner' => 0,
-        'fleet_group' => 0,
-        'fleet_creation' => 'NOW()'
+        'fleet_group' => 0
     ];
     
     /**
@@ -221,82 +219,8 @@ class Fleet4 extends Controller
             FunctionsLib::redirect(self::REDIRECT_TARGET);
         }
         
-        var_dump($this->_fleet_data);
-        die('ok');
-        
         // final step, send and redirect
         $this->sendFleet();
-        
-        $resource = parent::$objects->getObjects();
-        $pricelist = parent::$objects->getPrice();
-
-        $fleet_data = $this->getFleetData();
-        
-        $AllFleetSpeed = $fleet_data['fleet_speed'];
-        $GenFleetSpeed = $fleet_data['speed'];
-        $SpeedFactor = FunctionsLib::fleetSpeedFactor();
-        $MaxFleetSpeed = min($AllFleetSpeed);
-
-        $duration = FleetsLib::missionDuration(
-            $GenFleetSpeed,
-            $MaxFleetSpeed,
-            $fleet_data['distance'],
-            $SpeedFactor
-        );
-
-        $fleet['start_time'] = $duration + time();
-
-        // START CODE BY JSTAR
-        if ($_POST['mission'] == Missions::expedition) {
-            $StayDuration = floor($_POST['expeditiontime']);
-
-            if ($StayDuration > 0) {
-                $StayDuration = $StayDuration * 3600;
-                $StayTime = $fleet['start_time'] + $StayDuration;
-            } else {
-                FunctionsLib::redirect(self::REDIRECT_TARGET);
-            }
-        } // END CODE BY JSTAR
-        elseif ($_POST['mission'] == Missions::stay) {
-            $StayDuration = $_POST['holdingtime'] * 3600;
-            $StayTime = $fleet['start_time'] + $_POST['holdingtime'] * 3600;
-        } else {
-            $StayDuration = 0;
-            $StayTime = 0;
-        }
-
-        $fleet['end_time'] = $StayDuration + (2 * $duration) + time();
-        $FleetStorage = 0;
-        $FleetShipCount = 0;
-        $fleet_array = "";
-        $FleetSubQRY = "";
-
-        if (FunctionsLib::readConfig('adm_attack') != 0 
-            && $this->_target_data['user_authlevel'] >= 1 
-            && $this->_user['user_authlevel'] == 0) {
-
-            $this->showMessage(
-                $this->getLang()['fl_admins_cannot_be_attacked']
-            );
-        }
-
-        if ($fleet_group != 0) {
-            $AksStartTime = $this->_db->queryFetch("SELECT MAX(`fleet_start_time`) AS Start
-														FROM " . FLEETS . "
-														WHERE `fleet_group` = '" . $fleet_group . "';");
-
-            if ($AksStartTime['Start'] >= $fleet['start_time']) {
-                $fleet['end_time'] += $AksStartTime['Start'] - $fleet['start_time'];
-                $fleet['start_time'] = $AksStartTime['Start'];
-            } else {
-                $this->_db->query("UPDATE " . FLEETS . " SET
-										`fleet_start_time` = '" . $fleet['start_time'] . "',
-										`fleet_end_time` = fleet_end_time + '" . ($fleet['start_time'] - $AksStartTime['Start']) . "'
-										WHERE `fleet_group` = '" . $fleet_group . "';");
-
-                $fleet['end_time'] += $fleet['start_time'] - $AksStartTime['Start'];
-            }
-        }
         
         /*
         $this->_db->query("INSERT INTO " . FLEETS . " SET
@@ -436,7 +360,7 @@ class Fleet4 extends Controller
     private function runValidations()
     {
         $validations = [
-            'vacations', 'acs', 'ships', 'mission', 'noobProtection', 'fleets', 'resources'
+            'admin', 'vacations', 'acs', 'ships', 'mission', 'noobProtection', 'fleets', 'resources', 'time'
         ];
         
         foreach ($validations as $validation) {
@@ -445,6 +369,25 @@ class Fleet4 extends Controller
                 
                 return false;
             }
+        }
+        
+        return true;
+    }
+    
+    /**
+     * Validate both players level
+     * 
+     * @return boolean
+     */
+    private function validateAdmin()
+    {
+        if (FunctionsLib::readConfig('adm_attack') != 0 
+            && $this->_target_data['user_authlevel'] >= 1 
+            && $this->_user['user_authlevel'] == 0) {
+
+            $this->showMessage(
+                $this->getLang()['fl_admins_cannot_be_attacked']
+            );
         }
         
         return true;
@@ -527,6 +470,7 @@ class Fleet4 extends Controller
         if ($fleet) {
 
             $total_ships = 0;
+            $ships_string = '';
             
             foreach ($fleet as $ship_id => $amount) {
 
@@ -852,6 +796,70 @@ class Fleet4 extends Controller
         $this->_fleet_data['fleet_resource_metal'] = $transport_metal;
         $this->_fleet_data['fleet_resource_crystal'] = $transport_crystal;
         $this->_fleet_data['fleet_resource_deuterium'] = $transport_deuterium;
+        $this->_fleet_data['fleet_fuel'] = $consumption;
+        
+        return true;
+    }
+    
+    /**
+     * Validate fleet times
+     * 
+     * @return boolean
+     */
+    private function validateTime()
+    {
+        $fleet_data = $this->getFleetData();
+
+        $duration = FleetsLib::missionDuration(
+            $fleet_data['speed'],
+            $fleet_data['fleet_speed'],
+            $fleet_data['distance'],
+            FunctionsLib::fleetSpeedFactor()
+        );
+
+        $base_time = time();
+        $start_time = $duration + $base_time;
+        $stay_duration = 0;
+        $stay_time = 0;
+
+        if ($this->_clean_input_data['mission'] == Missions::expedition) {
+            $stay_duration = $this->_clean_input_data['expeditiontime'] * 3600;
+            $stay_time = $start_time + $stay_duration;
+        }
+        
+        if ($this->_clean_input_data['mission'] == Missions::stay) {
+            $stay_duration = $this->_clean_input_data['holdingtime'] * 3600;
+            $stay_time = $start_time + $stay_duration;
+        }
+
+        $end_time = $stay_duration + (2 * $duration) + $base_time;
+        
+        if ($this->getTargetData()['group'] != 0) {
+
+            $acs_start_time = $this->Fleet_model->getAcsMaxTime(
+                $this->getTargetData()['group']
+            );
+            
+            if ($acs_start_time >= $start_time) {
+
+                $end_time += $acs_start_time - $start_time;
+                $start_time = $acs_start_time;
+            } else {
+
+                $this->Fleet_model->updateAcsFleets(
+                    $this->getTargetData()['group'],
+                    $start_time,
+                    ($start_time - $acs_start_time)
+                );
+
+                $end_time += $start_time - $acs_start_time;
+            }
+        }
+        
+        // add fleets times
+        $this->_fleet_data['fleet_start_time'] = $start_time;
+        $this->_fleet_data['fleet_end_time'] = $end_time;
+        $this->_fleet_data['fleet_end_stay'] = $stay_time;
         
         return true;
     }

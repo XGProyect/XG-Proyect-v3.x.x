@@ -261,9 +261,11 @@ class Fleet
                
                 $sql[] = "`" . $field . "` = '" . $value . "'";
             }
-
+            
             $this->db->query(
-                "INSERT INTO `" . FLEETS . "` SET" . join(',', $sql) . ';'
+                "INSERT INTO `" . FLEETS . "` SET "
+                . join(', ', $sql) . 
+                ", `fleet_creation` = NOW();"
             );
             
             // remove ships and resources
@@ -297,11 +299,11 @@ class Fleet
 
             $sql[] = "`" . $field . "` = `" . $field . "` - '" . $value . "'";
         }
-        
+
         $this->db->query(
             "UPDATE `" . PLANETS . "` AS p
-            INNER JOIN " . SHIPS . " AS s ON s.ship_planet_id = p.`planet_id` SET
-            " . join(',', $sql) . "
+            INNER JOIN `" . SHIPS . "` AS s ON s.`ship_planet_id` = p.`planet_id` SET
+            " . join(', ', $sql) . ", 
             `planet_metal` = `planet_metal` - " . $fleet_data['fleet_resource_metal'] . ",
             `planet_crystal` = `planet_crystal` - " . $fleet_data['fleet_resource_crystal'] . ",
             `planet_deuterium` = `planet_deuterium` - " . ($fleet_data['fleet_resource_deuterium'] + $fleet_data['fleet_fuel']) . "
@@ -334,6 +336,41 @@ class Fleet
             )
             AND buddy_status = 1"
         )['buddies'];
+    }
+    
+    /**
+     * Get ACS Max Time
+     * 
+     * @param int $group_id Group ID
+     * 
+     * @return string
+     */
+    public function getAcsMaxTime(int $group_id): string
+    {
+        return $this->db->queryFetch(
+            "SELECT MAX(`fleet_start_time`) AS start_time
+                FROM `" . FLEETS . "`
+                WHERE `fleet_group` = '" . $group_id . "';"
+        )['start_time'];
+    }
+    
+    /**
+     * Update ACS Fleets Times
+     * 
+     * @param int $group_id   Group ID
+     * @param int $start_time Start Time
+     * @param int $end_time   End Time
+     * 
+     * @return void
+     */
+    public function updateAcsTimes(int $group_id, int $start_time, int $end_time)
+    {
+        $this->db->query(
+            "UPDATE `" . FLEETS . "` SET
+            `fleet_start_time` = '" . $start_time . "',
+            `fleet_end_time` = fleet_end_time + '" . $end_time . "'
+            WHERE `fleet_group` = '" . $group_id . "';"
+        );
     }
 }
 
