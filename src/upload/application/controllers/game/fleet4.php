@@ -214,46 +214,13 @@ class Fleet4 extends Controller
         $this->getTarget();
 
         // validate all the received data
-        if (!$this->runValidations()) {
+        if ($this->runValidations()) {
             
-            FunctionsLib::redirect(self::REDIRECT_TARGET);
+            // final step, send and redirect
+            $this->sendFleet();
         }
         
-        // final step, send and redirect
-        $this->sendFleet();
-        
-        /*
-        $this->_db->query("INSERT INTO " . FLEETS . " SET
-							`fleet_owner` = '" . $this->_user['user_id'] . "',
-							`fleet_mission` = '" . (int) $_POST['mission'] . "',
-							`fleet_amount` = '" . (int) $FleetShipCount . "',
-							`fleet_array` = '" . $fleet_array . "',
-							`fleet_start_time` = '" . $fleet['start_time'] . "',
-							`fleet_start_galaxy` = '" . (int) $_POST['thisgalaxy'] . "',
-							`fleet_start_system` = '" . (int) $_POST['thissystem'] . "',
-							`fleet_start_planet` = '" . (int) $_POST['thisplanet'] . "',
-							`fleet_start_type` = '" . (int) $_POST['thisplanettype'] . "',
-							`fleet_end_time` = '" . (int) $fleet['end_time'] . "',
-							`fleet_end_stay` = '" . (int) $StayTime . "',
-							`fleet_end_galaxy` = '" . (int) $_POST['galaxy'] . "',
-							`fleet_end_system` = '" . (int) $_POST['system'] . "',
-							`fleet_end_planet` = '" . (int) $_POST['planet'] . "',
-							`fleet_end_type` = '" . (int) $_POST['planettype'] . "',
-							`fleet_resource_metal` = '" . $TransMetal . "',
-							`fleet_resource_crystal` = '" . $TransCrystal . "',
-							`fleet_resource_deuterium` = '" . $TransDeuterium . "',
-                                                        `fleet_fuel` = '" . $consumption . "',    
-							`fleet_target_owner` = '" . (int) $this->_target_data['planet_user_id'] . "',
-							`fleet_group` = '" . (int) $fleet_group . "',
-							`fleet_creation` = '" . time() . "';");
-
-        $this->_db->query("UPDATE `" . PLANETS . "` AS p
-								INNER JOIN " . SHIPS . " AS s ON s.ship_planet_id = p.`planet_id` SET
-								$FleetSubQRY
-								`planet_metal` = `planet_metal` - " . $TransMetal . ",
-								`planet_crystal` = `planet_crystal` - " . $TransCrystal . ",
-								`planet_deuterium` = `planet_deuterium` - " . ($TransDeuterium + $consumption) . "
-								WHERE `planet_id` = " . $this->_planet['planet_id'] . ";");*/
+        FunctionsLib::redirect(self::REDIRECT_TARGET);
     }
     
     /**
@@ -913,6 +880,8 @@ class Fleet4 extends Controller
     
     /**
      * Send the fleet with the collected data
+     * 
+     * @return void
      */
     private function sendFleet()
     {
@@ -921,9 +890,6 @@ class Fleet4 extends Controller
         $this->Fleet_Model->insertNewFleet(
             $this->_fleet_data, $this->_planet, $this->_fleet_ships
         );
-        
-        // go to movements view
-        FunctionsLib::redirect(self::REDIRECT_TARGET);
     }
 }
 
