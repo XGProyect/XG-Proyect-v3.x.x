@@ -271,7 +271,7 @@ $lang['iv_defenses'] = 'Defenses';
 //----------------------------------------------------------------------------//
 //FLEET - FLEET1 - FLEET2 - FLEET3 - FLEETACS - FLEETSHORTCUTS
 $lang['fl_returning'] = 'Returning';
-$lang['fl_onway'] = 'On the road';
+$lang['fl_onway'] = 'On their way';
 $lang['fl_r'] = '(R)';
 $lang['fl_a'] = '(A)';
 $lang['fl_send_back'] = 'Back';

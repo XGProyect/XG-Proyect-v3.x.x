@@ -104,7 +104,7 @@ class Fleetmovements extends Controller
 
         while ($fleet = $this->_db->fetchArray($this->_flying_fleets)) {
             $block['num'] = ++$i;
-            $block['mission'] = $this->resources_pop_up($this->_lang['ff_type_mission'][$fleet['fleet_mission']] . ' ' . ( FleetsLib::isFleetReturning($fleet) ? $this->_lang['ff_r'] : $this->_lang['ff_a'] ), $fleet);
+            $block['mission'] = $this->resources_pop_up($this->_lang['ff_type_mission'][$fleet['fleet_mission']] . ' ' . ( FleetsLib::isFleetReturning($fleet['fleet_mess']) ? $this->_lang['ff_r'] : $this->_lang['ff_a'] ), $fleet);
             $block['amount'] = $this->ships_pop_up($this->_lang['ff_ships'], $fleet);
             $block['beginning'] = FormatLib::prettyCoords($fleet['fleet_start_galaxy'], $fleet['fleet_start_system'], $fleet['fleet_start_planet']);
             $block['departure'] = date(FunctionsLib::readConfig('date_format_extended'), $fleet['fleet_creation']);
