@@ -63,7 +63,7 @@ class Fleets
     public function __construct($fleets, $current_user_id)
     {
         if (is_array($fleets)) {
-            
+
             $this->setUp($fleets);
             $this->setUserId($current_user_id);
         }
@@ -77,17 +77,10 @@ class Fleets
     public function getFleets()
     {
         $list_of_fleets = [];
-        
+
         foreach($this->_fleets as $fleets) {
             
             if (($fleets instanceof FleetEntity)) {
-                
-                $this->setFleetCount();
-                
-                if ($fleets->getFleetMission() == Missions::expedition) {
-                    
-                    $this->setExpeditionsCount();
-                }
                 
                 $list_of_fleets[] = $fleets;
             }
@@ -106,8 +99,17 @@ class Fleets
     private function setUp($fleets)
     {
         foreach ($fleets as $fleet) {
+            
+            $data = $this->createNewFleetEntity($fleet);
+            
+            $this->_fleets[] = $data;
+            
+            $this->setFleetsCount();
 
-            $this->_fleets[] = $this->createNewFleetEntity($fleet);
+            if ($data->getFleetMission() == Missions::expedition) {
+
+                $this->setExpeditionsCount();
+            }
         }
     }
     

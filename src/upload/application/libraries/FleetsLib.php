@@ -258,37 +258,6 @@ class FleetsLib extends XGPCore
     }
 
     /**
-     * getMissions
-     *
-     * @param int $mission_number Mission id
-     *
-     * @return array
-     */
-    public static function getMissions($mission_number = 0)
-    {
-        $mission_type = [
-            1 => parent::$lang['type_mission'][1],
-            2 => parent::$lang['type_mission'][2],
-            3 => parent::$lang['type_mission'][3],
-            4 => parent::$lang['type_mission'][4],
-            5 => parent::$lang['type_mission'][5],
-            6 => parent::$lang['type_mission'][6],
-            7 => parent::$lang['type_mission'][7],
-            8 => parent::$lang['type_mission'][8],
-            9 => parent::$lang['type_mission'][9],
-            15 => parent::$lang['type_mission'][15]
-        ];
-
-        if ($mission_number === 0) {
-
-            return $mission_type;
-        } else {
-
-            return $mission_type[$mission_number];
-        }
-    }
-
-    /**
      * startLink
      *
      * @param array $fleet_row   Fleet row
@@ -650,13 +619,13 @@ class FleetsLib extends XGPCore
     /**
      * isFleetReturning
      *
-     * @param array $fleet_row Fleet row
+     * @param array $fleet_mess Fleet mess
      *
      * @return boolean
      */
-    public static function isFleetReturning($fleet_row)
+    public static function isFleetReturning($fleet_mess)
     {
-        return ($fleet_row['fleet_mess'] == 1);
+        return ($fleet_mess == 1);
     }
 }
 

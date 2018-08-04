@@ -327,7 +327,7 @@ class Fleet4 extends Controller
     private function runValidations()
     {
         $validations = [
-            'admin', 'vacations', 'acs', 'ships', 'mission', 'noobProtection', 'fleets', 'resources', 'time'
+            'admin', 'ownVacations', 'targetVacations', 'acs', 'ships', 'mission', 'noobProtection', 'fleets', 'resources', 'time'
         ];
         
         foreach ($validations as $validation) {
@@ -348,6 +348,13 @@ class Fleet4 extends Controller
      */
     private function validateAdmin()
     {
+        // skip if it's our own planet or it's an empty planet
+        if ($this->_own_planet
+            or !$this->_occupied_planet) {
+
+            return true;
+        }
+        
         if (FunctionsLib::readConfig('adm_attack') != 0 
             && $this->_target_data['user_authlevel'] >= 1 
             && $this->_user['user_authlevel'] == 0) {
@@ -365,22 +372,38 @@ class Fleet4 extends Controller
      * 
      * @return boolean
      */
-    private function validateVacations()
+    private function validateOwnVacations()
     {
         if (parent::$users->isOnVacations($this->_user)) {
 
             $this->showMessage($this->getLang()['fl_vacation_mode_active']);
         }
+        // set owner
+        $this->_fleet_data['fleet_owner'] = $this->_user['user_id'];
+        
+        return true;
+    }
+    
+    /**
+     * Validate vacations for both players
+     * 
+     * @return boolean
+     */
+    private function validateTargetVacations()
+    {
+        // skip if it's our own planet or it's an empty planet
+        if ($this->_own_planet
+            or !$this->_occupied_planet) {
 
+            return true;
+        }
+        
         if (isset($this->_target_data) 
             && parent::$users->isOnVacations($this->_target_data)
             && $this->_clean_input_data['mission'] != Missions::recycle) {
             
             $this->showMessage($this->getLang()['fl_in_vacation_player']);
         }
-        
-        // set owner
-        $this->_fleet_data['fleet_owner'] = $this->_user['user_id'];
         
         return true;
     }

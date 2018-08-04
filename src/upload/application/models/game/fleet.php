@@ -189,7 +189,7 @@ class Fleet
                 AND `planet_system` = '" . $s . "'
                 AND `planet_planet` = '" . $p . "'
                 AND `planet_type` = '" . $pt . "';"
-        );
+        ) ?? [];
     }
     
     /**
@@ -223,7 +223,7 @@ class Fleet
                 AND p.`planet_system` = '" . $s . "'
                 AND p.`planet_planet` = '" . $p . "'
                 AND p.`planet_type` = '" . $pt . "'"
-        );
+        ) ?? [];
     }
     
     /**
