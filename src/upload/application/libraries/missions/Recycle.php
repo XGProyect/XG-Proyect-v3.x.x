@@ -116,26 +116,21 @@ class Recycle extends Missions
         $this->planet_name = $target_planet['target_name'];
 
         // SOME REQUIRED VALUES
-        $ships = explode(';', $fleet_row['fleet_array']);
+        $ships = FleetsLib::getFleetShipsArray($fleet_row['fleet_array']);
         $recycle_capacity = 0;
         $other_capacity = 0;
         $current_resources = $fleet_row['fleet_resource_metal'] +
             $fleet_row['fleet_resource_crystal'] + $fleet_row['fleet_resource_deuterium'];
 
         // CALCULATE STORAGE FOR EACH KIND OF SHIP
-        foreach ($ships as $item => $group) {
+        foreach ($ships as $id => $amount) {
 
-            if ($group != '') {
+            if ($id == 209) {
 
-                $ship = explode(",", $group);
+                $recycle_capacity += $this->pricelist[$id]['capacity'] * $amount;
+            } else {
 
-                if ($ship[0] == 209) {
-
-                    $recycle_capacity += $this->pricelist[$ship[0]]['capacity'] * $ship[1];
-                } else {
-
-                    $other_capacity += $this->pricelist[$ship[0]]['capacity'] * $ship[1];
-                }
+                $other_capacity += $this->pricelist[$id]['capacity'] * $amount;
             }
         }
 

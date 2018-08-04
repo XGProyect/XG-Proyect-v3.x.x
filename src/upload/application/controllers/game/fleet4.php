@@ -460,7 +460,6 @@ class Fleet4 extends Controller
         if ($fleet) {
 
             $total_ships = 0;
-            $ships_string = '';
             
             foreach ($fleet as $ship_id => $amount) {
 
@@ -471,14 +470,13 @@ class Fleet4 extends Controller
                 }
                 
                 $total_ships += $amount;
-                $ships_string .= $ship_id . ',' . $amount . ';';
                 
                 $this->_fleet_storage += $price[$ship_id]['capacity'] * $amount;
                 $this->_fleet_ships[$objects[$ship_id]] = $amount;
             }
             
             $this->_fleet_data['fleet_amount'] = $total_ships;
-            $this->_fleet_data['fleet_array'] = $ships_string;
+            $this->_fleet_data['fleet_array'] = FleetsLib::setFleetShipsArray($fleet);
                 
             return true;
         }

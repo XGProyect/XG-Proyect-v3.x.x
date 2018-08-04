@@ -15,6 +15,7 @@ namespace application\libraries;
 
 use application\core\XGPCore;
 use application\libraries\FunctionsLib;
+use const DPATH;
 
 /**
  * FleetsLib Class
@@ -351,7 +352,7 @@ class FleetsLib extends XGPCore
      */
     public static function fleetShipsPopup($fleet_row, $text, $fleet_type, $current_user = '')
     {
-        $ships = explode(";", $fleet_row['fleet_array']);
+        $ships = self::getFleetShipsArray($fleet_row['fleet_array']);
         $pop_up = "<a href='#' onmouseover=\"return overlib('";
         $pop_up .= "<table width=200>";
 
@@ -377,32 +378,27 @@ class FleetsLib extends XGPCore
                     ":<font></td></tr>";
             }
 
-            foreach ($ships as $item => $group) {
+            foreach ($ships as $ship => $amount) {
 
-                if ($group != '') {
+                if ($fleet_row['fleet_owner'] == $current_user['user_id']) {
 
-                    $ship = explode(',', $group);
+                    $pop_up .= "<tr><td width=50% align=left><font color=white>" .
+                        parent::$lang['tech'][$ship] .
+                        ":<font></td><td width=50% align=right><font color=white>" .
+                        FormatLib::prettyNumber($amount) . "<font></td></tr>";
+                } elseif ($fleet_row['fleet_owner'] != $current_user['user_id']) {
 
-                    if ($fleet_row['fleet_owner'] == $current_user['user_id']) {
+                    if ($espionage_tech >= 4 && $espionage_tech < 8) {
 
                         $pop_up .= "<tr><td width=50% align=left><font color=white>" .
-                            parent::$lang['tech'][$ship[0]] .
+                            parent::$lang['tech'][$ship] .
+                            "<font></td></tr>";
+                    } elseif ($espionage_tech >= 8) {
+
+                        $pop_up .= "<tr><td width=50% align=left><font color=white>" .
+                            parent::$lang['tech'][$ship] .
                             ":<font></td><td width=50% align=right><font color=white>" .
-                            FormatLib::prettyNumber($ship[1]) . "<font></td></tr>";
-                    } elseif ($fleet_row['fleet_owner'] != $current_user['user_id']) {
-
-                        if ($espionage_tech >= 4 && $espionage_tech < 8) {
-
-                            $pop_up .= "<tr><td width=50% align=left><font color=white>" .
-                                parent::$lang['tech'][$ship[0]] .
-                                "<font></td></tr>";
-                        } elseif ($espionage_tech >= 8) {
-
-                            $pop_up .= "<tr><td width=50% align=left><font color=white>" .
-                                parent::$lang['tech'][$ship[0]] .
-                                ":<font></td><td width=50% align=right><font color=white>" .
-                                FormatLib::prettyNumber($ship[1]) . "<font></td></tr>";
-                        }
+                            FormatLib::prettyNumber($amount) . "<font></td></tr>";
                     }
                 }
             }
@@ -545,7 +541,7 @@ class FleetsLib extends XGPCore
         if ($MissionType == 10) {
 
             $EventString = parent::$lang['cff_missile_attack'] .
-                " ( " . preg_replace("(503,)i", "", $fleet_row['fleet_array']) . " ) ";
+                " ( " . FleetsLib::getFleetShipsArray($fleet_row['fleet_array'])[503] . " ) ";
             $Time = $fleet_row['fleet_start_time'];
             $Rest = $Time - time();
 
