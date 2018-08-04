@@ -212,6 +212,9 @@ class Movement extends Controller
         
         if ($this->_fleets->getFleetsCount() > 0) {
             
+            // reset
+            unset($list_of_movements);
+            
             $fleet_count = 0;
             
             foreach($this->_fleets->getFleets() as $fleet) {
@@ -329,6 +332,8 @@ class Movement extends Controller
     
     /**
      * Execute the fleet return if possible
+     * 
+     * @return void
      */
     private function execFleetReturn(): void
     {

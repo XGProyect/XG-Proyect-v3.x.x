@@ -53,6 +53,12 @@ class Fleets
     private $_expedition_count = 0;
     
     /**
+     *
+     * @var array
+     */
+    private $_fleet_index = [];
+    
+    /**
      * Constructor
      * 
      * @param array $fleets          Fleets
@@ -77,12 +83,15 @@ class Fleets
     public function getFleets()
     {
         $list_of_fleets = [];
-
+        $index = 0;
+        
         foreach($this->_fleets as $fleets) {
             
             if (($fleets instanceof FleetEntity)) {
                 
                 $list_of_fleets[] = $fleets;
+                
+                $this->_fleets_index[$fleets->getFleetId()] = $index++;
             }
         }
         
@@ -92,11 +101,25 @@ class Fleets
     /**
      * Get a fleet by ID
      * 
-     * @param type $fleet_id
+     * @param int $fleet_id
+     * 
+     * @return array
      */
-    public function getFleetById($fleet_id)
+    public function getFleetById(int $fleet_id): array
     {
-        return $this->_fleets;
+        return isset($this->_fleets[$this->validateIndex($fleet_id)]) ?? [];
+    }
+    
+    /**
+     * Validate index
+     * 
+     * @param int $fleet_id
+     * 
+     * @return type
+     */
+    private function validateIndex(int $fleet_id)
+    {
+        return isset($this->_fleets_index[$fleet_id]) ?? -1;
     }
     
     /**
