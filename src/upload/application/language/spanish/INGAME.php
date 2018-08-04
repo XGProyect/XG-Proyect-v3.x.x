@@ -21,6 +21,13 @@ $lang = [
         1 => 'Planeta',
         2 => 'Escombros',
         3 => 'Luna'
+    ],
+    
+    // types of planets or galaxy objects
+    'planet_type_shortcuts' => [
+        1 => '(P)',
+        2 => '(E)',
+        3 => '(L)'
     ]
 ];
 

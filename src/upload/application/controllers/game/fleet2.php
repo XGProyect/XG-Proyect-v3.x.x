@@ -20,6 +20,7 @@ use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
 use application\libraries\OfficiersLib;
 use application\libraries\premium\Premium;
+use application\libraries\users\Shortcuts;
 use const JS_PATH;
 use const MAX_GALAXY_IN_WORLD;
 use const MAX_PLANET_IN_SYSTEM;
@@ -245,38 +246,26 @@ class Fleet2 extends Controller
             return '';
         }
 
-        $shortcuts_string = $this->_user['user_fleet_shortcuts'];
+        $shortcuts = new Shortcuts(
+            $this->_user['user_fleet_shortcuts']
+        );
         
-        if ($shortcuts_string) {
-            
-            $shortcuts = explode(';', $shortcuts_string);
+        $shortcuts_list = $shortcuts->getAllAsArray();
+        
+        if ($shortcuts_list) {
+
             $list_of_shortcuts = [];
 
-            foreach ($shortcuts as $shortcut) {
+            foreach ($shortcuts_list as $shortcut) {
 
                 if ($shortcut != '') {
 
-                    $item = explode(',', $shortcut);
-
-                    $description = $item[0] . ' ' . FormatLib::prettyCoords($item[1], $item[2], $item[3]) . ' ';
-
-                    switch ($item[4]) {
-                        case 1:
-                            $description .= $this->getLang()['fl_planet_shortcut'];
-                            break;
-                        case 2:
-                            $description .= $this->getLang()['fl_debris_shortcut'];
-                            break;
-                        case 3:
-                            $description .= $this->getLang()['fl_moon_shortcut'];
-                            break;
-                        default:
-                            $description .= '';
-                            break;
-                    }
+                    $description = $shortcut['name'] . ' ' . FormatLib::prettyCoords(
+                        $shortcut['g'], $shortcut['s'], $shortcut['p']
+                    ) . ' ' . $this->getLang()['planet_type_shortcuts'][$shortcut['pt']];
 
                     $list_of_shortcuts[] = [
-                        'value' => $item[1] . ';' . $item[2] . ';' . $item[3] . ';' . $item[4],
+                        'value' => $shortcut['g'] . ';' . $shortcut['s'] . ';' . $shortcut['p'] . ';' . $shortcut['pt'],
                         'selected' => '',
                         'title' => $description
                     ];
