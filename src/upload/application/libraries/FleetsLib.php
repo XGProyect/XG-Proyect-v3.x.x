@@ -627,6 +627,30 @@ class FleetsLib extends XGPCore
     {
         return ($fleet_mess == 1);
     }
+    
+    /**
+     * Serialize the fleet array
+     * 
+     * @param array $fleet_array Fleet array
+     * 
+     * @return string
+     */
+    public static function setFleetShipsArray(array $fleet_array): string
+    {
+        return serialize($fleet_array);
+    }
+    
+    /**
+     * Un-serialize the fleet array
+     * 
+     * @param string $fleet_array Fleet array
+     * 
+     * @return array
+     */
+    public static function getFleetShipsArray(string $fleet_array): array
+    {
+        return unserialize($fleet_array);
+    }
 }
 
 /* end of FleetsLib.php */

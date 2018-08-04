@@ -15,6 +15,7 @@ namespace application\controllers\game;
 
 use application\core\Controller;
 use application\core\entities\FleetEntity;
+use application\core\enumerators\MissionsEnumerator as Missions;
 use application\libraries\fleets\Fleets;
 use application\libraries\FleetsLib;
 use application\libraries\FormatLib;
@@ -108,6 +109,9 @@ class Movement extends Controller
         // init a new fleets object
         $this->setUpFleets();
 
+        // time to do something
+        $this->runAction();
+        
         // build the page
         $this->buildPage();
     }
@@ -136,6 +140,21 @@ class Movement extends Controller
         );
     }
 
+    /**
+     * Run an action
+     * 
+     * @return void
+     */
+    private function runAction()
+    {
+        $fleet_action = filter_input(INPUT_GET, 'action');
+        
+        if (in_array($fleet_action, ['return'])) {
+            
+            $this->{'execFleet' . ucfirst($fleet_action)}();
+        }
+    }
+    
     /**
      * Build the page
      * 
@@ -188,7 +207,7 @@ class Movement extends Controller
             'fleet_end' => '-',
             'fleet_end_time' => '-',
             'fleet_arrival' => '-',
-            'inputs' => '-'
+            'fleet_actions' => '-'
         ];
         
         if ($this->_fleets->getFleetsCount() > 0) {
@@ -203,40 +222,19 @@ class Movement extends Controller
                     'title' => $this->buildTitleBlock($fleet->getFleetMess()),
                     'tooltip' => $this->buildToolTipBlock($fleet->getFleetMess()),
                     'fleet_amount' => FormatLib::prettyNumber($fleet->getFleetAmount()),
-                    'fleet' => '',//$this->buildShipsBlock($fleet->getFleetArray()),
+                    'fleet' => $this->buildShipsBlock($fleet->getFleetArray()),
                     'fleet_start' => FormatLib::prettyCoords(
                         $fleet->getFleetStartGalaxy(), $fleet->getFleetStartSystem(), $fleet->getFleetStartPlanet()
                     ),
                     'fleet_start_time' => Timing_library::formatDefaultTime($fleet->getFleetCreation()),
                     'fleet_end' => FormatLib::prettyCoords(
-                        $fleet->getFleetEndGalaxy(), $fleet->getFleetEndGalaxy(), $fleet->getFleetEndPlanet()
+                        $fleet->getFleetEndGalaxy(), $fleet->getFleetEndSystem(), $fleet->getFleetEndPlanet()
                     ),
                     'fleet_end_time' => Timing_library::formatDefaultTime($fleet->getFleetStartTime()),
                     'fleet_arrival' => Timing_library::formatDefaultTime($fleet->getFleetEndTime()),
-                    'inputs' => '-'
+                    'fleet_actions' => $this->buildActionsBlock($fleet),
                 ];
             }
-       
-            /*
-            while ($f = $this->_db->fetchArray($fq)) {
-                $i++;
-
-                //now we can view the call back button for ships in maintaing position (2)
-                if ($f['fleet_mess'] == 0 or $f['fleet_mess'] == 2) {
-                    $parse['inputs'] = '<form action="game.php?page=movement&action=return" method="post">';
-                    $parse['inputs'] .= '<input name="fleetid" value="' . $f['fleet_id'] . '" type="hidden">';
-                    $parse['inputs'] .= '<input value="' . $this->getLang()['fl_send_back'] . '" type="submit" name="send">';
-                    $parse['inputs'] .= '</form>';
-
-                    if ($f['fleet_mission'] == 1) {
-                        $parse['inputs'] .= '<a href="#" onClick="f(\'game.php?page=federationlayer&union=' . $f['fleet_group'] . '&fleet=' . $f['fleet_id'] . '\', \'\')">';
-                        $parse['inputs'] .= '<input value="' . $this->getLang()['fl_acs'] . '" type="button">';
-                        $parse['inputs'] .= '</a>';
-                    }
-                } else {
-                    $parse['inputs'] = '&nbsp;-&nbsp;';
-                }
-            }*/
         }
         
         return $list_of_movements;
@@ -277,34 +275,70 @@ class Movement extends Controller
     }
     
     /**
+     * Create the ships tooltip block
      * 
+     * @param string $fleet_array Fleet array
+     * 
+     * @return string
      */
     private function buildShipsBlock(string $fleet_array): string
     {
-        $fleet = explode(";", $fleet_array);
-        $e = 0;
-        $parse['fleet'] = '';
+        $ships = FleetsLib::getFleetShipsArray($fleet_array);
+        $tooltips = [];
+        
+        foreach ($ships as $ship => $amount) {
 
-        foreach ($fleet as $a => $b) {
-            if ($b != '') {
-                $e++;
-                $a = explode(",", $b);
-                $parse['fleet'] .= $this->getLang()['tech'][$a[0]] . ":" . $a[1] . "\n";
-
-                if ($e > 1) {
-                    $parse['fleet'] .= "\t";
-                }
-            }
+            $tooltips[] = $this->getLang()['tech'][$ship] . ':' . $amount;
         }
+        
+        return count($tooltips) > 0 ? join("\n", $tooltips) : '';
     }
     
     /**
-     * method send_back_fleet
-     * param
-     * returns the fleet to the planet
+     * Build the list of actions block
+     * 
+     * @param FleetEntity $fleet
+     * 
+     * @return string
      */
-    private function send_back_fleet()
+    private function buildActionsBlock(FleetEntity $fleet): string
     {
+        $actions = '-';
+        
+        if ($fleet->getFleetMess() != 1) {
+            
+            if ($fleet->getFleetMission() != Missions::expedition) {
+            
+                $actions = '<form action="game.php?page=movement&action=return" method="post">';
+                $actions .= '<input type="hidden" name="fleetid" value="' . $fleet->getFleetId() . '">';
+                $actions .= '<input type="submit" name="send" value="' . $this->getLang()['fl_send_back'] . '">';
+                $actions .= '</form>';
+            }
+
+            if ($fleet->getFleetMission() == Missions::attack) {
+                
+                $content = '<input type="button" value="' . $this->getLang()['fl_acs'] . '">';
+                $attributes = 'onClick="f(\'game.php?page=federationlayer&union=' . $fleet->getFleetGroup() . '&fleet=' . $fleet->getFleetId() . '\', \'\')"';
+                
+                $actions .= FunctionsLib::setUrl('#', '', $content, $attributes);
+            }
+        }
+        
+        return $actions;
+    }
+    
+    /**
+     * Execute the fleet return if possible
+     */
+    private function execFleetReturn(): void
+    {
+        $fleet_id = filter_input(INPUT_POST, 'fleetid', FILTER_VALIDATE_INT);
+        
+        if ($fleet_id) {
+            
+            $fleet = $this->_fleets->getFleetById($fleet_id);
+        }
+        
         if (( isset($_POST['fleetid']) ) && ( is_numeric($_POST['fleetid']) ) && ( isset($_GET['action']) ) && ( $_GET['action'] == 'return' )) {
 
 
@@ -351,7 +385,7 @@ class Movement extends Controller
 											WHERE `fleet_id` = '" . $fleet_id . "';");
                 }
             }
-        }
+        }   
     }
 }
 

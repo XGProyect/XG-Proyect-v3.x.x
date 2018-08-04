@@ -48,8 +48,8 @@
             <th>
                 {fleet_arrival}
             </th>
-            <th>
-                {inputs}
+            <th style="vertical-align: middle">
+                {fleet_actions}
             </th>
         </tr>
         {/list_of_movements}

@@ -90,6 +90,16 @@ class Fleets
     }
     
     /**
+     * Get a fleet by ID
+     * 
+     * @param type $fleet_id
+     */
+    public function getFleetById($fleet_id)
+    {
+        return $this->_fleets;
+    }
+    
+    /**
      * Set up the list of fleets
      * 
      * @param array $fleets Fleets

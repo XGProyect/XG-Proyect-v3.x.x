@@ -19,6 +19,8 @@ use application\libraries\adm\AdministrationLib;
 use application\libraries\FleetsLib;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
+use const FLEETS;
+use const USERS;
 
 /**
  * Fleetmovements Class
@@ -148,14 +150,12 @@ class Fleetmovements extends Controller
      */
     private function ships_pop_up($title, $content)
     {
-        $ships = explode(';', $content['fleet_array']);
+        $ships = FleetsLib::getFleetShipsArray($content['fleet_array']);
         $pop_up = '';
 
-        foreach ($ships as $item => $group) {
-            if ($group != '') {
-                $ship = explode(',', $group);
-                $pop_up .= $this->_lang['tech'][$ship[0]] . ': ' . FormatLib::prettyNumber($ship[1]) . '<br />';
-            }
+        foreach ($ships as $ship => $amount) {
+            
+            $pop_up .= $this->_lang['tech'][$ship] . ': ' . FormatLib::prettyNumber($amount) . '<br />';
         }
 
         $parse['popup_title'] = $title;
