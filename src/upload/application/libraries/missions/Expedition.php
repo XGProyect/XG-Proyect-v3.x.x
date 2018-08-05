@@ -71,6 +71,7 @@ class Expedition extends Missions
                 $ships = FleetsLib::getFleetShipsArray($fleet_row['fleet_array']);
                 $fleet_capacity = 0;
                 $fleet_points = 0;
+                $current_fleet = [];
 
                 foreach ($ships as $id => $count) {
 
@@ -78,7 +79,7 @@ class Expedition extends Missions
                     $fleet_capacity += $this->pricelist[$id]['capacity'] * $count;
                     $fleet_points += ( $count * $ships_points[$id] );
                 }
-
+                
                 // GET A NUMBER BETWEEN 0 AND 10 RANDOMLY
                 $this->hazard = mt_rand(0, 10);
 
@@ -175,6 +176,7 @@ class Expedition extends Missions
                     'fleet_id' => $fleet_row['fleet_id']
                 ]);
             } else {
+                
                 $this->expeditionMessage(
                     $fleet_row['fleet_owner'], $this->langs['sys_expe_blackholl_2'], $fleet_row['fleet_end_stay']
                 );

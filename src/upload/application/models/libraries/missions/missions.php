@@ -120,7 +120,7 @@ class Missions
         if ((int) $fleet_id > 0) {
 
             $this->db->query(
-                "DELETE FROM " . FLEETS . " WHERE `fleet_id` = '" . $fleet_id . "'"
+                "DELETE FROM `" . FLEETS . "` WHERE `fleet_id` = '" . $fleet_id . "'"
             );
         }
     }
