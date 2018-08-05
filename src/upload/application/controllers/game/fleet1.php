@@ -299,7 +299,7 @@ class Fleet1 extends Controller
         if ($this->_ship_count > 0
             && $this->checkAvailableSlot()) {
             
-            return $this->getTemplate()->set('fleet/fleet_selectors', $this->getLang());
+            return $this->getTemplate()->set('fleet/fleet1_selector_row', $this->getLang());
         }
         
         return '';
