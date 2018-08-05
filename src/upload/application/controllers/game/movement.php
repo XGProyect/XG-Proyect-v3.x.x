@@ -23,8 +23,6 @@ use application\libraries\FunctionsLib;
 use application\libraries\premium\Premium;
 use application\libraries\research\Researches;
 use application\libraries\Timing_library;
-use const ACS_FLEETS;
-use const FLEETS;
 use const JS_PATH;
 
 /**
@@ -57,12 +55,6 @@ class Movement extends Controller
      * @var array
      */
     private $_user;
-
-    /**
-     *
-     * @var array
-     */
-    private $_planet;
 
     /**
      *
@@ -102,9 +94,6 @@ class Movement extends Controller
 
         // set data
         $this->_user = $this->getUserData();
-        
-        // set planet data
-        $this->_planet = $this->getPlanetData();
 
         // init a new fleets object
         $this->setUpFleets();
@@ -278,7 +267,7 @@ class Movement extends Controller
     }
     
     /**
-     * Create the ships tooltip block
+     * Create the ships tool tip block
      * 
      * @param string $fleet_array Fleet array
      * 
@@ -310,13 +299,10 @@ class Movement extends Controller
         
         if ($fleet->getFleetMess() != 1) {
             
-            if ($fleet->getFleetMission() != Missions::expedition) {
-            
-                $actions = '<form action="game.php?page=movement&action=return" method="post">';
-                $actions .= '<input type="hidden" name="fleetid" value="' . $fleet->getFleetId() . '">';
-                $actions .= '<input type="submit" name="send" value="' . $this->getLang()['fl_send_back'] . '">';
-                $actions .= '</form>';
-            }
+            $actions = '<form action="game.php?page=movement&action=return" method="post">';
+            $actions .= '<input type="hidden" name="fleetid" value="' . $fleet->getFleetId() . '">';
+            $actions .= '<input type="submit" name="send" value="' . $this->getLang()['fl_send_back'] . '">';
+            $actions .= '</form>';
 
             if ($fleet->getFleetMission() == Missions::attack) {
                 
@@ -341,56 +327,15 @@ class Movement extends Controller
         
         if ($fleet_id) {
             
-            $fleet = $this->_fleets->getFleetById($fleet_id);
+            $fleet = $this->_fleets->getOwnFleetById($fleet_id);
+
+            if (!is_null($fleet) && $fleet->getFleetMess() != 1) {
+
+                $this->Fleet_Model->returnFleet(
+                    $fleet, $this->_user['user_id']
+                );
+            }   
         }
-        
-        if (( isset($_POST['fleetid']) ) && ( is_numeric($_POST['fleetid']) ) && ( isset($_GET['action']) ) && ( $_GET['action'] == 'return' )) {
-
-
-            $fleet_id = (int) $_POST['fleetid'];
-            $i = 0;
-            $fleet_row = $this->_db->queryFetch("SELECT *
-														FROM " . FLEETS . "
-														WHERE `fleet_id` = '" . $fleet_id . "';");
-
-            if ($fleet_row['fleet_owner'] == $this->_current_user['user_id']) {
-                if ($fleet_row['fleet_mess'] == 0 or $fleet_row['fleet_mess'] == 2) {
-                    if ($fleet_row['fleet_group'] > 0) {
-                        $acs = $this->_db->queryFetch("SELECT `acs_fleet_members`
-																FROM `" . ACS_FLEETS . "`
-																WHERE `acs_fleet_id` = '" . $fleet_row['fleet_group'] . "';");
-
-                        if ($acs['acs_fleet_members'] == $fleet_row['fleet_owner'] && $fleet_row['fleet_mission'] == 1) {
-                            $this->_db->query("DELETE FROM `" . ACS_FLEETS . "`
-													WHERE `acs_fleet_id` ='" . $fleet_row['fleet_group'] . "';");
-
-                            $this->_db->query("UPDATE " . FLEETS . " SET
-													`fleet_group` = '0'
-													WHERE `fleet_group` = '" . $fleet_row['fleet_group'] . "';");
-                        }
-
-                        if ($fleet_row['fleet_mission'] == 2) {
-                            $this->_db->query("UPDATE " . FLEETS . " SET
-												`fleet_group` = '0'
-												WHERE `fleet_id` = '" . $fleet_id . "';");
-                        }
-                    }
-
-                    $CurrentFlyingTime = time() - $fleet_row['fleet_creation'];
-                    $fleetLeght = $fleet_row['fleet_start_time'] - $fleet_row['fleet_creation'];
-                    $ReturnFlyingTime = ( $fleet_row['fleet_end_stay'] != 0 && $CurrentFlyingTime > $fleetLeght ) ? $fleetLeght + time() : $CurrentFlyingTime + time();
-
-
-                    $this->_db->query("UPDATE " . FLEETS . " SET
-											`fleet_start_time` = '" . (time() - 1) . "',
-											`fleet_end_stay` = '0',
-											`fleet_end_time` = '" . ($ReturnFlyingTime + 1) . "',
-											`fleet_target_owner` = '" . $this->_current_user['user_id'] . "',
-											`fleet_mess` = '1'
-											WHERE `fleet_id` = '" . $fleet_id . "';");
-                }
-            }
-        }   
     }
 }
 

@@ -56,7 +56,7 @@ class Fleets
      *
      * @var array
      */
-    private $_fleet_index = [];
+    private $_fleets_index = [];
     
     /**
      * Constructor
@@ -103,11 +103,30 @@ class Fleets
      * 
      * @param int $fleet_id
      * 
-     * @return array
+     * @return FleetEntity
      */
-    public function getFleetById(int $fleet_id): array
+    public function getFleetById(int $fleet_id): FleetEntity
     {
-        return isset($this->_fleets[$this->validateIndex($fleet_id)]) ?? [];
+        return $this->_fleets[$this->validateIndex($fleet_id)] ?? [];
+    }
+    
+    /**
+     * Get a fleet by ID
+     * 
+     * @param int $fleet_id
+     * 
+     * @return FleetEntity
+     */
+    public function getOwnFleetById(int $fleet_id)
+    {
+        $fleet = $this->getFleetById($fleet_id);
+        
+        if ($fleet->getFleetOwner() == $this->getUserId()) {
+            
+            return $fleet;
+        }
+        
+        return null;
     }
     
     /**

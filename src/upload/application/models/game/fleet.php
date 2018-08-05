@@ -13,6 +13,9 @@
  */
 namespace application\models\game;
 
+use application\core\entities\FleetEntity;
+use application\core\enumerators\MissionsEnumerator as Missions;
+
 /**
  * Fleet Class
  *
@@ -79,9 +82,9 @@ class Fleet
             );
         }
 
-        return [];   
+        return [];
     }
-    
+
     /**
      * Get all fleets by user id or owner
      * 
@@ -100,9 +103,9 @@ class Fleet
             );
         }
 
-        return [];  
+        return [];
     }
-    
+
     /**
      * Get all user planets
      * 
@@ -115,7 +118,7 @@ class Fleet
         if ((int) $user_id > 0) {
 
             return $this->db->queryFetchAll(
-                "SELECT 
+                    "SELECT 
                     p.`planet_id`,
                     p.`planet_name`,
                     p.`planet_galaxy`,
@@ -129,7 +132,7 @@ class Fleet
 
         return [];
     }
-    
+
     /**
      * Get ongoing ACS attacks
      * 
@@ -143,7 +146,7 @@ class Fleet
                 "SELECT * FROM `" . ACS_FLEETS . "`"
         );
     }
-    
+
     /**
      * Check if an acs exists
      *
@@ -158,7 +161,7 @@ class Fleet
     public function acsExists($fleet_acs, $galaxy, $system, $planet, $planet_type)
     {
         return $this->db->queryFetch(
-            "SELECT 
+                "SELECT 
                 COUNT(`acs_fleet_id`) AS `amount`
             FROM `" . ACS_FLEETS . "`
             WHERE `acs_fleet_id` = '" . $fleet_acs . "' AND 
@@ -166,9 +169,9 @@ class Fleet
                 `acs_fleet_system` = '" . $system . "' AND 
                 `acs_fleet_planet` = '" . $planet . "' AND 
                 `acs_fleet_planet_type` = '" . $planet_type . "';"
-        )['amount'] > 0;
+            )['amount'] > 0;
     }
-    
+
     /**
      * Get planet owner by coords
      * 
@@ -182,16 +185,16 @@ class Fleet
     public function getPlanetOwnerByCoords(int $g, int $s, int $p, int $pt): array
     {
         return $this->db->queryFetch(
-            "SELECT 
+                "SELECT 
                 `planet_user_id`
             FROM `" . PLANETS . "`
             WHERE `planet_galaxy` = '" . $g . "'
                 AND `planet_system` = '" . $s . "'
                 AND `planet_planet` = '" . $p . "'
                 AND `planet_type` = '" . $pt . "';"
-        ) ?? [];
+            ) ?? [];
     }
-    
+
     /**
      * Get target data by coords
      * 
@@ -205,7 +208,7 @@ class Fleet
     public function getTargetDataByCoords(int $g, int $s, int $p, int $pt): array
     {
         return $this->db->queryFetch(
-            "SELECT 
+                "SELECT 
                 p.`planet_user_id`,
                 p.`planet_debris_metal`,
                 p.`planet_debris_crystal`,
@@ -223,9 +226,9 @@ class Fleet
                 AND p.`planet_system` = '" . $s . "'
                 AND p.`planet_planet` = '" . $p . "'
                 AND p.`planet_type` = '" . $pt . "'"
-        ) ?? [];
+            ) ?? [];
     }
-    
+
     /**
      * Get ACS count
      * 
@@ -236,10 +239,10 @@ class Fleet
     public function getAcsCount($acs_fleet_id): int
     {
         return $this->db->queryFetch(
-            "SELECT COUNT(`acs_fleet_id`) AS `acs_amount`
+                "SELECT COUNT(`acs_fleet_id`) AS `acs_amount`
             FROM `" . ACS_FLEETS . "`
             WHERE `acs_fleet_id` = '" . $acs_fleet_id . "'"
-        )['acs_amount'];
+            )['acs_amount'];
     }
 
     /**
@@ -253,36 +256,35 @@ class Fleet
     public function insertNewFleet(array $fleet_data, array $planet_data, array $fleet_ships): bool
     {
         try {
-            
+
             $this->db->beginTransaction();
-            
+
             // prepare the query
             foreach ($fleet_data as $field => $value) {
-               
+
                 $sql[] = "`" . $field . "` = '" . $value . "'";
             }
-            
+
             $this->db->query(
                 "INSERT INTO `" . FLEETS . "` SET "
-                . join(', ', $sql) . 
+                . join(', ', $sql) .
                 ", `fleet_creation` = NOW();"
             );
-            
+
             // remove ships and resources
-            $this->updatePlanet($planet_data, $fleet_data, $fleet_ships);   
-            
+            $this->updatePlanet($planet_data, $fleet_data, $fleet_ships);
+
             $this->db->commitTransaction();
 
             return true;
-            
-        } catch(Exception $e) {
-            
+        } catch (Exception $e) {
+
             $this->db->rollbackTransaction();
-            
+
             return false;
         }
     }
-    
+
     /**
      * Update planet based on the received values
      * 
@@ -310,7 +312,7 @@ class Fleet
             WHERE `planet_id` = " . $planet_data['planet_id'] . ";"
         );
     }
-    
+
     /**
      * Get buddies
      * 
@@ -322,7 +324,7 @@ class Fleet
     public function getBuddies(int $current_planet, int $target_planet): string
     {
         return $this->db->queryFetch(
-            "SELECT COUNT(*) AS buddies
+                "SELECT COUNT(*) AS buddies
             FROM  `" . BUDDY . "`
             WHERE (
                 (
@@ -335,9 +337,9 @@ class Fleet
                 )
             )
             AND buddy_status = 1"
-        )['buddies'];
+            )['buddies'];
     }
-    
+
     /**
      * Get ACS Max Time
      * 
@@ -348,12 +350,12 @@ class Fleet
     public function getAcsMaxTime(int $group_id): string
     {
         return $this->db->queryFetch(
-            "SELECT MAX(`fleet_start_time`) AS start_time
+                "SELECT MAX(`fleet_start_time`) AS start_time
                 FROM `" . FLEETS . "`
                 WHERE `fleet_group` = '" . $group_id . "';"
-        )['start_time'];
+            )['start_time'];
     }
-    
+
     /**
      * Update ACS Fleets Times
      * 
@@ -371,6 +373,110 @@ class Fleet
             `fleet_end_time` = fleet_end_time + '" . $end_time . "'
             WHERE `fleet_group` = '" . $group_id . "';"
         );
+    }
+
+    /**
+     * Get all the ACS Members
+     * 
+     * @param int $fleet_group
+     * 
+     * @return string
+     */
+    public function getAcsMembers(int $fleet_group): string
+    {
+        return $this->db->queryFetch(
+            "SELECT af.`acs_fleet_members`
+                FROM `" . ACS_FLEETS . "` af
+                WHERE af.`acs_fleet_id` = '" . $fleet_group . "';"
+        )['acs_fleet_members'] ?? '';
+    }
+    
+    /**
+     * Remove an ACS fleet
+     * 
+     * @param int $fleet_group
+     * 
+     * @return void
+     */
+    public function removeAcs(int $fleet_group): void
+    {
+        $this->db->query(
+            "DELETE FROM `" . ACS_FLEETS . "`
+            WHERE `acs_fleet_id` = '" . $fleet_group . "';"
+        );
+
+        $this->db->query(
+            "UPDATE `" . FLEETS . "` f SET
+                f.`fleet_group` = '0'
+            WHERE f.`fleet_group` = '" . $fleet_group . "';"
+        );
+    }
+    
+    /**
+     * Return the fleet to its start planet
+     * 
+     * @param FleetEntity $fleet
+     * @param int         $user_id Current user ID
+     * 
+     * @return bool
+     */
+    public function returnFleet(FleetEntity $fleet, int $user_id): bool
+    {
+        try {
+
+            $this->db->beginTransaction();
+
+            if ($fleet->getFleetGroup() > 0) {
+
+                $acs = $this->getAcsMembers($fleet->getFleetGroup());
+
+                if ($acs['acs_fleet_members'] == $fleet->getFleetOwner() 
+                    && $fleet->getFleetMission() == Missions::attack) {
+
+                    $this->removeAcs($fleet->getFleetGroup());
+                }
+
+                if ($fleet->getFleetMission() == Missions::acs) {
+
+                    $this->db->query(
+                        "UPDATE " . FLEETS . " SET
+                            `fleet_group` = '0'
+                        WHERE `fleet_id` = '" . $fleet->getFleetId() . "';"
+                    );
+                }
+            }
+
+            $base_time = time();
+            $fleet_creation = strtotime($fleet->getFleetCreation());
+            $current_time = $base_time - $fleet_creation;
+            $flight_lenght = $fleet->getFleetStartTime() - $fleet_creation;
+            $return_time = $base_time + $current_time;
+            
+            if ($fleet->getFleetEndStay() != 0 
+                && $current_time > $flight_lenght) {
+                
+                $return_time = $base_time + $flight_lenght;
+            }
+
+            $this->db->query(
+                "UPDATE `" . FLEETS . "` f SET
+                    f.`fleet_start_time` = '" . $base_time . "',
+                    f.`fleet_end_stay` = '0',
+                    f.`fleet_end_time` = '" . $return_time . "',
+                    f.`fleet_target_owner` = '" . $user_id . "',
+                    f.`fleet_mess` = '1'
+                WHERE f.`fleet_id` = '" . $fleet->getFleetId() . "';"
+            );
+
+            $this->db->commitTransaction();
+
+            return true;
+        } catch (Exception $e) {
+
+            $this->db->rollbackTransaction();
+
+            return false;
+        }
     }
 }
 
