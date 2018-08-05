@@ -447,7 +447,7 @@ class Fleet
             }
 
             $base_time = time();
-            $fleet_creation = strtotime($fleet->getFleetCreation());
+            $fleet_creation = $fleet->getFleetCreation();
             $current_time = $base_time - $fleet_creation;
             $flight_lenght = $fleet->getFleetStartTime() - $fleet_creation;
             $return_time = $base_time + $current_time;
