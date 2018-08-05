@@ -268,7 +268,7 @@ class Fleet
             $this->db->query(
                 "INSERT INTO `" . FLEETS . "` SET "
                 . join(', ', $sql) .
-                ", `fleet_creation` = NOW();"
+                ", `fleet_creation` = '" . time() . "';"
             );
 
             // remove ships and resources
@@ -439,9 +439,9 @@ class Fleet
                 if ($fleet->getFleetMission() == Missions::acs) {
 
                     $this->db->query(
-                        "UPDATE " . FLEETS . " SET
-                            `fleet_group` = '0'
-                        WHERE `fleet_id` = '" . $fleet->getFleetId() . "';"
+                        "UPDATE `" . FLEETS . "` f SET
+                            f.`fleet_group` = '0'
+                        WHERE f.`fleet_id` = '" . $fleet->getFleetId() . "';"
                     );
                 }
             }
