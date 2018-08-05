@@ -146,6 +146,8 @@ class Expedition extends Missions
         $lost_amount = (($this->hazard * 33) + 1) / 100;
 
         if ($lost_amount == 1) {
+            $this->all_destroyed = true;
+            
             $this->expeditionMessage(
                 $fleet_row['fleet_owner'], $this->langs['sys_expe_blackholl_2'], $fleet_row['fleet_end_stay']
             );
