@@ -198,6 +198,31 @@ class Buddies
                 WHERE `user_id` = '" . (int)$user_id . "'"
         );
     }
+    
+    /**
+     * Get buddy details by ID
+     * 
+     * @param int $user_id
+     * 
+     * @return array
+     */
+    public function getBuddiesDetailsById($user_id): array
+    {
+        return $this->db->queryFetchAll(
+            "SELECT 
+                u.`user_id`,
+                u.`user_name`
+            FROM `" . BUDDY . "` AS b
+            LEFT JOIN `" . USERS . "` AS u ON ((u.user_id = b.buddy_sender) OR (u.user_id = b.buddy_receiver))
+            WHERE 
+            (
+                `buddy_sender` = '" . $user_id . "' 
+            OR
+                `buddy_receiver` = '" . $user_id . "'
+            ) 
+            AND `buddy_status` = '1';"
+        ) ?? [];
+    }
 }
 
 /* end of buddies.php */

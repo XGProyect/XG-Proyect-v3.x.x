@@ -14,8 +14,13 @@
 namespace application\controllers\game;
 
 use application\core\Controller;
-use application\core\Database;
+use application\libraries\fleets\Fleets;
+use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
+use const ACS_FLEETS;
+use const FLEETS;
+use const JS_PATH;
+use const USERS;
 
 /**
  * Federation Class
@@ -30,14 +35,34 @@ use application\libraries\FunctionsLib;
 class Federation extends Controller
 {
 
+    /**
+     * 
+     * @var int
+     */
     const MODULE_ID = 8;
 
-    private $_lang;
-    private $_current_user;
-    private $_fleet_id;
+    /**
+     * 
+     * @var string
+     */
+    const REDIRECT_TARGET = 'game.php?page=fleet1';
+    
+    /**
+     *
+     * @var array
+     */
+    private $_user;
 
     /**
-     * __construct()
+     *
+     * @var \Fleets
+     */
+    private $_fleets = null;
+    
+    /**
+     * Constructor
+     * 
+     * @return void
      */
     public function __construct()
     {
@@ -46,41 +71,124 @@ class Federation extends Controller
         // check if session is active
         parent::$users->checkSession();
 
+        // load Model
+        parent::loadModel('game/fleet');
+        parent::loadModel('game/buddies');
+        
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
-        $this->_db = new Database();
-        $this->_lang = parent::$lang;
-        $this->_current_user = parent::$users->getUserData();
+        // set data
+        $this->_user = $this->getUserData();
 
-        $this->build_page();
+        // init a new fleets object
+        $this->setUpFleets();
+
+        // time to do something
+        $this->runAction();
+        
+        // build the page
+        $this->buildPage();
     }
 
     /**
-     * method __destruct
-     * param
-     * return close db connection
+     * Creates a new fleets object that will handle all the fleets
+     * creation methods and actions
+     * 
+     * @return void
      */
-    public function __destruct()
+    private function setUpFleets()
     {
-        $this->_db->closeConnection();
+        $this->_fleets = new Fleets(
+            $this->Fleet_Model->getAllFleetsByUserId($this->_user['user_id']),
+            $this->_user['user_id']
+        );
     }
 
     /**
-     * method build_page
-     * param
-     * return main method, loads everything
+     * Run an action
+     * 
+     * @return void
      */
-    private function build_page()
+    private function runAction()
     {
-        #####################################################################################################
-        // SOME DEFAULT VALUES
-        #####################################################################################################
-        // LOAD TEMPLATES REQUIRED
-        $options_template = parent::$page->getTemplate('fleet/fleet_options');
+        /*
+        $mode = filter_input(
+            INPUT_GET,
+            'mode',
+            FILTER_CALLBACK,
+            [
+                'options' => function($value) {
+                    
+                    if (in_array($value, ['add', 'edit', 'delete', 'a'])) {
+                        
+                        return $value;
+                    }
+                    
+                    return false;
+                }
+            ]
+        );
+            
+        $data = filter_input_array(INPUT_POST, [
+            'name' => FILTER_SANITIZE_STRING,
+            'galaxy' => [
+                'filter'    => FILTER_VALIDATE_INT,
+                'options'   => ['min_range' => 1, 'max_range' => MAX_GALAXY_IN_WORLD]
+            ],
+            'system' => [
+                'filter'    => FILTER_VALIDATE_INT,
+                'options'   => ['min_range' => 1, 'max_range' => MAX_SYSTEM_IN_GALAXY]
+            ],
+            'planet' => [
+                'filter'    => FILTER_VALIDATE_INT,
+                'options'   => ['min_range' => 1, 'max_range' => (MAX_PLANET_IN_SYSTEM + 1)]
+            ],
+            'type' => [
+                'filter'    => FILTER_VALIDATE_INT,
+                'options'   => ['min_range' => 1, 'max_range' => 3]
+            ]
+        ]);
 
-        // LANGUAGE
-        $parse = $this->_lang;
+        $action = filter_input(INPUT_GET, 'a', FILTER_VALIDATE_INT);
+            
+        if ($mode) {
+            
+            $this->_clean_data['mode'] = $mode;
+            $this->_clean_data['data'] = $data;
+            $this->_clean_data['action'] = $action;
+            
+            $this->{$mode .'Shortcut'}();
+        }*/
+    }
+    
+    /**
+     * Build the page
+     * 
+     * @return void
+     */
+    private function buildPage()
+    {
+        /**
+         * Parse the items
+         */
+        $page = [
+            'js_path' => JS_PATH,
+            'acs_code' => $this->generateRandomAcsCode(),
+            'buddies_list' => $this->buildBuddiesList(),
+            'members_list' => $this->buildMembersList(),
+        ];
+
+        // display the page
+        parent::$page->display(
+            $this->getTemplate()->set(
+                'fleet/fleet_federation_view',
+                array_merge(
+                    $this->getLang(), $page
+                )
+            ), false, '', false
+        );
+        
 
         // OTHER VALUES
         $this->_fleet_id = isset($_GET['fleet']) ? (int) $_GET['fleet'] : NULL;
@@ -88,11 +196,11 @@ class Federation extends Controller
         $acs_user_message = '';
 
         if (!is_numeric($this->_fleet_id) or empty($this->_fleet_id) or ! is_numeric($union)) {
-            FunctionsLib::redirect('game.php?page=fleet1');
+            FunctionsLib::redirect(self::REDIRECT_TARGET);
         }
 
         // QUERY
-        $fleet = $this->_db->queryFetch(
+        $fleet = $this->db->queryFetch(
             "SELECT `fleet_id`,
             `fleet_start_time`,
             `fleet_end_time`,
@@ -106,16 +214,8 @@ class Federation extends Controller
             WHERE fleet_id = '" . intval($this->_fleet_id) . "'"
         );
 
-        $query_buddies = $this->_db->query("SELECT `user_id`, `user_name`
-            FROM " . BUDDY . " AS b
-            LEFT JOIN " . USERS . " AS u ON ((u.user_id = b.buddy_sender) OR (u.user_id = b.buddy_receiver))
-            WHERE (`buddy_sender` = '" . $this->_current_user['user_id'] . "' OR
-            `buddy_receiver` = '" . $this->_current_user['user_id'] . "') AND
-            `buddy_status` = '1';"
-        );
-
         if ($fleet['fleet_id'] == '') {
-            FunctionsLib::redirect('game.php?page=fleet1');
+            FunctionsLib::redirect(self::REDIRECT_TARGET);
         }
 
         // ACTIONS
@@ -133,25 +233,24 @@ class Federation extends Controller
             $user_to_add = isset($_POST['search_user']) ? '' : $_POST['add'] ? $_POST['friends_list'] : '';
 
             if ($this->add_user($user_to_add)) {
-                $acs_user_message = "<font color=\"lime\">" . $this->_lang['fl_player'] . " " . $_POST['addtogroup'] . " " . $this->_lang['fl_add_to_attack'] . "</font>";
+                $acs_user_message = FormatLib::customColor($this->getLang()['fl_player'] . " " . $_POST['addtogroup'] . " " . $this->getLang()['fl_add_to_attack'], 'lime');
             } else {
-                $acs_user_message = "<font color=\"red\">" . $this->_lang['fl_player'] . " " . $_POST['addtogroup'] . " " . $this->_lang['fl_dont_exist'] . "</font>";
+                $acs_user_message = FormatLib::colorRed($this->getLang()['fl_player'] . " " . $_POST['addtogroup'] . " " . $this->getLang()['fl_dont_exist']);
             }
         }
 
         if ($fleet['fleet_start_time'] <= time() or $fleet['fleet_end_time'] < time() or $fleet['fleet_mess'] == 1) {
-            FunctionsLib::redirect('game.php?page=fleet1');
+            FunctionsLib::redirect(self::REDIRECT_TARGET);
         }
 
         if (empty($fleet['fleet_group'])) {
 
-            $rand = mt_rand(100000, 999999999);
-            $acs_code = "AG" . $rand;
-            $federation_invited = intval($this->_current_user['user_id']);
 
-            $this->_db->query("INSERT INTO " . ACS_FLEETS . " SET
+            $federation_invited = intval($this->_user['user_id']);
+
+            $this->db->query("INSERT INTO " . ACS_FLEETS . " SET
                 `acs_fleet_name` = '" . $acs_code . "',
-                `acs_fleet_members` = '" . $this->_current_user['user_id'] . "',
+                `acs_fleet_members` = '" . $this->_user['user_id'] . "',
                 `acs_fleet_fleets` = '" . $this->_fleet_id . "',
                 `acs_fleet_galaxy` = '" . $fleet['fleet_end_galaxy'] . "',
                 `acs_fleet_system` = '" . $fleet['fleet_end_system'] . "',
@@ -160,34 +259,34 @@ class Federation extends Controller
                 `acs_fleet_invited` = '" . $federation_invited . "'"
             );
 
-            $acs_id = $this->_db->insertId();
-            $acs_madnessred = $this->_db->query(
+            $acs_id = $this->db->insertId();
+            $acs_fleet = $this->db->query(
                 "SELECT `acs_fleet_invited`, `acs_fleet_name`
             FROM " . ACS_FLEETS . "
             WHERE `acs_fleet_name` = '" . $acs_code . "' AND
-                            `acs_fleet_members` = '" . $this->_current_user['user_id'] . "' AND
+                            `acs_fleet_members` = '" . $this->_user['user_id'] . "' AND
                             `acs_fleet_fleets` = '" . $this->_fleet_id . "' AND
                             `acs_fleet_galaxy` = '" . $fleet['fleet_end_galaxy'] . "' AND
                             `acs_fleet_system` = '" . $fleet['fleet_end_system'] . "' AND
                             `acs_fleet_planet` = '" . $fleet['fleet_end_planet'] . "' AND
-                            `acs_fleet_invited` = '" . $this->_current_user['user_id'] . "'"
+                            `acs_fleet_invited` = '" . $this->_user['user_id'] . "'"
             );
 
-            $this->_db->query(
+            $this->db->query(
                 "UPDATE " . FLEETS . "
                 SET fleet_group = '" . $acs_id . "'
                 WHERE fleet_id = '" . intval($this->_fleet_id) . "'"
             );
         } else {
 
-            $acs_madnessred = $this->_db->query(
+            $acs_fleet = $this->db->query(
                 "SELECT `acs_fleet_invited`, `acs_fleet_name`
                 FROM " . ACS_FLEETS . "
                 WHERE acs_fleet_id = '" . intval($fleet['fleet_group']) . "'"
             );
         }
 
-        $row = $this->_db->fetchArray($acs_madnessred);
+        $row = $this->db->fetchArray($acs_fleet);
         $federation_invited = $row['acs_fleet_invited'];
         $parse['acs_code'] = $row['acs_fleet_name'];
         $members = explode(",", $federation_invited);
@@ -198,40 +297,75 @@ class Federation extends Controller
 
             if ($b != '') {
 
-                $member_qry = $this->_db->query(
+                $member_qry = $this->db->query(
                     "SELECT `user_name`
                     FROM " . USERS . "
                     WHERE `user_id` ='" . intval($b) . "' ;"
                 );
 
-                while ($row = $this->_db->fetchArray($member_qry)) {
+                while ($row = $this->db->fetchArray($member_qry)) {
                     $members_option['value'] = $row['user_name'];
-                    $members_option['selected'] = '';
                     $members_option['title'] = $row['user_name'];
-                    $members_row .= parent::$page->parseTemplate($options_template, $members_option);
                 }
             }
             $members_count++;
         }
 
-        $friends_row = '';
-
-        while ($buddies = $this->_db->fetchArray($query_buddies)) {
-            if ($buddies['user_id'] != $this->_current_user['user_id']) {
-                $members_option['value'] = $buddies['user_name'];
-                $members_option['selected'] = '';
-                $members_option['title'] = $buddies['user_name'];
-                $friends_row .= parent::$page->parseTemplate($options_template, $members_option);
-            }
-        }
-
-        $parse['friends'] = $friends_row;
         $parse['invited_count'] = $members_count;
         $parse['invited_members'] = $members_row;
         $parse['federation_invited'] = $federation_invited;
         $parse['add_user_message'] = $acs_user_message;
-
-        parent::$page->display(parent::$page->parseTemplate(parent::$page->getTemplate('fleet/fleet_federation'), $parse), false, '', false);
+    }
+    
+    /**
+     * Generates a random ACS code
+     * 
+     * @return string
+     */
+    private function generateRandomAcsCode(): string
+    {
+        return 'AG' . mt_rand(100000, 999999999);
+    }
+    
+    /**
+     * Build the list of friends
+     * 
+     * @return array
+     */
+    private function buildBuddiesList(): array
+    {
+        $list_of_buddies = [];
+        
+        $buddies = $this->Buddies_Model->getBuddiesDetailsById(
+            $this->_user['user_id']
+        );
+        
+        if (count($buddies) > 0) {
+            
+            foreach ($buddies as $buddy) {
+                
+                $list_of_buddies[] = [
+                    'value' => $buddy['user_name'],
+                    'title' => $buddy['user_name']
+                ];
+            }
+        }
+        
+        return $list_of_buddies;
+    }
+    
+    /**
+     * Build the list of members
+     * 
+     * @return array
+     */
+    private function buildMembersList(): array
+    {
+        $list_of_members = [];
+        
+        
+        
+        return $list_of_members;
     }
 
     /**
@@ -244,9 +378,9 @@ class Federation extends Controller
         $name_len = strlen($acs_name);
 
         if ($name_len >= 3 && $name_len <= 20) {
-            $this->_db->query("UPDATE " . ACS_FLEETS . "
-									SET `acs_fleet_name` = '" . $this->_db->escapeValue($acs_name) . "'
-									WHERE acs_fleet_members = '" . intval($this->_current_user['user_id']) . "';");
+            $this->db->query("UPDATE " . ACS_FLEETS . "
+									SET `acs_fleet_name` = '" . $this->db->escapeValue($acs_name) . "'
+									WHERE acs_fleet_members = '" . intval($this->_user['user_id']) . "';");
         }
 
         return true;
@@ -264,19 +398,19 @@ class Federation extends Controller
         }
 
         $added_user_id = 0;
-        $member_qry = $this->_db->queryFetch("SELECT `user_id`
+        $member_qry = $this->db->queryFetch("SELECT `user_id`
 															FROM " . USERS . "
-															WHERE `user_name` ='" . $this->_db->escapeValue($member_name) . "';");
+															WHERE `user_name` ='" . $this->db->escapeValue($member_name) . "';");
 
-        if (( $member_qry['user_id'] != NULL ) && ( $this->members_count($_POST['federation_invited']) < 5 ) && ( $member_qry['user_id'] != $this->_current_user['user_id'] )) {
-            $new_member_string = $this->_db->escapeValue($_POST['federation_invited']) . ',' . $member_qry['user_id'];
+        if (( $member_qry['user_id'] != NULL ) && ( $this->members_count($_POST['federation_invited']) < 5 ) && ( $member_qry['user_id'] != $this->_user['user_id'] )) {
+            $new_member_string = $this->db->escapeValue($_POST['federation_invited']) . ',' . $member_qry['user_id'];
 
-            $this->_db->query("UPDATE " . ACS_FLEETS . " SET
+            $this->db->query("UPDATE " . ACS_FLEETS . " SET
 									`acs_fleet_invited` = '" . $new_member_string . "'
 									WHERE `acs_fleet_fleets` = '" . $this->_fleet_id . "';");
 
-            $invite_message = $this->_lang['fl_player'] . $this->_current_user['user_name'] . $this->_lang['fl_acs_invitation_message'];
-            FunctionsLib::sendMessage($member_qry['user_id'], $this->_current_user['user_id'], '', 5, $this->_current_user['user_name'], $this->_lang['fl_acs_invitation_title'], $invite_message);
+            $invite_message = $this->getLang()['fl_player'] . $this->_user['user_name'] . $this->getLang()['fl_acs_invitation_message'];
+            FunctionsLib::sendMessage($member_qry['user_id'], $this->_user['user_id'], '', 5, $this->_user['user_name'], $this->getLang()['fl_acs_invitation_title'], $invite_message);
 
             return true;
         } else {
@@ -292,11 +426,11 @@ class Federation extends Controller
     private function remove_user($member_name = '')
     {
         $remove_user_id = 0;
-        $member_qry = $this->_db->queryFetch("SELECT `user_id`
+        $member_qry = $this->db->queryFetch("SELECT `user_id`
 															FROM " . USERS . "
-															WHERE `user_name` ='" . $this->_db->escapeValue($member_name) . "';");
+															WHERE `user_name` ='" . $this->db->escapeValue($member_name) . "';");
 
-        if (( $member_qry['user_id'] != NULL ) && ( $this->members_count($_POST['federation_invited']) >= 1 ) && ( $member_qry['user_id'] != $this->_current_user['user_id'] )) {
+        if (( $member_qry['user_id'] != NULL ) && ( $this->members_count($_POST['federation_invited']) >= 1 ) && ( $member_qry['user_id'] != $this->_user['user_id'] )) {
 
             $members = explode(',', $_POST['federation_invited']);
             $new_member_string = '';
@@ -309,12 +443,12 @@ class Federation extends Controller
 
             $new_member_string = substr_replace($new_member_string, '', -1);
 
-            $this->_db->query("UPDATE " . ACS_FLEETS . " SET
+            $this->db->query("UPDATE " . ACS_FLEETS . " SET
 									`acs_fleet_invited` = '" . $new_member_string . "'
 									WHERE `acs_fleet_fleets` = '" . $this->_fleet_id . "';");
 
-            $invite_message = $this->_lang['fl_player'] . $this->_current_user['user_name'] . $this->_lang['fl_acs_invitation_message'];
-            FunctionsLib::sendMessage($member_qry['user_id'], $this->_current_user['user_id'], '', 5, $this->_current_user['user_name'], $this->_lang['fl_acs_invitation_title'], $invite_message);
+            $invite_message = $this->getLang()['fl_player'] . $this->_user['user_name'] . $this->getLang()['fl_acs_invitation_message'];
+            FunctionsLib::sendMessage($member_qry['user_id'], $this->_user['user_id'], '', 5, $this->_user['user_name'], $this->getLang()['fl_acs_invitation_title'], $invite_message);
 
             return true;
         } else {
