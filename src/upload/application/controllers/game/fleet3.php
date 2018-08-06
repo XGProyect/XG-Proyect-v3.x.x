@@ -361,12 +361,8 @@ class Fleet3 extends Controller
          * data
          */
         $ships = $this->getSessionShips();
-        $acs = $this->Fleet_Model->acsExists(
-            $_SESSION['fleet_data']['target']['group'],
-            $_SESSION['fleet_data']['target']['galaxy'],
-            $_SESSION['fleet_data']['target']['system'],
-            $_SESSION['fleet_data']['target']['planet'],
-            $_SESSION['fleet_data']['target']['type']
+        $acs = $this->Fleet_Model->getAcsCount(
+            $_SESSION['fleet_data']['target']['group']
         );
         
         $missions = [];

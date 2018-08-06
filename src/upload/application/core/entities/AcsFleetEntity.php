@@ -65,9 +65,9 @@ class AcsFleetEntity extends Entity
      * 
      * @return string
      */
-    public function getAcsFleetMembers()
+    public function getAcsFleetOwner()
     {
-        return $this->_data['acs_fleet_members'];
+        return $this->_data['acs_fleet_owner'];
     }
 
     /**

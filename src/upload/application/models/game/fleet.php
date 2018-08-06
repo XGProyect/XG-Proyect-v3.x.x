@@ -97,9 +97,32 @@ class Fleet
         if ((int) $user_id > 0) {
 
             return $this->db->queryFetchAll(
-                    "SELECT f.*
-                    FROM `" . FLEETS . "` AS f
+                    "SELECT 
+                        f.*
+                    FROM `" . FLEETS . "` f
                     WHERE f.`fleet_owner` = '" . $user_id . "';"
+            );
+        }
+
+        return [];
+    }
+    
+    /**
+     * Get ACS Data by group ID
+     * 
+     * @param int $group_id
+     * 
+     * @return array
+     */
+    public function getAcsDataByGroupId(string $group_id)
+    {        
+        if (!empty($group_id)) {
+
+            return $this->db->queryFetchAll(
+                    "SELECT 
+                        acs.*
+                    FROM `" . ACS_FLEETS . "` acs
+                    WHERE acs.`acs_fleet_id` = '" . $group_id . "';"
             );
         }
 
@@ -140,36 +163,13 @@ class Fleet
      * 
      * @return mixed
      */
-    public function getOngoingAcs()
+    public function getOngoingAcs($user_id)
     {
         return $this->db->queryFetchAll(
-                "SELECT * FROM `" . ACS_FLEETS . "`"
-        );
-    }
-
-    /**
-     * Check if an acs exists
-     *
-     * @param int $fleet_acs    Fleet ACS ID
-     * @param int $galaxy       Galaxy
-     * @param int $system       System
-     * @param int $planet       Planet
-     * @param int $planet_type  Planet Type
-     *
-     * @return boolean
-     */
-    public function acsExists($fleet_acs, $galaxy, $system, $planet, $planet_type)
-    {
-        return $this->db->queryFetch(
                 "SELECT 
-                COUNT(`acs_fleet_id`) AS `amount`
-            FROM `" . ACS_FLEETS . "`
-            WHERE `acs_fleet_id` = '" . $fleet_acs . "' AND 
-                `acs_fleet_galaxy` = '" . $galaxy . "' AND 
-                `acs_fleet_system` = '" . $system . "' AND 
-                `acs_fleet_planet` = '" . $planet . "' AND 
-                `acs_fleet_planet_type` = '" . $planet_type . "';"
-            )['amount'] > 0;
+                    acs.* 
+                FROM `" . ACS_FLEETS . "` acs"
+        );
     }
 
     /**
@@ -239,10 +239,10 @@ class Fleet
     public function getAcsCount($acs_fleet_id): int
     {
         return $this->db->queryFetch(
-                "SELECT COUNT(`acs_fleet_id`) AS `acs_amount`
+            "SELECT COUNT(`acs_fleet_id`) AS `acs_amount`
             FROM `" . ACS_FLEETS . "`
             WHERE `acs_fleet_id` = '" . $acs_fleet_id . "'"
-            )['acs_amount'];
+        )['acs_amount'] ?? 0;
     }
 
     /**
@@ -376,19 +376,19 @@ class Fleet
     }
 
     /**
-     * Get all the ACS Members
+     * Get the ACS Owner
      * 
      * @param int $fleet_group
      * 
      * @return string
      */
-    public function getAcsMembers(int $fleet_group): string
+    public function getAcsOwner(int $fleet_group): int
     {
         return $this->db->queryFetch(
-            "SELECT af.`acs_fleet_members`
+            "SELECT af.`acs_fleet_owner`
                 FROM `" . ACS_FLEETS . "` af
                 WHERE af.`acs_fleet_id` = '" . $fleet_group . "';"
-        )['acs_fleet_members'] ?? '';
+        )['acs_fleet_owner'] ?? 0;
     }
     
     /**
@@ -428,9 +428,9 @@ class Fleet
 
             if ($fleet->getFleetGroup() > 0) {
 
-                $acs = $this->getAcsMembers($fleet->getFleetGroup());
+                $acs = $this->getAcsOwner($fleet->getFleetGroup());
 
-                if ($acs['acs_fleet_members'] == $fleet->getFleetOwner() 
+                if ($acs['acs_fleet_owner'] == $fleet->getFleetOwner() 
                     && $fleet->getFleetMission() == Missions::attack) {
 
                     $this->removeAcs($fleet->getFleetGroup());
@@ -477,6 +477,69 @@ class Fleet
 
             return false;
         }
+    }
+    
+    /**
+     * Create a new ACS Record
+     * 
+     * @param type $acs_code
+     * @param FleetEntity $fleet
+     * 
+     * @return boolean
+     */
+    public function createNewAcs($acs_code, FleetEntity $fleet)
+    {
+        try {
+
+            $this->db->beginTransaction();
+
+            $this->db->query(
+                "INSERT INTO `" . ACS_FLEETS . "` SET
+                    `acs_fleet_name` = '" . $acs_code . "',
+                    `acs_fleet_owner` = '" . $fleet->getFleetOwner() . "',
+                    `acs_fleet_fleets` = '" . $fleet->getFleetId() . "',
+                    `acs_fleet_galaxy` = '" . $fleet->getFleetEndGalaxy() . "',
+                    `acs_fleet_system` = '" . $fleet->getFleetEndSystem() . "',
+                    `acs_fleet_planet` = '" . $fleet->getFleetEndPlanet() . "',
+                    `acs_fleet_planet_type` = '" . $fleet->getFleetEndType() . "',
+                    `acs_fleet_invited` = '" . serialize([$fleet->getFleetOwner()]) . "'"
+            );
+
+            $group_id = $this->db->insertId();
+            
+            $this->db->query(
+                "UPDATE `" . FLEETS . "` SET
+                    `fleet_group` = '" . $group_id . "'
+                WHERE `fleet_id` = '" . $fleet->getFleetId() . "'"
+            );
+
+            $this->db->commitTransaction();
+
+            return $group_id;
+        } catch (Exception $e) {
+
+            $this->db->rollbackTransaction();
+
+            return false;
+        }
+    }
+    
+    /**
+     * Get all the ACS Members
+     * 
+     * @param string $acs_members
+     * 
+     * @return array
+     */
+    public function getListOfAcsMembers($acs_members)
+    {
+        return $this->db->queryFetchAll(
+            "SELECT 
+                u.`user_id`,
+                u.`user_name`
+            FROM `" . USERS . "` u
+            WHERE u.`user_id` IN (" . $acs_members . ");"
+        );
     }
 }
 

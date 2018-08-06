@@ -307,7 +307,7 @@ class Movement extends Controller
             if ($fleet->getFleetMission() == Missions::attack) {
                 
                 $content = '<input type="button" value="' . $this->getLang()['fl_acs'] . '">';
-                $attributes = 'onClick="f(\'game.php?page=federationlayer&union=' . $fleet->getFleetGroup() . '&fleet=' . $fleet->getFleetId() . '\', \'\')"';
+                $attributes = 'onClick="f(\'game.php?page=federationlayer&fleet=' . $fleet->getFleetId() . '\', \'\')"';
                 
                 $actions .= FunctionsLib::setUrl('#', '', $content, $attributes);
             }

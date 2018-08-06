@@ -130,6 +130,27 @@ class Fleets
     }
     
     /**
+     * Get a valid fleet by ID
+     * 
+     * @param int $fleet_id
+     * 
+     * @return FleetEntity
+     */
+    public function getOwnValidFleetById(int $fleet_id)
+    {
+        $fleet = $this->getOwnFleetById($fleet_id);
+        
+        if ($fleet->getFleetStartTime() <= time() 
+            or $fleet->getFleetEndTime() < time() 
+            or $fleet->getFleetMess() == 1) {
+            
+            return null;
+        }
+        
+        return $fleet;
+    }
+    
+    /**
      * Validate index
      * 
      * @param int $fleet_id

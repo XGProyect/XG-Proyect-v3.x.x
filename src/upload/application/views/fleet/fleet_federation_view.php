@@ -23,8 +23,8 @@
                 </select>
             </th>
             <th>
-                <a href="#"><input type="submit" value="{fl_invite_acs}" name="add"></a>
-                <a href="#"><input type="submit" value="{fl_remove_acs}" name="remove"></a>
+                <input type="submit" value="{fl_invite_acs}" name="add">
+                <input type="submit" value="{fl_remove_acs}" name="remove">
             </th>
             <th width="150px">
                 {fl_union_members} ({invited_count}/5)
@@ -40,14 +40,14 @@
             <th colspan="3">
                 {add_user_message}
                 <div id="search" style="visibility:hidden;text-align:left;">
-                    {fl_search_user} <input name="addtogroup" type="text" /> <input type="submit" value="{fl_search_user_btn}" name="search_user"/>
+                    {fl_search_user} <input name="addtogroup" type="text" /> <input type="submit" value="{fl_search_user_btn}" name="search"/>
                 </div>
             </th>
         </tr>
         <tr>
             <th colspan="3">
                 <div style="text-align:right;">
-                    <input type="submit" value="{fl_save_all}" name="save_acs"/>
+                    <input type="submit" value="{fl_save_all}" name="save"/>
                 </div>
             </th>
         </tr>

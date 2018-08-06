@@ -17,14 +17,15 @@ $tables['acs_fleets'] =
 "CREATE TABLE `" . ACS_FLEETS . "` (
 `acs_fleet_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
 `acs_fleet_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
-`acs_fleet_members` text CHARACTER SET utf8 COLLATE utf8_general_ci,
+`acs_fleet_owner` INT(11) NOT NULL DEFAULT '0',
 `acs_fleet_fleets` text CHARACTER SET utf8 COLLATE utf8_general_ci,
 `acs_fleet_galaxy` int(2) DEFAULT NULL,
 `acs_fleet_system` int(4) DEFAULT NULL,
 `acs_fleet_planet` int(2) DEFAULT NULL,
 `acs_fleet_planet_type` tinyint(1) DEFAULT NULL,
 `acs_fleet_invited` text,
-PRIMARY KEY (`acs_fleet_id`)
+PRIMARY KEY (`acs_fleet_id`),
+UNIQUE KEY `acs_fleet_name` (`acs_fleet_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 ";
 

@@ -14,11 +14,11 @@
 namespace application\controllers\game;
 
 use application\core\Controller;
+use application\libraries\fleets\AcsFleets;
 use application\libraries\fleets\Fleets;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
 use const ACS_FLEETS;
-use const FLEETS;
 use const JS_PATH;
 use const USERS;
 
@@ -58,6 +58,24 @@ class Federation extends Controller
      * @var \Fleets
      */
     private $_fleets = null;
+    
+    /**
+     *
+     * @var \AcsFleets
+     */
+    private $_group = null;
+    
+    /**
+     *
+     * @var string
+     */
+    private $_acs_code = '';
+    
+    /**
+     *
+     * @var int 
+     */
+    private $_members_count = 0;
     
     /**
      * Constructor
@@ -112,24 +130,26 @@ class Federation extends Controller
      */
     private function runAction()
     {
-        /*
-        $mode = filter_input(
-            INPUT_GET,
-            'mode',
-            FILTER_CALLBACK,
-            [
-                'options' => function($value) {
-                    
-                    if (in_array($value, ['add', 'edit', 'delete', 'a'])) {
-                        
-                        return $value;
-                    }
-                    
-                    return false;
-                }
-            ]
-        );
+        $data = filter_input_array(INPUT_POST);
             
+        if (isset($data['add']) && isset($data['friends_list'])) {
+            
+        }
+        
+        if (isset($data['remove']) && isset($data['members_list'])) {
+            
+        }
+        
+        if (isset($data['search']) && isset($data['addtogroup'])) {
+            
+        }
+        
+        if (isset($data['save']) && isset($data['name_acs'])) {
+            
+        }
+            
+            
+        /*
         $data = filter_input_array(INPUT_POST, [
             'name' => FILTER_SANITIZE_STRING,
             'galaxy' => [
@@ -169,14 +189,18 @@ class Federation extends Controller
      */
     private function buildPage()
     {
+        $this->validateData();
+        
         /**
          * Parse the items
          */
         $page = [
             'js_path' => JS_PATH,
-            'acs_code' => $this->generateRandomAcsCode(),
+            'acs_code' => $this->_acs_code,
             'buddies_list' => $this->buildBuddiesList(),
             'members_list' => $this->buildMembersList(),
+            'invited_count' => $this->_members_count,
+            'add_error_messages' => $this->buildErrorMessagesBlock()
         ];
 
         // display the page
@@ -191,32 +215,7 @@ class Federation extends Controller
         
 
         // OTHER VALUES
-        $this->_fleet_id = isset($_GET['fleet']) ? (int) $_GET['fleet'] : NULL;
-        $union = isset($_GET['union']) ? (int) $_GET['union'] : NULL;
         $acs_user_message = '';
-
-        if (!is_numeric($this->_fleet_id) or empty($this->_fleet_id) or ! is_numeric($union)) {
-            FunctionsLib::redirect(self::REDIRECT_TARGET);
-        }
-
-        // QUERY
-        $fleet = $this->db->queryFetch(
-            "SELECT `fleet_id`,
-            `fleet_start_time`,
-            `fleet_end_time`,
-            `fleet_mess`,
-            `fleet_group`,
-            `fleet_end_galaxy`,
-            `fleet_end_system`,
-            `fleet_end_planet`,
-            `fleet_end_type`
-            FROM " . FLEETS . "
-            WHERE fleet_id = '" . intval($this->_fleet_id) . "'"
-        );
-
-        if ($fleet['fleet_id'] == '') {
-            FunctionsLib::redirect(self::REDIRECT_TARGET);
-        }
 
         // ACTIONS
         if (isset($_POST['save_acs']) && $_POST['save_acs']) {
@@ -239,82 +238,47 @@ class Federation extends Controller
             }
         }
 
-        if ($fleet['fleet_start_time'] <= time() or $fleet['fleet_end_time'] < time() or $fleet['fleet_mess'] == 1) {
-            FunctionsLib::redirect(self::REDIRECT_TARGET);
-        }
+        $parse['add_user_message'] = $acs_user_message;
+    }
+    
+    /**
+     * Validate data
+     * 
+     * @return void
+     */
+    private function validateData()
+    {
+        $fleet_id = filter_input(INPUT_GET, 'fleet', FILTER_VALIDATE_INT);
+        
+        if ($fleet_id) {
+            
+            $own_fleet = $this->_fleets->getOwnValidFleetById($fleet_id);
 
-        if (empty($fleet['fleet_group'])) {
+            if (!is_null($own_fleet)) {
+               
+                if ($own_fleet->getFleetGroup() <= 0) {
 
-
-            $federation_invited = intval($this->_user['user_id']);
-
-            $this->db->query("INSERT INTO " . ACS_FLEETS . " SET
-                `acs_fleet_name` = '" . $acs_code . "',
-                `acs_fleet_members` = '" . $this->_user['user_id'] . "',
-                `acs_fleet_fleets` = '" . $this->_fleet_id . "',
-                `acs_fleet_galaxy` = '" . $fleet['fleet_end_galaxy'] . "',
-                `acs_fleet_system` = '" . $fleet['fleet_end_system'] . "',
-                `acs_fleet_planet` = '" . $fleet['fleet_end_planet'] . "',
-                `acs_fleet_planet_type` = '" . $fleet['fleet_end_type'] . "',
-                `acs_fleet_invited` = '" . $federation_invited . "'"
-            );
-
-            $acs_id = $this->db->insertId();
-            $acs_fleet = $this->db->query(
-                "SELECT `acs_fleet_invited`, `acs_fleet_name`
-            FROM " . ACS_FLEETS . "
-            WHERE `acs_fleet_name` = '" . $acs_code . "' AND
-                            `acs_fleet_members` = '" . $this->_user['user_id'] . "' AND
-                            `acs_fleet_fleets` = '" . $this->_fleet_id . "' AND
-                            `acs_fleet_galaxy` = '" . $fleet['fleet_end_galaxy'] . "' AND
-                            `acs_fleet_system` = '" . $fleet['fleet_end_system'] . "' AND
-                            `acs_fleet_planet` = '" . $fleet['fleet_end_planet'] . "' AND
-                            `acs_fleet_invited` = '" . $this->_user['user_id'] . "'"
-            );
-
-            $this->db->query(
-                "UPDATE " . FLEETS . "
-                SET fleet_group = '" . $acs_id . "'
-                WHERE fleet_id = '" . intval($this->_fleet_id) . "'"
-            );
-        } else {
-
-            $acs_fleet = $this->db->query(
-                "SELECT `acs_fleet_invited`, `acs_fleet_name`
-                FROM " . ACS_FLEETS . "
-                WHERE acs_fleet_id = '" . intval($fleet['fleet_group']) . "'"
-            );
-        }
-
-        $row = $this->db->fetchArray($acs_fleet);
-        $federation_invited = $row['acs_fleet_invited'];
-        $parse['acs_code'] = $row['acs_fleet_name'];
-        $members = explode(",", $federation_invited);
-        $members_count = 0;
-        $members_row = '';
-
-        foreach ($members as $a => $b) {
-
-            if ($b != '') {
-
-                $member_qry = $this->db->query(
-                    "SELECT `user_name`
-                    FROM " . USERS . "
-                    WHERE `user_id` ='" . intval($b) . "' ;"
+                    // create a new acs, and get its group ID
+                    $group_id = $this->Fleet_Model->createNewAcs(
+                        $this->generateRandomAcsCode(),
+                        $own_fleet
+                    );
+                } else {
+                    
+                    $group_id = $own_fleet->getFleetGroup();
+                }
+                
+                $this->_group = new AcsFleets(
+                    $this->Fleet_Model->getAcsDataByGroupId($group_id),
+                    $this->_user['user_id']
                 );
 
-                while ($row = $this->db->fetchArray($member_qry)) {
-                    $members_option['value'] = $row['user_name'];
-                    $members_option['title'] = $row['user_name'];
-                }
+                $this->_acs_code = $this->_group->getFirstAcs()->getAcsFleetName();
             }
-            $members_count++;
+        } else {
+            
+            FunctionsLib::redirect(self::REDIRECT_TARGET);
         }
-
-        $parse['invited_count'] = $members_count;
-        $parse['invited_members'] = $members_row;
-        $parse['federation_invited'] = $federation_invited;
-        $parse['add_user_message'] = $acs_user_message;
     }
     
     /**
@@ -345,7 +309,7 @@ class Federation extends Controller
             foreach ($buddies as $buddy) {
                 
                 $list_of_buddies[] = [
-                    'value' => $buddy['user_name'],
+                    'value' => $buddy['user_id'],
                     'title' => $buddy['user_name']
                 ];
             }
@@ -362,12 +326,32 @@ class Federation extends Controller
     private function buildMembersList(): array
     {
         $list_of_members = [];
+
+        $members = $this->Fleet_Model->getListOfAcsMembers(
+            join(',', unserialize($this->_group->getFirstAcs()->getAcsFleetInvited()))
+        );
         
-        
+        if (count($members) > 0) {
+            
+            foreach ($members as $member) {
+                
+                ++$this->_members_count;
+                
+                $list_of_members[] = [
+                    'value' => $member['user_id'],
+                    'title' => $member['user_name']
+                ];
+            }
+        }
         
         return $list_of_members;
     }
 
+    private function buildErrorMessagesBlock()
+    {
+        return '';
+    }
+    
     /**
      * method set_name
      * param $acs_name
@@ -380,7 +364,7 @@ class Federation extends Controller
         if ($name_len >= 3 && $name_len <= 20) {
             $this->db->query("UPDATE " . ACS_FLEETS . "
 									SET `acs_fleet_name` = '" . $this->db->escapeValue($acs_name) . "'
-									WHERE acs_fleet_members = '" . intval($this->_user['user_id']) . "';");
+									WHERE acs_fleet_owner = '" . intval($this->_user['user_id']) . "';");
         }
 
         return true;
