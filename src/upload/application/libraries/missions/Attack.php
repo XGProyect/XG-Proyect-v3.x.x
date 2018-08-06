@@ -172,6 +172,10 @@ class Attack extends Missions
                     $targetUser['research_weapons_technology'], $targetUser['research_shielding_technology'], $targetUser['research_armour_technology']
                 );
 
+                $player->setCoords(
+                    $fleet_row['fleet_end_galaxy'], $fleet_row['fleet_end_system'], $fleet_row['fleet_end_planet']
+                );
+                
                 $player->setName($targetUser['user_name']);
 
                 $defenders->addPlayer($player);
@@ -299,6 +303,10 @@ class Attack extends Missions
 
         $player->setName($player_info['user_name']);
 
+        $player->setCoords(
+            $fleet_row['fleet_start_galaxy'], $fleet_row['fleet_start_system'], $fleet_row['fleet_start_planet']
+        );
+        
         $playerGroup->addPlayer($player);
 
         return $playerGroup;
@@ -356,6 +364,10 @@ class Attack extends Missions
                         $player_info['research_weapons_technology'], $player_info['research_shielding_technology'], $player_info['research_armour_technology']
                     );
 
+                    $player->setCoords(
+                        $fleet_row['fleet_start_galaxy'], $fleet_row['fleet_start_system'], $fleet_row['fleet_start_planet']
+                    );
+                    
                     $player->setName($player_info['user_name']);
 
                     $playerGroup->addPlayer($player);
@@ -553,7 +565,7 @@ class Attack extends Missions
 
                 $fleetCapacity = 0;
                 $totalCount = 0;
-                $fleetArray = '';
+                $fleetArray = [];
 
                 foreach ($fleet as $idShipType => $fighters) {
 
@@ -566,7 +578,7 @@ class Attack extends Missions
                         $amount = $XshipType->getCount();
                         $fleetCapacity += $amount * $this->pricelist[$idShipType]['capacity'];
                         $totalCount += $amount;
-                        $fleetArray .= "$idShipType,$amount;";
+                        $fleetArray[$idShipType] = $amount;
                     }
                 }
 
@@ -594,7 +606,7 @@ class Attack extends Missions
                     }
 
                     $this->Missions_Model->updateReturningFleetData([
-                        'ships' => substr($fleetArray, 0, -1),
+                        'ships' => FleetsLib::setFleetShipsArray($fleetArray),
                         'amount' => $totalCount,
                         'stolen' => [
                             'metal' => $fleetSteal['metal'],

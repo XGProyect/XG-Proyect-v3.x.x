@@ -35,12 +35,16 @@ class Player extends IterableUtil
     private $shields_tech = 0;
     private $armour_tech = 0;
     private $name;
+    private $galaxy;
+    private $system;
+    private $planet;
 
-    public function __construct($id, $fleets = array(), $weapons_tech = null, $shields_tech = null, $armour_tech = null, $name = "")
+    public function __construct($id, $fleets = array(), $weapons_tech = null, $shields_tech = null, $armour_tech = null, $name = "", $galaxy = null, $system = null, $planet = null)
     {
         $this->id = $id;
         $this->name = $name;
         $this->setTech($weapons_tech, $shields_tech, $armour_tech);
+        $this->setCoords($galaxy, $system, $planet);
         foreach ($fleets as $fleet)
         {
             $this->addFleet($fleet);
@@ -63,6 +67,7 @@ class Player extends IterableUtil
         $fleet = $fleet->cloneMe();
         $fleet->setTech($this->weapons_tech, $this->shields_tech, $this->armour_tech);
         $fleet->setName($this->name);
+        $fleet->setCoords($this->galaxy, $this->system, $this->planet);
         $this->array[$fleet->getId()] = $fleet; //avoid collateral effects: when the object or array is an argument && it's saved in a structure
     }
     public function setTech($weapons = null, $shields = null, $armour = null)
@@ -74,6 +79,16 @@ class Player extends IterableUtil
         if(is_numeric($weapons)) $this->weapons_tech = intval($weapons);
         if(is_numeric($shields)) $this->shields_tech = intval($shields);
         if(is_numeric($armour)) $this->armour_tech = intval($armour);
+    }
+    public function setCoords($galaxy = null, $system = null, $planet = null)
+    {
+        foreach ($this->array as $id => $fleet)
+        {
+            $fleet->setCoords($galaxy, $system, $planet);
+        }
+        if(is_numeric($galaxy)) $this->galaxy = intval($galaxy);
+        if(is_numeric($system)) $this->system = intval($system);
+        if(is_numeric($planet)) $this->planet = intval($planet);
     }
     public function getId()
     {
@@ -98,6 +113,18 @@ class Player extends IterableUtil
     public function getArmourTech()
     {
         return $this->armour_tech;
+    }
+    public function getGalaxy()
+    {
+        return $this->galaxy;
+    }
+    public function getSystem()
+    {
+        return $this->system;
+    }
+    public function getPlanet()
+    {
+        return $this->planet;
     }
     public function getOrderedItereator()
     {
@@ -184,6 +211,7 @@ class Player extends IterableUtil
     {
         $fleetDefender = $fleetDefender->cloneMe();
         $fleetDefender->setTech($this->weapons_tech, $this->shields_tech, $this->armour_tech);
+        $fleetDefender->setCoords($this->galaxy, $this->system, $this->planet);
         $this->order();
         $fl = current($this->array);
         if ($fl === false)
@@ -215,6 +243,8 @@ class Player extends IterableUtil
     public function cloneMe()
     {
         $fleets = array_values($this->array);
-        return new Player($this->id, $fleets ,$this->weapons_tech, $this->shields_tech, $this->armour_tech, $this->name);
+        return new Player(
+            $this->id, $fleets ,$this->weapons_tech, $this->shields_tech, $this->armour_tech, $this->name, $this->galaxy, $this->system, $this->planet
+        );
     }
 }
