@@ -63,7 +63,8 @@ class Missions
     private function lockTables()
     {
         $this->db->query(
-            "LOCK TABLE " . ACS_FLEETS . " WRITE,
+            "LOCK TABLE " . ACS . " WRITE,
+            " . ACS_MEMBERS . " AS a WRITE,
             " . ALLIANCE . " AS a WRITE,    
             " . REPORTS . " WRITE,
             " . MESSAGES . " WRITE,
@@ -280,8 +281,8 @@ class Missions
         if ((int) $fleet_group_id > 0) {
 
             $this->db->query(
-                "DELETE FROM `" . ACS_FLEETS . "`
-                WHERE `acs_fleet_id` = '" . $fleet_group_id . "'"
+                "DELETE FROM `" . ACS . "`
+                WHERE `acs_id` = '" . $fleet_group_id . "'"
             );
         }
     }

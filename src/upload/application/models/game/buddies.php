@@ -203,24 +203,32 @@ class Buddies
      * Get buddy details by ID
      * 
      * @param int $user_id
+     * @param int $group_id
      * 
      * @return array
      */
-    public function getBuddiesDetailsById($user_id): array
+    public function getBuddiesDetailsForAcsById(int $user_id, int $group_id): array
     {
         return $this->db->queryFetchAll(
-            "SELECT 
+            "SELECT DISTINCT
                 u.`user_id`,
                 u.`user_name`
             FROM `" . BUDDY . "` AS b
-            LEFT JOIN `" . USERS . "` AS u ON ((u.user_id = b.buddy_sender) OR (u.user_id = b.buddy_receiver))
+            LEFT JOIN `" . USERS . "` AS u 
+            	ON ((u.user_id = b.buddy_sender) OR (u.user_id = b.buddy_receiver))
             WHERE 
             (
-                `buddy_sender` = '" . $user_id . "' 
+                b.`buddy_sender` = '" . $user_id . "' 
             OR
-                `buddy_receiver` = '" . $user_id . "'
+                b.`buddy_receiver` = '" . $user_id . "'
             ) 
-            AND `buddy_status` = '1';"
+            AND b.`buddy_status` = '1'
+            AND u.`user_id` NOT IN (
+                SELECT 
+                    acs.`acs_user_id`
+                FROM `" . ACS_MEMBERS . "` acs
+                WHERE acs.`acs_group_id` = '" . $group_id . "'
+            )"
         ) ?? [];
     }
 }

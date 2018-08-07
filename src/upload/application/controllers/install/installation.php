@@ -453,7 +453,7 @@ class Installation extends Controller
         $tables = [];
 
         // get the database structure
-        require_once XGP_ROOT . PUBLIC_PATH . 'install' . DIRECTORY_SEPARATOR . 'databaseinfos.php';
+        require_once XGP_ROOT . PUBLIC_PATH . 'install' . DIRECTORY_SEPARATOR . 'database.php';
 
         if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
 

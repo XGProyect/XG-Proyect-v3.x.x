@@ -41,93 +41,73 @@ class AcsFleetEntity extends Entity
     }
     
     /**
-     * Get the acs fleet id
+     * Get the acs id
      * 
      * @return string
      */
     public function getAcsFleetId()
     {
-        return $this->_data['acs_fleet_id'];
+        return $this->_data['acs_id'];
     }
 
     /**
-     * Get the acs fleet name
+     * Get the acs name
      * 
      * @return string
      */
     public function getAcsFleetName()
     {
-        return $this->_data['acs_fleet_name'];
+        return $this->_data['acs_name'];
     }
 
     /**
-     * Get the acs fleet members
+     * Get the acs owner
      * 
      * @return string
      */
     public function getAcsFleetOwner()
     {
-        return $this->_data['acs_fleet_owner'];
+        return $this->_data['acs_owner'];
     }
 
     /**
-     * Get the acs fleet fleets
-     * 
-     * @return string
-     */
-    public function getAcsFleetFleets()
-    {
-        return $this->_data['acs_fleet_fleets'];
-    }
-
-    /**
-     * Get the acs fleet galaxy
+     * Get the acs galaxy
      * 
      * @return string
      */
     public function getAcsFleetGalaxy()
     {
-        return $this->_data['acs_fleet_galaxy'];
+        return $this->_data['acs_galaxy'];
     }
 
     /**
-     * Get the acs fleet system
+     * Get the acs system
      * 
      * @return string
      */
     public function getAcsFleetSystem()
     {
-        return $this->_data['acs_fleet_system'];
+        return $this->_data['acs_system'];
     }
 
     /**
-     * Get the acs fleet planet
+     * Get the acs planet
      * 
      * @return string
      */
     public function getAcsFleetPlanet()
     {
-        return $this->_data['acs_fleet_planet'];
+        return $this->_data['acs_planet'];
     }
 
     /**
-     * Get the acs fleet planet type
+     * Get the acs planet type
      * 
      * @return string
      */
     public function getAcsFleetPlanetType()
     {
-        return $this->_data['acs_fleet_planet_type'];
-    }
-
-    /**
-     * Get the acs fleet invited
-     * 
-     * @return string
-     */
-    public function getAcsFleetInvited()
-    {
-        return $this->_data['acs_fleet_invited'];
+        return $this->_data['acs_planet_type'];
     }
 }
 /* end of AcsFleetEntity.php */

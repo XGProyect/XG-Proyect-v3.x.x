@@ -7,8 +7,8 @@
         <tr>
             <th colspan="3">
                 <div style="text-align:left">
-                    {fl_fleet_union_name} <input name="name_acs" type="text" id="txt_name_acs" value="{acs_code}" maxlength="20"/> 
-                    <a href="#" onclick="document.getElementById('search').style.visibility = 'visible';">{fl_search_user}</a>
+                    {fl_fleet_union_name} <input name="name_acs" type="text" id="txt_name_acs" value="{acs_code}" minlength="3" maxlength="20"/> 
+                    <a href="#" onclick="document.getElementById('search').style.display = 'block';">{fl_search_user}</a>
                 </div>
             </th>
         </tr>
@@ -38,8 +38,8 @@
         </tr>
         <tr>
             <th colspan="3">
-                {add_user_message}
-                <div id="search" style="visibility:hidden;text-align:left;">
+                {add_error_messages}
+                <div id="search" style="display: none; text-align: left;">
                     {fl_search_user} <input name="addtogroup" type="text" /> <input type="submit" value="{fl_search_user_btn}" name="search"/>
                 </div>
             </th>

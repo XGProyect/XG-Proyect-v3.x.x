@@ -213,7 +213,8 @@ if (!defined('DB_PREFIX')) {
 }
 
 // TABLES
-define('ACS_FLEETS', DB_PREFIX . 'acs_fleets');
+define('ACS', DB_PREFIX . 'acs');
+define('ACS_MEMBERS', DB_PREFIX . 'acs_members');
 define('ALLIANCE', DB_PREFIX . 'alliance');
 define('ALLIANCE_STATISTICS', DB_PREFIX . 'alliance_statistics');
 define('BANNED', DB_PREFIX . 'banned');

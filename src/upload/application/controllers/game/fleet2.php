@@ -347,20 +347,13 @@ class Fleet2 extends Controller
 
             foreach ($current_acs as $acs) {
 
-                $members = explode(',', $acs['acs_fleet_invited']);
-
-                if (!in_array($this->_user['user_id'], $members)) {
-
-                    continue;
-                }
-
                 $acs_fleets[] = [
-                    'galaxy' => $acs['acs_fleet_galaxy'],
-                    'system' => $acs['acs_fleet_system'],
-                    'planet' => $acs['acs_fleet_planet'],
-                    'planet_type' => $acs['acs_fleet_planet_type'],
-                    'id' => $acs['acs_fleet_id'],
-                    'name' => $acs['acs_fleet_name'],
+                    'galaxy' => $acs['acs_galaxy'],
+                    'system' => $acs['acs_system'],
+                    'planet' => $acs['acs_planet'],
+                    'planet_type' => $acs['acs_planet_type'],
+                    'id' => $acs['acs_id'],
+                    'name' => $acs['acs_name'],
                 ];
             }
         }
