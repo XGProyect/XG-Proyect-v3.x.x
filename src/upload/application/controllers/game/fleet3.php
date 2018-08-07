@@ -337,8 +337,14 @@ class Fleet3 extends Controller
                 ]
             ],
             PlanetTypes::debris => [
-                Missions::deploy,
-                Missions::recycle
+                'own' => [
+                    Missions::deploy,
+                    Missions::recycle
+                ],
+                'other' => [
+                    Missions::deploy,
+                    Missions::recycle
+                ]
             ],
             PlanetTypes::moon => [
                 'own' => [
