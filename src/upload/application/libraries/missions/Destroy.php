@@ -13,6 +13,7 @@
  */
 namespace application\libraries\missions;
 
+use application\libraries\FleetsLib;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
 
@@ -94,15 +95,11 @@ class Destroy extends Missions
                 }
             }
 
-            $TheFleet = explode(";", $fleet_row['fleet_array']);
+            $TheFleet = FleetsLib::getFleetShipsArray($fleet_row['fleet_array']);
 
-            foreach ($TheFleet as $a => $b) {
+            foreach ($TheFleet as $id => $count) {
 
-                if ($b != '') {
-
-                    $a = explode(",", $b);
-                    $current_ships[$a[0]]['count'] = $a[1];
-                }
+                $current_ships[$id]['count'] = $count;
             }
 
             $attack = $this->attack($current_ships, $target_ships, $current_data, $target_data);

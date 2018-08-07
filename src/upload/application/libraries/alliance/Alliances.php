@@ -71,7 +71,7 @@ class Alliances
      * 
      * @return array
      */
-    public function getAlliance()
+    public function getAlliances()
     {
         $list_of_alliances = [];
         
@@ -148,6 +148,8 @@ class Alliances
      * Set up the list of alliances
      * 
      * @param array $alliances Alliances
+     * 
+     * @return void
      */
     private function setUp($alliances)
     {

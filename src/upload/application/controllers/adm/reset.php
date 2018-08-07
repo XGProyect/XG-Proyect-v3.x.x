@@ -78,7 +78,8 @@ class Reset extends Controller
         $this->_db->query("CREATE  TABLE IF NOT EXISTS " . PLANETS . " ( LIKE " . PLANETS . "_s );");
         $this->_db->query("CREATE  TABLE IF NOT EXISTS " . USERS . " ( LIKE " . USERS . "_s );");
 
-        $this->_db->query("TRUNCATE TABLE " . ACS_FLEETS . "");
+        $this->_db->query("TRUNCATE TABLE " . ACS . "");
+        $this->_db->query("TRUNCATE TABLE " . ACS_MEMBERS . "");
         $this->_db->query("TRUNCATE TABLE " . ALLIANCE . "");
         $this->_db->query("TRUNCATE TABLE " . ALLIANCE_STATISTICS . "");
         $this->_db->query("TRUNCATE TABLE " . BANNED . "");

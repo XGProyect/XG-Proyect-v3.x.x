@@ -41,26 +41,29 @@ AutoLoader::registerDirectory(XGP_ROOT . CORE_PATH);
 AutoLoader::registerDirectory(XGP_ROOT . LIB_PATH);
 
 // For debugging
-
 if (DEBUG_MODE or (strpos($_SERVER['HTTP_HOST'], 'localhost') !== false)) {
 
     // Show all errors
     ini_set('display_errors', 1);
+} else {
+    /**
+     * We assume we are on prod here
+     */
+    
+    // We should use our custom function to handle errors.
+    set_error_handler(function($code, $description, $file = null, $line = null, $context = null) {
+
+        $displayErrors = strtolower(ini_get("display_errors"));
+
+        if (error_reporting() === 0 || $displayErrors === "on") {
+
+            return false;
+        }
+
+        $debug = new application\libraries\DebugLib();
+        $debug->error($description, $code, 'php');
+    });
 }
-
-// We should use our custom function to handle errors.
-set_error_handler(function($code, $description, $file = null, $line = null, $context = null) {
-
-    $displayErrors = strtolower(ini_get("display_errors"));
-
-    if (error_reporting() === 0 || $displayErrors === "on") {
-
-        return false;
-    }
-
-    $debug = new application\libraries\DebugLib();
-    $debug->error($description, $code, 'php');
-});
 
 // some values by default
 $lang = [];

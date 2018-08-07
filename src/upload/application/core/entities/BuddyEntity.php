@@ -13,7 +13,7 @@
  */
 namespace application\core\entities;
 
-use Exception;
+use application\core\Entity;
 
 /**
  * Buddy Entity Class
@@ -25,50 +25,19 @@ use Exception;
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-class BuddyEntity
+class BuddyEntity extends Entity
 {
 
     /**
-     *
-     * @var array
-     */
-    private $_buddy = [];
-
-    /**
-     * Init with the buddy data
+     * Constructor
      * 
-     * @param array $buddy Buddy
+     * @param array $data Data
      * 
      * @return void
      */
-    public function __construct($buddy)
+    public function __construct($data)
     {
-        $this->setBuddy($buddy);
-    }
-
-    /**
-     * Set the current planet
-     * 
-     * @param array $buddy Buddy
-     * 
-     * @throws Exception
-     * 
-     * @return void
-     */
-    private function setBuddy($buddy)
-    {
-        try {
-
-            if (!is_array($buddy)) {
-                
-                return  null;
-            }
-            
-            $this->_buddy = $buddy;
-        } catch (Exception $e) {
-
-            die('Caught exception: ' . $e->getMessage() . "\n");
-        }
+        parent::__construct($data);
     }
 
     /**
@@ -78,7 +47,7 @@ class BuddyEntity
      */
     public function getBuddyId()
     {
-        return $this->_buddy['buddy_id'];
+        return $this->_data['buddy_id'];
     }
 
     /**
@@ -88,7 +57,7 @@ class BuddyEntity
      */
     public function getBuddySender()
     {
-        return $this->_buddy['buddy_sender'];
+        return $this->_data['buddy_sender'];
     }
 
     /**
@@ -98,7 +67,7 @@ class BuddyEntity
      */
     public function getBuddyReceiver()
     {
-        return $this->_buddy['buddy_receiver'];
+        return $this->_data['buddy_receiver'];
     }
 
     /**
@@ -108,7 +77,7 @@ class BuddyEntity
      */
     public function getBuddyStatus()
     {
-        return $this->_buddy['buddy_status'];
+        return $this->_data['buddy_status'];
     }
 
     /**
@@ -118,7 +87,7 @@ class BuddyEntity
      */
     public function getRequestText()
     {
-        return $this->_buddy['buddy_request_text'];
+        return $this->_data['buddy_request_text'];
     }
 }
 

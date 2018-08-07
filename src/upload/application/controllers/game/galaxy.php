@@ -18,6 +18,20 @@ use application\core\Database;
 use application\libraries\FleetsLib;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
+use const ALLIANCE;
+use const BUDDY;
+use const DEBRIS_LIFE_TIME;
+use const DEFENSES;
+use const FLEETS;
+use const JS_PATH;
+use const MAX_GALAXY_IN_WORLD;
+use const MAX_PLANET_IN_SYSTEM;
+use const MAX_SYSTEM_IN_GALAXY;
+use const PLANETS;
+use const SETTINGS;
+use const SHIPS;
+use const USERS;
+use const USERS_STATISTICS;
 
 /**
  * Galaxy Class
@@ -504,7 +518,7 @@ class Galaxy extends Controller
 								fleet_owner = " . $this->_current_user['user_id'] . ",
 								fleet_mission = 10,
 								fleet_amount = " . $anz . ",
-								fleet_array = '503," . $anz . "',
+								fleet_array = '" . FleetsLib::setFleetShipsArray([503 => $anz]) ."',
 								fleet_start_time = '" . (time() + $flugzeit) . "',
 								fleet_start_galaxy = '" . $this->_current_planet['planet_galaxy'] . "',
 								fleet_start_system = '" . $this->_current_planet['planet_system'] . "',
@@ -731,7 +745,7 @@ class Galaxy extends Controller
                 $basicConsumption = $this->_pricelist[$Ship]['consumption'] * $Count;
                 $consumption += $basicConsumption * $Distance / 35000 * ( ( $spd / 10 ) + 1 ) * ( ( $spd / 10 ) + 1 );
                 $FleetShipCount += $Count;
-                $FleetDBArray .= $Ship . "," . $Count . ";";
+                $FleetDBArray[$Ship] = $Count;
                 $FleetSubQRY .= "`" . $this->_resource[$Ship] . "` = `" . $this->_resource[$Ship] . "` - " . $Count . ", ";
             }
         }
@@ -751,7 +765,7 @@ class Galaxy extends Controller
             `fleet_owner` = '" . $this->_current_user['user_id'] . "',
             `fleet_mission` = '" . intval($order) . "',
             `fleet_amount` = '" . $FleetShipCount . "',
-            `fleet_array` = '" . $FleetDBArray . "',
+            `fleet_array` = '" . FleetsLib::setFleetShipsArray($FleetDBArray) . "',
             `fleet_start_time` = '" . $fleet['start_time'] . "',
             `fleet_start_galaxy` = '" . $this->_current_planet['planet_galaxy'] . "',
             `fleet_start_system` = '" . $this->_current_planet['planet_system'] . "',

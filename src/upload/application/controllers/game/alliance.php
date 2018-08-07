@@ -360,7 +360,7 @@ class Alliance extends Controller
                 $this->Alliance_Model->searchAllianceByNameTag($search_string), $this->_user['user_id']
             );
 
-            foreach ($results->getAlliance() as $result) {
+            foreach ($results->getAlliances() as $result) {
 
                 $list_of_results[] = [
                     'ally_tag' => FunctionsLib::setUrl('game.php?page=alliance&mode=apply&allyid=' . $result->getAllianceId(), '', $result->getAllianceTag()),

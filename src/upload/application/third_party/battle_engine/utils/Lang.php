@@ -7,6 +7,7 @@ interface Lang
     public function getDefendersDefendingDescr($damage);
     public function getDefendersAttackingDescr($amount, $damage);
     public function getAttackersDefendingDescr($damage);
+    public function getTechs($weaponsTech, $shieldsTech, $armourTech);
     public function getAttackerHasWon();
     public function getDefendersHasWon();
     public function getDraw();
@@ -15,7 +16,7 @@ interface Lang
     public function getDefendersLostUnits($units);
     public function getFloatingDebris($metal, $crystal);
     public function getMoonProb($prob);
-    public function getNewMoon();
+    public function getNewMoon($name, $galaxy, $system, $planet);
 }
 
 ?>

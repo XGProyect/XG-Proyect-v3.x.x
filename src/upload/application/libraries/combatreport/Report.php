@@ -193,13 +193,15 @@ class Report
      */
     private function isOwnRequest(ReportEntity $report)
     {
-        return ($this->getReportOwnersAsArray($report)[0] == $this->getUserId());
+        return (in_array($this->getUserId(), $this->getReportOwnersAsArray($report)));
     }
     
     /**
      * Set up the list of reports
      * 
      * @param array $reports Reports
+     * 
+     * @return void
      */
     private function setUp($reports)
     {

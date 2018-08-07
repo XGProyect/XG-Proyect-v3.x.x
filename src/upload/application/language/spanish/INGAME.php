@@ -1,4 +1,45 @@
 <?php
+$lang = [
+    // ships
+    'ship_small_cargo_ship' => 'Nave pequeña de carga',
+    'ship_big_cargo_ship' => 'Nave grande de carga',
+    'ship_light_fighter' => 'Cazador ligero',
+    'ship_heavy_fighter' => 'Cazador pesado',
+    'ship_cruiser' => 'Crucero',
+    'ship_battleship' => 'Nave de batalla',
+    'ship_colony_ship' => 'Colonizador',
+    'ship_recycler' => 'Reciclador',
+    'ship_espionage_probe' => 'Sonda de espionaje',
+    'ship_bomber' => 'Bombardero',
+    'ship_solar_satellite' => 'Satélite solar',
+    'ship_destroyer' => 'Destructor',
+    'ship_deathstar' => 'Estrella de la muerte',
+    'ship_battlecruiser' => 'Acorazado',
+    
+    // types of planets or galaxy objects
+    'planet_type' => [
+        1 => 'Planeta',
+        2 => 'Escombros',
+        3 => 'Luna'
+    ],
+    
+    // types of planets or galaxy objects
+    'planet_type_shortcuts' => [
+        1 => '(P)',
+        2 => '(E)',
+        3 => '(L)'
+    ]
+];
+
+/**
+ * 
+ * 
+ * OLD LINES
+ * 
+ * 
+ */
+
+
 //SERVER GENERALS
 $lang['Metal'] = 'Metal';
 $lang['Crystal'] = 'Cristal';
@@ -330,6 +371,8 @@ $lang['fl_fleet_union'] = 'Unión de flota';
 $lang['fl_fleet_union_name'] = 'Nombre de la unión';
 $lang['fl_search_user'] = 'Buscar usuario';
 $lang['fl_friends_list'] = 'Lista de amigos:';
+$lang['fl_invite_acs'] = 'Invitar >>';
+$lang['fl_remove_acs'] = '<< Expulsar';
 $lang['fl_union_members'] = 'Usuario de la unión:';
 $lang['fl_search_user_btn'] = 'Buscar';
 $lang['fl_save_all'] = 'Ok';
@@ -1078,7 +1121,7 @@ $lang['debree_field_1'] = "Un campo de escombros de";
 $lang['debree_field_2'] = "flotan en la orbita del planeta.";
 $lang['sys_gcdrunits'] = "En estas coordenadas flotan %s unidades de %s y %s unidades de %s";
 $lang['sys_moonproba'] = "La probabilidad de que surja una luna de los escombros es de:";
-$lang['sys_moonbuilt'] = "Las enormes cantidad de metal y cristal se fusionan y forman un satélite lunar en la orbita del planeta %s [%d:%d:%d] !";
+$lang['sys_moonbuilt'] = "Las enormes cantidad de metal y cristal se fusionan y forman un satélite lunar en la orbita del planeta %s [%d:%d:%d]!";
 $lang['sys_attack_title'] = "Las flotas se enfrentan en ";
 $lang['sys_attack_round'] = "Ronda";
 $lang['sys_attack_attacker_pos'] = "Atacante";
@@ -1094,7 +1137,9 @@ $lang['fleet_attack_1'] = "La flota atacante dispara con una fuerza total de";
 $lang['fleet_attack_2'] = "sobre el defensor. Los escudos del defensor absorben";
 $lang['fleet_defs_1'] = "La flota defensora dispara con una fuerza total de";
 $lang['fleet_defs_2'] = "sobre el atacante. Los escudos del atacante absorben";
-$lang['damage'] = "puntos de daño.";
+$lang['damage'] = "puntos de daño,";
+$lang['with'] = 'con';
+$lang['shots'] = 'disparos';
 $lang['sys_attacker_won'] = "El atacante ha ganado la batalla";
 $lang['sys_defender_won'] = "El defensor ha ganado la batalla";
 $lang['sys_both_won'] = "La batalla termino en empate";

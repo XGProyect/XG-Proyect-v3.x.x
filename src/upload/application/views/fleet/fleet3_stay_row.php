@@ -7,6 +7,8 @@
     <th colspan="3">
         <select name="{stay_type}">
             {options}
+            <option value="{value}"{selected}>{value}</option>
+            {/options}
         </select>{fl_hours}
     </th>
 </tr>

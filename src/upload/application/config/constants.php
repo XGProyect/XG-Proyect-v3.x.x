@@ -138,6 +138,15 @@ define('DPATH', DEFAULT_SKINPATH);
 
 /**
  * 
+ * TIMING CONSTANTS
+ * 
+ */
+define('ONE_DAY', (60 * 60 * 24)); // 1 DAY
+define('ONE_WEEK', (ONE_DAY * 7)); // 1 WEEK
+define('ONE_MONTH', (ONE_DAY * 30)); // 1 MONTH
+
+/**
+ * 
  * GAME MECHANICS RELATED
  * You can change almost anything below without breaking the game
  * 
@@ -204,7 +213,8 @@ if (!defined('DB_PREFIX')) {
 }
 
 // TABLES
-define('ACS_FLEETS', DB_PREFIX . 'acs_fleets');
+define('ACS', DB_PREFIX . 'acs');
+define('ACS_MEMBERS', DB_PREFIX . 'acs_members');
 define('ALLIANCE', DB_PREFIX . 'alliance');
 define('ALLIANCE_STATISTICS', DB_PREFIX . 'alliance_statistics');
 define('BANNED', DB_PREFIX . 'banned');

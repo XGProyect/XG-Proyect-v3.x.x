@@ -4,27 +4,23 @@
  */
 
 // "aks" table -> "acs_fleets" table
-$queries[]  = "TRUNCATE `" . ACS_FLEETS . "`;";
-$queries[]  = "INSERT INTO `" . ACS_FLEETS . "`(
-                `acs_fleet_id`, 
-                `acs_fleet_name`, 
-                `acs_fleet_members`, 
-                `acs_fleet_fleets`, 
-                `acs_fleet_galaxy`, 
-                `acs_fleet_system`, 
-                `acs_fleet_planet`, 
-                `acs_fleet_planet_type`, 
-                `acs_fleet_invited`) 
+$queries[]  = "TRUNCATE `" . ACS . "`;";
+$queries[]  = "INSERT INTO `" . ACS . "`(
+                `acs_id`, 
+                `acs_name`, 
+                `acs_owner`,
+                `acs_galaxy`, 
+                `acs_system`, 
+                `acs_planet`, 
+                `acs_planet_type`) 
                 SELECT 
                     `id`,
                     `name`,
                     `teilnehmer`,
-                    `flotten`,
                     `galaxy`,
                     `system`,
                     `planet`,
-                    `planet_type`,
-                    `eingeladen`
+                    `planet_type`
                 FROM `{prefix}aks`;";
 
 // "alliance" table -> "alliance" table

@@ -7,15 +7,14 @@
             <td colspan="9" class="c">
                 <table border="0" width="100%">
                     <tr>
-                        <td style="background-color: transparent;">{fl_fleets} {flyingfleets} / {maxfleets} &nbsp; &nbsp; {fl_expeditions} {currentexpeditions} / {maxexpeditions}</td>
+                        <td style="background-color: transparent;">{fl_fleets} {fleets} / {max_fleets} &nbsp; &nbsp; {fl_expeditions} {expeditions} / {max_expeditions}</td>
                         <td style="background-color: transparent;" align="right"><a href="game.php?page=movement">{fl_fleets_movements}</a></td>
                     </tr>
                 </table>
             </td>
         </tr>
-        {message_nofreeslot}
+        {no_slot}
     </table>
-    {acs_members}
     <form action="game.php?page=fleet2" method="POST">
         <table width="519" border="0" cellpadding="0" cellspacing="1">
             <tr height="20">
@@ -27,20 +26,35 @@
                 <th>-</th>
                 <th>-</th>
             </tr>
-            {body}
+            {list_of_ships}
+            <tr height="20px">
+                <th>
+                    {ship_name}
+                </th>
+                <th>
+                    {ship_amount}
+                </th>
+                <th>
+                    {max_ships_link}
+                </th>
+                <th>
+                    {ships_input}
+                    <input type="hidden" name="maxship{ship_id}" value="{max_ships}" />
+                    <input type="hidden" name="consumption{ship_id}" value="{consumption}" />
+                    <input type="hidden" name="speed{ship_id}" value="{speed}" />
+                    <input type="hidden" name="capacity{ship_id}" value="{capacity}" />
+                </th>
+            </tr>
+            {/list_of_ships}
             </tr>
             {none_max_selector}
-            {noships_row}
+            {no_ships}
             {continue_button}
         </table>
-        {shipdata}
         <input type="hidden" name="galaxy" value="{galaxy}" />
         <input type="hidden" name="system" value="{system}" />
         <input type="hidden" name="planet" value="{planet}" />
         <input type="hidden" name="planet_type" value="{planettype}" />
-        <input type="hidden" name="mission" value="{target_mission}" />
-        <input type="hidden" name="maxepedition" value="{envoimaxexpedition}" />
-        <input type="hidden" name="curepedition" value="{expeditionencours}" />
         <input type="hidden" name="target_mission" value="{target_mission}" />
     </form>
 </div>

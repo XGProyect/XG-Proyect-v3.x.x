@@ -13,6 +13,7 @@
  */
 namespace application\libraries\missions;
 
+use application\libraries\FleetsLib;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
 use application\libraries\OfficiersLib;
@@ -73,16 +74,14 @@ class Spy extends Missions
 
             $CurrentSpyLvl = OfficiersLib::getMaxEspionage($current_data['research_espionage_technology'], $current_data['premium_officier_technocrat']);
             $TargetSpyLvl = OfficiersLib::getMaxEspionage($target_data['research_espionage_technology'], $target_data['premium_officier_technocrat']);
-            $fleet = explode(';', $fleet_row['fleet_array']);
+            $fleet = FleetsLib::getFleetShipsArray($fleet_row['fleet_array']);
 
             parent::makeUpdate($fleet_row['fleet_end_galaxy'], $fleet_row['fleet_end_system'], $fleet_row['fleet_end_planet'], $fleet_row['fleet_end_type']);
 
-            foreach ($fleet as $a => $b) {
-                if ($b != '') {
-                    $a = explode(",", $b);
-
-                    if ($a[0] == "210") {
-                        $LS = $a[1];
+            foreach ($fleet as $id => $amount) {
+                
+                if ($id == "210") {
+                        $LS = $amount;
                         $SpyToolDebris = $LS * 300;
 
                         $MaterialsInfo = $this->spy_target($target_data, 0, $this->langs['sys_spy_maretials']);
@@ -191,7 +190,6 @@ class Spy extends Missions
                             parent::returnFleet($fleet_row['fleet_id']);
                         }
                     }
-                }
             }
         } elseif ($fleet_row['fleet_mess'] == 1 && $fleet_row['fleet_end_time'] <= time()) {
             parent::restoreFleet($fleet_row, true);
