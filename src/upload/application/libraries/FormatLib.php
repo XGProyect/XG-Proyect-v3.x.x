@@ -13,6 +13,8 @@
  */
 namespace application\libraries;
 
+use application\core\enumerators\ImportanceEnumerator as Importance;
+
 /**
  * FormatLib Class
  *
@@ -152,27 +154,27 @@ class FormatLib
     }
 
     /**
-     * colorRed
+     * Set a red color
      *
-     * @param string $n String
+     * @param string $string String
      *
      * @return string
      */
-    public static function colorRed($n)
+    public static function colorRed($string)
     {
-        return '<font color="#ff0000">' . $n . '</font>';
+        return '<font color="#ff0000">' . $string . '</font>';
     }
 
     /**
-     * colorGreen
+     * Set a green color
      *
-     * @param string $n String
+     * @param string $string String
      *
      * @return string
      */
-    public static function colorGreen($n)
+    public static function colorGreen($string)
     {
-        return '<font color="#00ff00">' . $n . '</font>';
+        return '<font color="#00ff00">' . $string . '</font>';
     }
     
     /**
@@ -199,6 +201,7 @@ class FormatLib
     public static function prettyNumber($n, $floor = true)
     {
         if ($floor) {
+
             $n = floor($n);
         }
 
@@ -323,6 +326,27 @@ class FormatLib
         }
 
         return round($bytes, $precision) . ' ' . $units[$pow];
+    }
+    
+    /**
+     * Return the color based on the importance
+     * 
+     * @param int $priority
+     * 
+     * @return string
+     */
+    public static function getImportanceColor(int $priority): string
+    {
+        switch ($priority) {
+            case Importance::unimportant:
+                return 'lime';
+            case Importance::normal:
+                return 'yellow';
+            case Importance::important:
+                return 'red';
+        }
+        
+        return 'lime';
     }
 }
 

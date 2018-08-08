@@ -14,8 +14,13 @@
 namespace application\controllers\game;
 
 use application\core\Controller;
-use application\core\Database;
+use application\core\entities\NotesEntity;
+use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
+use application\libraries\Timing_library;
+use application\libraries\users\Notes as Note;
+use const JS_PATH;
+use const NOTES;
 
 /**
  * Notes Class
@@ -30,13 +35,34 @@ use application\libraries\FunctionsLib;
 class Notes extends Controller
 {
 
+    /**
+     * 
+     * @var int
+     */
     const MODULE_ID = 19;
 
-    private $_lang;
-    private $_current_user;
+    /**
+     * 
+     * @var string
+     */
+    const REDIRECT_TARGET = 'game.php?page=notes';
+    
+    /**
+     *
+     * @var array
+     */
+    private $_user;
 
     /**
-     * __construct()
+     *
+     * @var \Notes
+     */
+    private $_notes = null;
+    
+    /**
+     * Constructor
+     * 
+     * @return void
      */
     public function __construct()
     {
@@ -45,35 +71,61 @@ class Notes extends Controller
         // check if session is active
         parent::$users->checkSession();
 
+        // load Model
+        parent::loadModel('game/notes');
+        
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
-        $this->_db = new Database();
-        $this->_lang = parent::$lang;
-        $this->_current_user = parent::$users->getUserData();
+        // set data
+        $this->_user = $this->getUserData();
 
-        $this->build_page();
+        // init a new notes object
+        $this->setUpNotes();
+
+        // build the page
+        $this->buildPage();
     }
 
     /**
-     * method __destruct
-     * param
-     * return close db connection
+     * Creates a new ships object that will handle all the ships
+     * creation methods and actions
+     * 
+     * @return void
      */
-    public function __destruct()
+    private function setUpNotes()
     {
-        $this->_db->closeConnection();
+        $this->_notes = new Note(
+            $this->Notes_Model->getAllNotesByUserId($this->_user['user_id']),
+            $this->_user['user_id']
+        );
     }
 
     /**
-     * method build_page
-     * param
-     * return main method, loads everything
+     * Build the page
+     * 
+     * @return void
      */
-    private function build_page()
+    private function buildPage()
     {
-        $this->_lang['js_path'] = JS_PATH;
-        $parse = $this->_lang;
+        /**
+         * Parse the items
+         */
+        $page = [
+            'js_path' => JS_PATH,
+            'list_of_notes' => $this->buildNotesListBlock(),
+            'no_notes' => $this->_notes->hasNotes() ? '' : '<tr><th colspan="4">' . $this->getLang()['nt_you_dont_have_notes'] . '</th>'
+        ];
+
+        // display the page
+        parent::$page->display(
+            $this->getTemplate()->set(
+                'notes/notes_view',
+                array_merge(
+                    $this->getLang(), $page
+                )
+            ), false, '', false
+        );
 
         $a = isset($_GET['a']) ? intval($_GET['a']) : NULL;
         $n = isset($_GET['n']) ? intval($_GET['n']) : NULL;
@@ -94,7 +146,7 @@ class Notes extends Controller
                     note_text='$text'"
                 );
 
-                FunctionsLib::redirect('game.php?page=notes');
+                FunctionsLib::redirect(self::REDIRECT_TARGET);
             } elseif ($s == 2) {
                 $id = intval($_POST['n']);
                 $note_query = $this->_db->query(
@@ -105,7 +157,7 @@ class Notes extends Controller
                 );
 
                 if (!$note_query)
-                    FunctionsLib::redirect('game.php?page=notes');
+                    FunctionsLib::redirect(self::REDIRECT_TARGET);
 
                 $this->_db->query("UPDATE `" . NOTES . "` SET
                     note_time=$time,
@@ -115,7 +167,7 @@ class Notes extends Controller
                     WHERE note_id=" . intval($id) . ""
                 );
 
-                FunctionsLib::redirect('game.php?page=notes');
+                FunctionsLib::redirect(self::REDIRECT_TARGET);
             }
         }
         elseif ($_POST) {
@@ -134,7 +186,7 @@ class Notes extends Controller
                 }
             }
 
-            FunctionsLib::redirect('game.php?page=notes');
+            FunctionsLib::redirect(self::REDIRECT_TARGET);
         } else {
             if ($a == 1) {
                 $parse['c_Options'] = "<option value=2 selected=selected>" . $this->_lang['nt_important'] . "</option>
@@ -155,7 +207,7 @@ class Notes extends Controller
 															AND `note_id` = " . (int) $n . ";");
 
                 if (!$note) {
-                    FunctionsLib::redirect('game.php?page=notes');
+                    FunctionsLib::redirect(self::REDIRECT_TARGET);
                 }
 
 
@@ -171,58 +223,39 @@ class Notes extends Controller
                 $parse['texto'] = $note['note_text'];
 
                 parent::$page->display(parent::$page->parseTemplate(parent::$page->getTemplate('notes/notes_form'), $parse), false, '', false);
-            } else {
-                $notes_query = $this->_db->query("SELECT *
-														FROM `" . NOTES . "`
-														WHERE `note_owner` = " . $this->_current_user['user_id'] . "
-														ORDER BY `note_time` DESC");
-
-                $count = 0;
-                $NotesBodyEntryTPL = parent::$page->getTemplate('notes/notes_body_entry');
-                $list = '';
-
-                while ($note = $this->_db->fetchArray($notes_query)) {
-                    $count++;
-
-                    $parse['NOTE_COLOR'] = $this->return_priority($note['note_priority']);
-                    $parse['NOTE_ID'] = $note['note_id'];
-                    $parse['NOTE_TIME'] = date(FunctionsLib::readConfig('date_format_extended'), $note['note_time']);
-                    $parse['NOTE_TITLE'] = $note['note_title'];
-                    $parse['NOTE_TEXT'] = strlen($note['note_text']);
-
-                    $list .= parent::$page->parseTemplate($NotesBodyEntryTPL, $parse);
-                }
-
-                if ($count == 0) {
-                    $list .= "<tr><th colspan=4>" . $this->_lang['nt_you_dont_have_notes'] . "</th>\n";
-                }
-
-                $parse['BODY_LIST'] = $list;
-
-                parent::$page->display(parent::$page->parseTemplate(parent::$page->getTemplate('notes/notes_body'), $parse), false, '', false);
             }
         }
     }
 
     /**
-     * method return_priority
-     * param $priority
-     * return the color for each priority
+     * Build list of notes block
+     * 
+     * @return array
      */
-    private function return_priority($priority)
+    private function buildNotesListBlock(): array
     {
-        switch ($priority) {
-            case 0:
-            default:
-                return 'lime';
-                break;
-            case 1:
-                return 'yellow';
-                break;
-            case 2:
-                return 'red';
-                break;
+        $list_of_notes = [];
+        
+        $notes = $this->_notes->getNotes();
+        
+        if ($this->_notes->hasNotes()) {
+
+            foreach ($notes as $note) {
+
+                if ($note instanceof NotesEntity) {
+
+                    $list_of_notes[] = [
+                        'note_id' => $note->getNoteId(),
+                        'note_time' => Timing_library::formatDefaultTime($note->getNoteTime()),
+                        'note_color' => FormatLib::getImportanceColor($note->getNotePriority()),
+                        'note_title' => $note->getNoteTitle(),
+                        'note_text' => strlen($note->getNoteText())
+                    ];   
+                }
+            }   
         }
+        
+        return $list_of_notes;
     }
 }
 
