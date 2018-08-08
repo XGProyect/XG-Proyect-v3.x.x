@@ -334,7 +334,9 @@ class Movement extends Controller
                 $this->Fleet_Model->returnFleet(
                     $fleet, $this->_user['user_id']
                 );
-            }   
+                
+                FunctionsLib::redirect(self::REDIRECT_TARGET);
+            }
         }
     }
 }
