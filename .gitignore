@@ -13,7 +13,7 @@ src/upload/tests/_reports/
 #
 # docs
 #
-src/docs/
+/docs/*
 
 #
 # docker
