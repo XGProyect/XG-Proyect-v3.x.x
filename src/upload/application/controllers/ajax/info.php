@@ -27,13 +27,6 @@ use application\core\Controller;
  */
 class Info extends Controller
 {
-
-    /**
-     *
-     * @var array Language data
-     */
-    private $_lang;
-
     /**
      * Constructor
      * 
@@ -42,8 +35,6 @@ class Info extends Controller
     public function __construct()
     {
         parent::__construct();
-
-        $this->_lang = $this->getLang();
 
         // build the page
         $this->buildPage();
@@ -57,7 +48,7 @@ class Info extends Controller
     private function buildPage()
     {
         parent::$page->display(
-            $this->getTemplate()->set('ajax/info_view', $this->_lang), false, '', false
+            $this->getTemplate()->set('ajax/info_view', $this->getLang()), false, '', false
         );
     }
 }

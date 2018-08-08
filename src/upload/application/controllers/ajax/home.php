@@ -29,12 +29,6 @@ class Home extends Controller
 {
 
     /**
-     *
-     * @var array Language data
-     */
-    private $_lang;
-
-    /**
      * Constructor
      * 
      * @return void
@@ -42,9 +36,6 @@ class Home extends Controller
     public function __construct()
     {
         parent::__construct();
-
-        $this->_lang = $this->getLang();
-
         // build the page
         $this->buildPage();
     }
@@ -57,7 +48,7 @@ class Home extends Controller
     private function buildPage()
     {
         parent::$page->display(
-            $this->getTemplate()->set('ajax/home_view', $this->_lang), false, '', false
+            $this->getTemplate()->set('ajax/home_view', $this->getLang()), false, '', false
         );
     }
 }
