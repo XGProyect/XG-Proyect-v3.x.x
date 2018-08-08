@@ -29,7 +29,9 @@ class Installation
     private $db = null;
 
     /**
-     * __construct()
+     * Constructor
+     * 
+     * @return void
      */
     public function __construct($db)
     {

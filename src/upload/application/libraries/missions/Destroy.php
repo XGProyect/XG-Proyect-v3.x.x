@@ -13,6 +13,7 @@
  */
 namespace application\libraries\missions;
 
+use application\libraries\FleetsLib;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
 
@@ -94,15 +95,11 @@ class Destroy extends Missions
                 }
             }
 
-            $TheFleet = explode(";", $fleet_row['fleet_array']);
+            $TheFleet = FleetsLib::getFleetShipsArray($fleet_row['fleet_array']);
 
-            foreach ($TheFleet as $a => $b) {
+            foreach ($TheFleet as $id => $count) {
 
-                if ($b != '') {
-
-                    $a = explode(",", $b);
-                    $current_ships[$a[0]]['count'] = $a[1];
-                }
+                $current_ships[$id]['count'] = $count;
             }
 
             $attack = $this->attack($current_ships, $target_ships, $current_data, $target_data);
@@ -111,13 +108,13 @@ class Destroy extends Missions
             $FleetResult = $attack['win'];
             $dane_do_rw = $attack['data_for_rw'];
             $zlom = $attack['debris'];
-            $FleetArray = '';
+            $FleetArray = [];
             $FleetAmount = 0;
             $FleetStorage = 0;
 
             foreach ($current_ships as $Ship => $Count) {
                 $FleetStorage += $this->pricelist[$Ship]['capacity'] * $Count['count'];
-                $FleetArray .= $Ship . "," . $Count['count'] . ";";
+                $FleetArray[$Ship] = $Count['count'];
                 $FleetAmount += $Count['count'];
             }
 

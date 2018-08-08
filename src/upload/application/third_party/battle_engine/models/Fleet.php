@@ -36,7 +36,10 @@ class Fleet extends IterableUtil
     private $shields_tech = 0;
     private $armour_tech = 0;
     private $name;
-    public function __construct($id, $shipTypes = array(),$weapons_tech = null, $shields_tech = null, $armour_tech = null, $name = "")
+    private $galaxy;
+    private $system;
+    private $planet;
+    public function __construct($id, $shipTypes = array(),$weapons_tech = null, $shields_tech = null, $armour_tech = null, $name = "", $galaxy = null, $system = null, $planet = null)
     {
         $this->id = $id;
         $this->count = 0;
@@ -44,6 +47,7 @@ class Fleet extends IterableUtil
         if($this->id != -1)
         {
             $this->setTech($weapons_tech, $shields_tech, $armour_tech);
+            $this->setCoords($galaxy, $system, $planet);
         }
         foreach ($shipTypes as $shipType)
         {
@@ -73,6 +77,12 @@ class Fleet extends IterableUtil
         if(is_numeric($weapons)) $this->weapons_tech = intval($weapons);
         if(is_numeric($shields)) $this->shields_tech = intval($shields);
         if(is_numeric($armour)) $this->armour_tech = intval($armour);
+    }
+    public function setCoords($galaxy = null, $system = null, $planet = null)
+    {
+        $this->galaxy = $galaxy;
+        $this->system = $system;
+        $this->planet = $planet;
     }
     public function addShipType(ShipType $shipType)
     {
@@ -229,10 +239,22 @@ class Fleet extends IterableUtil
     {
         return $this->armour_tech;
     }
+    public function getGalaxy()
+    {
+        return $this->galaxy;
+    }
+    public function getSystem()
+    {
+        return $this->system;
+    }
+    public function getPlanet()
+    {
+        return $this->planet;
+    }
     public function cloneMe()
     {
         $types = array_values($this->array);
         $class = get_class($this);
-        return new $class($this->id, $types ,$this->weapons_tech, $this->shields_tech, $this->armour_tech);
+        return new $class($this->id, $types ,$this->weapons_tech, $this->shields_tech, $this->armour_tech, $this->galaxy, $this->system, $this->planet);
     }
 }

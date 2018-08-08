@@ -149,6 +149,8 @@ class Buddy
      * Set up the list of buddies
      * 
      * @param array $buddies Buddies
+     * 
+     * @return void
      */
     private function setUp($buddies)
     {

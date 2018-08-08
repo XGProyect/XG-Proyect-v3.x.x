@@ -15,6 +15,7 @@ namespace application\libraries;
 
 use application\core\XGPCore;
 use application\libraries\FunctionsLib;
+use const DPATH;
 
 /**
  * FleetsLib Class
@@ -113,65 +114,68 @@ class FleetsLib extends XGPCore
             $fleet_array[$fleet] = 1;
         }
 
-        foreach ($fleet_array as $ship => $count) {
+        if (!empty($fleet_array) && !is_null($fleet_array)) {
 
-            /**
-             * Special condition for Small cargo
-             */
-            if ($ship == 202) {
+            foreach ($fleet_array as $ship => $count) {
 
-                if ($user['research_impulse_drive'] >= 5) {
+                /**
+                 * Special condition for Small cargo
+                 */
+                if ($ship == 202) {
 
-                    $speed_all[$ship] = $pricelist[$ship]['speed2'] + ($pricelist[$ship]['speed2'] * $user['research_impulse_drive'] * 0.2);
-                } else {
+                    if ($user['research_impulse_drive'] >= 5) {
+
+                        $speed_all[$ship] = $pricelist[$ship]['speed2'] + ($pricelist[$ship]['speed2'] * $user['research_impulse_drive'] * 0.2);
+                    } else {
+
+                        $speed_all[$ship] = $pricelist[$ship]['speed'] + (($pricelist[$ship]['speed'] * $user['research_combustion_drive'] ) * 0.1);
+                    }
+                }
+
+                /**
+                 * Special condition for Recycler
+                 */
+                if ($ship == 209) {
 
                     $speed_all[$ship] = $pricelist[$ship]['speed'] + (($pricelist[$ship]['speed'] * $user['research_combustion_drive'] ) * 0.1);
-                }
-            }
 
-            /**
-             * Special condition for Recycler
-             */
-            if ($ship == 209) {
+                    if ($user['research_impulse_drive'] >= 17) {
 
-                $speed_all[$ship] = $pricelist[$ship]['speed'] + (($pricelist[$ship]['speed'] * $user['research_combustion_drive'] ) * 0.1);
+                        $speed_all[$ship] = $pricelist[$ship]['speed2'] + (($pricelist[$ship]['speed2'] * $user['research_impulse_drive'] ) * 0.2);
+                    }
 
-                if ($user['research_impulse_drive'] >= 17) {
+                    if ($user['research_hyperspace_drive'] >= 15) {
 
-                    $speed_all[$ship] = $pricelist[$ship]['speed2'] + (($pricelist[$ship]['speed2'] * $user['research_impulse_drive'] ) * 0.2);
+                        $speed_all[$ship] = $pricelist[$ship]['speed2'] + (($pricelist[$ship]['speed2'] * $user['research_hyperspace_drive'] ) * 0.3);
+                    }
                 }
 
-                if ($user['research_hyperspace_drive'] >= 15) {
+                if ($ship == 203 or $ship == 204 or $ship == 210) {
 
-                    $speed_all[$ship] = $pricelist[$ship]['speed2'] + (($pricelist[$ship]['speed2'] * $user['research_hyperspace_drive'] ) * 0.3);
+                    $speed_all[$ship] = $pricelist[$ship]['speed'] + (($pricelist[$ship]['speed'] * $user['research_combustion_drive']) * 0.1);
                 }
-            }
 
-            if ($ship == 203 or $ship == 204 or $ship == 210) {
+                if ($ship == 205 or $ship == 206 or $ship == 208) {
 
-                $speed_all[$ship] = $pricelist[$ship]['speed'] + (($pricelist[$ship]['speed'] * $user['research_combustion_drive']) * 0.1);
-            }
-
-            if ($ship == 205 or $ship == 206 or $ship == 208) {
-
-                $speed_all[$ship] = $pricelist[$ship]['speed'] + (($pricelist[$ship]['speed'] * $user['research_impulse_drive']) * 0.2);
-            }
-
-            if ($ship == 211) {
-
-                if ($user['research_hyperspace_drive'] >= 8) {
-
-                    $speed_all[$ship] = $pricelist[$ship]['speed2'] + (($pricelist[$ship]['speed2'] * $user['research_hyperspace_drive']) * 0.3);
-                } else {
-
-                    $speed_all[$ship] = $pricelist[$ship]['speed'] + (($pricelist[$ship]['speed'] * $user['research_hyperspace_drive']) * 0.2);
+                    $speed_all[$ship] = $pricelist[$ship]['speed'] + (($pricelist[$ship]['speed'] * $user['research_impulse_drive']) * 0.2);
                 }
-            }
 
-            if ($ship == 207 or $ship == 213 or $ship == 214 or $ship == 215) {
+                if ($ship == 211) {
 
-                $speed_all[$ship] = $pricelist[$ship]['speed'] + (($pricelist[$ship]['speed'] * $user['research_hyperspace_drive']) * 0.3);
-            }
+                    if ($user['research_hyperspace_drive'] >= 8) {
+
+                        $speed_all[$ship] = $pricelist[$ship]['speed2'] + (($pricelist[$ship]['speed2'] * $user['research_hyperspace_drive']) * 0.3);
+                    } else {
+
+                        $speed_all[$ship] = $pricelist[$ship]['speed'] + (($pricelist[$ship]['speed'] * $user['research_hyperspace_drive']) * 0.2);
+                    }
+                }
+
+                if ($ship == 207 or $ship == 213 or $ship == 214 or $ship == 215) {
+
+                    $speed_all[$ship] = $pricelist[$ship]['speed'] + (($pricelist[$ship]['speed'] * $user['research_hyperspace_drive']) * 0.3);
+                }
+            }   
         }
 
         if ($fleet != 0) {
@@ -252,37 +256,6 @@ class FleetsLib extends XGPCore
     public static function getMaxColonies($astrophysics_tech)
     {
         return ceil($astrophysics_tech / 2);
-    }
-
-    /**
-     * getMissions
-     *
-     * @param int $mission_number Mission id
-     *
-     * @return array
-     */
-    public static function getMissions($mission_number = 0)
-    {
-        $mission_type = [
-            1 => parent::$lang['type_mission'][1],
-            2 => parent::$lang['type_mission'][2],
-            3 => parent::$lang['type_mission'][3],
-            4 => parent::$lang['type_mission'][4],
-            5 => parent::$lang['type_mission'][5],
-            6 => parent::$lang['type_mission'][6],
-            7 => parent::$lang['type_mission'][7],
-            8 => parent::$lang['type_mission'][8],
-            9 => parent::$lang['type_mission'][9],
-            15 => parent::$lang['type_mission'][15]
-        ];
-
-        if ($mission_number === 0) {
-
-            return $mission_type;
-        } else {
-
-            return $mission_type[$mission_number];
-        }
     }
 
     /**
@@ -379,7 +352,7 @@ class FleetsLib extends XGPCore
      */
     public static function fleetShipsPopup($fleet_row, $text, $fleet_type, $current_user = '')
     {
-        $ships = explode(";", $fleet_row['fleet_array']);
+        $ships = self::getFleetShipsArray($fleet_row['fleet_array']);
         $pop_up = "<a href='#' onmouseover=\"return overlib('";
         $pop_up .= "<table width=200>";
 
@@ -405,32 +378,27 @@ class FleetsLib extends XGPCore
                     ":<font></td></tr>";
             }
 
-            foreach ($ships as $item => $group) {
+            foreach ($ships as $ship => $amount) {
 
-                if ($group != '') {
+                if ($fleet_row['fleet_owner'] == $current_user['user_id']) {
 
-                    $ship = explode(',', $group);
+                    $pop_up .= "<tr><td width=50% align=left><font color=white>" .
+                        parent::$lang['tech'][$ship] .
+                        ":<font></td><td width=50% align=right><font color=white>" .
+                        FormatLib::prettyNumber($amount) . "<font></td></tr>";
+                } elseif ($fleet_row['fleet_owner'] != $current_user['user_id']) {
 
-                    if ($fleet_row['fleet_owner'] == $current_user['user_id']) {
+                    if ($espionage_tech >= 4 && $espionage_tech < 8) {
 
                         $pop_up .= "<tr><td width=50% align=left><font color=white>" .
-                            parent::$lang['tech'][$ship[0]] .
+                            parent::$lang['tech'][$ship] .
+                            "<font></td></tr>";
+                    } elseif ($espionage_tech >= 8) {
+
+                        $pop_up .= "<tr><td width=50% align=left><font color=white>" .
+                            parent::$lang['tech'][$ship] .
                             ":<font></td><td width=50% align=right><font color=white>" .
-                            FormatLib::prettyNumber($ship[1]) . "<font></td></tr>";
-                    } elseif ($fleet_row['fleet_owner'] != $current_user['user_id']) {
-
-                        if ($espionage_tech >= 4 && $espionage_tech < 8) {
-
-                            $pop_up .= "<tr><td width=50% align=left><font color=white>" .
-                                parent::$lang['tech'][$ship[0]] .
-                                "<font></td></tr>";
-                        } elseif ($espionage_tech >= 8) {
-
-                            $pop_up .= "<tr><td width=50% align=left><font color=white>" .
-                                parent::$lang['tech'][$ship[0]] .
-                                ":<font></td><td width=50% align=right><font color=white>" .
-                                FormatLib::prettyNumber($ship[1]) . "<font></td></tr>";
-                        }
+                            FormatLib::prettyNumber($amount) . "<font></td></tr>";
                     }
                 }
             }
@@ -573,7 +541,7 @@ class FleetsLib extends XGPCore
         if ($MissionType == 10) {
 
             $EventString = parent::$lang['cff_missile_attack'] .
-                " ( " . preg_replace("(503,)i", "", $fleet_row['fleet_array']) . " ) ";
+                " ( " . FleetsLib::getFleetShipsArray($fleet_row['fleet_array'])[503] . " ) ";
             $Time = $fleet_row['fleet_start_time'];
             $Rest = $Time - time();
 
@@ -647,13 +615,37 @@ class FleetsLib extends XGPCore
     /**
      * isFleetReturning
      *
-     * @param array $fleet_row Fleet row
+     * @param array $fleet_mess Fleet mess
      *
      * @return boolean
      */
-    public static function isFleetReturning($fleet_row)
+    public static function isFleetReturning($fleet_mess)
     {
-        return ($fleet_row['fleet_mess'] == 1);
+        return ($fleet_mess == 1);
+    }
+    
+    /**
+     * Serialize the fleet array
+     * 
+     * @param array $fleet_array Fleet array
+     * 
+     * @return string
+     */
+    public static function setFleetShipsArray(array $fleet_array): string
+    {
+        return serialize($fleet_array);
+    }
+    
+    /**
+     * Un-serialize the fleet array
+     * 
+     * @param string $fleet_array Fleet array
+     * 
+     * @return array
+     */
+    public static function getFleetShipsArray(string $fleet_array): array
+    {
+        return unserialize($fleet_array);
     }
 }
 

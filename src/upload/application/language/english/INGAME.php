@@ -1,4 +1,45 @@
 <?php
+$lang = [
+    // ships
+    'ship_small_cargo_ship' => 'Small Cargo',
+    'ship_big_cargo_ship' => 'Large Cargo',
+    'ship_light_fighter' => 'Light Fighter',
+    'ship_heavy_fighter' => 'Heavy Fighter',
+    'ship_cruiser' => 'Cruiser',
+    'ship_battleship' => 'Battleship',
+    'ship_colony_ship' => 'Colony Ship',
+    'ship_recycler' => 'Recycler',
+    'ship_espionage_probe' => 'Espionage Probe',
+    'ship_bomber' => 'Bomber',
+    'ship_solar_satellite' => 'Solar Satellite',
+    'ship_destroyer' => 'Destroyer',
+    'ship_deathstar' => 'Deathstar',
+    'ship_battlecruiser' => 'Battlecruiser',
+    
+    // types of planets or galaxy objects
+    'planet_type' => [
+        1 => 'Planet',
+        2 => 'Debris',
+        3 => 'Moon'
+    ],
+    
+    // types of planets or galaxy objects
+    'planet_type_shortcuts' => [
+        1 => '(P)',
+        2 => '(D)',
+        3 => '(M)'
+    ]
+];
+
+/**
+ * 
+ * 
+ * OLD LINES
+ * 
+ * 
+ */
+
+
 //SERVER GENERALS
 $lang['Metal'] = 'Metal';
 $lang['Crystal'] = 'Crystal';
@@ -230,7 +271,7 @@ $lang['iv_defenses'] = 'Defenses';
 //----------------------------------------------------------------------------//
 //FLEET - FLEET1 - FLEET2 - FLEET3 - FLEETACS - FLEETSHORTCUTS
 $lang['fl_returning'] = 'Returning';
-$lang['fl_onway'] = 'On the road';
+$lang['fl_onway'] = 'On their way';
 $lang['fl_r'] = '(R)';
 $lang['fl_a'] = '(A)';
 $lang['fl_send_back'] = 'Back';
@@ -328,6 +369,8 @@ $lang['fl_fleet_union'] = 'Fleet union';
 $lang['fl_fleet_union_name'] = 'Union name';
 $lang['fl_search_user'] = 'Search user';
 $lang['fl_friends_list'] = 'Friends list:';
+$lang['fl_invite_acs'] = 'Invite >>';
+$lang['fl_remove_acs'] = '<< Remove';
 $lang['fl_union_members'] = 'Union user:';
 $lang['fl_search_user_btn'] = 'Search';
 $lang['fl_save_all'] = 'Ok';
@@ -1065,10 +1108,10 @@ $lang['debree_field_1'] = "A debris field";
 $lang['debree_field_2'] = "floating in the orbit of the planet.";
 $lang['sys_gcdrunits'] = "At these space coordinates now float %s %s and %s %s.";
 $lang['sys_moonproba'] = "The probability that a moon emerge from the rubble is:";
-$lang['sys_moonbuilt'] = "The huge amount of metal and glass are functioning and form a lunar satellite in orbit the planet %s [%d:%d:%d] !";
+$lang['sys_moonbuilt'] = "The huge amount of metal and glass are functioning and form a lunar satellite in orbit the planet %s [%d:%d:%d]!";
 $lang['sys_attack_title'] = "Fleets clash in ";
 $lang['sys_attack_round'] = "Round";
-$lang['sys_attack_attacker_pos'] = "Aggressor";
+$lang['sys_attack_attacker_pos'] = "Attacker";
 $lang['sys_attack_techologies'] = "Weapons: %d %% Shield: %d %% Armor: %d %% ";
 $lang['sys_attack_defender_pos'] = "Defender";
 $lang['sys_ship_type'] = "Type";
@@ -1081,7 +1124,9 @@ $lang['fleet_attack_1'] = "The attacking fleet fires a total force of";
 $lang['fleet_attack_2'] = "on the defender. The defender's shields absorb";
 $lang['fleet_defs_1'] = "The defending fleet fires a total force of";
 $lang['fleet_defs_2'] = "on the attacker. The attacker's shields absorb";
-$lang['damage'] = "points of damage.";
+$lang['damage'] = "points of damage,";
+$lang['with'] = 'with';
+$lang['shots'] = 'shots';
 $lang['sys_attacker_won'] = "The attacker has won the battle";
 $lang['sys_defender_won'] = "The defender has won the battle";
 $lang['sys_both_won'] = "The battle ended in a draw";

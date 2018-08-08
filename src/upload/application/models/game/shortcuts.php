@@ -1,6 +1,6 @@
 <?php
 /**
- * Fleet2 Model
+ * Shortcuts Model
  *
  * PHP Version 5.5+
  *
@@ -9,21 +9,21 @@
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
- * @version  3.0.4
+ * @version  3.1.0
  */
 namespace application\models\game;
 
 /**
- * Fleet2 Class
+ * Shortcuts Class
  *
  * @category Classes
  * @package  Application
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
- * @version  3.0.4
+ * @version  3.1.0
  */
-class Fleet2
+class Shortcuts
 {
 
     private $db = null;
@@ -46,20 +46,23 @@ class Fleet2
     {
         $this->db->closeConnection();
     }
-
+    
     /**
-     * Get ongoing ACS attacks
+     * Update user shortcuts
      * 
-     * @param
+     * @param int    $user_id   User ID
+     * @param string $shortcuts Shortcuts
      * 
-     * @return mixed
+     * @return void
      */
-    public function getOngoingAcs()
+    public function updateShortcuts(int $user_id, string $shortcuts): void
     {
-        return $this->db->query(
-                "SELECT * FROM " . ACS_FLEETS
+        $this->db->query(
+            "UPDATE `" . USERS . "` u SET
+                u.`user_fleet_shortcuts` = '" . $shortcuts . "'
+            WHERE u.`user_id` = '" . $user_id . "'"
         );
     }
 }
 
-/* end of fleet2.php */
+/* end of shortcuts.php */

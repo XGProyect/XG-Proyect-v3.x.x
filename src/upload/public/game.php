@@ -20,19 +20,24 @@ require XGP_ROOT . 'application' . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPA
 
 $hooks->call_hook('before_page');
 
-$page = isset($_GET['page']) ? $_GET['page'] : FunctionsLib::redirect('game.php?page=overview');
+$page = filter_input(INPUT_GET, 'page');
 
-// some replacements to adapt the pages
+if (is_null($page)) {
+    
+    FunctionsLib::redirect('game.php?page=overview');
+}
+
+// kind of a mapping
 $page = strtr(
-    $page, array(
-    'resources' => 'buildings',
-    'resourceSettings' => 'resources',
-    'station' => 'buildings',
-    'federationlayer' => 'federation',
-    'shortcuts' => 'fleetshortcuts',
-    'forums' => 'forum',
-    'defense' => 'shipyard',
-    )
+    $page, [
+        'resources' => 'buildings',
+        'resourceSettings' => 'resources',
+        'station' => 'buildings',
+        'federationlayer' => 'federation',
+        'shortcuts' => 'fleetshortcuts',
+        'forums' => 'forum',
+        'defense' => 'shipyard'
+    ]
 );
 
 $file_name = XGP_ROOT . GAME_PATH . $page . '.php';

@@ -13,7 +13,7 @@
  */
 namespace application\core\entities;
 
-use Exception;
+use application\core\Entity;
 
 /**
  * Alliance Entity Class
@@ -25,50 +25,19 @@ use Exception;
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-class AllianceEntity
+class AllianceEntity extends Entity
 {
 
     /**
-     *
-     * @var array
-     */
-    private $_alliance = [];
-
-    /**
-     * Init with the alliance data
+     * Constructor
      * 
-     * @param array $alliance Alliance
+     * @param array $data Data
      * 
      * @return void
      */
-    public function __construct($alliance)
+    public function __construct($data)
     {
-        $this->setAlliance($alliance);
-    }
-
-    /**
-     * Set the current planet
-     * 
-     * @param array $alliance Alliance
-     * 
-     * @throws Exception
-     * 
-     * @return void
-     */
-    private function setAlliance($alliance)
-    {
-        try {
-
-            if (!is_array($alliance)) {
-                
-                return  null;
-            }
-            
-            $this->_alliance = $alliance;
-        } catch (Exception $e) {
-
-            die('Caught exception: ' . $e->getMessage() . "\n");
-        }
+        parent::__construct($data);
     }
     
     /**
@@ -78,7 +47,7 @@ class AllianceEntity
      */
     public function getAllianceId()
     {
-        return $this->_alliance['alliance_id'];
+        return $this->_data['alliance_id'];
     }
 
     /**
@@ -88,7 +57,7 @@ class AllianceEntity
      */
     public function getAllianceName()
     {
-        return $this->_alliance['alliance_name'];
+        return $this->_data['alliance_name'];
     }
 
     /**
@@ -98,7 +67,7 @@ class AllianceEntity
      */
     public function getAllianceTag()
     {
-        return $this->_alliance['alliance_tag'];
+        return $this->_data['alliance_tag'];
     }
 
     /**
@@ -108,7 +77,7 @@ class AllianceEntity
      */
     public function getAllianceOwner()
     {
-        return $this->_alliance['alliance_owner'];
+        return $this->_data['alliance_owner'];
     }
 
     /**
@@ -118,7 +87,7 @@ class AllianceEntity
      */
     public function getAllianceRegisterTime()
     {
-        return $this->_alliance['alliance_register_time'];
+        return $this->_data['alliance_register_time'];
     }
     
     /**
@@ -128,7 +97,7 @@ class AllianceEntity
      */
     public function getAllianceDescription()
     {
-        return $this->_alliance['alliance_description'];
+        return $this->_data['alliance_description'];
     }
     
     /**
@@ -138,7 +107,7 @@ class AllianceEntity
      */
     public function getAllianceWeb()
     {
-        return $this->_alliance['alliance_web'];
+        return $this->_data['alliance_web'];
     }
     
     /**
@@ -148,7 +117,7 @@ class AllianceEntity
      */
     public function getAllianceText()
     {
-        return $this->_alliance['alliance_text'];
+        return $this->_data['alliance_text'];
     }
     
     /**
@@ -158,7 +127,7 @@ class AllianceEntity
      */
     public function getAllianceImage()
     {
-        return $this->_alliance['alliance_image'];
+        return $this->_data['alliance_image'];
     }
     
     /**
@@ -168,7 +137,7 @@ class AllianceEntity
      */
     public function getAllianceRequest()
     {
-        return $this->_alliance['alliance_request'];
+        return $this->_data['alliance_request'];
     }
     
     /**
@@ -178,7 +147,7 @@ class AllianceEntity
      */
     public function getAllianceRequestNotAllow()
     {
-        return $this->_alliance['alliance_request_notallow'];
+        return $this->_data['alliance_request_notallow'];
     }
     
     /**
@@ -188,7 +157,7 @@ class AllianceEntity
      */
     public function getAllianceOwnerRange()
     {
-        return $this->_alliance['alliance_owner_range'];
+        return $this->_data['alliance_owner_range'];
     }
 
     /**
@@ -198,7 +167,7 @@ class AllianceEntity
      */
     public function getAllianceRanks()
     {
-        return $this->_alliance['alliance_ranks'];
+        return $this->_data['alliance_ranks'];
     }
     
     /**
@@ -208,7 +177,7 @@ class AllianceEntity
      */
     public function getAllianceMembers()
     {
-        return $this->_alliance['alliance_members'];
+        return $this->_data['alliance_members'];
     }
 }
 

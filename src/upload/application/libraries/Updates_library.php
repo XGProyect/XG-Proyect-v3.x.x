@@ -64,10 +64,11 @@ class Updates_library extends XGPCore
         if ((time() >= ($last_cleanup + (3600 * $cleanup_interval)))) {
 
             // TIMERS
-            $del_planets = time() - (60 * 60 * 24); // 1 DAY
-            $del_before = time() - (60 * 60 * 24 * 7); // 1 WEEK
-            $del_inactive = time() - (60 * 60 * 24 * 30); // 1 MONTH
-            $del_deleted = time() - (60 * 60 * 24 * 7); // 1 WEEK
+            $del_planets = time() - ONE_DAY;
+            $del_before = time() - ONE_WEEK;
+            $del_inactive = time() - ONE_MONTH;
+            $del_deleted = time() - ONE_WEEK;
+
             // USERS TO DELETE
             $ChooseToDelete = $this->Update_Model->deleteUsersByDeletedAndInactive($del_deleted, $del_inactive);
 

@@ -64,7 +64,7 @@ class Attack_lang implements Lang
      */
     public function getAttackersAttackingDescr($amount, $damage)
     {
-        return $this->lang['fleet_attack_1'] . ' ' . $damage . " " . $this->lang['damage'] . " with $amount shots ";
+        return $this->lang['fleet_attack_1'] . ' ' . $damage . " " . $this->lang['damage'] . " " . $this->lang['with'] . " $amount " . $this->lang['shots'] . ". ";
     }
 
     /**
@@ -76,7 +76,7 @@ class Attack_lang implements Lang
      */
     public function getDefendersDefendingDescr($damage)
     {
-        return $this->lang['fleet_attack_2'] . ' ' . $damage . ' ' . $this->lang['damage'];
+        return $this->lang['fleet_attack_2'] . ' ' . $damage . ' ' . $this->lang['damage'] . '.';
     }
 
     /**
@@ -89,7 +89,7 @@ class Attack_lang implements Lang
      */
     public function getDefendersAttackingDescr($amount, $damage)
     {
-        return $this->lang['fleet_defs_1'] . ' ' . $damage . " " . $this->lang['damage'] . " with $amount shots ";
+        return $this->lang['fleet_defs_1'] . ' ' . $damage . " " . $this->lang['damage'] . " " . $this->lang['with'] . " $amount " . $this->lang['shots'] . ". ";
     }
 
     /**
@@ -101,9 +101,23 @@ class Attack_lang implements Lang
      */
     public function getAttackersDefendingDescr($damage)
     {
-        return $this->lang['fleet_defs_2'] . ' ' . $damage . ' ' . $this->lang['damage'];
+        return $this->lang['fleet_defs_2'] . ' ' . $damage . ' ' . $this->lang['damage'] . '.';
     }
 
+    /**
+     * getTechs
+     * 
+     * @param type $weaponsTech
+     * @param type $shieldsTech
+     * @param type $armourTech
+     * 
+     * @return string
+     */
+    public function getTechs($weaponsTech, $shieldsTech, $armourTech)
+    {
+        return $this->lang['cr_weapons'] . ': ' . ($weaponsTech*10).'% - ' . $this->lang['cr_shields'] . ': '.($shieldsTech*10).'% - ' . $this->lang['cr_armor'] . ': '.($armourTech*10).'%';
+    }
+    
     /**
      * getAttackerHasWon
      *
@@ -197,17 +211,22 @@ class Attack_lang implements Lang
      */
     public function getMoonProb($prob)
     {
-        return $this->lang['sys_moonproba'] . " $prob% .";
+        return $this->lang['sys_moonproba'] . " $prob%";
     }
 
     /**
      * getNewMoon
-     *
+     * 
+     * @param int $name
+     * @param int $galaxy
+     * @param int $system
+     * @param int $planet
+     * 
      * @return string
      */
-    public function getNewMoon()
+    public function getNewMoon($name, $galaxy, $system, $planet)
     {
-        return $this->lang['sys_moonbuilt'];
+        return sprintf($this->lang['sys_moonbuilt'], $name, $galaxy, $system, $planet);
     }
 }
 

@@ -64,6 +64,11 @@ abstract class Timing_library extends XGPCore
      */
     public static function formatDefaultTime($time)
     {
+        if (!is_numeric($time)) {
+            
+            $time = strtotime($time);
+        }
+        
         return date(FunctionsLib::readConfig('date_format_extended'), $time);
     }
 

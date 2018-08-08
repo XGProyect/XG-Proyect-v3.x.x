@@ -151,26 +151,25 @@ class Colonize extends Missions
      */
     private function build_new_fleet($fleet_array)
     {
-        $current_fleet = explode(';', $fleet_array);
-        $new_fleet = '';
+        $current_fleet = FleetsLib::getFleetShipsArray($fleet_array);
+        $new_fleet = [];
 
-        foreach ($current_fleet as $item => $group) {
-            if ($group != '') {
-                $ship = explode(',', $group);
+        foreach ($current_fleet as $ship => $count) {
 
-                if ($ship[0] == 208) {
-                    if ($ship[1] > 1) {
-                        $new_fleet .= $ship[0] . ',' . ( $ship[1] - 1 ) . ',';
-                    }
-                } else {
-                    if ($ship[1] <> 0) {
-                        $new_fleet .= $ship[0] . ',' . $ship[1] . ',';
-                    }
+            if ($ship == 208) {
+
+                if ($count > 1) {
+                    $new_fleet[$ship] = ( $count - 1 );
+                }
+            } else {
+
+                if ($count <> 0) {
+                    $new_fleet[$ship] = $count;
                 }
             }
         }
 
-        return $new_fleet;
+        return FleetsLib::setFleetShipsArray($new_fleet);
     }
 
     /**

@@ -13,6 +13,7 @@
  */
 namespace application\libraries\missions;
 
+use application\libraries\combatreport\Report;
 use application\libraries\FleetsLib;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
@@ -27,6 +28,10 @@ use LangManager;
 use Player;
 use PlayerGroup;
 use Ship;
+use const BATTLE_WIN;
+use const LIB_PATH;
+use const VENDOR_PATH;
+use const XGP_ROOT;
 
 /**
  * Attack Class
@@ -167,6 +172,10 @@ class Attack extends Missions
                     $targetUser['research_weapons_technology'], $targetUser['research_shielding_technology'], $targetUser['research_armour_technology']
                 );
 
+                $player->setCoords(
+                    $fleet_row['fleet_end_galaxy'], $fleet_row['fleet_end_system'], $fleet_row['fleet_end_planet']
+                );
+                
                 $player->setName($targetUser['user_name']);
 
                 $defenders->addPlayer($player);
@@ -274,19 +283,14 @@ class Attack extends Missions
     private function getPlayerGroup($fleet_row)
     {
         $playerGroup = new PlayerGroup();
-        $serializedTypes = explode(';', $fleet_row['fleet_array']);
+        $serializedTypes = FleetsLib::getFleetShipsArray($fleet_row['fleet_array']);
         $idPlayer = $fleet_row['fleet_owner'];
         $fleet = new Fleet($fleet_row['fleet_id']);
 
-        foreach ($serializedTypes as $serializedType) {
+        foreach ($serializedTypes as $id => $count) {
 
-            if (!empty($serializedType)) {
-
-                list($id, $count) = explode(',', $serializedType);
-
-                if ($id != 0 && $count != 0) {
-                    $fleet->addShipType($this->getShipType($id, $count));
-                }
+            if ($id != 0 && $count != 0) {
+                $fleet->addShipType($this->getShipType($id, $count));
             }
         }
 
@@ -299,6 +303,10 @@ class Attack extends Missions
 
         $player->setName($player_info['user_name']);
 
+        $player->setCoords(
+            $fleet_row['fleet_start_galaxy'], $fleet_row['fleet_start_system'], $fleet_row['fleet_start_planet']
+        );
+        
         $playerGroup->addPlayer($player);
 
         return $playerGroup;
@@ -321,19 +329,14 @@ class Attack extends Missions
             foreach ($result as $fleet_row) {
 
                 //making the current fleet object
-                $serializedTypes = explode(';', $fleet_row['fleet_array']);
+                $serializedTypes = FleetsLib::getFleetShipsArray($fleet_row['fleet_array']);
                 $idPlayer = $fleet_row['fleet_owner'];
                 $fleet = new Fleet($fleet_row['fleet_id']);
 
-                foreach ($serializedTypes as $serializedType) {
+                foreach ($serializedTypes as $id => $count) {
 
-                    if (!empty($serializedType)) {
-
-                        list ( $id, $count ) = explode(',', $serializedType);
-
-                        if ($id != 0 && $count != 0) {
-                            $fleet->addShipType($this->getShipType($id, $count));
-                        }
+                    if ($id != 0 && $count != 0) {
+                        $fleet->addShipType($this->getShipType($id, $count));
                     }
                 }
 
@@ -361,6 +364,10 @@ class Attack extends Missions
                         $player_info['research_weapons_technology'], $player_info['research_shielding_technology'], $player_info['research_armour_technology']
                     );
 
+                    $player->setCoords(
+                        $fleet_row['fleet_start_galaxy'], $fleet_row['fleet_start_system'], $fleet_row['fleet_start_planet']
+                    );
+                    
                     $player->setName($player_info['user_name']);
 
                     $playerGroup->addPlayer($player);
@@ -558,7 +565,7 @@ class Attack extends Missions
 
                 $fleetCapacity = 0;
                 $totalCount = 0;
-                $fleetArray = '';
+                $fleetArray = [];
 
                 foreach ($fleet as $idShipType => $fighters) {
 
@@ -571,7 +578,7 @@ class Attack extends Missions
                         $amount = $XshipType->getCount();
                         $fleetCapacity += $amount * $this->pricelist[$idShipType]['capacity'];
                         $totalCount += $amount;
-                        $fleetArray .= "$idShipType,$amount;";
+                        $fleetArray[$idShipType] = $amount;
                     }
                 }
 
@@ -599,7 +606,7 @@ class Attack extends Missions
                     }
 
                     $this->Missions_Model->updateReturningFleetData([
-                        'ships' => substr($fleetArray, 0, -1),
+                        'ships' => FleetsLib::setFleetShipsArray($fleetArray),
                         'amount' => $totalCount,
                         'stolen' => [
                             'metal' => $fleetSteal['metal'],

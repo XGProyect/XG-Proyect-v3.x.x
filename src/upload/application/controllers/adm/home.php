@@ -134,7 +134,7 @@ class Home extends Controller
         $parse['php_upload_max_filesize'] = FormatLib::prettyBytes((int) (str_replace('M', '', ini_get('upload_max_filesize')) * 1024 * 1024));
         $parse['php_memory_limit'] = FormatLib::prettyBytes((int) (str_replace('M', '', ini_get('memory_limit')) * 1024 * 1024));
         $parse['mysql_version'] = $this->_db->serverInfo();
-        $parse['mysql_packet_size'] = FormatLib::prettyBytes($this->_db->queryFetch("SHOW VARIABLES LIKE 'max_allowed_packet'")[1]);
+        $parse['mysql_packet_size'] = FormatLib::prettyBytes($this->_db->queryFetch("SHOW VARIABLES LIKE 'max_allowed_packet'")['Value']);
         $db_stats = $this->getDbStats();
         $parse['data_usage'] = FormatLib::prettyBytes($db_stats['Data_Usage']);
         $parse['index_usage'] = FormatLib::prettyBytes($db_stats['Index_Usage']);

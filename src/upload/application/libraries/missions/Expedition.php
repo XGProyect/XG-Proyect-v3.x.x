@@ -13,6 +13,7 @@
  */
 namespace application\libraries\missions;
 
+use application\libraries\FleetsLib;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
 
@@ -67,23 +68,18 @@ class Expedition extends Missions
             if ($fleet_row['fleet_end_stay'] < time()) {
 
                 $ships_points = $this->setShipsPoints();
-                $ships = explode(";", $fleet_row['fleet_array']);
+                $ships = FleetsLib::getFleetShipsArray($fleet_row['fleet_array']);
                 $fleet_capacity = 0;
                 $fleet_points = 0;
+                $current_fleet = [];
 
-                foreach ($ships as $item => $group) {
+                foreach ($ships as $id => $count) {
 
-                    if ($group != '') {
-
-                        $ship = explode(",", $group);
-                        $ship_number = $ship[0];
-                        $ship_amount = $ship[1];
-                        $current_fleet[$ship_number] = $ship_amount;
-                        $fleet_capacity += $this->pricelist[$ship_number]['capacity'] * $ship_amount;
-                        $fleet_points += ( $ship_amount * $ships_points[$ship_number] );
-                    }
+                    $current_fleet[$id] = $count;
+                    $fleet_capacity += $this->pricelist[$id]['capacity'] * $count;
+                    $fleet_points += ( $count * $ships_points[$id] );
                 }
-
+                
                 // GET A NUMBER BETWEEN 0 AND 10 RANDOMLY
                 $this->hazard = mt_rand(0, 10);
 
@@ -151,6 +147,8 @@ class Expedition extends Missions
         $lost_amount = (($this->hazard * 33) + 1) / 100;
 
         if ($lost_amount == 1) {
+            $this->all_destroyed = true;
+            
             $this->expeditionMessage(
                 $fleet_row['fleet_owner'], $this->langs['sys_expe_blackholl_2'], $fleet_row['fleet_end_stay']
             );
@@ -158,12 +156,12 @@ class Expedition extends Missions
             parent::removeFleet($fleet_row['fleet_id']);
         } else {
             $this->all_destroyed = true;
-            $new_ships = '';
+            $new_ships = [];
 
             foreach ($current_fleet as $ship => $amount) {
                 if (floor($amount * $lost_amount) != 0) {
                     $lost_ships[$ship] = floor($amount * $lost_amount);
-                    $new_ships .= $ship . "," . ($amount - $lost_ships[$ship]) . ";";
+                    $new_ships[$ship] = ($amount - $lost_ships[$ship]);
                     $this->all_destroyed = false;
                 }
             }
@@ -174,10 +172,11 @@ class Expedition extends Missions
                 );
 
                 $this->Missions_Model->updateFleetArrayById([
-                    'ships' => $new_ships,
+                    'ships' => FleetsLib::setFleetShipsArray($new_ships),
                     'fleet_id' => $fleet_row['fleet_id']
                 ]);
             } else {
+                
                 $this->expeditionMessage(
                     $fleet_row['fleet_owner'], $this->langs['sys_expe_blackholl_2'], $fleet_row['fleet_end_stay']
                 );
@@ -268,12 +267,12 @@ class Expedition extends Missions
             }
         }
 
-        $new_ships = '';
+        $new_ships = [];
         $found_ship_message = '';
 
         foreach ($current_fleet as $ship => $count) {
             if ($count > 0) {
-                $new_ships .= $ship . "," . $count . ";";
+                $new_ships[$ship] = $count;
             }
         }
 
@@ -286,7 +285,7 @@ class Expedition extends Missions
         }
 
         $this->Missions_Model->updateFleetArrayById([
-            'ships' => $new_ships,
+            'ships' => FleetsLib::setFleetShipsArray($new_ships),
             'fleet_id' => $fleet_row['fleet_id']
         ]);
 

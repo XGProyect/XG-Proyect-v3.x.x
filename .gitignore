@@ -1,5 +1,27 @@
+#
+# application
+#
 src/upload/application/config/config.php
 src/upload/application/logs/*.txt
+
+#
+# tests
+#
 src/upload/tests/build/
 src/upload/tests/_reports/
+
+#
+# docs
+#
 src/docs/
+
+#
+# docker
+#
+data/xgp.sql
+
+#
+# IDE
+#
+*.code-workspace
+nbproject/

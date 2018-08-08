@@ -14,6 +14,7 @@
 namespace application\libraries\missions;
 
 use application\core\XGPCore;
+use application\libraries\FleetsLib;
 use application\libraries\Updates_library;
 
 /**
@@ -104,17 +105,13 @@ class Missions extends XGPCore
 
         self::makeUpdate($galaxy, $system, $planet, $type);
 
-        $ships = explode(';', $fleet_row['fleet_array']);
+        $ships = FleetsLib::getFleetShipsArray($fleet_row['fleet_array']);
         $ships_fields = '';
 
-        foreach ($ships as $group) {
+        foreach ($ships as $id => $amount) {
 
-            if ($group != '') {
-
-                $ship = explode(",", $group);
-                $ships_fields .= "`" . $this->resource[$ship[0]] . "` = `" .
-                    $this->resource[$ship[0]] . "` + '" . $ship[1] . "', ";
-            }
+            $ships_fields .= "`" . $this->resource[$id] . "` = `" .
+                $this->resource[$id] . "` + '" . $amount . "', ";
         }
 
         $fuel_return = 0;

@@ -22,9 +22,13 @@ require XGP_ROOT . 'application' . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPA
 include_once XGP_ROOT . 'application' . DIRECTORY_SEPARATOR . 'libraries' . DIRECTORY_SEPARATOR . 'adm' . DIRECTORY_SEPARATOR . 'AdministrationLib.php';
 
 // check updates
-AdministrationLib::updateRequired();
+$page = filter_input(INPUT_GET, 'page');
 
-$page = isset($_GET['page']) ? $_GET['page'] : 'home';
+if (is_null($page)) {
+    
+    $page = 'home';
+}
+
 $file_name = XGP_ROOT . ADMIN_PATH . $page . '.php';
 
 // logout

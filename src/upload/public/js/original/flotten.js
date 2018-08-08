@@ -23,7 +23,7 @@ function setACS(id) {
 }
 
 function setACS_target(tacs) {
-    document.getElementsByName('acs_target_mr')[0].value = tacs;
+    document.getElementsByName('acs_target')[0].value = tacs;
 	return;
 }
 

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Database Schema File
  *
@@ -12,24 +11,28 @@
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-
-$tables['acs_fleets'] =
-"CREATE TABLE `" . ACS_FLEETS . "` (
-`acs_fleet_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-`acs_fleet_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
-`acs_fleet_members` text CHARACTER SET utf8 COLLATE utf8_general_ci,
-`acs_fleet_fleets` text CHARACTER SET utf8 COLLATE utf8_general_ci,
-`acs_fleet_galaxy` int(2) DEFAULT NULL,
-`acs_fleet_system` int(4) DEFAULT NULL,
-`acs_fleet_planet` int(2) DEFAULT NULL,
-`acs_fleet_planet_type` tinyint(1) DEFAULT NULL,
-`acs_fleet_invited` text,
-PRIMARY KEY (`acs_fleet_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+$tables['acs'] = "CREATE TABLE `" . ACS . "` (
+`acs_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+`acs_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+`acs_owner` INT(11) NOT NULL DEFAULT '0',
+`acs_galaxy` int(2) DEFAULT NULL,
+`acs_system` int(4) DEFAULT NULL,
+`acs_planet` int(2) DEFAULT NULL,
+`acs_planet_type` tinyint(1) DEFAULT NULL,
+PRIMARY KEY (`acs_id`),
+UNIQUE KEY `acs_name` (`acs_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 ";
 
-$tables['alliance'] =
-"CREATE TABLE `" . ALLIANCE . "` (
+$tables['acs_members'] = "CREATE TABLE `" . ACS_MEMBERS . "` (
+`acs_member_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+`acs_group_id` int(11) UNSIGNED NOT NULL,
+`acs_user_id` int(11) UNSIGNED NOT NULL,
+PRIMARY KEY (`acs_member_id`),
+UNIQUE( `acs_group_id`, `acs_user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;";
+
+$tables['alliance'] = "CREATE TABLE `" . ALLIANCE . "` (
 `alliance_id` bigint(11) NOT NULL AUTO_INCREMENT,
 `alliance_name` varchar(32) DEFAULT NULL,
 `alliance_tag` varchar(8) DEFAULT NULL,
@@ -46,8 +49,7 @@ $tables['alliance'] =
 PRIMARY KEY (`alliance_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;";
 
-$tables['alliance_statistics'] =
-"CREATE TABLE `" . ALLIANCE_STATISTICS . "` (
+$tables['alliance_statistics'] = "CREATE TABLE `" . ALLIANCE_STATISTICS . "` (
 `alliance_statistic_alliance_id` int(11) NOT NULL,
 `alliance_statistic_buildings_points` double(132,8) NOT NULL DEFAULT '0.00000000',
 `alliance_statistic_buildings_old_rank` int(11) NOT NULL DEFAULT '0',
@@ -68,8 +70,7 @@ $tables['alliance_statistics'] =
 PRIMARY KEY (`alliance_statistic_alliance_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 
-$tables['banned'] =
-"CREATE TABLE `" . BANNED . "` (
+$tables['banned'] = "CREATE TABLE `" . BANNED . "` (
 `banned_id` bigint(11) NOT NULL AUTO_INCREMENT,
 `banned_who` varchar(64) NOT NULL DEFAULT '',
 `banned_theme` text NOT NULL,
@@ -82,8 +83,7 @@ PRIMARY KEY (`banned_id`),
 KEY `ID` (`banned_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;";
 
-$tables['buddys'] =
-"CREATE TABLE `" . BUDDY . "` (
+$tables['buddys'] = "CREATE TABLE `" . BUDDY . "` (
   `buddy_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `buddy_sender` int(10) unsigned NOT NULL,
   `buddy_receiver` int(10) unsigned NOT NULL,
@@ -92,8 +92,7 @@ $tables['buddys'] =
 PRIMARY KEY (`buddy_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 
-$tables['buildings'] =
-"CREATE TABLE `" . BUILDINGS . "` (
+$tables['buildings'] = "CREATE TABLE `" . BUILDINGS . "` (
 `building_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
 `building_planet_id` int(11) unsigned NOT NULL,
 `building_metal_mine` int(11) NOT NULL DEFAULT '0',
@@ -118,8 +117,7 @@ PRIMARY KEY (`building_id`),
 UNIQUE KEY `building_planet_id` (`building_planet_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;";
 
-$tables['defenses'] =
-"CREATE TABLE `" . DEFENSES . "` (
+$tables['defenses'] = "CREATE TABLE `" . DEFENSES . "` (
 `defense_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
 `defense_planet_id` int(11) unsigned NOT NULL,
 `defense_rocket_launcher` int(11) NOT NULL DEFAULT '0',
@@ -136,8 +134,7 @@ PRIMARY KEY (`defense_id`),
 UNIQUE KEY `defense_planet_id` (`defense_planet_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 
-$tables['fleets'] =
-"CREATE TABLE `" . FLEETS . "` (
+$tables['fleets'] = "CREATE TABLE `" . FLEETS . "` (
 `fleet_id` bigint(11) NOT NULL AUTO_INCREMENT,
 `fleet_owner` int(11) NOT NULL DEFAULT '0',
 `fleet_mission` int(11) NOT NULL DEFAULT '0',
@@ -161,13 +158,12 @@ $tables['fleets'] =
 `fleet_fuel` bigint(11) NOT NULL DEFAULT '0',
 `fleet_target_owner` int(11) NOT NULL DEFAULT '0',
 `fleet_group` varchar(15) NOT NULL DEFAULT '0',
-`fleet_mess` int(11) NOT NULL DEFAULT '0',
-`fleet_creation` int(11) DEFAULT NULL,
+`fleet_mess` TINYINT(1) NOT NULL DEFAULT '0',
+`fleet_creation` int(11) NOT NULL DEFAULT '0',
 PRIMARY KEY (`fleet_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;";
 
-$tables['messages'] =
-"CREATE TABLE `" . MESSAGES . "` (
+$tables['messages'] = "CREATE TABLE `" . MESSAGES . "` (
 `message_id` BIGINT(11) NOT NULL AUTO_INCREMENT,
 `message_sender` INT(11) NOT NULL DEFAULT '0',
 `message_receiver` INT(11) NOT NULL DEFAULT '0',
@@ -180,8 +176,7 @@ $tables['messages'] =
 PRIMARY KEY  (`message_id`)
 ) ENGINE=InnoDB;";
 
-$tables['notes'] =
-"CREATE TABLE `" . NOTES . "` (
+$tables['notes'] = "CREATE TABLE `" . NOTES . "` (
 `note_id` bigint(11) NOT NULL AUTO_INCREMENT,
 `note_owner` int(11) DEFAULT NULL,
 `note_time` int(11) DEFAULT NULL,
@@ -191,15 +186,13 @@ $tables['notes'] =
 PRIMARY KEY (`note_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;";
 
-$tables['options'] =
-"CREATE TABLE IF NOT EXISTS `" . OPTIONS . "` (
+$tables['options'] = "CREATE TABLE IF NOT EXISTS `" . OPTIONS . "` (
 `option_id` bigint(20) unsigned NOT NULL,
 `option_name` varchar(191) DEFAULT NULL,
 `option_value` longtext NOT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8;";
 
-$tables['options_insert'] = 
-"INSERT INTO `" . OPTIONS . "` (`option_id`, `option_name`, `option_value`) VALUES
+$tables['options_insert'] = "INSERT INTO `" . OPTIONS . "` (`option_id`, `option_name`, `option_value`) VALUES
 (1, 'game_name', 'XG Proyect'),
 (2, 'game_logo', 'http://www.xgproyect.org/images/misc/xg-logo.png'),
 (3, 'lang', 'spanish'),
@@ -243,8 +236,7 @@ $tables['options_insert'] =
 (41, 'lastsettedsystempos', '1'),
 (42, 'lastsettedplanetpos', '1');";
 
-$tables['planets'] =
-"CREATE TABLE `" . PLANETS . "` (
+$tables['planets'] = "CREATE TABLE `" . PLANETS . "` (
 `planet_id` bigint(11) NOT NULL AUTO_INCREMENT,
 `planet_name` varchar(255) DEFAULT NULL,
 `planet_user_id` int(11) DEFAULT NULL,
@@ -290,8 +282,7 @@ $tables['planets'] =
 PRIMARY KEY (`planet_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;";
 
-$tables['premium'] =
-"CREATE TABLE `" . PREMIUM . "` (
+$tables['premium'] = "CREATE TABLE `" . PREMIUM . "` (
 `premium_user_id` INT(10) UNSIGNED NOT NULL,
 `premium_dark_matter` INT(10) NOT NULL DEFAULT '0',
 `premium_officier_commander` INT(10) NOT NULL DEFAULT '0',
@@ -302,8 +293,7 @@ $tables['premium'] =
 UNIQUE KEY `premium_user_id` (`premium_user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 
-$tables['reports'] =
-"CREATE TABLE `" . REPORTS . "` (
+$tables['reports'] = "CREATE TABLE `" . REPORTS . "` (
 `report_owners` varchar(255) NOT NULL,
 `report_rid` varchar(42) NOT NULL,
 `report_content` text NOT NULL,
@@ -314,8 +304,7 @@ KEY `time` (`report_time`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ";
 
-$tables['research'] =
-"CREATE TABLE `" . RESEARCH . "` (
+$tables['research'] = "CREATE TABLE `" . RESEARCH . "` (
 `research_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
 `research_user_id` int(11) unsigned NOT NULL,
 `research_current_research` int(11) NOT NULL DEFAULT '0',
@@ -339,16 +328,14 @@ PRIMARY KEY (`research_id`),
 UNIQUE KEY `research_user_id` (`research_user_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;";
 
-$tables['sessions'] =
-"CREATE TABLE `" . SESSIONS . "` (
+$tables['sessions'] = "CREATE TABLE `" . SESSIONS . "` (
 `session_id` CHAR(32) NOT NULL,
 `session_data` longtext NOT NULL,
 `session_last_accessed` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 PRIMARY KEY  (`session_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 
-$tables['settings'] =
-"CREATE TABLE `" . SETTINGS . "` (
+$tables['settings'] = "CREATE TABLE `" . SETTINGS . "` (
 `setting_user_id` INT(10) UNSIGNED NOT NULL,
 `setting_no_ip_check` TINYINT(1) NOT NULL DEFAULT '1',
 `setting_planet_sort` TINYINT(1) NOT NULL DEFAULT '0',
@@ -365,8 +352,7 @@ $tables['settings'] =
   UNIQUE KEY `setting_user_id` (`setting_user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 
-$tables['ships'] =
-"CREATE TABLE `" . SHIPS . "` (
+$tables['ships'] = "CREATE TABLE `" . SHIPS . "` (
 `ship_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
 `ship_planet_id` int(11) unsigned NOT NULL,
 `ship_small_cargo_ship` int(11) NOT NULL DEFAULT '0',
@@ -387,8 +373,7 @@ PRIMARY KEY (`ship_id`),
 UNIQUE KEY `ship_planet_id` (`ship_planet_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 
-$tables['users'] =
-"CREATE TABLE `" . USERS . "` (
+$tables['users'] = "CREATE TABLE `" . USERS . "` (
 `user_id` bigint(11) unsigned NOT NULL AUTO_INCREMENT,
 `user_name` varchar(64) NOT NULL DEFAULT '',
 `user_password` varchar(64) NOT NULL DEFAULT '',
@@ -416,8 +401,7 @@ $tables['users'] =
 PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;";
 
-$tables['user_statistics'] =
-"CREATE TABLE `" . USERS_STATISTICS . "` (
+$tables['user_statistics'] = "CREATE TABLE `" . USERS_STATISTICS . "` (
 `user_statistic_user_id` int(11) NOT NULL,
 `user_statistic_buildings_points` double(132,8) NOT NULL DEFAULT '0.00000000',
 `user_statistic_buildings_old_rank` int(11) NOT NULL DEFAULT '0',
@@ -437,4 +421,5 @@ $tables['user_statistics'] =
 `user_statistic_update_time` int(11) NOT NULL DEFAULT '0',
 PRIMARY KEY (`user_statistic_user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
-/* end of databaseinfos.php */
+
+/* end of database.php */

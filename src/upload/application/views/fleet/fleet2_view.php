@@ -15,20 +15,18 @@
     }
 </script>
 <form action="game.php?page=fleet3" method="post" onsubmit='this.submit.disabled = true;'>
-    {fleetblock}
-    <input type="hidden" name="speedallsmin"   value="{speedallsmin}" />
-    <input type="hidden" name="usedfleet"      value="{fleetarray}" />
-    <input type="hidden" name="thisgalaxy"     value="{galaxy}" />
-    <input type="hidden" name="thissystem"     value="{system}" />
-    <input type="hidden" name="thisplanet"     value="{planet}" />
-    <input type="hidden" name="galaxyend"      value="{galaxy_post}" />
-    <input type="hidden" name="systemend"      value="{system_post}" />
-    <input type="hidden" name="planetend"      value="{planet_post}" />
-    <input type="hidden" name="speedfactor"    value="{speedfactor}" />
+    {fleet_block}
+        <input type="hidden" name="consumption{ship_id}" value="{consumption}" />
+        <input type="hidden" name="speed{ship_id}" value="{speed}" />
+        <input type="hidden" name="capacity{ship_id}" value="{capacity}" />
+        <input type="hidden" name="ship{ship_id}" value="{ship}" />    
+    {/fleet_block}
+    <input type="hidden" name="speedfactor" value="{speedfactor}" />
+    <input type="hidden" name="thisgalaxy" value="{galaxy}" />
+    <input type="hidden" name="thissystem" value="{system}" />
+    <input type="hidden" name="thisplanet" value="{planet}" />
     <input type="hidden" name="thisplanettype" value="{planet_type}" />
-    <input type="hidden" name="thisresource1"  value="{metal}" />
-    <input type="hidden" name="thisresource2"  value="{crystal}" />
-    <input type="hidden" name="thisresource3"  value="{deuterium}" />
+    <input type="hidden" name="target_mission" value="{target_mission}" />
     <br />
     <div id="content">
         <table width="519" border="0" cellpadding="0" cellspacing="1">
@@ -38,21 +36,32 @@
             <tr height="20">
                 <th width="50%">{fl_destiny}</th>
                 <th>
-                    <input name="galaxy" size="3" maxlength="2" onChange="shortInfo()" onKeyUp="shortInfo()" value="{g}" />
-                    <input name="system" size="3" maxlength="3" onChange="shortInfo()" onKeyUp="shortInfo()" value="{s}" />
-                    <input name="planet" size="3" maxlength="2" onChange="shortInfo()" onKeyUp="shortInfo()" value="{p}" />
+                    <input name="galaxy" size="3" maxlength="2" onChange="shortInfo()" onKeyUp="shortInfo()" value="{galaxy_end}" />
+                    <input name="system" size="3" maxlength="3" onChange="shortInfo()" onKeyUp="shortInfo()" value="{system_end}" />
+                    <input name="planet" size="3" maxlength="2" onChange="shortInfo()" onKeyUp="shortInfo()" value="{planet_end}" />
                     <select name="planettype" onChange="shortInfo()" onKeyUp="shortInfo()">
-                        {options_planettype}
+                        {planet_types}
+                        <option value="{value}"{selected}>{title}</option>
+                        {/planet_types}
                     </select>
                     <input name="fleet_group" type="hidden" onChange="shortInfo()" onKeyUp="shortInfo()" value="0" />
-                    <input name="acs_target_mr" type="hidden" onChange="shortInfo()" onKeyUp="shortInfo()" value="0:0:0" />
+                    <input name="acs_target" type="hidden" onChange="shortInfo()" onKeyUp="shortInfo()" value="0:0:0" />
                 </th>
             </tr>
             <tr height="20">
                 <th>{fl_fleet_speed}</th>
                 <th>
                     <select name="speed" onChange="shortInfo()" onKeyUp="shortInfo()">
-                        {options}
+                        <option value="10">100</option>
+                        <option value="9">90</option>
+                        <option value="8">80</option>
+                        <option value="7">70</option>
+                        <option value="6">60</option>
+                        <option value="5">50</option>
+                        <option value="4">40</option>
+                        <option value="3">30</option>
+                        <option value="2">20</option>
+                        <option value="1">10</option>
                     </select> %
                 </th>
             </tr>
@@ -76,23 +85,28 @@
                 <th>{fl_cargo_capacity}</th>
                 <th><div id="storage">-</div></th>
             </tr>
-            {shortcut}
+            {shortcuts}
             <tr height="20">
                 <td colspan="2" class="c">{fl_my_planets}</td>
             </tr>
-            {colonylist}
+            {colonies}
             </tr>
             <tr height="20">
                 <td colspan="2" class="c">{fl_acs_title}</td>
             </tr>
-            {asc}
+            {acs}
+                <tr height="20">
+                    <th colspan="2">
+                        <a href="javascript:setTarget({galaxy},{system},{planet},{planet_type}); shortInfo(); setACS({id}); setACS_target('g{galaxy}s{system}p{planet}t{planet_type}');">
+                            ({name})
+                        </a>
+                    </th>
+                </tr>
+            {/acs}
             <tr height="20">
                 <th colspan="2"><input type="submit" name="submit" value="{fl_continue}" /></th>
             </tr>
         </table>
     </div>
-    <input type="hidden" name="maxepedition" value="{maxepedition}" />
-    <input type="hidden" name="curepedition" value="{curepedition}" />
-    <input type="hidden" name="target_mission" value="{target_mission}" />
 </form>
 <script>javascript:shortInfo();</script>

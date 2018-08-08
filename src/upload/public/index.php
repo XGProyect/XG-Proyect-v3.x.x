@@ -17,7 +17,12 @@ define('XGP_ROOT', realpath(dirname(__DIR__)) . DIRECTORY_SEPARATOR);
 
 require XGP_ROOT . 'application' . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'common.php';
 
-$page = (isset($_GET['page']) ? $_GET['page'] : 'home');
+$page = filter_input(INPUT_GET, 'page');
+
+if (is_null($page)) {
+    
+    $page = 'home';
+}
 
 $file_name = XGP_ROOT . HOME_PATH . $page . '.php';
 

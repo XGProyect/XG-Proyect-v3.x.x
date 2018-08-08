@@ -8,26 +8,22 @@
     <input type="hidden" name="thisresource1"  value="{metal}" />
     <input type="hidden" name="thisresource2"  value="{crystal}" />
     <input type="hidden" name="thisresource3"  value="{deuterium}" />
-    <input type="hidden" name="consumption"    value="{consumption}" />
-    <input type="hidden" name="dist"           value="{distance}" />
-    <input type="hidden" name="speedfactor"    value="{speedfactor}" />
-    <input type="hidden" name="thisgalaxy"     value="{thisgalaxy}" />
-    <input type="hidden" name="thissystem"     value="{thissystem}" />
-    <input type="hidden" name="thisplanet"     value="{thisplanet}" />
-    <input type="hidden" name="galaxy"         value="{galaxy}" />
-    <input type="hidden" name="system"         value="{system}" />
-    <input type="hidden" name="planet"         value="{planet}" />
-    <input type="hidden" name="thisplanettype" value="{thisplanettype}" />
-    <input type="hidden" name="planettype"     value="{planettype}" />
-    <input type="hidden" name="speedallsmin"   value="{speedallsmin}" />
+    <input type="hidden" name="thisgalaxy"     value="{this_galaxy}" />
+    <input type="hidden" name="thissystem"     value="{this_system}" />
+    <input type="hidden" name="thisplanet"     value="{this_planet}" />
+    <input type="hidden" name="thisplanettype" value="{this_planet_type}" />
+    <input type="hidden" name="galaxy"         value="{galaxy_end}" />
+    <input type="hidden" name="system"         value="{system_end}" />
+    <input type="hidden" name="planet"         value="{planet_end}" />
+    <input type="hidden" name="planettype"     value="{planet_type_end}" />
     <input type="hidden" name="speed"          value="{speed}" />
     <input type="hidden" name="speedfactor"    value="{speedfactor}" />
-    <input type="hidden" name="usedfleet"      value="{usedfleet}" />
-    <input type="hidden" name="maxepedition"   value="{maxepedition}" />
-    <input type="hidden" name="curepedition"   value="{curepedition}" />
-    <input type="hidden" name="fleet_group"    value="{fleet_group}" />
-    <input type="hidden" name="acs_target_mr"  value="{acs_target_mr}" />
-    {input_extra}
+    {fleet_block}
+        <input type="hidden" name="consumption{ship_id}" value="{consumption}" />
+        <input type="hidden" name="speed{ship_id}" value="{speed}" />
+        <input type="hidden" name="capacity{ship_id}" value="{capacity}" />
+        <input type="hidden" name="ship{ship_id}" value="{ship}" />    
+    {/fleet_block}
     <br />
     <div id="content">
         <table border="0" cellpadding="0" cellspacing="1" width="519">
@@ -40,7 +36,16 @@
                         <tr height="20">
                             <td class="c" colspan="2">{fl_mission}</td>
                         </tr>
-                        {missionselector}
+                        {mission_selector}
+                        <tr height="20">
+                            <th>
+                                <input id="{id}" type="radio" name="mission" value="{value}"{checked}/>
+                                <label for="{id}">{mission}</label>
+                                <br />
+                                {expedition_message}
+                            </th>
+                        </tr>
+                        {/mission_selector}
                     </table>
                 </th>
                 <th>
@@ -73,7 +78,7 @@
                         <tr height="20">
                             <th colspan="3">&nbsp;</th>
                         </tr>
-                        {stayblock}
+                        {stay_block}
                     </table>
                 </th>
             </tr>

@@ -19,6 +19,8 @@ use application\libraries\adm\AdministrationLib;
 use application\libraries\FleetsLib;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
+use const FLEETS;
+use const USERS;
 
 /**
  * Fleetmovements Class
@@ -104,7 +106,7 @@ class Fleetmovements extends Controller
 
         while ($fleet = $this->_db->fetchArray($this->_flying_fleets)) {
             $block['num'] = ++$i;
-            $block['mission'] = $this->resources_pop_up($this->_lang['ff_type_mission'][$fleet['fleet_mission']] . ' ' . ( FleetsLib::isFleetReturning($fleet) ? $this->_lang['ff_r'] : $this->_lang['ff_a'] ), $fleet);
+            $block['mission'] = $this->resources_pop_up($this->_lang['ff_type_mission'][$fleet['fleet_mission']] . ' ' . ( FleetsLib::isFleetReturning($fleet['fleet_mess']) ? $this->_lang['ff_r'] : $this->_lang['ff_a'] ), $fleet);
             $block['amount'] = $this->ships_pop_up($this->_lang['ff_ships'], $fleet);
             $block['beginning'] = FormatLib::prettyCoords($fleet['fleet_start_galaxy'], $fleet['fleet_start_system'], $fleet['fleet_start_planet']);
             $block['departure'] = date(FunctionsLib::readConfig('date_format_extended'), $fleet['fleet_creation']);
@@ -148,14 +150,12 @@ class Fleetmovements extends Controller
      */
     private function ships_pop_up($title, $content)
     {
-        $ships = explode(';', $content['fleet_array']);
+        $ships = FleetsLib::getFleetShipsArray($content['fleet_array']);
         $pop_up = '';
 
-        foreach ($ships as $item => $group) {
-            if ($group != '') {
-                $ship = explode(',', $group);
-                $pop_up .= $this->_lang['tech'][$ship[0]] . ': ' . FormatLib::prettyNumber($ship[1]) . '<br />';
-            }
+        foreach ($ships as $ship => $amount) {
+            
+            $pop_up .= $this->_lang['tech'][$ship] . ': ' . FormatLib::prettyNumber($amount) . '<br />';
         }
 
         $parse['popup_title'] = $title;
