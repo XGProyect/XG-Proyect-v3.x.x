@@ -1,23 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <phpdocumentor>
+    <title><![CDATA[XGP Proyect v3.1.0]]></title>
+    <encoding>utf-8</encoding>
     <parser>
-        <title><![CDATA[<b>XGP</b> Proyect v3.1.0]]></title>
-        <default-package-name><![CDATA[<b>XGP</b> Proyect v3.1.0]]></default-package-name>
-        <encoding>utf-8</encoding>
         <target>docs</target>
-        <markers>
-            <item>TODO</item>
-            <item>FIXME</item>
-        </markers>
-        <extensions>
-            <extension>php</extension>
-        </extensions>
+        <encoding>utf-8</encoding>
         <visibility></visibility>
     </parser>
+    <markers>
+        <item>TODO</item>
+        <item>FIXME</item>
+    </markers>
     <files>
-        <directory>src/upload</directory>
-        <ignore>tests/*</ignore>
-        <ignore>application/third_party/battle_engine/tests/*</ignore>
+        <directory>src/upload/application</directory>
+        <ignore>*tests*</ignore>
+        <ignore>*views*</ignore>
+        <ignore>*third_party*</ignore>
         <ignore-hidden>true</ignore-hidden>
         <ignore-symlinks>true</ignore-symlinks>
     </files>
