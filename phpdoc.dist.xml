@@ -17,7 +17,7 @@
     <files>
         <directory>src/upload</directory>
         <ignore>tests/*</ignore>
-        <ignore>application/third_party/battle_engine/*</ignore>
+        <ignore>application/third_party/battle_engine/tests/*</ignore>
         <ignore-hidden>true</ignore-hidden>
         <ignore-symlinks>true</ignore-symlinks>
     </files>
