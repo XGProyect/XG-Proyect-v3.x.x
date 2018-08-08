@@ -278,12 +278,12 @@ class Fleet4 extends Controller
     private function getTarget()
     {
         $target_data = $this->getTargetData();
-        
+
         $target = $this->Fleet_Model->getTargetDataByCoords(
             $target_data['galaxy'],
             $target_data['system'],
             $target_data['planet'],
-            $target_data['type']
+            ($target_data['type'] != 2 ? $target_data['type'] : '1')
         );
 
         if ($target) {
@@ -559,22 +559,23 @@ class Fleet4 extends Controller
         }
         
         if ($data['mission'] == Missions::recycle) {
-            
-            if ($target['planet_debris_metal'] == 0 
+
+            if ((count($target) <= 0) 
+                or ($target['planet_debris_metal'] == 0 
                 && $target['planet_debris_crystal'] == 0 
-                && time() > ($target['planet_invisible_start_time'] + DEBRIS_LIFE_TIME)) {
+                && time() > ($target['planet_invisible_start_time'] + DEBRIS_LIFE_TIME))) {
 
                 return false;
             }
         }
 
         if ($data['mission'] == Missions::destroy) {
-            
+
             if ($this->_own_planet
-                or $this->_occupied_planet
-                or ($target['type'] != PlanetTypes::moon)
+                or !$this->_occupied_planet
+                or ($this->getTargetData()['type'] != PlanetTypes::moon)
                 or !isset($fleet[Ships::ship_deathstar])) {
-                
+
                 return false;
             }
         }

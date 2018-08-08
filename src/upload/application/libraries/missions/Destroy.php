@@ -108,13 +108,13 @@ class Destroy extends Missions
             $FleetResult = $attack['win'];
             $dane_do_rw = $attack['data_for_rw'];
             $zlom = $attack['debris'];
-            $FleetArray = '';
+            $FleetArray = [];
             $FleetAmount = 0;
             $FleetStorage = 0;
 
             foreach ($current_ships as $Ship => $Count) {
                 $FleetStorage += $this->pricelist[$Ship]['capacity'] * $Count['count'];
-                $FleetArray .= $Ship . "," . $Count['count'] . ";";
+                $FleetArray[$Ship] = $Count['count'];
                 $FleetAmount += $Count['count'];
             }
 
