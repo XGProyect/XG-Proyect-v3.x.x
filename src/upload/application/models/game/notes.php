@@ -85,6 +85,27 @@ class Notes
                 AND n.`note_owner` = '" . $user_id . "';"
         ) ?? []; 
     }
+
+    /**
+     * Create a note by a certain user
+     * 
+     * @param int $user_id
+     * @param int $note_id
+     * 
+     * @return void
+     */
+    public function createNewNote(array $note_data): void
+    {
+        foreach ($note_data as $field => $value) {
+            
+            $sql[] = "`" . $field . "` = '" . $value . "'";
+        }
+        
+        $this->db->query(
+            "INSERT INTO `" . NOTES . "` SET "
+            . join(', ', $sql)
+        );
+    }
     
     /**
      * Update a note by a certain user

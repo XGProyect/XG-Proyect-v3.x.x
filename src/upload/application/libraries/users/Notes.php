@@ -75,6 +75,23 @@ class Notes
     }
     
     /**
+     * Get note by ID
+     * 
+     * @param int $note_id
+     * 
+     * @return array
+     */
+    public function getNoteById(int $note_id): array
+    {
+        if ($note_id == $this->getNotes()[0]->getNoteId()) {
+            
+            return $this->getNotes()[0]->getNoteId();
+        }
+        
+        return [];
+    }
+    
+    /**
      * Set up the list of notes
      * 
      * @param array $notes Notes

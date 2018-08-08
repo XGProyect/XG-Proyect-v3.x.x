@@ -80,6 +80,9 @@ class Notes extends Controller
         // set data
         $this->_user = $this->getUserData();
 
+        // time to do something
+        $this->runAction();
+        
         // init a new notes object
         $this->setUpNotes();
 
@@ -87,6 +90,16 @@ class Notes extends Controller
         $this->buildPage();
     }
 
+    /**
+     * Run an action
+     * 
+     * @return void
+     */
+    private function runAction()
+    {
+        
+    }
+    
     /**
      * Creates a new ships object that will handle all the ships
      * creation methods and actions
@@ -110,19 +123,15 @@ class Notes extends Controller
     {
         /**
          * Parse the items
-         */
-        $page = [
-            'js_path' => JS_PATH,
-            'list_of_notes' => $this->buildNotesListBlock(),
-            'no_notes' => $this->_notes->hasNotes() ? '' : '<tr><th colspan="4">' . $this->getLang()['nt_you_dont_have_notes'] . '</th>'
-        ];
+         */        
+        $page = $this->getCurrentPage();
 
         // display the page
         parent::$page->display(
             $this->getTemplate()->set(
-                'notes/notes_view',
+                $page['template'],
                 array_merge(
-                    $this->getLang(), $page
+                    $this->getLang(), $page['data']
                 )
             ), false, '', false
         );
@@ -187,43 +196,6 @@ class Notes extends Controller
             }
 
             FunctionsLib::redirect(self::REDIRECT_TARGET);
-        } else {
-            if ($a == 1) {
-                $parse['c_Options'] = "<option value=2 selected=selected>" . $this->_lang['nt_important'] . "</option>
-				<option value=1>" . $this->_lang['nt_normal'] . "</option>
-				<option value=0>" . $this->_lang['nt_unimportant'] . "</option>";
-                $parse['TITLE'] = $this->_lang['nt_create_note'];
-                $parse['inputs'] = "<input type=hidden name=s value=1>";
-
-                parent::$page->display(parent::$page->parseTemplate(parent::$page->getTemplate('notes/notes_form'), $parse), false, '', false);
-            } elseif ($a == 2) {
-                $SELECTED['0'] = '';
-                $SELECTED['1'] = '';
-                $SELECTED['2'] = '';
-
-                $note = $this->_db->queryFetch("SELECT *
-														FROM `" . NOTES . "`
-														WHERE `note_owner` = " . $this->_current_user['user_id'] . "
-															AND `note_id` = " . (int) $n . ";");
-
-                if (!$note) {
-                    FunctionsLib::redirect(self::REDIRECT_TARGET);
-                }
-
-
-                $SELECTED[$note['note_priority']] = ' selected="selected"';
-
-                $parse['c_Options'] = "<option value=2{$SELECTED['2']}>" . $this->_lang['nt_important'] . "</option>
-				<option value=1{$SELECTED['1']}>" . $this->_lang['nt_normal'] . "</option>
-				<option value=0{$SELECTED['0']}>" . $this->_lang['nt_unimportant'] . "</option>";
-
-                $parse['TITLE'] = $this->_lang['nt_edit_note'];
-                $parse['inputs'] = '<input type="hidden" name="s" value="2"><input type="hidden" name="n" value=' . $note['note_id'] . '>';
-                $parse['asunto'] = $note['note_title'];
-                $parse['texto'] = $note['note_text'];
-
-                parent::$page->display(parent::$page->parseTemplate(parent::$page->getTemplate('notes/notes_form'), $parse), false, '', false);
-            }
         }
     }
 
@@ -256,6 +228,85 @@ class Notes extends Controller
         }
         
         return $list_of_notes;
+    }
+    
+    /**
+     * Get current page
+     * 
+     * @return array
+     */
+    private function getCurrentPage(): array
+    {
+        $edit_view = filter_input(INPUT_GET, 'a', FILTER_VALIDATE_INT, [
+            'options'   => ['min_range' => 1, 'max_range' => 2]
+        ]);
+
+        if ($edit_view !== false && !is_null($edit_view)) {
+            
+            return [
+                'template' => 'notes/notes_form_view',
+                'data' => array_merge(
+                    ['js_path' => JS_PATH],
+                    $this->buildEditBlock($edit_view)
+                )
+            ];
+        }
+
+        return [
+            'template' => 'notes/notes_view',
+            'data' => [
+                'list_of_notes' => $this->buildNotesListBlock(),
+                'no_notes' => $this->_notes->hasNotes() ? '' : '<tr><th colspan="4">' . $this->getLang()['nt_you_dont_have_notes'] . '</th>'
+            ]
+        ];
+    }
+    
+    /**
+     * Build the edit view
+     * 
+     * @param int $edit_view
+     * 
+     * @return array
+     */
+    private function buildEditBlock(int $edit_view): array
+    {
+        $note_id = filter_input(INPUT_GET, 'n', FILTER_VALIDATE_INT);
+        $selected = [
+            'selected_2' => '',
+            'selected_1' => '',
+            'selected_0' => ''
+        ];
+        
+        // edit
+        if ($edit_view == 2 && !is_null($note_id)) {
+            
+            $note = $this->Notes_Model->getNoteById($this->_user['user_id'], $note_id);
+            
+            if ($note) {
+
+                $note_data = new Note(
+                    [$note]
+                );
+                
+                $selected[$note_data->getNoteById($note_id)]->getNotePriority();
+                
+                return array_merge([
+                    's' => 2,
+                    'note_id' => '<input type="hidden" name="n" value=' . $note_data->getNoteById($note_id)->getNoteId() . '>',
+                    'title' => $this->getLang()['nt_edit_note'],
+                    'subject' => $note_data->getNoteById($note_id)->getNoteTitle(),
+                    'text' => $note_data->getNoteById($note_id)->getNoteText()
+                ], $selected);
+            }            
+        }
+
+        // add or default
+        return array_merge([
+            's' => 1,
+            'title' => $this->getLang()['nt_create_note'],
+            'subject' => $this->getLang()['nt_subject_note'],
+            'text' => ''
+        ], $selected);
     }
 }
 
