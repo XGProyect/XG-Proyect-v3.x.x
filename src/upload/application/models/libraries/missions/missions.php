@@ -37,9 +37,6 @@ class Missions
     {
         // use this to make queries
         $this->db = $db;
-
-        // lock tables
-        //$this->lockTables();
     }
 
     /**
@@ -49,64 +46,8 @@ class Missions
      */
     public function __destruct()
     {
-        // unlock tables
-        //$this->unlockTables();
         // close connection
         $this->db->closeConnection();
-    }
-
-    /**
-     * Lock all the required tables
-     * 
-     * @return void
-     */
-    private function lockTables()
-    {
-        $this->db->query(
-            "LOCK TABLE " . ACS . " WRITE,
-            " . ACS_MEMBERS . " AS a WRITE,
-            " . ALLIANCE . " AS a WRITE,    
-            " . REPORTS . " WRITE,
-            " . MESSAGES . " WRITE,
-            " . FLEETS . " WRITE,
-            " . FLEETS . " AS f WRITE,
-            " . PLANETS . " WRITE,
-            " . PLANETS . " AS pc1 WRITE,
-            " . PLANETS . " AS pc2 WRITE,
-            " . PLANETS . " AS p WRITE,
-            " . PLANETS . " AS m WRITE,
-            " . PLANETS . " AS mp WRITE,
-            " . PLANETS . " AS pm WRITE,
-            " . PLANETS . " AS pm2 WRITE,
-            " . PREMIUM . " WRITE,
-            " . PREMIUM . " AS pr WRITE,
-            " . PREMIUM . " AS pre WRITE,
-            " . SETTINGS . " WRITE,
-            " . SETTINGS . " AS se WRITE,
-            " . SHIPS . " WRITE,
-            " . SHIPS . " AS s WRITE,
-            " . BUILDINGS . " WRITE,
-            " . BUILDINGS . " AS b WRITE,
-            " . DEFENSES . " WRITE,
-            " . DEFENSES . " AS d WRITE,
-            " . RESEARCH . " WRITE,
-            " . RESEARCH . " AS r WRITE,
-            " . USERS_STATISTICS . " WRITE,
-            " . USERS_STATISTICS . " AS us WRITE,
-            " . USERS_STATISTICS . " AS usul WRITE,
-            " . USERS . " WRITE,
-            " . USERS . " AS u WRITE"
-        );
-    }
-
-    /**
-     * Unlock previously locked tables
-     * 
-     * @return void
-     */
-    private function unlockTables()
-    {
-        $this->db->query("UNLOCK TABLES");
     }
 
     /**
@@ -736,8 +677,7 @@ class Missions
                     AND f.`fleet_end_planet` = '" . $data['coords']['planet'] . "';
                 UPDATE `" . PLANETS . "` AS p SET
                     `planet_destroyed` = '" . $data['time'] . "'
-                WHERE p.`planet_id` = '" . $data['planet_id'] . "';
-                "
+                WHERE p.`planet_id` = '" . $data['planet_id'] . "';"
             );
         }
     }

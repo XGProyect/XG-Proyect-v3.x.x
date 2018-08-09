@@ -230,6 +230,32 @@ class FormulaLib
 
         return $temp;
     }
+    
+    /**
+     * Get moon destruction chance
+     * 
+     * @param int $planet_diameter
+     * @param int $death_stars
+     * 
+     * @return int
+     */
+    public function getMoonDestructionChance(int $planet_diameter, int $death_stars): int
+    {
+        $prob = (100 - sqrt($planet_diameter)) * sqrt($death_stars);
+        
+        return ($prob > 100) ? 100 : round($prob);
+    }
+    
+    /**
+     * Get Death Stars destruction chance
+     * 
+     * @param int $planet_diameter
+     * @return type
+     */
+    public function getDeathStarsDestructionChance(int $planet_diameter)
+    {
+        return round(sqrt($planet_diameter) / 2);
+    }
 }
 
 /* end of FormulaLib.php */
