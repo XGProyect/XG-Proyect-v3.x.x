@@ -14,10 +14,14 @@
 namespace application\controllers\game;
 
 use application\core\Controller;
+use application\core\enumerators\DefensesEnumerator as Defenses;
+use application\core\enumerators\ShipsEnumerator as Ships;
 use application\libraries\DevelopmentsLib;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
 use Exception;
+use const DPATH;
+use const MAX_FLEET_OR_DEFS_PER_ROW;
 
 /**
  * Shipyard Class
@@ -40,8 +44,8 @@ class Shipyard extends Controller
      * @var array 
      */
     private $_missiles = [
-        502 => 0,
-        503 => 0
+        Defenses::defense_anti_ballistic_missile => 0,
+        Defenses::defense_interplanetary_missile => 0
     ];
 
     /**
@@ -468,10 +472,39 @@ class Shipyard extends Controller
     private function setAllowedItems()
     {
         $allowed_buildings = [
-            'shipyard' => [202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215],
-            'defense' => [401, 402, 403, 404, 405, 406, 407, 408, 502, 503]
+            'shipyard' => [
+                Ships::ship_small_cargo_ship,
+                Ships::ship_big_cargo_ship,
+                Ships::ship_light_fighter,
+                Ships::ship_heavy_fighter,
+                Ships::ship_cruiser,
+                Ships::ship_battleship,
+                Ships::ship_colony_ship,
+                Ships::ship_recycler,
+                Ships::ship_espionage_probe,
+                Ships::ship_bomber,
+                Ships::ship_solar_satellite,
+                Ships::ship_destroyer,
+                Ships::ship_deathstar,
+                Ships::ship_battlecruiser
+            ],
+            'defense' => [
+                Defenses::defense_rocket_launcher,
+                Defenses::defense_light_laser,
+                Defenses::defense_heavy_laser,
+                Defenses::defense_gauss_cannon,
+                Defenses::defense_ion_cannon,
+                Defenses::defense_plasma_turret,
+                Defenses::defense_small_shield_dome,
+                Defenses::defense_large_shield_dome,
+                Defenses::defense_anti_ballistic_missile,
+                Defenses::defense_interplanetary_missile
+            ]
         ];
 
+        
+            
+        
         $this->_allowed_items = array_filter($allowed_buildings[$this->getCurrentPage()], function($value) {
             return DevelopmentsLib::isDevelopmentAllowed(
                     $this->_user, $this->_planet, $value
@@ -539,7 +572,7 @@ class Shipyard extends Controller
         $max_by_system = $this->getMaxBuildableItemsBySystemLimit();
 
         // set the construction limit for shields
-        if (in_array($item_id, [407, 408])) {
+        if (in_array($item_id, [Defenses::defense_small_shield_dome, Defenses::defense_large_shield_dome])) {
 
             $max_shields = $this->getShieldDomeItemLimit($item_id, $amount_requested);
 
@@ -550,7 +583,7 @@ class Shipyard extends Controller
         }
 
         // set the construction limit for missiles
-        if (in_array($item_id, [502, 503])) {
+        if (in_array($item_id, [Defenses::defense_anti_ballistic_missile, Defenses::defense_interplanetary_missile])) {
 
             $max_missiles = $this->getMissilesItemLimit($item_id, $amount_requested);
 
@@ -573,7 +606,7 @@ class Shipyard extends Controller
 
         // last verification for missiles, 
         // I'm sure I can do all this process better
-        if (in_array($item_id, [502, 503])) {
+        if (in_array($item_id, [Defenses::defense_anti_ballistic_missile, Defenses::defense_interplanetary_missile])) {
 
             // keep track of the amount of missiles
             $this->_missiles[$item_id] += $amount_requested;
@@ -633,7 +666,7 @@ class Shipyard extends Controller
     private function getShieldDomeItemLimit($item_id)
     {
         // set construction limit for shield dome
-        $shields_ids = [407, 408];
+        $shields_ids = [Defenses::defense_small_shield_dome, Defenses::defense_large_shield_dome];
 
         if (in_array($item_id, $shields_ids)) {
 
@@ -660,16 +693,16 @@ class Shipyard extends Controller
 
         // start applying formulas
         $silo_size = $this->_planet[$this->getObjects()->getObjects(44)] * 10;
-        $taken_space = $this->_missiles[502] + ($this->_missiles[503] * 2);
+        $taken_space = $this->_missiles[Defenses::defense_anti_ballistic_missile] + ($this->_missiles[Defenses::defense_interplanetary_missile] * 2);
         $max_amount = $silo_size - $taken_space;
         $amount = 0;
 
-        if ($item_id == 502) {
+        if ($item_id == Defenses::defense_anti_ballistic_missile) {
 
             $amount = $max_amount;
         }
 
-        if ($item_id == 503) {
+        if ($item_id == Defenses::defense_interplanetary_missile) {
 
             $amount = floor($max_amount / 2);
         }
@@ -706,7 +739,7 @@ class Shipyard extends Controller
      */
     private function isShieldDomeAvailable($item_id)
     {
-        if (in_array($item_id, [407, 408])) {
+        if (in_array($item_id, [Defenses::defense_small_shield_dome, Defenses::defense_large_shield_dome])) {
 
             // check if something is already built
             if ($this->_planet[$this->getObjects()->getObjects($item_id)] >= 1) {
@@ -735,20 +768,21 @@ class Shipyard extends Controller
     {
         // get the amount of missiles stored in the planet
         $planet_missiles = [
-            502 => $this->_planet[$this->getObjects()->getObjects(502)],
-            503 => $this->_planet[$this->getObjects()->getObjects(503)]
+            Defenses::defense_anti_ballistic_missile => $this->_planet[$this->getObjects()->getObjects(Defenses::defense_anti_ballistic_missile)],
+            Defenses::defense_interplanetary_missile => $this->_planet[$this->getObjects()->getObjects(Defenses::defense_interplanetary_missile)]
         ];
 
         // get the amount of missiles in the current queue
         $current_queue = $this->processQueueToArray();
         $queue_missiles = [
-            502 => 0,
-            503 => 0
+            Defenses::defense_anti_ballistic_missile => 0,
+            Defenses::defense_interplanetary_missile => 0
         ];
 
         foreach ($current_queue as $item => $amount) {
 
-            if ($item == 502 or $item == 503) {
+            if ($item == Defenses::defense_anti_ballistic_missile 
+                or $item == Defenses::defense_interplanetary_missile) {
 
                 $queue_missiles[$item] += $amount;
             }
@@ -757,8 +791,8 @@ class Shipyard extends Controller
         // add the amount of missiles stored in the planet, and the amount of 
         // missiles in the current queue, and finally the amount of missiles in
         //  the queue that's being developed.
-        $this->_missiles[502] += $planet_missiles[502] + $queue_missiles[502];
-        $this->_missiles[503] += $planet_missiles[503] + $queue_missiles[503];
+        $this->_missiles[Defenses::defense_anti_ballistic_missile] += $planet_missiles[Defenses::defense_anti_ballistic_missile] + $queue_missiles[Defenses::defense_anti_ballistic_missile];
+        $this->_missiles[Defenses::defense_interplanetary_missile] += $planet_missiles[Defenses::defense_interplanetary_missile] + $queue_missiles[Defenses::defense_interplanetary_missile];
     }
 
     /**
