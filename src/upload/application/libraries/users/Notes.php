@@ -81,14 +81,14 @@ class Notes
      * 
      * @return array
      */
-    public function getNoteById(int $note_id): array
+    public function getNoteById(int $note_id)
     {
         if ($note_id == $this->getNotes()[0]->getNoteId()) {
             
-            return $this->getNotes()[0]->getNoteId();
+            return $this->getNotes()[0];
         }
         
-        return [];
+        return null;
     }
     
     /**

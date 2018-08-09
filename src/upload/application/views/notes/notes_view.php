@@ -17,7 +17,7 @@
         {list_of_notes}
         <tr>
             <th width="20">
-                <input name="delmes{note_id}" value="y" type="checkbox">
+                <input name="delnote[{note_id}]" value="y" type="checkbox">
             </th>
             <th width="150">{note_time}</th>
             <th>

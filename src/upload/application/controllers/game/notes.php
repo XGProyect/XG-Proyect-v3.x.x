@@ -15,6 +15,7 @@ namespace application\controllers\game;
 
 use application\core\Controller;
 use application\core\entities\NotesEntity;
+use application\core\enumerators\ImportanceEnumerator as Importance;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
 use application\libraries\Timing_library;
@@ -97,7 +98,45 @@ class Notes extends Controller
      */
     private function runAction()
     {
+        $data = filter_input_array(INPUT_POST, [
+            's' => [
+                'filter'    => FILTER_VALIDATE_INT,
+                'options'   => ['min_range' => 1, 'max_range' => 2]
+            ],
+            'u' => [
+                'filter'    => FILTER_VALIDATE_INT,
+                'options'   => ['min_range' => Importance::unimportant, 'max_range' => Importance::important]
+            ],
+            'title' => [
+                'filter'    => FILTER_SANITIZE_STRING,
+                'options'   => ['min_range' => 1, 'max_range' => 32]
+            ],
+            'text' => [
+                'filter'    => FILTER_SANITIZE_STRING,
+                'options'   => ['min_range' => 1, 'max_range' => 5000]
+            ],
+            'n' => FILTER_SANITIZE_NUMBER_INT
+        ]);
         
+        $delete = filter_input(INPUT_POST, 'delnote', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+
+        // add a note
+        if (isset($data['s']) && $data['s'] == 1) {
+            
+            $this->createNewNote($data);
+        }
+        
+        // edit a note
+        if (isset($data['s']) && $data['s'] == 2) {
+            
+            $this->editNote($data);
+        }
+        
+        // delete notes
+        if (isset($delete) && count($delete) > 0) {
+            
+            $this->deleteNote($delete);
+        }
     }
     
     /**
@@ -135,68 +174,6 @@ class Notes extends Controller
                 )
             ), false, '', false
         );
-
-        $a = isset($_GET['a']) ? intval($_GET['a']) : NULL;
-        $n = isset($_GET['n']) ? intval($_GET['n']) : NULL;
-        $s = isset($_POST['s']) ? intval($_POST['s']) : NULL;
-
-        if ($s == 1 or $s == 2) {
-            $time = time();
-            $priority = intval($_POST['u']);
-            $title = ( $_POST['title'] ) ? $this->_db->escapeValue(strip_tags($_POST['title'])) : "Sin t&iacute;tulo";
-            $text = $_POST['text'] ? FunctionsLib::formatText($_POST['text']) : $this->_lang['nt_no_text'];
-
-            if ($s == 1) {
-                $this->_db->query("INSERT INTO " . NOTES . " SET
-                    note_owner=" . intval($this->_current_user['user_id']) . ",
-                    note_time=$time,
-                    note_priority=$priority,
-                    note_title='$title',
-                    note_text='$text'"
-                );
-
-                FunctionsLib::redirect(self::REDIRECT_TARGET);
-            } elseif ($s == 2) {
-                $id = intval($_POST['n']);
-                $note_query = $this->_db->query(
-                    "SELECT *
-                    FROM " . NOTES . "
-                    WHERE note_id=" . intval($id) . " AND
-                                    note_owner=" . intval($this->_current_user['user_id']) . ""
-                );
-
-                if (!$note_query)
-                    FunctionsLib::redirect(self::REDIRECT_TARGET);
-
-                $this->_db->query("UPDATE `" . NOTES . "` SET
-                    note_time=$time,
-                    note_priority=$priority,
-                    note_title='$title',
-                    note_text='$text'
-                    WHERE note_id=" . intval($id) . ""
-                );
-
-                FunctionsLib::redirect(self::REDIRECT_TARGET);
-            }
-        }
-        elseif ($_POST) {
-            foreach ($_POST as $a => $b) {
-                if (preg_match("/delmes/i", $a) && $b == "y") {
-                    $id = str_replace("delmes", "", $a);
-                    $note_query = $this->_db->query("SELECT *
-															FROM `" . NOTES . "`
-															WHERE `note_id` = " . (int) $id . "
-																AND `note_owner` = " . $this->_current_user['user_id'] . "");
-
-                    if ($note_query) {
-                        $this->_db->query("DELETE FROM `" . NOTES . "`
-												WHERE `note_id` = " . (int) $id . ";");
-                    }
-                }
-            }
-
-            FunctionsLib::redirect(self::REDIRECT_TARGET);
-        }
     }
 
     /**
@@ -288,7 +265,7 @@ class Notes extends Controller
                     [$note]
                 );
                 
-                $selected[$note_data->getNoteById($note_id)]->getNotePriority();
+                $selected['selected_' . $note_data->getNoteById($note_id)->getNotePriority()] = 'selected="selected"';
                 
                 return array_merge([
                     's' => 2,
@@ -303,10 +280,77 @@ class Notes extends Controller
         // add or default
         return array_merge([
             's' => 1,
+            'note_id' => '',
             'title' => $this->getLang()['nt_create_note'],
             'subject' => $this->getLang()['nt_subject_note'],
             'text' => ''
         ], $selected);
+    }
+    
+    /**
+     * Create a new note
+     * 
+     * @param array $data
+     * 
+     * @return void
+     */
+    private function createNewNote(array $data): void
+    {
+        $this->Notes_Model->createNewNote(
+            [
+                'note_owner' => $this->_user['user_id'],
+                'note_time' => time(),
+                'note_priority' => is_int($data['u']) ? $data['u'] : Importance::important,
+                'note_title' => !empty($data['title']) ? $data['title'] : $this->getLang()['nt_subject_note'],
+                'note_text' => !empty($data['text']) ? $data['text'] : '',
+            ]
+        );
+    }
+    
+    /**
+     * Edit a note
+     * 
+     * @param array $data
+     * 
+     * @return void
+     */
+    private function editNote(array $data): void
+    {
+        $this->Notes_Model->updateNoteById(
+            $this->_user['user_id'],
+            $data['n'],
+            [
+                'note_time' => time(),
+                'note_priority' => is_int($data['u']) ? $data['u'] : Importance::important,
+                'note_title' => !empty($data['title']) ? $data['title'] : $this->getLang()['nt_subject_note'],
+                'note_text' => !empty($data['text']) ? $data['text'] : '',
+            ]
+        );
+    }
+    
+    /**
+     * Delete a note or multiple
+     * 
+     * @param array $data
+     * 
+     * @return void
+     */
+    private function deleteNote(array $data):void
+    {
+        $delete_string = [];
+        
+        foreach ($data as $note_id => $set) {
+            
+            if ($set == 'y') {
+                
+                $delete_string[] = $note_id;
+            }
+        }
+        
+        $this->Notes_Model->deleteNoteById(
+            $this->_user['user_id'],
+            join(',', $delete_string)
+        );
     }
 }
 
