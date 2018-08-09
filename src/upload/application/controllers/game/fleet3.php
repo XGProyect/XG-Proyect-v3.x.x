@@ -16,6 +16,7 @@ namespace application\controllers\game;
 use application\core\Controller;
 use application\core\enumerators\MissionsEnumerator as Missions;
 use application\core\enumerators\PlanetTypesEnumerator as PlanetTypes;
+use application\core\enumerators\ShipsEnumerator as Ships;
 use application\libraries\FleetsLib;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
@@ -304,20 +305,46 @@ class Fleet3 extends Controller
          * rules
          */
         $ships_rules = [
-            202 => [Missions::attack, Missions::acs, Missions::transport, Missions::deploy, Missions::stay, Missions::expedition],
-            203 => [Missions::attack, Missions::acs, Missions::transport, Missions::deploy, Missions::stay, Missions::expedition],
-            204 => [Missions::attack, Missions::acs, Missions::transport, Missions::deploy, Missions::stay, Missions::expedition],
-            205 => [Missions::attack, Missions::acs, Missions::transport, Missions::deploy, Missions::stay, Missions::expedition],
-            206 => [Missions::attack, Missions::acs, Missions::transport, Missions::deploy, Missions::stay, Missions::expedition],
-            207 => [Missions::attack, Missions::acs, Missions::transport, Missions::deploy, Missions::stay, Missions::expedition],
-            208 => [Missions::colonize, Missions::expedition],
-            209 => [Missions::recycle, Missions::expedition],
-            210 => [Missions::attack, Missions::acs, Missions::transport, Missions::deploy, Missions::stay, Missions::spy, Missions::expedition],
-            211 => [Missions::attack, Missions::acs, Missions::transport, Missions::deploy, Missions::stay, Missions::expedition],
-            212 => [],
-            213 => [Missions::attack, Missions::acs, Missions::transport, Missions::deploy, Missions::stay, Missions::expedition],
-            214 => [Missions::attack, Missions::acs, Missions::transport, Missions::deploy, Missions::stay, Missions::destroy, Missions::expedition],
-            215 => [Missions::attack, Missions::acs, Missions::transport, Missions::deploy, Missions::stay, Missions::expedition],
+            Ships::ship_small_cargo_ship => [
+                Missions::attack, Missions::acs, Missions::transport, Missions::deploy, Missions::stay, Missions::expedition
+            ],
+            Ships::ship_big_cargo_ship => [
+                Missions::attack, Missions::acs, Missions::transport, Missions::deploy, Missions::stay, Missions::expedition
+            ],
+            Ships::ship_light_fighter => [
+                Missions::attack, Missions::acs, Missions::transport, Missions::deploy, Missions::stay, Missions::expedition
+            ],
+            Ships::ship_heavy_fighter => [
+                Missions::attack, Missions::acs, Missions::transport, Missions::deploy, Missions::stay, Missions::expedition
+            ],
+            Ships::ship_cruiser => [
+                Missions::attack, Missions::acs, Missions::transport, Missions::deploy, Missions::stay, Missions::expedition
+            ],
+            Ships::ship_battleship => [
+                Missions::attack, Missions::acs, Missions::transport, Missions::deploy, Missions::stay, Missions::expedition
+            ],
+            Ships::ship_colony_ship => [
+                Missions::colonize, Missions::expedition
+            ],
+            Ships::ship_recycler => [
+                Missions::recycle, Missions::expedition
+            ],
+            Ships::ship_espionage_probe => [
+                Missions::attack, Missions::acs, Missions::deploy, Missions::stay, Missions::spy, Missions::expedition
+            ],
+            Ships::ship_bomber => [
+                Missions::attack, Missions::acs, Missions::transport, Missions::deploy, Missions::stay, Missions::expedition
+            ],
+            Ships::ship_solar_satellite => [],
+            Ships::ship_destroyer => [
+                Missions::attack, Missions::acs, Missions::transport, Missions::deploy, Missions::stay, Missions::expedition
+            ],
+            Ships::ship_deathstar => [
+                Missions::attack, Missions::acs, Missions::transport, Missions::deploy, Missions::stay, Missions::destroy, Missions::expedition
+            ],
+            Ships::ship_battlecruiser => [
+                Missions::attack, Missions::acs, Missions::transport, Missions::deploy, Missions::stay, Missions::expedition
+            ],
         ];
 
         $mission_rules = [

@@ -56,13 +56,13 @@ $lang['minutes'] = '15 min';
 $lang['offline'] = 'Desconectado';
 
 $lang['type_mission'][1] = 'Atacar';
-$lang['type_mission'][2] = 'Ataque grupal';
+$lang['type_mission'][2] = 'Ataq. confederación';
 $lang['type_mission'][3] = 'Transportar';
 $lang['type_mission'][4] = 'Desplegar';
 $lang['type_mission'][5] = 'Mantener posición';
 $lang['type_mission'][6] = 'Espiar';
 $lang['type_mission'][7] = 'Colonizar';
-$lang['type_mission'][8] = 'Reciclar';
+$lang['type_mission'][8] = 'Reciclar campo de escombros';
 $lang['type_mission'][9] = 'Destruir';
 $lang['type_mission'][15] = 'Expedición';
 

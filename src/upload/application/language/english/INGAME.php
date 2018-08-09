@@ -56,10 +56,10 @@ $lang['minutes'] = '15 min';
 $lang['offline'] = 'Offline';
 
 $lang['type_mission'][1] = 'Attack';
-$lang['type_mission'][2] = 'Group Attack';
+$lang['type_mission'][2] = 'ACS Attack';
 $lang['type_mission'][3] = 'Transport';
 $lang['type_mission'][4] = 'Deploy';
-$lang['type_mission'][5] = 'Hold Position';
+$lang['type_mission'][5] = 'ACS Defense';
 $lang['type_mission'][6] = 'Espionage';
 $lang['type_mission'][7] = 'Colonize';
 $lang['type_mission'][8] = 'Recycle';

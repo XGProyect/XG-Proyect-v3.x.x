@@ -297,7 +297,7 @@ class Movement extends Controller
     {
         $actions = '-';
         
-        if ($fleet->getFleetMess() != 1) {
+        if ($fleet->getFleetMess() == 0) {
             
             $actions = '<form action="game.php?page=movement&action=return" method="post">';
             $actions .= '<input type="hidden" name="fleetid" value="' . $fleet->getFleetId() . '">';
