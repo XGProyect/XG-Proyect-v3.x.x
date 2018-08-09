@@ -340,8 +340,8 @@ class Overview extends Controller
 
         if (count($fleet_row) > 0 && $fleet_row != '') {
 
-            ksort($fleet_row);
-
+            krsort($fleet_row);
+            
             foreach ($fleet_row as $time => $content) {
 
                 $fleet .= $content . "\n";
