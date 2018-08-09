@@ -28,7 +28,14 @@ $lang = [
         1 => '(P)',
         2 => '(D)',
         3 => '(M)'
-    ]
+    ],
+    
+    // type of structures
+    'construction' => 'Construction',
+    'research' => 'Research',
+    'ships' => 'Ships',
+    'missiles' => 'Rockets',
+    'defenses' => 'Defence',
 ];
 
 /**

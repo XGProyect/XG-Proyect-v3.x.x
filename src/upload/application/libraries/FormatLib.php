@@ -348,6 +348,20 @@ class FormatLib
         
         return 'lime';
     }
+    
+    /**
+     * Format the level
+     * 
+     * @param string $object
+     * @param string $lvl_string
+     * @param int $level
+     * 
+     * @return string
+     */
+    public static function formatLevel(string $object, string $lvl_string, int $level): string
+    {
+        return $object . ' (' . $lvl_string . $level . ')';
+    }
 }
 
 /* end of FormatLib.php */
