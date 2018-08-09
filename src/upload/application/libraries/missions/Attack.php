@@ -424,7 +424,7 @@ class Attack extends Missions
 
         // create the moon
         $_creator = new PlanetLib();
-        $_creator->setNewMoon($galaxy, $system, $planet, $target_userId, '', '', $size);
+        $_creator->setNewMoon($galaxy, $system, $planet, $target_userId);
     }
 
     /**
@@ -790,4 +790,4 @@ class Attack extends Missions
     }
 }
 
-/* end of attack.php */
+/* end of Attack.php */
