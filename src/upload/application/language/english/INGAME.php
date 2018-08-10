@@ -438,9 +438,9 @@ $lang['of_geologist'] = 'Geologist';
 $lang['of_technocrat'] = 'Technocrat';
 $lang['of_get_know'] = 'Get know!';
 $lang['of_add_admiral'] = '+2 max. fleet slots';
-$lang['of_add_engineer'] = 'Minimizes losses in half defenses,&lt;br&gt;+10% energy production';
+$lang['of_add_engineer'] = 'Minimizes losses in half defenses,<br/>+10% energy production';
 $lang['of_add_geologist'] = '+10% mine production';
-$lang['of_add_technocrat'] = '+2 Espionage level,&lt;br&gt;25% Less time for research';
+$lang['of_add_technocrat'] = '+2 Espionage level,<br/>25% Less time for research';
 $lang['of_darkmatter_description'] = 'Dark Matter is a substance for which storage has only been possible for a few standard years and still requires a lot of effort. It can be processed to produce unimaginable quantities of energy. The methods used to gain Dark Matter are complex and full of risks, making it very valuable.
 Only Dark Matter that has been bought and is still available protects an account from deletion!';
 $lang['of_darkmatter_description_short'] = 'Commander and officers can be hired with this rare substance.';
@@ -785,9 +785,9 @@ $lang['info'][503]['description'] = "Interplanetary Missiles (IPM) are your offe
 // -------------------------- OFFICIERS ----------------------------------------------------------------------------------------------------//
 $lang['info'][601]['description'] = 'Building queue, Empire view, Improved galaxy view, Message filter, Shortcuts, Advertisement free';
 $lang['info'][602]['description'] = '+2 max. fleet slots';
-$lang['info'][603]['description'] = 'Minimizes losses in half defenses,&lt;br&gt;+10% energy production';
+$lang['info'][603]['description'] = 'Minimizes losses in half defenses,<br/>+10% energy production';
 $lang['info'][604]['description'] = '+10% mine production';
-$lang['info'][605]['description'] = '+2 Espionage level,&lt;br&gt;25% Less time for research';
+$lang['info'][605]['description'] = '+2 Espionage level,<br/>25% Less time for research';
 //----------------------------------------------------------------------------//
 //MESSAGES
 $lang['mg_title'] = 'Messages';
