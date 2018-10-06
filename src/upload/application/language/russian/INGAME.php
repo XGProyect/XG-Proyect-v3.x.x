@@ -1,36 +1,36 @@
 <?php
 
 //SERVER GENERALS
-$lang['Metal']								= 'Metal';
-$lang['Crystal']							= 'Crystal';
-$lang['Deuterium']							= 'Deuterium';
-$lang['Darkmatter']							= 'Dark Matter';
-$lang['Energy']								= 'Energy';
-$lang['Messages']							= 'Messages';
-$lang['write_message']						= 'Write Message';
-$lang['ge_home_planet']						= 'Homeworld';
-$lang['ge_colony']							= 'Colony';
+$lang['Metal']								= 'Метал';
+$lang['Crystal']							= 'Кристал';
+$lang['Deuterium']							= 'Газ';
+$lang['Darkmatter']							= 'Темная материя';
+$lang['Energy']								= 'Энергия';
+$lang['Messages']							= 'Сообщения';
+$lang['write_message']						= 'Написать';
+$lang['ge_home_planet']						= 'Главная планета';
+$lang['ge_colony']							= 'Колония';
 
-$lang['online']								= 'Online';
-$lang['minutes']							= '15 min';
-$lang['offline']							= 'Offline';
+$lang['online']								= 'Он лайн';
+$lang['minutes']							= '15 мин';
+$lang['offline']							= 'Офлайн';
 
-$lang['type_mission'][1]  					= 'Attack';
-$lang['type_mission'][2]  					= 'Groupal Attack';
-$lang['type_mission'][3]  					= 'Transport';
-$lang['type_mission'][4]  					= 'Deploy';
-$lang['type_mission'][5]  					= 'Hold Position';
-$lang['type_mission'][6]  					= 'Spy';
-$lang['type_mission'][7]  					= 'Colonize';
-$lang['type_mission'][8]  					= 'Recycle';
-$lang['type_mission'][9]  					= 'Destroy';
-$lang['type_mission'][15] 					= 'Expedition';
+$lang['type_mission'][1]  					= 'Атаковать';
+$lang['type_mission'][2]  					= 'Совмесная атака';
+$lang['type_mission'][3]  					= 'Транспорт';
+$lang['type_mission'][4]  					= 'Развертывание';
+$lang['type_mission'][5]  					= 'удержание';
+$lang['type_mission'][6]  					= 'Шпионаж';
+$lang['type_mission'][7]  					= 'Колонизация';
+$lang['type_mission'][8]  					= 'Переработка';
+$lang['type_mission'][9]  					= 'Уничтожение';
+$lang['type_mission'][15] 					= 'Экспидиция';
 
 $lang['user_level'] = array (
-	'0' => 'Player',
-	'1' => 'Moderator',
-	'2' => 'Operator',
-	'3' => 'Administrator',
+	'0' => 'Игрок',
+	'1' => 'Модератор',
+	'2' => 'Оператор',
+	'3' => 'Администратор',
 );
 
 //SHORT NAMES FOR COMBAT REPORTS
@@ -40,8 +40,8 @@ $lang['tech_rc'] = array (
 204 => "F. light",
 205 => "F. heavy",
 206 => "Cruiser",
-207 => "Battleship",
-208 => "Col. Ship",
+207 => "Грейсер",
+208 => "Колонизатор",
 209 => "Recycler",
 210 => "Probes",
 211 => "Bomber",
