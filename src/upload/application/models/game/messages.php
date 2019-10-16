@@ -61,8 +61,8 @@ class Messages
     {
         if ((int) $user_id > 0 && !empty($msg_type_string)) {
 
-            return $this->db->query(
-                    "SELECT *
+            return $this->db->queryFetchAll(
+                "SELECT *
                 FROM `" . MESSAGES . "`
                 WHERE `message_receiver` = " . $user_id . "
                         AND `message_type` IN (" . rtrim($msg_type_string, ',') . ")
@@ -84,10 +84,11 @@ class Messages
     {
         if ((int) $user_id > 0) {
 
-            return $this->db->query(
-                    "SELECT *
+            return $this->db->queryFetchAll(
+                "SELECT 
+                    *
                 FROM `" . MESSAGES . "`
-                WHERE `message_receiver` = " . $user_id . "
+                WHERE `message_receiver` = '" . $user_id . "'
                 ORDER BY `message_time` DESC;"
             );
         }
@@ -108,7 +109,7 @@ class Messages
         if ((int) $user_id > 0 && !empty($msg_type_string)) {
 
             return $this->db->query(
-                    "UPDATE `" . MESSAGES . "` SET 
+                "UPDATE `" . MESSAGES . "` SET 
                     `message_read` = '1'
                 WHERE `message_receiver` = " . $user_id . "
                         AND `message_type` IN (" . rtrim($msg_type_string, ',') . ");"
@@ -131,7 +132,7 @@ class Messages
         if ((int) $user_id > 0) {
 
             return $this->db->query(
-                    "UPDATE `" . MESSAGES . "` SET 
+                "UPDATE `" . MESSAGES . "` SET 
                     `message_read` = '1'
                 WHERE `message_receiver` = " . $user_id . ";"
             );
@@ -152,7 +153,7 @@ class Messages
         if ((int) $planet_id > 0) {
 
             return $this->db->queryFetch(
-                    "SELECT u.`user_name`, p.`planet_galaxy`, p.`planet_system`, p.`planet_planet`
+                "SELECT u.`user_name`, p.`planet_galaxy`, p.`planet_system`, p.`planet_planet`
                 FROM " . PLANETS . " AS p
                 INNER JOIN " . USERS . " as u ON p.planet_user_id = u.user_id
                 WHERE p.`planet_user_id` = '" . $planet_id . "';"
@@ -174,7 +175,7 @@ class Messages
         if ((int) $user_id > 0) {
 
             return $this->db->query(
-                    "DELETE FROM " . MESSAGES . "
+                "DELETE FROM " . MESSAGES . "
                 WHERE `message_receiver` = '" . $user_id . "';"
             );
         }
@@ -195,7 +196,7 @@ class Messages
         if ((int) $user_id > 0 && (int) $msg_id > 0) {
 
             return $this->db->query(
-                    "DELETE FROM " . MESSAGES . "
+                "DELETE FROM " . MESSAGES . "
                 WHERE `message_id` = '" . $msg_id . "' 
                     AND `message_receiver` = '" . $user_id . "';"
             );
@@ -211,16 +212,16 @@ class Messages
      * 
      * @return mixed
      */
-    public function countMessages($user_id)
+    public function countMessagesByType($user_id)
     {
         if ((int) $user_id > 0) {
 
-            return $this->db->query(
-                    "SELECT 
+            return $this->db->queryFetchAll(
+                "SELECT 
                     `message_type`,
                     COUNT(`message_type`) AS message_type_count,
                     SUM(`message_read` = 0) AS unread_count
-                FROM " . MESSAGES . "
+                FROM `" . MESSAGES . "`
                 WHERE `message_receiver` = '" . $user_id . "'
                 GROUP BY `message_type`"
             );
@@ -242,30 +243,30 @@ class Messages
         if ((int) $user_id > 0 && (int) $user_ally_id >= 0) {
 
             return $this->db->queryFetch(
-                    "SELECT
+                "SELECT
+                ( SELECT COUNT(`user_id`)
+                    FROM `" . USERS . "`
+                    WHERE `user_ally_id` = '" . $user_ally_id . "' 
+                        AND `user_ally_id` <> 0
+                        AND `user_id` <> '" . $user_id . "'
+                    ) AS alliance_count,
+
+                    ( SELECT COUNT(`buddy_id`)
+                    FROM `" . BUDDY . "`
+                    WHERE `buddy_sender` = '" . $user_id . "' 
+                        OR `buddy_receiver` = '" . $user_id . "'
+                    ) AS buddys_count,
+
+                    ( SELECT COUNT(`note_id`)
+                    FROM `" . NOTES . "`
+                    WHERE `note_owner` = '" . $user_id . "'
+                    ) AS notes_count,
+
                     ( SELECT COUNT(`user_id`)
-                        FROM `" . USERS . "`
-                        WHERE `user_ally_id` = '" . $user_ally_id . "' 
-                            AND `user_ally_id` <> 0
-                            AND `user_id` <> '" . $user_id . "'
-                     ) AS alliance_count,
-
-                     ( SELECT COUNT(`buddy_id`)
-                        FROM `" . BUDDY . "`
-                        WHERE `buddy_sender` = '" . $user_id . "' 
-                            OR `buddy_receiver` = '" . $user_id . "'
-                     ) AS buddys_count,
-
-                     ( SELECT COUNT(`note_id`)
-                        FROM `" . NOTES . "`
-                        WHERE `note_owner` = '" . $user_id . "'
-                     ) AS notes_count,
-
-                     ( SELECT COUNT(`user_id`)
-                        FROM " . USERS . "
-                        WHERE user_authlevel <> 0
-                            AND `user_id` <> '" . $user_id . "'
-                     ) AS operators_count"
+                    FROM " . USERS . "
+                    WHERE user_authlevel <> 0
+                        AND `user_id` <> '" . $user_id . "'
+                    ) AS operators_count"
             );
         }
 
@@ -284,7 +285,7 @@ class Messages
         if ((int) $user_id > 0) {
 
             return $this->db->query(
-                    "SELECT 
+                "SELECT 
                     u.`user_id`,
                     u.`user_name`,
                     u.`user_email`
@@ -311,7 +312,7 @@ class Messages
         if ((int) $user_id > 0 && (int) $user_ally_id > 0) {
 
             return $this->db->query(
-                    "SELECT `user_id`, `user_name`, `user_email` 
+                "SELECT `user_id`, `user_name`, `user_email` 
                 FROM " . USERS . " 
                 WHERE user_ally_id = '" . $user_ally_id . "'
                     AND `user_id` <> '" . $user_id . "';"
@@ -332,8 +333,8 @@ class Messages
     {
         if ((int) $user_id > 0) {
 
-            return $this->db->query(
-                    "SELECT `user_name`, `user_email` 
+            return $this->db->queryFetchAll(
+                "SELECT `user_name`, `user_email` 
                 FROM " . USERS . " 
                 WHERE user_authlevel > '0'
                     AND `user_id` <> '" . $user_id . "';"
@@ -355,7 +356,7 @@ class Messages
         if ((int) $user_id > 0) {
 
             return $this->db->query(
-                    "SELECT `note_id`, `note_priority`, `note_title`
+                "SELECT `note_id`, `note_priority`, `note_title`
                 FROM `" . NOTES . "`
                 WHERE `note_owner` = '" . $user_id . "';"
             );

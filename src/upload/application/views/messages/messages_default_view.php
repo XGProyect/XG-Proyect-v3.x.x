@@ -22,6 +22,16 @@
                             </tr>
                             {message_list}
                             <tr>
+                                <th><input type="checkbox" name="delmes{message_id}" /></th>
+                                <th>{message_time}</th>
+                                <th>{message_from}</th>
+                                <th>{message_subject}</th>
+                            </tr>
+                            <tr>
+                                <td class="b"> </td><td colspan="3" class="b">{message_text}</td>
+                            </tr>
+                            {/message_list}
+                            <tr>
                                 <th colspan="4">
                                     &nbsp;
                                 </th>
@@ -44,7 +54,11 @@
                             <tr>
                                 <td class="c">{mg_operators}</td>
                             </tr>
-                            {show_operators}
+                            {operators_list}
+                            <tr>
+                                <th colspan="4">{user_name} <a href="mailto:{user_email}"><img src="{dpath}/img/m.gif" /></a></th>
+                            </tr>
+                            {/operators_list}
                         </table>
                     </td>
                 </tr>
