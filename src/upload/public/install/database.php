@@ -30,7 +30,7 @@ $tables['acs_members'] = "CREATE TABLE `" . ACS_MEMBERS . "` (
 `acs_user_id` int(11) UNSIGNED NOT NULL,
 PRIMARY KEY (`acs_member_id`),
 UNIQUE( `acs_group_id`, `acs_user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;";
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;";
 
 $tables['alliance'] = "CREATE TABLE `" . ALLIANCE . "` (
 `alliance_id` bigint(11) NOT NULL AUTO_INCREMENT,
