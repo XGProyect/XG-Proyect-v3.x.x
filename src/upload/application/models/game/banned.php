@@ -1,6 +1,6 @@
 <?php
 /**
- * Alliance Model
+ * Banned Model
  *
  * PHP Version 5.5+
  *
@@ -14,7 +14,7 @@
 namespace application\models\game;
 
 /**
- * Alliance Class
+ * Banned Class
  *
  * @category Classes
  * @package  Application
@@ -64,4 +64,4 @@ class Banned
     }
 }
 
-/* end of buildings.php */
+/* end of banned.php */
