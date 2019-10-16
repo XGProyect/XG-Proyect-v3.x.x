@@ -2,8 +2,8 @@
 <div id="content">
     <table width="668">
         <tr>
-            <td class="c">{Version}</td>
-            <td class="c">{Description}</td>
+            <td class="c">{ch_version}</td>
+            <td class="c">{ch_description}</td>
         </tr>
         {list_of_changes}
         <tr>

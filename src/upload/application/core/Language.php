@@ -97,11 +97,6 @@ class Language
             $required[] = 'ADMIN';
         }
 
-        if (defined('IN_CHANGELOG')) {
-
-            $required[] = 'CHANGELOG';
-        }
-
         if (defined('IN_GAME')) {
 
             $required[] = 'INGAME';

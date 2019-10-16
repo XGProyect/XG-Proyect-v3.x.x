@@ -117,6 +117,24 @@ PRIMARY KEY (`building_id`),
 UNIQUE KEY `building_planet_id` (`building_planet_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;";
 
+$tables['changelog'] = "CREATE TABLE `" . CHANGELOG . "` (
+`changelog_id` int(11) UNSIGNED NOT NULL,
+`changelog_lang_id` int(11) NOT NULL,
+`changelog_version` varchar(16) NOT NULL,
+`changelog_date` date NOT NULL,
+`changelog_description` text NOT NULL,
+PRIMARY KEY (`changelog_id`),
+UNIQUE KEY `changelog_id` (`changelog_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+
+$tables['changelog_insert'] = "INSERT INTO `" . CHANGELOG . "` (`changelog_id`, `changelog_lang_id`, `changelog_version`, `changelog_date`, `changelog_description`) VALUES 
+(1, '1', '3.0.0', '2013-05-13', '- Ejemplo 1'), 
+(2, '1', '3.1.0', '2013-06-13', '- Ejemplo 2'), 
+(3, '1', '3.2.0', '2013-11-08', '- Ejemplo 3'), 
+(4, '2', '3.0.0', '2013-05-13', '- Example 1'), 
+(5, '2', '3.1.0', '2013-06-13', '- Example 2'),
+(6, '2', '3.2.0', '2013-11-08', '- Example 3');";
+
 $tables['defenses'] = "CREATE TABLE `" . DEFENSES . "` (
 `defense_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
 `defense_planet_id` int(11) unsigned NOT NULL,
@@ -162,6 +180,17 @@ $tables['fleets'] = "CREATE TABLE `" . FLEETS . "` (
 `fleet_creation` int(11) NOT NULL DEFAULT '0',
 PRIMARY KEY (`fleet_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;";
+
+$tables['languages'] = "CREATE TABLE `" . LANGUAGES . "` (
+`language_id` int(11) NOT NULL,
+`language_name` varchar(64) CHARACTER SET utf8 NOT NULL,
+PRIMARY KEY (`language_id`),
+UNIQUE KEY `language_id` (`language_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+    
+$tables['languages_insert'] = "INSERT INTO `" . LANGUAGES . "` (`language_id`, `language_name`) VALUES
+(1, 'Spanish'),
+(2, 'English');";
 
 $tables['messages'] = "CREATE TABLE `" . MESSAGES . "` (
 `message_id` BIGINT(11) NOT NULL AUTO_INCREMENT,

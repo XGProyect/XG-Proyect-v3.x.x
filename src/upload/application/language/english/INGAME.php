@@ -36,6 +36,10 @@ $lang = [
     'ships' => 'Ships',
     'missiles' => 'Rockets',
     'defenses' => 'Defence',
+
+    // changelog
+    'ch_version' => 'Version',
+    'ch_description' => 'Description',
 ];
 
 /**

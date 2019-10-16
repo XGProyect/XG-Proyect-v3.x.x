@@ -9,14 +9,12 @@
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
- * @version  3.1.0
+ * @version  3.0.0
  */
 namespace application\controllers\game;
 
 use application\core\Controller;
 use application\libraries\FunctionsLib;
-
-define('IN_CHANGELOG', true);
 
 /**
  * Change log Class
@@ -45,6 +43,9 @@ class Changelog extends Controller
         // check if session is active
         parent::$users->checkSession();
 
+        // load Model
+        parent::loadModel('game/changelog');
+
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
@@ -59,14 +60,19 @@ class Changelog extends Controller
      */
     private function buildPage()
     {
-        $changes = [];
+        $changes    = [];
+        $entries    = $this->Changelog_Model->getAllChangelogEntries();
+    
+        if ($entries) {
+            foreach ($entries as $entry) {
 
-        foreach ($this->getLang()['changelog'] as $v => $d) {
-
-            $changes[] = [
-                'version_number' => $v,
-                'description' => nl2br($d)
-            ];
+                $changes[] = [
+                    'version_number' => $entry['changelog_version'],
+                    'description' => nl2br(
+                        date(FunctionsLib::readConfig('date_format'), strtotime($entry['changelog_date'])) . '<br>' . $entry['changelog_description']
+                    )
+                ];
+            }
         }
 
         parent::$page->display(
