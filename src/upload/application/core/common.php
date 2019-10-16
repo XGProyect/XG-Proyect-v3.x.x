@@ -41,7 +41,7 @@ AutoLoader::registerDirectory(XGP_ROOT . CORE_PATH);
 AutoLoader::registerDirectory(XGP_ROOT . LIB_PATH);
 
 // For debugging
-if (DEBUG_MODE or (strpos($_SERVER['HTTP_HOST'], 'localhost') !== false)) {
+if (DEBUG_MODE or (in_array($_SERVER['HTTP_HOST'], ['127.0.0.1', 'localhost']) !== false)) {
 
     // Show all errors
     ini_set('display_errors', 1);
