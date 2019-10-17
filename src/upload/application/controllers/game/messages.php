@@ -21,6 +21,8 @@ use application\libraries\FunctionsLib;
 use application\libraries\OfficiersLib;
 
 use const DPATH;
+use const JS_PATH;
+use const MODULE_ID;
 
 /**
  * Messages Class
@@ -71,9 +73,6 @@ class Messages extends Controller
         // set data
         $this->_user = $this->getUserData();
 
-        // init a new buddy object
-        //$this->setUpAlliances();
-
         // time to do something
         $this->runAction();
 
@@ -89,9 +88,9 @@ class Messages extends Controller
      * 
      * @return string
      */
-    private function getCurrentSection()
+    private function getCurrentSection(): string
     {
-        if (!OfficiersLib::isOfficierActive($this->_user['premium_officier_commander'])) {
+        if (OfficiersLib::isOfficierActive($this->_user['premium_officier_commander'])) {
 
             return 'premium';
         }
@@ -147,7 +146,7 @@ class Messages extends Controller
             array_merge(
                 $this->getLang(),
                 [
-                    'message_list' => $this->getMessagesList(),
+                    'message_list' => $this->getMessagesList($this->Messages_Model->getByUserId($this->_user['user_id'])),
                     'operators_list' => $this->getOperatorsAddressBook()
                 ]
             )
@@ -184,7 +183,7 @@ class Messages extends Controller
 
             // get list of messages
             $messages       = '';
-            $message_list   = $this->Messages_Model->getByUserIdAndType($this->_user['user_id'], $get_messages);
+            $message_list   = $this->getMessagesList($this->Messages_Model->getByUserIdAndType($this->_user['user_id'], $get_messages));
             $delete_options = '';
 
             // set messages as read
@@ -212,11 +211,12 @@ class Messages extends Controller
     /**
      * Return an array with a list of messages
      * 
+     * @param string $messages The messages
+     * 
      * @return array
      */
-    private function getMessagesList(): array
+    private function getMessagesList($messages): array
     {
-        $messages       = $this->Messages_Model->getByUserId($this->_user['user_id']);
         $messages_list  = [];
 
         if ($messages) {
@@ -428,83 +428,34 @@ class Messages extends Controller
         return $blocks_set;
     }
 
+    /**
+     * Write a new message
+     *
+     * @return void
+     */
     private function doWriteAction()
     {
+        $write_to = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 
-    }
 
-    private function doDeleteAction()
-    {
-        $delete             = filter_input(INPUT_POST, 'deletemessages');
-        $messages_to_delete = filter_input_array(INPUT_POST);
-        $type_to_delete     = filter_input_array(INPUT_GET);
-
-        switch($delete) {
-            case 'deleteall':
-                $this->Messages_Model->deleteAllByOwner($this->_user['user_id']);
-            break;
-            case 'deletemarked':
-
-                foreach ($messages_to_delete as $message => $checked) {
-
-                    if (preg_match("/delmes/i", $message) && $checked == 'on') {
-
-                        $message_id = str_replace('delmes', '', $message);
-
-                        $message_ids[] = $message_id;
-                    }
-                }
-
-                $this->Messages_Model->deleteByOwnerAndIds($this->_user['user_id'], join($message_ids, ','));
-
-            break;
-            case 'deleteunmarked':
-
-                foreach ($messages_to_delete as $message => $checked) {
-
-                    $message_id = str_replace('showmes', '', $message);
-                    $selected   = 'delmes' . $message_id;
-
-                    if (preg_match('/showmes/i', $message) && !isset($messages_to_delete[$selected])) {
-
-                        $message_ids[] = $message_id;
-                    }
-                }
-
-                $this->Messages_Model->deleteByOwnerAndIds($this->_user['user_id'], join($message_ids, ','));
-
-            break;
-            case 'deleteallshown':
-
-                $data = filter_input_array(INPUT_GET, FILTER_VALIDATE_INT);
-
-                if (isset($data['dsp']) && $data['dsp'] == 1) {
-                    
-                    foreach ($data as $field => $value) {
-        
-                        if (FunctionsLib::inMultiarray($field, $this->message_type)) {
-        
-                            $type_id = FunctionsLib::recursiveArraySearch($field, $this->message_type);
-                            break;
-                        }
-                    }
-
-                    $this->Messages_Model->deleteByOwnerAndMessageType($this->_user['user_id'], $type_id);
-                }
-            break;
-            default:
-            break;
-        }
-
-        FunctionsLib::redirect('game.php?' . strtr($_SERVER['QUERY_STRING'], ['&amp;' => '&']));
-    }
+        parent::$page->display(
+            $this->getTemplate()->set(
+                'messages/messages_pm_form_view',
+                array_merge(
+                    $this->getLang(),
+                    [
+                        'js_path' => JS_PATH
+                    ]
+                )
+            ) 
+        );
 
         /*
         // some values by default
         $parse = $this->langs;
         $parse['js_path'] = JS_PATH;
 
-        $write_to = isset($_GET['id']) ? (int) $_GET['id'] : null;
+        
 
         switch ($mode) {
             case 'write':
@@ -574,21 +525,80 @@ class Messages extends Controller
                 $parse['subject'] = (!isset($subject) ) ? $this->langs['mg_no_subject'] : $subject;
                 $parse['text'] = $text;
                 $parse['status_message'] = $error_page;
-
-                parent::$page->display(
-                    parent::$page->parseTemplate(
-                        parent::$page->getTemplate('messages/messages_pm_form_view'), $parse
-                    )
-                );
-
-                break;
-
-            case 'delete':
-
-
-                break;
         }
     }*/
+    }
+
+    /**
+     * Execute a delete action
+     *
+     * @return void
+     */
+    private function doDeleteAction()
+    {
+        $delete             = filter_input(INPUT_POST, 'deletemessages');
+        $messages_to_delete = filter_input_array(INPUT_POST);
+        $type_to_delete     = filter_input_array(INPUT_GET);
+
+        switch($delete) {
+            case 'deleteall':
+                $this->Messages_Model->deleteAllByOwner($this->_user['user_id']);
+            break;
+            case 'deletemarked':
+
+                foreach ($messages_to_delete as $message => $checked) {
+
+                    if (preg_match("/delmes/i", $message) && $checked == 'on') {
+
+                        $message_id = str_replace('delmes', '', $message);
+
+                        $message_ids[] = $message_id;
+                    }
+                }
+
+                $this->Messages_Model->deleteByOwnerAndIds($this->_user['user_id'], join($message_ids, ','));
+
+            break;
+            case 'deleteunmarked':
+
+                foreach ($messages_to_delete as $message => $checked) {
+
+                    $message_id = str_replace('showmes', '', $message);
+                    $selected   = 'delmes' . $message_id;
+
+                    if (preg_match('/showmes/i', $message) && !isset($messages_to_delete[$selected])) {
+
+                        $message_ids[] = $message_id;
+                    }
+                }
+
+                $this->Messages_Model->deleteByOwnerAndIds($this->_user['user_id'], join($message_ids, ','));
+
+            break;
+            case 'deleteallshown':
+
+                $data = filter_input_array(INPUT_GET, FILTER_VALIDATE_INT);
+
+                if (isset($data['dsp']) && $data['dsp'] == 1) {
+                    
+                    foreach ($data as $field => $value) {
+        
+                        if (FunctionsLib::inMultiarray($field, $this->message_type)) {
+        
+                            $type_id = FunctionsLib::recursiveArraySearch($field, $this->message_type);
+                            break;
+                        }
+                    }
+
+                    $this->Messages_Model->deleteByOwnerAndMessageType($this->_user['user_id'], $type_id);
+                }
+            break;
+            default:
+            break;
+        }
+
+        FunctionsLib::redirect('game.php?' . strtr($_SERVER['QUERY_STRING'], ['&amp;' => '&']));
+    }
 }
 
 /* end of messages.php */
