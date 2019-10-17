@@ -16,7 +16,7 @@
             </tr>
             <tr>
                 <th>{mg_to}</th>
-                <th><input type="text" name="to" size="40" value="{to}" /></th>
+                <th>{to}</th>
             </tr>
             <tr>
                 <th>{mg_subject}</th>

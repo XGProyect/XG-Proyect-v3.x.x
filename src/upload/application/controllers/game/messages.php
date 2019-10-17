@@ -78,9 +78,6 @@ class Messages extends Controller
 
         // build the page
         $this->buildPage();
-
-        // build the page
-        $this->buildPage();
     }
 
     /**
@@ -435,8 +432,53 @@ class Messages extends Controller
      */
     private function doWriteAction()
     {
-        $write_to = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+        $write_to       = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+        $message_sent   = filter_input_array(INPUT_POST);
 
+        if ($write_to) {
+            $receiver_data = $this->Messages_Model->getHomePlanet($write_to);
+
+            if (!$receiver_data) {
+                FunctionsLib::redirect('game.php?page=messages');
+            }
+        }
+
+        $text           = '';
+        $error_block    = false;
+
+        if ($message_sent) {
+            $errors         = 0;
+            $error_block  = true;
+
+            if (!$message_sent['subject']) {
+                $errors++;
+                $error_text     = $this->getLang()['mg_no_subject'];
+                $error_color    = '#FF0000';
+            }
+
+            if (!$message_sent['text']) {
+                $errors++;
+                $error_text     = $this->getLang()['mg_no_text'];
+                $error_color    = '#FF0000';
+            }
+
+            if ($errors == 0) {
+                $error_text     = $this->getLang()['mg_msg_sended'];
+                $error_color    = '#00FF00';
+
+                FunctionsLib::sendMessage(
+                    $write_to,
+                    $this->_user['user_id'],
+                    '',
+                    4,
+                    $this->_user['user_name'] . ' ' . FormatLib::prettyCoords(
+                        $this->_user['user_galaxy'], $this->_user['user_system'], $this->_user['user_planet']
+                    ),
+                    $message_sent['subject'],
+                    $message_sent['text']
+                );
+            }
+        }
 
         parent::$page->display(
             $this->getTemplate()->set(
@@ -444,89 +486,21 @@ class Messages extends Controller
                 array_merge(
                     $this->getLang(),
                     [
-                        'js_path' => JS_PATH
+                        'id'                => $receiver_data['user_id'],
+                        'to'                => $receiver_data['user_name'] . ' ' . FormatLib::prettyCoords(
+                            $receiver_data['planet_galaxy'], $receiver_data['planet_system'], $receiver_data['planet_planet']
+                        ),
+                        'subject'           => ((!isset($subject) ) ? $this->getLang()['mg_no_subject'] : $subject),
+                        'text'              => ((!isset($text) ) ? '' : $text),
+                        'error_text'        => ((!isset($error_text) ) ? '' : $error_text),
+                        'status_message'    => (!$error_block ? [] : ''),
+                        '/status_message'    => (!$error_block ? [] : ''),
+                        'error_color'       => ((!isset($error_color) ) ? '' : $error_color),
+                        'js_path'           => JS_PATH
                     ]
                 )
             ) 
         );
-
-        /*
-        // some values by default
-        $parse = $this->langs;
-        $parse['js_path'] = JS_PATH;
-
-        
-
-        switch ($mode) {
-            case 'write':
-                $text = '';
-                $error_page = '';
-
-                if (!is_numeric($write_to)) {
-
-                    FunctionsLib::redirect('game.php?page=messages');
-                } else {
-
-                    $OwnerHome = $this->Messages_Model->getHomePlanet($write_to);
-
-                    if (!$OwnerHome) {
-                        FunctionsLib::redirect('game.php?page=messages');
-                    }
-                }
-
-                if ($_POST) {
-                    $error = 0;
-
-                    if (!$_POST['subject']) {
-                        $error++;
-                        $parse['error_text'] = $this->langs['mg_no_subject'];
-                        $parse['error_color'] = '#FF0000';
-                        $error_page = parent::$page->parseTemplate(
-                            parent::$page->getTemplate('messages/messages_error_table'), $parse
-                        );
-                    }
-
-                    if (!$_POST['text']) {
-                        $error++;
-                        $parse['error_text'] = $this->langs['mg_no_text'];
-                        $parse['error_color'] = '#FF0000';
-                        $error_page = parent::$page->parseTemplate(
-                            parent::$page->getTemplate('messages/messages_error_table'), $parse
-                        );
-                    }
-
-                    if ($error == 0) {
-                        $parse['error_text'] = $this->langs['mg_msg_sended'];
-                        $parse['error_color'] = '#00FF00';
-
-                        $error_page = parent::$page->parseTemplate(
-                            parent::$page->getTemplate('messages/messages_error_table'), $parse
-                        );
-
-                        $Owner = $write_to;
-                        $Sender = $this->_user['user_id'];
-                        $From = $this->_user['user_name'] . ' ' . FormatLib::prettyCoords(
-                                $this->_user['user_galaxy'], $this->_user['user_system'], $this->_user['user_planet']
-                        );
-                        $Subject = $_POST['subject'];
-                        $Message = $_POST['text'];
-
-                        FunctionsLib::sendMessage($Owner, $Sender, '', 4, $From, $Subject, $Message);
-
-                        $subject = '';
-                        $text = '';
-                    }
-                }
-
-                $parse['id'] = $write_to;
-                $parse['to'] = $OwnerHome['user_name'] . ' ' . FormatLib::prettyCoords(
-                        $OwnerHome['planet_galaxy'], $OwnerHome['planet_system'], $OwnerHome['planet_planet']
-                );
-                $parse['subject'] = (!isset($subject) ) ? $this->langs['mg_no_subject'] : $subject;
-                $parse['text'] = $text;
-                $parse['status_message'] = $error_page;
-        }
-    }*/
     }
 
     /**

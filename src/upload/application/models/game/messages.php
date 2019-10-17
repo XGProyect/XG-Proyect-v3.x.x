@@ -153,7 +153,7 @@ class Messages
         if ((int) $planet_id > 0) {
 
             return $this->db->queryFetch(
-                "SELECT u.`user_name`, p.`planet_galaxy`, p.`planet_system`, p.`planet_planet`
+                "SELECT u.`user_id`, u.`user_name`, p.`planet_galaxy`, p.`planet_system`, p.`planet_planet`
                 FROM " . PLANETS . " AS p
                 INNER JOIN " . USERS . " as u ON p.planet_user_id = u.user_id
                 WHERE p.`planet_user_id` = '" . $planet_id . "';"
