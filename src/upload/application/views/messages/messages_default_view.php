@@ -22,7 +22,10 @@
                             </tr>
                             {message_list}
                             <tr>
-                                <th><input type="checkbox" name="delmes{message_id}" /></th>
+                                <th>
+                                    <input type="hidden" name="showmes{message_id}" />
+                                    <input type="checkbox" name="delmes{message_id}" />
+                                </th>
                                 <th>{message_time}</th>
                                 <th>{message_from}</th>
                                 <th>{message_subject}</th>

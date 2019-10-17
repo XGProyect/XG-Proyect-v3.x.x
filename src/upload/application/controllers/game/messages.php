@@ -106,7 +106,13 @@ class Messages extends Controller
      */
     private function runAction()
     {
-        $mode = filter_input(INPUT_GET, 'mode');
+        $mode   = filter_input(INPUT_GET, 'mode');
+        $delete = filter_input(INPUT_POST, 'deletemessages');
+        
+        if (in_array($delete, ['deleteall', 'deletemarked', 'deleteunmarked', 'deleteallshown'])) {
+
+            $mode = "delete";
+        }
 
         if (in_array($mode, ['write', 'delete'])) {
             
@@ -141,8 +147,8 @@ class Messages extends Controller
             array_merge(
                 $this->getLang(),
                 [
-                    'message_list' => $this->getListOfMessages(),
-                    'operators_list' => $this->buildOperatorsAddressBook()
+                    'message_list' => $this->getMessagesList(),
+                    'operators_list' => $this->getOperatorsAddressBook()
                 ]
             )
         );
@@ -160,7 +166,7 @@ class Messages extends Controller
         $messages       = [];
         $message_list   = [];
         $delete_options = [];
-        $data   = filter_input_array(INPUT_GET, FILTER_VALIDATE_INT);
+        $data           = filter_input_array(INPUT_GET, FILTER_VALIDATE_INT);
         
         if (isset($data['dsp']) && $data['dsp'] == 1) {
             
@@ -193,10 +199,10 @@ class Messages extends Controller
                     'form_submit'       => 'game.php?' . $_SERVER['QUERY_STRING'],
                     'message_type_list' => $this->getMessagesTypesList($active),
                     'messages'          => $messages,
-                    '/messages'          => $messages,
+                    '/messages'         => $messages,
                     'messages_list'     => $message_list,
                     'delete_options'    => $delete_options,
-                    '/delete_options'    => $delete_options
+                    '/delete_options'   => $delete_options
                 ],
                 $this->getExtraBlocksDisplay()
             )
@@ -429,45 +435,74 @@ class Messages extends Controller
 
     private function doDeleteAction()
     {
+        $delete             = filter_input(INPUT_POST, 'deletemessages');
+        $messages_to_delete = filter_input_array(INPUT_POST);
+        $type_to_delete     = filter_input_array(INPUT_GET);
+
+        switch($delete) {
+            case 'deleteall':
+                $this->Messages_Model->deleteAllByOwner($this->_user['user_id']);
+            break;
+            case 'deletemarked':
+
+                foreach ($messages_to_delete as $message => $checked) {
+
+                    if (preg_match("/delmes/i", $message) && $checked == 'on') {
+
+                        $message_id = str_replace('delmes', '', $message);
+
+                        $message_ids[] = $message_id;
+                    }
+                }
+
+                $this->Messages_Model->deleteByOwnerAndIds($this->_user['user_id'], join($message_ids, ','));
+
+            break;
+            case 'deleteunmarked':
+
+                foreach ($messages_to_delete as $message => $checked) {
+
+                    $message_id = str_replace('showmes', '', $message);
+                    $selected   = 'delmes' . $message_id;
+
+                    if (preg_match('/showmes/i', $message) && !isset($messages_to_delete[$selected])) {
+
+                        $message_ids[] = $message_id;
+                    }
+                }
+
+                $this->Messages_Model->deleteByOwnerAndIds($this->_user['user_id'], join($message_ids, ','));
+
+            break;
+            case 'deleteallshown':
+
+                $data = filter_input_array(INPUT_GET, FILTER_VALIDATE_INT);
+
+                if (isset($data['dsp']) && $data['dsp'] == 1) {
+                    
+                    foreach ($data as $field => $value) {
         
+                        if (FunctionsLib::inMultiarray($field, $this->message_type)) {
+        
+                            $type_id = FunctionsLib::recursiveArraySearch($field, $this->message_type);
+                            break;
+                        }
+                    }
+
+                    $this->Messages_Model->deleteByOwnerAndMessageType($this->_user['user_id'], $type_id);
+                }
+            break;
+            default:
+            break;
+        }
+
+        FunctionsLib::redirect('game.php?' . strtr($_SERVER['QUERY_STRING'], ['&amp;' => '&']));
     }
 
         /*
         // some values by default
         $parse = $this->langs;
         $parse['js_path'] = JS_PATH;
-
-        // display an specific category of items
-        if (isset($_GET['dsp']) && $_GET['dsp'] == 1 && $this->have_premium) {
-            $mode = '';
-            $get_messages = '';
-
-            foreach ($_GET as $field => $value) {
-
-                if (FunctionsLib::inMultiarray($field, $this->message_type)) {
-
-                    $type_id = FunctionsLib::recursiveArraySearch($field, $this->message_type);
-                    $get_messages .= $type_id . ',';
-                    $active[$type_id] = 1;
-                }
-            }
-
-            // get list of messages
-            $message_list = $this->Messages_Model->getByUserIdAndType($this->_user['user_id'], $get_messages);
-
-            // set messages as read
-            $this->Messages_Model->markAsReadByType($this->_user['user_id'], $get_messages);
-        } else {
-
-            $mode = isset($_GET['mode']) ? $_GET['mode'] : null;
-        }
-
-        // to delete something
-        $to_delete = isset($_POST['deletemessages']) ? $_POST['deletemessages'] : null;
-
-        if (isset($to_delete)) {
-            $mode = "delete";
-        }
 
         $write_to = isset($_GET['id']) ? (int) $_GET['id'] : null;
 
@@ -549,113 +584,7 @@ class Messages extends Controller
                 break;
 
             case 'delete':
-                if ($to_delete == 'deleteall') {
 
-                    $this->Messages_Model->deleteAllByOwner($this->_user['user_id']);
-                } elseif ($to_delete == 'deletemarked') {
-
-                    foreach ($_POST as $Message => $Answer) {
-
-                        if (preg_match("/delmes/i", $Message) && $Answer == 'on') {
-
-                            $MessId = str_replace("delmes", "", $Message);
-
-                            $this->Messages_Model->deleteByOwnerAndId($this->_user['user_id'], $MessId);
-                        }
-                    }
-                } elseif ($to_delete == 'deleteunmarked') {
-
-                    foreach ($_POST as $Message => $Answer) {
-
-                        $MessId = str_replace("showmes", "", $Message);
-                        $Selected = "delmes" . $MessId;
-                        $IsSelected = $_POST[$Selected];
-
-                        if (preg_match("/showmes/i", $Message) && !isset($IsSelected)) {
-
-                            $this->Messages_Model->deleteByOwnerAndId($this->_user['user_id'], $MessId);
-                        }
-                    }
-                }
-
-                FunctionsLib::redirect('game.php?' . strtr($_SERVER['QUERY_STRING'], ['&amp;' => '&']));
-
-                break;
-
-            default:
-                if ($this->have_premium) {
-
-                    // make messages count per type, notes and admins count
-                    $this->makeCounts();
-
-                    $parse['form_submit'] = 'game.php?' . $_SERVER['QUERY_STRING'];
-                    $type_row_template = parent::$page->getTemplate('messages/messages_body_premium_row_view');
-                    $rows = '';
-
-                    while ($messages_list = $this->_db->fetchAssoc($this->_messages_count)) {
-
-                        $this->message_type[$messages_list['message_type']]['count'] = $messages_list['message_type_count'];
-                        $this->message_type[$messages_list['message_type']]['unread'] = $messages_list['unread_count'];
-                    }
-
-                    foreach ($this->message_type as $id => $data) {
-
-                        $parse['message_type'] = $data['type_name'];
-                        $parse['message_type_name'] = $this->langs['mg_type'][$id];
-                        $parse['message_amount'] = isset($data['count']) ? $data['count'] : 0;
-                        $parse['message_unread'] = isset($data['unread']) ? $data['unread'] : 0;
-                        $parse['checked'] = (isset($active[$id]) ? 'checked' : '');
-                        $parse['checked_status'] = (isset($active[$id]) ? 1 : 0);
-
-                        $rows .= parent::$page->parseTemplate($type_row_template, $parse);
-                    }
-
-                    $parse['message_type_rows'] = $rows;
-                    $parse['buddys_count'] = $this->_extra_count['buddys_count'];
-                    $parse['alliance_count'] = $this->_extra_count['alliance_count'];
-                    $parse['operators_count'] = $this->_extra_count['operators_count'];
-                    $parse['notes_count'] = $this->_extra_count['notes_count'];
-
-                    $parse['mg_ab_friends'] = '';
-                    $parse['mg_ab_members'] = '';
-                    $parse['mg_ab_operators'] = '';
-                    $parse['mg_notes_rows'] = '';
-                    $parse['owncontactsopen'] = '';
-                    $parse['ownallyopen'] = '';
-                    $parse['gameoperatorsopen'] = '';
-                    $parse['noticesopen'] = '';
-
-                    if (isset($_POST['owncontactsopen']) && $_POST['owncontactsopen'] == 'on') {
-
-                        $parse['owncontactsopen'] = 'checked="1"';
-                        $parse['mg_ab_friends'] = $this->buildFriendsAddressBook();
-                    }
-
-                    if (isset($_POST['ownallyopen']) && $_POST['ownallyopen'] == 'on') {
-
-                        $parse['ownallyopen'] = 'checked="1"';
-                        $parse['mg_ab_members'] = $this->buildAllinaceAddressBook();
-                    }
-
-                    if (isset($_POST['gameoperatorsopen']) && $_POST['gameoperatorsopen'] == 'on') {
-
-                        $parse['gameoperatorsopen'] = 'checked="1"';
-                        $parse['mg_ab_operators'] = $this->buildOperatorsAddressBook();
-                    }
-
-                    if (isset($_POST['noticesopen']) && $_POST['noticesopen'] == 'on') {
-
-                        $parse['noticesopen'] = 'checked="1"';
-                        $parse['mg_notes_rows'] = $this->buildNotes();
-                    }
-
-                    $parse['message_list'] = isset($message_list) ? $this->loadMessages($message_list) : '';
-                    $parse['delete_options'] = isset($_GET['dsp']) ? $this->loadDeleteBox() : '';
-                }
-
-                parent::$page->display(
-                    parent::$page->parseTemplate($this->setDefaultTemplate(), $parse)
-                );
 
                 break;
         }

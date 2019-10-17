@@ -186,18 +186,40 @@ class Messages
     /**
      * Delete message by id and current user
      * 
-     * @param int $user_id The user ID
-     * @param int $msg_id  The message ID
+     * @param int $user_id       The user ID
+     * @param int $messages_ids  The messages ID
      * 
      * @return mixed
      */
-    public function deleteByOwnerAndId($user_id, $msg_id)
+    public function deleteByOwnerAndIds($user_id, $messages_ids)
     {
-        if ((int) $user_id > 0 && (int) $msg_id > 0) {
+        if ((int) $user_id > 0) {
 
             return $this->db->query(
                 "DELETE FROM " . MESSAGES . "
-                WHERE `message_id` = '" . $msg_id . "' 
+                WHERE `message_id` IN (" . $messages_ids . ") 
+                    AND `message_receiver` = '" . $user_id . "';"
+            );
+        }
+
+        return null;
+    }
+
+    /**
+     * Delete message by id and current user
+     * 
+     * @param int $user_id       The user ID
+     * @param int $message_type  The messages type
+     * 
+     * @return mixed
+     */
+    public function deleteByOwnerAndMessageType($user_id, $message_type)
+    {
+        if ((int) $user_id > 0 && (int) $message_type >= 0) {
+
+            return $this->db->query(
+                "DELETE FROM " . MESSAGES . "
+                WHERE `message_type` IN (" . $message_type . ") 
                     AND `message_receiver` = '" . $user_id . "';"
             );
         }
