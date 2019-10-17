@@ -23,6 +23,7 @@ use application\libraries\Timing_library;
 
 use const DPATH;
 use const JS_PATH;
+use const MODULE_ID;
 
 /**
  * Alliance Class
