@@ -85,7 +85,7 @@ class MessagesEntity extends Entity
      * 
      * @return string
      */
-    public function getMessageType())
+    public function getMessageType()
     {
         return $this->_data['message_type'];
     }
