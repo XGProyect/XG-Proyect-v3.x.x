@@ -80,7 +80,7 @@ class Empire extends Controller
     {
         parent::$page->display(
             $this->getTemplate()->set(
-                'empire/empire_view',
+                'game/empire_view',
                 array_merge(
                     $this->getLang(),
                     $this->buildBlocks()
@@ -97,66 +97,49 @@ class Empire extends Controller
     private function buildBlocks(): array
     {
         $empire_data            = $this->Empire_Model->getAllPlayerData((int)$this->_user['user_id']);
-        $elements['overview']   = ['image', 'name', 'coords', 'fields'];
-        $elements['resources']  = ['metal', 'crystal', 'deuterium', 'energy'];
 
         foreach ($empire_data as $planet) {
 
-            foreach ($elements['overview'] as $element) {
+            // general data
+            foreach (['image', 'name', 'coords', 'fields'] as $element) {
 
                 $empire[$element][] = $this->{'set' . ucfirst($element)}($planet);
             }
 
-            foreach ($elements['resources'] as $element) {
+            // resources data
+            foreach (['metal', 'crystal', 'deuterium', 'energy'] as $element) {
 
                 $empire[$element][] = $this->setResources($planet, $element);
             }
+
+            // structures and technologies data
+            foreach (['resources', 'facilities', 'fleet', 'defenses', 'missiles', 'tech'] as $element) {
+
+                $source = $planet;
+
+                if ($element == 'tech') {
+
+                    $source = $this->_user;
+                }
+
+                foreach ($this->getObjects()->getObjectsList($element) as $element_id) {
+
+                    if (!isset($empire[$element][$this->getObjects()->getObjects($element_id)])) {
+
+                        $empire[$element][$this->getObjects()->getObjects($element_id)]['value'] = '<th width="75px">' . (string)$this->getLang()[$this->getObjects()->getObjects($element_id)] . '</th>';
+                    }
+
+                    $empire[$element][$this->getObjects()->getObjects($element_id)]['value'] .= '<th width="75px">' . $this->setStructureData($planet, $source, $element, $element_id) . '</th>';
+                }
+            }
         }
-
-
-
-
 
         return array_merge(
             [
-                'amount_of_planets' => count($empire_data) + 1,
+                'amount_of_planets' => count($empire_data) + 1
             ],
             $empire
         );
-
-        /*
-        $resource = parent::$objects->getObjects();
-        $reslist = parent::$objects->getObjectsList();
-
-
-        while ($p = $this->_db->fetchArray($planetsrow)) {
-            $planet[] = $p;
-        }
-
-        $parse['mount'] = count($planet) + 1;
-
-        foreach ($planet as $p) {
-            
-            for ($k = 0; $k < 8; $k++) {
-                $parse[$f[$k]] = isset($parse[$f[$k]]) ? $parse[$f[$k]] : '';
-                $data['text'] = $datat[$k];
-                $parse[$f[$k]] .= parent::$page->parseTemplate($EmpireRowTPL, $data);
-            }
-
-            foreach ($resource as $i => $res) {
-                $r[$i] = isset($r[$i]) ? $r[$i] : '';
-                $data['text'] = (!isset($p[$resource[$i]]) && !isset($this->_current_user[$resource[$i]]) ) ? '0' : ( ( in_array($i, $reslist['build']) ) ? "<a href=\"game.php?page=" . DevelopmentsLib::setBuildingPage($i) . "&cp={$p['planet_id']}&amp;re=0&amp;planettype={$p['planet_type']}\">{$p[$resource[$i]]}</a>" : ( ( in_array($i, $reslist['tech']) ) ? "<a href=\"game.php?page=research&cp={$p['planet_id']}&amp;re=0&amp;planettype={$p['planet_type']}\">{$this->_current_user[$resource[$i]]}</a>" : ( ( in_array($i, $reslist['fleet']) ) ? "<a href=\"game.php?page=shipyard&cp={$p['planet_id']}&amp;re=0&amp;planettype={$p['planet_type']}\">{$p[$resource[$i]]}</a>" : ( ( in_array($i, $reslist['defense']) ) ? "<a href=\"game.php?page=defense&cp={$p['planet_id']}&amp;re=0&amp;planettype={$p['planet_type']}\">{$p[$resource[$i]]}</a>" : '0' ) ) ) );
-                $r[$i] .= parent::$page->parseTemplate($EmpireRowTPL, $data);
-            }
-        }
-
-        for ($j = 0; $j < 4; $j++) {
-            foreach ($reslist[$m[$j]] as $a => $i) {
-                $parse[$n[$j]] = isset($parse[$n[$j]]) ? $parse[$n[$j]] : '';
-                $data['text'] = $this->_lang['tech'][$i];
-                $parse[$n[$j]] .= "<tr>" . parent::$page->parseTemplate($EmpireRowTPL, $data) . $r[$i] . "</tr>";
-            }
-        }*/
     }
 
     /**
@@ -241,6 +224,44 @@ class Empire extends Controller
                 FormatLib::prettyNumber($planet['planet_' . $resource .  '_perhour'] + FunctionsLib::readConfig($resource . '_basic_income'))
             )
         ];
+    }
+
+    /**
+     * Sets the structure data
+     *
+     * @param array $planet
+     * @param array $source
+     * @param string $element
+     * @param integer $element_id
+     * @return string
+     */
+    private function setStructureData(array $planet, array $source, string $element, int $element_id): string
+    {
+        switch($element) {
+            case 'resources':
+            case 'facilities':
+                $page = DevelopmentsLib::setBuildingPage($element_id);
+            break;
+            case 'tech':
+                $page = 'research';
+            break;
+            case 'fleet':
+                $page = 'shipyard';
+            break;
+            case 'defenses':
+            case 'missiles':
+                $page = 'defense';
+            break;
+            default:
+                throw new \Exception('Undefined element type "' . $element . '". Only possible: build, tech, fleet, defenses and missiles.');
+            break;
+        }
+
+        $url = 'game.php?page=' . $page . '&cp=' . $planet['planet_id'] . '&re=0&planettype=' . $planet['planet_type'];
+
+        return FunctionsLib::setUrl(
+            $url, '', $source[$this->getObjects()->getObjects($element_id)]
+        );
     }
 }
 

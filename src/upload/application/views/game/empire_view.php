@@ -75,41 +75,50 @@
                 {/energy}
             </tr>
             <tr>
+                <td class="c" colspan="{amount_of_planets}" align="left">{iv_resources}</td>
+            </tr>
+            {resources}
+            <tr>
+                {value}
+            </tr>
+            {/resources}
+            <tr>
                 <td class="c" colspan="{amount_of_planets}" align="left">{iv_buildings}</td>
             </tr>
-            <!-- Buildings list -->
-            {planet_buildings}
-            <th width="75px">
-                {text}
-            </th>
-            {/planet_buildings}
-            <tr height="20px">
-                <td class="c" colspan="{amount_of_planets}" align="left">{iv_technology}</td>
+            {facilities}
+            <tr>
+                {value}
             </tr>
-            <!-- Technology list -->
-            {empire_tech}
-            <th width="75px">
-                {text}
-            </th>
-            {/empire_tech}
-            <tr height="20px">
-                <td class="c" colspan="{amount_of_planets}" align="left">{iv_ships}</td>
-            </tr>
-            <!-- Ships list -->
-            {planet_ships}
-            <th width="75px">
-                {text}
-            </th>
-            {/planet_ships}
+            {/facilities}
             <tr height="20px">
                 <td class="c" colspan="{amount_of_planets}" align="left">{iv_defenses}</td>
             </tr>
-            <!-- Defenses list -->
-            {planet_defenses}
-            <th width="75px">
-                {text}
-            </th>
-            {/planet_defenses}
+            {defenses}
+            <tr>
+                {value}
+            </tr>
+            {/defenses}
+            {missiles}
+            <tr>
+                {value}
+            </tr>
+            {/missiles}
+            <tr height="20px">
+                <td class="c" colspan="{amount_of_planets}" align="left">{iv_technology}</td>
+            </tr>
+            {tech}
+            <tr>
+                {value}
+            </tr>
+            {/tech}
+            <tr height="20px">
+                <td class="c" colspan="{amount_of_planets}" align="left">{iv_ships}</td>
+            </tr>
+            {fleet}
+            <tr>
+                {value}
+            </tr>
+            {/fleet}
         </tbody>
     </table>
 </div>

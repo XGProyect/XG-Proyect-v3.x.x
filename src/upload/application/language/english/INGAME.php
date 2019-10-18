@@ -1,5 +1,37 @@
 <?php
 $lang = [
+    // buildings
+    'building_metal_mine' => "Metal Mine",
+    'building_crystal_mine' => "Crystal Mine",
+    'building_deuterium_sintetizer' => "Deuterium Synthesizer",
+    'building_solar_plant' => "Solar Plant",
+    'building_fusion_reactor' => "Fusion Reactor",
+    'building_robot_factory' => "Robotics Factory",
+    'building_nano_factory' => "Nanite Factory",
+    'building_hangar' => "Shipyard",
+    'building_metal_store' => "Metal Storage",
+    'building_crystal_store' => "Crystal Storage",
+    'building_deuterium_tank' => "Deuterium Tank",
+    'building_laboratory' => "Research Lab",
+    'building_terraformer' => "Terraformer",
+    'building_ally_deposit' => "Alliance Depot",
+    'building_mondbasis' => "Lunar Base",
+    'building_phalanx' => "Sensor Phalanx",
+    'building_jump_gate' => "Jump Gate",
+    'building_missile_silo' => "Missile Silo",
+
+    // defenses
+    'defense_rocket_launcher' => 'Rocket Launcher',
+    'defense_light_laser' => 'Light Laser',
+    'defense_heavy_laser' => 'Heavy Laser',
+    'defense_gauss_cannon' => 'Gauss Cannon',
+    'defense_ion_cannon' => 'Ion Cannon',
+    'defense_plasma_turret' => 'Plasma Turret',
+    'defense_small_shield_dome' => 'Small Shield Dome',
+    'defense_large_shield_dome' => 'Large Shield Dome',
+    'defense_anti-ballistic_missile' => 'Anti-Ballistic Missiles',
+    'defense_interplanetary_missile' => 'Interplanetary Missiles',
+
     // ships
     'ship_small_cargo_ship' => 'Small Cargo',
     'ship_big_cargo_ship' => 'Large Cargo',
@@ -15,7 +47,25 @@ $lang = [
     'ship_destroyer' => 'Destroyer',
     'ship_deathstar' => 'Deathstar',
     'ship_battlecruiser' => 'Battlecruiser',
-    
+
+    // research
+    "research_espionage_technology" => 'Espionage Technology',
+    "research_computer_technology" => 'Computer Technology',
+    "research_weapons_technology" => 'Weapons Technology',
+    "research_shielding_technology" => 'Shielding Technology',
+    "research_armour_technology" => 'Armour Technology',
+    "research_energy_technology" => 'Energy Technology',
+    "research_hyperspace_technology" => 'Hyperspace Technology',
+    "research_combustion_drive" => 'Combustion Drive',
+    "research_impulse_drive" => 'Impulse Drive',
+    "research_hyperspace_drive" => 'Hyperspace Drive',
+    "research_laser_technology" => 'Laser Technology',
+    "research_ionic_technology" => 'Ion Technology',
+    "research_plasma_technology" => 'Plasma Technology',
+    "research_intergalactic_research_network" => 'Intergalactic Research Network',
+    "research_astrophysics" => 'Astrophysics',
+    "research_graviton_technology" => 'Graviton Technology',
+
     // types of planets or galaxy objects
     'planet_type' => [
         1 => 'Planet',
@@ -268,15 +318,15 @@ $lang['px_fleet_movement'] = 'Current Fleet Movement';
 
 //----------------------------------------------------------------------------//
 //EMPIRE
-$lang['iv_imperium_title'] = 'Empire vision';
+$lang['iv_imperium_title'] = 'Empire View';
 $lang['iv_planet'] = 'Planet';
 $lang['iv_name'] = 'Name';
 $lang['iv_coords'] = 'Coords';
 $lang['iv_fields'] = 'Fields';
 $lang['iv_resources'] = 'Resources';
-$lang['iv_buildings'] = 'Buildings';
-$lang['iv_technology'] = 'Technologies';
-$lang['iv_ships'] = 'Ships';
+$lang['iv_buildings'] = 'Facilities';
+$lang['iv_technology'] = 'Research';
+$lang['iv_ships'] = 'Fleet';
 $lang['iv_defenses'] = 'Defenses';
 
 //----------------------------------------------------------------------------//
