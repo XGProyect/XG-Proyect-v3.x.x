@@ -17,7 +17,7 @@
         {list_of_requests_received}
         <tr>
             <th>
-                <a href="game.php?page=messages&mode=write&id={id}">{username}</a>
+                <a href="game.php?page=chat&playerId={id}">{username}</a>
             </th>
             <th>
                 <a href="game.php?page=alliance&mode=ainfo&allyid={ally_id}">{alliance_name}</a>
@@ -39,7 +39,7 @@
         {list_of_requests_sent}
         <tr>
             <th>
-                <a href="game.php?page=messages&mode=write&id={id}">{username}</a>
+                <a href="game.php?page=chat&playerId={id}">{username}</a>
             </th>
             <th>
                 <a href="game.php?page=alliance&mode=ainfo&allyid={ally_id}">{alliance_name}</a>
@@ -61,7 +61,7 @@
         {list_of_buddies}
         <tr>
             <th>
-                <a href="game.php?page=messages&mode=write&id={id}">{username}</a>
+                <a href="game.php?page=chat&playerId={id}">{username}</a>
             </th>
             <th>
                 <a href="game.php?page=alliance&mode=ainfo&allyid={ally_id}">{alliance_name}</a>

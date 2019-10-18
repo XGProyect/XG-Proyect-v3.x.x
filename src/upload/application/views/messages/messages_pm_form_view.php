@@ -9,7 +9,7 @@
     </table>
     <br />
     {/status_message}
-    <form action="game.php?page=messages&mode=write&id={id}" method="post">
+    <form action="game.php?page=chat&playerId={id}" method="post">
         <table width="519px">
             <tr>
                 <td class="c" colspan="2">{mg_send_message}</td>

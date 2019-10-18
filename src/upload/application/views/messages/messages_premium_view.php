@@ -76,7 +76,7 @@
                                     </tr>
                                     {buddy_list}
                                     <tr>
-                                        <th colspan="4">{user_name} <a href="game.php?page=messages&mode=write&id={user_id}"><img src="{dpath}/img/m.gif" /></a></th>
+                                        <th colspan="4">{user_name} <a href="game.php?page=chat&playerId={user_id}"><img src="{dpath}/img/m.gif" /></a></th>
                                     </tr>
                                     {/buddy_list}
                                     <tr>
@@ -86,7 +86,7 @@
                                     </tr>
                                     {members_list}
                                     <tr>
-                                        <th colspan="4">{user_name} <a href="game.php?page=messages&mode=write&id={user_id}"><img src="{dpath}/img/m.gif" /></a></th>
+                                        <th colspan="4">{user_name} <a href="game.php?page=chat&playerId={user_id}"><img src="{dpath}/img/m.gif" /></a></th>
                                     </tr>
                                     {/members_list}
                                     <tr>

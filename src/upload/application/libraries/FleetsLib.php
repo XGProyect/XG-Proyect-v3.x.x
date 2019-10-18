@@ -419,7 +419,7 @@ class FleetsLib extends XGPCore
      */
     public static function enemyLink($fleet_row)
     {
-        $url = 'game.php?page=messages&mode=write&id=' . $fleet_row['fleet_owner'];
+        $url = 'game.php?page=chat&playerId=' . $fleet_row['fleet_owner'];
         $image = FunctionsLib::setImage(DPATH . '/img/m.gif', parent::$lang['write_message']);
         $link = $fleet_row['start_planet_user'] . ' ' . FunctionsLib::setUrl($url, '', $image);
 

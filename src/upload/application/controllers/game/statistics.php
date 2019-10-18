@@ -170,7 +170,7 @@ class Statistics extends Controller
                 }
 
                 if ($StatRow['user_id'] != $this->_current_user['user_id']) {
-                    $parse['player_mes'] = '<a href="game.php?page=messages&mode=write&id=' . $StatRow['user_id'] . '"><img src="' . DPATH . 'img/m.gif" border="0" title="' . $this->_lang['write_message'] . '" /></a>';
+                    $parse['player_mes'] = '<a href="game.php?page=chat&playerId=' . $StatRow['user_id'] . '"><img src="' . DPATH . 'img/m.gif" border="0" title="' . $this->_lang['write_message'] . '" /></a>';
                 } else {
                     $parse['player_mes'] = "";
                 }

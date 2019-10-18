@@ -21,7 +21,6 @@ use application\libraries\FunctionsLib;
 use application\libraries\OfficiersLib;
 
 use const DPATH;
-use const JS_PATH;
 use const MODULE_ID;
 
 /**
@@ -100,19 +99,13 @@ class Messages extends Controller
      * 
      * @return void
      */
-    private function runAction()
+    private function runAction(): void
     {
-        $mode   = filter_input(INPUT_GET, 'mode');
         $delete = filter_input(INPUT_POST, 'deletemessages');
         
         if (in_array($delete, ['deleteall', 'deletemarked', 'deleteunmarked', 'deleteallshown'])) {
 
-            $mode = "delete";
-        }
-
-        if (in_array($mode, ['write', 'delete'])) {
-            
-            $this->{'do' . ucfirst($mode) . 'Action'}();
+            $this->doDeleteAction();
         }
     }
 
@@ -423,84 +416,6 @@ class Messages extends Controller
         }
 
         return $blocks_set;
-    }
-
-    /**
-     * Write a new message
-     *
-     * @return void
-     */
-    private function doWriteAction()
-    {
-        $write_to       = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-        $message_sent   = filter_input_array(INPUT_POST);
-
-        if ($write_to) {
-            $receiver_data = $this->Messages_Model->getHomePlanet($write_to);
-
-            if (!$receiver_data) {
-                FunctionsLib::redirect('game.php?page=messages');
-            }
-        }
-
-        $text           = '';
-        $error_block    = false;
-
-        if ($message_sent) {
-            $errors         = 0;
-            $error_block  = true;
-
-            if (!$message_sent['subject']) {
-                $errors++;
-                $error_text     = $this->getLang()['mg_no_subject'];
-                $error_color    = '#FF0000';
-            }
-
-            if (!$message_sent['text']) {
-                $errors++;
-                $error_text     = $this->getLang()['mg_no_text'];
-                $error_color    = '#FF0000';
-            }
-
-            if ($errors == 0) {
-                $error_text     = $this->getLang()['mg_msg_sended'];
-                $error_color    = '#00FF00';
-
-                FunctionsLib::sendMessage(
-                    $write_to,
-                    $this->_user['user_id'],
-                    '',
-                    4,
-                    $this->_user['user_name'] . ' ' . FormatLib::prettyCoords(
-                        $this->_user['user_galaxy'], $this->_user['user_system'], $this->_user['user_planet']
-                    ),
-                    $message_sent['subject'],
-                    $message_sent['text']
-                );
-            }
-        }
-
-        parent::$page->display(
-            $this->getTemplate()->set(
-                'messages/messages_pm_form_view',
-                array_merge(
-                    $this->getLang(),
-                    [
-                        'id'                => $receiver_data['user_id'],
-                        'to'                => $receiver_data['user_name'] . ' ' . FormatLib::prettyCoords(
-                            $receiver_data['planet_galaxy'], $receiver_data['planet_system'], $receiver_data['planet_planet']
-                        ),
-                        'subject'           => ((!isset($subject) ) ? $this->getLang()['mg_no_subject'] : $subject),
-                        'text'              => ((!isset($text) ) ? '' : $text),
-                        'error_text'        => ((!isset($error_text) ) ? '' : $error_text),
-                        'status_message'    => (!$error_block ? [] : ''),
-                        '/status_message'    => (!$error_block ? [] : ''),
-                        'error_color'       => ((!isset($error_color) ) ? '' : $error_color),
-                        'js_path'           => JS_PATH
-                    ]
-                )
-            ) 
-        );
     }
 
     /**
