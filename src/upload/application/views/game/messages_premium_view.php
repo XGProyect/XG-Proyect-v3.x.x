@@ -17,32 +17,37 @@
                                     </tr>
                                     {message_type_list}
                                     <tr>
-                                        <th><input type="checkbox" name="{message_type}" {checked}></th>
-                                        <th colspan="2"><a href="?page=messages&dsp=1&{message_type}={checked_status}">{message_type_name}</a></th>
+                                        <th>
+                                            <input type="checkbox" name="{message_type}" {checked}>
+                                        </th>
+                                        <th colspan="2">
+                                            <a href="?page=messages&dsp=1&{message_type}={checked_status}">{message_type_name}</a>
+                                        </th>
                                         <th>{message_amount} / {message_unread}</th>
                                     </tr>
                                     {/message_type_list}
                                     {messages}
-                                        <tr>
-                                            <td class="c">{mg_action}</td>
-                                            <td class="c">{mg_date}</td>
-                                            <td class="c">{mg_from}</td>
-                                            <td class="c">{mg_subject}</td>
-                                        </tr>
-                                        {messages_list}
-                                        <tr>
-                                            <th>
-                                                <input type="hidden" name="showmes{message_id}" />
-                                                <input type="checkbox" name="delmes{message_id}" />
-                                            </th>
-                                            <th>{message_time}</th>
-                                            <th>{message_from}</th>
-                                            <th>{message_subject}</th>
-                                        </tr>
-                                        <tr>
-                                            <td class="b"> </td><td colspan="3" class="b">{message_text}</td>
-                                        </tr>
-                                        {/messages_list}
+                                    <tr>
+                                        <td class="c">{mg_action}</td>
+                                        <td class="c">{mg_date}</td>
+                                        <td class="c">{mg_from}</td>
+                                        <td class="c">{mg_subject}</td>
+                                    </tr>
+                                    {messages_list}
+                                    <tr>
+                                        <th>
+                                            <input type="hidden" name="showmes{message_id}" />
+                                            <input type="checkbox" name="delmes{message_id}" />
+                                        </th>
+                                        <th>{message_time}</th>
+                                        <th>{message_from}</th>
+                                        <th>{message_subject}</th>
+                                    </tr>
+                                    <tr>
+                                        <td class="b"> </td>
+                                        <td colspan="3" class="b">{message_text}</td>
+                                    </tr>
+                                    {/messages_list}
                                     {/messages}
                                     <tr>
                                         <th colspan="4">
@@ -70,33 +75,36 @@
                                         <th>{mg_amount_title}</th>
                                     </tr>
                                     <tr>
-                                        <th><input type="checkbox" name="owncontactsopen"{owncontactsopen}></th>
+                                        <th><input type="checkbox" name="owncontactsopen" {owncontactsopen}></th>
                                         <th colspan="2">{mg_friends_list} </th>
                                         <th>{buddys_count}</th>
                                     </tr>
                                     {buddy_list}
                                     <tr>
-                                        <th colspan="4">{user_name} <a href="game.php?page=chat&playerId={user_id}"><img src="{dpath}/img/m.gif" /></a></th>
+                                        <th colspan="4">{user_name} <a href="game.php?page=chat&playerId={user_id}"><img
+                                                    src="{dpath}/img/m.gif" /></a></th>
                                     </tr>
                                     {/buddy_list}
                                     <tr>
-                                        <th><input type="checkbox" name="ownallyopen"{ownallyopen}></th>
+                                        <th><input type="checkbox" name="ownallyopen" {ownallyopen}></th>
                                         <th colspan="2">{mg_alliance}</th>
                                         <th>{alliance_count}</th>
                                     </tr>
                                     {members_list}
                                     <tr>
-                                        <th colspan="4">{user_name} <a href="game.php?page=chat&playerId={user_id}"><img src="{dpath}/img/m.gif" /></a></th>
+                                        <th colspan="4">{user_name} <a href="game.php?page=chat&playerId={user_id}"><img
+                                                    src="{dpath}/img/m.gif" /></a></th>
                                     </tr>
                                     {/members_list}
                                     <tr>
-                                        <th><input type="checkbox" name="gameoperatorsopen"{gameoperatorsopen}></th>
+                                        <th><input type="checkbox" name="gameoperatorsopen" {gameoperatorsopen}></th>
                                         <th colspan="2">{mg_operators}</th>
                                         <th>{operators_count}</th>
                                     </tr>
                                     {operators_list}
                                     <tr>
-                                        <th colspan="4">{user_name} <a href="mailto:{user_email}"><img src="{dpath}/img/m.gif" /></a></th>
+                                        <th colspan="4">{user_name} <a href="mailto:{user_email}"><img
+                                                    src="{dpath}/img/m.gif" /></a></th>
                                     </tr>
                                     {/operators_list}
 
@@ -108,7 +116,7 @@
                                     </tr>
                                 </form>
                                 <form action="game.php?page=messages" method="POST">
-                                    <tr height="20"> 
+                                    <tr height="20">
                                     </tr>
                                     <tr>
                                         <td colspan="4" class="c">{mg_notes}</td>
@@ -118,7 +126,7 @@
                                         <th colspan="2">{mg_amount_title}</th>
                                     </tr>
                                     <tr>
-                                        <th colspan="2"><input type="checkbox" name="noticesopen"{noticesopen}></th>
+                                        <th colspan="2"><input type="checkbox" name="noticesopen" {noticesopen}></th>
                                         <th colspan="2">{notes_count}</th>
                                     </tr>
                                     {notes_list}
@@ -143,6 +151,5 @@
                 </tr>
             </tbody>
         </table>
-        <br><br><br><br>
     </center>
 </div>

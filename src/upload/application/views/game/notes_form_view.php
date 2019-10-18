@@ -29,7 +29,9 @@
             </th>
         </tr>
         <tr>
-            <td class="c"><a href="game.php?page=notes">{nt_back}</a></td>
+            <td class="c">
+                <a href="game.php?page=notes">{nt_back}</a>
+            </td>
             <td class="c">
                 <input type="reset" value="{nt_reset}">
                 <input type="submit" value="{nt_save}">

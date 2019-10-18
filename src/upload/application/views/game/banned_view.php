@@ -1,9 +1,10 @@
 <br>
 <div id="content">
-    <table width="600">
+    <table width="600px">
         <tr>
             <td class="c" colspan="5">{bn_players_banned_list}</td>
-        </tr><tr>
+        </tr>
+        <tr>
             <th>{bn_player}</th>
             <th>{bn_reason}</th>
             <th>{bn_from}</th>

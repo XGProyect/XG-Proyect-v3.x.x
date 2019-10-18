@@ -34,7 +34,7 @@
         </tr>
         {/list_of_requests_received}
         <tr>
-            <th class="c" colspan="5">{bu_my_requests}</a></th>
+            <th class="c" colspan="5">{bu_my_requests}</th>
         </tr>
         {list_of_requests_sent}
         <tr>

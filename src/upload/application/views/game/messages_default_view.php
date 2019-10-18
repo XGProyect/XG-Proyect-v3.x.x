@@ -31,7 +31,8 @@
                                 <th>{message_subject}</th>
                             </tr>
                             <tr>
-                                <td class="b"> </td><td colspan="3" class="b">{message_text}</td>
+                                <td class="b"></td>
+                                <td colspan="3" class="b">{message_text}</td>
                             </tr>
                             {/message_list}
                             <tr>
