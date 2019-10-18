@@ -267,7 +267,7 @@ $lang['px_scan_position'] = 'Scan position';
 $lang['px_fleet_movement'] = 'Current Fleet Movement';
 
 //----------------------------------------------------------------------------//
-//IMPERIUM
+//EMPIRE
 $lang['iv_imperium_title'] = 'Empire vision';
 $lang['iv_planet'] = 'Planet';
 $lang['iv_name'] = 'Name';

@@ -463,7 +463,7 @@ class TemplateLib
         $pages = [
             ['changelog', SYSTEM_VERSION, '', 'FFF', '', '0', '0'],
             ['overview', $this->langs['lm_overview'], '', 'FFF', '', '1', '1'],
-            ['imperium', $this->langs['lm_empire'], '', 'FFF', '', '1', '2'],
+            ['empire', $this->langs['lm_empire'], '', 'FFF', '', '1', '2'],
             ['resources', $this->langs['lm_resources'], '', 'FFF', '', '1', '3'],
             ['resourceSettings', $this->langs['lm_resources_settings'], '', 'FFF', '', '1', '4'],
             ['station', $this->langs['lm_station'], '', 'FFF', '', '1', '3'],
@@ -497,7 +497,7 @@ class TemplateLib
                 continue;
             }
 
-            if (!OfficiersLib::isOfficierActive($this->current_user['premium_officier_commander']) && $data[0] == 'imperium') {
+            if (!OfficiersLib::isOfficierActive($this->current_user['premium_officier_commander']) && $data[0] == 'empire') {
 
                 continue;
             }
