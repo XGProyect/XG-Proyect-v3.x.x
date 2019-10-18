@@ -2,7 +2,7 @@
 /**
  * Alliance Controller
  *
- * PHP Version 5.5+
+ * PHP Version 7+
  *
  * @category Controller
  * @package  Application
