@@ -2,7 +2,7 @@
 /**
  * Messages Controller
  *
- * PHP Version 5.5+
+ * PHP Version 7+
  *
  * @category Controller
  * @package  Application
@@ -16,7 +16,6 @@ namespace application\controllers\game;
 use application\core\Controller;
 use application\core\enumerators\MessagesEnumerator;
 use application\core\enumerators\SwitchIntEnumerator as SwitchInt;
-use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
 use application\libraries\OfficiersLib;
 
@@ -114,7 +113,7 @@ class Messages extends Controller
      * 
      * @return void
      */
-    private function buildPage()
+    private function buildPage(): void
     {
         parent::$page->display(
             $this->{'get' . ucfirst($this->getCurrentSection()) . 'Section'}()
@@ -258,7 +257,7 @@ class Messages extends Controller
      * 
      * @return array
      */
-    private function getMessagesTypesList($active): array
+    private function getMessagesTypesList(array $active): array
     {
         $messages_types         = $this->Messages_Model->countMessagesByType($this->_user['user_id']);
         $messages_types_list    = [];
@@ -423,7 +422,7 @@ class Messages extends Controller
      *
      * @return void
      */
-    private function doDeleteAction()
+    private function doDeleteAction(): void
     {
         $delete             = filter_input(INPUT_POST, 'deletemessages');
         $messages_to_delete = filter_input_array(INPUT_POST);
@@ -445,8 +444,10 @@ class Messages extends Controller
                     }
                 }
 
-                $this->Messages_Model->deleteByOwnerAndIds($this->_user['user_id'], join($message_ids, ','));
+                if (isset($message_ids)) {
 
+                    $this->Messages_Model->deleteByOwnerAndIds($this->_user['user_id'], join($message_ids, ','));
+                }
             break;
             case 'deleteunmarked':
 
@@ -461,8 +462,10 @@ class Messages extends Controller
                     }
                 }
 
-                $this->Messages_Model->deleteByOwnerAndIds($this->_user['user_id'], join($message_ids, ','));
+                if (isset($message_ids)) {
 
+                    $this->Messages_Model->deleteByOwnerAndIds($this->_user['user_id'], join($message_ids, ','));
+                }
             break;
             case 'deleteallshown':
 
@@ -479,7 +482,10 @@ class Messages extends Controller
                         }
                     }
 
-                    $this->Messages_Model->deleteByOwnerAndMessageType($this->_user['user_id'], $type_id);
+                    if (isset($type_id)) {
+
+                        $this->Messages_Model->deleteByOwnerAndMessageType($this->_user['user_id'], $type_id);
+                    }
                 }
             break;
             default:
