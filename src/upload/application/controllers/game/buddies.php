@@ -307,7 +307,7 @@ class Buddies extends Controller
         
         parent::$page->display(
             $this->getTemplate()->set(
-                'buddies/buddies_request', 
+                'game/buddies_request', 
                 array_merge(
                     ['js_path' => JS_PATH],
                     $user, 
@@ -335,7 +335,7 @@ class Buddies extends Controller
         // display the page
         parent::$page->display(
             $this->getTemplate()->set(
-                'buddies/buddies_view', array_merge($page, $this->getLang())
+                'game/buddies_view', array_merge($page, $this->getLang())
             )
         );
     }

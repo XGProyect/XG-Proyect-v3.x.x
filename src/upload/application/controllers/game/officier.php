@@ -130,7 +130,7 @@ class Officier extends Controller
 
         // display the page
         parent::$page->display(
-            $this->getTemplate()->set('officier/officier_view', array_merge($page, $this->getLang()))
+            $this->getTemplate()->set('game/officier_view', array_merge($page, $this->getLang()))
         );
     }
 

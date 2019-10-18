@@ -106,7 +106,7 @@ class Banned extends Controller
         }
 
         parent::$page->display(
-            $this->getTemplate()->set('banned/banned_view', $parse)
+            $this->getTemplate()->set('game/banned_view', $parse)
         );
     }
 }

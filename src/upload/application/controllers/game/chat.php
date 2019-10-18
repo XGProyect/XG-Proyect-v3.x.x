@@ -153,7 +153,7 @@ class Chat extends Controller
     {
         parent::$page->display(
             $this->getTemplate()->set(
-                'messages/messages_pm_form_view',
+                'game/chat_view',
                 array_merge(
                     $this->getLang(),
                     [

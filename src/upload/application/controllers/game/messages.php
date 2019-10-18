@@ -131,7 +131,7 @@ class Messages extends Controller
         $this->Messages_Model->markAsRead($this->_user['user_id']);
 
         return $this->getTemplate()->set(
-            'messages/messages_default_view',
+            'game/messages_default_view',
             array_merge(
                 $this->getLang(),
                 [
@@ -180,7 +180,7 @@ class Messages extends Controller
         }
 
         return $this->getTemplate()->set(
-            'messages/messages_premium_view',
+            'game/messages_premium_view',
             array_merge(
                 $this->getLang(),
                 [
