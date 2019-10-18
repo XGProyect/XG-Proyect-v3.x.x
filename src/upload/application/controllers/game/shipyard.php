@@ -173,6 +173,7 @@ class Shipyard extends Controller
 
                 // If after every validation, the amount of items to build, is more than 0
                 if ($amount > 0) {
+
                     $resources_needed = $this->getItemNeededResourcesByAmount($item, $amount);
                     $this->_resources_consumed['metal'] -= $resources_needed['metal'];
                     $this->_resources_consumed['crystal'] -= $resources_needed['crystal'];
@@ -251,7 +252,7 @@ class Shipyard extends Controller
     }
 
     /**
-     * Build each building block
+     * Build each item block
      * 
      * @param int $item_id Building ID
      * 
@@ -283,7 +284,7 @@ class Shipyard extends Controller
     private function getItemPriceWithFormat($item_id)
     {
         return DevelopmentsLib::formatedDevelopmentPrice(
-                $this->_user, $this->_planet, $item_id, false
+            $this->_user, $this->_planet, $item_id, false
         );
     }
 
@@ -297,7 +298,7 @@ class Shipyard extends Controller
     private function getItemTimeWithFormat($item_id)
     {
         return DevelopmentsLib::formatedDevelopmentTime(
-                $this->getItemTime($item_id)
+            $this->getItemTime($item_id)
         );
     }
 
@@ -311,7 +312,7 @@ class Shipyard extends Controller
     private function getItemTime($item_id)
     {
         return DevelopmentsLib::developmentTime(
-                $this->_user, $this->_planet, $item_id
+            $this->_user, $this->_planet, $item_id
         );
     }
 
@@ -355,7 +356,7 @@ class Shipyard extends Controller
                 $box_data['tab_index'] = $item_id;
 
                 return $this->getTemplate()->set(
-                        'shipyard/shipyard_build_box', $box_data
+                    'shipyard/shipyard_build_box', $box_data
                 );
             }
         }
@@ -386,7 +387,7 @@ class Shipyard extends Controller
         ) {
 
             return $this->getTemplate()->set(
-                    'shipyard/shipyard_build_button', $this->getLang()
+                'shipyard/shipyard_build_button', $this->getLang()
             );
         }
 
@@ -502,9 +503,6 @@ class Shipyard extends Controller
             ]
         ];
 
-        
-            
-        
         $this->_allowed_items = array_filter($allowed_buildings[$this->getCurrentPage()], function($value) {
             return DevelopmentsLib::isDevelopmentAllowed(
                     $this->_user, $this->_planet, $value
