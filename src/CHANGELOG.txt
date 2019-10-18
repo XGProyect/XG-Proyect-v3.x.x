@@ -1,6 +1,16 @@
 '3.1.0' =>
+Core
 [#000] New core, for all the pages.-
+[#000] Migrated to Parser library by CodeIgniter.-
+[#000] Migrated queries to Models.-
+[#000] New single page for private messages called "chat", will provably mutate into a real chat in the future.-
+[#000] Re-sorted some language lines.-
+[#000] Changelog migrated into the database using two new tables "languages" and "changelog".-
+
+Project
 [#000] Added Unit Testing.-
+
+Features
 [#000] New features.-
 
 
