@@ -221,7 +221,7 @@ class Notes extends Controller
         if ($edit_view !== false && !is_null($edit_view)) {
             
             return [
-                'template' => 'notes/notes_form_view',
+                'template' => 'game/notes_form_view',
                 'data' => array_merge(
                     ['js_path' => JS_PATH],
                     $this->buildEditBlock($edit_view)
@@ -230,7 +230,7 @@ class Notes extends Controller
         }
 
         return [
-            'template' => 'notes/notes_view',
+            'template' => 'game/notes_view',
             'data' => [
                 'list_of_notes' => $this->buildNotesListBlock(),
                 'no_notes' => $this->_notes->hasNotes() ? '' : '<tr><th colspan="4">' . $this->getLang()['nt_you_dont_have_notes'] . '</th>'

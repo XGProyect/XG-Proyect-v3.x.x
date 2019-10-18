@@ -108,7 +108,7 @@ class Techtree extends Controller
         // display the page
         parent::$page->display(
             $this->getTemplate()->set(
-                'techtree/techtree_view',
+                'game/techtree_view',
                 array_merge(
                     $this->getLang(), $page
                 )

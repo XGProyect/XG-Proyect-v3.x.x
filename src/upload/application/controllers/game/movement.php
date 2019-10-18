@@ -171,7 +171,7 @@ class Movement extends Controller
         // display the page
         parent::$page->display(
             $this->getTemplate()->set(
-                'movement/movements_view',
+                'game/movements_view',
                 array_merge(
                     $this->getLang(), $page
                 )
