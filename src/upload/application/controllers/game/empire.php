@@ -211,7 +211,7 @@ class Empire extends Controller
         if ($resource == 'energy') {
 
             return [
-                'used_energy' => (FormatLib::prettyNumber($planet['planet_energy_max'] - $planet['planet_energy_used'])),
+                'used_energy' => (FormatLib::prettyNumber($planet['planet_energy_max'] + $planet['planet_energy_used'])),
                 'max_energy' => FormatLib::prettyNumber($planet['planet_energy_max'])
             ];
         }
