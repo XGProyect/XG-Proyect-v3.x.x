@@ -1,6 +1,6 @@
 <?php
 /**
- * Officier Model
+ * Galaxy Model
  *
  * PHP Version 7+
  *
@@ -14,7 +14,7 @@
 namespace application\models\game;
 
 /**
- * Officier Class
+ * Galaxy Class
  *
  * @category Classes
  * @package  Application
@@ -23,7 +23,7 @@ namespace application\models\game;
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-class Officier
+class Galaxy
 {
 
     private $db = null;
@@ -48,28 +48,18 @@ class Officier
     {
         $this->db->closeConnection();
     }
-
+    
     /**
-     * Set premium access to the current user
-     *
-     * @param integer $user_id
-     * @param integer $price
-     * @param string $officier
-     * @param integer $time_to_add
-     * @return void
+     * Get buddy data by ID
+     * 
+     * @param int $buddy_id Buddy ID
+     * 
+     * @return int $buddy_id Buddy ID
      */
-    public function setPremium(int $user_id, int $price, string $officier, int $time_to_add): void
+    public function getBuddyDataByBuddyId($buddy_id)
     {
-        if ($user_id > 0) {
 
-            $this->db->query(
-                "UPDATE `" . PREMIUM . "` SET
-                    `premium_dark_matter` = `premium_dark_matter` - '" . $price . "',
-                    `" . $officier . "` = '" . $time_to_add . "'
-                WHERE `premium_user_id` = '" . $user_id . "';"
-            );
-        }
     }
 }
 
-/* end of officier.php */
+/* end of buddies.php */
