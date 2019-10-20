@@ -219,12 +219,33 @@ class Messages extends Controller
                     ),
                     'message_from' => $message['message_from'],
                     'message_subject' => $message['message_subject'],
-                    'message_text' => nl2br($message['message_text'])
+                    'message_text' => nl2br($message['message_text']),
+                    'message_reply' => $this->setMessageReply($message['message_sender'])
                 ];
             }
         }
 
         return $messages_list;
+    }
+
+    /**
+     * Set the message reply icon
+     *
+     * @param integer $from
+     * @return string
+     */
+    private function setMessageReply(int $from): string
+    {
+        if ($from > 0) {
+
+            return FunctionsLib::setUrl(
+                'game.php?page=chat&playerId=' . $from,
+                $this->getLang()['mg_send_message'],
+                FunctionsLib::setImage(DPATH . '/img/m.gif', $this->getLang()['mg_send_message'])
+            );
+        }
+
+        return '';
     }
 
     /**

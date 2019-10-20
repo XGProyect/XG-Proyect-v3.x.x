@@ -27,7 +27,7 @@
                                     <input type="checkbox" name="delmes{message_id}" />
                                 </th>
                                 <th>{message_time}</th>
-                                <th>{message_from}</th>
+                                <th>{message_from} {message_reply}</th>
                                 <th>{message_subject}</th>
                             </tr>
                             <tr>
