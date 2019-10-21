@@ -168,7 +168,7 @@ $lang['tn_delete_mode'] = 'Tu cuenta se encuentra en modo borrar. La misma será
 
 //----------------------------------------------------------------------------//
 //LEFT MENU
-$lang['lm_overview'] = 'Visión general';
+$lang['lm_overview'] = 'Resumen';
 $lang['lm_galaxy'] = 'Galaxia';
 $lang['lm_empire'] = 'Imperio';
 $lang['lm_fleet'] = 'Flota';
@@ -179,21 +179,21 @@ $lang['lm_station'] = 'Instalaciones';
 $lang['lm_research'] = 'Investigación';
 $lang['lm_shipyard'] = 'Hangar';
 $lang['lm_defenses'] = 'Defensa';
-$lang['lm_officiers'] = 'Oficiales';
+$lang['lm_officiers'] = 'Casino';
 $lang['lm_trader'] = 'Mercader';
-$lang['lm_technology'] = 'Tecnología';
+$lang['lm_technology'] = 'Técnica';
 $lang['lm_messages'] = 'Mensajes';
-$lang['lm_alliance'] = 'Alianzas';
+$lang['lm_alliance'] = 'Alianza';
 $lang['lm_buddylist'] = 'Amigos';
 $lang['lm_notes'] = 'Notas';
-$lang['lm_statistics'] = 'Estadísticas';
-$lang['lm_search'] = 'Buscar';
+$lang['lm_statistics'] = 'Clasificación';
+$lang['lm_search'] = 'Búsqueda';
 $lang['lm_options'] = 'Opciones';
 $lang['lm_banned'] = 'Baneados';
 $lang['lm_forums'] = 'Foro';
 $lang['lm_logout'] = 'Salir';
 $lang['lm_administration'] = 'Administración';
-$lang['lm_module_not_accesible'] = 'No se puede acceder en este momento a la página solicitada';
+$lang['lm_module_not_accesible'] = 'No se ha encontrado la página.';
 
 //----------------------------------------------------------------------------//
 //OVERVIEW

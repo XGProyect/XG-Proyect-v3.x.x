@@ -172,7 +172,7 @@ $lang['lm_overview'] = 'Overview';
 $lang['lm_galaxy'] = 'Galaxy';
 $lang['lm_empire'] = 'Empire';
 $lang['lm_fleet'] = 'Fleet';
-$lang['lm_movement'] = 'Fleet movements';
+$lang['lm_movement'] = 'Fleet movement';
 $lang['lm_resources'] = 'Resources';
 $lang['lm_resources_settings'] = 'Resource settings';
 $lang['lm_station'] = 'Facilities';
@@ -186,14 +186,14 @@ $lang['lm_messages'] = 'Messages';
 $lang['lm_alliance'] = 'Alliance';
 $lang['lm_buddylist'] = 'Buddies';
 $lang['lm_notes'] = 'Notes';
-$lang['lm_statistics'] = 'Statistics';
+$lang['lm_statistics'] = 'Highscore';
 $lang['lm_search'] = 'Search';
 $lang['lm_options'] = 'Options';
 $lang['lm_banned'] = 'Banned';
-$lang['lm_forums'] = 'Forum';
-$lang['lm_logout'] = 'Logout';
+$lang['lm_forums'] = 'Board';
+$lang['lm_logout'] = 'Log out';
 $lang['lm_administration'] = 'Administration';
-$lang['lm_module_not_accesible'] = 'The requested page it\'s not available right now';
+$lang['lm_module_not_accesible'] = 'Page could not be found.';
 
 //----------------------------------------------------------------------------//
 //OVERVIEW
