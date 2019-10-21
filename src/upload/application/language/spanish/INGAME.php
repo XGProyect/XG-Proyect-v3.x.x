@@ -91,6 +91,25 @@ $lang = [
     'ch_version' => 'Versión',
     'ch_description' => 'Descripción',
 
+    // notes page
+    'nt_my_notes' => 'Mis notas',
+    'nt_new_note' => '+ Nueva Nota',
+    'nt_col_subject' => 'Asunto',
+    'nt_col_date' => 'Fecha',
+    'nt_no_notes_found' => 'No se encontraron notas',
+    'nt_add_note' => 'Escribir nueva nota',
+    'nt_your_subject' => 'Your subject',
+    'nt_priority' => 'Priority',
+    'nt_important' => 'Important',
+    'nt_normal' => 'Normal',
+    'nt_unimportant' => 'Unimportant',
+    'nt_your_message' => 'Your Message',
+    'nt_characters' => 'Caracteres',
+    'nt_back' => 'Volver',
+    'nt_save' => 'Guardar',
+    'nt_edit_note' => 'Editar nota',
+    'nt_delete_market_notes' => 'Elimintar todas las notas marcadas',
+
     // search page
     'sh_search_universe' => 'Búsqueda en el Universo de XG Proyect',
     'sh_put_in_leyend' => 'Introduce nombre de jugador, planeta o alianza',
@@ -1079,29 +1098,6 @@ $lang['bu_rejected_title'] = 'Solicitud rechazada';
 $lang['bu_rejected_text'] = 'El jugador %u ha rechazado tu solicitud de amistad.';
 $lang['bu_to_accept_title'] = 'Nueva solicitud de amistad';
 $lang['bu_to_accept_text'] = 'El jugador %u te ha enviado una solicitud de amistad.';
-
-
-//----------------------------------------------------------------------------//
-//NOTES
-$lang['nt_important'] = 'Importante';
-$lang['nt_normal'] = 'Normal';
-$lang['nt_unimportant'] = 'Sin importancia';
-$lang['nt_create_note'] = 'Hacer una nota';
-$lang['nt_edit_note'] = 'Editar nota';
-$lang['nt_you_dont_have_notes'] = 'No tienes notas';
-$lang['nt_notes'] = 'Notas';
-$lang['nt_create_new_note'] = 'Crear nueva nota';
-$lang['nt_date_note'] = 'Fecha';
-$lang['nt_subject_note'] = 'Asunto';
-$lang['nt_size_note'] = 'Tamaño';
-$lang['nt_dlte_note'] = 'Borrar';
-$lang['nt_priority'] = 'Prioridad';
-$lang['nt_note'] = 'Nota';
-$lang['nt_characters'] = 'caracteres';
-$lang['nt_back'] = 'Volver';
-$lang['nt_reset'] = 'Reestablecer';
-$lang['nt_save'] = 'Guardar';
-$lang['nt_no_text'] = 'Sin texto';
 
 //----------------------------------------------------------------------------//
 //STATISTICS

@@ -91,6 +91,25 @@ $lang = [
     'ch_version' => 'Version',
     'ch_description' => 'Description',
 
+    // notes page
+    'nt_my_notes' => 'My notes',
+    'nt_new_note' => '+ New Note',
+    'nt_col_subject' => 'Subject',
+    'nt_col_date' => 'Date',
+    'nt_no_notes_found' => 'No notes found',
+    'nt_add_note' => 'Add note',
+    'nt_your_subject' => 'Your subject',
+    'nt_priority' => 'Priority',
+    'nt_important' => 'Important',
+    'nt_normal' => 'Normal',
+    'nt_unimportant' => 'Unimportant',
+    'nt_your_message' => 'Your Message',
+    'nt_characters' => 'characters',
+    'nt_back' => 'Back',
+    'nt_save' => 'Save',
+    'nt_edit_note' => 'Edit note',
+    'nt_delete_market_notes' => 'Delete marked notes',
+
     // search page
     'sh_search_universe' => 'Search Universe',
     'sh_put_in_leyend' => 'Put in player, alliance or planet name',
@@ -1066,28 +1085,6 @@ $lang['bu_rejected_title'] = 'Request refused';
 $lang['bu_rejected_text'] = 'Player %u has rejected your buddy request.';
 $lang['bu_to_accept_title'] = 'New Friend Request';
 $lang['bu_to_accept_text'] = 'Player %u has sent you a buddy request.';
-
-//----------------------------------------------------------------------------//
-//NOTES
-$lang['nt_important'] = 'Important';
-$lang['nt_normal'] = 'Normal';
-$lang['nt_unimportant'] = 'Unimportant';
-$lang['nt_create_note'] = 'Create note';
-$lang['nt_edit_note'] = 'Edit note';
-$lang['nt_you_dont_have_notes'] = 'no notes recorded';
-$lang['nt_notes'] = 'Notes';
-$lang['nt_create_new_note'] = 'Create a new note';
-$lang['nt_date_note'] = 'Date';
-$lang['nt_subject_note'] = 'Subject';
-$lang['nt_size_note'] = 'Size';
-$lang['nt_dlte_note'] = 'Delete';
-$lang['nt_priority'] = 'Priority';
-$lang['nt_note'] = 'Notice';
-$lang['nt_characters'] = 'characters';
-$lang['nt_back'] = 'Back';
-$lang['nt_reset'] = 'Reset';
-$lang['nt_save'] = 'Save';
-$lang['nt_no_text'] = 'No text';
 
 //----------------------------------------------------------------------------//
 //STATISTICS

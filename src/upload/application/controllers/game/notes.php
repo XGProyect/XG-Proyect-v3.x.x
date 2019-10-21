@@ -197,8 +197,7 @@ class Notes extends Controller
                         'note_id' => $note->getNoteId(),
                         'note_time' => Timing_library::formatDefaultTime($note->getNoteTime()),
                         'note_color' => FormatLib::getImportanceColor($note->getNotePriority()),
-                        'note_title' => $note->getNoteTitle(),
-                        'note_text' => strlen($note->getNoteText())
+                        'note_title' => $note->getNoteTitle()
                     ];   
                 }
             }   
@@ -233,7 +232,7 @@ class Notes extends Controller
             'template' => 'game/notes_view',
             'data' => [
                 'list_of_notes' => $this->buildNotesListBlock(),
-                'no_notes' => $this->_notes->hasNotes() ? '' : '<tr><th colspan="4">' . $this->getLang()['nt_you_dont_have_notes'] . '</th>'
+                'no_notes' => $this->_notes->hasNotes() ? '' : '<tr><th colspan="4">' . $this->getLang()['nt_no_notes_found'] . '</th>'
             ]
         ];
     }
@@ -281,8 +280,8 @@ class Notes extends Controller
         return array_merge([
             's' => 1,
             'note_id' => '',
-            'title' => $this->getLang()['nt_create_note'],
-            'subject' => $this->getLang()['nt_subject_note'],
+            'title' => $this->getLang()['nt_add_note'],
+            'subject' => $this->getLang()['nt_your_subject'],
             'text' => ''
         ], $selected);
     }
@@ -301,7 +300,7 @@ class Notes extends Controller
                 'note_owner' => $this->_user['user_id'],
                 'note_time' => time(),
                 'note_priority' => is_int($data['u']) ? $data['u'] : Importance::important,
-                'note_title' => !empty($data['title']) ? $data['title'] : $this->getLang()['nt_subject_note'],
+                'note_title' => !empty($data['title']) ? $data['title'] : $this->getLang()['nt_your_subject'],
                 'note_text' => !empty($data['text']) ? $data['text'] : '',
             ]
         );
@@ -322,7 +321,7 @@ class Notes extends Controller
             [
                 'note_time' => time(),
                 'note_priority' => is_int($data['u']) ? $data['u'] : Importance::important,
-                'note_title' => !empty($data['title']) ? $data['title'] : $this->getLang()['nt_subject_note'],
+                'note_title' => !empty($data['title']) ? $data['title'] : $this->getLang()['nt_your_subject'],
                 'note_text' => !empty($data['text']) ? $data['text'] : '',
             ]
         );
@@ -335,7 +334,7 @@ class Notes extends Controller
      * 
      * @return void
      */
-    private function deleteNote(array $data):void
+    private function deleteNote(array $data): void
     {
         $delete_string = [];
         
