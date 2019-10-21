@@ -61,14 +61,14 @@ class Search
 
             return $this->db->queryFetchAll(
                 "SELECT 
-                    u.`user_id` AS `user_id`,
+                    u.`user_id`,
                     u.`user_name`,
                     u.`user_authlevel`,
                     p.`planet_name`,
                     p.`planet_galaxy`,
                     p.`planet_system`,
                     p.`planet_planet`,
-                    s.`user_statistic_total_rank` AS `rank`,
+                    s.`user_statistic_total_rank` AS `user_rank`,
                     a.`alliance_id`,
                     a.`alliance_name`
                 FROM `" . USERS . "` AS u
@@ -124,14 +124,14 @@ class Search
 
             return $this->db->queryFetchAll(
                 "SELECT 
-                    u.`user_id` AS `user_id`,
+                    u.`user_id`,
                     u.`user_name`,
                     u.`user_authlevel`,
                     p.`planet_name`,
                     p.`planet_galaxy`,
                     p.`planet_system`,
                     p.`planet_planet`,
-                    s.`user_statistic_total_rank` AS `rank`,
+                    s.`user_statistic_total_rank` AS `user_rank`,
                     a.`alliance_id`,
                     a.`alliance_name`
                 FROM `" . USERS . "` AS u

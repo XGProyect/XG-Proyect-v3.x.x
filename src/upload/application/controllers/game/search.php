@@ -39,6 +39,11 @@ class Search extends Controller
 
     const MODULE_ID = 17;
 
+    /**
+     *
+     * @var \NoobsProtectionLib 
+     */
+    private $_noob = null;
 
     /**
      *
@@ -79,6 +84,9 @@ class Search extends Controller
 
         // load Model
         parent::loadModel('game/search');
+
+        // load library
+        $this->_noob = FunctionsLib::loadLibrary('NoobsProtectionLib');
 
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
@@ -147,7 +155,7 @@ class Search extends Controller
     {
         parent::$page->display(
             $this->getTemplate()->set(
-                'search/search_view',
+                'game/search_view',
                 array_merge(
                     [
                         'search_results' => $this->buildResultsBlock() ?? [],
@@ -157,27 +165,13 @@ class Search extends Controller
                 )
             ) 
         );
-        /*while ($s = $this->_db->fetchArray($search)) {
-                if ($type == 'playername' or $type == 'planetname') {
-                    if ($this->_current_user['user_id'] != $s['user_id']) {
-                        $s['actions'] = '<a href="game.php?page=chat&playerId=' . $s['user_id'] . '" title="' . $this->_lang['write_message'] . '"><img src="' . DPATH . 'img/m.gif"/></a>&nbsp;';
-                        $s['actions'] .= '<a href="#" title="' . $this->_lang['sh_buddy_request'] . '" onClick="f(\'game.php?page=buddies&mode=2&u=' . $s['user_id'] . '\', \'' . $this->_lang['sh_buddy_request'] . '\')"><img src="' . DPATH . 'img/b.gif" border="0"></a>';
-                    }
-
-                    $s['planet_name'] = $s['planet_name'];
-                    $s['username'] = $s['user_name'];
-                    $s['alliance_name'] = ($s['alliance_name'] != '') ? "<a href=\"game.php?page=alliance&mode=ainfo&allyid={$s['alliance_id']}\">{$s['alliance_name']}</a>" : '';
-                    $s['position'] = $this->setPosition($s['rank'], $s['user_authlevel']);
-                    $s['coordinated'] = "{$s['planet_galaxy']}:{$s['planet_system']}:{$s['planet_planet']}";
-                    $result_list .= parent::$page->parseTemplate($row, $s);
-                } elseif ($type == 'allytag' or $type == 'allyname') {
-                    $s['ally_points'] = FormatLib::prettyNumber($s['points']);
-                    $s['ally_tag'] = "<a href=\"game.php?page=alliance&mode=ainfo&allyid={$s['alliance_id']}\">{$s['alliance_tag']}</a>";
-                    $result_list .= parent::$page->parseTemplate($row, $s);
-                }
-            }*/
     }
 
+    /**
+     * Build the results block
+     *
+     * @return void
+     */
     private function buildResultsBlock()
     {
         if (count($this->_results) > 0) {
@@ -185,7 +179,7 @@ class Search extends Controller
             $this->_search_terms['error_block'] = '';
 
             return $this->getTemplate()->set(
-                'search/search_' . $this->_search_terms['search_type'] . '_results_view',
+                'game/search_' . $this->_search_terms['search_type'] . '_results_view',
                 array_merge(
                     $this->getLang(),
                     [
@@ -209,13 +203,15 @@ class Search extends Controller
 
         foreach ($this->_results as $results) {
 
-            if ($this->_search_terms['player_name'] == 'alliance_tag') {
+
+            if ($this->_search_terms['search_type'] == 'player_name') {
 
                 $list_of_results[] = array_merge(
                     $results,
                     [
-                        'alliance_points'  => FormatLib::prettyNumber($results['alliance_points']),
-                        'alliance_actions' => $this->getAllianceApplicationAction((int)$results['alliance_id'], (int)$results['alliance_requests'])
+                        'planet_position' => FormatLib::prettyCoords($results['planet_galaxy'], $results['planet_system'], $results['planet_planet']),
+                        'user_rank' => $this->setPosition((int)$results['user_rank'], (int)$results['user_authlevel']),
+                        'user_actions'  => $this->getPlayersActions((int)$results['user_id'])
                     ]
                 );
             }
@@ -225,7 +221,7 @@ class Search extends Controller
                 $list_of_results[] = array_merge(
                     $results,
                     [
-                        'alliance_points'  => FormatLib::prettyNumber($results['alliance_points']),
+                        'alliance_points' => FormatLib::prettyNumber($results['alliance_points']),
                         'alliance_actions' => $this->getAllianceApplicationAction((int)$results['alliance_id'], (int)$results['alliance_requests'])
                     ]
                 );
@@ -236,17 +232,63 @@ class Search extends Controller
                 $list_of_results[] = array_merge(
                     $results,
                     [
-                        'alliance_points'  => FormatLib::prettyNumber($results['alliance_points']),
-                        'alliance_actions' => $this->getAllianceApplicationAction((int)$results['alliance_id'], (int)$results['alliance_requests'])
+                        'planet_position' => FormatLib::prettyCoords($results['planet_galaxy'], $results['planet_system'], $results['planet_planet']),
+                        'user_rank' => $this->setPosition((int)$results['user_rank'], (int)$results['user_authlevel']),
+                        'user_actions'  => $this->getPlayersActions((int)$results['user_id'])
                     ]
                 );
             }
         }
 
-
         return $list_of_results;
     }
 
+    /**
+     * Set the user position or not based on its level
+     *
+     * @param integer $user_rank
+     * @param integer $user_level
+     * @return string
+     */
+    private function setPosition(int $user_rank, int $user_level): string
+    {
+        if ($this->_noob->isRankVisible($user_level)) {
+
+            return FunctionsLib::setUrl(
+                'game.php?page=statistics&start=' . $user_rank,
+                '',
+                FormatLib::prettyNumber($user_rank)
+            );
+        } else {
+
+            return '-';
+        }
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param integer $user_id
+     * @return string
+     */
+    private function getPlayersActions(int $user_id): string
+    {
+        $chatLink = FunctionsLib::setUrl(
+            'game.php?page=chat&playerId=' . $user_id,
+            $this->getLang()['sh_tip_apply'],
+            FunctionsLib::setImage(DPATH . '/img/m.gif', $this->getLang()['sh_tip_write'])
+        );
+
+        $buddyLink = FunctionsLib::setUrl(
+            '#',
+            $this->getLang()['sh_tip_apply'],
+            FunctionsLib::setImage(DPATH . '/img/b.gif', $this->getLang()['sh_tip_buddy_request']),
+            'onClick="f(\'game.php?page=buddies&mode=2&u=' . $user_id . '\', \'' . $this->getLang()['sh_tip_buddy_request'] . '\')"'
+        );
+
+        return $chatLink . ' ' .  $buddyLink;
+    }
+    
     /**
      * Get alliance application action based on alliance permission
      *
@@ -266,25 +308,6 @@ class Search extends Controller
         }
 
         return '';
-    }
-
-    /**
-     * Set the user position or not based on its level
-     * 
-     * @param int $user_rank  User rank
-     * @param int $user_level User level
-     * 
-     * @return string
-     */
-    private function setPosition($user_rank, $user_level)
-    {
-        if ($this->_noob->isRankVisible($user_level)) {
-
-            return '<a href="game.php?page=statistics&start=' . $user_rank . '">' . $user_rank . '</a>';
-        } else {
-
-            return '-';
-        }
     }
 }
 
