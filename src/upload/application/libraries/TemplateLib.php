@@ -469,23 +469,22 @@ class TemplateLib
             ['station', $this->langs['lm_station'], '', 'FFF', '', '1', '3'],
             ['trader', $this->langs['lm_trader'], '', 'FF8900', '', '1', '5'],
             ['research', $this->langs['lm_research'], '', 'FFF', '', '1', '6'],
+            ['techtree', $this->langs['lm_technology'], '', 'FFF', '', '1', '10'],
             ['shipyard', $this->langs['lm_shipyard'], '', 'FFF', '', '1', '7'],
+            ['defense', $this->langs['lm_defenses'], '', 'FFF', '', '1', '12'],
             ['fleet1', $this->langs['lm_fleet'], '', 'FFF', '', '1', '8'],
             ['movement', $this->langs['lm_movement'], '', 'FFF', '', '1', '9'],
-            ['techtree', $this->langs['lm_technology'], '', 'FFF', '', '1', '10'],
             ['galaxy', $this->langs['lm_galaxy'], 'mode=0', 'FFF', '', '1', '11'],
-            ['defense', $this->langs['lm_defenses'], '', 'FFF', '', '1', '12'],
-            ['alliance', $this->langs['lm_alliance'], '', 'FFF', '', '2', '13'],
-            ['forums', $this->langs['lm_forums'], '', 'FFF', '', '2', '14'],
-            ['officier', $this->langs['lm_officiers'], '', 'FF8900', '', '2', '15'],
+            ['alliance', $this->langs['lm_alliance'], '', 'FFF', '', '1', '13'],
+            ['officier', $this->langs['lm_officiers'], '', 'FF8900', '', '1', '15'],
+            ['messages', $this->langs['lm_messages'], '', 'FFF', '', '1', '18'],   
             ['statistics', $this->langs['lm_statistics'], 'range=' . $tota_rank, 'FFF', '', '2', '16'],
+            ['notes', $this->langs['lm_notes'], '', 'FFF', 'true', '2', '19'],
+            ['buddies', $this->langs['lm_buddylist'], '', 'FFF', '', '2', '20'],
             ['search', $this->langs['lm_search'], '', 'FFF', '', '2', '17'],
-            ['messages', $this->langs['lm_messages'], '', 'FFF', '', '3', '18'],
-            ['notes', $this->langs['lm_notes'], '', 'FFF', 'true', '3', '19'],
-            ['buddies', $this->langs['lm_buddylist'], '', 'FFF', '', '3', '20'],
-            ['options', $this->langs['lm_options'], '', 'FFF', '', '3', '21'],
-            ['banned', $this->langs['lm_banned'], '', 'FFF', '', '3', '22'],
-            ['logout', $this->langs['lm_logout'], '', 'FFF', '', '3', '']
+            ['options', $this->langs['lm_options'], '', 'FFF', '', '2', '21'],
+            ['logout', $this->langs['lm_logout'], '', 'FFF', '', '2', ''],
+            ['forums', $this->langs['lm_forums'], '', 'FFF', '', '3', '14']
         ];
 
         // BUILD THE MENU

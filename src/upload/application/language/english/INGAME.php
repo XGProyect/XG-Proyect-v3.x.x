@@ -211,7 +211,6 @@ $lang['lm_notes'] = 'Notes';
 $lang['lm_statistics'] = 'Highscore';
 $lang['lm_search'] = 'Search';
 $lang['lm_options'] = 'Options';
-$lang['lm_banned'] = 'Banned';
 $lang['lm_forums'] = 'Board';
 $lang['lm_logout'] = 'Log out';
 $lang['lm_administration'] = 'Administration';
