@@ -99,9 +99,9 @@ $lang = [
     'sh_option_alliance_tag' => 'Alliances/Tags',
     'sh_option_planet_names' => 'Planet names',
     'sh_error_empty' => 'No search term entered',
-    'sh_error_no_results_option_player_name' => 'No players found',
-    'sh_error_no_results_option_alliance_tag' => 'No alliances found',
-    'sh_error_no_results_option_planet_names' => 'No planets found',
+    'sh_error_no_results_player_name' => 'No players found',
+    'sh_error_no_results_alliance_tag' => 'No alliances found',
+    'sh_error_no_results_planet_names' => 'No planets found',
     'sh_col_players_name' => 'Players Name',
     'sh_col_alliance' => 'Alliance',
     'sh_col_homeworld' => 'Homeworld',
@@ -112,6 +112,9 @@ $lang = [
     'sh_col_member' => 'Member',
     'sh_col_points' => 'Points',
     'sh_col_planet' => 'Planet',
+    'sh_tip_apply' => 'Apply for this alliance',
+    'sh_tip_write' => 'Write message',
+    'sh_tip_buddy_request' => 'Buddy request'
 ];
 
 /**

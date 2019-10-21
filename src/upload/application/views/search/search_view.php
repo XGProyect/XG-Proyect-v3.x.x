@@ -10,12 +10,12 @@
                     {sh_put_in_leyend}
                     <br><br>
                     <select name="search_type">
-                        <option value="option_player_name"{option_player_name}>{sh_option_player_name}</option>
-                        <option value="option_alliance_tag"{option_alliance_tag}>{sh_option_alliance_tag}</option>
-                        <option value="option_planet_names"{option_planet_names}>{sh_option_planet_names}</option>
+                        <option value="player_name"{player_name}>{sh_option_player_name}</option>
+                        <option value="alliance_tag"{alliance_tag}>{sh_option_alliance_tag}</option>
+                        <option value="planet_names"{planet_names}>{sh_option_planet_names}</option>
                     </select>
                     &nbsp;&nbsp;
-                    <input type="text" name="search_text" value="{searchtext}">
+                    <input type="text" name="search_text" value="{search_text}">
                     &nbsp;&nbsp;
 
                     <input type="submit" value="{sh_search_button}">

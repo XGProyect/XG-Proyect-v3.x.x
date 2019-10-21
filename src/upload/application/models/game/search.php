@@ -98,13 +98,13 @@ class Search
                     a.`alliance_id`,
                     a.`alliance_name`,
                     a.`alliance_tag`,
-                    a.`alliance_request_notallow`,
-                    s.`alliance_statistic_total_points` AS `points`,
-                    (SELECT COUNT(user_id) AS `ally_members` FROM `" . USERS . "` WHERE `user_ally_id` = a.`alliance_id`) AS `ally_members`
+                    a.`alliance_request_notallow` AS `alliance_requests`,
+                    s.`alliance_statistic_total_points` AS `alliance_points`,
+                    (SELECT COUNT(user_id) AS `ally_members` FROM `" . USERS . "` WHERE `user_ally_id` = a.`alliance_id`) AS `alliance_members`
                 FROM `" . ALLIANCE . "` AS a
                     LEFT JOIN `" . ALLIANCE_STATISTICS . "` AS s ON a.`alliance_id` = s.`alliance_statistic_alliance_id`
                 WHERE (a.alliance_name LIKE '%" . $this->db->escapeValue($allianceTag) . "%')
-                    OR (a.alliance_name LIKE '%" . $this->db->escapeValue($allianceTag) . "%')
+                    OR (a.alliance_tag LIKE '%" . $this->db->escapeValue($allianceTag) . "%')
                 LIMIT " . MAX_SEARCH_RESULTS . ";"
             );
         }
