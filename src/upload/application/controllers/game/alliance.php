@@ -439,7 +439,7 @@ class Alliance extends Controller
     {
         $request = filter_input_array(INPUT_POST);
         
-        if ($this->_alliance->getCurrentAlliance()->getAllianceRequestNotAllow()) {
+        if (!$this->_alliance->getCurrentAlliance()->getAllianceRequestNotAllow()) {
             
             FunctionsLib::message($this->getLang()['al_alliance_closed'], 'game.php?page=alliance', 3);
         }
@@ -770,8 +770,8 @@ class Alliance extends Controller
                     'text' => $text[$t],
                     'alliance_web' => $this->_alliance->getCurrentAlliance()->getAllianceWeb(),
                     'alliance_image' => $this->_alliance->getCurrentAlliance()->getAllianceImage(),
-                    'alliance_request_notallow_0' => $this->_alliance->getCurrentAlliance()->getAllianceRequestNotAllow() == SwitchInt::on ? 'selected' : '',
-                    'alliance_request_notallow_1' => $this->_alliance->getCurrentAlliance()->getAllianceRequestNotAllow() == SwitchInt::off ? 'selected' : '',
+                    'alliance_request_notallow_0' => $this->_alliance->getCurrentAlliance()->getAllianceRequestNotAllow() == SwitchInt::off ? 'selected' : '',
+                    'alliance_request_notallow_1' => $this->_alliance->getCurrentAlliance()->getAllianceRequestNotAllow() == SwitchInt::on ? 'selected' : '',
                     'alliance_owner_range' => $this->_alliance->getCurrentAlliance()->getAllianceOwnerRange(),
                 ]
             )
