@@ -88,7 +88,7 @@ if ($selectedVar == 'XG'){
     LangManager::getInstance()->setImplementation(new XGLangImplementation());
 }
 else{
-    LangManager::getInstance()->setImplementation(new MoonsLangImplementation());
+    LangManager::getInstance()->setImplementation(new XGLangImplementation());
 }
 
 

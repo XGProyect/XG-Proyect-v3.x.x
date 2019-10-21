@@ -28,7 +28,6 @@
  */
 
 require (dirname(__DIR__) . DIRECTORY_SEPARATOR ."utils".DIRECTORY_SEPARATOR."includer.php");
-require (OPBEPATH . "tests".DIRECTORY_SEPARATOR."runnable".DIRECTORY_SEPARATOR."langs".DIRECTORY_SEPARATOR."MoonsLangImplementation.php");
 require (OPBEPATH . "tests".DIRECTORY_SEPARATOR."runnable".DIRECTORY_SEPARATOR."langs".DIRECTORY_SEPARATOR."XGLangImplementation.php");
 
 class RunnableTest
