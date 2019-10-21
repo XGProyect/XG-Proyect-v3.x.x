@@ -1,8 +1,11 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * Search Controller
  *
- * PHP Version 5.5+
+ * PHP Version 7+
  *
  * @category Controller
  * @package  Application
@@ -17,6 +20,8 @@ use application\core\Controller;
 use application\core\Database;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
+
+use MODULE_ID;
 
 /**
  * Search Class
@@ -33,10 +38,26 @@ class Search extends Controller
 
     const MODULE_ID = 17;
 
-    private $_current_user;
-    private $_lang;
-    private $_noob;
-    private $max_results;
+
+    /**
+     *
+     * @var type \Users_library
+     */
+    private $_user;
+
+    /**
+     * Contains the search terms provided by the player
+     *
+     * @var array
+     */
+    private $_search_terms = [
+        'search_type' => '',
+        'option_player_name' => '',
+        'option_alliance_tag' => '',
+        'option_planet_names' => '',
+        'search_text' => '',
+        'error_block' => ''
+    ];
 
     /**
      * __construct()
@@ -48,40 +69,84 @@ class Search extends Controller
         // check if session is active
         parent::$users->checkSession();
 
+        // load Model
+        parent::loadModel('game/search');
+
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
-        $this->_db = new Database();
-        $this->_lang = parent::$lang;
-        $this->_current_user = parent::$users->getUserData();
-        $this->_noob = FunctionsLib::loadLibrary('NoobsProtectionLib');
+        // set data
+        $this->_user = $this->getUserData();
 
-        $this->max_results = MAX_SEARCH_RESULTS;
+        // time to do something
+        $this->runAction();
 
-        $this->build_page();
+        // build the page
+        $this->buildPage();
     }
 
     /**
-     * method __destruct
-     * param
-     * return close db connection
+     * Run an action
+     * 
+     * @return void
      */
-    public function __destruct()
+    private function runAction(): void
     {
-        $this->_db->closeConnection();
+        $search_query = filter_input_array(INPUT_POST, [
+            'search_type' => FILTER_SANITIZE_STRING,
+            'search_text' => FILTER_SANITIZE_STRING
+        ]);
+        
+        $this->_search_terms['search_type'] = $search_query['search_type'];
+        $this->_search_terms[$search_query['search_type']] = 'selected = "selected"';
+        $this->_search_terms['search_text'] = $search_query['search_text'];
+        $this->_search_terms['error_block'] = $this->getLang()['sh_error_empty'];
+
+        if (!empty($search_query['search_type'])) {
+
+            switch($search_query['search_type']) {
+                case 'option_player_name':
+                default:
+    
+                    $results = $this->Search_Model->getResultsByPlayerName($search_query['search_text']);
+    
+                break;
+                case 'option_alliance_tag':
+                    
+                    $results = $this->Search_Model->getResultsByAllianceTag($search_query['search_text']);
+    
+                break;
+                case 'option_planet_names':
+    
+                    $results = $this->Search_Model->getResultsByPlanetName($search_query['search_text']);
+    
+                break;
+            }
+
+            $this->buildResultsBlock($results);
+        }
     }
 
     /**
-     * method build_page
-     * param
-     * return main method, loads everything
+     * Build the page
+     * 
+     * @return void
      */
-    private function build_page()
+    private function buildPage(): void
     {
-        $parse = $this->_lang;
-        $type = isset($_POST['type']) ? $_POST['type'] : '';
-        $searchtext = $this->_db->escapeValue(isset($_POST['searchtext']) ? $_POST['searchtext'] : '');
-        $search_results = '';
+        parent::$page->display(
+            $this->getTemplate()->set(
+                'search/search_view',
+                array_merge(
+                    $this->getLang(),
+                    $this->_search_terms,
+                    [
+                        'search_results' => [],
+                    ]
+                )
+            ) 
+        );
+        /*
 
         if ($_POST) {
             switch ($type) {
@@ -89,48 +154,24 @@ class Search extends Controller
                 default:
                     $table = parent::$page->getTemplate('search/search_user_table');
                     $row = parent::$page->getTemplate('search/search_user_row');
-                    $search = $this->_db->query("SELECT u.user_id AS user_id, u.user_name, u.user_authlevel, p.planet_name, p.planet_galaxy, p.planet_system, p.planet_planet, s.user_statistic_total_rank AS rank, a.alliance_id, a.alliance_name
-														FROM " . USERS . " AS u
-														INNER JOIN " . USERS_STATISTICS . " AS s ON s.user_statistic_user_id = u.user_id
-														INNER JOIN " . PLANETS . " AS p ON p.`planet_id` = u.user_home_planet_id
-														LEFT JOIN " . ALLIANCE . " AS a ON a.alliance_id = u.user_ally_id
-														WHERE u.user_name LIKE '%" . $searchtext . "%' LIMIT " . $this->max_results . ";");
+
                     break;
                 case 'planetname':
                     $table = parent::$page->getTemplate('search/search_user_table');
                     $row = parent::$page->getTemplate('search/search_user_row');
-                    $search = $this->_db->query("SELECT u.user_id AS user_id, u.user_name, u.user_authlevel, p.planet_name, p.planet_galaxy, p.planet_system, p.planet_planet, s.user_statistic_total_rank AS rank, a.alliance_id, a.alliance_name
-														FROM " . USERS . " AS u
-														INNER JOIN " . USERS_STATISTICS . " AS s ON s.user_statistic_user_id = u.user_id
-														INNER JOIN " . PLANETS . " AS p ON p.`planet_user_id` = u.user_id
-														LEFT JOIN " . ALLIANCE . " AS a ON a.alliance_id = u.user_ally_id
-														WHERE p.planet_name LIKE '%" . $searchtext . "%' LIMIT " . $this->max_results . ";");
+
 
                     break;
                 case 'allytag':
                     $table = parent::$page->getTemplate('search/search_ally_table');
                     $row = parent::$page->getTemplate('search/search_ally_row');
-                    $search = $this->_db->query("SELECT a.alliance_id,
-                    									a.alliance_name,
-                    									a.alliance_tag,
-                    									s.alliance_statistic_total_points as points,
-                    									(SELECT COUNT(user_id) AS `ally_members` FROM `" . USERS . "` WHERE `user_ally_id` = a.`alliance_id`) AS `ally_members`
-                    								FROM " . ALLIANCE . " AS a
-													LEFT JOIN " . ALLIANCE_STATISTICS . " AS s ON a.alliance_id = s.alliance_statistic_alliance_id
-                    								WHERE a.alliance_tag LIKE '%" . $searchtext . "%' LIMIT " . $this->max_results . ";");
+
 
                     break;
                 case 'allyname':
                     $table = parent::$page->getTemplate('search/search_ally_table');
                     $row = parent::$page->getTemplate('search/search_ally_row');
-                    $search = $this->_db->query("SELECT a.alliance_id,
-                    										a.alliance_name,
-                    										a.alliance_tag,
-                    										s.alliance_statistic_total_points as points,
-                    										(SELECT COUNT(user_id) AS `ally_members` FROM `" . USERS . "` WHERE `user_ally_id` = a.`alliance_id`) AS `ally_members`
-                    								FROM " . ALLIANCE . " AS a
-													LEFT JOIN " . ALLIANCE_STATISTICS . " AS s ON a.alliance_id = s.alliance_statistic_alliance_id
-                    								WHERE a.alliance_name LIKE '%" . $searchtext . "%' LIMIT " . $this->max_results . ";");
+
                     break;
             }
         }
@@ -162,17 +203,22 @@ class Search extends Controller
                 $parse['result_list'] = $result_list;
                 $search_results = parent::$page->parseTemplate($table, $parse);
             }
-        }
-
-        $parse['type_playername'] = ( $type == "playername" ) ? " selected" : "";
-        $parse['type_planetname'] = ( $type == "planetname" ) ? " selected" : "";
-        $parse['type_allytag'] = ( $type == "allytag" ) ? " selected" : "";
-        $parse['type_allyname'] = ( $type == "allyname" ) ? " selected" : "";
-        $parse['searchtext'] = $searchtext;
-        $parse['search_results'] = $search_results;
-
-        parent::$page->display(parent::$page->parseTemplate(parent::$page->getTemplate('search/search_body'), $parse));
+        }*/
     }
+
+    private function buildResultsBlock(array $results)
+    {
+        if (count($results) <= 0) {
+            
+            $this->_search_terms['error_block'] = $this->getLang()['sh_error_no_results_' . $this->_search_terms['search_type']];
+        } else {
+
+            foreach ($results as $result) {
+
+            }
+        }
+    }
+
 
     /**
      * Set the user position or not based on its level

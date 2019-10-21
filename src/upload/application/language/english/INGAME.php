@@ -90,6 +90,28 @@ $lang = [
     // changelog
     'ch_version' => 'Version',
     'ch_description' => 'Description',
+
+    // search page
+    'sh_search_universe' => 'Search Universe',
+    'sh_put_in_leyend' => 'Put in player, alliance or planet name',
+    'sh_search_button' => 'Search',
+    'sh_option_player_name' => 'Player names',
+    'sh_option_alliance_tag' => 'Alliances/Tags',
+    'sh_option_planet_names' => 'Planet names',
+    'sh_error_empty' => 'No search term entered',
+    'sh_error_no_results_option_player_name' => 'No players found',
+    'sh_error_no_results_option_alliance_tag' => 'No alliances found',
+    'sh_error_no_results_option_planet_names' => 'No planets found',
+    'sh_col_players_name' => 'Players Name',
+    'sh_col_alliance' => 'Alliance',
+    'sh_col_homeworld' => 'Homeworld',
+    'sh_col_position' => 'Position',
+    'sh_col_highscore_ranking' => 'Highscore ranking',
+    'sh_col_action' => 'Action',
+    'sh_col_tag' => 'Tag',
+    'sh_col_member' => 'Member',
+    'sh_col_points' => 'Points',
+    'sh_col_planet' => 'Planet',
 ];
 
 /**
@@ -1084,24 +1106,6 @@ $lang['st_per'] = 'by';
 $lang['st_in_the_positions'] = 'in ranks';
 $lang['st_actions'] = 'Actions';
 $lang['st_ally_request'] = 'Send request to this alliance';
-
-//----------------------------------------------------------------------------//
-//SEARCH
-$lang['sh_tag'] = 'Tag';
-$lang['sh_name'] = 'Name';
-$lang['sh_members'] = 'Member';
-$lang['sh_points'] = 'Points';
-$lang['sh_searcg_in_the_universe'] = 'Search Universe';
-$lang['sh_player_name'] = 'Player Name';
-$lang['sh_planet_name'] = 'Planet Name';
-$lang['sh_alliance_tag'] = 'Alliance Tag';
-$lang['sh_alliance_name'] = 'Alliance Name';
-$lang['sh_search'] = 'search';
-$lang['sh_buddy_request'] = 'Buddy request';
-$lang['sh_alliance'] = 'Alliance';
-$lang['sh_planet'] = 'Planet';
-$lang['sh_coords'] = 'Position';
-$lang['sh_position'] = 'Rank';
 
 //----------------------------------------------------------------------------//
 //OPTIONS

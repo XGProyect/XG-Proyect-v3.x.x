@@ -90,6 +90,28 @@ $lang = [
     // changelog
     'ch_version' => 'Versión',
     'ch_description' => 'Descripción',
+
+    // search page
+    'sh_search_universe' => 'Búsqueda en el Universo de XG Proyect',
+    'sh_put_in_leyend' => 'Introduce nombre de jugador, planeta o alianza',
+    'sh_search_button' => 'Buscar',
+    'sh_option_player_name' => 'Nombres de jugadores',
+    'sh_option_alliance_tag' => 'Alianzas/Etiquetas',
+    'sh_option_planet_names' => 'Nombres de planetas',
+    'sh_error_empty' => 'No se ha introducido término de búsqueda',
+    'sh_error_no_results_option_player_name' => 'No se encontraron jugadores',
+    'sh_error_no_results_option_alliance_tag' => 'No se han encontrado alianzas',
+    'sh_error_no_results_option_planet_names' => 'No fue posible encontrar ningún planeta',
+    'sh_col_players_name' => 'Nombre del jugador',
+    'sh_col_alliance' => 'Alianza',
+    'sh_col_homeworld' => '	Planeta Principal',
+    'sh_col_position' => 'Posición',
+    'sh_col_highscore_ranking' => 'Clasificación',
+    'sh_col_action' => 'Acción',
+    'sh_col_tag' => 'Etiqueta',
+    'sh_col_member' => 'Miembros',
+    'sh_col_points' => 'Puntos',
+    'sh_col_planet' => 'Planeta',
 ];
 
 /**
@@ -1098,24 +1120,6 @@ $lang['st_per'] = 'por';
 $lang['st_in_the_positions'] = 'en las posiciones';
 $lang['st_actions'] = 'Acciones';
 $lang['st_ally_request'] = 'Echar solicitud a esta alianza';
-
-//----------------------------------------------------------------------------//
-//SEARCH
-$lang['sh_tag'] = 'Etiqueta';
-$lang['sh_name'] = 'Nombre';
-$lang['sh_members'] = 'Miembros';
-$lang['sh_points'] = 'Puntos';
-$lang['sh_searcg_in_the_universe'] = 'Buscar en el Universo';
-$lang['sh_player_name'] = 'Nombre del jugador';
-$lang['sh_planet_name'] = 'Nombre del planeta';
-$lang['sh_alliance_tag'] = 'Etiqueta de la alianza';
-$lang['sh_alliance_name'] = 'Nombre de la alianza';
-$lang['sh_search'] = 'Buscar';
-$lang['sh_buddy_request'] = 'Solicitud de compañeros';
-$lang['sh_alliance'] = 'Alianza';
-$lang['sh_planet'] = 'Planeta';
-$lang['sh_coords'] = 'Coordenadas';
-$lang['sh_position'] = 'Posición';
 
 //----------------------------------------------------------------------------//
 //OPTIONS
