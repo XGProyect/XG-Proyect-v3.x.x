@@ -249,7 +249,7 @@ class Notes extends Controller
         $note_id = filter_input(INPUT_GET, 'n', FILTER_VALIDATE_INT);
         $selected = [
             'selected_2' => '',
-            'selected_1' => '',
+            'selected_1' => 'selected="selected"',
             'selected_0' => ''
         ];
         
@@ -257,6 +257,7 @@ class Notes extends Controller
         if ($edit_view == 2 && !is_null($note_id)) {
             
             $note = $this->Notes_Model->getNoteById($this->_user['user_id'], $note_id);
+            $selected = array_fill_keys(array_keys($selected), null); // clear values keeping the keys
             
             if ($note) {
 
