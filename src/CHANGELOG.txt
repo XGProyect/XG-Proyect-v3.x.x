@@ -1,18 +1,22 @@
 '3.1.0' =>
 Core
-[#000] New core, for all the pages.-
+[#000] New core, for all the pages, PHP 7.1+.-
 [#000] Migrated to Parser library by CodeIgniter.-
 [#000] Migrated queries to Models.-
 [#000] New single page for private messages called "chat", will provably mutate into a real chat in the future.-
 [#000] Re-sorted some language lines.-
 [#000] Changelog migrated into the database using two new tables "languages" and "changelog".-
+[#000] Options page rewritten into preferences page, with simplified amount of features, deprecating many from the old ogame version.-
+[#000] Pages templates structure simplified to follow the controllers and models structure into adm, ajax, game, home and install.-
+[#000] Menu UI set a little bit closer to OGame's redesign.-
 
 Project
 [#000] Added Unit Testing.-
+[#000] Added Docker.-
 
 Features
-[#000] New features.-
-
+[#000] Seach pages includes new texts and simplified view.-
+[#000] New variables for the Bomber.-
 
 '3.0.4' =>
 CORE
