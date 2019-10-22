@@ -8,11 +8,11 @@
 XG Proyect
 ====
 
-**X**treme **G**amez Proyect  
+**X**treme **G**amez **Proyect**o  
 Support: http://www.xgproyect.org/  
 Live Server: http://server.xgproyect.org/  
 
-Require PHP >= 5.6  
+Require PHP >= 7.1  
 Require MySQLi >= 5.0.0  
 
 ![Free](http://www.gnu.org/graphics/agplv3-155x51.png)
@@ -27,7 +27,7 @@ Point you browser to your localhost and follow the step by step instructions pro
 
 We are happy to deliver this software giving others the possibility to have a good OGame Clon.  
 On the other hand, it's a pleasure to see people using XG Proyect.  
-<a href="http://www.xgproyect.org/privatemessage/new/1" target="_blank">Send me a PM</a> in the forum so I can put your game logo here!  
+<a href="https://github.com/XGProyect/XG-Proyect-v3.x.x/issues" target="_blank">Create a ticket</a> on GitHub so I can put your game logo here!  
 
 ![xgproyect](http://www.xgproyect.org/images/misc/xg-logo.png)
 
