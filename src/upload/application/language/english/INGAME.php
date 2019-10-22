@@ -1107,50 +1107,6 @@ $lang['st_actions'] = 'Actions';
 $lang['st_ally_request'] = 'Send request to this alliance';
 
 //----------------------------------------------------------------------------//
-//OPTIONS
-$lang['op_cant_activate_vacation_mode'] = 'If you\'re building or moving fleets will not be able to enter on vacation mode.';
-$lang['op_password_changed'] = 'Password has been changed<br /><a href="index.php" target="_top">Back</a>';
-$lang['op_username_changed'] = 'Username changed<br /><a href="index.php" target="_top">Back</a>';
-$lang['op_options_changed'] = 'Changes saved.<br /><a href="game.php?page=options">Back</a>';
-$lang['op_vacation_mode_title'] = 'Vacation mode';
-$lang['op_vacation_mode_active_message'] = 'Vacation mode has been turned on. Vacation until at least:';
-$lang['op_end_vacation_mode'] = 'Finish vacation mode';
-$lang['op_save_changes'] = 'save changes';
-$lang['op_user_data'] = 'User Data';
-$lang['op_username'] = 'Username';
-$lang['op_old_pass'] = 'Old password';
-$lang['op_new_pass'] = 'New password (min. 8 characters)';
-$lang['op_repeat_new_pass'] = 'New password (repeat)';
-$lang['op_email_adress'] = 'Email address';
-$lang['op_permanent_email_adress'] = 'Permanent Address';
-$lang['op_general_settings'] = 'General Options';
-$lang['op_sort_planets_by'] = 'Sort planets by:';
-$lang['op_sort_kind'] = 'Assortment sequence:';
-$lang['op_deactivate_ipcheck'] = 'Disable IP Check';
-$lang['op_galaxy_settings'] = 'Galaxy View Options';
-$lang['op_spy_probes_number'] = 'Number of espionage probes';
-$lang['op_max_fleets_messages'] = 'Maximum fleet messages';
-$lang['op_shortcut'] = 'Shortcut';
-$lang['op_show'] = 'Show';
-$lang['op_spy'] = 'Spy';
-$lang['op_write_message'] = 'Write message';
-$lang['op_add_to_buddy_list'] = 'Add to buddy list';
-$lang['op_missile_attack'] = 'Missile attack';
-$lang['op_vacation_delete_mode'] = 'Vacation mode / Delete account';
-$lang['op_activate_vacation_mode'] = 'Enable vacation mode';
-$lang['op_dlte_account'] = 'Delete account';
-$lang['op_email_adress_descrip'] = 'You can change this email address at any time. This will be entered as a permanent address after 7 days without changes.';
-$lang['op_deactivate_ipcheck_descrip'] = 'IP check means that a security logout occurs automatically when the IP changes or two people are logged into an account from different IPs. Disabling the IP check may represent a security risk!';
-$lang['op_spy_probes_number_descrip'] = 'Number of espionage probes that can be sent directly from each scan in the Galaxy menu.';
-$lang['op_activate_vacation_mode_descrip'] = 'Vacation mode will protect you during long absences. It can only be activated if nothing is being built (fleet, building, or defense), nothing is being researched, and none of your fleets are underway. Once it is activated, you are protected from new attacks. Attacks that have already started will be carried out. During vacation mode, production is set to zero and must be manually returned to 100 % after vacation mode ends. Vacation mode lasts a minimum of two days and can only be deactivated after this time.';
-$lang['op_dlte_account_descrip'] = 'If you mark this box, your account will be deleted automatically after 7 days.';
-$lang['op_sort_colonization'] = 'Colonization Date';
-$lang['op_sort_coords'] = 'Coordinates';
-$lang['op_sort_alpha'] = 'Alphabetic order';
-$lang['op_sort_asc'] = 'Ascendant';
-$lang['op_sort_desc'] = 'Decreasing';
-
-//----------------------------------------------------------------------------//
 //BANNED
 $lang['bn_no_players_banned'] = 'No banned players';
 

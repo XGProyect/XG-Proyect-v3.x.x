@@ -1120,50 +1120,6 @@ $lang['st_actions'] = 'Acciones';
 $lang['st_ally_request'] = 'Echar solicitud a esta alianza';
 
 //----------------------------------------------------------------------------//
-//OPTIONS
-$lang['op_cant_activate_vacation_mode'] = 'Si estás construyendo o moviendo flotas no podrás entrar al modo vaciones.';
-$lang['op_password_changed'] = 'La contraseña ha sido cambiada.<br /><a href="index.php" target="_top">Volver</a>';
-$lang['op_username_changed'] = 'El nombre de usuario ha sido cambiado.<br /><a href="index.php" target="_top">Volver</a>';
-$lang['op_options_changed'] = 'Los cambios se han guardado.<br /><a href="game.php?page=options">Volver</a>';
-$lang['op_vacation_mode_title'] = 'Modo vacaciones';
-$lang['op_vacation_mode_active_message'] = 'El modo vacaciones se ha encendido. Tendra que estar de vacaciones como mínimo hasta el: ';
-$lang['op_end_vacation_mode'] = 'Finalizar modo vacaciones';
-$lang['op_save_changes'] = 'Guardar cambios';
-$lang['op_user_data'] = 'Datos del usuario';
-$lang['op_username'] = 'Nombre de usuario';
-$lang['op_old_pass'] = 'Contraseña anterior';
-$lang['op_new_pass'] = 'Nueva contraseña (min. 8 Caracteres)';
-$lang['op_repeat_new_pass'] = 'Nueva contraseña (repetir)';
-$lang['op_email_adress'] = 'Dirección de correo electrónico';
-$lang['op_permanent_email_adress'] = 'Dirección permanente de correo electrónico';
-$lang['op_general_settings'] = 'Ajustes generales';
-$lang['op_sort_planets_by'] = 'Ordenar planetas por:';
-$lang['op_sort_kind'] = 'Tipo de ordenación:';
-$lang['op_deactivate_ipcheck'] = 'Desactivar comprobación de IP';
-$lang['op_galaxy_settings'] = 'Opciones de visión de Galaxia';
-$lang['op_spy_probes_number'] = 'Cantidad de sondas de espionaje';
-$lang['op_max_fleets_messages'] = 'Máximo mensajes de flotas';
-$lang['op_shortcut'] = 'Accesos directos';
-$lang['op_show'] = 'Mostrar';
-$lang['op_spy'] = 'Espiar';
-$lang['op_write_message'] = 'Escribir mensaje';
-$lang['op_add_to_buddy_list'] = 'Agregar a la lista de amigos';
-$lang['op_missile_attack'] = 'Ataque con misiles';
-$lang['op_vacation_delete_mode'] = 'Modo vacaciones / Borrar cuenta';
-$lang['op_activate_vacation_mode'] = 'Activar modo vacaciones';
-$lang['op_dlte_account'] = 'Borrar cuenta';
-$lang['op_email_adress_descrip'] = 'Esta dirección puede ser cambiada en cualquier momento. La dirección sera permanente si no se realizan cambios en los próximos 7 días.';
-$lang['op_deactivate_ipcheck_descrip'] = 'La comprobación de IP significa que se realizará un logout de seguridad automáticamente cuando cambie la IP o cuando 2 personas entren en la misma cuenta usando diferentes IPs.  Desactivar la comprobación de IP puede ser un agujero de seguridad!';
-$lang['op_spy_probes_number_descrip'] = 'Cantidad de sondas de espionaje que serán enviadas en cada espionaje desde el menú de galaxia';
-$lang['op_activate_vacation_mode_descrip'] = 'El modo vacaciones protege tu cuenta durante tu ausencia';
-$lang['op_dlte_account_descrip'] = 'Seleccionando esta opción borraras tu cuenta dentro de 7 dias';
-$lang['op_sort_colonization'] = 'Fecha de colonización';
-$lang['op_sort_coords'] = 'Coordenadas';
-$lang['op_sort_alpha'] = 'Orden alfabético';
-$lang['op_sort_asc'] = 'Creciente';
-$lang['op_sort_desc'] = 'Decreciente';
-
-//----------------------------------------------------------------------------//
 //BANNED
 $lang['bn_no_players_banned'] = 'No hay jugadores baneados';
 $lang['bn_exists'] = 'Existe ';
