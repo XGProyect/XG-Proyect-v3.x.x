@@ -60,11 +60,12 @@ class Updates_library
     public function deleteUsersByDeletedAndInactive($del_deleted, $del_inactive)
     {
         return $this->db->queryFetchAll(
-                "SELECT u.`user_id`
+            "SELECT u.`user_id`
             FROM `" . USERS . "` AS u
-            INNER JOIN `" . SETTINGS . "` AS s ON s.setting_user_id = u.user_id
-            WHERE (s.`setting_delete_account` < '" . $del_deleted . "' AND s.`setting_delete_account` <> 0) OR
-            (u.`user_onlinetime` < '" . $del_inactive . "' AND u.`user_onlinetime` <> 0 AND u.`user_authlevel` <> 3)"
+            INNER JOIN `" . PREFERENCES . "` AS p ON p.preference_user_id = u.user_id
+            WHERE (p.`preference_delete_mode` < '" . $del_deleted . "' 
+                AND p.`preference_delete_mode` <> 0) 
+                OR (u.`user_onlinetime` < '" . $del_inactive . "' AND u.`user_onlinetime` <> 0 AND u.`user_authlevel` <> 3)"
         );
     }
 

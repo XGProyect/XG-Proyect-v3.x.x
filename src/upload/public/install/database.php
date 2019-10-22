@@ -311,6 +311,18 @@ $tables['planets'] = "CREATE TABLE `" . PLANETS . "` (
 PRIMARY KEY (`planet_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;";
 
+$tables['preferences'] = "CREATE TABLE `" . PREFERENCES . "` (
+`preference_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+`preference_user_id` int(11) NOT NULL,
+`preference_spy_probes` tinyint(2) NOT NULL DEFAULT '1',
+`preference_planet_sort` tinyint(1) NOT NULL DEFAULT '0',
+`preference_planet_sort_sequence` tinyint(1) NOT NULL DEFAULT '0',
+`preference_vacation_mode` int(10) DEFAULT NULL,
+`preference_delete_mode` int(10) DEFAULT NULL,
+PRIMARY KEY (`preference_id`),
+UNIQUE KEY `preference_user_id` (`preference_user_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;";
+
 $tables['premium'] = "CREATE TABLE `" . PREMIUM . "` (
 `premium_user_id` INT(10) UNSIGNED NOT NULL,
 `premium_dark_matter` INT(10) NOT NULL DEFAULT '0',
@@ -362,23 +374,6 @@ $tables['sessions'] = "CREATE TABLE `" . SESSIONS . "` (
 `session_data` longtext NOT NULL,
 `session_last_accessed` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 PRIMARY KEY  (`session_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
-
-$tables['settings'] = "CREATE TABLE `" . SETTINGS . "` (
-`setting_user_id` INT(10) UNSIGNED NOT NULL,
-`setting_no_ip_check` TINYINT(1) NOT NULL DEFAULT '1',
-`setting_planet_sort` TINYINT(1) NOT NULL DEFAULT '0',
-`setting_planet_order` TINYINT(1) NOT NULL DEFAULT '0',
-`setting_probes_amount` TINYINT(1) NOT NULL DEFAULT '1',
-`setting_fleet_actions` TINYINT(1) NOT NULL DEFAULT '0',
-`setting_galaxy_espionage` TINYINT(1) NOT NULL DEFAULT '1',
-`setting_galaxy_write` TINYINT(1) NOT NULL DEFAULT '1',
-`setting_galaxy_buddy` TINYINT(1) NOT NULL DEFAULT '1',
-`setting_galaxy_missile` TINYINT(1) NOT NULL DEFAULT '1',
-`setting_vacations_status` TINYINT(1) NOT NULL DEFAULT '0',
-`setting_vacations_until` INT(10) NOT NULL DEFAULT '0',
-`setting_delete_account` INT(10) NOT NULL DEFAULT '0',
-  UNIQUE KEY `setting_user_id` (`setting_user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 
 $tables['ships'] = "CREATE TABLE `" . SHIPS . "` (

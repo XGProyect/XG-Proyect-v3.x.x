@@ -302,8 +302,8 @@ abstract class FunctionsLib extends XGPCore
     public static function sortPlanets($current_user)
     {
         $db = new Database();
-        $order = $current_user['setting_planet_order'] == 1 ? "DESC" : "ASC";
-        $sort = $current_user['setting_planet_sort'];
+        $order = $current_user['preference_planet_sort_sequence'] == 1 ? "DESC" : "ASC";
+        $sort = $current_user['preference_planet_sort'];
 
         $planets = "SELECT `planet_id`, `planet_name`, `planet_galaxy`, `planet_system`, `planet_planet`, `planet_type`
                     FROM " . PLANETS . "

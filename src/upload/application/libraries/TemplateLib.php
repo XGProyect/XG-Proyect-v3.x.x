@@ -369,23 +369,23 @@ class TemplateLib
         $parse['show_umod_notice'] = '';
 
         // When vacation mode did not expire
-        if ($this->current_user['setting_vacations_status']) {
+        if ($this->current_user['preference_vacation_mode'] > 0) {
 
             $parse['color'] = '#1DF0F0';
             $parse['message'] = $this->langs['tn_vacation_mode'] . date(
-                    FunctionsLib::readConfig('date_format_extended'), $this->current_user['setting_vacations_until']
+                    FunctionsLib::readConfig('date_format_extended'), $this->current_user['preference_vacation_mode']
             );
             $parse['jump_line'] = '<br/>';
 
             $parse['show_umod_notice'] = $this->parseTemplate($this->getTemplate('general/notices_view'), $parse);
         }
 
-        if ($this->current_user['setting_delete_account']) {
+        if ($this->current_user['preference_delete_mode'] > 0) {
 
             // When it is in delete mode
             $parse['color'] = '#FF0000';
             $parse['message'] = $this->langs['tn_delete_mode'] . date(
-                    FunctionsLib::readConfig('date_format_extended'), $this->current_user['setting_delete_account'] + (60 * 60 * 24 * 7)
+                    FunctionsLib::readConfig('date_format_extended'), $this->current_user['preference_delete_mode'] + (60 * 60 * 24 * 7)
             );
             $parse['jump_line'] = '';
 
@@ -482,7 +482,7 @@ class TemplateLib
             ['notes', $this->langs['lm_notes'], '', 'FFF', 'true', '2', '19'],
             ['buddies', $this->langs['lm_buddylist'], '', 'FFF', '', '2', '20'],
             ['search', $this->langs['lm_search'], '', 'FFF', '', '2', '17'],
-            ['options', $this->langs['lm_options'], '', 'FFF', '', '2', '21'],
+            ['preferences', $this->langs['lm_options'], '', 'FFF', '', '2', '21'],
             ['logout', $this->langs['lm_logout'], '', 'FFF', '', '2', ''],
             ['forums', $this->langs['lm_forums'], '', 'FFF', '', '3', '14']
         ];

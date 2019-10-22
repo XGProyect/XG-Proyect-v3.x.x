@@ -444,8 +444,8 @@ class Maker extends Controller
                 $this->_db->query("INSERT INTO " . PREMIUM . " SET
 										`premium_user_id` = '" . $last_user_id . "';");
 
-                $this->_db->query("INSERT INTO " . SETTINGS . " SET
-										`setting_user_id` = '" . $last_user_id . "';");
+                $this->_db->query("INSERT INTO " . PREFERENCES . " SET
+										`preference_user_id` = '" . $last_user_id . "';");
 
                 $this->_alert = AdministrationLib::saveMessage('ok', str_replace('%s', $pass, $this->_lang['mk_user_added']));
             } else {

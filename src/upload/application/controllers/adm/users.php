@@ -99,10 +99,10 @@ class Users extends Controller
                 $this->_user_query = $this->_db->queryFetch(
                     "SELECT u.*,
                             p.*,
-                            se.*,
+                            pr.*,
                             r.*
                     FROM " . USERS . " AS u
-                        INNER JOIN " . SETTINGS . " AS se ON se.setting_user_id = u.user_id
+                        INNER JOIN " . PREFERENCES . " AS pr ON pr.preference_user_id = u.user_id
                         INNER JOIN " . PREMIUM . " AS p ON p.premium_user_id = u.user_id
                         INNER JOIN " . RESEARCH . " AS r ON r.research_user_id = u.user_id
                     WHERE (u.user_id = '{$this->_id}') LIMIT 1;"
@@ -117,10 +117,10 @@ class Users extends Controller
                 $this->_user_query = $this->_db->queryFetch(
                     "SELECT u.*,
                             p.*,
-                            se.*,
+                            pr.*,
                             r.*
                     FROM " . USERS . " AS u
-                        INNER JOIN " . SETTINGS . " AS se ON se.setting_user_id = u.user_id
+                        INNER JOIN " . PREFERENCES . " AS pr ON pr.preference_user_id = u.user_id
                         INNER JOIN " . PREMIUM . " AS p ON p.premium_user_id = u.user_id
                         INNER JOIN " . RESEARCH . " AS r ON r.research_user_id = u.user_id
                     WHERE (u.user_id = '{$this->_id}') LIMIT 1;"
@@ -372,18 +372,12 @@ class Users extends Controller
     {
         $parse = $this->_lang;
         $parse['settings'] = str_replace('%s', $this->_user_query['user_name'], $this->_lang['us_user_settings']);
-        $parse['setting_planet_sort'] = $this->planet_sort_combo();
-        $parse['setting_planet_order'] = $this->planet_order_combo();
-        $parse['setting_no_ip_check'] = ( $this->_user_query['setting_no_ip_check'] ) ? ' checked="checked" ' : '';
-        $parse['setting_probes_amount'] = $this->_user_query['setting_probes_amount'];
-        $parse['setting_fleet_actions'] = $this->_user_query['setting_fleet_actions'];
-        $parse['setting_galaxy_espionage'] = ( $this->_user_query['setting_galaxy_espionage'] ) ? ' checked="checked" ' : '';
-        $parse['setting_galaxy_write'] = ( $this->_user_query['setting_galaxy_write'] ) ? ' checked="checked" ' : '';
-        $parse['setting_galaxy_buddy'] = ( $this->_user_query['setting_galaxy_buddy'] ) ? ' checked="checked" ' : '';
-        $parse['setting_galaxy_missile'] = ( $this->_user_query['setting_galaxy_missile'] ) ? ' checked="checked" ' : '';
-        $parse['setting_vacations_status'] = ( $this->_user_query['setting_vacations_status'] ) ? ' checked="checked" ' : '';
-        $parse['setting_vacations_until'] = ( $this->_user_query['setting_vacations_until'] ) ? $this->vacation_set() : '';
-        $parse['setting_delete_account'] = ( $this->_user_query['setting_delete_account'] ) ? ' checked="checked" ' : '';
+        $parse['preference_planet_sort'] = $this->planet_sort_combo();
+        $parse['preference_planet_sort_sequence'] = $this->planet_order_combo();
+        $parse['preference_spy_probes'] = $this->_user_query['preference_spy_probes'];
+        $parse['preference_vacations_status'] = ( $this->_user_query['preference_vacation_mode'] > 0 ) ? ' checked="checked" ' : '';
+        $parse['preference_vacation_mode'] = ( $this->_user_query['preference_vacation_mode'] > 0 ) ? $this->vacation_set() : '';
+        $parse['preference_delete_mode'] = ( $this->_user_query['preference_delete_mode'] ) ? ' checked="checked" ' : '';
         $parse['alert_info'] = ( $this->_alert_type != '' ) ? AdministrationLib::saveMessage($this->_alert_type, $this->_alert_info) : '';
 
         return parent::$page->parseTemplate(parent::$page->getTemplate("adm/users_settings_view"), $parse);
@@ -768,40 +762,36 @@ class Users extends Controller
     private function save_settings()
     {
         $vacation_time = FunctionsLib::getDefaultVacationTime(); // DEFAULT VACATION TIME BEFORE A USER CAN REMOVE IT
-        $setting_planet_sort = ( ( isset($_POST['setting_planet_sort']) ) ? (int) $_POST['setting_planet_sort'] : 0 );
-        $setting_planet_order = ( ( isset($_POST['setting_planet_order']) ) ? (int) $_POST['setting_planet_order'] : 0 );
-        $setting_no_ip_check = ( ( isset($_POST['setting_no_ip_check']) && $_POST['setting_no_ip_check'] == 'on' ) ? 1 : 0 );
-        $setting_probes_amount = ( ( isset($_POST['setting_probes_amount']) ) ? (int) $_POST['setting_probes_amount'] : 0 );
-        $setting_fleet_actions = ( ( isset($_POST['setting_fleet_actions']) ) ? (int) $_POST['setting_fleet_actions'] : 0 );
-        $setting_galaxy_espionage = ( ( isset($_POST['setting_galaxy_espionage']) && $_POST['setting_galaxy_espionage'] == 'on' ) ? 1 : 0 );
-        $setting_galaxy_write = ( ( isset($_POST['setting_galaxy_write']) && $_POST['setting_galaxy_write'] == 'on' ) ? 1 : 0 );
-        $setting_galaxy_buddy = ( ( isset($_POST['setting_galaxy_buddy']) && $_POST['setting_galaxy_buddy'] == 'on' ) ? 1 : 0 );
-        $setting_galaxy_missile = ( ( isset($_POST['setting_galaxy_missile']) && $_POST['setting_galaxy_missile'] == 'on' ) ? 1 : 0 );
-        $setting_vacations_status = ( ( isset($_POST['setting_vacations_status']) && $_POST['setting_vacations_status'] == 'on' ) ? 1 : 0 );
-        $setting_vacations_until = ( ( isset($_POST['setting_vacations_status']) && $_POST['setting_vacations_status'] == 'on' ) ? $vacation_time : 0 );
-        $setting_delete_account = ( ( isset($_POST['setting_delete_account']) && $_POST['setting_delete_account'] == 'on' ) ? time() : 0 );
+        $preference_planet_sort = ( ( isset($_POST['preference_planet_sort']) ) ? (int) $_POST['preference_planet_sort'] : 0 );
+        $preference_planet_sort_sequence = ( ( isset($_POST['preference_planet_sort_sequence']) ) ? (int) $_POST['preference_planet_sort_sequence'] : 0 );
+        $preference_spy_probes = ( ( isset($_POST['preference_spy_probes']) ) ? (int) $_POST['preference_spy_probes'] : 0 );
+        $preference_vacations_status = ( ( isset($_POST['preference_vacations_status']) && $_POST['preference_vacations_status'] == 'on' ) ? 1 : 0 );
+        $preference_vacation_mode = ( ( isset($_POST['preference_vacations_status']) && $_POST['preference_vacations_status'] == 'on' ) ? "'" . $vacation_time . "'" : 'NULL' );
+        $preference_delete_mode = ( ( isset($_POST['preference_delete_mode']) && $_POST['preference_delete_mode'] == 'on' ) ? "'" . time() . "'" : 'NULL' );
 
         // BUILD THE SPECIFIC QUERY
-        if ($this->_user_query['setting_vacations_status'] == 1 && $setting_vacations_status == 0) {
+        if (($this->_user_query['preference_vacation_mode'] > 0) && $preference_vacations_status == 0) {
+
             // WE HAVE TO REMOVE HIM FROM VACATION AND SET PLANET PRODUCTION
             $vacation_head = " , " . PLANETS . " AS p";
             $vacation_condition = " AND p.`planet_user_id` = '" . (int) $this->_id . "'";
             $vacation_query = "
-			s.`setting_vacations_status` = '{$setting_vacations_status}',
-			s.`setting_vacations_until` = '{$setting_vacations_until}',
+			pr.`preference_vacation_mode` = {$preference_vacation_mode},
 			p.`planet_building_metal_mine_percent` = '10',
 			p.`planet_building_crystal_mine_percent` = '10',
 			p.`planet_building_deuterium_sintetizer_percent` = '10',
 			p.`planet_building_solar_plant_percent` = '10',
 			p.`planet_building_fusion_reactor_percent` = '10',
 			p.`planet_ship_solar_satellite_percent` = '10',";
-        } elseif ($this->_user_query['setting_vacations_status'] == 0 && $setting_vacations_status == 1) {
+        } elseif ($this->_user_query['preference_vacation_mode'] == 0 
+            or is_null($this->_user_query['preference_vacation_mode']) 
+            && $preference_vacations_status == 1) {
+
             // WE HAVE TO ADD HIM TO VACATION AND REMOVE PLANET PRODUCTION
             $vacation_head = " , " . PLANETS . " AS p";
             $vacation_condition = " AND p.`planet_user_id` = '" . (int) $this->_id . "'";
             $vacation_query = "
-			s.`setting_vacations_status` = '{$setting_vacations_status}',
-			s.`setting_vacations_until` = '{$setting_vacations_until}',
+			pr.`preference_vacation_mode` = {$preference_vacation_mode},
 			p.`planet_metal_perhour` = '" . FunctionsLib::readConfig('metal_basic_income') . "',
 			p.`planet_crystal_perhour` = '" . FunctionsLib::readConfig('crystal_basic_income') . "',
 			p.`planet_deuterium_perhour` = '" . FunctionsLib::readConfig('deuterium_basic_income') . "',
@@ -819,19 +809,13 @@ class Users extends Controller
             $vacation_query = '';
         }
 
-        $this->_db->query("UPDATE " . SETTINGS . " AS s{$vacation_head} SET
-									{$vacation_query}
-									s.`setting_no_ip_check` = '{$setting_no_ip_check}',
-									s.`setting_planet_sort` = '{$setting_planet_sort}',
-									s.`setting_planet_order` = '{$setting_planet_order}',
-									s.`setting_probes_amount` = '{$setting_probes_amount}',
-									s.`setting_fleet_actions` = '{$setting_fleet_actions}',
-									s.`setting_galaxy_espionage` = '{$setting_galaxy_espionage}',
-									s.`setting_galaxy_write` = '{$setting_galaxy_write}',
-									s.`setting_galaxy_buddy` = '{$setting_galaxy_buddy}',
-									s.`setting_galaxy_missile` = '{$setting_galaxy_missile}',
-									s.`setting_delete_account` = '{$setting_delete_account}'
-									WHERE s.`setting_user_id` = '{$this->_id}'{$vacation_condition}");
+        $this->_db->query("UPDATE " . PREFERENCES . " AS pr{$vacation_head} SET
+                                    {$vacation_query}
+                                    pr.`preference_spy_probes` = '{$preference_spy_probes}',
+									pr.`preference_planet_sort` = '{$preference_planet_sort}',
+									pr.`preference_planet_sort_sequence` = '{$preference_planet_sort_sequence}',									
+									pr.`preference_delete_mode` = {$preference_delete_mode}
+									WHERE pr.`preference_user_id` = '{$this->_id}'{$vacation_condition}");
 
 
         $this->_alert_info = $this->_lang['us_all_ok_message'];
@@ -1252,13 +1236,13 @@ class Users extends Controller
     {
         $sort = '';
         $sort_types = array(
-            0 => $this->_lang['us_user_setting_planet_sort_op1'],
-            1 => $this->_lang['us_user_setting_planet_sort_op2'],
-            2 => $this->_lang['us_user_setting_planet_sort_op3']
+            0 => $this->_lang['us_user_preference_planet_sort_op1'],
+            1 => $this->_lang['us_user_preference_planet_sort_op2'],
+            2 => $this->_lang['us_user_preference_planet_sort_op3']
         );
 
         foreach ($sort_types as $id => $name) {
-            $sort .= "<option value =\"{$id}\"" . ( ( $this->_user_query['setting_planet_sort'] == $id ) ? " selected" : "" ) . ">{$name}</option>";
+            $sort .= "<option value =\"{$id}\"" . ( ( $this->_user_query['preference_planet_sort'] == $id ) ? " selected" : "" ) . ">{$name}</option>";
         }
 
         return $sort;
@@ -1273,12 +1257,12 @@ class Users extends Controller
     {
         $order = '';
         $order_types = array(
-            0 => $this->_lang['us_user_setting_planet_order_op1'],
-            1 => $this->_lang['us_user_setting_planet_order_op2'],
+            0 => $this->_lang['us_user_preference_planet_sort_sequence_op1'],
+            1 => $this->_lang['us_user_preference_planet_sort_sequence_op2'],
         );
 
         foreach ($order_types as $id => $name) {
-            $order .= "<option value =\"{$id}\"" . ( ( $this->_user_query['setting_planet_order'] == $id ) ? " selected" : "" ) . ">{$name}</option>";
+            $order .= "<option value =\"{$id}\"" . ( ( $this->_user_query['preference_planet_sort_sequence'] == $id ) ? " selected" : "" ) . ">{$name}</option>";
         }
 
         return $order;
@@ -1789,7 +1773,7 @@ class Users extends Controller
      */
     private function vacation_set()
     {
-        return $this->_lang['us_user_setting_vacations_until'] . date(FunctionsLib::readConfig('date_format_extended'), $this->_user_query['setting_vacations_until']);
+        return $this->_lang['us_user_preference_vacations_until'] . date(FunctionsLib::readConfig('date_format_extended'), $this->_user_query['preference_vacation_mode']);
     }
 }
 

@@ -177,7 +177,7 @@ class Users_library
      */
     public function isOnVacations($user)
     {
-        return ($user['setting_vacations_status'] == 1);
+        return ($user['preference_vacation_mode'] > 0);
     }
     
     /**

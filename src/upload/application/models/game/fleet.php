@@ -226,10 +226,10 @@ class Fleet
                 u.`user_authlevel`,
                 u.`user_onlinetime`,
                 u.`user_ally_id`,
-                s.`setting_vacations_status`
+                pr.`preference_vacation_mode`
             FROM `" . PLANETS . "` p
             INNER JOIN `" . USERS . "` u ON u.`user_id` = p.`planet_user_id`
-            INNER JOIN `" . SETTINGS . "` s ON s.`setting_user_id` = u.`user_id`
+            INNER JOIN `" . PREFERENCES . "` pr ON pr.`preference_user_id` = u.`user_id`
             WHERE p.`planet_galaxy` = '" . $g . "'
                 AND p.`planet_system` = '" . $s . "'
                 AND p.`planet_planet` = '" . $p . "'

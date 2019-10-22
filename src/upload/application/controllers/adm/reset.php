@@ -92,7 +92,7 @@ class Reset extends Controller
         $this->_db->query("TRUNCATE TABLE " . PREMIUM . "");
         $this->_db->query("TRUNCATE TABLE " . RESEARCH . "");
         $this->_db->query("TRUNCATE TABLE " . REPORTS . "");
-        $this->_db->query("TRUNCATE TABLE " . SETTINGS . "");
+        $this->_db->query("TRUNCATE TABLE " . PREFERENCES . "");
         $this->_db->query("TRUNCATE TABLE " . USERS_STATISTICS . "");
         $this->_db->query("TRUNCATE TABLE " . SHIPS . "");
 
@@ -138,8 +138,8 @@ class Reset extends Controller
                     $this->_db->query("INSERT INTO " . PREMIUM . " SET
 											`premium_user_id` = '" . $last_id . "';");
 
-                    $this->_db->query("INSERT INTO " . SETTINGS . " SET
-											`setting_user_id` = '" . $last_id . "';");
+                    $this->_db->query("INSERT INTO " . PREFERENCES . " SET
+											`preference_user_id` = '" . $last_id . "';");
 
                     $this->_db->query("UPDATE " . USERS . " SET
 											`user_banned` = '0'

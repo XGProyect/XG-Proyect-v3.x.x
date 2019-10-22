@@ -168,7 +168,7 @@ class GalaxyLib extends XGPCore
         }
 
         // MISSILE
-        if ($this->current_user['setting_galaxy_missile'] == '1' && $this->isMissileActive()) {
+        if ($this->isMissileActive()) {
 
             $action['missile'] = $this->missileLink(self::PLANET_TYPE);
         }
@@ -357,7 +357,7 @@ class GalaxyLib extends XGPCore
         $status['inactive'] = '';
         $status['noob_protection'] = '';
 
-        if ($this->row_data['setting_vacations_status']) {
+        if ($this->row_data['preference_vacation_mode'] > 0) {
 
             $status['vacation'] = '<span class="vacation">' . $this->langs['gl_v'] . '</span>';
         }
@@ -493,29 +493,20 @@ class GalaxyLib extends XGPCore
 
         if ($this->row_data['user_id'] != $this->current_user['user_id']) {
 
-            if ($this->current_user['setting_galaxy_espionage'] == '1') {
+            $image = FunctionsLib::setImage(DPATH . 'img/e.gif', $this->langs['gl_spy']);
+            $attributes = "onclick=\"javascript:doit(6, " . $this->galaxy . ", " . $this->system . ", " .
+                $this->planet . ", 1, " . $this->current_user['preference_spy_probes'] . ");\"";
+            $links .= FunctionsLib::setUrl('', '', $image, $attributes) . '&nbsp;';
 
-                $image = FunctionsLib::setImage(DPATH . 'img/e.gif', $this->langs['gl_spy']);
-                $attributes = "onclick=\"javascript:doit(6, " . $this->galaxy . ", " . $this->system . ", " .
-                    $this->planet . ", 1, " . $this->current_user['setting_probes_amount'] . ");\"";
-                $links .= FunctionsLib::setUrl('', '', $image, $attributes) . '&nbsp;';
-            }
+            $image = FunctionsLib::setImage(DPATH . 'img/m.gif', $this->langs['write_message']);
+            $url = 'game.php?page=chat&playerId=' . $this->row_data['user_id'];
+            $links .= FunctionsLib::setUrl($url, '', $image) . '&nbsp;';
 
-            if ($this->current_user['setting_galaxy_write'] == '1') {
+            $image = FunctionsLib::setImage(DPATH . 'img/b.gif', $this->langs['gl_buddy_request']);
+            $url = "game.php?page=buddies&mode=2&u=" . $this->row_data['user_id'];
+            $links .= FunctionsLib::setUrl($url, '', $image, '') . '&nbsp;';
 
-                $image = FunctionsLib::setImage(DPATH . 'img/m.gif', $this->langs['write_message']);
-                $url = 'game.php?page=chat&playerId=' . $this->row_data['user_id'];
-                $links .= FunctionsLib::setUrl($url, '', $image) . '&nbsp;';
-            }
-
-            if ($this->current_user['setting_galaxy_buddy'] == '1') {
-
-                $image = FunctionsLib::setImage(DPATH . 'img/b.gif', $this->langs['gl_buddy_request']);
-                $url = "game.php?page=buddies&mode=2&u=" . $this->row_data['user_id'];
-                $links .= FunctionsLib::setUrl($url, '', $image, '') . '&nbsp;';
-            }
-
-            if ($this->current_user['setting_galaxy_missile'] == '1' && $this->isMissileActive()) {
+            if ($this->isMissileActive()) {
 
                 $image = FunctionsLib::setImage(DPATH . 'img/r.gif', $this->langs['gl_missile_attack']);
                 $url = 'game.php?page=galaxy&mode=2&galaxy=' . $this->galaxy . '&system=' . $this->system .
@@ -598,7 +589,7 @@ class GalaxyLib extends XGPCore
     private function spyLink($planet_type)
     {
         $attributes = "onclick=&#039javascript:doit(6, " . $this->galaxy . ", " . $this->system . ", " .
-            $this->planet . ", " . $planet_type . ", " . $this->current_user['setting_probes_amount'] . ");&#039";
+            $this->planet . ", " . $planet_type . ", " . $this->current_user['preference_spy_probes'] . ");&#039";
         return str_replace('"', '', FunctionsLib::setUrl('', '', $this->langs['type_mission'][6], $attributes));
     }
 
