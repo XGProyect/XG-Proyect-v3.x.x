@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * Preferences Model
  *
@@ -47,6 +50,23 @@ class Preferences
     public function __destruct()
     {
         $this->db->closeConnection();
+    }
+
+    /**
+     * Get all preferences by a certain user
+     * 
+     * @param int $user_id
+     * 
+     * @return array
+     */
+    public function getAllPreferencesByUserId(int $user_id): array
+    {
+        return $this->db->queryFetchAll(
+            "SELECT
+                p.*
+            FROM `" . PREFERENCES . "` p
+            WHERE p.`preference_user_id` = '" . $user_id . "';"
+        ) ?? [];
     }
 }
 

@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * Preferences Controller
  *
@@ -14,10 +17,12 @@
 namespace application\controllers\game;
 
 use application\core\Controller;
+use application\core\entities\PreferencesEntity;
 use application\core\enumerators\SwitchIntEnumerator as SwitchInt;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
 use application\libraries\Timing_library;
+use application\libraries\game\Preferences as Pref;
 
 use const MODULE_ID;
 
@@ -87,7 +92,10 @@ class Preferences extends Controller
      */
     private function setUpPreferences()
     {
-
+        $this->_preferences = new Pref(
+            $this->Preferences_Model->getAllPreferencesByUserId((int)$this->_user['user_id']),
+            (int)$this->_user['user_id']
+        );
     }
 
     /**
@@ -97,7 +105,7 @@ class Preferences extends Controller
      */
     private function runAction()
     {
-        
+        var_dump($this->_preferences->getCurrentPreference());
     }
 
     /**

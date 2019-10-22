@@ -1,8 +1,11 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * Preferences entity
  *
- * PHP Version 7+
+ * PHP Version 7.1+
  *
  * @category Core
  * @package  Application
@@ -43,71 +46,71 @@ class PreferencesEntity extends Entity
     /**
      * Return the preference id
      * 
-     * @return string
+     * @return int
      */
-    public function gePreferenceId()
+    public function gePreferenceId(): int
     {
-        return $this->_data['preference_id'];
+        return (int)$this->_data['preference_id'];
     }
 
     /**
      * Return the preference user id
      * 
-     * @return string
+     * @return int
      */
-    public function getPreferenceUsedId()
+    public function getPreferenceUsedId(): int
     {
-        return $this->_data['preference_user_id'];
+        return (int)$this->_data['preference_user_id'];
     }
 
     /**
      * Return the preference spy probes
      * 
-     * @return string
+     * @return int
      */
-    public function getPreferenceSpyProbes()
+    public function getPreferenceSpyProbes(): int
     {
-        return $this->_data['preference_spy_probes'];
+        return (int)$this->_data['preference_spy_probes'];
     }
 
     /**
      * Return the preference planet sort
      * 
-     * @return string
+     * @return int
      */
-    public function getPreferencePlanetSort()
+    public function getPreferencePlanetSort(): int
     {
-        return $this->_data['preference_planet_sort'];
+        return (int)$this->_data['preference_planet_sort'];
     }
 
     /**
      * Return the prefernce planet sort sequence
      * 
-     * @return string
+     * @return int
      */
-    public function getPreferencePlanetSortSequence()
+    public function getPreferencePlanetSortSequence(): int
     {
-        return $this->_data['preference_planet_sort_sequence'];
+        return (int)$this->_data['preference_planet_sort_sequence'];
     }
     
     /**
      * Return the preference vacation mode
      * 
-     * @return string
+     * @return int
      */
-    public function getPreferenceVacationMode()
+    public function getPreferenceVacationMode(): int
     {
-        return $this->_data['preference_vacation_mode'];
+        return (int)$this->_data['preference_vacation_mode'];
     }
 
     /**
      * Return the preference delete mode
      * 
-     * @return string
+     * @return int
      */
-    public function getPreferenceDeleteMode()
+    public function getPreferenceDeleteMode(): int
     {
-        return $this->_data['preference_delete_mode'];
+        return (int)$this->_data['preference_delete_mode'];
     }
 }
 

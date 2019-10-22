@@ -1,6 +1,6 @@
 <br />
 <div id="content">
-    <form action="game.php?page=preferences&mode=change" method="post">
+    <form action="game.php?page=preferences" method="post">
         <table width="519px">
             <tbody>
                 <tr>
@@ -54,7 +54,7 @@
                 </tr>
                 <tr>
                     <th colspan="2">
-                        <input value="{pr_use_settings}" type="submit">
+                        <input value="{pr_use_settings}" name="apply_settings" type="submit">
                     </th>
                 </tr>
                 <tr>
@@ -71,7 +71,7 @@
                 </tr>
                 <tr>
                     <th colspan="2">
-                        <input value="{pr_use_settings}" type="submit">
+                        <input value="{pr_use_settings}" name="apply_settings" type="submit">
                     </th>
                 </tr>
                 <tr>
@@ -103,7 +103,7 @@
                 </tr>
                 <tr>
                     <th colspan="2">
-                        <input value="{pr_use_settings}" type="submit">
+                        <input value="{pr_use_settings}" name="apply_settings" type="submit">
                     </th>
                 </tr>
                 <tr>
@@ -119,7 +119,7 @@
                 </tr>
                 <tr>
                     <th colspan="2">
-                        <input value="{pr_activate}" type="submit">
+                        <input value="{pr_activate}" name="activate_vacation_mode" type="submit">
                     </th>
                 </tr>
                 <tr>
@@ -138,7 +138,7 @@
                 </tr>
                 <tr>
                     <th colspan="2">
-                        <input value="{pr_use_settings}" type="submit">
+                        <input value="{pr_use_settings}" name="apply_settings" type="submit">
                     </th>
                 </tr>
             </tbody>
