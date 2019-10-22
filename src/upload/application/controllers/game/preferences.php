@@ -2,7 +2,7 @@
 /**
  * Preferences Controller
  *
- * PHP Version 7+
+ * PHP Version 7.1+
  *
  * @category Controller
  * @package  Application
@@ -14,14 +14,11 @@
 namespace application\controllers\game;
 
 use application\core\Controller;
-use application\core\enumerators\AllianceRanksEnumerator as AllianceRanks;
 use application\core\enumerators\SwitchIntEnumerator as SwitchInt;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
 use application\libraries\Timing_library;
 
-use const DPATH;
-use const JS_PATH;
 use const MODULE_ID;
 
 /**
@@ -110,7 +107,17 @@ class Preferences extends Controller
      */
     private function buildPage()
     {
-
+        parent::$page->display(
+            $this->getTemplate()->set(
+                'game/preferences_view',
+                array_merge(
+                    $this->getLang(),
+                    [
+    
+                    ]
+                )
+            )
+        );
     }
 }
 
