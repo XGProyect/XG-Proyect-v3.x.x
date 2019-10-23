@@ -17,6 +17,7 @@ use application\libraries\FleetsLib;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
 use application\libraries\OfficiersLib;
+use application\libraries\Timing_library as Timing;
 
 /**
  * Spy Class
@@ -216,7 +217,7 @@ class Spy extends Missions
                 $String .= $TitleString . " " . $target_data['planet_name'];
                 $String .= " <a href=\"game.php?page=galaxy&mode=3&galaxy=" . $target_data['planet_galaxy'] . "&system=" . $target_data['planet_system'] . "\">";
                 $String .= "[" . $target_data['planet_galaxy'] . ":" . $target_data['planet_system'] . ":" . $target_data['planet_planet'] . "]</a>";
-                $String .= $this->langs['sys_the'] . date(FunctionsLib::readConfig('date_format_extended'), time()) . "</td>";
+                $String .= $this->langs['sys_the'] . Timing::formatExtendedDate(time()) . "</td>";
                 $String .= "</tr><tr>";
                 $String .= "<td width=220>" . $this->langs['Metal'] . "</td><td width=220 align=right>" . FormatLib::prettyNumber($target_data['planet_metal']) . "</td><td>&nbsp;</td>";
                 $String .= "<td width=220>" . $this->langs['Crystal'] . "</td></td><td width=220 align=right>" . FormatLib::prettyNumber($target_data['planet_crystal']) . "</td>";

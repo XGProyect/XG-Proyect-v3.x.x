@@ -13,11 +13,13 @@
  */
 namespace application\controllers\game;
 
+use MODULE_ID;
 use application\core\Controller;
 use application\libraries\DevelopmentsLib;
 use application\libraries\FleetsLib;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
+use application\libraries\Timing_library as Timing;
 use application\libraries\Updates_library;
 
 /**
@@ -100,7 +102,7 @@ class Overview extends Controller
         // SHOW ALL THE INFORMATION, IN ORDER, ACCORDING TO THE TEMPLATE
         $parse['planet_name'] = $this->_current_planet['planet_name'];
         $parse['user_name'] = $this->_current_user['user_name'];
-        $parse['date_time'] = date(FunctionsLib::readConfig('date_format_extended'), time());
+        $parse['date_time'] = Timing::formatExtendedDate(time());
         $parse['Have_new_message'] = $block['messages'];
         $parse['fleet_list'] = $block['fleet_movements'];
         $parse['planet_image'] = $this->_current_planet['planet_image'];

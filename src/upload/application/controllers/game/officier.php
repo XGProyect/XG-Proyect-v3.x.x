@@ -13,14 +13,15 @@
  */
 namespace application\controllers\game;
 
+use DPATH;
+use MDOULE_ID;
 use application\core\Controller;
 use application\core\Database;
 use application\core\Enumerators\OfficiersEnumerator as OE;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
 use application\libraries\OfficiersLib;
-
-use MDOULE_ID;
+use application\libraries\Timing_library as Timing;
 
 /**
  * Officier Class
@@ -196,7 +197,7 @@ class Officier extends Controller
     {
         if (OfficiersLib::isOfficierActive($this->_user[$this->getObjects()->getObjects($item_id)])) {
 
-            return FormatLib::customColor($this->getLang()['of_active'] . ' ' . date(FunctionsLib::readConfig('date_format'), $this->_user[$this->getObjects()->getObjects($item_id)]), 'lime');
+            return FormatLib::customColor($this->getLang()['of_active'] . ' ' . Timing::formatShortDate($this->_user[$this->getObjects()->getObjects($item_id)]), 'lime');
         }
 
         return FormatLib::colorRed($this->getLang()['of_inactive']);

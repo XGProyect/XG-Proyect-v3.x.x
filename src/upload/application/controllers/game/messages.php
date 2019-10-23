@@ -2,7 +2,7 @@
 /**
  * Messages Controller
  *
- * PHP Version 7.1+
+ * PHP Version 7+
  *
  * @category Controller
  * @package  Application
@@ -18,7 +18,6 @@ use application\core\enumerators\MessagesEnumerator;
 use application\core\enumerators\SwitchIntEnumerator as SwitchInt;
 use application\libraries\FunctionsLib;
 use application\libraries\OfficiersLib;
-
 use const DPATH;
 use const MODULE_ID;
 

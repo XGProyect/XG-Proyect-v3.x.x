@@ -13,15 +13,16 @@
  */
 namespace application\libraries;
 
+use CI_Email;
 use application\core\Database;
-use application\core\enumerators\MessagesEnumerator;
-use application\core\enumerators\UserRanksEnumerator;
 use application\core\Options;
 use application\core\XGPCore;
+use application\core\enumerators\MessagesEnumerator;
+use application\core\enumerators\UserRanksEnumerator;
+use application\libraries\Timing_library as Timing;
 use application\libraries\messenger\MessagesFormat;
 use application\libraries\messenger\MessagesOptions;
 use application\libraries\messenger\Messenger;
-use CI_Email;
 
 
 /**
@@ -752,7 +753,7 @@ abstract class FunctionsLib extends XGPCore
         if ($user_row['user_banned'] > 0) {
 
             $parse = parent::$lang;
-            $parse['banned_until'] = date(FunctionsLib::readConfig('date_format_extended'), $user_row['user_banned']);
+            $parse['banned_until'] = Timing::formatExtendedDate($user_row['user_banned']);
 
             die(parent::$page->get('home/banned_message')->parse($parse));
         }

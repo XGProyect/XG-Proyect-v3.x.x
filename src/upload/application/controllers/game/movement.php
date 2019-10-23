@@ -218,12 +218,12 @@ class Movement extends Controller
                     'fleet_start' => FormatLib::prettyCoords(
                         $fleet->getFleetStartGalaxy(), $fleet->getFleetStartSystem(), $fleet->getFleetStartPlanet()
                     ),
-                    'fleet_start_time' => Timing_library::formatDefaultTime($fleet->getFleetCreation()),
+                    'fleet_start_time' => Timing::formatExtendedDate($fleet->getFleetCreation()),
                     'fleet_end' => FormatLib::prettyCoords(
                         $fleet->getFleetEndGalaxy(), $fleet->getFleetEndSystem(), $fleet->getFleetEndPlanet()
                     ),
-                    'fleet_end_time' => Timing_library::formatDefaultTime($fleet->getFleetStartTime()),
-                    'fleet_arrival' => Timing_library::formatDefaultTime($fleet->getFleetEndTime()),
+                    'fleet_end_time' => Timing::formatExtendedDate($fleet->getFleetStartTime()),
+                    'fleet_arrival' => Timing::formatExtendedDate($fleet->getFleetEndTime()),
                     'fleet_actions' => $this->buildActionsBlock($fleet),
                 ];
             }

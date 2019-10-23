@@ -447,7 +447,7 @@ class Buddies extends Controller
     {
         if ($buddy->getBuddyStatus() == BuddiesStatus::isBuddy) {
             
-            return Timing_library::setOnlineStatus($online_time);
+            return Timing::setOnlineStatus($online_time);
         } else {
             
             return $buddy->getRequestText();

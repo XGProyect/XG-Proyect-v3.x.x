@@ -15,6 +15,7 @@ namespace application\controllers\game;
 
 use application\core\Controller;
 use application\libraries\FunctionsLib;
+use application\libraries\Timing_library as Timing;
 
 /**
  * Change log Class
@@ -69,7 +70,7 @@ class Changelog extends Controller
                 $changes[] = [
                     'version_number' => $entry['changelog_version'],
                     'description' => nl2br(
-                        date(FunctionsLib::readConfig('date_format'), strtotime($entry['changelog_date'])) . '<br>' . $entry['changelog_description']
+                        Timing::formatShortDate($entry['changelog_date']) . '<br>' . $entry['changelog_description']
                     )
                 ];
             }

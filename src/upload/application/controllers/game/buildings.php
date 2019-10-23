@@ -13,13 +13,14 @@
  */
 namespace application\controllers\game;
 
+use Exception;
 use application\core\Controller;
-use application\libraries\buildings\Building;
 use application\libraries\DevelopmentsLib;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
 use application\libraries\OfficiersLib;
-use Exception;
+use application\libraries\Timing_library as Timing;
+use application\libraries\buildings\Building;
 
 /**
  * Buildings Class
@@ -851,7 +852,7 @@ class Buildings extends Controller
                             $ListIDRow .= "			pl = \"" . $PlanetID . "\";\n";
                             $ListIDRow .= "			t();\n";
                             $ListIDRow .= "		</script>";
-                            $ListIDRow .= "		<strong color=\"lime\"><br><font color=\"lime\">" . date(FunctionsLib::readConfig('date_format_extended'), $BuildEndTime) . "</font></strong>";
+                            $ListIDRow .= "		<strong color=\"lime\"><br><font color=\"lime\">" . Timing::formatExtendedDate($BuildEndTime) . "</font></strong>";
                         } else {
                             $ListIDRow .= "		<font color=\"red\">";
                             $ListIDRow .= "		<a href=\"game.php?page=" . $this->getCurrentPage() . "&listid=" . $ListID . "&amp;cmd=remove&amp;planet=" . $PlanetID . "\">" . $this->getLang()['bd_cancel'] . "</a></font>";

@@ -13,6 +13,8 @@
  */
 namespace application\libraries;
 
+use application\libraries\Timing_library as Timing;
+
 /**
  * TemplateLib Class
  *
@@ -21,7 +23,7 @@ namespace application\libraries;
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
- * @version  3.0.0
+ * @version  3.1.0
  */
 class TemplateLib
 {
@@ -372,9 +374,7 @@ class TemplateLib
         if ($this->current_user['preference_vacation_mode'] > 0) {
 
             $parse['color'] = '#1DF0F0';
-            $parse['message'] = $this->langs['tn_vacation_mode'] . date(
-                    FunctionsLib::readConfig('date_format_extended'), $this->current_user['preference_vacation_mode']
-            );
+            $parse['message'] = $this->langs['tn_vacation_mode'] . Timing::formatExtendedDate($this->current_user['preference_vacation_mode']);
             $parse['jump_line'] = '<br/>';
 
             $parse['show_umod_notice'] = $this->parseTemplate($this->getTemplate('general/notices_view'), $parse);
@@ -384,9 +384,7 @@ class TemplateLib
 
             // When it is in delete mode
             $parse['color'] = '#FF0000';
-            $parse['message'] = $this->langs['tn_delete_mode'] . date(
-                    FunctionsLib::readConfig('date_format_extended'), $this->current_user['preference_delete_mode'] + (60 * 60 * 24 * 7)
-            );
+            $parse['message'] = $this->langs['tn_delete_mode'] . Timing::formatExtendedDate($this->current_user['preference_delete_mode'] + (60 * 60 * 24 * 7));
             $parse['jump_line'] = '';
 
             $parse['show_umod_notice'] = $this->parseTemplate($this->getTemplate('general/notices_view'), $parse);

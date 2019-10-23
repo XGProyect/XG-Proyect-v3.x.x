@@ -13,8 +13,6 @@
  */
 namespace application\libraries;
 
-use application\core\XGPCore;
-
 /**
  * Timing_library Class
  *
@@ -25,7 +23,7 @@ use application\core\XGPCore;
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-abstract class Timing_library extends XGPCore
+abstract class Timing_library
 {
 
     /**
@@ -56,13 +54,13 @@ abstract class Timing_library extends XGPCore
     }
 
     /**
-     * Format time based on system default config
+     * Format time based on system default extended date config
      * 
      * @param string $time Time
      * 
      * @return string
      */
-    public static function formatDefaultTime($time)
+    public static function formatExtendedDate($time)
     {
         if (!is_numeric($time)) {
             
@@ -70,6 +68,23 @@ abstract class Timing_library extends XGPCore
         }
         
         return date(FunctionsLib::readConfig('date_format_extended'), $time);
+    }
+
+    /**
+     * Format time based on system default short date config
+     * 
+     * @param string $time Time
+     * 
+     * @return string
+     */
+    public static function formatShortDate($time)
+    {
+        if (!is_numeric($time)) {
+            
+            $time = strtotime($time);
+        }
+        
+        return date(FunctionsLib::readConfig('date_format'), $time);
     }
 
     /**

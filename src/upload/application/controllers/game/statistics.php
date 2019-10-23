@@ -13,10 +13,12 @@
  */
 namespace application\controllers\game;
 
+use MODULE_ID;
 use application\core\Controller;
 use application\core\Database;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
+use application\libraries\Timing_library as Timing;
 
 /**
  * Statistics Class
@@ -117,7 +119,7 @@ class Statistics extends Controller
 
             $start++;
 
-            $parse['stat_date'] = date(FunctionsLib::readConfig('date_format_extended'), FunctionsLib::readConfig('stat_last_update'));
+            $parse['stat_date'] = Timing::formatExtendedDate(FunctionsLib::readConfig('stat_last_update'));
             $parse['stat_values'] = "";
             $StatAllianceTableTPL = parent::$page->getTemplate('stat/stat_alliancetable');
 
@@ -154,7 +156,7 @@ class Statistics extends Controller
             );
 
             $start++;
-            $parse['stat_date'] = date(FunctionsLib::readConfig('date_format_extended'), FunctionsLib::readConfig('stat_last_update'));
+            $parse['stat_date'] = Timing::formatExtendedDate(FunctionsLib::readConfig('stat_last_update'));
             $parse['stat_values'] = "";
             $previusId = 0;
             $StatPlayerTableTPL = parent::$page->getTemplate('stat/stat_playertable');

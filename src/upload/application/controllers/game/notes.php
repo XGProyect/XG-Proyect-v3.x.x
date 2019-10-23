@@ -195,7 +195,7 @@ class Notes extends Controller
 
                     $list_of_notes[] = [
                         'note_id' => $note->getNoteId(),
-                        'note_time' => Timing_library::formatDefaultTime($note->getNoteTime()),
+                        'note_time' => Timing::formatExtendedDate($note->getNoteTime()),
                         'note_color' => FormatLib::getImportanceColor($note->getNotePriority()),
                         'note_title' => $note->getNoteTitle()
                     ];   
