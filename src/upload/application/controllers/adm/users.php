@@ -676,7 +676,6 @@ class Users extends Controller
         $username = isset($_POST['username']) ? $_POST['username'] : '';
         $password = isset($_POST['password']) ? $_POST['password'] : '';
         $email = isset($_POST['email']) ? $_POST['email'] : '';
-        $perm_email = isset($_POST['user_email_permanent']) ? $_POST['user_email_permanent'] : '';
         $authlevel = isset($_POST['authlevel']) ? $_POST['authlevel'] : -1;
         $id_planet = isset($_POST['id_planet']) ? $_POST['id_planet'] : 0;
         $cur_planet = isset($_POST['current_planet']) ? $_POST['current_planet'] : 0;
@@ -699,12 +698,8 @@ class Users extends Controller
             $password = "`user_password`";
         }
 
-        if ($email == '' or $this->check_email($email, true)) {
+        if ($email == '' or $this->check_email($email)) {
             $errors .= $this->_lang['us_error_email'] . '<br />';
-        }
-
-        if ($perm_email == '' or $this->check_email($perm_email, false)) {
-            $errors .= $this->_lang['us_error_perm_email'] . '<br />';
         }
 
         if ($authlevel < 0 or $authlevel > 3) {
@@ -731,7 +726,6 @@ class Users extends Controller
                 `user_name` = '" . $username . "',
                 `user_password` = " . $password . ",
                 `user_email` = '" . $email . "',
-                `user_email_permanent` = '" . $perm_email . "',
                 `user_authlevel` = '" . $authlevel . "',
                 `user_home_planet_id` = '" . $id_planet . "',
                 `user_current_planet` = '" . $cur_planet . "',
@@ -1708,8 +1702,7 @@ class Users extends Controller
         $user_query = $this->_db->queryFetch("SELECT `user_id`, `user_authlevel`
 													FROM " . USERS . "
 													WHERE `user_name` = '" . $user . "' OR
-															`user_email` = '" . $user . "' OR
-															`user_email_permanent` = '" . $user . "';");
+															`user_email` = '" . $user . "';");
 
         $this->_id = $user_query['user_id'];
         $this->_authlevel = $user_query['user_authlevel'];
@@ -1749,21 +1742,16 @@ class Users extends Controller
     /**
      * method check_email
      * param $email
-     * param $type
      * return true if the email exists
      */
-    private function check_email($email, $type)
+    private function check_email($email)
     {
-        if ($type) {
-            $email_type = 'user_email_permanent';
-        } else {
-            $email_type = 'user_email';
-        }
-
-        return $this->_db->queryFetch("SELECT `user_id`
-												FROM `" . USERS . "`
-												WHERE `{$email_type}` = '{$email}' AND
-													`user_id` <> '{$this->_id}';");
+        return $this->_db->queryFetch(
+            "SELECT `user_id`
+            FROM `" . USERS . "`
+            WHERE `user_email` = '{$email}' AND
+                `user_id` <> '{$this->_id}';"
+        );
     }
 
     /**

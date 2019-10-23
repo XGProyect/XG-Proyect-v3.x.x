@@ -456,7 +456,6 @@ $lang['us_moon_shortcut'] = 'Moon (L)';
 $lang['us_send_data'] = 'Save changes';
 $lang['us_error_username'] = 'Username empty on already taken';
 $lang['us_error_email'] = 'Email empty or already taken';
-$lang['us_error_perm_email'] = 'Permanent Email empty or already taken';
 $lang['us_error_authlevel'] = 'The user level can not be empty and must be between 0 and 3';
 $lang['us_error_idplanet'] = 'The planet can not be empty';
 $lang['us_error_current_planet'] = 'The current user planet can not be empty';

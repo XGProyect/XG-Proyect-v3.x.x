@@ -51,3 +51,4 @@ PRIMARY KEY (`preference_id`),
 UNIQUE KEY `preference_user_id` (`preference_user_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;";
 $queries[] = "DROP TABLE `" . DB_PREFIX . "settings`";
+$queries[] = "ALTER TABLE `" . USERS . "` DROP `user_email_permanent`;";

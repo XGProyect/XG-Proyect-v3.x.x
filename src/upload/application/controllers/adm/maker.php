@@ -412,7 +412,6 @@ class Maker extends Controller
                 $this->_db->query("INSERT INTO " . USERS . " SET
 										`user_name` = '" . $this->_db->escapeValue(strip_tags($name)) . "',
 										`user_email` = '" . $this->_db->escapeValue($email) . "',
-										`user_email_permanent` = '" . $this->_db->escapeValue($email) . "',
 										`user_ip_at_reg` = '" . $_SERVER['REMOTE_ADDR'] . "',
 										`user_home_planet_id` = '0',
 										`user_register_time` = '" . $time . "',

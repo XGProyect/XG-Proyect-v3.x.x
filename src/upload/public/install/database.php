@@ -402,7 +402,6 @@ $tables['users'] = "CREATE TABLE `" . USERS . "` (
 `user_name` varchar(64) NOT NULL DEFAULT '',
 `user_password` varchar(64) NOT NULL DEFAULT '',
 `user_email` varchar(64) NOT NULL DEFAULT '',
-`user_email_permanent` varchar(64) NOT NULL DEFAULT '',
 `user_authlevel` tinyint(4) NOT NULL DEFAULT '0',
 `user_home_planet_id` int(11) NOT NULL DEFAULT '0',
 `user_galaxy` int(11) NOT NULL DEFAULT '0',

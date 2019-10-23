@@ -455,7 +455,6 @@ $lang['us_moon_shortcut'] = 'Luna (L)';
 $lang['us_send_data'] = 'Guardar cambios';
 $lang['us_error_username'] = 'Nombre de usuario vacío o ya existente';
 $lang['us_error_email'] = 'Email vacío o existente';
-$lang['us_error_perm_email'] = 'Email permanente vacío o existente';
 $lang['us_error_authlevel'] = 'El nivel del usuario no puede estar vacío y debe estar entre 0 y 3';
 $lang['us_error_idplanet'] = 'El planeta del usuario no puede estar vacío';
 $lang['us_error_current_planet'] = 'El planeta actual del usuario no puede estar vacío';

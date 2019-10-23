@@ -511,7 +511,6 @@ class Installation extends Controller
                 'user_name' => $adm_name,
                 'user_password' => $adm_pass,
                 'user_email' => $adm_email,
-                'user_email_permanent' => $adm_email,
                 'user_authlevel' => '3',
                 'user_home_planet_id' => '1',
                 'user_galaxy' => 1,
