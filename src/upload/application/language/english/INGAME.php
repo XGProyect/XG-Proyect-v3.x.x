@@ -170,6 +170,10 @@ $lang = [
     'pr_your_account' => 'Your Account',
     'pr_delete_account' => 'Delete account',
     'pr_delete_account_explanation' => '<p>Check here to have your account marked for automatic deletion after 7 days.</p>',
+    'pr_ok_settings_saved' => 'Settings saved',
+    'pr_error_wrong_password' => 'Wrong password!',
+    'pr_error_invalid_characters' => 'Nickname %s contains invalid characters or your nickname has an invalid length!',
+    'pr_error_nick_in_use' => 'Ingame nick already in use!',
 ];
 
 /**

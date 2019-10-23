@@ -15,11 +15,15 @@
                 </tr>
                 <tr>
                     <th>{pr_new_player_name}:</th>
-                    <th><input name="new_user_name" size="20" type="text"></th>
+                    <th>
+                        <input type="text" name="new_user_name" size="20" minlength="3" maxlength="20">
+                    </th>
                 </tr>
                 <tr>
                     <th>{pr_enter_password_confirmation}:</th>
-                    <th><input name="user_password" size="20" type="password"></th>
+                    <th>
+                        <input type="password" name="confirmation_user_password" size="20" minlength="8" autocomplete="off">
+                    </th>
                 </tr>
                 <tr>
                     <th colspan="2" style="text-align: justify; font-weight: normal;">
@@ -31,12 +35,14 @@
                 </tr>
                 <tr>
                     <th>{pr_player_current_password}:</th>
-                    <th><input name="user_password" size="20" type="password"></th>
+                    <th>
+                        <input type="password" name="current_user_password" size="20" minlength="8" autocomplete="off">
+                    </th>
                 </tr>
                 <tr>
                     <th>{pr_new_player_password}:</th>
                     <th>
-                        <input name="new_user_password" size="20" type="password">
+                        <input type="password" name="new_user_password" size="20" minlength="8" autocomplete="off">
                     </th>
                 </tr>
                 <tr>
@@ -49,12 +55,12 @@
                 <tr>
                     <th>{pr_new_player_email}:</th>
                     <th>
-                        <input name="user_email" size="20" type="email">
+                        <input type="email" name="user_email" size="20" minlength="4">
                     </th>
                 </tr>
                 <tr>
                     <th colspan="2">
-                        <input value="{pr_use_settings}" name="apply_settings" type="submit">
+                        <input type="submit" name="apply_settings" value="{pr_use_settings}">
                     </th>
                 </tr>
                 <tr>
@@ -66,12 +72,12 @@
                 <tr>
                     <th>{pr_number_espionage_probes}:</th>
                     <th>
-                        <input name="preference_spy_probes" value="{preference_spy_probes}" size="3" type="number" min="1" max="99">
+                        <input type="number" name="preference_spy_probes" value="{preference_spy_probes}" size="3" minlength="1" min="1" max="99" pattern="[0-9]*">
                     </th>
                 </tr>
                 <tr>
                     <th colspan="2">
-                        <input value="{pr_use_settings}" name="apply_settings" type="submit">
+                        <input type="submit" name="apply_settings" value="{pr_use_settings}">
                     </th>
                 </tr>
                 <tr>
@@ -83,7 +89,7 @@
                 <tr>
                     <th>{pr_sort_planets_by}:</th>
                     <th>
-                        <select name="sort_planet">
+                        <select name="preference_planet_sort">
                             {sort_planet}
                             <option value="{value}"{selected}>{text}</option>
                             {/sort_planet}
@@ -93,7 +99,7 @@
                 <tr>
                     <th>{pr_sorting_sequence}:</th>
                     <th>
-                        <select name="sort_sequence">
+                        <select name="preference_planet_sort_sequence">
                             {sort_sequence}
                             <option value="{value}"{selected}>{text}</option>
                             {/sort_sequence}
@@ -102,7 +108,7 @@
                 </tr>
                 <tr>
                     <th colspan="2">
-                        <input value="{pr_use_settings}" name="apply_settings" type="submit">
+                        <input type="submit" name="apply_settings" value="{pr_use_settings}">
                     </th>
                 </tr>
                 <tr>
@@ -118,7 +124,7 @@
                 </tr>
                 <tr>
                     <th colspan="2">
-                        <input value="{pr_activate}" name="activate_vacation_mode" type="submit">
+                        <input type="submit" name="preference_vacation_mode" value="{pr_activate}">
                     </th>
                 </tr>
                 <tr>
@@ -127,7 +133,7 @@
                 <tr>
                     <th>{pr_delete_account}</th>
                     <th>
-                        <input type="checkbox">
+                        <input type="checkbox" name="preference_delete_mode">
                     </th>
                 </tr>
                 <tr>
@@ -137,7 +143,7 @@
                 </tr>
                 <tr>
                     <th colspan="2">
-                        <input value="{pr_use_settings}" name="apply_settings" type="submit">
+                        <input type="submit" name="apply_settings" value="{pr_use_settings}">
                     </th>
                 </tr>
             </tbody>

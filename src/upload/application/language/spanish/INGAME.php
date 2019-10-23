@@ -170,6 +170,10 @@ $lang = [
     'pr_your_account' => 'Tu cuenta',
     'pr_delete_account' => 'Eliminar cuenta',
     'pr_delete_account_explanation' => '<p>Si marcas ésta opción, tu cuenta se borrará automáticamente después de 7 días.</p>',
+    'pr_ok_settings_saved' => 'Opciones guardadas',
+    'pr_error_wrong_password' => '¡Contraseña incorrecta!',
+    'pr_error_invalid_characters' => '¡El Nick %s contiene carácteres no válidos, o tu nick tiene una longitud invalida!',
+    'pr_error_nick_in_use' => '¡Este nick ya está en uso!',
 ];
 
 /**
