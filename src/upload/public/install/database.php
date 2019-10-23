@@ -2,7 +2,7 @@
 /**
  * Database Schema File
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Data
  * @package  N/A

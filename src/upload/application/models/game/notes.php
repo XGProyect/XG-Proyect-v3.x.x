@@ -2,7 +2,7 @@
 /**
  * Notes Model
  *
- * PHP Version 7+
+ * PHP Version 7.1+
  *
  * @category Model
  * @package  Application

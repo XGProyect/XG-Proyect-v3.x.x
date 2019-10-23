@@ -5,7 +5,7 @@ declare(strict_types=1);
 /**
  * Empire Controller
  *
- * PHP Version 7+
+ * PHP Version 7.1+
  *
  * @category Controller
  * @package  Application

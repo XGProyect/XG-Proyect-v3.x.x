@@ -2,7 +2,7 @@
 /**
  * Migrate Controller
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Controller
  * @package  Application

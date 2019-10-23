@@ -2,7 +2,7 @@
 /**
  * Messages entity
  *
- * PHP Version 7+
+ * PHP Version 7.1+
  *
  * @category Core
  * @package  Application
