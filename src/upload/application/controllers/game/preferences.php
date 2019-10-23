@@ -86,11 +86,11 @@ class Preferences extends Controller
         // set data
         $this->_user = $this->getUserData();
 
-        // init a new buddy object
-        $this->setUpPreferences();
-
         // time to do something
         $this->runAction();
+
+        // init a new buddy object
+        $this->setUpPreferences();
 
         // build the page
         $this->buildPage();
@@ -153,9 +153,11 @@ class Preferences extends Controller
             $this->validatePlanetSortSequence($preferences);
             $this->validateDeleteMode($preferences);
 
-            if ($this->_error != '') {
+            if ($this->_error == '') {
 
-                $this->updateValidatedFields();
+                $this->Preferences_Model->updateValidatedFields(
+                    $this->_fields_to_update, (int)$this->_user['user_id']
+                );
             }
         }
     }

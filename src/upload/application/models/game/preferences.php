@@ -100,6 +100,38 @@ class Preferences
             LIMIT 1;"
         ) ?? [];
     }
+
+    /**
+     * Update validated fields
+     *
+     * @param array $fields
+     * @param integer $user_id
+     * @return void
+     */
+    public function updateValidatedFields(array $fields, int $user_id): void
+    {
+        $columns_to_update  = [];
+
+        foreach ($fields as $column => $value) {
+
+            if (strpos($column, 'user_') !== false) {
+
+                $columns_to_update[] = "u.`" . $column . "` = '" . $value . "'";
+            }
+
+            if (strpos($column, 'preference_') !== false) {
+
+                $columns_to_update[] = "p.`" . $column . "` = '" . $value . "'";
+            }
+        }
+
+        $this->db->query(
+            "UPDATE " . USERS . " AS u, " . PREFERENCES . " AS p SET
+            " . join($columns_to_update, ', ') . "
+            WHERE u.`user_id` = '" . $user_id . "'
+                AND p.`preference_user_id` = '" . $user_id . "';"
+        );
+    }
 }
 
 /* end of preferences.php */

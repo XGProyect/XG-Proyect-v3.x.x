@@ -303,7 +303,7 @@ abstract class FunctionsLib extends XGPCore
     public static function sortPlanets($current_user)
     {
         $db = new Database();
-        $order = $current_user['preference_planet_sort_sequence'] == 1 ? "DESC" : "ASC";
+        $order = $current_user['preference_planet_sort_sequence'] == 1 ? "DESC" : "ASC"; // up or down
         $sort = $current_user['preference_planet_sort'];
 
         $planets = "SELECT `planet_id`, `planet_name`, `planet_galaxy`, `planet_system`, `planet_planet`, `planet_type`
@@ -312,20 +312,22 @@ abstract class FunctionsLib extends XGPCore
                         AND `planet_destroyed` = 0 ORDER BY ";
 
         switch ($sort) {
-            case 0:
+            case 0: // emergence
+            default:
                 $planets .= "`planet_id` " . $order;
-
-                break;
-
-            case 1:
-                $planets .= "`planet_galaxy`, `planet_system`, `planet_planet`, `planet_type` " . $order;
-
-                break;
-
-            case 2:
+            break;
+            case 1: // coordinates
+                $planets .= "`planet_galaxy` " . $order . ", `planet_system` " . $order . ", `planet_planet` " . $order . ", `planet_type` " . $order;
+            break;
+            case 2: // alphabet
                 $planets .= "`planet_name` " . $order;
-
-                break;
+            break;
+            case 3: // size
+                $planets .= "`planet_diameter` " . $order;
+            break;
+            case 4: // used_fields
+                $planets .= "`planet_field_current` " . $order;
+            break;
         }
 
         return $db->query($planets);
