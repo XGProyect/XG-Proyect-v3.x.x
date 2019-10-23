@@ -55,7 +55,13 @@
                 <tr>
                     <th>{pr_new_player_email}:</th>
                     <th>
-                        <input type="email" name="user_email" size="20" minlength="4">
+                        <input type="email" name="new_user_email" size="20" minlength="4" maxlength="64">
+                    </th>
+                </tr>
+                <tr>
+                    <th>{pr_enter_password_confirmation}:</th>
+                    <th>
+                        <input type="password" name="confirmation_email_password" size="20" minlength="8" autocomplete="off">
                     </th>
                 </tr>
                 <tr>

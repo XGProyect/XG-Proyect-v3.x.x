@@ -122,7 +122,8 @@ class Preferences extends Controller
             'confirmation_user_password' => FILTER_SANITIZE_STRING,
             'current_user_password' => FILTER_SANITIZE_STRING,
             'new_user_password' => FILTER_SANITIZE_STRING,
-            'user_email' => FILTER_VALIDATE_EMAIL,
+            'new_user_email' => FILTER_VALIDATE_EMAIL,
+            'confirmation_email_password' => FILTER_SANITIZE_STRING,
             'preference_spy_probes' => [
                 'filter' => FILTER_VALIDATE_INT,
                 'options' => ['default' => 1, 'min_range' => 1, 'max_range' => 99]
@@ -150,10 +151,12 @@ class Preferences extends Controller
             $this->validateSpyProbes($preferences);
             $this->validatePlanetSort($preferences);
             $this->validatePlanetSortSequence($preferences);
+            $this->validateDeleteMode($preferences);
 
-            var_dump($this->_fields_to_update);
-            var_dump($this->_error);
-            die();
+            if ($this->_error != '') {
+
+                $this->updateValidatedFields();
+            }
         }
     }
 
@@ -238,9 +241,9 @@ class Preferences extends Controller
 
                 $user_name_len = strlen(trim($preferences['new_user_name']));
 
-                if ($user_name_len > 3 && $user_name_len <= 20 ) {
+                if ($user_name_len > 3 && $user_name_len <= 20) {
 
-                    if ($this->checkIfNicknameExists($preferences['new_user_name'])) {
+                    if (!$this->Preferences_Model->checkIfNicknameExists($preferences['new_user_name'])) {
 
                         $this->_fields_to_update['user_name'] = $preferences['new_user_name'];
                     } else {
@@ -249,7 +252,7 @@ class Preferences extends Controller
                     }
                 } else {
 
-                    $this->_error = $this->getLang()['pr_error_invalid_characters'];
+                    $this->_error = $this->getLang()['pr_error_user_invalid_characters'];
                 }
             } else {
 
@@ -271,7 +274,7 @@ class Preferences extends Controller
 
             if (sha1($preferences['current_user_password']) == $this->_user['user_password']) {
 
-                $this->_fields_to_update['user_password'] = sha1($preferences['new_user_password']);
+                $this->_fields_to_update['user_password'] = sha1(trim($preferences['new_user_password']));
             } else {
 
                 $this->_error = $this->getLang()['pr_error_wrong_password'];
@@ -279,9 +282,39 @@ class Preferences extends Controller
         }
     }
     
+    /**
+     * Validate new email
+     *
+     * @param array $preferences
+     * @return void
+     */
     private function validateNewEmail(array $preferences): void
     {
+        if (isset($preferences['new_user_email']) 
+            && isset($preferences['confirmation_email_password'])) {
 
+            if (sha1($preferences['confirmation_email_password']) == $this->_user['user_password']) {
+
+                $user_email_len = strlen(trim($preferences['new_user_email']));
+
+                if ($user_email_len > 4 && $user_email_len <= 64) {
+
+                    if (!$this->Preferences_Model->checkIfEmailExists($preferences['new_user_email'])) {
+
+                        $this->_fields_to_update['user_email'] = $preferences['new_user_email'];
+                    } else {
+
+                        $this->_error = $this->getLang()['pr_error_email_in_use'];
+                    }
+                } else {
+
+                    $this->_error = $this->getLang()['pr_error_email_invalid_characters'];
+                }
+            } else {
+
+                $this->_error = $this->getLang()['pr_error_wrong_password'];
+            }
+        }
     }
 
     /**
@@ -332,7 +365,8 @@ class Preferences extends Controller
     {
         if (isset($preferences['preference_delete_mode'])
             && $preferences['preference_delete_mode'] = 'on') {
-
+            
+            $this->_fields_to_update['preference_delete_mode'] = time();
         }
     }
 }

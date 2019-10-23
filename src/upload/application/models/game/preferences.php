@@ -68,6 +68,38 @@ class Preferences
             WHERE p.`preference_user_id` = '" . $user_id . "';"
         ) ?? [];
     }
+
+    /**
+     * Check if the nickname exists
+     *
+     * @param string $user_name
+     * @return array
+     */
+    public function checkIfNicknameExists(string $nickname): array
+    {
+        return $this->db->queryFetch(
+            "SELECT `user_id`
+            FROM `" . USERS . "`
+            WHERE `user_name` = '" . $this->db->escapeValue($nickname) . "'
+            LIMIT 1;"
+        ) ?? [];
+    }
+
+    /**
+     * Check if the email exists
+     *
+     * @param string $email
+     * @return array
+     */
+    public function checkIfEmailExists(string $email): array
+    {
+        return $this->db->queryFetch(
+            "SELECT `user_email`
+            FROM `" . USERS . "`
+            WHERE `user_email` = '" . $this->db->escapeValue($email) . "'
+            LIMIT 1;"
+        ) ?? [];
+    }
 }
 
 /* end of preferences.php */
