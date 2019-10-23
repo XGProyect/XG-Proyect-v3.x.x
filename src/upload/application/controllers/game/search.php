@@ -21,8 +21,7 @@ use application\core\Database;
 use application\core\enumerators\SwitchIntEnumerator as SwitchInt;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
-
-use MODULE_ID;
+use const MODULE_ID;
 
 /**
  * Search Class

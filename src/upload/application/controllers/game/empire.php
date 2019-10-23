@@ -21,9 +21,8 @@ use application\core\Database;
 use application\libraries\DevelopmentsLib;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
-
-use DPATH;
-use MODULE_ID;
+use const DPATH;
+use const MODULE_ID;
 
 /**
  * Empire Class

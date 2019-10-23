@@ -13,12 +13,12 @@
  */
 namespace application\controllers\game;
 
-use MODULE_ID;
 use application\core\Controller;
 use application\core\Database;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
 use application\libraries\Timing_library as Timing;
+use const MODULE_ID;
 
 /**
  * Statistics Class

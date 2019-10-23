@@ -13,7 +13,6 @@
  */
 namespace application\controllers\game;
 
-use MODULE_ID;
 use application\core\Controller;
 use application\libraries\DevelopmentsLib;
 use application\libraries\FleetsLib;
@@ -21,6 +20,7 @@ use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
 use application\libraries\Timing_library as Timing;
 use application\libraries\Updates_library;
+use const MODULE_ID;
 
 /**
  * Overview Class

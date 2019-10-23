@@ -21,7 +21,6 @@ use application\core\entities\PreferencesEntity;
 use application\core\enumerators\PreferencesEnumerator as PrefEnum;
 use application\libraries\FunctionsLib;
 use application\libraries\game\Preferences as Pref;
-
 use const MODULE_ID;
 
 /**
