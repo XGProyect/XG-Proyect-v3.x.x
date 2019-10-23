@@ -909,27 +909,6 @@ $lang['bu_to_accept_title']					= 'New Friend Request';
 $lang['bu_to_accept_text']					= 'Player %u has sent you a friend request.';
 
 //----------------------------------------------------------------------------//
-//NOTES
-$lang['nt_important']						= 'Important';
-$lang['nt_normal']							= 'Normal';
-$lang['nt_unimportant']						= 'Unimportant';
-$lang['nt_create_note']						= 'Create note';
-$lang['nt_edit_note']						= 'Edit note';
-$lang['nt_you_dont_have_notes']				= 'no notes recorded';
-$lang['nt_notes']							= 'Notes';
-$lang['nt_create_new_note']					= 'Create a new note';
-$lang['nt_date_note']						= 'Date';
-$lang['nt_subject_note']					= 'Subject';
-$lang['nt_size_note']						= 'Size';
-$lang['nt_dlte_note']						= 'Delete';
-$lang['nt_priority']						= 'Priority';
-$lang['nt_note']							= 'Notice';
-$lang['nt_characters']						= 'characters';
-$lang['nt_back']							= 'Back';
-$lang['nt_reset']							= 'Reestablecer';
-$lang['nt_save']							= 'Save';
-
-//----------------------------------------------------------------------------//
 //STATISTICS
 $lang['st_player']							= 'Player';
 $lang['st_alliance']						= 'Alliance';
@@ -964,58 +943,6 @@ $lang['sh_alliance']						= 'Alliance';
 $lang['sh_planet']							= 'Planet';
 $lang['sh_coords']							= 'Position';
 $lang['sh_position']						= 'Rank';
-
-//----------------------------------------------------------------------------//
-//OPTIONS
-$lang['op_cant_activate_vacation_mode']		= 'If you\'re building or moving fleets will not be able to enter on vacation mode.';
-$lang['op_password_changed']				= 'Password has been changed<br /><a href="index.php" target="_top">Back</a>';
-$lang['op_username_changed']				= 'Username changed<br /><a href="index.php" target="_top">Back</a>';
-$lang['op_options_changed']					= 'Changes saved.<br /><a href="game.php?page=options">Back</a>';
-$lang['op_vacation_mode_active_message']	= 'The vacation mode is turned on. Have to be on vacation at least until: ';
-$lang['op_end_vacation_mode']				= 'Finish vacation mode';
-$lang['op_save_changes']					= 'save changes';
-$lang['op_admin_title_options']				= 'Options available to management';
-$lang['op_admin_planets_protection']		= 'Protection of planets';
-$lang['op_user_data']						= 'User Data';
-
-$lang['op_username']						= 'Username';
-$lang['op_old_pass']						= 'Old password';
-$lang['op_new_pass']						= 'New password (min. 8 characters)';
-$lang['op_repeat_new_pass']					= 'New password (repeat)';
-$lang['op_email_adress']					= 'Email address';
-$lang['op_permanent_email_adress']			= 'Permanent Address';
-$lang['op_general_settings']				= 'General Options';
-$lang['op_sort_planets_by']					= 'Sort planets by:';
-$lang['op_sort_kind']						= 'Assortment sequence:';
-$lang['op_skin_example']					= 'Skin';
-$lang['op_show_skin']						= 'Display skin';
-$lang['op_deactivate_ipcheck']				= 'Disable IP Check';
-$lang['op_galaxy_settings']					= 'Galaxy View Options';
-$lang['op_spy_probes_number']				= 'Number of espionage probes';
-$lang['op_toolt_data']						= 'Information tools';
-$lang['op_seconds']							= 'seconds';
-$lang['op_max_fleets_messages']				= 'Maximum fleet messages';
-$lang['op_show_ally_logo']					= 'Display ally logo';
-$lang['op_shortcut']						= 'Shortcut';
-$lang['op_show']							= 'Show';
-$lang['op_spy']								= 'Spy';
-$lang['op_write_message']					= 'Write message';
-$lang['op_add_to_buddy_list']				= 'Add to buddylist';
-$lang['op_missile_attack']					= 'Missile attack';
-$lang['op_send_report']						= 'Send report';
-$lang['op_vacation_delete_mode']			= 'Vacation mode / Delete account';
-$lang['op_activate_vacation_mode']			= 'Enable vacation mode';
-$lang['op_dlte_account']					= 'Delete account';
-$lang['op_email_adress_descrip']			= 'You can change this email address at any time. This will be entered as a permanent address after 7 days without changes.';
-$lang['op_deactivate_ipcheck_descrip']		= 'IP check means that a security logout occurs automatically when the IP changes or two people are logged into an account from different IPs. Disabling the IP check may represent a security risk!';
-$lang['op_spy_probes_number_descrip']		= 'Number of espionage probes that can be sent directly from each scan in the Galaxy menu.';
-$lang['op_activate_vacation_mode_descrip']	= 'Vacation mode will protect you during long absences. It can only be activated if nothing is being built (fleet, building, or defense), nothing is being researched, and none of your fleets are underway. Once it is activated, you are protected from new attacks. Attacks that have already started will be carried out. During vacation mode, production is set to zero and must be manually returned to 100 % after vacation mode ends. Vacation mode lasts a minimum of two days and can only be deactivated after this time.';
-$lang['op_dlte_account_descrip']			= 'If you mark this box, your account will be deleted automatically after 7 days.';
-$lang['op_sort_colonization']				= 'Colonization Date';
-$lang['op_sort_coords']						= 'Coordinates';
-$lang['op_sort_alpha']						= 'Alphabetic order';
-$lang['op_sort_asc']						= 'Ascendant';
-$lang['op_sort_desc']						= 'Decreasing';
 
 //----------------------------------------------------------------------------//
 //BANNED
@@ -1128,9 +1055,6 @@ $lang['sys_stay_mess_bend']         		= " and offers ";
 
 //----------------------------------------------------------------------------//
 //class.CheckSession.php
-$lang['ccs_multiple_users']					= 'Cookie error! There are several users with this name! You must delete your cookies. In case of problems contact the administrator.';
-$lang['ccs_other_user']						= 'Cookie error! Your cookie does not match the user! You must delete your cookies. In case of problems contact the administrator';
-$lang['css_different_password']				= 'Cookie error! Session error, must connect again! You must delete your cookies. In case of problems contact the administrator.';
 $lang['css_account_banned_message']			= 'YOUR ACCOUNT HAS BEEN SUSPENDED';
 $lang['css_account_banned_expire']			= 'Expiration:';
 
