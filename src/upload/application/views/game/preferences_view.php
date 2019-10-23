@@ -11,7 +11,7 @@
                 </tr>
                 <tr>
                     <th>{pr_your_player_name}:</th>
-                    <th>lucky</th>
+                    <th>{user_name}</th>
                 </tr>
                 <tr>
                     <th>{pr_new_player_name}:</th>
@@ -44,7 +44,7 @@
                 </tr>
                 <tr>
                     <th>{pr_your_player_email}:</th>
-                    <th>lucky@lucky.com</th>
+                    <th>{user_email}</th>
                 </tr>
                 <tr>
                     <th>{pr_new_player_email}:</th>
@@ -66,7 +66,7 @@
                 <tr>
                     <th>{pr_number_espionage_probes}:</th>
                     <th>
-                        <input name="preference_spy_probes" size="3" type="number" min="1" max="99">
+                        <input name="preference_spy_probes" value="{preference_spy_probes}" size="3" type="number" min="1" max="99">
                     </th>
                 </tr>
                 <tr>
@@ -83,21 +83,20 @@
                 <tr>
                     <th>{pr_sort_planets_by}:</th>
                     <th>
-                        <select name="">
-                            <option value="">{pr_order_emergence}</option>
-                            <option value="">{pr_order_coordinates}</option>
-                            <option value="">{pr_order_alphabet}</option>
-                            <option value="">{pr_order_size}</option>
-                            <option value="">{pr_order_used_fields}</option>
+                        <select name="sort_planet">
+                            {sort_planet}
+                            <option value="{value}"{selected}>{text}</option>
+                            {/sort_planet}
                         </select>
                     </th>
                 </tr>
                 <tr>
                     <th>{pr_sorting_sequence}:</th>
                     <th>
-                        <select name="">
-                            <option value="">{pr_sorting_sequence_up}</option>
-                            <option value="">{pr_sorting_sequence_down}</option>
+                        <select name="sort_sequence">
+                            {sort_sequence}
+                            <option value="{value}"{selected}>{text}</option>
+                            {/sort_sequence}
                         </select>
                     </th>
                 </tr>

@@ -18,10 +18,8 @@ namespace application\controllers\game;
 
 use application\core\Controller;
 use application\core\entities\PreferencesEntity;
-use application\core\enumerators\SwitchIntEnumerator as SwitchInt;
-use application\libraries\FormatLib;
+use application\core\enumerators\PreferencesEnumerator as PrefEnum;
 use application\libraries\FunctionsLib;
-use application\libraries\Timing_library;
 use application\libraries\game\Preferences as Pref;
 
 use const MODULE_ID;
@@ -105,7 +103,7 @@ class Preferences extends Controller
      */
     private function runAction()
     {
-        var_dump($this->_preferences->getCurrentPreference());
+
     }
 
     /**
@@ -121,11 +119,57 @@ class Preferences extends Controller
                 array_merge(
                     $this->getLang(),
                     [
-    
+                        'user_name' => $this->_user['user_name'],
+                        'user_email' => $this->_user['user_email'],
+                        'preference_spy_probes' => $this->_preferences->getCurrentPreference()->getPreferenceSpyProbes(),
+                        'sort_planet' => $this->sortPlanetOptions(),
+                        'sort_sequence' => $this->sortSequenceOptions()
                     ]
                 )
             )
         );
+    }
+
+    /**
+     * Returns an array with the different options to sort a planet
+     *
+     * @return array
+     */
+    private function sortPlanetOptions(): array
+    {
+        $order_options = [];
+
+        foreach(PrefEnum::order as $order => $value) {
+
+            $order_options[] = [
+                'value' => $value,
+                'selected' => ($value == $this->_preferences->getCurrentPreference()->getPreferencePlanetSort() ? 'selected="selected"' : ''),
+                'text' => $this->getLang()['pr_order_' . $order]
+            ];
+        }
+
+        return $order_options;
+    }
+
+    /**
+     * Returns an array with the different sequence options to sort a planet
+     *
+     * @return array
+     */
+    private function sortSequenceOptions(): array
+    {
+        $sequence_options = [];
+
+        foreach(PrefEnum::sequence as $sequence => $value) {
+
+            $sequence_options[] = [
+                'value' => $value,
+                'selected' => ($value == $this->_preferences->getCurrentPreference()->getPreferencePlanetSortSequence() ? 'selected="selected"' : ''),
+                'text' => $this->getLang()['pr_sorting_sequence_' . $sequence]
+            ];
+        }
+
+        return $sequence_options;
     }
 }
 
