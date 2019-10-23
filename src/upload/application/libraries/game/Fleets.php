@@ -11,7 +11,7 @@
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-namespace application\libraries\fleets;
+namespace application\libraries\game;
 
 use application\core\entities\FleetEntity;
 use application\core\enumerators\MissionsEnumerator as Missions;

@@ -16,13 +16,13 @@ namespace application\controllers\game;
 use application\core\Controller;
 use application\core\entities\FleetEntity;
 use application\core\enumerators\MissionsEnumerator as Missions;
-use application\libraries\fleets\Fleets;
 use application\libraries\FleetsLib;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
+use application\libraries\Timing_library;
+use application\libraries\game\Fleets;
 use application\libraries\premium\Premium;
 use application\libraries\research\Researches;
-use application\libraries\Timing_library;
 use const JS_PATH;
 
 /**

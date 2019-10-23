@@ -14,10 +14,10 @@
 namespace application\controllers\game;
 
 use application\core\Controller;
-use application\libraries\fleets\AcsFleets;
-use application\libraries\fleets\Fleets;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
+use application\libraries\game\AcsFleets;
+use application\libraries\game\Fleets;
 use const JS_PATH;
 
 /**

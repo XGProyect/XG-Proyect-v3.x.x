@@ -15,10 +15,10 @@ namespace application\controllers\game;
 
 use application\core\Controller;
 use application\core\enumerators\ShipsEnumerator as Ships;
-use application\libraries\fleets\Fleets;
 use application\libraries\FleetsLib;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
+use application\libraries\game\Fleets;
 use application\libraries\premium\Premium;
 use application\libraries\research\Researches;
 use const JS_PATH;
