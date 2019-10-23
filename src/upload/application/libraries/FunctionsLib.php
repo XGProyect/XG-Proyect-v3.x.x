@@ -742,12 +742,12 @@ abstract class FunctionsLib extends XGPCore
     {
         if ($user_row['user_id'] != $_SESSION['user_id'] && !defined('IN_LOGIN')) {
 
-            FunctionsLib::message(parent::$lang['ccs_other_user'], XGP_ROOT, 3, false, false);
+            FunctionsLib::message(parent::$lang['ccs_other_user'], SYSTEM_ROOT, 3, false, false);
         }
 
         if (sha1($user_row['user_password'] . "-" . SECRETWORD) != $_SESSION['user_password'] && !defined('IN_LOGIN')) {
 
-            FunctionsLib::message(parent::$lang['css_different_password'], XGP_ROOT, 5, false, false);
+            FunctionsLib::message(parent::$lang['css_different_password'], SYSTEM_ROOT, 5, false, false);
         }
 
         if ($user_row['user_banned'] > 0) {
