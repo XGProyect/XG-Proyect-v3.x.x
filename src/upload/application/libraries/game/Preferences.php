@@ -97,6 +97,36 @@ class Preferences
     {
         return ($this->getCurrentPreference()->getPreferenceOwner() === $this->getUserId());
     }
+
+    /**
+     * Check if the username change is allowed
+     *
+     * @return boolean
+     */
+    public function isNickNameChangeAllowed(): bool
+    {
+        return (($this->getCurrentPreference()->getPreferenceNicknameChange() + ONE_WEEK) < time());
+    }
+
+    /**
+     * Check if the vacation mode is enabled
+     *
+     * @return boolean
+     */
+    public function isVacationModeOn(): bool
+    {
+        return ($this->getCurrentPreference()->getPreferenceVacationMode() > 0);
+    }
+
+    /**
+     * Check if the vacation mode removal is allowed
+     *
+     * @return boolean
+     */
+    public function isVacationModeRemovalAllowed(): bool
+    {
+        return (($this->getCurrentPreference()->getPreferenceVacationMode() + ONE_DAY * 2) < time());
+    }
     
     /**
      * Set up the list of preferences

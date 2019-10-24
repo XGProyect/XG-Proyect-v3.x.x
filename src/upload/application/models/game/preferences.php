@@ -121,7 +121,7 @@ class Preferences
 
             if (strpos($column, 'preference_') !== false) {
 
-                $columns_to_update[] = "p.`" . $column . "` = '" . $value . "'";
+                $columns_to_update[] = "p.`" . $column . "` = " . (is_null($value) ? 'NULL' : "'" . $value . "'");
             }
         }
 

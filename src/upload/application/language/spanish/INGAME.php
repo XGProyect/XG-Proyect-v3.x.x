@@ -167,6 +167,9 @@ $lang = [
     'pr_vacation_mode' => 'Modo vacaciones',
     'pr_vacation_mode_explanation' => '<p>El modo de vacaciones te protege en caso de ausencia prolongada. Solo puedes activarlo cuando no tengas flotas en movimiento. Los encargos de construcción e investigación en progreso se pausarán.</p><p>Mientras el modo de vacaciones esté activo, no sufrirás ataques. Sin embargo, los ataques que ya se hayan iniciado se completarán. La producción se pondrá a cero.</p><p>El modo de vacaciones dura 48 Horas como mínimo. Puedes desactivarlo una vez concluya este tiempo.</p>',
     'pr_activate' => 'Activar',
+    'pr_activate_alert' => '¿Quieres activar el modo vacaciones? Podrás terminar tus vacaciones tras 2 días.',
+    'pr_vacation_mode_active' => 'Jugador en modo vacaciones',
+    'pr_deactivate' => 'Finalizar vacaciones',
     'pr_your_account' => 'Tu cuenta',
     'pr_delete_account' => 'Eliminar cuenta',
     'pr_delete_account_explanation' => '<p>Si marcas ésta opción, tu cuenta se borrará automáticamente después de 7 días.</p>',
@@ -176,6 +179,7 @@ $lang = [
     'pr_error_email_invalid_characters' => '¡El Correo electrónico %s contiene carácteres no válidos, o tu correo electrónico tiene una longitud invalida!',
     'pr_error_nick_in_use' => '¡Este nick ya está en uso!',
     'pr_error_email_in_use' => '¡Este correo electrónico ya está en uso!',
+    'pr_delete_mode_active' => 'Esta cuenta será eliminada el %s',
 ];
 
 /**

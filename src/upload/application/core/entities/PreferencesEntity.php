@@ -64,6 +64,16 @@ class PreferencesEntity extends Entity
     }
 
     /**
+     * Return the preference nickname change
+     * 
+     * @return int
+     */
+    public function getPreferenceNicknameChange(): int
+    {
+        return (int)$this->_data['preference_nickname_change'];
+    }
+
+    /**
      * Return the preference spy probes
      * 
      * @return int

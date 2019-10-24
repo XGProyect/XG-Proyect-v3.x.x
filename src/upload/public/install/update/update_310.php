@@ -42,6 +42,7 @@ $queries[] = "INSERT INTO `" . LANGUAGES . "` (`language_id`, `language_name`) V
 $queries[] = "CREATE TABLE `" . PREFERENCES . "` (
 `preference_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
 `preference_user_id` int(11) NOT NULL,
+`preference_nickname_change` int(10) NULL DEFAULT NULL,
 `preference_spy_probes` tinyint(2) NOT NULL DEFAULT '1',
 `preference_planet_sort` tinyint(1) NOT NULL DEFAULT '0',
 `preference_planet_sort_sequence` tinyint(1) NOT NULL DEFAULT '0',

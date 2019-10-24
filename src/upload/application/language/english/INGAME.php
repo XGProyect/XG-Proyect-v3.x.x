@@ -167,6 +167,9 @@ $lang = [
     'pr_vacation_mode' => 'Vacation Mode',
     'pr_vacation_mode_explanation' => '<p>Vacation mode is designed to protect you during long absences from the game. You can only activate it when none of your fleets are in transit. Building and research orders will be put on hold.</p><p>Once vacation mode is activated, it will protect you from new attacks. Attacks that have already started will, however, continue and your production will be set to zero.</p><p>Vacation mode lasts a minimum of 48 hours. Only after this time expires will you be able to deactivate it.</p>',
     'pr_activate' => 'Activate',
+    'pr_activate_alert' => 'Do you want to activate vacation mode? You can only end your vacation after 2 days.',
+    'pr_vacation_mode_active' => 'Player in vacation mode',
+    'pr_deactivate' => 'End Vacation',
     'pr_your_account' => 'Your Account',
     'pr_delete_account' => 'Delete account',
     'pr_delete_account_explanation' => '<p>Check here to have your account marked for automatic deletion after 7 days.</p>',
@@ -176,6 +179,7 @@ $lang = [
     'pr_error_email_invalid_characters' => 'Email %s contains invalid characters or your email has an invalid length!',
     'pr_error_nick_in_use' => 'Ingame nick already in use!',
     'pr_error_email_in_use' => 'Ingame email already in use!',
+    'pr_delete_mode_active' => 'This account will be deleted on %s',
 ];
 
 /**
