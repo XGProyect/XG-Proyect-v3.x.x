@@ -30,9 +30,9 @@ class PlanetEntity extends Entity
 
     /**
      * Constructor
-     * 
+     *
      * @param array $data Data
-     * 
+     *
      * @return void
      */
     public function __construct($data)
@@ -45,7 +45,7 @@ class PlanetEntity extends Entity
      */
     public function getPlanetId()
     {
-        return $this->_data['planet_id'];
+        return $this->data['planet_id'];
     }
 
     /**
@@ -53,7 +53,7 @@ class PlanetEntity extends Entity
      */
     public function getPlanetName()
     {
-        return $this->_data['planet_name'];
+        return $this->data['planet_name'];
     }
 
     /**
@@ -61,7 +61,7 @@ class PlanetEntity extends Entity
      */
     public function getPlanetUserId()
     {
-        return $this->_data['planet_user_id'];
+        return $this->data['planet_user_id'];
     }
 
     /**
@@ -69,7 +69,7 @@ class PlanetEntity extends Entity
      */
     public function getPlanetGalaxy()
     {
-        return $this->_data['planet_galaxy'];
+        return $this->data['planet_galaxy'];
     }
 
     /**
@@ -77,7 +77,7 @@ class PlanetEntity extends Entity
      */
     public function getPlanetSystem()
     {
-        return $this->_data['planet_system'];
+        return $this->data['planet_system'];
     }
 
     /**
@@ -85,7 +85,7 @@ class PlanetEntity extends Entity
      */
     public function getPlanetPosition()
     {
-        return $this->_data['planet_data'];
+        return $this->data['planet_data'];
     }
 
     /**
@@ -93,7 +93,7 @@ class PlanetEntity extends Entity
      */
     public function getPlanetLastUpdate()
     {
-        return $this->_data['planet_last_update'];
+        return $this->data['planet_last_update'];
     }
 
     /**
@@ -101,7 +101,7 @@ class PlanetEntity extends Entity
      */
     public function getPlanetType()
     {
-        return $this->_data['planet_type'];
+        return $this->data['planet_type'];
     }
 
     /**
@@ -109,7 +109,7 @@ class PlanetEntity extends Entity
      */
     public function getPlanetStatus()
     {
-        return $this->_data['planet_destroyed'];
+        return $this->data['planet_destroyed'];
     }
 
     /**
@@ -117,7 +117,7 @@ class PlanetEntity extends Entity
      */
     public function getPlanetBuildingQueue()
     {
-        return $this->_data['planet_b_building'];
+        return $this->data['planet_b_building'];
     }
 
     /**
@@ -125,7 +125,7 @@ class PlanetEntity extends Entity
      */
     public function getPlanetCurrentBuildingId()
     {
-        return $this->_data['planet_b_building_id'];
+        return $this->data['planet_b_building_id'];
     }
 
     /**
@@ -133,7 +133,7 @@ class PlanetEntity extends Entity
      */
     public function getPlanetTechnologyQueue()
     {
-        return $this->_data['planet_b_tech'];
+        return $this->data['planet_b_tech'];
     }
 
     /**
@@ -141,7 +141,7 @@ class PlanetEntity extends Entity
      */
     public function getPlanetCurrentTechnologyId()
     {
-        return $this->_data['planet_b_tech_id'];
+        return $this->data['planet_b_tech_id'];
     }
 
     /**
@@ -149,7 +149,7 @@ class PlanetEntity extends Entity
      */
     public function getPlanetHangarQueue()
     {
-        return $this->_data['planet_b_hangar'];
+        return $this->data['planet_b_hangar'];
     }
 
     /**
@@ -157,7 +157,7 @@ class PlanetEntity extends Entity
      */
     public function getPlanetCurrentHangarId()
     {
-        return $this->_data['planet_b_hangar_id'];
+        return $this->data['planet_b_hangar_id'];
     }
 
     /**
@@ -165,7 +165,7 @@ class PlanetEntity extends Entity
      */
     public function getPlanetImage()
     {
-        return $this->_data['planet_image'];
+        return $this->data['planet_image'];
     }
 
     /**
@@ -173,7 +173,7 @@ class PlanetEntity extends Entity
      */
     public function getPlanetDiameter()
     {
-        return $this->_data['planet_diameter'];
+        return $this->data['planet_diameter'];
     }
 
     /**
@@ -181,7 +181,7 @@ class PlanetEntity extends Entity
      */
     public function getPlanetAmountOfOcuppiedFields()
     {
-        return $this->_data['planet_field_current'];
+        return $this->data['planet_field_current'];
     }
 
     /**
@@ -189,7 +189,7 @@ class PlanetEntity extends Entity
      */
     public function getPlanetMaxAmountOfFields()
     {
-        return $this->_data['planet_field_max'];
+        return $this->data['planet_field_max'];
     }
 
     /**
@@ -197,7 +197,7 @@ class PlanetEntity extends Entity
      */
     public function getPlanetTempMin()
     {
-        return $this->_data['planet_temp_min'];
+        return $this->data['planet_temp_min'];
     }
 
     /**
@@ -205,7 +205,7 @@ class PlanetEntity extends Entity
      */
     public function getPlanetTempMax()
     {
-        return $this->_data['planet_temp_max'];
+        return $this->data['planet_temp_max'];
     }
 
     /**
@@ -213,7 +213,7 @@ class PlanetEntity extends Entity
      */
     public function getPlanetAmountOfMetal()
     {
-        return $this->_data['planet_metal'];
+        return $this->data['planet_metal'];
     }
 
     /**
@@ -221,7 +221,7 @@ class PlanetEntity extends Entity
      */
     public function getPlanetProductionPerHourMetal()
     {
-        return $this->_data['planet_metal_perhour'];
+        return $this->data['planet_metal_perhour'];
     }
 
     /**
@@ -229,7 +229,7 @@ class PlanetEntity extends Entity
      */
     public function getPlanetStorageCapacityMetal()
     {
-        return $this->_data['planet_metal_max'];
+        return $this->data['planet_metal_max'];
     }
 
     /**
@@ -237,7 +237,7 @@ class PlanetEntity extends Entity
      */
     public function getPlanetAmountOfCrystal()
     {
-        return $this->_data['planet_crystal'];
+        return $this->data['planet_crystal'];
     }
 
     /**
@@ -245,7 +245,7 @@ class PlanetEntity extends Entity
      */
     public function getPlanetProductionPerHourCrystal()
     {
-        return $this->_data['planet_crystal_perhour'];
+        return $this->data['planet_crystal_perhour'];
     }
 
     /**
@@ -253,7 +253,7 @@ class PlanetEntity extends Entity
      */
     public function getPlanetStorageCapacityCrystal()
     {
-        return $this->_data['planet_crystal_max'];
+        return $this->data['planet_crystal_max'];
     }
 
     /**
@@ -261,7 +261,7 @@ class PlanetEntity extends Entity
      */
     public function getPlanetAmountOfDeuterium()
     {
-        return $this->_data['planet_deuterium'];
+        return $this->data['planet_deuterium'];
     }
 
     /**
@@ -269,7 +269,7 @@ class PlanetEntity extends Entity
      */
     public function getPlanetProductionPerHourDeuterium()
     {
-        return $this->_data['planet_deuterium_perhour'];
+        return $this->data['planet_deuterium_perhour'];
     }
 
     /**
@@ -277,7 +277,7 @@ class PlanetEntity extends Entity
      */
     public function getPlanetStorageCapacityDeuterium()
     {
-        return $this->_data['planet_deuterium_max'];
+        return $this->data['planet_deuterium_max'];
     }
 
     /**
@@ -285,7 +285,7 @@ class PlanetEntity extends Entity
      */
     public function getPlanetUsedEnergy()
     {
-        return $this->_data['planet_energy_used'];
+        return $this->data['planet_energy_used'];
     }
 
     /**
@@ -293,7 +293,7 @@ class PlanetEntity extends Entity
      */
     public function getPlanetMaxEnergy()
     {
-        return $this->_data['planet_energy_max'];
+        return $this->data['planet_energy_max'];
     }
 
     /**
@@ -301,7 +301,7 @@ class PlanetEntity extends Entity
      */
     public function getPlanetProductionPercentageMetal()
     {
-        return $this->_data['planet_building_metal_mine_percent'];
+        return $this->data['planet_building_metal_mine_percent'];
     }
 
     /**
@@ -309,7 +309,7 @@ class PlanetEntity extends Entity
      */
     public function getPlanetProductionPercentageCrystal()
     {
-        return $this->_data['planet_building_crystal_mine_percent'];
+        return $this->data['planet_building_crystal_mine_percent'];
     }
 
     /**
@@ -317,7 +317,7 @@ class PlanetEntity extends Entity
      */
     public function getPlanetProductionPercentageDeuterium()
     {
-        return $this->_data['planet_building_deuterium_sintetizer_percent'];
+        return $this->data['planet_building_deuterium_sintetizer_percent'];
     }
 
     /**
@@ -325,7 +325,7 @@ class PlanetEntity extends Entity
      */
     public function getPlanetProductionPercentageSolarPlant()
     {
-        return $this->_data['planet_building_solar_plant_percent'];
+        return $this->data['planet_building_solar_plant_percent'];
     }
 
     /**
@@ -333,7 +333,7 @@ class PlanetEntity extends Entity
      */
     public function getPlanetProductionPercentageFusion()
     {
-        return $this->_data['planet_building_fusion_reactor_percent'];
+        return $this->data['planet_building_fusion_reactor_percent'];
     }
 
     /**
@@ -341,7 +341,7 @@ class PlanetEntity extends Entity
      */
     public function getPlanetProductionPercentageSolarSatellite()
     {
-        return $this->_data['planet_ship_solar_satellite_percent'];
+        return $this->data['planet_ship_solar_satellite_percent'];
     }
 
     /**
@@ -349,7 +349,7 @@ class PlanetEntity extends Entity
      */
     public function getPlanetLatestJumpTime()
     {
-        return $this->_data['planet_last_jump_time'];
+        return $this->data['planet_last_jump_time'];
     }
 
     /**
@@ -357,7 +357,7 @@ class PlanetEntity extends Entity
      */
     public function getPlanetDebrisMetal()
     {
-        return $this->_data['planet_debris_metal'];
+        return $this->data['planet_debris_metal'];
     }
 
     /**
@@ -365,7 +365,7 @@ class PlanetEntity extends Entity
      */
     public function getPlanetDebrisCrystal()
     {
-        return $this->_data['planet_debris_crystal'];
+        return $this->data['planet_debris_crystal'];
     }
 
     /**
@@ -373,7 +373,7 @@ class PlanetEntity extends Entity
      */
     public function getPlanetInvisibleStartTime()
     {
-        return $this->_data['planet_invisible_start_time'];
+        return $this->data['planet_invisible_start_time'];
     }
 }
 

@@ -23,7 +23,7 @@ $hook['before_page'] = [
     'function' => 'MyMethod',
     'filename' => 'MyClass.php',
     'filepath' => 'hooks',
-    'params' => ['beer', 'wine', 'snacks']
+    'params' => ['beer', 'wine', 'snacks'],
 ];
 
 /**
@@ -32,7 +32,6 @@ $hook['before_page'] = [
  * $hook['before_page'][]
  * $hook['new_page'][]
  */
-
 
 // INSERT HOOKS BEFORE THIS LINE
 /* end of hooks.php */

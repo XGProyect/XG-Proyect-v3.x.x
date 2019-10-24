@@ -30,9 +30,9 @@ class NotesEntity extends Entity
 
     /**
      * Constructor
-     * 
+     *
      * @param array $data Data
-     * 
+     *
      * @return void
      */
     public function __construct($data)
@@ -42,62 +42,62 @@ class NotesEntity extends Entity
 
     /**
      * Return the note id
-     * 
+     *
      * @return string
      */
     public function getNoteId()
     {
-        return $this->_data['note_id'];
+        return $this->data['note_id'];
     }
 
     /**
      * Return the note owner
-     * 
+     *
      * @return string
      */
     public function getNoteOwner()
     {
-        return $this->_data['note_owner'];
+        return $this->data['note_owner'];
     }
 
     /**
      * Return the note time
-     * 
+     *
      * @return string
      */
     public function getNoteTime()
     {
-        return $this->_data['note_time'];
+        return $this->data['note_time'];
     }
 
     /**
      * Return the note priority
-     * 
+     *
      * @return string
      */
     public function getNotePriority()
     {
-        return $this->_data['note_priority'];
+        return $this->data['note_priority'];
     }
 
     /**
      * Return the note title
-     * 
+     *
      * @return string
      */
     public function getNoteTitle()
     {
-        return $this->_data['note_title'];
+        return $this->data['note_title'];
     }
-    
+
     /**
      * Return the note text
-     * 
+     *
      * @return string
      */
     public function getNoteText()
     {
-        return $this->_data['note_text'];
+        return $this->data['note_text'];
     }
 }
 

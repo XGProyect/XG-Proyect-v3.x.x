@@ -25,11 +25,9 @@ namespace application\core\enumerators;
  */
 abstract class ImportanceEnumerator
 {
-
     const unimportant = 0;
     const normal = 1;
     const important = 2;
-
 }
 
 /* end of ImportanceEnumerator.php */

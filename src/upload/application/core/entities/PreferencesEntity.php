@@ -50,7 +50,7 @@ class PreferencesEntity extends Entity
      */
     public function gePreferenceId(): int
     {
-        return (int)$this->_data['preference_id'];
+        return (int)$this->data['preference_id'];
     }
 
     /**
@@ -60,7 +60,7 @@ class PreferencesEntity extends Entity
      */
     public function getPreferenceUsedId(): int
     {
-        return (int)$this->_data['preference_user_id'];
+        return (int)$this->data['preference_user_id'];
     }
 
     /**
@@ -70,7 +70,7 @@ class PreferencesEntity extends Entity
      */
     public function getPreferenceNicknameChange(): int
     {
-        return (int)$this->_data['preference_nickname_change'];
+        return (int)$this->data['preference_nickname_change'];
     }
 
     /**
@@ -80,7 +80,7 @@ class PreferencesEntity extends Entity
      */
     public function getPreferenceSpyProbes(): int
     {
-        return (int)$this->_data['preference_spy_probes'];
+        return (int)$this->data['preference_spy_probes'];
     }
 
     /**
@@ -90,7 +90,7 @@ class PreferencesEntity extends Entity
      */
     public function getPreferencePlanetSort(): int
     {
-        return (int)$this->_data['preference_planet_sort'];
+        return (int)$this->data['preference_planet_sort'];
     }
 
     /**
@@ -100,7 +100,7 @@ class PreferencesEntity extends Entity
      */
     public function getPreferencePlanetSortSequence(): int
     {
-        return (int)$this->_data['preference_planet_sort_sequence'];
+        return (int)$this->data['preference_planet_sort_sequence'];
     }
     
     /**
@@ -110,7 +110,7 @@ class PreferencesEntity extends Entity
      */
     public function getPreferenceVacationMode(): int
     {
-        return (int)$this->_data['preference_vacation_mode'];
+        return (int)$this->data['preference_vacation_mode'];
     }
 
     /**
@@ -120,7 +120,7 @@ class PreferencesEntity extends Entity
      */
     public function getPreferenceDeleteMode(): int
     {
-        return (int)$this->_data['preference_delete_mode'];
+        return (int)$this->data['preference_delete_mode'];
     }
 }
 

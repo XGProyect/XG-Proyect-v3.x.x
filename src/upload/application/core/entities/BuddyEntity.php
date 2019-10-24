@@ -47,7 +47,7 @@ class BuddyEntity extends Entity
      */
     public function getBuddyId()
     {
-        return $this->_data['buddy_id'];
+        return $this->data['buddy_id'];
     }
 
     /**
@@ -57,7 +57,7 @@ class BuddyEntity extends Entity
      */
     public function getBuddySender()
     {
-        return $this->_data['buddy_sender'];
+        return $this->data['buddy_sender'];
     }
 
     /**
@@ -67,7 +67,7 @@ class BuddyEntity extends Entity
      */
     public function getBuddyReceiver()
     {
-        return $this->_data['buddy_receiver'];
+        return $this->data['buddy_receiver'];
     }
 
     /**
@@ -77,7 +77,7 @@ class BuddyEntity extends Entity
      */
     public function getBuddyStatus()
     {
-        return $this->_data['buddy_status'];
+        return $this->data['buddy_status'];
     }
 
     /**
@@ -87,7 +87,7 @@ class BuddyEntity extends Entity
      */
     public function getRequestText()
     {
-        return $this->_data['buddy_request_text'];
+        return $this->data['buddy_request_text'];
     }
 }
 

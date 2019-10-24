@@ -25,11 +25,9 @@ namespace application\core\enumerators;
  */
 abstract class PlanetTypesEnumerator
 {
-
     const planet = 1;
     const debris = 2;
     const moon = 3;
-
 }
 
 /* end of PlanetTypesEnumerator.php */

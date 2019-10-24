@@ -54,7 +54,6 @@ class Options extends XGPCore
     public static function getInstance()
     {
         if (self::$instance == null) {
-
             //make new istance of this class and save it to field for next usage
             $class = __class__;
             self::$instance = new $class();
@@ -73,17 +72,15 @@ class Options extends XGPCore
     public function getOptions($option = '')
     {
         if ($option == '') {
-
             return $this->_db->query(
-                    "SELECT * FROM `" . OPTIONS . "`;"
+                "SELECT * FROM `" . OPTIONS . "`;"
             );
         } else {
-
             return $this->_db->queryFetch(
-                    "SELECT * 
-                    FROM `" . OPTIONS . "` 
+                "SELECT *
+                    FROM `" . OPTIONS . "`
                     WHERE `option_name` = '" . $option . "';"
-                )['option_value'];
+            )['option_value'];
         }
     }
 
@@ -98,12 +95,11 @@ class Options extends XGPCore
     public function writeOptions($option, $value = '')
     {
         if ($option != '') {
-
             if ($this->_db->query(
-                    "UPDATE `" . OPTIONS . "` 
-                    SET `option_value` = '" . $value . "' 
+                "UPDATE `" . OPTIONS . "`
+                    SET `option_value` = '" . $value . "'
                     WHERE `option_name` = '" . $option . "';"
-                )) {
+            )) {
                 return true;
             }
         }
@@ -113,20 +109,19 @@ class Options extends XGPCore
 
     /**
      * Insert a new option into database
-     * 
+     *
      * @param string $option Option
      * @param string $value  Value
-     * 
+     *
      * @return boolean
      */
     public function insertOption($option, $value = '')
     {
         if ($option != '') {
-
             if ($this->_db->query(
-                    "INSERT INTO `" . OPTIONS . "` 
+                "INSERT INTO `" . OPTIONS . "`
                     (`option_name`, `option_value`) VALUES('" . $option . "', '" . $value . "');"
-                )) {
+            )) {
                 return true;
             }
         }
@@ -136,19 +131,18 @@ class Options extends XGPCore
 
     /**
      * Delete an option permanently
-     * 
+     *
      * @param string $option Option
-     * 
+     *
      * @return boolean
      */
     public function deleteOption($option)
     {
         if ($option != '') {
-
             if ($this->_db->query(
-                    "DELETE `" . OPTIONS . "` 
+                "DELETE `" . OPTIONS . "`
                     WHERE `option_name` = '" . $option . "';"
-                )) {
+            )) {
                 return true;
             }
         }

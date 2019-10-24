@@ -46,12 +46,10 @@ class Acs extends Missions
     public function acsMission($fleet_row)
     {
         if ($fleet_row['fleet_mess'] == 0 && $fleet_row['fleet_start_time'] > time()) {
-
             parent::returnFleet($fleet_row['fleet_id']);
         }
 
         if ($fleet_row['fleet_end_time'] <= time()) {
-
             parent::restoreFleet($fleet_row);
             parent::removeFleet($fleet_row['fleet_id']);
         }

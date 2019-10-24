@@ -30,9 +30,9 @@ class ReportEntity extends Entity
 
     /**
      * Constructor
-     * 
+     *
      * @param array $data Data
-     * 
+     *
      * @return void
      */
     public function __construct($data)
@@ -42,52 +42,52 @@ class ReportEntity extends Entity
 
     /**
      * Return the report owners
-     * 
+     *
      * @return string
      */
     public function getReportOwners()
     {
-        return $this->_data['report_owners'];
+        return $this->data['report_owners'];
     }
 
     /**
      * Return the report rid
-     * 
+     *
      * @return string
      */
     public function getReportId()
     {
-        return $this->_data['report_rid'];
+        return $this->data['report_rid'];
     }
 
     /**
      * Return the report content
-     * 
+     *
      * @return string
      */
     public function getReportContent()
     {
-        return $this->_data['report_content'];
+        return $this->data['report_content'];
     }
 
     /**
      * Return the report destroyed
-     * 
+     *
      * @return string
      */
     public function getReportDestroyed()
     {
-        return $this->_data['report_destroyed'];
+        return $this->data['report_destroyed'];
     }
 
     /**
      * Return the report time
-     * 
+     *
      * @return string
      */
     public function getReportTime()
     {
-        return $this->_data['report_time'];
+        return $this->data['report_time'];
     }
 }
 

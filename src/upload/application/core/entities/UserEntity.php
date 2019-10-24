@@ -30,9 +30,9 @@ class UserEntity extends Entity
 
     /**
      * Constructor
-     * 
+     *
      * @param array $data Data
-     * 
+     *
      * @return void
      */
     public function __construct($data)

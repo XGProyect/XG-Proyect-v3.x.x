@@ -25,10 +25,8 @@ namespace application\libraries\enumerators;
  */
 abstract class BuddiesStatusEnumerator
 {
-
     const isBuddy = 1;
     const isNotBuddy = 0;
-
 }
 
 /* end of BuddiesStatusEnumerator.php */

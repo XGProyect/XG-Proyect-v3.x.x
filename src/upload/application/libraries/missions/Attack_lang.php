@@ -106,18 +106,18 @@ class Attack_lang implements Lang
 
     /**
      * getTechs
-     * 
+     *
      * @param type $weaponsTech
      * @param type $shieldsTech
      * @param type $armourTech
-     * 
+     *
      * @return string
      */
     public function getTechs($weaponsTech, $shieldsTech, $armourTech)
     {
-        return $this->lang['cr_weapons'] . ': ' . ($weaponsTech*10).'% - ' . $this->lang['cr_shields'] . ': '.($shieldsTech*10).'% - ' . $this->lang['cr_armor'] . ': '.($armourTech*10).'%';
+        return $this->lang['cr_weapons'] . ': ' . ($weaponsTech * 10) . '% - ' . $this->lang['cr_shields'] . ': ' . ($shieldsTech * 10) . '% - ' . $this->lang['cr_armor'] . ': ' . ($armourTech * 10) . '%';
     }
-    
+
     /**
      * getAttackerHasWon
      *
@@ -160,8 +160,8 @@ class Attack_lang implements Lang
     public function getStoleDescr($metal, $crystal, $deuterium)
     {
         return $this->lang['sys_stealed_ressources'] . " $metal " . $this->lang['Metal'] .
-            ", $crystal " . $this->lang['Crystal'] . " " . $this->lang['sys_and'] .
-            " $deuterium " . $this->lang['Deuterium'];
+        ", $crystal " . $this->lang['Crystal'] . " " . $this->lang['sys_and'] .
+        " $deuterium " . $this->lang['Deuterium'];
     }
 
     /**
@@ -199,7 +199,7 @@ class Attack_lang implements Lang
     public function getFloatingDebris($metal, $crystal)
     {
         return $this->lang['debree_field_1'] . ":  $metal " . $this->lang['Metal'] .
-            " $crystal " . $this->lang['Crystal'] . ' ' . $this->lang['debree_field_2'] . '.';
+        " $crystal " . $this->lang['Crystal'] . ' ' . $this->lang['debree_field_2'] . '.';
     }
 
     /**
@@ -216,12 +216,12 @@ class Attack_lang implements Lang
 
     /**
      * getNewMoon
-     * 
+     *
      * @param int $name
      * @param int $galaxy
      * @param int $system
      * @param int $planet
-     * 
+     *
      * @return string
      */
     public function getNewMoon($name, $galaxy, $system, $planet)

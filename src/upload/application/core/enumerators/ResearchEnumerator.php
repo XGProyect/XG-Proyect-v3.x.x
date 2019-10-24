@@ -25,7 +25,6 @@ namespace application\core\enumerators;
  */
 abstract class ResearchEnumerator
 {
-
     const research_espionage_technology = 106;
     const research_computer_technology = 108;
     const research_weapons_technology = 109;
@@ -42,7 +41,6 @@ abstract class ResearchEnumerator
     const research_intergalactic_research_network = 123;
     const research_astrophysics = 124;
     const research_graviton_technology = 199;
-
 }
 
 /* end of ResearchEnumerator.php */

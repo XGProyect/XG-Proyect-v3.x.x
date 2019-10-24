@@ -91,7 +91,6 @@ class Xml
 
         // if multiple result are returned so key is not unique
         if (!$result || count($result) !== 1) {
-
             throw new Exception(sprintf('Item with id "%s" does not exists or is not unique.', $config_name));
         }
 
@@ -124,7 +123,6 @@ class Xml
         $x = $this->config->children();
 
         foreach ($x as $xmlObject) {
-
             $config[(string) $xmlObject->name] = (string) $xmlObject->value;
         }
 
@@ -143,13 +141,10 @@ class Xml
     {
         //if $config_name is an array, then we wont update all values and do single save task at the end
         if (is_array($config_name)) {
-
             foreach ($config_name as $key => $value) {
-
                 $this->getXmlEntity($key)->value = $value;
             }
         } else {
-
             $this->getXmlEntity($config_name)->value = $config_value;
         }
 
@@ -166,7 +161,6 @@ class Xml
     public static function getInstance($sheet)
     {
         if (self::$instance == null) {
-
             //make new istance of this class and save it to field for next usage
             $c = __class__;
             self::$instance = new $c($sheet);

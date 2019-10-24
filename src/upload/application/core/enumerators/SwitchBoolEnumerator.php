@@ -25,10 +25,8 @@ namespace application\core\enumerators;
  */
 abstract class SwitchBoolEnumerator
 {
-
     const on = true;
     const off = false;
-
 }
 
 /* end of SwitchBoolEnumerator.php */

@@ -25,10 +25,8 @@ namespace application\core\enumerators;
  */
 abstract class SwitchIntEnumerator
 {
-
     const on = 1;
     const off = 0;
-
 }
 
 /* end of SwitchIntEnumerator.php */
