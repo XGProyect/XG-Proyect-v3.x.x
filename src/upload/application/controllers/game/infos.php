@@ -67,7 +67,7 @@ class Infos extends Controller
         $this->_prod_grid = parent::$objects->getProduction();
         $this->_current_user = parent::$users->getUserData();
         $this->_current_planet = parent::$users->getPlanetData();
-        $this->_element_id = isset($_GET['gid']) ? (int) $_GET['gid'] : NULL;
+        $this->_element_id = isset($_GET['gid']) ? (int) $_GET['gid'] : null;
 
         $this->build_page();
     }
@@ -104,7 +104,7 @@ class Infos extends Controller
         $parse['image'] = $this->_element_id;
         $parse['description'] = $this->_lang['info'][$this->_element_id]['description'];
 
-        if ($this->_element_id < 13 or ( $this->_element_id == 43 && $this->_current_planet[$this->_resource[43]] > 0 )) {
+        if ($this->_element_id < 13 or ($this->_element_id == 43 && $this->_current_planet[$this->_resource[43]] > 0)) {
             $PageTPL = parent::$page->getTemplate('infos/info_buildings_table');
         } elseif ($this->_element_id < 200) {
             $PageTPL = parent::$page->getTemplate('infos/info_buildings_general');
@@ -261,9 +261,9 @@ class Infos extends Controller
         for ($BuildLevel = $BuildStartLvl; $BuildLevel < $BuildStartLvl + 15; ++$BuildLevel) {
             $Prod = ProductionLib::maxStorable($BuildLevel);
 
-            $bloc['build_lvl'] = ( $CurrentBuildtLvl == $BuildLevel ) ? "<font color=\"#ff0000\">" . $BuildLevel . "</font>" : $BuildLevel;
+            $bloc['build_lvl'] = ($CurrentBuildtLvl == $BuildLevel) ? "<font color=\"#ff0000\">" . $BuildLevel . "</font>" : $BuildLevel;
             $bloc['build_prod'] = FormatLib::prettyNumber($Prod);
-            $bloc['build_prod_diff'] = FormatLib::colorNumber(FormatLib::prettyNumber(( $Prod - $ActualProd)));
+            $bloc['build_prod_diff'] = FormatLib::colorNumber(FormatLib::prettyNumber(($Prod - $ActualProd)));
 
             if ($ProdFirst == 0) {
                 $ProdFirst = floor($Prod);
@@ -287,7 +287,7 @@ class Infos extends Controller
         $Table = "";
 
         for ($BuildLevel = $BuildStartLvl; $BuildLevel < $BuildStartLvl + 15; ++$BuildLevel) {
-            $bloc['tech_lvl'] = ( $CurrentBuildtLvl == $BuildLevel ) ? "<font color=\"#ff0000\">" . $BuildLevel . "</font>" : $BuildLevel;
+            $bloc['tech_lvl'] = ($CurrentBuildtLvl == $BuildLevel) ? "<font color=\"#ff0000\">" . $BuildLevel . "</font>" : $BuildLevel;
             $bloc['tech_colonies'] = FormatLib::prettyNumber(FleetsLib::getMaxColonies($BuildLevel));
             $bloc['tech_expeditions'] = FormatLib::prettyNumber(FleetsLib::getMaxExpeditions($BuildLevel));
 
@@ -323,7 +323,7 @@ class Infos extends Controller
 
     /**
      * doFleetJump
-     * 
+     *
      * @return string
      */
     private function doFleetJump()
@@ -375,7 +375,6 @@ class Infos extends Controller
                                     $ShipArray[$Ship] = $gemi_kontrol;
                                 }
 
-
                                 if ($ShipArray[$Ship] > 0) {
 
                                     $SubQueryOri .= "`" . $this->_resource[$Ship] . "` = `" . $this->_resource[$Ship] . "` - '" . $ShipArray[$Ship] . "', ";
@@ -390,8 +389,8 @@ class Infos extends Controller
                                     $SubQueryOri
                                     `planet_last_jump_time` = '" . $JumpTime . "',
                                     `user_current_planet` = '" . $TargetGate['planet_id'] . "'
-                                WHERE `planet_id` = '" . $this->_current_planet['planet_id'] . "' 
-                                    AND `ship_planet_id` = '" . $this->_current_planet['planet_id'] . "' 
+                                WHERE `planet_id` = '" . $this->_current_planet['planet_id'] . "'
+                                    AND `ship_planet_id` = '" . $this->_current_planet['planet_id'] . "'
                                     AND `user_id` = '" . $this->_current_user['user_id'] . "';"
                             );
 
@@ -467,8 +466,10 @@ class Infos extends Controller
         while ($CurMoon = $this->_db->fetchAssoc($MoonList)) {
             if ($CurMoon['planet_id'] != $this->_current_planet['planet_id']) {
                 $RestString = $this->GetNextJumpWaitTime($CurMoon);
-                if ($CurMoon[$this->_resource[43]] >= 1)
+                if ($CurMoon[$this->_resource[43]] >= 1) {
                     $Combo .= "<option value=\"" . $CurMoon['planet_id'] . "\">[" . $CurMoon['planet_galaxy'] . ":" . $CurMoon['planet_system'] . ":" . $CurMoon['planet_planet'] . "] " . $CurMoon['planet_name'] . $RestString['string'] . "</option>\n";
+                }
+
             }
         }
         return $Combo;
@@ -506,8 +507,8 @@ class Infos extends Controller
         $game_resource_multiplier = FunctionsLib::readConfig('resource_multiplier');
 
         // BOOST
-        $geologe_boost = 1 + ( 1 * ( OfficiersLib::isOfficierActive($this->_current_user['premium_officier_geologist']) ? GEOLOGUE : 0 ) );
-        $engineer_boost = 1 + ( 1 * ( OfficiersLib::isOfficierActive($this->_current_user['premium_officier_engineer']) ? ENGINEER_ENERGY : 0 ) );
+        $geologe_boost = 1 + (1 * (OfficiersLib::isOfficierActive($this->_current_user['premium_officier_geologist']) ? GEOLOGUE : 0));
+        $engineer_boost = 1 + (1 * (OfficiersLib::isOfficierActive($this->_current_user['premium_officier_engineer']) ? ENGINEER_ENERGY : 0));
 
         // PRODUCTION FORMULAS
         $metal_prod = eval($this->_prod_grid[$this->_element_id]['formule']['metal']);
@@ -535,8 +536,9 @@ class Infos extends Controller
         }
 
         $BuildStartLvl = $CurrentBuildtLvl - 2;
-        if ($BuildStartLvl < 1)
+        if ($BuildStartLvl < 1) {
             $BuildStartLvl = 1;
+        }
 
         $Table = "";
         $ProdFirst = 0;
@@ -561,13 +563,15 @@ class Infos extends Controller
 
             $bloc['build_lvl'] = ($CurrentBuildtLvl == $BuildLevel) ? "<font color=\"#ff0000\">" . $BuildLevel . "</font>" : $BuildLevel;
 
-            if ($ProdFirst > 0)
-                if ($this->_element_id != 12)
+            if ($ProdFirst > 0) {
+                if ($this->_element_id != 12) {
                     $bloc['build_gain'] = "<font color=\"lime\">(" . FormatLib::prettyNumber(floor($Prod[$this->_element_id] - $ProdFirst)) . ")</font>";
-                else
+                } else {
                     $bloc['build_gain'] = "<font color=\"lime\">(" . FormatLib::prettyNumber(floor($Prod[4] - $ProdFirst)) . ")</font>";
-            else
+                }
+            } else {
                 $bloc['build_gain'] = "";
+            }
 
             if ($this->_element_id != 12) {
                 $bloc['build_prod'] = FormatLib::prettyNumber(floor($Prod[$this->_element_id]));
@@ -581,10 +585,12 @@ class Infos extends Controller
                 $bloc['build_need_diff'] = FormatLib::colorNumber(FormatLib::prettyNumber(floor($Prod[3] - $ActualNeed)));
             }
             if ($ProdFirst == 0) {
-                if ($this->_element_id != 12)
+                if ($this->_element_id != 12) {
                     $ProdFirst = floor($Prod[$this->_element_id]);
-                else
+                } else {
                     $ProdFirst = floor($Prod[4]);
+                }
+
             }
 
             $Table .= parent::$page->parseTemplate($Template, $bloc);
@@ -597,8 +603,10 @@ class Infos extends Controller
     {
         $ResultString = "";
         for ($Type = 200; $Type < 500; $Type++) {
-            if (isset($this->_combat_caps[$this->_element_id]['sd'][$Type]) && $this->_combat_caps[$this->_element_id]['sd'][$Type] > 1)
+            if (isset($this->_combat_caps[$this->_element_id]['sd'][$Type]) && $this->_combat_caps[$this->_element_id]['sd'][$Type] > 1) {
                 $ResultString .= $this->_lang['in_rf_again'] . " " . $this->_lang['tech'][$Type] . " <font color=\"#00ff00\">" . $this->_combat_caps[$this->_element_id]['sd'][$Type] . "</font><br>";
+            }
+
         }
         return $ResultString;
     }
@@ -607,8 +615,10 @@ class Infos extends Controller
     {
         $ResultString = "";
         for ($Type = 200; $Type < 500; $Type++) {
-            if (isset($this->_combat_caps[$Type]['sd'][$this->_element_id]) && $this->_combat_caps[$Type]['sd'][$this->_element_id] > 1)
+            if (isset($this->_combat_caps[$Type]['sd'][$this->_element_id]) && $this->_combat_caps[$Type]['sd'][$this->_element_id] > 1) {
                 $ResultString .= $this->_lang['in_rf_from'] . " " . $this->_lang['tech'][$Type] . " <font color=\"#ff0000\">" . $this->_combat_caps[$Type]['sd'][$this->_element_id] . "</font><br>";
+            }
+
         }
         return $ResultString;
     }

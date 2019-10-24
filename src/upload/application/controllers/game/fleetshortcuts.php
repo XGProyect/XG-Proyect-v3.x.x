@@ -16,9 +16,6 @@ namespace application\controllers\game;
 use application\core\Controller;
 use application\libraries\FunctionsLib;
 use application\libraries\users\Shortcuts;
-use const MAX_GALAXY_IN_WORLD;
-use const MAX_PLANET_IN_SYSTEM;
-use const MAX_SYSTEM_IN_GALAXY;
 
 /**
  * Fleetshortcuts Class
@@ -34,17 +31,17 @@ class Fleetshortcuts extends Controller
 {
 
     /**
-     * 
+     *
      * @var int
      */
     const MODULE_ID = 8;
 
     /**
-     * 
+     *
      * @var string
      */
     const REDIRECT_TARGET = 'game.php?page=shortcuts';
-    
+
     /**
      *
      * @var array
@@ -56,22 +53,22 @@ class Fleetshortcuts extends Controller
      * @var \Shortcuts
      */
     private $_shortcuts = null;
-    
+
     /**
      *
      * @var int
      */
     private $_shortcuts_count = 0;
-    
+
     /**
      *
      * @var array
      */
     private $_clean_data = [];
-    
+
     /**
      * Constructor
-     * 
+     *
      * @return void
      */
     public function __construct()
@@ -83,7 +80,7 @@ class Fleetshortcuts extends Controller
 
         // load Model
         parent::loadModel('game/shortcuts');
-        
+
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
@@ -95,7 +92,7 @@ class Fleetshortcuts extends Controller
 
         // time to do something
         $this->runAction();
-        
+
         // build the page
         $this->buildPage();
     }
@@ -103,7 +100,7 @@ class Fleetshortcuts extends Controller
     /**
      * Creates a new shortcut object that will handle all the shortcuts
      * creation methods and actions
-     * 
+     *
      * @return void
      */
     private function setUpShortcuts()
@@ -115,7 +112,7 @@ class Fleetshortcuts extends Controller
 
     /**
      * Run an action
-     * 
+     *
      * @return void
      */
     private function runAction()
@@ -125,53 +122,53 @@ class Fleetshortcuts extends Controller
             'mode',
             FILTER_CALLBACK,
             [
-                'options' => function($value) {
-                    
+                'options' => function ($value) {
+
                     if (in_array($value, ['add', 'edit', 'delete', 'a'])) {
-                        
+
                         return $value;
                     }
-                    
+
                     return false;
-                }
+                },
             ]
         );
-            
+
         $data = filter_input_array(INPUT_POST, [
             'name' => FILTER_SANITIZE_STRING,
             'galaxy' => [
-                'filter'    => FILTER_VALIDATE_INT,
-                'options'   => ['min_range' => 1, 'max_range' => MAX_GALAXY_IN_WORLD]
+                'filter' => FILTER_VALIDATE_INT,
+                'options' => ['min_range' => 1, 'max_range' => MAX_GALAXY_IN_WORLD],
             ],
             'system' => [
-                'filter'    => FILTER_VALIDATE_INT,
-                'options'   => ['min_range' => 1, 'max_range' => MAX_SYSTEM_IN_GALAXY]
+                'filter' => FILTER_VALIDATE_INT,
+                'options' => ['min_range' => 1, 'max_range' => MAX_SYSTEM_IN_GALAXY],
             ],
             'planet' => [
-                'filter'    => FILTER_VALIDATE_INT,
-                'options'   => ['min_range' => 1, 'max_range' => (MAX_PLANET_IN_SYSTEM + 1)]
+                'filter' => FILTER_VALIDATE_INT,
+                'options' => ['min_range' => 1, 'max_range' => (MAX_PLANET_IN_SYSTEM + 1)],
             ],
             'type' => [
-                'filter'    => FILTER_VALIDATE_INT,
-                'options'   => ['min_range' => 1, 'max_range' => 3]
-            ]
+                'filter' => FILTER_VALIDATE_INT,
+                'options' => ['min_range' => 1, 'max_range' => 3],
+            ],
         ]);
 
         $action = filter_input(INPUT_GET, 'a', FILTER_VALIDATE_INT);
-            
+
         if ($mode) {
-            
+
             $this->_clean_data['mode'] = $mode;
             $this->_clean_data['data'] = $data;
             $this->_clean_data['action'] = $action;
-            
-            $this->{$mode .'Shortcut'}();
+
+            $this->{$mode . 'Shortcut'}();
         }
     }
-    
+
     /**
      * Build the page
-     * 
+     *
      * @return void
      */
     private function buildPage()
@@ -181,9 +178,9 @@ class Fleetshortcuts extends Controller
          */
         $page = [
             'shortcuts' => $this->buildShortcuts(),
-            'no_shortcuts' => $this->_shortcuts_count <= 0 ? '<th colspan="2">' . $this->getLang()['fl_no_shortcuts'] . '</th>' : ''
+            'no_shortcuts' => $this->_shortcuts_count <= 0 ? '<th colspan="2">' . $this->getLang()['fl_no_shortcuts'] . '</th>' : '',
         ];
-        
+
         // display the page
         parent::$page->display(
             $this->getTemplate()->set(
@@ -197,19 +194,19 @@ class Fleetshortcuts extends Controller
 
     /**
      * Build the shortcuts list
-     * 
+     *
      * @return array
      */
     private function buildShortcuts(): array
     {
         $shortcuts = $this->_shortcuts->getAllAsArray();
         $list_of_shortcuts = [];
-        
+
         if (count($shortcuts) > 0) {
 
             $set_row = true;
             $shortcut_id = 0;
-            
+
             foreach ($shortcuts as $shortcut) {
 
                 $list_of_shortcuts[] = [
@@ -231,16 +228,16 @@ class Fleetshortcuts extends Controller
 
         return $list_of_shortcuts;
     }
-    
+
     /**
      * Create a shortcut
-     * 
+     *
      * @return void
      */
     private function addShortcut(): void
     {
         $this->setData();
-        
+
         /**
          * Parse the items
          */
@@ -252,30 +249,30 @@ class Fleetshortcuts extends Controller
             'galaxy' => '',
             'system' => '',
             'planet' => '',
-            'type' => ''
+            'type' => '',
         ];
-        
+
         $this->buildEdit($page);
     }
-    
+
     /**
      * Edit a shortcut
-     * 
+     *
      * @return void
      */
     private function editShortcut(): void
     {
         $this->setData();
-        
+
         $shortcut_id = $this->_clean_data['action'];
-        
+
         if ($shortcut_id === false) {
-            
+
             FunctionsLib::redirect(self::REDIRECT_TARGET);
         }
-        
+
         $shortcut = $this->_shortcuts->getById($shortcut_id);
-        
+
         /**
          * Parse the items
          */
@@ -287,27 +284,27 @@ class Fleetshortcuts extends Controller
             'galaxy' => $shortcut['g'],
             'system' => $shortcut['s'],
             'planet' => $shortcut['p'],
-            'type' . $shortcut['pt']  => 'selected="selected"',
+            'type' . $shortcut['pt'] => 'selected="selected"',
         ];
-        
+
         $this->buildEdit($page);
     }
-    
+
     /**
      * Delete a shortcut
-     * 
+     *
      * @return void
      */
     private function deleteShortcut(): void
     {
         $this->setData();
     }
-    
+
     /**
      * Build the edit view
-     * 
+     *
      * @param array $page Page Data
-     * 
+     *
      * @return void
      */
     private function buildEdit(array $page): void
@@ -322,48 +319,48 @@ class Fleetshortcuts extends Controller
             )
         );
     }
-    
+
     /**
      * Set and save the post data if valid
-     * 
+     *
      * @return void
      */
     private function setData(): void
-    {        
+    {
         $data = $this->_clean_data['data'];
-        
+
         if (is_array($data)) {
-         
+
             if (!empty($data['name']) && $data['galaxy'] && $data['system'] && $data['planet'] && $data['type']) {
-            
+
                 $mode = $this->_clean_data['mode'];
                 $action = $this->_clean_data['action'];
-                
+
                 if (!is_null($action) && !is_null($mode)) {
 
                     if ($mode == 'edit') {
 
                         $this->_shortcuts->editById(
                             $action, $data['name'], $data['galaxy'], $data['system'], $data['planet'], $data['type']
-                        );  
+                        );
                     }
-                    
+
                     if ($mode == 'delete') {
-                        
+
                         $this->_shortcuts->deleteById($action);
-                    } 
+                    }
                 } else {
 
                     $this->_shortcuts->addNew(
                         $data['name'], $data['galaxy'], $data['system'], $data['planet'], $data['type']
                     );
                 }
-                
+
                 $this->Shortcuts_Model->updateShortcuts(
                     $this->_user['user_id'], $this->_shortcuts->getAllAsJsonString()
                 );
             }
-            
+
             FunctionsLib::redirect(self::REDIRECT_TARGET);
         }
     }

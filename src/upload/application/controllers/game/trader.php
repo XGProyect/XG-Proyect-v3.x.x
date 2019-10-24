@@ -3,7 +3,7 @@
  * Trader Controller
  *
  * PHP Version 7.1+
- * 
+ *
  * @category Controller
  * @package  Application
  * @author   XG Proyect Team
@@ -107,7 +107,7 @@ class Trader extends Controller
                         $amout = array(
                             'metal' => 0,
                             'crystal' => $_POST['cristal'],
-                            'deuterium' => $_POST['deut']
+                            'deuterium' => $_POST['deut'],
                         );
 
                         $storage = $this->checkStorage($amout);
@@ -149,7 +149,7 @@ class Trader extends Controller
                         $amout = array(
                             'metal' => $_POST['metal'],
                             'crystal' => 0,
-                            'deuterium' => $_POST['deut']
+                            'deuterium' => $_POST['deut'],
                         );
 
                         $storage = $this->checkStorage($amout);
@@ -191,7 +191,7 @@ class Trader extends Controller
                         $amout = array(
                             'metal' => $_POST['metal'],
                             'crystal' => $_POST['cristal'],
-                            'deuterium' => 0
+                            'deuterium' => 0,
                         );
 
                         $storage = $this->checkStorage($amout);
