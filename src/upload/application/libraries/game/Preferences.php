@@ -32,15 +32,15 @@ class Preferences
 {
     /**
      *
-     * @var array 
+     * @var array
      */
-    private $_preferences = [];
+    private $preferences = [];
     
     /**
      *
-     * @var int 
+     * @var int
      */
-    private $_current_user_id = 0;
+    private $current_user_id = 0;
     
     /**
      * Constructor
@@ -52,7 +52,6 @@ class Preferences
     public function __construct(array $preferences, int  $current_user_id)
     {
         if (is_array($preferences)) {
-            
             $this->setUp($preferences);
             $this->setUserId($current_user_id);
         }
@@ -60,17 +59,15 @@ class Preferences
     
     /**
      * Get all the preferences
-     * 
+     *
      * @return array
      */
     public function getPreferences(): array
     {
         $list_of_preferences = [];
         
-        foreach($this->_preferences as $preference) {
-            
+        foreach ($this->preferences as $preference) {
             if (($preference instanceof PreferenceEntity)) {
-                
                 $list_of_preferences[] = $preference;
             }
         }
@@ -80,17 +77,17 @@ class Preferences
     
     /**
      * Return current preference data
-     * 
+     *
      * @return \PreferencesEntity
      */
     public function getCurrentPreference(): PreferencesEntity
     {
-        return $this->_preferences[0];
+        return $this->preferences[0];
     }
     
     /**
      * Check if is the preference owner
-     * 
+     *
      * @return boolean
      */
     public function isOwner(): bool
@@ -130,50 +127,49 @@ class Preferences
     
     /**
      * Set up the list of preferences
-     * 
+     *
      * @param array $preferences Preferences
-     * 
+     *
      * @return void
      */
     private function setUp($preferences): void
     {
         foreach ($preferences as $preference) {
-
-            $this->_preferences[] = $this->createNewPreferencesEntity($preference);
+            $this->preferences[] = $this->createNewPreferencesEntity($preference);
         }
     }
     
     /**
      * Set the user id
-     * 
+     *
      * @param int $user_id User Id
-     * 
+     *
      * @return void
      */
     private function setUserId($user_id): void
     {
-        $this->_current_user_id = $user_id;
+        $this->current_user_id = $user_id;
     }
     
     /**
      * Get the user id
-     * 
+     *
      * @return int
      */
     private function getUserId(): int
     {
-        return $this->_current_user_id;
+        return $this->current_user_id;
     }
     
     /**
      * Create a new instance of PreferencesEntity
-     * 
+     *
      * @param array $preference Preference
-     * 
+     *
      * @return \PreferencesEntity
      */
     private function createNewPreferencesEntity($preference)
-    {   
+    {
         return new PreferencesEntity($preference);
     }
 }

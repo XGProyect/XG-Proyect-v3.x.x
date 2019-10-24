@@ -33,7 +33,7 @@ class Preferences
 
     /**
      * Constructor
-     * 
+     *
      * @return void
      */
     public function __construct($db)
@@ -44,7 +44,7 @@ class Preferences
 
     /**
      * __destruct
-     * 
+     *
      * @return void
      */
     public function __destruct()
@@ -54,9 +54,9 @@ class Preferences
 
     /**
      * Get all preferences by a certain user
-     * 
+     *
      * @param int $user_id
-     * 
+     *
      * @return array
      */
     public function getAllPreferencesByUserId(int $user_id): array
@@ -113,14 +113,11 @@ class Preferences
         $columns_to_update  = [];
 
         foreach ($fields as $column => $value) {
-
             if (strpos($column, 'user_') !== false) {
-
                 $columns_to_update[] = "u.`" . $column . "` = '" . $value . "'";
             }
 
             if (strpos($column, 'preference_') !== false) {
-
                 $columns_to_update[] = "p.`" . $column . "` = " . (is_null($value) ? 'NULL' : "'" . $value . "'");
             }
         }

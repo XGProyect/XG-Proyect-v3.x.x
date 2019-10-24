@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types = 1);
 
 /**
  * Preferences Controller
@@ -20,9 +20,8 @@ use application\core\Controller;
 use application\core\enumerators\PreferencesEnumerator as PrefEnum;
 use application\libraries\FormatLib as Format;
 use application\libraries\FunctionsLib as Functions;
-use application\libraries\Timing_library as Timing;
 use application\libraries\game\Preferences as Pref;
-use const MODULE_ID;
+use application\libraries\Timing_library as Timing;
 
 /**
  * Preferences Class
@@ -34,11 +33,12 @@ use const MODULE_ID;
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
+
 class Preferences extends Controller
 {
 
     const MODULE_ID = 21;
-    
+
     /**
      *
      * @var type \Users_library
@@ -47,7 +47,7 @@ class Preferences extends Controller
 
     /**
      * Reference to Preferences library
-     * 
+     *
      * @var \Preferences
      */
     private $_preferences = null;
@@ -75,7 +75,7 @@ class Preferences extends Controller
 
     /**
      * Constructor
-     * 
+     *
      * @return void
      */
     public function __construct()
@@ -87,7 +87,7 @@ class Preferences extends Controller
 
         // load Model
         parent::loadModel('game/preferences');
-        
+
         // Check module access
         Functions::moduleMessage(Functions::isModuleAccesible(self::MODULE_ID));
 
@@ -107,20 +107,20 @@ class Preferences extends Controller
     /**
      * Creates a new preferences object that will handle all the preferences
      * creation methods and actions
-     * 
+     *
      * @return void
      */
     private function setUpPreferences()
     {
         $this->_preferences = new Pref(
-            $this->Preferences_Model->getAllPreferencesByUserId((int)$this->_user['user_id']),
-            (int)$this->_user['user_id']
+            $this->Preferences_Model->getAllPreferencesByUserId((int) $this->_user['user_id']),
+            (int) $this->_user['user_id']
         );
     }
 
     /**
      * Run an action
-     * 
+     *
      * @return void
      */
     private function runAction()
@@ -143,17 +143,17 @@ class Preferences extends Controller
             'confirmation_email_password' => FILTER_SANITIZE_STRING,
             'preference_spy_probes' => [
                 'filter' => FILTER_VALIDATE_INT,
-                'options' => ['default' => 1, 'min_range' => 1, 'max_range' => 99]
+                'options' => ['default' => 1, 'min_range' => 1, 'max_range' => 99],
             ],
             'preference_planet_sort' => [
                 'filter' => FILTER_VALIDATE_INT,
-                'options' => ['default' => 0, 'min_range' => 0, 'max_range' => (count(PrefEnum::order)-1)]
+                'options' => ['default' => 0, 'min_range' => 0, 'max_range' => (count(PrefEnum::order) - 1)],
             ],
             'preference_planet_sort_sequence' => [
                 'filter' => FILTER_VALIDATE_INT,
-                'options' => ['default' => 0, 'min_range' => 0, 'max_range' => (count(PrefEnum::sequence)-1)]
+                'options' => ['default' => 0, 'min_range' => 0, 'max_range' => (count(PrefEnum::sequence) - 1)],
             ],
-            'preference_delete_mode' => FILTER_SANITIZE_STRING
+            'preference_delete_mode' => FILTER_SANITIZE_STRING,
         ]);
 
         if ($preferences) {
@@ -176,7 +176,7 @@ class Preferences extends Controller
             if ($this->_error == '') {
 
                 $this->Preferences_Model->updateValidatedFields(
-                    $this->_fields_to_update, (int)$this->_user['user_id']
+                    $this->_fields_to_update, (int) $this->_user['user_id']
                 );
             }
         }
@@ -184,7 +184,7 @@ class Preferences extends Controller
 
     /**
      * Build the page
-     * 
+     *
      * @return void
      */
     private function buildPage()
@@ -216,7 +216,7 @@ class Preferences extends Controller
     private function setMessageDisplay(): array
     {
         $message = [
-            'status_message' => []
+            'status_message' => [],
         ];
 
         if ($this->_post) {
@@ -225,7 +225,7 @@ class Preferences extends Controller
                 'status_message' => '',
                 '/status_message' => '',
                 'error_color' => ($this->_error == '' ? '#00FF00' : '#FF0000'),
-                'error_text' => ($this->_error == '' ? $this->getLang()['pr_ok_settings_saved'] : $this->_error)
+                'error_text' => ($this->_error == '' ? $this->getLang()['pr_ok_settings_saved'] : $this->_error),
             ];
         }
 
@@ -236,12 +236,12 @@ class Preferences extends Controller
     {
         return [
             'user_name' => $this->_user['user_name'],
-            
+
             'hide_nickname_change' => ($this->_preferences->isNickNameChangeAllowed() ? '' : 'style="display: none"'),
-            'user_email' => $this->_user['user_email']
+            'user_email' => $this->_user['user_email'],
         ];
     }
-    
+
     /**
      * Returns an array with the different options to sort a planet
      *
@@ -251,12 +251,12 @@ class Preferences extends Controller
     {
         $order_options = [];
 
-        foreach(PrefEnum::order as $order => $value) {
+        foreach (PrefEnum::order as $order => $value) {
 
             $order_options[] = [
                 'value' => $value,
                 'selected' => ($value == $this->_preferences->getCurrentPreference()->getPreferencePlanetSort() ? 'selected="selected"' : ''),
-                'text' => $this->getLang()['pr_order_' . $order]
+                'text' => $this->getLang()['pr_order_' . $order],
             ];
         }
 
@@ -272,12 +272,12 @@ class Preferences extends Controller
     {
         $sequence_options = [];
 
-        foreach(PrefEnum::sequence as $sequence => $value) {
+        foreach (PrefEnum::sequence as $sequence => $value) {
 
             $sequence_options[] = [
                 'value' => $value,
                 'selected' => ($value == $this->_preferences->getCurrentPreference()->getPreferencePlanetSortSequence() ? 'selected="selected"' : ''),
-                'text' => $this->getLang()['pr_sorting_sequence_' . $sequence]
+                'text' => $this->getLang()['pr_sorting_sequence_' . $sequence],
             ];
         }
 
@@ -296,13 +296,13 @@ class Preferences extends Controller
             return [
                 'hide_vacation_invalid' => 'style="display: none"',
                 'pr_vacation_mode_active' => Format::strongText(Format::colorRed($this->getLang()['pr_vacation_mode_active'])),
-                'disabled' => ($this->_preferences->isVacationModeRemovalAllowed() ? '' : 'style="display: none"')
+                'disabled' => ($this->_preferences->isVacationModeRemovalAllowed() ? '' : 'style="display: none"'),
             ];
         }
 
         return [
             'hide_no_vacation' => 'style="display: none"',
-            'pr_vacation_mode_active' => ''
+            'pr_vacation_mode_active' => '',
         ];
     }
 
@@ -321,7 +321,7 @@ class Preferences extends Controller
                     ['%s' => Timing::formatExtendedDate($this->_preferences->getCurrentPreference()->getPreferenceDeleteMode() + ONE_WEEK)]
                 )),
                 'preference_delete_mode' => 'checked="checked"',
-                'hide_delete' => 'style="display: none"'
+                'hide_delete' => 'style="display: none"',
             ];
         }
 
@@ -336,7 +336,7 @@ class Preferences extends Controller
      */
     private function validateNewUserName(array $preferences): void
     {
-        if (isset($preferences['new_user_name']) 
+        if (isset($preferences['new_user_name'])
             && isset($preferences['confirmation_user_password'])
             && $this->_preferences->isNickNameChangeAllowed()) {
 
@@ -385,7 +385,7 @@ class Preferences extends Controller
             }
         }
     }
-    
+
     /**
      * Validate new email
      *
@@ -394,7 +394,7 @@ class Preferences extends Controller
      */
     private function validateNewEmail(array $preferences): void
     {
-        if (isset($preferences['new_user_email']) 
+        if (isset($preferences['new_user_email'])
             && isset($preferences['confirmation_email_password'])) {
 
             if (sha1($preferences['confirmation_email_password']) == $this->_user['user_password']) {
@@ -478,7 +478,7 @@ class Preferences extends Controller
     {
         if (isset($preferences['preference_delete_mode'])
             && $preferences['preference_delete_mode'] = 'on') {
-            
+
             $this->_fields_to_update['preference_delete_mode'] = time();
         } else {
 
