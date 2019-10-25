@@ -18,11 +18,9 @@ define('XGP_ROOT', realpath(dirname(__DIR__)) . DIRECTORY_SEPARATOR);
 include XGP_ROOT . 'application/core/common.php';
 
 if (isset($_GET['content'])) {
-
     $file_name = XGP_ROOT . AJAX_PATH . $_GET['content'] . '.php';
 
     if (file_exists($file_name)) {
-
         include $file_name;
 
         $class_name = 'application\controllers\ajax\\' . ucfirst($_GET['content']);

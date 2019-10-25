@@ -29,7 +29,7 @@ class Media extends Controller
 {
     /**
      * Constructor
-     * 
+     *
      * @return void
      */
     public function __construct()
@@ -42,13 +42,16 @@ class Media extends Controller
 
     /**
      * Build the page
-     * 
+     *
      * @return void
      */
     private function buildPage()
     {
         parent::$page->display(
-            $this->getTemplate()->set('ajax/media_view', $this->getLang()), false, '', false
+            $this->getTemplate()->set('ajax/media_view', $this->getLang()),
+            false,
+            '',
+            false
         );
     }
 }

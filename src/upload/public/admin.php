@@ -25,7 +25,6 @@ include_once XGP_ROOT . 'application' . DIRECTORY_SEPARATOR . 'libraries' . DIRE
 $page = filter_input(INPUT_GET, 'page');
 
 if (is_null($page)) {
-    
     $page = 'home';
 }
 
@@ -33,22 +32,17 @@ $file_name = XGP_ROOT . ADMIN_PATH . $page . '.php';
 
 // logout
 if ($page == 'logout') {
-
     AdministrationLib::closeSession();
     FunctionsLib::redirect(SYSTEM_ROOT . 'game.php?page=overview');
 }
 
 if (file_exists($file_name)) {
-
     include $file_name;
-
-
 
     $class_name = 'application\controllers\adm\\' . ucfirst($page);
 
     new $class_name();
 } else {
-
     FunctionsLib::redirect(XGP_ROOT . 'admin.php');
 }
 

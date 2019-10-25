@@ -34,4 +34,4 @@ interface Lang
     public function getNewMoon($name, $galaxy, $system, $planet);
 }
 
-?>
+/* end of Lang.php */

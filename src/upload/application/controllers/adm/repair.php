@@ -84,14 +84,13 @@ class Repair extends Controller
         $parse['alert'] = '';
 
         if (!$_POST) {
-
             $tables = $this->_db->query(
-                "SELECT 
+                "SELECT
                     `table_name`,
                     `data_length`,
                     `index_length`,
                     `data_free`
-                FROM information_schema.TABLES 
+                FROM information_schema.TABLES
                 WHERE table_schema = '" . DB_NAME . "';"
             );
 

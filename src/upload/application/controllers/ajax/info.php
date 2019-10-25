@@ -29,7 +29,7 @@ class Info extends Controller
 {
     /**
      * Constructor
-     * 
+     *
      * @return void
      */
     public function __construct()
@@ -42,13 +42,16 @@ class Info extends Controller
 
     /**
      * Build the page
-     * 
+     *
      * @return void
      */
     private function buildPage()
     {
         parent::$page->display(
-            $this->getTemplate()->set('ajax/info_view', $this->getLang()), false, '', false
+            $this->getTemplate()->set('ajax/info_view', $this->getLang()),
+            false,
+            '',
+            false
         );
     }
 }

@@ -30,7 +30,7 @@ class Overview
 
     /**
      * Constructor
-     * 
+     *
      * @return void
      */
     public function __construct($db)
@@ -41,7 +41,7 @@ class Overview
 
     /**
      * __destruct
-     * 
+     *
      * @return void
      */
     public function __destruct()
@@ -51,44 +51,43 @@ class Overview
 
     /**
      * Get own fleets
-     * 
+     *
      * @param type $user_id
-     * 
+     *
      * @return mixed
      */
     public function getOwnFleets($user_id)
     {
         if ((int) $user_id > 0) {
-
             return $this->db->queryFetchAll(
-                    "SELECT 
-                    f.*, 
-                    po.`planet_name` AS `start_planet_name`, 
+                "SELECT
+                    f.*,
+                    po.`planet_name` AS `start_planet_name`,
                     pt.`planet_name` AS `target_planet_name`,
-                    uo.`user_name` AS `start_planet_user`, 
+                    uo.`user_name` AS `start_planet_user`,
                     ut.`user_name` AS `target_planet_user`
                 FROM `" . FLEETS . "` f
                     INNER JOIN `" . USERS . "` uo
                     	ON uo.`user_id` = f.`fleet_owner`
                     LEFT JOIN `" . USERS . "` ut
                     	ON ut.`user_id` = f.`fleet_target_owner`
-                    INNER JOIN `" . PLANETS . "` po 
-                	ON 
+                    INNER JOIN `" . PLANETS . "` po
+                	ON
                         (
-                            po.planet_galaxy = f.fleet_start_galaxy AND 
-                            po.planet_system = f.fleet_start_system AND 
-                            po.planet_planet = f.fleet_start_planet AND 
-                            po.planet_type = f.fleet_start_type 
+                            po.planet_galaxy = f.fleet_start_galaxy AND
+                            po.planet_system = f.fleet_start_system AND
+                            po.planet_planet = f.fleet_start_planet AND
+                            po.planet_type = f.fleet_start_type
                         )
-                    LEFT JOIN `" . PLANETS . "` pt 
-                	ON 
+                    LEFT JOIN `" . PLANETS . "` pt
+                	ON
                         (
-                            pt.planet_galaxy = f.fleet_end_galaxy AND 
-                            pt.planet_system = f.fleet_end_system AND 
-                            pt.planet_planet = f.fleet_end_planet AND 
-                            pt.planet_type = f.fleet_end_type 
+                            pt.planet_galaxy = f.fleet_end_galaxy AND
+                            pt.planet_system = f.fleet_end_system AND
+                            pt.planet_planet = f.fleet_end_planet AND
+                            pt.planet_type = f.fleet_end_type
                         )
-                WHERE f.`fleet_owner` = '" . $user_id . "' OR 
+                WHERE f.`fleet_owner` = '" . $user_id . "' OR
                     f.`fleet_target_owner` = '" . $user_id . "'"
             );
         }
@@ -98,17 +97,16 @@ class Overview
 
     /**
      * Get own fleets
-     * 
+     *
      * @param type $user_id
-     * 
+     *
      * @return mixed
      */
     public function getPlanets($user_id)
     {
         if ((int) $user_id > 0) {
-
             return $this->db->queryFetchAll(
-                    "SELECT *
+                "SELECT *
                     FROM " . PLANETS . " AS p
                     INNER JOIN " . BUILDINGS . " AS b ON b.building_planet_id = p.`planet_id`
                     INNER JOIN " . DEFENSES . " AS d ON d.defense_planet_id = p.`planet_id`
