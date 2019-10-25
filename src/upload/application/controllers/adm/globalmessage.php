@@ -86,7 +86,7 @@ class Globalmessage extends Controller
             $color = $info[$this->_current_user['user_authlevel']]['color'];
             $level = $this->_lang['user_level'][$this->_current_user['user_authlevel']];
 
-            if (( isset($_POST['tresc']) && $_POST['tresc'] != '' ) && ( isset($_POST['temat']) && $_POST['temat'] != '' ) && ( isset($_POST['message']) or isset($_POST['mail']) )) {
+            if ((isset($_POST['tresc']) && $_POST['tresc'] != '') && (isset($_POST['temat']) && $_POST['temat'] != '') && (isset($_POST['message']) or isset($_POST['mail']))) {
                 $sq = $this->_db->query("SELECT `user_id` , `user_name`, `user_email`
 														FROM " . USERS . "");
 
@@ -106,13 +106,15 @@ class Globalmessage extends Controller
                     $i = 0;
                     $from = [
                         'mail' => FunctionsLib::readConfig('admin_email'),
-                        'name' => FunctionsLib::readConfig('game_name')
+                        'name' => FunctionsLib::readConfig('game_name'),
                     ];
 
                     while ($u = $this->_db->fetchArray($sq)) {
-
                         FunctionsLib::sendEmail(
-                            $u['user_email'], $_POST['temat'], $_POST['tresc'], $from
+                            $u['user_email'],
+                            $_POST['temat'],
+                            $_POST['tresc'],
+                            $from
                         );
 
                         // 20 per row

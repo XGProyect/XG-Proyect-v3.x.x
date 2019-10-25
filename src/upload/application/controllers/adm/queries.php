@@ -48,12 +48,10 @@ class Queries extends Controller
 
         // Check if the user is allowed to access
         if (AdministrationLib::haveAccess(
-                $this->current_user['user_authlevel']
-            ) && $this->current_user['user_authlevel'] == 3 && ADMIN_ACCESS_QUERY === true) {
-
+            $this->current_user['user_authlevel']
+        ) && $this->current_user['user_authlevel'] == 3 && ADMIN_ACCESS_QUERY === true) {
             $this->buildPage();
         } else {
-
             die(AdministrationLib::noAccessMessage($this->langs['ge_no_permissions']));
         }
     }
@@ -69,7 +67,6 @@ class Queries extends Controller
         $query = isset($_POST['querie']) ? $_POST['querie'] : null;
 
         if (isset($_POST) && !empty($query)) {
-
             // clean
             $query = str_replace("\'", "'", str_replace('\"', '"', $query));
 
@@ -78,10 +75,8 @@ class Queries extends Controller
 
             // do
             if (!$connection->query($query)) {
-
                 $parse['alert'] = AdministrationLib::saveMessage('error', $connection->error);
             } else {
-
                 $parse['alert'] = AdministrationLib::saveMessage('ok', $this->langs['qe_succes']);
             }
         }

@@ -19,8 +19,6 @@ use application\libraries\adm\AdministrationLib;
 use application\libraries\FleetsLib;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
-use const FLEETS;
-use const USERS;
 
 /**
  * Fleetmovements Class
@@ -106,7 +104,7 @@ class Fleetmovements extends Controller
 
         while ($fleet = $this->_db->fetchArray($this->_flying_fleets)) {
             $block['num'] = ++$i;
-            $block['mission'] = $this->resources_pop_up($this->_lang['ff_type_mission'][$fleet['fleet_mission']] . ' ' . ( FleetsLib::isFleetReturning($fleet['fleet_mess']) ? $this->_lang['ff_r'] : $this->_lang['ff_a'] ), $fleet);
+            $block['mission'] = $this->resources_pop_up($this->_lang['ff_type_mission'][$fleet['fleet_mission']] . ' ' . (FleetsLib::isFleetReturning($fleet['fleet_mess']) ? $this->_lang['ff_r'] : $this->_lang['ff_a']), $fleet);
             $block['amount'] = $this->ships_pop_up($this->_lang['ff_ships'], $fleet);
             $block['beginning'] = FormatLib::prettyCoords($fleet['fleet_start_galaxy'], $fleet['fleet_start_system'], $fleet['fleet_start_planet']);
             $block['departure'] = date(FunctionsLib::readConfig('date_format_extended'), $fleet['fleet_creation']);
@@ -129,7 +127,7 @@ class Fleetmovements extends Controller
     {
         $total_resources = $content['fleet_resource_metal'] + $content['fleet_resource_crystal'] + $content['fleet_resource_deuterium'];
 
-        if ($total_resources <> 0) {
+        if ($total_resources != 0) {
             $resources_popup = $this->_lang['ff_metal'] . ': ' . FormatLib::prettyNumber($content['fleet_resource_metal']) . '<br />';
             $resources_popup .= $this->_lang['ff_crystal'] . ': ' . FormatLib::prettyNumber($content['fleet_resource_crystal']) . '<br />';
             $resources_popup .= $this->_lang['ff_deuterium'] . ': ' . FormatLib::prettyNumber($content['fleet_resource_deuterium']);
@@ -154,7 +152,6 @@ class Fleetmovements extends Controller
         $pop_up = '';
 
         foreach ($ships as $ship => $amount) {
-            
             $pop_up .= $this->_lang['tech'][$ship] . ': ' . FormatLib::prettyNumber($amount) . '<br />';
         }
 

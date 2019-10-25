@@ -1,6 +1,6 @@
 <?php
 /**
- * Updates_library Model
+ * UpdatesLibrary Model
  *
  * PHP Version 7.1+
  *
@@ -14,7 +14,7 @@
 namespace application\models\libraries;
 
 /**
- * Updates_library Class
+ * UpdatesLibrary Class
  *
  * @category Classes
  * @package  Application
@@ -23,7 +23,7 @@ namespace application\models\libraries;
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-class Updates_library
+class UpdatesLibrary
 {
 
     private $db = null;

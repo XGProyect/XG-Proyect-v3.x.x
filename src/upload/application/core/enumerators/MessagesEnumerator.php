@@ -25,12 +25,12 @@ namespace application\core\enumerators;
  */
 abstract class MessagesEnumerator
 {
-    const espio = 0;
-    const combat = 1;
-    const exp = 2;
-    const ally = 3;
-    const user = 4;
-    const general = 5;
+    const ESPIO = 0;
+    const COMBAT = 1;
+    const EXP = 2;
+    const ALLY = 3;
+    const USER = 4;
+    const GENERAL = 5;
 }
 
 /* end of MessagesEnumerator.php */

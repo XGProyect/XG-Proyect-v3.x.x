@@ -18,7 +18,7 @@ use application\libraries\combatreport\Report;
 use application\libraries\FleetsLib;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
-use application\libraries\Updates_library;
+use application\libraries\UpdatesLibrary;
 use Battle;
 use DebugManager;
 use Defense;
@@ -28,10 +28,6 @@ use LangManager;
 use Player;
 use PlayerGroup;
 use Ship;
-use const BATTLE_WIN;
-use const LIB_PATH;
-use const VENDOR_PATH;
-use const XGP_ROOT;
 
 /**
  * Destroy Class
@@ -55,22 +51,22 @@ class Destroy extends Missions
         'flag' => false,
         'destroyed' => 'none',
         'moon_chance' => 0,
-        'ds_chance' => 0
+        'ds_chance' => 0,
     ];
-    
+
     /**
      *
-     * @var /FormulaLib 
+     * @var /FormulaLib
      */
     private $_formula;
-    
+
     /**
      * __construct()
      */
     public function __construct()
     {
         parent::__construct();
-        
+
         $this->_formula = FunctionsLib::loadLibrary('FormulaLib');
     }
 
@@ -90,8 +86,8 @@ class Destroy extends Missions
                 'galaxy' => $fleet_row['fleet_end_galaxy'],
                 'system' => $fleet_row['fleet_end_system'],
                 'planet' => $fleet_row['fleet_end_planet'],
-                'type' => $fleet_row['fleet_end_type']
-            ]
+                'type' => $fleet_row['fleet_end_type'],
+            ],
         ]);
 
         if ($fleet_row['fleet_mess'] == 0 && $fleet_row['fleet_start_time'] <= time()) {
@@ -120,7 +116,7 @@ class Destroy extends Missions
             $targetUser = $this->Missions_Model->getAllUserDataByUserId($target_planet['planet_user_id']);
             $target_userID = $targetUser['user_id'];
 
-            Updates_library::updatePlanetResources($targetUser, $target_planet, time());
+            UpdatesLibrary::updatePlanetResources($targetUser, $target_planet, time());
 
             //----------------------- prepare players for battle ----------------------
             // attackers fleet sum
@@ -143,9 +139,9 @@ class Destroy extends Missions
                         'galaxy' => $fleet_row['fleet_end_galaxy'],
                         'system' => $fleet_row['fleet_end_system'],
                         'planet' => $fleet_row['fleet_end_planet'],
-                        'type' => $fleet_row['fleet_end_type']
+                        'type' => $fleet_row['fleet_end_type'],
                     ],
-                    'time' => time()
+                    'time' => time(),
                 ]
             );
             $defenders = $this->getPlayerGroupFromQuery($def, $targetUser);
@@ -186,7 +182,7 @@ class Destroy extends Missions
                 $player->setCoords(
                     $fleet_row['fleet_end_galaxy'], $fleet_row['fleet_end_system'], $fleet_row['fleet_end_planet']
                 );
-                
+
                 $player->setName($targetUser['user_name']);
 
                 $defenders->addPlayer($player);
@@ -198,7 +194,7 @@ class Destroy extends Missions
             //------------------------------ battle -----------------------------------
             $battle = new Battle($attackers, $defenders);
             $startBattle = DebugManager::runDebugged(
-                    array($battle, 'startBattle'), $errorHandler, $exceptionHandler
+                array($battle, 'startBattle'), $errorHandler, $exceptionHandler
             );
 
             $startBattle();
@@ -217,17 +213,17 @@ class Destroy extends Missions
 
             $this->updateDebris($fleet_row, $report);
             $this->createNewReportAndSendIt($fleet_row, $report, $target_planet['planet_name']);
-            
+
             if ($this->_destruction['destroyed'] == 'moon') {
-                
+
                 $this->Missions_Model->updateFleetsStatusToMakeThemReturn([
                     'coords' => [
                         'galaxy' => $fleet_row['fleet_end_galaxy'],
                         'system' => $fleet_row['fleet_end_system'],
-                        'planet' => $fleet_row['fleet_end_planet']
+                        'planet' => $fleet_row['fleet_end_planet'],
                     ],
                     'time' => time(),
-                    'planet_id' => $target_planet['planet_id']
+                    'planet_id' => $target_planet['planet_id'],
                 ]);
 
                 if ($targetUser['user_current_planet'] == $target_planet['planet_id']) {
@@ -236,13 +232,13 @@ class Destroy extends Missions
                         'coords' => [
                             'galaxy' => $fleet_row['fleet_end_galaxy'],
                             'system' => $fleet_row['fleet_end_system'],
-                            'planet' => $fleet_row['fleet_end_planet']
+                            'planet' => $fleet_row['fleet_end_planet'],
                         ],
-                        'planet_user_id' => $target_planet['planet_user_id']
+                        'planet_user_id' => $target_planet['planet_user_id'],
                     ]);
                 }
             }
-            
+
         } elseif ($fleet_row['fleet_mess'] == 1 && $fleet_row['fleet_end_time'] <= time()) {
 
             $message = sprintf(
@@ -252,7 +248,7 @@ class Destroy extends Missions
             FunctionsLib::sendMessage(
                 $fleet_row['fleet_owner'], '', $fleet_row['fleet_end_time'], 1, $this->langs['sys_mess_tower'], $this->langs['sys_mess_fleetback'], $message
             );
-            
+
             parent::restoreFleet($fleet_row, true);
             parent::removeFleet($fleet_row['fleet_id']);
         }
@@ -293,22 +289,22 @@ class Destroy extends Missions
     {
         list($metal, $crystal) = $report->getDebris();
 
-        if (($metal + $crystal) > 0 ) {
+        if (($metal + $crystal) > 0) {
 
             $this->Missions_Model->updatePlanetDebrisByCoords(
                 [
                     'time' => time(),
                     'debris' => [
                         'metal' => $metal,
-                        'crystal' => $crystal
+                        'crystal' => $crystal,
                     ],
                     'coords' => [
                         'galaxy' => $fleet_row['fleet_end_galaxy'],
                         'system' => $fleet_row['fleet_end_system'],
-                        'planet' => $fleet_row['fleet_end_planet']
-                    ]
+                        'planet' => $fleet_row['fleet_end_planet'],
+                    ],
                 ]
-            );   
+            );
         }
     }
 
@@ -345,7 +341,7 @@ class Destroy extends Missions
         $player->setCoords(
             $fleet_row['fleet_start_galaxy'], $fleet_row['fleet_start_system'], $fleet_row['fleet_start_planet']
         );
-        
+
         $playerGroup->addPlayer($player);
 
         return $playerGroup;
@@ -406,7 +402,7 @@ class Destroy extends Missions
                     $player->setCoords(
                         $fleet_row['fleet_start_galaxy'], $fleet_row['fleet_start_system'], $fleet_row['fleet_start_planet']
                     );
-                    
+
                     $player->setName($player_info['user_name']);
 
                     $playerGroup->addPlayer($player);
@@ -436,36 +432,36 @@ class Destroy extends Missions
     private function updateMoon($target_data, $death_stars)
     {
         if ($this->_destruction['flag']) {
-            
+
             return null;
         }
-        
+
         $this->_destruction['flag'] = true;
-        
+
         $result = false;
 
         $moon_chance = $this->_formula->getMoonDestructionChance($target_data['planet_diameter'], $death_stars);
         $ds_chance = $this->_formula->getDeathStarsDestructionChance($target_data['planet_diameter']);
-        
+
         $this->_destruction['moon_chance'] = $moon_chance;
-        
+
         $random_chance = mt_rand(0, 100);
-        
+
         if ($random_chance <= $moon_chance) {
-            
+
             $result = true;
-            
+
             $this->_destruction['destroyed'] = 'moon';
         }
 
         if (!$result) {
-            
+
             $random_chance = mt_rand(0, 100);
-            
+
             $this->_destruction['ds_chance'] = $ds_chance;
-            
+
             if ($random_chance <= $ds_chance) {
-                
+
                 $this->_destruction['destroyed'] = 'ds';
             }
         }
@@ -488,12 +484,12 @@ class Destroy extends Missions
         $owners = implode(',', $idAll);
         $rid = md5($report) . time();
         $report_data = $report . $this->buildDestroyReport($fleet_row, $report, $planet_name);
-        
+
         $this->Missions_Model->insertReport([
             'owners' => $owners,
             'rid' => $rid,
             'content' => addslashes($report_data),
-            'time' => time()
+            'time' => time(),
         ]);
 
         foreach ($idAtts as $id) {
@@ -583,7 +579,7 @@ class Destroy extends Missions
         $steal = array(
             'metal' => 0,
             'crystal' => 0,
-            'deuterium' => 0
+            'deuterium' => 0,
         );
 
         foreach ($playerGroupBeforeBattle->getIterator() as $idPlayer => $player) {
@@ -633,7 +629,7 @@ class Destroy extends Missions
                     $fleetSteal = array(
                         'metal' => 0,
                         'crystal' => 0,
-                        'deuterium' => 0
+                        'deuterium' => 0,
                     );
 
                     if ($playerGroupAfterBattle->battleResult == BATTLE_WIN) {
@@ -647,24 +643,24 @@ class Destroy extends Missions
                         );
 
                         $this->updateMoon($target_planet, $fleetArray[Ships::ship_deathstar]);
-                        
+
                         $steal['metal'] += $fleetSteal['metal'];
                         $steal['crystal'] += $fleetSteal['crystal'];
                         $steal['deuterium'] += $fleetSteal['deuterium'];
                     }
 
                     if ($this->_destruction['destroyed'] == 'ds') {
-                
+
                         $emptyFleets[] = $idFleet;
                     } else {
-                        
+
                         $this->Missions_Model->updateReturningFleetData([
                             'ships' => FleetsLib::setFleetShipsArray($fleetArray),
                             'amount' => $totalCount,
                             'stolen' => [
                                 'metal' => $fleetSteal['metal'],
                                 'crystal' => $fleetSteal['crystal'],
-                                'deuterium' => $fleetSteal['deuterium']
+                                'deuterium' => $fleetSteal['deuterium'],
                             ],
                             'fleet_id' => $idFleet,
                         ]);
@@ -743,9 +739,9 @@ class Destroy extends Missions
             'stolen' => [
                 'metal' => $steal['metal'],
                 'crystal' => $steal['crystal'],
-                'deuterium' => $steal['deuterium']
+                'deuterium' => $steal['deuterium'],
             ],
-            'planet_id' => $target_planet['planet_id']
+            'planet_id' => $target_planet['planet_id'],
         ]);
 
         // Updating flying fleets
@@ -780,7 +776,7 @@ class Destroy extends Missions
         $steal = array(
             'metal' => 0,
             'crystal' => 0,
-            'deuterium' => 0
+            'deuterium' => 0,
         );
 
         // Max resources that can be take
@@ -839,17 +835,17 @@ class Destroy extends Missions
         $content = $this->langs['sys_mess_destruc_report'] . ' ' . FormatLib::prettyCoords($g, $s, $p);
 
         return FunctionsLib::setUrl(
-                '', '', $content, $style . ' ' . $js
+            '', '', $content, $style . ' ' . $js
         );
     }
 
     /**
      * Extend the base report with destruction data
-     * 
+     *
      * @param array  $fleet_row
      * @param type   $report
      * @param string $planet_name
-     * 
+     *
      * @return string
      */
     private function buildDestroyReport(array $fleet_row, $report, string $planet_name): string
@@ -870,14 +866,14 @@ class Destroy extends Missions
             $raport[] = $destruction_info;
             $raport[] = $this->langs['sys_destruc_mess1'] . $this->langs['sys_destruc_' . $this->_destruction['destroyed']];
             $raport[] = sprintf($this->langs['sys_destruc_lune'], $this->_destruction['moon_chance']);
-            $raport[] = sprintf($this->langs['sys_destruc_rip'], $this->_destruction['ds_chance']);            
-            
+            $raport[] = sprintf($this->langs['sys_destruc_rip'], $this->_destruction['ds_chance']);
+
         } elseif ($report->isAdraw()) {
 
             $raport[] = $destruction_info;
             $raport[] = $this->langs['sys_destruc_stop'] . $this->langs['sys_destruc_' . $this->_destruction['destroyed']];
             $raport[] = sprintf($this->langs['sys_destruc_lune'], $this->_destruction['moon_chance']);
-            $raport[] = sprintf($this->langs['sys_destruc_rip'], $this->_destruction['ds_chance']); 
+            $raport[] = sprintf($this->langs['sys_destruc_rip'], $this->_destruction['ds_chance']);
         } else {
 
             $raport[] = $destruction_info;
@@ -885,7 +881,7 @@ class Destroy extends Missions
             $raport[] = sprintf($this->langs['sys_destruc_lune'], $this->_destruction['moon_chance']);
             $raport[] = sprintf($this->langs['sys_destruc_rip'], $this->_destruction['ds_chance']);
         }
-        
+
         return join("<br/>", $raport);
     }
 }

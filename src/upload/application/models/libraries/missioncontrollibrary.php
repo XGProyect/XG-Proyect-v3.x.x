@@ -23,7 +23,7 @@ namespace application\models\libraries;
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-class Mission_control_library
+class MissionControlLibrary
 {
 
     private $db = null;
@@ -133,4 +133,4 @@ class Mission_control_library
     }
 }
 
-/* end of mission_control_library.php */
+/* end of MissionControlLibrary.php */

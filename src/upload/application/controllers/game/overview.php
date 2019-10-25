@@ -19,8 +19,7 @@ use application\libraries\FleetsLib;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
 use application\libraries\Timing_library as Timing;
-use application\libraries\Updates_library;
-use const MODULE_ID;
+use application\libraries\UpdatesLibrary;
 
 /**
  * Overview Class
@@ -137,7 +136,7 @@ class Overview extends Controller
 
         if (!$is_current_planet) {
             // UPDATE THE PLANET INFORMATION FIRST, MAY BE SOMETHING HAS JUST FINISHED
-            Updates_library::updateBuildingsQueue($user_planet, $this->_current_user);
+            UpdatesLibrary::updateBuildingsQueue($user_planet, $this->_current_user);
         }
 
         if ($user_planet['planet_b_building'] != 0) {
@@ -239,13 +238,12 @@ class Overview extends Controller
                 $fleet_row[$stay_block_id] = !isset($fleet_row[$stay_block_id]) ? '' : $fleet_row[$stay_block_id];
                 $fleet_row[$end_block_id] = !isset($fleet_row[$end_block_id]) ? '' : $fleet_row[$end_block_id];
 
-
                 if ($start_time > time()) {
 
                     $fleet_row[$start_block_id] = FleetsLib::flyingFleetsTable($fleets, 0, true, $label, $record, $this->_current_user);
                 }
 
-                if (( $fleets['fleet_mission'] != 4 ) && ( $fleets['fleet_mission'] != 10 )) {
+                if (($fleets['fleet_mission'] != 4) && ($fleets['fleet_mission'] != 10)) {
                     $label = 'ft';
 
                     if ($stay_time > time()) {
@@ -283,12 +281,12 @@ class Overview extends Controller
                     if ($start_time > time()) {
 
                         $fleet_row[$start_block_id] = FleetsLib::flyingFleetsTable(
-                                $fleets, 0, false, 'ofs', $record, $this->_current_user
+                            $fleets, 0, false, 'ofs', $record, $this->_current_user
                         );
                     }
                 }
 
-                if (( $fleets['fleet_mission'] == 1 ) && ( $fleet_group > 0 )) {
+                if (($fleets['fleet_mission'] == 1) && ($fleet_group > 0)) {
                     $record++;
 
                     if ($fleet_status > 0) {
@@ -343,7 +341,7 @@ class Overview extends Controller
         if (count($fleet_row) > 0 && $fleet_row != '') {
 
             krsort($fleet_row);
-            
+
             foreach ($fleet_row as $time => $content) {
 
                 $fleet .= $content . "\n";

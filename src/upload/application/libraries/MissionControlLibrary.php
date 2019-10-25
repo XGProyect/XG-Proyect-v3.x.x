@@ -14,7 +14,7 @@
 namespace application\libraries;
 
 /**
- * Mission_control_library Class
+ * MissionControlLibrary Class
  *
  * @category Classes
  * @package  Application
@@ -23,15 +23,15 @@ namespace application\libraries;
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-class Mission_control_library
+class MissionControlLibrary
 {
 
     /**
-     * Contains the model Mission_control_library
-     * 
-     * @var \Mission_control_library 
+     * Contains the model MissionControlLibrary
+     *
+     * @var \MissionControlLibrary
      */
-    private $_Mission_control_library_Model = null;
+    private $Mission_control_library_Model = null;
 
     /**
      * __construct
@@ -41,45 +41,44 @@ class Mission_control_library
     public function __construct()
     {
         // load the required model
-        $this->_Mission_control_library_Model = FunctionsLib::modelLoader('libraries/Mission_control_library');
+        $this->Mission_control_library_Model = FunctionsLib::modelLoader('libraries/MissionControlLibrary');
     }
 
     /**
      * Get all the fleets that should be arriving by now
-     * 
+     *
      * @return void
      */
     public function arrivingFleets()
     {
         $this->processMissions(
-            $this->_Mission_control_library_Model->getArrivingFleets()
+            $this->Mission_control_library_Model->getArrivingFleets()
         );
     }
 
     /**
      * Get all the fleets that should be returning by now
-     * 
+     *
      * @return void
      */
     public function returningFleets()
     {
         $this->processMissions(
-            $this->_Mission_control_library_Model->getReturningFleets()
+            $this->Mission_control_library_Model->getReturningFleets()
         );
     }
 
     /**
      * Process the mission based on the provided fleets
-     * 
+     *
      * @param array $all_fleets A list of fleets
-     * 
+     *
      * @return void
      */
     private function processMissions($all_fleets = [])
     {
         // validate
         if (!is_array($all_fleets) or empty($all_fleets)) {
-
             return;
         }
 
@@ -100,7 +99,6 @@ class Mission_control_library
 
         // Process missions
         foreach ($all_fleets as $fleet) {
-
             $name = $missions[$fleet['fleet_mission']];
             $mission_name = $name . 'Mission';
             $class_name = '\application\libraries\missions\\' . $name;
@@ -111,4 +109,4 @@ class Mission_control_library
     }
 }
 
-/* end of Mission_control_library.php */
+/* end of MissionControlLibrary.php */

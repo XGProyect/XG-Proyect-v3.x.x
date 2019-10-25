@@ -50,9 +50,7 @@ class Deploy extends Missions
     public function deployMission($fleet_row)
     {
         if ($fleet_row['fleet_mess'] == 0) {
-
             if ($fleet_row['fleet_start_time'] <= time()) {
-
                 $target_coords = sprintf(
                     $this->langs['sys_adress_planet'], $fleet_row['fleet_end_galaxy'], $fleet_row['fleet_end_system'], $fleet_row['fleet_end_planet']
                 );

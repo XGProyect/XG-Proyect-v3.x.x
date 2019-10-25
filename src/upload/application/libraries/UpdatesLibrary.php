@@ -25,7 +25,7 @@ use application\core\XGPCore;
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-class Updates_library extends XGPCore
+class UpdatesLibrary extends XGPCore
 {
 
     private $Update_Model;
@@ -40,7 +40,7 @@ class Updates_library extends XGPCore
         parent::__construct();
 
         // load Model
-        $this->Update_Model = FunctionsLib::modelLoader('libraries/updates_library');
+        $this->Update_Model = FunctionsLib::modelLoader('libraries/UpdatesLibrary');
 
         // Other stuff
         $this->cleanUp();
@@ -62,7 +62,6 @@ class Updates_library extends XGPCore
         $cleanup_interval = 6; // 6 HOURS
 
         if ((time() >= ($last_cleanup + (3600 * $cleanup_interval)))) {
-
             // TIMERS
             $del_planets = time() - ONE_DAY;
             $del_before = time() - ONE_WEEK;
@@ -73,9 +72,7 @@ class Updates_library extends XGPCore
             $ChooseToDelete = $this->Update_Model->deleteUsersByDeletedAndInactive($del_deleted, $del_inactive);
 
             if ($ChooseToDelete) {
-
                 foreach ($ChooseToDelete as $delete) {
-
                     parent::$users->deleteUser($delete['user_id']);
                 }
             }
@@ -104,7 +101,6 @@ class Updates_library extends XGPCore
 
         // CHECK TIME
         if ((time() >= ($last_backup + (3600 * $update_interval))) && ($auto_backup == 1)) {
-
             $this->Update_Model->generateBackUp(); // MAKE BACKUP
 
             FunctionsLib::updateConfig('last_backup', time());
@@ -122,13 +118,9 @@ class Updates_library extends XGPCore
     public static function updateBuildingsQueue(&$current_planet, &$current_user)
     {
         if ($current_planet['planet_b_building_id'] != 0) {
-
             while ($current_planet['planet_b_building_id'] != 0) {
-
                 if ($current_planet['planet_b_building'] <= time()) {
-
                     if (self::checkBuildingQueue($current_planet, $current_user)) {
-
                         DevelopmentsLib::setFirstElement($current_planet, $current_user);
                     }
                 } else {
@@ -147,12 +139,11 @@ class Updates_library extends XGPCore
     {
         // language issues if is not present
         if (!defined('IN_GAME')) {
-
             define('IN_GAME', true);
         }
 
         // let's start the missions control process
-        $mission_control = new Mission_control_library();
+        $mission_control = new MissionControlLibrary();
         $mission_control->arrivingFleets();
         $mission_control->returningFleets();
     }
@@ -169,7 +160,6 @@ class Updates_library extends XGPCore
         $update_interval = FunctionsLib::readConfig('stat_update_time');
 
         if ((time() >= ($stat_last_update + (60 * $update_interval)))) {
-
             $result = new Statistics_library();
 
             FunctionsLib::updateConfig('stat_last_update', $result->makeStats()['stats_time']);
@@ -186,12 +176,11 @@ class Updates_library extends XGPCore
      */
     private static function checkBuildingQueue(&$current_planet, &$current_user)
     {
-        $db = FunctionsLib::modelLoader('libraries/updates_library');
+        $db = FunctionsLib::modelLoader('libraries/UpdatesLibrary');
         $resource = parent::$objects->getObjects();
         $ret_value = false;
 
         if ($current_planet['planet_b_building_id'] != 0) {
-
             $current_queue = $current_planet['planet_b_building_id'];
 
             if ($current_queue != 0) {
@@ -206,46 +195,41 @@ class Updates_library extends XGPCore
             array_shift($queue_array);
 
             if ($build_mode == 'destroy') {
-
                 $for_destroy = true;
             } else {
-
                 $for_destroy = false;
             }
 
             if ($build_end_time <= time()) {
-
                 $needed = DevelopmentsLib::developmentPrice(
-                    $current_user, $current_planet, $element, true, $for_destroy
+                    $current_user,
+                    $current_planet,
+                    $element,
+                    true,
+                    $for_destroy
                 );
 
                 $units = $needed['metal'] + $needed['crystal'] + $needed['deuterium'];
                 $current = (int) $current_planet['planet_field_current'];
                 $max = (int) $current_planet['planet_field_max'];
                 $message = '';
-                
+
                 if ($current_planet['planet_type'] == 3) {
                     if ($element == 41) {
-
                         $current += 1;
                         $max += FIELDS_BY_MOONBASIS_LEVEL;
-                        $current_planet[$resource[$element]] ++;
+                        $current_planet[$resource[$element]]++;
                     } elseif ($element != 0) {
-
                         if (DevelopmentsLib::isDevelopmentPayable($current_user, $current_planet, $element, true, $for_destroy)) {
-                        
                             if ($for_destroy == false) {
-
                                 $current += 1;
-                                $current_planet[$resource[$element]] ++;
+                                $current_planet[$resource[$element]]++;
                             } else {
-
                                 $current -= 1;
-                                $current_planet[$resource[$element]] --;
+                                $current_planet[$resource[$element]]--;
                             }
                         } else {
-
-                            $message    = sprintf(
+                            $message = sprintf(
                                 parent::$lang['sys_notenough_money'],
                                 parent::$lang['tech'][$element],
                                 FormatLib::prettyNumber($current_planet['planet_metal']),
@@ -264,21 +248,16 @@ class Updates_library extends XGPCore
                         }
                     }
                 } elseif ($current_planet['planet_type'] == 1) {
-
                     if (DevelopmentsLib::isDevelopmentPayable($current_user, $current_planet, $element, true, $for_destroy)) {
-                     
                         if ($for_destroy == false) {
-
                             $current += 1;
-                            $current_planet[$resource[$element]] ++;
+                            $current_planet[$resource[$element]]++;
                         } else {
-
                             $current -= 1;
-                            $current_planet[$resource[$element]] --;
+                            $current_planet[$resource[$element]]--;
                         }
                     } else {
-                        
-                        $message    = sprintf(
+                        $message = sprintf(
                             parent::$lang['sys_notenough_money'],
                             parent::$lang['tech'][$element],
                             FormatLib::prettyNumber($current_planet['planet_metal']),
@@ -298,10 +277,8 @@ class Updates_library extends XGPCore
                 }
 
                 if (count($queue_array) == 0) {
-
                     $new_queue = 0;
                 } else {
-
                     $new_queue = implode(';', $queue_array);
                 }
 
@@ -310,21 +287,22 @@ class Updates_library extends XGPCore
                 $current_planet['planet_field_current'] = $current;
                 $current_planet['planet_field_max'] = $max;
                 $current_planet['building_points'] = Statistics_library::calculatePoints(
-                        $element, $current_planet[$resource[$element]]
+                    $element,
+                    $current_planet[$resource[$element]]
                 );
 
                 $db->updatePlanet(
-                    $resource[$element], $current_planet[$resource[$element]], $current_planet
+                    $resource[$element],
+                    $current_planet[$resource[$element]],
+                    $current_planet
                 );
 
                 if ($message != '') {
-                    
-                    FunctionsLib::sendMessage($current_user['user_id'], 0, '', 5, parent::$lang['sys_buildlist'], parent::$lang['sys_buildlist_fail'], $message); 
+                    FunctionsLib::sendMessage($current_user['user_id'], 0, '', 5, parent::$lang['sys_buildlist'], parent::$lang['sys_buildlist_fail'], $message);
                 }
-                
+
                 $ret_value = true;
             } else {
-
                 $ret_value = false;
             }
         } else {
@@ -374,7 +352,8 @@ class Updates_library extends XGPCore
         $parse['production_level'] = 100;
 
         $post_percent = ProductionLib::maxProduction(
-                $current_planet['planet_energy_max'], $current_planet['planet_energy_used']
+            $current_planet['planet_energy_max'],
+            $current_planet['planet_energy_used']
         );
 
         $Caps['planet_metal_perhour'] = 0;
@@ -384,18 +363,17 @@ class Updates_library extends XGPCore
         $Caps['planet_energy_used'] = 0;
 
         foreach ($ProdGrid as $ProdID => $formula) {
-
             $BuildLevelFactor = $current_planet['planet_' . $resource[$ProdID] . '_percent'];
             $BuildLevel = $current_planet[$resource[$ProdID]];
             $BuildEnergy = $current_user['research_energy_technology'];
 
             // BOOST
-            $geologe_boost = 1 + ( 1 * ( OfficiersLib::isOfficierActive(
-                    $current_user['premium_officier_geologist']
-                ) ? GEOLOGUE : 0));
-            $engineer_boost = 1 + ( 1 * ( OfficiersLib::isOfficierActive(
-                    $current_user['premium_officier_engineer']
-                ) ? ENGINEER_ENERGY : 0));
+            $geologe_boost = 1 + (1 * (OfficiersLib::isOfficierActive(
+                $current_user['premium_officier_geologist']
+            ) ? GEOLOGUE : 0));
+            $engineer_boost = 1 + (1 * (OfficiersLib::isOfficierActive(
+                $current_user['premium_officier_engineer']
+            ) ? ENGINEER_ENERGY : 0));
 
             // PRODUCTION FORMULAS
             $metal_prod = eval($ProdGrid[$ProdID]['formule']['metal']);
@@ -405,36 +383,39 @@ class Updates_library extends XGPCore
 
             // PRODUCTION
             $Caps['planet_metal_perhour'] += ProductionLib::currentProduction(
-                    ProductionLib::productionAmount($metal_prod, $geologe_boost, $game_resource_multiplier), $post_percent
+                ProductionLib::productionAmount($metal_prod, $geologe_boost, $game_resource_multiplier), $post_percent
             );
 
             $Caps['planet_crystal_perhour'] += ProductionLib::currentProduction(
-                    ProductionLib::productionAmount($crystal_prod, $geologe_boost, $game_resource_multiplier), $post_percent
+                ProductionLib::productionAmount($crystal_prod, $geologe_boost, $game_resource_multiplier), $post_percent
             );
 
             $Caps['planet_deuterium_perhour'] += ProductionLib::currentProduction(
-                    ProductionLib::productionAmount($deuterium_prod, $geologe_boost, $game_resource_multiplier), $post_percent
+                ProductionLib::productionAmount($deuterium_prod, $geologe_boost, $game_resource_multiplier), $post_percent
             );
 
             if ($ProdID >= 4) {
-
                 if ($ProdID == 12 && $current_planet['planet_deuterium'] == 0) {
                     continue;
                 }
 
                 $Caps['planet_energy_max'] += ProductionLib::productionAmount(
-                        $energy_prod, $engineer_boost, 0, true
+                    $energy_prod,
+                    $engineer_boost,
+                    0,
+                    true
                 );
             } else {
-
                 $Caps['planet_energy_used'] += ProductionLib::productionAmount(
-                        $energy_prod, 1, 0, true
+                    $energy_prod,
+                    1,
+                    0,
+                    true
                 );
             }
         }
 
         if ($current_planet['planet_type'] == 3) {
-
             $game_metal_basic_income = 0;
             $game_crystal_basic_income = 0;
             $game_deuterium_basic_income = 0;
@@ -444,7 +425,6 @@ class Updates_library extends XGPCore
             $current_planet['planet_energy_used'] = 0;
             $current_planet['planet_energy_max'] = 0;
         } else {
-
             $current_planet['planet_metal_perhour'] = $Caps['planet_metal_perhour'];
             $current_planet['planet_crystal_perhour'] = $Caps['planet_crystal_perhour'];
             $current_planet['planet_deuterium_perhour'] = $Caps['planet_deuterium_perhour'];
@@ -456,104 +436,86 @@ class Updates_library extends XGPCore
         $current_planet['planet_last_update'] = $UpdateTime;
 
         if ($current_planet['planet_energy_max'] == 0) {
-
             $current_planet['planet_metal_perhour'] = $game_metal_basic_income;
             $current_planet['planet_crystal_perhour'] = $game_crystal_basic_income;
             $current_planet['planet_deuterium_perhour'] = $game_deuterium_basic_income;
 
             $production_level = 100;
         } elseif ($current_planet['planet_energy_max'] >= $current_planet['planet_energy_used']) {
-
             $production_level = 100;
         } else {
-
             $production_level = floor(
                 ($current_planet['planet_energy_max'] / $current_planet['planet_energy_used']) * 100
             );
         }
 
         if ($production_level > 100) {
-
             $production_level = 100;
         } elseif ($production_level < 0) {
-
             $production_level = 0;
         }
 
         if ($current_planet['planet_metal'] <= $MaxMetalStorage) {
-
             $MetalProduction = (
                 ($ProductionTime * ($current_planet['planet_metal_perhour'] / 3600))
-                ) * (0.01 * $production_level);
+            ) * (0.01 * $production_level);
 
-            $MetalBaseProduc = (($ProductionTime * ($game_metal_basic_income / 3600 )));
+            $MetalBaseProduc = (($ProductionTime * ($game_metal_basic_income / 3600)));
             $MetalTheorical = $current_planet['planet_metal'] + $MetalProduction + $MetalBaseProduc;
 
             if ($MetalTheorical <= $MaxMetalStorage) {
-
                 $current_planet['planet_metal'] = $MetalTheorical;
             } else {
-
                 $current_planet['planet_metal'] = $MaxMetalStorage;
             }
         }
 
         if ($current_planet['planet_crystal'] <= $MaxCristalStorage) {
-
             $CristalProduction = (
                 ($ProductionTime * ($current_planet['planet_crystal_perhour'] / 3600))
-                ) * (0.01 * $production_level);
+            ) * (0.01 * $production_level);
 
-            $CristalBaseProduc = (($ProductionTime * ($game_crystal_basic_income / 3600 )));
+            $CristalBaseProduc = (($ProductionTime * ($game_crystal_basic_income / 3600)));
             $CristalTheorical = $current_planet['planet_crystal'] + $CristalProduction + $CristalBaseProduc;
 
             if ($CristalTheorical <= $MaxCristalStorage) {
-
                 $current_planet['planet_crystal'] = $CristalTheorical;
             } else {
-
                 $current_planet['planet_crystal'] = $MaxCristalStorage;
             }
         }
 
         if ($current_planet['planet_deuterium'] <= $MaxDeuteriumStorage) {
-
             $DeuteriumProduction = (
                 ($ProductionTime * ($current_planet['planet_deuterium_perhour'] / 3600))
-                ) * (0.01 * $production_level);
+            ) * (0.01 * $production_level);
 
-            $DeuteriumBaseProduc = (($ProductionTime * ($game_deuterium_basic_income / 3600 )));
+            $DeuteriumBaseProduc = (($ProductionTime * ($game_deuterium_basic_income / 3600)));
             $DeuteriumTheorical = $current_planet['planet_deuterium'] +
                 $DeuteriumProduction + $DeuteriumBaseProduc;
 
             if ($DeuteriumTheorical <= $MaxDeuteriumStorage) {
-
                 $current_planet['planet_deuterium'] = $DeuteriumTheorical;
             } else {
-
                 $current_planet['planet_deuterium'] = $MaxDeuteriumStorage;
             }
         }
 
         if ($current_planet['planet_metal'] < 0) {
-
             $current_planet['planet_metal'] = 0;
         }
 
         if ($current_planet['planet_crystal'] < 0) {
-
             $current_planet['planet_crystal'] = 0;
         }
 
         if ($current_planet['planet_deuterium'] < 0) {
-
             $current_planet['planet_deuterium'] = 0;
         }
 
         if ($Simul == false) {
-
             // new DB Object
-            $db = FunctionsLib::modelLoader('libraries/updates_library');
+            $db = FunctionsLib::modelLoader('libraries/UpdatesLibrary');
 
             // SHIPS AND DEFENSES UPDATE
             $builded = self::updateHangarQueue($current_user, $current_planet, $ProductionTime);
@@ -561,28 +523,21 @@ class Updates_library extends XGPCore
             $defense_points = 0;
 
             if ($builded != '') {
-
                 foreach ($builded as $element => $count) {
-
-                    if ($element <> '') {
-
+                    if ($element != '') {
                         // POINTS
                         switch ($element) {
-
                             case (($element >= 202) && ($element <= 215)):
                                 $ship_points += Statistics_library::calculatePoints($element, $count) * $count;
                                 break;
-
                             case (($element >= 401) && ($element <= 503)):
                                 $defense_points += Statistics_library::calculatePoints($element, $count) * $count;
                                 break;
-
                             default:
                                 break;
                         }
 
-                        if($resource[$element] != ''){
-
+                        if ($resource[$element] != '') {
                             $sub_query .= "`" . $resource[$element] . "` = '" . $current_planet[$resource[$element]] . "', ";
                         }
                     }
@@ -591,12 +546,13 @@ class Updates_library extends XGPCore
 
             // RESEARCH UPDATE
             if ($current_planet['planet_b_tech'] <= time() && $current_planet['planet_b_tech_id'] != 0) {
-
                 $current_user['research_points'] = Statistics_library::calculatePoints(
-                        $current_planet['planet_b_tech_id'], $current_user[$resource[$current_planet['planet_b_tech_id']]], 'tech'
+                    $current_planet['planet_b_tech_id'],
+                    $current_user[$resource[$current_planet['planet_b_tech_id']]],
+                    'tech'
                 );
 
-                $current_user[$resource[$current_planet['planet_b_tech_id']]] ++;
+                $current_user[$resource[$current_planet['planet_b_tech_id']]]++;
 
                 $tech_query = "`planet_b_tech` = '0',";
                 $tech_query .= "`planet_b_tech_id` = '0',";
@@ -606,7 +562,6 @@ class Updates_library extends XGPCore
                     $current_user['research_points'] . "',";
                 $tech_query .= "`research_current_research` = '0',";
             } else {
-
                 $tech_query = "";
             }
 
@@ -615,7 +570,7 @@ class Updates_library extends XGPCore
                 'ship_points' => $ship_points,
                 'defense_points' => $defense_points,
                 'sub_query' => $sub_query,
-                'tech_query' => $tech_query
+                'tech_query' => $tech_query,
             ]);
         }
     }
@@ -634,7 +589,6 @@ class Updates_library extends XGPCore
         $resource = parent::$objects->getObjects();
 
         if ($current_planet['planet_b_hangar_id'] != "") {
-
             $Builded = [];
             $BuildArray = [];
             $BuildQueue = explode(';', $current_planet['planet_b_hangar_id']);
@@ -648,7 +602,9 @@ class Updates_library extends XGPCore
                     if (isset($Item[0]) && $Item[0] != 0) {
 
                         $AcumTime = DevelopmentsLib::developmentTime(
-                            $current_user, $current_planet, $Item[0]
+                            $current_user,
+                            $current_planet,
+                            $Item[0]
                         );
                         $BuildArray[$Node] = array($Item[0], $Item[1], $AcumTime);
                     }
@@ -659,28 +615,23 @@ class Updates_library extends XGPCore
             $UnFinished = false;
 
             foreach ($BuildArray as $Node => $Item) {
-
                 $Element = $Item[0];
                 $Count = $Item[1];
                 $BuildTime = $Item[2];
                 $Builded[$Element] = 0;
 
                 if (!$UnFinished and $BuildTime > 0) {
-
                     $AllTime = $BuildTime * $Count;
 
                     if ($current_planet['planet_b_hangar'] >= $BuildTime) {
-
                         $Done = min($Count, floor($current_planet['planet_b_hangar'] / $BuildTime));
 
                         if ($Count > $Done) {
-
                             $current_planet['planet_b_hangar'] -= $BuildTime * $Done;
 
                             $UnFinished = true;
                             $Count -= $Done;
                         } else {
-
                             $current_planet['planet_b_hangar'] -= $AllTime;
                             $Count = 0;
                         }
@@ -688,18 +639,15 @@ class Updates_library extends XGPCore
                         $Builded[$Element] += $Done;
                         $current_planet[$resource[$Element]] += $Done;
                     } else {
-
                         $UnFinished = true;
                     }
                 } elseif (!$UnFinished) {
-
                     $Builded[$Element] += $Count;
                     $current_planet[$resource[$Element]] += $Count;
                     $Count = 0;
                 }
 
                 if ($Count != 0) {
-
                     $current_planet['planet_b_hangar_id'] .= $Element . "," . $Count . ";";
                 }
             }

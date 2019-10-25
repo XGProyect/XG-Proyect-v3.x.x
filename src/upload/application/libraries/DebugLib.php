@@ -64,14 +64,13 @@ class DebugLib
      */
     private function whereCalled($level = 1)
     {
-        
+
         $trace = debug_backtrace();
         $file = isset($trace[$level]['file']) ? $trace[$level]['file'] : '';
         $line = isset($trace[$level]['line']) ? $trace[$level]['line'] : '';
         $object = isset($trace[$level]['object']) ? $trace[$level]['object'] : '';
 
         if (is_object($object)) {
-
             $object = get_class($object);
         }
 
@@ -92,8 +91,8 @@ class DebugLib
     {
         $this->numqueries++;
         $this->log .= '<tr><th rowspan="2">Query ' .
-            $this->numqueries . ':</th><th>' . $query . '</th></tr><tr><th>' .
-            $this->whereCalled(3) . '</th></tr>';
+        $this->numqueries . ':</th><th>' . $query . '</th></tr><tr><th>' .
+        $this->whereCalled(3) . '</th></tr>';
     }
 
     /**
@@ -110,7 +109,7 @@ class DebugLib
                                 <a href="' . XGP_ROOT . 'admin.php?page=settings">Debug Log</a>:
                             </td>
                         </tr>'
-            . $this->log .
+        . $this->log .
             '</table>';
     }
 
@@ -125,30 +124,29 @@ class DebugLib
     public function error($message, $title, $type = 'db')
     {
         if (DEBUG_MODE == true) {
-
             echo '<h2>' . $title . '</h2><br><font color="red">' . $message . '</font><br><hr>';
             echo $this->echoLog();
             echo $this->whereCalled(3);
         } else {
-
             $user_ip = $_SERVER['REMOTE_ADDR'];
 
             // format log
             $log = '|' . $user_ip . '|' . $type . '|' . $title . '|' . $message . '|' . $this->whereCalled(3) . '|';
 
             if (defined('LOG_ERRORS') && LOG_ERRORS != '') {
-             
                 // log the error
-                $this->writeErrors($log, $type);   
+                $this->writeErrors($log, $type);
             }
-            
+
             // notify administrator
             if (defined('ERROR_LOGS_MAIL') && ERROR_LOGS_MAIL != '') {
-
                 FunctionsLib::sendEmail(
-                    ERROR_LOGS_MAIL, '[DEBUG][' . $title . ']', $log, [
-                    'mail' => ERROR_LOGS_MAIL,
-                    'name' => 'XG Proyect'
+                    ERROR_LOGS_MAIL,
+                    '[DEBUG][' . $title . ']',
+                    $log,
+                    [
+                        'mail' => ERROR_LOGS_MAIL,
+                        'name' => 'XG Proyect',
                     ]
                 );
             }
@@ -172,30 +170,29 @@ class DebugLib
                               <img src="http://www.xgproyect.org/images/misc/xg-logo.png" alt="XG Proyect">
                               </a>
                               <p><b>500.</b> <ins>That’s an error.</ins>
-                              <p>The requested URL throw an error. Contact the game Administrator. 
+                              <p>The requested URL throw an error. Contact the game Administrator.
                               <ins>That’s all we know.</ins>
                             ';
         }
 
         die();
     }
-    
+
     /**
      * Log errors
-     * 
+     *
      * @param string $text Text
      * @param string $type Type
-     * 
+     *
      * @return void
      */
     private function writeErrors($text, $type)
     {
-        $file_name  = $type . '-error-' . date('Ymd') . '-' . time();
-        $file_code  = sha1($file_name . $text);
-        $file       = XGP_ROOT . LOGS_PATH . $file_name . '-' . $file_code . '.txt';
-        
-        if (!file_exists($file)) {
+        $file_name = $type . '-error-' . date('Ymd') . '-' . time();
+        $file_code = sha1($file_name . $text);
+        $file = XGP_ROOT . LOGS_PATH . $file_name . '-' . $file_code . '.txt';
 
+        if (!file_exists($file)) {
             @fopen($file, "w+");
             @fclose(fopen($file, "w+"));
         }

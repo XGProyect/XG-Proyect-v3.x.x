@@ -60,15 +60,12 @@ class NoobsProtectionLib extends XGPCore
     public function isWeak($current_points, $other_points)
     {
         if ($this->protection) {
-
             if ($this->protectionmulti == 0) {
                 $this->protectionmulti = 1;
             }
 
             if ($current_points > $other_points * $this->protectionmulti) {
-
                 if ($other_points > $this->protectiontime && $this->protectiontime > 0) {
-
                     return false;
                 }
 
@@ -90,15 +87,12 @@ class NoobsProtectionLib extends XGPCore
     public function isStrong($current_points, $other_points)
     {
         if ($this->protection) {
-
             if ($this->protectionmulti == 0) {
                 $this->protectionmulti = 1;
             }
 
             if ($current_points * $this->protectionmulti < $other_points) {
-
                 if ($current_points > $this->protectiontime && $this->protectiontime > 0) {
-
                     return false;
                 }
 
@@ -135,9 +129,9 @@ class NoobsProtectionLib extends XGPCore
 
     /**
      * Determines if the rank can be shown or not
-     * 
+     *
      * @param int $user_auth_level User authorization level (0-3)
-     * 
+     *
      * @return boolean
      */
     public function isRankVisible($user_auth_level)

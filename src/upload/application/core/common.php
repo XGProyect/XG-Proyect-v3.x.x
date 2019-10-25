@@ -17,7 +17,7 @@ use application\core\Hooks;
 use application\core\Sessions;
 use application\libraries\FunctionsLib;
 use application\libraries\SecurePageLib;
-use application\libraries\Updates_library;
+use application\libraries\UpdatesLibrary;
 
 // report all errors
 error_reporting(E_ALL);
@@ -112,7 +112,7 @@ if (!defined('IN_INSTALL')) {
         define('DEFENSE_DEBRIS_FACTOR', FunctionsLib::readConfig('defs_cdr') / 100);
 
         // Several updates
-        new Updates_library();
+        new UpdatesLibrary();
     }
 }
 

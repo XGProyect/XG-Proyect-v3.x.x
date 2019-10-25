@@ -18,9 +18,9 @@
 ###########################################################################
 
 /**
- * 
+ *
  * SYSTEM CONFIGURATION
- * 
+ *
  */
 // GAME FILES VERSION
 define('SYSTEM_VERSION', '3.1.0');
@@ -41,16 +41,19 @@ define('ERROR_LOGS_MAIL', '');
 define('ADMIN_ACCESS_QUERY', true);
 
 /**
- * 
+ *
  * SYSTEM PATHS CONFIGURATION
- * 
+ *
  */
 define('PROTOCOL', ($_SERVER['HTTPS'] == 'on' ? 'https://' : 'http://'));
 
 // BASE PATH
 define(
-    'BASE_PATH', $_SERVER['HTTP_HOST'] . str_replace(
-        '/' . basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']
+    'BASE_PATH',
+    $_SERVER['HTTP_HOST'] . str_replace(
+        '/' . basename($_SERVER['SCRIPT_NAME']),
+        '',
+        $_SERVER['SCRIPT_NAME']
     )
 );
 
@@ -64,9 +67,9 @@ define('GAMEURL', PROTOCOL . $_SERVER['HTTP_HOST'] . '/');
 define('ADM_URL', PROTOCOL . strtr(BASE_PATH, ['public' => '']));
 
 /**
- * 
+ *
  * GLOBAL DIRECTORY STRUCTURE
- * 
+ *
  */
 define('APP_PATH', 'application' . DIRECTORY_SEPARATOR);
 define('DATA_PATH', 'data' . DIRECTORY_SEPARATOR);
@@ -74,9 +77,9 @@ define('PUBLIC_PATH', 'public' . DIRECTORY_SEPARATOR);
 define('SYSTEM_PATH', 'system' . DIRECTORY_SEPARATOR);
 
 /**
- * 
+ *
  * APPLICATION DIRECTORY STRUCTURE
- * 
+ *
  */
 define('CONFIGS_PATH', APP_PATH . 'config' . DIRECTORY_SEPARATOR);
 define('CONTROLLERS_PATH', APP_PATH . 'controllers' . DIRECTORY_SEPARATOR);
@@ -90,9 +93,9 @@ define('VENDOR_PATH', APP_PATH . 'third_party' . DIRECTORY_SEPARATOR);
 define('TEMPLATE_DIR', APP_PATH . 'views' . DIRECTORY_SEPARATOR);
 
 /**
- * 
+ *
  * CONTROLLERS DIRECTORY STRUCTURE
- * 
+ *
  */
 define('ADMIN_PATH', CONTROLLERS_PATH . 'adm' . DIRECTORY_SEPARATOR);
 define('AJAX_PATH', CONTROLLERS_PATH . 'ajax' . DIRECTORY_SEPARATOR);
@@ -101,16 +104,16 @@ define('HOME_PATH', CONTROLLERS_PATH . 'home' . DIRECTORY_SEPARATOR);
 define('INSTALL_PATH', CONTROLLERS_PATH . 'install' . DIRECTORY_SEPARATOR);
 
 /**
- * 
+ *
  * DATA DIRECTORY STRUCTURE
- * 
+ *
  */
 define('BACKUP_PATH', DATA_PATH . 'backups' . DIRECTORY_SEPARATOR);
 
 /**
- * 
+ *
  * PUBLIC DIRECTORY STRUCTURE
- * 
+ *
  */
 define('CSS_PATH', PUBLIC_PATH . 'css' . DIRECTORY_SEPARATOR);
 define('IMG_PATH', PUBLIC_PATH . 'images' . DIRECTORY_SEPARATOR);
@@ -119,37 +122,36 @@ define('JS_PATH', PUBLIC_PATH . 'js' . DIRECTORY_SEPARATOR);
 define('UPLOAD_PATH', PUBLIC_PATH . 'upload' . DIRECTORY_SEPARATOR);
 
 /**
- * 
+ *
  * INSTALL DIRECTORY STRUCTURE
- * 
+ *
  */
 define('MIGRATION_PATH', PUB_INS_PATH . 'migration' . DIRECTORY_SEPARATOR);
 define('UPDATE_PATH', PUB_INS_PATH . 'update' . DIRECTORY_SEPARATOR);
 
-
 /**
- * 
+ *
  * SKIN DIRECTORY STRUCTURE
- * 
+ *
  */
 define('SKIN_PATH', UPLOAD_PATH . 'skins' . DIRECTORY_SEPARATOR);
 define('DEFAULT_SKINPATH', SKIN_PATH . 'xgproyect' . DIRECTORY_SEPARATOR);
 define('DPATH', DEFAULT_SKINPATH);
 
 /**
- * 
+ *
  * TIMING CONSTANTS
- * 
+ *
  */
 define('ONE_DAY', (60 * 60 * 24)); // 1 DAY
 define('ONE_WEEK', (ONE_DAY * 7)); // 1 WEEK
 define('ONE_MONTH', (ONE_DAY * 30)); // 1 MONTH
 
 /**
- * 
+ *
  * GAME MECHANICS RELATED
  * You can change almost anything below without breaking the game
- * 
+ *
  */
 // UNIVERSE DATA, GALAXY, SYSTEMS AND PLANETS || DEFAULT 9-499-15 RESPECTIVELY
 define('MAX_GALAXY_IN_WORLD', 9);
@@ -197,9 +199,9 @@ define('PLANETS_LIFE_TIME', 24); // IN HOURS
 define('VACATION_TIME_FORCED', 2); // IN DAYS
 
 /**
- * 
- * DATABASE RELATED 
- * 
+ *
+ * DATABASE RELATED
+ *
  */
 ###########################################################################
 #
@@ -208,7 +210,6 @@ define('VACATION_TIME_FORCED', 2); // IN DAYS
 ###########################################################################
 // TO PREVENT ERRORS
 if (!defined('DB_PREFIX')) {
-
     define('DB_PREFIX', '');
 }
 
@@ -242,7 +243,7 @@ $charset = 'UTF-8';
 ini_set('default_charset', $charset);
 
 if (extension_loaded('mbstring')) {
-    define('MB_ENABLED', TRUE);
+    define('MB_ENABLED', true);
     // mbstring.internal_encoding is deprecated starting with PHP 5.6
     // and it's usage triggers E_DEPRECATED messages.
     @ini_set('mbstring.internal_encoding', $charset);
@@ -250,18 +251,18 @@ if (extension_loaded('mbstring')) {
     // That's utilized by CI_Utf8, but it's also done for consistency with iconv.
     mb_substitute_character('none');
 } else {
-    define('MB_ENABLED', FALSE);
+    define('MB_ENABLED', false);
 }
 
 // There's an ICONV_IMPL constant, but the PHP manual says that using
 // iconv's predefined constants is "strongly discouraged".
 if (extension_loaded('iconv')) {
-    define('ICONV_ENABLED', TRUE);
+    define('ICONV_ENABLED', true);
     // iconv.internal_encoding is deprecated starting with PHP 5.6
     // and it's usage triggers E_DEPRECATED messages.
     @ini_set('iconv.internal_encoding', $charset);
 } else {
-    define('ICONV_ENABLED', FALSE);
+    define('ICONV_ENABLED', false);
 }
 
 /* end of constants.php */

@@ -30,7 +30,7 @@ final class Messenger extends XGPCore
 {
 
     /**
-     * 
+     * Constructor
      */
     public function __construct()
     {

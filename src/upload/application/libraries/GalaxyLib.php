@@ -150,32 +150,27 @@ class GalaxyLib extends XGPCore
 
         // ONLY IF IS NOT THE CURRENT USER
         if ($this->row_data['user_id'] != $this->current_user['user_id']) {
-
             $action['attack'] = $this->attackLink(self::PLANET_TYPE);
             $action['spy'] = $this->spyLink(self::PLANET_TYPE);
 
             // HOLD POSITION ONLY IF IS A FRIEND
             if ($this->isFriend($this->row_data['buddys'], $this->row_data['user_id'])) {
-
                 $action['hold_position'] = $this->holdPositionLink(self::PLANET_TYPE);
             }
         }
 
         // ONLY IF IS THE CURRENT USER
         if ($this->row_data['user_id'] == $this->current_user['user_id']) {
-
             $action['deploy'] = $this->deployLink(self::PLANET_TYPE);
         }
 
         // MISSILE
         if ($this->isMissileActive()) {
-
             $action['missile'] = $this->missileLink(self::PLANET_TYPE);
         }
 
         // PHALANX
         if ($this->isPhalanxActive()) {
-
             $action['phalanx'] = $this->phalanxLink(self::PLANET_TYPE);
         }
 
@@ -191,7 +186,6 @@ class GalaxyLib extends XGPCore
 
         // LOOP THRU ACTIONS
         foreach ($action as $to_parse) {
-
             if ($to_parse != '') { // SKIP EMPTY ACTIONS
                 $parse['links'] .= $to_parse . '<br>';
             }
@@ -210,31 +204,25 @@ class GalaxyLib extends XGPCore
         $phalanx_link = stripslashes($this->row_data['planet_name']);
 
         if ($this->row_data['planet_destroyed'] == 0) {
-
             if ($this->isPhalanxActive()) {
-
                 $attributes = "onclick=fenster('game.php?page=phalanx&galaxy=" . $this->galaxy .
-                    "&amp;system=" . $this->system . "&amp;planet=" . $this->planet .
-                    "&amp;planettype=" . self::PLANET_TYPE . "')";
+                "&amp;system=" . $this->system . "&amp;planet=" . $this->planet .
+                "&amp;planettype=" . self::PLANET_TYPE . "')";
                 $phalanx_link = FunctionsLib::setUrl('', 'Phalanx', $this->row_data['planet_name'], $attributes);
             }
 
             $planetname = $phalanx_link;
 
-            if ($this->row_data['planet_last_update'] > ( time() - 59 * 60 ) && $this->row_data['user_id'] != $this->current_user['user_id']) {
-
-                if ($this->row_data['planet_last_update'] > ( time() - 10 * 60 ) && $this->row_data['user_id'] != $this->current_user['user_id']) {
-
+            if ($this->row_data['planet_last_update'] > (time() - 59 * 60) && $this->row_data['user_id'] != $this->current_user['user_id']) {
+                if ($this->row_data['planet_last_update'] > (time() - 10 * 60) && $this->row_data['user_id'] != $this->current_user['user_id']) {
                     $planetname .= "(*)";
                 } else {
-
                     $planetname .= " (" . FormatLib::prettyTimeHour(
-                            time() - $this->row_data['planet_last_update']
-                        ) . ")";
+                        time() - $this->row_data['planet_last_update']
+                    ) . ")";
                 }
             }
         } else {
-
             $planetname = $this->langs['gl_planet_destroyed'];
         }
 
@@ -260,27 +248,23 @@ class GalaxyLib extends XGPCore
 
         // ONLY IF IS NOT THE CURRENT USER
         if ($this->row_data['user_id'] != $this->current_user['user_id']) {
-
             $action['attack'] = $this->attackLink(self::MOON_TYPE);
             $action['spy'] = $this->spyLink(self::MOON_TYPE);
             $action['hold_position'] = $this->holdPositionLink(self::MOON_TYPE);
 
             // DESTROY
             if ($this->currentplanet[$this->resource[214]] > 0) {
-
                 $action['destroy'] = $this->destroyLink(self::MOON_TYPE);
             }
         }
 
         // ONLY IF IS THE CURRENT USER
         if ($this->row_data['user_id'] == $this->current_user['user_id']) {
-
             $action['deploy'] = $this->deployLink(self::MOON_TYPE);
         }
 
         // CHECK MOON STATUS AND COMPLETE DATA IF REQUIRED
         if ($this->row_data['destroyed_moon'] == 0 && $this->row_data['id_luna'] != 0) {
-
             $parse = $this->langs;
             $parse['dpath'] = DPATH;
             $parse['name_moon'] = $this->row_data['name_moon'];
@@ -292,10 +276,8 @@ class GalaxyLib extends XGPCore
 
             // LOOP THRU ACTIONS
             foreach ($action as $to_parse) {
-
                 // SKIP EMPTY ACTIONS
                 if ($to_parse != '') {
-
                     $parse['links'] .= $to_parse . '<br>';
                 }
             }
@@ -314,16 +296,13 @@ class GalaxyLib extends XGPCore
     private function debrisBlock()
     {
         if ($this->row_data['metal'] + $this->row_data['crystal'] >= DEBRIS_MIN_VISIBLE_SIZE) {
-
             $recyclers_needed = ceil(
                 ($this->row_data['metal'] + $this->row_data['crystal']) / $this->pricelist[209]['capacity']
             );
 
             if ($recyclers_needed < $this->currentplanet['ship_recycler']) {
-
                 $recyclers_sended = $recyclers_needed;
             } elseif ($recyclers_needed >= $this->currentplanet['ship_recycler']) {
-
                 $recyclers_sended = $this->currentplanet['ship_recycler'];
             }
 
@@ -358,34 +337,30 @@ class GalaxyLib extends XGPCore
         $status['noob_protection'] = '';
 
         if ($this->row_data['preference_vacation_mode'] > 0) {
-
             $status['vacation'] = '<span class="vacation">' . $this->langs['gl_v'] . '</span>';
         }
 
         if ($this->row_data['user_banned']) {
-
             $status['banned'] = '<span class="banned">' . FunctionsLib::setUrl(
-                    'game.php?page=banned', '', $this->langs['gl_b']
-                ) . '</span>';
+                'game.php?page=banned',
+                '',
+                $this->langs['gl_b']
+            ) . '</span>';
         }
 
-        if ($this->row_data['user_onlinetime'] < (time() - 60 * 60 * 24 * 7 ) && $this->row_data['user_onlinetime'] > ( time() - 60 * 60 * 24 * 28 )) {
-
+        if ($this->row_data['user_onlinetime'] < (time() - 60 * 60 * 24 * 7) && $this->row_data['user_onlinetime'] > (time() - 60 * 60 * 24 * 28)) {
             $status['inactive'] = '<span class="inactive">' . $this->langs['gl_i'] . '</span>';
         }
 
-        if ($this->row_data['user_onlinetime'] < ( time() - 60 * 60 * 24 * 28 )) {
-
+        if ($this->row_data['user_onlinetime'] < (time() - 60 * 60 * 24 * 28)) {
             $status['inactive'] .= '<span class="longinactive">' . $this->langs['gl_I'] . '</span>';
         }
 
         if ($this->noob->isWeak($MyGameLevel, $HeGameLevel)) {
-
             $status['noob_protection'] = '<span class="noob">' . $this->langs['gl_w'] . '</span>';
         }
 
         if ($this->noob->isStrong($MyGameLevel, $HeGameLevel)) {
-
             $status['noob_protection'] = '<span class="strong">' . $this->langs['gl_s'] . '</span>';
         }
 
@@ -401,25 +376,26 @@ class GalaxyLib extends XGPCore
         }
 
         if ($this->row_data['user_id'] != $this->current_user['user_id']) {
-
             $parse['actions'] = "<td>";
             $parse['actions'] .= str_replace('"', '', FunctionsLib::setUrl(
-                    'game.php?page=chat&playerId=' . $this->row_data['user_id'], '', $this->langs['write_message']
+                'game.php?page=chat&playerId=' . $this->row_data['user_id'],
+                '',
+                $this->langs['write_message']
             ));
             $parse['actions'] .= "</td></tr><tr><td>";
             $parse['actions'] .= str_replace('"', '', FunctionsLib::setUrl(
-                    "game.php?page=buddies&mode=2&u=" . $this->row_data['user_id'], '', $this->langs['gl_buddy_request'], ''
+                "game.php?page=buddies&mode=2&u=" . $this->row_data['user_id'],
+                '',
+                $this->langs['gl_buddy_request'],
+                ''
             ));
             $parse['actions'] .= "</td></tr><tr>";
-
 
             // USER STATUS AND NAME
             $parse['status'] = $this->row_data['user_name'];
 
             foreach ($status as $to_parse) {
-
                 if ($to_parse != '') {
-
                     $parse['status'] .= '<font color="white">(</font>' . $to_parse . '<font color="white">)</font>';
                 }
             }
@@ -445,15 +421,15 @@ class GalaxyLib extends XGPCore
         $add = '';
 
         if ($this->row_data['user_ally_id'] != 0) {
-
             if ($this->row_data['ally_members'] > 1) {
-
                 $add = $this->langs['gl_member_add'];
             }
 
             $parse = $this->langs;
             $parse['alliance_name'] = str_replace(
-                "'", "\'", htmlspecialchars($this->row_data['alliance_name'], ENT_COMPAT)
+                "'",
+                "\'",
+                htmlspecialchars($this->row_data['alliance_name'], ENT_COMPAT)
             );
 
             $parse['ally_members'] = $this->row_data['ally_members'];
@@ -461,9 +437,11 @@ class GalaxyLib extends XGPCore
             $parse['ally_id'] = $this->row_data['user_ally_id'];
 
             if ($this->row_data['alliance_web'] != '') {
-
                 $web_url = FunctionsLib::setUrl(
-                        FunctionsLib::prepUrl($this->row_data['alliance_web']), '', $this->langs['gl_alliance_web_page'], 'target="_new"'
+                    FunctionsLib::prepUrl($this->row_data['alliance_web']),
+                    '',
+                    $this->langs['gl_alliance_web_page'],
+                    'target="_new"'
                 );
 
                 $parse['web'] = '</tr><tr>';
@@ -471,10 +449,8 @@ class GalaxyLib extends XGPCore
             }
 
             if ($this->current_user['user_ally_id'] == $this->row_data['user_ally_id']) {
-
                 $parse['tag'] = '<span class="allymember">' . $this->row_data['alliance_tag'] . '</span>';
             } else {
-
                 $parse['tag'] = $this->row_data['alliance_tag'];
             }
         }
@@ -492,10 +468,9 @@ class GalaxyLib extends XGPCore
         $links = '';
 
         if ($this->row_data['user_id'] != $this->current_user['user_id']) {
-
             $image = FunctionsLib::setImage(DPATH . 'img/e.gif', $this->langs['gl_spy']);
             $attributes = "onclick=\"javascript:doit(6, " . $this->galaxy . ", " . $this->system . ", " .
-                $this->planet . ", 1, " . $this->current_user['preference_spy_probes'] . ");\"";
+            $this->planet . ", 1, " . $this->current_user['preference_spy_probes'] . ");\"";
             $links .= FunctionsLib::setUrl('', '', $image, $attributes) . '&nbsp;';
 
             $image = FunctionsLib::setImage(DPATH . 'img/m.gif', $this->langs['write_message']);
@@ -507,10 +482,9 @@ class GalaxyLib extends XGPCore
             $links .= FunctionsLib::setUrl($url, '', $image, '') . '&nbsp;';
 
             if ($this->isMissileActive()) {
-
                 $image = FunctionsLib::setImage(DPATH . 'img/r.gif', $this->langs['gl_missile_attack']);
                 $url = 'game.php?page=galaxy&mode=2&galaxy=' . $this->galaxy . '&system=' . $this->system .
-                    '&planet=' . $this->planet . '&current=' . $this->current_user['user_current_planet'];
+                '&planet=' . $this->planet . '&current=' . $this->current_user['user_current_planet'];
                 $links .= FunctionsLib::setUrl($url, '', $image) . '&nbsp;';
             }
         }
@@ -533,7 +507,7 @@ class GalaxyLib extends XGPCore
     private function attackLink($planet_type)
     {
         $url = "game.php?page=fleet1&galaxy=" . $this->galaxy . "&amp;system=" . $this->system . "&amp;planet=" .
-            $this->planet . "&amp;planettype=" . $planet_type . "&amp;target_mission=1";
+        $this->planet . "&amp;planettype=" . $planet_type . "&amp;target_mission=1";
         return str_replace('"', '', FunctionsLib::setUrl($url, '', $this->langs['type_mission'][1]));
     }
 
@@ -547,7 +521,7 @@ class GalaxyLib extends XGPCore
     private function transportLink($planet_type)
     {
         $url = "game.php?page=fleet1&galaxy=" . $this->galaxy . "&system=" . $this->system .
-            "&planet=" . $this->planet . "&planettype=" . $planet_type . "&target_mission=3";
+        "&planet=" . $this->planet . "&planettype=" . $planet_type . "&target_mission=3";
         return str_replace('"', '', FunctionsLib::setUrl($url, '', $this->langs['type_mission'][3]));
     }
 
@@ -561,7 +535,7 @@ class GalaxyLib extends XGPCore
     private function deployLink($planet_type)
     {
         $url = "game.php?page=fleet1&galaxy=" . $this->galaxy . "&system=" . $this->system .
-            "&planet=" . $this->planet . "&planettype=" . $planet_type . "&target_mission=4";
+        "&planet=" . $this->planet . "&planettype=" . $planet_type . "&target_mission=4";
         return str_replace('"', '', FunctionsLib::setUrl($url, '', $this->langs['type_mission'][4]));
     }
 
@@ -575,7 +549,7 @@ class GalaxyLib extends XGPCore
     private function holdPositionLink($planet_type)
     {
         $url = "game.php?page=fleet1&galaxy=" . $this->galaxy . "&system=" . $this->system .
-            "&planet=" . $this->planet . "&planettype=" . $planet_type . "&target_mission=5";
+        "&planet=" . $this->planet . "&planettype=" . $planet_type . "&target_mission=5";
         return str_replace('"', '', FunctionsLib::setUrl($url, '', $this->langs['type_mission'][5]));
     }
 
@@ -589,7 +563,7 @@ class GalaxyLib extends XGPCore
     private function spyLink($planet_type)
     {
         $attributes = "onclick=&#039javascript:doit(6, " . $this->galaxy . ", " . $this->system . ", " .
-            $this->planet . ", " . $planet_type . ", " . $this->current_user['preference_spy_probes'] . ");&#039";
+        $this->planet . ", " . $planet_type . ", " . $this->current_user['preference_spy_probes'] . ");&#039";
         return str_replace('"', '', FunctionsLib::setUrl('', '', $this->langs['type_mission'][6], $attributes));
     }
 
@@ -603,7 +577,7 @@ class GalaxyLib extends XGPCore
     private function destroyLink($planet_type)
     {
         $url = "game.php?page=fleet1&galaxy=" . $this->galaxy . "&system=" . $this->system . "&planet=" .
-            $this->planet . "&planettype=" . $planet_type . "&target_mission=9";
+        $this->planet . "&planettype=" . $planet_type . "&target_mission=9";
         return str_replace('"', '', FunctionsLib::setUrl($url, '', $this->langs['type_mission'][9]));
     }
 
@@ -617,7 +591,7 @@ class GalaxyLib extends XGPCore
     private function missileLink($planet_type)
     {
         $url = "game.php?page=galaxy&mode=2&galaxy=" . $this->galaxy . "&system=" . $this->system . "&planet=" .
-            $this->planet . "&current=" . $this->current_user['user_current_planet'];
+        $this->planet . "&current=" . $this->current_user['user_current_planet'];
         return str_replace('"', '', FunctionsLib::setUrl($url, '', $this->langs['gl_missile_attack']));
     }
 
@@ -631,7 +605,7 @@ class GalaxyLib extends XGPCore
     private function phalanxLink($planet_type)
     {
         $attributes = "onclick=fenster(&#039;game.php?page=phalanx&galaxy=" . $this->galaxy . "&amp;system=" .
-            $this->system . "&amp;planet=" . $this->planet . "&amp;planettype=" . $planet_type . "&#039;)";
+        $this->system . "&amp;planet=" . $this->planet . "&amp;planettype=" . $planet_type . "&#039;)";
         return str_replace('"', '', FunctionsLib::setUrl('', '', $this->langs['gl_phalanx'], $attributes));
     }
     ######################################
@@ -651,7 +625,6 @@ class GalaxyLib extends XGPCore
     private function isFriend($friends_array, $current_user_id)
     {
         if ($current_user_id == $this->current_user['user_id']) {
-
             return false;
         }
 
@@ -667,8 +640,9 @@ class GalaxyLib extends XGPCore
      */
     private function isMissileActive()
     {
-        if (( $this->currentplanet['defense_interplanetary_missile'] != 0 ) && ( $this->row_data['user_id'] != $this->current_user['user_id'] ) && ( $this->row_data['planet_galaxy'] == $this->currentplanet['planet_galaxy'] )) {
-
+        if (($this->currentplanet['defense_interplanetary_missile'] != 0)
+            && ($this->row_data['user_id'] != $this->current_user['user_id'])
+            && ($this->row_data['planet_galaxy'] == $this->currentplanet['planet_galaxy'])) {
             return $this->isInRange($this->formula->missileRange($this->current_user['research_impulse_drive']));
         }
     }
@@ -680,11 +654,10 @@ class GalaxyLib extends XGPCore
      */
     private function isPhalanxActive()
     {
-        if (($this->currentplanet['building_phalanx'] != 0) 
-            && ($this->row_data['user_id'] != $this->current_user['user_id']) 
+        if (($this->currentplanet['building_phalanx'] != 0)
+            && ($this->row_data['user_id'] != $this->current_user['user_id'])
             && ($this->row_data['planet_galaxy'] == $this->currentplanet['planet_galaxy'])
             && ($this->currentplanet['planet_type']) == 3) {
-
             return $this->isInRange($this->formula->phalanxRange($this->currentplanet['building_phalanx']));
         }
     }

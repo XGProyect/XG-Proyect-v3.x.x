@@ -49,18 +49,14 @@ class ProductionLib
     public static function maxProduction($max_energy, $energy_used)
     {
         if (($max_energy == 0) && ($energy_used > 0)) {
-
             $percentage = 0;
         } elseif (($max_energy > 0) && (($energy_used + $max_energy) < 0)) {
-
             $percentage = floor(($max_energy) / ($energy_used * -1) * 100);
         } else {
-
             $percentage = 100;
         }
 
         if ($percentage > 100) {
-
             $percentage = 100;
         }
 
@@ -80,10 +76,8 @@ class ProductionLib
     public static function productionAmount($production, $boost, $mult = 0, $is_energy = false)
     {
         if ($is_energy) {
-
             return floor($production * $boost);
         } else {
-
             return floor($production * $mult * $boost);
         }
     }

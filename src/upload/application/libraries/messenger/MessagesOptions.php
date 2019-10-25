@@ -54,7 +54,7 @@ final class MessagesOptions
     private $_type;
 
     /**
-     * 
+     *
      * @var type
      */
     private $_from;
@@ -73,7 +73,7 @@ final class MessagesOptions
 
     /**
      *
-     * @var type 
+     * @var type
      */
     private $_message_format;
 
@@ -94,9 +94,9 @@ final class MessagesOptions
 
     public function getType()
     {
-        if ($this->_type == '' or ! is_object($this->_type)) {
+        if ($this->_type == '' or !is_object($this->_type)) {
 
-            return MessagesEnumerator::general;
+            return MessagesEnumerator::GENERAL;
         }
 
         return $this->_type;

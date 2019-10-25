@@ -55,7 +55,6 @@ final class QueueElements
      * @var string
      */
     public $build_mode = '';
-
 }
 
 /* end of QueueElements.php */

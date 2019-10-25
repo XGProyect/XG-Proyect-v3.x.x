@@ -38,10 +38,8 @@ class FormulaLib
         $range = 0;
 
         if ($phalanx_level > 1) {
-
             $range = pow($phalanx_level, 2) - 1;
         } elseif ($phalanx_level == 1) {
-
             $range = 1;
         }
 
@@ -58,7 +56,6 @@ class FormulaLib
     public function missileRange($impulse_drive_level)
     {
         if ($impulse_drive_level > 0) {
-
             return ($impulse_drive_level * 5) - 1;
         }
 
@@ -79,13 +76,13 @@ class FormulaLib
         $min = [
             9747, 9849, 9899, 11091, 12166,
             12166, 11874, 12921, 12689, 12410,
-            12083, 11662, 10392, 9000, 8062
+            12083, 11662, 10392, 9000, 8062,
         ];
 
         $max = [
             10392, 10488, 11747, 14491, 14900,
             15748, 15588, 15905, 15588, 15000,
-            14318, 13416, 11000, 9644, 8602
+            14318, 13416, 11000, 9644, 8602,
         ];
 
         $diameter = mt_rand($min[$position - 1], $max[$position - 1]);
@@ -94,11 +91,9 @@ class FormulaLib
         $fields = $this->calculatePlanetFields($diameter);
 
         if ($main) {
-
             $diameter = '12800';
             $fields = FunctionsLib::readConfig('initial_fields');
         }
-
 
         $return['planet_diameter'] = $diameter;
         $return['planet_field_max'] = $fields;
@@ -108,9 +103,9 @@ class FormulaLib
 
     /**
      * getPlanetFields
-     * 
+     *
      * @param int $diameter Diameter
-     * 
+     *
      * @return int
      */
     public function calculatePlanetFields($diameter)
@@ -137,58 +132,47 @@ class FormulaLib
             'normaltemp' => 7, // normal
             'trocken' => 10, // dry
             'wasser' => 9, // water
-            'wuesten' => 4 // desert
+            'wuesten' => 4, // desert
         ];
 
-
         if ($position >= 1 && $position <= 3) {
-
             $type = ['trocken', 'wuesten'];
         }
 
         if ($position >= 4 && $position <= 5) {
-
             $type = ['normaltemp', 'trocken'];
         }
 
         if ($position >= 6 && $position <= 7) {
-
             $type = ['dschjungel', 'normaltemp'];
         }
 
         if ($position >= 8 && $position <= 9) {
-
             $type = ['wasser', 'dschjungel'];
         }
 
         if ($position >= 10 && $position <= 11) {
-
             $type = ['eis', 'wasser'];
         }
 
         if ($position >= 12 && $position <= 13) {
-
             $type = ['gas', 'eis'];
         }
 
         if ($position >= 14 && $position <= 15) {
-
             $type = ['normaltemp', 'gas'];
         }
 
         // if it's an even number, we will get second element postion in the array
         if ($system % 2 == 0) {
-
             $even = 1;
         } else {
-
             $even = 0;
         }
 
         $image_id = mt_rand(1, $planets_availables[$type[$even]]);
 
         if ($image_id < 10) {
-
             $image_id = '0' . $image_id;
         }
 
@@ -230,25 +214,25 @@ class FormulaLib
 
         return $temp;
     }
-    
+
     /**
      * Get moon destruction chance
-     * 
+     *
      * @param int $planet_diameter
      * @param int $death_stars
-     * 
+     *
      * @return int
      */
     public function getMoonDestructionChance(int $planet_diameter, int $death_stars): int
     {
         $prob = (100 - sqrt($planet_diameter)) * sqrt($death_stars);
-        
+
         return ($prob > 100) ? 100 : round($prob);
     }
-    
+
     /**
      * Get Death Stars destruction chance
-     * 
+     *
      * @param int $planet_diameter
      * @return type
      */

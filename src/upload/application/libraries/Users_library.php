@@ -54,10 +54,10 @@ class Users_library
             $this->setPlanetData();
 
             // Update resources, ships, defenses & technologies
-            Updates_library::updatePlanetResources($this->user_data, $this->planet_data, time());
+            UpdatesLibrary::updatePlanetResources($this->user_data, $this->planet_data, time());
 
             // Update buildings queue
-            Updates_library::updateBuildingsQueue($this->planet_data, $this->user_data);
+            UpdatesLibrary::updateBuildingsQueue($this->planet_data, $this->user_data);
         }
     }
 
@@ -179,7 +179,7 @@ class Users_library
     {
         return ($user['preference_vacation_mode'] > 0);
     }
-    
+
     /**
      * Check if user is inactive
      *
@@ -204,7 +204,7 @@ class Users_library
      */
     private function isSessionSet()
     {
-        if (!isset($_SESSION['user_id']) or ! isset($_SESSION['user_name']) or ! isset($_SESSION['user_password'])) {
+        if (!isset($_SESSION['user_id']) or !isset($_SESSION['user_name']) or !isset($_SESSION['user_password'])) {
 
             return false;
         } else {
