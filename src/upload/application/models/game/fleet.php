@@ -42,7 +42,7 @@ class Fleet
 
     /**
      * __destruct
-     * 
+     *
      * @return void
      */
     public function __destruct()
@@ -52,17 +52,16 @@ class Fleet
 
     /**
      * Get ships by planet id
-     * 
+     *
      * @param int $planet_id Planet ID
-     * 
+     *
      * @return array
      */
     public function getShipsByPlanetId($planet_id)
     {
         if ((int) $planet_id > 0) {
-
             return $this->db->queryFetch(
-                    "SELECT 
+                "SELECT
                         s.`ship_small_cargo_ship`,
                         s.`ship_big_cargo_ship`,
                         s.`ship_light_fighter`,
@@ -77,7 +76,7 @@ class Fleet
                         s.`ship_destroyer`,
                         s.`ship_deathstar`,
                         s.`ship_battlecruiser`
-                    FROM `" . SHIPS . "` AS s 
+                    FROM `" . SHIPS . "` AS s
                     WHERE s.`ship_planet_id` = '" . $planet_id . "';"
             );
         }
@@ -87,17 +86,16 @@ class Fleet
 
     /**
      * Get all fleets by user id or owner
-     * 
+     *
      * @param int $user_id User ID
-     * 
+     *
      * @return array
      */
     public function getAllFleetsByUserId($user_id)
     {
         if ((int) $user_id > 0) {
-
             return $this->db->queryFetchAll(
-                    "SELECT 
+                "SELECT
                         f.*
                     FROM `" . FLEETS . "` f
                     WHERE f.`fleet_owner` = '" . $user_id . "';"
@@ -106,23 +104,22 @@ class Fleet
 
         return [];
     }
-    
+
     /**
      * Get ACS Data by group ID
-     * 
+     *
      * @param int $group_id
-     * 
+     *
      * @return array
      */
     public function getAcsDataByGroupId(string $group_id)
-    {        
+    {
         if (!empty($group_id)) {
-
             return $this->db->queryFetch(
-                    "SELECT 
+                "SELECT
                         acs.*,
                         (
-                            SELECT 
+                            SELECT
                                 COUNT(*)
                             FROM `" . ACS_MEMBERS . "` am
                             WHERE am.`acs_group_id` = acs.`acs_id`
@@ -137,17 +134,16 @@ class Fleet
 
     /**
      * Get all user planets
-     * 
+     *
      * @param int $user_id User ID
-     * 
+     *
      * @return array
      */
     public function getAllPlanetsByUserId($user_id)
     {
         if ((int) $user_id > 0) {
-
             return $this->db->queryFetchAll(
-                    "SELECT 
+                "SELECT
                     p.`planet_id`,
                     p.`planet_name`,
                     p.`planet_galaxy`,
@@ -164,16 +160,16 @@ class Fleet
 
     /**
      * Get ongoing ACS attacks
-     * 
+     *
      * @param
-     * 
+     *
      * @return mixed
      */
     public function getOngoingAcs($user_id)
     {
         return $this->db->queryFetchAll(
-                "SELECT 
-                    acs.* 
+            "SELECT
+                    acs.*
                 FROM `" . ACS_MEMBERS . "` am
                 INNER JOIN `" . ACS . "` acs ON acs.`acs_id` = am.`acs_group_id`
                 WHERE am.`acs_user_id` = '" . $user_id . "';"
@@ -182,41 +178,41 @@ class Fleet
 
     /**
      * Get planet owner by coords
-     * 
+     *
      * @param int $g    Galaxy
      * @param int $s    System
      * @param int $p    Planet
      * @param int $pt   Planet Type
-     * 
+     *
      * @return bool
      */
     public function getPlanetOwnerByCoords(int $g, int $s, int $p, int $pt): array
     {
         return $this->db->queryFetch(
-                "SELECT 
+            "SELECT
                 `planet_user_id`
             FROM `" . PLANETS . "`
             WHERE `planet_galaxy` = '" . $g . "'
                 AND `planet_system` = '" . $s . "'
                 AND `planet_planet` = '" . $p . "'
                 AND `planet_type` = '" . $pt . "';"
-            ) ?? [];
+        ) ?? [];
     }
 
     /**
      * Get target data by coords
-     * 
+     *
      * @param int $g    Galaxy
      * @param int $s    System
      * @param int $p    Planet
      * @param int $pt   Planet Type
-     * 
+     *
      * @return type
      */
     public function getTargetDataByCoords(int $g, int $s, int $p, int $pt): array
     {
         return $this->db->queryFetch(
-                "SELECT 
+            "SELECT
                 p.`planet_user_id`,
                 p.`planet_debris_metal`,
                 p.`planet_debris_crystal`,
@@ -234,14 +230,14 @@ class Fleet
                 AND p.`planet_system` = '" . $s . "'
                 AND p.`planet_planet` = '" . $p . "'
                 AND p.`planet_type` = '" . $pt . "'"
-            ) ?? [];
+        ) ?? [];
     }
 
     /**
      * Get ACS count
-     * 
+     *
      * @param type $acs_id
-     * 
+     *
      * @return int
      */
     public function getAcsCount($acs_id): int
@@ -255,21 +251,19 @@ class Fleet
 
     /**
      * Insert a new fleet
-     * 
+     *
      * @param array $fleet_data
      * @param array $planet_data
-     * 
+     *
      * @return boolean
      */
     public function insertNewFleet(array $fleet_data, array $planet_data, array $fleet_ships): bool
     {
         try {
-
             $this->db->beginTransaction();
 
             // prepare the query
             foreach ($fleet_data as $field => $value) {
-
                 $sql[] = "`" . $field . "` = '" . $value . "'";
             }
 
@@ -286,7 +280,6 @@ class Fleet
 
             return true;
         } catch (Exception $e) {
-
             $this->db->rollbackTransaction();
 
             return false;
@@ -295,25 +288,24 @@ class Fleet
 
     /**
      * Update planet based on the received values
-     * 
+     *
      * @param array $planet_data Planet Data
      * @param array $fleet_data  Fleet Data
      * @param array $fleet_ships Fleet Ships
-     * 
+     *
      * @return void
      */
     public function updatePlanet(array $planet_data, array $fleet_data, array $fleet_ships)
     {
         // prepare the query
         foreach ($fleet_ships as $field => $value) {
-
             $sql[] = "`" . $field . "` = `" . $field . "` - '" . $value . "'";
         }
 
         $this->db->query(
             "UPDATE `" . PLANETS . "` AS p
             INNER JOIN `" . SHIPS . "` AS s ON s.`ship_planet_id` = p.`planet_id` SET
-            " . join(', ', $sql) . ", 
+            " . join(', ', $sql) . ",
             `planet_metal` = `planet_metal` - " . $fleet_data['fleet_resource_metal'] . ",
             `planet_crystal` = `planet_crystal` - " . $fleet_data['fleet_resource_crystal'] . ",
             `planet_deuterium` = `planet_deuterium` - " . ($fleet_data['fleet_resource_deuterium'] + $fleet_data['fleet_fuel']) . "
@@ -323,16 +315,16 @@ class Fleet
 
     /**
      * Get buddies
-     * 
+     *
      * @param int $current_planet Current Planet ID
      * @param int $target_planet  Target Planet ID
-     * 
+     *
      * @return array
      */
     public function getBuddies(int $current_planet, int $target_planet): string
     {
         return $this->db->queryFetch(
-                "SELECT COUNT(*) AS buddies
+            "SELECT COUNT(*) AS buddies
             FROM  `" . BUDDY . "`
             WHERE (
                 (
@@ -345,32 +337,32 @@ class Fleet
                 )
             )
             AND buddy_status = 1"
-            )['buddies'];
+        )['buddies'];
     }
 
     /**
      * Get ACS Max Time
-     * 
+     *
      * @param int $group_id Group ID
-     * 
+     *
      * @return string
      */
     public function getAcsMaxTime(int $group_id): string
     {
         return $this->db->queryFetch(
-                "SELECT MAX(`fleet_start_time`) AS start_time
+            "SELECT MAX(`fleet_start_time`) AS start_time
                 FROM `" . FLEETS . "`
                 WHERE `fleet_group` = '" . $group_id . "';"
-            )['start_time'];
+        )['start_time'];
     }
 
     /**
      * Update ACS Fleets Times
-     * 
+     *
      * @param int $group_id   Group ID
      * @param int $start_time Start Time
      * @param int $end_time   End Time
-     * 
+     *
      * @return void
      */
     public function updateAcsTimes(int $group_id, int $start_time, int $end_time)
@@ -385,9 +377,9 @@ class Fleet
 
     /**
      * Get the ACS Owner
-     * 
+     *
      * @param int $fleet_group
-     * 
+     *
      * @return string
      */
     public function getAcsOwner(int $fleet_group): int
@@ -398,12 +390,12 @@ class Fleet
                 WHERE af.`acs_id` = '" . $fleet_group . "';"
         )['acs_owner'] ?? 0;
     }
-    
+
     /**
      * Remove an ACS fleet
-     * 
+     *
      * @param int $fleet_group
-     * 
+     *
      * @return void
      */
     public function removeAcs(int $fleet_group): void
@@ -419,33 +411,29 @@ class Fleet
             WHERE f.`fleet_group` = '" . $fleet_group . "';"
         );
     }
-    
+
     /**
      * Return the fleet to its start planet
-     * 
+     *
      * @param FleetEntity $fleet
      * @param int         $user_id Current user ID
-     * 
+     *
      * @return bool
      */
     public function returnFleet(FleetEntity $fleet, int $user_id): bool
     {
         try {
-
             $this->db->beginTransaction();
 
             if ($fleet->getFleetGroup() > 0) {
-
                 $acs = $this->getAcsOwner($fleet->getFleetGroup());
 
-                if ($acs['acs_owner'] == $fleet->getFleetOwner() 
+                if ($acs['acs_owner'] == $fleet->getFleetOwner()
                     && $fleet->getFleetMission() == Missions::attack) {
-
                     $this->removeAcs($fleet->getFleetGroup());
                 }
 
                 if ($fleet->getFleetMission() == Missions::acs) {
-
                     $this->db->query(
                         "UPDATE `" . FLEETS . "` f SET
                             f.`fleet_group` = '0'
@@ -459,10 +447,9 @@ class Fleet
             $current_time = $base_time - $fleet_creation;
             $flight_lenght = $fleet->getFleetStartTime() - $fleet_creation;
             $return_time = $base_time + $current_time;
-            
-            if ($fleet->getFleetEndStay() != 0 
+
+            if ($fleet->getFleetEndStay() != 0
                 && $current_time > $flight_lenght) {
-                
                 $return_time = $base_time + $flight_lenght;
             }
 
@@ -480,25 +467,23 @@ class Fleet
 
             return true;
         } catch (Exception $e) {
-
             $this->db->rollbackTransaction();
 
             return false;
         }
     }
-    
+
     /**
      * Create a new ACS Record
-     * 
+     *
      * @param type $acs_code
      * @param FleetEntity $fleet
-     * 
+     *
      * @return boolean
      */
     public function createNewAcs($acs_code, FleetEntity $fleet)
     {
         try {
-
             $this->db->beginTransaction();
 
             $this->db->query(
@@ -512,37 +497,36 @@ class Fleet
             );
 
             $group_id = $this->db->insertId();
-            
+
             $this->db->query(
                 "UPDATE `" . FLEETS . "` SET
                     `fleet_group` = '" . $group_id . "'
                 WHERE `fleet_id` = '" . $fleet->getFleetId() . "'"
             );
-            
+
             $this->insertNewAcsMember($fleet->getFleetOwner(), $group_id);
 
             $this->db->commitTransaction();
 
             return $group_id;
         } catch (Exception $e) {
-
             $this->db->rollbackTransaction();
 
             return false;
         }
     }
-    
+
     /**
      * Get all the ACS Members
-     * 
+     *
      * @param int $group_id
-     * 
+     *
      * @return array
      */
     public function getListOfAcsMembers($group_id)
     {
         return $this->db->queryFetchAll(
-            "SELECT 
+            "SELECT
                 u.`user_id`,
                 u.`user_name`
             FROM `" . ACS_MEMBERS . "` am
@@ -550,47 +534,47 @@ class Fleet
             WHERE am.`acs_group_id` = '" . $group_id . "'"
         );
     }
-    
+
     /**
      * Update ACS Name
-     * 
+     *
      * @param string $acs_name
      * @param int $user_id
-     * 
+     *
      * @return void
      */
     public function updateAcsName(string $acs_name, int $user_id): void
     {
         $this->db->query(
-            "UPDATE `" . ACS . "` acs SET 
+            "UPDATE `" . ACS . "` acs SET
                 acs.`acs_name` = '" . $this->db->escapeValue($acs_name) . "'
             WHERE acs.`acs_owner` = '" . $user_id . "';"
         );
     }
-    
+
     /**
      * Create a new ACS Member
-     * 
+     *
      * @param int $member
      * @param int $group_id
-     * 
+     *
      * @return void
      */
     public function insertNewAcsMember(int $member, int $group_id): void
     {
         $this->db->query(
-            "INSERT INTO `" . ACS_MEMBERS . "` SET 
+            "INSERT INTO `" . ACS_MEMBERS . "` SET
                 `acs_group_id` = '" . $group_id . "',
                 `acs_user_id` = '" . $member . "'"
         );
     }
-    
+
     /**
      * Remove an ACS Member
-     * 
+     *
      * @param int $member
      * @param int $group_id
-     * 
+     *
      * @return void
      */
     public function removeAcsMember(int $member, int $group_id): void
@@ -601,12 +585,12 @@ class Fleet
                 AND `acs_user_id` = '" . $member . "'"
         );
     }
-    
+
     /**
      * Get the user name by ID
-     * 
+     *
      * @param string $user_name User Name
-     * 
+     *
      * @return int
      */
     public function getUserIdByName(string $user_name, int $group_id): int
@@ -617,7 +601,7 @@ class Fleet
             FROM `" . USERS . "` u
             WHERE u.`user_name` = '" . $user_name . "'
             AND u.`user_id` NOT IN (
-                SELECT 
+                SELECT
                     acs.`acs_user_id`
                 FROM `" . ACS_MEMBERS . "` acs
                 WHERE acs.`acs_group_id` = '" . $group_id . "'

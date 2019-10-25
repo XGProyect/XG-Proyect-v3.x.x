@@ -30,7 +30,7 @@ class Changelog
 
     /**
      * Constructor
-     * 
+     *
      * @return void
      */
     public function __construct($db)
@@ -41,7 +41,7 @@ class Changelog
 
     /**
      * __destruct
-     * 
+     *
      * @return void
      */
     public function __destruct()
@@ -51,18 +51,18 @@ class Changelog
 
     /**
      * Get changelog entries
-     * 
+     *
      * @return array
      */
     public function getAllChangelogEntries()
     {
         return $this->db->queryFetchAll(
-                "SELECT
+            "SELECT
                 c.`changelog_version`,
                 c.`changelog_date`,
                 c.`changelog_description`
             FROM `xgp_changelog` c
-            LEFT JOIN `xgp_languages` l 
+            LEFT JOIN `xgp_languages` l
                 ON l.`language_id` = c.`changelog_lang_id`
             WHERE l.`language_name` = (
                 SELECT o.`option_value` FROM `xgp_options` o WHERE `option_name` = 'lang'

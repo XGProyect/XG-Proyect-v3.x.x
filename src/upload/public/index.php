@@ -20,14 +20,12 @@ require XGP_ROOT . 'application' . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPA
 $page = filter_input(INPUT_GET, 'page');
 
 if (is_null($page)) {
-    
     $page = 'home';
 }
 
 $file_name = XGP_ROOT . HOME_PATH . $page . '.php';
 
 if (file_exists($file_name)) {
-
     include $file_name;
 
     $class_name = 'application\controllers\home\\' . ucfirst($page);

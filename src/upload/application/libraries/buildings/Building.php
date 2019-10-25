@@ -75,7 +75,7 @@ class Building
 
     /**
      * Init the class with some values
-     * 
+     *
      * @param array $planet  Planet
      * @param array $user    User
      * @param array $objects Objects
@@ -90,9 +90,9 @@ class Building
 
     /**
      * Add a new building to the queue, that will be build
-     * 
+     *
      * @param int $building_id Building ID
-     * 
+     *
      * @return void
      */
     public function addBuilding($building_id)
@@ -104,9 +104,9 @@ class Building
 
     /**
      * Remove building from list
-     * 
+     *
      * @param type $element_id
-     * 
+     *
      * @return void
      */
     public function removeBuilding($element_id)
@@ -116,7 +116,7 @@ class Building
 
     /**
      * Cancel current building
-     * 
+     *
      * @return void
      */
     public function cancelBuilding()
@@ -126,9 +126,9 @@ class Building
 
     /**
      * Add a new building to the queue, that will be destroyed
-     * 
+     *
      * @param int $building_id Building ID
-     * 
+     *
      * @return void
      */
     public function tearDownBuilding($building_id)
@@ -140,7 +140,7 @@ class Building
 
     /**
      * Count current elements in the queue
-     * 
+     *
      * @return int
      */
     public function getCountElementsOnQueue()
@@ -150,7 +150,7 @@ class Building
 
     /**
      * Get the updated queue as a string
-     * 
+     *
      * @return string
      */
     public function getNewQueueAsString()
@@ -160,7 +160,7 @@ class Building
 
     /**
      * Get the updated queue as an array
-     * 
+     *
      * @return string
      */
     public function getNewQueueAsArray()
@@ -170,7 +170,7 @@ class Building
 
     /**
      * Check if the queue is full
-     * 
+     *
      * @return boolean
      */
     public function isQueueFull()
@@ -178,12 +178,10 @@ class Building
         $queue_size = 1;
 
         if (OfficiersLib::isOfficierActive($this->_user['premium_officier_commander'])) {
-
             $queue_size = MAX_BUILDING_QUEUE_SIZE;
         }
 
         if ($this->getCountElementsOnQueue() < $queue_size) {
-
             return false;
         }
 
@@ -202,7 +200,6 @@ class Building
         $build_level = $this->calculateBuildLevel($build_mode);
 
         if ($build_level < 0) {
-
             return null;
         }
 
@@ -264,7 +261,7 @@ class Building
 
     /**
      * Get building current level
-     * 
+     *
      * @return int
      */
     private function getBuildingCurrentLevel()
@@ -274,9 +271,9 @@ class Building
 
     /**
      * Set the level based on if we are going to build or destroy
-     * 
+     *
      * @param string $build_mode Build Mode
-     * 
+     *
      * @return int
      */
     private function calculateBuildLevel($build_mode)
@@ -288,9 +285,9 @@ class Building
 
     /**
      * Set the time based on if we are going to build or destroy
-     * 
+     *
      * @param string $build_mode Build Mode
-     * 
+     *
      * @return int
      */
     private function calculateBuildTime($build_mode)
@@ -298,8 +295,10 @@ class Building
         $difference = ($build_mode == 'teardown') ? 2 : 1;
 
         $this->_build_time = DevelopmentsLib::developmentTime(
-                $this->_user, $this->_planet, $this->_building
-            ) / $difference;
+            $this->_user,
+            $this->_planet,
+            $this->_building
+        ) / $difference;
 
         return $this->_build_time;
     }
@@ -308,16 +307,14 @@ class Building
      * Calculate the building time for each element
      * depending if it's the first element in the queue
      * or there's something before.
-     * 
+     *
      * @return int
      */
     private function calculateBuildEndTime()
     {
         if ($this->getCountElementsOnQueue() <= 0) {
-
             return time() + $this->_build_time;
         } else {
-
             $prev_element = $this->getCountElementsOnQueue() - 1;
             $prev_element_time = $this->_queue->getElementFromQueueAsArray($prev_element)[2];
 

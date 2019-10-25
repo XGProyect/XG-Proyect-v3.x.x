@@ -30,7 +30,7 @@ class Officier
 
     /**
      * Constructor
-     * 
+     *
      * @return void
      */
     public function __construct($db)
@@ -41,7 +41,7 @@ class Officier
 
     /**
      * __destruct
-     * 
+     *
      * @return void
      */
     public function __destruct()
@@ -61,7 +61,6 @@ class Officier
     public function setPremium(int $user_id, int $price, string $officier, int $time_to_add): void
     {
         if ($user_id > 0) {
-
             $this->db->query(
                 "UPDATE `" . PREMIUM . "` SET
                     `premium_dark_matter` = `premium_dark_matter` - '" . $price . "',

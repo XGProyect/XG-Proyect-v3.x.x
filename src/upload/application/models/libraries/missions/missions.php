@@ -30,7 +30,7 @@ class Missions
 
     /**
      * Constructor
-     * 
+     *
      * @return void
      */
     public function __construct($db)
@@ -41,7 +41,7 @@ class Missions
 
     /**
      * __destruct
-     * 
+     *
      * @return void
      */
     public function __destruct()
@@ -52,9 +52,9 @@ class Missions
 
     /**
      * Delete a fleet by its ID
-     * 
+     *
      * @param int $fleet_id Fleet ID
-     * 
+     *
      * @return void
      */
     public function deleteFleetById($fleet_id)
@@ -69,9 +69,9 @@ class Missions
 
     /**
      * Update fleet status to return by ID
-     * 
+     *
      * @param int $fleet_id Fleet ID
-     * 
+     *
      * @return void
      */
     public function updateFleetStatusToReturnById($fleet_id)
@@ -88,9 +88,9 @@ class Missions
 
     /**
      * Update fleet status to stay by ID
-     * 
+     *
      * @param int $fleet_id Fleet ID
-     * 
+     *
      * @return void
      */
     public function updateFleetStatusToStayById($fleet_id)
@@ -107,9 +107,9 @@ class Missions
 
     /**
      * Update planet ships by the provided coords and with the provided data
-     * 
+     *
      * @param array $data Data to update
-     * 
+     *
      * @return void
      */
     public function updatePlanetsShipsByCoords($data = [])
@@ -133,9 +133,9 @@ class Missions
 
     /**
      * Update planet resources by the provided coords and with the provided data
-     * 
+     *
      * @param array $data Data to update
-     * 
+     *
      * @return void
      */
     public function updatePlanetResourcesByCoords($data = [])
@@ -158,9 +158,9 @@ class Missions
 
     /**
      * Get all planet data
-     * 
+     *
      * @param array $data Data to update
-     * 
+     *
      * @return array
      */
     public function getAllPlanetDataByCoords($data = [])
@@ -168,7 +168,7 @@ class Missions
         if (is_array($data)) {
 
             return $this->db->queryFetch(
-                    "SELECT *
+                "SELECT *
                 FROM `" . PLANETS . "` AS p
                 LEFT JOIN `" . BUILDINGS . "` AS b ON b.building_planet_id = p.`planet_id`
                 LEFT JOIN `" . DEFENSES . "` AS d ON d.defense_planet_id = p.`planet_id`
@@ -186,9 +186,9 @@ class Missions
 
     /**
      * Get all user data by user ID
-     * 
+     *
      * @param int $user_id User ID
-     * 
+     *
      * @return array
      */
     public function getAllUserDataByUserId($user_id)
@@ -196,7 +196,7 @@ class Missions
         if ((int) $user_id > 0) {
 
             return $this->db->queryFetch(
-                    "SELECT u.*,
+                "SELECT u.*,
                     r.*,
                     pr.*
                 FROM `" . USERS . "` AS u
@@ -212,9 +212,9 @@ class Missions
 
     /**
      * Delete ACS fleet by ID
-     * 
+     *
      * @param int $fleet_group_id Fleet group ID
-     * 
+     *
      * @return void
      */
     public function deleteAcsFleetById($fleet_group_id)
@@ -230,9 +230,9 @@ class Missions
 
     /**
      * Update ACS fleet status by ID
-     * 
+     *
      * @param string $fleet_group_id Fleet group
-     * 
+     *
      * @return void
      */
     public function updateAcsFleetStatusByGroupId($fleet_group_id)
@@ -249,9 +249,9 @@ class Missions
 
     /**
      * Get all fleets by ACS fleet ID
-     * 
+     *
      * @param type $fleet_group_id
-     * 
+     *
      * @return array
      */
     public function getAllAcsFleetsByGroupId($fleet_group_id)
@@ -259,7 +259,7 @@ class Missions
         if ((int) $fleet_group_id > 0) {
 
             return $this->db->queryFetchAll(
-                    "SELECT * 
+                "SELECT *
                 FROM `" . FLEETS . "`
                 WHERE `fleet_group` = '" . $fleet_group_id . "';"
             );
@@ -270,9 +270,9 @@ class Missions
 
     /**
      * Get all fleets by end coordinates, start time and stay time
-     * 
+     *
      * @param array $data Data to get the fleets
-     * 
+     *
      * @return array
      */
     public function getAllFleetsByEndCoordsAndTimes($data = [])
@@ -280,13 +280,13 @@ class Missions
         if (is_array($data)) {
 
             return $this->db->queryFetchAll(
-                    "SELECT * 
-                FROM `" . FLEETS . "` 
-                WHERE `fleet_end_galaxy` = '" . (int) $data['coords']['galaxy'] . "' AND 
-                    `fleet_end_system` = '" . (int) $data['coords']['system'] . "' AND  
+                "SELECT *
+                FROM `" . FLEETS . "`
+                WHERE `fleet_end_galaxy` = '" . (int) $data['coords']['galaxy'] . "' AND
+                    `fleet_end_system` = '" . (int) $data['coords']['system'] . "' AND
                     `fleet_end_planet` = '" . (int) $data['coords']['planet'] . "' AND
                     `fleet_end_type` = '" . (int) $data['coords']['type'] . "' AND
-                    `fleet_start_time` < '" . $data['time'] . "' AND 
+                    `fleet_start_time` < '" . $data['time'] . "' AND
                     `fleet_end_stay` >= '" . $data['time'] . "';"
             );
         }
@@ -296,9 +296,9 @@ class Missions
 
     /**
      * Update planet debris by coordinates
-     * 
+     *
      * @param array $data Data to run the query
-     * 
+     *
      * @return void
      */
     public function updatePlanetDebrisByCoords($data = [])
@@ -321,9 +321,9 @@ class Missions
 
     /**
      * Get user technologies by the provided user ID
-     * 
+     *
      * @param int $user_id User ID
-     * 
+     *
      * @return array
      */
     public function getTechnologiesByUserId($user_id)
@@ -331,12 +331,12 @@ class Missions
         if ((int) $user_id > 0) {
 
             return $this->db->queryFetch(
-                    "SELECT u.user_name,
+                "SELECT u.user_name,
                     r.research_weapons_technology,
                     r.research_shielding_technology,
                     r.research_armour_technology
                 FROM " . USERS . " AS u
-                    INNER JOIN `" . RESEARCH . "` AS r 
+                    INNER JOIN `" . RESEARCH . "` AS r
                         ON r.research_user_id = u.user_id
                 WHERE u.user_id = '" . $user_id . "';"
             );
@@ -345,9 +345,9 @@ class Missions
 
     /**
      * Get moon id by coords
-     * 
+     *
      * @param array $data Moon coords
-     * 
+     *
      * @return array
      */
     public function getMoonIdByCoords($data = [])
@@ -355,7 +355,7 @@ class Missions
         if (is_array($data)) {
 
             return $this->db->queryFetch(
-                    "SELECT `planet_id`
+                "SELECT `planet_id`
                 FROM `" . PLANETS . "`
                 WHERE `planet_galaxy` = '" . $data['coords']['galaxy'] . "'
                     AND `planet_system` = '" . $data['coords']['system'] . "'
@@ -369,9 +369,9 @@ class Missions
 
     /**
      * Insert a new record in the reports table
-     * 
+     *
      * @param array $data Report data
-     * 
+     *
      * @return void
      */
     public function insertReport($data = [])
@@ -390,9 +390,9 @@ class Missions
 
     /**
      * Update returning fleet steal resources
-     * 
+     *
      * @param type $data
-     * 
+     *
      * @return void
      */
     public function updateReturningFleetData($data = [])
@@ -414,9 +414,9 @@ class Missions
 
     /**
      * Delete multiple fleets by a set of provided ids
-     * 
+     *
      * @param string $id_string String of IDS
-     * 
+     *
      * @return void
      */
     public function deleteMultipleFleetsByIds($id_string)
@@ -429,9 +429,9 @@ class Missions
 
     /**
      * Update planet losses by Id
-     * 
+     *
      * @param array $data Data to update
-     * 
+     *
      * @return void
      */
     public function updatePlanetLossesById($data = [])
@@ -454,9 +454,9 @@ class Missions
 
     /**
      * Get planet and user data before colonization can take place
-     * 
+     *
      * @param array $data User and Planet data
-     * 
+     *
      * @return array
      */
     public function getPlanetAndUserCountsCounts($data = [])
@@ -464,7 +464,7 @@ class Missions
         if (is_array($data)) {
 
             return $this->db->queryFetch(
-                    "SELECT
+                "SELECT
                     (SELECT COUNT(*)
                             FROM " . PLANETS . " AS pc1
                             WHERE pc1.`planet_user_id` = '" . $data['user_id'] . "' AND
@@ -487,9 +487,9 @@ class Missions
 
     /**
      * Get friendly planet data
-     * 
+     *
      * @param array $data Data to update
-     * 
+     *
      * @return void
      */
     public function getFriendlyPlanetData($data = [])
@@ -497,7 +497,7 @@ class Missions
         if (is_array($data)) {
 
             return $this->db->queryFetch(
-                    "SELECT pc1.`planet_user_id` AS start_id,
+                "SELECT pc1.`planet_user_id` AS start_id,
                     pc1.`planet_name` AS start_name,
                     pc2.`planet_user_id` AS target_id,
                     pc2.`planet_name` AS target_name
@@ -514,16 +514,16 @@ class Missions
         }
     }
     /**
-     * 
+     *
      * COLONIZATION
-     * 
+     *
      */
 
     /**
      * Updates the points after the colonization took place
-     * 
+     *
      * @param array $data Data to update
-     * 
+     *
      * @return void
      */
     public function updateColonizationStatistics($data = [])
@@ -546,9 +546,9 @@ class Missions
 
     /**
      * Updates the fleet array and points by fleet id and coords
-     * 
+     *
      * @param array $data Data to update
-     * 
+     *
      * @return void
      */
     public function updateColonizatonReturningFleet($data = [])
@@ -576,16 +576,16 @@ class Missions
         }
     }
     /**
-     * 
+     *
      * DESTROY
-     * 
+     *
      */
 
     /**
      * Get destroyer data
-     * 
+     *
      * @param array $data Data to update
-     * 
+     *
      * @return array
      */
     public function getDestroyerData($data = [])
@@ -593,7 +593,7 @@ class Missions
         if (is_array($data)) {
 
             return $this->db->queryFetch(
-                    "SELECT 
+                "SELECT
                     p.planet_name,
                     r.research_weapons_technology,
                     r.research_shielding_technology,
@@ -616,9 +616,9 @@ class Missions
 
     /**
      * Get target to destroy data
-     * 
+     *
      * @param array $data Data to update
-     * 
+     *
      * @return array
      */
     public function getTargetToDestroyData($data = [])
@@ -626,16 +626,16 @@ class Missions
         if (is_array($data)) {
 
             return $this->db->queryFetch(
-                    "SELECT 
-                    s.*, 
-                    d.*, 
-                    p.`planet_id`, 
-                    p.planet_diameter, 
-                    p.planet_user_id, 
-                    u.user_name, 
-                    u.user_current_planet, 
-                    r.research_weapons_technology, 
-                    r.research_shielding_technology, 
+                "SELECT
+                    s.*,
+                    d.*,
+                    p.`planet_id`,
+                    p.planet_diameter,
+                    p.planet_user_id,
+                    u.user_name,
+                    u.user_current_planet,
+                    r.research_weapons_technology,
+                    r.research_shielding_technology,
                     r.research_armour_technology
                 FROM " . PLANETS . " AS p
                 INNER JOIN " . SHIPS . " AS s ON s.ship_planet_id = p.`planet_id`
@@ -654,10 +654,10 @@ class Missions
     }
 
     /**
-     * 
-     * 
+     *
+     *
      * @param array $data Data to update
-     * 
+     *
      * @return void
      */
     public function updateFleetsStatusToMakeThemReturn($data = [])
@@ -684,9 +684,9 @@ class Missions
 
     /**
      * Update user current planet, to avoid that they get stuck on a deleted moon
-     * 
+     *
      * @param array $data Data to update
-     * 
+     *
      * @return void
      */
     public function updateUserCurrentPlanetByCoordsAndUserId($data = [])
@@ -709,9 +709,9 @@ class Missions
 
     /**
      * Update planet data after its destruction
-     * 
+     *
      * @param array $data Data to update
-     * 
+     *
      * @return void
      */
     public function updatePlanetDataAfterDestruction($data = [])
@@ -736,9 +736,9 @@ class Missions
 
     /**
      * Update destroy fleet data and make it return
-     * 
+     *
      * @param array $data Data to update
-     * 
+     *
      * @return void
      */
     public function updateFleetDataToReturn($data = [])
@@ -755,16 +755,16 @@ class Missions
         }
     }
     /**
-     * 
+     *
      * EXPEDITION
-     * 
+     *
      */
 
     /**
-     * 
-     * 
+     *
+     *
      * @param array $data Data to update
-     * 
+     *
      * @return void
      */
     public function updateFleetArrayById($data = [])
@@ -782,9 +782,9 @@ class Missions
 
     /**
      * Updates the fleet resources with what we found on the expedition
-     * 
+     *
      * @param array $data Data to update
-     * 
+     *
      * @return void
      */
     public function updateFleetResourcesById($data = [])
@@ -804,16 +804,16 @@ class Missions
         }
     }
     /**
-     * 
+     *
      * MISSILE
-     * 
+     *
      */
 
     /**
      * Get all missiles attacker data by coords
-     * 
+     *
      * @param array $data Coords
-     * 
+     *
      * @return void
      */
     public function getMissileAttackerDataByCoords($data = [])
@@ -821,7 +821,7 @@ class Missions
         if (is_array($data)) {
 
             return $this->db->queryFetch(
-                    "SELECT p.`planet_name`, r.`research_weapons_technology`
+                "SELECT p.`planet_name`, r.`research_weapons_technology`
                 FROM " . PLANETS . " AS p
                 INNER JOIN " . RESEARCH . " AS r ON r.research_user_id = p.planet_user_id
                 WHERE `planet_galaxy` = " . $data['coords']['galaxy'] . " AND
@@ -834,9 +834,9 @@ class Missions
 
     /**
      * Get all missiles target data by coords
-     * 
+     *
      * @param array $data Coords
-     * 
+     *
      * @return void
      */
     public function getMissileTargetDataByCoords($data = [])
@@ -844,7 +844,7 @@ class Missions
         if (is_array($data)) {
 
             return $this->db->queryFetch(
-                    "SELECT p.`planet_id`, p.`planet_name`, p.`planet_user_id`, d.*, r.`research_shielding_technology`
+                "SELECT p.`planet_id`, p.`planet_name`, p.`planet_user_id`, d.*, r.`research_shielding_technology`
                 FROM " . PLANETS . " AS p
                 INNER JOIN " . DEFENSES . " AS d ON d.defense_planet_id = p.`planet_id`
                 INNER JOIN " . RESEARCH . " AS r ON r.research_user_id = p.planet_user_id
@@ -858,9 +858,9 @@ class Missions
 
     /**
      * Update planet target defenses based on the attack result
-     * 
+     *
      * @param array $data Data to update
-     * 
+     *
      * @return void
      */
     public function updatePlanetDefenses($data = [])
@@ -876,16 +876,16 @@ class Missions
         }
     }
     /**
-     * 
+     *
      * RECYCLE
-     * 
+     *
      */
 
     /**
      * Update planet debris field and make the fleet return
-     * 
+     *
      * @param array $data Data to update
-     * 
+     *
      * @return void
      */
     public function updatePlanetDebrisFieldAndFleet($data = [])
@@ -910,9 +910,9 @@ class Missions
 
     /**
      * Update planet debris field and make the fleet return
-     * 
+     *
      * @param array $data Data to update
-     * 
+     *
      * @return void
      */
     public function getPlanetDebris($data = [])
@@ -920,9 +920,9 @@ class Missions
         if (is_array($data)) {
 
             return $this->db->queryFetch(
-                    "SELECT 
-                    `planet_name` AS target_name, 
-                    `planet_debris_metal`, 
+                "SELECT
+                    `planet_name` AS target_name,
+                    `planet_debris_metal`,
                     `planet_debris_crystal`
                 FROM " . PLANETS . "
                 WHERE `planet_galaxy` = '" . $data['coords']['galaxy'] . "' AND
@@ -936,16 +936,16 @@ class Missions
         return [];
     }
     /**
-     * 
+     *
      * SPY
-     * 
+     *
      */
 
     /**
      * Get user data that's going to start the spy process
-     * 
+     *
      * @param array $data Data to update
-     * 
+     *
      * @return array
      */
     public function getSpyUserDataByCords($data = [])
@@ -953,7 +953,7 @@ class Missions
         if (is_array($data)) {
 
             return $this->db->queryFetch(
-                    "SELECT p.planet_name, p.planet_galaxy, p.planet_system, p.planet_planet, u.user_name, r.research_espionage_technology, pr.premium_officier_technocrat
+                "SELECT p.planet_name, p.planet_galaxy, p.planet_system, p.planet_planet, u.user_name, r.research_espionage_technology, pr.premium_officier_technocrat
                     FROM " . PLANETS . " AS p
                     INNER JOIN " . USERS . " AS u ON u.user_id = p.planet_user_id
                     INNER JOIN " . PREMIUM . " AS pr ON pr.premium_user_id = p.planet_user_id
@@ -969,9 +969,9 @@ class Missions
 
     /**
      * Get user data that's going to be inquired (spied)
-     * 
+     *
      * @param array $data Data to update
-     * 
+     *
      * @return array
      */
     public function getInquiredUserDataByCords($data = [])
@@ -979,7 +979,7 @@ class Missions
         if (is_array($data)) {
 
             return $this->db->queryFetch(
-                    "SELECT p.`planet_id`, p.planet_user_id, p.planet_name, p.planet_galaxy, p.planet_system, p.planet_planet, p.planet_metal, p.planet_crystal, p.planet_deuterium, p.planet_energy_max, s.*, d.*, b.*, r.*, pr.premium_officier_technocrat
+                "SELECT p.`planet_id`, p.planet_user_id, p.planet_name, p.planet_galaxy, p.planet_system, p.planet_planet, p.planet_metal, p.planet_crystal, p.planet_deuterium, p.planet_energy_max, s.*, d.*, b.*, r.*, pr.premium_officier_technocrat
                     FROM " . PLANETS . " AS p
                     INNER JOIN " . SHIPS . " AS s ON s.ship_planet_id = p.`planet_id`
                     INNER JOIN " . DEFENSES . " AS d ON d.defense_planet_id = p.`planet_id`
@@ -998,9 +998,9 @@ class Missions
 
     /**
      * Update planet target defenses based on the attack result
-     * 
+     *
      * @param array $data Data to update
-     * 
+     *
      * @return void
      */
     public function updateCrystalDebrisByPlanetId($data = [])
@@ -1016,16 +1016,16 @@ class Missions
         }
     }
     /**
-     * 
+     *
      * TRANSPORT
-     * 
+     *
      */
 
     /**
      * Update planet target defenses based on the attack result
-     * 
+     *
      * @param int $fleet_id Fleet ID
-     * 
+     *
      * @return void
      */
     public function updateReturningFleetResources($fleet_id = 0)

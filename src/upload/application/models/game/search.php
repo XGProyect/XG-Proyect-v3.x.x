@@ -30,7 +30,7 @@ class Search
 
     /**
      * Constructor
-     * 
+     *
      * @return void
      */
     public function __construct($db)
@@ -41,7 +41,7 @@ class Search
 
     /**
      * __destruct
-     * 
+     *
      * @return void
      */
     public function __destruct()
@@ -58,9 +58,8 @@ class Search
     public function getResultsByPlayerName(string $playerName): array
     {
         if (!empty($playerName)) {
-
             return $this->db->queryFetchAll(
-                "SELECT 
+                "SELECT
                     u.`user_id`,
                     u.`user_name`,
                     u.`user_authlevel`,
@@ -92,15 +91,18 @@ class Search
     public function getResultsByAllianceTag(string $allianceTag): array
     {
         if (!empty($allianceTag)) {
-
             return $this->db->queryFetchAll(
-                "SELECT 
+                "SELECT
                     a.`alliance_id`,
                     a.`alliance_name`,
                     a.`alliance_tag`,
                     a.`alliance_request_notallow` AS `alliance_requests`,
                     s.`alliance_statistic_total_points` AS `alliance_points`,
-                    (SELECT COUNT(user_id) AS `ally_members` FROM `" . USERS . "` WHERE `user_ally_id` = a.`alliance_id`) AS `alliance_members`
+                    (SELECT
+                        COUNT(user_id) AS `ally_members`
+                        FROM `" . USERS . "`
+                        WHERE `user_ally_id` = a.`alliance_id`
+                    ) AS `alliance_members`
                 FROM `" . ALLIANCE . "` AS a
                     LEFT JOIN `" . ALLIANCE_STATISTICS . "` AS s ON a.`alliance_id` = s.`alliance_statistic_alliance_id`
                 WHERE (a.alliance_name LIKE '%" . $this->db->escapeValue($allianceTag) . "%')
@@ -121,9 +123,8 @@ class Search
     public function getResultsByPlanetName(string $planetName): array
     {
         if (!empty($planetName)) {
-
             return $this->db->queryFetchAll(
-                "SELECT 
+                "SELECT
                     u.`user_id`,
                     u.`user_name`,
                     u.`user_authlevel`,
@@ -138,7 +139,7 @@ class Search
                     INNER JOIN `" . USERS_STATISTICS . "` AS s ON s.`user_statistic_user_id` = u.`user_id`
                     INNER JOIN `" . PLANETS . "` AS p ON p.`planet_user_id` = u.`user_id`
                     LEFT JOIN `" . ALLIANCE . "` AS a ON a.`alliance_id` = u.`user_ally_id`
-                WHERE p.`planet_name` LIKE '%" . $this->db->escapeValue($planetName) . "%' 
+                WHERE p.`planet_name` LIKE '%" . $this->db->escapeValue($planetName) . "%'
                 LIMIT " . MAX_SEARCH_RESULTS . ";"
             );
         }

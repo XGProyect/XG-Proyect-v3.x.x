@@ -30,7 +30,7 @@ class Mission_control_library
 
     /**
      * Constructor
-     * 
+     *
      * @return void
      */
     public function __construct($db)
@@ -41,7 +41,7 @@ class Mission_control_library
 
     /**
      * __destruct
-     * 
+     *
      * @return void
      */
     public function __destruct()
@@ -50,17 +50,17 @@ class Mission_control_library
     }
 
     /**
-     * Return a list of all the arriving fleets that are going 
+     * Return a list of all the arriving fleets that are going
      * to be processed at this time.
-     * 
+     *
      * @return array
      */
     public function getArrivingFleets()
     {
         return $this->db->queryFetchAll(
-                "SELECT f.*
+            "SELECT f.*
             FROM `" . FLEETS . "` f, `" . FLEETS . "` sf
-            WHERE 
+            WHERE
             (
                 (
                     f.`fleet_start_galaxy` = sf.`fleet_start_galaxy` AND
@@ -72,7 +72,7 @@ class Mission_control_library
                 (
                     f.`fleet_end_galaxy` = sf.`fleet_start_galaxy` AND
                     f.`fleet_end_system` = sf.`fleet_start_system` AND
-                    f.`fleet_end_planet` = sf.`fleet_start_planet` AND 
+                    f.`fleet_end_planet` = sf.`fleet_start_planet` AND
                     f.`fleet_end_type`= sf.`fleet_start_type`
                 )
             )
@@ -83,8 +83,8 @@ class Mission_control_library
             )
             AND
             (
-                sf.`fleet_start_time` <= '" . time() . "' 
-                    AND sf.`fleet_mess` ='0' 
+                sf.`fleet_start_time` <= '" . time() . "'
+                    AND sf.`fleet_mess` ='0'
             )
             GROUP BY f.`fleet_id`
             ORDER BY f.`fleet_id` ASC"
@@ -92,17 +92,17 @@ class Mission_control_library
     }
 
     /**
-     * Return a list of all the returning fleets that are going 
+     * Return a list of all the returning fleets that are going
      * to be processed at this time.
-     * 
+     *
      * @return array
      */
     public function getReturningFleets()
     {
         return $this->db->queryFetchAll(
-                "SELECT f.*
+            "SELECT f.*
             FROM `" . FLEETS . "` f, `" . FLEETS . "` ef
-            WHERE 
+            WHERE
             (
                 (
                     f.`fleet_start_galaxy` = ef.`fleet_end_galaxy` AND
@@ -114,7 +114,7 @@ class Mission_control_library
                 (
                     f.`fleet_end_galaxy` = ef.`fleet_end_galaxy` AND
                     f.`fleet_end_system` = ef.`fleet_end_system` AND
-                    f.`fleet_end_planet` = ef.`fleet_end_planet` AND 
+                    f.`fleet_end_planet` = ef.`fleet_end_planet` AND
                     f.`fleet_end_type`= ef.`fleet_end_type`
                 )
             )

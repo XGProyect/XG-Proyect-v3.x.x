@@ -13,7 +13,6 @@
  */
 namespace application\models\game;
 
-
 /**
  * Empire Class
  *
@@ -40,7 +39,7 @@ class Empire
 
     /**
      * __destruct
-     * 
+     *
      * @return void
      */
     public function __destruct()
@@ -57,7 +56,6 @@ class Empire
     public function getAllPlayerData(int $user_id): array
     {
         if ($user_id > 0) {
-
             return $this->db->queryFetchAll(
                 "SELECT `planet_id`,
                     `planet_name`,

@@ -30,9 +30,9 @@ class BuddyEntity extends Entity
 
     /**
      * Constructor
-     * 
+     *
      * @param array $data Data
-     * 
+     *
      * @return void
      */
     public function __construct($data)
@@ -42,7 +42,7 @@ class BuddyEntity extends Entity
 
     /**
      * Return the buddy id
-     * 
+     *
      * @return string
      */
     public function getBuddyId()
@@ -52,7 +52,7 @@ class BuddyEntity extends Entity
 
     /**
      * Return the buddy sender
-     * 
+     *
      * @return string
      */
     public function getBuddySender()
@@ -62,7 +62,7 @@ class BuddyEntity extends Entity
 
     /**
      * Return the buddy receiver
-     * 
+     *
      * @return string
      */
     public function getBuddyReceiver()
@@ -72,7 +72,7 @@ class BuddyEntity extends Entity
 
     /**
      * Return the buddy status
-     * 
+     *
      * @return string
      */
     public function getBuddyStatus()
@@ -82,7 +82,7 @@ class BuddyEntity extends Entity
 
     /**
      * Return the buddy request text
-     * 
+     *
      * @return string
      */
     public function getRequestText()

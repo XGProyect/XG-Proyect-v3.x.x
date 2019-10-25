@@ -30,7 +30,7 @@ class Updates_library
 
     /**
      * Constructor
-     * 
+     *
      * @return void
      */
     public function __construct($db)
@@ -41,7 +41,7 @@ class Updates_library
 
     /**
      * __destruct
-     * 
+     *
      * @return void
      */
     public function __destruct()
@@ -51,10 +51,10 @@ class Updates_library
 
     /**
      * Delete deleted users and inactive users
-     * 
+     *
      * @param int $del_deleted  Delete deleted users
      * @param int $del_inactive Delete inactive users
-     * 
+     *
      * @return void
      */
     public function deleteUsersByDeletedAndInactive($del_deleted, $del_inactive)
@@ -63,17 +63,17 @@ class Updates_library
             "SELECT u.`user_id`
             FROM `" . USERS . "` AS u
             INNER JOIN `" . PREFERENCES . "` AS p ON p.preference_user_id = u.user_id
-            WHERE (p.`preference_delete_mode` < '" . $del_deleted . "' 
-                AND p.`preference_delete_mode` <> 0) 
+            WHERE (p.`preference_delete_mode` < '" . $del_deleted . "'
+                AND p.`preference_delete_mode` <> 0)
                 OR (u.`user_onlinetime` < '" . $del_inactive . "' AND u.`user_onlinetime` <> 0 AND u.`user_authlevel` <> 3)"
         );
     }
 
     /**
      * Delete old messages
-     * 
+     *
      * @param int $del_before Delete time
-     * 
+     *
      * @return void
      */
     public function deleteMessages($del_before)
@@ -83,9 +83,9 @@ class Updates_library
 
     /**
      * Delete old reports
-     * 
+     *
      * @param int $del_before Delete time
-     * 
+     *
      * @return void
      */
     public function deleteReports($del_before)
@@ -95,9 +95,9 @@ class Updates_library
 
     /**
      * Delete old sessions
-     * 
+     *
      * @param int $del_before Delete time
-     * 
+     *
      * @return void
      */
     public function deleteSessions($del_before)
@@ -107,9 +107,9 @@ class Updates_library
 
     /**
      * Delete old planets
-     * 
+     *
      * @param int $del_before Delete time
-     * 
+     *
      * @return void
      */
     public function deleteDestroyedPlanets($del_before)
@@ -125,7 +125,7 @@ class Updates_library
 
     /**
      * Generate an SQL Backup
-     * 
+     *
      * @return void
      */
     public function generateBackUp()
@@ -135,11 +135,11 @@ class Updates_library
 
     /**
      * Update planet buildings, queue, fields and statistics
-     * 
+     *
      * @param string $building_name Building Name
      * @param int    $amount        Amount
      * @param array  $planet        Planet
-     * 
+     *
      * @return void
      */
     public function updatePlanet($building_name, $amount, $planet)
@@ -161,9 +161,9 @@ class Updates_library
 
     /**
      * Update planet building queue
-     * 
+     *
      * @param array $planet Planet
-     * 
+     *
      * @return void
      */
     public function updateBuildingsQueue($planet)
@@ -178,15 +178,14 @@ class Updates_library
 
     /**
      * Update all planet data, before any action takes place
-     * 
+     *
      * @param type $data Planet data to update
-     * 
+     *
      * @return void
      */
     public function updateAllPlanetData($data = [])
     {
         if (is_array($data)) {
-
             $this->db->query(
                 "UPDATE " . PLANETS . " AS p
                 INNER JOIN " . USERS_STATISTICS . " AS us ON us.user_statistic_user_id = p.planet_user_id

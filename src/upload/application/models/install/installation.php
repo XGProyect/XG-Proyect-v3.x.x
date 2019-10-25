@@ -30,7 +30,7 @@ class Installation
 
     /**
      * Constructor
-     * 
+     *
      * @return void
      */
     public function __construct($db)
@@ -41,7 +41,7 @@ class Installation
 
     /**
      * __destruct
-     * 
+     *
      * @return void
      */
     public function __destruct()
@@ -51,38 +51,38 @@ class Installation
 
     /**
      * Get a list of tables
-     * 
+     *
      * @param type $db_name DB Name
-     * 
+     *
      * @return array
      */
     public function getListOfTables($db_name)
     {
         return $this->db->queryFetchAll(
-                "SHOW TABLES FROM " . $db_name
+            "SHOW TABLES FROM " . $db_name
         );
     }
 
     /**
      * Get a count of admins
-     * 
+     *
      * @return array
      */
     public function getAdmin()
     {
         return $this->db->queryFetch(
-                "SELECT COUNT(`user_id`) as count FROM " . USERS . " 
+            "SELECT COUNT(`user_id`) as count FROM " . USERS . "
                 WHERE `user_id` = '1' OR `user_authlevel` = '3';"
         );
     }
 
     /**
      * Check if the connection can be stablish
-     * 
+     *
      * @param string $host     Host
      * @param string $user     User
      * @param string $password Password
-     * 
+     *
      * @return Database
      */
     public function tryConnection($host, $user, $password)
@@ -92,9 +92,9 @@ class Installation
 
     /**
      * Check if the database name exists
-     * 
+     *
      * @param string $db_name DB Name
-     * 
+     *
      * @return Database
      */
     public function tryDatabase($db_name)
@@ -104,7 +104,7 @@ class Installation
 
     /**
      * Set for windows sql mode to MYSQL40
-     * 
+     *
      * @return void
      */
     public function setWindowsSqlMode()
@@ -118,9 +118,9 @@ class Installation
 
     /**
      * Run a simple insert query
-     * 
+     *
      * @param string $query Query
-     * 
+     *
      * @return int
      */
     public function runSimpleQuery($query)
@@ -130,7 +130,7 @@ class Installation
 
     /**
      * Set for windows sql mode to normal
-     * 
+     *
      * @return void
      */
     public function setNormalMode()
