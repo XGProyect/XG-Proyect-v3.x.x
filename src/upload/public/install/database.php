@@ -127,11 +127,11 @@ PRIMARY KEY (`changelog_id`),
 UNIQUE KEY `changelog_id` (`changelog_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 
-$tables['changelog_insert'] = "INSERT INTO `" . CHANGELOG . "` (`changelog_id`, `changelog_lang_id`, `changelog_version`, `changelog_date`, `changelog_description`) VALUES 
-(1, '1', '3.0.0', '2013-05-13', '- Ejemplo 1'), 
-(2, '1', '3.1.0', '2013-06-13', '- Ejemplo 2'), 
-(3, '1', '3.2.0', '2013-11-08', '- Ejemplo 3'), 
-(4, '2', '3.0.0', '2013-05-13', '- Example 1'), 
+$tables['changelog_insert'] = "INSERT INTO `" . CHANGELOG . "` (`changelog_id`, `changelog_lang_id`, `changelog_version`, `changelog_date`, `changelog_description`) VALUES
+(1, '1', '3.0.0', '2013-05-13', '- Ejemplo 1'),
+(2, '1', '3.1.0', '2013-06-13', '- Ejemplo 2'),
+(3, '1', '3.2.0', '2013-11-08', '- Ejemplo 3'),
+(4, '2', '3.0.0', '2013-05-13', '- Example 1'),
 (5, '2', '3.1.0', '2013-06-13', '- Example 2'),
 (6, '2', '3.2.0', '2013-11-08', '- Example 3');";
 
@@ -187,7 +187,7 @@ $tables['languages'] = "CREATE TABLE `" . LANGUAGES . "` (
 PRIMARY KEY (`language_id`),
 UNIQUE KEY `language_id` (`language_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
-    
+
 $tables['languages_insert'] = "INSERT INTO `" . LANGUAGES . "` (`language_id`, `language_name`) VALUES
 (1, 'Spanish'),
 (2, 'English');";
@@ -223,13 +223,13 @@ $tables['options'] = "CREATE TABLE IF NOT EXISTS `" . OPTIONS . "` (
 
 $tables['options_insert'] = "INSERT INTO `" . OPTIONS . "` (`option_id`, `option_name`, `option_value`) VALUES
 (1, 'game_name', 'XG Proyect'),
-(2, 'game_logo', 'http://www.xgproyect.org/images/misc/xg-logo.png'),
+(2, 'game_logo', 'https://xgproyect.org/wp-content/uploads/2019/10/xg-logo.png'),
 (3, 'lang', 'spanish'),
 (4, 'game_speed', '2500'),
 (5, 'fleet_speed', '2500'),
 (6, 'resource_multiplier', '1'),
 (7, 'admin_email', ''),
-(8, 'forum_url', 'http://www.xgproyect.org/'),
+(8, 'forum_url', 'https://www.xgproyect.org/'),
 (9, 'game_enable', '1'),
 (10, 'close_reason', 'Sorry, the server is currently offline.'),
 (11, 'date_time_zone', 'America/Argentina/Buenos_Aires'),
@@ -255,7 +255,7 @@ $tables['options_insert'] = "INSERT INTO `" . OPTIONS . "` (`option_id`, `option
 (31, 'stat_update_time', '1'),
 (32, 'stat_admin_level', '0'),
 (33, 'stat_last_update', '0'),
-(34, 'premium_url', 'http://www.xgproyect.org/game.php?page=officier'),
+(34, 'premium_url', 'https://www.xgproyect.org/game.php?page=officier'),
 (35, 'trader_darkmatter', '3500'),
 (36, 'auto_backup', '0'),
 (37, 'last_backup', '0'),

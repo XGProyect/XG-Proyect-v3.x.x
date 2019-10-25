@@ -4,7 +4,7 @@
         {alert}
         <form class="form-horizontal" method="post">
             <div class="control-group">
-                <img src="http://www.xgproyect.org/images/misc/xg-logo.png" title="XG Proyect">
+                <img src="https://xgproyect.org/wp-content/uploads/2019/10/xg-logo.png" title="XG Proyect">
             </div>
             <div class="control-group">
                 <label class="control-label" for="inputEmail">{lg_email_label}:</label>
