@@ -43,47 +43,38 @@ class FormatLib
         $sr = floor($seconds / 1 % 60);
 
         if ($hs < 10) {
-
             $hh = "0" . $hs;
         } else {
-
             $hh = $hs;
         }
-        if ($ms < 10) {
 
+        if ($ms < 10) {
             $mm = "0" . $ms;
         } else {
-
             $mm = $ms;
         }
-        if ($sr < 10) {
 
+        if ($sr < 10) {
             $ss = "0" . $sr;
         } else {
-
             $ss = $sr;
         }
 
         $time = '';
 
         if ($day != 0) {
-
             $time .= $day . 'd ';
         }
 
         if ($hs != 0) {
-
             $time .= $hh . 'h ';
         } else {
-
             $time .= '00h ';
         }
 
         if ($ms != 0) {
-
             $time .= $mm . 'm ';
         } else {
-
             $time .= '00m ';
         }
 
@@ -122,30 +113,21 @@ class FormatLib
     public static function colorNumber($n, $s = '')
     {
         if ($n > 0) {
-
             if ($s != '') {
-
                 $s = self::colorGreen($s);
             } else {
-
                 $s = self::colorGreen($n);
             }
         } elseif ($n < 0) {
-
             if ($s != '') {
-
                 $s = self::colorRed($s);
             } else {
-
                 $s = self::colorRed($n);
             }
         } else {
-
             if ($s != '') {
-
                 $s = $s;
             } else {
-
                 $s = $n;
             }
         }
@@ -176,13 +158,13 @@ class FormatLib
     {
         return '<font color="#00ff00">' . $string . '</font>';
     }
-    
+
     /**
      * Return a provided color
-     * 
+     *
      * @param string $string String
      * @param string $color  Color
-     * 
+     *
      * @return string
      */
     public static function customColor($string, $color)
@@ -201,7 +183,6 @@ class FormatLib
     public static function prettyNumber($n, $floor = true)
     {
         if ($floor) {
-
             $n = floor($n);
         }
 
@@ -219,22 +200,16 @@ class FormatLib
     {
         // MAS DEL TRILLON
         if ($number >= 1000000000000000000000000) {
-
-            return self::prettyNumber(( $number / 1000000000000000000)) . "&nbsp;<font color=lime>T+</font>";
+            return self::prettyNumber(($number / 1000000000000000000)) . "&nbsp;<font color=lime>T+</font>";
         } elseif ($number >= 1000000000000000000 && $number < 1000000000000000000000000) {
-
-            return self::prettyNumber(( $number / 1000000000000000000)) . "&nbsp;<font color=lime>T</font>";
+            return self::prettyNumber(($number / 1000000000000000000)) . "&nbsp;<font color=lime>T</font>";
         } elseif ($number >= 1000000000000 && $number < 1000000000000000000) {
-
-            return self::prettyNumber(( $number / 1000000000000)) . "&nbsp;<font color=lime>B</font>";
+            return self::prettyNumber(($number / 1000000000000)) . "&nbsp;<font color=lime>B</font>";
         } elseif ($number >= 1000000 && $number < 1000000000000) {
-
-            return self::prettyNumber(( $number / 1000000)) . "&nbsp;<font color=lime>M</font>";
+            return self::prettyNumber(($number / 1000000)) . "&nbsp;<font color=lime>M</font>";
         } elseif ($number >= 1000 && $number < 1000000) {
-
-            return self::prettyNumber(( $number / 1000)) . "&nbsp;<font color=lime>K</font>";
+            return self::prettyNumber(($number / 1000)) . "&nbsp;<font color=lime>K</font>";
         } else {
-
             return self::prettyNumber($number);
         }
     }
@@ -251,8 +226,10 @@ class FormatLib
     public static function floatToString($numeric, $pro = 0, $output = false)
     {
         return ($output) ? str_replace(
-                ",", ".", sprintf("%." . $pro . "f", $numeric)
-            ) : sprintf("%." . $pro . "f", $numeric);
+            ",",
+            ".",
+            sprintf("%." . $pro . "f", $numeric)
+        ) : sprintf("%." . $pro . "f", $numeric);
     }
 
     /**
@@ -266,10 +243,8 @@ class FormatLib
     public static function roundUp($value, $precision = 0)
     {
         if ($precision == 0) {
-
             $precisionFactor = 1;
         } else {
-
             $precisionFactor = pow(10, $precision);
         }
 
@@ -304,11 +279,11 @@ class FormatLib
 
     /**
      * prettyBytes
-     * 
+     *
      * @param int     $bytes     Bytes
      * @param int     $precision Precision
      * @param boolean $bitwise   Bitwise Arithmetic
-     * 
+     *
      * @return int
      */
     public static function prettyBytes($bytes, $precision = 2, $bitwise = false)
@@ -327,12 +302,12 @@ class FormatLib
 
         return round($bytes, $precision) . ' ' . $units[$pow];
     }
-    
+
     /**
      * Return the color based on the importance
-     * 
+     *
      * @param int $priority
-     * 
+     *
      * @return string
      */
     public static function getImportanceColor(int $priority): string
@@ -345,17 +320,17 @@ class FormatLib
             case Importance::important:
                 return 'red';
         }
-        
+
         return 'lime';
     }
-    
+
     /**
      * Format the level
-     * 
+     *
      * @param string $object
      * @param string $lvl_string
      * @param int $level
-     * 
+     *
      * @return string
      */
     public static function formatLevel(string $object, string $lvl_string, int $level): string
