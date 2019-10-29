@@ -23,27 +23,26 @@ $hooks->call_hook('before_page');
 $page = filter_input(INPUT_GET, 'page');
 
 if (is_null($page)) {
-    
     FunctionsLib::redirect('game.php?page=overview');
 }
 
 // kind of a mapping
 $page = strtr(
-    $page, [
+    $page,
+    [
         'resources' => 'buildings',
         'resourceSettings' => 'resources',
         'station' => 'buildings',
         'federationlayer' => 'federation',
         'shortcuts' => 'fleetshortcuts',
         'forums' => 'forum',
-        'defense' => 'shipyard'
+        'defense' => 'shipyard',
     ]
 );
 
 $file_name = XGP_ROOT . GAME_PATH . $page . '.php';
 
 if (isset($page)) {
-
     // logout
     if ($page == 'logout') {
         $session->delete();
@@ -52,7 +51,6 @@ if (isset($page)) {
 
     // other pages
     if (file_exists($file_name)) {
-
         include $file_name;
 
         $class_name = 'application\controllers\game\\' . ucfirst($page);
