@@ -56,28 +56,32 @@ class DebugLib
     }
 
     /**
-     * whereCalled
+     * Return error stack trace until provided level
      *
-     * @param int $level Level
-     *
+     * @param integer $level
      * @return string
      */
-    private function whereCalled($level = 1)
+    private function whereCalled(int $level = 5): string
     {
+        $error_stack_trace = [];
 
-        $trace = debug_backtrace();
-        $file = isset($trace[$level]['file']) ? $trace[$level]['file'] : '';
-        $line = isset($trace[$level]['line']) ? $trace[$level]['line'] : '';
-        $object = isset($trace[$level]['object']) ? $trace[$level]['object'] : '';
+        for ($error_level = $level; $error_level >= 0; $error_level--) {
+            $trace = debug_backtrace();
+            $file = isset($trace[$error_level]['file']) ? $trace[$error_level]['file'] : '';
+            $line = isset($trace[$error_level]['line']) ? $trace[$error_level]['line'] : '';
+            $object = isset($trace[$error_level]['object']) ? $trace[$error_level]['object'] : '';
 
-        if (is_object($object)) {
-            $object = get_class($object);
+            if (is_object($object)) {
+                $object = get_class($object);
+            }
+
+            $break = explode('/', $file);
+            $pfile = $break[count($break) - 1];
+
+            $error_stack_trace[] = "Where called: line $line of $object (in $pfile)";
         }
 
-        $break = Explode('/', $file);
-        $pfile = $break[count($break) - 1];
-
-        return "Where called: line $line of $object <br/>(in $pfile)";
+        return join('<br>', $error_stack_trace);
     }
 
     /**
@@ -92,46 +96,51 @@ class DebugLib
         $this->numqueries++;
         $this->log .= '<tr><th rowspan="2">Query ' .
         $this->numqueries . ':</th><th>' . $query . '</th></tr><tr><th>' .
-        $this->whereCalled(3) . '</th></tr>';
+        $this->whereCalled() . '</th></tr>';
     }
 
     /**
-     * echoLog
+     * Returns the database log information
      *
      * @return string
      */
-    public function echoLog()
+    public function echoLog(): string
     {
-        return '<br>
-                    <table>
-                        <tr>
-                            <td class="k" colspan="2">
-                                <a href="' . XGP_ROOT . 'admin.php?page=settings">Debug Log</a>:
-                            </td>
-                        </tr>'
-        . $this->log .
-            '</table>';
+        if ($this->log) {
+            return '<div><a href="' . XGP_ROOT . 'admin.php?page=settings">Debug Log</a>:' . $this->log . '</div>';
+        }
+
+        return '';
     }
 
     /**
-     * error
+     * Take different actions like displaying the error, logging the error and sending an email
      *
-     * @param string $message Message
-     * @param string $title   Title
-     *
+     * @param integer $code
+     * @param string $description
+     * @param string $file
+     * @param integer $line
+     * @param string $type
      * @return void
      */
-    public function error($message, $title, $type = 'db')
+    public function error(int $code, string $description, string $file, int $line, string $type = 'db'): void
     {
-        if (DEBUG_MODE == true) {
-            echo '<h2>' . $title . '</h2><br><font color="red">' . $message . '</font><br><hr>';
-            echo $this->echoLog();
-            echo $this->whereCalled(3);
+        if (DEBUG_MODE or (in_array($_SERVER['HTTP_HOST'], ['127.0.0.1', 'localhost']) !== false)) {
+            echo '<div style="background-color:blue;color:white;position:absolute;width:100%;z-index:999999;text-align:center;bottom:0">
+                    <h2 style="color:red">' . $description . '</h2>
+                    <h3>in ' . $file . ' on line ' . $line . '</h3>
+                    <span>Error code: ' . $code . '</span>
+                    <hr>
+                    ' . $this->echoLog() . '
+                    <h3>Trace:</h3>
+                    <div>' . $this->whereCalled() . '</div>
+                    <br>
+                </div>';
         } else {
             $user_ip = $_SERVER['REMOTE_ADDR'];
 
             // format log
-            $log = '|' . $user_ip . '|' . $type . '|' . $title . '|' . $message . '|' . $this->whereCalled(3) . '|';
+            $log = '|' . $user_ip . '|' . $type . '|' . $code . '|' . $description . '|' . $this->whereCalled() . '|';
 
             if (defined('LOG_ERRORS') && LOG_ERRORS != '') {
                 // log the error
@@ -142,7 +151,7 @@ class DebugLib
             if (defined('ERROR_LOGS_MAIL') && ERROR_LOGS_MAIL != '') {
                 FunctionsLib::sendEmail(
                     ERROR_LOGS_MAIL,
-                    '[DEBUG][' . $title . ']',
+                    '[DEBUG][' . $code . ']',
                     $log,
                     [
                         'mail' => ERROR_LOGS_MAIL,
@@ -152,41 +161,42 @@ class DebugLib
             }
 
             // show page to the user
-            echo '<!DOCTYPE html>
-                            <html lang=en>
-                              <meta charset=utf-8>
-                              <meta name=viewport content="initial-scale=1, minimum-scale=1, width=device-width">
-                              <title>Error 500 (Internal Server Error)</title>
-                              <style>
-                                *{margin:0;padding:0}html,code{font:15px/22px arial,sans-serif}
-                                html{background:#fff;color:#222;padding:15px}
-                                body{margin:7% auto 0;max-width:390px;min-height:180px;padding:30px 0 15px}
-                                * > p{margin:11px 0 22px;overflow:hidden}
-                                ins{color:#777;text-decoration:none}a img{border:0}
-                                @media screen and (max-width:772px)
-                                {body{background:none;margin-top:0;max-width:none;padding-right:0}}
-                              </style>
-                              <a href=//www.xgproyect.org/>
-                              <img src="https://xgproyect.org/wp-content/uploads/2019/10/xg-logo.png" alt="XG Proyect">
-                              </a>
-                              <p><b>500.</b> <ins>That’s an error.</ins>
-                              <p>The requested URL throw an error. Contact the game Administrator.
-                              <ins>That’s all we know.</ins>
-                            ';
-        }
+            if (E_NOTICE != $code) {
+                echo '<!DOCTYPE html>
+                <html lang=en>
+                    <meta charset=utf-8>
+                    <meta name=viewport content="initial-scale=1, minimum-scale=1, width=device-width">
+                    <title>Error 500 (Internal Server Error)</title>
+                    <style>
+                    *{margin:0;padding:0}html,code{font:15px/22px arial,sans-serif}
+                    html{background:#fff;color:#222;padding:15px}
+                    body{margin:7% auto 0;max-width:390px;min-height:180px;padding:30px 0 15px}
+                    * > p{margin:11px 0 22px;overflow:hidden}
+                    ins{color:#777;text-decoration:none}a img{border:0}
+                    @media screen and (max-width:772px)
+                    {body{background:none;margin-top:0;max-width:none;padding-right:0}}
+                    </style>
+                    <a href=//www.xgproyect.org/>
+                    <img src="https://xgproyect.org/wp-content/uploads/2019/10/xg-logo.png" alt="XG Proyect">
+                    </a>
+                    <p><b>500.</b> <ins>That’s an error.</ins>
+                    <p>The requested URL throw an error. Contact the game Administrator.
+                    <ins>That’s all we know.</ins>
+                ';
 
-        die();
+                die();
+            }
+        }
     }
 
     /**
-     * Log errors
+     * Log the errors into a file
      *
-     * @param string $text Text
-     * @param string $type Type
-     *
+     * @param string $text
+     * @param string $type
      * @return void
      */
-    private function writeErrors($text, $type)
+    private function writeErrors(string $text, string $type): void
     {
         $file_name = $type . '-error-' . date('Ymd') . '-' . time();
         $file_code = sha1($file_name . $text);

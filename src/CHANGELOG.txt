@@ -9,6 +9,7 @@ Core
 [#000] Options page rewritten into preferences page, with simplified amount of features, deprecating many from the old ogame version.-
 [#000] Pages templates structure simplified to follow the controllers and models structure into adm, ajax, game, home and install.-
 [#000] Menu UI set a little bit closer to OGame's redesign.-
+[#000] New error handler class that properly handles notices, warnings and fatal errors (only fatal errors are blockers from now on).-
 
 Project
 [#000] Added Unit Testing.-

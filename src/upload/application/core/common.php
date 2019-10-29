@@ -13,6 +13,7 @@
  * @version  3.0.0
  */
 
+use application\core\ErrorHandler;
 use application\core\Hooks;
 use application\core\Sessions;
 use application\libraries\FunctionsLib;
@@ -39,28 +40,8 @@ require_once XGP_ROOT . CORE_PATH . 'AutoLoader.php';
 AutoLoader::registerDirectory(XGP_ROOT . CORE_PATH);
 AutoLoader::registerDirectory(XGP_ROOT . LIB_PATH);
 
-// For debugging
-if (DEBUG_MODE or (in_array($_SERVER['HTTP_HOST'], ['127.0.0.1', 'localhost']) !== false)) {
-    // Show all errors
-    ini_set('display_errors', 1);
-} else {
-    /**
-     * We assume we are on prod here
-     */
-
-    // We should use our custom function to handle errors.
-    set_error_handler(function ($code, $description, $file = null, $line = null, $context = null) {
-
-        $displayErrors = strtolower(ini_get("display_errors"));
-
-        if (error_reporting() === 0 || $displayErrors === "on") {
-            return false;
-        }
-
-        $debug = new application\libraries\DebugLib();
-        $debug->error($description, $code, 'php');
-    });
-}
+// XGP error handler
+new ErrorHandler;
 
 // some values by default
 $lang = [];
