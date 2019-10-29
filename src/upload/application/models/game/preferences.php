@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types = 1);
 
 /**
  * Preferences Model
@@ -15,6 +15,8 @@ declare(strict_types=1);
  * @version  3.1.0
  */
 namespace application\models\game;
+
+use application\libraries\FunctionsLib as Functions;
 
 /**
  * Preferences Class
@@ -110,7 +112,7 @@ class Preferences
      */
     public function updateValidatedFields(array $fields, int $user_id): void
     {
-        $columns_to_update  = [];
+        $columns_to_update = [];
 
         foreach ($fields as $column => $value) {
             if (strpos($column, 'user_') !== false) {
@@ -128,6 +130,100 @@ class Preferences
             WHERE u.`user_id` = '" . $user_id . "'
                 AND p.`preference_user_id` = '" . $user_id . "';"
         );
+    }
+
+    /**
+     * Check the empire current activity
+     *
+     * @param integer $user_id
+     * @return boolean
+     */
+    public function isEmpireActive(int $user_id): bool
+    {
+        if ($user_id > 0) {
+            $activity = $this->db->queryFetch(
+                "SELECT (
+                    (
+                        SELECT
+                            COUNT(f.`fleet_id`) AS quantity
+                        FROM `" . FLEETS . "` f
+                        WHERE f.`fleet_owner` = '" . $user_id . "'
+                    )
+                +
+                    (
+                        SELECT
+                            COUNT(p.`planet_id`) AS quantity
+                        FROM `" . PLANETS . "` p
+                        WHERE p.`planet_user_id` = '" . $user_id . "'
+                            AND (p.`planet_b_building` <> 0
+                                OR `planet_b_tech` <> 0
+                                OR `planet_b_hangar` <> 0
+                            )
+                    )
+                ) as total"
+            );
+
+            return ($activity['total'] > 0);
+        }
+
+        return false;
+    }
+
+    /**
+     * Start vacation mode first checking if it's possible to set
+     *
+     * @param integer $user_id
+     * @return boolean
+     */
+    public function startVacation(int $user_id): bool
+    {
+        if (!$this->isEmpireActive($user_id)) {
+            $this->db->query(
+                "UPDATE `" . PREFERENCES . "` pr, `" . PLANETS . "` p SET
+                    pr.`preference_vacation_mode` = '" . time() . "',
+                    p.`planet_metal_perhour` = '" . Functions::readConfig('metal_basic_income') . "',
+                    p.`planet_crystal_perhour` = '" . Functions::readConfig('crystal_basic_income') . "',
+                    p.`planet_deuterium_perhour` = '" . Functions::readConfig('deuterium_basic_income') . "',
+                    p.`planet_energy_used` = '0',
+                    p.`planet_energy_max` = '0',
+                    p.`planet_building_metal_mine_percent` = '0',
+                    p.`planet_building_crystal_mine_percent` = '0',
+                    p.`planet_building_deuterium_sintetizer_percent` = '0',
+                    p.`planet_building_solar_plant_percent` = '0',
+                    p.`planet_building_fusion_reactor_percent` = '0',
+                    p.`planet_ship_solar_satellite_percent` = '0'
+                WHERE pr.`preference_user_id` = '" . $user_id . "'
+                    AND p.`planet_user_id` = '" . $user_id . "';"
+            );
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Remove vacation mode and set production to maximum
+     *
+     * @param integer $user_id
+     * @return void
+     */
+    public function endVacation(int $user_id): void
+    {
+        if ($user_id > 0) {
+            $this->db->query(
+                "UPDATE `" . PREFERENCES . "` pr, `" . PLANETS . "` p SET
+                    pr.`preference_vacation_mode` = NULL,
+                    p.`planet_building_metal_mine_percent` = '10',
+                    p.`planet_building_crystal_mine_percent` = '10',
+                    p.`planet_building_deuterium_sintetizer_percent` = '10',
+                    p.`planet_building_solar_plant_percent` = '10',
+                    p.`planet_building_fusion_reactor_percent` = '10',
+                    p.`planet_ship_solar_satellite_percent` = '10'
+                WHERE pr.`preference_user_id` = '" . $user_id . "'
+                    AND p.`planet_user_id` = '" . $user_id . "';"
+            );
+        }
     }
 }
 

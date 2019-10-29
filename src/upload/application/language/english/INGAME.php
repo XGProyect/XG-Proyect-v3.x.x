@@ -70,16 +70,16 @@ $lang = [
     'planet_type' => [
         1 => 'Planet',
         2 => 'Debris',
-        3 => 'Moon'
+        3 => 'Moon',
     ],
-    
+
     // types of planets or galaxy objects
     'planet_type_shortcuts' => [
         1 => '(P)',
         2 => '(D)',
-        3 => '(M)'
+        3 => '(M)',
     ],
-    
+
     // type of structures
     'construction' => 'Construction',
     'research' => 'Research',
@@ -170,6 +170,8 @@ $lang = [
     'pr_activate_alert' => 'Do you want to activate vacation mode? You can only end your vacation after 2 days.',
     'pr_vacation_mode_active' => 'Player in vacation mode',
     'pr_deactivate' => 'End Vacation',
+    'pr_empire_active' => 'Vacation mode cannot be activated ',
+    'pr_empire_active_fleet' => '(Active fleets)',
     'pr_your_account' => 'Your Account',
     'pr_delete_account' => 'Delete account',
     'pr_delete_account_explanation' => '<p>Check here to have your account marked for automatic deletion after 7 days.</p>',
@@ -183,13 +185,12 @@ $lang = [
 ];
 
 /**
- * 
- * 
+ *
+ *
  * OLD LINES
- * 
- * 
+ *
+ *
  */
-
 
 //SERVER GENERALS
 $lang['Metal'] = 'Metal';
@@ -555,7 +556,6 @@ $lang['bd_ready'] = 'finished';
 $lang['bd_finished'] = 'finished';
 $lang['bd_from'] = 'from<br />';
 
-
 //----------------------------------------------------------------------------//
 //RESOURCES
 $lang['rs_amount'] = 'quantity';
@@ -752,7 +752,7 @@ $lang['res']['descriptions'] = array(
     602 => 'The Fleet Admiral is an experienced combat war veteran and skilled strategist. Even in the toughest of battles, he is able to create an overview of the situation and maintain contact to his subordinate admirals. The Fleet Admiral is also an accomplished computer programmer who, in an emergency situation, can gain two additional slots to control his battle fleets. He also provides an additional expedition slot, and allows orders to be passed on to the fleet detailing which resources should be prioritised when looting after a successful attack.',
     603 => 'The Engineer is a specialist on energy management and defence capabilities. In times of peace, he increases the energy of the colonies, insuring an equal distribution of power across all the grids. In case of an enemy attack, he immediately routs all the power to all defence mechanisms, avoiding an eventual overload, which results in lower defence losses during a battle.',
     604 => 'The Geologist is a expert in astro-mineralogy and crystalography. He assists his teams in metallurgy and chemistry as he also takes care of the interplanetary communications optimizing the use and refining of the raw material along the empire. Utilizing state of the art equipment for surveying, the Geologist can locate optimal areas for mining, increasing mining production by 10%.',
-    605 => 'The guild of The Technocrats is composed of genius scientists, and you will find them always over the realm where all human logic would be defied. For thousands of years, no normal humans have ever cracked the code of a Technocrat. The Technocrat inspires the researchers of the empire with his presence.'
+    605 => 'The guild of The Technocrats is composed of genius scientists, and you will find them always over the realm where all human logic would be defied. For thousands of years, no normal humans have ever cracked the code of a Technocrat. The Technocrat inspires the researchers of the empire with his presence.',
 );
 
 //----------------------------------------------------------------------------//

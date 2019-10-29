@@ -47,7 +47,7 @@ $lang = [
     'ship_destroyer' => 'Destructor',
     'ship_deathstar' => 'Estrella de la muerte',
     'ship_battlecruiser' => 'Acorazado',
-    
+
     // research
     "research_espionage_technology" => 'Tecnología de espionaje"',
     "research_computer_technology" => 'Tecnología de computación',
@@ -70,16 +70,16 @@ $lang = [
     'planet_type' => [
         1 => 'Planeta',
         2 => 'Escombros',
-        3 => 'Luna'
+        3 => 'Luna',
     ],
-    
+
     // types of planets or galaxy objects
     'planet_type_shortcuts' => [
         1 => '(P)',
         2 => '(E)',
-        3 => '(L)'
+        3 => '(L)',
     ],
-    
+
     // type of structures
     'construction' => 'Construcción',
     'research' => 'Investigación',
@@ -170,6 +170,8 @@ $lang = [
     'pr_activate_alert' => '¿Quieres activar el modo vacaciones? Podrás terminar tus vacaciones tras 2 días.',
     'pr_vacation_mode_active' => 'Jugador en modo vacaciones',
     'pr_deactivate' => 'Finalizar vacaciones',
+    'pr_empire_active' => 'El modo vacaciones no puede ser activado ',
+    'pr_empire_active_fleet' => '(Flotas activas)',
     'pr_your_account' => 'Tu cuenta',
     'pr_delete_account' => 'Eliminar cuenta',
     'pr_delete_account_explanation' => '<p>Si marcas ésta opción, tu cuenta se borrará automáticamente después de 7 días.</p>',
@@ -183,13 +185,12 @@ $lang = [
 ];
 
 /**
- * 
- * 
+ *
+ *
  * OLD LINES
- * 
- * 
+ *
+ *
  */
-
 
 //SERVER GENERALS
 $lang['Metal'] = 'Metal';
