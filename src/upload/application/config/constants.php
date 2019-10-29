@@ -45,7 +45,13 @@ define('ADMIN_ACCESS_QUERY', true);
  * SYSTEM PATHS CONFIGURATION
  *
  */
-define('PROTOCOL', ($_SERVER['HTTPS'] == 'on' ? 'https://' : 'http://'));
+if ((!empty($_SERVER['REQUEST_SCHEME']) && $_SERVER['REQUEST_SCHEME'] == 'https') ||
+    (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ||
+    (!empty($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == '443')) {
+    define('PROTOCOL', 'https://');
+} else {
+    define('PROTOCOL', 'http://');
+}
 
 // BASE PATH
 define(
