@@ -83,7 +83,7 @@ class Database
                 if (!defined('IN_INSTALL')) {
 
                     die($this->debug->error(
-                            'Database connection failed: ' . $this->connection->connect_error, 'SQL Error'
+                        'Database connection failed: ' . $this->connection->connect_error, 'SQL Error'
                     ));
                 }
             } else {
@@ -93,7 +93,7 @@ class Database
                     if (!defined('IN_INSTALL')) {
 
                         die($this->debug->error(
-                                'Database selection failed: ' . $this->connection->connect_error, 'SQL Error'
+                            'Database selection failed: ' . $this->connection->connect_error, 'SQL Error'
                         ));
                     }
                 } else {
@@ -159,7 +159,7 @@ class Database
 
     /**
      * Test if MySQLi connection was stablished
-     * 
+     *
      * @return boolean
      */
     public function testConnection()
@@ -265,7 +265,7 @@ class Database
      * Multi Query
      *
      * @param string $sql SQL String
-     * 
+     *
      * @return mixed
      */
     public function queryMulty($sql = false)
@@ -453,55 +453,55 @@ class Database
 
     /**
      * Set the auto commit for transactions
-     * 
+     *
      * @param bool $status
-     * 
+     *
      * @return void
      */
     public function setAutoCommit(bool $status = true)
     {
         $this->connection->autocommit($status);
     }
-    
+
     /**
      * Start a transaction
-     * 
+     *
      * @return void
      */
     public function beginTransaction()
     {
         // disable auto commit
         $this->setAutoCommit(false);
-        
+
         $this->connection->begin_transaction();
     }
-    
+
     /**
      * Confirm and commit a transaction
-     * 
+     *
      * @return void
      */
     public function commitTransaction()
     {
         $this->connection->commit();
-        
+
         // re enable after transaction end
         $this->setAutoCommit();
     }
-    
+
     /**
      * Rollback changes since transaction begin
-     * 
+     *
      * @return void
      */
     public function rollbackTransaction()
     {
         $this->connection->rollback();
-        
+
         // re enable after transaction end
         $this->setAutoCommit();
     }
-    
+
     /**
      * backupDb
      *
