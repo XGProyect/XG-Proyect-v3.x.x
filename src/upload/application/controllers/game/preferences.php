@@ -176,6 +176,8 @@ class Preferences extends Controller
                     $this->fields_to_update,
                     (int) $this->user['user_id']
                 );
+
+                $this->setUpPreferences();
             }
         }
     }
@@ -304,13 +306,18 @@ class Preferences extends Controller
             ];
         }
 
+        if ($this->Preferences_Model->isEmpireActive((int) $this->user['user_id'])) {
+            return [
+                'disabled' => 'style="display: none"',
+                'pr_vacation_mode_active' => Format::strongText(
+                    Format::colorRed($this->getLang()['pr_empire_active']) . $this->getLang()['pr_empire_active_fleet']
+                ),
+            ];
+        }
+
         return [
             'hide_no_vacation' => 'style="display: none"',
-            'pr_vacation_mode_active' => ($this->Preferences_Model->isEmpireActive((int) $this->user['user_id']) ?
-                Format::strongText(
-                    Format::colorRed($this->getLang()['pr_empire_active']) . $this->getLang()['pr_empire_active_fleet']
-                ) : ''
-            ),
+            'pr_vacation_mode_active' => '',
         ];
     }
 
