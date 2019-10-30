@@ -88,6 +88,9 @@ class Preferences extends Controller
         // load Model
         parent::loadModel('game/preferences');
 
+        // load Language
+        parent::loadLang('preferences');
+
         // Check module access
         Functions::moduleMessage(Functions::isModuleAccesible(self::MODULE_ID));
 
@@ -193,7 +196,7 @@ class Preferences extends Controller
             $this->getTemplate()->set(
                 'game/preferences_view',
                 array_merge(
-                    $this->getLang(),
+                    $this->langs->language,
                     $this->setMessageDisplay(),
                     $this->setUserData(),
                     [
@@ -224,7 +227,7 @@ class Preferences extends Controller
                 'status_message' => '',
                 '/status_message' => '',
                 'error_color' => ($this->error == '' ? '#00FF00' : '#FF0000'),
-                'error_text' => ($this->error == '' ? $this->getLang()['pr_ok_settings_saved'] : $this->error),
+                'error_text' => ($this->error == '' ? $this->langs->line('pr_ok_settings_saved') : $this->error),
             ];
         }
 
@@ -260,7 +263,7 @@ class Preferences extends Controller
                 'selected' => (
                     $value == $this->preferences->getCurrentPreference()->getPreferencePlanetSort() ? 'selected="selected"' : ''
                 ),
-                'text' => $this->getLang()['pr_order_' . $order],
+                'text' => $this->langs->line('pr_order_' . $order),
             ];
         }
 
@@ -282,7 +285,7 @@ class Preferences extends Controller
                 'selected' => (
                     $value == $this->preferences->getCurrentPreference()->getPreferencePlanetSortSequence() ? 'selected="selected"' : ''
                 ),
-                'text' => $this->getLang()['pr_sorting_sequence_' . $sequence],
+                'text' => $this->langs->line('pr_sorting_sequence_' . $sequence),
             ];
         }
 
@@ -300,7 +303,7 @@ class Preferences extends Controller
             return [
                 'hide_vacation_invalid' => 'style="display: none"',
                 'pr_vacation_mode_active' => Format::strongText(
-                    Format::colorRed($this->getLang()['pr_vacation_mode_active'])
+                    Format::colorRed($this->langs->line('pr_vacation_mode_active'))
                 ),
                 'disabled' => ($this->preferences->isVacationModeRemovalAllowed() ? '' : 'style="display: none"'),
             ];
@@ -310,7 +313,7 @@ class Preferences extends Controller
             return [
                 'disabled' => 'style="display: none"',
                 'pr_vacation_mode_active' => Format::strongText(
-                    Format::colorRed($this->getLang()['pr_empire_active']) . $this->getLang()['pr_empire_active_fleet']
+                    Format::colorRed($this->langs->line('pr_empire_active') . $this->langs->line('pr_empire_active_fleet'))
                 ),
             ];
         }
@@ -331,7 +334,7 @@ class Preferences extends Controller
         if ($this->preferences->getCurrentPreference()->getPreferenceDeleteMode() > 0) {
             return [
                 'pr_delete_account' => Format::colorRed(strtr(
-                    $this->getLang()['pr_delete_mode_active'],
+                    $this->langs->line('pr_delete_mode_active'),
                     [
                         '%s' => Timing::formatExtendedDate(
                             $this->preferences->getCurrentPreference()->getPreferenceDeleteMode() + ONE_WEEK
@@ -365,16 +368,16 @@ class Preferences extends Controller
                         $this->fields_to_update['user_name'] = $preferences['new_user_name'];
                         $this->fields_to_update['preference_nickname_change'] = time();
                     } else {
-                        $this->error = $this->getLang()['pr_error_nick_in_use'];
+                        $this->error = $this->langs->line('pr_error_nick_in_use');
                     }
                 } else {
                     $this->error = strtr(
-                        $this->getLang()['pr_error_user_invalid_characters'],
+                        $this->langs->line('pr_error_user_invalid_characters'),
                         ['%s' => $preferences['new_user_name']]
                     );
                 }
             } else {
-                $this->error = $this->getLang()['pr_error_wrong_password'];
+                $this->error = $this->langs->line('pr_error_wrong_password');
             }
         }
     }
@@ -392,7 +395,7 @@ class Preferences extends Controller
             if (sha1($preferences['current_user_password']) == $this->user['user_password']) {
                 $this->fields_to_update['user_password'] = sha1(trim($preferences['new_user_password']));
             } else {
-                $this->error = $this->getLang()['pr_error_wrong_password'];
+                $this->error = $this->langs->line('pr_error_wrong_password');
             }
         }
     }
@@ -414,16 +417,16 @@ class Preferences extends Controller
                     if (!$this->Preferences_Model->checkIfEmailExists($preferences['new_user_email'])) {
                         $this->fields_to_update['user_email'] = $preferences['new_user_email'];
                     } else {
-                        $this->error = $this->getLang()['pr_error_email_in_use'];
+                        $this->error = $this->langs->line('pr_error_email_in_use');
                     }
                 } else {
                     $this->error = strtr(
-                        $this->getLang()['pr_error_email_invalid_characters'],
+                        $this->langs->line('pr_error_email_invalid_characters'),
                         ['%s' => $preferences['new_user_email']]
                     );
                 }
             } else {
-                $this->error = $this->getLang()['pr_error_wrong_password'];
+                $this->error = $this->langs->line('pr_error_wrong_password');
             }
         }
     }
