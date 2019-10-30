@@ -200,15 +200,15 @@ class FormatLib
     {
         // MAS DEL TRILLON
         if ($number >= 1000000000000000000000000) {
-            return self::prettyNumber(($number / 1000000000000000000)) . "&nbsp;<font color=lime>T+</font>";
+            return self::prettyNumber(($number / 1000000000000000000)) . ' T+';
         } elseif ($number >= 1000000000000000000 && $number < 1000000000000000000000000) {
-            return self::prettyNumber(($number / 1000000000000000000)) . "&nbsp;<font color=lime>T</font>";
+            return self::prettyNumber(($number / 1000000000000000000)) . ' T';
         } elseif ($number >= 1000000000000 && $number < 1000000000000000000) {
-            return self::prettyNumber(($number / 1000000000000)) . "&nbsp;<font color=lime>B</font>";
+            return self::prettyNumber(($number / 1000000000000)) . ' B';
         } elseif ($number >= 1000000 && $number < 1000000000000) {
-            return self::prettyNumber(($number / 1000000)) . "&nbsp;<font color=lime>M</font>";
-        } elseif ($number >= 1000 && $number < 1000000) {
-            return self::prettyNumber(($number / 1000)) . "&nbsp;<font color=lime>K</font>";
+            return self::prettyNumber(($number / 1000000)) . ' M';
+        } elseif ($number >= 10000 && $number < 1000000) {
+            return self::prettyNumber(($number / 1000)) . ' K';
         } else {
             return self::prettyNumber($number);
         }
