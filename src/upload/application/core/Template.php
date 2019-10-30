@@ -90,7 +90,7 @@ class Template
 
         // required by the library
         if (!defined('BASEPATH')) {
-            define('BASEPATH', true);
+            define('BASEPATH', XGP_ROOT . APP_PATH);
         }
 
         // use CI library

@@ -15,6 +15,7 @@ namespace application\core;
 
 use application\libraries\TemplateLib;
 use application\libraries\Users_library;
+use CI_Lang;
 
 /**
  * XGPCore Class
@@ -92,9 +93,9 @@ abstract class XGPCore
      * Load the provided model, support a dir path
      *
      * @param string $class Mandatory field, if not will throw an exception
-     * 
+     *
      * @return void
-     * 
+     *
      * @throws \Exception
      */
     protected function loadModel($class)
@@ -102,14 +103,12 @@ abstract class XGPCore
         try {
             // some validations
             if ((string) $class && $class != '' && !is_null($class)) {
-
                 $class_route = strtolower(substr($class, 0, strrpos($class, '/')));
                 $class_name = ucfirst(strtolower(substr($class, strrpos($class, '/') + 1, strlen($class))));
                 $model_file = XGP_ROOT . MODELS_PATH . strtolower($class) . '.php';
 
                 // check if the file exists
                 if (file_exists($model_file)) {
-
                     require_once $model_file;
 
                     $class_route = strtr(MODELS_PATH . $class_route . DIRECTORY_SEPARATOR . $class_name, ['/' => '\\']);
@@ -121,7 +120,39 @@ abstract class XGPCore
             // not found
             throw new \Exception('Model not defined');
         } catch (\Exception $e) {
+            die('Fatal error: ' . $e->getMessage());
+        }
+    }
 
+    /**
+     * Load a language file using CI Library
+     *
+     * @param string|array $language_file
+     * @return void
+     */
+    protected function loadLang($language_file): void
+    {
+        try {
+            // require email library
+            $ci_lang_path = XGP_ROOT . SYSTEM_PATH . 'core' . DIRECTORY_SEPARATOR . 'Lang.php';
+
+            if (!file_exists($ci_lang_path)) {
+                // not found
+                throw new \Exception('Language file "' . $language_file . '" not defined');
+                return;
+            }
+
+            // required by the library
+            if (!defined('BASEPATH')) {
+                define('BASEPATH', XGP_ROOT . APP_PATH);
+            }
+
+            // use CI library
+            require_once $ci_lang_path;
+
+            $this->langs = new CI_Lang;
+            $this->langs->load($language_file, DEFAULT_LANG);
+        } catch (\Exception $e) {
             die('Fatal error: ' . $e->getMessage());
         }
     }
