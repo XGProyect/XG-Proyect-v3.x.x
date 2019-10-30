@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types = 1);
 
 /**
  * Search Controller
@@ -17,11 +17,9 @@ declare(strict_types=1);
 namespace application\controllers\game;
 
 use application\core\Controller;
-use application\core\Database;
 use application\core\enumerators\SwitchIntEnumerator as SwitchInt;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
-use const MODULE_ID;
 
 /**
  * Search Class
@@ -40,28 +38,22 @@ class Search extends Controller
 
     /**
      *
-     * @var \NoobsProtectionLib 
+     * @var \NoobsProtectionLib
      */
-    private $_noob = null;
-
-    /**
-     *
-     * @var type \Users_library
-     */
-    private $_user;
+    private $noob = null;
 
     /**
      * Contains the search terms provided by the player
      *
      * @var array
      */
-    private $_search_terms = [
+    private $search_terms = [
         'search_type' => '',
         'player_name' => '',
         'alliance_tag' => '',
         'planet_names' => '',
         'search_text' => '',
-        'error_block' => ''
+        'error_block' => '',
     ];
 
     /**
@@ -69,7 +61,7 @@ class Search extends Controller
      *
      * @var array
      */
-    private $_results = [];
+    private $results = [];
 
     /**
      * __construct()
@@ -84,14 +76,14 @@ class Search extends Controller
         // load Model
         parent::loadModel('game/search');
 
+        // load Language
+        parent::loadLang('search');
+
         // load library
-        $this->_noob = FunctionsLib::loadLibrary('NoobsProtectionLib');
+        $this->noob = FunctionsLib::loadLibrary('NoobsProtectionLib');
 
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
-
-        // set data
-        $this->_user = $this->getUserData();
 
         // time to do something
         $this->runAction();
@@ -102,52 +94,44 @@ class Search extends Controller
 
     /**
      * Run an action
-     * 
+     *
      * @return void
      */
     private function runAction(): void
     {
         $search_query = filter_input_array(INPUT_POST, [
             'search_type' => FILTER_SANITIZE_STRING,
-            'search_text' => FILTER_SANITIZE_STRING
+            'search_text' => FILTER_SANITIZE_STRING,
         ]);
-        
-        $this->_search_terms['search_type'] = $search_query['search_type'];
-        $this->_search_terms[$search_query['search_type']] = 'selected = "selected"';
-        $this->_search_terms['search_text'] = $search_query['search_text'];
-        $this->_search_terms['error_block'] = $this->getLang()['sh_error_empty'];
+
+        $this->search_terms['search_type'] = $search_query['search_type'];
+        $this->search_terms[$search_query['search_type']] = 'selected = "selected"';
+        $this->search_terms['search_text'] = $search_query['search_text'];
+        $this->search_terms['error_block'] = $this->langs->line('sh_error_empty');
 
         if (!empty($search_query['search_text'])) {
-
-            switch($search_query['search_type']) {
+            switch ($search_query['search_type']) {
                 case 'player_name':
                 default:
-    
-                    $this->_results = $this->Search_Model->getResultsByPlayerName($search_query['search_text']);
-    
-                break;
+                    $this->results = $this->Search_Model->getResultsByPlayerName($search_query['search_text']);
+                    break;
                 case 'alliance_tag':
-                    
-                    $this->_results = $this->Search_Model->getResultsByAllianceTag($search_query['search_text']);
-    
-                break;
+                    $this->results = $this->Search_Model->getResultsByAllianceTag($search_query['search_text']);
+                    break;
                 case 'planet_names':
-    
-                    $this->_results = $this->Search_Model->getResultsByPlanetName($search_query['search_text']);
-    
-                break;
+                    $this->results = $this->Search_Model->getResultsByPlanetName($search_query['search_text']);
+                    break;
             }
 
-            if (count($this->_results) <= 0 ) {
-
-                $this->_search_terms['error_block'] = $this->getLang()['sh_error_no_results_' . $this->_search_terms['search_type']];
+            if (count($this->results) <= 0) {
+                $this->search_terms['error_block'] = $this->langs->line('sh_error_no_results_' . $this->search_terms['search_type']);
             }
         }
     }
 
     /**
      * Build the page
-     * 
+     *
      * @return void
      */
     private function buildPage(): void
@@ -159,10 +143,10 @@ class Search extends Controller
                     [
                         'search_results' => $this->buildResultsBlock() ?? [],
                     ],
-                    $this->_search_terms,
-                    $this->getLang()
+                    $this->search_terms,
+                    $this->langs->language
                 )
-            ) 
+            )
         );
     }
 
@@ -173,14 +157,13 @@ class Search extends Controller
      */
     private function buildResultsBlock()
     {
-        if (count($this->_results) > 0) {
-
-            $this->_search_terms['error_block'] = '';
+        if (count($this->results) > 0) {
+            $this->search_terms['error_block'] = '';
 
             return $this->getTemplate()->set(
-                'game/search_' . $this->_search_terms['search_type'] . '_results_view',
+                'game/search_' . $this->search_terms['search_type'] . '_results_view',
                 array_merge(
-                    $this->getLang(),
+                    $this->langs->language,
                     [
                         'results' => $this->parseResults(),
                     ]
@@ -200,40 +183,35 @@ class Search extends Controller
     {
         $list_of_results = [];
 
-        foreach ($this->_results as $results) {
-
-
-            if ($this->_search_terms['search_type'] == 'player_name') {
-
+        foreach ($this->results as $results) {
+            if ($this->search_terms['search_type'] == 'player_name') {
                 $list_of_results[] = array_merge(
                     $results,
                     [
                         'planet_position' => FormatLib::prettyCoords($results['planet_galaxy'], $results['planet_system'], $results['planet_planet']),
-                        'user_rank' => $this->setPosition((int)$results['user_rank'], (int)$results['user_authlevel']),
-                        'user_actions'  => $this->getPlayersActions((int)$results['user_id'])
+                        'user_rank' => $this->setPosition((int) $results['user_rank'], (int) $results['user_authlevel']),
+                        'user_actions' => $this->getPlayersActions((int) $results['user_id']),
                     ]
                 );
             }
 
-            if ($this->_search_terms['search_type'] == 'alliance_tag') {
-
+            if ($this->search_terms['search_type'] == 'alliance_tag') {
                 $list_of_results[] = array_merge(
                     $results,
                     [
                         'alliance_points' => FormatLib::prettyNumber($results['alliance_points']),
-                        'alliance_actions' => $this->getAllianceApplicationAction((int)$results['alliance_id'], (int)$results['alliance_requests'])
+                        'alliance_actions' => $this->getAllianceApplicationAction((int) $results['alliance_id'], (int) $results['alliance_requests']),
                     ]
                 );
             }
 
-            if ($this->_search_terms['search_type'] == 'planet_names') {
-
+            if ($this->search_terms['search_type'] == 'planet_names') {
                 $list_of_results[] = array_merge(
                     $results,
                     [
                         'planet_position' => FormatLib::prettyCoords($results['planet_galaxy'], $results['planet_system'], $results['planet_planet']),
-                        'user_rank' => $this->setPosition((int)$results['user_rank'], (int)$results['user_authlevel']),
-                        'user_actions'  => $this->getPlayersActions((int)$results['user_id'])
+                        'user_rank' => $this->setPosition((int) $results['user_rank'], (int) $results['user_authlevel']),
+                        'user_actions' => $this->getPlayersActions((int) $results['user_id']),
                     ]
                 );
             }
@@ -251,15 +229,13 @@ class Search extends Controller
      */
     private function setPosition(int $user_rank, int $user_level): string
     {
-        if ($this->_noob->isRankVisible($user_level)) {
-
+        if ($this->noob->isRankVisible($user_level)) {
             return FunctionsLib::setUrl(
                 'game.php?page=statistics&start=' . $user_rank,
                 '',
                 FormatLib::prettyNumber($user_rank)
             );
         } else {
-
             return '-';
         }
     }
@@ -274,20 +250,20 @@ class Search extends Controller
     {
         $chatLink = FunctionsLib::setUrl(
             'game.php?page=chat&playerId=' . $user_id,
-            $this->getLang()['sh_tip_apply'],
-            FunctionsLib::setImage(DPATH . '/img/m.gif', $this->getLang()['sh_tip_write'])
+            $this->langs->line('sh_tip_apply'),
+            FunctionsLib::setImage(DPATH . '/img/m.gif', $this->langs->line('sh_tip_write'))
         );
 
         $buddyLink = FunctionsLib::setUrl(
             '#',
-            $this->getLang()['sh_tip_apply'],
-            FunctionsLib::setImage(DPATH . '/img/b.gif', $this->getLang()['sh_tip_buddy_request']),
-            'onClick="f(\'game.php?page=buddies&mode=2&u=' . $user_id . '\', \'' . $this->getLang()['sh_tip_buddy_request'] . '\')"'
+            $this->langs->line('sh_tip_apply'),
+            FunctionsLib::setImage(DPATH . '/img/b.gif', $this->langs->line('sh_tip_buddy_request')),
+            'onClick="f(\'game.php?page=buddies&mode=2&u=' . $user_id . '\', \'' . $this->langs->line('sh_tip_buddy_request') . '\')"'
         );
 
-        return $chatLink . ' ' .  $buddyLink;
+        return $chatLink . ' ' . $buddyLink;
     }
-    
+
     /**
      * Get alliance application action based on alliance permission
      *
@@ -298,11 +274,10 @@ class Search extends Controller
     private function getAllianceApplicationAction(int $alliance_id, int $alliance_requests): string
     {
         if ($alliance_requests == SwitchInt::on) {
-
             return FunctionsLib::setUrl(
                 'game.php?page=alliance&mode=apply&allyid=' . $alliance_id,
-                $this->getLang()['sh_tip_apply'],
-                FunctionsLib::setImage(DPATH . '/img/m.gif', $this->getLang()['sh_tip_apply'])
+                $this->langs->line('sh_tip_apply'),
+                FunctionsLib::setImage(DPATH . '/img/m.gif', $this->langs->line('sh_tip_apply'))
             );
         }
 
