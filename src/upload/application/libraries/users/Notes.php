@@ -31,13 +31,13 @@ class Notes
      *
      * @var array
      */
-    private $_notes = [];
+    private $notes = [];
 
     /**
      *
      * @var int
      */
-    private $_notes_count = 0;
+    private $notes_count = 0;
 
     /**
      * Constructor
@@ -49,7 +49,6 @@ class Notes
     public function __construct($notes)
     {
         if (is_array($notes)) {
-
             $this->setUp($notes);
         }
     }
@@ -63,10 +62,8 @@ class Notes
     {
         $list_of_notes = [];
 
-        foreach ($this->_notes as $notes) {
-
+        foreach ($this->notes as $notes) {
             if (($notes instanceof NotesEntity)) {
-
                 $list_of_notes[] = $notes;
             }
         }
@@ -84,7 +81,6 @@ class Notes
     public function getNoteById(int $note_id)
     {
         if ($note_id == $this->getNotes()[0]->getNoteId()) {
-
             return $this->getNotes()[0];
         }
 
@@ -101,8 +97,7 @@ class Notes
     private function setUp($notes): void
     {
         foreach ($notes as $note) {
-
-            $this->_notes[] = $this->createNewNotesEntity($note);
+            $this->notes[] = $this->createNewNotesEntity($note);
 
             $this->setNotesCount();
         }
@@ -125,7 +120,7 @@ class Notes
      */
     private function setNotesCount(): void
     {
-        ++$this->_notes_count;
+        ++$this->notes_count;
     }
 
     /**
@@ -135,7 +130,7 @@ class Notes
      */
     public function getNotesCount(): int
     {
-        return $this->_notes_count;
+        return $this->notes_count;
     }
 
     /**
