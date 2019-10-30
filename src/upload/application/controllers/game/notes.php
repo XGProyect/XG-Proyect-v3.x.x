@@ -18,10 +18,8 @@ use application\core\entities\NotesEntity;
 use application\core\enumerators\ImportanceEnumerator as Importance;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
-use application\libraries\Timing_library;
+use application\libraries\Timing_library as Timing;
 use application\libraries\users\Notes as Note;
-use const JS_PATH;
-use const NOTES;
 
 /**
  * Notes Class
@@ -37,32 +35,32 @@ class Notes extends Controller
 {
 
     /**
-     * 
+     *
      * @var int
      */
     const MODULE_ID = 19;
 
     /**
-     * 
+     *
      * @var string
      */
     const REDIRECT_TARGET = 'game.php?page=notes';
-    
+
     /**
      *
      * @var array
      */
-    private $_user;
+    private $user;
 
     /**
      *
      * @var \Notes
      */
-    private $_notes = null;
-    
+    private $notes = null;
+
     /**
      * Constructor
-     * 
+     *
      * @return void
      */
     public function __construct()
@@ -74,16 +72,19 @@ class Notes extends Controller
 
         // load Model
         parent::loadModel('game/notes');
-        
+
+        // load Language
+        parent::loadLang('notes');
+
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
         // set data
-        $this->_user = $this->getUserData();
+        $this->user = $this->getUserData();
 
         // time to do something
         $this->runAction();
-        
+
         // init a new notes object
         $this->setUpNotes();
 
@@ -93,76 +94,73 @@ class Notes extends Controller
 
     /**
      * Run an action
-     * 
+     *
      * @return void
      */
     private function runAction()
     {
         $data = filter_input_array(INPUT_POST, [
             's' => [
-                'filter'    => FILTER_VALIDATE_INT,
-                'options'   => ['min_range' => 1, 'max_range' => 2]
+                'filter' => FILTER_VALIDATE_INT,
+                'options' => ['min_range' => 1, 'max_range' => 2],
             ],
             'u' => [
-                'filter'    => FILTER_VALIDATE_INT,
-                'options'   => ['min_range' => Importance::unimportant, 'max_range' => Importance::important]
+                'filter' => FILTER_VALIDATE_INT,
+                'options' => ['min_range' => Importance::unimportant, 'max_range' => Importance::important],
             ],
             'title' => [
-                'filter'    => FILTER_SANITIZE_STRING,
-                'options'   => ['min_range' => 1, 'max_range' => 32]
+                'filter' => FILTER_SANITIZE_STRING,
+                'options' => ['min_range' => 1, 'max_range' => 32],
             ],
             'text' => [
-                'filter'    => FILTER_SANITIZE_STRING,
-                'options'   => ['min_range' => 1, 'max_range' => 5000]
+                'filter' => FILTER_SANITIZE_STRING,
+                'options' => ['min_range' => 1, 'max_range' => 5000],
             ],
-            'n' => FILTER_SANITIZE_NUMBER_INT
+            'n' => FILTER_SANITIZE_NUMBER_INT,
         ]);
-        
+
         $delete = filter_input(INPUT_POST, 'delnote', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 
         // add a note
         if (isset($data['s']) && $data['s'] == 1) {
-            
             $this->createNewNote($data);
         }
-        
+
         // edit a note
         if (isset($data['s']) && $data['s'] == 2) {
-            
             $this->editNote($data);
         }
-        
+
         // delete notes
         if (isset($delete) && count($delete) > 0) {
-            
             $this->deleteNote($delete);
         }
     }
-    
+
     /**
      * Creates a new ships object that will handle all the ships
      * creation methods and actions
-     * 
+     *
      * @return void
      */
     private function setUpNotes()
     {
-        $this->_notes = new Note(
-            $this->Notes_Model->getAllNotesByUserId($this->_user['user_id']),
-            $this->_user['user_id']
+        $this->notes = new Note(
+            $this->Notes_Model->getAllNotesByUserId($this->user['user_id']),
+            $this->user['user_id']
         );
     }
 
     /**
      * Build the page
-     * 
+     *
      * @return void
      */
     private function buildPage()
     {
         /**
          * Parse the items
-         */        
+         */
         $page = $this->getCurrentPage();
 
         // display the page
@@ -170,61 +168,61 @@ class Notes extends Controller
             $this->getTemplate()->set(
                 $page['template'],
                 array_merge(
-                    $this->getLang(), $page['data']
+                    $this->langs->language,
+                    $page['data']
                 )
-            ), false, '', false
+            ),
+            false,
+            '',
+            false
         );
     }
 
     /**
      * Build list of notes block
-     * 
+     *
      * @return array
      */
     private function buildNotesListBlock(): array
     {
         $list_of_notes = [];
-        
-        $notes = $this->_notes->getNotes();
-        
-        if ($this->_notes->hasNotes()) {
 
+        $notes = $this->notes->getNotes();
+
+        if ($this->notes->hasNotes()) {
             foreach ($notes as $note) {
-
                 if ($note instanceof NotesEntity) {
-
                     $list_of_notes[] = [
                         'note_id' => $note->getNoteId(),
                         'note_time' => Timing::formatExtendedDate($note->getNoteTime()),
                         'note_color' => FormatLib::getImportanceColor($note->getNotePriority()),
-                        'note_title' => $note->getNoteTitle()
-                    ];   
+                        'note_title' => $note->getNoteTitle(),
+                    ];
                 }
-            }   
+            }
         }
-        
+
         return $list_of_notes;
     }
-    
+
     /**
      * Get current page
-     * 
+     *
      * @return array
      */
     private function getCurrentPage(): array
     {
         $edit_view = filter_input(INPUT_GET, 'a', FILTER_VALIDATE_INT, [
-            'options'   => ['min_range' => 1, 'max_range' => 2]
+            'options' => ['min_range' => 1, 'max_range' => 2],
         ]);
 
         if ($edit_view !== false && !is_null($edit_view)) {
-            
             return [
                 'template' => 'game/notes_form_view',
                 'data' => array_merge(
                     ['js_path' => JS_PATH],
                     $this->buildEditBlock($edit_view)
-                )
+                ),
             ];
         }
 
@@ -232,16 +230,16 @@ class Notes extends Controller
             'template' => 'game/notes_view',
             'data' => [
                 'list_of_notes' => $this->buildNotesListBlock(),
-                'no_notes' => $this->_notes->hasNotes() ? '' : '<tr><th colspan="4">' . $this->getLang()['nt_no_notes_found'] . '</th>'
-            ]
+                'no_notes' => $this->notes->hasNotes() ? '' : '<tr><th colspan="4">' . $this->langs->line('nt_no_notes_found') . '</th>',
+            ],
         ];
     }
-    
+
     /**
      * Build the edit view
-     * 
+     *
      * @param int $edit_view
-     * 
+     *
      * @return array
      */
     private function buildEditBlock(int $edit_view): array
@@ -250,105 +248,101 @@ class Notes extends Controller
         $selected = [
             'selected_2' => '',
             'selected_1' => 'selected="selected"',
-            'selected_0' => ''
+            'selected_0' => '',
         ];
-        
+
         // edit
         if ($edit_view == 2 && !is_null($note_id)) {
-            
-            $note = $this->Notes_Model->getNoteById($this->_user['user_id'], $note_id);
+            $note = $this->Notes_Model->getNoteById($this->user['user_id'], $note_id);
             $selected = array_fill_keys(array_keys($selected), null); // clear values keeping the keys
-            
-            if ($note) {
 
+            if ($note) {
                 $note_data = new Note(
                     [$note]
                 );
-                
+
                 $selected['selected_' . $note_data->getNoteById($note_id)->getNotePriority()] = 'selected="selected"';
-                
+
                 return array_merge([
                     's' => 2,
                     'note_id' => '<input type="hidden" name="n" value=' . $note_data->getNoteById($note_id)->getNoteId() . '>',
-                    'title' => $this->getLang()['nt_edit_note'],
+                    'title' => $this->langs->line('nt_edit_note'),
                     'subject' => $note_data->getNoteById($note_id)->getNoteTitle(),
-                    'text' => $note_data->getNoteById($note_id)->getNoteText()
+                    'text' => $note_data->getNoteById($note_id)->getNoteText(),
                 ], $selected);
-            }            
+            }
         }
 
         // add or default
         return array_merge([
             's' => 1,
             'note_id' => '',
-            'title' => $this->getLang()['nt_add_note'],
-            'subject' => $this->getLang()['nt_your_subject'],
-            'text' => ''
+            'title' => $this->langs->line('nt_add_note'),
+            'subject' => $this->langs->line('nt_your_subject'),
+            'text' => '',
         ], $selected);
     }
-    
+
     /**
      * Create a new note
-     * 
+     *
      * @param array $data
-     * 
+     *
      * @return void
      */
     private function createNewNote(array $data): void
     {
         $this->Notes_Model->createNewNote(
             [
-                'note_owner' => $this->_user['user_id'],
+                'note_owner' => $this->user['user_id'],
                 'note_time' => time(),
                 'note_priority' => is_int($data['u']) ? $data['u'] : Importance::important,
-                'note_title' => !empty($data['title']) ? $data['title'] : $this->getLang()['nt_your_subject'],
+                'note_title' => !empty($data['title']) ? $data['title'] : $this->langs->line('nt_your_subject'),
                 'note_text' => !empty($data['text']) ? $data['text'] : '',
             ]
         );
     }
-    
+
     /**
      * Edit a note
-     * 
+     *
      * @param array $data
-     * 
+     *
      * @return void
      */
     private function editNote(array $data): void
     {
         $this->Notes_Model->updateNoteById(
-            $this->_user['user_id'],
+            $this->user['user_id'],
             $data['n'],
             [
                 'note_time' => time(),
                 'note_priority' => is_int($data['u']) ? $data['u'] : Importance::important,
-                'note_title' => !empty($data['title']) ? $data['title'] : $this->getLang()['nt_your_subject'],
+                'note_title' => !empty($data['title']) ? $data['title'] : $this->langs->line('nt_your_subject'),
                 'note_text' => !empty($data['text']) ? $data['text'] : '',
             ]
         );
     }
-    
+
     /**
      * Delete a note or multiple
-     * 
+     *
      * @param array $data
-     * 
+     *
      * @return void
      */
     private function deleteNote(array $data): void
     {
         $delete_string = [];
-        
+
         foreach ($data as $note_id => $set) {
-            
             if ($set == 'y') {
-                
                 $delete_string[] = $note_id;
             }
         }
-        
+
         $this->Notes_Model->deleteNoteById(
-            $this->_user['user_id'],
+            $this->user['user_id'],
             join(',', $delete_string)
         );
     }
