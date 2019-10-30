@@ -24,7 +24,7 @@ $lang = [
     'tr_merchant2_title' => 'Canjea tus recursos.',
     'tr_step1' => '1. Canjea tus recursos.',
     'tr_step2' => '2. Llamar al mercader',
-    'tr_price' => 'Coste: 3.500 de Materia Oscura (por llamada)',
+    'tr_price' => 'Coste: %s de Materia Oscura (por llamada)',
     'tr_call_button' => 'Llamar al mercader',
 ];
 

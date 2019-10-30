@@ -24,7 +24,7 @@ $lang = [
     'tr_merchant2_title' => 'Exchange your resources.',
     'tr_step1' => '1. Exchange your resources.',
     'tr_step2' => '2. Call merchant',
-    'tr_price' => 'Costs: 3.500 Dark Matter (per call)',
+    'tr_price' => 'Costs: %s Dark Matter (per call)',
     'tr_call_button' => 'Call merchant',
 ];
 
