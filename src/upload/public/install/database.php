@@ -215,11 +215,13 @@ $tables['notes'] = "CREATE TABLE `" . NOTES . "` (
 PRIMARY KEY (`note_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;";
 
-$tables['options'] = "CREATE TABLE IF NOT EXISTS `" . OPTIONS . "` (
+$tables['options'] = "CREATE TABLE `" . OPTIONS . "` (
 `option_id` bigint(20) unsigned NOT NULL,
 `option_name` varchar(191) DEFAULT NULL,
-`option_value` longtext NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8;";
+`option_value` longtext NOT NULL,
+PRIMARY KEY (`option_id`),
+UNIQUE KEY `option_name` (`option_name`)
+) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8;";
 
 $tables['options_insert'] = "INSERT INTO `" . OPTIONS . "` (`option_id`, `option_name`, `option_value`) VALUES
 (1, 'game_name', 'XG Proyect'),
@@ -263,7 +265,12 @@ $tables['options_insert'] = "INSERT INTO `" . OPTIONS . "` (`option_id`, `option
 (39, 'version', '" . SYSTEM_VERSION . "'),
 (40, 'lastsettedgalaxypos', '1'),
 (41, 'lastsettedsystempos', '1'),
-(42, 'lastsettedplanetpos', '1');";
+(42, 'lastsettedplanetpos', '1'),
+(43, 'merchant_base_min_exchange_rate', '0.7'),
+(44, 'merchant_base_max_exchange_rate', '1'),
+(45, 'merchant_metal_multiplier', '3'),
+(46, 'merchant_crystal_multiplier', '2'),
+(47, 'merchant_deuterium_multiplier', '1');";
 
 $tables['planets'] = "CREATE TABLE `" . PLANETS . "` (
 `planet_id` bigint(11) NOT NULL AUTO_INCREMENT,

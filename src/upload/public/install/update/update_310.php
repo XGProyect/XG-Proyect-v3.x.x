@@ -22,12 +22,12 @@ $queries[] = "CREATE TABLE `" . CHANGELOG . "` (
 `changelog_description` text NOT NULL,
 PRIMARY KEY (`changelog_id`),
 UNIQUE KEY `changelog_id` (`changelog_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;";  
-$queries[] = "INSERT INTO `" . CHANGELOG . "` (`changelog_id`, `changelog_lang_id`, `changelog_version`, `changelog_date`, `changelog_description`) VALUES 
-(1, '1', '3.0.0', '2013-05-13', '- Ejemplo 1'), 
-(2, '1', '3.1.0', '2013-06-13', '- Ejemplo 2'), 
-(3, '1', '3.2.0', '2013-11-08', '- Ejemplo 3'), 
-(4, '2', '3.0.0', '2013-05-13', '- Example 1'), 
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+$queries[] = "INSERT INTO `" . CHANGELOG . "` (`changelog_id`, `changelog_lang_id`, `changelog_version`, `changelog_date`, `changelog_description`) VALUES
+(1, '1', '3.0.0', '2013-05-13', '- Ejemplo 1'),
+(2, '1', '3.1.0', '2013-06-13', '- Ejemplo 2'),
+(3, '1', '3.2.0', '2013-11-08', '- Ejemplo 3'),
+(4, '2', '3.0.0', '2013-05-13', '- Example 1'),
 (5, '2', '3.1.0', '2013-06-13', '- Example 2'),
 (6, '2', '3.2.0', '2013-11-08', '- Example 3');";
 $queries[] = "CREATE TABLE `" . LANGUAGES . "` (
@@ -53,3 +53,7 @@ UNIQUE KEY `preference_user_id` (`preference_user_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;";
 $queries[] = "DROP TABLE `" . DB_PREFIX . "settings`";
 $queries[] = "ALTER TABLE `" . USERS . "` DROP `user_email_permanent`;";
+$queries[] = "INSERT INTO `" . OPTIONS . "` (`option_id`, `option_name`, `option_value`) VALUES ('43', 'merchant_base_min_exchange_rate', '0.7'), ('44', 'merchant_base_max_exchange_rate', '1'), ('45', 'merchant_metal_multiplier', '3'), ('46', 'merchant_crystal_multiplier', '2'), ('47', 'merchant_deuterium_multiplier', '1');";
+$queries[] = "ALTER TABLE `" . OPTIONS . "` ADD PRIMARY KEY(`option_id`);";
+$queries[] = "ALTER TABLE `" . OPTIONS . "` ADD UNIQUE(`option_name`);";
+$queries[] = "UPDATE `" . OPTIONS . "` SET `option_name` = 'merchant_price' WHERE `xgp_options`.`option_id` = 35;";
