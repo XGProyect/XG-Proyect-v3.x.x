@@ -141,7 +141,7 @@ class Search extends Controller
                 'game/search_view',
                 array_merge(
                     [
-                        'search_results' => $this->buildResultsBlock() ?? [],
+                        'search_results' => $this->buildResultsBlock(),
                     ],
                     $this->search_terms,
                     $this->langs->language
@@ -153,9 +153,9 @@ class Search extends Controller
     /**
      * Build the results block
      *
-     * @return void
+     * @return string
      */
-    private function buildResultsBlock()
+    private function buildResultsBlock(): string
     {
         if (count($this->results) > 0) {
             $this->search_terms['error_block'] = '';
@@ -171,7 +171,7 @@ class Search extends Controller
             );
         }
 
-        return null;
+        return '';
     }
 
     /**

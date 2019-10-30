@@ -25,4 +25,3 @@
     </form>
     {error_block}
     {search_results}
-    {/search_results}
