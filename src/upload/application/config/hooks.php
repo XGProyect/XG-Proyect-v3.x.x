@@ -9,8 +9,9 @@
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
- * @version  3.0.0
+ * @version  3.1.0
  */
+
 /**
  * MODES
  * before_loads
@@ -20,7 +21,7 @@
 // INSERT HOOKS AFTER THIS LINE
 $hook['before_page'] = [
     'class' => 'MyClass',
-    'function' => 'MyMethod',
+    'function' => 'myMethod',
     'filename' => 'MyClass.php',
     'filepath' => 'hooks',
     'params' => ['beer', 'wine', 'snacks'],
