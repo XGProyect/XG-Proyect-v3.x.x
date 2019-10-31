@@ -26,6 +26,25 @@ $lang = [
     'tr_step2' => '2. Llamar al mercader',
     'tr_price' => 'Coste: %s de Materia Oscura (por llamada)',
     'tr_call_button' => 'Llamar al mercader',
+
+    // traderAuctioneer
+
+    // traderScrap
+    'tr_scrap_hello' => 'Veamos entonces qué está dispuesto a pagar.',
+    'tr_scrap_final' => '¡Es mi última palabra, de verdad!',
+    'tr_scrap_phrase_1' => 'En ninguna galaxia conseguirá una oferta mejor.',
+    'tr_scrap_phrase_2' => 'Tengo que reducirle el precio por los agujeros de bala.',
+    'tr_scrap_phrase_3' => 'Me tendría que estar pagando usted a mí por quedarme con su chatarra.',
+    'tr_scrap_phrase_4' => 'No te puedo nada más por esta basura oxidada.',
+    'tr_scrap_phrase_5' => 'Mi mujer me va a matar...',
+    'tr_scrap_phrase_6' => '¿Acaso quiere llevarme a la ruina?',
+    'tr_scrap_phrase_7' => 'Esta oferta es una excepción absolutamente única.',
+    'tr_scrap_phrase_8' => 'Soy empresario, y no de beneficencia.',
+    'tr_scrap_phrase_9' => '¡Pero si ya apenas saco tajada de este trato!',
+    'tr_scrap_phrase_10' => '¡Tengo una familia que alimentar!',
+    'tr_scrap_phrase_11' => 'Ya puedo escuchar las burlas de mis competidores',
+
+    // traderImportExport
 ];
 
 /* end of trader_lang.php */
