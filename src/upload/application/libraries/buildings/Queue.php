@@ -56,7 +56,7 @@ final class Queue
     private function breakDownCurrentQueue()
     {
         // extract elements and filter empty values
-        $elements = array_filter(explode(self::QUEUE_SEPARATOR, $this->_queue));
+        $elements = array_filter(explode(self::QUEUE_SEPARATOR, $this->queue));
         $queue = [];
 
         if (is_array($elements)) {
@@ -75,8 +75,8 @@ final class Queue
      */
     private function makeUpCurrentQueue()
     {
-        if (isset($this->_queue)) {
-            $queue = $this->_queue;
+        if (isset($this->queue)) {
+            $queue = $this->queue;
 
             foreach ($queue as $element_id => $content) {
                 $queue[$element_id] = implode(self::ITEM_SEPARATOR, $content);
@@ -96,12 +96,12 @@ final class Queue
     public function addElementToQueue(QueueElements $queue_elements)
     {
         if (is_object($queue_elements)) {
-            if (!is_array($this->_queue)) {
+            if (!is_array($this->queue)) {
                 $this->breakDownCurrentQueue();
             }
 
             // convert the object to an array and put it to the end
-            array_push($this->_queue, (array) $queue_elements);
+            array_push($this->queue, (array) $queue_elements);
         }
     }
 
@@ -115,12 +115,12 @@ final class Queue
     public function removeElementFromQueue($element_id)
     {
         if (is_int($element_id)) {
-            if (!is_array($this->_queue)) {
+            if (!is_array($this->queue)) {
                 $this->breakDownCurrentQueue();
             }
 
             // unset that element from the array
-            unset($this->_queue[$element_id]);
+            unset($this->queue[$element_id]);
         }
     }
 
@@ -133,12 +133,12 @@ final class Queue
      */
     public function getElementFromQueueAsArray($element_id)
     {
-        if (isset($this->_queue)) {
-            if (!is_array($this->_queue)) {
+        if (isset($this->queue)) {
+            if (!is_array($this->queue)) {
                 $this->breakDownCurrentQueue();
             }
 
-            return $this->_queue[$element_id];
+            return $this->queue[$element_id];
         }
 
         return [];
@@ -151,12 +151,12 @@ final class Queue
      */
     public function returnQueueAsString()
     {
-        if (isset($this->_queue)) {
-            if (is_array($this->_queue)) {
+        if (isset($this->queue)) {
+            if (is_array($this->queue)) {
                 $this->makeUpCurrentQueue();
             }
 
-            return $this->_queue;
+            return $this->queue;
         }
 
         return '';
@@ -169,12 +169,12 @@ final class Queue
      */
     public function returnQueueAsArray()
     {
-        if (isset($this->_queue)) {
-            if (!is_array($this->_queue)) {
+        if (isset($this->queue)) {
+            if (!is_array($this->queue)) {
                 $this->breakDownCurrentQueue();
             }
 
-            return $this->_queue;
+            return $this->queue;
         }
 
         return [];
@@ -187,12 +187,13 @@ final class Queue
      */
     public function countQueueElements()
     {
-        if (isset($this->_queue)) {
-            if (!is_array($this->_queue)) {
+
+        if (isset($this->queue)) {
+            if (!is_array($this->queue)) {
                 $this->breakDownCurrentQueue();
             }
 
-            return count($this->_queue);
+            return count($this->queue);
         }
 
         return 0;
