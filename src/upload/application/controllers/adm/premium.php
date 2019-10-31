@@ -72,8 +72,8 @@ class Premium extends Controller
                 $error .= $this->_lang['pr_error_url'];
             }
 
-            if (isset($_POST['trader_darkmatter']) && ( $_POST['trader_darkmatter'] > 0 )) {
-                FunctionsLib::updateConfig('trader_darkmatter', $_POST['trader_darkmatter']);
+            if (isset($_POST['merchant_price']) && ($_POST['merchant_price'] > 0)) {
+                FunctionsLib::updateConfig('merchant_price', $_POST['merchant_price']);
             } else {
                 $error .= $this->_lang['pr_error_trader'];
             }
@@ -86,7 +86,7 @@ class Premium extends Controller
         }
 
         $parse['premium_url'] = FunctionsLib::readConfig('premium_url');
-        $parse['trader_darkmatter'] = FunctionsLib::readConfig('trader_darkmatter');
+        $parse['merchant_price'] = FunctionsLib::readConfig('merchant_price');
 
         parent::$page->display(parent::$page->parseTemplate(parent::$page->getTemplate('adm/premium_view'), $parse));
     }
