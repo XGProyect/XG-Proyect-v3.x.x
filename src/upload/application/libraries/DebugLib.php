@@ -25,9 +25,12 @@ namespace application\libraries;
  */
 class DebugLib
 {
-
-    private $log;
-    private $numqueries;
+    /**
+     * Array of executed queries
+     *
+     * @var array
+     */
+    private $queries = [];
 
     /**
      * __construct
@@ -36,8 +39,6 @@ class DebugLib
      */
     public function __construct()
     {
-        $this->vars = $this->log = '';
-        $this->numqueries = 0;
     }
 
     /**
@@ -85,18 +86,19 @@ class DebugLib
     }
 
     /**
-     * add
+     * Add a query to the query list
      *
      * @param int $query Query
      *
      * @return void
      */
-    public function add($query)
+    public function add(string $query): void
     {
-        $this->numqueries++;
-        $this->log .= '<tr><th rowspan="2">Query ' .
-        $this->numqueries . ':</th><th>' . $query . '</th></tr><tr><th>' .
-        $this->whereCalled() . '</th></tr>';
+        if (isset($this->queries[$query])) {
+            $this->queries[$query]++;
+        } else {
+            array_push($this->queries, [$query => 1]);
+        }
     }
 
     /**
@@ -104,13 +106,11 @@ class DebugLib
      *
      * @return string
      */
-    public function echoLog(): string
+    public function echoLog(): void
     {
-        if ($this->log) {
-            return '<div><a href="' . XGP_ROOT . 'admin.php?page=settings">Debug Log</a>:' . $this->log . '</div>';
+        if ($this->queries && DEBUG_MODE) {
+            print_r($this->queries);
         }
-
-        return '';
     }
 
     /**
@@ -123,16 +123,19 @@ class DebugLib
      * @param string $type
      * @return void
      */
-    public function error(int $code, string $description, string $file, int $line, string $type = 'db'): void
+    public function error(int $code, string $description, string $file = '', int $line = 0, string $type = 'db'): void
     {
         if (DEBUG_MODE or (in_array($_SERVER['HTTP_HOST'], ['127.0.0.1', 'localhost']) !== false)) {
             echo '<div style="background-color:blue;color:white;position:absolute;width:100%;z-index:999999;text-align:center;bottom:0">
-                    <h2 style="color:red">' . $description . '</h2>
-                    <h3>in ' . $file . ' on line ' . $line . '</h3>
-                    <span>Error code: ' . $code . '</span>
-                    <hr>
-                    ' . $this->echoLog() . '
-                    <h3>Trace:</h3>
+                    <h2 style="color:red; font-weight:normal">' . $description . '</h2>';
+
+            if ($type != 'db') {
+                echo '<h3>in ' . $file . ' on line ' . $line . '</h3>
+                        <span>Error code: ' . $code . '</span>';
+            }
+
+            echo '<hr>
+                    <h3>Trace (<a href="' . XGP_ROOT . 'admin.php?page=settings">Debug Log</a>):</h3>
                     <div>' . $this->whereCalled() . '</div>
                     <br>
                 </div>';

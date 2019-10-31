@@ -77,27 +77,22 @@ class Database
     public function openConnection()
     {
         if (defined('DB_HOST') && defined('DB_USER') && defined('DB_PASS') && defined('DB_NAME')) {
-
             if (!$this->tryConnection(DB_HOST, DB_USER, DB_PASS)) {
-
                 if (!defined('IN_INSTALL')) {
-
                     die($this->debug->error(
-                        'Database connection failed: ' . $this->connection->connect_error, 'SQL Error'
+                        -1,
+                        'Database connection failed: ' . $this->connection->connect_error
                     ));
                 }
             } else {
-
                 if (!$this->tryDatabase(DB_NAME)) {
-
                     if (!defined('IN_INSTALL')) {
-
                         die($this->debug->error(
-                            'Database selection failed: ' . $this->connection->connect_error, 'SQL Error'
+                            -1,
+                            'Database selection failed: ' . $this->connection->connect_error
                         ));
                     }
                 } else {
-
                     return true;
                 }
             }
@@ -118,14 +113,12 @@ class Database
     public function tryConnection($host = '', $user = '', $pass = null)
     {
         if (empty($host) or empty($user)) {
-
             return;
         }
 
         $this->connection = @new mysqli($host, $user, $pass);
 
         if ($this->connection->connect_error) {
-
             return false;
         }
 
@@ -149,10 +142,8 @@ class Database
         $db_select = @$this->connection->select_db($db_name);
 
         if ($db_select) {
-
             return true;
         } else {
-
             return false;
         }
     }
@@ -165,9 +156,7 @@ class Database
     public function testConnection()
     {
         if (is_resource($this->connection) or is_object($this->connection)) {
-
             if ($this->connection->ping()) {
-
                 return true;
             }
         }
@@ -185,7 +174,6 @@ class Database
     public function closeConnection()
     {
         if (isset($this->connection) && (is_resource($this->connection) or is_object($this->connection))) {
-
             $this->connection->close();
             unset($this->connection);
 
@@ -205,7 +193,6 @@ class Database
     public function query($sql = false)
     {
         if ($sql != false) {
-
             $this->last_query = $sql;
             $result = @$this->connection->query($sql);
 
@@ -227,7 +214,6 @@ class Database
     public function queryFetch($sql = false)
     {
         if ($sql != false) {
-
             $this->last_query = $sql;
             $result = @$this->connection->query($sql);
 
@@ -249,7 +235,6 @@ class Database
     public function queryFetchAll($sql = false)
     {
         if ($sql != false) {
-
             $this->last_query = $sql;
             $result = @$this->connection->query($sql);
 
@@ -271,7 +256,6 @@ class Database
     public function queryMulty($sql = false)
     {
         if ($sql != false) {
-
             $this->last_query = $sql;
             $result = @$this->connection->multi_query($sql);
 
@@ -294,7 +278,6 @@ class Database
     {
         // undo any magic quote effects so mysqli_real_escape_string can do the work
         if ($this->magic_quotes_active) {
-
             $value = stripslashes($value);
         }
 
@@ -323,14 +306,12 @@ class Database
     public function fetchAll($result_set)
     {
         if (function_exists('mysqli_fetch_all')) {
-
             return $result_set->fetch_all(MYSQLI_ASSOC);
         }
 
         $results_array = [];
 
         while ($row = $this->fetchAssoc($result_set)) {
-
             $results_array[] = $row;
         }
 
@@ -438,13 +419,12 @@ class Database
     private function confirmQuery($result)
     {
         if (!$result) {
-
             $output = "Database query failed: " . $this->connection->error;
 
             // uncomment below line when you want to debug your last query
             $output .= " Last SQL Query: " . $this->last_query;
 
-            die($this->debug->error($output, "SQL Error"));
+            die($this->debug->error(-1, $output));
         }
 
         // DEBUG LOG
