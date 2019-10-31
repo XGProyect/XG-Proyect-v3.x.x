@@ -86,7 +86,7 @@ class Home extends Controller
 
         // VERIFICATIONS
         if ($this->_current_user['user_authlevel'] >= 3) {
-            if (is_writable(XGP_ROOT . CONFIGS_PATH . 'config.php')) {
+            if ((bool) (@fileperms(XGP_ROOT . CONFIGS_PATH . 'config.php') & 0x0002)) {
                 $message[1] = $this->_lang['hm_config_file_writable'] . '<br />';
                 $error++;
             }
