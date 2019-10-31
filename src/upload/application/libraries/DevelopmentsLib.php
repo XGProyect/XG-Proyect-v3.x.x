@@ -372,7 +372,11 @@ class DevelopmentsLib extends XGPCore
                     }
 
                     $is_payable = self::isDevelopmentPayable(
-                        $current_user, $current_planet, $element, true, $for_destroy
+                        $current_user,
+                        $current_planet,
+                        $element,
+                        true,
+                        $for_destroy
                     );
 
                     if ($for_destroy) {
@@ -394,7 +398,6 @@ class DevelopmentsLib extends XGPCore
                         $new_queue = implode(";", $queue_array);
 
                         if ($new_queue == '') {
-
                             $new_queue = '0';
                         }
 
@@ -406,11 +409,28 @@ class DevelopmentsLib extends XGPCore
                             $message = sprintf($lang['sys_nomore_level'], $element_name);
                         } else {
                             $price = self::developmentPrice(
-                                $current_user, $current_planet, $element, true, $for_destroy
+                                $current_user,
+                                $current_planet,
+                                $element,
+                                true,
+                                $for_destroy
                             );
 
                             $message = sprintf(
-                                $lang['sys_notenough_money'], $element_name, FormatLib::prettyNumber($current_planet['planet_metal']), $lang['Metal'], FormatLib::prettyNumber($current_planet['planet_crystal']), $lang['Crystal'], FormatLib::prettyNumber($current_planet['planet_deuterium']), $lang['Deuterium'], FormatLib::prettyNumber($price['metal']), $lang['Metal'], FormatLib::prettyNumber($price['crystal']), $lang['Crystal'], FormatLib::prettyNumber($price['deuterium']), $lang['Deuterium']
+                                $lang['sys_notenough_money'],
+                                $element_name,
+                                FormatLib::prettyNumber($current_planet['planet_metal']),
+                                $lang['Metal'],
+                                FormatLib::prettyNumber($current_planet['planet_crystal']),
+                                $lang['Crystal'],
+                                FormatLib::prettyNumber($current_planet['planet_deuterium']),
+                                $lang['Deuterium'],
+                                FormatLib::prettyNumber($price['metal']),
+                                $lang['Metal'],
+                                FormatLib::prettyNumber($price['crystal']),
+                                $lang['Crystal'],
+                                FormatLib::prettyNumber($price['deuterium']),
+                                $lang['Deuterium']
                             );
                         }
 
@@ -436,7 +456,6 @@ class DevelopmentsLib extends XGPCore
                     }
                 }
             } else {
-
                 $build_end_time = '0';
                 $new_queue = '0';
             }
