@@ -56,4 +56,4 @@ $queries[] = "ALTER TABLE `" . USERS . "` DROP `user_email_permanent`;";
 $queries[] = "INSERT INTO `" . OPTIONS . "` (`option_id`, `option_name`, `option_value`) VALUES ('43', 'merchant_base_min_exchange_rate', '0.7'), ('44', 'merchant_base_max_exchange_rate', '1'), ('45', 'merchant_metal_multiplier', '3'), ('46', 'merchant_crystal_multiplier', '2'), ('47', 'merchant_deuterium_multiplier', '1');";
 $queries[] = "ALTER TABLE `" . OPTIONS . "` ADD PRIMARY KEY(`option_id`);";
 $queries[] = "ALTER TABLE `" . OPTIONS . "` ADD UNIQUE(`option_name`);";
-$queries[] = "UPDATE `" . OPTIONS . "` SET `option_name` = 'merchant_price' WHERE `xgp_options`.`option_id` = 35;";
+$queries[] = "UPDATE `" . OPTIONS . "` SET `option_name` = 'merchant_price' WHERE `" . OPTIONS . "`.`option_id` = 35;";
