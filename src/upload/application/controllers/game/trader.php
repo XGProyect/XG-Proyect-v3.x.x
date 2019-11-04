@@ -14,8 +14,8 @@
 namespace application\controllers\game;
 
 use application\core\Controller;
-use application\core\Database;
-use application\libraries\FunctionsLib;
+use application\libraries\FormatLib as Format;
+use application\libraries\FunctionsLib as Functions;
 use application\libraries\ProductionLib;
 use Exception;
 
@@ -34,14 +34,22 @@ class Trader extends Controller
 
     const MODULE_ID = 5;
 
-    private $langs;
-    private $resource;
-    private $tr_dark_matter;
-    private $current_user;
-    private $current_planet;
+    /**
+     * Current user data
+     *
+     * @var array
+     */
+    private $user;
 
     /**
-     * __construct
+     * Current planet data
+     *
+     * @var array
+     */
+    private $planet;
+
+    /**
+     * Constructor
      *
      * @return void
      */
@@ -52,217 +60,301 @@ class Trader extends Controller
         // check if session is active
         parent::$users->checkSession();
 
+        // load Model
+        parent::loadModel('game/trader');
+
+        // load Language
+        parent::loadLang(['global', 'trader']);
+
         // Check module access
-        FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
+        Functions::moduleMessage(Functions::isModuleAccesible(self::MODULE_ID));
 
-        $this->_db = new Database();
-        $this->langs = parent::$lang;
-        $this->resource = parent::$objects->getObjects();
-        $this->tr_dark_matter = FunctionsLib::readConfig('trader_darkmatter');
-        $this->current_user = parent::$users->getUserData();
-        $this->current_planet = parent::$users->getPlanetData();
+        // set user data
+        $this->user = $this->getUserData();
 
+        // set planet data
+        $this->planet = $this->getPlanetData();
+
+        // init a new buddy object
+        //$this->setUpTrader();
+
+        // time to do something
+        //$this->runAction();
+
+        // build the page
         $this->buildPage();
     }
 
     /**
-     * __destructor
+     * Build the page
      *
      * @return void
      */
-    public function __destruct()
+    private function buildPage(): void
     {
-        $this->_db->closeConnection();
+        parent::$page->display(
+            $this->getTemplate()->set(
+                'game/trader_overview_view',
+                array_merge(
+                    $this->langs->language,
+                    $this->getMode()
+                )
+            )
+        );
+    }
+    /*
+    $parse = $this->langs;
+
+    if ($this->current_user['premium_dark_matter'] < $this->tr_dark_matter) {
+
+    FunctionsLib::message(
+    str_replace(
+    '%s', $this->tr_dark_matter, $this->langs['tr_darkmatter_needed']
+    ), '', '', true
+    );
+
+    die();
+    }
+
+    if (isset($_POST['ress']) && $_POST['ress'] != '') {
+
+    switch ($_POST['ress']) {
+
+    case 'metal':
+    if ($_POST['cristal'] < 0 or $_POST['deut'] < 0) {
+    FunctionsLib::message($this->langs['tr_only_positive_numbers'], "game.php?page=traderOverview", 1);
+    } else {
+    $necessaire = (($_POST['cristal'] * 2) + ($_POST['deut'] * 4));
+    $amout = array(
+    'metal' => 0,
+    'crystal' => $_POST['cristal'],
+    'deuterium' => $_POST['deut'],
+    );
+
+    $storage = $this->checkStorage($amout);
+
+    if (is_string($storage)) {
+
+    die(FunctionsLib::message($storage, 'game.php?page=traderOverview', '2'));
+    }
+
+    if ($this->current_planet['planet_metal'] > $necessaire) {
+
+    $this->_db->query(
+    "UPDATE " . PLANETS . " SET
+    `planet_metal` = `planet_metal` - " . round($necessaire) . ",
+    `planet_crystal` = `planet_crystal` + " . round($_POST['cristal']) . ",
+    `planet_deuterium` = `planet_deuterium` + " . round($_POST['deut']) . "
+    WHERE `planet_id` = '" . $this->current_planet['planet_id'] . "';"
+    );
+
+    $this->current_planet['planet_metal'] -= $necessaire;
+    $this->current_planet['planet_crystal'] += isset($_POST['cristal']) ? $_POST['cristal'] : 0;
+    $this->current_planet['planet_deuterium'] += isset($_POST['deut']) ? $_POST['deut'] : 0;
+
+    $this->discountDarkMatter(); // REDUCE DARKMATTER
+    } else {
+
+    FunctionsLib::message($this->langs['tr_not_enought_metal'], "game.php?page=traderOverview", 1);
+    }
+    }
+    break;
+
+    case 'cristal':
+    if ($_POST['metal'] < 0 or $_POST['deut'] < 0) {
+
+    FunctionsLib::message($this->langs['tr_only_positive_numbers'], "game.php?page=traderOverview", 1);
+    } else {
+
+    $necessaire = ((abs($_POST['metal']) * 0.5) + (abs($_POST['deut']) * 2));
+    $amout = array(
+    'metal' => $_POST['metal'],
+    'crystal' => 0,
+    'deuterium' => $_POST['deut'],
+    );
+
+    $storage = $this->checkStorage($amout);
+
+    if (is_string($storage)) {
+
+    die(FunctionsLib::message($storage, 'game.php?page=traderOverview', '2'));
+    }
+
+    if ($this->current_planet['planet_crystal'] > $necessaire) {
+
+    $this->_db->query(
+    "UPDATE " . PLANETS . " SET
+    `planet_metal` = `planet_metal` + " . round($_POST['metal']) . ",
+    `planet_crystal` = `planet_crystal` - " . round($necessaire) . ",
+    `planet_deuterium` = `planet_deuterium` + " . round($_POST['deut']) . "
+    WHERE `planet_id` = '" . $this->current_planet['planet_id'] . "';"
+    );
+
+    $this->current_planet['planet_metal'] += isset($_POST['metal']) ? $_POST['metal'] : 0;
+    $this->current_planet['planet_crystal'] -= $necessaire;
+    $this->current_planet['planet_deuterium'] += isset($_POST['deut']) ? $_POST['deut'] : 0;
+
+    $this->discountDarkMatter(); // REDUCE DARKMATTER
+    } else {
+
+    FunctionsLib::message($this->langs['tr_not_enought_crystal'], "game.php?page=traderOverview", 1);
+    }
+    }
+    break;
+
+    case 'deuterium':
+    if ($_POST['cristal'] < 0 or $_POST['metal'] < 0) {
+
+    FunctionsLib::message($this->langs['tr_only_positive_numbers'], "game.php?page=traderOverview", 1);
+    } else {
+
+    $necessaire = ((abs($_POST['metal']) * 0.25) + (abs($_POST['cristal']) * 0.5));
+    $amout = array(
+    'metal' => $_POST['metal'],
+    'crystal' => $_POST['cristal'],
+    'deuterium' => 0,
+    );
+
+    $storage = $this->checkStorage($amout);
+
+    if (is_string($storage)) {
+
+    die(FunctionsLib::message($storage, 'game.php?page=traderOverview', '2'));
+    }
+
+    if ($this->current_planet['planet_deuterium'] > $necessaire) {
+
+    $this->_db->query(
+    "UPDATE " . PLANETS . " SET
+    `planet_metal` = `planet_metal` + " . round($_POST['metal']) . ",
+    `planet_crystal` = `planet_crystal` + " . round($_POST['cristal']) . ",
+    `planet_deuterium` = `planet_deuterium` - " . round($necessaire) . "
+    WHERE `planet_id` = '" . $this->current_planet['planet_id'] . "';"
+    );
+
+    $this->current_planet['planet_metal'] += isset($_POST['metal']) ? $_POST['metal'] : 0;
+    $this->current_planet['planet_crystal'] += isset($_POST['cristal']) ? $_POST['cristal'] : 0;
+    $this->current_planet['planet_deuterium'] -= $necessaire;
+
+    $this->discountDarkMatter(); // REDUCE DARKMATTER
+    } else {
+
+    FunctionsLib::message($this->langs['tr_not_enought_deuterium'], "game.php?page=traderOverview", 1);
+    }
+    }
+    break;
+    }
+
+    FunctionsLib::message($this->langs['tr_exchange_done'], "game.php?page=traderOverview", 1);
+    } else {
+
+    $template = parent::$page->getTemplate('trader/trader_main');
+
+    if (isset($_POST['action'])) {
+
+    $parse['mod_ma_res'] = '1';
+
+    switch ((isset($_POST['choix']) ? $_POST['choix'] : null)) {
+
+    case 'metal':
+    $template = parent::$page->getTemplate('trader/trader_metal');
+
+    $parse['mod_ma_res_a'] = '2';
+    $parse['mod_ma_res_b'] = '4';
+
+    break;
+
+    case 'cristal':
+    $template = parent::$page->getTemplate('trader/trader_cristal');
+
+    $parse['mod_ma_res_a'] = '0.5';
+    $parse['mod_ma_res_b'] = '2';
+
+    break;
+
+    case 'deut':
+    $template = parent::$page->getTemplate('trader/trader_deuterium');
+
+    $parse['mod_ma_res_a'] = '0.25';
+    $parse['mod_ma_res_b'] = '0.5';
+
+    break;
+    }
+    }
+    }
+
+    parent::$page->display(parent::$page->parseTemplate($template, $parse));*/
+    //}
+
+    /**
+     * Get the kind of trader that we are requesting
+     *
+     * @return array
+     */
+    private function getMode(): array
+    {
+        $mode = filter_input(INPUT_GET, 'mode', FILTER_SANITIZE_STRING);
+        $template = '';
+
+        if (in_array($mode, ['traderResources', 'traderAuctioneer', 'traderScrap', 'traderImportExport'])) {
+            $view_to_get = strtolower(strtr($mode, ['trader' => '']));
+            $template = $this->getTemplate()->set(
+                'game/trader_' . $view_to_get . '_view',
+                array_merge(
+                    $this->langs->language,
+                    [
+                        'list_of_resources' => $this->{'build' . ucfirst($view_to_get) . 'Section'}(),
+                    ]
+                )
+            );
+        }
+
+        return [
+            'current_mode' => $template,
+        ];
     }
 
     /**
-     * buildPage
+     * Build resources section
      *
-     * @return void
+     * @return array
      */
-    private function buildPage()
+    private function buildResourcesSection(): array
     {
-        $parse = $this->langs;
+        $list_of_resources = [];
 
-        if ($this->current_user['premium_dark_matter'] < $this->tr_dark_matter) {
-
-            FunctionsLib::message(
-                str_replace(
-                    '%s', $this->tr_dark_matter, $this->langs['tr_darkmatter_needed']
-                ), '', '', true
+        foreach (['metal' => 4500, 'crystal' => 9000, 'deuterium' => 13500] as $resource => $price) {
+            $list_of_resources[] = array_merge(
+                $this->langs->language,
+                [
+                    'dpath' => DPATH,
+                    'resource' => $resource,
+                    'resource_name' => $this->langs->line($resource),
+                    'current_resource' => Format::shortlyNumber($this->planet['planet_' . $resource]),
+                    'max_resource' => Format::shortlyNumber($this->planet['planet_' . $resource . '_max']),
+                    'dark_matter_price_10' => Format::prettyNumber($price),
+                    'dark_matter_price_50' => Format::prettyNumber($price * 5),
+                    'dark_matter_price_100' => Format::prettyNumber($price * 10),
+                ]
             );
-
-            die();
         }
 
-        if (isset($_POST['ress']) && $_POST['ress'] != '') {
+        return $list_of_resources;
+    }
 
-            switch ($_POST['ress']) {
+    private function buildAuctioneerSection(): array
+    {
+        return [];
+    }
 
-                case 'metal':
-                    if ($_POST['cristal'] < 0 or $_POST['deut'] < 0) {
-                        FunctionsLib::message($this->langs['tr_only_positive_numbers'], "game.php?page=trader", 1);
-                    } else {
-                        $necessaire = (($_POST['cristal'] * 2) + ($_POST['deut'] * 4));
-                        $amout = array(
-                            'metal' => 0,
-                            'crystal' => $_POST['cristal'],
-                            'deuterium' => $_POST['deut'],
-                        );
+    private function buildScrapSection(): array
+    {
+        return [];
+    }
 
-                        $storage = $this->checkStorage($amout);
-
-                        if (is_string($storage)) {
-
-                            die(FunctionsLib::message($storage, 'game.php?page=trader', '2'));
-                        }
-
-                        if ($this->current_planet['planet_metal'] > $necessaire) {
-
-                            $this->_db->query(
-                                "UPDATE " . PLANETS . " SET
-                                `planet_metal` = `planet_metal` - " . round($necessaire) . ",
-                                `planet_crystal` = `planet_crystal` + " . round($_POST['cristal']) . ",
-                                `planet_deuterium` = `planet_deuterium` + " . round($_POST['deut']) . "
-                                WHERE `planet_id` = '" . $this->current_planet['planet_id'] . "';"
-                            );
-
-                            $this->current_planet['planet_metal'] -= $necessaire;
-                            $this->current_planet['planet_crystal'] += isset($_POST['cristal']) ? $_POST['cristal'] : 0;
-                            $this->current_planet['planet_deuterium'] += isset($_POST['deut']) ? $_POST['deut'] : 0;
-
-                            $this->discountDarkMatter(); // REDUCE DARKMATTER
-                        } else {
-
-                            FunctionsLib::message($this->langs['tr_not_enought_metal'], "game.php?page=trader", 1);
-                        }
-                    }
-                    break;
-
-                case 'cristal':
-                    if ($_POST['metal'] < 0 or $_POST['deut'] < 0) {
-
-                        FunctionsLib::message($this->langs['tr_only_positive_numbers'], "game.php?page=trader", 1);
-                    } else {
-
-                        $necessaire = ((abs($_POST['metal']) * 0.5) + (abs($_POST['deut']) * 2));
-                        $amout = array(
-                            'metal' => $_POST['metal'],
-                            'crystal' => 0,
-                            'deuterium' => $_POST['deut'],
-                        );
-
-                        $storage = $this->checkStorage($amout);
-
-                        if (is_string($storage)) {
-
-                            die(FunctionsLib::message($storage, 'game.php?page=trader', '2'));
-                        }
-
-                        if ($this->current_planet['planet_crystal'] > $necessaire) {
-
-                            $this->_db->query(
-                                "UPDATE " . PLANETS . " SET
-                                `planet_metal` = `planet_metal` + " . round($_POST['metal']) . ",
-                                `planet_crystal` = `planet_crystal` - " . round($necessaire) . ",
-                                `planet_deuterium` = `planet_deuterium` + " . round($_POST['deut']) . "
-                                WHERE `planet_id` = '" . $this->current_planet['planet_id'] . "';"
-                            );
-
-                            $this->current_planet['planet_metal'] += isset($_POST['metal']) ? $_POST['metal'] : 0;
-                            $this->current_planet['planet_crystal'] -= $necessaire;
-                            $this->current_planet['planet_deuterium'] += isset($_POST['deut']) ? $_POST['deut'] : 0;
-
-                            $this->discountDarkMatter(); // REDUCE DARKMATTER
-                        } else {
-
-                            FunctionsLib::message($this->langs['tr_not_enought_crystal'], "game.php?page=trader", 1);
-                        }
-                    }
-                    break;
-
-                case 'deuterium':
-                    if ($_POST['cristal'] < 0 or $_POST['metal'] < 0) {
-
-                        FunctionsLib::message($this->langs['tr_only_positive_numbers'], "game.php?page=trader", 1);
-                    } else {
-
-                        $necessaire = ((abs($_POST['metal']) * 0.25) + (abs($_POST['cristal']) * 0.5));
-                        $amout = array(
-                            'metal' => $_POST['metal'],
-                            'crystal' => $_POST['cristal'],
-                            'deuterium' => 0,
-                        );
-
-                        $storage = $this->checkStorage($amout);
-
-                        if (is_string($storage)) {
-
-                            die(FunctionsLib::message($storage, 'game.php?page=trader', '2'));
-                        }
-
-                        if ($this->current_planet['planet_deuterium'] > $necessaire) {
-
-                            $this->_db->query(
-                                "UPDATE " . PLANETS . " SET
-                                `planet_metal` = `planet_metal` + " . round($_POST['metal']) . ",
-                                `planet_crystal` = `planet_crystal` + " . round($_POST['cristal']) . ",
-                                `planet_deuterium` = `planet_deuterium` - " . round($necessaire) . "
-                                WHERE `planet_id` = '" . $this->current_planet['planet_id'] . "';"
-                            );
-
-                            $this->current_planet['planet_metal'] += isset($_POST['metal']) ? $_POST['metal'] : 0;
-                            $this->current_planet['planet_crystal'] += isset($_POST['cristal']) ? $_POST['cristal'] : 0;
-                            $this->current_planet['planet_deuterium'] -= $necessaire;
-
-                            $this->discountDarkMatter(); // REDUCE DARKMATTER
-                        } else {
-
-                            FunctionsLib::message($this->langs['tr_not_enought_deuterium'], "game.php?page=trader", 1);
-                        }
-                    }
-                    break;
-            }
-
-            FunctionsLib::message($this->langs['tr_exchange_done'], "game.php?page=trader", 1);
-        } else {
-
-            $template = parent::$page->getTemplate('trader/trader_main');
-
-            if (isset($_POST['action'])) {
-
-                $parse['mod_ma_res'] = '1';
-
-                switch ((isset($_POST['choix']) ? $_POST['choix'] : null)) {
-
-                    case 'metal':
-                        $template = parent::$page->getTemplate('trader/trader_metal');
-
-                        $parse['mod_ma_res_a'] = '2';
-                        $parse['mod_ma_res_b'] = '4';
-
-                        break;
-
-                    case 'cristal':
-                        $template = parent::$page->getTemplate('trader/trader_cristal');
-
-                        $parse['mod_ma_res_a'] = '0.5';
-                        $parse['mod_ma_res_b'] = '2';
-
-                        break;
-
-                    case 'deut':
-                        $template = parent::$page->getTemplate('trader/trader_deuterium');
-
-                        $parse['mod_ma_res_a'] = '0.25';
-                        $parse['mod_ma_res_b'] = '0.5';
-
-                        break;
-                }
-            }
-        }
-
-        parent::$page->display(parent::$page->parseTemplate($template, $parse));
+    private function buildImportexportSection(): array
+    {
+        return [];
     }
 
     /**

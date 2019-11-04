@@ -499,26 +499,6 @@ $lang['of_get_darkmatter'] = 'Get dark matter';
 $lang['of_months'] = '3 month for';
 $lang['of_week'] = '1 week for';
 $lang['of_only'] = 'only';
-//----------------------------------------------------------------------------//
-//TRADER
-$lang['tr_only_positive_numbers'] = 'You may only use positive numbers!';
-$lang['tr_not_enought_metal'] = 'You do not have enough metal.';
-$lang['tr_not_enought_crystal'] = 'You do not have enough crystal.';
-$lang['tr_not_enought_deuterium'] = 'You do not have enough deuterium.';
-$lang['tr_exchange_done'] = 'Exchange successful';
-$lang['tr_call_trader'] = 'Call a dealer';
-$lang['tr_call_trader_who_buys'] = 'Call a dealer who buy ';
-$lang['tr_call_trader_submit'] = 'Call trader';
-$lang['tr_exchange_quota'] = 'The exchange rate is 2/1/0.5';
-$lang['tr_sell_metal'] = 'Sales of metal';
-$lang['tr_sell_crystal'] = 'Sales of crystal';
-$lang['tr_sell_deuterium'] = 'Sales of deuterium';
-$lang['tr_resource'] = 'Resource';
-$lang['tr_amount'] = 'Quantity';
-$lang['tr_quota_exchange'] = 'Exchange rate';
-$lang['tr_exchange'] = 'Swap';
-$lang['tr_darkmatter_needed'] = 'You need at least <font color="#FF8900">%s of dark matter</font> too visit the dealer.';
-$lang['tr_full_storage'] = 'The %s is full';
 
 //----------------------------------------------------------------------------//
 //TECHTREE

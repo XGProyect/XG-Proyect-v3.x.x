@@ -502,27 +502,6 @@ $lang['of_week'] = '1 semana por';
 $lang['of_only'] = 'sólo';
 
 //----------------------------------------------------------------------------//
-//TRADER
-$lang['tr_only_positive_numbers'] = '¡Solo se pueden usar números positivos!';
-$lang['tr_not_enought_metal'] = 'No tienes suficiente metal.';
-$lang['tr_not_enought_crystal'] = 'No tienes suficiente cristal.';
-$lang['tr_not_enought_deuterium'] = 'No tienes suficiente deuterio.';
-$lang['tr_exchange_done'] = 'Intercambio realizado con éxito';
-$lang['tr_call_trader'] = 'Llamar a un negociante';
-$lang['tr_call_trader_who_buys'] = 'Llamar a un negociante que compra ';
-$lang['tr_call_trader_submit'] = 'Llamar al comerciante';
-$lang['tr_exchange_quota'] = 'El tipo de intercambio es de 2/1/0.5';
-$lang['tr_sell_metal'] = 'Venta de metal';
-$lang['tr_sell_crystal'] = 'Venta de cristal';
-$lang['tr_sell_deuterium'] = 'Venta de deuterio';
-$lang['tr_resource'] = 'Recurso';
-$lang['tr_amount'] = 'Cantidad';
-$lang['tr_quota_exchange'] = 'Cuota de intercambio';
-$lang['tr_exchange'] = 'Intercambiar';
-$lang['tr_darkmatter_needed'] = 'Necesitas <font color="#FF8900">%s de materia oscura</font> para visitar al Mercader.';
-$lang['tr_full_storage'] = 'El %s esta lleno';
-
-//----------------------------------------------------------------------------//
 //TECHTREE
 $lang['tt_requirements'] = 'Requisitos';
 $lang['tt_lvl'] = 'nivel ';

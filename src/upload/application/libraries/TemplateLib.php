@@ -465,7 +465,7 @@ class TemplateLib
             ['resources', $this->langs['lm_resources'], '', 'FFF', '', '1', '3'],
             ['resourceSettings', $this->langs['lm_resources_settings'], '', 'FFF', '', '1', '4'],
             ['station', $this->langs['lm_station'], '', 'FFF', '', '1', '3'],
-            ['trader', $this->langs['lm_trader'], '', 'FF8900', '', '1', '5'],
+            ['traderOverview', $this->langs['lm_trader'], '', 'FF8900', '', '1', '5'],
             ['research', $this->langs['lm_research'], '', 'FFF', '', '1', '6'],
             ['techtree', $this->langs['lm_technology'], '', 'FFF', '', '1', '10'],
             ['shipyard', $this->langs['lm_shipyard'], '', 'FFF', '', '1', '7'],
