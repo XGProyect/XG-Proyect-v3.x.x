@@ -439,6 +439,10 @@ class Fleet3 extends Controller
         // sort by value from lower to higher
         sort($missions_set);
 
+        if (count($missions_set) <= 0) {
+            FunctionsLib::redirect(self::REDIRECT_TARGET);
+        }
+
         $this->_allowed_missions = $missions_set;
 
         return $missions_set;
