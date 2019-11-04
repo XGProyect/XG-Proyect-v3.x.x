@@ -16,13 +16,12 @@ $lang['ins_license'] = 'License';
 $lang['ins_install'] = 'Install';
 $lang['ins_language_select'] = 'Select language';
 
-
 // OVERVIEW PAGE
 $lang['ins_install_title'] = 'Installation';
 $lang['ins_title'] = 'Introduction';
 $lang['ins_welcome'] = 'Welcome to XG Proyect!';
 $lang['ins_welcome_first_line'] = 'XG Proyect is the best OGame clones around. XG Proyect 3 is the latest and most stable package never before developed. As any other version, XG Proyect receives support from the team known as Xtreme-gameZ, always making sure to get the best quality care and the stability of the release. XG Proyect 3 day by day looks forward and seeks growth, stability, flexibility, dynamism, quality and user confidence. We\'re always expecting that XG Proyect is better than your expectations.';
-$lang['ins_welcome_second_line'] = 'The installation system will guide you through the installation or upgrading from a previous version to the latest. For doubts, problems o queries, do not hesitate to see our <a href="http://www.xgproyect.org/"><em>support and development community</em></a>.';
+$lang['ins_welcome_second_line'] = 'The installation system will guide you through the installation or upgrading from a previous version to the latest. For doubts, problems o queries, do not hesitate to see our <a href="https://www.xgproyect.org/"><em>support and development community</em></a>.';
 $lang['ins_welcome_third_line'] = 'XG Proyect is an OpenSource project, to see the license specifications click over license in the main menu. To start the installation click on the install button, to update or migrate log into the ADMIN CP.';
 $lang['ins_install_license'] = 'License';
 

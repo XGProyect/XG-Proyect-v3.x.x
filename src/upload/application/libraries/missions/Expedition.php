@@ -2,7 +2,7 @@
 /**
  * Expedition Library
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Library
  * @package  Application
@@ -64,9 +64,7 @@ class Expedition extends Missions
     public function expeditionMission($fleet_row)
     {
         if ($fleet_row['fleet_mess'] == 0) {
-
             if ($fleet_row['fleet_end_stay'] < time()) {
-
                 $ships_points = $this->setShipsPoints();
                 $ships = FleetsLib::getFleetShipsArray($fleet_row['fleet_array']);
                 $fleet_capacity = 0;
@@ -74,12 +72,11 @@ class Expedition extends Missions
                 $current_fleet = [];
 
                 foreach ($ships as $id => $count) {
-
                     $current_fleet[$id] = $count;
                     $fleet_capacity += $this->pricelist[$id]['capacity'] * $count;
-                    $fleet_points += ( $count * $ships_points[$id] );
+                    $fleet_points += ($count * $ships_points[$id]);
                 }
-                
+
                 // GET A NUMBER BETWEEN 0 AND 10 RANDOMLY
                 $this->hazard = mt_rand(0, 10);
 
@@ -88,43 +85,33 @@ class Expedition extends Missions
                     // BLACKHOLE
                     case (($this->hazard < 3)):
                         $this->hazardBlackhole($fleet_row, $current_fleet);
-
                         break;
-
                     // NOTHING
                     case (($this->hazard == 3)):
                         $this->hazardNothing($fleet_row);
-
                         break;
-
                     // RESOURCES
                     case ((($this->hazard >= 4) && ($this->hazard < 7))):
                         $this->hazardResources($fleet_row, $fleet_capacity);
-
                         break;
-
                     // NOTHING
                     case (($this->hazard == 7)):
                         $this->hazardNothing($fleet_row);
-
                         break;
-
-
                     // SHIPS
                     case ((($this->hazard >= 8) && ($this->hazard < 11))):
                         $this->hazardShips($fleet_row, $fleet_points, $current_fleet);
-
                         break;
                 }
             }
         }
 
         if ($fleet_row['fleet_end_time'] < time()) {
-
             if (!$this->all_destroyed) {
-
                 $this->expeditionMessage(
-                    $fleet_row['fleet_owner'], $this->langs['sys_expe_back_home'], $fleet_row['fleet_end_time']
+                    $fleet_row['fleet_owner'],
+                    $this->langs['sys_expe_back_home'],
+                    $fleet_row['fleet_end_time']
                 );
 
                 parent::restoreFleet($fleet_row, true);
@@ -148,9 +135,11 @@ class Expedition extends Missions
 
         if ($lost_amount == 1) {
             $this->all_destroyed = true;
-            
+
             $this->expeditionMessage(
-                $fleet_row['fleet_owner'], $this->langs['sys_expe_blackholl_2'], $fleet_row['fleet_end_stay']
+                $fleet_row['fleet_owner'],
+                $this->langs['sys_expe_blackholl_2'],
+                $fleet_row['fleet_end_stay']
             );
 
             parent::removeFleet($fleet_row['fleet_id']);
@@ -168,17 +157,20 @@ class Expedition extends Missions
 
             if (!$this->all_destroyed) {
                 $this->expeditionMessage(
-                    $fleet_row['fleet_owner'], $this->langs['sys_expe_blackholl_1'], $fleet_row['fleet_end_stay']
+                    $fleet_row['fleet_owner'],
+                    $this->langs['sys_expe_blackholl_1'],
+                    $fleet_row['fleet_end_stay']
                 );
 
                 $this->Missions_Model->updateFleetArrayById([
                     'ships' => FleetsLib::setFleetShipsArray($new_ships),
-                    'fleet_id' => $fleet_row['fleet_id']
+                    'fleet_id' => $fleet_row['fleet_id'],
                 ]);
             } else {
-                
                 $this->expeditionMessage(
-                    $fleet_row['fleet_owner'], $this->langs['sys_expe_blackholl_2'], $fleet_row['fleet_end_stay']
+                    $fleet_row['fleet_owner'],
+                    $this->langs['sys_expe_blackholl_2'],
+                    $fleet_row['fleet_end_stay']
                 );
 
                 parent::removeFleet($fleet_row['fleet_id']);
@@ -196,7 +188,9 @@ class Expedition extends Missions
     private function hazardNothing($fleet_row)
     {
         $this->expeditionMessage(
-            $fleet_row['fleet_owner'], $this->langs['sys_expe_nothing_' . mt_rand(1, 2)], $fleet_row['fleet_end_stay']
+            $fleet_row['fleet_owner'],
+            $this->langs['sys_expe_nothing_' . mt_rand(1, 2)],
+            $fleet_row['fleet_end_stay']
         );
 
         parent::returnFleet($fleet_row['fleet_id']);
@@ -222,7 +216,7 @@ class Expedition extends Missions
             $found_metal = intval($found_resources / 2);
             $found_crystal = intval($found_resources / 4);
             $found_deuterium = intval($found_resources / 6);
-            $found_darkmatter = ( $fleet_capacity > 10000 ) ? intval(3 * log($fleet_capacity / 10000) * 100) : 0;
+            $found_darkmatter = ($fleet_capacity > 10000) ? intval(3 * log($fleet_capacity / 10000) * 100) : 0;
             $found_darkmatter = mt_rand($found_darkmatter / 2, $found_darkmatter);
 
             $this->Missions_Model->updateFleetResourcesById([
@@ -230,13 +224,21 @@ class Expedition extends Missions
                     'metal' => $found_metal,
                     'crystal' => $found_crystal,
                     'deuterium' => $found_deuterium,
-                    'darkmatter' => $found_darkmatter
+                    'darkmatter' => $found_darkmatter,
                 ],
-                'fleet_id' => $fleet_row['fleet_id']
+                'fleet_id' => $fleet_row['fleet_id'],
             ]);
 
             $message = sprintf(
-                $this->langs['sys_expe_found_goods'], FormatLib::prettyNumber($found_metal), $this->langs['Metal'], FormatLib::prettyNumber($found_crystal), $this->langs['Crystal'], FormatLib::prettyNumber($found_deuterium), $this->langs['Deuterium'], FormatLib::prettyNumber($found_darkmatter), $this->langs['Darkmatter']
+                $this->langs['sys_expe_found_goods'],
+                FormatLib::prettyNumber($found_metal),
+                $this->langs['Metal'],
+                FormatLib::prettyNumber($found_crystal),
+                $this->langs['Crystal'],
+                FormatLib::prettyNumber($found_deuterium),
+                $this->langs['Deuterium'],
+                FormatLib::prettyNumber($found_darkmatter),
+                $this->langs['Darkmatter']
             );
 
             $this->expeditionMessage($fleet_row['fleet_owner'], $message, $fleet_row['fleet_end_stay']);
@@ -286,7 +288,7 @@ class Expedition extends Missions
 
         $this->Missions_Model->updateFleetArrayById([
             'ships' => FleetsLib::setFleetShipsArray($new_ships),
-            'fleet_id' => $fleet_row['fleet_id']
+            'fleet_id' => $fleet_row['fleet_id'],
         ]);
 
         $message = $this->langs['sys_expe_found_ships'] . $found_ship_message;
@@ -304,7 +306,7 @@ class Expedition extends Missions
         return [
             202 => 1.0, 203 => 1.5, 204 => 0.5, 205 => 1.5, 206 => 2.0,
             207 => 2.5, 208 => 0.5, 209 => 1.0, 210 => 0.01, 211 => 3.0,
-            212 => 0.0, 213 => 3.5, 214 => 5.0, 215 => 3.2
+            212 => 0.0, 213 => 3.5, 214 => 5.0, 215 => 3.2,
         ];
     }
 
@@ -318,7 +320,7 @@ class Expedition extends Missions
         return [
             202 => 0.1, 203 => 0.1, 204 => 0.1, 205 => 0.5, 206 => 0.25,
             207 => 0.125, 208 => 0.5, 209 => 0.1, 210 => 0.1, 211 => 0.0625,
-            212 => 0.0, 213 => 0.0625, 214 => 0.03125, 215 => 0.0625
+            212 => 0.0, 213 => 0.0625, 214 => 0.03125, 215 => 0.0625,
         ];
     }
 
@@ -334,7 +336,13 @@ class Expedition extends Missions
     private function expeditionMessage($owner, $message, $time)
     {
         FunctionsLib::sendMessage(
-            $owner, '', $time, 5, $this->langs['sys_mess_qg'], $this->langs['sys_expe_report'], $message
+            $owner,
+            '',
+            $time,
+            5,
+            $this->langs['sys_mess_qg'],
+            $this->langs['sys_expe_report'],
+            $message
         );
     }
 }

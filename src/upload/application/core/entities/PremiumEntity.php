@@ -2,7 +2,7 @@
 /**
  * Premium entity
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Core
  * @package  Application
@@ -36,9 +36,9 @@ class PremiumEntity
 
     /**
      * Init with the premium data
-     * 
+     *
      * @param array $premium Premium
-     * 
+     *
      * @return void
      */
     public function __construct($premium)
@@ -48,22 +48,22 @@ class PremiumEntity
 
     /**
      * Set the current premium
-     * 
+     *
      * @param array $premium Premium
-     * 
+     *
      * @throws Exception
-     * 
+     *
      * @return void
      */
     private function setPremium($premium)
     {
         try {
-            
+
             if (!is_array($premium)) {
-                
+
                 return null;
             }
-            
+
             $this->_premium = $premium;
         } catch (Exception $e) {
 
@@ -73,67 +73,67 @@ class PremiumEntity
 
     /**
      * Return the premium user id
-     * 
+     *
      * @return string
      */
     public function getPremiumUserId()
     {
         return $this->_premium['premium_user_id'];
     }
-    
+
     /**
      * Return the premium dark matter
-     * 
+     *
      * @return string
      */
     public function getPremiumDarkMatter()
     {
         return $this->_premium['premium_dark_matter'];
     }
-    
+
     /**
      * Return the premium officier commander
-     * 
+     *
      * @return string
      */
     public function getPremiumOfficierCommander()
     {
         return $this->_premium['premium_officier_commander'];
     }
-    
+
     /**
      * Return the premium officier admiral
-     * 
+     *
      * @return string
      */
     public function getPremiumOfficierAdmiral()
     {
         return $this->_premium['premium_officier_admiral'];
     }
-    
+
     /**
      * Return the premium officier engineer
-     * 
+     *
      * @return string
      */
     public function getPremiumOfficierEngineer()
     {
         return $this->_premium['premium_officier_engineer'];
     }
-    
+
     /**
      * Return the premium officier geologist
-     * 
+     *
      * @return string
      */
     public function getPremiumOfficierGeologist()
     {
         return $this->_premium['premium_officier_geologist'];
     }
-    
+
     /**
      * Return the premium officier technocrat
-     * 
+     *
      * @return string
      */
     public function getPremiumOfficierTechnocrat()

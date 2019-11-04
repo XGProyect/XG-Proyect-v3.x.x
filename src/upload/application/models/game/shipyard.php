@@ -2,7 +2,7 @@
 /**
  * Shipyard Model
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Model
  * @package  Application
@@ -30,7 +30,7 @@ class Shipyard
 
     /**
      * Constructor
-     * 
+     *
      * @return void
      */
     public function __construct($db)
@@ -41,7 +41,7 @@ class Shipyard
 
     /**
      * __destruct
-     * 
+     *
      * @return void
      */
     public function __destruct()
@@ -51,9 +51,9 @@ class Shipyard
 
     /**
      * Update the planets table, set the items to build and reduce the resources
-     * 
+     *
      * @param array $planet Current planet data
-     * 
+     *
      * @return void
      */
     public function insertItemsToBuild($resources, $shipyard_queue, $planet_id)

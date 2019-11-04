@@ -2,7 +2,7 @@
 /**
  * Ships enumerator
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Library
  * @package  Application
@@ -25,11 +25,10 @@ namespace application\core\enumerators;
  */
 abstract class ShipsEnumerator
 {
-
     const ship_small_cargo_ship = 202;
     const ship_big_cargo_ship = 203;
     const ship_light_fighter = 204;
-    const ship_heavy_fighter= 205;
+    const ship_heavy_fighter = 205;
     const ship_cruiser = 206;
     const ship_battleship = 207;
     const ship_colony_ship = 208;
@@ -40,7 +39,6 @@ abstract class ShipsEnumerator
     const ship_destroyer = 213;
     const ship_deathstar = 214;
     const ship_battlecruiser = 215;
-
 }
 
 /* end of ShipsEnumerator.php */

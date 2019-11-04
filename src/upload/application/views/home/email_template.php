@@ -1,6 +1,6 @@
 <table>
     <tr>
-        <td><img src="http://www.xgproyect.org/images/misc/xg-logo.png" /></td>
+        <td><img src="https://xgproyect.org/wp-content/uploads/2019/10/xg-logo.png" /></td>
     </tr>
     <tr>
         <td>{re_mail_text_part1}</td>

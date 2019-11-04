@@ -19,10 +19,6 @@
             <td><input type="text" name="email" value="{user_email}"></td>
         </tr>
         <tr>
-            <td>{us_user_information_pemail}</td>
-            <td><input type="text" name="user_email_permanent" value="{user_email_permanent}"></td>
-        </tr>
-        <tr>
             <td>{us_user_information_level}</td>
             <td>
                 <select name="authlevel">

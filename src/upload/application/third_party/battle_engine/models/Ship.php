@@ -1,4 +1,5 @@
 <?php
+
 /**
  *  OPBE
  *  Copyright (C) 2013  Jstar
@@ -27,6 +28,7 @@
  */
 class Ship extends ShipType
 {
+
     public function getRepairProb()
     {
         return SHIP_REPAIR_PROB;

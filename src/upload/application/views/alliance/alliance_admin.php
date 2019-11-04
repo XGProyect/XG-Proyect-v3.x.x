@@ -67,8 +67,8 @@
                 <th>{al_manage_requests}</th>
                 <th>
                     <select name="request_notallow">
-                        <option value="1" {alliance_request_notallow_0}>{al_requests_not_allowed}</option>
-                        <option value="0" {alliance_request_notallow_1}>{al_requests_allowed}</option>
+                        <option value="0" {alliance_request_notallow_0}>{al_requests_not_allowed}</option>
+                        <option value="1" {alliance_request_notallow_1}>{al_requests_allowed}</option>
                     </select>
                 </th>
             </tr>

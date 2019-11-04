@@ -1,5 +1,37 @@
 <?php
 $lang = [
+    // buildings
+    'building_metal_mine' => "Metal Mine",
+    'building_crystal_mine' => "Crystal Mine",
+    'building_deuterium_sintetizer' => "Deuterium Synthesizer",
+    'building_solar_plant' => "Solar Plant",
+    'building_fusion_reactor' => "Fusion Reactor",
+    'building_robot_factory' => "Robotics Factory",
+    'building_nano_factory' => "Nanite Factory",
+    'building_hangar' => "Shipyard",
+    'building_metal_store' => "Metal Storage",
+    'building_crystal_store' => "Crystal Storage",
+    'building_deuterium_tank' => "Deuterium Tank",
+    'building_laboratory' => "Research Lab",
+    'building_terraformer' => "Terraformer",
+    'building_ally_deposit' => "Alliance Depot",
+    'building_mondbasis' => "Lunar Base",
+    'building_phalanx' => "Sensor Phalanx",
+    'building_jump_gate' => "Jump Gate",
+    'building_missile_silo' => "Missile Silo",
+
+    // defenses
+    'defense_rocket_launcher' => 'Rocket Launcher',
+    'defense_light_laser' => 'Light Laser',
+    'defense_heavy_laser' => 'Heavy Laser',
+    'defense_gauss_cannon' => 'Gauss Cannon',
+    'defense_ion_cannon' => 'Ion Cannon',
+    'defense_plasma_turret' => 'Plasma Turret',
+    'defense_small_shield_dome' => 'Small Shield Dome',
+    'defense_large_shield_dome' => 'Large Shield Dome',
+    'defense_anti-ballistic_missile' => 'Anti-Ballistic Missiles',
+    'defense_interplanetary_missile' => 'Interplanetary Missiles',
+
     // ships
     'ship_small_cargo_ship' => 'Small Cargo',
     'ship_big_cargo_ship' => 'Large Cargo',
@@ -15,30 +47,58 @@ $lang = [
     'ship_destroyer' => 'Destroyer',
     'ship_deathstar' => 'Deathstar',
     'ship_battlecruiser' => 'Battlecruiser',
-    
+
+    // research
+    "research_espionage_technology" => 'Espionage Technology',
+    "research_computer_technology" => 'Computer Technology',
+    "research_weapons_technology" => 'Weapons Technology',
+    "research_shielding_technology" => 'Shielding Technology',
+    "research_armour_technology" => 'Armour Technology',
+    "research_energy_technology" => 'Energy Technology',
+    "research_hyperspace_technology" => 'Hyperspace Technology',
+    "research_combustion_drive" => 'Combustion Drive',
+    "research_impulse_drive" => 'Impulse Drive',
+    "research_hyperspace_drive" => 'Hyperspace Drive',
+    "research_laser_technology" => 'Laser Technology',
+    "research_ionic_technology" => 'Ion Technology',
+    "research_plasma_technology" => 'Plasma Technology',
+    "research_intergalactic_research_network" => 'Intergalactic Research Network',
+    "research_astrophysics" => 'Astrophysics',
+    "research_graviton_technology" => 'Graviton Technology',
+
     // types of planets or galaxy objects
     'planet_type' => [
         1 => 'Planet',
         2 => 'Debris',
-        3 => 'Moon'
+        3 => 'Moon',
     ],
-    
+
     // types of planets or galaxy objects
     'planet_type_shortcuts' => [
         1 => '(P)',
         2 => '(D)',
-        3 => '(M)'
-    ]
+        3 => '(M)',
+    ],
+
+    // type of structures
+    'construction' => 'Construction',
+    'research' => 'Research',
+    'ships' => 'Ships',
+    'missiles' => 'Rockets',
+    'defenses' => 'Defence',
+
+    // changelog
+    'ch_version' => 'Version',
+    'ch_description' => 'Description',
 ];
 
 /**
- * 
- * 
+ *
+ *
  * OLD LINES
- * 
- * 
+ *
+ *
  */
-
 
 //SERVER GENERALS
 $lang['Metal'] = 'Metal';
@@ -56,10 +116,10 @@ $lang['minutes'] = '15 min';
 $lang['offline'] = 'Offline';
 
 $lang['type_mission'][1] = 'Attack';
-$lang['type_mission'][2] = 'Group Attack';
+$lang['type_mission'][2] = 'ACS Attack';
 $lang['type_mission'][3] = 'Transport';
 $lang['type_mission'][4] = 'Deploy';
-$lang['type_mission'][5] = 'Hold Position';
+$lang['type_mission'][5] = 'ACS Defense';
 $lang['type_mission'][6] = 'Espionage';
 $lang['type_mission'][7] = 'Colonize';
 $lang['type_mission'][8] = 'Recycle';
@@ -111,7 +171,7 @@ $lang['lm_overview'] = 'Overview';
 $lang['lm_galaxy'] = 'Galaxy';
 $lang['lm_empire'] = 'Empire';
 $lang['lm_fleet'] = 'Fleet';
-$lang['lm_movement'] = 'Fleet movements';
+$lang['lm_movement'] = 'Fleet movement';
 $lang['lm_resources'] = 'Resources';
 $lang['lm_resources_settings'] = 'Resource settings';
 $lang['lm_station'] = 'Facilities';
@@ -125,14 +185,13 @@ $lang['lm_messages'] = 'Messages';
 $lang['lm_alliance'] = 'Alliance';
 $lang['lm_buddylist'] = 'Buddies';
 $lang['lm_notes'] = 'Notes';
-$lang['lm_statistics'] = 'Statistics';
+$lang['lm_statistics'] = 'Highscore';
 $lang['lm_search'] = 'Search';
 $lang['lm_options'] = 'Options';
-$lang['lm_banned'] = 'Banned';
-$lang['lm_forums'] = 'Forum';
-$lang['lm_logout'] = 'Logout';
+$lang['lm_forums'] = 'Board';
+$lang['lm_logout'] = 'Log out';
 $lang['lm_administration'] = 'Administration';
-$lang['lm_module_not_accesible'] = 'The requested page it\'s not available right now';
+$lang['lm_module_not_accesible'] = 'Page could not be found.';
 
 //----------------------------------------------------------------------------//
 //OVERVIEW
@@ -256,16 +315,16 @@ $lang['px_scan_position'] = 'Scan position';
 $lang['px_fleet_movement'] = 'Current Fleet Movement';
 
 //----------------------------------------------------------------------------//
-//IMPERIUM
-$lang['iv_imperium_title'] = 'Empire vision';
+//EMPIRE
+$lang['iv_imperium_title'] = 'Empire View';
 $lang['iv_planet'] = 'Planet';
 $lang['iv_name'] = 'Name';
 $lang['iv_coords'] = 'Coords';
 $lang['iv_fields'] = 'Fields';
 $lang['iv_resources'] = 'Resources';
-$lang['iv_buildings'] = 'Buildings';
-$lang['iv_technology'] = 'Technologies';
-$lang['iv_ships'] = 'Ships';
+$lang['iv_buildings'] = 'Facilities';
+$lang['iv_technology'] = 'Research';
+$lang['iv_ships'] = 'Fleet';
 $lang['iv_defenses'] = 'Defenses';
 
 //----------------------------------------------------------------------------//
@@ -405,7 +464,6 @@ $lang['bd_ready'] = 'finished';
 $lang['bd_finished'] = 'finished';
 $lang['bd_from'] = 'from<br />';
 
-
 //----------------------------------------------------------------------------//
 //RESOURCES
 $lang['rs_amount'] = 'quantity';
@@ -431,9 +489,9 @@ $lang['of_geologist'] = 'Geologist';
 $lang['of_technocrat'] = 'Technocrat';
 $lang['of_get_know'] = 'Get know!';
 $lang['of_add_admiral'] = '+2 max. fleet slots';
-$lang['of_add_engineer'] = 'Minimizes losses in half defenses,&lt;br&gt;+10% energy production';
+$lang['of_add_engineer'] = 'Minimizes losses in half defenses,<br/>+10% energy production';
 $lang['of_add_geologist'] = '+10% mine production';
-$lang['of_add_technocrat'] = '+2 Espionage level,&lt;br&gt;25% Less time for research';
+$lang['of_add_technocrat'] = '+2 Espionage level,<br/>25% Less time for research';
 $lang['of_darkmatter_description'] = 'Dark Matter is a substance for which storage has only been possible for a few standard years and still requires a lot of effort. It can be processed to produce unimaginable quantities of energy. The methods used to gain Dark Matter are complex and full of risks, making it very valuable.
 Only Dark Matter that has been bought and is still available protects an account from deletion!';
 $lang['of_darkmatter_description_short'] = 'Commander and officers can be hired with this rare substance.';
@@ -602,7 +660,7 @@ $lang['res']['descriptions'] = array(
     602 => 'The Fleet Admiral is an experienced combat war veteran and skilled strategist. Even in the toughest of battles, he is able to create an overview of the situation and maintain contact to his subordinate admirals. The Fleet Admiral is also an accomplished computer programmer who, in an emergency situation, can gain two additional slots to control his battle fleets. He also provides an additional expedition slot, and allows orders to be passed on to the fleet detailing which resources should be prioritised when looting after a successful attack.',
     603 => 'The Engineer is a specialist on energy management and defence capabilities. In times of peace, he increases the energy of the colonies, insuring an equal distribution of power across all the grids. In case of an enemy attack, he immediately routs all the power to all defence mechanisms, avoiding an eventual overload, which results in lower defence losses during a battle.',
     604 => 'The Geologist is a expert in astro-mineralogy and crystalography. He assists his teams in metallurgy and chemistry as he also takes care of the interplanetary communications optimizing the use and refining of the raw material along the empire. Utilizing state of the art equipment for surveying, the Geologist can locate optimal areas for mining, increasing mining production by 10%.',
-    605 => 'The guild of The Technocrats is composed of genius scientists, and you will find them always over the realm where all human logic would be defied. For thousands of years, no normal humans have ever cracked the code of a Technocrat. The Technocrat inspires the researchers of the empire with his presence.'
+    605 => 'The guild of The Technocrats is composed of genius scientists, and you will find them always over the realm where all human logic would be defied. For thousands of years, no normal humans have ever cracked the code of a Technocrat. The Technocrat inspires the researchers of the empire with his presence.',
 );
 
 //----------------------------------------------------------------------------//
@@ -778,9 +836,9 @@ $lang['info'][503]['description'] = "Interplanetary Missiles (IPM) are your offe
 // -------------------------- OFFICIERS ----------------------------------------------------------------------------------------------------//
 $lang['info'][601]['description'] = 'Building queue, Empire view, Improved galaxy view, Message filter, Shortcuts, Advertisement free';
 $lang['info'][602]['description'] = '+2 max. fleet slots';
-$lang['info'][603]['description'] = 'Minimizes losses in half defenses,&lt;br&gt;+10% energy production';
+$lang['info'][603]['description'] = 'Minimizes losses in half defenses,<br/>+10% energy production';
 $lang['info'][604]['description'] = '+10% mine production';
-$lang['info'][605]['description'] = '+2 Espionage level,&lt;br&gt;25% Less time for research';
+$lang['info'][605]['description'] = '+2 Espionage level,<br/>25% Less time for research';
 //----------------------------------------------------------------------------//
 //MESSAGES
 $lang['mg_title'] = 'Messages';
@@ -983,28 +1041,6 @@ $lang['bu_to_accept_title'] = 'New Friend Request';
 $lang['bu_to_accept_text'] = 'Player %u has sent you a buddy request.';
 
 //----------------------------------------------------------------------------//
-//NOTES
-$lang['nt_important'] = 'Important';
-$lang['nt_normal'] = 'Normal';
-$lang['nt_unimportant'] = 'Unimportant';
-$lang['nt_create_note'] = 'Create note';
-$lang['nt_edit_note'] = 'Edit note';
-$lang['nt_you_dont_have_notes'] = 'no notes recorded';
-$lang['nt_notes'] = 'Notes';
-$lang['nt_create_new_note'] = 'Create a new note';
-$lang['nt_date_note'] = 'Date';
-$lang['nt_subject_note'] = 'Subject';
-$lang['nt_size_note'] = 'Size';
-$lang['nt_dlte_note'] = 'Delete';
-$lang['nt_priority'] = 'Priority';
-$lang['nt_note'] = 'Notice';
-$lang['nt_characters'] = 'characters';
-$lang['nt_back'] = 'Back';
-$lang['nt_reset'] = 'Reset';
-$lang['nt_save'] = 'Save';
-$lang['nt_no_text'] = 'No text';
-
-//----------------------------------------------------------------------------//
 //STATISTICS
 $lang['st_player'] = 'Player';
 $lang['st_alliance'] = 'Alliance';
@@ -1025,71 +1061,8 @@ $lang['st_actions'] = 'Actions';
 $lang['st_ally_request'] = 'Send request to this alliance';
 
 //----------------------------------------------------------------------------//
-//SEARCH
-$lang['sh_tag'] = 'Tag';
-$lang['sh_name'] = 'Name';
-$lang['sh_members'] = 'Member';
-$lang['sh_points'] = 'Points';
-$lang['sh_searcg_in_the_universe'] = 'Search Universe';
-$lang['sh_player_name'] = 'Player Name';
-$lang['sh_planet_name'] = 'Planet Name';
-$lang['sh_alliance_tag'] = 'Alliance Tag';
-$lang['sh_alliance_name'] = 'Alliance Name';
-$lang['sh_search'] = 'search';
-$lang['sh_buddy_request'] = 'Buddy request';
-$lang['sh_alliance'] = 'Alliance';
-$lang['sh_planet'] = 'Planet';
-$lang['sh_coords'] = 'Position';
-$lang['sh_position'] = 'Rank';
-
-//----------------------------------------------------------------------------//
-//OPTIONS
-$lang['op_cant_activate_vacation_mode'] = 'If you\'re building or moving fleets will not be able to enter on vacation mode.';
-$lang['op_password_changed'] = 'Password has been changed<br /><a href="index.php" target="_top">Back</a>';
-$lang['op_username_changed'] = 'Username changed<br /><a href="index.php" target="_top">Back</a>';
-$lang['op_options_changed'] = 'Changes saved.<br /><a href="game.php?page=options">Back</a>';
-$lang['op_vacation_mode_title'] = 'Vacation mode';
-$lang['op_vacation_mode_active_message'] = 'Vacation mode has been turned on. Vacation until at least:';
-$lang['op_end_vacation_mode'] = 'Finish vacation mode';
-$lang['op_save_changes'] = 'save changes';
-$lang['op_user_data'] = 'User Data';
-$lang['op_username'] = 'Username';
-$lang['op_old_pass'] = 'Old password';
-$lang['op_new_pass'] = 'New password (min. 8 characters)';
-$lang['op_repeat_new_pass'] = 'New password (repeat)';
-$lang['op_email_adress'] = 'Email address';
-$lang['op_permanent_email_adress'] = 'Permanent Address';
-$lang['op_general_settings'] = 'General Options';
-$lang['op_sort_planets_by'] = 'Sort planets by:';
-$lang['op_sort_kind'] = 'Assortment sequence:';
-$lang['op_deactivate_ipcheck'] = 'Disable IP Check';
-$lang['op_galaxy_settings'] = 'Galaxy View Options';
-$lang['op_spy_probes_number'] = 'Number of espionage probes';
-$lang['op_max_fleets_messages'] = 'Maximum fleet messages';
-$lang['op_shortcut'] = 'Shortcut';
-$lang['op_show'] = 'Show';
-$lang['op_spy'] = 'Spy';
-$lang['op_write_message'] = 'Write message';
-$lang['op_add_to_buddy_list'] = 'Add to buddy list';
-$lang['op_missile_attack'] = 'Missile attack';
-$lang['op_vacation_delete_mode'] = 'Vacation mode / Delete account';
-$lang['op_activate_vacation_mode'] = 'Enable vacation mode';
-$lang['op_dlte_account'] = 'Delete account';
-$lang['op_email_adress_descrip'] = 'You can change this email address at any time. This will be entered as a permanent address after 7 days without changes.';
-$lang['op_deactivate_ipcheck_descrip'] = 'IP check means that a security logout occurs automatically when the IP changes or two people are logged into an account from different IPs. Disabling the IP check may represent a security risk!';
-$lang['op_spy_probes_number_descrip'] = 'Number of espionage probes that can be sent directly from each scan in the Galaxy menu.';
-$lang['op_activate_vacation_mode_descrip'] = 'Vacation mode will protect you during long absences. It can only be activated if nothing is being built (fleet, building, or defense), nothing is being researched, and none of your fleets are underway. Once it is activated, you are protected from new attacks. Attacks that have already started will be carried out. During vacation mode, production is set to zero and must be manually returned to 100 % after vacation mode ends. Vacation mode lasts a minimum of two days and can only be deactivated after this time.';
-$lang['op_dlte_account_descrip'] = 'If you mark this box, your account will be deleted automatically after 7 days.';
-$lang['op_sort_colonization'] = 'Colonization Date';
-$lang['op_sort_coords'] = 'Coordinates';
-$lang['op_sort_alpha'] = 'Alphabetic order';
-$lang['op_sort_asc'] = 'Ascendant';
-$lang['op_sort_desc'] = 'Decreasing';
-
-//----------------------------------------------------------------------------//
 //BANNED
 $lang['bn_no_players_banned'] = 'No banned players';
-
 $lang['bn_exists'] = 'Exists ';
 $lang['bn_players_banned'] = ' player/s banned/s';
 $lang['bn_players_banned_list'] = 'List of banned players';
@@ -1188,19 +1161,17 @@ $lang['sys_mess_destruc_report'] = "Destruction Report";
 $lang['sys_destruc_lune'] = "The probability of destroying the moon is: %d %% ";
 $lang['sys_destruc_rip'] = "The probability that the stars of death are destroyed is: %d %% ";
 $lang['sys_destruc_stop'] = "The defender has failed to stop the destruction of the moon";
-$lang['sys_destruc_mess1'] = "The shooting death stars the graviton to the orbit of the moon";
-$lang['sys_destruc_mess'] = "A fleet of the planet %s [%d:%d:%d] goes to the moon of the planet [%d:%d:%d]";
-$lang['sys_destruc_echec'] = ". The tremors began to shake off the surface of the moon, but something goes wrong, the graviton in the stars of death also causes tremors and death stars fly to pieces.";
-$lang['sys_destruc_reussi'] = ", The tremors began to shake off the surface of the moon, after a while the moon does not support more and fly to pieces, mission accomplished, the fleet returns to home planet.";
-$lang['sys_destruc_null'] = ", The stars of death did not generate the power, the mission fails and the ships returned home.";
+$lang['sys_destruc_mess1'] = "The Death Stars shoot the graviton over the moon orbit";
+$lang['sys_destruc_mess'] = "A fleet from planet %s [%d:%d:%d] goes to planet moon [%d:%d:%d]";
+$lang['sys_destruc_moon'] = ". The tremors began to shake the surface of the moon, after a few moments the moon couldn't longer resist and blows into thousand of pieces, mission accomplished, the fleet returns to the planet of origin.";
+$lang['sys_destruc_ds'] = ". The tremors began to shake the surface of the moon, but something goes wrong, the Death Stars graviton also causes tremors making the Death Stars blow into thousand of pieces.";
+$lang['sys_destruc_none'] = ". The Death Stars didn't generate enough power, the mission failed and the ships returned.";
 $lang['sys_the'] = " the ";
 $lang['sys_stay_mess_back'] = "One of your fleet return from ";
 $lang['sys_stay_mess_bend'] = " and offers ";
 
 //----------------------------------------------------------------------------//
 //class.CheckSession.php
-$lang['ccs_other_user'] = 'Cookie error! Your cookie does not match the user! You must delete your cookies. In case of problems contact the administrator';
-$lang['css_different_password'] = 'Cookie error! Session error, must connect again! You must delete your cookies. In case of problems contact the administrator.';
 $lang['css_account_banned_message'] = 'YOUR ACCOUNT HAS BEEN SUSPENDED';
 $lang['css_account_banned_expire'] = 'Expiration:';
 

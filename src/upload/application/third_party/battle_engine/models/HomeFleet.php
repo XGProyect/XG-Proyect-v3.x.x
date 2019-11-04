@@ -27,6 +27,8 @@
  * @link https://github.com/jstar88/opbe
  */
 class HomeFleet extends Fleet
-{}
+{
+    
+}
 
 ?>

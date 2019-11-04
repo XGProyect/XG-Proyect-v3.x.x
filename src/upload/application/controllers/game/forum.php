@@ -2,7 +2,7 @@
 /**
  * Forum Controller
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Controller
  * @package  Application
@@ -36,7 +36,7 @@ class Forum extends Controller
 
     /**
      * Constructor
-     * 
+     *
      * @return void
      */
     public function __construct()
@@ -55,7 +55,7 @@ class Forum extends Controller
 
     /**
      * Build the page
-     * 
+     *
      * @return void
      */
     private function buildPage()

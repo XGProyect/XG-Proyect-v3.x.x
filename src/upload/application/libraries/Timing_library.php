@@ -2,7 +2,7 @@
 /**
  * Timing Library
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Library
  * @package  Application
@@ -12,8 +12,6 @@
  * @version  3.0.0
  */
 namespace application\libraries;
-
-use application\core\XGPCore;
 
 /**
  * Timing_library Class
@@ -25,14 +23,14 @@ use application\core\XGPCore;
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-abstract class Timing_library extends XGPCore
+abstract class Timing_library
 {
 
     /**
      * Return an string with the online time formatted
-     * 
+     *
      * @param int $online_time Online Time
-     * 
+     *
      * @return string
      */
     public static function setOnlineStatus($online_time)
@@ -56,27 +54,44 @@ abstract class Timing_library extends XGPCore
     }
 
     /**
-     * Format time based on system default config
-     * 
+     * Format time based on system default extended date config
+     *
      * @param string $time Time
-     * 
+     *
      * @return string
      */
-    public static function formatDefaultTime($time)
+    public static function formatExtendedDate($time)
     {
         if (!is_numeric($time)) {
-            
+
             $time = strtotime($time);
         }
-        
+
         return date(FunctionsLib::readConfig('date_format_extended'), $time);
     }
 
     /**
-     * Format time on days format
-     * 
+     * Format time based on system default short date config
+     *
      * @param string $time Time
-     * 
+     *
+     * @return string
+     */
+    public static function formatShortDate($time)
+    {
+        if (!is_numeric($time)) {
+
+            $time = strtotime($time);
+        }
+
+        return date(FunctionsLib::readConfig('date_format'), $time);
+    }
+
+    /**
+     * Format time on days format
+     *
+     * @param string $time Time
+     *
      * @return string
      */
     public static function formatDaysTime($time)

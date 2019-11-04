@@ -2,7 +2,7 @@
 /**
  * Buddy entity
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Core
  * @package  Application
@@ -30,9 +30,9 @@ class BuddyEntity extends Entity
 
     /**
      * Constructor
-     * 
+     *
      * @param array $data Data
-     * 
+     *
      * @return void
      */
     public function __construct($data)
@@ -42,52 +42,52 @@ class BuddyEntity extends Entity
 
     /**
      * Return the buddy id
-     * 
+     *
      * @return string
      */
     public function getBuddyId()
     {
-        return $this->_data['buddy_id'];
+        return $this->data['buddy_id'];
     }
 
     /**
      * Return the buddy sender
-     * 
+     *
      * @return string
      */
     public function getBuddySender()
     {
-        return $this->_data['buddy_sender'];
+        return $this->data['buddy_sender'];
     }
 
     /**
      * Return the buddy receiver
-     * 
+     *
      * @return string
      */
     public function getBuddyReceiver()
     {
-        return $this->_data['buddy_receiver'];
+        return $this->data['buddy_receiver'];
     }
 
     /**
      * Return the buddy status
-     * 
+     *
      * @return string
      */
     public function getBuddyStatus()
     {
-        return $this->_data['buddy_status'];
+        return $this->data['buddy_status'];
     }
 
     /**
      * Return the buddy request text
-     * 
+     *
      * @return string
      */
     public function getRequestText()
     {
-        return $this->_data['buddy_request_text'];
+        return $this->data['buddy_request_text'];
     }
 }
 

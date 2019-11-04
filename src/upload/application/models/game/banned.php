@@ -1,8 +1,8 @@
 <?php
 /**
- * Alliance Model
+ * Banned Model
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Model
  * @package  Application
@@ -14,7 +14,7 @@
 namespace application\models\game;
 
 /**
- * Alliance Class
+ * Banned Class
  *
  * @category Classes
  * @package  Application
@@ -30,7 +30,7 @@ class Banned
 
     /**
      * Constructor
-     * 
+     *
      * @return void
      */
     public function __construct($db)
@@ -41,7 +41,7 @@ class Banned
 
     /**
      * __destruct
-     * 
+     *
      * @return void
      */
     public function __destruct()
@@ -51,17 +51,17 @@ class Banned
 
     /**
      * Get banned users
-     * 
+     *
      * @return array
      */
     public function getBannedUsers()
     {
         return $this->db->queryFetchAll(
-                "SELECT *
+            "SELECT *
             FROM " . BANNED . "
             ORDER BY `banned_id`;"
         );
     }
 }
 
-/* end of buildings.php */
+/* end of banned.php */

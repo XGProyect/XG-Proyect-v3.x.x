@@ -28,7 +28,6 @@
  */
 class IterableUtil implements Iterator
 {
-
     /* Iterator functions */
 
     public function rewind()
@@ -55,11 +54,10 @@ class IterableUtil implements Iterator
     {
         return $this->current() !== false;
     }
-
     /* other functions */
+
     public function getIterator()
     {
         return $this->array;
     }
-
 }

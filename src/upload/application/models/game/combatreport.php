@@ -2,7 +2,7 @@
 /**
  * Combat Report Model
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Model
  * @package  Application
@@ -30,7 +30,7 @@ class Combatreport
 
     /**
      * Constructor
-     * 
+     *
      * @return void
      */
     public function __construct($db)
@@ -41,19 +41,19 @@ class Combatreport
 
     /**
      * __destruct
-     * 
+     *
      * @return void
      */
     public function __destruct()
     {
         $this->db->closeConnection();
     }
-    
+
     /**
      * Get report by its Id
-     * 
+     *
      * @param string $report_id Report ID
-     * 
+     *
      * @return array
      */
     public function getReportById($report_id)
@@ -63,7 +63,7 @@ class Combatreport
             FROM `" . REPORTS . "`
             WHERE `report_rid` = '" . $this->db->escapeValue($report_id) . "';"
         );
-        
+
         return $result;
     }
 }

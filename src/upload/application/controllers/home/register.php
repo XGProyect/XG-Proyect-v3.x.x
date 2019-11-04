@@ -2,7 +2,7 @@
 /**
  * Register Controller
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Controller
  * @package  Application
@@ -105,7 +105,6 @@ class Register extends Controller
                     [
                         'user_name' => $this->_db->escapeValue(strip_tags($user_name)),
                         'user_email' => $this->_db->escapeValue($user_email),
-                        'user_email_permanent' => $this->_db->escapeValue($user_email),
                         'user_ip_at_reg' => $_SERVER['REMOTE_ADDR'],
                         'user_agent' => $_SERVER['HTTP_USER_AGENT'],
                         'user_current_page' => $this->_db->escapeValue($_SERVER['REQUEST_URI']),

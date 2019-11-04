@@ -2,7 +2,7 @@
 /**
  * Template
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Core
  * @package  Application
@@ -30,9 +30,9 @@ class Template
 
     /**
      *
-     * @var CI_Parser CodeIgniter Parser Class 
+     * @var CI_Parser CodeIgniter Parser Class
      */
-    private $_parserObject = null;
+    private $parserObject = null;
 
     /**
      * Constructor
@@ -44,9 +44,9 @@ class Template
 
     /**
      * Get the template that we'll need
-     * 
+     *
      * @param string $template Template Name to get
-     * 
+     *
      * @return string
      */
     public function get($template)
@@ -57,7 +57,6 @@ class Template
         if ($template) { // We got something
             return $template; // Return
         } else {
-
             // Throw Exception
             die('Template not found or empty: <strong>' . $template_name . '</strong><br />
                 Location: <strong>' . $route . '</strong>');
@@ -65,19 +64,19 @@ class Template
     }
 
     /**
-     * 
+     *
      * @param type $template
      * @param type $data
      * @param type $return
      */
-    public function set($template, $data, $return = FALSE)
+    public function set($template, $data, $return = false)
     {
-        return $this->_parserObject->parse($this->get($template), $data, $return);
+        return $this->parserObject->parse($this->get($template), $data, $return);
     }
 
     /**
      * Create a new parser object that we'll need from now on
-     * 
+     *
      * @return type
      */
     private function createNewParser()
@@ -86,20 +85,18 @@ class Template
         $parser_library_path = XGP_ROOT . SYSTEM_PATH . 'libraries' . DIRECTORY_SEPARATOR . 'Parser.php';
 
         if (!file_exists($parser_library_path)) {
-
             return;
         }
 
         // required by the library
         if (!defined('BASEPATH')) {
-
-            define('BASEPATH', true);
+            define('BASEPATH', XGP_ROOT . APP_PATH);
         }
 
         // use CI library
         require_once $parser_library_path;
 
-        $this->_parserObject = new CI_Parser();
+        $this->parserObject = new CI_Parser();
     }
 }
 

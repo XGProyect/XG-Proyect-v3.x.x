@@ -2,7 +2,7 @@
 /**
  * Missions enumerator
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Library
  * @package  Application
@@ -25,7 +25,6 @@ namespace application\core\enumerators;
  */
 abstract class MissionsEnumerator
 {
-
     const attack = 1;
     const acs = 2;
     const transport = 3;
@@ -37,7 +36,6 @@ abstract class MissionsEnumerator
     const destroy = 9;
     const missile = 10;
     const expedition = 15;
-
 }
 
 /* end of MissionsEnumerator.php */

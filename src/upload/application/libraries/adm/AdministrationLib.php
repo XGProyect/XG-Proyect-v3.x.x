@@ -2,7 +2,7 @@
 /**
  * Administration Library
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Library
  * @package  Application
@@ -40,10 +40,8 @@ class AdministrationLib extends XGPCore
     public static function haveAccess($user_level)
     {
         if ($user_level >= 1) {
-
             return true;
         } else {
-
             return false;
         }
     }
@@ -70,10 +68,8 @@ class AdministrationLib extends XGPCore
     public static function installDirExists()
     {
         if (file_exists(XGP_ROOT . PUBLIC_PATH . 'install/')) {
-
             return true;
         } else {
-
             return false;
         }
     }
@@ -151,7 +147,6 @@ class AdministrationLib extends XGPCore
         $parse['message'] = $message;
 
         if (!$dismissible) {
-
             $parse['dismissible'] = 'hide';
         }
 
@@ -217,7 +212,6 @@ class AdministrationLib extends XGPCore
     public static function adminLogin($admin_id = 0, $admin_name = '', $password = '')
     {
         if ($admin_id != 0 && !empty($admin_name) && !empty($password)) {
-
             parent::$users->userLogin($admin_id, $admin_name, $password);
 
             $_SESSION['admin_id'] = $admin_id;
@@ -226,7 +220,6 @@ class AdministrationLib extends XGPCore
 
             return true;
         } else {
-
             return false;
         }
     }
@@ -239,12 +232,10 @@ class AdministrationLib extends XGPCore
     public static function checkSession()
     {
         if (!self::isSessionSet()) {
-
             $db = new Database();
             $parse = parent::$lang;
 
             if ($_POST) {
-
                 $login = $db->queryFetch(
                     "SELECT `user_id`, `user_name`, `user_password`
                     FROM " . USERS . "
@@ -255,7 +246,6 @@ class AdministrationLib extends XGPCore
                 );
 
                 if ($login) {
-
                     // User login
                     if (self::adminLogin($login['user_id'], $login['user_name'], $login['user_password'])) {
 
@@ -301,18 +291,16 @@ class AdministrationLib extends XGPCore
      */
     private static function isSessionSet()
     {
-        if (!isset($_SESSION['admin_id']) or ! isset($_SESSION['admin_name']) or ! isset($_SESSION['admin_password'])) {
-
+        if (!isset($_SESSION['admin_id']) or !isset($_SESSION['admin_name']) or !isset($_SESSION['admin_password'])) {
             return false;
         } else {
-
             return true;
         }
     }
 
     /**
      * Check if an update is required
-     * 
+     *
      * @return void
      */
     public static function updateRequired()

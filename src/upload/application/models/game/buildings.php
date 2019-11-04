@@ -2,7 +2,7 @@
 /**
  * Buildings Model
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Model
  * @package  Application
@@ -30,7 +30,7 @@ class Buildings
 
     /**
      * Constructor
-     * 
+     *
      * @return void
      */
     public function __construct($db)
@@ -41,7 +41,7 @@ class Buildings
 
     /**
      * __destruct
-     * 
+     *
      * @return void
      */
     public function __destruct()
@@ -51,11 +51,11 @@ class Buildings
 
     /**
      * Insert a new building queue
-     * 
+     *
      * @param type $building_id
      * @param type $queue
      * @param type $planet_id
-     * 
+     *
      * @return void
      */
     public function updatePlanetBuildingQueue($queue, $building_id, $planet_id)

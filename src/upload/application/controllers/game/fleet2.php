@@ -2,7 +2,7 @@
 /**
  * Fleet2 Controller
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Controller
  * @package  Application
@@ -21,10 +21,6 @@ use application\libraries\FunctionsLib;
 use application\libraries\OfficiersLib;
 use application\libraries\premium\Premium;
 use application\libraries\users\Shortcuts;
-use const JS_PATH;
-use const MAX_GALAXY_IN_WORLD;
-use const MAX_PLANET_IN_SYSTEM;
-use const MAX_SYSTEM_IN_GALAXY;
 
 /**
  * Fleet2 Class
@@ -52,13 +48,13 @@ class Fleet2 extends Controller
      * @var array
      */
     private $_planet;
-    
+
     /**
      *
      * @var \Premium
      */
     private $_premium = null;
-    
+
     /**
      *
      * @var array
@@ -67,12 +63,12 @@ class Fleet2 extends Controller
         'fleet_array' => [],
         'fleet_list' => '',
         'amount' => 0,
-        'speed_all' => []
+        'speed_all' => [],
     ];
-    
+
     /**
      * Constructor
-     * 
+     *
      * @return void
      */
     public function __construct()
@@ -84,13 +80,13 @@ class Fleet2 extends Controller
 
         // load Model
         parent::loadModel('game/fleet');
-        
+
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
         // set data
         $this->_user = $this->getUserData();
-        
+
         // set planet data
         $this->_planet = $this->getPlanetData();
 
@@ -104,7 +100,7 @@ class Fleet2 extends Controller
     /**
      * Creates a new ships object that will handle all the ships
      * creation methods and actions
-     * 
+     *
      * @return void
      */
     private function setUpFleets()
@@ -117,7 +113,7 @@ class Fleet2 extends Controller
 
     /**
      * Build the page
-     * 
+     *
      * @return void
      */
     private function buildPage()
@@ -131,7 +127,7 @@ class Fleet2 extends Controller
             'planet_types' => $this->buildPlanetTypesBlock(),
             'shortcuts' => $this->buildShortcutsBlock(),
             'colonies' => $this->buildColoniesBlock(),
-            'acs' => $this->buildAcsBlock()
+            'acs' => $this->buildAcsBlock(),
         ];
 
         // display the page
@@ -144,10 +140,10 @@ class Fleet2 extends Controller
             )
         );
     }
-    
+
     /**
      * Build the fleet block
-     * 
+     *
      * @return type
      */
     private function buildFleetBlock()
@@ -159,25 +155,25 @@ class Fleet2 extends Controller
 
         $list_of_ships = [];
         $selected_fleet = filter_input_array(INPUT_POST);
-        
+
         if ($ships != null) {
-            
-            foreach($ships as $ship_name => $ship_amount) {
+
+            foreach ($ships as $ship_name => $ship_amount) {
 
                 if ($ship_amount != 0) {
-                    
+
                     $ship_id = array_search($ship_name, $objects);
-                    
+
                     if (!isset($selected_fleet['ship' . $ship_id])
                         or $selected_fleet['ship' . $ship_id] == 0) {
-                        
+
                         continue;
                     }
-                    
+
                     $amount_to_set = $selected_fleet['ship' . $ship_id];
-                    
+
                     if ($amount_to_set > $ship_amount) {
-                        
+
                         $amount_to_set = $ship_amount;
                     }
 
@@ -185,24 +181,24 @@ class Fleet2 extends Controller
                     $this->_fleet_data['fleet_list'] .= $ship_id . ',' . $amount_to_set . ';';
                     $this->_fleet_data['amount'] += $amount_to_set;
                     $this->_fleet_data['speed_all'][$ship_id] = FleetsLib::fleetMaxSpeed('', $ship_id, $this->_user);
-                    
+
                     $list_of_ships[] = [
                         'ship_id' => $ship_id,
                         'consumption' => FleetsLib::shipConsumption($ship_id, $this->_user),
                         'speed' => FleetsLib::fleetMaxSpeed('', $ship_id, $this->_user),
                         'capacity' => $price[$ship_id]['capacity'] ?? 0,
-                        'ship' => $amount_to_set
+                        'ship' => $amount_to_set,
                     ];
                 }
             }
         }
-        
+
         return $list_of_ships;
     }
-    
+
     /**
      * Build the planet type drop down
-     * 
+     *
      * @return void
      */
     private function buildPlanetTypesBlock()
@@ -210,48 +206,48 @@ class Fleet2 extends Controller
         $planet_type = [
             'fl_planet' => PlanetTypes::planet,
             'fl_debris' => PlanetTypes::debris,
-            'fl_moon' => PlanetTypes::moon
+            'fl_moon' => PlanetTypes::moon,
         ];
-        
+
         $data = filter_input_array(INPUT_POST, [
             'planet_type' => [
-                'filter'    => FILTER_VALIDATE_INT,
-                'options'   => ['min_range' => 1, 'max_range' => 3]
-            ]
+                'filter' => FILTER_VALIDATE_INT,
+                'options' => ['min_range' => 1, 'max_range' => 3],
+            ],
         ]);
-        
+
         $list_of_options = [];
-        
+
         foreach ($planet_type as $label => $value) {
-            
+
             $list_of_options[] = [
                 'value' => $value,
                 'selected' => ($value == $data['planet_type']) ? 'selected' : '',
-                'title' => $this->getLang()[$label]
+                'title' => $this->getLang()[$label],
             ];
         }
-        
+
         return $list_of_options;
     }
-    
+
     /**
      * Build the shortcuts block
-     * 
+     *
      * @return string
      */
     private function buildShortcutsBlock()
     {
         if (!OfficiersLib::isOfficierActive($this->_premium->getCurrentPremium()->getPremiumOfficierCommander())) {
-        
+
             return '';
         }
 
         $shortcuts = new Shortcuts(
             $this->_user['user_fleet_shortcuts']
         );
-        
+
         $shortcuts_list = $shortcuts->getAllAsArray();
-        
+
         if ($shortcuts_list) {
 
             $list_of_shortcuts = [];
@@ -267,7 +263,7 @@ class Fleet2 extends Controller
                     $list_of_shortcuts[] = [
                         'value' => $shortcut['g'] . ';' . $shortcut['s'] . ';' . $shortcut['p'] . ';' . $shortcut['pt'],
                         'selected' => '',
-                        'title' => $description
+                        'title' => $description,
                     ];
                 }
             }
@@ -276,7 +272,7 @@ class Fleet2 extends Controller
                 'fleet/fleet2_shortcuts_row',
                 [
                     'select' => 'shortcuts',
-                    'options' => $list_of_shortcuts
+                    'options' => $list_of_shortcuts,
                 ]
             );
         } else {
@@ -286,27 +282,27 @@ class Fleet2 extends Controller
                 ['shorcut_message' => $this->getLang()['fl_no_shortcuts']]
             );
         }
-        
+
         return $this->getTemplate()->set(
             'fleet/fleet2_shortcuts',
             array_merge($this->getLang(), ['shortcuts_rows' => $shortcut_row])
         );
     }
-    
+
     /**
      * Build the colony shortcuts block
-     * 
+     *
      * @return string
      */
     private function buildColoniesBlock()
     {
         $planets = $this->Fleet_Model->getAllPlanetsByUserId($this->_user['user_id']);
         $list_of_planets = [];
-        
+
         if ($planets) {
-            
-            foreach($planets as $planet) {
-                
+
+            foreach ($planets as $planet) {
+
                 $list_of_planets[] = [
                     'value' => $planet['planet_galaxy'] . ';' . $planet['planet_system'] . ';' . $planet['planet_planet'] . ';' . $planet['planet_type'],
                     'selected' => '',
@@ -314,15 +310,15 @@ class Fleet2 extends Controller
                         $planet['planet_galaxy'],
                         $planet['planet_system'],
                         $planet['planet_planet']
-                    ) . ($planet['planet_type'] == PlanetTypes::moon ? ' (' . $this->getLang()['fcm_moon'] . ')' : '')
+                    ) . ($planet['planet_type'] == PlanetTypes::moon ? ' (' . $this->getLang()['fcm_moon'] . ')' : ''),
                 ];
             }
-            
+
             return $this->getTemplate()->set(
                 'fleet/fleet2_shortcuts_row',
                 [
                     'select' => 'colonies',
-                    'options' => $list_of_planets
+                    'options' => $list_of_planets,
                 ]
             );
         }
@@ -332,17 +328,17 @@ class Fleet2 extends Controller
             ['shorcut_message' => $this->getLang()['fl_no_colony']]
         );
     }
-    
+
     /**
      * Build the acs shortcuts block
-     * 
+     *
      * @return string
      */
     private function buildAcsBlock()
     {
         $current_acs = $this->Fleet_Model->getOngoingAcs($this->_user['user_id']);
         $acs_fleets = [];
-        
+
         if ($current_acs) {
 
             foreach ($current_acs as $acs) {
@@ -357,42 +353,42 @@ class Fleet2 extends Controller
                 ];
             }
         }
-        
+
         return $acs_fleets;
     }
-    
+
     /**
      * Set inputs data
-     * 
+     *
      * @return array
      */
     private function setInputsData()
     {
         $data = filter_input_array(INPUT_POST, [
             'galaxy' => [
-                'filter'    => FILTER_VALIDATE_INT,
-                'options'   => ['min_range' => 1, 'max_range' => MAX_GALAXY_IN_WORLD]
+                'filter' => FILTER_VALIDATE_INT,
+                'options' => ['min_range' => 1, 'max_range' => MAX_GALAXY_IN_WORLD],
             ],
             'system' => [
-                'filter'    => FILTER_VALIDATE_INT,
-                'options'   => ['min_range' => 1, 'max_range' => MAX_SYSTEM_IN_GALAXY]
+                'filter' => FILTER_VALIDATE_INT,
+                'options' => ['min_range' => 1, 'max_range' => MAX_SYSTEM_IN_GALAXY],
             ],
             'planet' => [
-                'filter'    => FILTER_VALIDATE_INT,
-                'options'   => ['min_range' => 1, 'max_range' => (MAX_PLANET_IN_SYSTEM + 1)]
+                'filter' => FILTER_VALIDATE_INT,
+                'options' => ['min_range' => 1, 'max_range' => (MAX_PLANET_IN_SYSTEM + 1)],
             ],
             'planet_type' => [
-                'filter'    => FILTER_VALIDATE_INT,
-                'options'   => ['min_range' => 1, 'max_range' => 3]
+                'filter' => FILTER_VALIDATE_INT,
+                'options' => ['min_range' => 1, 'max_range' => 3],
             ],
-            'target_mission' => FILTER_VALIDATE_INT
+            'target_mission' => FILTER_VALIDATE_INT,
         ]);
 
         if (is_null($data) or count($this->_fleet_data['speed_all']) <= 0) {
-            
+
             FunctionsLib::redirect('game.php?page=fleet1');
         }
-        
+
         // attach fleet data
         $_SESSION['fleet_data'] = [
             'fleet_speed' => min($this->_fleet_data['speed_all']),
@@ -408,7 +404,7 @@ class Fleet2 extends Controller
             'galaxy_end' => $data['galaxy'] ?? $this->_planet['planet_galaxy'],
             'system_end' => $data['system'] ?? $this->_planet['planet_system'],
             'planet_end' => $data['planet'] ?? $this->_planet['planet_planet'],
-            'target_mission' => $data['target_mission'] ?? 0
+            'target_mission' => $data['target_mission'] ?? 0,
         ];
     }
 }

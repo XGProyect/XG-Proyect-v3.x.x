@@ -2,7 +2,7 @@
 /**
  * SecurePage Library
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Library
  * @package  Application
@@ -52,24 +52,19 @@ class SecurePageLib
     private function validate($value)
     {
         if (!is_array($value)) {
-
             $value = str_ireplace("script", "blocked", $value);
 
             if (get_magic_quotes_gpc()) {
-
                 $value = htmlentities(stripslashes($value), ENT_QUOTES, 'UTF-8', false);
             } else {
-
                 $value = htmlentities($value, ENT_QUOTES, 'UTF-8', false);
             }
 
             //$value = mysql_real_escape_string ( $value );
         } else {
-
             $c = 0;
 
             foreach ($value as $val) {
-
                 $value[$c] = $this->validate($val);
                 $c++;
             }
@@ -86,7 +81,6 @@ class SecurePageLib
     public static function run()
     {
         if (self::$instance == null) {
-
             $c = __CLASS__;
             self::$instance = new $c();
         }

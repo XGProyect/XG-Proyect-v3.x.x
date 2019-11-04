@@ -2,7 +2,7 @@
 /**
  * Users_library Model
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Model
  * @package  Application
@@ -190,12 +190,12 @@ class Users_library
     public function deleteUserDataById($user_id)
     {
         $this->db->query(
-            "DELETE r,f,n,p,se,s,u FROM " . USERS . " AS u
+            "DELETE r,f,n,p,pr,s,u FROM " . USERS . " AS u
             INNER JOIN " . RESEARCH . " AS r ON r.research_user_id = u.user_id
             LEFT JOIN " . FLEETS . " AS f ON f.fleet_owner = u.user_id
             LEFT JOIN " . NOTES . " AS n ON n.note_owner = u.user_id
             INNER JOIN " . PREMIUM . " AS p ON p.premium_user_id = u.user_id
-            INNER JOIN " . SETTINGS . " AS se ON se.setting_user_id = u.user_id
+            INNER JOIN " . PREFERENCES . " AS pr ON pr.preference_user_id = u.user_id
             INNER JOIN " . USERS_STATISTICS . " AS s ON s.user_statistic_user_id = u.user_id
             WHERE u.`user_id` = '" . $user_id . "';"
         );
@@ -213,7 +213,7 @@ class Users_library
         return $this->db->queryFetch(
                 "SELECT u.*,
                 pre.*,
-                se.*,
+                pr.*,
                 usul.user_statistic_total_rank,
                 usul.user_statistic_total_points,
                 r.*,
@@ -222,7 +222,7 @@ class Users_library
                 FROM `" . MESSAGES . "` 
                 WHERE `message_receiver` = u.`user_id` AND `message_read` = 0) AS `new_message`
             FROM " . USERS . " AS u
-            INNER JOIN " . SETTINGS . " AS se ON se.setting_user_id = u.user_id
+            INNER JOIN " . PREFERENCES . " AS pr ON pr.preference_user_id = u.user_id
             INNER JOIN " . USERS_STATISTICS . " AS usul ON usul.user_statistic_user_id = u.user_id
             INNER JOIN " . PREMIUM . " AS pre ON pre.premium_user_id = u.user_id
             INNER JOIN " . RESEARCH . " AS r ON r.research_user_id = u.user_id
@@ -377,7 +377,7 @@ class Users_library
     public function createSettings($user_id)
     {
         $this->db->query(
-            "INSERT INTO " . SETTINGS . " SET `setting_user_id` = '" . $user_id . "';"
+            "INSERT INTO " . PREFERENCES . " SET `preference_user_id` = '" . $user_id . "';"
         );
     }
 

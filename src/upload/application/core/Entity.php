@@ -2,7 +2,7 @@
 /**
  * Entity
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Core
  * @package  Application
@@ -32,13 +32,13 @@ class Entity
      *
      * @var array
      */
-    protected $_data = [];
+    protected $data = [];
 
     /**
      * Init with the db data
-     * 
+     *
      * @param array $data data
-     * 
+     *
      * @return void
      */
     public function __construct($data)
@@ -48,25 +48,22 @@ class Entity
 
     /**
      * Set the current data
-     * 
+     *
      * @param array $data data
-     * 
+     *
      * @throws Exception
-     * 
+     *
      * @return void
      */
     private function setData($data)
     {
         try {
-
             if (!is_array($data)) {
-                
                 return null;
             }
-            
-            $this->_data = $data;
-        } catch (Exception $e) {
 
+            $this->data = $data;
+        } catch (Exception $e) {
             die('Caught exception: ' . $e->getMessage() . "\n");
         }
     }

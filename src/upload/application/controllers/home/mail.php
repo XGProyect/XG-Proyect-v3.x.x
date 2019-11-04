@@ -2,7 +2,7 @@
 /**
  * Mail Controller
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Controller
  * @package  Application
@@ -38,7 +38,7 @@ class Mail extends Controller
 
     /**
      * __construct
-     * 
+     *
      * @return void
      */
     public function __construct()
@@ -53,7 +53,7 @@ class Mail extends Controller
 
     /**
      * __destruct
-     * 
+     *
      * @return void
      */
     public function __destruct()
@@ -63,7 +63,7 @@ class Mail extends Controller
 
     /**
      * buildPage
-     * 
+     *
      * @return void
      */
     private function buildPage()
@@ -78,26 +78,26 @@ class Mail extends Controller
         $parse['css_path'] = XGP_ROOT . CSS_PATH . 'home/';
 
         if ($_POST) {
-
             $parse['display'] = 'display: block';
 
             if ($this->processRequest($_POST['email'])) {
-
                 $parse['error_msg'] = $this->langs['lp_sent'];
             } else {
-
                 $parse['error_msg'] = $this->langs['lp_error'];
             }
         }
 
         parent::$page->display(
-            parent::$page->parseTemplate(parent::$page->getTemplate('home/mail_view'), $parse), false, '', false
+            parent::$page->parseTemplate(parent::$page->getTemplate('home/mail_view'), $parse),
+            false,
+            '',
+            false
         );
     }
 
     /**
      * generatePassword
-     * 
+     *
      * @return string
      */
     private function generatePassword()
@@ -118,9 +118,9 @@ class Mail extends Controller
 
     /**
      * processRequest
-     * 
+     *
      * @param string $mail E-Mail
-     * 
+     *
      * @return void
      */
     private function processRequest($mail)
@@ -128,12 +128,11 @@ class Mail extends Controller
         $ExistMail = $this->_db->queryFetch(
             "SELECT `user_name`
             FROM " . USERS . "
-            WHERE `user_email` = '" . $this->_db->escapeValue($mail) . "' 
+            WHERE `user_email` = '" . $this->_db->escapeValue($mail) . "'
             LIMIT 1;"
         );
 
         if (empty($ExistMail['user_name'])) {
-
             return false;
         } else {
             $new_password = $this->sendPassEmail($mail, $ExistMail['user_name']);
@@ -141,7 +140,7 @@ class Mail extends Controller
             $this->_db->query(
                 "UPDATE " . USERS . " SET
                 `user_password` ='" . sha1($new_password) . "'
-                WHERE `user_email`='" . $this->_db->escapeValue($mail) . "' 
+                WHERE `user_email`='" . $this->_db->escapeValue($mail) . "'
                 LIMIT 1;"
             );
 
@@ -151,10 +150,10 @@ class Mail extends Controller
 
     /**
      * sendPassEmail
-     * 
+     *
      * @param string $emailaddress Email Address
      * @param string $UserName     User Name
-     * 
+     *
      * @return string
      */
     private function sendPassEmail($emailaddress, $UserName)
@@ -169,13 +168,17 @@ class Mail extends Controller
         $parse['re_mail_text_part7'] = str_replace('%s', $game_name, $this->langs['re_mail_text_part7']);
 
         $email = parent::$page->parseTemplate(
-            parent::$page->getTemplate('home/recover_password_email_template_view'), $parse
+            parent::$page->getTemplate('home/recover_password_email_template_view'),
+            $parse
         );
 
         FunctionsLib::sendEmail(
-            $emailaddress, $this->langs['lp_mail_title'], $email, [
-            'mail' => FunctionsLib::readConfig('admin_email'),
-            'name' => $game_name
+            $emailaddress,
+            $this->langs['lp_mail_title'],
+            $email,
+            [
+                'mail' => FunctionsLib::readConfig('admin_email'),
+                'name' => $game_name,
             ]
         );
 

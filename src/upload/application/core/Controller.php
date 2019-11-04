@@ -2,7 +2,7 @@
 /**
  * XGPCore
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Core
  * @package  Application
@@ -28,35 +28,35 @@ abstract class Controller extends XGPCore
 
     /**
      * Contains the current user data
-     * 
-     * @var array 
+     *
+     * @var array
      */
     private $_current_user = [];
 
     /**
      * Contains the current planet data
-     * 
-     * @var array 
+     *
+     * @var array
      */
     private $_current_planet = [];
 
     /**
      * Contains the whole set of objects by request
-     * 
-     * @var array 
+     *
+     * @var array
      */
     private $_objects = [];
 
     /**
      * Contains the whole set of language lines
-     * 
-     * @var array 
+     *
+     * @var array
      */
     private $_langs = [];
 
     /**
      *
-     * @var type 
+     * @var type
      */
     private $_template = null;
 
@@ -116,7 +116,7 @@ abstract class Controller extends XGPCore
 
     /**
      * Return the user data
-     * 
+     *
      * @return array
      */
     protected function getUserData()
@@ -126,7 +126,7 @@ abstract class Controller extends XGPCore
 
     /**
      * Return the planet data
-     * 
+     *
      * @return Planet
      */
     protected function getPlanetData()
@@ -136,7 +136,7 @@ abstract class Controller extends XGPCore
 
     /**
      * Return the objects data
-     * 
+     *
      * @return Objects
      */
     protected function getObjects()
@@ -146,7 +146,7 @@ abstract class Controller extends XGPCore
 
     /**
      * Return the languages
-     * 
+     *
      * @return array
      */
     protected function getLang()
@@ -155,7 +155,7 @@ abstract class Controller extends XGPCore
     }
 
     /**
-     * 
+     *
      * @return type
      */
     protected function getTemplate()

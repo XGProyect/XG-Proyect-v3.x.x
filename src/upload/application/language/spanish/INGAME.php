@@ -1,5 +1,37 @@
 <?php
 $lang = [
+    // buildings
+    'building_metal_mine' => "Mina de metal",
+    'building_crystal_mine' => "Mina de cristal",
+    'building_deuterium_sintetizer' => "Sintetizador de deuterio",
+    'building_solar_plant' => "Planta de energía solar",
+    'building_fusion_reactor' => "Planta de fusión",
+    'building_robot_factory' => "Fábrica de Robots",
+    'building_nano_factory' => "Fábrica de Nanobots",
+    'building_hangar' => "Hangar",
+    'building_metal_store' => "Almacén de Metal",
+    'building_crystal_store' => "Almacén de Cristal",
+    'building_deuterium_tank' => "Contenedor de deuterio",
+    'building_laboratory' => "Laboratorio de investigación",
+    'building_terraformer' => "Terraformer",
+    'building_ally_deposit' => "Depósito de la Alianza",
+    'building_mondbasis' => "Base lunar",
+    'building_phalanx' => "Sensor Phalanx",
+    'building_jump_gate' => "Salto cuántico",
+    'building_missile_silo' => "Silo",
+
+    // defenses
+    'defense_rocket_launcher' => 'Lanzamisiles',
+    'defense_light_laser' => 'Láser pequeño',
+    'defense_heavy_laser' => 'Láser grande',
+    'defense_gauss_cannon' => 'Cañón Gauss',
+    'defense_ion_cannon' => 'Cañón iónico',
+    'defense_plasma_turret' => 'Cañón de plasma',
+    'defense_small_shield_dome' => 'Cúpula pequeña de protección',
+    'defense_large_shield_dome' => 'Cúpula grande de protección',
+    'defense_anti-ballistic_missile' => 'Misiles antibalísticos',
+    'defense_interplanetary_missile' => 'Misil interplanetario',
+
     // ships
     'ship_small_cargo_ship' => 'Nave pequeña de carga',
     'ship_big_cargo_ship' => 'Nave grande de carga',
@@ -15,30 +47,58 @@ $lang = [
     'ship_destroyer' => 'Destructor',
     'ship_deathstar' => 'Estrella de la muerte',
     'ship_battlecruiser' => 'Acorazado',
-    
+
+    // research
+    "research_espionage_technology" => 'Tecnología de espionaje"',
+    "research_computer_technology" => 'Tecnología de computación',
+    "research_weapons_technology" => 'Tecnología militar',
+    "research_shielding_technology" => 'Tecnología de defensa',
+    "research_armour_technology" => 'Tecnología de blindaje',
+    "research_energy_technology" => 'Tecnología de energía',
+    "research_hyperspace_technology" => 'Tecnología de hiperespacio',
+    "research_combustion_drive" => 'Motor de combustión',
+    "research_impulse_drive" => 'Motor de impulso',
+    "research_hyperspace_drive" => 'Propulsor hiperespacial',
+    "research_laser_technology" => 'Tecnología láser',
+    "research_ionic_technology" => 'Tecnología iónica',
+    "research_plasma_technology" => 'Tecnología de plasma',
+    "research_intergalactic_research_network" => 'Red de investigación intergaláctica',
+    "research_astrophysics" => 'Astrofísica',
+    "research_graviton_technology" => 'Tecnología de gravitón',
+
     // types of planets or galaxy objects
     'planet_type' => [
         1 => 'Planeta',
         2 => 'Escombros',
-        3 => 'Luna'
+        3 => 'Luna',
     ],
-    
+
     // types of planets or galaxy objects
     'planet_type_shortcuts' => [
         1 => '(P)',
         2 => '(E)',
-        3 => '(L)'
-    ]
+        3 => '(L)',
+    ],
+
+    // type of structures
+    'construction' => 'Construcción',
+    'research' => 'Investigación',
+    'ships' => 'Naves',
+    'missiles' => 'Misiles',
+    'defenses' => 'Defensa',
+
+    // changelog
+    'ch_version' => 'Versión',
+    'ch_description' => 'Descripción',
 ];
 
 /**
- * 
- * 
+ *
+ *
  * OLD LINES
- * 
- * 
+ *
+ *
  */
-
 
 //SERVER GENERALS
 $lang['Metal'] = 'Metal';
@@ -56,13 +116,13 @@ $lang['minutes'] = '15 min';
 $lang['offline'] = 'Desconectado';
 
 $lang['type_mission'][1] = 'Atacar';
-$lang['type_mission'][2] = 'Ataque grupal';
+$lang['type_mission'][2] = 'Ataq. confederación';
 $lang['type_mission'][3] = 'Transportar';
 $lang['type_mission'][4] = 'Desplegar';
 $lang['type_mission'][5] = 'Mantener posición';
 $lang['type_mission'][6] = 'Espiar';
 $lang['type_mission'][7] = 'Colonizar';
-$lang['type_mission'][8] = 'Reciclar';
+$lang['type_mission'][8] = 'Reciclar campo de escombros';
 $lang['type_mission'][9] = 'Destruir';
 $lang['type_mission'][15] = 'Expedición';
 
@@ -107,7 +167,7 @@ $lang['tn_delete_mode'] = 'Tu cuenta se encuentra en modo borrar. La misma será
 
 //----------------------------------------------------------------------------//
 //LEFT MENU
-$lang['lm_overview'] = 'Visión general';
+$lang['lm_overview'] = 'Resumen';
 $lang['lm_galaxy'] = 'Galaxia';
 $lang['lm_empire'] = 'Imperio';
 $lang['lm_fleet'] = 'Flota';
@@ -118,21 +178,20 @@ $lang['lm_station'] = 'Instalaciones';
 $lang['lm_research'] = 'Investigación';
 $lang['lm_shipyard'] = 'Hangar';
 $lang['lm_defenses'] = 'Defensa';
-$lang['lm_officiers'] = 'Oficiales';
+$lang['lm_officiers'] = 'Casino';
 $lang['lm_trader'] = 'Mercader';
-$lang['lm_technology'] = 'Tecnología';
+$lang['lm_technology'] = 'Técnica';
 $lang['lm_messages'] = 'Mensajes';
-$lang['lm_alliance'] = 'Alianzas';
+$lang['lm_alliance'] = 'Alianza';
 $lang['lm_buddylist'] = 'Amigos';
 $lang['lm_notes'] = 'Notas';
-$lang['lm_statistics'] = 'Estadísticas';
-$lang['lm_search'] = 'Buscar';
+$lang['lm_statistics'] = 'Clasificación';
+$lang['lm_search'] = 'Búsqueda';
 $lang['lm_options'] = 'Opciones';
-$lang['lm_banned'] = 'Baneados';
 $lang['lm_forums'] = 'Foro';
 $lang['lm_logout'] = 'Salir';
 $lang['lm_administration'] = 'Administración';
-$lang['lm_module_not_accesible'] = 'No se puede acceder en este momento a la página solicitada';
+$lang['lm_module_not_accesible'] = 'No se ha encontrado la página.';
 
 //----------------------------------------------------------------------------//
 //OVERVIEW
@@ -258,7 +317,7 @@ $lang['px_scan_position'] = 'Escanear posición';
 $lang['px_fleet_movement'] = 'Movimiento actual de flotas';
 
 //----------------------------------------------------------------------------//
-//IMPERIUM
+//EMPIRE
 $lang['iv_imperium_title'] = 'Visión del Imperio';
 $lang['iv_planet'] = 'Planeta';
 $lang['iv_name'] = 'Nombre';
@@ -431,9 +490,9 @@ $lang['of_geologist'] = 'Geólogo';
 $lang['of_technocrat'] = 'Tecnócrata';
 $lang['of_get_know'] = '¡Consíguelo ahora!';
 $lang['of_add_admiral'] = '+2 huecos de flota máximos';
-$lang['of_add_engineer'] = 'Minimiza las perdidas de las defensas a la mitad,&lt;br&gt;+10% de producción de energía';
+$lang['of_add_engineer'] = 'Minimiza las perdidas de las defensas a la mitad,<br/>+10% de producción de energía';
 $lang['of_add_geologist'] = '+10% producción de minas';
-$lang['of_add_technocrat'] = '+2 al nivel de espionaje,&lt;br&gt;25% menos tiempo de investigación';
+$lang['of_add_technocrat'] = '+2 al nivel de espionaje,<br/>25% menos tiempo de investigación';
 $lang['of_darkmatter_description'] = 'La Materia Oscura es una sustancia que desde hace apenas unos años se puede almacenar, y aun así esto representa grandes dificultades. De ella se pueden extraer increíbles cantidades de energía. El proceso que se requiere para producir Materia Oscura es complejo y arriesgado, por lo que se ha convertido en un bien muy valioso.
 ¡Sólo la materia oscura comprada que aún no se ha consumido protege una cuenta de su eliminación!';
 $lang['of_darkmatter_description_short'] = 'El comandante y los oficiales pueden ser contratados con esta sustancia rara.';
@@ -615,8 +674,8 @@ $lang['in_jump_gate_not_ready_target'] = 'El salto cuántico no está listo en l
 $lang['in_jump_gate_doesnt_have_one'] = '¡No tienes Salto cuántico en esa luna!';
 $lang['in_jump_gate_already_used'] = 'El Salto cuántico fue usado, tiempo para recargar su energia: ';
 $lang['in_jump_gate_available'] = 'disponible';
-$lang['in_rf_again'] = 'Fuego rapido contra';
-$lang['in_rf_from'] = 'Fuego rapido de';
+$lang['in_rf_again'] = 'Fuego rápido contra';
+$lang['in_rf_from'] = 'Fuego rápido de';
 $lang['in_level'] = 'Nivel';
 $lang['in_prod_p_hour'] = 'Produción/hora';
 $lang['in_difference'] = 'Diferencia';
@@ -790,9 +849,9 @@ $lang['info'][503]['description'] = "Los misiles interplanetarios destruyen los 
 // -------------------------- OFFICIERS ----------------------------------------------------------------------------------------------------//
 $lang['info'][601]['description'] = 'Lista de construcción, Visión del imperio, Vista de galaxia mejorada, Filtro de mensajes, Accesos directos, Sin publicidad';
 $lang['info'][602]['description'] = '+2 huecos de flota máximos';
-$lang['info'][603]['description'] = 'Minimiza las perdidas de las defensas a la mitad,<br />+10% de producción de energía';
+$lang['info'][603]['description'] = 'Minimiza las perdidas de las defensas a la mitad,<br/>+10% de producción de energía';
 $lang['info'][604]['description'] = '+10% producción de minas';
-$lang['info'][605]['description'] = '+2 al nivel de espionaje,<br />25% menos tiempo de investigación';
+$lang['info'][605]['description'] = '+2 al nivel de espionaje,<br/>25% menos tiempo de investigación';
 
 //----------------------------------------------------------------------------//
 //MESSAGES
@@ -995,29 +1054,6 @@ $lang['bu_rejected_text'] = 'El jugador %u ha rechazado tu solicitud de amistad.
 $lang['bu_to_accept_title'] = 'Nueva solicitud de amistad';
 $lang['bu_to_accept_text'] = 'El jugador %u te ha enviado una solicitud de amistad.';
 
-
-//----------------------------------------------------------------------------//
-//NOTES
-$lang['nt_important'] = 'Importante';
-$lang['nt_normal'] = 'Normal';
-$lang['nt_unimportant'] = 'Sin importancia';
-$lang['nt_create_note'] = 'Hacer una nota';
-$lang['nt_edit_note'] = 'Editar nota';
-$lang['nt_you_dont_have_notes'] = 'No tienes notas';
-$lang['nt_notes'] = 'Notas';
-$lang['nt_create_new_note'] = 'Crear nueva nota';
-$lang['nt_date_note'] = 'Fecha';
-$lang['nt_subject_note'] = 'Asunto';
-$lang['nt_size_note'] = 'Tamaño';
-$lang['nt_dlte_note'] = 'Borrar';
-$lang['nt_priority'] = 'Prioridad';
-$lang['nt_note'] = 'Nota';
-$lang['nt_characters'] = 'caracteres';
-$lang['nt_back'] = 'Volver';
-$lang['nt_reset'] = 'Reestablecer';
-$lang['nt_save'] = 'Guardar';
-$lang['nt_no_text'] = 'Sin texto';
-
 //----------------------------------------------------------------------------//
 //STATISTICS
 $lang['st_player'] = 'Jugador';
@@ -1037,68 +1073,6 @@ $lang['st_per'] = 'por';
 $lang['st_in_the_positions'] = 'en las posiciones';
 $lang['st_actions'] = 'Acciones';
 $lang['st_ally_request'] = 'Echar solicitud a esta alianza';
-
-//----------------------------------------------------------------------------//
-//SEARCH
-$lang['sh_tag'] = 'Etiqueta';
-$lang['sh_name'] = 'Nombre';
-$lang['sh_members'] = 'Miembros';
-$lang['sh_points'] = 'Puntos';
-$lang['sh_searcg_in_the_universe'] = 'Buscar en el Universo';
-$lang['sh_player_name'] = 'Nombre del jugador';
-$lang['sh_planet_name'] = 'Nombre del planeta';
-$lang['sh_alliance_tag'] = 'Etiqueta de la alianza';
-$lang['sh_alliance_name'] = 'Nombre de la alianza';
-$lang['sh_search'] = 'Buscar';
-$lang['sh_buddy_request'] = 'Solicitud de compañeros';
-$lang['sh_alliance'] = 'Alianza';
-$lang['sh_planet'] = 'Planeta';
-$lang['sh_coords'] = 'Coordenadas';
-$lang['sh_position'] = 'Posición';
-
-//----------------------------------------------------------------------------//
-//OPTIONS
-$lang['op_cant_activate_vacation_mode'] = 'Si estás construyendo o moviendo flotas no podrás entrar al modo vaciones.';
-$lang['op_password_changed'] = 'La contraseña ha sido cambiada.<br /><a href="index.php" target="_top">Volver</a>';
-$lang['op_username_changed'] = 'El nombre de usuario ha sido cambiado.<br /><a href="index.php" target="_top">Volver</a>';
-$lang['op_options_changed'] = 'Los cambios se han guardado.<br /><a href="game.php?page=options">Volver</a>';
-$lang['op_vacation_mode_title'] = 'Modo vacaciones';
-$lang['op_vacation_mode_active_message'] = 'El modo vacaciones se ha encendido. Tendra que estar de vacaciones como mínimo hasta el: ';
-$lang['op_end_vacation_mode'] = 'Finalizar modo vacaciones';
-$lang['op_save_changes'] = 'Guardar cambios';
-$lang['op_user_data'] = 'Datos del usuario';
-$lang['op_username'] = 'Nombre de usuario';
-$lang['op_old_pass'] = 'Contraseña anterior';
-$lang['op_new_pass'] = 'Nueva contraseña (min. 8 Caracteres)';
-$lang['op_repeat_new_pass'] = 'Nueva contraseña (repetir)';
-$lang['op_email_adress'] = 'Dirección de correo electrónico';
-$lang['op_permanent_email_adress'] = 'Dirección permanente de correo electrónico';
-$lang['op_general_settings'] = 'Ajustes generales';
-$lang['op_sort_planets_by'] = 'Ordenar planetas por:';
-$lang['op_sort_kind'] = 'Tipo de ordenación:';
-$lang['op_deactivate_ipcheck'] = 'Desactivar comprobación de IP';
-$lang['op_galaxy_settings'] = 'Opciones de visión de Galaxia';
-$lang['op_spy_probes_number'] = 'Cantidad de sondas de espionaje';
-$lang['op_max_fleets_messages'] = 'Máximo mensajes de flotas';
-$lang['op_shortcut'] = 'Accesos directos';
-$lang['op_show'] = 'Mostrar';
-$lang['op_spy'] = 'Espiar';
-$lang['op_write_message'] = 'Escribir mensaje';
-$lang['op_add_to_buddy_list'] = 'Agregar a la lista de amigos';
-$lang['op_missile_attack'] = 'Ataque con misiles';
-$lang['op_vacation_delete_mode'] = 'Modo vacaciones / Borrar cuenta';
-$lang['op_activate_vacation_mode'] = 'Activar modo vacaciones';
-$lang['op_dlte_account'] = 'Borrar cuenta';
-$lang['op_email_adress_descrip'] = 'Esta dirección puede ser cambiada en cualquier momento. La dirección sera permanente si no se realizan cambios en los próximos 7 días.';
-$lang['op_deactivate_ipcheck_descrip'] = 'La comprobación de IP significa que se realizará un logout de seguridad automáticamente cuando cambie la IP o cuando 2 personas entren en la misma cuenta usando diferentes IPs.  Desactivar la comprobación de IP puede ser un agujero de seguridad!';
-$lang['op_spy_probes_number_descrip'] = 'Cantidad de sondas de espionaje que serán enviadas en cada espionaje desde el menú de galaxia';
-$lang['op_activate_vacation_mode_descrip'] = 'El modo vacaciones protege tu cuenta durante tu ausencia';
-$lang['op_dlte_account_descrip'] = 'Seleccionando esta opción borraras tu cuenta dentro de 7 dias';
-$lang['op_sort_colonization'] = 'Fecha de colonización';
-$lang['op_sort_coords'] = 'Coordenadas';
-$lang['op_sort_alpha'] = 'Orden alfabético';
-$lang['op_sort_asc'] = 'Creciente';
-$lang['op_sort_desc'] = 'Decreciente';
 
 //----------------------------------------------------------------------------//
 //BANNED
@@ -1201,19 +1175,17 @@ $lang['sys_mess_destruc_report'] = "Reporte de Destruccion";
 $lang['sys_destruc_lune'] = "La probabilidad de destruir la luna es de: %d %% ";
 $lang['sys_destruc_rip'] = "La probabilidad de que sean destruidas las estrellas de la muerte es de: %d %% ";
 $lang['sys_destruc_stop'] = "El defensor ha conseguido detener la destrucción de la luna";
-$lang['sys_destruc_mess1'] = "Las estrellas de la muerte disparan el graviton a la orbita de la luna";
+$lang['sys_destruc_mess1'] = "Las estrellas de la muerte disparan el graviton a la órbita de la luna";
 $lang['sys_destruc_mess'] = "Una flota del planeta %s [%d:%d:%d] se dirige a la luna del planeta [%d:%d:%d]";
-$lang['sys_destruc_echec'] = ". Los temblores empiezan a sacudir la superficie de la luna, pero algo sale mal, el graviton en las estrellas de la muerte tambien provoca temblores y las estrellas de la muerte vuelan en mil pedazos.";
-$lang['sys_destruc_reussi'] = ", Los temblores empiezan a sacudir la superficie de la luna, despues de unos instantes la luna no soporta mas y vuela en mil pedazos, mision cumplida, la flota vuelve al planeta de origen.";
-$lang['sys_destruc_null'] = ", Las estrellas de la muerte no generan el poder necesario, la mision falla y las naves vuelven de regreso.";
+$lang['sys_destruc_moon'] = ". Los temblores empiezan a sacudir la superficie de la luna, despues de unos instantes la luna no soporta mas y vuela en mil pedazos, mision cumplida, la flota vuelve al planeta de origen.";
+$lang['sys_destruc_ds'] = ". Los temblores empiezan a sacudir la superficie de la luna, pero algo sale mal, el graviton en las estrellas de la muerte también provoca temblores y las estrellas de la muerte vuelan en mil pedazos.";
+$lang['sys_destruc_none'] = ". Las estrellas de la muerte no generan el poder necesario, la mision falla y las naves vuelven de regreso.";
 $lang['sys_the'] = " el ";
 $lang['sys_stay_mess_back'] = "Una de sus flotas vuelve de ";
 $lang['sys_stay_mess_bend'] = " y entrega su mercancía ";
 
 //----------------------------------------------------------------------------//
 //class.CheckSession.php
-$lang['ccs_other_user'] = '¡Error de cookies! ¡Su cookie no corresponde con el usuario! Debe eliminar sus cookies. En caso de problemas contacte al administrador.';
-$lang['css_different_password'] = '¡Error de cookies! ¡Error de sesión, debe conectarse de nuevo! Debe eliminar sus cookies. En caso de problemas contacte al administrador.';
 $lang['css_account_banned_message'] = 'SU CUENTA HA SIDO SUSPENDIDA';
 $lang['css_account_banned_expire'] = 'Expiraci&oacute;n:';
 

@@ -2,7 +2,7 @@
 /**
  * Ban Controller
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Controller
  * @package  Application
@@ -142,21 +142,26 @@ class Ban extends Controller
             $parse['changedate'] = $this->_lang['bn_auto_lift_ban_message'];
             $parse['vacation'] = '';
 
-            $banned_user = $this->_db->queryFetch("SELECT b.*, s.`setting_user_id`, s.`setting_vacations_status`
-																	FROM `" . BANNED . "` AS b
-																	INNER JOIN `" . SETTINGS . "` AS s
-																		ON s.`setting_user_id` = (SELECT `user_id`
-																									FROM `" . USERS . "`
-																										WHERE `user_name` = '" . $ban_name . "'
-																										LIMIT 1)
-																	WHERE `banned_who` = '" . $ban_name . "'");
+            $banned_user = $this->_db->queryFetch(
+                            "SELECT 
+                                b.*,
+                                p.`preference_user_id`,
+                                p.`preference_vacation_mode`
+                            FROM `" . BANNED . "` AS b
+                            INNER JOIN `" . PREFERENCES . "` AS p
+                                ON p.`preference_user_id` = (SELECT `user_id`
+                                                            FROM `" . USERS . "`
+                                                                WHERE `user_name` = '" . $ban_name . "'
+                                                                LIMIT 1)
+                            WHERE `banned_who` = '" . $ban_name . "'"
+                            );
             if ($banned_user) {
                 $parse['banned_until'] = $this->_lang['bn_banned_until'] . ' (' . date(FunctionsLib::readConfig('date_format_extended'), $banned_user['banned_longer']) . ')';
                 $parse['reason'] = $banned_user['banned_theme'];
                 $parse['changedate'] = '<div style="float:left">' . $this->_lang['bn_change_date'] . '</div><div style="float:right">' . AdministrationLib::showPopUp($this->_lang['bn_edit_ban_help']) . '</div>';
             }
 
-            $parse['vacation'] = $banned_user['setting_vacations_status'] ? 'checked="checked"' : '';
+            $parse['vacation'] = $banned_user['preference_vacation_mode'] ? 'checked="checked"' : '';
 
             if (isset($_POST['bannow']) && $_POST['bannow']) {
                 if (!is_numeric($_POST['days']) or ! is_numeric($_POST['hour'])) {
@@ -206,14 +211,14 @@ class Ban extends Controller
 																FROM " . USERS . "
 																WHERE `user_name` = '" . $ban_name . "' LIMIT 1");
 
-                    $this->_db->query("UPDATE " . USERS . " AS u, " . SETTINGS . " AS s, " . PLANETS . " AS p SET
+                    $this->_db->query("UPDATE " . USERS . " AS u, " . PREFERENCES . " AS pr, " . PLANETS . " AS p SET
 											u.`user_banned` = '" . $banned_until . "',
-											s.`setting_vacations_status` = '" . ( isset($_POST['vacat']) ? 1 : 0 ) . "',
+											pr.`preference_vacation_mode` = '" . ( isset($_POST['vacat']) ? FunctionsLib::getDefaultVacationTime() : NULL ) . "',
 											p.`planet_building_metal_mine_percent` = '0',
 											p.`planet_building_crystal_mine_percent` = '0',
 											p.`planet_building_deuterium_sintetizer_percent` = '0'
 											WHERE u.`user_id` = " . $user_id['user_id'] . "
-													AND s.`setting_user_id` = " . $user_id['user_id'] . "
+													AND pr.`preference_user_id` = " . $user_id['user_id'] . "
 													AND p.`planet_user_id` = " . $user_id['user_id'] . ";");
 
                     $parse['alert'] = AdministrationLib::saveMessage('ok', ( str_replace('%s', $ban_name, $this->_lang['bn_ban_success'])));

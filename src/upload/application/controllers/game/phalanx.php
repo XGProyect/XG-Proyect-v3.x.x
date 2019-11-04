@@ -2,7 +2,7 @@
 /**
  * Phalanx Controller
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Controller
  * @package  Application
@@ -124,7 +124,6 @@ class Phalanx extends Controller
                 $TargetMoonIsDestroyed = $TargetInfo['planet_destroyed'] !== 0;
             }
 
-
             $FleetToTarget = $this->_db->query("SELECT *
             										FROM " . FLEETS . "
             										WHERE ( ( `fleet_start_galaxy` = '" . $Galaxy . "' AND
@@ -192,13 +191,15 @@ class Phalanx extends Controller
             }
             ksort($fpage);
             $Fleets = '';
-            foreach ($fpage as $FleetTime => $FleetContent)
+            foreach ($fpage as $FleetTime => $FleetContent) {
                 $Fleets .= $FleetContent . "\n";
+            }
 
             $parse['phl_fleets_table'] = $Fleets;
             $parse['phl_er_deuter'] = "";
-        } else
+        } else {
             $parse['phl_er_deuter'] = $this->_lang['px_no_deuterium'];
+        }
 
         $parse['phl_pl_galaxy'] = $Galaxy;
         $parse['phl_pl_system'] = $System;

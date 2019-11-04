@@ -2,7 +2,7 @@
 /**
  * Planet Types enumerator
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Library
  * @package  Application
@@ -25,11 +25,9 @@ namespace application\core\enumerators;
  */
 abstract class PlanetTypesEnumerator
 {
-
     const planet = 1;
     const debris = 2;
     const moon = 3;
-
 }
 
 /* end of PlanetTypesEnumerator.php */

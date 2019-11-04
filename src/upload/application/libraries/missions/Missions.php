@@ -2,7 +2,7 @@
 /**
  * Missions Library
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Library
  * @package  Application
@@ -15,7 +15,7 @@ namespace application\libraries\missions;
 
 use application\core\XGPCore;
 use application\libraries\FleetsLib;
-use application\libraries\Updates_library;
+use application\libraries\UpdatesLibrary;
 
 /**
  * Missions Class
@@ -111,7 +111,7 @@ class Missions extends XGPCore
         foreach ($ships as $id => $amount) {
 
             $ships_fields .= "`" . $this->resource[$id] . "` = `" .
-                $this->resource[$id] . "` + '" . $amount . "', ";
+            $this->resource[$id] . "` + '" . $amount . "', ";
         }
 
         $fuel_return = 0;
@@ -125,15 +125,15 @@ class Missions extends XGPCore
             'resources' => [
                 'metal' => $fleet_row['fleet_resource_metal'],
                 'crystal' => $fleet_row['fleet_resource_crystal'],
-                'deuterium' => ($fleet_row['fleet_resource_deuterium'] + $fuel_return)
+                'deuterium' => ($fleet_row['fleet_resource_deuterium'] + $fuel_return),
             ],
             'ships' => $ships_fields,
             'coords' => [
                 'galaxy' => $galaxy,
                 'system' => $system,
                 'planet' => $planet,
-                'type' => $type
-            ]
+                'type' => $type,
+            ],
         ];
 
         $this->Missions_Model->updatePlanetsShipsByCoords($update_array);
@@ -169,14 +169,14 @@ class Missions extends XGPCore
             'resources' => [
                 'metal' => $fleet_row['fleet_resource_metal'],
                 'crystal' => $fleet_row['fleet_resource_crystal'],
-                'deuterium' => $fleet_row['fleet_resource_deuterium']
+                'deuterium' => $fleet_row['fleet_resource_deuterium'],
             ],
             'coords' => [
                 'galaxy' => $galaxy,
                 'system' => $system,
                 'planet' => $planet,
-                'type' => $type
-            ]
+                'type' => $type,
+            ],
         ];
 
         $this->Missions_Model->updatePlanetResourcesByCoords($update_array);
@@ -199,8 +199,8 @@ class Missions extends XGPCore
                 'galaxy' => $galaxy,
                 'system' => $system,
                 'planet' => $planet,
-                'type' => $type
-            ]
+                'type' => $type,
+            ],
         ]);
 
         $target_user = $this->Missions_Model->getAllUserDataByUserId(
@@ -208,7 +208,7 @@ class Missions extends XGPCore
         );
 
         // update planet resources and queues
-        Updates_library::updatePlanetResources($target_user, $target_planet, time());
+        UpdatesLibrary::updatePlanetResources($target_user, $target_planet, time());
     }
 }
 

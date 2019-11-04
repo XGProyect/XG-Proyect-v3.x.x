@@ -2,7 +2,7 @@
 /**
  * Maker Controller
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Controller
  * @package  Application
@@ -412,7 +412,6 @@ class Maker extends Controller
                 $this->_db->query("INSERT INTO " . USERS . " SET
 										`user_name` = '" . $this->_db->escapeValue(strip_tags($name)) . "',
 										`user_email` = '" . $this->_db->escapeValue($email) . "',
-										`user_email_permanent` = '" . $this->_db->escapeValue($email) . "',
 										`user_ip_at_reg` = '" . $_SERVER['REMOTE_ADDR'] . "',
 										`user_home_planet_id` = '0',
 										`user_register_time` = '" . $time . "',
@@ -444,8 +443,8 @@ class Maker extends Controller
                 $this->_db->query("INSERT INTO " . PREMIUM . " SET
 										`premium_user_id` = '" . $last_user_id . "';");
 
-                $this->_db->query("INSERT INTO " . SETTINGS . " SET
-										`setting_user_id` = '" . $last_user_id . "';");
+                $this->_db->query("INSERT INTO " . PREFERENCES . " SET
+										`preference_user_id` = '" . $last_user_id . "';");
 
                 $this->_alert = AdministrationLib::saveMessage('ok', str_replace('%s', $pass, $this->_lang['mk_user_added']));
             } else {

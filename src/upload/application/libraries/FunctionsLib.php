@@ -2,7 +2,7 @@
 /**
  * Functions Library
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Library
  * @package  Application
@@ -21,8 +21,8 @@ use application\core\XGPCore;
 use application\libraries\messenger\MessagesFormat;
 use application\libraries\messenger\MessagesOptions;
 use application\libraries\messenger\Messenger;
+use application\libraries\Timing_library as Timing;
 use CI_Email;
-
 
 /**
  * FunctionsLib Class
@@ -32,7 +32,7 @@ use CI_Email;
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
- * @version  3.0.0
+ * @version  3.1.0
  */
 abstract class FunctionsLib extends XGPCore
 {
@@ -47,7 +47,6 @@ abstract class FunctionsLib extends XGPCore
     public static function loadLibrary($library = '')
     {
         if (!empty($library)) {
-
             // Require file
             require_once XGP_ROOT . LIB_PATH . $library . '.php';
 
@@ -56,7 +55,6 @@ abstract class FunctionsLib extends XGPCore
             // Create new $library object
             return new $class_name();
         } else {
-
             // ups!
             return false;
         }
@@ -72,7 +70,6 @@ abstract class FunctionsLib extends XGPCore
     public static function modelLoader($model = '')
     {
         if (!empty($model)) {
-
             // Require file
             require_once XGP_ROOT . MODELS_PATH . strtolower($model) . '.php';
 
@@ -81,7 +78,6 @@ abstract class FunctionsLib extends XGPCore
             // Create new $library object
             return new $class_name(new Database());
         } else {
-
             // ups!
             return false;
         }
@@ -117,10 +113,8 @@ abstract class FunctionsLib extends XGPCore
     public static function chronoApplet($type, $ref, $value, $init)
     {
         if ($init == true) {
-
             $template = parent::$page->getTemplate('general/chrono_applet_init');
         } else {
-
             $template = parent::$page->getTemplate('general/chrono_applet');
         }
 
@@ -144,14 +138,12 @@ abstract class FunctionsLib extends XGPCore
         $configs = Options::getInstance();
 
         if ($all) {
-
             foreach ($configs->getOptions() as $row) {
                 $return[$row['option_name']] = $row['option_value'];
             }
 
             return $return;
         } else {
-
             return $configs->getOptions($config_name);
         }
     }
@@ -179,8 +171,9 @@ abstract class FunctionsLib extends XGPCore
     public static function validEmail($address)
     {
         return (!preg_match(
-                "/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix", $address
-            )) ? false : true;
+            "/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix",
+            $address
+        )) ? false : true;
     }
 
     /**
@@ -193,12 +186,10 @@ abstract class FunctionsLib extends XGPCore
     public static function prepUrl($url = '')
     {
         if ($url == 'http://' or $url == '') {
-
             return '';
         }
 
         if (substr($url, 0, 7) != 'http://' && substr($url, 0, 8) != 'https://') {
-
             $url = 'http://' . $url;
         }
 
@@ -236,7 +227,6 @@ abstract class FunctionsLib extends XGPCore
         $parse['middle2'] = '';
 
         if ($center) {
-
             $parse['middle1'] = '<div id="content">';
             $parse['middle2'] = '</div>';
         }
@@ -244,14 +234,18 @@ abstract class FunctionsLib extends XGPCore
         $page = parent::$page->parseTemplate(parent::$page->getTemplate('general/message_body'), $parse);
 
         if (!defined('IN_ADMIN')) {
-
             parent::$page->display(
-                $page, $topnav, (($dest != "") ? "<meta http-equiv=\"refresh\" content=\"$time;URL=$dest\">" : ""), $menu
+                $page,
+                $topnav,
+                (($dest != "") ? "<meta http-equiv=\"refresh\" content=\"$time;URL=$dest\">" : ""),
+                $menu
             );
         } else {
-
             parent::$page->display(
-                $page, $topnav, (($dest != "") ? "<meta http-equiv=\"refresh\" content=\"$time;URL=$dest\">" : ""), $menu
+                $page,
+                $topnav,
+                (($dest != "") ? "<meta http-equiv=\"refresh\" content=\"$time;URL=$dest\">" : ""),
+                $menu
             );
         }
     }
@@ -269,10 +263,8 @@ abstract class FunctionsLib extends XGPCore
         $modules_array = explode(';', $modules_array);
 
         if ($module_id == 0) {
-
             return $modules_array;
         } else {
-
             return $modules_array[$module_id];
         }
     }
@@ -287,7 +279,6 @@ abstract class FunctionsLib extends XGPCore
     public static function moduleMessage($access_level)
     {
         if ($access_level == 0) {
-
             die(self::message(parent::$lang['lm_module_not_accesible'], '', '', true));
         }
     }
@@ -302,8 +293,8 @@ abstract class FunctionsLib extends XGPCore
     public static function sortPlanets($current_user)
     {
         $db = new Database();
-        $order = $current_user['setting_planet_order'] == 1 ? "DESC" : "ASC";
-        $sort = $current_user['setting_planet_sort'];
+        $order = $current_user['preference_planet_sort_sequence'] == 1 ? "DESC" : "ASC"; // up or down
+        $sort = $current_user['preference_planet_sort'];
 
         $planets = "SELECT `planet_id`, `planet_name`, `planet_galaxy`, `planet_system`, `planet_planet`, `planet_type`
                     FROM " . PLANETS . "
@@ -311,19 +302,21 @@ abstract class FunctionsLib extends XGPCore
                         AND `planet_destroyed` = 0 ORDER BY ";
 
         switch ($sort) {
-            case 0:
+            case 0: // emergence
+            default:
                 $planets .= "`planet_id` " . $order;
-
                 break;
-
-            case 1:
-                $planets .= "`planet_galaxy`, `planet_system`, `planet_planet`, `planet_type` " . $order;
-
+            case 1: // coordinates
+                $planets .= "`planet_galaxy` " . $order . ", `planet_system` " . $order . ", `planet_planet` " . $order . ", `planet_type` " . $order;
                 break;
-
-            case 2:
+            case 2: // alphabet
                 $planets .= "`planet_name` " . $order;
-
+                break;
+            case 3: // size
+                $planets .= "`planet_diameter` " . $order;
+                break;
+            case 4: // used_fields
+                $planets .= "`planet_field_current` " . $order;
                 break;
         }
 
@@ -349,24 +342,19 @@ abstract class FunctionsLib extends XGPCore
         $mode = isset($_GET['mode']) ? $_GET['mode'] : '';
 
         if ($user_planets) {
-
             while ($planets = $db->fetchArray($user_planets)) {
-
                 if ($current_planet_id != $planets['planet_id']) {
-
                     $list .= "\n<option ";
-                    $list .= (($planets['planet_id'] == $current_user['user_current_planet'] ) ?
+                    $list .= (($planets['planet_id'] == $current_user['user_current_planet']) ?
                         'selected="selected" ' : '');
 
                     // FOR TOPNAVIGATION BAR PLANET LIST
                     if ($current_planet_id == 0) {
-
                         $list .= "value=\"game.php?page=" . $page . "&gid=" .
                             $gid . "&cp=" . $planets['planet_id'] . "";
                         $list .= "&amp;mode=" . $mode;
                         $list .= "&amp;re=0\">";
                     } else {
-
                         // FOR FLEETS2 PAGE COLONIES SHORTCUTS
                         $list .= "value=\"" . $planets['planet_galaxy'] . ';' . $planets['planet_system'] . ';' .
                             $planets['planet_planet'] . ';' . $planets['planet_type'] . "\">";
@@ -383,10 +371,8 @@ abstract class FunctionsLib extends XGPCore
 
         // IF THE LIST OF PLANETS IS EMPTY WE SHOULD RETURN false
         if ($list !== '') {
-
             return $list;
         } else {
-
             return false;
         }
     }
@@ -414,23 +400,23 @@ abstract class FunctionsLib extends XGPCore
 
         switch ($type) {
             case 0:
-                $type = MessagesEnumerator::espio;
+                $type = MessagesEnumerator::ESPIO;
                 break;
             case 1:
-                $type = MessagesEnumerator::combat;
+                $type = MessagesEnumerator::COMBAT;
                 break;
             case 2:
-                $type = MessagesEnumerator::exp;
+                $type = MessagesEnumerator::EXP;
                 break;
             case 3:
-                $type = MessagesEnumerator::ally;
+                $type = MessagesEnumerator::ALLY;
                 break;
             case 4:
-                $type = MessagesEnumerator::user;
+                $type = MessagesEnumerator::USER;
                 break;
             default:
             case 5:
-                $type = MessagesEnumerator::general;
+                $type = MessagesEnumerator::GENERAL;
                 break;
         }
 
@@ -439,8 +425,7 @@ abstract class FunctionsLib extends XGPCore
         $options->setSubject($subject);
 
         if ($allowHtml) {
-
-            $options->setMessageFormat(MessagesFormat::html);
+            $options->setMessageFormat(MessagesFormat::HTML);
         }
 
         $options->setMessageText($message);
@@ -451,13 +436,13 @@ abstract class FunctionsLib extends XGPCore
 
     /**
      * Send and email
-     * 
+     *
      * @param string $to      Mail To
      * @param string $subject Mail Subject
      * @param string $body    Mail Body
      * @param array  $from    Mail From
      * @param mixed  $headers Mail headers (optional)
-     * 
+     *
      * @return mixed
      */
     public static function sendEmail($to, $subject, $body, $from, $format = 'text', $headers = '')
@@ -466,14 +451,12 @@ abstract class FunctionsLib extends XGPCore
         $mail_library_path = XGP_ROOT . SYSTEM_PATH . 'libraries/Email.php';
 
         if (!file_exists($mail_library_path)) {
-
             return;
         }
 
         // required by the library
         if (!defined('BASEPATH')) {
-
-            define('BASEPATH', true);
+            define('BASEPATH', XGP_ROOT . APP_PATH);
         }
 
         // use CI library
@@ -482,13 +465,11 @@ abstract class FunctionsLib extends XGPCore
         $mail = new CI_Email();
 
         if ($format === 'text' or $format === 'html') {
-
             $mail->set_mailtype($format);
         }
 
         // from
         if (is_array($from)) {
-
             $mail->from($from['mail'], $from['name']);
         }
 
@@ -497,9 +478,7 @@ abstract class FunctionsLib extends XGPCore
 
         // headers
         if (is_array($headers)) {
-
             foreach ($headers as $header => $value) {
-
                 $mail->set_header($header, $value);
             }
         }
@@ -537,17 +516,14 @@ abstract class FunctionsLib extends XGPCore
     public static function setUrl($url, $title = '', $content, $attributes = '')
     {
         if (empty($url)) {
-
             $url = '#';
         }
 
         if (!empty($title)) {
-
             $title = 'title="' . $title . '"';
         }
 
         if (!empty($attributes)) {
-
             $attributes = ' ' . $attributes;
         }
 
@@ -566,7 +542,6 @@ abstract class FunctionsLib extends XGPCore
     public static function setImage($path, $title = 'img', $attributes = '')
     {
         if (!empty($attributes)) {
-
             $attributes = ' ' . $attributes;
         }
 
@@ -584,14 +559,10 @@ abstract class FunctionsLib extends XGPCore
     public static function inMultiarray($needle, $haystack)
     {
         foreach ($haystack as $key => $value) {
-
             if ($value == $needle) {
-
                 return true;
             } elseif (is_array($value)) {
-
                 if (self::inMultiarray($needle, $value)) {
-
                     return true;
                 }
             }
@@ -611,11 +582,9 @@ abstract class FunctionsLib extends XGPCore
     public static function recursiveArraySearch($needle, $haystack)
     {
         foreach ($haystack as $key => $value) {
-
             $current_key = $key;
 
-            if ($needle === $value or ( is_array($value) && self::recursiveArraySearch($needle, $value) !== false )) {
-
+            if ($needle === $value or (is_array($value) && self::recursiveArraySearch($needle, $value) !== false)) {
                 return $current_key;
             }
         }
@@ -648,13 +617,11 @@ abstract class FunctionsLib extends XGPCore
 
         // set the user language reading the config file
         if ($installed && !isset($_COOKIE['current_lang'])) {
-
             $_COOKIE['current_lang'] = self::readConfig('lang');
         }
 
         // get the language from the session
         if (isset($_COOKIE['current_lang'])) {
-
             return $_COOKIE['current_lang'];
         }
 
@@ -663,9 +630,9 @@ abstract class FunctionsLib extends XGPCore
 
     /**
      * setCurrentLanguage
-     * 
+     *
      * @param string $lang Language
-     * 
+     *
      * @return void
      */
     public static function setCurrentLanguage($lang = '')
@@ -674,7 +641,6 @@ abstract class FunctionsLib extends XGPCore
 
         // set the user language reading the config file
         if ($db != null && $db->testConnection() && !isset($_COOKIE['current_lang'])) {
-
             self::updateConfig('lang', $lang);
         }
 
@@ -695,13 +661,10 @@ abstract class FunctionsLib extends XGPCore
         $lang_options = '';
 
         while (($lang_dir = readdir($langs_dir)) !== false) {
-
             if (!in_array($lang_dir, $exceptions)) {
-
                 $lang_options .= '<option ';
 
                 if ($current_lang == $lang_dir) {
-
                     $lang_options .= 'selected = selected';
                 }
 
@@ -721,10 +684,9 @@ abstract class FunctionsLib extends XGPCore
      */
     public static function checkServer($current_user)
     {
-        if (self::readConfig('game_enable') == 0 
-            && $current_user['user_authlevel'] < UserRanksEnumerator::admin 
+        if (self::readConfig('game_enable') == 0
+            && $current_user['user_authlevel'] < UserRanksEnumerator::admin
             && !defined('IN_ADMIN')) {
-
             self::message(stripslashes(FunctionsLib::readConfig('close_reason')), '', '', false, false);
             die();
         }
@@ -732,56 +694,53 @@ abstract class FunctionsLib extends XGPCore
 
     /**
      * Display login errors
-     * 
+     *
      * @param array $user_row User Row
-     * 
+     *
      * @return void
      */
     public static function displayLoginErrors($user_row)
     {
         if ($user_row['user_id'] != $_SESSION['user_id'] && !defined('IN_LOGIN')) {
-
-            FunctionsLib::message(parent::$lang['ccs_other_user'], XGP_ROOT, 3, false, false);
+            FunctionsLib::redirect(SYSTEM_ROOT);
         }
 
         if (sha1($user_row['user_password'] . "-" . SECRETWORD) != $_SESSION['user_password'] && !defined('IN_LOGIN')) {
-
-            FunctionsLib::message(parent::$lang['css_different_password'], XGP_ROOT, 5, false, false);
+            FunctionsLib::redirect(SYSTEM_ROOT);
         }
 
         if ($user_row['user_banned'] > 0) {
-
             $parse = parent::$lang;
-            $parse['banned_until'] = date(FunctionsLib::readConfig('date_format_extended'), $user_row['user_banned']);
+            $parse['banned_until'] = Timing::formatExtendedDate($user_row['user_banned']);
 
             die(parent::$page->get('home/banned_message')->parse($parse));
         }
     }
-    
+
     /**
      * Replicates the behavior of mysql_real_escape_string
-     * 
+     *
      * @param string $value Value to escape
-     * 
+     *
      * @return string
      */
-    public static function escapeString($value) 
+    public static function escapeString($value)
     {
-        $search = ["\\",  "\x00", "\n",  "\r",  "'",  '"', "\x1a"];
-        $replace = ["\\\\","\\0","\\n", "\\r", "\'", '\"', "\\Z"];
+        $search = ["\\", "\x00", "\n", "\r", "'", '"', "\x1a"];
+        $replace = ["\\\\", "\\0", "\\n", "\\r", "\'", '\"', "\\Z"];
 
         return str_replace($search, $replace, $value);
     }
-    
+
     /**
      * Shows a message box
-     * 
+     *
      * @param string $title     Box Tittle
      * @param string $message   Box Message
      * @param string $goto      Go to url
      * @param string $button    Button text
      * @param bool   $two_lines Set the message in two lines
-     * 
+     *
      * @return string
      */
     public static function messageBox($title, $message, $goto = '', $button = ' ok ', $two_lines = false)
@@ -795,9 +754,9 @@ abstract class FunctionsLib extends XGPCore
                     parent::$page->getTemplate('alliance/alliance_message_box_row_' . ($two_lines ? 'two' : 'one')),
                     [
                         'message' => $message,
-                        'button' => $button
+                        'button' => $button,
                     ]
-                )
+                ),
             ]
         );
     }

@@ -2,7 +2,7 @@
 /**
  * Home Controller
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Controller
  * @package  Application
@@ -75,8 +75,7 @@ class Home extends Controller
             $login = $this->_db->queryFetch(
                 "SELECT `user_id`, `user_name`, `user_password`, `user_banned`
                 FROM " . USERS . "
-                WHERE (`user_name` = '" . $this->_db->escapeValue($_POST['login']) . "'
-                    OR `user_email` = '" . $this->_db->escapeValue($_POST['login']) . "')
+                WHERE `user_email` = '" . $this->_db->escapeValue($_POST['login']) . "'
                     AND `user_password` = '" . sha1($_POST['pass']) . "'
                 LIMIT 1"
             );

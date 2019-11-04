@@ -2,7 +2,7 @@
 /**
  * Buildings
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Library
  * @package  Application
@@ -55,7 +55,6 @@ final class QueueElements
      * @var string
      */
     public $build_mode = '';
-
 }
 
 /* end of QueueElements.php */

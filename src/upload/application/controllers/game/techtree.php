@@ -2,7 +2,7 @@
 /**
  * Techtree Controller
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Controller
  * @package  Application
@@ -32,14 +32,34 @@ class Techtree extends Controller
 
     const MODULE_ID = 10;
 
-    private $_lang;
-    private $_resource;
-    private $_requeriments;
-    private $_current_user;
-    private $_current_planet;
+    /**
+     *
+     * @var array
+     */
+    private $_user;
 
     /**
-     * __construct()
+     *
+     * @var array
+     */
+    private $_planet;
+
+    /**
+     *
+     * @var \Objects
+     */
+    private $_resource;
+
+    /**
+     *
+     * @var \Objects
+     */
+    private $_requirements;
+
+    /**
+     * Constructor
+     *
+     * @return void
      */
     public function __construct()
     {
@@ -51,76 +71,113 @@ class Techtree extends Controller
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
-        $this->_lang = parent::$lang;
-        $this->_resource = parent::$objects->getObjects();
-        $this->_requeriments = parent::$objects->getRelations();
-        $this->_current_user = parent::$users->getUserData();
-        $this->_current_planet = parent::$users->getPlanetData();
+        // set data
+        $this->_user = $this->getUserData();
 
-        $this->build_page();
+        // set planet data
+        $this->_planet = $this->getPlanetData();
+
+        // requirements
+        $this->_resource = parent::$objects->getObjects();
+
+        // requirements
+        $this->_requirements = parent::$objects->getRelations();
+
+        // build the page
+        $this->buildPage();
     }
 
     /**
-     * method build_page
-     * param
-     * return main method, loads everything
+     * Build the page
+     *
+     * @return void
      */
-    private function build_page()
+    private function buildPage()
     {
-        $parse = $this->_lang;
-        $page = '';
-        $header_template = parent::$page->getTemplate('techtree/techtree_head');
-        $row_template = parent::$page->getTemplate('techtree/techtree_row');
+        /**
+         * Parse the items
+         */
+        $page = [
+            'list_of_constructions' => $this->buildBlock('build'),
+            'list_of_research' => $this->buildBlock('tech'),
+            'list_of_ships' => $this->buildBlock('fleet'),
+            'list_of_missiles' => $this->buildBlock('missiles'),
+            'list_of_defenses' => $this->buildBlock('defenses'),
+        ];
 
-        foreach ($this->_lang['tech'] as $element => $element_name) {
-            if ($element < 600) {
-                $parse['tt_name'] = $element_name;
+        // display the page
+        parent::$page->display(
+            $this->getTemplate()->set(
+                'game/techtree_view',
+                array_merge(
+                    $this->getLang(), $page
+                )
+            )
+        );
+    }
 
-                if (!isset($this->_resource[$element])) {
-                    $parse['Requirements'] = $this->_lang['tt_requirements'];
-                    $page .= parent::$page->parseTemplate($header_template, $parse);
-                } else {
-                    if (isset($this->_requeriments[$element])) {
-                        $list = '';
+    /**
+     * Build the block
+     *
+     * @param string $object_id
+     *
+     * @return array
+     */
+    private function buildBlock(string $object_id): array
+    {
+        $objects = parent::$objects->getObjectsList($object_id);
+        $list_of_objects = [];
 
-                        foreach ($this->_requeriments[$element] as $requirement => $level) {
-                            if (isset($this->_current_user[$this->_resource[$requirement]]) && $this->_current_user[$this->_resource[$requirement]] >= $level) {
-                                $list .= FormatLib::colorGreen($this->set_level_format($level, $this->_lang['tech'][$requirement]));
-                            } elseif (isset($this->_current_planet[$this->_resource[$requirement]]) && $this->_current_planet[$this->_resource[$requirement]] >= $level) {
-                                $list .= FormatLib::colorGreen($this->set_level_format($level, $this->_lang['tech'][$requirement]));
-                            } else {
-                                $list .= FormatLib::colorRed($this->set_level_format($level, $this->_lang['tech'][$requirement]));
-                            }
+        foreach ($objects as $object) {
 
-                            $list .= '<br/>';
-                        }
-
-                        $parse['required_list'] = $list;
-                    } else {
-                        $parse['required_list'] = '';
-                        $parse['tt_detail'] = '';
-                    }
-
-                    $parse['tt_info'] = $element;
-                    $page .= parent::$page->parseTemplate($row_template, $parse);
-                }
-            }
+            $list_of_objects[] = [
+                'tt_info' => $object,
+                'tt_name' => $this->getLang()['tech'][$object],
+                'tt_detail' => '',
+                'requirements' => join('<br/>', $this->getRequirements($object)),
+            ];
         }
 
-        $parse['techtree_list'] = $page;
-
-        return parent::$page->display(parent::$page->parseTemplate(parent::$page->getTemplate('techtree/techtree_body'), $parse));
+        return $list_of_objects;
     }
 
     /**
-     * method set_level_format
-     * param $level
-     * param $tech_name
-     * return (string) format tech with level
+     * Build the requirements list
+     *
+     * @param int $object
+     *
+     * @return array
      */
-    private function set_level_format($level, $tech_name)
+    private function getRequirements(int $object): array
     {
-        return $tech_name . ' (' . $this->_lang['tt_lvl'] . $level . ')';
+        $list_of_requirements = [];
+
+        if (!isset($this->_requirements[$object])) {
+
+            return $list_of_requirements;
+        }
+
+        foreach ($this->_requirements[$object] as $requirement => $level) {
+
+            $color = 'Red';
+
+            if ((isset($this->_user[$this->_resource[$requirement]])
+                && $this->_user[$this->_resource[$requirement]] >= $level)
+                or (isset($this->_planet[$this->_resource[$requirement]])
+                    && $this->_planet[$this->_resource[$requirement]] >= $level)) {
+
+                $color = 'Green';
+            }
+
+            $list_of_requirements[] = FormatLib::{'color' . $color}(
+                FormatLib::formatLevel(
+                    $this->getLang()['tech'][$requirement], $this->getLang()['tt_lvl'], $level
+                )
+            );
+
+        }
+
+        return $list_of_requirements;
     }
 }
 

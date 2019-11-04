@@ -2,7 +2,7 @@
 /**
  * Banned Controller
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Controller
  * @package  Application
@@ -15,6 +15,7 @@ namespace application\controllers\game;
 
 use application\core\Controller;
 use application\libraries\FunctionsLib;
+use application\libraries\Timing_library as Timing;
 
 /**
  * Banned Class
@@ -91,8 +92,8 @@ class Banned extends Controller
                 $body[] = [
                     'player' => $u['banned_who'],
                     'reason' => $u['banned_theme'],
-                    'since' => date(FunctionsLib::readConfig('date_format_extended'), $u['banned_time']),
-                    'until' => date(FunctionsLib::readConfig('date_format_extended'), $u['banned_longer']),
+                    'since' => Timing::formatExtendedDate($u['banned_time']),
+                    'until' => Timing::formatExtendedDate($u['banned_longer']),
                     'by' => FunctionsLib::setUrl('mailto:' . $u['banned_email'], $u['banned_author'], $u['banned_author'])
                 ];
             }
@@ -106,7 +107,7 @@ class Banned extends Controller
         }
 
         parent::$page->display(
-            $this->getTemplate()->set('banned/banned_view', $parse)
+            $this->getTemplate()->set('game/banned_view', $parse)
         );
     }
 }

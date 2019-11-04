@@ -26,21 +26,21 @@
  * @version 6-3-2015
  * @link https://github.com/jstar88/opbe
  */
-
 class DebugManager
 {
+
     private $errorHandler;
     private $exceptionHandler;
 
     public static function intercept($toIntercept, $newFunction)
     {
-        return function ()use($toIntercept, $newFunction)
-        {
+        return function ()use($toIntercept, $newFunction) {
             $newFunction();
             return call_user_func_array($toIntercept, func_get_args());
         }
         ;
     }
+
     /**
      * DebugManager::runDebugged()
      * Return a new function that will run the function given as argument under debug
@@ -53,8 +53,7 @@ class DebugManager
             $errorHandler = array('DebugManager', 'myErrorHandler');
         if ($exceptionHandler == null)
             $exceptionHandler = array('DebugManager', 'save');
-        return function ()use($func, $errorHandler, $exceptionHandler)
-        {
+        return function ()use($func, $errorHandler, $exceptionHandler) {
             set_error_handler($errorHandler);
             set_exception_handler($exceptionHandler);
             $return = call_user_func_array($func, func_get_args($func));
@@ -77,8 +76,7 @@ class DebugManager
     public static function myErrorHandler($errno, $errstr, $errfile, $errline)
     {
         $error = '';
-        switch ($errno)
-        {
+        switch ($errno) {
             case E_USER_ERROR:
                 $error .= "ERROR [$errno] $errstr" . PHP_EOL;
                 break;
@@ -100,7 +98,6 @@ class DebugManager
         DebugManager::save($error);
         /* Don't execute PHP internal error handler */
         return true;
-
     }
 
     /**
@@ -116,8 +113,7 @@ class DebugManager
         $post = '$_POST =' . var_export($_POST);
         $get = '$_GET =' . var_export($_GET);
         $output = ob_get_clean();
-        if (!file_exists(OPBEPATH . 'errors'))
-        {
+        if (!file_exists(OPBEPATH . 'errors')) {
             mkdir(OPBEPATH . 'errors', 0777, true);
         }
         file_put_contents(OPBEPATH . 'errors' . DIRECTORY_SEPARATOR . date('d-m-y__H-i-s') . '.html', $time . PHP_EOL . $other . PHP_EOL . $post . PHP_EOL . $get . PHP_EOL . $output);
@@ -127,12 +123,12 @@ class DebugManager
 
 function log_var($name, $value)
 {
-    if (is_array($value))
-    {
+    if (is_array($value)) {
         $value = var_export($value);
     }
     log_comment("$name = $value");
 }
+
 function log_comment($comment)
 {
     echo "[log]$comment<br>\n";

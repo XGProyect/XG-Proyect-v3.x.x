@@ -2,7 +2,7 @@
 /**
  * Statistics Controller
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Controller
  * @package  Application
@@ -48,10 +48,8 @@ class Statistics extends Controller
 
         // Check if the user is allowed to access
         if (AdministrationLib::haveAccess($this->current_user['user_authlevel']) && AdministrationLib::authorization($this->current_user['user_authlevel'], 'config_game') == 1) {
-
             $this->buildPage();
         } else {
-
             die(AdministrationLib::noAccessMessage($this->langs['ge_no_permissions']));
         }
     }
@@ -108,9 +106,9 @@ class Statistics extends Controller
 
     /**
      * adminLevels
-     * 
+     *
      * @param string $selected Selected level
-     * 
+     *
      * @return string
      */
     private function adminLevels($selected)

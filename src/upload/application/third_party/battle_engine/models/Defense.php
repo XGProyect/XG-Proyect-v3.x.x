@@ -1,4 +1,5 @@
 <?php
+
 /**
  *  OPBE
  *  Copyright (C) 2013  Jstar
@@ -27,6 +28,7 @@
  */
 class Defense extends ShipType
 {
+
     public function getRepairProb()
     {
         return DEFENSE_REPAIR_PROB;

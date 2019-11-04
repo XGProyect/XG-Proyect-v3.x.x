@@ -2,7 +2,7 @@
 /**
  * Statistics Controller
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Controller
  * @package  Application
@@ -17,6 +17,8 @@ use application\core\Controller;
 use application\core\Database;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
+use application\libraries\Timing_library as Timing;
+use const MODULE_ID;
 
 /**
  * Statistics Class
@@ -117,7 +119,7 @@ class Statistics extends Controller
 
             $start++;
 
-            $parse['stat_date'] = date(FunctionsLib::readConfig('date_format_extended'), FunctionsLib::readConfig('stat_last_update'));
+            $parse['stat_date'] = Timing::formatExtendedDate(FunctionsLib::readConfig('stat_last_update'));
             $parse['stat_values'] = "";
             $StatAllianceTableTPL = parent::$page->getTemplate('stat/stat_alliancetable');
 
@@ -154,7 +156,7 @@ class Statistics extends Controller
             );
 
             $start++;
-            $parse['stat_date'] = date(FunctionsLib::readConfig('date_format_extended'), FunctionsLib::readConfig('stat_last_update'));
+            $parse['stat_date'] = Timing::formatExtendedDate(FunctionsLib::readConfig('stat_last_update'));
             $parse['stat_values'] = "";
             $previusId = 0;
             $StatPlayerTableTPL = parent::$page->getTemplate('stat/stat_playertable');
@@ -170,7 +172,7 @@ class Statistics extends Controller
                 }
 
                 if ($StatRow['user_id'] != $this->_current_user['user_id']) {
-                    $parse['player_mes'] = '<a href="game.php?page=messages&mode=write&id=' . $StatRow['user_id'] . '"><img src="' . DPATH . 'img/m.gif" border="0" title="' . $this->_lang['write_message'] . '" /></a>';
+                    $parse['player_mes'] = '<a href="game.php?page=chat&playerId=' . $StatRow['user_id'] . '"><img src="' . DPATH . 'img/m.gif" border="0" title="' . $this->_lang['write_message'] . '" /></a>';
                 } else {
                     $parse['player_mes'] = "";
                 }

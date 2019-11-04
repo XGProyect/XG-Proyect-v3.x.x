@@ -2,7 +2,7 @@
 /**
  * Recycle Library
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Library
  * @package  Application
@@ -60,18 +60,17 @@ class Recycle extends Missions
         $recycled_resources = $this->calculateCapacity($fleet_row);
 
         if ($fleet_row['fleet_mess'] == 0 && $fleet_row['fleet_start_time'] <= time()) {
-
             $this->Missions_Model->updatePlanetDebrisFieldAndFleet([
                 'recycled' => [
                     'metal' => $recycled_resources['metal'],
-                    'crystal' => $recycled_resources['crystal']
+                    'crystal' => $recycled_resources['crystal'],
                 ],
                 'coords' => [
                     'galaxy' => $fleet_row['fleet_end_galaxy'],
                     'system' => $fleet_row['fleet_end_system'],
-                    'planet' => $fleet_row['fleet_end_planet']
+                    'planet' => $fleet_row['fleet_end_planet'],
                 ],
-                'fleet_id' => $fleet_row['fleet_id']
+                'fleet_id' => $fleet_row['fleet_id'],
             ]);
 
             $message = sprintf(
@@ -109,8 +108,8 @@ class Recycle extends Missions
             'coords' => [
                 'galaxy' => $fleet_row['fleet_end_galaxy'],
                 'system' => $fleet_row['fleet_end_system'],
-                'planet' => $fleet_row['fleet_end_planet']
-            ]
+                'planet' => $fleet_row['fleet_end_planet'],
+            ],
         ]);
 
         $this->planet_name = $target_planet['target_name'];
@@ -139,7 +138,7 @@ class Recycle extends Missions
             $recycle_capacity -= ($current_resources - $other_capacity);
         }
 
-        if (( $target_planet['planet_debris_metal'] + $target_planet['planet_debris_crystal'] ) <= $recycle_capacity) {
+        if (($target_planet['planet_debris_metal'] + $target_planet['planet_debris_crystal']) <= $recycle_capacity) {
 
             $recycled_resources['metal'] = $target_planet['planet_debris_metal'];
             $recycled_resources['crystal'] = $target_planet['planet_debris_crystal'];
@@ -156,7 +155,7 @@ class Recycle extends Missions
                     $recycled_resources['crystal'] = $target_planet['planet_debris_crystal'];
 
                     if ($target_planet['planet_debris_metal'] >
-                        ( $recycle_capacity - $recycled_resources['crystal'])) {
+                        ($recycle_capacity - $recycled_resources['crystal'])) {
 
                         $recycled_resources['metal'] = $recycle_capacity - $recycled_resources['crystal'];
                     } else {

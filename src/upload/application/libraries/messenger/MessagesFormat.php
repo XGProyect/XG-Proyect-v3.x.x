@@ -2,7 +2,7 @@
 /**
  * Messenger Library
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Library
  * @package  Application
@@ -21,14 +21,12 @@ namespace application\libraries\messenger;
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
- * @version  3.0.4
+ * @version  3.1.0
  */
 abstract class MessagesFormat
 {
-
-    const simple = 0;
-    const html = 1;
-
+    const SIMPLE = 0;
+    const HTML = 1;
 }
 
 /* end of MessagesFormat.php */

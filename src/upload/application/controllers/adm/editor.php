@@ -2,7 +2,7 @@
 /**
  * Editor Controller
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Controller
  * @package  Application
@@ -76,15 +76,14 @@ class Editor extends Controller
                 $parse['alert'] = AdministrationLib::saveMessage('ok', $this->_lang['ce_all_ok_message']);
             }
         }
-        
+
         $parse['language_files'] = $this->get_files();
         $parse['contents'] = empty($this->_current_file) ? '' : $this->get_contents();
 
         if ($parse['contents'] == '') {
-            
             $parse['alert'] = AdministrationLib::saveMessage('error', $this->_lang['ce_all_error_reading']);
         }
-        
+
         parent::$page->display(parent::$page->parseTemplate(parent::$page->getTemplate('adm/editor_view'), $parse));
     }
 
@@ -101,9 +100,8 @@ class Editor extends Controller
         // OPEN THE FILE
         $fs = @fopen($changelog_file, 'a+');
         $contents = '';
-        
-        if ($fs) {
 
+        if ($fs) {
             // LOOP THRU THE FILE TO GET ITS CONTENT
             while (!feof($fs)) {
                 $contents .= fgets($fs, 1024);
@@ -130,7 +128,6 @@ class Editor extends Controller
         $fs = @fopen($file, 'w');
 
         if ($fs && $file_data != '') {
-
             fwrite($fs, $file_data);
 
             fclose($fs);
@@ -148,7 +145,7 @@ class Editor extends Controller
         $exceptions = array('.', '..', '.htaccess', 'index.html');
         $lang_options = '';
 
-        while (( $lang_file = readdir($langs_files) ) !== false) {
+        while (($lang_file = readdir($langs_files)) !== false) {
             if (!in_array($lang_file, $exceptions) && strpos($lang_file, '.', 0) != 0) {
                 $lang_options .= '<option ';
 

@@ -2,7 +2,7 @@
 /**
  * Reset Controller
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Controller
  * @package  Application
@@ -92,11 +92,11 @@ class Reset extends Controller
         $this->_db->query("TRUNCATE TABLE " . PREMIUM . "");
         $this->_db->query("TRUNCATE TABLE " . RESEARCH . "");
         $this->_db->query("TRUNCATE TABLE " . REPORTS . "");
-        $this->_db->query("TRUNCATE TABLE " . SETTINGS . "");
+        $this->_db->query("TRUNCATE TABLE " . PREFERENCES . "");
         $this->_db->query("TRUNCATE TABLE " . USERS_STATISTICS . "");
         $this->_db->query("TRUNCATE TABLE " . SHIPS . "");
 
-        $AllUsers = $this->_db->query("SELECT `user_name`, `user_password`, `user_email`, `user_email_permanent`,`user_authlevel`,`user_galaxy`,`user_system`,`user_planet`, `user_onlinetime`, `user_register_time`, `user_home_planet_id`
+        $AllUsers = $this->_db->query("SELECT `user_name`, `user_password`, `user_email`,`user_authlevel`,`user_galaxy`,`user_system`,`user_planet`, `user_onlinetime`, `user_register_time`, `user_home_planet_id`
 											FROM " . USERS . "_s
 											WHERE 1;");
 
@@ -115,7 +115,6 @@ class Reset extends Controller
                         "INSERT INTO " . USERS . " SET
                             `user_name` = '" . $TheUser['user_name'] . "',
                             `user_email` = '" . $TheUser['user_email'] . "',
-                            `user_email_permanent` = '" . $TheUser['user_email_permanent'] . "',
                             `user_home_planet_id` = '0',
                             `user_authlevel` = '" . $TheUser['user_authlevel'] . "',
                             `user_galaxy` = '" . $TheUser['user_galaxy'] . "',
@@ -138,8 +137,8 @@ class Reset extends Controller
                     $this->_db->query("INSERT INTO " . PREMIUM . " SET
 											`premium_user_id` = '" . $last_id . "';");
 
-                    $this->_db->query("INSERT INTO " . SETTINGS . " SET
-											`setting_user_id` = '" . $last_id . "';");
+                    $this->_db->query("INSERT INTO " . PREFERENCES . " SET
+											`preference_user_id` = '" . $last_id . "';");
 
                     $this->_db->query("UPDATE " . USERS . " SET
 											`user_banned` = '0'

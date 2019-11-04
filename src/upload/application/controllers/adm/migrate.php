@@ -2,7 +2,7 @@
 /**
  * Migrate Controller
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Controller
  * @package  Application
@@ -44,7 +44,7 @@ class Migrate extends Controller
 
     /**
      * __construct()
-     * 
+     *
      * @return void
      */
     public function __construct()
@@ -59,12 +59,10 @@ class Migrate extends Controller
 
         // Check if the user is allowed to access
         if (AdministrationLib::haveAccess(
-                $this->current_user['user_authlevel']
-            ) && $this->current_user['user_authlevel'] == 3) {
-
+            $this->current_user['user_authlevel']
+        ) && $this->current_user['user_authlevel'] == 3) {
             $this->buildPage();
         } else {
-
             die(AdministrationLib::noAccessMessage($this->langs['ge_no_permissions']));
         }
     }
@@ -82,7 +80,6 @@ class Migrate extends Controller
         $parse['versions_list'] = $this->getVersionsList();
 
         if ($_POST) {
-
             $this->host = isset($_POST['host']) ? $_POST['host'] : null;
             $this->user = isset($_POST['user']) ? $_POST['user'] : null;
             $this->password = isset($_POST['password']) ? $_POST['password'] : null;
@@ -92,13 +89,11 @@ class Migrate extends Controller
             $this->demo = (isset($_POST['demo_mode']) && $_POST['demo_mode'] == 'on') ? true : false;
 
             if (!$this->validateDbData()) {
-
                 $alerts = $this->langs['mi_empty_fields_error'];
                 $continue = false;
             }
 
             if (!$this->checkVersion() && $continue) {
-
                 $alerts = $this->langs['mi_no_migration_file'];
                 $continue = false;
             }
@@ -107,7 +102,6 @@ class Migrate extends Controller
             $this->dbObject = new Database();
 
             if (!$this->tryConnection() && $continue) {
-
                 $alerts = $this->langs['mi_not_connected_error'];
                 $continue = false;
             }
@@ -118,23 +112,21 @@ class Migrate extends Controller
             }
 
             if ($continue) {
-
                 $this->startMigration();
 
                 $parse['alert'] = AdministrationLib::saveMessage('ok', $this->langs['mi_success']);
 
                 if ($this->demo) {
-
                     $parse['result'] = print_r($this->output, true);
 
                     parent::$page->display(
                         parent::$page->parseTemplate(
-                            parent::$page->getTemplate('adm/migrate_result_view'), $parse
+                            parent::$page->getTemplate('adm/migrate_result_view'),
+                            $parse
                         )
                     );
                 }
             } else {
-
                 $parse['alert'] = AdministrationLib::saveMessage('warning', $alerts);
                 $parse['v_host'] = $this->host;
                 $parse['v_db'] = $this->name;
@@ -150,7 +142,7 @@ class Migrate extends Controller
 
     /**
      * getVersionsList
-     * 
+     *
      * @return string
      */
     private function getVersionsList()
@@ -176,13 +168,12 @@ class Migrate extends Controller
             '2106' => '2.10.6',
             '2107' => '2.10.7',
             '2108' => '2.10.8',
-            '2109' => '2.10.9'
+            '2109' => '2.10.9',
         ];
 
         $version_options = '';
 
         foreach ($versions as $id => $version) {
-
             if ($id == $this->version) {
                 $select = 'selected="selected"';
             } else {
@@ -203,12 +194,12 @@ class Migrate extends Controller
     private function validateDbData()
     {
         return !empty($this->host) && !empty($this->name) &&
-            !empty($this->user) && !empty($this->prefix);
+        !empty($this->user) && !empty($this->prefix);
     }
 
     /**
      * checkVersion
-     * 
+     *
      * @return boolean
      */
     private function checkVersion()
@@ -238,14 +229,14 @@ class Migrate extends Controller
 
     /**
      * startMigration
-     * 
+     *
      * @return void
      */
     private function startMigration()
     {
         /**
          * 1º Step
-         * 
+         *
          * Update old DB to latest in its current branch
          */
         $this->firstStep();
@@ -260,7 +251,7 @@ class Migrate extends Controller
 
     /**
      * firstStep
-     * 
+     *
      * @return void
      */
     private function firstStep()
@@ -274,15 +265,12 @@ class Migrate extends Controller
         // Check if there was something
         if (isset($queries) && count($queries) > 0) {
             foreach ($queries as $query) {
-
                 // set the prefix
                 $query = strtr($query, ['{prefix}' => $this->prefix]);
 
                 if (!$this->demo) {
-
                     $this->output[] = $this->dbObject->query($query);
                 } else {
-
                     $this->output[] = $query;
                 }
             }
@@ -291,7 +279,7 @@ class Migrate extends Controller
 
     /**
      * secondStep
-     * 
+     *
      * @return void
      */
     private function secondStep()
@@ -306,15 +294,12 @@ class Migrate extends Controller
         // Check if there was something/*
         if (isset($queries) && count($queries) > 0) {
             foreach ($queries as $query) {
-
                 // set the prefix
                 $query = strtr($query, ['{prefix}' => $this->prefix]);
 
                 if (!$this->demo) {
-
                     $this->output[] = $this->dbObject->query($query);
                 } else {
-
                     $this->output[] = $query;
                 }
             }

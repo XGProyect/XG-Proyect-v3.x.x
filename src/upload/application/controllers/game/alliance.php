@@ -2,7 +2,7 @@
 /**
  * Alliance Controller
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Controller
  * @package  Application
@@ -19,10 +19,11 @@ use application\core\enumerators\SwitchIntEnumerator as SwitchInt;
 use application\libraries\alliance\Alliances;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
-use application\libraries\Timing_library;
+use application\libraries\Timing_library as Timing;
 
 use const DPATH;
 use const JS_PATH;
+use const MODULE_ID;
 
 /**
  * Alliance Class
@@ -438,7 +439,7 @@ class Alliance extends Controller
     {
         $request = filter_input_array(INPUT_POST);
         
-        if ($this->_alliance->getCurrentAlliance()->getAllianceRequestNotAllow()) {
+        if (!$this->_alliance->getCurrentAlliance()->getAllianceRequestNotAllow()) {
             
             FunctionsLib::message($this->getLang()['al_alliance_closed'], 'game.php?page=alliance', 3);
         }
@@ -504,8 +505,8 @@ class Alliance extends Controller
                 'user_galaxy' => $member['user_galaxy'],
                 'user_system' => $member['user_system'],
                 'coords' => FormatLib::prettyCoords($member['user_galaxy'], $member['user_system'], $member['user_planet']),
-                'user_ally_register_time' => Timing_library::formatDefaultTime($member['user_ally_register_time']),
-                'online_time' => $this->_alliance->hasAccess(AllianceRanks::online_status) ? Timing_library::setOnlineStatus($member['user_onlinetime']) : '-'
+                'user_ally_register_time' => Timing::formatExtendedDate($member['user_ally_register_time']),
+                'online_time' => $this->_alliance->hasAccess(AllianceRanks::online_status) ? Timing::setOnlineStatus($member['user_onlinetime']) : '-'
             ];
         }
         
@@ -769,8 +770,8 @@ class Alliance extends Controller
                     'text' => $text[$t],
                     'alliance_web' => $this->_alliance->getCurrentAlliance()->getAllianceWeb(),
                     'alliance_image' => $this->_alliance->getCurrentAlliance()->getAllianceImage(),
-                    'alliance_request_notallow_0' => $this->_alliance->getCurrentAlliance()->getAllianceRequestNotAllow() == SwitchInt::on ? 'selected' : '',
-                    'alliance_request_notallow_1' => $this->_alliance->getCurrentAlliance()->getAllianceRequestNotAllow() == SwitchInt::off ? 'selected' : '',
+                    'alliance_request_notallow_0' => $this->_alliance->getCurrentAlliance()->getAllianceRequestNotAllow() == SwitchInt::off ? 'selected' : '',
+                    'alliance_request_notallow_1' => $this->_alliance->getCurrentAlliance()->getAllianceRequestNotAllow() == SwitchInt::on ? 'selected' : '',
                     'alliance_owner_range' => $this->_alliance->getCurrentAlliance()->getAllianceOwnerRange(),
                 ]
             )
@@ -850,8 +851,8 @@ class Alliance extends Controller
                 'user_galaxy' => $member['user_galaxy'],
                 'user_system' => $member['user_system'],
                 'coords' => FormatLib::prettyCoords($member['user_galaxy'], $member['user_system'], $member['user_planet']),
-                'user_ally_register_time' => Timing_library::formatDefaultTime($member['user_ally_register_time']),
-                'online_time' => Timing_library::formatDaysTime($member['user_onlinetime']),
+                'user_ally_register_time' => Timing::formatExtendedDate($member['user_ally_register_time']),
+                'online_time' => Timing::formatDaysTime($member['user_onlinetime']),
                 'actions' => $this->buildAdminMembersActionBlock($member['user_id'], $member['user_name'], $rank)
             ];
         }
@@ -972,7 +973,7 @@ class Alliance extends Controller
                 $list_of_requests[$request['user_id']] = [
                     'id' => $request['user_id'],
                     'username' => $request['user_name'],
-                    'time' => Timing_library::formatDefaultTime($request['user_ally_register_time']),
+                    'time' => Timing::formatExtendedDate($request['user_ally_register_time']),
                     'ally_request_text' => nl2br($request['user_ally_request_text'])
                 ];
             }

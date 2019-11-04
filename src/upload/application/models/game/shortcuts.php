@@ -2,7 +2,7 @@
 /**
  * Shortcuts Model
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Model
  * @package  Application
@@ -39,20 +39,20 @@ class Shortcuts
 
     /**
      * __destruct
-     * 
+     *
      * @return void
      */
     public function __destruct()
     {
         $this->db->closeConnection();
     }
-    
+
     /**
      * Update user shortcuts
-     * 
+     *
      * @param int    $user_id   User ID
      * @param string $shortcuts Shortcuts
-     * 
+     *
      * @return void
      */
     public function updateShortcuts(int $user_id, string $shortcuts): void

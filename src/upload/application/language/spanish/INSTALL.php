@@ -16,12 +16,11 @@ $lang['ins_license'] = 'Licencia';
 $lang['ins_install'] = 'Instalar';
 $lang['ins_language_select'] = 'Seleccionar idioma';
 
-
 // OVERVIEW PAGE
 $lang['ins_title'] = 'Introducci&oacute;n';
 $lang['ins_welcome'] = '&iexcl;Bienvenido a XG Proyect!';
 $lang['ins_welcome_first_line'] = 'XG Proyect es el mejor clon de OGame existente hasta el momento. XG Proyect 3 es el &uacute;ltimo y m&aacute;s estable paquete nunca antes desarrollado. Tal cual como las otras versiones, XG Proyect recibe soporte del equipo antes conocido como Xtreme-gameZ, asegur&aacute;ndonos siempre de lograr la mejor calidad en atenci&oacute;n y la estabilidad de la versi&oacute;n. XG Proyect 3 d&iacute;a a d&iacute;a busca: crecimiento, estabilidad, flexibilidad, dinamismo, calidad y la confianza del usuario en que es su mejor opci&oacute;n y elecci&oacute;n. Siempre esperamos que XG Proyect sea mejor que tus expectativas.';
-$lang['ins_welcome_second_line'] = 'El sistema de instalaci&oacute;n te guiar&aacute; a trav&eacute;s de la instalaci&oacute;n del mismo, o la actualizaci&oacute;n de una versi&oacute;n anterior a la m&aacute;s reciente. Cualquier duda, problema o consulta no dudes en consulta nuestra <a href="http://www.xgproyect.org/"><em>comunidad de desarrollo y soporte</em></a>.';
+$lang['ins_welcome_second_line'] = 'El sistema de instalaci&oacute;n te guiar&aacute; a trav&eacute;s de la instalaci&oacute;n del mismo, o la actualizaci&oacute;n de una versi&oacute;n anterior a la m&aacute;s reciente. Cualquier duda, problema o consulta no dudes en consulta nuestra <a href="https://www.xgproyect.org/"><em>comunidad de desarrollo y soporte</em></a>.';
 $lang['ins_welcome_third_line'] = 'XG Proyect es un proyecto OpenSource (c&oacute;digo abierto), para ver las especificaciones de la licencia haz click en licencia en la barra superior. Para comenzar la instalaci&oacute;n haz click en el bot&oacute;n instalar, para actualizar a la versi&oacute;n m&aacute;s reciente o migrar deber&aacute;s iniciar sesi&oacute;n en el ADMIN CP.';
 $lang['ins_install_license'] = 'Licencia';
 

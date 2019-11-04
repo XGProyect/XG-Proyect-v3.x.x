@@ -26,9 +26,9 @@
  * @version beta(26-10-2013)
  * @link https://github.com/jstar88/opbe
  */
-
 class Gauss
 {
+
     /**
      * Random::getNext()
      * Return an random normal number
@@ -36,8 +36,8 @@ class Gauss
      */
     public static function getNext()
     {
-        $x = (float)mt_rand() / (float)mt_getrandmax();
-        $y = (float)mt_rand() / (float)mt_getrandmax();
+        $x = (float) mt_rand() / (float) mt_getrandmax();
+        $y = (float) mt_rand() / (float) mt_getrandmax();
         $u = sqrt(-2 * log($x)) * cos(2 * pi() * $y);
         $v = sqrt(-2 * log($x)) * sin(2 * pi() * $y);
         return $u;
@@ -68,20 +68,16 @@ class Gauss
     public static function getNextMsBetween($m, $s, $min, $max)
     {
         $i = 0;
-        if ($min > $m || $max < $m)
-        {
+        if ($min > $m || $max < $m) {
             throw new Exception("Mean is not bounded by min and max");
         }
-        while (true)
-        {
+        while (true) {
             $n = self::getNextMs($m, $s);
-            if ($n >= $min && $n <= $max)
-            {
+            if ($n >= $min && $n <= $max) {
                 return $n;
             }
             $i++;
-            if ($i > 10)
-            {
+            if ($i > 10) {
                 return mt_rand($min, $max);
             }
         }

@@ -2,7 +2,7 @@
 /**
  * Users Library
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Library
  * @package  Application
@@ -40,7 +40,6 @@ class Users_library
         $this->Users_Model = FunctionsLib::modelLoader('libraries/users_library');
 
         if ($this->isSessionSet()) {
-
             // Get user data and check it
             $this->setUserData();
 
@@ -54,10 +53,10 @@ class Users_library
             $this->setPlanetData();
 
             // Update resources, ships, defenses & technologies
-            Updates_library::updatePlanetResources($this->user_data, $this->planet_data, time());
+            UpdatesLibrary::updatePlanetResources($this->user_data, $this->planet_data, time());
 
             // Update buildings queue
-            Updates_library::updateBuildingsQueue($this->planet_data, $this->user_data);
+            UpdatesLibrary::updateBuildingsQueue($this->planet_data, $this->user_data);
         }
     }
 
@@ -113,7 +112,6 @@ class Users_library
     public function checkSession()
     {
         if (!$this->isSessionSet()) {
-
             FunctionsLib::redirect(SYSTEM_ROOT);
         }
     }
@@ -130,19 +128,15 @@ class Users_library
         $user_data = $this->Users_Model->getAllyIdByUserId($user_id);
 
         if ($user_data['user_ally_id'] != 0) {
-
             $alliance = $this->Users_Model->getAllianceDataByAllianceId($user_data['user_ally_id']);
 
             if ($alliance['ally_members'] > 1 && (isset($alliance['alliance_ranks']) && !is_null($alliance['alliance_ranks']))) {
-
                 $ranks = unserialize($alliance['alliance_ranks']);
                 $userRank = null;
 
                 // search for an user that has permission to receive the alliance.
                 foreach ($ranks as $id => $rank) {
-
                     if ($rank['rechtehand'] == 1) {
-
                         $userRank = $id;
                         break;
                     }
@@ -150,14 +144,11 @@ class Users_library
 
                 // check and update
                 if (is_numeric($userRank)) {
-
                     $this->Users_Model->updateAllianceOwner($alliance['alliance_id'], $userRank);
                 } else {
-
                     $this->Users_Model->deleteAlliance($alliance['alliance_id']);
                 }
             } else {
-
                 $this->Users_Model->deleteAlliance($alliance['alliance_id']);
             }
         }
@@ -177,9 +168,9 @@ class Users_library
      */
     public function isOnVacations($user)
     {
-        return ($user['setting_vacations_status'] == 1);
+        return ($user['preference_vacation_mode'] > 0);
     }
-    
+
     /**
      * Check if user is inactive
      *
@@ -204,11 +195,9 @@ class Users_library
      */
     private function isSessionSet()
     {
-        if (!isset($_SESSION['user_id']) or ! isset($_SESSION['user_name']) or ! isset($_SESSION['user_password'])) {
-
+        if (!isset($_SESSION['user_id']) or !isset($_SESSION['user_name']) or !isset($_SESSION['user_password'])) {
             return false;
         } else {
-
             return true;
         }
     }
@@ -226,7 +215,10 @@ class Users_library
 
         // update user activity data
         $this->Users_Model->updateUserActivityData(
-            $_SERVER['REQUEST_URI'], $_SERVER['REMOTE_ADDR'], $_SERVER['HTTP_USER_AGENT'], $_SESSION['user_id']
+            $_SERVER['REQUEST_URI'],
+            $_SERVER['REMOTE_ADDR'],
+            $_SERVER['HTTP_USER_AGENT'],
+            $_SESSION['user_id']
         );
 
         // pass the data
@@ -244,7 +236,8 @@ class Users_library
     private function setPlanetData()
     {
         $this->planet_data = $this->Users_Model->setPlanetData(
-            $this->user_data['user_current_planet'], FunctionsLib::readConfig('stat_admin_level')
+            $this->user_data['user_current_planet'],
+            FunctionsLib::readConfig('stat_admin_level')
         );
     }
 
@@ -259,11 +252,9 @@ class Users_library
         $restore = isset($_GET['re']) ? (int) $_GET['re'] : '';
 
         if (isset($select) && is_numeric($select) && isset($restore) && $restore == 0 && $select != 0) {
-
             $owned = $this->Users_Model->getUserPlanetByIdAndUserId($select, $this->user_data['user_id']);
 
             if ($owned) {
-
                 $this->user_data['current_planet'] = $select;
                 $this->Users_Model->changeUserPlanetByUserId($select, $this->user_data['user_id']);
             }
@@ -281,7 +272,6 @@ class Users_library
     public function createUserWithOptions($data, $full_insert = true)
     {
         if (is_array($data)) {
-
             $insert_query = 'INSERT INTO ' . USERS . ' SET ';
 
             foreach ($data as $column => $value) {
@@ -296,7 +286,6 @@ class Users_library
 
             // insert extra required tables
             if ($full_insert) {
-
                 // create the buildings, defenses and ships tables
                 $this->Users_Model->createPremium($user_id);
                 $this->Users_Model->createResearch($user_id);

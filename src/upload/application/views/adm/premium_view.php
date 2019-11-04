@@ -14,7 +14,7 @@
             <label>
                 <strong>{pr_trader}</strong>
             </label>
-            <input type="text" name="trader_darkmatter" value="{trader_darkmatter}" class="input-small">
+            <input type="text" name="merchant_price" value="{merchant_price}" class="input-small">
             <div align="center">
                 <input type="submit" name="save" value="{pr_save_changes}" class="btn btn-primary">
             </div>

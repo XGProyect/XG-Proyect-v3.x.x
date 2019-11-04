@@ -2,7 +2,7 @@
 /**
  * Language
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Core
  * @package  Application
@@ -48,14 +48,11 @@ class Language
         $languages_loaded = $this->getFileName();
 
         if (defined('DEFAULT_LANG')) {
-
             foreach ($languages_loaded as $load) {
-
                 $route = XGP_ROOT . LANG_PATH . DEFAULT_LANG . '/' . $load . '.' . $this->lang_extension;
 
                 // WE GOT SOMETHING
                 if (file_exists($route)) {
-
                     // GET THE LANGUAGE PACK
                     include $route;
                 }
@@ -63,11 +60,9 @@ class Language
 
             // WE GOT SOMETHING
             if (!empty($lang)) {
-
                 // SET DATA
                 $this->lang = $lang;
             } else {
-
                 // THROW EXCEPTION
                 die('Language not found or empty: <strong>' . $load . '</strong><br/>
                     Location: <strong>' . $route . '</strong>');
@@ -93,27 +88,18 @@ class Language
     private function getFileName()
     {
         if (defined('IN_ADMIN')) {
-
             $required[] = 'ADMIN';
         }
 
-        if (defined('IN_CHANGELOG')) {
-
-            $required[] = 'CHANGELOG';
-        }
-
         if (defined('IN_GAME')) {
-
             $required[] = 'INGAME';
         }
 
         if (defined('IN_INSTALL')) {
-
             $required[] = 'INSTALL';
         }
 
         if (defined('IN_LOGIN')) {
-
             $required[] = 'HOME';
         }
 

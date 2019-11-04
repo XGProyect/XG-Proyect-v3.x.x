@@ -2,7 +2,7 @@
 /**
  * Home Controller
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Controller
  * @package  Application
@@ -65,7 +65,6 @@ class Home extends Controller
     public function __destruct()
     {
         if (isset($this->_db)) {
-
             $this->_db->closeConnection();
         }
     }
@@ -87,12 +86,12 @@ class Home extends Controller
 
         // VERIFICATIONS
         if ($this->_current_user['user_authlevel'] >= 3) {
-            if (is_writable(XGP_ROOT . CONFIGS_PATH . 'config.php')) {
+            if ((bool) (@fileperms(XGP_ROOT . CONFIGS_PATH . 'config.php') & 0x0002)) {
                 $message[1] = $this->_lang['hm_config_file_writable'] . '<br />';
                 $error++;
             }
 
-            if (( @filesize(XGP_ROOT . LOGS_PATH . 'ErrorLog.php') ) != 0) {
+            if ((@filesize(XGP_ROOT . LOGS_PATH . 'ErrorLog.php')) != 0) {
                 $message[2] = $this->_lang['hm_database_errors'] . '<br />';
                 $error++;
             }
@@ -155,19 +154,18 @@ class Home extends Controller
     private function checkUpdates()
     {
         if (function_exists('file_get_contents')) {
-
             $system_v = FunctionsLib::readConfig('version');
             $last_v = @json_decode(
-                    @file_get_contents(
-                        'http://xgproyect.org/current.php', false, stream_context_create(
-                            ['http' =>
-                                [
-                                    'timeout' => 1, // one second
-                                ]
-                            ]
-                        )
+                @file_get_contents(
+                    'http://xgproyect.org/current.php', false, stream_context_create(
+                        ['http' =>
+                            [
+                                'timeout' => 1, // one second
+                            ],
+                        ]
                     )
-                )->version;
+                )
+            )->version;
 
             return version_compare($system_v, $last_v, '<');
         }
@@ -175,7 +173,7 @@ class Home extends Controller
 
     /**
      * getWebServer
-     * 
+     *
      * @return string
      */
     private function getWebServer()
@@ -218,59 +216,59 @@ class Home extends Controller
     private function getDbStats()
     {
         return $this->_db->queryFetch(
-                "SELECT 
+            "SELECT
                 SUM(`data_length`) AS `Data_Usage`,
                 SUM(`index_length`) AS `Index_Usage`
-            FROM information_schema.TABLES 
+            FROM information_schema.TABLES
             WHERE table_schema = '" . $this->_db->escapeValue(DB_NAME) . "';"
         );
     }
 
     /**
      * Get some user statistics from the database
-     * 
+     *
      * @return array
      */
     private function getUsersStats()
     {
         return $this->_db->queryFetch(
-                "SELECT 
+            "SELECT
                 (
-                        SELECT 
-                                COUNT(`user_id`) AS `unique_visitors_today` 
-                        FROM 
-                                `" . USERS . "` 
-                        WHERE 
+                        SELECT
+                                COUNT(`user_id`) AS `unique_visitors_today`
+                        FROM
+                                `" . USERS . "`
+                        WHERE
                                 `user_onlinetime` > UNIX_TIMESTAMP(
                                         DATE_SUB(NOW(), INTERVAL 1 DAY)
                                 )
-                ) AS `unique_visitors_today`, 
+                ) AS `unique_visitors_today`,
                 (
-                        SELECT 
-                                COUNT(`user_id`) AS `new_users_today` 
-                        FROM 
-                                `" . USERS . "` 
-                        WHERE 
+                        SELECT
+                                COUNT(`user_id`) AS `new_users_today`
+                        FROM
+                                `" . USERS . "`
+                        WHERE
                                 `user_register_time` > UNIX_TIMESTAMP(
                                         DATE_SUB(NOW(), INTERVAL 1 DAY)
                                 )
                 ) AS `new_users_today`,
                 (
-                        SELECT 
-                                COUNT(`message_id`) AS `new_messages_today` 
-                        FROM 
-                                `" . MESSAGES . "` 
-                        WHERE 
+                        SELECT
+                                COUNT(`message_id`) AS `new_messages_today`
+                        FROM
+                                `" . MESSAGES . "`
+                        WHERE
                                 `message_time` > UNIX_TIMESTAMP(
                                         DATE_SUB(NOW(), INTERVAL 1 DAY)
                                 )
                 ) AS `new_messages_today`,
                 (
-                        SELECT 
-                                COUNT(`report_rid`) AS `new_reports_today` 
-                        FROM 
-                                `" . REPORTS . "` 
-                        WHERE 
+                        SELECT
+                                COUNT(`report_rid`) AS `new_reports_today`
+                        FROM
+                                `" . REPORTS . "`
+                        WHERE
                                 `report_time` > UNIX_TIMESTAMP(
                                         DATE_SUB(NOW(), INTERVAL 1 DAY)
                                 )

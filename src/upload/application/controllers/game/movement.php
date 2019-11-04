@@ -2,7 +2,7 @@
 /**
  * Movement Controller
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Controller
  * @package  Application
@@ -16,13 +16,13 @@ namespace application\controllers\game;
 use application\core\Controller;
 use application\core\entities\FleetEntity;
 use application\core\enumerators\MissionsEnumerator as Missions;
-use application\libraries\fleets\Fleets;
 use application\libraries\FleetsLib;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
+use application\libraries\Timing_library;
+use application\libraries\game\Fleets;
 use application\libraries\premium\Premium;
 use application\libraries\research\Researches;
-use application\libraries\Timing_library;
 use const JS_PATH;
 
 /**
@@ -171,7 +171,7 @@ class Movement extends Controller
         // display the page
         parent::$page->display(
             $this->getTemplate()->set(
-                'movement/movements_view',
+                'game/movements_view',
                 array_merge(
                     $this->getLang(), $page
                 )
@@ -218,12 +218,12 @@ class Movement extends Controller
                     'fleet_start' => FormatLib::prettyCoords(
                         $fleet->getFleetStartGalaxy(), $fleet->getFleetStartSystem(), $fleet->getFleetStartPlanet()
                     ),
-                    'fleet_start_time' => Timing_library::formatDefaultTime($fleet->getFleetCreation()),
+                    'fleet_start_time' => Timing::formatExtendedDate($fleet->getFleetCreation()),
                     'fleet_end' => FormatLib::prettyCoords(
                         $fleet->getFleetEndGalaxy(), $fleet->getFleetEndSystem(), $fleet->getFleetEndPlanet()
                     ),
-                    'fleet_end_time' => Timing_library::formatDefaultTime($fleet->getFleetStartTime()),
-                    'fleet_arrival' => Timing_library::formatDefaultTime($fleet->getFleetEndTime()),
+                    'fleet_end_time' => Timing::formatExtendedDate($fleet->getFleetStartTime()),
+                    'fleet_arrival' => Timing::formatExtendedDate($fleet->getFleetEndTime()),
                     'fleet_actions' => $this->buildActionsBlock($fleet),
                 ];
             }
@@ -297,7 +297,7 @@ class Movement extends Controller
     {
         $actions = '-';
         
-        if ($fleet->getFleetMess() != 1) {
+        if ($fleet->getFleetMess() == 0) {
             
             $actions = '<form action="game.php?page=movement&action=return" method="post">';
             $actions .= '<input type="hidden" name="fleetid" value="' . $fleet->getFleetId() . '">';
@@ -334,7 +334,9 @@ class Movement extends Controller
                 $this->Fleet_Model->returnFleet(
                     $fleet, $this->_user['user_id']
                 );
-            }   
+                
+                FunctionsLib::redirect(self::REDIRECT_TARGET);
+            }
         }
     }
 }

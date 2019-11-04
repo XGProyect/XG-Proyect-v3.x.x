@@ -2,7 +2,7 @@
 /**
  * Template Library
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Library
  * @package  Application
@@ -13,6 +13,8 @@
  */
 namespace application\libraries;
 
+use application\libraries\Timing_library as Timing;
+
 /**
  * TemplateLib Class
  *
@@ -21,7 +23,7 @@ namespace application\libraries;
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
- * @version  3.0.0
+ * @version  3.1.0
  */
 class TemplateLib
 {
@@ -153,7 +155,7 @@ class TemplateLib
      * @param array $array     Values to parse
      *
      * @return void
-     * 
+     *
      * @deprecated since version v3.0.2, will be removed on v3.2.0
      */
     public function parseTemplate($template, $array)
@@ -171,7 +173,7 @@ class TemplateLib
      * @param string $template_name Template name
      *
      * @return string
-     * 
+     *
      * @deprecated since version v3.0.2, will be removed on v3.2.0
      */
     public function getTemplate($template_name)
@@ -197,7 +199,7 @@ class TemplateLib
      * @param string $template Template
      *
      * @return void
-     * 
+     *
      * @deprecated since version v3.1.0, will be removed on v3.2.0
      */
     public function parse($array = array(), $template = '')
@@ -215,7 +217,7 @@ class TemplateLib
      * @param string $template_name Template name
      *
      * @return string
-     * 
+     *
      * @deprecated since version v3.1.0, will be removed on v3.2.0
      */
     public function get($template_name)
@@ -232,7 +234,7 @@ class TemplateLib
 
             // not found
             throw new \Exception(
-            'Template not found or empty: <strong>' . $template_name . '</strong><br />
+                'Template not found or empty: <strong>' . $template_name . '</strong><br />
                 Location: <strong>' . $route . '</strong>'
             );
         } catch (\Exception $e) {
@@ -276,7 +278,7 @@ class TemplateLib
         $pages = [
             0 => array('installation', $this->langs['ins_overview'], 'overview'),
             1 => array('installation', $this->langs['ins_license'], 'license'),
-            2 => array('installation', $this->langs['ins_install'], 'step1')
+            2 => array('installation', $this->langs['ins_install'], 'step1'),
         ];
 
         // BUILD THE MENU
@@ -317,7 +319,7 @@ class TemplateLib
             1 => ['step2', $this->langs['ins_step2']],
             2 => ['step3', $this->langs['ins_step3']],
             3 => ['step4', $this->langs['ins_step4']],
-            4 => ['step5', $this->langs['ins_step5']]
+            4 => ['step5', $this->langs['ins_step5']],
         ];
 
         // BUILD THE MENU
@@ -369,24 +371,20 @@ class TemplateLib
         $parse['show_umod_notice'] = '';
 
         // When vacation mode did not expire
-        if ($this->current_user['setting_vacations_status']) {
+        if ($this->current_user['preference_vacation_mode'] > 0) {
 
             $parse['color'] = '#1DF0F0';
-            $parse['message'] = $this->langs['tn_vacation_mode'] . date(
-                    FunctionsLib::readConfig('date_format_extended'), $this->current_user['setting_vacations_until']
-            );
+            $parse['message'] = $this->langs['tn_vacation_mode'] . Timing::formatExtendedDate($this->current_user['preference_vacation_mode']);
             $parse['jump_line'] = '<br/>';
 
             $parse['show_umod_notice'] = $this->parseTemplate($this->getTemplate('general/notices_view'), $parse);
         }
 
-        if ($this->current_user['setting_delete_account']) {
+        if ($this->current_user['preference_delete_mode'] > 0) {
 
             // When it is in delete mode
             $parse['color'] = '#FF0000';
-            $parse['message'] = $this->langs['tn_delete_mode'] . date(
-                    FunctionsLib::readConfig('date_format_extended'), $this->current_user['setting_delete_account'] + (60 * 60 * 24 * 7)
-            );
+            $parse['message'] = $this->langs['tn_delete_mode'] . Timing::formatExtendedDate($this->current_user['preference_delete_mode'] + (60 * 60 * 24 * 7));
             $parse['jump_line'] = '';
 
             $parse['show_umod_notice'] = $this->parseTemplate($this->getTemplate('general/notices_view'), $parse);
@@ -398,8 +396,8 @@ class TemplateLib
         $deuterium = FormatLib::prettyNumber($this->current_planet['planet_deuterium']);
         $darkmatter = FormatLib::prettyNumber($this->current_user['premium_dark_matter']);
         $energy = FormatLib::prettyNumber(
-                $this->current_planet['planet_energy_max'] + $this->current_planet['planet_energy_used']
-            ) . "/" . FormatLib::prettyNumber($this->current_planet['planet_energy_max']);
+            $this->current_planet['planet_energy_max'] + $this->current_planet['planet_energy_used']
+        ) . "/" . FormatLib::prettyNumber($this->current_planet['planet_energy_max']);
 
         // OFFICERS AVAILABILITY
         $commander = OfficiersLib::isOfficierActive($this->current_user['premium_officier_commander']) ? '' : '_un';
@@ -409,25 +407,25 @@ class TemplateLib
         $technocrat = OfficiersLib::isOfficierActive($this->current_user['premium_officier_technocrat']) ? '' : '_un';
 
         // METAL
-        if (( $this->current_planet['planet_metal'] >= $this->current_planet['planet_metal_max'])) {
+        if (($this->current_planet['planet_metal'] >= $this->current_planet['planet_metal_max'])) {
 
             $metal = FormatLib::colorRed($metal);
         }
 
         // CRYSTAL
-        if (( $this->current_planet['planet_crystal'] >= $this->current_planet['planet_crystal_max'])) {
+        if (($this->current_planet['planet_crystal'] >= $this->current_planet['planet_crystal_max'])) {
 
             $crystal = FormatLib::colorRed($crystal);
         }
 
         // DEUTERIUM
-        if (( $this->current_planet['planet_deuterium'] >= $this->current_planet['planet_deuterium_max'])) {
+        if (($this->current_planet['planet_deuterium'] >= $this->current_planet['planet_deuterium_max'])) {
 
             $deuterium = FormatLib::colorRed($deuterium);
         }
 
         // ENERGY
-        if (( $this->current_planet['planet_energy_max'] + $this->current_planet['planet_energy_used'] ) < 0) {
+        if (($this->current_planet['planet_energy_max'] + $this->current_planet['planet_energy_used']) < 0) {
 
             $energy = FormatLib::colorRed($energy);
         }
@@ -459,33 +457,32 @@ class TemplateLib
         $modules_array = explode(';', FunctionsLib::readConfig('modules'));
         $sub_template = $this->getTemplate('general/left_menu_row_view');
         $tota_rank = $this->current_user['user_statistic_total_rank'] == '' ?
-            $this->current_planet['stats_users'] : $this->current_user['user_statistic_total_rank'];
+        $this->current_planet['stats_users'] : $this->current_user['user_statistic_total_rank'];
         $pages = [
             ['changelog', SYSTEM_VERSION, '', 'FFF', '', '0', '0'],
             ['overview', $this->langs['lm_overview'], '', 'FFF', '', '1', '1'],
-            ['imperium', $this->langs['lm_empire'], '', 'FFF', '', '1', '2'],
+            ['empire', $this->langs['lm_empire'], '', 'FFF', '', '1', '2'],
             ['resources', $this->langs['lm_resources'], '', 'FFF', '', '1', '3'],
             ['resourceSettings', $this->langs['lm_resources_settings'], '', 'FFF', '', '1', '4'],
             ['station', $this->langs['lm_station'], '', 'FFF', '', '1', '3'],
             ['trader', $this->langs['lm_trader'], '', 'FF8900', '', '1', '5'],
             ['research', $this->langs['lm_research'], '', 'FFF', '', '1', '6'],
+            ['techtree', $this->langs['lm_technology'], '', 'FFF', '', '1', '10'],
             ['shipyard', $this->langs['lm_shipyard'], '', 'FFF', '', '1', '7'],
+            ['defense', $this->langs['lm_defenses'], '', 'FFF', '', '1', '12'],
             ['fleet1', $this->langs['lm_fleet'], '', 'FFF', '', '1', '8'],
             ['movement', $this->langs['lm_movement'], '', 'FFF', '', '1', '9'],
-            ['techtree', $this->langs['lm_technology'], '', 'FFF', '', '1', '10'],
             ['galaxy', $this->langs['lm_galaxy'], 'mode=0', 'FFF', '', '1', '11'],
-            ['defense', $this->langs['lm_defenses'], '', 'FFF', '', '1', '12'],
-            ['alliance', $this->langs['lm_alliance'], '', 'FFF', '', '2', '13'],
-            ['forums', $this->langs['lm_forums'], '', 'FFF', '', '2', '14'],
-            ['officier', $this->langs['lm_officiers'], '', 'FF8900', '', '2', '15'],
+            ['alliance', $this->langs['lm_alliance'], '', 'FFF', '', '1', '13'],
+            ['officier', $this->langs['lm_officiers'], '', 'FF8900', '', '1', '15'],
+            ['messages', $this->langs['lm_messages'], '', 'FFF', '', '1', '18'],
             ['statistics', $this->langs['lm_statistics'], 'range=' . $tota_rank, 'FFF', '', '2', '16'],
+            ['notes', $this->langs['lm_notes'], '', 'FFF', 'true', '2', '19'],
+            ['buddies', $this->langs['lm_buddylist'], '', 'FFF', '', '2', '20'],
             ['search', $this->langs['lm_search'], '', 'FFF', '', '2', '17'],
-            ['messages', $this->langs['lm_messages'], '', 'FFF', '', '3', '18'],
-            ['notes', $this->langs['lm_notes'], '', 'FFF', 'true', '3', '19'],
-            ['buddies', $this->langs['lm_buddylist'], '', 'FFF', '', '3', '20'],
-            ['options', $this->langs['lm_options'], '', 'FFF', '', '3', '21'],
-            ['banned', $this->langs['lm_banned'], '', 'FFF', '', '3', '22'],
-            ['logout', $this->langs['lm_logout'], '', 'FFF', '', '3', '']
+            ['preferences', $this->langs['lm_options'], '', 'FFF', '', '2', '21'],
+            ['logout', $this->langs['lm_logout'], '', 'FFF', '', '2', ''],
+            ['forums', $this->langs['lm_forums'], '', 'FFF', '', '3', '14'],
         ];
 
         // BUILD THE MENU
@@ -497,7 +494,7 @@ class TemplateLib
                 continue;
             }
 
-            if (!OfficiersLib::isOfficierActive($this->current_user['premium_officier_commander']) && $data[0] == 'imperium') {
+            if (!OfficiersLib::isOfficierActive($this->current_user['premium_officier_commander']) && $data[0] == 'empire') {
 
                 continue;
             }
@@ -515,7 +512,7 @@ class TemplateLib
             if ($data[4] == 'true') {
 
                 $link_type = '<a href="#" onClick="f(\'' . $link . '\', \'' . $data[1] . '\')">
-                    <font color="' . ( ( $data[3] != 'FFF' ) ? $data[3] : '' ) . '">' . $data[1] . '</font></a>';
+                    <font color="' . (($data[3] != 'FFF') ? $data[3] : '') . '">' . $data[1] . '</font></a>';
             } else {
 
                 $link_type = '<a href="' . $link . '">
@@ -560,7 +557,7 @@ class TemplateLib
         $parse['menu_block2'] = $menu_block2;
         $parse['menu_block3'] = $menu_block3;
         $parse['admin_link'] = (($this->current_user['user_authlevel'] > 0) ?
-            "<tr><td><div align=\"center\"><a href=\"admin.php\" target=\"_blank\"> 
+            "<tr><td><div align=\"center\"><a href=\"admin.php\" target=\"_blank\">
             <font color=\"lime\">" . $this->langs['lm_administration'] . "</font></a></div></td></tr>" : "");
 
         return $this->parseTemplate($this->getTemplate('general/left_menu_view'), $parse);

@@ -2,7 +2,7 @@
 /**
  * Planet Library
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Library
  * @package  Application
@@ -66,7 +66,6 @@ class PlanetLib extends XGPCore
     public function createPlanetWithOptions($data, $full_insert = true)
     {
         if (is_array($data)) {
-
             $insert_query = 'INSERT INTO ' . PLANETS . ' SET ';
 
             foreach ($data as $column => $value) {
@@ -80,7 +79,6 @@ class PlanetLib extends XGPCore
 
             // insert extra required tables
             if ($full_insert) {
-
                 // get the last inserted planet id
                 $planet_id = $this->_db->insertId();
 
@@ -115,7 +113,6 @@ class PlanetLib extends XGPCore
         );
 
         if (!$planet_exist) {
-
             $planet = $this->formula->getPlanetSize($position, $main);
             $temp = $this->formula->setPlanetTemp($position);
             $name = ($name == '') ? $this->langs['ge_colony'] : $name;
@@ -145,7 +142,7 @@ class PlanetLib extends XGPCore
                     'planet_deuterium' => BUILD_DEUTERIUM,
                     'planet_deuterium_perhour' => FunctionsLib::readConfig('deuterium_basic_income'),
                     'planet_b_building_id' => '0',
-                    'planet_b_hangar_id' => ''
+                    'planet_b_hangar_id' => '',
                 ]
             );
 
@@ -191,7 +188,6 @@ class PlanetLib extends XGPCore
         );
 
         if ($MoonPlanet['id_moon'] == '' && $MoonPlanet['planet_id'] != 0) {
-
             $SizeMin = 2000 + ($chance * 100);
             $SizeMax = 6000 + ($chance * 200);
             $temp = $this->formula->setPlanetTemp($position);
@@ -214,7 +210,7 @@ class PlanetLib extends XGPCore
                     'planet_temp_min' => $min_temp == 0 ? $temp['min'] : $min_temp,
                     'planet_temp_max' => $max_temp == 0 ? $temp['max'] : $max_temp,
                     'planet_b_building_id' => '0',
-                    'planet_b_hangar_id' => ''
+                    'planet_b_hangar_id' => '',
                 ]
             );
 
@@ -275,7 +271,6 @@ class PlanetLib extends XGPCore
      */
     public function deletePlanetById($planet_id)
     {
-        
     }
 
     /**
@@ -290,7 +285,6 @@ class PlanetLib extends XGPCore
      */
     public function deletePlanetByCoords($galaxy, $system, $planet, $type)
     {
-        
     }
 }
 

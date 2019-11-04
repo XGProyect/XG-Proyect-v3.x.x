@@ -2,7 +2,7 @@
 /**
  * Information Controller
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Controller
  * @package  Application
@@ -100,14 +100,14 @@ class Information extends Controller
                             WHERE user_onlinetime < {$inactive_time} AND user_onlinetime <> 0
              ) AS inactive_count,
 
-             ( SELECT COUNT(setting_user_id)
-                            FROM " . SETTINGS . "
-                            WHERE setting_vacations_status <> 0
+             ( SELECT COUNT(preference_user_id)
+                            FROM " . PREFERENCES . "
+                            WHERE preference_vacation_mode = '1'
              ) AS on_vacation,
 
-             ( SELECT COUNT(setting_user_id)
-                            FROM " . SETTINGS . "
-                            WHERE setting_delete_account <> 0
+             ( SELECT COUNT(preference_user_id)
+                            FROM " . PREFERENCES . "
+                            WHERE preference_delete_mode IS NOT NULL
              ) AS to_delete,
 
              ( SELECT COUNT(user_id)

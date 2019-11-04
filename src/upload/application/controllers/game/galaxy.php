@@ -2,7 +2,7 @@
 /**
  * Galaxy Controller
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Controller
  * @package  Application
@@ -28,7 +28,7 @@ use const MAX_GALAXY_IN_WORLD;
 use const MAX_PLANET_IN_SYSTEM;
 use const MAX_SYSTEM_IN_GALAXY;
 use const PLANETS;
-use const SETTINGS;
+use const PREFERENCES;
 use const SHIPS;
 use const USERS;
 use const USERS_STATISTICS;
@@ -83,7 +83,7 @@ class Galaxy extends Controller
         $this->_galaxyLib = FunctionsLib::loadLibrary('GalaxyLib');
 
 
-        if ($this->_current_user['setting_vacations_status']) {
+        if ($this->_current_user['preference_vacation_mode'] > 0) {
 
             FunctionsLib::message($this->_lang['gl_no_access_vm_on'], '', '');
         }
@@ -172,7 +172,7 @@ class Galaxy extends Controller
                 u.user_id,
                 u.user_ally_id,
                 u.user_banned,
-                se.setting_vacations_status,
+                pr.preference_vacation_mode,
                 u.user_onlinetime,
                 u.user_name,
                 u.user_authlevel,
@@ -189,7 +189,7 @@ class Galaxy extends Controller
                 (SELECT COUNT(user_id) AS `ally_members` FROM `" . USERS . "` WHERE `user_ally_id` = a.`alliance_id`) AS `ally_members`
             FROM " . PLANETS . " AS p
                 INNER JOIN " . USERS . " AS u ON p.planet_user_id = u.user_id
-                INNER JOIN " . SETTINGS . " AS se ON se.setting_user_id = u.user_id
+                INNER JOIN " . PREFERENCES . " AS pr ON pr.preference_user_id = u.user_id
                 INNER JOIN " . USERS_STATISTICS . " AS s ON s.user_statistic_user_id = u.user_id
                 LEFT JOIN " . ALLIANCE . " AS a ON a.alliance_id = u.user_ally_id
                 LEFT JOIN " . PLANETS . " AS m ON m.planet_id = (SELECT mp.`planet_id`
@@ -421,9 +421,9 @@ class Galaxy extends Controller
         $tempvar2 = $this->_formula->missileRange($this->_current_user['research_impulse_drive']);
 
         $tempvar3 = $this->_db->queryFetch(
-            "SELECT u.`user_id`,u.`user_onlinetime`,s.`setting_vacations_status`
+            "SELECT u.`user_id`,u.`user_onlinetime`,pr.`preference_vacation_mode`
             FROM " . USERS . " AS u
-            INNER JOIN " . SETTINGS . " AS s ON s.setting_user_id = u.user_id
+            INNER JOIN " . PREFERENCES . " AS pr ON pr.preference_user_id = u.user_id
             WHERE u.user_id = (SELECT `planet_user_id`
             FROM " . PLANETS . "
             WHERE planet_galaxy = " . $g . "  AND
@@ -488,7 +488,7 @@ class Galaxy extends Controller
                 $errors++;
             }
         }
-        if ($tempvar3['setting_vacations_status'] == 1) {
+        if ($tempvar3['preference_vacation_mode'] > 0) {
             $error .= $this->_lang['fl_in_vacation_player'] . '<br>';
             $errors++;
         }
@@ -553,7 +553,7 @@ class Galaxy extends Controller
      */
     private function send_fleet()
     {
-        $max_spy_probes = $this->_current_user['setting_probes_amount'];
+        $max_spy_probes = $this->_current_user['preference_spy_probes'];
         $UserSpyProbes = $this->_current_planet['ship_espionage_probe'];
         $UserRecycles = $this->_current_planet['ship_recycler'];
         $UserDeuterium = $this->_current_planet['planet_deuterium'];
@@ -661,9 +661,9 @@ class Galaxy extends Controller
             $TargetUser = $this->_current_user;
         } elseif ($TargetRow['planet_user_id'] != '') {
             $TargetUser = $this->_db->queryFetch(
-                "SELECT u.`user_id`, u.`user_onlinetime`, u.`user_authlevel`, s.`setting_vacations_status`
+                "SELECT u.`user_id`, u.`user_onlinetime`, u.`user_authlevel`, pr.`preference_vacation_mode`
                 FROM " . USERS . " AS u
-                INNER JOIN " . SETTINGS . " AS s ON s.setting_user_id = u.user_id
+                INNER JOIN " . PREFERENCES . " AS pr ON pr.preference_user_id = u.user_id
                 WHERE `user_id` = '" . $TargetRow['planet_user_id'] . "';"
             );
         }
@@ -687,7 +687,7 @@ class Galaxy extends Controller
         $user_points = $this->_noob->returnPoints($this->_current_user['user_id'], $TargetUser['user_id']);
         $CurrentPoints = $user_points['user_points'];
         $TargetPoints = $user_points['target_points'];
-        $TargetVacat = $TargetUser['setting_vacations_status'];
+        $TargetVacat = $TargetUser['preference_vacation_mode'];
 
         if (( FleetsLib::getMaxFleets($this->_current_user[$this->_resource[108]], $this->_current_user['premium_officier_admiral']) ) <= $CurrentFlyingFleets) {
             die("612 ");
@@ -701,7 +701,7 @@ class Galaxy extends Controller
             die("601 ");
         }
 
-        if (( $TargetVacat && $order != 8 ) or $this->_current_user['setting_vacations_status']) {
+        if (( $TargetVacat && $order != 8 ) or ($this->_current_user['preference_vacation_mode'] > 0)) {
             die("605 ");
         }
 

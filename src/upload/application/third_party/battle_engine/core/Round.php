@@ -1,5 +1,4 @@
 <?php
-
 /**
  *  OPBE
  *  Copyright (C) 2013  Jstar
@@ -26,6 +25,7 @@
  * @version beta(26-10-2013)
  * @link https://github.com/jstar88/opbe
  */
+
 /**
  * Round
  * 
@@ -35,18 +35,15 @@
  */
 class Round
 {
+
     private $attackers; // PlayerGroup attackers , will be updated when round start
     private $defenders; // PlayerGroup defenders, will be updated when round start
-
     private $fire_a; // a fire manager that rappresent all fires from attackers to defenders
     private $fire_d; // a fire manager that rappresent all fires from defenders to attackers
-
     private $physicShotsToDefenders;
     private $physicShotsToAttachers;
-
     private $attacherShipsCleaner;
     private $defenderShipsCleaner;
-
     private $number; // this round number
 
     /**
@@ -57,6 +54,7 @@ class Round
      * @param int: the round number 
      * @return void
      */
+
     public function __construct(PlayerGroup $attackers, PlayerGroup $defenders, $number)
     {
         $this->number = $number;
@@ -66,7 +64,7 @@ class Round
         $this->attackers = $attackers->cloneMe();
         $this->defenders = $defenders->cloneMe();
     }
-    
+
     /**
      * Round::startRound()
      * Start the current round and update the players instance inside this object.
@@ -77,51 +75,41 @@ class Round
         echo '--- Round ' . $this->number . ' ---<br><br>';
         //---------------------- Generating the fire -------------------------------//
         //note that we don't need to check the order of fire, because we will order when splitting the fire later
-        
         // here we add to fire manager each fire shotted from an attacker's ShipType to all defenders 
         $defendersMerged = $this->defenders->getEquivalentFleetContent();
-        foreach ($this->attackers->getIterator() as $idPlayer => $player)
-        {
-            foreach ($player->getIterator() as $idFleet => $fleet)
-            {
-                foreach ($fleet->getIterator() as $idShipType => $shipType)
-                {
+        foreach ($this->attackers->getIterator() as $idPlayer => $player) {
+            foreach ($player->getIterator() as $idFleet => $fleet) {
+                foreach ($fleet->getIterator() as $idShipType => $shipType) {
                     $this->fire_a->add(new Fire($shipType, $defendersMerged));
                 }
             }
-        }       
+        }
         // here we add to fire manager each fire shotted from an defender's ShipType to all attackers
         $attackersMerged = $this->attackers->getEquivalentFleetContent();
-        foreach ($this->defenders->getIterator() as $idPlayer => $player)
-        {
-            foreach ($player->getIterator() as $idFleet => $fleet)
-            {
-                foreach ($fleet->getIterator() as $idShipType => $shipType)
-                {
+        foreach ($this->defenders->getIterator() as $idPlayer => $player) {
+            foreach ($player->getIterator() as $idFleet => $fleet) {
+                foreach ($fleet->getIterator() as $idShipType => $shipType) {
                     $this->fire_d->add(new Fire($shipType, $attackersMerged));
                 }
             }
-        }        
+        }
         //--------------------------------------------------------------------------//
-
         //------------------------- Sending the fire -------------------------------//
         echo "***** firing to defenders *****<br>";
         $this->physicShotsToDefenders = $this->defenders->inflictDamage($this->fire_a);
         echo "***** firing to attackers *****<br>";
         $this->physicShotsToAttachers = $this->attackers->inflictDamage($this->fire_d);
         //--------------------------------------------------------------------------//
-
         //------------------------- Cleaning ships ---------------------------------//
         $this->defenderShipsCleaner = $this->defenders->cleanShips();
         $this->attacherShipsCleaner = $this->attackers->cleanShips();
         //--------------------------------------------------------------------------//
-        
         //------------------------- Repairing shields ------------------------------//
         $this->defenders->repairShields();
         $this->attackers->repairShields();
         //--------------------------------------------------------------------------//
     }
-    
+
     /**
      * Round::getAttackersFire()
      * Return the FireManager of the attacker
@@ -131,7 +119,7 @@ class Round
     {
         return $this->fire_a;
     }
-    
+
     /**
      * Round::getDefendersFire()
      * Return the FireManager of the defender
@@ -141,7 +129,7 @@ class Round
     {
         return $this->fire_d;
     }
-    
+
     /**
      * Round::getAttachersPhysicShots()
      * Return an array of attacker PhysicShots (multidimensional)
@@ -151,7 +139,7 @@ class Round
     {
         return $this->physicShotsToDefenders;
     }
-    
+
     /**
      * Round::getDefendersPhysicShots()
      * Return an array of defender PhysicShots (multidimensional)
@@ -161,7 +149,7 @@ class Round
     {
         return $this->physicShotsToAttachers;
     }
-    
+
     /**
      * Round::getAttachersShipsCleaner()
      * Return an array of attacker ShipsCleaner (multidimensional)
@@ -171,7 +159,7 @@ class Round
     {
         return $this->attacherShipsCleaner;
     }
-    
+
     /**
      * Round::getDefendersShipsCleaner()
      * Return an array of defender ShipsCleaner (multidimensional)
@@ -181,7 +169,7 @@ class Round
     {
         return $this->defenderShipsCleaner;
     }
-    
+
     /**
      * Round::getAfterBattleAttackers()
      * Return the attackers after the round.
@@ -191,7 +179,7 @@ class Round
     {
         return $this->attackers;
     }
-    
+
     /**
      * Round::getAfterBattleDefenders()
      * Return the defenders after the round.
@@ -201,7 +189,7 @@ class Round
     {
         return $this->defenders;
     }
-    
+
     /**
      * Round::__toString()
      * An html rappresentation of this object
@@ -212,10 +200,10 @@ class Round
         ob_start();
         $_round = $this;
         $_i = $this->number;
-        require(OPBEPATH."views/round.html");
+        require(OPBEPATH . "views/round.html");
         return ob_get_clean();
     }
-    
+
     /**
      * Round::getNumber()
      * Return this round number
@@ -225,44 +213,46 @@ class Round
     {
         return $this->number;
     }
-    
+
     public function getAttackersFirePower()
     {
         return $this->getAttackersFire()->getAttackerTotalFire();
     }
+
     public function getAttackersFireCount()
     {
         return $this->getAttackersFire()->getAttackerTotalShots();
     }
+
     public function getDefendersFirePower()
     {
         return $this->getDefendersFire()->getAttackerTotalFire();
     }
+
     public function getDefendersFireCount()
     {
         return $this->getDefendersFire()->getAttackerTotalShots();
     }
+
     public function getAttachersAssorbedDamage()
     {
         $playerGroupPS = $this->getDefendersPhysicShots();
         return $this->getPlayersAssorbedDamage($playerGroupPS);
     }
+
     public function getDefendersAssorbedDamage()
     {
         $playerGroupPS = $this->getAttachersPhysicShots();
         return $this->getPlayersAssorbedDamage($playerGroupPS);
     }
+
     private function getPlayersAssorbedDamage($playerGroupPS)
     {
         $ass = 0;
-        foreach ($playerGroupPS as $idPlayer => $playerPs)
-        {
-            foreach ($playerPs as $idFleet => $fleetPS)
-            {
-                foreach ($fleetPS as $idTypeD => $typeDPS)
-                {
-                    foreach ($typeDPS as $typeAPS)
-                    {
+        foreach ($playerGroupPS as $idPlayer => $playerPs) {
+            foreach ($playerPs as $idFleet => $fleetPS) {
+                foreach ($fleetPS as $idTypeD => $typeDPS) {
+                    foreach ($typeDPS as $typeAPS) {
                         $ass += $typeAPS->getAssorbedDamage();
                     }
                 }

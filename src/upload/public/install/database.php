@@ -2,7 +2,7 @@
 /**
  * Database Schema File
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Data
  * @package  N/A
@@ -30,7 +30,7 @@ $tables['acs_members'] = "CREATE TABLE `" . ACS_MEMBERS . "` (
 `acs_user_id` int(11) UNSIGNED NOT NULL,
 PRIMARY KEY (`acs_member_id`),
 UNIQUE( `acs_group_id`, `acs_user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;";
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;";
 
 $tables['alliance'] = "CREATE TABLE `" . ALLIANCE . "` (
 `alliance_id` bigint(11) NOT NULL AUTO_INCREMENT,
@@ -117,6 +117,24 @@ PRIMARY KEY (`building_id`),
 UNIQUE KEY `building_planet_id` (`building_planet_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;";
 
+$tables['changelog'] = "CREATE TABLE `" . CHANGELOG . "` (
+`changelog_id` int(11) UNSIGNED NOT NULL,
+`changelog_lang_id` int(11) NOT NULL,
+`changelog_version` varchar(16) NOT NULL,
+`changelog_date` date NOT NULL,
+`changelog_description` text NOT NULL,
+PRIMARY KEY (`changelog_id`),
+UNIQUE KEY `changelog_id` (`changelog_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+
+$tables['changelog_insert'] = "INSERT INTO `" . CHANGELOG . "` (`changelog_id`, `changelog_lang_id`, `changelog_version`, `changelog_date`, `changelog_description`) VALUES
+(1, '1', '3.0.0', '2013-05-13', '- Ejemplo 1'),
+(2, '1', '3.1.0', '2013-06-13', '- Ejemplo 2'),
+(3, '1', '3.2.0', '2013-11-08', '- Ejemplo 3'),
+(4, '2', '3.0.0', '2013-05-13', '- Example 1'),
+(5, '2', '3.1.0', '2013-06-13', '- Example 2'),
+(6, '2', '3.2.0', '2013-11-08', '- Example 3');";
+
 $tables['defenses'] = "CREATE TABLE `" . DEFENSES . "` (
 `defense_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
 `defense_planet_id` int(11) unsigned NOT NULL,
@@ -163,6 +181,17 @@ $tables['fleets'] = "CREATE TABLE `" . FLEETS . "` (
 PRIMARY KEY (`fleet_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;";
 
+$tables['languages'] = "CREATE TABLE `" . LANGUAGES . "` (
+`language_id` int(11) NOT NULL,
+`language_name` varchar(64) CHARACTER SET utf8 NOT NULL,
+PRIMARY KEY (`language_id`),
+UNIQUE KEY `language_id` (`language_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+
+$tables['languages_insert'] = "INSERT INTO `" . LANGUAGES . "` (`language_id`, `language_name`) VALUES
+(1, 'Spanish'),
+(2, 'English');";
+
 $tables['messages'] = "CREATE TABLE `" . MESSAGES . "` (
 `message_id` BIGINT(11) NOT NULL AUTO_INCREMENT,
 `message_sender` INT(11) NOT NULL DEFAULT '0',
@@ -186,21 +215,23 @@ $tables['notes'] = "CREATE TABLE `" . NOTES . "` (
 PRIMARY KEY (`note_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;";
 
-$tables['options'] = "CREATE TABLE IF NOT EXISTS `" . OPTIONS . "` (
+$tables['options'] = "CREATE TABLE `" . OPTIONS . "` (
 `option_id` bigint(20) unsigned NOT NULL,
 `option_name` varchar(191) DEFAULT NULL,
-`option_value` longtext NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8;";
+`option_value` longtext NOT NULL,
+PRIMARY KEY (`option_id`),
+UNIQUE KEY `option_name` (`option_name`)
+) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8;";
 
 $tables['options_insert'] = "INSERT INTO `" . OPTIONS . "` (`option_id`, `option_name`, `option_value`) VALUES
 (1, 'game_name', 'XG Proyect'),
-(2, 'game_logo', 'http://www.xgproyect.org/images/misc/xg-logo.png'),
+(2, 'game_logo', 'https://xgproyect.org/wp-content/uploads/2019/10/xg-logo.png'),
 (3, 'lang', 'spanish'),
 (4, 'game_speed', '2500'),
 (5, 'fleet_speed', '2500'),
 (6, 'resource_multiplier', '1'),
 (7, 'admin_email', ''),
-(8, 'forum_url', 'http://www.xgproyect.org/'),
+(8, 'forum_url', 'https://www.xgproyect.org/'),
 (9, 'game_enable', '1'),
 (10, 'close_reason', 'Sorry, the server is currently offline.'),
 (11, 'date_time_zone', 'America/Argentina/Buenos_Aires'),
@@ -226,15 +257,20 @@ $tables['options_insert'] = "INSERT INTO `" . OPTIONS . "` (`option_id`, `option
 (31, 'stat_update_time', '1'),
 (32, 'stat_admin_level', '0'),
 (33, 'stat_last_update', '0'),
-(34, 'premium_url', 'http://www.xgproyect.org/game.php?page=officier'),
-(35, 'trader_darkmatter', '3500'),
+(34, 'premium_url', 'https://www.xgproyect.org/game.php?page=officier'),
+(35, 'merchant_price', '3500'),
 (36, 'auto_backup', '0'),
 (37, 'last_backup', '0'),
 (38, 'last_cleanup', '0'),
 (39, 'version', '" . SYSTEM_VERSION . "'),
 (40, 'lastsettedgalaxypos', '1'),
 (41, 'lastsettedsystempos', '1'),
-(42, 'lastsettedplanetpos', '1');";
+(42, 'lastsettedplanetpos', '1'),
+(43, 'merchant_base_min_exchange_rate', '0.7'),
+(44, 'merchant_base_max_exchange_rate', '1'),
+(45, 'merchant_metal_multiplier', '3'),
+(46, 'merchant_crystal_multiplier', '2'),
+(47, 'merchant_deuterium_multiplier', '1');";
 
 $tables['planets'] = "CREATE TABLE `" . PLANETS . "` (
 `planet_id` bigint(11) NOT NULL AUTO_INCREMENT,
@@ -280,6 +316,19 @@ $tables['planets'] = "CREATE TABLE `" . PLANETS . "` (
 `planet_debris_crystal` bigint(11) NOT NULL DEFAULT '0',
 `planet_invisible_start_time` int(11) NOT NULL DEFAULT '0',
 PRIMARY KEY (`planet_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;";
+
+$tables['preferences'] = "CREATE TABLE `" . PREFERENCES . "` (
+`preference_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+`preference_user_id` int(11) NOT NULL,
+`preference_nickname_change` int(10) DEFAULT NULL,
+`preference_spy_probes` tinyint(2) NOT NULL DEFAULT '1',
+`preference_planet_sort` tinyint(1) NOT NULL DEFAULT '0',
+`preference_planet_sort_sequence` tinyint(1) NOT NULL DEFAULT '0',
+`preference_vacation_mode` int(10) DEFAULT NULL,
+`preference_delete_mode` int(10) DEFAULT NULL,
+PRIMARY KEY (`preference_id`),
+UNIQUE KEY `preference_user_id` (`preference_user_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;";
 
 $tables['premium'] = "CREATE TABLE `" . PREMIUM . "` (
@@ -335,23 +384,6 @@ $tables['sessions'] = "CREATE TABLE `" . SESSIONS . "` (
 PRIMARY KEY  (`session_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 
-$tables['settings'] = "CREATE TABLE `" . SETTINGS . "` (
-`setting_user_id` INT(10) UNSIGNED NOT NULL,
-`setting_no_ip_check` TINYINT(1) NOT NULL DEFAULT '1',
-`setting_planet_sort` TINYINT(1) NOT NULL DEFAULT '0',
-`setting_planet_order` TINYINT(1) NOT NULL DEFAULT '0',
-`setting_probes_amount` TINYINT(1) NOT NULL DEFAULT '1',
-`setting_fleet_actions` TINYINT(1) NOT NULL DEFAULT '0',
-`setting_galaxy_espionage` TINYINT(1) NOT NULL DEFAULT '1',
-`setting_galaxy_write` TINYINT(1) NOT NULL DEFAULT '1',
-`setting_galaxy_buddy` TINYINT(1) NOT NULL DEFAULT '1',
-`setting_galaxy_missile` TINYINT(1) NOT NULL DEFAULT '1',
-`setting_vacations_status` TINYINT(1) NOT NULL DEFAULT '0',
-`setting_vacations_until` INT(10) NOT NULL DEFAULT '0',
-`setting_delete_account` INT(10) NOT NULL DEFAULT '0',
-  UNIQUE KEY `setting_user_id` (`setting_user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
-
 $tables['ships'] = "CREATE TABLE `" . SHIPS . "` (
 `ship_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
 `ship_planet_id` int(11) unsigned NOT NULL,
@@ -378,7 +410,6 @@ $tables['users'] = "CREATE TABLE `" . USERS . "` (
 `user_name` varchar(64) NOT NULL DEFAULT '',
 `user_password` varchar(64) NOT NULL DEFAULT '',
 `user_email` varchar(64) NOT NULL DEFAULT '',
-`user_email_permanent` varchar(64) NOT NULL DEFAULT '',
 `user_authlevel` tinyint(4) NOT NULL DEFAULT '0',
 `user_home_planet_id` int(11) NOT NULL DEFAULT '0',
 `user_galaxy` int(11) NOT NULL DEFAULT '0',
