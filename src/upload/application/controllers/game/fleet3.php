@@ -34,8 +34,17 @@ use application\libraries\research\Researches;
  */
 class Fleet3 extends Controller
 {
-
+    /**
+     *
+     * @var int
+     */
     const MODULE_ID = 8;
+
+    /**
+     *
+     * @var string
+     */
+    const REDIRECT_TARGET = 'game.php?page=fleet1';
 
     /**
      *
@@ -137,7 +146,9 @@ class Fleet3 extends Controller
             $this->getTemplate()->set(
                 'fleet/fleet3_view',
                 array_merge(
-                    $this->getLang(), $page, $inputs_data
+                    $this->getLang(),
+                    $page,
+                    $inputs_data
                 )
             )
         );
@@ -159,23 +170,18 @@ class Fleet3 extends Controller
         $selected_fleet = $this->getSessionShips();
 
         if ($ships != null) {
-
             foreach ($ships as $ship_name => $ship_amount) {
-
                 if ($ship_amount != 0) {
-
                     $ship_id = array_search($ship_name, $objects);
 
                     if (!isset($selected_fleet[$ship_id])
                         or $selected_fleet[$ship_id] == 0) {
-
                         continue;
                     }
 
                     $amount_to_set = $selected_fleet[$ship_id];
 
                     if ($amount_to_set > $ship_amount) {
-
                         $amount_to_set = $ship_amount;
                     }
 
@@ -218,9 +224,7 @@ class Fleet3 extends Controller
         $mission_selector = [];
 
         if (count($list_of_missions)) {
-
             foreach ($list_of_missions as $mission) {
-
                 $mission_selector[] = [
                     'value' => $mission,
                     'mission' => $this->getLang()['type_mission'][$mission],
@@ -248,11 +252,9 @@ class Fleet3 extends Controller
         $stay_type = '';
 
         if (in_array(Missions::expedition, $this->_allowed_missions)) {
-
             $stay_type = 'expeditiontime';
 
             for ($i = 1; $i <= $max_exp_time; $i++) {
-
                 $options[] = [
                     'value' => $i,
                     'selected' => $i == 1 ? ' selected' : '',
@@ -261,11 +263,9 @@ class Fleet3 extends Controller
         }
 
         if (in_array(Missions::stay, $this->_allowed_missions)) {
-
             $stay_type = 'holdingtime';
 
             foreach ($hours as $hour) {
-
                 $options[] = [
                     'value' => $hour,
                     'selected' => $hour == 1 ? ' selected' : '',
@@ -274,7 +274,6 @@ class Fleet3 extends Controller
         }
 
         if (count($options) > 0) {
-
             return $this->getTemplate()->set(
                 'fleet/fleet3_stay_row',
                 array_merge(
@@ -320,10 +319,10 @@ class Fleet3 extends Controller
                 Missions::attack, Missions::acs, Missions::transport, Missions::deploy, Missions::stay, Missions::expedition,
             ],
             Ships::ship_colony_ship => [
-                Missions::colonize, Missions::expedition,
+                Missions::deploy, Missions::colonize, Missions::expedition,
             ],
             Ships::ship_recycler => [
-                Missions::recycle, Missions::expedition,
+                Missions::deploy, Missions::recycle, Missions::expedition,
             ],
             Ships::ship_espionage_probe => [
                 Missions::attack, Missions::acs, Missions::deploy, Missions::stay, Missions::spy, Missions::expedition,
@@ -406,34 +405,26 @@ class Fleet3 extends Controller
         );
 
         if ($selected_planet) {
-
             $ocuppied = true;
 
             if ($selected_planet['planet_user_id'] == $this->_user['user_id']) {
-
                 $action_type = 'own';
             }
         }
 
         if ($_SESSION['fleet_data']['target']['planet'] == (MAX_PLANET_IN_SYSTEM + 1)) {
-
             $possible_missions = [Missions::expedition];
         } else {
-
             $possible_missions = $mission_rules[$_SESSION['fleet_data']['target']['type']][$action_type];
 
             if (!$acs && in_array(Missions::acs, $possible_missions)) {
-
                 unset($possible_missions[array_search(Missions::acs, $possible_missions)]);
             }
         }
 
         if (count($ships) > 0) {
-
             foreach ($ships as $ship_id => $amount) {
-
                 if ($amount > 0) {
-
                     $missions[] = array_intersect(
                         $ships_rules[$ship_id],
                         $possible_missions
@@ -487,8 +478,7 @@ class Fleet3 extends Controller
         ]);
 
         if (is_null($data)) {
-
-            FunctionsLib::redirect('game.php?page=fleet1');
+            FunctionsLib::redirect(self::REDIRECT_TARGET);
         }
 
         $this->_current_mission = $data['target_mission'];

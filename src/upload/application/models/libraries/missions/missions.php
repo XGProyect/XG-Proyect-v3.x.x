@@ -13,6 +13,8 @@
  */
 namespace application\models\libraries\missions;
 
+use application\libraries\FleetsLib;
+
 /**
  * Missions Class
  *
@@ -741,14 +743,13 @@ class Missions
      *
      * @return void
      */
-    public function updateFleetDataToReturn($data = [])
+    public function updateFleetDataToReturn(array $data): void
     {
         if (is_array($data)) {
-
             $this->db->query(
                 "UPDATE " . FLEETS . " SET
                 `fleet_amount` = '" . $data['amount'] . "',
-                `fleet_array` = '" . $data['ships'] . "',
+                `fleet_array` = '" . FleetsLib::setFleetShipsArray($data['ships']) . "',
                 `fleet_mess` = '1'
                 WHERE fleet_id = '" . (int) $data['fleet_id'] . "';"
             );
