@@ -155,9 +155,7 @@ class Buildings extends Controller
 
                     // start building
                     $this->Buildings_Model->updatePlanetBuildingQueue(
-                        $this->_planet['planet_b_building_id'],
-                        $this->_planet['planet_b_building'],
-                        $this->_planet['planet_id']
+                        $this->_planet
                     );
                 }
 
@@ -711,6 +709,12 @@ class Buildings extends Controller
         if ($QueueID != false && DevelopmentsLib::isDevelopmentAllowed($this->_user, $this->_planet, $building)) {
             if ($QueueID <= 1) {
                 if (DevelopmentsLib::isDevelopmentPayable($this->_user, $this->_planet, $building, true, false) && !parent::$users->isOnVacations($this->_user)) {
+                    $price = DevelopmentsLib::developmentPrice($this->_user, $this->_planet, $building, true, !$AddMode);
+
+                    $this->_planet['planet_metal'] -= $price['metal'];
+                    $this->_planet['planet_crystal'] -= $price['crystal'];
+                    $this->_planet['planet_deuterium'] -= $price['deuterium'];
+
                     $continue = true;
                 }
             } else {

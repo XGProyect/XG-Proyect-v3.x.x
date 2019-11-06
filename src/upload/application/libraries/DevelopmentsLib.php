@@ -77,9 +77,8 @@ class DevelopmentsLib extends XGPCore
      *
      * @return int
      */
-    public static function developmentPrice(
-        $current_user, $current_planet, $element, $incremental = true, $destroy = false
-    ) {
+    public static function developmentPrice($current_user, $current_planet, $element, $incremental = true, $destroy = false)
+    {
         $resource = parent::$objects->getObjects();
         $pricelist = parent::$objects->getPrice();
 
@@ -110,6 +109,7 @@ class DevelopmentsLib extends XGPCore
                 }
             }
         }
+
         return $cost;
     }
 

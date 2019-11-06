@@ -50,21 +50,21 @@ class Buildings
     }
 
     /**
-     * Insert a new building queue
+     * Insert a new building queue and deduct resources
      *
-     * @param type $building_id
-     * @param type $queue
-     * @param type $planet_id
-     *
+     * @param array $planet
      * @return void
      */
-    public function updatePlanetBuildingQueue($queue, $building_id, $planet_id)
+    public function updatePlanetBuildingQueue(array $planet): void
     {
         $this->db->query(
-            "UPDATE " . PLANETS . " SET
-                `planet_b_building_id` = '" . $queue . "',
-                `planet_b_building` = '" . $building_id . "'
-            WHERE `planet_id` = '" . $planet_id . "';"
+            "UPDATE `" . PLANETS . "` SET
+                `planet_metal` = '" . $planet['planet_metal'] . "',
+                `planet_crystal` = '" . $planet['planet_crystal'] . "',
+                `planet_deuterium` = '" . $planet['planet_deuterium'] . "',
+                `planet_b_building` = '" . $planet['planet_b_building'] . "',
+                `planet_b_building_id` = '" . $planet['planet_b_building_id'] . "'
+            WHERE `planet_id` = '" . $planet['planet_id'] . "';"
         );
     }
 }
