@@ -135,7 +135,9 @@ class Fleet2 extends Controller
             $this->getTemplate()->set(
                 'fleet/fleet2_view',
                 array_merge(
-                    $this->getLang(), $page, $this->setInputsData()
+                    $this->getLang(),
+                    $page,
+                    $this->setInputsData()
                 )
             )
         );
