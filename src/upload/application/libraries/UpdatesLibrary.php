@@ -118,15 +118,15 @@ class UpdatesLibrary extends XGPCore
      */
     public static function updateBuildingsQueue(&$current_planet, &$current_user)
     {
-        if ($current_planet['planet_b_building_id'] != 0) {
-            while ($current_planet['planet_b_building_id'] != 0) {
-                if ($current_planet['planet_b_building'] <= time()) {
-                    if (self::checkBuildingQueue($current_planet, $current_user)) {
-                        DevelopmentsLib::setFirstElement($current_planet, $current_user);
-                    }
+        while ($current_planet['planet_b_building_id'] != 0) {
+            if ($current_planet['planet_b_building'] <= time()) {
+                if (self::checkBuildingQueue($current_planet, $current_user)) {
+                    DevelopmentsLib::setFirstElement($current_planet, $current_user);
                 } else {
                     break;
                 }
+            } else {
+                break;
             }
         }
     }
