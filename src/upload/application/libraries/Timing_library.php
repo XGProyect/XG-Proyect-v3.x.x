@@ -13,6 +13,8 @@
  */
 namespace application\libraries;
 
+use application\core\XGPCore;
+
 /**
  * Timing_library Class
  *
@@ -23,7 +25,7 @@ namespace application\libraries;
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-abstract class Timing_library
+abstract class Timing_library extends XGPCore
 {
 
     /**
