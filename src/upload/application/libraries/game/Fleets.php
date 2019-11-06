@@ -102,7 +102,7 @@ class Fleets
      */
     public function getFleetById(int $fleet_id): FleetEntity
     {
-        return $this->_fleets[$this->validateIndex($fleet_id)] ?? [];
+        return $this->_fleets[$this->validateIndex($fleet_id)] ?? new FleetEntity;
     }
 
     /**
@@ -152,7 +152,7 @@ class Fleets
      */
     private function validateIndex(int $fleet_id)
     {
-        return isset($this->_fleets_index[$fleet_id]) ?? -1;
+        return isset($this->_fleets_index[$fleet_id]) ? $this->_fleets_index[$fleet_id] : -1;
     }
 
     /**
