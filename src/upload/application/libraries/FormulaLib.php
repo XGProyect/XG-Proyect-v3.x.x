@@ -240,6 +240,82 @@ class FormulaLib
     {
         return round(sqrt($planet_diameter) / 2);
     }
+
+    /**
+     *10%
+     *echo floor((10000 * 10 / 10000) * 4500 / 10);
+     *
+     *50%
+     *echo floor((10000 * 50 / 10000) * 4500 / 10);
+     *
+     *100%
+     * ((max_storage - current_resources) * percentage /  max_storage) * base_dm / base_percentage
+     *echo floor(((10000 - 1549.33) * 100 / 10000) * 4500 / 10);// = 38083
+     *
+     *
+     *10000 * 0.10 |     1000 - 4500
+     *20000 * 0.10 | 2000 - 9000
+     *40000 * 0.10 | 4000 - 18000
+     *75000 * 0.10 | 7500 - 18000
+     *
+     *(max_storage * 0.10) *  base_resource / (max_storage_level_1 * 0.10)
+     */
+
+    public function getTraderRefill($max_storage, $base_resource, $max_storage_level)
+    {
+        return ($max_storage * 0.10) * $base_resource / ($max_storage_level * 0.10);
+    }
+
+    /**
+     * Get the price to refill the storage a 10%
+     *
+     * @param integer $max_storage
+     * @param integer $base_dm
+     * @return integer
+     */
+    public function getPriceToFillBy10Percent(int $max_storage, int $base_dm): int
+    {
+        return calculateRefillStoragePrice($max_storage, $base_dm, 10);
+    }
+
+    /**
+     * Get the price to refill the storage a 50%
+     *
+     * @param integer $max_storage
+     * @param integer $base_dm
+     * @return integer
+     */
+    public function getPriceToFillBy50Percent(int $max_storage, int $base_dm): int
+    {
+        return calculateRefillStoragePrice($max_storage, $base_dm, 50);
+    }
+
+    /**
+     * Get the price to completely refill the storage
+     *
+     * @param integer $max_storage
+     * @param integer $base_dm
+     * @param float $current_resources
+     * @return integer
+     */
+    public function getPriceToFillTo100Percent(int $max_storage, int $base_dm, float $current_resources): int
+    {
+        return calculateRefillStoragePrice($max_storage, $base_dm, 100, $current_resources);
+    }
+
+    /**
+     * Get the price to refill the storage
+     *
+     * @param integer $max_storage
+     * @param integer $base_dm
+     * @param integer $percentage
+     * @param float $current_resources
+     * @return integer
+     */
+    public function calculateRefillStoragePrice(int $max_storage, int $base_dm, int $percentage, float $current_resources = 0): int
+    {
+        return (($max_storage - $current_resources) * $percentage / $max_storage) * $base_dm / 10;
+    }
 }
 
 /* end of FormulaLib.php */
