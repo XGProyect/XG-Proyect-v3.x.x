@@ -152,6 +152,13 @@ class Buildings extends Controller
                             $this->removeFromQueue($list_id);
                             break;
                     }
+
+                    // start building
+                    $this->Buildings_Model->updatePlanetBuildingQueue(
+                        $this->_planet['planet_b_building_id'],
+                        $this->_planet['planet_b_building'],
+                        $this->_planet['planet_id']
+                    );
                 }
 
                 if ($reload == 'overview') {
@@ -161,16 +168,6 @@ class Buildings extends Controller
                 }
             }
         }
-
-        // set first element
-        DevelopmentsLib::setFirstElement($this->_planet, $this->_user);
-
-        // start building
-        $this->Buildings_Model->updatePlanetBuildingQueue(
-            $this->_planet['planet_b_building_id'],
-            $this->_planet['planet_b_building'],
-            $this->_planet['planet_id']
-        );
     }
 
     /**
@@ -760,6 +757,7 @@ class Buildings extends Controller
                 if ($QueueID == 1) {
                     $QueueArray = [];
                     $BuildEndTime = time() + $BuildTime;
+                    $this->_planet['planet_b_building'] = $BuildEndTime;
                 } else {
                     $PrevBuild = explode(",", $QueueArray[$ActualCount - 1]);
                     $BuildEndTime = $PrevBuild[3] + $BuildTime;
