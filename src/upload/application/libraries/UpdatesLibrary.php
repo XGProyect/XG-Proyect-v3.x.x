@@ -363,7 +363,7 @@ class UpdatesLibrary extends XGPCore
                         $element_name = $lang['tech'][$element];
 
                         if ($no_more_level == true) {
-                            $message = sprintf($lang['sys_nomore_level'], $element_name);
+                            $message = '';
                         } else {
                             $price = Developments::developmentPrice(
                                 $current_user,
@@ -373,33 +373,50 @@ class UpdatesLibrary extends XGPCore
                                 $for_destroy
                             );
 
+                            $insufficient = [];
+
+                            if ($price['metal'] > $current_planet['planet_metal']) {
+                                $insufficient[] = $lang['Metal'];
+                            }
+
+                            if ($price['crystal'] > $current_planet['planet_crystal']) {
+                                $insufficient[] = $lang['Crystal'];
+                            }
+
+                            if ($price['deuterium'] > $current_planet['planet_deuterium']) {
+                                $insufficient[] = $lang['Deuterium'];
+                            }
+
                             $message = sprintf(
-                                $lang['sys_notenough_money'],
+                                $lang['sys_building_queue_not_enough_resources'],
+                                $lang['sys_building_queue_' . $build_mode . '_order'],
                                 $element_name,
-                                Format::prettyNumber($current_planet['planet_metal']),
-                                $lang['Metal'],
-                                Format::prettyNumber($current_planet['planet_crystal']),
-                                $lang['Crystal'],
-                                Format::prettyNumber($current_planet['planet_deuterium']),
-                                $lang['Deuterium'],
-                                Format::prettyNumber($price['metal']),
-                                $lang['Metal'],
-                                Format::prettyNumber($price['crystal']),
-                                $lang['Crystal'],
-                                Format::prettyNumber($price['deuterium']),
-                                $lang['Deuterium']
+                                $level,
+                                Functions::setUrl(
+                                    'game.php?page=galaxy&mode=3&galaxy=' . $current_planet['planet_galaxy'] . '&system=' . $current_planet['planet_system'],
+                                    '',
+                                    $current_planet['planet_name'] . ' ' . Format::prettyCoords(
+                                        $current_planet['planet_galaxy'],
+                                        $current_planet['planet_system'],
+                                        $current_planet['planet_planet']
+                                    )
+                                ),
+                                join(', ', $insufficient)
                             );
                         }
 
-                        Functions::sendMessage(
-                            $current_user['user_id'],
-                            0,
-                            '',
-                            5,
-                            $lang['sys_buildlist'],
-                            $lang['sys_buildlist_fail'],
-                            $message
-                        );
+                        if ($message != '') {
+                            Functions::sendMessage(
+                                $current_user['user_id'],
+                                0,
+                                '',
+                                5,
+                                $lang['sys_building_queue_not_enough_resources_from'],
+                                $lang['sys_building_queue_not_enough_resources_subject'],
+                                $message,
+                                true
+                            );
+                        }
 
                         array_shift($queue_array);
 

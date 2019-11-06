@@ -90,6 +90,13 @@ $lang = [
     // changelog
     'ch_version' => 'Versión',
     'ch_description' => 'Descripción',
+
+    // system
+    'sys_building_queue_build_order' => 'Orden de construcción',
+    'sys_building_queue_destroy_order' => 'Orden de destrucción',
+    'sys_building_queue_not_enough_resources' => 'La %s de tu %s de nivel %s en %s no pudo ejecutarse.<br><br>Recursos insuficientes: %s.',
+    'sys_building_queue_not_enough_resources_from' => 'Mensaje del sistema',
+    'sys_building_queue_not_enough_resources_subject' => 'Producción cancelada',
 ];
 
 /**
@@ -1140,10 +1147,6 @@ $lang['sys_tran_mess_user'] = "Una flota proveniente de %s %s llega a tu planeta
 $lang['sys_mess_fleetback'] = "Vuelta de la flota";
 $lang['sys_tran_mess_back'] = "Una flota regreso al planeta %s %s. La flota no entrego recursos.";
 $lang['sys_recy_gotten'] = "Tu flota llego a las coordenadas indicadas y recolecto %s unidades de %s y %s unidades de %s.";
-$lang['sys_notenough_money'] = "No tienes suficientes recursos para construir una %s. Tienes %s de %s, %s de %s y %s de %s y el costo de la construcción era %s de %s, %s de %s y %s de %s";
-$lang['sys_nomore_level'] = "Intentas destruir un edificio ( %s ).";
-$lang['sys_buildlist'] = "Lista de construcción";
-$lang['sys_buildlist_fail'] = "Construcción imposible";
 $lang['sys_gain'] = "Beneficios";
 $lang['sys_fleet_won'] = "Una de tus flotas regresa del planeta %s %s y entrega %s de %s, %s de %s y %s de %s";
 $lang['sys_perte_attaquant'] = "Parte Atacante";
