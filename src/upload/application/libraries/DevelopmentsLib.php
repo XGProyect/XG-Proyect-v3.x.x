@@ -356,7 +356,7 @@ class DevelopmentsLib extends XGPCore
                 $queue_array = explode(";", $current_queue);
                 $loop = true;
 
-                while ($loop == true) {
+                while ($loop) {
                     $list_id_array = explode(",", $queue_array[0]);
                     $element = $list_id_array[0];
                     $level = $list_id_array[1];
@@ -365,11 +365,7 @@ class DevelopmentsLib extends XGPCore
                     $build_mode = $list_id_array[4];
                     $no_more_level = false;
 
-                    if ($build_mode == 'destroy') {
-                        $for_destroy = true;
-                    } else {
-                        $for_destroy = false;
-                    }
+                    $for_destroy = ($build_mode == 'destroy') ? true : false;
 
                     $is_payable = self::isDevelopmentPayable(
                         $current_user,
@@ -386,7 +382,7 @@ class DevelopmentsLib extends XGPCore
                         }
                     }
 
-                    if ($is_payable == true) {
+                    if ($is_payable) {
                         $price = self::developmentPrice($current_user, $current_planet, $element, true, $for_destroy);
 
                         $current_planet['planet_metal'] -= $price['metal'];
@@ -442,7 +438,7 @@ class DevelopmentsLib extends XGPCore
 
                         foreach ($queue_array as $num => $info) {
                             $fix_ele = explode(",", $info);
-                            $fix_ele[3] = $fix_ele[3] - $build_time;
+                            $fix_ele[3] = $fix_ele[3] - $build_time; // build end time
                             $queue_array[$num] = implode(",", $fix_ele);
                         }
 

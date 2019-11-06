@@ -189,17 +189,13 @@ class UpdatesLibrary extends XGPCore
             }
 
             $build_array = explode(",", $queue_array[0]);
+            $element = $build_array[0];
             $build_end_time = floor($build_array[3]);
             $build_mode = $build_array[4];
-            $element = $build_array[0];
 
             array_shift($queue_array);
 
-            if ($build_mode == 'destroy') {
-                $for_destroy = true;
-            } else {
-                $for_destroy = false;
-            }
+            $for_destroy = ($build_mode == 'destroy') ? true : false;
 
             if ($build_end_time <= time()) {
                 $needed = DevelopmentsLib::developmentPrice(
@@ -241,11 +237,7 @@ class UpdatesLibrary extends XGPCore
                     }
                 }
 
-                if (count($queue_array) == 0) {
-                    $new_queue = 0;
-                } else {
-                    $new_queue = implode(';', $queue_array);
-                }
+                $new_queue = (count($queue_array) == 0) ? 0 : implode(';', $queue_array);
 
                 $current_planet['planet_b_building'] = 0;
                 $current_planet['planet_b_building_id'] = $new_queue;
