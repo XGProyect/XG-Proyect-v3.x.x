@@ -194,6 +194,25 @@ class UpdatesLibrary
     }
 
     /**
+     * Updated planet queue and disocunt resources
+     *
+     * @param array $planet
+     * @return void
+     */
+    public function updateQueueResources($planet)
+    {
+        $this->db->query(
+            "UPDATE `" . PLANETS . "` SET
+                `planet_metal` = '" . $planet['planet_metal'] . "',
+                `planet_crystal` = '" . $planet['planet_crystal'] . "',
+                `planet_deuterium` = '" . $planet['planet_deuterium'] . "',
+                `planet_b_building` = '" . $planet['planet_b_building'] . "',
+                `planet_b_building_id` = '" . $planet['planet_b_building_id'] . "'
+            WHERE `planet_id` = '" . $planet['planet_id'] . "';"
+        );
+    }
+
+    /**
      * Update all planet data, before any action takes place
      *
      * @param type $data Planet data to update
