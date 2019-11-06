@@ -210,10 +210,8 @@ class UpdatesLibrary extends XGPCore
                     $for_destroy
                 );
 
-                $units = $needed['metal'] + $needed['crystal'] + $needed['deuterium'];
                 $current = (int) $current_planet['planet_field_current'];
                 $max = (int) $current_planet['planet_field_max'];
-                $message = '';
 
                 if ($current_planet['planet_type'] == 3) {
                     if ($element == 41) {
@@ -229,23 +227,6 @@ class UpdatesLibrary extends XGPCore
                                 $current -= 1;
                                 $current_planet[$resource[$element]]--;
                             }
-                        } else {
-                            $message = sprintf(
-                                parent::$lang['sys_notenough_money'],
-                                parent::$lang['tech'][$element],
-                                FormatLib::prettyNumber($current_planet['planet_metal']),
-                                parent::$lang['Metal'],
-                                FormatLib::prettyNumber($current_planet['planet_crystal']),
-                                parent::$lang['Crystal'],
-                                FormatLib::prettyNumber($current_planet['planet_deuterium']),
-                                parent::$lang['Deuterium'],
-                                FormatLib::prettyNumber($needed['metal']),
-                                parent::$lang['Metal'],
-                                FormatLib::prettyNumber($needed['crystal']),
-                                parent::$lang['Crystal'],
-                                FormatLib::prettyNumber($needed['deuterium']),
-                                parent::$lang['Deuterium']
-                            );
                         }
                     }
                 } elseif ($current_planet['planet_type'] == 1) {
@@ -257,23 +238,6 @@ class UpdatesLibrary extends XGPCore
                             $current -= 1;
                             $current_planet[$resource[$element]]--;
                         }
-                    } else {
-                        $message = sprintf(
-                            parent::$lang['sys_notenough_money'],
-                            parent::$lang['tech'][$element],
-                            FormatLib::prettyNumber($current_planet['planet_metal']),
-                            parent::$lang['Metal'],
-                            FormatLib::prettyNumber($current_planet['planet_crystal']),
-                            parent::$lang['Crystal'],
-                            FormatLib::prettyNumber($current_planet['planet_deuterium']),
-                            parent::$lang['Deuterium'],
-                            FormatLib::prettyNumber($needed['metal']),
-                            parent::$lang['Metal'],
-                            FormatLib::prettyNumber($needed['crystal']),
-                            parent::$lang['Crystal'],
-                            FormatLib::prettyNumber($needed['deuterium']),
-                            parent::$lang['Deuterium']
-                        );
                     }
                 }
 
@@ -297,10 +261,6 @@ class UpdatesLibrary extends XGPCore
                     $current_planet[$resource[$element]],
                     $current_planet
                 );
-
-                if ($message != '') {
-                    FunctionsLib::sendMessage($current_user['user_id'], 0, '', 5, parent::$lang['sys_buildlist'], parent::$lang['sys_buildlist_fail'], $message);
-                }
 
                 $ret_value = true;
             } else {
