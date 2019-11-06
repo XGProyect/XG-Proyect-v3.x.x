@@ -59,9 +59,6 @@ class Buildings
     {
         $this->db->query(
             "UPDATE `" . PLANETS . "` SET
-                `planet_metal` = '" . $planet['planet_metal'] . "',
-                `planet_crystal` = '" . $planet['planet_crystal'] . "',
-                `planet_deuterium` = '" . $planet['planet_deuterium'] . "',
                 `planet_b_building` = '" . $planet['planet_b_building'] . "',
                 `planet_b_building_id` = '" . $planet['planet_b_building_id'] . "'
             WHERE `planet_id` = '" . $planet['planet_id'] . "';"

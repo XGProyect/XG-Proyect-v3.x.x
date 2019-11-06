@@ -20,6 +20,7 @@ use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
 use application\libraries\OfficiersLib;
 use application\libraries\Timing_library as Timing;
+use application\libraries\UpdatesLibrary;
 use Exception;
 
 /**
@@ -152,6 +153,9 @@ class Buildings extends Controller
                             $this->removeFromQueue($list_id);
                             break;
                     }
+
+                    // start building
+                    UpdatesLibrary::setFirstElement($this->_planet, $this->_user);
 
                     // start building
                     $this->Buildings_Model->updatePlanetBuildingQueue(
@@ -709,12 +713,6 @@ class Buildings extends Controller
         if ($QueueID != false && DevelopmentsLib::isDevelopmentAllowed($this->_user, $this->_planet, $building)) {
             if ($QueueID <= 1) {
                 if (DevelopmentsLib::isDevelopmentPayable($this->_user, $this->_planet, $building, true, false) && !parent::$users->isOnVacations($this->_user)) {
-                    $price = DevelopmentsLib::developmentPrice($this->_user, $this->_planet, $building, true, !$AddMode);
-
-                    $this->_planet['planet_metal'] -= $price['metal'];
-                    $this->_planet['planet_crystal'] -= $price['crystal'];
-                    $this->_planet['planet_deuterium'] -= $price['deuterium'];
-
                     $continue = true;
                 }
             } else {
@@ -761,7 +759,6 @@ class Buildings extends Controller
                 if ($QueueID == 1) {
                     $QueueArray = [];
                     $BuildEndTime = time() + $BuildTime;
-                    $this->_planet['planet_b_building'] = $BuildEndTime;
                 } else {
                     $PrevBuild = explode(",", $QueueArray[$ActualCount - 1]);
                     $BuildEndTime = $PrevBuild[3] + $BuildTime;
