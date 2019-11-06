@@ -136,22 +136,18 @@ class Federation extends Controller
         $data = filter_input_array(INPUT_POST);
 
         if (isset($data['add']) && isset($data['friends_list'])) {
-
             $this->addAcsMember($data['friends_list']);
         }
 
         if (isset($data['remove']) && isset($data['members_list'])) {
-
             $this->removeAcsMember($data['members_list']);
         }
 
         if (isset($data['search']) && isset($data['addtogroup'])) {
-
             $this->searchUser($data['addtogroup']);
         }
 
         if (isset($data['save']) && isset($data['name_acs'])) {
-
             $this->saveAcsName($data['name_acs']);
         }
     }
@@ -182,9 +178,13 @@ class Federation extends Controller
             $this->getTemplate()->set(
                 'fleet/fleet_federation_view',
                 array_merge(
-                    $this->getLang(), $page
+                    $this->getLang(),
+                    $page
                 )
-            ), false, '', false
+            ),
+            false,
+            '',
+            false
         );
     }
 
@@ -198,11 +198,9 @@ class Federation extends Controller
     private function addAcsMember(int $member): void
     {
         if ((int) $member > 0) {
-
             $fleet_id = filter_input(INPUT_GET, 'fleet', FILTER_VALIDATE_INT);
 
             if ($fleet_id) {
-
                 $own_fleet = $this->_fleets->getOwnValidFleetById($fleet_id);
 
                 $acs = $this->Fleet_Model->getAcsDataByGroupId(
@@ -211,9 +209,9 @@ class Federation extends Controller
 
                 if ($acs['acs_members'] < 5
                     && $member != $this->_user['user_id']) {
-
                     $this->Fleet_Model->insertNewAcsMember(
-                        $member, $own_fleet->getFleetGroup()
+                        $member,
+                        $own_fleet->getFleetGroup()
                     );
 
                     $invite_message = $this->getLang()['fl_player'] . $this->_user['user_name'] . $this->getLang()['fl_acs_invitation_message'];
@@ -241,11 +239,9 @@ class Federation extends Controller
     private function removeAcsMember(int $member): void
     {
         if ((int) $member > 0) {
-
             $fleet_id = filter_input(INPUT_GET, 'fleet', FILTER_VALIDATE_INT);
 
             if ($fleet_id) {
-
                 $own_fleet = $this->_fleets->getOwnValidFleetById($fleet_id);
 
                 $acs = $this->Fleet_Model->getAcsDataByGroupId(
@@ -254,9 +250,9 @@ class Federation extends Controller
 
                 if ($acs['acs_members'] >= 1
                     && $member != $this->_user['user_id']) {
-
                     $this->Fleet_Model->removeAcsMember(
-                        $member, $own_fleet->getFleetGroup()
+                        $member,
+                        $own_fleet->getFleetGroup()
                     );
                 }
             }
@@ -273,18 +269,14 @@ class Federation extends Controller
     private function searchUser(string $user_name): void
     {
         if (!empty($user_name)) {
-
             $user_id = $this->Fleet_Model->getUserIdByName($user_name);
-
             if ($user_id > 0 && $user_id != $this->_user['user_id']) {
-
                 $this->addAcsMember($user_id);
 
                 $this->_message = FormatLib::customColor(
                     $this->getLang()['fl_player'] . ' ' . $user_name . ' ' . $this->getLang()['fl_add_to_attack'], 'lime'
                 );
             } else {
-
                 $this->_message = FormatLib::colorRed(
                     $this->getLang()['fl_player'] . ' ' . $user_name . ' ' . $this->getLang()['fl_dont_exist']
                 );
@@ -304,10 +296,21 @@ class Federation extends Controller
         $name_len = strlen($acs_name);
 
         if ($name_len >= 3 && $name_len <= 20) {
+            $fleet_id = filter_input(INPUT_GET, 'fleet', FILTER_VALIDATE_INT);
 
-            $this->Fleet_Model->updateAcsName(
-                $acs_name, $this->_user['user_id']
-            );
+            if ($fleet_id) {
+                $own_fleet = $this->_fleets->getOwnValidFleetById($fleet_id);
+
+                $acs = $this->Fleet_Model->getAcsDataByGroupId(
+                    $own_fleet->getFleetGroup()
+                );
+
+                $this->Fleet_Model->updateAcsName(
+                    $acs_name,
+                    $acs['acs_id'],
+                    $this->_user['user_id']
+                );
+            }
         }
     }
 
@@ -321,20 +324,16 @@ class Federation extends Controller
         $fleet_id = filter_input(INPUT_GET, 'fleet', FILTER_VALIDATE_INT);
 
         if ($fleet_id) {
-
             $own_fleet = $this->_fleets->getOwnValidFleetById($fleet_id);
 
             if (!is_null($own_fleet)) {
-
                 if ($own_fleet->getFleetGroup() <= 0) {
-
                     // create a new acs, and get its group ID
                     $group_id = $this->Fleet_Model->createNewAcs(
                         $this->generateRandomAcsCode(),
                         $own_fleet
                     );
                 } else {
-
                     $group_id = $own_fleet->getFleetGroup();
                 }
 
@@ -346,7 +345,6 @@ class Federation extends Controller
                 $this->_acs_code = $this->_group->getFirstAcs()->getAcsFleetName();
             }
         } else {
-
             FunctionsLib::redirect(self::REDIRECT_TARGET);
         }
     }

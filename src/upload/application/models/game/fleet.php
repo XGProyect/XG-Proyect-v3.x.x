@@ -543,12 +543,13 @@ class Fleet
      *
      * @return void
      */
-    public function updateAcsName(string $acs_name, int $user_id): void
+    public function updateAcsName(string $acs_name, int $acs_id, int $user_id): void
     {
         $this->db->query(
             "UPDATE `" . ACS . "` acs SET
                 acs.`acs_name` = '" . $this->db->escapeValue($acs_name) . "'
-            WHERE acs.`acs_owner` = '" . $user_id . "';"
+            WHERE acs.`acs_id` = '" . $acs_id . "'
+                AND acs.`acs_owner` = '" . $user_id . "';"
         );
     }
 
