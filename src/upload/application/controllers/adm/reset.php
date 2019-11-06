@@ -89,16 +89,20 @@ class Reset extends Controller
         $this->_db->query("TRUNCATE TABLE " . FLEETS . "");
         $this->_db->query("TRUNCATE TABLE " . MESSAGES . "");
         $this->_db->query("TRUNCATE TABLE " . NOTES . "");
-        $this->_db->query("TRUNCATE TABLE " . PREMIUM . "");
-        $this->_db->query("TRUNCATE TABLE " . RESEARCH . "");
-        $this->_db->query("TRUNCATE TABLE " . REPORTS . "");
         $this->_db->query("TRUNCATE TABLE " . PREFERENCES . "");
-        $this->_db->query("TRUNCATE TABLE " . USERS_STATISTICS . "");
+        $this->_db->query("TRUNCATE TABLE " . PREMIUM . "");
+        $this->_db->query("TRUNCATE TABLE " . REPORTS . "");
+        $this->_db->query("TRUNCATE TABLE " . RESEARCH . "");
+        $this->_db->query("TRUNCATE TABLE " . SESSIONS . "");
         $this->_db->query("TRUNCATE TABLE " . SHIPS . "");
+        $this->_db->query("TRUNCATE TABLE " . USERS_STATISTICS . "");
 
-        $AllUsers = $this->_db->query("SELECT `user_name`, `user_password`, `user_email`,`user_authlevel`,`user_galaxy`,`user_system`,`user_planet`, `user_onlinetime`, `user_register_time`, `user_home_planet_id`
-											FROM " . USERS . "_s
-											WHERE 1;");
+        $AllUsers = $this->_db->query(
+            "SELECT
+                `user_name`, `user_password`, `user_email`,`user_authlevel`,`user_galaxy`,`user_system`,`user_planet`, `user_onlinetime`, `user_register_time`, `user_home_planet_id`
+            FROM " . USERS . "_s
+            WHERE 1;"
+        );
 
         $LimitTime = time() - (15 * (24 * (60 * 60)));
         $TransUser = 0;
@@ -339,8 +343,9 @@ class Reset extends Controller
 											`user_ally_rank_id` = '0'");
                 }
 
-
                 if ($_POST['fleets'] == 'on') {
+                    $this->_db->query("TRUNCATE TABLE " . ACS . "");
+                    $this->_db->query("TRUNCATE TABLE " . ACS_MEMBERS . "");
                     $this->_db->query("TRUNCATE TABLE " . FLEETS . "");
                 }
 
