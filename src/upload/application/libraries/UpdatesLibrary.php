@@ -82,6 +82,7 @@ class UpdatesLibrary extends XGPCore
             $this->Update_Model->deleteReports($del_before);
             $this->Update_Model->deleteSessions(date('Y-m-d H:i:s', $del_planets));
             $this->Update_Model->deleteDestroyedPlanets($del_planets);
+            $this->Update_Model->deleteExpiredAcs();
 
             FunctionsLib::updateConfig('last_cleanup', time());
         }
