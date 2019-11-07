@@ -11,11 +11,13 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
+
 namespace application\controllers\game;
 
 use application\core\Controller;
 use application\libraries\FormatLib as Format;
 use application\libraries\FunctionsLib as Functions;
+use application\libraries\game\ResourceMarket;
 use application\libraries\ProductionLib;
 use Exception;
 
@@ -49,6 +51,13 @@ class Trader extends Controller
     private $planet;
 
     /**
+     * ResourceMarket object
+     *
+     * @var \ResourceMarket
+     */
+    private $trader;
+
+    /**
      * Constructor
      *
      * @return void
@@ -66,6 +75,9 @@ class Trader extends Controller
         // load Language
         parent::loadLang(['global', 'trader']);
 
+        // loda library
+        $this->formula = Functions::loadLibrary('FormulaLib');
+
         // Check module access
         Functions::moduleMessage(Functions::isModuleAccesible(self::MODULE_ID));
 
@@ -75,14 +87,28 @@ class Trader extends Controller
         // set planet data
         $this->planet = $this->getPlanetData();
 
-        // init a new buddy object
-        //$this->setUpTrader();
+        // init a new trader object
+        $this->setUpTrader();
 
         // time to do something
         //$this->runAction();
 
         // build the page
         $this->buildPage();
+    }
+
+    /**
+     * Creates a new trader object that will handle all the trader
+     * creation methods and actions
+     *
+     * @return void
+     */
+    private function setUpTrader(): void
+    {
+        $this->trader = new ResourceMarket(
+            $this->user,
+            $this->planet
+        );
     }
 
     /**
@@ -140,7 +166,7 @@ class Trader extends Controller
     {
         $list_of_resources = [];
 
-        foreach (['metal' => 4500, 'crystal' => 9000, 'deuterium' => 13500] as $resource => $price) {
+        foreach (['metal', 'crystal', 'deuterium'] as $resource) {
             $list_of_resources[] = array_merge(
                 $this->langs->language,
                 [
@@ -149,14 +175,31 @@ class Trader extends Controller
                     'resource_name' => $this->langs->line($resource),
                     'current_resource' => Format::shortlyNumber($this->planet['planet_' . $resource]),
                     'max_resource' => Format::shortlyNumber($this->planet['planet_' . $resource . '_max']),
-                    'dark_matter_price_10' => Format::prettyNumber($price),
-                    'dark_matter_price_50' => Format::prettyNumber($price * 5),
-                    'dark_matter_price_100' => Format::prettyNumber($price * 10),
-                ]
+                ],
+                $this->returnDarkMatterPricePoints($resource)
             );
         }
 
         return $list_of_resources;
+    }
+
+    /**
+     * Return the dark matter price points
+     *
+     * @param string $resource
+     * @return array
+     */
+    private function returnDarkMatterPricePoints(string $resource): array
+    {
+        $pricePoints = [];
+
+        foreach ([10, 50, 100] as $percentage) {
+            $dm_price = $this->trader->{'getPriceToFill' . $percentage . 'Percent'}($resource);
+            $formated_dm_price = Format::customColor(Format::prettyNumber($dm_price), '#2cbef2') . ' ' . $this->langs->line('dark_matter_short');
+            $pricePoints['dark_matter_price_' . $percentage] = ($dm_price > 0) ? $formated_dm_price : Format::colorRed('-');
+        }
+
+        return $pricePoints;
     }
 
     private function buildAuctioneerSection(): array
