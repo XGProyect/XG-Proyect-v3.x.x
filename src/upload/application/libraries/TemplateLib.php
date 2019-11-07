@@ -65,16 +65,13 @@ class TemplateLib
         $page = '';
 
         if (!defined('IN_MESSAGE')) {
-
             // For the Home page
             if (defined('IN_LOGIN')) {
-
                 die($current_page);
             }
 
             // For the Install page
             if (defined('IN_INSTALL')) {
-
                 $page .= $this->installHeader($metatags);
                 $page .= $menu ? $this->installMenu() : ''; // MENU
                 $page .= $topnav ? $this->installNavbar() : ''; // TOP NAVIGATION BAR
@@ -83,7 +80,6 @@ class TemplateLib
 
         // For the Install page
         if (defined('IN_INSTALL') && defined('IN_MESSAGE')) {
-
             $page .= $this->installHeader($metatags);
             $page .= $menu ? $this->installMenu() : ''; // MENU
             $page .= $topnav ? $this->installNavbar() : ''; // TOP NAVIGATION BAR
@@ -91,7 +87,6 @@ class TemplateLib
 
         // For the Admin page
         if (defined('IN_ADMIN')) {
-
             $page .= $this->adminHeader($metatags);
             $page .= $menu ? $this->adminMenu() : ''; // MENU
             $page .= $topnav ? $this->adminNavbar() : ''; // TOP NAVIGATION BAR
@@ -99,7 +94,6 @@ class TemplateLib
 
         // Anything else
         if ($page == '') {
-
             $page .= $this->gameHeader($metatags);
             $page .= $topnav ? $this->gameNavbar() : ''; // TOP NAVIGATION BAR
             $page .= $menu ? $this->gameMenu() : ''; // MENU
@@ -107,40 +101,34 @@ class TemplateLib
 
         // Merge: Header + Topnav + Menu + Page
         if (!defined('IN_INSTALL') && !defined('IN_ADMIN')) {
-
             $page .= "\n<center>\n" . $current_page . "\n</center>\n";
         } else {
-
             if (defined('IN_MESSAGE')) {
-
                 $page .= "\n<center>\n" . $current_page . "\n</center>\n";
             } else {
-
                 $page .= $current_page;
             }
         }
 
         // Footer
         if (!defined('IN_INSTALL') && !defined('IN_ADMIN') && !defined('IN_LOGIN')) {
-
             // Is inside the game
             if (isset($_GET['page']) && $_GET['page'] != 'galaxy') {
-
                 $page .= $this->parseTemplate($this->getTemplate('general/footer'), '');
             }
         }
 
         if (defined('IN_ADMIN')) {
-
             $page .= $this->parseTemplate(
-                $this->getTemplate('adm/simple_footer'), ['version' => SYSTEM_VERSION, 'year' => $this->current_year]
+                $this->getTemplate('adm/simple_footer'),
+                ['version' => SYSTEM_VERSION, 'year' => $this->current_year]
             );
         }
 
         if (defined('IN_INSTALL') && !defined('IN_MESSAGE')) {
-
             $page .= $this->parseTemplate(
-                $this->getTemplate('install/simple_footer'), ['year' => $this->current_year]
+                $this->getTemplate('install/simple_footer'),
+                ['year' => $this->current_year]
             );
         }
 
@@ -161,9 +149,11 @@ class TemplateLib
     public function parseTemplate($template, $array)
     {
         return preg_replace_callback(
-            '#\{([a-z0-9\-_]*?)\}#Ssi', function ($matches) use ($array) {
+            '#\{([a-z0-9\-_]*?)\}#Ssi',
+            function ($matches) use ($array) {
                 return ((isset($array[$matches[1]])) ? $array[$matches[1]] : '');
-            }, $template
+            },
+            $template
         );
     }
 
@@ -182,10 +172,8 @@ class TemplateLib
         $template = @file_get_contents($route);
 
         if ($template) { // We got something
-
             return $template; // Return
         } else {
-
             // Throw Exception
             die('Template not found or empty: <strong>' . $template_name . '</strong><br />
                 Location: <strong>' . $route . '</strong>');
@@ -205,9 +193,11 @@ class TemplateLib
     public function parse($array = array(), $template = '')
     {
         return preg_replace_callback(
-            '#\{([a-z0-9\-_]*?)\}#Ssi', function ($matches) use ($array) {
+            '#\{([a-z0-9\-_]*?)\}#Ssi',
+            function ($matches) use ($array) {
                 return ((isset($array[$matches[1]])) ? $array[$matches[1]] : '');
-            }, ($template == '' ? $this->template : $template)
+            },
+            ($template == '' ? $this->template : $template)
         );
     }
 
@@ -238,7 +228,6 @@ class TemplateLib
                 Location: <strong>' . $route . '</strong>'
             );
         } catch (\Exception $e) {
-
             // Throw Exception
             die($e->getMessage());
         }
@@ -267,7 +256,6 @@ class TemplateLib
     {
         // Update config language to the new setted value
         if (isset($_POST['language'])) {
-
             FunctionsLib::setCurrentLanguage($_POST['language']);
             FunctionsLib::redirect(XGP_ROOT . 'install/');
         }
@@ -283,14 +271,11 @@ class TemplateLib
 
         // BUILD THE MENU
         foreach ($pages as $key => $data) {
-
             if ($data[2] != '') {
-
                 // URL
                 $items .= '<li' . ($current_page == $data[0] ? ' class="active"' : '') .
                     '><a href="index.php?page=' . $data[0] . '&mode=' . $data[2] . '">' . $data[1] . '</a></li>';
             } else {
-
                 // URL
                 $items .= '<li' . ($current_page == $data[0] ? ' class="active"' : '') .
                     '><a href="index.php?page=' . $data[0] . '">' . $data[1] . '</a></li>';
@@ -324,7 +309,6 @@ class TemplateLib
 
         // BUILD THE MENU
         foreach ($steps as $key => $data) {
-
             // URL
             $items .= '<li' . ($current_mode == $data[0] ? ' class="active"' : '') .
                 '><a href="#">' . $data[1] . '</a></li>';
@@ -372,7 +356,6 @@ class TemplateLib
 
         // When vacation mode did not expire
         if ($this->current_user['preference_vacation_mode'] > 0) {
-
             $parse['color'] = '#1DF0F0';
             $parse['message'] = $this->langs['tn_vacation_mode'] . Timing::formatExtendedDate($this->current_user['preference_vacation_mode']);
             $parse['jump_line'] = '<br/>';
@@ -381,7 +364,6 @@ class TemplateLib
         }
 
         if ($this->current_user['preference_delete_mode'] > 0) {
-
             // When it is in delete mode
             $parse['color'] = '#FF0000';
             $parse['message'] = $this->langs['tn_delete_mode'] . Timing::formatExtendedDate($this->current_user['preference_delete_mode'] + (60 * 60 * 24 * 7));
@@ -426,7 +408,6 @@ class TemplateLib
 
         // ENERGY
         if (($this->current_planet['planet_energy_max'] + $this->current_planet['planet_energy_used']) < 0) {
-
             $energy = FormatLib::colorRed($energy);
         }
 
@@ -487,34 +468,27 @@ class TemplateLib
 
         // BUILD THE MENU
         foreach ($pages as $key => $data) {
-
             // IF THE MODULE IT'S NOT ENABLED, CONTINUE!
             if (isset($modules_array[$data[6]]) && $modules_array[$data[6]] == 0 && $modules_array[$data[6]] != '') {
-
                 continue;
             }
 
             if (!OfficiersLib::isOfficierActive($this->current_user['premium_officier_commander']) && $data[0] == 'empire') {
-
                 continue;
             }
 
             // BUILD URL
             if ($data[2] != '') {
-
                 $link = 'game.php?page=' . $data[0] . '&' . $data[2];
             } else {
-
                 $link = 'game.php?page=' . $data[0];
             }
 
             // POP UP OR NOT
             if ($data[4] == 'true') {
-
                 $link_type = '<a href="#" onClick="f(\'' . $link . '\', \'' . $data[1] . '\')">
                     <font color="' . (($data[3] != 'FFF') ? $data[3] : '') . '">' . $data[1] . '</font></a>';
             } else {
-
                 $link_type = '<a href="' . $link . '">
                     <font color="' . (($data[3] != 'FFF') ? $data[3] : '') . '">' . $data[1] . '</font></a>';
             }
@@ -525,7 +499,6 @@ class TemplateLib
 
             // ONLY FOR THE CHANGELOG
             if ($data[5] == 0) {
-
                 $parse['changelog'] = '(' . $link_type . ')';
             }
 
@@ -634,18 +607,14 @@ class TemplateLib
         );
         // BUILD THE MENU
         foreach ($pages as $key => $data) {
-
             if ($data[2] != $flag) {
-
                 $flag = $data[2];
                 $items = '';
             }
 
             if ($data[0] == 'buildstats') {
-
                 $extra = 'onClick="return confirm(\'' . $this->langs['mn_tools_manual_update_confirm'] . '\');"';
             } else {
-
                 $extra = '';
             }
 
