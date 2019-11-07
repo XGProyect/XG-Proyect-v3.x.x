@@ -13,6 +13,7 @@
  */
 namespace application\libraries;
 
+use application\libraries\ProductionLib as Production;
 use application\libraries\Timing_library as Timing;
 
 /**
@@ -389,20 +390,17 @@ class TemplateLib
         $technocrat = OfficiersLib::isOfficierActive($this->current_user['premium_officier_technocrat']) ? '' : '_un';
 
         // METAL
-        if (($this->current_planet['planet_metal'] >= $this->current_planet['planet_metal_max'])) {
-
+        if ($this->current_planet['planet_metal'] >= Production::maxStorable($this->current_planet['building_metal_store'])) {
             $metal = FormatLib::colorRed($metal);
         }
 
         // CRYSTAL
-        if (($this->current_planet['planet_crystal'] >= $this->current_planet['planet_crystal_max'])) {
-
+        if ($this->current_planet['planet_crystal'] >= Production::maxStorable($this->current_planet['building_crystal_store'])) {
             $crystal = FormatLib::colorRed($crystal);
         }
 
         // DEUTERIUM
-        if (($this->current_planet['planet_deuterium'] >= $this->current_planet['planet_deuterium_max'])) {
-
+        if ($this->current_planet['planet_deuterium'] >= Production::maxStorable($this->current_planet['building_deuterium_tank'])) {
             $deuterium = FormatLib::colorRed($deuterium);
         }
 
