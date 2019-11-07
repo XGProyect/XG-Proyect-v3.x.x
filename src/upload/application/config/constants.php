@@ -35,7 +35,7 @@ define('DEBUG_MODE', false);
 define('LOG_ERRORS', true);
 
 // ERROR LOGS MAIL
-define('ERROR_LOGS_MAIL', '');
+define('ERROR_LOGS_MAIL', 'errors@xgproyect.org');
 
 // RUN QUERIES FLAG
 define('ADMIN_ACCESS_QUERY', true);
