@@ -58,3 +58,4 @@ $queries[] = "ALTER TABLE `" . OPTIONS . "` ADD PRIMARY KEY(`option_id`);";
 $queries[] = "ALTER TABLE `" . OPTIONS . "` ADD UNIQUE(`option_name`);";
 $queries[] = "UPDATE `" . OPTIONS . "` SET `option_name` = 'merchant_price' WHERE `" . OPTIONS . "`.`option_id` = 35;";
 $queries[] = "ALTER TABLE `" . USERS . "` CHANGE `user_agent` `user_agent` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL, CHANGE `user_current_page` `user_current_page` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL;";
+$queries[] = "ALTER TABLE `" . PLANETS . "` DROP `planet_metal_max`, DROP `planet_crystal_max`, DROP `planet_deuterium_max`;";

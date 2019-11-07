@@ -102,24 +102,12 @@
             <td><input type="text" name="planet_metal" value="{planet_metal}"></td>
         </tr>
         <tr>
-            <td>{us_user_main_metal_max}</td>
-            <td><input type="text" name="planet_metal_max" value="{planet_metal_max}"></td>
-        </tr>
-        <tr>
             <td>{us_user_main_crystal}</td>
             <td><input type="text" name="planet_crystal" value="{planet_crystal}"></td>
         </tr>
         <tr>
-            <td>{us_user_main_crystal_max}</td>
-            <td><input type="text" name="planet_crystal_max" value="{planet_crystal_max}"></td>
-        </tr>
-        <tr>
             <td>{us_user_main_deuterium}</td>
             <td><input type="text" name="planet_deuterium" value="{planet_deuterium}"></td>
-        </tr>
-        <tr>
-            <td>{us_user_main_deuterium_max}</td>
-            <td><input type="text" name="planet_deuterium_max" value="{planet_deuterium_max}"></td>
         </tr>
         <tr>
             <td>{us_user_main_ship_solar_satellite_percent}</td>

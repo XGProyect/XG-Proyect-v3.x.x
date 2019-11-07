@@ -271,16 +271,6 @@ class PlanetEntity extends Entity
     }
 
     /**
-     * Return the planet metal capacity
-     *
-     * @return integer
-     */
-    public function getPlanetStorageCapacityMetal(): int
-    {
-        return (int) $this->data['planet_metal_max'];
-    }
-
-    /**
      * Return the planet current amount of crystal
      *
      * @return float
@@ -301,16 +291,6 @@ class PlanetEntity extends Entity
     }
 
     /**
-     * Return the planet crystal capacity
-     *
-     * @return integer
-     */
-    public function getPlanetStorageCapacityCrystal(): int
-    {
-        return (int) $this->data['planet_crystal_max'];
-    }
-
-    /**
      * Return the planet current amount of deuterium
      *
      * @return float
@@ -328,16 +308,6 @@ class PlanetEntity extends Entity
     public function getPlanetProductionPerHourDeuterium(): int
     {
         return (int) $this->data['planet_deuterium_perhour'];
-    }
-
-    /**
-     * Return the planet deuterium capacity
-     *
-     * @return integer
-     */
-    public function getPlanetStorageCapacityDeuterium(): int
-    {
-        return (int) $this->data['planet_deuterium_max'];
     }
 
     /**

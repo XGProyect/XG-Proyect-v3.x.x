@@ -556,13 +556,10 @@ $lang['us_user_main_temp_min'] = 'Min. temperature';
 $lang['us_user_main_temp_max'] = 'Max. temperature';
 $lang['us_user_main_metal'] = 'Metal';
 $lang['us_user_main_metal_perhour'] = 'Metal per hour';
-$lang['us_user_main_metal_max'] = 'Maximum metal';
 $lang['us_user_main_crystal'] = 'Crystal';
 $lang['us_user_main_crystal_perhour'] = 'Crystal per hour';
-$lang['us_user_main_crystal_max'] = 'Maximum Crystal';
 $lang['us_user_main_deuterium'] = 'Deuterium';
 $lang['us_user_main_deuterium_perhour'] = 'Deuterium per hour';
-$lang['us_user_main_deuterium_max'] = 'Maximum Deuterium';
 $lang['us_user_main_energy_used'] = 'Energy used';
 $lang['us_user_main_energy_max'] = 'Maximum energy';
 $lang['us_user_main_building_metal_mine_percent'] = '% metal production';
@@ -691,7 +688,7 @@ $lang['al_delete_members'] = 'Delete members';
 $lang['al_rank_not_defined'] = 'N/A';
 $lang['al_cant_delete_last_one'] = 'You can\'t delete the last member of the alliance';
 
-//	BACKUPS
+//    BACKUPS
 $lang['bku_title'] = 'Backups';
 $lang['bku_auto'] = 'Automatic Backup';
 $lang['bku_auto_legend'] = 'Automatic backups occur once every 6 hours';
