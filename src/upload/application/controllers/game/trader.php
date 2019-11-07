@@ -18,8 +18,6 @@ use application\core\Controller;
 use application\libraries\FormatLib as Format;
 use application\libraries\FunctionsLib as Functions;
 use application\libraries\game\ResourceMarket;
-use application\libraries\ProductionLib;
-use Exception;
 
 /**
  * Trader Class
@@ -34,7 +32,26 @@ use Exception;
 class Trader extends Controller
 {
 
+    /**
+     * The module ID
+     *
+     * @var int
+     */
     const MODULE_ID = 5;
+
+    /**
+     * Contains the resources type
+     *
+     * @var array
+     */
+    const RESOURCES = ['metal', 'crystal', 'deuterium'];
+
+    /**
+     * Contains the refill percentages
+     *
+     * @var array
+     */
+    const PERCENTAGES = [10, 50, 100];
 
     /**
      * Current user data
@@ -166,7 +183,7 @@ class Trader extends Controller
     {
         $list_of_resources = [];
 
-        foreach (['metal', 'crystal', 'deuterium'] as $resource) {
+        foreach (self::RESOURCES as $resource) {
             $list_of_resources[] = array_merge(
                 $this->langs->language,
                 [
@@ -175,8 +192,8 @@ class Trader extends Controller
                     'resource_name' => $this->langs->line($resource),
                     'current_resource' => Format::shortlyNumber($this->planet['planet_' . $resource]),
                     'max_resource' => Format::shortlyNumber($this->planet['planet_' . $resource . '_max']),
-                ],
-                $this->returnDarkMatterPricePoints($resource)
+                    'refill_options' => $this->setRefillOptions($resource),
+                ]
             );
         }
 
@@ -184,22 +201,39 @@ class Trader extends Controller
     }
 
     /**
-     * Return the dark matter price points
+     * Set the different refill options
      *
      * @param string $resource
      * @return array
      */
-    private function returnDarkMatterPricePoints(string $resource): array
+    private function setRefillOptions(string $resource): array
     {
-        $pricePoints = [];
+        $refillOptions = [];
 
-        foreach ([10, 50, 100] as $percentage) {
+        foreach (self::PERCENTAGES as $percentage) {
             $dm_price = $this->trader->{'getPriceToFill' . $percentage . 'Percent'}($resource);
-            $formated_dm_price = Format::customColor(Format::prettyNumber($dm_price), '#2cbef2') . ' ' . $this->langs->line('dark_matter_short');
-            $pricePoints['dark_matter_price_' . $percentage] = ($dm_price > 0) ? $formated_dm_price : Format::colorRed('-');
+
+            if ($this->trader->{'is' . $resource . 'StorageFull'}() or $dm_price == 0) {
+                $price = Format::colorRed('-');
+                $button = '';
+            } else {
+                $price = Format::customColor(
+                    Format::prettyNumber($dm_price),
+                    '#2cbef2'
+                ) . ' ' . $this->langs->line('dark_matter_short');
+                $button = '<input type="button" name="' . $resource . '-' . $percentage . '" value="' . $this->langs->line('tr_refill_button') . '">';
+            }
+
+            $refillOptions[] = [
+                'label' => (self::PERCENTAGES == 100) ? $this->langs->line('tr_refill_to') : $this->langs->line('tr_refill_by'),
+                'percentage' => $percentage,
+                'tr_requires' => $this->langs->line('tr_requires'),
+                'price' => $price,
+                'button' => $button,
+            ];
         }
 
-        return $pricePoints;
+        return $refillOptions;
     }
 
     private function buildAuctioneerSection(): array
@@ -215,67 +249,6 @@ class Trader extends Controller
     private function buildImportexportSection(): array
     {
         return [];
-    }
-
-    /**
-     * checkStorage
-     *
-     * @param array   $amount Amount
-     * @param boolean $force  Force, ignore storage size
-     *
-     * @return boolean
-     */
-    public function checkStorage($amount, $force = null)
-    {
-        if (!is_array($amount)) {
-
-            throw new Exception("Must be array", 1);
-        }
-
-        $hangar = array('metal' => 22, 'crystal' => 23, 'deuterium' => 24);
-        $check = array();
-
-        foreach ($hangar as $k => $v) {
-
-            if (!empty($amount[$k])) {
-
-                if ($this->current_planet["planet_" . $k] + $amount[$k] >= ProductionLib::maxStorable($this->current_planet[$this->resource[$v]])) {
-
-                    $check[$k] = false;
-                } else {
-
-                    $check[$k] = true;
-                }
-            } else {
-
-                $check[$k] = true;
-            }
-        }
-
-        if ($check['metal'] === true && $check['crystal'] === true && $check['deuterium'] === true) {
-
-            return false;
-        } else {
-
-            if (is_null($force)) {
-
-                foreach ($hangar as $k => $v) {
-
-                    if ($check[$k] === false) {
-
-                        return sprintf(
-                            $this->langs['tr_full_storage'], strtolower($this->langs['info'][$v]['name'])
-                        );
-                    } else {
-
-                        continue;
-                    }
-                }
-            } else {
-
-                return $check;
-            }
-        }
     }
 
     /**

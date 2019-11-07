@@ -16,8 +16,10 @@ declare (strict_types = 1);
  */
 namespace application\libraries\game;
 
+use application\core\entities\BuildingsEntity;
 use application\core\entities\PlanetEntity;
 use application\core\entities\UserEntity;
+use application\libraries\ProductionLib as Production;
 
 /**
  * ResourceMarket Class
@@ -32,16 +34,25 @@ use application\core\entities\UserEntity;
 class ResourceMarket
 {
     /**
+     * Contains the current user data
      *
      * @var \UserEntity
      */
-    private $resource_market_user;
+    private $user;
 
     /**
+     * Contains the current planet data
      *
      * @var \PlanetEntity
      */
-    private $resource_market_planet;
+    private $planet;
+
+    /**
+     * Contains the current planet buildings
+     *
+     * @var \BuildingEntity
+     */
+    private $buildings;
 
     /**
      * Constructor
@@ -53,6 +64,7 @@ class ResourceMarket
     {
         $this->setUpUser($user);
         $this->setUpPlanet($planet);
+        $this->setUpBuildings($planet);
     }
 
     /**
@@ -60,12 +72,12 @@ class ResourceMarket
      *
      * @param integer $max_storage
      * @param integer $base_dm
-     * @param integer $max_storage_initial_level
      * @return float
      */
-    public function calculateBasePriceToRefill(int $max_storage, int $base_dm, int $max_storage_initial_level): float
+    public function calculateBasePriceToRefill(int $max_storage, int $base_dm): float
     {
-        return ($max_storage * 0.10) * $base_dm / ($max_storage_initial_level * 0.10);
+        // (max_storage_capacity * 0.10) * base_dark_maatter / (max_initial_storage * 0.10)
+        return ($max_storage * 0.10) * $base_dm / (Production::maxStorable(0) * 0.10);
     }
 
     /**
@@ -77,10 +89,8 @@ class ResourceMarket
     public function getPriceToFill10Percent(string $resource): float
     {
         return $this->calculateRefillStoragePrice(
-            $this->resource_market_planet->{'getPlanetStorageCapacity' . ucfirst($resource)}(),
-            BASIC_RESOURCE_MARKET_DM[$resource],
-            10,
-            10000
+            $resource,
+            10
         );
     }
 
@@ -93,10 +103,8 @@ class ResourceMarket
     public function getPriceToFill50Percent(string $resource): float
     {
         return $this->calculateRefillStoragePrice(
-            $this->resource_market_planet->{'getPlanetStorageCapacity' . ucfirst($resource)}(),
-            BASIC_RESOURCE_MARKET_DM[$resource],
-            50,
-            10000
+            $resource,
+            50
         );
     }
 
@@ -109,11 +117,9 @@ class ResourceMarket
     public function getPriceToFill100Percent(string $resource): float
     {
         return $this->calculateRefillStoragePrice(
-            $this->resource_market_planet->{'getPlanetStorageCapacity' . ucfirst($resource)}(),
-            BASIC_RESOURCE_MARKET_DM[$resource],
+            $resource,
             100,
-            10000,
-            $this->resource_market_planet->{'getPlanetAmountOf' . ucfirst($resource)}()
+            $this->planet->{'getPlanetAmountOf' . ucfirst($resource)}()
         );
     }
 
@@ -124,43 +130,48 @@ class ResourceMarket
      * @param integer $base_dm
      * @param integer $percentage
      * @param float $current_resources
-     * @return integer
+     * @return float
      */
-    public function calculateRefillStoragePrice(int $max_storage, int $base_dm, int $percentage, int $max_storage_initial_level, float $current_resources = 0): float
+    public function calculateRefillStoragePrice(string $resource, int $percentage, float $current_resources = 0): float
     {
-        return (($max_storage - $current_resources) * $percentage / $max_storage) * $this->calculateBasePriceToRefill($max_storage, $base_dm, $max_storage_initial_level) / 10;
+        $max_storage = $this->planet->{'getPlanetStorageCapacity' . ucfirst($resource)}();
+        $base_price = $this->calculateBasePriceToRefill($max_storage, BASIC_RESOURCE_MARKET_DM[$resource]);
+
+        return (($max_storage - $current_resources) * $percentage / $max_storage) * $base_price / 10;
     }
 
     /**
-     * Get all the preferences
+     * Check if the metal storage is full, returns true if full
      *
-     * @return array
+     * @return boolean
      */
-    public function getResourceMarketUser(): array
+    public function isMetalStorageFull(): bool
     {
-        $list_of_preferences = [];
-
-        foreach ($this->preferences as $preference) {
-            if (($preference instanceof PreferenceEntity)) {
-                $list_of_preferences[] = $preference;
-            }
-        }
-
-        return $list_of_preferences;
+        return (Production::maxStorable($this->buildings->getBuildingMetalStore()) <= $this->planet->getPlanetAmountOfMetal());
     }
 
     /**
-     * Return current preference data
+     * Check if the crystal storage is full, returns true if full
      *
-     * @return \PreferencesEntity
+     * @return boolean
      */
-    public function getCurrentPreference(): PreferencesEntity
+    public function isCrystalStorageFull(): bool
     {
-        return $this->preferences[0];
+        return (Production::maxStorable($this->buildings->getBuildingCrystalStore()) <= $this->planet->getPlanetAmountOfCrystal());
     }
 
     /**
-     * Set up the list of preferences
+     * Check if the deuterium storage is full, returns true if full
+     *
+     * @return boolean
+     */
+    public function isDeuteriumStorageFull(): bool
+    {
+        return (Production::maxStorable($this->buildings->getBuildingDeuteriumTank()) <= $this->planet->getPlanetAmountOfDeuterium());
+    }
+
+    /**
+     * Set up the user
      *
      * @param array $preferences Preferences
      *
@@ -168,11 +179,11 @@ class ResourceMarket
      */
     private function setUpUser($user): void
     {
-        $this->resource_market_user = $this->createNewUserEntity($user);
+        $this->user = $this->createNewUserEntity($user);
     }
 
     /**
-     * Set up the list of preferences
+     * Set up the planet
      *
      * @param array $preferences Preferences
      *
@@ -180,7 +191,19 @@ class ResourceMarket
      */
     private function setUpPlanet($planet): void
     {
-        $this->resource_market_planet = $this->createNewPlanetEntity($planet);
+        $this->planet = $this->createNewPlanetEntity($planet);
+    }
+
+    /**
+     * Set up the buildings
+     *
+     * @param array $preferences Preferences
+     *
+     * @return void
+     */
+    private function setUpBuildings($planet): void
+    {
+        $this->buildings = $this->createNewBuildingsEntity($planet);
     }
 
     /**
@@ -205,6 +228,18 @@ class ResourceMarket
     private function createNewPlanetEntity($planet)
     {
         return new PlanetEntity($planet);
+    }
+
+    /**
+     * Create a new instance of BuildingsEntity
+     *
+     * @param array $planet
+     *
+     * @return \BuildingsEntity
+     */
+    private function createNewBuildingsEntity($planet)
+    {
+        return new BuildingsEntity($planet);
     }
 }
 

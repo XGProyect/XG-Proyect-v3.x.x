@@ -35,27 +35,15 @@
                                 </th>
                             </tr>
                             <tr>
+                                {refill_options}
                                 <th>
-                                    {tr_refill_by}:<br>
-                                    <span style="font-size: 3em">10%</span><br>
+                                    {label}:<br>
+                                    <span style="font-size: 3em">{percentage}%</span><br>
                                     {tr_requires}:<br>
-                                    {dark_matter_price_10}<br>
-                                    <input type="button" name="{resource}-10" value="{tr_refill_button}">
+                                    {price}<br>
+                                    {button}
                                 </th>
-                                <th>
-                                    {tr_refill_by}:<br>
-                                    <span style="font-size: 3em">50%</span><br>
-                                    {tr_requires}:<br>
-                                    {dark_matter_price_50}<br>
-                                    <input type="button" name="{resource}-50"value="{tr_refill_button}">
-                                </th>
-                                <th>
-                                    {tr_refill_to}:<br>
-                                    <span style="font-size: 3em">100%</span><br>
-                                    {tr_requires}:<br>
-                                    {dark_matter_price_100}<br>
-                                    <input type="button" name="{resource}-100" value="{tr_refill_button}">
-                                </th>
+                                {/refill_options}
                             </tr>
                         </table>
                     </td>
