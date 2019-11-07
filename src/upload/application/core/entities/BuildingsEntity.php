@@ -61,7 +61,7 @@ class BuildingsEntity extends Entity
     }
 
     /**
-     * Return the building metal mine
+     * Return the building metal mine level
      *
      * @return integer
      */
@@ -71,7 +71,7 @@ class BuildingsEntity extends Entity
     }
 
     /**
-     * Return the building crystal mine
+     * Return the building crystal mine level
      *
      * @return int
      */
@@ -81,7 +81,7 @@ class BuildingsEntity extends Entity
     }
 
     /**
-     * Return the building deuterium sintetizer
+     * Return the building deuterium sintetizer level
      *
      * @return integer
      */
@@ -91,7 +91,7 @@ class BuildingsEntity extends Entity
     }
 
     /**
-     * Return the building solar plant
+     * Return the building solar plant level
      *
      * @return integer
      */
@@ -101,7 +101,7 @@ class BuildingsEntity extends Entity
     }
 
     /**
-     * Return the building fusion reactor
+     * Return the building fusion reactor level
      *
      * @return integer
      */
@@ -111,7 +111,7 @@ class BuildingsEntity extends Entity
     }
 
     /**
-     * Return the building robot factory
+     * Return the building robot factory level
      *
      * @return integer
      */
@@ -121,7 +121,7 @@ class BuildingsEntity extends Entity
     }
 
     /**
-     * Return the building nano factory
+     * Return the building nano factory level
      *
      * @return integer
      */
@@ -131,7 +131,7 @@ class BuildingsEntity extends Entity
     }
 
     /**
-     * Return the building hangar
+     * Return the building hangar level
      *
      * @return integer
      */
@@ -141,7 +141,7 @@ class BuildingsEntity extends Entity
     }
 
     /**
-     * Return the building metal store
+     * Return the building metal store level
      *
      * @return integer
      */
@@ -151,7 +151,7 @@ class BuildingsEntity extends Entity
     }
 
     /**
-     * Return the building crystal store
+     * Return the building crystal store level
      *
      * @return integer
      */
@@ -161,17 +161,17 @@ class BuildingsEntity extends Entity
     }
 
     /**
-     * Return the building deuterium tank
+     * Return the building deuterium tank level
      *
      * @return int
      */
-    public function getBuildingDeuteriumTank(): int
+    public function getBuildingDeuteriumStore(): int
     {
         return (int) $this->data['building_deuterium_tank'];
     }
 
     /**
-     * Return the building laboratory
+     * Return the building laboratory level
      *
      * @return integer
      */
@@ -181,7 +181,7 @@ class BuildingsEntity extends Entity
     }
 
     /**
-     * Return the building terraformer
+     * Return the building terraformer level
      *
      * @return integer
      */
@@ -191,7 +191,7 @@ class BuildingsEntity extends Entity
     }
 
     /**
-     * Return the building ally deposit
+     * Return the building ally deposit level
      *
      * @return integer
      */
@@ -201,7 +201,7 @@ class BuildingsEntity extends Entity
     }
 
     /**
-     * Return the building missile silo
+     * Return the building missile silo level
      *
      * @return int
      */
@@ -211,7 +211,7 @@ class BuildingsEntity extends Entity
     }
 
     /**
-     * Return the building mondbasis
+     * Return the building mondbasis level
      *
      * @return int
      */
@@ -221,7 +221,7 @@ class BuildingsEntity extends Entity
     }
 
     /**
-     * Return the building phalanx
+     * Return the building phalanx level
      *
      * @return integer
      */
@@ -231,7 +231,7 @@ class BuildingsEntity extends Entity
     }
 
     /**
-     * Return the building jump gate
+     * Return the building jump gate level
      *
      * @return integer
      */

@@ -134,7 +134,7 @@ class ResourceMarket
      */
     public function calculateRefillStoragePrice(string $resource, int $percentage, float $current_resources = 0): float
     {
-        $max_storage = $this->planet->{'getPlanetStorageCapacity' . ucfirst($resource)}();
+        $max_storage = Production::maxStorable($this->buildings->{'getBuilding' . ucfirst($resource) . 'Store'}());
         $base_price = $this->calculateBasePriceToRefill($max_storage, BASIC_RESOURCE_MARKET_DM[$resource]);
 
         return (($max_storage - $current_resources) * $percentage / $max_storage) * $base_price / 10;
@@ -167,7 +167,7 @@ class ResourceMarket
      */
     public function isDeuteriumStorageFull(): bool
     {
-        return (Production::maxStorable($this->buildings->getBuildingDeuteriumTank()) <= $this->planet->getPlanetAmountOfDeuterium());
+        return (Production::maxStorable($this->buildings->getBuildingDeuteriumStore()) <= $this->planet->getPlanetAmountOfDeuterium());
     }
 
     /**
