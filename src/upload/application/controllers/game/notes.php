@@ -138,7 +138,7 @@ class Notes extends Controller
     }
 
     /**
-     * Creates a new ships object that will handle all the ships
+     * Creates a new notes object that will handle all the notes
      * creation methods and actions
      *
      * @return void
