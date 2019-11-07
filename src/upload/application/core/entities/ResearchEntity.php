@@ -16,7 +16,7 @@ namespace application\core\entities;
 use application\core\Entity;
 
 /**
- * Research Entity Class
+ * ResearchEntity Class
  *
  * @category Entity
  * @package  Core

@@ -16,7 +16,7 @@ namespace application\core\entities;
 use application\core\Entity;
 
 /**
- * Buddy Entity Class
+ * BuddyEntity Class
  *
  * @category Entity
  * @package  Core

@@ -16,7 +16,7 @@ namespace application\core\entities;
 use application\core\Entity;
 
 /**
- * Messages entity Class
+ * MessagesEntity Class
  *
  * @category Entity
  * @package  Core

@@ -19,7 +19,7 @@ namespace application\core\entities;
 use application\core\Entity;
 
 /**
- * Notes Entity Class
+ * PreferencesEntity Class
  *
  * @category Entity
  * @package  Core

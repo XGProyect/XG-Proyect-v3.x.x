@@ -16,7 +16,7 @@ namespace application\core\entities;
 use application\core\Entity;
 
 /**
- * Report Entity Class
+ * ReportEntity Class
  *
  * @category Entity
  * @package  Core

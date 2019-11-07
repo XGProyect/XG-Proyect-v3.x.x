@@ -16,7 +16,7 @@ namespace application\core\entities;
 use application\core\Entity;
 
 /**
- * Alliance Entity Class
+ * AllianceEntity Class
  *
  * @category Entity
  * @package  Core

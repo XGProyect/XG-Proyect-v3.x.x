@@ -16,7 +16,7 @@ namespace application\core\entities;
 use Exception;
 
 /**
- * Premium Entity Class
+ * PremiumEntity Class
  *
  * @category Entity
  * @package  Core

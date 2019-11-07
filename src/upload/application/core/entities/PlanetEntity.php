@@ -16,7 +16,7 @@ namespace application\core\entities;
 use application\core\Entity;
 
 /**
- * Planet Class
+ * PlanetEntity Class
  *
  * @category Entity
  * @package  Core
