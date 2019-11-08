@@ -52,7 +52,7 @@
                     {/list_of_resources}
                 </table>
             </form>
-            <table width="100%">
+            <!--<table width="100%">
                 <tr>
                     <td class="c" colspan="2">{tr_merchant2_tab_title}</td>
                 </tr>
@@ -104,7 +104,7 @@
                         <input type="button" value="{tr_call_button}">
                     </th>
                 </tr>
-            </table>
+            </table>-->
         </td>
     </tr>
 </table>
