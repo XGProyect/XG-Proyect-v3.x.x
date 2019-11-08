@@ -13,7 +13,7 @@
  */
 namespace application\core\entities;
 
-use Exception;
+use application\core\Entity;
 
 /**
  * PremiumEntity Class
@@ -25,50 +25,16 @@ use Exception;
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-class PremiumEntity
+class PremiumEntity extends Entity
 {
-
     /**
+     * Constructor
      *
-     * @var array
+     * @param array $data
      */
-    private $_premium = [];
-
-    /**
-     * Init with the premium data
-     *
-     * @param array $premium Premium
-     *
-     * @return void
-     */
-    public function __construct($premium)
+    public function __construct($data)
     {
-        $this->setPremium($premium);
-    }
-
-    /**
-     * Set the current premium
-     *
-     * @param array $premium Premium
-     *
-     * @throws Exception
-     *
-     * @return void
-     */
-    private function setPremium($premium)
-    {
-        try {
-
-            if (!is_array($premium)) {
-
-                return null;
-            }
-
-            $this->_premium = $premium;
-        } catch (Exception $e) {
-
-            die('Caught exception: ' . $e->getMessage() . "\n");
-        }
+        parent::__construct($data);
     }
 
     /**
@@ -78,7 +44,7 @@ class PremiumEntity
      */
     public function getPremiumUserId()
     {
-        return $this->_premium['premium_user_id'];
+        return $this->data['premium_user_id'];
     }
 
     /**
@@ -88,7 +54,7 @@ class PremiumEntity
      */
     public function getPremiumDarkMatter()
     {
-        return $this->_premium['premium_dark_matter'];
+        return $this->data['premium_dark_matter'];
     }
 
     /**
@@ -98,7 +64,7 @@ class PremiumEntity
      */
     public function getPremiumOfficierCommander()
     {
-        return $this->_premium['premium_officier_commander'];
+        return $this->data['premium_officier_commander'];
     }
 
     /**
@@ -108,7 +74,7 @@ class PremiumEntity
      */
     public function getPremiumOfficierAdmiral()
     {
-        return $this->_premium['premium_officier_admiral'];
+        return $this->data['premium_officier_admiral'];
     }
 
     /**
@@ -118,7 +84,7 @@ class PremiumEntity
      */
     public function getPremiumOfficierEngineer()
     {
-        return $this->_premium['premium_officier_engineer'];
+        return $this->data['premium_officier_engineer'];
     }
 
     /**
@@ -128,7 +94,7 @@ class PremiumEntity
      */
     public function getPremiumOfficierGeologist()
     {
-        return $this->_premium['premium_officier_geologist'];
+        return $this->data['premium_officier_geologist'];
     }
 
     /**
@@ -138,7 +104,7 @@ class PremiumEntity
      */
     public function getPremiumOfficierTechnocrat()
     {
-        return $this->_premium['premium_officier_technocrat'];
+        return $this->data['premium_officier_technocrat'];
     }
 }
 
