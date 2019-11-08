@@ -80,11 +80,11 @@ class Users extends Controller
     private function build_page()
     {
         $parse = $this->_lang;
-        $user = isset($_GET['user']) ? trim($_GET['user']) : NULL;
-        $type = isset($_GET['type']) ? trim($_GET['type']) : NULL;
-        $this->_edit = isset($_GET['edit']) ? trim($_GET['edit']) : NULL;
-        $this->_planet = isset($_GET['planet']) ? trim($_GET['planet']) : NULL;
-        $this->_moon = isset($_GET['moon']) ? trim($_GET['moon']) : NULL;
+        $user = isset($_GET['user']) ? trim($_GET['user']) : null;
+        $type = isset($_GET['type']) ? trim($_GET['type']) : null;
+        $this->_edit = isset($_GET['edit']) ? trim($_GET['edit']) : null;
+        $this->_planet = isset($_GET['planet']) ? trim($_GET['planet']) : null;
+        $this->_moon = isset($_GET['moon']) ? trim($_GET['moon']) : null;
 
         $parse['alert'] = '';
 
@@ -219,7 +219,6 @@ class Users extends Controller
 
             case 'research':
 
-
                 $this->save_research();
 
                 break;
@@ -298,9 +297,9 @@ class Users extends Controller
 
     /**
      * delete_data
-     * 
+     *
      * @param type $type Type
-     * 
+     *
      * @return void
      */
     private function delete_data($type)
@@ -326,9 +325,9 @@ class Users extends Controller
     private function refresh_page()
     {
         // SET PARAMS
-        $page = ( isset($_GET['page']) ? '?page=' . $_GET['page'] : '' );
-        $type = ( isset($_GET['type']) ? '&type=' . $_GET['type'] : '' );
-        $user = ( isset($_GET['user']) ? '&user=' . $_GET['user'] : '' );
+        $page = (isset($_GET['page']) ? '?page=' . $_GET['page'] : '');
+        $type = (isset($_GET['type']) ? '&type=' . $_GET['type'] : '');
+        $user = (isset($_GET['user']) ? '&user=' . $_GET['user'] : '');
 
         // REDIRECTION
         FunctionsLib::redirect("admin.php{$page}{$type}{$user}");
@@ -352,13 +351,13 @@ class Users extends Controller
         $parse['main_planet'] = $this->build_planet_combo($this->_user_query, 'user_home_planet_id');
         $parse['current_planet'] = $this->build_planet_combo($this->_user_query, 'user_current_planet');
         $parse['alliances'] = $this->build_alliance_combo($this->_user_query);
-        $parse['user_register_time'] = ( $this->_user_query['user_register_time'] == 0 ) ? '-' : date(FunctionsLib::readConfig('date_format_extended'), $this->_user_query['user_register_time']);
+        $parse['user_register_time'] = ($this->_user_query['user_register_time'] == 0) ? '-' : date(FunctionsLib::readConfig('date_format_extended'), $this->_user_query['user_register_time']);
         $parse['user_onlinetime'] = $this->last_activity($this->_user_query['user_onlinetime']);
         $parse['sel' . $this->_user_query['user_authlevel']] = 'selected';
-        $parse['user_banned'] = ( $this->_user_query['user_banned'] <= 0 ) ? '<p class="text-error">' . $this->_lang['ge_no'] : '<p class="text-success">' . $this->_lang['ge_yes'];
-        $parse['user_banned'] .= ( $this->_user_query['user_banned'] > 0 ) ? $this->_lang['us_user_information_banned_until'] . date(FunctionsLib::readConfig('date_format'), $this->_user_query['user_banned']) . '</p>' : '</p>';
+        $parse['user_banned'] = ($this->_user_query['user_banned'] <= 0) ? '<p class="text-error">' . $this->_lang['ge_no'] : '<p class="text-success">' . $this->_lang['ge_yes'];
+        $parse['user_banned'] .= ($this->_user_query['user_banned'] > 0) ? $this->_lang['us_user_information_banned_until'] . date(FunctionsLib::readConfig('date_format'), $this->_user_query['user_banned']) . '</p>' : '</p>';
         $parse['user_fleet_shortcuts'] = $this->build_shortcuts_combo($this->_user_query['user_fleet_shortcuts']);
-        $parse['alert_info'] = ( $this->_alert_type != '' ) ? AdministrationLib::saveMessage($this->_alert_type, $this->_alert_info) : '';
+        $parse['alert_info'] = ($this->_alert_type != '') ? AdministrationLib::saveMessage($this->_alert_type, $this->_alert_info) : '';
 
         return parent::$page->parseTemplate(parent::$page->getTemplate("adm/users_information_view"), $parse);
     }
@@ -375,10 +374,10 @@ class Users extends Controller
         $parse['preference_planet_sort'] = $this->planet_sort_combo();
         $parse['preference_planet_sort_sequence'] = $this->planet_order_combo();
         $parse['preference_spy_probes'] = $this->_user_query['preference_spy_probes'];
-        $parse['preference_vacations_status'] = ( $this->_user_query['preference_vacation_mode'] > 0 ) ? ' checked="checked" ' : '';
-        $parse['preference_vacation_mode'] = ( $this->_user_query['preference_vacation_mode'] > 0 ) ? $this->vacation_set() : '';
-        $parse['preference_delete_mode'] = ( $this->_user_query['preference_delete_mode'] ) ? ' checked="checked" ' : '';
-        $parse['alert_info'] = ( $this->_alert_type != '' ) ? AdministrationLib::saveMessage($this->_alert_type, $this->_alert_info) : '';
+        $parse['preference_vacations_status'] = ($this->_user_query['preference_vacation_mode'] > 0) ? ' checked="checked" ' : '';
+        $parse['preference_vacation_mode'] = ($this->_user_query['preference_vacation_mode'] > 0) ? $this->vacation_set() : '';
+        $parse['preference_delete_mode'] = ($this->_user_query['preference_delete_mode']) ? ' checked="checked" ' : '';
+        $parse['alert_info'] = ($this->_alert_type != '') ? AdministrationLib::saveMessage($this->_alert_type, $this->_alert_info) : '';
 
         return parent::$page->parseTemplate(parent::$page->getTemplate("adm/users_settings_view"), $parse);
     }
@@ -394,7 +393,7 @@ class Users extends Controller
         $parse += (array) $this->_user_query;
         $parse['research'] = str_replace(array('%s', '%d'), array($this->_user_query['user_name'], $this->_id), $this->_lang['us_user_research']);
         $parse['technologies_table'] = $this->research_table();
-        $parse['alert_info'] = ( $this->_alert_type != '' ) ? AdministrationLib::saveMessage($this->_alert_type, $this->_alert_info) : '';
+        $parse['alert_info'] = ($this->_alert_type != '') ? AdministrationLib::saveMessage($this->_alert_type, $this->_alert_info) : '';
 
         return parent::$page->parseTemplate(parent::$page->getTemplate("adm/users_research_view"), $parse);
     }
@@ -410,7 +409,7 @@ class Users extends Controller
         $parse['premium'] = str_replace('%s', $this->_user_query['user_name'], $this->_lang['us_user_premium']);
         $parse['premium_dark_matter'] = $this->_user_query['premium_dark_matter'];
         $parse['premium_table'] = $this->premium_table();
-        $parse['alert_info'] = ( $this->_alert_type != '' ) ? AdministrationLib::saveMessage($this->_alert_type, $this->_alert_info) : '';
+        $parse['alert_info'] = ($this->_alert_type != '') ? AdministrationLib::saveMessage($this->_alert_type, $this->_alert_info) : '';
 
         return parent::$page->parseTemplate(parent::$page->getTemplate("adm/users_premium_view"), $parse);
     }
@@ -449,7 +448,6 @@ class Users extends Controller
                 $get_query = 'd.* ';
 
                 break;
-
 
             case '':
             default:
@@ -541,7 +539,7 @@ class Users extends Controller
                 break;
         } // SWITCH
 
-        $parse['alert_info'] = ( $this->_alert_type != '' ) ? AdministrationLib::saveMessage($this->_alert_type, $this->_alert_info) : '';
+        $parse['alert_info'] = ($this->_alert_type != '') ? AdministrationLib::saveMessage($this->_alert_type, $this->_alert_info) : '';
 
         return $view;
     }
@@ -656,7 +654,7 @@ class Users extends Controller
                 break;
         } // SWITCH
 
-        $parse['alert_info'] = ( $this->_alert_type != '' ) ? AdministrationLib::saveMessage($this->_alert_type, $this->_alert_info) : '';
+        $parse['alert_info'] = ($this->_alert_type != '') ? AdministrationLib::saveMessage($this->_alert_type, $this->_alert_info) : '';
 
         return $view;
     }
@@ -756,12 +754,12 @@ class Users extends Controller
     private function save_settings()
     {
         $vacation_time = FunctionsLib::getDefaultVacationTime(); // DEFAULT VACATION TIME BEFORE A USER CAN REMOVE IT
-        $preference_planet_sort = ( ( isset($_POST['preference_planet_sort']) ) ? (int) $_POST['preference_planet_sort'] : 0 );
-        $preference_planet_sort_sequence = ( ( isset($_POST['preference_planet_sort_sequence']) ) ? (int) $_POST['preference_planet_sort_sequence'] : 0 );
-        $preference_spy_probes = ( ( isset($_POST['preference_spy_probes']) ) ? (int) $_POST['preference_spy_probes'] : 0 );
-        $preference_vacations_status = ( ( isset($_POST['preference_vacations_status']) && $_POST['preference_vacations_status'] == 'on' ) ? 1 : 0 );
-        $preference_vacation_mode = ( ( isset($_POST['preference_vacations_status']) && $_POST['preference_vacations_status'] == 'on' ) ? "'" . $vacation_time . "'" : 'NULL' );
-        $preference_delete_mode = ( ( isset($_POST['preference_delete_mode']) && $_POST['preference_delete_mode'] == 'on' ) ? "'" . time() . "'" : 'NULL' );
+        $preference_planet_sort = ((isset($_POST['preference_planet_sort'])) ? (int) $_POST['preference_planet_sort'] : 0);
+        $preference_planet_sort_sequence = ((isset($_POST['preference_planet_sort_sequence'])) ? (int) $_POST['preference_planet_sort_sequence'] : 0);
+        $preference_spy_probes = ((isset($_POST['preference_spy_probes'])) ? (int) $_POST['preference_spy_probes'] : 0);
+        $preference_vacations_status = ((isset($_POST['preference_vacations_status']) && $_POST['preference_vacations_status'] == 'on') ? 1 : 0);
+        $preference_vacation_mode = ((isset($_POST['preference_vacations_status']) && $_POST['preference_vacations_status'] == 'on') ? "'" . $vacation_time . "'" : 'NULL');
+        $preference_delete_mode = ((isset($_POST['preference_delete_mode']) && $_POST['preference_delete_mode'] == 'on') ? "'" . time() . "'" : 'NULL');
 
         // BUILD THE SPECIFIC QUERY
         if (($this->_user_query['preference_vacation_mode'] > 0) && $preference_vacations_status == 0) {
@@ -777,8 +775,8 @@ class Users extends Controller
 			p.`planet_building_solar_plant_percent` = '10',
 			p.`planet_building_fusion_reactor_percent` = '10',
 			p.`planet_ship_solar_satellite_percent` = '10',";
-        } elseif ($this->_user_query['preference_vacation_mode'] == 0 
-            or is_null($this->_user_query['preference_vacation_mode']) 
+        } elseif ($this->_user_query['preference_vacation_mode'] == 0
+            or is_null($this->_user_query['preference_vacation_mode'])
             && $preference_vacations_status == 1) {
 
             // WE HAVE TO ADD HIM TO VACATION AND REMOVE PLANET PRODUCTION
@@ -807,10 +805,9 @@ class Users extends Controller
                                     {$vacation_query}
                                     pr.`preference_spy_probes` = '{$preference_spy_probes}',
 									pr.`preference_planet_sort` = '{$preference_planet_sort}',
-									pr.`preference_planet_sort_sequence` = '{$preference_planet_sort_sequence}',									
+									pr.`preference_planet_sort_sequence` = '{$preference_planet_sort_sequence}',
 									pr.`preference_delete_mode` = {$preference_delete_mode}
 									WHERE pr.`preference_user_id` = '{$this->_id}'{$vacation_condition}");
-
 
         $this->_alert_info = $this->_lang['us_all_ok_message'];
         $this->_alert_type = 'ok';
@@ -829,7 +826,7 @@ class Users extends Controller
         // LOOP THRU ALL THE TECHNOLOGIES
         foreach ($_POST as $tech => $level) {
             if (strpos($tech, 'research_') !== false) {
-                $level = ( isset($level) ? $level : 0 );
+                $level = (isset($level) ? $level : 0);
                 $query_string .= "`{$tech}` = '" . $this->_db->escapeValue($level) . "',";
             }
         }
@@ -868,7 +865,7 @@ class Users extends Controller
                 // DARK MATTER HAS A DIFFERENT BEHAVIOUR
                 if ($premium == 'premium_dark_matter') {
                     // IF IS NOT A NUMERIC VALUE, SET IT TO 0
-                    if (!is_numeric($data) or empty($data) or ! isset($data)) {
+                    if (!is_numeric($data) or empty($data) or !isset($data)) {
                         $data = 0;
                     }
                 } else {
@@ -886,7 +883,7 @@ class Users extends Controller
                         case 2:
                         case 3:
                             // SET THE TIME (3 = 3 MONTHS, 2 = ONE WEEK, 1 = NOT ACTIVE / DEACTIVATE)
-                            $data = time() + ( $data == 3 ? ( 3600 * 24 * 30 * 3 ) : ( 3600 * 24 * 7 ) );
+                            $data = time() + ($data == 3 ? (3600 * 24 * 30 * 3) : (3600 * 24 * 7));
                             break;
                     } // switch
                 }
@@ -937,26 +934,20 @@ class Users extends Controller
         foreach ($_POST as $field => $value) {
             switch ($field) {
                 case 'planet_destroyed':
-
                     if ($value == 1) {
                         $query_string .= "`planet_destroyed` = '" . (time() + (PLANETS_LIFE_TIME * 3600)) . "',";
                     } else {
                         $query_string .= "`planet_destroyed` = '0',";
                     }
-
                     break;
 
                 case 'planet_last_jump_time':
-
                     $query_string .= "`planet_last_jump_time` = '0',";
-
                     break;
 
                 case '':
                 default:
-
                     $query_string .= "`{$field}` = '" . $this->_db->escapeValue($value) . "',";
-
                     break;
             }
         }
@@ -977,9 +968,9 @@ class Users extends Controller
 
     /**
      * saveBuildings
-     * 
+     *
      * @param int $type Type
-     * 
+     *
      * @return void
      */
     private function saveBuildings($type = 1)
@@ -987,7 +978,6 @@ class Users extends Controller
         $id_get = $this->_planet;
 
         if ($type == 3) {
-
             $id_get = $this->_moon;
         }
 
@@ -998,7 +988,7 @@ class Users extends Controller
         // LOOP THRU ALL THE BUILDINGS
         foreach ($_POST as $building => $level) {
             if (strpos($building, 'building_') !== false) {
-                $level = ( isset($level) ? $level : 0 );
+                $level = (isset($level) ? $level : 0);
                 $query_string .= "`{$building}` = '" . $this->_db->escapeValue($level) . "',";
                 $total_fields += $level;
             }
@@ -1009,7 +999,7 @@ class Users extends Controller
         // QUERY END
         $query_string .= " `planet_field_current` = '" . $total_fields . "', ";
         $query_string .= " `planet_field_max` = IF(`planet_type` = 3, 1 + `building_mondbasis` * " . FIELDS_BY_MOONBASIS_LEVEL . ", `planet_field_max`) ";
-        $query_string .= " WHERE `building_planet_id` = '" . $this->_db->escapeValue($id_get) . "' 
+        $query_string .= " WHERE `building_planet_id` = '" . $this->_db->escapeValue($id_get) . "'
                             AND `planet_id` = '" . $this->_db->escapeValue($id_get) . "';";
 
         // RUN THE QUERY
@@ -1042,7 +1032,7 @@ class Users extends Controller
         // LOOP THRU ALL THE SHIPS
         foreach ($_POST as $ship => $amount) {
             if (strpos($ship, 'ship_') !== false) {
-                $level = ( isset($amount) ? $amount : 0 );
+                $level = (isset($amount) ? $amount : 0);
                 $query_string .= "`{$ship}` = '" . $this->_db->escapeValue($amount) . "',";
             }
         }
@@ -1083,7 +1073,7 @@ class Users extends Controller
         // LOOP THRU ALL THE DEFENSES
         foreach ($_POST as $defense => $amount) {
             if (strpos($defense, 'defense_') !== false) {
-                $level = ( isset($amount) ? $amount : 0 );
+                $level = (isset($amount) ? $amount : 0);
                 $query_string .= "`{$defense}` = '" . $this->_db->escapeValue($amount) . "',";
             }
         }
@@ -1122,7 +1112,7 @@ class Users extends Controller
 												FROM " . USERS . ";");
 
         while ($users_row = $this->_db->fetchArray($users)) {
-            $combo_rows .= '<option value="' . $users_row['user_id'] . '" ' . ( $users_row['user_id'] == $user_id ? ' selected' : '' ) . '>' . $users_row['user_name'] . '</option>';
+            $combo_rows .= '<option value="' . $users_row['user_id'] . '" ' . ($users_row['user_id'] == $user_id ? ' selected' : '') . '>' . $users_row['user_name'] . '</option>';
         }
 
         return $combo_rows;
@@ -1229,11 +1219,11 @@ class Users extends Controller
         $sort_types = array(
             0 => $this->_lang['us_user_preference_planet_sort_op1'],
             1 => $this->_lang['us_user_preference_planet_sort_op2'],
-            2 => $this->_lang['us_user_preference_planet_sort_op3']
+            2 => $this->_lang['us_user_preference_planet_sort_op3'],
         );
 
         foreach ($sort_types as $id => $name) {
-            $sort .= "<option value =\"{$id}\"" . ( ( $this->_user_query['preference_planet_sort'] == $id ) ? " selected" : "" ) . ">{$name}</option>";
+            $sort .= "<option value =\"{$id}\"" . (($this->_user_query['preference_planet_sort'] == $id) ? " selected" : "") . ">{$name}</option>";
         }
 
         return $sort;
@@ -1253,7 +1243,7 @@ class Users extends Controller
         );
 
         foreach ($order_types as $id => $name) {
-            $order .= "<option value =\"{$id}\"" . ( ( $this->_user_query['preference_planet_sort_sequence'] == $id ) ? " selected" : "" ) . ">{$name}</option>";
+            $order .= "<option value =\"{$id}\"" . (($this->_user_query['preference_planet_sort_sequence'] == $id) ? " selected" : "") . ">{$name}</option>";
         }
 
         return $order;
@@ -1271,7 +1261,7 @@ class Users extends Controller
             0 => '-',
             1 => $this->_lang['us_user_premium_deactivate'],
             2 => $this->_lang['us_user_premium_activate_one_week'],
-            3 => $this->_lang['us_user_premium_activate_three_month']
+            3 => $this->_lang['us_user_premium_activate_three_month'],
         );
 
         foreach ($premium_types as $id => $name) {
@@ -1292,7 +1282,7 @@ class Users extends Controller
         $percent_values = array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
 
         foreach ($percent_values as $id => $number) {
-            $percent .= "<option value=\"{$id}\"  " . ( $current_value == $number ? ' selected' : '') . ">" . ( $number * 10 ) . "</option>";
+            $percent .= "<option value=\"{$id}\"  " . ($current_value == $number ? ' selected' : '') . ">" . ($number * 10) . "</option>";
         }
 
         return $percent;
@@ -1327,10 +1317,10 @@ class Users extends Controller
     private function build_image_combo($current_image)
     {
         $images_dir = opendir(XGP_ROOT . DEFAULT_SKINPATH . 'planets');
-        $exceptions = array('.', '..', '.htaccess', 'index.html', '.DS_Store', 'small',);
+        $exceptions = array('.', '..', '.htaccess', 'index.html', '.DS_Store', 'small');
         $images_options = '';
 
-        while (( $image_dir = readdir($images_dir) ) !== false) {
+        while (($image_dir = readdir($images_dir)) !== false) {
             if (strpos($image_dir, '.jpg')) {
                 $images_options .= "<option ";
 
@@ -1346,9 +1336,9 @@ class Users extends Controller
     }
     ######################################
     #
-	# sub tables methods
+    # sub tables methods
     #
-	######################################
+    ######################################
 
     /**
      * method research_table
@@ -1399,8 +1389,8 @@ class Users extends Controller
                     }
 
                     $parse['premium'] = $this->_lang['us_user_' . $officier];
-                    $parse['status'] = ( $expire == 0 ) ? $this->_lang['us_user_premium_inactive'] : ( $this->_lang['us_user_premium_active_until'] . date(FunctionsLib::readConfig('date_format'), $expire) );
-                    $parse['status_style'] = ( $expire == 0 ) ? 'text-error' : 'text-success';
+                    $parse['status'] = ($expire == 0) ? $this->_lang['us_user_premium_inactive'] : ($this->_lang['us_user_premium_active_until'] . date(FunctionsLib::readConfig('date_format'), $expire));
+                    $parse['status_style'] = ($expire == 0) ? 'text-error' : 'text-success';
                     $parse['field'] = $officier;
                     $parse['combo'] = $this->premium_combo($expire);
 
@@ -1550,7 +1540,6 @@ class Users extends Controller
         $prepare_table = '';
         $flag = 1;
 
-
         foreach ($this->_db->fetchAssoc($planets_data) as $building => $level) {
             if (strpos($building, 'building_') !== false && !in_array($building, $exclude_buildings)) {
                 if ($flag <= 2) { // SKIP NOT REQUIRED FIELDS
@@ -1638,9 +1627,9 @@ class Users extends Controller
 
     /**
      * delete_planet
-     * 
+     *
      * @param int $id_planet Planet ID
-     * 
+     *
      * @return void
      */
     private function delete_planet($id_planet = 0)
@@ -1656,16 +1645,16 @@ class Users extends Controller
             INNER JOIN " . BUILDINGS . " AS b ON b.building_planet_id = p.`planet_id`
             INNER JOIN " . DEFENSES . " AS d ON d.defense_planet_id = p.`planet_id`
             INNER JOIN " . SHIPS . " AS s ON s.ship_planet_id = p.`planet_id`
-            WHERE `planet_id` = '" . $id_planet . "' 
+            WHERE `planet_id` = '" . $id_planet . "'
                 AND `planet_type`= 1;"
         );
     }
 
     /**
      * delete_moon
-     * 
+     *
      * @param int $id_moon Moon ID
-     * 
+     *
      * @return void
      */
     private function delete_moon($id_moon = 0)
@@ -1679,7 +1668,7 @@ class Users extends Controller
             INNER JOIN " . BUILDINGS . " AS b ON b.building_planet_id = m.`planet_id`
             INNER JOIN " . DEFENSES . " AS d ON d.defense_planet_id = m.`planet_id`
             INNER JOIN " . SHIPS . " AS s ON s.ship_planet_id = m.`planet_id`
-            WHERE `planet_id` = '" . $id_moon . "' 
+            WHERE `planet_id` = '" . $id_moon . "'
                 AND `planet_type` = 3;"
         );
     }
@@ -1704,7 +1693,7 @@ class Users extends Controller
         $this->_id = $user_query['user_id'];
         $this->_authlevel = $user_query['user_authlevel'];
 
-        return ( $user_query['user_id'] != '' && $user_query != NULL );
+        return ($user_query['user_id'] != '' && $user_query != null);
     }
 
     /**
