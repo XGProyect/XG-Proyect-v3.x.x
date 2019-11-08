@@ -930,15 +930,12 @@ class Users extends Controller
         // QUERY START
         $query_string = "UPDATE " . PLANETS . " SET ";
 
+        // remove unneeded field
+        unset($_POST['send_data']);
+
         // LOOP THRU ALL THE PLANET DATA
         foreach ($_POST as $field => $value) {
             switch ($field) {
-                case 'send_data':
-
-                    continue;
-
-                    break;
-
                 case 'planet_destroyed':
 
                     if ($value == 1) {
