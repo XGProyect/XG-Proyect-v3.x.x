@@ -4,52 +4,54 @@
     </tr>
     <tr>
         <td>
-            <table width="100%">
-                <tr>
-                    <td class="c" colspan="2">{tr_merchant1_tab_title}</td>
-                </tr>
-                <tr>
-                    <th colspan="2">
-                        <h2>{tr_merchant1_title}</h2>
-                        <p>{tr_merchant1_explanation}</p>
-                    </th>
-                </tr>
-                <tr>
-                    <td class="c" colspan="2">
-                        <h3>{tr_merchant1_info}</h3>
-                    </td>
-                </tr>
-                {list_of_resources}
-                <tr>
-                    <th>
-                        <img border="0" src="{dpath}resources/{resource}.gif" width="42" height="22">
-                        <br>
-                        {resource_name}
-                    </th>
-                    <td>
-                        <table width="100%">
-                            <tr>
-                                <th colspan="3">
-                                    {tr_storage_capacity}:
-                                    {current_resource} / {max_resource}
-                                </th>
-                            </tr>
-                            <tr>
-                                {refill_options}
-                                <th>
-                                    {label}:<br>
-                                    <span style="font-size: 3em">{percentage}%</span><br>
-                                    {tr_requires}:<br>
-                                    {price}<br>
-                                    {button}
-                                </th>
-                                {/refill_options}
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-                {/list_of_resources}
-            </table>
+            <form name="refill-resources" method="POST" action="">
+                <table width="100%">
+                    <tr>
+                        <td class="c" colspan="2">{tr_merchant1_tab_title}</td>
+                    </tr>
+                    <tr>
+                        <th colspan="2">
+                            <h2>{tr_merchant1_title}</h2>
+                            <p>{tr_merchant1_explanation}</p>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td class="c" colspan="2">
+                            <h3>{tr_merchant1_info}</h3>
+                        </td>
+                    </tr>
+                    {list_of_resources}
+                    <tr>
+                        <th>
+                            <img border="0" src="{dpath}resources/{resource}.gif" width="42" height="22">
+                            <br>
+                            {resource_name}
+                        </th>
+                        <td>
+                            <table width="100%">
+                                <tr>
+                                    <th colspan="3">
+                                        {tr_storage_capacity}:
+                                        {current_resource} / {max_resource}
+                                    </th>
+                                </tr>
+                                <tr>
+                                    {refill_options}
+                                    <th>
+                                        {label}:<br>
+                                        <span style="font-size: 3em">{percentage}%</span><br>
+                                        {tr_requires}:<br>
+                                        {price}<br>
+                                        {button}
+                                    </th>
+                                    {/refill_options}
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    {/list_of_resources}
+                </table>
+            </form>
             <table width="100%">
                 <tr>
                     <td class="c" colspan="2">{tr_merchant2_tab_title}</td>

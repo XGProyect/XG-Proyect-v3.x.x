@@ -75,6 +75,13 @@ class Trader extends Controller
     private $trader;
 
     /**
+     * Contains an error message
+     *
+     * @var string
+     */
+    private $error = '';
+
+    /**
      * Constructor
      *
      * @return void
@@ -108,7 +115,7 @@ class Trader extends Controller
         $this->setUpTrader();
 
         // time to do something
-        //$this->runAction();
+        $this->runAction();
 
         // build the page
         $this->buildPage();
@@ -129,6 +136,53 @@ class Trader extends Controller
     }
 
     /**
+     * Run an action
+     *
+     * @return void
+     */
+    private function runAction(): void
+    {
+        $refill = filter_input_array(INPUT_POST);
+
+        if ($refill) {
+            if (preg_match_all(
+                '/(' . join('|', self::RESOURCES) . ')-(' . join('|', self::PERCENTAGES) . ')/',
+                key($refill)
+            )) {
+                $this->refillResource(...explode('-', key($refill)));
+            }
+        }
+    }
+
+    /**
+     * Refill resources
+     *
+     * @param string $resource
+     * @param integer $percentage
+     * @return void
+     */
+    private function refillResource(string $resource, int $percentage): void
+    {
+        if ($this->trader->{'is' . $resource . 'StorageFillable'}($percentage)) {
+            if ($this->trader->isRefillPayable($resource, $percentage)) {
+                $this->Trader_Model->refillStorage(
+                    $this->trader->{'getPriceToFill' . $percentage . 'Percent'}($resource),
+                    $resource,
+                    $this->trader->getProjectedResouces($resource, $percentage),
+                    $this->user['user_id'],
+                    $this->planet['planet_id']
+                );
+
+                Functions::redirect('game.php?page=traderOverview&mode=traderResources');
+            } else {
+                $this->error = $this->langs->line('tr_no_enough_dark_matter');
+            }
+        } else {
+            $this->error = $this->langs->line('tr_no_enough_storage');
+        }
+    }
+
+    /**
      * Build the page
      *
      * @return void
@@ -140,10 +194,34 @@ class Trader extends Controller
                 'game/trader_overview_view',
                 array_merge(
                     $this->langs->language,
+                    $this->setMessageDisplay(),
                     $this->getMode()
                 )
             )
         );
+    }
+
+    /**
+     * Display the message block
+     *
+     * @return array
+     */
+    private function setMessageDisplay(): array
+    {
+        $message = [
+            'status_message' => [],
+        ];
+
+        if ($this->error != '') {
+            $message = [
+                'status_message' => '',
+                '/status_message' => '',
+                'error_color' => '#FF0000',
+                'error_text' => $this->error,
+            ];
+        }
+
+        return $message;
     }
 
     /**
@@ -213,7 +291,8 @@ class Trader extends Controller
         foreach (self::PERCENTAGES as $percentage) {
             $dm_price = $this->trader->{'getPriceToFill' . $percentage . 'Percent'}($resource);
 
-            if ($this->trader->{'is' . $resource . 'StorageFull'}() or $dm_price == 0) {
+            if (!$this->trader->{'is' . ucfirst($resource) . 'StorageFillable'}($percentage)
+                or $dm_price == 0) {
                 $price = Format::colorRed('-');
                 $button = '';
             } else {
@@ -221,7 +300,7 @@ class Trader extends Controller
                     Format::prettyNumber($dm_price),
                     '#2cbef2'
                 ) . ' ' . $this->langs->line('dark_matter_short');
-                $button = '<input type="button" name="' . $resource . '-' . $percentage . '" value="' . $this->langs->line('tr_refill_button') . '">';
+                $button = '<input type="submit" name="' . $resource . '-' . $percentage . '" value="' . $this->langs->line('tr_refill_button') . '">';
             }
 
             $refillOptions[] = [
@@ -249,20 +328,6 @@ class Trader extends Controller
     private function buildImportexportSection(): array
     {
         return [];
-    }
-
-    /**
-     * Query to discount the amount of dark matter
-     *
-     * @return void
-     */
-    private function discountDarkMatter()
-    {
-        $this->_db->query(
-            "UPDATE `" . PREMIUM . "` SET
-            `premium_dark_matter` = `premium_dark_matter` - " . $this->tr_dark_matter . "
-            WHERE `premium_user_id` = " . $this->current_user['user_id'] . ""
-        );
     }
 }
 

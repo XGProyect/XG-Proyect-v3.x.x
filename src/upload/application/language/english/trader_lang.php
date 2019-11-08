@@ -26,6 +26,8 @@ $lang = [
     'tr_step2' => '2. Call merchant',
     'tr_price' => 'Costs: %s Dark Matter (per call)',
     'tr_call_button' => 'Call merchant',
+    'tr_no_enough_storage' => 'Not enough storage capacity.',
+    'tr_no_enough_dark_matter' => 'There is not enough dark matter available',
 
     // traderAuctioneer
 

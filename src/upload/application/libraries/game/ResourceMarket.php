@@ -18,6 +18,7 @@ namespace application\libraries\game;
 
 use application\core\entities\BuildingsEntity;
 use application\core\entities\PlanetEntity;
+use application\core\entities\PremiumEntity;
 use application\core\entities\UserEntity;
 use application\libraries\ProductionLib as Production;
 
@@ -39,6 +40,13 @@ class ResourceMarket
      * @var \UserEntity
      */
     private $user;
+
+    /**
+     * Contains the current user premium data
+     *
+     * @var \PremiumEntity
+     */
+    private $premium;
 
     /**
      * Contains the current planet data
@@ -63,6 +71,7 @@ class ResourceMarket
     public function __construct(array $user, array $planet)
     {
         $this->setUpUser($user);
+        $this->setUpPremium($user);
         $this->setUpPlanet($planet);
         $this->setUpBuildings($planet);
     }
@@ -137,7 +146,7 @@ class ResourceMarket
         $max_storage = Production::maxStorable($this->buildings->{'getBuilding' . ucfirst($resource) . 'Store'}());
         $base_price = $this->calculateBasePriceToRefill($max_storage, BASIC_RESOURCE_MARKET_DM[$resource]);
 
-        return (($max_storage - $current_resources) * $percentage / $max_storage) * $base_price / 10;
+        return floor((($max_storage - $current_resources) * $percentage / $max_storage) * $base_price / 10);
     }
 
     /**
@@ -171,9 +180,89 @@ class ResourceMarket
     }
 
     /**
+     * Get the amount of resources that we will refill based on the provided percentage
+     *
+     * @param int $percentage
+     * @return float
+     */
+    public function getProjectedResouces(string $resource, int $percentage): float
+    {
+        $amount_to_fill = Production::maxStorable(
+            $this->buildings->{'getBuilding' . ucfirst($resource) . 'Store'}()
+        ) * $percentage / 100;
+
+        if ($percentage != 100) {
+            return $this->planet->{'getPlanetAmountOf' . ucfirst($resource)}() + $amount_to_fill;
+        }
+
+        return $amount_to_fill;
+    }
+
+    /**
+     * Check if the metal storage is fillable up to the provided percentage, returns true if it is
+     *
+     * @param integer $percentage
+     * @return boolean
+     */
+    public function isMetalStorageFillable(int $percentage): bool
+    {
+        return $this->isStorageFillable('metal', $percentage);
+    }
+
+    /**
+     * Check if the crystal storage is fillable up to the provided percentage, returns true if it is
+     *
+     * @param integer $percentage
+     * @return boolean
+     */
+    public function isCrystalStorageFillable(int $percentage): bool
+    {
+        return $this->isStorageFillable('crystal', $percentage);
+    }
+
+    /**
+     * Check if the deuterium storage is fillable up to the provided percentage, returns true if it is
+     *
+     * @param integer $percentage
+     * @return boolean
+     */
+    public function isDeuteriumStorageFillable(int $percentage): bool
+    {
+        return $this->isStorageFillable('deuterium', $percentage);
+    }
+
+    /**
+     * Check if the user can pay for the storage refill
+     *
+     * @param string $resource
+     * @param integer $percentage
+     * @return boolean
+     */
+    public function isRefillPayable(string $resource, int $percentage): bool
+    {
+        return ($this->{'getPriceToFill' . $percentage . 'Percent'}($resource) <= $this->premium->getPremiumDarkMatter());
+    }
+
+    /**
+     * Check if the storage is fillable up to the provided percentage, returns true if it is
+     *
+     * @param string $resource
+     * @param integer $percentage
+     * @return boolean
+     */
+    private function isStorageFillable(string $resource, int $percentage): bool
+    {
+        if ($this->{'is' . ucfirst($resource) . 'StorageFull'}()) {
+            return false;
+        }
+
+        return (Production::maxStorable($this->buildings->{'getBuilding' . ucfirst($resource) . 'Store'}()) >= $this->getProjectedResouces($resource, $percentage));
+    }
+
+    /**
      * Set up the user
      *
-     * @param array $preferences Preferences
+     * @param array $user
      *
      * @return void
      */
@@ -183,9 +272,21 @@ class ResourceMarket
     }
 
     /**
+     * Set up the user premium data
+     *
+     * @param array $user
+     *
+     * @return void
+     */
+    private function setUpPremium($user): void
+    {
+        $this->premium = $this->createNewPremiumEntity($user);
+    }
+
+    /**
      * Set up the planet
      *
-     * @param array $preferences Preferences
+     * @param array $planet
      *
      * @return void
      */
@@ -195,9 +296,9 @@ class ResourceMarket
     }
 
     /**
-     * Set up the buildings
+     * Set up the plaanet buildings
      *
-     * @param array $preferences Preferences
+     * @param array $planet
      *
      * @return void
      */
@@ -216,6 +317,18 @@ class ResourceMarket
     private function createNewUserEntity($user)
     {
         return new UserEntity($user);
+    }
+
+    /**
+     * Create a new instance of PremiumEntity
+     *
+     * @param array $user
+     *
+     * @return \PremiumEntity
+     */
+    private function createNewPremiumEntity($user)
+    {
+        return new PremiumEntity($user);
     }
 
     /**
