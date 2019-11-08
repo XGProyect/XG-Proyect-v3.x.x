@@ -13,6 +13,7 @@
  */
 namespace application\libraries;
 
+use application\core\enumerators\BuildingsEnumerator;
 use application\core\XGPCore;
 use application\libraries\DevelopmentsLib as Developments;
 use application\libraries\FormatLib as Format;
@@ -203,42 +204,20 @@ class UpdatesLibrary extends XGPCore
             $for_destroy = ($build_mode == 'destroy') ? true : false;
 
             if ($build_end_time <= time()) {
-                $needed = Developments::developmentPrice(
-                    $current_user,
-                    $current_planet,
-                    $element,
-                    true,
-                    $for_destroy
-                );
-
                 $current = (int) $current_planet['planet_field_current'];
                 $max = (int) $current_planet['planet_field_max'];
 
-                if ($current_planet['planet_type'] == 3) {
-                    if ($element == 41) {
+                if ($element == BuildingsEnumerator::BUILDING_MONDBASIS) {
+                    $current += 1;
+                    $max += FIELDS_BY_MOONBASIS_LEVEL;
+                    $current_planet[$resource[$element]]++;
+                } else {
+                    if ($for_destroy == false) {
                         $current += 1;
-                        $max += FIELDS_BY_MOONBASIS_LEVEL;
                         $current_planet[$resource[$element]]++;
-                    } elseif ($element != 0) {
-                        if (Developments::isDevelopmentPayable($current_user, $current_planet, $element, true, $for_destroy)) {
-                            if ($for_destroy == false) {
-                                $current += 1;
-                                $current_planet[$resource[$element]]++;
-                            } else {
-                                $current -= 1;
-                                $current_planet[$resource[$element]]--;
-                            }
-                        }
-                    }
-                } elseif ($current_planet['planet_type'] == 1) {
-                    if (Developments::isDevelopmentPayable($current_user, $current_planet, $element, true, $for_destroy)) {
-                        if ($for_destroy == false) {
-                            $current += 1;
-                            $current_planet[$resource[$element]]++;
-                        } else {
-                            $current -= 1;
-                            $current_planet[$resource[$element]]--;
-                        }
+                    } else {
+                        $current -= 1;
+                        $current_planet[$resource[$element]]--;
                     }
                 }
 
