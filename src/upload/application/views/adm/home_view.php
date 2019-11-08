@@ -12,7 +12,7 @@
                     <th style="text-align: center" colspan="6">{hm_title}</th>
                 </tr>
             </thead>
-            <tbody>    
+            <tbody>
                 <tr>
                     <td style="background-color: #ccc">Server Type</td>
                     <td>{server_type}</td>
@@ -86,7 +86,7 @@
     <div class="hero-unit" align="justify">
         <h1>{hm_credits}</h1>
         <p><strong>{hm_proyect_leader}</strong> <br/>
-            lucky<br/> BeReal
+            <a href="https://github.com/LucasKovacs" target="_blank">lucky</a><br/> <a href="https://github.com/BeReal86" target="_blank">BeReal</a>
             <br/><br/>
             <strong>{hm_extensions}</strong> <br/>
             <a href="https://github.com/jstar88/opbe">jstar - OPBE</a> <br>
