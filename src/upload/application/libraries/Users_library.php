@@ -46,17 +46,19 @@ class Users_library
             // Check game close
             FunctionsLib::checkServer($this->user_data);
 
-            // Set the changed planet
-            $this->setPlanet();
+            if (!defined('IN_ADMIN')) {
+                // Set the changed planet
+                $this->setPlanet();
 
-            // Get planet data and check it
-            $this->setPlanetData();
+                // Get planet data and check it
+                $this->setPlanetData();
 
-            // Update resources, ships, defenses & technologies
-            UpdatesLibrary::updatePlanetResources($this->user_data, $this->planet_data, time());
+                // Update resources, ships, defenses & technologies
+                UpdatesLibrary::updatePlanetResources($this->user_data, $this->planet_data, time());
 
-            // Update buildings queue
-            UpdatesLibrary::updateBuildingsQueue($this->planet_data, $this->user_data);
+                // Update buildings queue
+                UpdatesLibrary::updateBuildingsQueue($this->planet_data, $this->user_data);
+            }
         }
     }
 
