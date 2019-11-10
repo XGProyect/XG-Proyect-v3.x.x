@@ -637,6 +637,11 @@ abstract class FunctionsLib extends XGPCore
      */
     public static function setCurrentLanguage($lang = '')
     {
+        // force english
+        if (!in_array($lang, self::getLanguagesList())) {
+            $lang = 'english';
+        }
+
         $db = new Database();
 
         // set the user language reading the config file
@@ -645,6 +650,26 @@ abstract class FunctionsLib extends XGPCore
         }
 
         setcookie('current_lang', $lang);
+    }
+
+    /**
+     * Get the list of available languages
+     *
+     * @return array
+     */
+    public static function getLanguagesList()
+    {
+        $langs_dir = opendir(XGP_ROOT . LANG_PATH);
+        $exceptions = ['.', '..', '.htaccess', 'index.html', '.DS_Store'];
+        $langs = [];
+
+        while (($lang_dir = readdir($langs_dir)) !== false) {
+            if (!in_array($lang_dir, $exceptions)) {
+                $langs[] = $lang_dir;
+            }
+        }
+
+        return $langs;
     }
 
     /**
