@@ -23,4 +23,4 @@ RECOMMENDED REQUIREMENTS
 OPTIONS
 + Install
 + Update
-+ Migrate 2.10.X -> 3.0.X
++ Migrate 2.X.X -> 3.1.X

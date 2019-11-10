@@ -37,8 +37,7 @@ $queries[] = "INSERT INTO `" . ALLIANCE . "`(
                 `alliance_image`,
                 `alliance_request`,
                 `alliance_request_notallow`,
-                `alliance_owner_range`,
-                `alliance_ranks`)
+                `alliance_owner_range`)
                 SELECT
                     `id`,
                     `ally_name`,
@@ -51,8 +50,7 @@ $queries[] = "INSERT INTO `" . ALLIANCE . "`(
                     `ally_image`,
                     `ally_request`,
                     `ally_request_notallow`,
-                    `ally_owner_range`,
-                    `ally_ranks`
+                    `ally_owner_range`
                 FROM `{prefix}alliance`;";
 
 // "banned" table -> "banned" table
@@ -221,13 +219,10 @@ $queries[] = "INSERT INTO `" . PLANETS . "`(
                 `planet_temp_max`,
                 `planet_metal`,
                 `planet_metal_perhour`,
-                `planet_metal_max`,
                 `planet_crystal`,
                 `planet_crystal_perhour`,
-                `planet_crystal_max`,
                 `planet_deuterium`,
                 `planet_deuterium_perhour`,
-                `planet_deuterium_max`,
                 `planet_energy_used`,
                 `planet_energy_max`,
                 `planet_building_metal_mine_percent`,
@@ -264,13 +259,10 @@ $queries[] = "INSERT INTO `" . PLANETS . "`(
                     p.`temp_max`,
                     p.`metal`,
                     p.`metal_perhour`,
-                    p.`metal_max`,
                     p.`crystal`,
                     p.`crystal_perhour`,
-                    p.`crystal_max`,
                     p.`deuterium`,
                     p.`deuterium_perhour`,
-                    p.`deuterium_max`,
                     p.`energy_used`,
                     p.`energy_max`,
                     p.`metal_mine_porcent`,
@@ -510,7 +502,6 @@ $queries[] = "INSERT INTO `" . USERS . "`(
                     `user_name`,
                     `user_password`,
                     `user_email`,
-                    `user_email_permanent`,
                     `user_authlevel`,
                     `user_home_planet_id`,
                     `user_galaxy`,
@@ -535,7 +526,6 @@ $queries[] = "INSERT INTO `" . USERS . "`(
                     `username`,
                     IF(`id` = 1, '" . $password . "', `password`) AS `password`,
                     `email`,
-                    `email_2`,
                     `authlevel`,
                     `id_planet`,
                     `galaxy`,
@@ -620,33 +610,19 @@ $queries[] = "INSERT INTO `" . RESEARCH . "`(
                 FROM `{prefix}users`;";
 
 // "users" table -> "settings" table
-$queries[] = "TRUNCATE `" . SETTINGS . "`;";
-$queries[] = "INSERT INTO `" . SETTINGS . "`(
-                    `setting_user_id`,
-                    `setting_no_ip_check`,
-                    `setting_planet_sort`,
-                    `setting_planet_order`,
-                    `setting_probes_amount`,
-                    `setting_fleet_actions`,
-                    `setting_galaxy_espionage`,
-                    `setting_galaxy_write`,
-                    `setting_galaxy_buddy`,
-                    `setting_galaxy_missile`,
-                    `setting_vacations_status`,
-                    `setting_vacations_until`,
-                    `setting_delete_account`)
+$queries[] = "TRUNCATE `" . PREFERENCES . "`;";
+$queries[] = "INSERT INTO `" . PREFERENCES . "`(
+                    `preference_user_id`,
+                    `preference_spy_probes`,
+                    `preference_planet_sort`,
+                    `preference_planet_sort_sequence`,
+                    `preference_vacation_until`,
+                    `preference_delete_mode`)
                 SELECT
                     `id`,
-                    `noipcheck`,
+                    `spio_anz`,
                     `planet_sort`,
                     `planet_sort_order`,
-                    `spio_anz`,
-                    `settings_fleetactions`,
-                    `settings_esp`,
-                    `settings_wri`,
-                    `settings_bud`,
-                    `settings_mis`,
-                    `urlaubs_modus`,
                     `urlaubs_until`,
                     `db_deaktjava`
                 FROM `{prefix}users`;";
