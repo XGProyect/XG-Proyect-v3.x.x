@@ -1,7 +1,7 @@
 
 <p align="center"
     <a href="http://www.xgproyect.org/" target="_blank">
-        <img align="center" src="http://www.xgproyect.org/images/misc/xg-logo.png" title="XG Proyect" alt="xgp-logo">
+        <img align="center" img src="https://xgproyect.org/wp-content/uploads/2019/10/xgp-new-logo-black.png" width="250px" title="XG Proyect" alt="xgp-logo">
     </a>
 </p> 
 

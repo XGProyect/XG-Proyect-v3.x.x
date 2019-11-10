@@ -225,7 +225,7 @@ UNIQUE KEY `option_name` (`option_name`)
 
 $tables['options_insert'] = "INSERT INTO `" . OPTIONS . "` (`option_name`, `option_value`) VALUES
 ('game_name', 'XG Proyect'),
-('game_logo', 'https://xgproyect.org/wp-content/uploads/2019/10/xg-logo.png'),
+('game_logo', 'https://xgproyect.org/wp-content/uploads/2019/10/xgp-new-logo-white.png'),
 ('lang', 'spanish'),
 ('game_speed', '2500'),
 ('fleet_speed', '2500'),
