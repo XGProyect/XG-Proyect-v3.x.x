@@ -31,7 +31,6 @@ use application\libraries\game\ResourceMarket;
  */
 class Trader extends Controller
 {
-
     /**
      * The module ID
      *
