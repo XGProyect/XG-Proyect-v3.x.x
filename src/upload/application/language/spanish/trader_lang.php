@@ -44,7 +44,7 @@ $lang = [
     'tr_scrap_phrase_8' => 'Soy empresario, y no de beneficencia.',
     'tr_scrap_phrase_9' => '¡Pero si ya apenas saco tajada de este trato!',
     'tr_scrap_phrase_10' => '¡Tengo una familia que alimentar!',
-    'tr_scrap_phrase_11' => 'Ya puedo escuchar las burlas de mis competidores',
+    'tr_scrap_phrase_11' => 'Ya oigo la maliciosa burla de la competencia.',
 
     // traderImportExport
 ];
