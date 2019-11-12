@@ -78,19 +78,25 @@ class Galaxy extends Controller
         $this->_galaxyLib = FunctionsLib::loadLibrary('GalaxyLib');
 
         if ($this->_current_user['preference_vacation_mode'] > 0) {
-
             FunctionsLib::message($this->langs->line('gl_no_access_vm_on'), '', '');
         }
 
-        $this->build_page();
+        // init a new galaxy object
+        //$this->setUpPreferences();
+
+        // time to do something
+        //$this->runAction();
+
+        // build the page
+        $this->buildPage();
     }
 
     /**
-     * method build_page
-     * param
-     * return main method, loads everything
+     * Build the page
+     *
+     * @return void
      */
-    private function build_page()
+    private function buildPage(): void
     {
         if (isset($_GET['fleet']) && $_GET['fleet'] == 'true') {
             $this->send_fleet();
@@ -145,7 +151,6 @@ class Galaxy extends Controller
         $parse['galaxy'] = $this->_galaxy;
         $parse['system'] = $this->_system;
         $parse['planet'] = $planet;
-        $parse['outerspace_slot'] = MAX_PLANET_IN_SYSTEM + 1;
         $parse['currentmip'] = $this->_current_planet['defense_interplanetary_missile'];
         $parse['maxfleetcount'] = $maxfleet_count;
         $parse['fleetmax'] = $fleetmax;
@@ -159,7 +164,7 @@ class Galaxy extends Controller
         $parse['planet_type'] = $this->_current_planet['planet_type'];
         $parse['mip'] = ($mode == 2) ? parent::$page->parseTemplate(parent::$page->getTemplate('galaxy/galaxy_missile_selector'), $parse) : " ";
         $parse['galaxyrows'] = $this->show_row();
-        $parse['planetcount'] = $this->_planet_count . " " . $this->langs->line('gl_populed_planets');
+        $parse['planetcount'] = $this->_planet_count . " " . $this->langs->line('gl_colonized_planets');
 
         parent::$page->display(
             $this->getTemplate()->set(
@@ -168,8 +173,7 @@ class Galaxy extends Controller
                     $this->langs->language,
                     $parse
                 )
-            ),
-            false
+            )
         );
     }
 

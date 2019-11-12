@@ -114,9 +114,7 @@ class TemplateLib
         // Footer
         if (!defined('IN_INSTALL') && !defined('IN_ADMIN') && !defined('IN_LOGIN')) {
             // Is inside the game
-            if (isset($_GET['page']) && $_GET['page'] != 'galaxy') {
-                $page .= $this->parseTemplate($this->getTemplate('general/footer'), '');
-            }
+            $page .= $this->parseTemplate($this->getTemplate('general/footer'), '');
         }
 
         if (defined('IN_ADMIN')) {
