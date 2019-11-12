@@ -97,7 +97,7 @@ class Preferences extends Controller
         // set data
         $this->user = $this->getUserData();
 
-        // init a new buddy object
+        // init a new preferences object
         $this->setUpPreferences();
 
         // time to do something
