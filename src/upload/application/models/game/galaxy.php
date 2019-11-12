@@ -62,13 +62,13 @@ class Galaxy
             "SELECT
                 (
                     SELECT
-                        CONCAT ( GROUP_CONCAT(`buddy_receiver`) , ',' , GROUP_CONCAT(`buddy_sender`) ) AS buddys
+                        CONCAT (GROUP_CONCAT(`buddy_receiver`), ',', GROUP_CONCAT(`buddy_sender`)) AS `buddys`
                     FROM `" . BUDDY . "` AS b
                     WHERE
                     (
-                        b.`buddy_receiver` = u.user_id
+                        b.`buddy_receiver` = u.`user_id`
                         OR
-                        b.`buddy_sender` = u.user_id
+                        b.`buddy_sender` = u.`user_id`
                     )
                 ) AS buddys,
                 p.`planet_debris_metal` AS `metal`,
@@ -108,15 +108,15 @@ class Galaxy
                 ) AS `ally_members`
             FROM `" . PLANETS . "` AS p
                 INNER JOIN `" . USERS . "` AS u
-                    ON p.planet_user_id = u.user_id
+                    ON p.`planet_user_id` = u.`user_id`
                 INNER JOIN `" . PREFERENCES . "` AS pr
-                    ON pr.preference_user_id = u.user_id
+                    ON pr.`preference_user_id` = u.`user_id`
                 INNER JOIN `" . USERS_STATISTICS . "` AS s
-                    ON s.user_statistic_user_id = u.user_id
+                    ON s.`user_statistic_user_id` = u.`user_id`
                 LEFT JOIN `" . ALLIANCE . "` AS a
-                    ON a.alliance_id = u.user_ally_id
+                    ON a.`alliance_id` = u.`user_ally_id`
                 LEFT JOIN `" . PLANETS . "` AS m
-                    ON m.planet_id = (
+                    ON m.`planet_id` = (
                         SELECT mp.`planet_id`
                         FROM `" . PLANETS . "` AS mp
                         WHERE (
@@ -126,7 +126,7 @@ class Galaxy
                             AND
                             mp.`planet_planet` = p.`planet_planet`
                             AND
-                            mp.`planet_type` = 3
+                            mp.`planet_type` = '3'
                         )
                     )
             WHERE (

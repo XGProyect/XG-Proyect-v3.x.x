@@ -163,8 +163,8 @@
             var e2 = document.getElementById('fleetstatustable');
             // make the table row visible
             e.style.display = '';
-            if (e2.rows.length > 2) {
-                e2.deleteRow(2);
+            if (e2.rows.length > 0) {
+                e2.deleteRow(0);
             }
             var row = e2.insertRow('test');
             var td1 = document.createElement("td");
@@ -290,17 +290,28 @@
             <td class="c">{gl_alliance}</td>
             <td class="c">{gl_actions}</td>
         </tr>
-        {galaxyrows}
+        {list_of_positions}
+        <tr>
+            <th width="30px">{pos}</th>
+            <th width="30px">{planet}</th>
+            <th width="130px" style="white-space: nowrap;">{planetname}</th>
+            <th width="30px" style="white-space: nowrap;">{moon}</th>
+            <th width="30px" style="white-space: nowrap;">{debris}</th>
+            <th width="150px">{username}</th>
+            <th width="80px">{alliance}</th>
+            <th width="125px" style="white-space: nowrap;">{actions}</th>
+        </tr>
+        {/list_of_positions}
         <tr id="fleetstatusrow">
             <th class="c" colspan="8">
                 <table style="font-weight: bold" width="100%" id="fleetstatustable">
-                    <!-- will be filled with content later on while processing ajax replys -->
+                    <!-- will be filled with content later on while processing ajax replies -->
                 </table>
             </th>
         </tr>
         <tr>
             <td class="c" colspan="7">
-                {planetcount}
+                {planet_count} {gl_colonized_planets}
             </td>
             <td class="c">
                 <a href="#" style="cursor: pointer;" onmouseover='return overlib("<table width=240><tr><td class=c colspan=2>{gl_legend}</td></tr><tr><td width=220>{gl_strong_player}</td><td><span class=strong>{gl_s}</span></td></tr><tr><td width=220>{gl_week_player}</td><td><span class=noob>{gl_w}</span></td></tr><tr><td width=220>{gl_vacation}</td><td><span class=vacation>{gl_v}</span></td></tr><tr><td width=220>{gl_banned}</td><td><span class=banned>{gl_b}</span></td></tr><tr><td width=220>{gl_inactive_seven}</td><td><span class=inactive>{gl_i}</span></td></tr><tr><td width=220>{gl_inactive_twentyeight}</td><td><span class=longinactive>{gl_I}</span></td></tr></table>", STICKY, MOUSEOFF, DELAY, 750, CENTER, OFFSETX, -150, OFFSETY, -150);' onmouseout='return nd();'>

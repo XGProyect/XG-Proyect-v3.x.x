@@ -38,10 +38,22 @@ class Galaxy extends Controller
      */
     const MODULE_ID = 11;
 
-    private $_planet_count = 0;
+    /**
+     * Contains the galaxy data
+     *
+     * @var array
+     */
+    private $galaxy = [];
+
+    /**
+     * Contains the current amount of planets
+     *
+     * @var integer
+     */
+    private $planet_count = 0;
+
     private $_current_user;
     private $_current_planet;
-    private $_lang;
     private $_galaxy;
     private $_system;
     private $_formula;
@@ -144,7 +156,7 @@ class Galaxy extends Controller
         }
         // END FIX BY alivan
 
-        $this->_galaxy_data = $this->Galaxy_Model->getGalaxyDataByGalaxyAndSystem($this->_galaxy, $this->_system);
+        $this->galaxy = $this->Galaxy_Model->getGalaxyDataByGalaxyAndSystem($this->_galaxy, $this->_system);
 
         $parse = $this->langs->language;
         $parse['js_path'] = JS_PATH;
@@ -163,14 +175,16 @@ class Galaxy extends Controller
         $parse['current_planet'] = $this->_current_planet['planet_planet'];
         $parse['planet_type'] = $this->_current_planet['planet_type'];
         $parse['mip'] = ($mode == 2) ? parent::$page->parseTemplate(parent::$page->getTemplate('galaxy/galaxy_missile_selector'), $parse) : " ";
-        $parse['galaxyrows'] = $this->show_row();
-        $parse['planetcount'] = $this->_planet_count . " " . $this->langs->line('gl_colonized_planets');
 
         parent::$page->display(
             $this->getTemplate()->set(
                 'game/galaxy_view',
                 array_merge(
                     $this->langs->language,
+                    [
+                        'list_of_positions' => $this->buildPositionsList(),
+                        'planet_count' => $this->planet_count,
+                    ],
                     $parse
                 )
             )
@@ -178,56 +192,45 @@ class Galaxy extends Controller
     }
 
     /**
-     * method ShowGalaxyRows
-     * param
-     * return validates the position setted by the user
+     * Build the list of positions for the galaxy
+     *
+     * @return array
      */
-    private function show_row()
+    private function buildPositionsList(): array
     {
-        $rows = '';
-        $start = 1;
-        $template = parent::$page->getTemplate('galaxy/galaxy_row');
-        $galaxy_row = new $this->_galaxyLib($this->_current_user, $this->_current_planet, $this->_galaxy, $this->_system, $this->langs->language);
-        $parse['planet'] = '';
-        $parse['planetname'] = '';
-        $parse['moon'] = '';
-        $parse['debris'] = '';
-        $parse['username'] = '';
-        $parse['alliance'] = '';
-        $parse['actions'] = '';
+        $list_of_positions = [];
+        $galaxy_row = new $this->_galaxyLib(
+            $this->_current_user,
+            $this->_current_planet,
+            $this->_galaxy,
+            $this->_system,
+            $this->langs->language
+        );
 
-        foreach ($this->_galaxy_data as $row_data) {
-            for ($current_planet = $start; $current_planet < 1 + (MAX_PLANET_IN_SYSTEM); $current_planet++) {
-                if ($row_data['planet_galaxy'] == $this->_galaxy && $row_data['planet_system'] == $this->_system && $row_data['planet_planet'] == $current_planet) {
-                    if ($row_data['id_planet'] != 0) {
-                        if ($row_data['planet_destroyed'] == 0) {
-                            $this->_planet_count++;
-                        }
-                    }
+        foreach ($this->galaxy as $planet) {
+            $this->planet_count++;
 
-                    // PARSE THE ROW INTO THE ROW TEMPLATE
-                    $rows .= parent::$page->parseTemplate($template, $galaxy_row->buildRow($row_data, $current_planet));
+            $list_of_positions[$planet['planet_planet']] = $galaxy_row->buildRow($planet, $planet['planet_planet']);
+        }
 
-                    $start++;
-                    break;
-                } else {
-                    $parse['pos'] = $start;
-                    $rows .= parent::$page->parseTemplate($template, $parse);
-                    $start++;
-                }
+        for ($i = 1; $i <= MAX_PLANET_IN_SYSTEM; $i++) {
+            if (!isset($list_of_positions[$i])) {
+                $list_of_positions[$i] = [
+                    'pos' => $i,
+                    'planet' => '',
+                    'planetname' => '',
+                    'moon' => '',
+                    'debris' => '',
+                    'username' => '',
+                    'alliance' => '',
+                    'actions' => '',
+                ];
             }
         }
 
-        for ($i = $start; $i <= MAX_PLANET_IN_SYSTEM; $i++) {
-            $parse['pos'] = $i;
-            $rows .= parent::$page->parseTemplate($template, $parse);
-        }
+        ksort($list_of_positions);
 
-        // CLEAN SOME DATA
-        unset($row_data);
-
-        // RETURN THE ROWS
-        return $rows;
+        return $list_of_positions;
     }
 
     /**
