@@ -34,7 +34,7 @@ class Changelog extends Controller
 
     /**
      * Constructor
-     * 
+     *
      * @return void
      */
     public function __construct()
@@ -56,29 +56,29 @@ class Changelog extends Controller
 
     /**
      * Build the page
-     * 
+     *
      * @return void
      */
     private function buildPage()
     {
-        $changes    = [];
-        $entries    = $this->Changelog_Model->getAllChangelogEntries();
-    
+        $changes = [];
+        $entries = $this->Changelog_Model->getAllChangelogEntries();
+
         if ($entries) {
             foreach ($entries as $entry) {
-
                 $changes[] = [
                     'version_number' => $entry['changelog_version'],
                     'description' => nl2br(
                         Timing::formatShortDate($entry['changelog_date']) . '<br>' . $entry['changelog_description']
-                    )
+                    ),
                 ];
             }
         }
 
         parent::$page->display(
             $this->getTemplate()->set('game/changelog_view', array_merge(
-                $this->getLang(), ['list_of_changes' => $changes]
+                $this->getLang(),
+                ['list_of_changes' => $changes]
             ))
         );
     }
