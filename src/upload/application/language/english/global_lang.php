@@ -11,16 +11,16 @@ $lang = [
 
     // missions
     'type_mission' => [
-        1 => 'Atacar',
-        2 => 'Ataq. confederación',
-        3 => 'Transportar',
-        4 => 'Desplegar',
-        5 => 'Mantener posición',
-        6 => 'Espiar',
-        7 => 'Colonizar',
-        8 => 'Reciclar campo de escombros',
-        9 => 'Destruir',
-        15 => 'Expedición',
+        1 => 'Attack',
+        2 => 'ACS Attack',
+        3 => 'Transport',
+        4 => 'Deploy',
+        5 => 'ACS Defense',
+        6 => 'Espionage',
+        7 => 'Colonize',
+        8 => 'Recycle',
+        9 => 'Destroy',
+        15 => 'Expedition',
     ],
 ];
 

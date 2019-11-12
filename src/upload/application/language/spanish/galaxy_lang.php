@@ -29,7 +29,6 @@ $lang = [
     'gl_galaxy' => 'Galaxia',
     'gl_solar_system' => 'Sistema solar',
     'gl_show' => 'Mostrar',
-    'gl_pos' => 'Pos',
     'gl_planet' => 'Planeta',
     'gl_name_activity' => 'Nombre (Actividad)',
     'gl_moon' => 'Luna',

@@ -258,7 +258,7 @@
                     <td class="c" colspan="8">{gl_solar_system} {galaxy}:{system}</td>
                 </tr>
                 <tr>
-                    <td class="c">{gl_pos}</td>
+                    <td class="c"></td>
                     <td class="c">{gl_planet}</td>
                     <td class="c">{gl_name_activity}</td>
                     <td class="c">{gl_moon}</td>
