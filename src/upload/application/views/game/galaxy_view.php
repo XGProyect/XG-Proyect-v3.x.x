@@ -303,7 +303,7 @@
                 {planetcount}
             </td>
             <td class="c">
-                <a href="#" style="cursor: pointer;" onmouseover='return overlib("<table width=240><tr><td class="c" colspan=2>{gl_legend}</td></tr><tr><td width=220>{gl_strong_player}</td><td><span class=strong>{gl_s}</span></td></tr><tr><td width=220>{gl_week_player}</td><td><span class=noob>{gl_w}</span></td></tr><tr><td width=220>{gl_vacation}</td><td><span class=vacation>{gl_v}</span></td></tr><tr><td width=220>{gl_banned}</td><td><span class=banned>{gl_b}</span></td></tr><tr><td width=220>{gl_inactive_seven}</td><td><span class=inactive>{gl_i}</span></td></tr><tr><td width=220>{gl_inactive_twentyeight}</td><td><span class=longinactive>{gl_I}</span></td></tr></table>", STICKY, MOUSEOFF, DELAY, 750, CENTER, OFFSETX, -150, OFFSETY, -150);' onmouseout='return nd();'>
+                <a href="#" style="cursor: pointer;" onmouseover='return overlib("<table width=240><tr><td class=c colspan=2>{gl_legend}</td></tr><tr><td width=220>{gl_strong_player}</td><td><span class=strong>{gl_s}</span></td></tr><tr><td width=220>{gl_week_player}</td><td><span class=noob>{gl_w}</span></td></tr><tr><td width=220>{gl_vacation}</td><td><span class=vacation>{gl_v}</span></td></tr><tr><td width=220>{gl_banned}</td><td><span class=banned>{gl_b}</span></td></tr><tr><td width=220>{gl_inactive_seven}</td><td><span class=inactive>{gl_i}</span></td></tr><tr><td width=220>{gl_inactive_twentyeight}</td><td><span class=longinactive>{gl_I}</span></td></tr></table>", STICKY, MOUSEOFF, DELAY, 750, CENTER, OFFSETX, -150, OFFSETY, -150);' onmouseout='return nd();'>
                     {gl_legend}
                 </a>
             </td>
