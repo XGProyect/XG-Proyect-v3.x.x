@@ -311,7 +311,7 @@ class GalaxyLib extends XGPCore
             $parse['galaxy'] = $this->galaxy;
             $parse['system'] = $this->system;
             $parse['planet'] = $this->planet;
-            $parse['planettype'] = self::DEBRIS_TYPE;
+            $parse['planettype'] = self::PLANET_TYPE;
             $parse['recsended'] = $recyclers_sended;
             $parse['planet_debris_metal'] = FormatLib::prettyNumber($this->row_data['metal']);
             $parse['planet_debris_crystal'] = FormatLib::prettyNumber($this->row_data['crystal']);

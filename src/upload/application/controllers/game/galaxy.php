@@ -590,7 +590,7 @@ class Galaxy extends Controller
                 `planet_type` = '" . $this->_db->escapeValue($_POST['planettype']) . "';"
         );
 
-        if ($TargetRow['planet_user_id'] == '') {
+        if ($TargetRow == null) {
             $TargetUser = $this->_current_user;
         } elseif ($TargetRow['planet_user_id'] != '') {
             $TargetUser = $this->_db->queryFetch(
@@ -666,8 +666,8 @@ class Galaxy extends Controller
         $fleet['end_time'] = ($Duration * 2) + time();
 
         $FleetShipCount = 0;
-        $FleetDBArray = "";
-        $FleetSubQRY = "";
+        $FleetDBArray = [];
+        $FleetSubQRY = '';
         $consumption = 0;
         $SpeedFactor = FunctionsLib::fleetSpeedFactor();
 
