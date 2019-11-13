@@ -77,4 +77,4 @@ $lang = [
     'gl_to' => 'a',
 ];
 
-/* end of galaxt_lang.php */
+/* end of galaxy_lang.php */
