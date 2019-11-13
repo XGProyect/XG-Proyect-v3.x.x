@@ -648,39 +648,6 @@ $lang['info'][604]['name'] = "Technocrat";
 $lang['info'][604]['description'] = "The guild is composed of technocrats authentic genius, and always find that dangerous edge where it all explode into a thousand pieces before they could find an explanation and technology rational. No normal human being ever try to decode the code of a technocrat, with its presence, the researchers modeled the rule.";
 
 //----------------------------------------------------------------------------//
-//MESSAGES
-$lang['mg_type'][0] = 'Spy reports';
-$lang['mg_type'][1] = 'Messages from players';
-$lang['mg_type'][2] = 'Messages from ally';
-$lang['mg_type'][3] = 'Battle reports';
-$lang['mg_type'][4] = 'Collection reports';
-$lang['mg_type'][5] = 'Transportation reports';
-$lang['mg_type'][15] = 'Expedition reports';
-$lang['mg_type'][99] = 'Construction reports';
-$lang['mg_type'][100] = 'View all Messages';
-$lang['mg_no_subject'] = 'No Subject';
-$lang['mg_no_text'] = 'No message';
-$lang['mg_msg_sended'] = 'Message sent';
-$lang['mg_delete_marked'] = 'Delete marked messages';
-$lang['mg_delete_unmarked'] = 'Delete all unmarked messages';
-$lang['mg_delete_all'] = 'Delete all messages';
-$lang['mg_show_only_header_spy_reports'] = 'show only partial espionage reports ';
-$lang['mg_action'] = 'Action';
-$lang['mg_date'] = 'Date';
-$lang['mg_from'] = 'From';
-$lang['mg_subject'] = 'Subject';
-$lang['mg_confirm_delete'] = 'Confirm';
-$lang['mg_message_title'] = 'Messages';
-$lang['mg_message_type'] = 'Message type';
-$lang['mg_total'] = 'Total';
-$lang['mg_game_operators'] = 'Game operators';
-$lang['mg_to'] = 'To';
-$lang['mg_send_message'] = 'Send message';
-$lang['mg_message'] = 'Message';
-$lang['mg_chars'] = 'characters';
-$lang['mg_send'] = 'Send';
-
-//----------------------------------------------------------------------------//
 //ALLIANCE
 $lang['al_description_message'] = 'Alliance description message';
 $lang['al_web_text'] = 'Alliance web site';

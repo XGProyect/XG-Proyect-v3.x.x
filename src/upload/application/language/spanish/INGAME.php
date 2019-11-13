@@ -762,42 +762,6 @@ $lang['info'][604]['description'] = '+10% producción de minas';
 $lang['info'][605]['description'] = '+2 al nivel de espionaje,<br/>25% menos tiempo de investigación';
 
 //----------------------------------------------------------------------------//
-//MESSAGES
-$lang['mg_title'] = 'Mensajes';
-$lang['mg_show_title'] = 'Mostrar';
-$lang['mg_type_title'] = 'Tipo';
-$lang['mg_amount_title'] = 'Cantidad';
-$lang['mg_unread_title'] = 'Sin leer';
-$lang['mg_type'][0] = 'Reportes de espionaje';
-$lang['mg_type'][1] = 'Reportes de Batalla';
-$lang['mg_type'][2] = 'Reportes de expedición';
-$lang['mg_type'][3] = 'Mensajes de la alianza';
-$lang['mg_type'][4] = 'Mensajes de usuarios';
-$lang['mg_type'][5] = 'Otros mensajes';
-$lang['mg_address_book'] = 'Libreta de direcciones';
-$lang['mg_friends_list'] = 'Lista de amigos';
-$lang['mg_alliance'] = 'Alianza propia';
-$lang['mg_operators'] = 'Operadores del juego';
-$lang['mg_notes'] = 'Notas';
-$lang['mg_action'] = 'Acción';
-$lang['mg_date'] = 'Fecha';
-$lang['mg_from'] = 'De';
-$lang['mg_subject'] = 'Asunto';
-$lang['mg_delete_marked'] = 'Borrar mensajes marcados';
-$lang['mg_delete_unmarked'] = 'Borrar todos los mensajes sin marcar';
-$lang['mg_delete_all_shown'] = 'Borrar todos los mensajes mostrados';
-$lang['mg_delete_all'] = 'Borrar todos los mensajes';
-$lang['mg_confirm_action'] = 'ok';
-$lang['mg_no_text'] = 'Falta el mensaje';
-$lang['mg_msg_sended'] = 'Mensaje enviado';
-$lang['mg_no_subject'] = 'Sin asunto';
-$lang['mg_to'] = 'Destinatario';
-$lang['mg_send_message'] = 'Enviar mensaje';
-$lang['mg_message'] = 'Mensaje';
-$lang['mg_chars'] = 'caracteres';
-$lang['mg_send'] = 'Enviar';
-
-//----------------------------------------------------------------------------//
 //ALLIANCE
 $lang['al_description_message'] = 'Mensaje de descripcion de la alianza.';
 $lang['al_web_text'] = 'Web de la alianza';

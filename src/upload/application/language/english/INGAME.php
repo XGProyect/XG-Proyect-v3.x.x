@@ -750,41 +750,6 @@ $lang['info'][602]['description'] = '+2 max. fleet slots';
 $lang['info'][603]['description'] = 'Minimizes losses in half defenses,<br/>+10% energy production';
 $lang['info'][604]['description'] = '+10% mine production';
 $lang['info'][605]['description'] = '+2 Espionage level,<br/>25% Less time for research';
-//----------------------------------------------------------------------------//
-//MESSAGES
-$lang['mg_title'] = 'Messages';
-$lang['mg_show_title'] = 'Show';
-$lang['mg_type_title'] = 'Type';
-$lang['mg_amount_title'] = 'Amount';
-$lang['mg_unread_title'] = 'Unread';
-$lang['mg_type'][0] = 'Spy reports';
-$lang['mg_type'][1] = 'Battle reports';
-$lang['mg_type'][2] = 'Reportes de expedición';
-$lang['mg_type'][3] = 'Messages from alliance';
-$lang['mg_type'][4] = 'Messages from players';
-$lang['mg_type'][5] = 'Other messages';
-$lang['mg_address_book'] = 'Address Book';
-$lang['mg_friends_list'] = 'Friends list';
-$lang['mg_alliance'] = 'Own alliance';
-$lang['mg_operators'] = 'Game operators';
-$lang['mg_notes'] = 'Notes';
-$lang['mg_action'] = 'Action';
-$lang['mg_date'] = 'Date';
-$lang['mg_from'] = 'From';
-$lang['mg_subject'] = 'Subject';
-$lang['mg_delete_marked'] = 'Delete marked messages';
-$lang['mg_delete_unmarked'] = 'Delete all unmarked messages';
-$lang['mg_delete_all_shown'] = 'Delete all shown messages';
-$lang['mg_delete_all'] = 'Delete all messages';
-$lang['mg_confirm_action'] = 'ok';
-$lang['mg_no_text'] = 'Message missing';
-$lang['mg_msg_sended'] = 'Message sent';
-$lang['mg_no_subject'] = 'No subject';
-$lang['mg_to'] = 'To';
-$lang['mg_send_message'] = 'Send message';
-$lang['mg_message'] = 'Message';
-$lang['mg_chars'] = 'characters';
-$lang['mg_send'] = 'Send';
 
 //----------------------------------------------------------------------------//
 //ALLIANCE
