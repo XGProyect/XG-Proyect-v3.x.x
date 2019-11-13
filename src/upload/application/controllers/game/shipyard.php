@@ -271,13 +271,31 @@ class Shipyard extends Controller
         $item_to_parse['dpath'] = DPATH;
         $item_to_parse['element'] = $item_id;
         $item_to_parse['element_name'] = $this->getLang()['tech'][$item_id];
-        $item_to_parse['element_description'] = $this->getLang()['res']['descriptions'][$item_id];
+        $item_to_parse['element_description'] = $this->getItemDescription($item_id);
         $item_to_parse['element_price'] = $this->getItemPriceWithFormat($item_id);
         $item_to_parse['building_time'] = $this->getItemTimeWithFormat($item_id);
         $item_to_parse['element_nbre'] = $this->getItemAmountWithFormat($item_id);
         $item_to_parse['add_element'] = $this->getItemInsertBlock($item_id);
 
         return $item_to_parse;
+    }
+
+    /**
+     * Return the item short description
+     *
+     * @param integer $item_id
+     * @return string
+     */
+    private function getItemDescription(int $item_id): string
+    {
+        if ($item_id == Defenses::defense_interplanetary_missile) {
+            return strtr(
+                $this->getLang()['res']['descriptions'][$item_id],
+                ['%s' => $this->formula->missileRange($this->user['research_impulse_drive'])]
+            );
+        }
+
+        return $this->getLang()['res']['descriptions'][$item_id];
     }
 
     /**

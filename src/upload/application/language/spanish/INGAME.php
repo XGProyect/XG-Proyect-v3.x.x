@@ -566,7 +566,7 @@ Cada nivel de esta tecnología aumenta el escudo efectivo en un 10% (basado en e
     407 => "La cúpula pequeña de protección cubre el planeta con un delgado campo protector que puede absorber inmensas cantidades de energía.",
     408 => "La cúpula grande de protección proviene de una tecnología de defensa mejorada que absorbe incluso más energía antes de colapsarse.",
     502 => "Los misiles antibalísticos destruyen los misiles interplanetarios.",
-    503 => "Los misiles interplanetarios destruyen los sistemas de defensa del enemigo.",
+    503 => "Los misiles interplanetarios destruyen los sistemas de defensa del enemigo. Tus misiles interplanetarios tienen actualmente un alcance de %s sistemas.",
     601 => 'El puesto de Comandante se ha establecido por si mismo en la guerra moderna. A causa del simplificado manejo de las estructuras, las instrucciones pueden procesarse más rápidamente. ¡Con él serás capaz de tener una visión general de tu imperio! Esto te permitirá desarrollar estructuras que te llevan a estar a la delantera de tu enemigo.',
     602 => 'El almirante de flota es un veterano de guerra experimentado y un habilidoso estratega. En las batallas más duras, es capaz de hacerse una idea de la situación y contactar a sus almirantes subordinados. Un emperador sabio puede confiar en su ayuda durante los combates y guiar más flotas al mismo tiempo.',
     603 => 'El Ingeniero es un especialista en gestión de energía. En tiempos de paz aumenta la energía de todas las colonias. En caso de ataque, garantiza el abastecimiento de energía a los cañones, evitando una posible sobrecarga, lo que conduce a una reducción de defensas perdidas en batalla.',
