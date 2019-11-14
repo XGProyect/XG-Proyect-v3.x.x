@@ -47,6 +47,9 @@ class Changelog extends Controller
         // load Model
         parent::loadModel('game/changelog');
 
+        // load Language
+        parent::loadLang('changelog');
+
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
@@ -77,7 +80,7 @@ class Changelog extends Controller
 
         parent::$page->display(
             $this->getTemplate()->set('game/changelog_view', array_merge(
-                $this->getLang(),
+                $this->langs->language,
                 ['list_of_changes' => $changes]
             ))
         );

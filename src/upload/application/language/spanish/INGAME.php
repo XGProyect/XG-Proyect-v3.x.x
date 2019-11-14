@@ -87,10 +87,6 @@ $lang = [
     'missiles' => 'Misiles',
     'defenses' => 'Defensa',
 
-    // changelog
-    'ch_version' => 'Versión',
-    'ch_description' => 'Descripción',
-
     // system
     'sys_building_queue_build_order' => 'Orden de construcción',
     'sys_building_queue_destroy_order' => 'Orden de destrucción',
