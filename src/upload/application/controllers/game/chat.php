@@ -17,9 +17,6 @@ use application\core\Controller;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
 
-use const JS_PATH;
-use const MODULE_ID;
-
 /**
  * Chat Class
  *
@@ -50,7 +47,7 @@ class Chat extends Controller
 
     /**
      * Private message data
-     * 
+     *
      * @var array
      */
     private $_message_data = [];
@@ -68,6 +65,9 @@ class Chat extends Controller
         // load Model
         parent::loadModel('game/messages');
 
+        // load Language
+        parent::loadLang('chat');
+
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
@@ -83,13 +83,13 @@ class Chat extends Controller
 
     /**
      * Run an action
-     * 
+     *
      * @return void
      */
     private function runAction()
     {
-        $write_to       = filter_input(INPUT_GET, 'playerId', FILTER_VALIDATE_INT);
-        $message_sent   = filter_input_array(INPUT_POST);
+        $write_to = filter_input(INPUT_GET, 'playerId', FILTER_VALIDATE_INT);
+        $message_sent = filter_input_array(INPUT_POST);
 
         if ($write_to) {
             $this->_receiver_data = $this->Messages_Model->getHomePlanet($write_to);
@@ -100,34 +100,30 @@ class Chat extends Controller
         }
 
         $this->_message_data['error_block'] = false;
-        $this->_message_data['error_text']  = $this->getLang()['mg_msg_sended'];
+        $this->_message_data['error_text'] = $this->langs->line('pm_msg_sended');
         $this->_message_data['error_color'] = '#00FF00';
-        $this->_message_data['subject']     = $message_sent['subject'];
-        $this->_message_data['text']        = $message_sent['text'];
+        $this->_message_data['subject'] = $message_sent['subject'];
+        $this->_message_data['text'] = $message_sent['text'];
 
         if ($message_sent) {
-
             $errors = 0;
             $this->_message_data['error_block'] = true;
 
             if (!$message_sent['subject']) {
-
                 $errors++;
-                $this->_message_data['error_text']  = $this->getLang()['mg_no_subject'];
+                $this->_message_data['error_text'] = $this->langs->line('pm_no_subject');
                 $this->_message_data['error_color'] = '#FF0000';
             }
 
             if (!$message_sent['text']) {
-
                 $errors++;
-                $this->_message_data['error_text']  = $this->getLang()['mg_no_text'];
+                $this->_message_data['error_text'] = $this->langs->line('pm_no_text');
                 $this->_message_data['error_color'] = '#FF0000';
             }
 
             if ($errors == 0) {
-
                 $this->_message_data['subject'] = '';
-                $this->_message_data['text']    = '';
+                $this->_message_data['text'] = '';
 
                 FunctionsLib::sendMessage(
                     $write_to,
@@ -146,7 +142,7 @@ class Chat extends Controller
 
     /**
      * Build the page
-     * 
+     *
      * @return void
      */
     private function buildPage()
@@ -155,22 +151,22 @@ class Chat extends Controller
             $this->getTemplate()->set(
                 'game/chat_view',
                 array_merge(
-                    $this->getLang(),
+                    $this->langs->language,
                     [
-                        'id'                => $this->_receiver_data['user_id'],
-                        'to'                => $this->_receiver_data['user_name'] . ' ' . FormatLib::prettyCoords(
+                        'id' => $this->_receiver_data['user_id'],
+                        'to' => $this->_receiver_data['user_name'] . ' ' . FormatLib::prettyCoords(
                             $this->_receiver_data['planet_galaxy'], $this->_receiver_data['planet_system'], $this->_receiver_data['planet_planet']
                         ),
-                        'subject'           => ((!isset($this->_message_data['subject']) ) ? $this->getLang()['mg_no_subject'] : $this->_message_data['subject']),
-                        'text'              => ((!isset($this->_message_data['text']) ) ? '' : $this->_message_data['text']),
-                        'error_text'        => ((!isset($this->_message_data['error_text']) ) ? '' : $this->_message_data['error_text']),
-                        'status_message'    => (!$this->_message_data['error_block'] ? [] : ''),
-                        '/status_message'   => (!$this->_message_data['error_block'] ? [] : ''),
-                        'error_color'       => ((!isset($this->_message_data['error_color']) ) ? '' : $this->_message_data['error_color']),
-                        'js_path'           => JS_PATH
+                        'subject' => ((!isset($this->_message_data['subject'])) ? $this->langs->line('pm_no_subject') : $this->_message_data['subject']),
+                        'text' => ((!isset($this->_message_data['text'])) ? '' : $this->_message_data['text']),
+                        'error_text' => ((!isset($this->_message_data['error_text'])) ? '' : $this->_message_data['error_text']),
+                        'status_message' => (!$this->_message_data['error_block'] ? [] : ''),
+                        '/status_message' => (!$this->_message_data['error_block'] ? [] : ''),
+                        'error_color' => ((!isset($this->_message_data['error_color'])) ? '' : $this->_message_data['error_color']),
+                        'js_path' => JS_PATH
                     ]
                 )
-            ) 
+            )
         );
     }
 }

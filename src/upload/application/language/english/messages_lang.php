@@ -27,14 +27,7 @@ $lang = [
     'mg_delete_all_shown' => 'Delete all shown messages',
     'mg_delete_all' => 'Delete all messages',
     'mg_confirm_action' => 'ok',
-    'mg_no_text' => 'Message missing',
-    'mg_msg_sended' => 'Message sent',
-    'mg_no_subject' => 'No subject',
-    'mg_to' => 'To',
     'mg_send_message' => 'Send message',
-    'mg_message' => 'Message',
-    'mg_chars' => 'characters',
-    'mg_send' => 'Send',
 ];
 
 /* end of messages_lang.php */

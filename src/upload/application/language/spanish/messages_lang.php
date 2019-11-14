@@ -27,14 +27,7 @@ $lang = [
     'mg_delete_all_shown' => 'Borrar todos los mensajes mostrados',
     'mg_delete_all' => 'Borrar todos los mensajes',
     'mg_confirm_action' => 'ok',
-    'mg_no_text' => 'Falta el mensaje',
-    'mg_msg_sended' => 'Mensaje enviado',
-    'mg_no_subject' => 'Sin asunto',
-    'mg_to' => 'Destinatario',
     'mg_send_message' => 'Enviar mensaje',
-    'mg_message' => 'Mensaje',
-    'mg_chars' => 'caracteres',
-    'mg_send' => 'Enviar',
 ];
 
 /* end of messages_lang.php */
