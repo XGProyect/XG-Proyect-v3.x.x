@@ -90,7 +90,7 @@ class Galaxy extends Controller
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
         // set data
-        $this->_user = $this->getUserData();
+        $this->user = $this->getUserData();
         $this->planet = $this->getPlanetData();
 
         $this->_db = new Database();
@@ -200,6 +200,7 @@ class Galaxy extends Controller
                 array_merge(
                     $this->langs->language,
                     [
+                        'js_path' => JS_PATH,
                         'list_of_positions' => $this->buildPositionsList(),
                         'planet_count' => $this->planet_count,
                     ],
