@@ -164,8 +164,6 @@ class Fleet4 extends Controller
 
         // set data
         $this->_user = $this->getUserData();
-
-        // set planet data
         $this->_planet = $this->getPlanetData();
 
         // init a new fleets object
