@@ -1038,30 +1038,3 @@ $lang['fa_not_attack_yourself'] = 'Error, can not attack yourself';
 $lang['fa_action_not_allowed'] = 'Error, action not permitted';
 $lang['fa_vacation_mode_current'] = 'Error, you are in vacation mode';
 $lang['fa_sending'] = 'Sending';
-
-//----------------------------------------------------------------------------//
-// MissilesAjax.php
-$lang['ma_silo_level'] = 'You must be at least level 4 silo';
-$lang['ma_impulse_drive_required'] = 'You must investigate the Impulse Drive.';
-$lang['ma_not_send_other_galaxy'] = 'You can not send missiles to another galaxy.';
-$lang['ma_planet_doesnt_exists'] = 'The objective world does not exist.';
-$lang['ma_cant_send'] = 'You can not send ';
-$lang['ma_missile'] = ' missiles, have only ';
-$lang['ma_wrong_target'] = 'Wrong Target';
-$lang['ma_no_missiles'] = 'There are no available Interplanetary Missile';
-$lang['ma_add_missile_number'] = 'Enter the number of missiles that you want to send';
-$lang['ma_misil_launcher'] = 'Rocket Launcher';
-$lang['ma_small_laser'] = 'Light Laser';
-$lang['ma_big_laser'] = 'Heavy Laser';
-$lang['ma_gauss_canyon'] = 'Gauss Cannon';
-$lang['ma_ionic_canyon'] = 'Ion Cannon';
-$lang['ma_buster_canyon'] = 'Plasma Turret';
-$lang['ma_small_protection_shield'] = 'Small Shield Dome';
-$lang['ma_big_protection_shield'] = 'Large Shield Dome';
-$lang['ma_all'] = 'All';
-$lang['ma_missiles_sended'] = ' interplanetary missiles were sent. Main objective: ';
-$lang["ma_all_destroyed"] = 'All interplanetary missiles has been destoyed by interceptor missiles.';
-$lang['ma_planet_without_defens'] = 'Planet without dedenses';
-$lang['ma_some_destroyed'] = ' has been destroyed by interceptor missiles.';
-$lang['ma_missile_attack'] = "";
-$lang['ma_missile_string'] = 'Missiles attack (%1%) from %2% arrive to planet %3% <br><br>';

@@ -1051,6 +1051,11 @@ $lang['sys_destruc_none'] = ". Las estrellas de la muerte no generan el poder ne
 $lang['sys_the'] = " el ";
 $lang['sys_stay_mess_back'] = "Una de sus flotas vuelve de ";
 $lang['sys_stay_mess_bend'] = " y entrega su mercancía ";
+$lang['sys_missile_attack'] = 'Ataque con misiles';
+$lang['sys_all_destroyed'] = 'Todos los misiles interplanetarios han sido destruidos por los misiles de intercepción.';
+$lang['sys_planet_without_defenses'] = 'Planeta sin defensa.';
+$lang['sys_some_destroyed'] = ' han sido destruidos por los misiles de intercepción.';
+$lang['sys_missile_string'] = 'Un ataque con misiles (%1%) de %2% llega al planeta %3% <br><br>';
 
 //----------------------------------------------------------------------------//
 //class.CheckSession.php
@@ -1107,30 +1112,4 @@ $lang['cr_armor'] = 'Blindaje';
 $lang['cr_destroyed'] = '¡Destruida!';
 $lang['cr_no_access'] = '¡El reporte solicitado no existe!';
 
-//----------------------------------------------------------------------------//
-// MissilesAjax.php
-$lang['ma_silo_level'] = 'Debes tener al menos silo al nivel 4';
-$lang['ma_impulse_drive_required'] = 'Debes investigar el Motor de Impulso.';
-$lang['ma_not_send_other_galaxy'] = 'No puedes enviar misiles a otra galaxia.';
-$lang['ma_planet_doesnt_exists'] = 'El planeta objetivo no existe.';
-$lang['ma_cant_send'] = 'No puedes enviar ';
-$lang['ma_missile'] = ' misiles, sólo dispones de ';
-$lang['ma_wrong_target'] = 'Objetivo Incorrecto';
-$lang['ma_no_missiles'] = 'No hay misiles interplanetarios disponibles';
-$lang['ma_add_missile_number'] = 'Ingresar el número de misiles que deseas enviar';
-$lang['ma_misil_launcher'] = 'Lanzamisiles';
-$lang['ma_small_laser'] = 'Láser pequeño';
-$lang['ma_big_laser'] = 'Láser grande';
-$lang['ma_gauss_canyon'] = 'Cañón Gauss';
-$lang['ma_ionic_canyon'] = 'Cañón iónico';
-$lang['ma_buster_canyon'] = 'Cañón de plasma';
-$lang['ma_small_protection_shield'] = 'Cúpula pequeña de protección';
-$lang['ma_big_protection_shield'] = 'Cúpula grande de protección';
-$lang['ma_all'] = 'Todo';
-$lang['ma_missiles_sended'] = ' misiles interplanetarios se enviaron. objetivo principal: ';
-$lang['ma_all_destroyed'] = 'Todos los misiles interplanetarios han sido destruidos por los misiles de intercepción.';
-$lang['ma_planet_without_defens'] = 'Planeta sin defensa.';
-$lang['ma_some_destroyed'] = ' han sido destruidos por los misiles de intercepción.';
-$lang['ma_missile_attack'] = "";
-$lang['ma_missile_string'] = 'Un ataque con misiles (%1%) de %2% llega al planeta %3% <br><br>';
 /* end of INGAME.php */

@@ -74,7 +74,7 @@ class Galaxy extends Controller
         parent::loadModel('game/galaxy');
 
         // load Language
-        parent::loadLang(['global', 'galaxy']);
+        parent::loadLang(['global', 'defenses', 'galaxy']);
 
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
@@ -152,7 +152,7 @@ class Galaxy extends Controller
                 $this->reduce_deuterium();
             }
         } elseif ($mode == 2 && $this->_current_planet['defense_interplanetary_missile'] < 1) {
-            die(FunctionsLib::message($this->langs->line('ma_no_missiles'), "game.php?page=galaxy&mode=0", 2));
+            die(FunctionsLib::message($this->langs->line('gl_no_missiles'), "game.php?page=galaxy&mode=0", 2));
         }
         // END FIX BY alivan
 
@@ -374,42 +374,42 @@ class Galaxy extends Controller
         $errors = 0;
 
         if ($this->_current_planet['building_missile_silo'] < 4) {
-            $error .= $this->langs->line('ma_silo_level') . '<br>';
+            $error .= $this->langs->line('gl_silo_level') . '<br>';
             $errors++;
         }
 
         if ($this->_current_user['research_impulse_drive'] == 0) {
-            $error .= $this->langs->line('ma_impulse_drive_required') . '<br>';
+            $error .= $this->langs->line('gl_impulse_drive_required') . '<br>';
             $errors++;
         }
 
         if ($tempvar1 >= $tempvar2 || $g != $this->_current_planet['planet_galaxy']) {
-            $error .= $this->langs->line('ma_not_send_other_galaxy') . '<br>';
+            $error .= $this->langs->line('gl_not_send_other_galaxy') . '<br>';
             $errors++;
         }
 
         if (!$tempvar3) {
-            $error .= $this->langs->line('ma_planet_doesnt_exists') . '<br>';
+            $error .= $this->langs->line('gl_planet_doesnt_exists') . '<br>';
             $errors++;
         }
 
         if ($anz > $missiles) {
-            $error .= $this->langs->line('ma_cant_send') . $anz . $this->langs->line('ma_missile') . $missiles . '<br>';
+            $error .= $this->langs->line('gl_cant_send') . $anz . $this->langs->line('gl_missile') . $missiles . '<br>';
             $errors++;
         }
 
         if (((!is_numeric($target) && $target != "all") or ($target < 0 or $target > 8))) {
-            $error .= $this->langs->line('ma_wrong_target') . '<br>';
+            $error .= $this->langs->line('gl_wrong_target') . '<br>';
             $errors++;
         }
 
         if ($missiles == 0) {
-            $error .= $this->langs->line('ma_no_missiles') . '<br>';
+            $error .= $this->langs->line('gl_no_missiles') . '<br>';
             $errors++;
         }
 
         if ($anz == 0) {
-            $error .= $this->langs->line('ma_add_missile_number') . '<br>';
+            $error .= $this->langs->line('gl_add_missile_number') . '<br>';
             $errors++;
         }
 
@@ -436,47 +436,51 @@ class Galaxy extends Controller
         $flugzeit = round(((30 + (60 * $tempvar1)) * 2500) / FunctionsLib::readConfig('fleet_speed'));
 
         $DefenseLabel = array(
-            0 => $this->langs->line('tech')[401],
-            1 => $this->langs->line('tech')[402],
-            2 => $this->langs->line('tech')[403],
-            3 => $this->langs->line('tech')[404],
-            4 => $this->langs->line('tech')[405],
-            5 => $this->langs->line('tech')[406],
-            6 => $this->langs->line('tech')[407],
-            7 => $this->langs->line('tech')[408],
-            'all' => $this->langs->line('ma_all'),
+            0 => $this->langs->line('gl_all_defenses'),
+            1 => $this->langs->line('defense_rocket_launcher'),
+            2 => $this->langs->line('defense_light_laser'),
+            3 => $this->langs->line('defense_heavy_laser'),
+            4 => $this->langs->line('defense_gauss_cannon'),
+            5 => $this->langs->line('defense_ion_cannon'),
+            6 => $this->langs->line('defense_plasma_turret'),
+            7 => $this->langs->line('defense_small_shield_dome'),
+            8 => $this->langs->line('defense_large_shield_dome'),
         );
 
-        $this->_db->query("INSERT INTO " . FLEETS . " SET
-								fleet_owner = " . $this->_current_user['user_id'] . ",
-								fleet_mission = 10,
-								fleet_amount = " . $anz . ",
-								fleet_array = '" . FleetsLib::setFleetShipsArray([503 => $anz]) . "',
-								fleet_start_time = '" . (time() + $flugzeit) . "',
-								fleet_start_galaxy = '" . $this->_current_planet['planet_galaxy'] . "',
-								fleet_start_system = '" . $this->_current_planet['planet_system'] . "',
-								fleet_start_planet ='" . $this->_current_planet['planet_planet'] . "',
-								fleet_start_type = 1,
-								fleet_end_time = '" . (time() + $flugzeit + 1) . "',
-								fleet_end_stay = 0,
-								fleet_end_galaxy = '" . $g . "',
-								fleet_end_system = '" . $s . "',
-								fleet_end_planet = '" . $i . "',
-								fleet_end_type = 1,
-								fleet_target_obj = '" . $target . "',
-								fleet_resource_metal = 0,
-								fleet_resource_crystal = 0,
-								fleet_resource_deuterium = 0,
-								fleet_target_owner = '" . $ziel_id . "',
-								fleet_group = 0,
-								fleet_mess = 0,
-								fleet_creation = " . time() . ";");
+        $this->_db->query(
+            "INSERT INTO `" . FLEETS . "` SET
+            `fleet_owner` = '" . $this->_current_user['user_id'] . "',
+            `fleet_mission` = '10',
+            `fleet_amount` = " . $anz . ",
+            `fleet_array` = '" . FleetsLib::setFleetShipsArray([503 => $anz]) . "',
+            `fleet_start_time` = '" . (time() + $flugzeit) . "',
+            `fleet_start_galaxy` = '" . $this->_current_planet['planet_galaxy'] . "',
+            `fleet_start_system` = '" . $this->_current_planet['planet_system'] . "',
+            `fleet_start_planet` ='" . $this->_current_planet['planet_planet'] . "',
+            `fleet_start_type` = '1',
+            `fleet_end_time` = '" . (time() + $flugzeit + 1) . "',
+            `fleet_end_stay` = '0',
+            `fleet_end_galaxy` = '" . $g . "',
+            `fleet_end_system` = '" . $s . "',
+            `fleet_end_planet` = '" . $i . "',
+            `fleet_end_type` = '1',
+            `fleet_target_obj` = '" . $target . "',
+            `fleet_resource_metal` = '0',
+            `fleet_resource_crystal` = '0',
+            `fleet_resource_deuterium` = '0',
+            `fleet_target_owner` = '" . $ziel_id . "',
+            `fleet_group` = '0',
+            `fleet_mess` = '0',
+            `fleet_creation` = '" . time() . "';"
+        );
 
-        $this->_db->query("UPDATE " . DEFENSES . " SET
-								defense_interplanetary_missile = defense_interplanetary_missile - " . $anz . "
-								WHERE defense_planet_id =  '" . $this->_current_user['user_current_planet'] . "'");
+        $this->_db->query(
+            "UPDATE `" . DEFENSES . "` SET
+            `defense_interplanetary_missile` = `defense_interplanetary_missile` - " . $anz . "
+            WHERE `defense_planet_id` =  '" . $this->_current_user['user_current_planet'] . "'"
+        );
 
-        FunctionsLib::message("<b>" . $anz . "</b>" . $this->langs->line('ma_missiles_sended') . $DefenseLabel[$target], "game.php?page=overview", 3);
+        FunctionsLib::message("<b>" . $anz . "</b>" . $this->langs->line('gl_missiles_sended') . $DefenseLabel[$target], "game.php?page=overview", 3);
     }
 
     /**

@@ -75,6 +75,17 @@ $lang = [
     'gl_ship' => 'ship',
     'gl_ships' => 's',
     'gl_to' => 'to',
+    // lines below will be probably moved to a new controller that handles missiles launch
+    'gl_silo_level' => 'You must be at least level 4 silo',
+    'gl_impulse_drive_required' => 'You must investigate the Impulse Drive.',
+    'gl_not_send_other_galaxy' => 'You can not send missiles to another galaxy.',
+    'gl_planet_doesnt_exists' => 'The objective world does not exist.',
+    'gl_cant_send' => 'You can not send ',
+    'gl_missile' => ' missiles, have only ',
+    'gl_wrong_target' => 'Wrong Target',
+    'gl_no_missiles' => 'There are no available Interplanetary Missile',
+    'gl_add_missile_number' => 'Enter the number of missiles that you want to send',
+    'gl_missiles_sended' => ' interplanetary missiles were sent. Main objective: ',
 ];
 
 /* end of galaxy_lang.php */

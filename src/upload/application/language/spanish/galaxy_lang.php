@@ -75,6 +75,17 @@ $lang = [
     'gl_ship' => 'nave',
     'gl_ships' => 's',
     'gl_to' => 'a',
+    // lines below will be probably moved to a new controller that handles missiles launch
+    'gl_silo_level' => 'Debes tener al menos silo al nivel 4',
+    'gl_impulse_drive_required' => 'Debes investigar el Motor de Impulso.',
+    'gl_not_send_other_galaxy' => 'No puedes enviar misiles a otra galaxia.',
+    'gl_planet_doesnt_exists' => 'El planeta objetivo no existe.',
+    'gl_cant_send' => 'No puedes enviar ',
+    'gl_missile' => ' misiles, sólo dispones de ',
+    'gl_wrong_target' => 'Objetivo Incorrecto',
+    'gl_no_missiles' => 'No hay misiles interplanetarios disponibles',
+    'gl_add_missile_number' => 'Ingresar el número de misiles que deseas enviar',
+    'gl_missiles_sended' => ' misiles interplanetarios se enviaron. objetivo principal: ',
 ];
 
 /* end of galaxy_lang.php */
