@@ -39,6 +39,18 @@ class Galaxy extends Controller
     const MODULE_ID = 11;
 
     /**
+     *
+     * @var array
+     */
+    private $user;
+
+    /**
+     *
+     * @var array
+     */
+    private $planet;
+
+    /**
      * Contains the galaxy data
      *
      * @var array
@@ -52,8 +64,6 @@ class Galaxy extends Controller
      */
     private $planet_count = 0;
 
-    private $_current_user;
-    private $_current_planet;
     private $_galaxy;
     private $_system;
     private $_formula;
@@ -79,9 +89,11 @@ class Galaxy extends Controller
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
+        // set data
+        $this->_user = $this->getUserData();
+        $this->planet = $this->getPlanetData();
+
         $this->_db = new Database();
-        $this->_current_user = parent::$users->getUserData();
-        $this->_current_planet = parent::$users->getPlanetData();
         $this->_resource = parent::$objects->getObjects();
         $this->_pricelist = parent::$objects->getPrice();
         $this->_reslist = parent::$objects->getObjectsList();
@@ -89,7 +101,7 @@ class Galaxy extends Controller
         $this->_noob = FunctionsLib::loadLibrary('NoobsProtectionLib');
         $this->_galaxyLib = FunctionsLib::loadLibrary('GalaxyLib');
 
-        if ($this->_current_user['preference_vacation_mode'] > 0) {
+        if ($this->user['preference_vacation_mode'] > 0) {
             FunctionsLib::message($this->langs->line('gl_no_access_vm_on'), '', '');
         }
 
@@ -97,10 +109,26 @@ class Galaxy extends Controller
         //$this->setUpPreferences();
 
         // time to do something
-        //$this->runAction();
+        $this->runAction();
 
         // build the page
         $this->buildPage();
+    }
+
+    /**
+     * Run an action
+     *
+     * @return void
+     */
+    private function runAction()
+    {
+        if (isset($_GET['fleet']) && $_GET['fleet'] == 'true') {
+            $this->sendFleet();
+        }
+
+        if (isset($_GET['missiles']) && $_GET['missiles'] == 'true') {
+            $this->sendMissiles();
+        }
     }
 
     /**
@@ -110,22 +138,14 @@ class Galaxy extends Controller
      */
     private function buildPage(): void
     {
-        if (isset($_GET['fleet']) && $_GET['fleet'] == 'true') {
-            $this->send_fleet();
-        }
-
-        if (isset($_GET['missiles']) && $_GET['missiles'] == 'true') {
-            $this->send_missiles();
-        }
-
-        $fleetmax = FleetsLib::getMaxFleets($this->_current_user['research_computer_technology'], $this->_current_user['premium_officier_admiral']);
-        $CurrentPlID = $this->_current_planet['planet_id'];
-        $CurrentSP = $this->_current_planet['ship_espionage_probe'];
+        $fleetmax = FleetsLib::getMaxFleets($this->user['research_computer_technology'], $this->user['premium_officier_admiral']);
+        $CurrentPlID = $this->planet['planet_id'];
+        $CurrentSP = $this->planet['ship_espionage_probe'];
 
         $maxfleet = $this->_db->query(
             "SELECT `fleet_id`
             FROM " . FLEETS . "
-            WHERE `fleet_owner` = '" . intval($this->_current_user['user_id']) . "';"
+            WHERE `fleet_owner` = '" . intval($this->user['user_id']) . "';"
         );
 
         $maxfleet_count = $this->_db->numRows($maxfleet);
@@ -138,7 +158,7 @@ class Galaxy extends Controller
             }
         }
 
-        $setted_position = $this->validate_position($mode);
+        $setted_position = $this->validatePosition($mode);
         $this->_galaxy = $setted_position['galaxy'];
         $this->_system = $setted_position['system'];
         $planet = $setted_position['planet'];
@@ -146,34 +166,32 @@ class Galaxy extends Controller
 
         // START FIX BY alivan
         if ($mode != 2) {
-            if (($this->_current_planet['planet_system'] != ($psystem - 1)) && ($this->_current_planet['planet_system'] != isset($_GET['system']) or $this->_current_planet['planet_galaxy'] != isset($_GET['galaxy'])) && ($mode != 0) && ($this->_current_planet['planet_deuterium'] < 10)) {
+            if (($this->planet['planet_system'] != ($psystem - 1)) && ($this->planet['planet_system'] != isset($_GET['system']) or $this->planet['planet_galaxy'] != isset($_GET['galaxy'])) && ($mode != 0) && ($this->planet['planet_deuterium'] < 10)) {
                 die(FunctionsLib::message($this->langs->line('gl_no_deuterium_to_view_galaxy'), "game.php?page=galaxy&mode=0", 2));
-            } elseif (($this->_current_planet['planet_system'] != ($psystem - 1)) && ($this->_current_planet['planet_system'] != isset($_GET['system']) or $this->_current_planet['planet_galaxy'] != isset($_GET['galaxy'])) && ($mode != 0)) {
-                $this->reduce_deuterium();
+            } elseif (($this->planet['planet_system'] != ($psystem - 1)) && ($this->planet['planet_system'] != isset($_GET['system']) or $this->planet['planet_galaxy'] != isset($_GET['galaxy'])) && ($mode != 0)) {
+                $this->reduceDeuterium();
             }
-        } elseif ($mode == 2 && $this->_current_planet['defense_interplanetary_missile'] < 1) {
+        } elseif ($mode == 2 && $this->planet['defense_interplanetary_missile'] < 1) {
             die(FunctionsLib::message($this->langs->line('gl_no_missiles'), "game.php?page=galaxy&mode=0", 2));
         }
         // END FIX BY alivan
 
         $this->galaxy = $this->Galaxy_Model->getGalaxyDataByGalaxyAndSystem($this->_galaxy, $this->_system);
 
-        $parse = $this->langs->language;
-        $parse['js_path'] = JS_PATH;
         $parse['galaxy'] = $this->_galaxy;
         $parse['system'] = $this->_system;
         $parse['planet'] = $planet;
-        $parse['currentmip'] = $this->_current_planet['defense_interplanetary_missile'];
+        $parse['currentmip'] = $this->planet['defense_interplanetary_missile'];
         $parse['maxfleetcount'] = $maxfleet_count;
         $parse['fleetmax'] = $fleetmax;
-        $parse['recyclers'] = FormatLib::prettyNumber($this->_current_planet['ship_recycler']);
+        $parse['recyclers'] = FormatLib::prettyNumber($this->planet['ship_recycler']);
         $parse['spyprobes'] = FormatLib::prettyNumber($CurrentSP);
-        $parse['missile_count'] = sprintf($this->langs->line('gl_missil_to_launch'), $this->_current_planet['defense_interplanetary_missile']);
+        $parse['missile_count'] = sprintf($this->langs->line('gl_missil_to_launch'), $this->planet['defense_interplanetary_missile']);
         $parse['current'] = isset($_GET['current']) ? $_GET['current'] : null;
-        $parse['current_galaxy'] = $this->_current_planet['planet_galaxy'];
-        $parse['current_system'] = $this->_current_planet['planet_system'];
-        $parse['current_planet'] = $this->_current_planet['planet_planet'];
-        $parse['planet_type'] = $this->_current_planet['planet_type'];
+        $parse['current_galaxy'] = $this->planet['planet_galaxy'];
+        $parse['current_system'] = $this->planet['planet_system'];
+        $parse['current_planet'] = $this->planet['planet_planet'];
+        $parse['planet_type'] = $this->planet['planet_type'];
         $parse['mip'] = ($mode == 2) ? parent::$page->parseTemplate(parent::$page->getTemplate('galaxy/galaxy_missile_selector'), $parse) : " ";
 
         parent::$page->display(
@@ -200,19 +218,21 @@ class Galaxy extends Controller
     {
         $list_of_positions = [];
         $galaxy_row = new $this->_galaxyLib(
-            $this->_current_user,
-            $this->_current_planet,
+            $this->user,
+            $this->planet,
             $this->_galaxy,
             $this->_system,
             $this->langs->language
         );
 
+        // set the current planets
         foreach ($this->galaxy as $planet) {
             $this->planet_count++;
 
             $list_of_positions[$planet['planet_planet']] = $galaxy_row->buildRow($planet, $planet['planet_planet']);
         }
 
+        // fill the empty positions
         for ($i = 1; $i <= MAX_PLANET_IN_SYSTEM; $i++) {
             if (!isset($list_of_positions[$i])) {
                 $list_of_positions[$i] = [
@@ -238,7 +258,7 @@ class Galaxy extends Controller
      * param $mode
      * return validates the position setted by the user
      */
-    private function validate_position($mode)
+    private function validatePosition($mode)
     {
         $return['galaxy'] = '';
         $return['system'] = '';
@@ -247,11 +267,10 @@ class Galaxy extends Controller
 
         switch ($mode) {
             case 0:
-                $galaxy = $this->_current_planet['planet_galaxy'];
-                $system = $this->_current_planet['planet_system'];
-                $planet = $this->_current_planet['planet_planet'];
+                $galaxy = $this->planet['planet_galaxy'];
+                $system = $this->planet['planet_system'];
+                $planet = $this->planet['planet_planet'];
                 break;
-
             case 1:
                 // ONLY NUMBERS
                 $_POST['galaxy'] = (isset($_POST['galaxy']) && intval($_POST['galaxy'])) ? preg_replace("[^0-9]", "", $_POST['galaxy']) : 1;
@@ -309,21 +328,17 @@ class Galaxy extends Controller
                 } else {
                     $system = $_POST['system'];
                 }
-
                 break;
-
             case 2:
                 $galaxy = intval($_GET['galaxy']);
                 $system = intval($_GET['system']);
                 $planet = intval($_GET['planet']);
                 break;
-
             case 3:
                 $galaxy = intval($_GET['galaxy']);
                 $system = intval($_GET['system']);
                 break;
-
-            default;
+            default:
                 $galaxy = 1;
                 $system = 1;
                 break;
@@ -342,7 +357,7 @@ class Galaxy extends Controller
      * param
      * return send missiles routine
      */
-    private function send_missiles()
+    private function sendMissiles()
     {
         $g = intval($_GET['galaxy']);
         $s = intval($_GET['system']);
@@ -350,9 +365,9 @@ class Galaxy extends Controller
         $anz = ($_POST['SendMI'] < 0) ? 0 : intval($_POST['SendMI']);
         $target = $_POST['Target'];
 
-        $missiles = $this->_current_planet['defense_interplanetary_missile'];
-        $tempvar1 = abs($s - $this->_current_planet['planet_system']);
-        $tempvar2 = $this->_formula->missileRange($this->_current_user['research_impulse_drive']);
+        $missiles = $this->planet['defense_interplanetary_missile'];
+        $tempvar1 = abs($s - $this->planet['planet_system']);
+        $tempvar2 = $this->_formula->missileRange($this->user['research_impulse_drive']);
 
         $tempvar3 = $this->_db->queryFetch(
             "SELECT u.`user_id`,u.`user_onlinetime`,pr.`preference_vacation_mode`
@@ -366,24 +381,24 @@ class Galaxy extends Controller
                 planet_type = 1 LIMIT 1) LIMIT 1"
         );
 
-        $user_points = $this->_noob->returnPoints($this->_current_user['user_id'], $tempvar3['user_id']);
+        $user_points = $this->_noob->returnPoints($this->user['user_id'], $tempvar3['user_id']);
         $MyGameLevel = $user_points['user_points'];
         $HeGameLevel = $user_points['target_points'];
 
         $error = '';
         $errors = 0;
 
-        if ($this->_current_planet['building_missile_silo'] < 4) {
+        if ($this->planet['building_missile_silo'] < 4) {
             $error .= $this->langs->line('gl_silo_level') . '<br>';
             $errors++;
         }
 
-        if ($this->_current_user['research_impulse_drive'] == 0) {
+        if ($this->user['research_impulse_drive'] == 0) {
             $error .= $this->langs->line('gl_impulse_drive_required') . '<br>';
             $errors++;
         }
 
-        if ($tempvar1 >= $tempvar2 || $g != $this->_current_planet['planet_galaxy']) {
+        if ($tempvar1 >= $tempvar2 || $g != $this->planet['planet_galaxy']) {
             $error .= $this->langs->line('gl_not_send_other_galaxy') . '<br>';
             $errors++;
         }
@@ -449,14 +464,14 @@ class Galaxy extends Controller
 
         $this->_db->query(
             "INSERT INTO `" . FLEETS . "` SET
-            `fleet_owner` = '" . $this->_current_user['user_id'] . "',
+            `fleet_owner` = '" . $this->user['user_id'] . "',
             `fleet_mission` = '10',
             `fleet_amount` = " . $anz . ",
             `fleet_array` = '" . FleetsLib::setFleetShipsArray([503 => $anz]) . "',
             `fleet_start_time` = '" . (time() + $flugzeit) . "',
-            `fleet_start_galaxy` = '" . $this->_current_planet['planet_galaxy'] . "',
-            `fleet_start_system` = '" . $this->_current_planet['planet_system'] . "',
-            `fleet_start_planet` ='" . $this->_current_planet['planet_planet'] . "',
+            `fleet_start_galaxy` = '" . $this->planet['planet_galaxy'] . "',
+            `fleet_start_system` = '" . $this->planet['planet_system'] . "',
+            `fleet_start_planet` ='" . $this->planet['planet_planet'] . "',
             `fleet_start_type` = '1',
             `fleet_end_time` = '" . (time() + $flugzeit + 1) . "',
             `fleet_end_stay` = '0',
@@ -477,7 +492,7 @@ class Galaxy extends Controller
         $this->_db->query(
             "UPDATE `" . DEFENSES . "` SET
             `defense_interplanetary_missile` = `defense_interplanetary_missile` - " . $anz . "
-            WHERE `defense_planet_id` =  '" . $this->_current_user['user_current_planet'] . "'"
+            WHERE `defense_planet_id` =  '" . $this->user['user_current_planet'] . "'"
         );
 
         FunctionsLib::message("<b>" . $anz . "</b>" . $this->langs->line('gl_missiles_sended') . $DefenseLabel[$target], "game.php?page=overview", 3);
@@ -488,13 +503,13 @@ class Galaxy extends Controller
      * param
      * return send fleet routine
      */
-    private function send_fleet()
+    private function sendFleet()
     {
-        $max_spy_probes = $this->_current_user['preference_spy_probes'];
-        $UserSpyProbes = $this->_current_planet['ship_espionage_probe'];
-        $UserRecycles = $this->_current_planet['ship_recycler'];
-        $UserDeuterium = $this->_current_planet['planet_deuterium'];
-        $UserMissiles = $this->_current_planet['defense_interplanetary_missile'];
+        $max_spy_probes = $this->user['preference_spy_probes'];
+        $UserSpyProbes = $this->planet['ship_espionage_probe'];
+        $UserRecycles = $this->planet['ship_recycler'];
+        $UserDeuterium = $this->planet['planet_deuterium'];
+        $UserMissiles = $this->planet['defense_interplanetary_missile'];
         $fleet = [];
         $speedalls = [];
         $PartialFleet = false;
@@ -508,12 +523,10 @@ class Galaxy extends Controller
             case 6:
                 $_POST['ship210'] = $_POST['shipcount'];
                 break;
-
             case 7:
                 $_POST['ship208'] = $_POST['shipcount'];
                 break;
-
-            case 8;
+            case 8:
                 $_POST['ship209'] = $_POST['shipcount'];
                 break;
         }
@@ -521,23 +534,19 @@ class Galaxy extends Controller
         $fleet['amount'] = 0;
 
         foreach ($this->_reslist['fleet'] as $ship_id) {
-
             $TName = "ship" . $ship_id;
             $ship_amount = isset($_POST[$TName]) ? (int) $_POST[$TName] : 0;
 
             if ($ship_id > 200 && $ship_id < 300 && $ship_amount > 0) {
-
-                if ($ship_amount > $this->_current_planet[$this->_resource[$ship_id]]) {
-
-                    $fleet['fleetarray'][$ship_id] = (int) $this->_current_planet[$this->_resource[$ship_id]];
-                    $fleet['fleetlist'] .= $ship_id . "," . $this->_current_planet[$this->_resource[$ship_id]] . ";";
-                    $fleet['amount'] += (int) $this->_current_planet[$this->_resource[$ship_id]];
-                    $PartialCount += (int) $this->_current_planet[$this->_resource[$ship_id]];
+                if ($ship_amount > $this->planet[$this->_resource[$ship_id]]) {
+                    $fleet['fleetarray'][$ship_id] = (int) $this->planet[$this->_resource[$ship_id]];
+                    $fleet['fleetlist'] .= $ship_id . "," . $this->planet[$this->_resource[$ship_id]] . ";";
+                    $fleet['amount'] += (int) $this->planet[$this->_resource[$ship_id]];
+                    $PartialCount += (int) $this->planet[$this->_resource[$ship_id]];
 
                     // we sent less that the amount requested
                     $PartialFleet = true;
                 } else {
-
                     $fleet['fleetarray'][$ship_id] = $ship_amount;
                     $fleet['fleetlist'] .= $ship_id . "," . $ship_amount . ";";
                     $fleet['amount'] += $ship_amount;
@@ -580,7 +589,7 @@ class Galaxy extends Controller
         $CurrentFlyingFleets = $this->_db->queryFetch(
             "SELECT COUNT(fleet_id) AS `Nbre`
             FROM " . FLEETS . "
-            WHERE `fleet_owner` = '" . $this->_current_user['user_id'] . "';"
+            WHERE `fleet_owner` = '" . $this->user['user_id'] . "';"
         );
 
         $CurrentFlyingFleets = $CurrentFlyingFleets['Nbre'];
@@ -595,7 +604,7 @@ class Galaxy extends Controller
         );
 
         if ($TargetRow == null) {
-            $TargetUser = $this->_current_user;
+            $TargetUser = $this->user;
         } elseif ($TargetRow['planet_user_id'] != '') {
             $TargetUser = $this->_db->queryFetch(
                 "SELECT u.`user_id`, u.`user_onlinetime`, u.`user_authlevel`, pr.`preference_vacation_mode`
@@ -621,12 +630,12 @@ class Galaxy extends Controller
             }
         }
 
-        $user_points = $this->_noob->returnPoints($this->_current_user['user_id'], $TargetUser['user_id']);
+        $user_points = $this->_noob->returnPoints($this->user['user_id'], $TargetUser['user_id']);
         $CurrentPoints = $user_points['user_points'];
         $TargetPoints = $user_points['target_points'];
         $TargetVacat = $TargetUser['preference_vacation_mode'];
 
-        if ((FleetsLib::getMaxFleets($this->_current_user[$this->_resource[108]], $this->_current_user['premium_officier_admiral'])) <= $CurrentFlyingFleets) {
+        if ((FleetsLib::getMaxFleets($this->user[$this->_resource[108]], $this->user['premium_officier_admiral'])) <= $CurrentFlyingFleets) {
             die("612 ");
         }
 
@@ -638,7 +647,7 @@ class Galaxy extends Controller
             die("601 ");
         }
 
-        if (($TargetVacat && $order != 8) or ($this->_current_user['preference_vacation_mode'] > 0)) {
+        if (($TargetVacat && $order != 8) or ($this->user['preference_vacation_mode'] > 0)) {
             die("605 ");
         }
 
@@ -656,12 +665,12 @@ class Galaxy extends Controller
             die("601 ");
         }
 
-        if (($TargetRow['planet_user_id'] == $this->_current_planet['planet_user_id']) && ($order == 6)) {
+        if (($TargetRow['planet_user_id'] == $this->planet['planet_user_id']) && ($order == 6)) {
             die("601 ");
         }
 
-        $Distance = FleetsLib::targetDistance($this->_current_planet['planet_galaxy'], $_POST['galaxy'], $this->_current_planet['planet_system'], $_POST['system'], $this->_current_planet['planet_planet'], $_POST['planet']);
-        $speedall = FleetsLib::fleetMaxSpeed($FleetArray, 0, $this->_current_user);
+        $Distance = FleetsLib::targetDistance($this->planet['planet_galaxy'], $_POST['galaxy'], $this->planet['planet_system'], $_POST['system'], $this->planet['planet_planet'], $_POST['planet']);
+        $speedall = FleetsLib::fleetMaxSpeed($FleetArray, 0, $this->user);
         $SpeedAllMin = min($speedall);
         $Duration = FleetsLib::missionDuration(10, $SpeedAllMin, $Distance, FunctionsLib::fleetSpeedFactor());
 
@@ -699,15 +708,15 @@ class Galaxy extends Controller
 
         $this->_db->query(
             "INSERT INTO " . FLEETS . " SET
-            `fleet_owner` = '" . $this->_current_user['user_id'] . "',
+            `fleet_owner` = '" . $this->user['user_id'] . "',
             `fleet_mission` = '" . intval($order) . "',
             `fleet_amount` = '" . $FleetShipCount . "',
             `fleet_array` = '" . FleetsLib::setFleetShipsArray($FleetDBArray) . "',
             `fleet_start_time` = '" . $fleet['start_time'] . "',
-            `fleet_start_galaxy` = '" . $this->_current_planet['planet_galaxy'] . "',
-            `fleet_start_system` = '" . $this->_current_planet['planet_system'] . "',
-            `fleet_start_planet` = '" . $this->_current_planet['planet_planet'] . "',
-            `fleet_start_type` = '" . $this->_current_planet['planet_type'] . "',
+            `fleet_start_galaxy` = '" . $this->planet['planet_galaxy'] . "',
+            `fleet_start_system` = '" . $this->planet['planet_system'] . "',
+            `fleet_start_planet` = '" . $this->planet['planet_planet'] . "',
+            `fleet_start_type` = '" . $this->planet['planet_type'] . "',
             `fleet_end_time` = '" . $fleet['end_time'] . "',
             `fleet_end_galaxy` = '" . intval($_POST['galaxy']) . "',
             `fleet_end_system` = '" . intval($_POST['system']) . "',
@@ -724,13 +733,13 @@ class Galaxy extends Controller
             INNER JOIN " . SHIPS . " AS s ON s.ship_planet_id = p.`planet_id` SET
             $FleetSubQRY
             p.`planet_deuterium` = '" . (($UserDeuterium < 1) ? 0 : $UserDeuterium) . "'
-            WHERE p.`planet_id` = '" . $this->_current_planet['planet_id'] . "';"
+            WHERE p.`planet_id` = '" . $this->planet['planet_id'] . "';"
         );
 
         $CurrentFlyingFleets++;
 
         foreach ($FleetArray as $Ships => $Count) {
-            if ($max_spy_probes > $this->_current_planet[$this->_resource[$Ships]]) {
+            if ($max_spy_probes > $this->planet[$this->_resource[$Ships]]) {
                 $ResultMessage = "610 " . $FleetShipCount;
             }
         }
@@ -747,12 +756,12 @@ class Galaxy extends Controller
      * param
      * return reduce deuterium exploring the galaxy
      */
-    private function reduce_deuterium()
+    private function reduceDeuterium()
     {
         $this->_db->query(
             "UPDATE " . PLANETS . " SET
             `planet_deuterium` = `planet_deuterium` -  10
-            WHERE `planet_id` = '" . $this->_current_planet['planet_id'] . "' LIMIT 1"
+            WHERE `planet_id` = '" . $this->planet['planet_id'] . "' LIMIT 1"
         );
     }
 }
