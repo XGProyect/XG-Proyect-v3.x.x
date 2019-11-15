@@ -33,26 +33,33 @@ use application\libraries\Timing_library as Timing;
  */
 class Alliance extends Controller
 {
-
+    /**
+     * The module ID
+     *
+     * @var int
+     */
     const MODULE_ID = 13;
 
     /**
+     * Contains a BBCodeLib object
      *
      * @var \BBCodeLib
      */
-    private $_bbcode = null;
+    private $bbcode = null;
 
     /**
+     * Current user data
      *
-     * @var type \Users_library
+     * @var array
      */
-    private $_user;
+    private $user;
 
     /**
+     * Contains an Alliance object
      *
      * @var \Alliance
      */
-    private $_alliance = null;
+    private $alliance = null;
 
     /**
      * Constructor
@@ -66,17 +73,20 @@ class Alliance extends Controller
         // check if session is active
         parent::$users->checkSession();
 
-        // load Model
-        parent::loadModel('game/alliance');
-
-        // load Library
-        $this->_bbcode = FunctionsLib::loadLibrary('BBCodeLib');
-
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
+        // load Model
+        parent::loadModel('game/alliance');
+
+        // load Language
+        parent::loadLang('alliance');
+
+        // load Library
+        $this->bbcode = FunctionsLib::loadLibrary('BBCodeLib');
+
         // set data
-        $this->_user = $this->getUserData();
+        $this->user = $this->getUserData();
 
         // init a new buddy object
         $this->setUpAlliances();
@@ -93,10 +103,10 @@ class Alliance extends Controller
      */
     private function setUpAlliances()
     {
-        $this->_alliance = new Alliances(
+        $this->alliance = new Alliances(
             $this->Alliance_Model->getAllianceDataById($this->getAllianceId()),
-            $this->_user['user_id'],
-            $this->_user['user_ally_rank_id']
+            $this->user['user_id'],
+            $this->user['user_ally_rank_id']
         );
     }
 
@@ -120,7 +130,8 @@ class Alliance extends Controller
         ];
 
         return in_array(
-            $this->getCurrentSection(), array_filter($allowed_pages[$this->getUserAccess()], function ($value) {
+            $this->getCurrentSection(),
+            array_filter($allowed_pages[$this->getUserAccess()], function ($value) {
                 return $value;
             })
         );
@@ -134,11 +145,9 @@ class Alliance extends Controller
     private function getUserAccess()
     {
         // not in an alliance
-        if ((int) $this->_user['user_ally_id'] === 0) {
-
+        if ((int) $this->user['user_ally_id'] === 0) {
             // doesn't have a request
-            if ((int) $this->_user['user_ally_request'] === 0) {
-
+            if ((int) $this->user['user_ally_request'] === 0) {
                 // it's public then
                 return 'public';
             }
@@ -161,18 +170,15 @@ class Alliance extends Controller
         $alliance_id = filter_input(INPUT_GET, 'allyid', FILTER_VALIDATE_INT);
 
         if (!empty($alliance_id) && (int) $alliance_id != 0) {
-
             return $alliance_id;
         }
 
-        if ($this->_user['user_ally_id'] != 0) {
-
-            return $this->_user['user_ally_id'];
+        if ($this->user['user_ally_id'] != 0) {
+            return $this->user['user_ally_id'];
         }
 
-        if ($this->_user['user_ally_request'] != 0) {
-
-            return $this->_user['user_ally_request'];
+        if ($this->user['user_ally_request'] != 0) {
+            return $this->user['user_ally_request'];
         }
     }
 
@@ -196,7 +202,6 @@ class Alliance extends Controller
     private function buildPage()
     {
         if (!$this->isPageAllowed()) {
-
             FunctionsLib::redirect('game.php?page=alliance');
         }
 
@@ -243,8 +248,7 @@ class Alliance extends Controller
         $button_text = $this->getLang()['al_delete_request'];
 
         if (!empty($cancel)) {
-
-            $this->Alliance_Model->cancelUserRequestById($this->_user['user_id']);
+            $this->Alliance_Model->cancelUserRequestById($this->user['user_id']);
             $request_text = $this->getLang()['al_request_deleted'];
             $button_text = $this->getLang()['al_continue'];
         }
@@ -253,7 +257,7 @@ class Alliance extends Controller
             'alliance/alliance_awaiting_view',
             array_merge(
                 [
-                    'request_text' => str_replace('%s', $this->_alliance->getCurrentAlliance()->getAllianceTag(), $request_text),
+                    'request_text' => str_replace('%s', $this->alliance->getCurrentAlliance()->getAllianceTag(), $request_text),
                     'button_text' => $button_text,
                 ],
                 $this->getLang()
@@ -274,11 +278,9 @@ class Alliance extends Controller
         $details = [];
 
         foreach ($blocks as $block) {
-
             $data = $this->{'build' . ucfirst($block) . 'Block'}();
 
             if (empty($data['detail_content'])) {
-
                 continue;
             }
 
@@ -286,7 +288,8 @@ class Alliance extends Controller
         }
 
         return $this->getTemplate()->set(
-            'alliance/alliance_front_page_view', array_merge([
+            'alliance/alliance_front_page_view',
+            array_merge([
                 'image' => $this->buildImageBlock(),
                 'details' => $details,
                 'description' => $this->buildDescriptionBlock(),
@@ -309,9 +312,9 @@ class Alliance extends Controller
                 $this->getLang(),
                 [
                     'image' => $this->buildImageBlock(),
-                    'tag' => $this->_alliance->getCurrentAlliance()->getAllianceTag(),
-                    'name' => $this->_alliance->getCurrentAlliance()->getAllianceName(),
-                    'members' => $this->_alliance->getCurrentAlliance()->getAllianceMembers(),
+                    'tag' => $this->alliance->getCurrentAlliance()->getAllianceTag(),
+                    'name' => $this->alliance->getCurrentAlliance()->getAllianceName(),
+                    'members' => $this->alliance->getCurrentAlliance()->getAllianceMembers(),
                     'description' => $this->buildDescriptionBlock(),
                     'web' => $this->buildWebBlock()['detail_content'],
                     'requests' => $this->buildPublicRequestsBlock(),
@@ -334,14 +337,13 @@ class Alliance extends Controller
         );
 
         if (!empty($search_string)) {
-
             $list_of_results = [];
             $results = new Alliances(
-                $this->Alliance_Model->searchAllianceByNameTag($search_string), $this->_user['user_id']
+                $this->Alliance_Model->searchAllianceByNameTag($search_string),
+                $this->user['user_id']
             );
 
             foreach ($results->getAlliances() as $result) {
-
                 $list_of_results[] = [
                     'ally_tag' => FunctionsLib::setUrl('game.php?page=alliance&mode=apply&allyid=' . $result->getAllianceId(), '', $result->getAllianceTag()),
                     'alliance_name' => $result->getAllianceName(),
@@ -368,32 +370,30 @@ class Alliance extends Controller
         $action = filter_input_array(INPUT_POST);
 
         if (is_array($action)) {
-
             $alliance_tag = $action['atag'];
             $alliance_name = $action['aname'];
 
             if (strlen($alliance_tag) < 3 or strlen($alliance_tag) > 8) {
-
                 FunctionsLib::message($this->getLang()['al_tag_required'], 'game.php?page=alliance&mode=make', 3);
             }
 
             if ($this->allianceTagExists($alliance_tag)) {
-
                 FunctionsLib::message(strtr($this->getLang()['al_tag_already_exists'], ['%s' => $alliance_tag]), 'game.php?page=alliance&mode=make', 3);
             }
 
             if (strlen($alliance_name) < 3 or strlen($alliance_name) > 30) {
-
                 FunctionsLib::message($this->getLang()['al_name_required'], 'game.php?page=alliance&mode=make', 3);
             }
 
             if ($this->allianceNameExists($alliance_name)) {
-
                 FunctionsLib::message(strtr($this->getLang()['al_name_already_exists'], ['%s' => $alliance_name]), 'game.php?page=alliance&mode=make', 3);
             }
 
             $this->Alliance_Model->createNewAlliance(
-                $alliance_name, $alliance_tag, $this->_user['user_id'], $this->getLang()['al_alliance_founder_rank']
+                $alliance_name,
+                $alliance_tag,
+                $this->user['user_id'],
+                $this->getLang()['al_alliance_founder_rank']
             );
 
             $message = str_replace(['%s', '%d'], [$alliance_name, $alliance_tag], $this->getLang()['al_created']);
@@ -404,7 +404,6 @@ class Alliance extends Controller
                 $this->getLang()['al_continue']
             );
         } else {
-
             return $this->getTemplate()->set('alliance/alliance_make_view', $this->getLang());
         }
     }
@@ -418,15 +417,15 @@ class Alliance extends Controller
     {
         $request = filter_input_array(INPUT_POST);
 
-        if (!$this->_alliance->getCurrentAlliance()->getAllianceRequestNotAllow()) {
-
+        if (!$this->alliance->getCurrentAlliance()->getAllianceRequestNotAllow()) {
             FunctionsLib::message($this->getLang()['al_alliance_closed'], 'game.php?page=alliance', 3);
         }
 
         if ($request['send'] != null && !empty($request['text'])) {
-
             $this->Alliance_Model->createNewUserRequest(
-                $this->getAllianceId(), $request['text'], $this->_user['user_id']
+                $this->getAllianceId(),
+                $request['text'],
+                $this->user['user_id']
             );
 
             FunctionsLib::message($this->getLang()['al_request_confirmation_message'], 'game.php?page=alliance', 3);
@@ -437,10 +436,10 @@ class Alliance extends Controller
             [
                 'js_path' => JS_PATH,
                 'allyid' => $this->getAllianceId(),
-                'text_apply' => (!empty($this->_alliance->getCurrentAlliance()->getAllianceRequest())) ? $this->_alliance->getCurrentAlliance()->getAllianceRequest() : $this->getLang()['al_default_request_text'],
+                'text_apply' => (!empty($this->alliance->getCurrentAlliance()->getAllianceRequest())) ? $this->alliance->getCurrentAlliance()->getAllianceRequest() : $this->getLang()['al_default_request_text'],
                 'write_to_alliance' => strtr(
                     $this->getLang()['al_write_request'],
-                    ['%s' => $this->_alliance->getCurrentAlliance()->getAllianceTag()]
+                    ['%s' => $this->alliance->getCurrentAlliance()->getAllianceTag()]
                 ),
             ]
         ));
@@ -453,8 +452,7 @@ class Alliance extends Controller
      */
     private function getMemberslistSection()
     {
-        if (!$this->_alliance->hasAccess(AllianceRanks::view_member_list)) {
-
+        if (!$this->alliance->hasAccess(AllianceRanks::view_member_list)) {
             FunctionsLib::redirect('game.php?page=alliance');
         }
 
@@ -463,14 +461,15 @@ class Alliance extends Controller
         $sort_by_order_rules = [1 => 2, 2 => 1];
 
         $members = $this->Alliance_Model->getAllianceMembers(
-            $this->_user['user_ally_id'], $sort_by_field, $sort_by_order
+            $this->user['user_ally_id'],
+            $sort_by_field,
+            $sort_by_order
         );
 
         $position = 0;
         $members_list = [];
 
         foreach ($members as $member) {
-
             $position++;
 
             $members_list[] = [
@@ -485,7 +484,7 @@ class Alliance extends Controller
                 'user_system' => $member['user_system'],
                 'coords' => FormatLib::prettyCoords($member['user_galaxy'], $member['user_system'], $member['user_planet']),
                 'user_ally_register_time' => Timing::formatExtendedDate($member['user_ally_register_time']),
-                'online_time' => $this->_alliance->hasAccess(AllianceRanks::online_status) ? Timing::setOnlineStatus($member['user_onlinetime']) : '-',
+                'online_time' => $this->alliance->hasAccess(AllianceRanks::online_status) ? Timing::setOnlineStatus($member['user_onlinetime']) : '-',
             ];
         }
 
@@ -509,13 +508,11 @@ class Alliance extends Controller
      */
     private function getCircularSection()
     {
-        if (!$this->_alliance->hasAccess(AllianceRanks::send_circular)) {
-
+        if (!$this->alliance->hasAccess(AllianceRanks::send_circular)) {
             FunctionsLib::redirect('game.php?page=alliance');
         }
 
         if ((bool) filter_input(INPUT_GET, 'sendmail', FILTER_VALIDATE_INT)) {
-
             $post = filter_input_array(INPUT_POST, [
                 'r' => FILTER_SANITIZE_NUMBER_INT,
                 'text' => FILTER_SANITIZE_STRING,
@@ -524,28 +521,25 @@ class Alliance extends Controller
             $members_list = [];
 
             if (!(bool) $post['r']) {
-
                 $members = $this->Alliance_Model->getAllianceMembersById(
-                    $this->_user['user_ally_id']
+                    $this->user['user_ally_id']
                 );
             } else {
-
                 $members = $this->Alliance_Model->getAllianceMembersByIdAndRankId(
-                    $this->_user['user_ally_id'], $post['r']
+                    $this->user['user_ally_id'],
+                    $post['r']
                 );
             }
 
             if (count($members) > 0) {
-
                 foreach ($members as $member) {
-
                     FunctionsLib::sendMessage(
                         $member['user_id'],
-                        $this->_user['user_id'],
+                        $this->user['user_id'],
                         '',
                         3,
-                        $this->_alliance->getCurrentAlliance()->getAllianceTag(),
-                        $this->_user['user_name'],
+                        $this->alliance->getCurrentAlliance()->getAllianceTag(),
+                        $this->user['user_name'],
                         $post['text']
                     );
 
@@ -562,15 +556,13 @@ class Alliance extends Controller
             );
         }
 
-        $ranks = $this->_alliance->getCurrentAllianceRankObject();
+        $ranks = $this->alliance->getCurrentAllianceRankObject();
         $list_of_ranks = $ranks->getAllRanksAsArray();
 
         $ranks_list = [];
 
         if (is_array($list_of_ranks)) {
-
             foreach ($list_of_ranks as $id => $rank) {
-
                 $ranks_list[] = [
                     'value' => $id + 1,
                     'name' => $rank['rank'],
@@ -597,20 +589,18 @@ class Alliance extends Controller
      */
     private function getExitSection()
     {
-        if ($this->_alliance->isOwner()) {
-
+        if ($this->alliance->isOwner()) {
             FunctionsLib::message($this->getLang()['al_founder_cant_leave_alliance'], 'game.php?page=alliance', 3);
         }
 
         if ((bool) filter_input(INPUT_GET, 'yes', FILTER_VALIDATE_INT)) {
-
             $this->Alliance_Model->exitAlliance(
                 $this->getAllianceId(),
-                $this->_user['user_id']
+                $this->user['user_id']
             );
 
             return FunctionsLib::messageBox(
-                strtr($this->getLang()['al_leave_sucess'], ['%s' => $this->_alliance->getCurrentAlliance()->getAllianceName()]),
+                strtr($this->getLang()['al_leave_sucess'], ['%s' => $this->alliance->getCurrentAlliance()->getAllianceName()]),
                 '<br>',
                 'game.php?page=alliance',
                 $this->getLang()['al_continue']
@@ -618,7 +608,7 @@ class Alliance extends Controller
         }
 
         return FunctionsLib::messageBox(
-            strtr($this->getLang()['al_do_you_really_want_to_go_out'], ['%s' => $this->_alliance->getCurrentAlliance()->getAllianceName()]),
+            strtr($this->getLang()['al_do_you_really_want_to_go_out'], ['%s' => $this->alliance->getCurrentAlliance()->getAllianceName()]),
             '<br/>',
             'game.php?page=alliance&mode=exit&yes=1',
             $this->getLang()['al_go_out_yes']
@@ -651,8 +641,7 @@ class Alliance extends Controller
             'transfer' => '',
         ];
 
-        if (isset($admin_sections[$edit]) && $this->_alliance->hasAccess($admin_sections[$edit])) {
-
+        if (isset($admin_sections[$edit]) && $this->alliance->hasAccess($admin_sections[$edit])) {
             return $this->{'getAdmin' . ucfirst($edit) . 'Section'}();
         }
 
@@ -691,7 +680,6 @@ class Alliance extends Controller
         ]);
 
         if (isset($post['options'])) {
-
             $this->Alliance_Model->updateAllianceSettings(
                 $this->getAllianceId(),
                 [
@@ -706,7 +694,6 @@ class Alliance extends Controller
         }
 
         if (isset($post['t'])) {
-
             $callback = [
                 1 => 'Description',
                 2 => 'Text',
@@ -728,9 +715,9 @@ class Alliance extends Controller
         ];
 
         $text = [
-            1 => $this->_alliance->getCurrentAlliance()->getAllianceDescription(),
-            2 => $this->_alliance->getCurrentAlliance()->getAllianceText(),
-            3 => $this->_alliance->getCurrentAlliance()->getAllianceRequest(),
+            1 => $this->alliance->getCurrentAlliance()->getAllianceDescription(),
+            2 => $this->alliance->getCurrentAlliance()->getAllianceText(),
+            3 => $this->alliance->getCurrentAlliance()->getAllianceRequest(),
         ];
 
         return $this->getTemplate()->set(
@@ -743,11 +730,11 @@ class Alliance extends Controller
                     't' => $t,
                     'request_type' => $request_type[$t],
                     'text' => $text[$t],
-                    'alliance_web' => $this->_alliance->getCurrentAlliance()->getAllianceWeb(),
-                    'alliance_image' => $this->_alliance->getCurrentAlliance()->getAllianceImage(),
-                    'alliance_request_notallow_0' => $this->_alliance->getCurrentAlliance()->getAllianceRequestNotAllow() == SwitchInt::off ? 'selected' : '',
-                    'alliance_request_notallow_1' => $this->_alliance->getCurrentAlliance()->getAllianceRequestNotAllow() == SwitchInt::on ? 'selected' : '',
-                    'alliance_owner_range' => $this->_alliance->getCurrentAlliance()->getAllianceOwnerRange(),
+                    'alliance_web' => $this->alliance->getCurrentAlliance()->getAllianceWeb(),
+                    'alliance_image' => $this->alliance->getCurrentAlliance()->getAllianceImage(),
+                    'alliance_request_notallow_0' => $this->alliance->getCurrentAlliance()->getAllianceRequestNotAllow() == SwitchInt::off ? 'selected' : '',
+                    'alliance_request_notallow_1' => $this->alliance->getCurrentAlliance()->getAllianceRequestNotAllow() == SwitchInt::on ? 'selected' : '',
+                    'alliance_owner_range' => $this->alliance->getCurrentAlliance()->getAllianceOwnerRange(),
                 ]
             )
         );
@@ -778,24 +765,20 @@ class Alliance extends Controller
         $new_rank = filter_input(INPUT_POST, 'newrang', FILTER_VALIDATE_INT);
 
         if (isset($kick)
-            && $this->_alliance->hasAccess(AllianceRanks::kick)
-            && $kick != $this->_alliance->getCurrentAlliance()->getAllianceOwner()) {
-
+            && $this->alliance->hasAccess(AllianceRanks::kick)
+            && $kick != $this->alliance->getCurrentAlliance()->getAllianceOwner()) {
             $this->Alliance_Model->exitAlliance(
                 $this->getAllianceId(),
                 $kick
             );
-
         }
 
         if (isset($new_rank)
             && isset($id)
-            && $id != $this->_alliance->getCurrentAlliance()->getAllianceOwner()) {
-
-            $ranks = $this->_alliance->getCurrentAllianceRankObject();
+            && $id != $this->alliance->getCurrentAlliance()->getAllianceOwner()) {
+            $ranks = $this->alliance->getCurrentAllianceRankObject();
 
             if ($ranks->getUserRankById($new_rank) != null) {
-
                 $this->Alliance_Model->updateUserRank($id, $new_rank);
             }
         }
@@ -805,14 +788,15 @@ class Alliance extends Controller
         $sort_by_order_rules = [1 => 2, 2 => 1];
 
         $members = $this->Alliance_Model->getAllianceMembers(
-            $this->_user['user_ally_id'], $sort_by_field, $sort_by_order
+            $this->user['user_ally_id'],
+            $sort_by_field,
+            $sort_by_order
         );
 
         $position = 0;
         $members_list = [];
 
         foreach ($members as $member) {
-
             $position++;
 
             $members_list[] = [
@@ -855,14 +839,11 @@ class Alliance extends Controller
         $name = filter_input(INPUT_POST, 'nametag', FILTER_SANITIZE_STRIPPED);
 
         if (isset($name)) {
-
             if (strlen($name) < 3 or strlen($name) > 30) {
-
                 FunctionsLib::message($this->getLang()['al_name_required'], 'game.php?page=alliance&mode=admin&edit=name', 3);
             }
 
             if ($this->allianceNameExists($name)) {
-
                 FunctionsLib::message(strtr($this->getLang()['al_name_already_exists'], ['%s' => $name]), 'game.php?page=alliance&mode=admin&edit=name', 3);
             }
 
@@ -881,7 +862,7 @@ class Alliance extends Controller
                 [
                     'case' => strtr(
                         $this->getLang()['al_change_title'],
-                        ['%s' => $this->_alliance->getCurrentAlliance()->getAllianceName()]
+                        ['%s' => $this->alliance->getCurrentAlliance()->getAllianceName()]
                     ),
                     'title' => $this->getLang()['al_new_name'],
                 ]
@@ -902,34 +883,32 @@ class Alliance extends Controller
         $text = filter_input(INPUT_POST, 'text');
 
         if (isset($accept) && $show != 0) {
-
             $this->Alliance_Model->addUserToAlliance($show, $this->getAllianceId());
 
             FunctionsLib::sendMessage(
                 $show,
-                $this->_user['user_id'],
+                $this->user['user_id'],
                 '',
                 3,
-                $this->_alliance->getCurrentAlliance()->getAllianceTag(),
-                $this->getLang()['al_you_was_acceted'] . $this->_alliance->getCurrentAlliance()->getAllianceName(),
-                $this->getLang()['al_hi_the_alliance'] . $this->_alliance->getCurrentAlliance()->getAllianceName() . $this->getLang()['al_has_accepted'] . $text
+                $this->alliance->getCurrentAlliance()->getAllianceTag(),
+                $this->getLang()['al_you_was_acceted'] . $this->alliance->getCurrentAlliance()->getAllianceName(),
+                $this->getLang()['al_hi_the_alliance'] . $this->alliance->getCurrentAlliance()->getAllianceName() . $this->getLang()['al_has_accepted'] . $text
             );
 
             FunctionsLib::redirect('game.php?page=alliance&mode=admin&edit=requests');
         }
 
         if (isset($cancel) && $show != 0) {
-
             $this->Alliance_Model->removeUserFromAlliance($show);
 
             FunctionsLib::sendMessage(
                 $show,
-                $this->_user['user_id'],
+                $this->user['user_id'],
                 '',
                 3,
-                $this->_alliance->getCurrentAlliance()->getAllianceTag(),
-                $this->getLang()['al_you_was_declined'] . $this->_alliance->getCurrentAlliance()->getAllianceName(),
-                $this->getLang()['al_hi_the_alliance'] . $this->_alliance->getCurrentAlliance()->getAllianceName() . $this->getLang()['al_has_declined'] . $text
+                $this->alliance->getCurrentAlliance()->getAllianceTag(),
+                $this->getLang()['al_you_was_declined'] . $this->alliance->getCurrentAlliance()->getAllianceName(),
+                $this->getLang()['al_hi_the_alliance'] . $this->alliance->getCurrentAlliance()->getAllianceName() . $this->getLang()['al_has_declined'] . $text
             );
 
             FunctionsLib::redirect('game.php?page=alliance&mode=admin&edit=requests');
@@ -942,9 +921,7 @@ class Alliance extends Controller
         $request_form = '';
 
         if ($requests) {
-
             foreach ($requests as $request) {
-
                 $list_of_requests[$request['user_id']] = [
                     'id' => $request['user_id'],
                     'username' => $request['user_name'],
@@ -954,7 +931,6 @@ class Alliance extends Controller
             }
 
             if (isset($show) && isset($list_of_requests[$show])) {
-
                 $request_form = $this->getTemplate()->set(
                     'alliance/alliance_admin_request_form',
                     array_merge(
@@ -994,11 +970,10 @@ class Alliance extends Controller
         $post = filter_input_array(INPUT_POST);
         $delete = filter_input(INPUT_GET, 'd', FILTER_VALIDATE_INT);
 
-        $ranks = $this->_alliance->getCurrentAllianceRankObject();
+        $ranks = $this->alliance->getCurrentAllianceRankObject();
 
         // Create a new rank
         if (isset($post['newrangname'])) {
-
             $ranks->addNew(
                 $post['newrangname']
             );
@@ -1011,13 +986,11 @@ class Alliance extends Controller
 
         // edit rights for each rank
         if (isset($post['id'])) {
-
             foreach ($post['id'] as $id) {
-
                 $ranks->editRankById(
                     $id,
                     [
-                        AllianceRanks::delete => (isset($post['u' . $id . 'r1']) && $this->_alliance->isOwner()) ? SwitchInt::on : SwitchInt::off,
+                        AllianceRanks::delete => (isset($post['u' . $id . 'r1']) && $this->alliance->isOwner()) ? SwitchInt::on : SwitchInt::off,
                         AllianceRanks::kick => isset($post['u' . $id . 'r2']) ? SwitchInt::on : SwitchInt::off,
                         AllianceRanks::applications => isset($post['u' . $id . 'r3']) ? SwitchInt::on : SwitchInt::off,
                         AllianceRanks::view_member_list => isset($post['u' . $id . 'r4']) ? SwitchInt::on : SwitchInt::off,
@@ -1038,7 +1011,6 @@ class Alliance extends Controller
 
         // delete a rank
         if (isset($delete)) {
-
             $ranks->deleteRankById($delete);
 
             $this->Alliance_Model->updateAllianceRanks(
@@ -1051,12 +1023,10 @@ class Alliance extends Controller
         $list_of_ranks = [];
 
         if (is_array($ranks->getAllRanksAsArray())) {
-
             foreach ($ranks->getAllRanksAsArray() as $rank_id => $details) {
-
                 $r1 = '<b>-</b>';
 
-                if ($this->_alliance->isOwner()) {
+                if ($this->alliance->isOwner()) {
                     $r1 = '<input type="checkbox" name="u' . $rank_id . 'r1"' . (($details['rights'][AllianceRanks::delete] == SwitchInt::on) ? ' checked="checked"' : '') . '>';
                 }
 
@@ -1099,14 +1069,11 @@ class Alliance extends Controller
         $tag = filter_input(INPUT_POST, 'nametag', FILTER_SANITIZE_STRIPPED);
 
         if (isset($tag)) {
-
             if (strlen($tag) < 3 or strlen($tag) > 8) {
-
                 FunctionsLib::message($this->getLang()['al_tag_required'], 'game.php?page=alliance&mode=admin&edit=tag', 3);
             }
 
             if ($this->allianceTagExists($tag)) {
-
                 FunctionsLib::message(strtr($this->getLang()['al_tag_already_exists'], ['%s' => $tag]), 'game.php?page=alliance&mode=admin&edit=tag', 3);
             }
 
@@ -1125,7 +1092,7 @@ class Alliance extends Controller
                 [
                     'case' => strtr(
                         $this->getLang()['al_change_title'],
-                        ['%s' => $this->_alliance->getCurrentAlliance()->getAllianceTag()]
+                        ['%s' => $this->alliance->getCurrentAlliance()->getAllianceTag()]
                     ),
                     'title' => $this->getLang()['al_new_tag'],
                 ]
@@ -1143,17 +1110,16 @@ class Alliance extends Controller
         $new_leader = filter_input(INPUT_POST, 'newleader', FILTER_VALIDATE_INT);
 
         if (isset($new_leader) && $new_leader != 0) {
-
             $this->Alliance_Model->transferAlliance(
-                $this->_user['user_ally_id'],
-                $this->_user['user_id'],
+                $this->user['user_ally_id'],
+                $this->user['user_id'],
                 $new_leader
             );
 
             FunctionsLib::redirect('game.php?page=alliance');
         }
 
-        $ranksObject = $this->_alliance->getCurrentAllianceRankObject();
+        $ranksObject = $this->alliance->getCurrentAllianceRankObject();
 
         $users = $this->Alliance_Model->getAllianceMembersById(
             $this->getAllianceId()
@@ -1162,12 +1128,10 @@ class Alliance extends Controller
         $list_of_members = [];
 
         foreach ($users as $user) {
-
             $rank_name = $ranksObject->getUserRankById($user['user_ally_rank_id'])['rank'];
             $right_hand = $ranksObject->getUserRankById($user['user_ally_rank_id'])['rights'][AllianceRanks::right_hand];
 
             if (isset($right_hand) && $right_hand == SwitchInt::on) {
-
                 $list_of_members[] = [
                     'user_id' => $user['user_id'],
                     'user_name' => $user['user_name'],
@@ -1199,10 +1163,9 @@ class Alliance extends Controller
      */
     private function buildPublicRequestsBlock()
     {
-        if (!$this->_user['user_ally_id']
-            && !$this->_user['user_ally_request']
-            && !$this->_alliance->getCurrentAlliance()->getAllianceRequestNotAllow()) {
-
+        if (!$this->user['user_ally_id']
+            && !$this->user['user_ally_request']
+            && !$this->alliance->getCurrentAlliance()->getAllianceRequestNotAllow()) {
             $url = FunctionsLib::setUrl(
                 'game.php?page=alliance&mode=apply&allyid=' . $this->getAllianceId(),
                 $this->getLang()['al_click_to_send_request'],
@@ -1222,10 +1185,9 @@ class Alliance extends Controller
      */
     private function buildImageBlock()
     {
-        $image = $this->_alliance->getCurrentAlliance()->getAllianceImage();
+        $image = $this->alliance->getCurrentAlliance()->getAllianceImage();
 
         if (!empty($image)) {
-
             return '<tr><th colspan="2">' . FunctionsLib::setImage($image, $image) . '</td></tr>';
         }
 
@@ -1241,7 +1203,7 @@ class Alliance extends Controller
     {
         return [
             'detail_title' => $this->getLang()['al_ally_info_tag'],
-            'detail_content' => $this->_alliance->getCurrentAlliance()->getAllianceTag(),
+            'detail_content' => $this->alliance->getCurrentAlliance()->getAllianceTag(),
         ];
     }
 
@@ -1254,7 +1216,7 @@ class Alliance extends Controller
     {
         return [
             'detail_title' => $this->getLang()['al_ally_info_name'],
-            'detail_content' => $this->_alliance->getCurrentAlliance()->getAllianceName(),
+            'detail_content' => $this->alliance->getCurrentAlliance()->getAllianceName(),
         ];
     }
 
@@ -1267,14 +1229,13 @@ class Alliance extends Controller
     {
         $list_of_members = '';
 
-        if ($this->_alliance->hasAccess(AllianceRanks::view_member_list)) {
-
+        if ($this->alliance->hasAccess(AllianceRanks::view_member_list)) {
             $list_of_members = ' (' . FunctionsLib::setUrl('game.php?page=alliance&mode=memberslist', '', $this->getLang()['al_user_list']) . ')';
         }
 
         return [
             'detail_title' => $this->getLang()['al_ally_info_members'],
-            'detail_content' => $this->_alliance->getCurrentAlliance()->getAllianceMembers() . $list_of_members,
+            'detail_content' => $this->alliance->getCurrentAlliance()->getAllianceMembers() . $list_of_members,
         ];
     }
 
@@ -1285,11 +1246,10 @@ class Alliance extends Controller
      */
     private function buildRankBlock()
     {
-        $rank = $this->getUserRank($this->_user['user_id'], $this->_user['user_ally_rank_id']);
+        $rank = $this->getUserRank($this->user['user_id'], $this->user['user_ally_rank_id']);
         $admin_area = '';
 
-        if ($this->_alliance->hasAccess(AllianceRanks::administration)) {
-
+        if ($this->alliance->hasAccess(AllianceRanks::administration)) {
             $admin_area = ' (' . FunctionsLib::setUrl('game.php?page=alliance&mode=admin&edit=ally', '', $this->getLang()['al_manage_alliance']) . ')';
         }
 
@@ -1308,11 +1268,10 @@ class Alliance extends Controller
     {
         $requests = '';
         $count = $this->Alliance_Model->getAllianceRequestsCount(
-            $this->_alliance->getCurrentAlliance()->getAllianceId()
+            $this->alliance->getCurrentAlliance()->getAllianceId()
         )['total_requests'];
 
-        if ($this->_alliance->hasAccess(AllianceRanks::application_management) && $count != 0) {
-
+        if ($this->alliance->hasAccess(AllianceRanks::application_management) && $count != 0) {
             $requests = FunctionsLib::setUrl(
                 'game.php?page=alliance&mode=admin&edit=requests',
                 '',
@@ -1333,8 +1292,7 @@ class Alliance extends Controller
      */
     private function buildCircularBlock()
     {
-        if ($this->_alliance->hasAccess(AllianceRanks::send_circular)) {
-
+        if ($this->alliance->hasAccess(AllianceRanks::send_circular)) {
             return [
                 'detail_title' => $this->getLang()['al_circular_message'],
                 'detail_content' => FunctionsLib::setUrl('game.php?page=alliance&mode=circular', '', $this->getLang()['al_send_circular_message']),
@@ -1350,11 +1308,10 @@ class Alliance extends Controller
     private function buildDescriptionBlock()
     {
         $description = $this->getLang()['al_description_message'];
-        $alliance_description = $this->_alliance->getCurrentAlliance()->getAllianceDescription();
+        $alliance_description = $this->alliance->getCurrentAlliance()->getAllianceDescription();
 
         if ($alliance_description != '') {
-
-            $description = nl2br($this->_bbcode->bbCode($alliance_description)) . '</th></tr>';
+            $description = nl2br($this->bbcode->bbCode($alliance_description)) . '</th></tr>';
         }
 
         return '<tr><th colspan="2" height="100px">' . $description . '</th></tr>';
@@ -1368,10 +1325,9 @@ class Alliance extends Controller
     private function buildWebBlock()
     {
         $alliance_web = '-';
-        $alliance_web_url = $this->_alliance->getCurrentAlliance()->getAllianceWeb();
+        $alliance_web_url = $this->alliance->getCurrentAlliance()->getAllianceWeb();
 
         if ($alliance_web_url != '') {
-
             $url = FunctionsLib::prepUrl($alliance_web_url);
             $alliance_web = FunctionsLib::setUrl($url, '', $url, 'target="_blank"');
         }
@@ -1389,7 +1345,7 @@ class Alliance extends Controller
      */
     private function buildTextBlock()
     {
-        return nl2br($this->_bbcode->bbCode($this->_alliance->getCurrentAlliance()->getAllianceText()));
+        return nl2br($this->bbcode->bbCode($this->alliance->getCurrentAlliance()->getAllianceText()));
     }
 
     /**
@@ -1399,8 +1355,7 @@ class Alliance extends Controller
      */
     private function buildLeaveBlock()
     {
-        if (!$this->_alliance->isOwner()) {
-
+        if (!$this->alliance->isOwner()) {
             return $this->getTemplate()->set('alliance/alliance_leave_view', $this->getLang());
         }
 
@@ -1445,12 +1400,10 @@ class Alliance extends Controller
      */
     private function getUserRank($member_id, $member_rank_id)
     {
-        if ($this->_alliance->getCurrentAlliance()->getAllianceOwner() == $member_id) {
-
-            $owner_rank = $this->_alliance->getCurrentAlliance()->getAllianceOwnerRange();
+        if ($this->alliance->getCurrentAlliance()->getAllianceOwner() == $member_id) {
+            $owner_rank = $this->alliance->getCurrentAlliance()->getAllianceOwnerRange();
 
             if (empty($owner_rank)) {
-
                 return $this->getLang()['al_founder_rank_text'];
             }
 
@@ -1458,11 +1411,10 @@ class Alliance extends Controller
         }
 
         if ($member_rank_id == 0) {
-
             return $this->getLang()['al_new_member_rank_text'];
         }
 
-        $ranks = $this->_alliance->getCurrentAllianceRankObject();
+        $ranks = $this->alliance->getCurrentAllianceRankObject();
 
         return $ranks->getUserRankById($member_rank_id)['rank'];
     }
@@ -1481,22 +1433,18 @@ class Alliance extends Controller
         $rank = $this->getUserRank($member_id, $member_rank_id);
 
         if ($requested_rank != $member_id) {
-
             return $rank;
         }
 
-        $ranks = $this->_alliance->getCurrentAllianceRankObject();
+        $ranks = $this->alliance->getCurrentAllianceRankObject();
 
         $options = '<option onclick="document.edit_user_rank.submit();" value="0">' . $this->getLang()['al_new_member_rank_text'] . '</option>';
 
         if (is_array($ranks->getAllRanksAsArray())) {
-
             foreach ($ranks->getAllRanksAsArray() as $id => $rank) {
-
                 $selected = '';
 
                 if ($member_rank_id - 1 == $id) {
-
                     $selected = ' selected=selected';
                 }
 
@@ -1530,29 +1478,25 @@ class Alliance extends Controller
         $kick_user = '';
         $change_rank = '';
 
-        if ($this->_alliance->getCurrentAlliance()->getAllianceOwner() == $member_id
+        if ($this->alliance->getCurrentAlliance()->getAllianceOwner() == $member_id
             or $requested_rank == $member_id) {
-
             return '-';
         }
 
-        if ($this->_alliance->hasAccess(AllianceRanks::kick)) {
-
+        if ($this->alliance->hasAccess(AllianceRanks::kick)) {
             $action = 'game.php?page=alliance&mode=admin&edit=members&kick=' . $member_id;
             $content = FunctionsLib::setImage(DPATH . 'alliance/abort.gif');
             $attributes = 'onclick="javascript:return confirm(\'' . strtr($this->getLang()['al_confirm_remove_member'], ['%s' => $member_name]) . '\');"';
             $kick_user = FunctionsLib::setUrl($action, '', $content, $attributes);
         }
 
-        if ($this->_alliance->hasAccess(AllianceRanks::administration)) {
-
+        if ($this->alliance->hasAccess(AllianceRanks::administration)) {
             $action = 'game.php?page=alliance&mode=admin&edit=members&rank=' . $member_id;
             $content = FunctionsLib::setImage(DPATH . 'alliance/key.gif');
             $change_rank = FunctionsLib::setUrl($action, '', $content);
         }
 
         if (empty($kick_user) && empty($change_rank)) {
-
             return '-';
         }
 
