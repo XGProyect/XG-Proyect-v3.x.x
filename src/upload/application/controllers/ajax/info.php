@@ -29,8 +29,6 @@ class Info extends Controller
 {
     /**
      * Constructor
-     *
-     * @return void
      */
     public function __construct()
     {

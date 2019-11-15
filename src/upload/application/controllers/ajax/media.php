@@ -29,8 +29,6 @@ class Media extends Controller
 {
     /**
      * Constructor
-     *
-     * @return void
      */
     public function __construct()
     {

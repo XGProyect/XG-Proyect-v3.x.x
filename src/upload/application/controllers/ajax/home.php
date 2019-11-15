@@ -27,15 +27,13 @@ use application\core\Controller;
  */
 class Home extends Controller
 {
-
     /**
      * Constructor
-     *
-     * @return void
      */
     public function __construct()
     {
         parent::__construct();
+
         // build the page
         $this->buildPage();
     }
