@@ -29,14 +29,13 @@ $lang['mn_index'] = 'Home';
 $lang['mn_permissions'] = 'Permissions';
 $lang['mn_reset_universe'] = 'Reset universe';
 $lang['mn_sql_queries'] = 'SQL query';
-$lang['mn_config_title'] = 'Configuration';
-$lang['mn_config_server'] = 'Game settings';
-$lang['mn_config_modules'] = 'Game features';
+$lang['mn_config_title'] = 'Server Configuration';
+$lang['mn_config_server'] = 'Server settings';
+$lang['mn_config_modules'] = 'Server features';
 $lang['mn_config_registrations'] = 'User registration settings';
-$lang['mn_config_planets'] = 'New planet settings';
-$lang['mn_config_stats'] = 'Statistics';
-$lang['mn_premium'] = 'Premium';
-$lang['mn_config_changelog'] = 'Languages edition';
+$lang['mn_config_planets'] = 'New planets settings';
+$lang['mn_config_stats'] = 'Statistics settings';
+$lang['mn_premium'] = 'Premium settings';
 $lang['mn_info_title'] = 'Information';
 $lang['mn_info_general'] = 'General';
 $lang['mn_info_db'] = 'System Errors';
@@ -46,6 +45,7 @@ $lang['mn_edition_title'] = 'Edition';
 $lang['mn_edition_maker'] = 'Creator';
 $lang['mn_edition_users'] = 'Users';
 $lang['mn_edition_alliances'] = 'Alliances';
+$lang['mn_edition_languages'] = 'Languages';
 $lang['mn_tools_title'] = 'Tools';
 $lang['mn_tools_backup'] = 'Backups';
 $lang['mn_tools_encrypter'] = 'Password encrypter';
@@ -59,7 +59,7 @@ $lang['mn_maintenance_title'] = 'Maintenance';
 $lang['mn_maintenance_db'] = 'Repair / Optimize tables';
 
 // TOP NAVIGATION BAR
-$lang['tn_game'] = 'Game overview';
+$lang['tn_game'] = 'Back to the server';
 $lang['tn_logout'] = 'Logout';
 $lang['tn_exit_confirm'] = 'Are you sure you want to log out of the control panel?';
 $lang['tn_update'] = 'Update available!';
@@ -85,11 +85,11 @@ $lang['hm_principal_contributors'] = 'Main contributors';
 // PERMISSIONS
 $lang['mod_title'] = 'Manage permissions';
 $lang['mod_range'] = 'Ranks';
-$lang['mod_power_config'] = 'Access to Configurations';
-$lang['mod_power_info'] = 'Access to Information';
-$lang['mod_power_edition'] = 'Access to Edition';
-$lang['mod_power_tools'] = 'Access to Tools';
-$lang['mod_power_maintenance'] = 'Access to Maintenance';
+$lang['mod_power_config'] = 'Access to server configurations';
+$lang['mod_power_info'] = 'Access to information';
+$lang['mod_power_edition'] = 'Access to edition';
+$lang['mod_power_tools'] = 'Access to tools';
+$lang['mod_power_maintenance'] = 'Access to maintenance';
 $lang['mod_power_log'] = 'Record actions';
 $lang['mod_reference'] = 'Referencias';
 $lang['mod_save_all'] = 'Save permissions';
@@ -135,7 +135,7 @@ $lang['qe_succes'] = 'Operation completed successfully';
 $lang['qe_note'] = 'Note: Only one query at the time';
 
 // SETTINGS - CONFIGURATIONS
-$lang['se_server_parameters'] = 'Game settings';
+$lang['se_server_parameters'] = 'Server settings';
 $lang['se_name'] = 'Name';
 $lang['se_logo'] = 'Logo';
 $lang['se_lang'] = 'Language';
@@ -158,8 +158,8 @@ $lang['se_title_admins_protection'] = 'Check the box to enable protection and pr
 $lang['se_admin_protection'] = 'Protection';
 $lang['se_save_parameters'] = 'Save changes';
 $lang['se_configuration_title'] = 'Configuration';
-$lang['se_server_name'] = 'Name of your game';
-$lang['se_server_logo'] = 'Your game Logo. Only an URL.';
+$lang['se_server_name'] = 'Name of your server';
+$lang['se_server_logo'] = 'Your server Logo. Only an URL.';
 $lang['se_def_cdr'] = 'Defenses to debris';
 $lang['se_ships_cdr'] = 'Ships to debris';
 $lang['se_def_cdr_message'] = 'Set the percentage of debris that would generate the defenses after an attack';
@@ -193,7 +193,7 @@ So it\'s going to be able to attack player with more than 2 points.';
 $lang['se_all_ok_message'] = 'Changes saved successfully!';
 
 // MODULES
-$lang['mdl_modules'] = 'Game features';
+$lang['mdl_modules'] = 'Server features';
 $lang['mdl_save'] = 'Save features';
 $lang['module'][0] = 'Changelog';
 $lang['module'][1] = 'Overview';
@@ -240,7 +240,7 @@ $lang['np_all_ok_message'] = 'Changes saved successfully!';
 $lang['np_save_parameters'] = 'Save changes';
 
 // STATISTICS SETTINGS
-$lang['cs_title'] = 'Statistics';
+$lang['cs_title'] = 'Statistics settings';
 $lang['cs_point_per_resources_used'] = 'One point equals';
 $lang['cs_resources'] = 'resources';
 $lang['cs_time_between_updates'] = 'Time between updates';
@@ -252,7 +252,7 @@ $lang['cs_yes'] = 'Yes';
 $lang['cs_no'] = 'No';
 
 // PREMIUM
-$lang['pr_title'] = 'Premium';
+$lang['pr_title'] = 'Premium settings';
 $lang['pr_pay_url'] = 'Payment URL';
 $lang['pr_trader'] = 'Trader cost (Dark Matter)';
 $lang['pr_save_changes'] = 'Save changes';
@@ -264,7 +264,7 @@ $lang['pr_all_ok_message'] = 'Changes saved successfully!';
 $lang['ce_edit'] = 'Languages edition';
 $lang['ce_notice'] = 'Here you can modify the languages files, HTML is allowed. Use with caution.';
 $lang['ce_file'] = 'Select language file';
-$lang['ce_warning'] = 'Making a wrong change in this file may cause your game to stop working, modify it only if you know what you are doing.';
+$lang['ce_warning'] = 'Making a wrong change in this file may cause your server to stop working, modify it only if you know what you are doing.';
 $lang['ce_sure'] = 'Are you sure you want to continue?';
 $lang['ce_save_changes'] = 'Save changes';
 $lang['ce_all_ok_message'] = 'Changes saved successfully!';

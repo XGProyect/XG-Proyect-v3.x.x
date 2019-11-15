@@ -92,8 +92,7 @@ class Moderation extends Controller
         $Operator = explode(",", $QueryModerationEx[1]);
         $Administrator = explode(",", $QueryModerationEx[2]);
 
-
-        // MODERADORES
+        // Operator (GO)
         if ($Moderator[0] == 1) {
             $parse['view_m'] = 'checked = "checked"';
         }
@@ -113,7 +112,7 @@ class Moderation extends Controller
             $parse['maintenance_m'] = 'checked = "checked"';
         }
 
-        // OPERADORES
+        // Super Operator (SGo)
         if ($Operator[0] == 1) {
             $parse['view_o'] = 'checked = "checked"';
         }
@@ -133,7 +132,7 @@ class Moderation extends Controller
             $parse['maintenance_o'] = 'checked = "checked"';
         }
 
-        // ADMINISTRADOR (SOLO PARA EL HISTORIAL)
+        // Administrator (GA) (SOLO PARA EL HISTORIAL)
         if ($Administrator[0] == 1) {
             $parse['log_a'] = 'checked = "checked"';
         }

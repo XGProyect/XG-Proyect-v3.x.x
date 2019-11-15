@@ -47,7 +47,7 @@ class Editor extends Controller
         $this->_current_user = parent::$users->getUserData();
 
         // Check if the user is allowed to access
-        if (AdministrationLib::haveAccess($this->_current_user['user_authlevel']) && AdministrationLib::authorization($this->_current_user['user_authlevel'], 'config_game') == 1) {
+        if (AdministrationLib::haveAccess($this->_current_user['user_authlevel']) && $this->_current_user['user_authlevel'] == 3) {
             $this->build_page();
         } else {
             die(AdministrationLib::noAccessMessage($this->_lang['ge_no_permissions']));

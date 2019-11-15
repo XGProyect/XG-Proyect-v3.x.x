@@ -29,14 +29,13 @@ $lang['mn_index'] = 'Inicio';
 $lang['mn_permissions'] = 'Permisos';
 $lang['mn_reset_universe'] = 'Reiniciar universo';
 $lang['mn_sql_queries'] = 'Consultas SQL';
-$lang['mn_config_title'] = 'Configuración';
-$lang['mn_config_server'] = 'Ajustes del juego';
-$lang['mn_config_modules'] = 'Características del juego';
+$lang['mn_config_title'] = 'Ajustes del servidor';
+$lang['mn_config_server'] = 'Ajustes del servidor';
+$lang['mn_config_modules'] = 'Características del servidor';
 $lang['mn_config_registrations'] = 'Ajustes de registro';
 $lang['mn_config_planets'] = 'Ajustes de nuevos planetas';
-$lang['mn_config_stats'] = 'Estadísticas';
-$lang['mn_premium'] = 'Premium';
-$lang['mn_config_changelog'] = 'Editar lenguajes';
+$lang['mn_config_stats'] = 'Ajustes de estadísticas';
+$lang['mn_premium'] = 'Ajustes de premium';
 $lang['mn_info_title'] = 'Información';
 $lang['mn_info_general'] = 'General';
 $lang['mn_info_db'] = 'Errores del sistema';
@@ -46,6 +45,7 @@ $lang['mn_edition_title'] = 'Edición';
 $lang['mn_edition_maker'] = 'Creador';
 $lang['mn_edition_users'] = 'Usuarios';
 $lang['mn_edition_alliances'] = 'Alianzas';
+$lang['mn_edition_languages'] = 'Idiomas';
 $lang['mn_tools_title'] = 'Herramientas';
 $lang['mn_tools_backup'] = 'Backups';
 $lang['mn_tools_encrypter'] = 'Encriptador de claves';
@@ -59,7 +59,7 @@ $lang['mn_maintenance_title'] = 'Mantenimiento';
 $lang['mn_maintenance_db'] = 'Reparar / Optimizar tablas';
 
 // TOP NAVIGATION BAR
-$lang['tn_game'] = 'Juego visión general';
+$lang['tn_game'] = 'Regresar al servidor';
 $lang['tn_logout'] = 'Salir';
 $lang['tn_exit_confirm'] = '¿Está seguro que desea salir del panel de control?';
 $lang['tn_update'] = '¡Actualización disponible!';
@@ -85,11 +85,11 @@ $lang['hm_principal_contributors'] = 'Principales colaboradores';
 // PERMISSIONS
 $lang['mod_title'] = 'Administrar permisos';
 $lang['mod_range'] = 'Rango';
-$lang['mod_power_config'] = 'Acceso a Configuraciones';
-$lang['mod_power_info'] = 'Acceso a Información';
-$lang['mod_power_edition'] = 'Acceso a Edición';
-$lang['mod_power_tools'] = 'Acceso a Herramientas';
-$lang['mod_power_maintenance'] = 'Acceso a Mantenimiento';
+$lang['mod_power_config'] = 'Acceso a configuraciones del server';
+$lang['mod_power_info'] = 'Acceso a información';
+$lang['mod_power_edition'] = 'Acceso a edición';
+$lang['mod_power_tools'] = 'Acceso a herramientas';
+$lang['mod_power_maintenance'] = 'Acceso a mantenimiento';
 $lang['mod_power_log'] = 'Registrar acciones';
 $lang['mod_reference'] = 'Referencias';
 $lang['mod_save_all'] = 'Guardar permisos';
@@ -135,12 +135,12 @@ $lang['qe_succes'] = 'Operación realizada con éxito';
 $lang['qe_note'] = 'Nota: Ingresá una consulta a la vez';
 
 // SETTINGS - CONFIGURATIONS
-$lang['se_server_parameters'] = 'Ajustes del juego';
+$lang['se_server_parameters'] = 'Ajustes del servidor';
 $lang['se_name'] = 'Nombre';
 $lang['se_logo'] = 'Logo';
 $lang['se_lang'] = 'Idioma';
 $lang['se_general_speed'] = 'Velocidad general';
-$lang['se_normal_speed'] = 'Velocidad normal del juego: 1<br>Velocidad máxima recomendada: 100';
+$lang['se_normal_speed'] = 'Velocidad normal del servidor: 1<br>Velocidad máxima recomendada: 100';
 $lang['se_normal_speed_resoruces'] = 'Velocidad normal de producción: 1<br>Velocidad máxima recomendada: 100';
 $lang['se_normal_speed_fleett'] = 'Velocidad normal de las flotas: 1<br>Velocidad máxima recomendada: 100';
 $lang['se_fleet_speed'] = 'Velocidad de las flotas';
@@ -157,8 +157,8 @@ $lang['se_title_admins_protection'] = 'Marcá la casilla para activar la protecc
 $lang['se_admin_protection'] = 'Protección';
 $lang['se_save_parameters'] = 'Guardar cambios';
 $lang['se_configuration_title'] = 'Configuración';
-$lang['se_server_name'] = 'Nombre de tu juego';
-$lang['se_server_logo'] = 'El logo de tu juego. Solo puede ser una URL.';
+$lang['se_server_name'] = 'Nombre de tu servidor';
+$lang['se_server_logo'] = 'El logo de tu servidor. Solo puede ser una URL.';
 $lang['se_def_cdr'] = 'Defensas a escombros';
 $lang['se_ships_cdr'] = 'Naves a escombros';
 $lang['se_def_cdr_message'] = 'Establece el porcentaje de escombros que generarian las defensas después de un ataque';
@@ -192,7 +192,7 @@ Por lo tanto podrá atacar a los jugadores que tienen más de 2 puntos.';
 $lang['se_all_ok_message'] = '¡Cambios guardados con éxito!';
 
 // MODULES
-$lang['mdl_modules'] = 'Características del juego';
+$lang['mdl_modules'] = 'Características del servidor';
 $lang['mdl_save'] = 'Guardar características';
 $lang['module'][0] = 'Changelog';
 $lang['module'][1] = 'Visión general';
@@ -239,7 +239,7 @@ $lang['np_all_ok_message'] = '¡Cambios guardados con éxito!';
 $lang['np_save_parameters'] = 'Guardar cambios';
 
 // STATISTICS SETTINGS
-$lang['cs_title'] = 'Estadísticas';
+$lang['cs_title'] = 'Ajustes de estadísticas';
 $lang['cs_point_per_resources_used'] = 'Valor de 1 punto de estadística';
 $lang['cs_resources'] = 'recursos';
 $lang['cs_time_between_updates'] = 'Tiempo entre actualización de estadísticas';
@@ -251,7 +251,7 @@ $lang['cs_yes'] = 'Si';
 $lang['cs_no'] = 'No';
 
 // PREMIUM
-$lang['pr_title'] = 'Premium';
+$lang['pr_title'] = 'Ajustes de Premium';
 $lang['pr_pay_url'] = 'URL de pago';
 $lang['pr_trader'] = 'Costo Mercader (Materia Oscura)';
 $lang['pr_save_changes'] = 'Guardar cambios';
@@ -263,7 +263,7 @@ $lang['pr_all_ok_message'] = '¡Cambios guardados con éxito!';
 $lang['ce_edit'] = 'Editar lenguajes';
 $lang['ce_notice'] = 'Modifica a continuación los archivos de lenguaje, HTML permitido. Usar con cuidado.';
 $lang['ce_file'] = 'Seleccionar archivo de idioma';
-$lang['ce_warning'] = 'Realizar un cambio erróneo en este archivo puede provocar que el juego deje de funcionar, modifícalo únicamente si sabes lo que haces.';
+$lang['ce_warning'] = 'Realizar un cambio erróneo en este archivo puede provocar que el servidor deje de funcionar, modifícalo únicamente si sabes lo que haces.';
 $lang['ce_sure'] = '¿Estás seguro que deseas continuar?';
 $lang['ce_save_changes'] = 'Guardar cambios';
 $lang['ce_all_ok_message'] = '¡Cambios guardados con éxito!';

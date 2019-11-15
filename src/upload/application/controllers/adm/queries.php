@@ -47,9 +47,9 @@ class Queries extends Controller
         $this->current_user = parent::$users->getUserData();
 
         // Check if the user is allowed to access
-        if (AdministrationLib::haveAccess(
-            $this->current_user['user_authlevel']
-        ) && $this->current_user['user_authlevel'] == 3 && ADMIN_ACCESS_QUERY === true) {
+        if (AdministrationLib::haveAccess($this->current_user['user_authlevel'])
+            && $this->current_user['user_authlevel'] == 3
+            && ADMIN_ACCESS_QUERY === true) {
             $this->buildPage();
         } else {
             die(AdministrationLib::noAccessMessage($this->langs['ge_no_permissions']));

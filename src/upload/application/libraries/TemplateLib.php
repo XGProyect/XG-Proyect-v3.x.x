@@ -576,15 +576,12 @@ class TemplateLib
         $pages = array(
             ['home', $this->langs['mn_index'], '1'],
             ['moderation', $this->langs['mn_permissions'], '1'],
-            ['reset', $this->langs['mn_reset_universe'], '1'],
-            ['queries', $this->langs['mn_sql_queries'], '1'],
             ['server', $this->langs['mn_config_server'], '2'],
             ['modules', $this->langs['mn_config_modules'], '2'],
             ['planets', $this->langs['mn_config_planets'], '2'],
             ['registration', $this->langs['mn_config_registrations'], '2'],
             ['statistics', $this->langs['mn_config_stats'], '2'],
             ['premium', $this->langs['mn_premium'], '2'],
-            ['editor', $this->langs['mn_config_changelog'], '2'],
             ['information', $this->langs['mn_info_general'], '3'],
             ['errors', $this->langs['mn_info_db'], '3'],
             ['fleetmovements', $this->langs['mn_info_fleets'], '3'],
@@ -592,6 +589,7 @@ class TemplateLib
             ['maker', $this->langs['mn_edition_maker'], '4'],
             ['users', $this->langs['mn_edition_users'], '4'],
             ['alliances', $this->langs['mn_edition_alliances'], '4'],
+            ['editor', $this->langs['mn_edition_languages'], '4'],
             ['backup', $this->langs['mn_tools_backup'], '5'],
             ['encrypter', $this->langs['mn_tools_encrypter'], '5'],
             ['globalmessage', $this->langs['mn_tools_global_message'], '5'],
@@ -599,7 +597,9 @@ class TemplateLib
             ['buildstats', $this->langs['mn_tools_manual_update'], '5'],
             ['update', $this->langs['mn_tools_update'], '5'],
             ['migrate', $this->langs['mn_tools_migrate'], '5'],
+            ['queries', $this->langs['mn_sql_queries'], '5'],
             ['repair', $this->langs['mn_maintenance_db'], '6'],
+            ['reset', $this->langs['mn_reset_universe'], '6'],
         );
         // BUILD THE MENU
         foreach ($pages as $key => $data) {
