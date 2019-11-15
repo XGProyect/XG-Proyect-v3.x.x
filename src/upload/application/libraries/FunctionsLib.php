@@ -448,7 +448,7 @@ abstract class FunctionsLib extends XGPCore
     public static function sendEmail($to, $subject, $body, $from, $format = 'text', $headers = '')
     {
         // require email library
-        $mail_library_path = XGP_ROOT . SYSTEM_PATH . 'libraries/Email.php';
+        $mail_library_path = XGP_ROOT . SYSTEM_PATH . 'ci3_custom' . DIRECTORY_SEPARATOR . 'libraries' . DIRECTORY_SEPARATOR . 'Email.php';
 
         if (!file_exists($mail_library_path)) {
             return;
