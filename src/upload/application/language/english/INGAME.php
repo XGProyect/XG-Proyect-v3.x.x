@@ -726,18 +726,6 @@ $lang['st_actions'] = 'Actions';
 $lang['st_ally_request'] = 'Send request to this alliance';
 
 //----------------------------------------------------------------------------//
-//BANNED
-$lang['bn_no_players_banned'] = 'No banned players';
-$lang['bn_exists'] = 'Exists ';
-$lang['bn_players_banned'] = ' player/s banned/s';
-$lang['bn_players_banned_list'] = 'List of banned players';
-$lang['bn_player'] = 'Player';
-$lang['bn_reason'] = 'Reason';
-$lang['bn_from'] = 'From';
-$lang['bn_until'] = 'Until';
-$lang['bn_by'] = 'By';
-
-//----------------------------------------------------------------------------//
 //SYSTEM
 $lang['sys_attacker_lostunits'] = "The attacker has lost a total of";
 $lang['sys_defender_lostunits'] = "The defender has lost a total of";

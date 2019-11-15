@@ -736,18 +736,6 @@ $lang['st_actions'] = 'Acciones';
 $lang['st_ally_request'] = 'Echar solicitud a esta alianza';
 
 //----------------------------------------------------------------------------//
-//BANNED
-$lang['bn_no_players_banned'] = 'No hay jugadores baneados';
-$lang['bn_exists'] = 'Existe ';
-$lang['bn_players_banned'] = ' jugador/es baneado/s';
-$lang['bn_players_banned_list'] = 'Lista de jugadores baneados';
-$lang['bn_player'] = 'Jugador';
-$lang['bn_reason'] = 'Motivo';
-$lang['bn_from'] = 'Desde el';
-$lang['bn_until'] = 'Hasta el';
-$lang['bn_by'] = 'Por';
-
-//----------------------------------------------------------------------------//
 //SYSTEM
 $lang['sys_attacker_lostunits'] = "El atacante ha perdido un total de";
 $lang['sys_defender_lostunits'] = "El defensor ha perdido un total de";
