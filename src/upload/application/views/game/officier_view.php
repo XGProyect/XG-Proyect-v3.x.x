@@ -2,15 +2,15 @@
 <div id="content">
     <table width=600>
         <tr>
-            <td colspan="3" class="c">{Darkmatter}</td>
+            <td colspan="3" class="c">{dark_matter}</td>
         </tr>
         <tr>
-            <td class=l>
+            <td class="l">
                 <img border='0' src="{dpath}premium/DMaterie.jpg" align='top' width='120' height='120'>
             </td>
-            <td class=l>
-                <strong>{Darkmatter}</strong><br>
-                {of_darkmatter_description} 
+            <td class="l">
+                <strong>{dark_matter}</strong><br>
+                {of_darkmatter_description}
                 <div style="margin:4px 4px;">
                     <table>
                         <tr>
@@ -23,7 +23,7 @@
                     </table>
                 </div>
             </td>
-            <td class=l style="width:90px;text-align:center; vertical-align:middle;">
+            <td class="l" style="width:90px;text-align:center; vertical-align:middle;">
                 <a id='darkmatter2' href='{premium_pay_url}' style='cursor:pointer; text-align:center;width:100px;height:60px;'><br>
                     <div id='darkmatter2'><b>{of_get_darkmatter}</b></div>
                 </a>
@@ -34,37 +34,37 @@
         </tr>
         {officier_list}
         <tr>
-            <td class=l rowspan="2">
+            <td class="l" rowspan="2">
                 <img border='0' src="{dpath}premium/{img_big}.jpg" align='top' width='120' height='120'>
             </td>
-            <td class=l rowspan="2">
-                <b>{off_name}</b>(<b>{off_status}</b>)<br>
-                {off_desc}							
+            <td class="l" rowspan="2">
+                <b>{name}</b>(<b>{status}</b>)<br>
+                {description}
                 <div style="margin:4px 4px;">
                     <table>
                         <tr>
                             <td>
-                                <img src="{dpath}premium/{img_small}.gif" width="32" height="32" style="vertical-align:middle;" alt="{off_name}">
+                                <img src="{dpath}premium/{img_small}.gif" width="32" height="32" style="vertical-align:middle;" alt="{name}">
                             </td>
                             <td style='background-color:transparent;'>
-                                <strong style="color:skyblue; vertical-align:middle;">{off_desc_short}</strong>
+                                <strong style="color:skyblue; vertical-align:middle;">{benefits}</strong>
                             </td>
                         </tr>
                     </table>
                 </div>
             </td>
-            <td class=l style="width:90px;text-align:center; vertical-align:middle;">
-                <a href='{off_link_month}'>
+            <td class="l" style="width:90px;text-align:center; vertical-align:middle;">
+                <a href='{link_month}'>
                     <b>{of_months}<br><font color=lime>{of_only} {month_price}</font>
-                    <br>{Darkmatter}</b>
+                    <br>{dark_matter}</b>
                 </a>
             </td>
         </tr>
         <tr>
-            <td class=l style="width:90px;text-align:center; vertical-align:middle;">
-                <a href='{off_link_week}' >
+            <td class="l" style="width:90px;text-align:center; vertical-align:middle;">
+                <a href='{link_week}' >
                     <b>{of_week}<br><font color=lime>{of_only} {week_price}</font>
-                    <br>{Darkmatter}</b>
+                    <br>{dark_matter}</b>
                 </a>
             </td>
         </tr>

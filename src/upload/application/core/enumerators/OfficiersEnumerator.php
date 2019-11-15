@@ -25,11 +25,11 @@ namespace application\core\enumerators;
  */
 abstract class OfficiersEnumerator
 {
-    const premium_officier_commander = 601;
-    const premium_officier_admiral = 602;
-    const premium_officier_engineer = 603;
-    const premium_officier_geologist = 604;
-    const premium_officier_technocrat = 605;
+    const PREMIUM_OFFICIER_COMMANDER = 601;
+    const PREMIUM_OFFICIER_ADMIRAL = 602;
+    const PREMIUM_OFFICIER_ENGINEER = 603;
+    const PREMIUM_OFFICIER_GEOLOGIST = 604;
+    const PREMIUM_OFFICIER_TECHNOCRAT = 605;
 }
 
 /* end of OfficiersEnumerator.php */

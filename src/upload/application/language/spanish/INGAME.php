@@ -403,30 +403,6 @@ $lang['rs_daily'] = 'Diaria';
 $lang['rs_weekly'] = 'Semanal';
 
 //----------------------------------------------------------------------------//
-//OFFICIERS
-$lang['of_title'] = 'Oficiales';
-$lang['of_recruit'] = 'Reclutar';
-$lang['of_active'] = 'Activo hasta el';
-$lang['of_inactive'] = 'Inactivo';
-$lang['of_commander'] = 'Comandante';
-$lang['of_admiral'] = 'Almirante';
-$lang['of_engineer'] = 'Ingeniero';
-$lang['of_geologist'] = 'Geólogo';
-$lang['of_technocrat'] = 'Tecnócrata';
-$lang['of_get_know'] = '¡Consíguelo ahora!';
-$lang['of_add_admiral'] = '+2 huecos de flota máximos';
-$lang['of_add_engineer'] = 'Minimiza las perdidas de las defensas a la mitad,<br/>+10% de producción de energía';
-$lang['of_add_geologist'] = '+10% producción de minas';
-$lang['of_add_technocrat'] = '+2 al nivel de espionaje,<br/>25% menos tiempo de investigación';
-$lang['of_darkmatter_description'] = 'La Materia Oscura es una sustancia que desde hace apenas unos años se puede almacenar, y aun así esto representa grandes dificultades. De ella se pueden extraer increíbles cantidades de energía. El proceso que se requiere para producir Materia Oscura es complejo y arriesgado, por lo que se ha convertido en un bien muy valioso.
-¡Sólo la materia oscura comprada que aún no se ha consumido protege una cuenta de su eliminación!';
-$lang['of_darkmatter_description_short'] = 'El comandante y los oficiales pueden ser contratados con esta sustancia rara.';
-$lang['of_get_darkmatter'] = 'Obtener materia oscura';
-$lang['of_months'] = '3 meses por';
-$lang['of_week'] = '1 semana por';
-$lang['of_only'] = 'sólo';
-
-//----------------------------------------------------------------------------//
 //TECHTREE
 $lang['tt_requirements'] = 'Requisitos';
 $lang['tt_lvl'] = 'nivel ';
@@ -495,12 +471,6 @@ $lang['tech'] = array(
     408 => "Cúpula grande de protección",
     502 => "Misiles antibalísticos",
     503 => "Misil interplanetario",
-    600 => "Oficial",
-    601 => "Comandante",
-    602 => "Almirante",
-    603 => "Ingeniero",
-    604 => "Geólogo",
-    605 => "Tecnócrata",
 );
 
 $lang['res']['descriptions'] = array(
@@ -563,11 +533,6 @@ Cada nivel de esta tecnología aumenta el escudo efectivo en un 10% (basado en e
     408 => "La cúpula grande de protección proviene de una tecnología de defensa mejorada que absorbe incluso más energía antes de colapsarse.",
     502 => "Los misiles antibalísticos destruyen los misiles interplanetarios.",
     503 => "Los misiles interplanetarios destruyen los sistemas de defensa del enemigo. Tus misiles interplanetarios tienen actualmente un alcance de %s sistemas.",
-    601 => 'El puesto de Comandante se ha establecido por si mismo en la guerra moderna. A causa del simplificado manejo de las estructuras, las instrucciones pueden procesarse más rápidamente. ¡Con él serás capaz de tener una visión general de tu imperio! Esto te permitirá desarrollar estructuras que te llevan a estar a la delantera de tu enemigo.',
-    602 => 'El almirante de flota es un veterano de guerra experimentado y un habilidoso estratega. En las batallas más duras, es capaz de hacerse una idea de la situación y contactar a sus almirantes subordinados. Un emperador sabio puede confiar en su ayuda durante los combates y guiar más flotas al mismo tiempo.',
-    603 => 'El Ingeniero es un especialista en gestión de energía. En tiempos de paz aumenta la energía de todas las colonias. En caso de ataque, garantiza el abastecimiento de energía a los cañones, evitando una posible sobrecarga, lo que conduce a una reducción de defensas perdidas en batalla.',
-    604 => 'El geólogo es un experto en astrominerología y astrocristalografía. Apoyado por su equipo de metalúrgicos e ingenieros en química apoya a gobiernos interplanetarias a la explotación de fuentes de recursos y a la optimización del refinamiento de estos recursos.',
-    605 => 'El gremio de los Tecnócratas está compuesto de auténticos genios y siempre los encontrarás en un mundo donde la lógica humana sería descartada. Desde hace miles de años, ningún ser humano normal ha podido descifrar el código de un tecnócrata. El tecnócrata inspira a los investigadores del imperio con tan sólo su presencia.',
 );
 
 //----------------------------------------------------------------------------//
@@ -749,13 +714,6 @@ $lang['info'][502]['name'] = "Misiles antibalísticos";
 $lang['info'][502]['description'] = "Un misil antibalístico puede proteger a tu planeta de un misíl interplanetario que se está aproximando.";
 $lang['info'][503]['name'] = "Misil interplanetario";
 $lang['info'][503]['description'] = "Los misiles interplanetarios destruyen los sistemas de defensa del enemigo. Los sistemas de defensa destruidos por los misiles interplanetarios no serán reparados.";
-
-// -------------------------- OFFICIERS ----------------------------------------------------------------------------------------------------//
-$lang['info'][601]['description'] = 'Lista de construcción, Visión del imperio, Vista de galaxia mejorada, Filtro de mensajes, Accesos directos, Sin publicidad';
-$lang['info'][602]['description'] = '+2 huecos de flota máximos';
-$lang['info'][603]['description'] = 'Minimiza las perdidas de las defensas a la mitad,<br/>+10% de producción de energía';
-$lang['info'][604]['description'] = '+10% producción de minas';
-$lang['info'][605]['description'] = '+2 al nivel de espionaje,<br/>25% menos tiempo de investigación';
 
 //----------------------------------------------------------------------------//
 //STATISTICS

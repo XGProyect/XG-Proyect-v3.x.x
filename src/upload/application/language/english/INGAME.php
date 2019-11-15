@@ -404,30 +404,6 @@ $lang['rs_daily'] = 'Res per day:';
 $lang['rs_weekly'] = 'Res per week:';
 
 //----------------------------------------------------------------------------//
-//OFFICIERS
-$lang['of_title'] = 'Officers';
-$lang['of_recruit'] = 'Recruit';
-$lang['of_active'] = 'Active until';
-$lang['of_inactive'] = 'Inactive';
-$lang['of_commander'] = 'Commander';
-$lang['of_admiral'] = 'Admiral';
-$lang['of_engineer'] = 'Engineer';
-$lang['of_geologist'] = 'Geologist';
-$lang['of_technocrat'] = 'Technocrat';
-$lang['of_get_know'] = 'Get know!';
-$lang['of_add_admiral'] = '+2 max. fleet slots';
-$lang['of_add_engineer'] = 'Minimizes losses in half defenses,<br/>+10% energy production';
-$lang['of_add_geologist'] = '+10% mine production';
-$lang['of_add_technocrat'] = '+2 Espionage level,<br/>25% Less time for research';
-$lang['of_darkmatter_description'] = 'Dark Matter is a substance for which storage has only been possible for a few standard years and still requires a lot of effort. It can be processed to produce unimaginable quantities of energy. The methods used to gain Dark Matter are complex and full of risks, making it very valuable.
-Only Dark Matter that has been bought and is still available protects an account from deletion!';
-$lang['of_darkmatter_description_short'] = 'Commander and officers can be hired with this rare substance.';
-$lang['of_get_darkmatter'] = 'Get dark matter';
-$lang['of_months'] = '3 month for';
-$lang['of_week'] = '1 week for';
-$lang['of_only'] = 'only';
-
-//----------------------------------------------------------------------------//
 //TECHTREE
 $lang['tt_requirements'] = 'Requirements';
 $lang['tt_lvl'] = 'level ';
@@ -496,12 +472,6 @@ $lang['tech'] = array(
     408 => "Large Shield Dome",
     502 => "Anti-Ballistic Missiles",
     503 => "Interplanetary Missiles",
-    600 => "Official",
-    601 => "Commander",
-    602 => "Admiral",
-    603 => "Engineer",
-    604 => "Geologist",
-    605 => "Technocrat",
 );
 
 $lang['res']['descriptions'] = array(
@@ -563,11 +533,6 @@ $lang['res']['descriptions'] = array(
     408 => "The evolution of the small shield dome can employ significantly more energy to withstand attacks.",
     502 => "Anti-Ballistic Missiles destroy attacking interplanetary missiles",
     503 => "Interplanetary Missiles destroy enemy defences. Your interplanetary missiles have got a coverage of %s systems.",
-    601 => 'The Commander-position has established itself in modern warfare. Because of the simplified command structure, instructions can be handled faster. With Commander you are able to overview your entire empire! This allows you to develop structures that bring you one step closer to your enemy.',
-    602 => 'The Fleet Admiral is an experienced combat war veteran and skilled strategist. Even in the toughest of battles, he is able to create an overview of the situation and maintain contact to his subordinate admirals. The Fleet Admiral is also an accomplished computer programmer who, in an emergency situation, can gain two additional slots to control his battle fleets. He also provides an additional expedition slot, and allows orders to be passed on to the fleet detailing which resources should be prioritised when looting after a successful attack.',
-    603 => 'The Engineer is a specialist on energy management and defence capabilities. In times of peace, he increases the energy of the colonies, insuring an equal distribution of power across all the grids. In case of an enemy attack, he immediately routs all the power to all defence mechanisms, avoiding an eventual overload, which results in lower defence losses during a battle.',
-    604 => 'The Geologist is a expert in astro-mineralogy and crystalography. He assists his teams in metallurgy and chemistry as he also takes care of the interplanetary communications optimizing the use and refining of the raw material along the empire. Utilizing state of the art equipment for surveying, the Geologist can locate optimal areas for mining, increasing mining production by 10%.',
-    605 => 'The guild of The Technocrats is composed of genius scientists, and you will find them always over the realm where all human logic would be defied. For thousands of years, no normal humans have ever cracked the code of a Technocrat. The Technocrat inspires the researchers of the empire with his presence.',
 );
 
 //----------------------------------------------------------------------------//
@@ -739,13 +704,6 @@ $lang['info'][502]['name'] = "Anti-Ballistic Missiles";
 $lang['info'][502]['description'] = 'Anti Ballistic Missiles (ABM) are your only line of defence when attacked by Interplanetary Missiles (IPM) on your planet or moon. When a launch of IPMs is detected, these missiles automatically arm, process a launch code in their flight computers, target the inbound IPM, and launch to intercept. During the flight, the target IPM is constantly tracked and course corrections are applied until the ABM reaches the target and destroys the attacking IPM. Each ABM destroys one incoming IPM.';
 $lang['info'][503]['name'] = "Interplanetary Missiles";
 $lang['info'][503]['description'] = 'Interplanetary Missiles (IPM) are your offensive weapon to destroy the defences of your target. Using state of the art tracking technology, each missile targets a certain number of defences for destruction. Tipped with an anti-matter bomb, they deliver a destructive force so severe that destroyed shields and defences cannot be repaired. The only way to counter these missiles is with ABMs.';
-
-// -------------------------- OFFICIERS ----------------------------------------------------------------------------------------------------//
-$lang['info'][601]['description'] = 'Building queue, Empire view, Improved galaxy view, Message filter, Shortcuts, Advertisement free';
-$lang['info'][602]['description'] = '+2 max. fleet slots';
-$lang['info'][603]['description'] = 'Minimizes losses in half defenses,<br/>+10% energy production';
-$lang['info'][604]['description'] = '+10% mine production';
-$lang['info'][605]['description'] = '+2 Espionage level,<br/>25% Less time for research';
 
 //----------------------------------------------------------------------------//
 //STATISTICS
