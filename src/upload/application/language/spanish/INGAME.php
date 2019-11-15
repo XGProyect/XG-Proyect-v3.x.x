@@ -758,38 +758,6 @@ $lang['info'][604]['description'] = '+10% producción de minas';
 $lang['info'][605]['description'] = '+2 al nivel de espionaje,<br/>25% menos tiempo de investigación';
 
 //----------------------------------------------------------------------------//
-//BUDDY
-$lang['bu_request_exists'] = '¡Ya existe una solicitud a ese jugador!';
-$lang['bu_cannot_request_yourself'] = '¡No puedes solicitarte como amigo a ti mismo!';
-$lang['bu_request_message'] = 'Mensaje de solicitud';
-$lang['bu_player'] = 'Nombre';
-$lang['bu_request_text'] = 'Texto de solicitud';
-$lang['bu_characters'] = 'caracteres';
-$lang['bu_back'] = 'Volver';
-$lang['bu_send'] = 'Enviar';
-$lang['bu_cancel_request'] = 'Cancelar Solicitud';
-$lang['bu_accept'] = 'Aceptar';
-$lang['bu_decline'] = 'Rechazar';
-$lang['bu_delete'] = 'Eliminar';
-$lang['bu_buddy_list'] = 'Lista de Amigos';
-$lang['bu_requests'] = 'Solicitudes de amistad';
-$lang['bu_alliance'] = 'Alianza';
-$lang['bu_coords'] = 'Coordenadas';
-$lang['bu_text'] = 'Texto / Estado';
-$lang['bu_action'] = 'Acción';
-$lang['bu_my_requests'] = 'Mis solicitudes';
-$lang['bu_partners'] = 'Mis Amigos';
-$lang['bu_estate'] = 'Estado';
-$lang['bu_deleted_title'] = 'Amigo perdido';
-$lang['bu_deleted_text'] = 'El jugador %u te ha eliminado de su lista de amigos.';
-$lang['bu_accepted_title'] = 'Solicitud aceptada';
-$lang['bu_accepted_text'] = 'El jugador %u ha aceptado tu solicitud de amistad.';
-$lang['bu_rejected_title'] = 'Solicitud rechazada';
-$lang['bu_rejected_text'] = 'El jugador %u ha rechazado tu solicitud de amistad.';
-$lang['bu_to_accept_title'] = 'Nueva solicitud de amistad';
-$lang['bu_to_accept_text'] = 'El jugador %u te ha enviado una solicitud de amistad.';
-
-//----------------------------------------------------------------------------//
 //STATISTICS
 $lang['st_player'] = 'Jugador';
 $lang['st_alliance'] = 'Alianza';

@@ -748,38 +748,6 @@ $lang['info'][604]['description'] = '+10% mine production';
 $lang['info'][605]['description'] = '+2 Espionage level,<br/>25% Less time for research';
 
 //----------------------------------------------------------------------------//
-//BUDDY
-$lang['bu_request_exists'] = 'There is already an application to that player!';
-$lang['bu_cannot_request_yourself'] = 'You can not ask yourself as a friend';
-$lang['bu_request_message'] = 'Request message';
-$lang['bu_player'] = 'Name';
-$lang['bu_request_text'] = 'Application Text';
-$lang['bu_characters'] = 'characters';
-$lang['bu_back'] = 'Back';
-$lang['bu_send'] = 'Send';
-$lang['bu_cancel_request'] = 'Cancel Request';
-$lang['bu_accept'] = 'Accept';
-$lang['bu_decline'] = 'Reject';
-$lang['bu_delete'] = 'Delete';
-$lang['bu_buddy_list'] = 'Buddy list';
-$lang['bu_requests'] = 'Applications';
-$lang['bu_alliance'] = 'Alliance';
-$lang['bu_coords'] = 'Coordinates';
-$lang['bu_text'] = 'Text';
-$lang['bu_action'] = 'Action';
-$lang['bu_my_requests'] = 'My Requests';
-$lang['bu_partners'] = 'My buddies';
-$lang['bu_estate'] = 'State';
-$lang['bu_deleted_title'] = 'Friend lost';
-$lang['bu_deleted_text'] = 'Player %u has deleted you from their list of buddies.';
-$lang['bu_accepted_title'] = 'Request accepted';
-$lang['bu_accepted_text'] = 'Player %u has accepted your buddy request.';
-$lang['bu_rejected_title'] = 'Request refused';
-$lang['bu_rejected_text'] = 'Player %u has rejected your buddy request.';
-$lang['bu_to_accept_title'] = 'New Friend Request';
-$lang['bu_to_accept_text'] = 'Player %u has sent you a buddy request.';
-
-//----------------------------------------------------------------------------//
 //STATISTICS
 $lang['st_player'] = 'Player';
 $lang['st_alliance'] = 'Alliance';

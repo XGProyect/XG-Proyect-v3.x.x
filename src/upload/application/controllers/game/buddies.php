@@ -33,25 +33,29 @@ use Exception;
  */
 class Buddies extends Controller
 {
-
+    /**
+     * The module ID
+     *
+     * @var int
+     */
     const MODULE_ID = 20;
 
     /**
+     * Current user data
      *
-     * @var type \Users_library
+     * @var array
      */
-    private $_user;
+    private $user;
 
     /**
+     * Contains a Buddy object
      *
      * @var \Buddy
      */
-    private $_buddy = null;
+    private $buddy = null;
 
     /**
      * Constructor
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -60,14 +64,17 @@ class Buddies extends Controller
         // check if session is active
         parent::$users->checkSession();
 
-        // load Model
-        parent::loadModel('game/buddies');
-
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
+        // load Model
+        parent::loadModel('game/buddies');
+
+        // load Language
+        parent::loadLang('buddies');
+
         // set data
-        $this->_user = $this->getUserData();
+        $this->user = $this->getUserData();
 
         // init a new buddy object
         $this->setUpBudies();
@@ -87,9 +94,9 @@ class Buddies extends Controller
      */
     private function setUpBudies()
     {
-        $this->_buddy = new Buddy(
-            $this->Buddies_Model->getBuddiesByUserId($this->_user['user_id']),
-            $this->_user['user_id']
+        $this->buddy = new Buddy(
+            $this->Buddies_Model->getBuddiesByUserId($this->user['user_id']),
+            $this->user['user_id']
         );
     }
 
@@ -115,14 +122,10 @@ class Buddies extends Controller
         ];
 
         if (isset($allowed_modes[$mode])) {
-
             if (isset($allowed_actions[$sm])) {
-
                 $this->{$allowed_modes[$mode]}($allowed_actions[$sm]);
             } else {
-
                 if ($allowed_modes[$mode] == 'buildRequestForm') {
-
                     $this->{$allowed_modes[$mode]}();
                 }
             }
@@ -139,7 +142,6 @@ class Buddies extends Controller
     private function execAction($action)
     {
         try {
-
             if (empty($action)) {
                 throw new Exception('Action cannot be empty');
             }
@@ -148,7 +150,6 @@ class Buddies extends Controller
 
             FunctionsLib::redirect('game.php?page=buddies');
         } catch (Exception $e) {
-
             die('Caught exception: ' . $e->getMessage() . "\n");
         }
     }
@@ -167,26 +168,20 @@ class Buddies extends Controller
         );
 
         if ($buddy->getBuddyStatus() == BuddiesStatus::isNotBuddy) {
-
-            if ($buddy->getBuddySender() != $this->_user['user_id']) {
-
+            if ($buddy->getBuddySender() != $this->user['user_id']) {
                 $this->sendMessage($buddy->getBuddySender(), 1);
-
-            } elseif ($buddy->getBuddySender() == $this->_user['user_id']) {
-
+            } elseif ($buddy->getBuddySender() == $this->user['user_id']) {
                 $this->sendMessage($buddy->getBuddyReceiver(), 1);
             }
         } else {
-            if ($buddy->getBuddySender() != $this->_user['user_id']) {
-
+            if ($buddy->getBuddySender() != $this->user['user_id']) {
                 $this->sendMessage($buddy->getBuddySender(), 2);
-            } elseif ($buddy->getBuddySender() == $this->_user['user_id']) {
-
+            } elseif ($buddy->getBuddySender() == $this->user['user_id']) {
                 $this->sendMessage($buddy->getBuddyReceiver(), 2);
             }
         }
 
-        $this->Buddies_Model->removeBuddyById($bid, $this->_user['user_id']);
+        $this->Buddies_Model->removeBuddyById($bid, $this->user['user_id']);
     }
 
     /**
@@ -204,7 +199,7 @@ class Buddies extends Controller
 
         $this->sendMessage($buddy->getBuddySender(), 3);
 
-        $this->Buddies_Model->setBuddyStatusById($bid, $this->_user['user_id']);
+        $this->Buddies_Model->setBuddyStatusById($bid, $this->user['user_id']);
     }
 
     /**
@@ -219,21 +214,19 @@ class Buddies extends Controller
 
         $buddy = null;
 
-        if ($buddy_data = $this->Buddies_Model->getBuddyIdByReceiverAndSender($user, $this->_user['user_id'])) {
-
+        if ($buddy_data = $this->Buddies_Model->getBuddyIdByReceiverAndSender($user, $this->user['user_id'])) {
             $buddy = new BuddyEntity($buddy_data);
         }
 
         if (!is_null($buddy) && $buddy->getBuddyId() != 0) {
-
-            FunctionsLib::message($this->getLang()['bu_request_exists'], 'game.php?page=buddies', 3, true);
+            FunctionsLib::message($this->langs->line('bu_request_exists'), 'game.php?page=buddies', 3, true);
         }
 
         $this->sendMessage($user, 4);
 
         $this->Buddies_Model->insertNewBuddyRequest(
             $user,
-            $this->_user['user_id'],
+            $this->user['user_id'],
             $text
         );
     }
@@ -269,15 +262,15 @@ class Buddies extends Controller
 
         FunctionsLib::sendMessage(
             $to,
-            $this->_user['user_id'],
+            $this->user['user_id'],
             '',
             5,
-            $this->_user['user_name'],
-            $this->getLang()[$types[$type]['title']],
+            $this->user['user_name'],
+            $this->langs->line($types[$type]['title']),
             str_replace(
                 '%u',
-                $this->_user['user_name'],
-                $this->getLang()[$types[$type]['text']]
+                $this->user['user_name'],
+                $this->langs->line($types[$type]['text'])
             )
         );
     }
@@ -291,15 +284,13 @@ class Buddies extends Controller
     {
         $user = filter_input(INPUT_GET, 'u', FILTER_VALIDATE_INT);
 
-        if ($user == $this->_user['user_id']) {
-
-            FunctionsLib::message($this->getLang()['bu_cannot_request_yourself'], 'game.php?page=buddies', 2, true);
+        if ($user == $this->user['user_id']) {
+            FunctionsLib::message($this->langs->line('bu_cannot_request_yourself'), 'game.php?page=buddies', 2, true);
         }
 
         $user = $this->Buddies_Model->checkIfBuddyExists($user);
 
         if (!$user) {
-
             FunctionsLib::redirect('game.php?page=buddies');
         }
 
@@ -309,7 +300,7 @@ class Buddies extends Controller
                 array_merge(
                     ['js_path' => JS_PATH],
                     $user,
-                    $this->getLang()
+                    $this->langs->language
                 )
             )
         );
@@ -333,7 +324,8 @@ class Buddies extends Controller
         // display the page
         parent::$page->display(
             $this->getTemplate()->set(
-                'game/buddies_view', array_merge($page, $this->getLang())
+                'game/buddies_view',
+                array_merge($page, $this->langs->language)
             )
         );
     }
@@ -345,13 +337,11 @@ class Buddies extends Controller
      */
     private function buildListOfRequestsReceived()
     {
-        $received_requests = $this->_buddy->getReceivedRequests();
+        $received_requests = $this->buddy->getReceivedRequests();
         $rows = [];
 
         if ($this->hasAny($received_requests)) {
-
             foreach ($received_requests as $received) {
-
                 $rows[] = $this->extractPlayerData($received);
             }
         }
@@ -366,13 +356,11 @@ class Buddies extends Controller
      */
     private function buildListOfRequestsSent()
     {
-        $requests_sent = $this->_buddy->getSentRequests();
+        $requests_sent = $this->buddy->getSentRequests();
         $rows = [];
 
         if ($this->hasAny($requests_sent)) {
-
             foreach ($requests_sent as $sent) {
-
                 $rows[] = $this->extractPlayerData($sent);
             }
         }
@@ -387,13 +375,11 @@ class Buddies extends Controller
      */
     private function buildListOfBuddies()
     {
-        $buddies = $this->_buddy->getBuddies();
+        $buddies = $this->buddy->getBuddies();
         $rows = [];
 
         if ($this->hasAny($buddies)) {
-
             foreach ($buddies as $buddy) {
-
                 $rows[] = $this->extractPlayerData($buddy);
             }
         }
@@ -410,11 +396,9 @@ class Buddies extends Controller
      */
     private function extractPlayerData(BuddyEntity $buddy)
     {
-        if ($buddy->getBuddySender() == $this->_user['user_id']) {
-
+        if ($buddy->getBuddySender() == $this->user['user_id']) {
             $id_to_get = $buddy->getBuddyReceiver();
         } else {
-
             $id_to_get = $buddy->getBuddySender();
         }
 
@@ -462,21 +446,14 @@ class Buddies extends Controller
         $bid = $buddy->getBuddyId();
 
         if ($buddy->getBuddyStatus() == BuddiesStatus::isBuddy) {
-
-            $url = $this->generateUrl($bid, 1, $this->getLang()['bu_delete']);
-
+            $url = $this->generateUrl($bid, 1, $this->langs->line('bu_delete'));
         } else {
-
-            if ($buddy->getBuddySender() == $this->_user['user_id']) {
-
-                $url = $this->generateUrl($bid, 1, $this->getLang()['bu_cancel_request']);
-
+            if ($buddy->getBuddySender() == $this->user['user_id']) {
+                $url = $this->generateUrl($bid, 1, $this->langs->line('bu_cancel_request'));
             } else {
-
-                $url = $this->generateUrl($bid, 2, $this->getLang()['bu_accept']);
+                $url = $this->generateUrl($bid, 2, $this->langs->line('bu_accept'));
                 $url .= '<br/>';
-                $url .= $this->generateUrl($bid, 1, $this->getLang()['bu_decline']);
-
+                $url .= $this->generateUrl($bid, 1, $this->langs->line('bu_decline'));
             }
         }
 
