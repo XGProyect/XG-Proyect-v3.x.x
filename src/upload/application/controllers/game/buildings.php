@@ -534,13 +534,16 @@ class Buildings extends Controller
             ],
         ];
 
-        return array_filter($allowed_buildings[$this->getCurrentPage()][$this->_planet['planet_type']], function ($value) {
-            return DevelopmentsLib::isDevelopmentAllowed(
-                $this->_user,
-                $this->_planet,
-                $value
-            );
-        });
+        return array_filter(
+            $allowed_buildings[$this->getCurrentPage()][$this->_planet['planet_type']],
+            function ($value) {
+                return DevelopmentsLib::isDevelopmentAllowed(
+                    $this->_user,
+                    $this->_planet,
+                    $value
+                );
+            }
+        );
     }
     /**
      * OLD METHODS BELOW
