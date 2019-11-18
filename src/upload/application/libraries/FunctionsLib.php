@@ -710,7 +710,7 @@ abstract class FunctionsLib extends XGPCore
     public static function checkServer($current_user)
     {
         if (self::readConfig('game_enable') == 0
-            && $current_user['user_authlevel'] < UserRanksEnumerator::admin
+            && $current_user['user_authlevel'] < UserRanksEnumerator::ADMIN
             && !defined('IN_ADMIN')) {
             self::message(stripslashes(FunctionsLib::readConfig('close_reason')), '', '', false, false);
             die();
