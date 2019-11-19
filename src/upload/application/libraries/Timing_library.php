@@ -27,7 +27,6 @@ use application\core\XGPCore;
  */
 abstract class Timing_library extends XGPCore
 {
-
     /**
      * Return an string with the online time formatted
      *
@@ -41,13 +40,11 @@ abstract class Timing_library extends XGPCore
         $status = parent::$lang['offline'];
 
         if ($online_time + 60 * 15 >= time()) {
-
             $color = 'yellow';
             $status = parent::$lang['minutes'];
         }
 
         if ($online_time + 60 * 10 >= time()) {
-
             $color = 'lime';
             $status = parent::$lang['online'];
         }
@@ -65,7 +62,6 @@ abstract class Timing_library extends XGPCore
     public static function formatExtendedDate($time)
     {
         if (!is_numeric($time)) {
-
             $time = strtotime($time);
         }
 
@@ -82,7 +78,6 @@ abstract class Timing_library extends XGPCore
     public static function formatShortDate($time)
     {
         if (!is_numeric($time)) {
-
             $time = strtotime($time);
         }
 
