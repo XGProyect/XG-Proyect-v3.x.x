@@ -13,6 +13,8 @@
  */
 namespace application\models\adm;
 
+use application\core\Database;
+
 /**
  * Home Class
  *
@@ -25,24 +27,21 @@ namespace application\models\adm;
  */
 class Home
 {
-
     private $db = null;
 
     /**
      * Constructor
      *
-     * @return void
+     * @param Database $db
      */
-    public function __construct($db)
+    public function __construct(Database $db)
     {
         // use this to make queries
         $this->db = $db;
     }
 
     /**
-     * __destruct
-     *
-     * @return void
+     * Destructor
      */
     public function __destruct()
     {

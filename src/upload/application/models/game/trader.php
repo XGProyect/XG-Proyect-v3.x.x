@@ -13,6 +13,8 @@
  */
 namespace application\models\game;
 
+use application\core\Database;
+
 /**
  * Trader Class
  *
@@ -25,22 +27,21 @@ namespace application\models\game;
  */
 class Trader
 {
-
     private $db = null;
 
     /**
-     * __construct()
+     * Constructor
+     *
+     * @param Database $db
      */
-    public function __construct($db)
+    public function __construct(Database $db)
     {
         // use this to make queries
         $this->db = $db;
     }
 
     /**
-     * __destruct
-     *
-     * @return void
+     * Destructor
      */
     public function __destruct()
     {

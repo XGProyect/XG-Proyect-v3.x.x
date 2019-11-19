@@ -13,6 +13,7 @@
  */
 namespace application\models\game;
 
+use application\core\Database;
 use application\core\entities\FleetEntity;
 use application\core\enumerators\MissionsEnumerator as Missions;
 
@@ -28,22 +29,21 @@ use application\core\enumerators\MissionsEnumerator as Missions;
  */
 class Fleet
 {
-
     private $db = null;
 
     /**
-     * __construct()
+     * Constructor
+     *
+     * @param Database $db
      */
-    public function __construct($db)
+    public function __construct(Database $db)
     {
         // use this to make queries
         $this->db = $db;
     }
 
     /**
-     * __destruct
-     *
-     * @return void
+     * Destructor
      */
     public function __destruct()
     {

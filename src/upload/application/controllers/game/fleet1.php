@@ -75,8 +75,6 @@ class Fleet1 extends Controller
 
     /**
      * Constructor
-     *
-     * @return void
      */
     public function __construct()
     {

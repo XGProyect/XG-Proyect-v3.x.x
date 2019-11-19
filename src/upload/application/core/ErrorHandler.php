@@ -36,8 +36,6 @@ final class ErrorHandler
 
     /**
      * Constructor
-     *
-     * @return void
      */
     public function __construct()
     {
