@@ -136,6 +136,198 @@ class TemplateLib
     }
 
     /**
+     * Display the admin page
+     *
+     * @param string $current_page
+     * @param boolean $sidebar
+     * @param boolean $navigation
+     * @param boolean $footer
+     * @return void
+     */
+    public function displayAdmin(string $current_page, bool $sidebar = true, bool $navigation = true, bool $footer = true): void
+    {
+        if ($sidebar) {
+            $parse['sidebar'] = $this->adminSidebar();
+        }
+
+        if ($navigation) {
+            $parse['navigation'] = $this->adminNavigation();
+        }
+
+        if ($footer) {
+            $parse['footer'] = $this->adminFooter();
+        }
+
+        $page = $this->adminSimpleHeader();
+        $page .= $this->adminPage($current_page, ($parse ?? []), ($sidebar && $navigation && $footer));
+        $page .= $this->adminSimpleFooter();
+
+        // Show result page
+        die($page);
+    }
+
+    /**
+     * Set the admin page
+     *
+     * @param string $page
+     * @param array $parse
+     * @return string
+     */
+    private function adminPage(string $page, array $parse, bool $full): string
+    {
+        return $this->parseTemplate(
+            $this->getTemplate(($full ? 'adm/admin_page_view' : 'adm/simple_admin_page_view')),
+            array_merge($this->langs, $parse, ['page_content' => $page])
+        );
+    }
+
+    /**
+     * Set the admin meta header
+     *
+     * @return string
+     */
+    private function adminSimpleHeader(): string
+    {
+        return $this->parseTemplate(
+            $this->getTemplate('adm/simple_header'),
+            [
+                'title' => 'Admin CP',
+                'admin_public_path' => ADMIN_PUBLIC_PATH,
+            ]
+        );
+    }
+
+    /**
+     * Set the admin sidebar
+     *
+     * @return string
+     */
+    private function adminSidebar(): string
+    {
+        $current_page = isset($_GET['page']) ? $_GET['page'] : null;
+        $items = '';
+        $flag = '';
+        $pages = array(
+            ['moderation', $this->langs['mn_permissions'], '5'],
+            ['server', $this->langs['mn_config_server'], '2'],
+            ['modules', $this->langs['mn_config_modules'], '2'],
+            ['planets', $this->langs['mn_config_planets'], '2'],
+            ['registration', $this->langs['mn_config_registrations'], '2'],
+            ['statistics', $this->langs['mn_config_stats'], '2'],
+            ['premium', $this->langs['mn_premium'], '2'],
+            ['tasks', $this->langs['mn_info_tasks'], '3'],
+            ['errors', $this->langs['mn_info_db'], '3'],
+            ['fleetmovements', $this->langs['mn_info_fleets'], '3'],
+            ['messages', $this->langs['mn_info_messages'], '3'],
+            ['maker', $this->langs['mn_edition_maker'], '4'],
+            ['users', $this->langs['mn_edition_users'], '4'],
+            ['alliances', $this->langs['mn_edition_alliances'], '4'],
+            ['editor', $this->langs['mn_edition_languages'], '4'],
+            ['backup', $this->langs['mn_tools_backup'], '5'],
+            ['encrypter', $this->langs['mn_tools_encrypter'], '5'],
+            ['globalmessage', $this->langs['mn_tools_global_message'], '5'],
+            ['ban', $this->langs['mn_tools_ban'], '5'],
+            ['buildstats', $this->langs['mn_tools_manual_update'], '5'],
+            ['update', $this->langs['mn_tools_update'], '5'],
+            ['migrate', $this->langs['mn_tools_migrate'], '5'],
+            ['queries', $this->langs['mn_sql_queries'], '5'],
+            ['repair', $this->langs['mn_maintenance_db'], '6'],
+            ['reset', $this->langs['mn_reset_universe'], '6'],
+        );
+        $active_block = 1;
+
+        // BUILD THE MENU
+        foreach ($pages as $key => $data) {
+            $extra = '';
+            $active = '';
+
+            if ($data[2] != $flag) {
+                $flag = $data[2];
+                $items = '';
+            }
+
+            if ($data[0] == 'buildstats') {
+                $extra = 'onClick="return confirm(\'' . $this->langs['mn_tools_manual_update_confirm'] . '\');"';
+            }
+
+            if ($data[0] == $current_page) {
+                $active = ' active';
+                $active_block = $data[2];
+            }
+
+            $items .= '<a class="collapse-item' . $active . '" href="' . ADM_URL . 'admin.php?page=' . $data[0] . '"  ' . $extra . '>' . $data[1] . '</a>';
+
+            $parse_block[$data[2]] = $items;
+        }
+
+        // PARSE THE MENU AND OTHER DATA
+        $parse = $this->langs;
+        $parse['username'] = $this->current_user['user_name'];
+        $parse['menu_block_2'] = $parse_block[2];
+        $parse['menu_block_3'] = $parse_block[3];
+        $parse['menu_block_4'] = $parse_block[4];
+        $parse['menu_block_5'] = $parse_block[5];
+        $parse['menu_block_6'] = $parse_block[6];
+        $parse['active_' . $active_block] = ' active';
+        $parse['active_' . $active_block . '_show'] = ' show';
+
+        return $this->parseTemplate(
+            $this->getTemplate('adm/sidebar_view'), $parse
+        );
+    }
+
+    /**
+     * Set the admin navigation
+     *
+     * @return string
+     */
+    private function adminNavigation(): string
+    {
+        return $this->parseTemplate(
+            $this->getTemplate('adm/navigation_view'),
+            array_merge(
+                $this->langs,
+                [
+                    'user_name' => $this->current_user['user_name'],
+                    'current_date' => Timing::formatShortDate(time()),
+                ]
+            )
+        );
+    }
+
+    /**
+     * Set the admin footer
+     *
+     * @return string
+     */
+    private function adminFooter(): string
+    {
+        return $this->parseTemplate(
+            $this->getTemplate('adm/footer_view'),
+            [
+                'version' => SYSTEM_VERSION,
+                'year' => $this->current_year,
+            ]
+        );
+    }
+
+    /**
+     * Set admin simple footer
+     *
+     * @return string
+     */
+    private function adminSimpleFooter(): string
+    {
+        return $this->parseTemplate(
+            $this->getTemplate('adm/simple_footer'),
+            [
+                'admin_public_path' => ADMIN_PUBLIC_PATH,
+                'version' => SYSTEM_VERSION,
+            ]
+        );
+    }
+
+    /**
      * parseTemplate
      *
      * @param string $template Template
