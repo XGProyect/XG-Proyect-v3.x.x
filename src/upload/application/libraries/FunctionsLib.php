@@ -21,7 +21,7 @@ use application\core\XGPCore;
 use application\libraries\messenger\MessagesFormat;
 use application\libraries\messenger\MessagesOptions;
 use application\libraries\messenger\Messenger;
-use application\libraries\Timing_library as Timing;
+use application\libraries\TimingLibrary as Timing;
 use CI_Email;
 
 /**
