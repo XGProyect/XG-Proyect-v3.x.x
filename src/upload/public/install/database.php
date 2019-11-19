@@ -243,7 +243,7 @@ $tables['options_insert'] = "INSERT INTO `" . OPTIONS . "` (`option_name`, `opti
 ('noobprotection', '1'),
 ('noobprotectiontime', '50000'),
 ('noobprotectionmulti', '5'),
-('modules', '1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;0;1;1;'),
+('modules', '1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;0;1;1'),
 ('moderation', '1,1,0,0,1,0;1,1,0,1,1,0;1;'),
 ('initial_fields', '163'),
 ('metal_basic_income', '90'),
