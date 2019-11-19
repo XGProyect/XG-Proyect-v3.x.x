@@ -18,7 +18,7 @@ use application\core\Enumerators\OfficiersEnumerator as OE;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
 use application\libraries\OfficiersLib;
-use application\libraries\Timing_library as Timing;
+use application\libraries\TimingLibrary as Timing;
 use DPATH;
 
 /**

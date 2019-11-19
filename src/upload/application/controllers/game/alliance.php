@@ -19,7 +19,7 @@ use application\core\enumerators\SwitchIntEnumerator as SwitchInt;
 use application\libraries\alliance\Alliances;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
-use application\libraries\Timing_library as Timing;
+use application\libraries\TimingLibrary as Timing;
 
 /**
  * Alliance Class

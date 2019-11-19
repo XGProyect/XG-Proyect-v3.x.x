@@ -21,7 +21,7 @@ use application\core\enumerators\PreferencesEnumerator as PrefEnum;
 use application\libraries\FormatLib as Format;
 use application\libraries\FunctionsLib as Functions;
 use application\libraries\game\Preferences as Pref;
-use application\libraries\Timing_library as Timing;
+use application\libraries\TimingLibrary as Timing;
 
 /**
  * Preferences Class

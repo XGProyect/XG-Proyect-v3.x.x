@@ -15,7 +15,7 @@ namespace application\controllers\game;
 
 use application\core\Controller;
 use application\libraries\FunctionsLib;
-use application\libraries\Timing_library as Timing;
+use application\libraries\TimingLibrary as Timing;
 
 /**
  * Banned Class

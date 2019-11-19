@@ -16,7 +16,7 @@ namespace application\libraries;
 use application\core\XGPCore;
 
 /**
- * Timing_library Class
+ * Timing Library Class
  *
  * @category Classes
  * @package  Application
@@ -25,7 +25,7 @@ use application\core\XGPCore;
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-abstract class Timing_library extends XGPCore
+abstract class TimingLibrary extends XGPCore
 {
     /**
      * Return an string with the online time formatted

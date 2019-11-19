@@ -18,7 +18,7 @@ use application\core\entities\BuddyEntity;
 use application\libraries\buddies\Buddy;
 use application\libraries\enumerators\BuddiesStatusEnumerator as BuddiesStatus;
 use application\libraries\FunctionsLib;
-use application\libraries\Timing_library as Timing;
+use application\libraries\TimingLibrary as Timing;
 use Exception;
 
 /**

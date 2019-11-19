@@ -22,7 +22,7 @@ use application\libraries\FunctionsLib;
 use application\libraries\game\Fleets;
 use application\libraries\premium\Premium;
 use application\libraries\research\Researches;
-use application\libraries\Timing_library as Timing;
+use application\libraries\TimingLibrary as Timing;
 
 /**
  * Movement Class
