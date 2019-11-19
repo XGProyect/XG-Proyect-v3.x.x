@@ -14,7 +14,7 @@
 namespace application\libraries;
 
 use application\libraries\ProductionLib as Production;
-use application\libraries\Timing_library as Timing;
+use application\libraries\TimingLibrary as Timing;
 
 /**
  * TemplateLib Class
