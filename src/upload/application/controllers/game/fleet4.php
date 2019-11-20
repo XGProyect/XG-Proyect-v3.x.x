@@ -210,7 +210,6 @@ class Fleet4 extends Controller
 
         // validate all the received data
         if ($this->runValidations()) {
-
             // final step, send and redirect
             $this->sendFleet();
         }
@@ -258,7 +257,6 @@ class Fleet4 extends Controller
         ]);
 
         if (is_null($data)) {
-
             FunctionsLib::redirect('game.php?page=fleet1');
         }
 
@@ -282,7 +280,6 @@ class Fleet4 extends Controller
         );
 
         if ($target) {
-
             $this->_occupied_planet = true;
 
             // set target data
@@ -326,9 +323,7 @@ class Fleet4 extends Controller
         ];
 
         foreach ($validations as $validation) {
-
             if (!$this->{'validate' . ucfirst($validation)}()) {
-
                 return false;
             }
         }
@@ -346,14 +341,12 @@ class Fleet4 extends Controller
         // skip if it's our own planet or it's an empty planet
         if ($this->_own_planet
             or !$this->_occupied_planet) {
-
             return true;
         }
 
         if (FunctionsLib::readConfig('adm_attack') != 0
             && $this->_target_data['user_authlevel'] >= 1
             && $this->_user['user_authlevel'] == 0) {
-
             $this->showMessage(
                 $this->getLang()['fl_admins_cannot_be_attacked']
             );
@@ -370,9 +363,9 @@ class Fleet4 extends Controller
     private function validateOwnVacations()
     {
         if (parent::$users->isOnVacations($this->_user)) {
-
             $this->showMessage($this->getLang()['fl_vacation_mode_active']);
         }
+
         // set owner
         $this->_fleet_data['fleet_owner'] = $this->_user['user_id'];
 
@@ -389,14 +382,12 @@ class Fleet4 extends Controller
         // skip if it's our own planet or it's an empty planet
         if ($this->_own_planet
             or !$this->_occupied_planet) {
-
             return true;
         }
 
         if (isset($this->_target_data)
             && parent::$users->isOnVacations($this->_target_data)
             && $this->_clean_input_data['mission'] != Missions::recycle) {
-
             $this->showMessage($this->getLang()['fl_in_vacation_player']);
         }
 
@@ -414,7 +405,6 @@ class Fleet4 extends Controller
 
         if ($target_data['group'] > 0
             && $this->_clean_input_data['mission'] == Missions::acs) {
-
             $target_string = 'g' . (int) $target_data['galaxy'] .
             's' . (int) $target_data['system'] .
             'p' . (int) $target_data['planet'] .
@@ -422,7 +412,6 @@ class Fleet4 extends Controller
 
             if ($target_data['acs_target'] == $target_string
                 && $this->Fleet_Model->getAcsCount($target_data['group']) > 0) {
-
                 // set acs group
                 $this->_fleet_data['fleet_group'] = $target_data['group'];
 
@@ -453,11 +442,9 @@ class Fleet4 extends Controller
         $price = parent::$objects->getPrice();
 
         if ($fleet) {
-
             $total_ships = 0;
 
             foreach ($fleet as $ship_id => $amount) {
-
                 if (!isset($planet_ships[$objects[$ship_id]])
                     or ((int) $amount > $planet_ships[$objects[$ship_id]])) {
 
@@ -496,42 +483,34 @@ class Fleet4 extends Controller
         $target = $this->_target_data;
 
         if ($data['mission'] == Missions::attack) {
-
             if ($this->_own_planet) {
-
                 return false;
             }
         }
 
         if ($data['mission'] == Missions::spy) {
-
             if (!isset($fleet[Ships::ship_espionage_probe])) {
-
                 return false;
             }
 
             if ($this->_own_planet) {
-
                 return false;
             }
         }
 
         if ($data['mission'] == Missions::deploy
             && !$this->_own_planet) {
-
             $this->showMessage(
                 FormatLib::colorRed($this->getLang()['fl_deploy_only_your_planets'])
             );
         }
 
         if ($data['mission'] == Missions::stay) {
-
             $is_buddy = $this->Fleet_Model->getBuddies(
                 $this->_planet['planet_user_id'], $this->_target_data['planet_user_id']
             ) >= 1;
 
             if ($this->_target_data['user_ally_id'] != $this->_user['user_ally_id'] && !$is_buddy) {
-
                 $this->showMessage(
                     FormatLib::colorRed($this->getLang()['fl_stay_not_on_enemy'])
                 );
@@ -539,14 +518,11 @@ class Fleet4 extends Controller
         }
 
         if ($data['mission'] == Missions::colonize) {
-
             if (!isset($fleet[Ships::ship_colony_ship])) {
-
                 return false;
             }
 
             if ($this->_occupied_planet) {
-
                 $this->showMessage(
                     FormatLib::colorRed($this->getLang()['fl_planet_populed'])
                 );
@@ -554,7 +530,6 @@ class Fleet4 extends Controller
         }
 
         if ($data['mission'] == Missions::recycle) {
-
             if ((count($target) <= 0)
                 or ($target['planet_debris_metal'] == 0
                     && $target['planet_debris_crystal'] == 0
@@ -565,7 +540,6 @@ class Fleet4 extends Controller
         }
 
         if ($data['mission'] == Missions::destroy) {
-
             if ($this->_own_planet
                 or !$this->_occupied_planet
                 or ($this->getTargetData()['type'] != PlanetTypes::moon)
@@ -577,30 +551,25 @@ class Fleet4 extends Controller
 
         if ($data['mission'] == Missions::expedition
             && !$this->_occupied_planet) {
-
             $expeditions = $this->_fleets->getExpeditionsCount();
             $max_expeditions = FleetsLib::getMaxExpeditions(
                 $this->_research->getCurrentResearch()->getResearchAstrophysics()
             );
 
             if ($max_expeditions <= 0) {
-
                 $this->showMessage(
                     FormatLib::colorRed($this->getLang()['fl_expedition_tech_required'])
                 );
             }
 
             if ($max_expeditions <= $expeditions) {
-
                 $this->showMessage(
                     FormatLib::colorRed($this->getLang()['fl_expedition_fleets_limit'])
                 );
             }
         } else {
-
             if ($data['mission'] != Missions::colonize
                 && !$this->_occupied_planet) {
-
                 return false;
             }
         }
@@ -621,12 +590,10 @@ class Fleet4 extends Controller
         // skip if it's our own planet or it's an empty planet
         if ($this->_own_planet
             or !$this->_occupied_planet) {
-
             return true;
         }
 
         if (!parent::$users->isInactive($this->_target_data)) {
-
             $noob = FunctionsLib::loadLibrary('NoobsProtectionLib');
 
             $points = $noob->returnPoints(
@@ -647,7 +614,6 @@ class Fleet4 extends Controller
 
             if ($noob->isWeak($user_points, $target_points)
                 && in_array($this->_clean_input_data['mission'], $disallow_weak)) {
-
                 $this->showMessage(
                     FormatLib::customColor($this->getLang()['fl_week_player'], 'lime')
                 );
@@ -655,7 +621,6 @@ class Fleet4 extends Controller
 
             if ($noob->isStrong($user_points, $target_points)
                 && in_array($this->_clean_input_data['mission'], $disallow_strong)) {
-
                 $this->showMessage(
                     FormatLib::colorRed($this->getLang()['fl_strong_player'])
                 );
@@ -680,7 +645,6 @@ class Fleet4 extends Controller
         );
 
         if ($max_fleets <= $fleets) {
-
             $this->showMessage(
                 $this->getLang()['fl_no_slots']
             );
@@ -702,7 +666,6 @@ class Fleet4 extends Controller
 
         if ($metal + $crystal + $deuterium < 1
             && $this->_clean_input_data['mission'] == Missions::transport) {
-
             $this->showMessage(
                 FormatLib::customColor($this->getLang()['fl_empty_transport'], 'lime')
             );
@@ -719,27 +682,21 @@ class Fleet4 extends Controller
         $deuterium = max(0, $deuterium);
 
         if ($metal < 1) {
-
             $transport_metal = 0;
         } else {
-
             $transport_metal = $metal;
             $storage_needed += $transport_metal;
         }
 
         if ($crystal < 1) {
-
             $transport_crystal = 0;
         } else {
-
             $transport_crystal = $crystal;
             $storage_needed += $transport_crystal;
         }
         if ($deuterium < 1) {
-
             $transport_deuterium = 0;
         } else {
-
             $transport_deuterium = $deuterium;
             $storage_needed += $transport_deuterium;
         }
@@ -752,25 +709,20 @@ class Fleet4 extends Controller
         $stock_valid = false;
 
         if ($stock_metal >= $transport_metal) {
-
             if ($stock_crystal >= $transport_crystal) {
-
                 if ($stock_deuterium >= $transport_deuterium) {
-
                     $stock_valid = true;
                 }
             }
         }
 
         if (!$stock_valid) {
-
             $this->showMessage(
                 FormatLib::colorRed($this->getLang()['fl_no_enought_deuterium'] . FormatLib::prettyNumber($consumption))
             );
         }
 
         if ($storage_needed > $this->_fleet_storage) {
-
             $this->showMessage(
                 FormatLib::colorRed($this->getLang()['fl_no_enought_cargo_capacity'] . FormatLib::prettyNumber($storage_needed - $this->_fleet_storage))
             );
@@ -819,17 +771,14 @@ class Fleet4 extends Controller
         $end_time = $stay_duration + (2 * $duration) + $base_time;
 
         if ($this->getTargetData()['group'] != 0) {
-
             $acs_start_time = $this->Fleet_Model->getAcsMaxTime(
                 $this->getTargetData()['group']
             );
 
             if ($acs_start_time >= $start_time) {
-
                 $end_time += $acs_start_time - $start_time;
                 $start_time = $acs_start_time;
             } else {
-
                 $this->Fleet_Model->updateAcsTimes(
                     $this->getTargetData()['group'],
                     $start_time,
