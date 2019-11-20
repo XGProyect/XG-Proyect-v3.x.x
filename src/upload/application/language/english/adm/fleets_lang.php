@@ -17,7 +17,6 @@ $lang = [
     'ff_metal' => 'Metal',
     'ff_crystal' => 'Crystal',
     'ff_deuterium' => 'Deuterium',
-    'ff_no_resources' => 'No resources',
     'ff_type_mission' => [
         1 => 'Attack',
         2 => 'ACS Attack',

@@ -17,7 +17,6 @@ $lang = [
     'ff_metal' => 'Metal',
     'ff_crystal' => 'Cristal',
     'ff_deuterium' => 'Deuterio',
-    'ff_no_resources' => 'Sin recursos',
     'ff_type_mission' => [
         1 => 'Atacar',
         2 => 'Ataq. confederación',
