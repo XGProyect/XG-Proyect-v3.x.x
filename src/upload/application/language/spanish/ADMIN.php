@@ -752,17 +752,6 @@ $lang['sb_start_memory'] = 'Memoria consumida al inicio: %i KB / máx. %m KB<br>
 $lang['sb_stats_update'] = 'Estadísticas actualizadas en: %t segundos<br>';
 $lang['sb_stats_updated'] = 'Resumen:<br>';
 
-// UPDATE
-$lang['up_title'] = 'Actualizar';
-$lang['up_no_update_required'] = 'Ya tienes la última versión';
-$lang['up_sub_title'] = 'Actualizar de la versión <strong>v%s</strong> a <strong>v%s</strong>';
-$lang['up_test_mode'] = 'Mode de prueba:';
-$lang['up_test_mode_notice'] = 'Nota: el modo de prueba de permite obtener un listado de todas las consultas que se van a correr. De esta forma puedes obtener un detalle de que es lo que hará el sistema de actualización. Es importante aclarar que <strong>ninguna consulta será ejecutada</strong> mientras el modo de prueba este activo.';
-$lang['up_go'] = 'Iniciar actualización';
-$lang['up_back'] = 'Volver';
-$lang['up_no_version_file'] = 'El archivo de actualización no existe, verifique que el directorio "install" exista.';
-$lang['up_success'] = '¡Actualización finalizada!';
-
 // MIGRATE
 $lang['mi_title'] = 'Migrar';
 $lang['mi_version_select'] = 'Seleccionar versión';
