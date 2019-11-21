@@ -70,7 +70,7 @@ class Update extends Controller
     }
 
     /**
-     * build_page
+     * Build the page
      *
      * @return void
      */
