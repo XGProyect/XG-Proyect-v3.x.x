@@ -753,35 +753,6 @@ $lang['sb_start_memory'] = 'Memory consumed  at startup: %i KB / max. %m KB<br>'
 $lang['sb_stats_update'] = 'Statistics updated in: %t seconds<br>';
 $lang['sb_stats_updated'] = 'Summary:<br>';
 
-// MIGRATE
-$lang['mi_title'] = 'Migrate';
-$lang['mi_version_select'] = 'Select version';
-$lang['mi_option_init'] = 'Select';
-$lang['mi_server_title'] = 'SQL server:';
-$lang['mi_db_title'] = 'Database:';
-$lang['mi_user_title'] = 'User:';
-$lang['mi_password_title'] = 'Password:';
-$lang['mi_prefix_title'] = 'Tables prefix:';
-$lang['mi_test_mode'] = 'Test mode:';
-$lang['mi_test_mode_notice'] = 'Notice: test mode allows you to obtain a list of queries that are going to be executed. Checking this box, allows you to get details about what the migration system will do. It is important to clarify that <strong>no query will be executed.</strong>';
-$lang['mi_ex_tag'] = 'Ex:';
-$lang['mi_go'] = 'Start migration';
-$lang['mi_back'] = 'Back';
-$lang['mi_empty_fields_error'] = 'All fields are required';
-$lang['mi_no_migration_file'] = 'The migration file doesn\'t exists, please verify that the "install" directory exists.';
-$lang['mi_not_connected_error'] = 'Unable to connect to the database with the data entered.';
-$lang['mi_db_not_exists'] = 'Unable to access the database with the provided name.';
-$lang['mi_success'] = 'Migration completed!';
-$lang['mi_alert_title'] = 'Notice before migrating:';
-$lang['mi_alert_type_1_title'] = 'Alerts';
-$lang['mi_alert_type_1_content_1'] = 'The data stored in the new installation of XGP will be lost, excluding the settings.-';
-$lang['mi_alert_type_2_title'] = 'Warnings';
-$lang['mi_alert_type_2_content_1'] = 'User passwords are not going to be imported. Old passwords were stored with md5 encoding, new ones are being stored with sha1. Your users will require to change their passwords.-';
-$lang['mi_alert_type_3_title'] = 'Info';
-$lang['mi_alert_type_3_content_1'] = 'Errors logs are not going to be imported.-';
-$lang['mi_alert_type_3_content_2'] = 'Plugins are not going to be imported.-';
-$lang['mi_alert_type_3_content_3'] = 'Configurations / settings are not going to be imported.-';
-
 // DATA BASE
 $lang['db_not_opt'] = '¡Error!';
 $lang['db_not_check'] = 'There\'re errors!';

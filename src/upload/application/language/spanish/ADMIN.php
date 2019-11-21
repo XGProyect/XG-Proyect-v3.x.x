@@ -752,35 +752,6 @@ $lang['sb_start_memory'] = 'Memoria consumida al inicio: %i KB / máx. %m KB<br>
 $lang['sb_stats_update'] = 'Estadísticas actualizadas en: %t segundos<br>';
 $lang['sb_stats_updated'] = 'Resumen:<br>';
 
-// MIGRATE
-$lang['mi_title'] = 'Migrar';
-$lang['mi_version_select'] = 'Seleccionar versión';
-$lang['mi_option_init'] = 'Seleccionar';
-$lang['mi_server_title'] = 'Servidor SQL:';
-$lang['mi_db_title'] = 'Base de datos:';
-$lang['mi_user_title'] = 'Usuario:';
-$lang['mi_password_title'] = 'Contraseña:';
-$lang['mi_prefix_title'] = 'Prefix de las tablas:';
-$lang['mi_test_mode'] = 'Mode de prueba:';
-$lang['mi_test_mode_notice'] = 'Nota: el modo de prueba de permite obtener un listado de todas las consultas que se van a correr. De esta forma puedes obtener un detalle de que es lo que hará el sistema de migración. Es importante aclarar que <strong>ninguna consulta será ejecutada</strong> mientras el modo de prueba este activo.';
-$lang['mi_ex_tag'] = 'Ej:';
-$lang['mi_go'] = 'Iniciar migración';
-$lang['mi_back'] = 'Volver';
-$lang['mi_empty_fields_error'] = 'Todos los campos son obligatorios';
-$lang['mi_no_migration_file'] = 'El archivo de migración no existe, verifique que el directorio "install" exista.';
-$lang['mi_not_connected_error'] = 'No fue posible conectarse a la base de datos con los datos ingresados.';
-$lang['mi_db_not_exists'] = 'No se pudo acceder a la base de datos con el nombre establecido.';
-$lang['mi_success'] = '¡Migración finalizada!';
-$lang['mi_alert_title'] = 'Antes de migrar tenga en cuenta:';
-$lang['mi_alert_type_1_title'] = 'Alertas';
-$lang['mi_alert_type_1_content_1'] = 'La información almacenada en la nueva instalación de XGP será eliminada, salvo por las configuraciones.-';
-$lang['mi_alert_type_2_title'] = 'Advertencias';
-$lang['mi_alert_type_2_content_1'] = 'Las claves de los usuarios no serán importadas. Las claves viejas fueron almacenadas con encriptación md5, y las nuevas serán almacenadas con sha1. Los usuarios requeriran cambiar sus claves.-';
-$lang['mi_alert_type_3_title'] = 'Información';
-$lang['mi_alert_type_3_content_1'] = 'Los reportes de error no serán importados.-';
-$lang['mi_alert_type_3_content_2'] = 'Los plugins no serán importados.-';
-$lang['mi_alert_type_3_content_3'] = 'Las configuraciones no serán importadas.-';
-
 // DATA BASE
 $lang['db_not_opt'] = '¡Error!';
 $lang['db_not_check'] = '¡Hay errores!';
