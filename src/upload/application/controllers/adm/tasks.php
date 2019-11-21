@@ -149,7 +149,7 @@ class Tasks extends Controller
     private function getStatLastUpdateActions(): string
     {
         return Functions::setUrl(
-            'admin.php?page=buildstats',
+            'admin.php?page=rebuildhighscores',
             $this->langs->line('ta_buildstats_title'),
             '<i class="fas fa-play" data-toggle="popover" data-placement="top"
             data-trigger="hover" data-content="' . $this->langs->line('ta_buildstats_title') . '"></i>'
