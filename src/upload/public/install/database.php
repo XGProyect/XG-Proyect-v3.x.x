@@ -198,7 +198,7 @@ $tables['messages'] = "CREATE TABLE `" . MESSAGES . "` (
 `message_receiver` INT(11) NOT NULL DEFAULT '0',
 `message_time` INT(11) NOT NULL DEFAULT '0',
 `message_type` INT(11) NOT NULL DEFAULT '0',
-`message_from` VARCHAR(48) CHARACTER SET utf8 DEFAULT NULL,
+`message_from` VARCHAR(65) CHARACTER SET utf8 DEFAULT NULL,
 `message_subject` text CHARACTER SET utf8,
 `message_text` text CHARACTER SET utf8,
 `message_read` TINYINT( 1 ) UNSIGNED NOT NULL DEFAULT  '0',
