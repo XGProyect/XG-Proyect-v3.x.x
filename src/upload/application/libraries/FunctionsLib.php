@@ -490,7 +490,7 @@ abstract class FunctionsLib extends XGPCore
         $mail->message($body);
 
         // send!
-        $mail->send();
+        return $mail->send();
     }
 
     /**

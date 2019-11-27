@@ -132,15 +132,17 @@ class AdministrationLib extends XGPCore
                 $parse['color'] = 'alert-success';
                 $parse['status'] = parent::$lang['gn_ok_title'];
                 break;
-
             case 'error':
                 $parse['color'] = 'alert-error';
                 $parse['status'] = parent::$lang['gn_error_title'];
                 break;
-
             case 'warning':
                 $parse['color'] = 'alert-block';
                 $parse['status'] = parent::$lang['gn_warning_title'];
+                break;
+            case 'info':
+                $parse['color'] = 'alert-info';
+                $parse['status'] = '';
                 break;
         }
 
