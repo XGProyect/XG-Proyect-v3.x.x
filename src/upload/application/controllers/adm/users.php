@@ -1135,6 +1135,8 @@ class Users extends Controller
             0 => $this->_lang['us_user_preference_planet_sort_op1'],
             1 => $this->_lang['us_user_preference_planet_sort_op2'],
             2 => $this->_lang['us_user_preference_planet_sort_op3'],
+            3 => $this->_lang['us_user_preference_planet_sort_op4'],
+            4 => $this->_lang['us_user_preference_planet_sort_op5'],
         );
 
         foreach ($sort_types as $id => $name) {
