@@ -89,13 +89,10 @@ class Users extends Controller
         $parse['alert'] = '';
 
         if ($user != '') {
-
             if (!$this->check_user($user)) {
-
                 $parse['alert'] = AdministrationLib::saveMessage('error', $this->_lang['us_nothing_found']);
                 $user = '';
             } else {
-
                 $this->_user_query = $this->_db->queryFetch(
                     "SELECT u.*,
                             p.*,
@@ -110,7 +107,6 @@ class Users extends Controller
 
                 // save the data
                 if (isset($_POST['send_data']) && $_POST['send_data']) {
-
                     $this->save_data($type);
                 }
 
@@ -158,39 +154,27 @@ class Users extends Controller
             case 'info':
             case '':
             default:
-
                 return $this->get_data_info();
-
                 break;
 
             case 'settings':
-
                 return $this->get_data_settings();
-
                 break;
 
             case 'research':
-
                 return $this->get_data_research();
-
                 break;
 
             case 'premium':
-
                 return $this->get_data_premium();
-
                 break;
 
             case 'planets':
-
                 return $this->get_data_planets();
-
                 break;
 
             case 'moons':
-
                 return $this->get_data_moons();
-
                 break;
         }
     }
@@ -206,88 +190,62 @@ class Users extends Controller
             case 'info':
             case '':
             default:
-
                 $this->save_info();
-
                 break;
 
             case 'settings':
-
                 $this->save_settings();
-
                 break;
 
             case 'research':
-
                 $this->save_research();
-
                 break;
 
             case 'premium':
-
                 $this->save_premium();
-
                 break;
 
             case 'planets':
-
                 switch ($this->_edit) {
                     case '':
                     case 'planet':
                     default:
-
                         $this->save_planet(1);
-
                         break;
 
                     case 'buildings':
-
                         $this->saveBuildings(1);
-
                         break;
 
                     case 'ships':
-
                         $this->save_ships(1);
-
                         break;
 
                     case 'defenses':
-
                         $this->save_defenses(1);
-
                         break;
                 }
 
                 break;
 
             case 'moons':
-
                 switch ($this->_edit) {
                     case '':
                     case 'moon':
                     default:
-
                         $this->save_planet(3);
-
                         break;
 
                     case 'buildings':
-
                         $this->saveBuildings(3);
-
                         break;
 
                     case 'ships':
-
                         $this->save_ships(3);
-
                         break;
 
                     case 'defenses':
-
                         $this->save_defenses(3);
-
                         break;
                 }
 
@@ -426,32 +384,23 @@ class Users extends Controller
         // CHOOSE THE ACTION
         switch ($this->_edit) {
             case 'planet':
-
                 $get_query = 'p.* ';
-
                 break;
 
             case 'buildings':
-
                 $get_query = 'b.* ';
-
                 break;
 
             case 'ships':
-
                 $get_query = 's.* ';
-
                 break;
 
             case 'defenses':
-
                 $get_query = 'd.* ';
-
                 break;
 
             case '':
             default:
-
                 $get_query = 'p.*, b.*, d.*, s.*,
                     m.planet_id AS moon_id,
                     m.planet_name AS moon_name,
@@ -484,36 +433,27 @@ class Users extends Controller
 
         // CHOOSE THE ACTION
         switch ($this->_edit) {
-            case 'planet':
-
+            case ($this->_edit == 'planet' && $planets_query->num_rows > 0):
                 $parse += $this->edit_main($planets_query);
-                $view = parent::$page->parseTemplate(parent::$page->getTemplate("adm/users_planets_main_view"), $parse);
-
+                $view = 'adm/users_planets_main_view';
                 break;
 
             case 'buildings':
-
                 $parse['buildings_table'] = $this->edit_buildings($planets_query, 1);
-                $view = parent::$page->parseTemplate(parent::$page->getTemplate("adm/users_planets_buildings_view"), $parse);
-
+                $view = 'adm/users_planets_buildings_view';
                 break;
 
             case 'ships':
-
                 $parse['ships_table'] = $this->edit_ships($planets_query);
-                $view = parent::$page->parseTemplate(parent::$page->getTemplate("adm/users_planets_ships_view"), $parse);
-
+                $view = 'adm/users_planets_ships_view';
                 break;
 
             case 'defenses':
-
                 $parse['defenses_table'] = $this->edit_defenses($planets_query, 1);
-                $view = parent::$page->parseTemplate(parent::$page->getTemplate("adm/users_planets_defenses_view"), $parse);
-
+                $view = 'adm/users_planets_defenses_view';
                 break;
 
             case 'delete':
-
                 $this->_db->query(
                     "UPDATE " . PLANETS . " AS p, " . PLANETS . " AS m, " . USERS . " AS u SET
                     p.`planet_destroyed` = '" . (time() + (PLANETS_LIFE_TIME * 3600)) . "',
@@ -527,21 +467,20 @@ class Users extends Controller
                 );
 
                 $this->refresh_page();
-
                 break;
 
             case '':
             default:
 
                 $parse['planets_table'] = $this->planets_table($planets_query);
-                $view = parent::$page->parseTemplate(parent::$page->getTemplate("adm/users_planets_view"), $parse);
+                $view = 'adm/users_planets_view';
 
                 break;
         } // SWITCH
 
         $parse['alert_info'] = ($this->_alert_type != '') ? AdministrationLib::saveMessage($this->_alert_type, $this->_alert_info) : '';
 
-        return $view;
+        return parent::$page->parseTemplate(parent::$page->getTemplate($view), $parse);
     }
 
     /**
@@ -556,34 +495,24 @@ class Users extends Controller
         // CHOOSE THE ACTION
         switch ($this->_edit) {
             case 'moon':
-
                 $get_query = 'm.* ';
-
                 break;
 
             case 'buildings':
-
                 $get_query = 'b.* ';
-
                 break;
 
             case 'ships':
-
                 $get_query = 's.* ';
-
                 break;
 
             case 'defenses':
-
                 $get_query = 'd.* ';
-
                 break;
 
             case '':
             default:
-
                 $get_query = 'm.*, b.*, d.*, s.*';
-
                 break;
         } // SWITCH
 
@@ -606,57 +535,45 @@ class Users extends Controller
 
         // CHOOSE THE ACTION
         switch ($this->_edit) {
-            case 'moon':
-
+            case ($this->_edit == 'moon' && $moons_query->num_rows > 0):
                 $parse += $this->edit_main($moons_query);
-                $view = parent::$page->parseTemplate(parent::$page->getTemplate("adm/users_moons_main_view"), $parse);
-
+                $view = 'adm/users_moons_main_view';
                 break;
 
             case 'buildings':
-
                 $parse['buildings_table'] = $this->edit_buildings($moons_query, 3);
-                $view = parent::$page->parseTemplate(parent::$page->getTemplate("adm/users_planets_buildings_view"), $parse);
-
+                $view = 'adm/users_planets_buildings_view';
                 break;
 
             case 'ships':
-
                 $parse['ships_table'] = $this->edit_ships($moons_query);
-                $view = parent::$page->parseTemplate(parent::$page->getTemplate("adm/users_planets_ships_view"), $parse);
-
+                $view = 'adm/users_planets_ships_view';
                 break;
 
             case 'defenses':
-
                 $parse['defenses_table'] = $this->edit_defenses($moons_query, 3);
-                $view = parent::$page->parseTemplate(parent::$page->getTemplate("adm/users_planets_defenses_view"), $parse);
-
+                $view = 'adm/users_planets_defenses_view';
                 break;
 
             case 'delete':
-
                 $this->_db->query("UPDATE " . PLANETS . " AS m, " . USERS . " AS u SET
                     m.`planet_destroyed` = '" . (time() + (PLANETS_LIFE_TIME * 3600)) . "',
                     u.`user_current_planet` = u.`user_home_planet_id`
                     WHERE m.`planet_id` = '" . (int) $this->_moon . "' AND
                                     m.`planet_type` = '3';");
                 $this->refresh_page();
-
                 break;
 
             case '':
             default:
-
                 $parse['moons_table'] = $this->moons_table($moons_query);
-                $view = parent::$page->parseTemplate(parent::$page->getTemplate("adm/users_moons_view"), $parse);
-
+                $view = 'adm/users_moons_view';
                 break;
         } // SWITCH
 
         $parse['alert_info'] = ($this->_alert_type != '') ? AdministrationLib::saveMessage($this->_alert_type, $this->_alert_info) : '';
 
-        return $view;
+        return parent::$page->parseTemplate(parent::$page->getTemplate($view), $parse);
     }
     ######################################
     #
