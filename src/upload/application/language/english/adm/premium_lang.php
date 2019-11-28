@@ -1,7 +1,7 @@
 <?php
 $lang = [
     'pr_title' => 'Premium settings',
-    'pr_sub_title' => 'Everything that involves dark matter can be managed here. From officiers to merchants.',
+    'pr_sub_title' => 'Everything that involves dark matter can be managed here. From officers to merchants.',
     'pr_general' => 'General',
     'pr_pay_url' => 'Payment URL',
     'pr_trader' => 'Resource Market - Exchange resources',

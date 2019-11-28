@@ -432,28 +432,28 @@ class Users extends Controller
         $parse['planets'] = str_replace('%s', $this->_user_query['user_name'], $this->_lang['us_user_planets']);
 
         // CHOOSE THE ACTION
-        switch ($this->_edit) {
+        switch (true) {
             case ($this->_edit == 'planet' && $planets_query->num_rows > 0):
                 $parse += $this->edit_main($planets_query);
                 $view = 'adm/users_planets_main_view';
                 break;
 
-            case 'buildings':
+            case ($this->_edit == 'buildings' && $planets_query->num_rows > 0):
                 $parse['buildings_table'] = $this->edit_buildings($planets_query, 1);
                 $view = 'adm/users_planets_buildings_view';
                 break;
 
-            case 'ships':
+            case ($this->_edit == 'ships' && $planets_query->num_rows > 0):
                 $parse['ships_table'] = $this->edit_ships($planets_query);
                 $view = 'adm/users_planets_ships_view';
                 break;
 
-            case 'defenses':
+            case ($this->_edit == 'defenses' && $planets_query->num_rows > 0):
                 $parse['defenses_table'] = $this->edit_defenses($planets_query, 1);
                 $view = 'adm/users_planets_defenses_view';
                 break;
 
-            case 'delete':
+            case ($this->_edit == 'delete'):
                 $this->_db->query(
                     "UPDATE " . PLANETS . " AS p, " . PLANETS . " AS m, " . USERS . " AS u SET
                     p.`planet_destroyed` = '" . (time() + (PLANETS_LIFE_TIME * 3600)) . "',
@@ -471,10 +471,8 @@ class Users extends Controller
 
             case '':
             default:
-
                 $parse['planets_table'] = $this->planets_table($planets_query);
                 $view = 'adm/users_planets_view';
-
                 break;
         } // SWITCH
 
@@ -534,28 +532,28 @@ class Users extends Controller
         $parse['moons'] = str_replace('%s', $this->_user_query['user_name'], $this->_lang['us_user_moons']);
 
         // CHOOSE THE ACTION
-        switch ($this->_edit) {
+        switch (true) {
             case ($this->_edit == 'moon' && $moons_query->num_rows > 0):
                 $parse += $this->edit_main($moons_query);
                 $view = 'adm/users_moons_main_view';
                 break;
 
-            case 'buildings':
+            case ($this->_edit == 'buildings' && $moons_query->num_rows > 0):
                 $parse['buildings_table'] = $this->edit_buildings($moons_query, 3);
                 $view = 'adm/users_planets_buildings_view';
                 break;
 
-            case 'ships':
+            case ($this->_edit == 'ships' && $moons_query->num_rows > 0):
                 $parse['ships_table'] = $this->edit_ships($moons_query);
                 $view = 'adm/users_planets_ships_view';
                 break;
 
-            case 'defenses':
+            case ($this->_edit == 'defenses' && $moons_query->num_rows > 0):
                 $parse['defenses_table'] = $this->edit_defenses($moons_query, 3);
                 $view = 'adm/users_planets_defenses_view';
                 break;
 
-            case 'delete':
+            case ($this->_edit == 'delete'):
                 $this->_db->query("UPDATE " . PLANETS . " AS m, " . USERS . " AS u SET
                     m.`planet_destroyed` = '" . (time() + (PLANETS_LIFE_TIME * 3600)) . "',
                     u.`user_current_planet` = u.`user_home_planet_id`
