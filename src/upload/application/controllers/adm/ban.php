@@ -167,7 +167,7 @@ class Ban extends Controller
                 if (!is_numeric($_POST['days']) or !is_numeric($_POST['hour'])) {
                     $parse['alert'] = AdministrationLib::saveMessage('warning', $this->_lang['bn_all_fields_required']);
                 } else {
-                    $reas = (string) $_POST['why'];
+                    $reas = (string) $_POST['text'];
                     $days = (int) $_POST['days'];
                     $hour = (int) $_POST['hour'];
                     $admin_name = $this->_current_user['user_name'];
