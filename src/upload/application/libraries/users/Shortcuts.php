@@ -49,13 +49,11 @@ class Shortcuts
     {
         try {
             if (is_array($shortcuts)) {
-
                 throw new Exception('JSON Expected!');
             }
 
             $this->setShortcuts($shortcuts);
         } catch (Exception $e) {
-
             die('Caught exception: ' . $e->getMessage() . "\n");
         }
     }
@@ -97,7 +95,6 @@ class Shortcuts
     {
         try {
             if (empty($name) or empty($g) or empty($s) or empty($p) or empty($pt)) {
-
                 throw new Exception('Name cannot be empty or null');
             }
 
@@ -113,7 +110,6 @@ class Shortcuts
 
             return $this->getShortcuts();
         } catch (Exception $e) {
-
             die('Caught exception: ' . $e->getMessage() . "\n");
         }
     }
@@ -136,7 +132,6 @@ class Shortcuts
     {
         try {
             if (!isset($this->getShortcuts()[$this->validateShortcutId($shortcut_id)])) {
-
                 throw new Exception('Shortcut ID doesn\'t exists');
             }
 
@@ -152,7 +147,6 @@ class Shortcuts
 
             return $this->getShortcuts();
         } catch (Exception $e) {
-
             die('Caught exception: ' . $e->getMessage() . "\n");
         }
     }
@@ -213,12 +207,10 @@ class Shortcuts
     private function validateShortcutId($shortcut_id)
     {
         if ($shortcut_id < 0) {
-
             return 0;
         }
 
         if ($shortcut_id > count($this->_shortcuts)) {
-
             return count($this->_shortcuts) - 1;
         }
 

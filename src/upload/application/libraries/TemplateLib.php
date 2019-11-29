@@ -86,13 +86,6 @@ class TemplateLib
             $page .= $topnav ? $this->installNavbar() : ''; // TOP NAVIGATION BAR
         }
 
-        // For the Admin page
-        if (defined('IN_ADMIN')) {
-            $page .= $this->adminHeader($metatags);
-            $page .= $menu ? $this->adminMenu() : ''; // MENU
-            $page .= $topnav ? $this->adminNavbar() : ''; // TOP NAVIGATION BAR
-        }
-
         // Anything else
         if ($page == '') {
             $page .= $this->gameHeader($metatags);
@@ -101,7 +94,7 @@ class TemplateLib
         }
 
         // Merge: Header + Topnav + Menu + Page
-        if (!defined('IN_INSTALL') && !defined('IN_ADMIN')) {
+        if (!defined('IN_INSTALL')) {
             $page .= "\n<center>\n" . $current_page . "\n</center>\n";
         } else {
             if (defined('IN_MESSAGE')) {
@@ -112,16 +105,9 @@ class TemplateLib
         }
 
         // Footer
-        if (!defined('IN_INSTALL') && !defined('IN_ADMIN') && !defined('IN_LOGIN')) {
+        if (!defined('IN_INSTALL') && !defined('IN_LOGIN')) {
             // Is inside the game
             $page .= $this->parseTemplate($this->getTemplate('general/footer'), '');
-        }
-
-        if (defined('IN_ADMIN')) {
-            $page .= $this->parseTemplate(
-                $this->getTemplate('adm/simple_footer'),
-                ['version' => SYSTEM_VERSION, 'year' => $this->current_year]
-            );
         }
 
         if (defined('IN_INSTALL') && !defined('IN_MESSAGE')) {
@@ -217,20 +203,19 @@ class TemplateLib
             ['premium', $this->langs['mn_premium'], '2'],
             ['tasks', $this->langs['mn_info_tasks'], '3'],
             ['errors', $this->langs['mn_info_db'], '3'],
-            ['fleetmovements', $this->langs['mn_info_fleets'], '3'],
+            ['fleets', $this->langs['mn_info_fleets'], '3'],
             ['messages', $this->langs['mn_info_messages'], '3'],
             ['maker', $this->langs['mn_edition_maker'], '4'],
             ['users', $this->langs['mn_edition_users'], '4'],
             ['alliances', $this->langs['mn_edition_alliances'], '4'],
-            ['editor', $this->langs['mn_edition_languages'], '4'],
+            ['languages', $this->langs['mn_edition_languages'], '4'],
             ['backup', $this->langs['mn_tools_backup'], '5'],
             ['encrypter', $this->langs['mn_tools_encrypter'], '5'],
-            ['globalmessage', $this->langs['mn_tools_global_message'], '5'],
+            ['announcement', $this->langs['mn_tools_global_message'], '5'],
             ['ban', $this->langs['mn_tools_ban'], '5'],
-            ['buildstats', $this->langs['mn_tools_manual_update'], '5'],
+            ['rebuildhighscores', $this->langs['mn_tools_manual_update'], '5'],
             ['update', $this->langs['mn_tools_update'], '5'],
             ['migrate', $this->langs['mn_tools_migrate'], '5'],
-            ['queries', $this->langs['mn_sql_queries'], '5'],
             ['repair', $this->langs['mn_maintenance_db'], '6'],
             ['reset', $this->langs['mn_reset_universe'], '6'],
         );
@@ -246,7 +231,7 @@ class TemplateLib
                 $items = '';
             }
 
-            if ($data[0] == 'buildstats') {
+            if ($data[0] == 'rebuildhighscores') {
                 $extra = 'onClick="return confirm(\'' . $this->langs['mn_tools_manual_update_confirm'] . '\');"';
             }
 
@@ -722,107 +707,6 @@ class TemplateLib
             <font color=\"lime\">" . $this->langs['lm_administration'] . "</font></a></div></td></tr>" : "");
 
         return $this->parseTemplate($this->getTemplate('general/left_menu_view'), $parse);
-    }
-
-    /**
-     * adminHeader
-     *
-     * @param string $metatags Meta tags
-     *
-     * @return string
-     */
-    private function adminHeader($metatags = '')
-    {
-        $parse['title'] = 'Admin CP';
-        $parse['js_path'] = JS_PATH;
-        $parse['css_path'] = CSS_PATH;
-        $parse['-meta-'] = $metatags ? $metatags : '';
-
-        return $this->parseTemplate($this->getTemplate('adm/simple_header'), $parse);
-    }
-
-    /**
-     * adminNavbar
-     *
-     * @return string
-     */
-    private function adminNavbar()
-    {
-        // PARSE THE MENU AND OTHER DATA
-        $parse = $this->langs;
-        $parse['version'] = FunctionsLib::readConfig('version');
-
-        return $this->parseTemplate($this->getTemplate('adm/topnav_view'), $parse);
-    }
-
-    /**
-     * adminMenu
-     *
-     * @return string
-     */
-    private function adminMenu()
-    {
-        $current_page = isset($_GET['page']) ? $_GET['page'] : null;
-        $items = '';
-        $flag = '';
-        $pages = array(
-            ['home', $this->langs['mn_index'], '1'],
-            ['moderation', $this->langs['mn_permissions'], '1'],
-            ['server', $this->langs['mn_config_server'], '2'],
-            ['modules', $this->langs['mn_config_modules'], '2'],
-            ['planets', $this->langs['mn_config_planets'], '2'],
-            ['registration', $this->langs['mn_config_registrations'], '2'],
-            ['statistics', $this->langs['mn_config_stats'], '2'],
-            ['premium', $this->langs['mn_premium'], '2'],
-            ['information', $this->langs['mn_info_general'], '3'],
-            ['errors', $this->langs['mn_info_db'], '3'],
-            ['fleetmovements', $this->langs['mn_info_fleets'], '3'],
-            ['messages', $this->langs['mn_info_messages'], '3'],
-            ['maker', $this->langs['mn_edition_maker'], '4'],
-            ['users', $this->langs['mn_edition_users'], '4'],
-            ['alliances', $this->langs['mn_edition_alliances'], '4'],
-            ['editor', $this->langs['mn_edition_languages'], '4'],
-            ['backup', $this->langs['mn_tools_backup'], '5'],
-            ['encrypter', $this->langs['mn_tools_encrypter'], '5'],
-            ['globalmessage', $this->langs['mn_tools_global_message'], '5'],
-            ['ban', $this->langs['mn_tools_ban'], '5'],
-            ['buildstats', $this->langs['mn_tools_manual_update'], '5'],
-            ['update', $this->langs['mn_tools_update'], '5'],
-            ['migrate', $this->langs['mn_tools_migrate'], '5'],
-            ['queries', $this->langs['mn_sql_queries'], '5'],
-            ['repair', $this->langs['mn_maintenance_db'], '6'],
-            ['reset', $this->langs['mn_reset_universe'], '6'],
-        );
-        // BUILD THE MENU
-        foreach ($pages as $key => $data) {
-            if ($data[2] != $flag) {
-                $flag = $data[2];
-                $items = '';
-            }
-
-            if ($data[0] == 'buildstats') {
-                $extra = 'onClick="return confirm(\'' . $this->langs['mn_tools_manual_update_confirm'] . '\');"';
-            } else {
-                $extra = '';
-            }
-
-            $items .= '<li' . ($current_page == $data[0] ? ' class="active"' : '') . '>
-                <a href="' . ADM_URL . 'admin.php?page=' . $data[0] . '" ' . $extra . '>' . $data[1] . '</a></li>';
-
-            $parse_block[$data[2]] = $items;
-        }
-
-        // PARSE THE MENU AND OTHER DATA
-        $parse = $this->langs;
-        $parse['username'] = $this->current_user['user_name'];
-        $parse['menu_block_1'] = $parse_block[1];
-        $parse['menu_block_2'] = $parse_block[2];
-        $parse['menu_block_3'] = $parse_block[3];
-        $parse['menu_block_4'] = $parse_block[4];
-        $parse['menu_block_5'] = $parse_block[5];
-        $parse['menu_block_6'] = $parse_block[6];
-
-        return $this->parseTemplate($this->getTemplate('adm/menu_view'), $parse);
     }
 
     /**

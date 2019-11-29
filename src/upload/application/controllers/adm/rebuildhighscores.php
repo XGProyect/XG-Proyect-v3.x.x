@@ -12,7 +12,7 @@ declare (strict_types = 1);
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
- * @version  3.0.0
+ * @version  3.1.0
  */
 namespace application\controllers\adm;
 

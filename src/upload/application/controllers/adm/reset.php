@@ -375,7 +375,9 @@ class Reset extends Controller
             $parse['alert'] = AdministrationLib::saveMessage('ok', $this->_lang['re_reset_excess']);
         }
 
-        parent::$page->display(parent::$page->parseTemplate(parent::$page->getTemplate('adm/reset_view'), $parse));
+        parent::$page->displayAdmin(
+            $this->getTemplate()->set('adm/reset_view', $parse)
+        );
     }
 }
 

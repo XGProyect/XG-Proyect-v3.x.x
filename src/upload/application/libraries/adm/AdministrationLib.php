@@ -13,7 +13,6 @@
  */
 namespace application\libraries\adm;
 
-use application\core\Database;
 use application\core\XGPCore;
 use application\libraries\FunctionsLib;
 
@@ -55,8 +54,8 @@ class AdministrationLib extends XGPCore
      */
     public static function noAccessMessage($mes = '')
     {
-        FunctionsLib::message(
-            self::saveMessage('error', $mes, false), '', '', true
+        parent::$page->displayAdmin(
+            self::saveMessage('error', $mes, false)
         );
     }
 
@@ -133,11 +132,11 @@ class AdministrationLib extends XGPCore
                 $parse['status'] = parent::$lang['gn_ok_title'];
                 break;
             case 'error':
-                $parse['color'] = 'alert-error';
+                $parse['color'] = 'alert-danger';
                 $parse['status'] = parent::$lang['gn_error_title'];
                 break;
             case 'warning':
-                $parse['color'] = 'alert-block';
+                $parse['color'] = 'alert-warning';
                 $parse['status'] = parent::$lang['gn_warning_title'];
                 break;
             case 'info':
@@ -149,7 +148,7 @@ class AdministrationLib extends XGPCore
         $parse['message'] = $message;
 
         if (!$dismissible) {
-            $parse['dismissible'] = 'hide';
+            $parse['dismissible'] = 'd-none';
         }
 
         return parent::$page->parseTemplate(parent::$page->getTemplate('adm/save_message_view'), $parse);
@@ -234,42 +233,10 @@ class AdministrationLib extends XGPCore
     public static function checkSession()
     {
         if (!self::isSessionSet()) {
-            $db = new Database();
-            $parse = parent::$lang;
+            $page = filter_input(INPUT_GET, 'page', FILTER_SANITIZE_STRING);
 
-            if ($_POST) {
-                $login = $db->queryFetch(
-                    "SELECT `user_id`, `user_name`, `user_password`
-                    FROM " . USERS . "
-                    WHERE `user_email` = '" . $db->escapeValue($_POST['inputEmail']) . "'
-                        AND `user_password` = '" . sha1($_POST['inputPassword']) . "'
-                        AND `user_authlevel` >= '1'
-                        LIMIT 1"
-                );
-
-                if ($login) {
-                    // User login
-                    if (self::adminLogin($login['user_id'], $login['user_name'], $login['user_password'])) {
-
-                        // Redirect to game
-                        FunctionsLib::redirect('admin.php');
-                    }
-                }
-
-                // If login fails
-                FunctionsLib::redirect(SYSTEM_ROOT . 'admin.php?error=1');
-            } else {
-
-                $parse['alert'] = '';
-
-                if (isset($_GET['error']) && $_GET['error'] == 1) {
-
-                    $parse['alert'] = self::saveMessage('error', parent::$lang['lg_error_wrong_data'], false);
-                }
-
-                parent::$page->display(
-                    parent::$page->parseTemplate(parent::$page->getTemplate('adm/login_view'), $parse), false, '', false
-                );
+            if ($page != 'login') {
+                FunctionsLib::redirect(SYSTEM_ROOT . 'admin.php?page=login&redirect=' . $page);
             }
         }
     }

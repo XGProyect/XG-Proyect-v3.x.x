@@ -60,9 +60,7 @@ class Repair extends Controller
     }
 
     /**
-     * __destruct
-     *
-     * @return void
+     * Destructor
      */
     public function __destruct()
     {
@@ -146,7 +144,7 @@ class Repair extends Controller
             }
         }
 
-        parent::$page->display(
+        parent::$page->displayAdmin(
             parent::$page->parseTemplate(
                 parent::$page->getTemplate('adm/repair_view'), $parse
             )

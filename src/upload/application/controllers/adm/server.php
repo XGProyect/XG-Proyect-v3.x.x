@@ -118,7 +118,9 @@ class Server extends Controller
         $parse['noobprot2'] = $this->_game_config['noobprotectiontime'];
         $parse['noobprot3'] = $this->_game_config['noobprotectionmulti'];
 
-        parent::$page->display(parent::$page->parseTemplate(parent::$page->getTemplate('adm/server_view'), $parse));
+        parent::$page->displayAdmin(
+            $this->getTemplate()->set('adm/server_view', $parse)
+        );
     }
 
     /**
@@ -151,13 +153,13 @@ class Server extends Controller
 
         // GENERAL RATE
         if (isset($_POST['game_speed']) && is_numeric($_POST['game_speed'])) {
-            $this->_game_config['game_speed'] = ( 2500 * $_POST['game_speed'] );
+            $this->_game_config['game_speed'] = (2500 * $_POST['game_speed']);
         }
 
         // SPEED OF FLEET
 
         if (isset($_POST['fleet_speed']) && is_numeric($_POST['fleet_speed'])) {
-            $this->_game_config['fleet_speed'] = ( 2500 * $_POST['fleet_speed'] );
+            $this->_game_config['fleet_speed'] = (2500 * $_POST['fleet_speed']);
         }
 
         // SPEED OF PRODUCTION
@@ -237,7 +239,6 @@ class Server extends Controller
             }
         }
 
-
         // PROTECTION FOR NOVICES
         if (isset($_POST['noobprotection']) && $_POST['noobprotection'] == 'on') {
             $this->_game_config['noobprotection'] = 1;
@@ -287,7 +288,7 @@ class Server extends Controller
             $time_zones .= '<optgroup label="GMT' . $this->format_offset($offset) . '">';
 
             foreach ($tz as $key => $zone) {
-                $time_zones .= '<option value="' . $zone . '" ' . ( $current_time_zone == $zone ? ' selected' : '' ) . ' >' . $zone . '</option>';
+                $time_zones .= '<option value="' . $zone . '" ' . ($current_time_zone == $zone ? ' selected' : '') . ' >' . $zone . '</option>';
             }
 
             $time_zones .= '</optgroup>';
@@ -319,9 +320,9 @@ class Server extends Controller
 
     /**
      * Percentage picker
-     * 
+     *
      * @param string $current_percentage Current percentage for the field
-     * 
+     *
      * @return string
      */
     private function percentage_picker($current_percentage)

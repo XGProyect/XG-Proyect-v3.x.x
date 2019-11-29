@@ -21,7 +21,7 @@
                         {bn_reason} <br /><br />{bn_characters}<br /><input type="text" name="result" value="50" disabled class="input-mini"/>
                     </th>
                     <td colspan="2">
-                        <textarea name="why" class="field span12" rows="5" onKeyDown="contar('frm_ban', 'why', 50)" onKeyUp="contar('frm_ban', 'why', 50)">{reason}</textarea>
+                        <textarea name="why" class="field span12" rows="5" onKeyDown="cntChars('frm_ban', 'why', 50)" onKeyUp="cntChars('frm_ban', 'why', 50)">{reason}</textarea>
                     </td>
                 </tr>
                 <tr>

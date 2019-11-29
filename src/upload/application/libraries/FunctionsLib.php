@@ -231,23 +231,12 @@ abstract class FunctionsLib extends XGPCore
             $parse['middle2'] = '</div>';
         }
 
-        $page = parent::$page->parseTemplate(parent::$page->getTemplate('general/message_body'), $parse);
-
-        if (!defined('IN_ADMIN')) {
-            parent::$page->display(
-                $page,
-                $topnav,
-                (($dest != "") ? "<meta http-equiv=\"refresh\" content=\"$time;URL=$dest\">" : ""),
-                $menu
-            );
-        } else {
-            parent::$page->display(
-                $page,
-                $topnav,
-                (($dest != "") ? "<meta http-equiv=\"refresh\" content=\"$time;URL=$dest\">" : ""),
-                $menu
-            );
-        }
+        parent::$page->display(
+            parent::$page->parseTemplate(parent::$page->getTemplate('general/message_body'), $parse),
+            $topnav,
+            (($dest != "") ? "<meta http-equiv=\"refresh\" content=\"$time;URL=$dest\">" : ""),
+            $menu
+        );
     }
 
     /**

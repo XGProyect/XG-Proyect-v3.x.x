@@ -10,15 +10,23 @@ Core
 [#000] Pages templates structure simplified to follow the controllers and models structure into adm, ajax, game, home and install.-
 [#000] Menu UI set a little bit closer to OGame's redesign.-
 [#000] New error handler class that properly handles notices, warnings and fatal errors (only fatal errors are blockers from now on).-
-[#000] New core to handle languages and allow multiple language load, each page has its own language and not the whole languge array.-
+[#000] New core to handle languages (by CodeIgniter) and allow multiple language load, each page has its own language and not the whole languge array.-
 
 Project
 [#000] Added Unit Testing.-
 [#000] Added Docker.-
 
-Features
+Improvements
 [#000] Seach pages includes new texts and simplified view.-
-[#000] New variables for the Bomber.-
+
+Features
+[#000][game] New variables for the Bomber.-
+[#000][game] New feature to refill storages was added to the trader, on the Resource Market section.-
+[#000][admin] New admin panel design.-
+[#000][admin] New functionality to manage fleets through the admin panel, allowing admins to restart and returns fleets, finish missions or delete fleets.-
+[#000][admin] New functionality to manage backup through the admin panel, allowing admins to review, delete and download the backups.-
+[#000][admin] New functionality to add custom colors to the annoucements (previously global messages).-
+[#000][admin] New functionality to see which emails were sent and which did not in the annoucements page (previously global messages).-
 
 '3.0.4' =>
 CORE

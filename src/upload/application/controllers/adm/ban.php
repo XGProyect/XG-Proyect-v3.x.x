@@ -90,7 +90,7 @@ class Ban extends Controller
                 break;
         }
 
-        parent::$page->display($view);
+        parent::$page->displayAdmin($view);
     }
 
     /**

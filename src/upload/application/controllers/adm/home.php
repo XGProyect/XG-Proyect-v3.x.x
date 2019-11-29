@@ -1,4 +1,7 @@
 <?php
+
+declare (strict_types = 1);
+
 /**
  * Home Controller
  *
@@ -14,9 +17,8 @@
 namespace application\controllers\adm;
 
 use application\core\Controller;
-use application\core\Database;
 use application\libraries\adm\AdministrationLib;
-use application\libraries\FormatLib;
+use application\libraries\FormatLib as Format;
 use application\libraries\FunctionsLib;
 
 /**
@@ -31,12 +33,15 @@ use application\libraries\FunctionsLib;
  */
 class Home extends Controller
 {
-
-    private $_lang;
-    private $_current_user;
+    /**
+     * Current user data
+     *
+     * @var array
+     */
+    private $user;
 
     /**
-     * __construct()
+     * Constructor
      */
     public function __construct()
     {
@@ -45,120 +50,121 @@ class Home extends Controller
         // check if session is active
         AdministrationLib::checkSession();
 
-        $this->_db = new Database();
-        $this->_lang = parent::$lang;
-        $this->_current_user = parent::$users->getUserData();
+        // load Model
+        parent::loadModel('adm/home');
+
+        // load Language
+        parent::loadLang(['adm/global', 'adm/home']);
+
+        // set data
+        $this->user = $this->getUserData();
 
         // Check if the user is allowed to access
-        if (!AdministrationLib::haveAccess($this->_current_user['user_authlevel'])) {
-            die(AdministrationLib::noAccessMessage($this->_lang['ge_no_permissions']));
-        } else {
-            $this->build_page();
+        if (!AdministrationLib::haveAccess($this->user['user_authlevel'])) {
+            AdministrationLib::noAccessMessage($this->langs->line('no_permissions'));
         }
+
+        // build the page
+        $this->buildPage();
     }
 
     /**
-     * method __destruct
-     * param
-     * return close db connection
+     * Build the page
+     *
+     * @return void
      */
-    public function __destruct()
+    private function buildPage(): void
     {
-        if (isset($this->_db)) {
-            $this->_db->closeConnection();
-        }
+        $server_stats = $this->Home_Model->getUsersStats();
+
+        parent::$page->displayAdmin(
+            $this->getTemplate()->set(
+                'adm/home_view',
+                array_merge(
+                    $this->langs->language,
+                    $server_stats,
+                    [
+                        'alert' => [$this->buildAlertsBlock()],
+                        'average_user_points' => Format::shortlyNumber($server_stats['average_user_points']),
+                        'average_alliance_points' => Format::shortlyNumber($server_stats['average_alliance_points']),
+                        'database_size' => Format::prettyBytes($this->Home_Model->getDbSize()['db_size']),
+                        'database_server' => $this->Home_Model->getDbVersion(),
+                        'php_version' => PHP_VERSION,
+                        'server_version' => SYSTEM_VERSION,
+                    ]
+                )
+            )
+        );
     }
 
     /**
-     * method build_page
-     * param
-     * return main method, loads everything
+     * Build the alerts block based on our current server status
+     *
+     * @return array
      */
-    private function build_page()
+    private function buildAlertsBlock(): array
     {
-        $parse = $this->_lang;
-        $error = 0;
-        $message[1] = '';
-        $message[2] = '';
-        $message[3] = '';
-        $message[4] = '';
-        $message[5] = '';
+        $alert = [];
 
-        // VERIFICATIONS
-        if ($this->_current_user['user_authlevel'] >= 3) {
+        if ($this->user['user_authlevel'] >= 3) {
             if ((bool) (@fileperms(XGP_ROOT . CONFIGS_PATH . 'config.php') & 0x0002)) {
-                $message[1] = $this->_lang['hm_config_file_writable'] . '<br />';
-                $error++;
+                $alert[] = $this->langs->line('hm_config_file_writable');
             }
 
-            if ((@filesize(XGP_ROOT . LOGS_PATH . 'ErrorLog.php')) != 0) {
-                $message[2] = $this->_lang['hm_database_errors'] . '<br />';
-                $error++;
+            if ($this->getServerErrors()) {
+                $alert[] = $this->langs->line('hm_errors');
             }
 
             if ($this->checkUpdates()) {
-                $message[3] = $this->_lang['hm_old_version'] . '<br />';
-                $error++;
+                $alert[] = $this->langs->line('hm_old_version');
             }
 
             if (AdministrationLib::installDirExists()) {
-                $message[4] = $this->_lang['hm_install_file_detected'] . '<br />';
-                $error++;
+                $alert[] = $this->langs->line('hm_install_file_detected');
             }
 
-            if (SYSTEM_VERSION != FunctionsLib::readConfig('version')) {
-                $message[5] = $this->_lang['hm_update_required'] . '<br />';
-                $error++;
+            if (FunctionsLib::readConfig('version') != SYSTEM_VERSION) {
+                $alert[] = $this->langs->line('hm_update_required');
             }
         }
 
-        if ($error > 1) {
-            $parse['error_message'] = '<br />' . $message[1] . $message[2] . $message[3] . $message[4] . $message[5];
-            $parse['second_style'] = "alert-error";
-            $parse['error_type'] = $this->_lang['hm_errors'];
-        } elseif ($error == 1) {
-            $parse['error_message'] = '<br />' . $message[1] . $message[2] . $message[3] . $message[4] . $message[5];
-            $parse['second_style'] = "alert-block";
-            $parse['error_type'] = $this->_lang['hm_warning'];
-        } else {
-            $parse['error_message'] = $this->_lang['hm_all_ok'];
-            $parse['second_style'] = "alert-success";
-            $parse['error_type'] = $this->_lang['hm_ok'];
+        $alerts_count = count($alert);
+        $messages = $second_style = $error_type = null;
+
+        if ($alerts_count > 1) {
+            $messages = join('<br>', $alert);
+            $second_style = 'alert-danger';
+            $error_type = $this->langs->line('hm_error');
         }
 
-        $parse['server_type'] = PHP_OS;
-        $parse['web_server'] = $this->getWebServer();
-        $parse['php_version'] = PHP_VERSION;
-        $parse['php_max_post_size'] = FormatLib::prettyBytes((int) (str_replace('M', '', ini_get('post_max_size')) * 1024 * 1024));
-        $parse['php_upload_max_filesize'] = FormatLib::prettyBytes((int) (str_replace('M', '', ini_get('upload_max_filesize')) * 1024 * 1024));
-        $parse['php_memory_limit'] = FormatLib::prettyBytes((int) (str_replace('M', '', ini_get('memory_limit')) * 1024 * 1024));
-        $parse['mysql_version'] = $this->_db->serverInfo();
-        $parse['mysql_packet_size'] = FormatLib::prettyBytes($this->_db->queryFetch("SHOW VARIABLES LIKE 'max_allowed_packet'")['Value']);
-        $db_stats = $this->getDbStats();
-        $parse['data_usage'] = FormatLib::prettyBytes($db_stats['Data_Usage']);
-        $parse['index_usage'] = FormatLib::prettyBytes($db_stats['Index_Usage']);
-        $user_stats = $this->getUsersStats();
-        $parse['unique_visitors_today'] = $user_stats['unique_visitors_today'];
-        $parse['new_users_today'] = $user_stats['new_users_today'];
-        $parse['new_messages_today'] = $user_stats['new_messages_today'];
-        $parse['new_reports_today'] = $user_stats['new_reports_today'];
+        if ($alerts_count == 1) {
+            $messages = join('<br>', $alert);
+            $second_style = 'alert-warning';
+            $error_type = $this->langs->line('hm_warning');
+        }
 
-        parent::$page->display(parent::$page->parseTemplate(parent::$page->getTemplate('adm/home_view'), $parse));
+        return [
+            'error_message' => $messages ?? $this->langs->line('hm_all_ok'),
+            'second_style' => $second_style ?? 'alert-success',
+            'error_type' => $error_type ?? $this->langs->line('hm_ok'),
+        ];
     }
 
     /**
-     * method check_updates
-     * param
-     * return check for updates and returns true or false
+     * Check if there's any new version available
+     *
+     * @return boolean
      */
-    private function checkUpdates()
+    private function checkUpdates(): bool
     {
         if (function_exists('file_get_contents')) {
             $system_v = FunctionsLib::readConfig('version');
             $last_v = @json_decode(
                 @file_get_contents(
-                    'http://xgproyect.org/current.php', false, stream_context_create(
-                        ['http' =>
+                    'https://xgproyect.org/current.php',
+                    false,
+                    stream_context_create(
+                        ['https' =>
                             [
                                 'timeout' => 1, // one second
                             ],
@@ -169,111 +175,20 @@ class Home extends Controller
 
             return version_compare($system_v, $last_v, '<');
         }
+
+        return false;
     }
 
     /**
-     * getWebServer
+     * Check if there are any errors logged
      *
-     * @return string
+     * @return boolean
      */
-    private function getWebServer()
+    private function getServerErrors(): bool
     {
-        $sapi_name = php_sapi_name();
-        $addsapi = false;
+        $logs_path = XGP_ROOT . LOGS_PATH;
 
-        if (preg_match('#(Apache)/([0-9\.]+)\s#siU', $_SERVER['SERVER_SOFTWARE'], $wsregs)) {
-            $webserver = "$wsregs[1] v$wsregs[2]";
-            if ($sapi_name == 'cgi' or $sapi_name == 'cgi-fcgi') {
-                $addsapi = true;
-            }
-        } else if (preg_match('#Microsoft-IIS/([0-9\.]+)#siU', $_SERVER['SERVER_SOFTWARE'], $wsregs)) {
-            $webserver = "IIS v$wsregs[1]";
-            $addsapi = true;
-        } else if (preg_match('#Zeus/([0-9\.]+)#siU', $_SERVER['SERVER_SOFTWARE'], $wsregs)) {
-            $webserver = "Zeus v$wsregs[1]";
-            $addsapi = true;
-        } else if (strtoupper($_SERVER['SERVER_SOFTWARE']) == 'APACHE') {
-            $webserver = 'Apache';
-            if ($sapi_name == 'cgi' or $sapi_name == 'cgi-fcgi') {
-                $addsapi = true;
-            }
-        } else {
-            $webserver = $sapi_name;
-        }
-
-        if ($addsapi) {
-            $webserver .= ' (' . $sapi_name . ')';
-        }
-
-        return $webserver;
-    }
-
-    /**
-     * Get some tables statistics from the database
-     *
-     * @return array
-     */
-    private function getDbStats()
-    {
-        return $this->_db->queryFetch(
-            "SELECT
-                SUM(`data_length`) AS `Data_Usage`,
-                SUM(`index_length`) AS `Index_Usage`
-            FROM information_schema.TABLES
-            WHERE table_schema = '" . $this->_db->escapeValue(DB_NAME) . "';"
-        );
-    }
-
-    /**
-     * Get some user statistics from the database
-     *
-     * @return array
-     */
-    private function getUsersStats()
-    {
-        return $this->_db->queryFetch(
-            "SELECT
-                (
-                        SELECT
-                                COUNT(`user_id`) AS `unique_visitors_today`
-                        FROM
-                                `" . USERS . "`
-                        WHERE
-                                `user_onlinetime` > UNIX_TIMESTAMP(
-                                        DATE_SUB(NOW(), INTERVAL 1 DAY)
-                                )
-                ) AS `unique_visitors_today`,
-                (
-                        SELECT
-                                COUNT(`user_id`) AS `new_users_today`
-                        FROM
-                                `" . USERS . "`
-                        WHERE
-                                `user_register_time` > UNIX_TIMESTAMP(
-                                        DATE_SUB(NOW(), INTERVAL 1 DAY)
-                                )
-                ) AS `new_users_today`,
-                (
-                        SELECT
-                                COUNT(`message_id`) AS `new_messages_today`
-                        FROM
-                                `" . MESSAGES . "`
-                        WHERE
-                                `message_time` > UNIX_TIMESTAMP(
-                                        DATE_SUB(NOW(), INTERVAL 1 DAY)
-                                )
-                ) AS `new_messages_today`,
-                (
-                        SELECT
-                                COUNT(`report_rid`) AS `new_reports_today`
-                        FROM
-                                `" . REPORTS . "`
-                        WHERE
-                                `report_time` > UNIX_TIMESTAMP(
-                                        DATE_SUB(NOW(), INTERVAL 1 DAY)
-                                )
-                ) AS `new_reports_today`"
-        );
+        return (count(glob($logs_path . '*.txt')) > 0);
     }
 }
 

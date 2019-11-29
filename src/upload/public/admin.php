@@ -33,7 +33,7 @@ $file_name = XGP_ROOT . ADMIN_PATH . $page . '.php';
 // logout
 if ($page == 'logout') {
     AdministrationLib::closeSession();
-    FunctionsLib::redirect(SYSTEM_ROOT . 'game.php?page=overview');
+    FunctionsLib::redirect(SYSTEM_ROOT . 'admin.php?page=login');
 }
 
 if (file_exists($file_name)) {

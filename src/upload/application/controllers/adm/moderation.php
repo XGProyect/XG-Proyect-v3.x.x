@@ -141,7 +141,9 @@ class Moderation extends Controller
         $parse['oper'] = $this->_lang['user_level'][2];
         $parse['adm'] = $this->_lang['user_level'][3];
 
-        parent::$page->display(parent::$page->parseTemplate(parent::$page->getTemplate('adm/moderation_view'), $parse));
+        parent::$page->displayAdmin(
+            $this->getTemplate()->set('adm/moderation_view', $parse)
+        );
     }
 
     /**
