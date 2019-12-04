@@ -158,22 +158,26 @@ class Home extends Controller
     private function checkUpdates(): bool
     {
         if (function_exists('file_get_contents')) {
-            $system_v = FunctionsLib::readConfig('version');
-            $last_v = @json_decode(
-                @file_get_contents(
-                    'https://xgproyect.org/current.php',
-                    false,
-                    stream_context_create(
-                        ['https' =>
-                            [
-                                'timeout' => 1, // one second
-                            ],
-                        ]
-                    )
+            $file_data = @file_get_contents(
+                'https://xgproyect.org/current.php',
+                false,
+                stream_context_create(
+                    ['https' =>
+                        [
+                            'timeout' => 1, // one second
+                        ],
+                    ]
                 )
-            )->version;
+            );
 
-            return version_compare($system_v, $last_v, '<');
+            if ($file_data) {
+                $system_v = FunctionsLib::readConfig('version');
+                $last_v = @json_decode(
+                    $file_data
+                )->version;
+
+                return version_compare($system_v, $last_v, '<');
+            }
         }
 
         return false;

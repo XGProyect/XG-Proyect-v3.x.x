@@ -439,8 +439,8 @@ abstract class FunctionsLib extends XGPCore
         // require email library
         $mail_library_path = XGP_ROOT . SYSTEM_PATH . 'ci3_custom' . DIRECTORY_SEPARATOR . 'libraries' . DIRECTORY_SEPARATOR . 'Email.php';
 
-        if (!file_exists($mail_library_path)) {
-            return;
+        if (!file_exists($mail_library_path) or !function_exists('mail')) {
+            return false;
         }
 
         // required by the library
