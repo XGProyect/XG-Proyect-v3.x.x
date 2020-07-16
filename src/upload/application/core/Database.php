@@ -66,7 +66,10 @@ class Database
 
         $this->debug = new DebugLib();
         $this->openConnection();
-        $this->magic_quotes_active = get_magic_quotes_gpc();
+
+        if (version_compare(PHP_VERSION, '7.3.0', '<')) {
+            $this->magic_quotes_active = get_magic_quotes_gpc();
+        }
     }
 
     /**

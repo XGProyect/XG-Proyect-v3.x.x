@@ -27,9 +27,12 @@ use application\libraries\UpdatesLibrary;
 $config_file = XGP_ROOT . 'application' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'config.php';
 $installed = false;
 
-if (file_exists($config_file) && filesize($config_file) > 0) {
+if (file_exists($config_file)) {
     require $config_file;
-    $installed = true;
+
+    if (defined('DB_HOST') && defined('DB_USER') && defined('DB_PASS') && defined('DB_NAME') && defined('DB_PREFIX')) {
+        $installed = true;
+    }
 }
 
 // Require some stuff
