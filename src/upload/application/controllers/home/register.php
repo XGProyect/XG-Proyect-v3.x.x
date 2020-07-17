@@ -36,8 +36,8 @@ class Register extends Controller
     private $current_user;
 
     /**
-     * Contains the error 
-     * 
+     * Contains the error
+     *
      * @var int
      */
     private $error_id;
@@ -110,7 +110,7 @@ class Register extends Controller
                         'user_current_page' => $this->_db->escapeValue($_SERVER['REQUEST_URI']),
                         'user_home_planet_id' => 0,
                         'user_register_time' => time(),
-                        'user_password' => $hashed_password
+                        'user_password' => $hashed_password,
                     ]
                 );
 
@@ -182,13 +182,13 @@ class Register extends Controller
 
                 $this->_db->query(
                     "UPDATE " . USERS . " SET
-                    `user_home_planet_id` = (SELECT `planet_id` 
-                        FROM " . PLANETS . " 
-                        WHERE `planet_user_id` = '" . $user_id . "' 
+                    `user_home_planet_id` = (SELECT `planet_id`
+                        FROM " . PLANETS . "
+                        WHERE `planet_user_id` = '" . $user_id . "'
                         LIMIT 1),
-                    `user_current_planet` = (SELECT `planet_id` 
-                        FROM " . PLANETS . " 
-                        WHERE `planet_user_id` = '" . $user_id . "' 
+                    `user_current_planet` = (SELECT `planet_id`
+                        FROM " . PLANETS . "
+                        WHERE `planet_user_id` = '" . $user_id . "'
                         LIMIT 1),
                     `user_galaxy` = '" . $galaxy . "',
                     `user_system` = '" . $system . "',
@@ -243,10 +243,10 @@ class Register extends Controller
 
         $email = parent::$page->parseTemplate(parent::$page->getTemplate('home/email_template'), $parse);
         $status = FunctionsLib::sendEmail(
-                $emailaddress, $this->langs['re_mail_register_at'] . FunctionsLib::readConfig('game_name'), $email, [
+            $emailaddress, $this->langs['re_mail_register_at'] . FunctionsLib::readConfig('game_name'), $email, [
                 'mail' => FunctionsLib::readConfig('admin_email'),
-                'name' => $game_name
-                ], 'html'
+                'name' => $game_name,
+            ], 'html'
         );
 
         return $status;
@@ -306,7 +306,7 @@ class Register extends Controller
     private function checkUser()
     {
         return $this->_db->queryFetch(
-                "SELECT `user_name`
+            "SELECT `user_name`
             FROM " . USERS . "
             WHERE `user_name` = '" . $this->_db->escapeValue($_POST['character']) . "'
             LIMIT 1;"
@@ -321,7 +321,7 @@ class Register extends Controller
     private function checkEmail()
     {
         return $this->_db->queryFetch(
-                "SELECT `user_email`
+            "SELECT `user_email`
             FROM " . USERS . "
             WHERE `user_email` = '" . $this->_db->escapeValue($_POST['email']) . "'
             LIMIT 1;"

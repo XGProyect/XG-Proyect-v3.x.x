@@ -436,50 +436,54 @@ abstract class FunctionsLib extends XGPCore
      */
     public static function sendEmail($to, $subject, $body, $from, $format = 'text', $headers = '')
     {
-        // require email library
-        $mail_library_path = XGP_ROOT . SYSTEM_PATH . 'ci3_custom' . DIRECTORY_SEPARATOR . 'libraries' . DIRECTORY_SEPARATOR . 'Email.php';
+        try {
+            // require email library
+            $mail_library_path = XGP_ROOT . SYSTEM_PATH . 'ci3_custom' . DIRECTORY_SEPARATOR . 'libraries' . DIRECTORY_SEPARATOR . 'Email.php';
 
-        if (!file_exists($mail_library_path) or !function_exists('mail')) {
+            if (!file_exists($mail_library_path) or !function_exists('mail')) {
+                return false;
+            }
+
+            // required by the library
+            if (!defined('BASEPATH')) {
+                define('BASEPATH', XGP_ROOT . APP_PATH);
+            }
+
+            // use CI library
+            require_once $mail_library_path;
+
+            $mail = new CI_Email();
+
+            if ($format === 'text' or $format === 'html') {
+                $mail->set_mailtype($format);
+            }
+
+            // from
+            if (is_array($from)) {
+                $mail->from($from['mail'], $from['name']);
+            }
+
+            // to
+            $mail->to($to);
+
+            // headers
+            if (is_array($headers)) {
+                foreach ($headers as $header => $value) {
+                    $mail->set_header($header, $value);
+                }
+            }
+
+            // subject
+            $mail->subject($subject);
+
+            // message body
+            $mail->message($body);
+
+            // send!
+            return $mail->send();
+        } catch (Exception $e) {
             return false;
         }
-
-        // required by the library
-        if (!defined('BASEPATH')) {
-            define('BASEPATH', XGP_ROOT . APP_PATH);
-        }
-
-        // use CI library
-        require_once $mail_library_path;
-
-        $mail = new CI_Email();
-
-        if ($format === 'text' or $format === 'html') {
-            $mail->set_mailtype($format);
-        }
-
-        // from
-        if (is_array($from)) {
-            $mail->from($from['mail'], $from['name']);
-        }
-
-        // to
-        $mail->to($to);
-
-        // headers
-        if (is_array($headers)) {
-            foreach ($headers as $header => $value) {
-                $mail->set_header($header, $value);
-            }
-        }
-
-        // subject
-        $mail->subject($subject);
-
-        // message body
-        $mail->message($body);
-
-        // send!
-        return $mail->send();
     }
 
     /**
