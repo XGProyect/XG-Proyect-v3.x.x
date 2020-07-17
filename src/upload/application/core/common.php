@@ -13,6 +13,10 @@
  * @version  3.0.0
  */
 
+// report all errors
+error_reporting(E_ALL);
+ini_set('display_errors', 0);
+
 use application\core\ErrorHandler;
 use application\core\Hooks;
 use application\core\Sessions;
@@ -20,16 +24,15 @@ use application\libraries\FunctionsLib;
 use application\libraries\SecurePageLib;
 use application\libraries\UpdatesLibrary;
 
-// report all errors
-error_reporting(E_ALL);
-ini_set('display_errors', 0);
-
 $config_file = XGP_ROOT . 'application' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'config.php';
 $installed = false;
 
-if (file_exists($config_file) && filesize($config_file) > 0) {
+if (file_exists($config_file)) {
     require $config_file;
-    $installed = true;
+
+    if (defined('DB_HOST') && defined('DB_USER') && defined('DB_PASS') && defined('DB_NAME') && defined('DB_PREFIX')) {
+        $installed = true;
+    }
 }
 
 // Require some stuff
@@ -72,16 +75,16 @@ if (!defined('IN_INSTALL')) {
     $current_page = isset($_GET['page']) ? $_GET['page'] : '';
 
     // Sessions
-    $session = new Sessions();
+    $session = new Sessions;
 
     // Hooks
-    $hooks = new Hooks();
+    $hooks = new Hooks;
 
     // Before load stuff
     $hooks->call_hook('before_loads');
 
     if (!defined('IN_LOGIN') or 'IN_LOGIN' != true) {
-        $exclude = ['editor'];
+        $exclude = ['languages'];
 
         if (!in_array($current_page, $exclude)) {
             SecurePageLib::run();
@@ -93,7 +96,7 @@ if (!defined('IN_INSTALL')) {
         define('DEFENSE_DEBRIS_FACTOR', FunctionsLib::readConfig('defs_cdr') / 100);
 
         // Several updates
-        new UpdatesLibrary();
+        new UpdatesLibrary;
     }
 }
 

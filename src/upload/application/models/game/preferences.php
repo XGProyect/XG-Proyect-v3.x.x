@@ -16,6 +16,7 @@ declare (strict_types = 1);
  */
 namespace application\models\game;
 
+use application\core\Database;
 use application\libraries\FunctionsLib as Functions;
 
 /**
@@ -30,24 +31,21 @@ use application\libraries\FunctionsLib as Functions;
  */
 class Preferences
 {
-
     private $db = null;
 
     /**
      * Constructor
      *
-     * @return void
+     * @param Database $db
      */
-    public function __construct($db)
+    public function __construct(Database $db)
     {
         // use this to make queries
         $this->db = $db;
     }
 
     /**
-     * __destruct
-     *
-     * @return void
+     * Destructor
      */
     public function __destruct()
     {

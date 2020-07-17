@@ -69,7 +69,6 @@ class Fleets
     public function __construct($fleets, $current_user_id)
     {
         if (is_array($fleets)) {
-
             $this->setUp($fleets);
             $this->setUserId($current_user_id);
         }
@@ -86,12 +85,8 @@ class Fleets
         $index = 0;
 
         foreach ($this->_fleets as $fleets) {
-
             if (($fleets instanceof FleetEntity)) {
-
                 $list_of_fleets[] = $fleets;
-
-                $this->_fleets_index[$fleets->getFleetId()] = $index++;
             }
         }
 
@@ -107,7 +102,7 @@ class Fleets
      */
     public function getFleetById(int $fleet_id): FleetEntity
     {
-        return $this->_fleets[$this->validateIndex($fleet_id)] ?? [];
+        return $this->_fleets[$this->validateIndex($fleet_id)] ?? new FleetEntity;
     }
 
     /**
@@ -122,7 +117,6 @@ class Fleets
         $fleet = $this->getFleetById($fleet_id);
 
         if ($fleet->getFleetOwner() == $this->getUserId()) {
-
             return $fleet;
         }
 
@@ -143,7 +137,6 @@ class Fleets
         if ($fleet->getFleetStartTime() <= time()
             or $fleet->getFleetEndTime() < time()
             or $fleet->getFleetMess() == 1) {
-
             return null;
         }
 
@@ -159,7 +152,7 @@ class Fleets
      */
     private function validateIndex(int $fleet_id)
     {
-        return isset($this->_fleets_index[$fleet_id]) ?? -1;
+        return isset($this->_fleets_index[$fleet_id]) ? $this->_fleets_index[$fleet_id] : -1;
     }
 
     /**
@@ -171,16 +164,17 @@ class Fleets
      */
     private function setUp($fleets)
     {
-        foreach ($fleets as $fleet) {
+        $index = 0;
 
+        foreach ($fleets as $fleet) {
             $data = $this->createNewFleetEntity($fleet);
 
             $this->_fleets[] = $data;
+            $this->_fleets_index[$data->getFleetId()] = $index++;
 
             $this->setFleetsCount();
 
             if ($data->getFleetMission() == Missions::expedition) {
-
                 $this->setExpeditionsCount();
             }
         }

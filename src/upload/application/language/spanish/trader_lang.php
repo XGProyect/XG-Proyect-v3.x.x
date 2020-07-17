@@ -26,6 +26,8 @@ $lang = [
     'tr_step2' => '2. Llamar al mercader',
     'tr_price' => 'Coste: %s de Materia Oscura (por llamada)',
     'tr_call_button' => 'Llamar al mercader',
+    'tr_no_enough_storage' => 'No hay suficiente capacidad de almacenamiento.',
+    'tr_no_enough_dark_matter' => 'No hay suficiente materia oscura disponible',
 
     // traderAuctioneer
 
@@ -42,7 +44,7 @@ $lang = [
     'tr_scrap_phrase_8' => 'Soy empresario, y no de beneficencia.',
     'tr_scrap_phrase_9' => '¡Pero si ya apenas saco tajada de este trato!',
     'tr_scrap_phrase_10' => '¡Tengo una familia que alimentar!',
-    'tr_scrap_phrase_11' => 'Ya puedo escuchar las burlas de mis competidores',
+    'tr_scrap_phrase_11' => 'Ya oigo la maliciosa burla de la competencia.',
 
     // traderImportExport
 ];

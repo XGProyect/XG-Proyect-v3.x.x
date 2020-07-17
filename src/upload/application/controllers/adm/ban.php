@@ -30,8 +30,6 @@ use application\libraries\FunctionsLib;
  */
 class Ban extends Controller
 {
-
-    private $_lang;
     private $_current_user;
     private $_users_count = 0;
     private $_banned_count = 0;
@@ -46,15 +44,17 @@ class Ban extends Controller
         // check if session is active
         AdministrationLib::checkSession();
 
+        // load Language
+        parent::loadLang(['adm/global', 'adm/ban']);
+
         $this->_db = new Database();
-        $this->_lang = parent::$lang;
         $this->_current_user = parent::$users->getUserData();
 
         // Check if the user is allowed to access
         if (AdministrationLib::haveAccess($this->_current_user['user_authlevel']) && AdministrationLib::authorization($this->_current_user['user_authlevel'], 'edit_users') == 1) {
             $this->build_page();
         } else {
-            die(AdministrationLib::noAccessMessage($this->_lang['ge_no_permissions']));
+            die(AdministrationLib::noAccessMessage($this->langs->line('ge_no_permissions')));
         }
     }
 
@@ -75,7 +75,7 @@ class Ban extends Controller
      */
     private function build_page()
     {
-        switch (( isset($_GET['mode']) ? $_GET['mode'] : '')) {
+        switch ((isset($_GET['mode']) ? $_GET['mode'] : '')) {
             case 'ban':
 
                 $view = $this->show_ban();
@@ -90,7 +90,7 @@ class Ban extends Controller
                 break;
         }
 
-        parent::$page->display($view);
+        parent::$page->displayAdmin($view);
     }
 
     /**
@@ -100,7 +100,7 @@ class Ban extends Controller
      */
     private function show_default()
     {
-        $parse = $this->_lang;
+        $parse = $this->langs->language;
         $parse['js_path'] = JS_PATH;
 
         if (isset($_POST['unban_name']) && $_POST['unban_name']) {
@@ -114,7 +114,7 @@ class Ban extends Controller
 									WHERE `user_name` = '" . $username . "'
 									LIMIT 1");
 
-            $parse['alert'] = AdministrationLib::saveMessage('ok', ( str_replace('%s', $username, $this->_lang['bn_lift_ban_success'])));
+            $parse['alert'] = AdministrationLib::saveMessage('ok', (str_replace('%s', $username, $this->langs->line('bn_lift_ban_success'))));
         }
 
         $parse['users_list'] = $this->get_users_list();
@@ -132,18 +132,18 @@ class Ban extends Controller
      */
     private function show_ban()
     {
-        $parse = $this->_lang;
+        $parse = $this->langs->language;
         $parse['js_path'] = JS_PATH;
-        $ban_name = isset($_GET['ban_name']) ? $this->_db->escapeValue($_GET['ban_name']) : NULL;
+        $ban_name = isset($_GET['ban_name']) ? $this->_db->escapeValue($_GET['ban_name']) : null;
 
         if (isset($_GET['banuser']) && isset($_GET['ban_name'])) {
             $parse['name'] = $ban_name;
             $parse['banned_until'] = '';
-            $parse['changedate'] = $this->_lang['bn_auto_lift_ban_message'];
+            $parse['changedate'] = $this->langs->line('bn_auto_lift_ban_message');
             $parse['vacation'] = '';
 
             $banned_user = $this->_db->queryFetch(
-                            "SELECT 
+                "SELECT
                                 b.*,
                                 p.`preference_user_id`,
                                 p.`preference_vacation_mode`
@@ -154,20 +154,20 @@ class Ban extends Controller
                                                                 WHERE `user_name` = '" . $ban_name . "'
                                                                 LIMIT 1)
                             WHERE `banned_who` = '" . $ban_name . "'"
-                            );
+            );
             if ($banned_user) {
-                $parse['banned_until'] = $this->_lang['bn_banned_until'] . ' (' . date(FunctionsLib::readConfig('date_format_extended'), $banned_user['banned_longer']) . ')';
+                $parse['banned_until'] = $this->langs->line('bn_banned_until') . ' (' . date(FunctionsLib::readConfig('date_format_extended'), $banned_user['banned_longer']) . ')';
                 $parse['reason'] = $banned_user['banned_theme'];
-                $parse['changedate'] = '<div style="float:left">' . $this->_lang['bn_change_date'] . '</div><div style="float:right">' . AdministrationLib::showPopUp($this->_lang['bn_edit_ban_help']) . '</div>';
+                $parse['changedate'] = '<div style="float:left">' . $this->langs->line('bn_change_date') . '</div><div style="float:right">' . AdministrationLib::showPopUp($this->langs->line('bn_edit_ban_help')) . '</div>';
             }
 
             $parse['vacation'] = $banned_user['preference_vacation_mode'] ? 'checked="checked"' : '';
 
             if (isset($_POST['bannow']) && $_POST['bannow']) {
-                if (!is_numeric($_POST['days']) or ! is_numeric($_POST['hour'])) {
-                    $parse['alert'] = AdministrationLib::saveMessage('warning', $this->_lang['bn_all_fields_required']);
+                if (!is_numeric($_POST['days']) or !is_numeric($_POST['hour'])) {
+                    $parse['alert'] = AdministrationLib::saveMessage('warning', $this->langs->line('bn_all_fields_required'));
                 } else {
-                    $reas = (string) $_POST['why'];
+                    $reas = (string) $_POST['text'];
                     $days = (int) $_POST['days'];
                     $hour = (int) $_POST['hour'];
                     $admin_name = $this->_current_user['user_name'];
@@ -177,10 +177,10 @@ class Ban extends Controller
                     $ban_time += $hour * 3600;
 
                     if ($banned_user['banned_longer'] > time()) {
-                        $ban_time += ( $banned_user['banned_longer'] - time() );
+                        $ban_time += ($banned_user['banned_longer'] - time());
                     }
 
-                    if (( $ban_time + $current_time ) < time()) {
+                    if (($ban_time + $current_time) < time()) {
                         $banned_until = $current_time;
                     } else {
                         $banned_until = $current_time + $ban_time;
@@ -213,7 +213,7 @@ class Ban extends Controller
 
                     $this->_db->query("UPDATE " . USERS . " AS u, " . PREFERENCES . " AS pr, " . PLANETS . " AS p SET
 											u.`user_banned` = '" . $banned_until . "',
-											pr.`preference_vacation_mode` = '" . ( isset($_POST['vacat']) ? FunctionsLib::getDefaultVacationTime() : NULL ) . "',
+											pr.`preference_vacation_mode` = " . (isset($_POST['vacat']) ? "'" . time() . "'" : 'NULL') . ",
 											p.`planet_building_metal_mine_percent` = '0',
 											p.`planet_building_crystal_mine_percent` = '0',
 											p.`planet_building_deuterium_sintetizer_percent` = '0'
@@ -221,7 +221,7 @@ class Ban extends Controller
 													AND pr.`preference_user_id` = " . $user_id['user_id'] . "
 													AND p.`planet_user_id` = " . $user_id['user_id'] . ";");
 
-                    $parse['alert'] = AdministrationLib::saveMessage('ok', ( str_replace('%s', $ban_name, $this->_lang['bn_ban_success'])));
+                    $parse['alert'] = AdministrationLib::saveMessage('ok', (str_replace('%s', $ban_name, $this->langs->line('bn_ban_success'))));
                 }
             }
         } else {
@@ -238,16 +238,16 @@ class Ban extends Controller
      */
     private function get_users_list()
     {
-        $query_order = ( isset($_GET['order']) && $_GET['order'] == 'id' ) ? 'user_id' : 'user_name';
+        $query_order = (isset($_GET['order']) && $_GET['order'] == 'id') ? 'user_id' : 'user_name';
         $where_authlevel = '';
         $where_banned = '';
         $users_list = '';
 
         if ($this->_current_user['user_authlevel'] != 3) {
-            $where_authlevel = "WHERE `user_authlevel` < '" . ( $this->_current_user['user_authlevel'] ) . "'";
+            $where_authlevel = "WHERE `user_authlevel` < '" . ($this->_current_user['user_authlevel']) . "'";
         }
 
-        if (isset($_GET['view']) && ( $_GET['view'] == 'user_banned' )) {
+        if (isset($_GET['view']) && ($_GET['view'] == 'user_banned')) {
             if ($this->_current_user['user_authlevel'] == 3) {
                 $where_banned = "WHERE `user_banned` <> '0'";
             } else {
@@ -265,7 +265,7 @@ class Ban extends Controller
             $status = '';
 
             if ($user['user_banned'] == 1) {
-                $status = $this->_lang['bn_status'];
+                $status = $this->langs->line('bn_status');
             }
 
             $users_list .= '<option value="' . $user['user_name'] . '">' . $user['user_name'] . '&nbsp;&nbsp;(ID:&nbsp;' . $user['user_id'] . ')' . $status . '</option>';
@@ -285,7 +285,7 @@ class Ban extends Controller
      */
     private function get_banned_list()
     {
-        $order = ( isset($_GET['order2']) && $_GET['order2'] == 'id' ) ? 'user_id' : 'user_name';
+        $order = (isset($_GET['order2']) && $_GET['order2'] == 'id') ? 'user_id' : 'user_name';
         $banned_list = '';
 
         // get the banned users

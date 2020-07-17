@@ -1,5 +1,4 @@
 <?php
-$queries[] = "DELETE FROM `" . OPTIONS . "` WHERE `option_name` = 'ssl_enabled'";
 $queries[] = "ALTER TABLE `" . BUDDY . "` ADD PRIMARY KEY (`buddy_id`), ADD KEY `buddy_id` (`buddy_id`);";
 $queries[] = "ALTER TABLE `" . FLEETS . "` CHANGE `fleet_mess` `fleet_mess` TINYINT(1) NOT NULL DEFAULT '0';";
 $queries[] = "RENAME TABLE `" . DB_PREFIX . "acs_fleets` TO `" . ACS . "`;";
@@ -51,9 +50,16 @@ $queries[] = "CREATE TABLE `" . PREFERENCES . "` (
 PRIMARY KEY (`preference_id`),
 UNIQUE KEY `preference_user_id` (`preference_user_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;";
+$queries[] = "INSERT INTO `" . PREFERENCES . "` (`preference_user_id`) SELECT `user_id` FROM `" . USERS . "`;";
 $queries[] = "DROP TABLE `" . DB_PREFIX . "settings`";
 $queries[] = "ALTER TABLE `" . USERS . "` DROP `user_email_permanent`;";
-$queries[] = "INSERT INTO `" . OPTIONS . "` (`option_id`, `option_name`, `option_value`) VALUES ('43', 'merchant_base_min_exchange_rate', '0.7'), ('44', 'merchant_base_max_exchange_rate', '1'), ('45', 'merchant_metal_multiplier', '3'), ('46', 'merchant_crystal_multiplier', '2'), ('47', 'merchant_deuterium_multiplier', '1');";
 $queries[] = "ALTER TABLE `" . OPTIONS . "` ADD PRIMARY KEY(`option_id`);";
+$queries[] = "ALTER TABLE `" . OPTIONS . "` CHANGE `option_id` `option_id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT;";
 $queries[] = "ALTER TABLE `" . OPTIONS . "` ADD UNIQUE(`option_name`);";
-$queries[] = "UPDATE `" . OPTIONS . "` SET `option_name` = 'merchant_price' WHERE `" . OPTIONS . "`.`option_id` = 35;";
+$queries[] = "INSERT INTO `" . OPTIONS . "` (`option_name`, `option_value`) VALUES ('merchant_base_min_exchange_rate', '0.7'), ('merchant_base_max_exchange_rate', '1'), ('merchant_metal_multiplier', '3'), ('merchant_crystal_multiplier', '2'), ('merchant_deuterium_multiplier', '1');";
+$queries[] = "UPDATE `" . OPTIONS . "` SET `option_name` = 'merchant_price' WHERE `option_name` = 'trader_darkmatter';";
+$queries[] = "DELETE FROM `" . OPTIONS . "` WHERE `option_name` = 'ssl_enabled'";
+$queries[] = "ALTER TABLE `" . USERS . "` CHANGE `user_agent` `user_agent` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL, CHANGE `user_current_page` `user_current_page` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL;";
+$queries[] = "ALTER TABLE `" . PLANETS . "` DROP `planet_metal_max`, DROP `planet_crystal_max`, DROP `planet_deuterium_max`;";
+$queries[] = "UPDATE `" . OPTIONS . "` SET `option_value` = '1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;0;1;1' WHERE `option_name` = 'modules';";
+$queries[] = "ALTER TABLE `" . MESSAGES . "` CHANGE `message_from` `message_from` VARCHAR(65) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;";

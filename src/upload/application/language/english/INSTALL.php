@@ -43,7 +43,7 @@ $lang['ins_user_title'] = 'User:';
 $lang['ins_password_title'] = 'Password:';
 $lang['ins_prefix_title'] = 'Tables prefix:';
 $lang['ins_ex_tag'] = 'Ex:';
-$lang['ins_install_go'] = 'Intall';
+$lang['ins_install_go'] = 'Install';
 
 // ERRORS
 $lang['ins_not_connected_error'] = 'Unable to connect to the database with the data entered.';

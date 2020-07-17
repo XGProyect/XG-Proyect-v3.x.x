@@ -1,4 +1,7 @@
 <?php
+
+declare (strict_types = 1);
+
 /**
  * Backup Controller
  *
@@ -14,9 +17,10 @@
 namespace application\controllers\adm;
 
 use application\core\Controller;
-use application\core\Database;
-use application\libraries\adm\AdministrationLib;
-use application\libraries\FunctionsLib;
+use application\libraries\adm\AdministrationLib as Administration;
+use application\libraries\FormatLib as Format;
+use application\libraries\FunctionsLib as Functions;
+use application\libraries\TimingLibrary as Timing;
 
 /**
  * Backup Class
@@ -30,74 +34,233 @@ use application\libraries\FunctionsLib;
  */
 class Backup extends Controller
 {
-
-    private $_lang;
-    private $_current_user;
+    const BACKUP_SETTINGS = [
+        'auto_backup' => FILTER_SANITIZE_STRING,
+    ];
 
     /**
-     * __construct()
+     * Current user data
+     *
+     * @var array
+     */
+    private $user;
+
+    /**
+     * Constructor
      */
     public function __construct()
     {
         parent::__construct();
 
         // check if session is active
-        AdministrationLib::checkSession();
+        Administration::checkSession();
 
-        $this->_db = new Database();
-        $this->_lang = parent::$lang;
-        $this->_current_user = parent::$users->getUserData();
+        // load Model
+        parent::loadModel('adm/backup');
+
+        // load Language
+        parent::loadLang(['adm/global', 'adm/backup']);
+
+        // set data
+        $this->user = $this->getUserData();
 
         // Check if the user is allowed to access
-        if (AdministrationLib::haveAccess($this->_current_user['user_authlevel']) && AdministrationLib::authorization($this->_current_user['user_authlevel'], 'use_tools') == 1) {
-            $this->build_page();
-        } else {
-            die(AdministrationLib::noAccessMessage($this->_lang['ge_no_permissions']));
+        if (Administration::authorization($this->user['user_authlevel'], 'use_tools') != 1) {
+            Administration::noAccessMessage($this->langs->line('no_permissions'));
+        }
+
+        // time to do something
+        $this->runAction();
+
+        // build the page
+        $this->buildPage();
+    }
+
+    /**
+     * Run an action
+     *
+     * @return void
+     */
+    private function runAction(): void
+    {
+        $save = filter_input(INPUT_POST, 'save');
+        $backup = filter_input(INPUT_POST, 'backup');
+        $file_actions = filter_input_array(INPUT_GET, [
+            'action' => FILTER_SANITIZE_STRING,
+            'file' => [
+                'filter' => FILTER_CALLBACK,
+                'options' => [$this, 'isValidFile'],
+            ],
+        ]);
+
+        // save form
+        if ($save) {
+            $data = filter_input_array(INPUT_POST, self::BACKUP_SETTINGS, true);
+
+            foreach ($data as $option => $value) {
+                Functions::updateConfig($option, ($value == 'on' ? 1 : 0));
+            }
+        }
+
+        // create a new backup
+        if ($backup) {
+            $this->Backup_Model->performBackup();
+        }
+
+        // download or delete a file
+        if ($file_actions) {
+            if (in_array($file_actions['action'], ['download', 'delete'])
+                && $file_actions['file'] != null) {
+                $this->{'do' . ucfirst($file_actions['action']) . 'Action'}($file_actions['file']);
+            }
         }
     }
 
     /**
-     * method __destruct
-     * param
-     * return close db connection
+     * Download the provided file
+     *
+     * @param string $file_name
+     * @return void
      */
-    public function __destruct()
+    private function doDownloadAction(string $file_name): void
     {
-        $this->_db->closeConnection();
+        $to_download = XGP_ROOT . BACKUP_PATH . $file_name;
+
+        if (file_exists($to_download)) {
+            header('Content-type: text/plain');
+            header('Content-disposition: attachment; filename=' . $file_name);
+            readfile($to_download);
+            exit();
+        }
     }
 
     /**
-     * method build_page
-     * param
-     * return main method, loads everything
+     * Delete the provided file
+     *
+     * @param string $file_name
+     * @return void
      */
-    private function build_page()
+    private function doDeleteAction(string $file_name): void
     {
-        $parse = $this->_lang;
+        $to_delete = XGP_ROOT . BACKUP_PATH . $file_name;
 
-        // ON POST
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            // SAVE DATA
-            if (isset($_POST['save']) && $_POST['save']) {
-                FunctionsLib::updateConfig('auto_backup', ( ( isset($_POST['auto_backup']) && $_POST['auto_backup'] == 'on' ) ? 1 : 0));
-            }
+        if (file_exists($to_delete)) {
+            unlink($to_delete);
+        }
 
-            // BACKUP DATABASE RIGHT NOW
-            if (isset($_POST['backup']) && $_POST['backup']) {
-                $result = $this->_db->backupDb();
+        Functions::redirect('admin.php?page=backup');
+    }
 
-                if ($result != false) {
-                    $parse['alert'] = AdministrationLib::saveMessage('ok', str_replace('%s', round($result / 1024, 2), $this->_lang['bku_backup_done']));
-                }
+    /**
+     * Build the page
+     *
+     * @return void
+     */
+    private function buildPage(): void
+    {
+        parent::$page->displayAdmin(
+            $this->getTemplate()->set(
+                'adm/backup_view',
+                array_merge(
+                    $this->langs->language,
+                    $this->getBackupSettings(),
+                    $this->getBackupList()
+                )
+            )
+        );
+    }
+
+    /**
+     * Get new user registration settings
+     *
+     * @return void
+     */
+    private function getBackupSettings()
+    {
+        return $this->setChecked(
+            array_filter(
+                Functions::readConfig('', true),
+                function ($key) {
+                    return array_key_exists($key, self::BACKUP_SETTINGS);
+                },
+                ARRAY_FILTER_USE_KEY
+            )
+        );
+    }
+
+    /**
+     * Coverts the setting value from an int to a "checked"
+     *
+     * @param array $settings
+     * @return array
+     */
+    private function setChecked(array $settings): array
+    {
+        foreach ($settings as $key => $value) {
+            $settings[$key] = $value == 1 ? 'checked="checked"' : '';
+        }
+
+        return $settings;
+    }
+
+    /**
+     * Build the list of available backups
+     *
+     * @return void
+     */
+    private function getBackupList()
+    {
+        $backup_list = [];
+        $backups_path = XGP_ROOT . BACKUP_PATH;
+
+        // list of backup files
+        chdir($backups_path);
+        $files = glob('*.sql');
+
+        if ($files != '') {
+            foreach ($files as $file_name) {
+                $backup_list[] = [
+                    'file_name' => $this->formatFileName($file_name),
+                    'file_size' => Format::prettyBytes(filesize($file_name)),
+                    'full_file_name' => $file_name,
+                ];
             }
         }
 
-        // PARSE DATA
-        $auto_backup_status = FunctionsLib::readConfig('auto_backup');
-        $parse['color'] = ( $auto_backup_status == 1 ) ? 'text-success' : 'text-error';
-        $parse['checked'] = ( $auto_backup_status == 1 ) ? 'checked' : '';
+        krsort($backup_list);
 
-        parent::$page->display(parent::$page->parseTemplate(parent::$page->getTemplate("adm/backup_view"), $parse));
+        return [
+            'backup_list' => $backup_list,
+        ];
+    }
+
+    /**
+     * Format the file name to get the current date as name
+     *
+     * @param string $file_name
+     * @return string
+     */
+    private function formatFileName(string $file_name): string
+    {
+        $matches = [];
+        preg_match('/db-backup-(?:[0-9]+)-([0-9]+)-(?:[a-zA-Z0-9]+)\.sql/', $file_name, $matches);
+
+        return Timing::formatExtendedDate($matches[1]);
+    }
+
+    /**
+     * Check whether if it's a valid file, returns an empty string if it's not
+     *
+     * @param string $file_name
+     * @return boolean
+     */
+    private function isValidFile(string $file_name): string
+    {
+        if ((bool) preg_match('/db-backup-(?:[0-9]+)-([0-9]+)-(?:[a-zA-Z0-9]+)\.sql/', $file_name, $matches) !== false) {
+            return $file_name;
+        }
+
+        return '';
     }
 }
 

@@ -16,7 +16,7 @@ namespace application\core\entities;
 use application\core\Entity;
 
 /**
- * Notes Entity Class
+ * NotesEntity Class
  *
  * @category Entity
  * @package  Core
@@ -27,13 +27,10 @@ use application\core\Entity;
  */
 class NotesEntity extends Entity
 {
-
     /**
      * Constructor
      *
-     * @param array $data Data
-     *
-     * @return void
+     * @param array $data
      */
     public function __construct($data)
     {

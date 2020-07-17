@@ -19,7 +19,8 @@ use application\libraries\DevelopmentsLib;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
 use application\libraries\OfficiersLib;
-use application\libraries\Timing_library as Timing;
+use application\libraries\TimingLibrary as Timing;
+use application\libraries\UpdatesLibrary;
 use Exception;
 
 /**
@@ -71,8 +72,6 @@ class Buildings extends Controller
 
     /**
      * Constructor
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -152,6 +151,14 @@ class Buildings extends Controller
                             $this->removeFromQueue($list_id);
                             break;
                     }
+
+                    // start building
+                    UpdatesLibrary::setFirstElement($this->_planet, $this->_user);
+
+                    // start building
+                    $this->Buildings_Model->updatePlanetBuildingQueue(
+                        $this->_planet
+                    );
                 }
 
                 if ($reload == 'overview') {
@@ -161,16 +168,6 @@ class Buildings extends Controller
                 }
             }
         }
-
-        // set first element
-        DevelopmentsLib::setFirstElement($this->_planet, $this->_user);
-
-        // start building
-        $this->Buildings_Model->updatePlanetBuildingQueue(
-            $this->_planet['planet_b_building_id'],
-            $this->_planet['planet_b_building'],
-            $this->_planet['planet_id']
-        );
     }
 
     /**
@@ -535,13 +532,16 @@ class Buildings extends Controller
             ],
         ];
 
-        return array_filter($allowed_buildings[$this->getCurrentPage()][$this->_planet['planet_type']], function ($value) {
-            return DevelopmentsLib::isDevelopmentAllowed(
-                $this->_user,
-                $this->_planet,
-                $value
-            );
-        });
+        return array_filter(
+            $allowed_buildings[$this->getCurrentPage()][$this->_planet['planet_type']],
+            function ($value) {
+                return DevelopmentsLib::isDevelopmentAllowed(
+                    $this->_user,
+                    $this->_planet,
+                    $value
+                );
+            }
+        );
     }
     /**
      * OLD METHODS BELOW

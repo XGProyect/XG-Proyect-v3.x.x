@@ -1,4 +1,4 @@
-<form action="game.php?page=trader" method="post">
+<form action="game.php?page=traderOverview" method="post">
     <input type="hidden" name="action" value="2">
     <br />
     <div id="content">

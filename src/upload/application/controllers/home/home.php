@@ -52,9 +52,7 @@ class Home extends Controller
     }
 
     /**
-     * __destruct
-     *
-     * @return void
+     * Destructor
      */
     public function __destruct()
     {

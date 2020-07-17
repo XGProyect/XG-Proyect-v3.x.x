@@ -1,6 +1,9 @@
 <?php
+
+declare (strict_types = 1);
+
 /**
- * XGPCore
+ * Controller
  *
  * PHP Version 7.1+
  *
@@ -14,14 +17,14 @@
 namespace application\core;
 
 /**
- * XGPCore Class
+ * Controller Class
  *
  * @category Classes
  * @package  Application
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
- * @version  3.0.0
+ * @version  3.1.0
  */
 abstract class Controller extends XGPCore
 {
@@ -31,34 +34,34 @@ abstract class Controller extends XGPCore
      *
      * @var array
      */
-    private $_current_user = [];
+    private $current_user = [];
 
     /**
      * Contains the current planet data
      *
      * @var array
      */
-    private $_current_planet = [];
+    private $current_planet = [];
 
     /**
      * Contains the whole set of objects by request
      *
      * @var array
      */
-    private $_objects = [];
+    private $objects_list = [];
 
     /**
      * Contains the whole set of language lines
      *
      * @var array
      */
-    private $_langs = [];
+    private $langs = [];
 
     /**
      *
-     * @var type
+     * @var \Template
      */
-    private $_template = null;
+    private $template = null;
 
     /**
      * Constructor
@@ -76,42 +79,52 @@ abstract class Controller extends XGPCore
 
     /**
      * Set the user Data
+     *
+     * @return void
      */
-    private function setUserData()
+    private function setUserData(): void
     {
-        $this->_current_user = parent::$users->getUserData();
+        $this->current_user = parent::$users->getUserData();
     }
 
     /**
      * Set the planet Data
+     *
+     * @return void
      */
-    private function setPlanetData()
+    private function setPlanetData(): void
     {
-        $this->_current_planet = parent::$users->getPlanetData();
+        $this->current_planet = parent::$users->getPlanetData();
     }
 
     /**
      * Set objects data
+     *
+     * @return void
      */
-    private function setObjects()
+    private function setObjects(): void
     {
-        $this->_objects = parent::$objects;
+        $this->objects_list = parent::$objects;
     }
 
     /**
      * Set languages data
+     *
+     * @return void
      */
-    private function setLang()
+    private function setLang(): void
     {
-        $this->_langs = parent::$lang;
+        $this->langs = parent::$lang;
     }
 
     /**
-     * Set languages data
+     * Set template data
+     *
+     * @return void
      */
-    private function setTemplate()
+    private function setTemplate(): void
     {
-        $this->_template = new Template();
+        $this->template = new Template();
     }
 
     /**
@@ -119,29 +132,29 @@ abstract class Controller extends XGPCore
      *
      * @return array
      */
-    protected function getUserData()
+    protected function getUserData(): array
     {
-        return $this->_current_user;
+        return $this->current_user;
     }
 
     /**
      * Return the planet data
      *
-     * @return Planet
+     * @return array
      */
-    protected function getPlanetData()
+    protected function getPlanetData(): array
     {
-        return $this->_current_planet;
+        return $this->current_planet;
     }
 
     /**
      * Return the objects data
      *
-     * @return Objects
+     * @return \Objects
      */
-    protected function getObjects()
+    protected function getObjects(): Objects
     {
-        return $this->_objects;
+        return $this->objects_list;
     }
 
     /**
@@ -149,18 +162,19 @@ abstract class Controller extends XGPCore
      *
      * @return array
      */
-    protected function getLang()
+    protected function getLang(): array
     {
-        return $this->_langs;
+        return $this->langs;
     }
 
     /**
+     * Returns the template
      *
-     * @return type
+     * @return \Template
      */
-    protected function getTemplate()
+    protected function getTemplate(): Template
     {
-        return $this->_template;
+        return $this->template;
     }
 }
 

@@ -13,6 +13,8 @@
  */
 namespace application\models\game;
 
+use application\core\Database;
+
 /**
  * Trader Class
  *
@@ -25,26 +27,46 @@ namespace application\models\game;
  */
 class Trader
 {
-
     private $db = null;
 
     /**
-     * __construct()
+     * Constructor
+     *
+     * @param Database $db
      */
-    public function __construct($db)
+    public function __construct(Database $db)
     {
         // use this to make queries
         $this->db = $db;
     }
 
     /**
-     * __destruct
-     *
-     * @return void
+     * Destructor
      */
     public function __destruct()
     {
         $this->db->closeConnection();
+    }
+
+    /**
+     * Refill planet storage and discount the needed dark matter
+     *
+     * @param integer $dark_matter
+     * @param string $resource
+     * @param float $amount
+     * @param integer $user_id
+     * @param integer $planet_id
+     * @return void
+     */
+    public function refillStorage(int $dark_matter, string $resource, float $amount, int $user_id, int $planet_id): void
+    {
+        $this->db->query(
+            "UPDATE `" . PREMIUM . "` pr, `" . PLANETS . "` p SET
+            pr.`premium_dark_matter` = pr.`premium_dark_matter` - '" . $dark_matter . "',
+            p.`planet_" . $resource . "` = '" . $amount . "'
+            WHERE pr.`premium_user_id` = '" . $user_id . "'
+                AND p.`planet_id` = '" . $planet_id . "';"
+        );
     }
 }
 

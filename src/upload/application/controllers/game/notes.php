@@ -18,7 +18,7 @@ use application\core\entities\NotesEntity;
 use application\core\enumerators\ImportanceEnumerator as Importance;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
-use application\libraries\Timing_library as Timing;
+use application\libraries\TimingLibrary as Timing;
 use application\libraries\users\Notes as Note;
 
 /**
@@ -60,8 +60,6 @@ class Notes extends Controller
 
     /**
      * Constructor
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -138,7 +136,7 @@ class Notes extends Controller
     }
 
     /**
-     * Creates a new ships object that will handle all the ships
+     * Creates a new notes object that will handle all the notes
      * creation methods and actions
      *
      * @return void

@@ -25,10 +25,10 @@ namespace application\core\enumerators;
  */
 abstract class UserRanksEnumerator
 {
-    const player = 0;
-    const go = 1;
-    const sgo = 2;
-    const admin = 3;
+    const PLAYER = 0;
+    const GO = 1;
+    const SGO = 2;
+    const ADMIN = 3;
 }
 
 /* end of UserRanksEnumerator.php */

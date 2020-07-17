@@ -13,6 +13,7 @@
  */
 namespace application\models\game;
 
+use application\core\Database;
 use application\core\entities\FleetEntity;
 use application\core\enumerators\MissionsEnumerator as Missions;
 
@@ -28,22 +29,21 @@ use application\core\enumerators\MissionsEnumerator as Missions;
  */
 class Fleet
 {
-
     private $db = null;
 
     /**
-     * __construct()
+     * Constructor
+     *
+     * @param Database $db
      */
-    public function __construct($db)
+    public function __construct(Database $db)
     {
         // use this to make queries
         $this->db = $db;
     }
 
     /**
-     * __destruct
-     *
-     * @return void
+     * Destructor
      */
     public function __destruct()
     {
@@ -172,6 +172,7 @@ class Fleet
                     acs.*
                 FROM `" . ACS_MEMBERS . "` am
                 INNER JOIN `" . ACS . "` acs ON acs.`acs_id` = am.`acs_group_id`
+                INNER JOIN `" . FLEETS . "` f ON f.`fleet_group` = acs.`acs_id`
                 WHERE am.`acs_user_id` = '" . $user_id . "';"
         );
     }
@@ -543,12 +544,13 @@ class Fleet
      *
      * @return void
      */
-    public function updateAcsName(string $acs_name, int $user_id): void
+    public function updateAcsName(string $acs_name, int $acs_id, int $user_id): void
     {
         $this->db->query(
             "UPDATE `" . ACS . "` acs SET
                 acs.`acs_name` = '" . $this->db->escapeValue($acs_name) . "'
-            WHERE acs.`acs_owner` = '" . $user_id . "';"
+            WHERE acs.`acs_id` = '" . $acs_id . "'
+                AND acs.`acs_owner` = '" . $user_id . "';"
         );
     }
 

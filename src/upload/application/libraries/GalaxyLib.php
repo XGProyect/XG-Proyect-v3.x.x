@@ -54,11 +54,11 @@ class GalaxyLib extends XGPCore
      *
      * @return void
      */
-    public function __construct($user = '', $planet = '', $galaxy = '', $system = '')
+    public function __construct($user = '', $planet = '', $galaxy = '', $system = '', $langs = '')
     {
         parent::__construct();
 
-        $this->langs = parent::$lang;
+        $this->langs = $langs;
         $this->current_user = $user;
         $this->currentplanet = $planet;
         $this->galaxy = $galaxy;
@@ -311,7 +311,7 @@ class GalaxyLib extends XGPCore
             $parse['galaxy'] = $this->galaxy;
             $parse['system'] = $this->system;
             $parse['planet'] = $this->planet;
-            $parse['planettype'] = self::DEBRIS_TYPE;
+            $parse['planettype'] = self::PLANET_TYPE;
             $parse['recsended'] = $recyclers_sended;
             $parse['planet_debris_metal'] = FormatLib::prettyNumber($this->row_data['metal']);
             $parse['planet_debris_crystal'] = FormatLib::prettyNumber($this->row_data['crystal']);
@@ -380,7 +380,7 @@ class GalaxyLib extends XGPCore
             $parse['actions'] .= str_replace('"', '', FunctionsLib::setUrl(
                 'game.php?page=chat&playerId=' . $this->row_data['user_id'],
                 '',
-                $this->langs['write_message']
+                $this->langs['gl_write_message']
             ));
             $parse['actions'] .= "</td></tr><tr><td>";
             $parse['actions'] .= str_replace('"', '', FunctionsLib::setUrl(
@@ -473,7 +473,7 @@ class GalaxyLib extends XGPCore
             $this->planet . ", 1, " . $this->current_user['preference_spy_probes'] . ");\"";
             $links .= FunctionsLib::setUrl('', '', $image, $attributes) . '&nbsp;';
 
-            $image = FunctionsLib::setImage(DPATH . 'img/m.gif', $this->langs['write_message']);
+            $image = FunctionsLib::setImage(DPATH . 'img/m.gif', $this->langs['gl_write_message']);
             $url = 'game.php?page=chat&playerId=' . $this->row_data['user_id'];
             $links .= FunctionsLib::setUrl($url, '', $image) . '&nbsp;';
 

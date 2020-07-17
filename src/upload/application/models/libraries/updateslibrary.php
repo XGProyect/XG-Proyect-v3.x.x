@@ -13,6 +13,8 @@
  */
 namespace application\models\libraries;
 
+use application\core\Database;
+
 /**
  * UpdatesLibrary Class
  *
@@ -25,24 +27,21 @@ namespace application\models\libraries;
  */
 class UpdatesLibrary
 {
-
     private $db = null;
 
     /**
      * Constructor
      *
-     * @return void
+     * @param Database $db
      */
-    public function __construct($db)
+    public function __construct(Database $db)
     {
         // use this to make queries
         $this->db = $db;
     }
 
     /**
-     * __destruct
-     *
-     * @return void
+     * Destructor
      */
     public function __destruct()
     {
@@ -115,11 +114,28 @@ class UpdatesLibrary
     public function deleteDestroyedPlanets($del_before)
     {
         $this->db->query(
-            "DELETE p,b,d,s FROM " . PLANETS . " AS p
-            INNER JOIN " . BUILDINGS . " AS b ON b.building_planet_id = p.`planet_id`
-            INNER JOIN " . DEFENSES . " AS d ON d.defense_planet_id = p.`planet_id`
-            INNER JOIN " . SHIPS . " AS s ON s.ship_planet_id = p.`planet_id`
-            WHERE `planet_destroyed` < '" . $del_before . "' AND `planet_destroyed` <> 0;"
+            "DELETE p,b,d,s FROM `" . PLANETS . "` AS p
+            INNER JOIN `" . BUILDINGS . "` AS b ON b.building_planet_id = p.`planet_id`
+            INNER JOIN `" . DEFENSES . "` AS d ON d.defense_planet_id = p.`planet_id`
+            INNER JOIN `" . SHIPS . "` AS s ON s.ship_planet_id = p.`planet_id`
+            WHERE `planet_destroyed` < '" . $del_before . "'
+                AND `planet_destroyed` <> 0;"
+        );
+    }
+
+    /**
+     * Delete expired ACS and their members
+     *
+     * @return void
+     */
+    public function deleteExpiredAcs()
+    {
+        $this->db->query(
+            "DELETE a,m1,m2 FROM `" . ACS . "` AS a
+            INNER JOIN `" . ACS_MEMBERS . "` m1 ON m1.`acs_group_id` = a.`acs_id`
+            RIGHT JOIN `" . ACS_MEMBERS . "` m2 ON m2.`acs_group_id` = a.`acs_id`
+			LEFT JOIN `" . FLEETS . "` f ON f.`fleet_group` = a.`acs_id`
+            WHERE f.`fleet_id` IS NULL"
         );
     }
 
@@ -172,6 +188,25 @@ class UpdatesLibrary
             "UPDATE " . PLANETS . " SET
             `planet_b_building` = '" . $planet['planet_b_building'] . "',
             `planet_b_building_id` = '" . $planet['planet_b_building_id'] . "'
+            WHERE `planet_id` = '" . $planet['planet_id'] . "';"
+        );
+    }
+
+    /**
+     * Updated planet queue and disocunt resources
+     *
+     * @param array $planet
+     * @return void
+     */
+    public function updateQueueResources($planet)
+    {
+        $this->db->query(
+            "UPDATE `" . PLANETS . "` SET
+                `planet_metal` = '" . $planet['planet_metal'] . "',
+                `planet_crystal` = '" . $planet['planet_crystal'] . "',
+                `planet_deuterium` = '" . $planet['planet_deuterium'] . "',
+                `planet_b_building` = '" . $planet['planet_b_building'] . "',
+                `planet_b_building_id` = '" . $planet['planet_b_building_id'] . "'
             WHERE `planet_id` = '" . $planet['planet_id'] . "';"
         );
     }

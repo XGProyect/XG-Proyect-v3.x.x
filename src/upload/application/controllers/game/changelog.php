@@ -15,7 +15,7 @@ namespace application\controllers\game;
 
 use application\core\Controller;
 use application\libraries\FunctionsLib;
-use application\libraries\Timing_library as Timing;
+use application\libraries\TimingLibrary as Timing;
 
 /**
  * Change log Class
@@ -34,8 +34,6 @@ class Changelog extends Controller
 
     /**
      * Constructor
-     * 
-     * @return void
      */
     public function __construct()
     {
@@ -47,6 +45,9 @@ class Changelog extends Controller
         // load Model
         parent::loadModel('game/changelog');
 
+        // load Language
+        parent::loadLang('changelog');
+
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
@@ -56,29 +57,29 @@ class Changelog extends Controller
 
     /**
      * Build the page
-     * 
+     *
      * @return void
      */
     private function buildPage()
     {
-        $changes    = [];
-        $entries    = $this->Changelog_Model->getAllChangelogEntries();
-    
+        $changes = [];
+        $entries = $this->Changelog_Model->getAllChangelogEntries();
+
         if ($entries) {
             foreach ($entries as $entry) {
-
                 $changes[] = [
                     'version_number' => $entry['changelog_version'],
                     'description' => nl2br(
                         Timing::formatShortDate($entry['changelog_date']) . '<br>' . $entry['changelog_description']
-                    )
+                    ),
                 ];
             }
         }
 
         parent::$page->display(
             $this->getTemplate()->set('game/changelog_view', array_merge(
-                $this->getLang(), ['list_of_changes' => $changes]
+                $this->langs->language,
+                ['list_of_changes' => $changes]
             ))
         );
     }

@@ -13,7 +13,9 @@
  */
 namespace application\libraries;
 
-use application\libraries\Timing_library as Timing;
+use application\core\Template;
+use application\libraries\ProductionLib as Production;
+use application\libraries\TimingLibrary as Timing;
 
 /**
  * TemplateLib Class
@@ -48,6 +50,18 @@ class TemplateLib
         $this->current_planet = $users->getPlanetData();
         $this->langs = $lang;
         $this->current_year = date('Y');
+
+        $this->setTemplate();
+    }
+
+    /**
+     * Set template object
+     *
+     * @return void
+     */
+    private function setTemplate(): void
+    {
+        $this->template = new Template();
     }
 
     /**
@@ -65,16 +79,13 @@ class TemplateLib
         $page = '';
 
         if (!defined('IN_MESSAGE')) {
-
             // For the Home page
             if (defined('IN_LOGIN')) {
-
                 die($current_page);
             }
 
             // For the Install page
             if (defined('IN_INSTALL')) {
-
                 $page .= $this->installHeader($metatags);
                 $page .= $menu ? $this->installMenu() : ''; // MENU
                 $page .= $topnav ? $this->installNavbar() : ''; // TOP NAVIGATION BAR
@@ -83,69 +94,251 @@ class TemplateLib
 
         // For the Install page
         if (defined('IN_INSTALL') && defined('IN_MESSAGE')) {
-
             $page .= $this->installHeader($metatags);
             $page .= $menu ? $this->installMenu() : ''; // MENU
             $page .= $topnav ? $this->installNavbar() : ''; // TOP NAVIGATION BAR
         }
 
-        // For the Admin page
-        if (defined('IN_ADMIN')) {
-
-            $page .= $this->adminHeader($metatags);
-            $page .= $menu ? $this->adminMenu() : ''; // MENU
-            $page .= $topnav ? $this->adminNavbar() : ''; // TOP NAVIGATION BAR
-        }
-
         // Anything else
         if ($page == '') {
-
             $page .= $this->gameHeader($metatags);
             $page .= $topnav ? $this->gameNavbar() : ''; // TOP NAVIGATION BAR
             $page .= $menu ? $this->gameMenu() : ''; // MENU
         }
 
         // Merge: Header + Topnav + Menu + Page
-        if (!defined('IN_INSTALL') && !defined('IN_ADMIN')) {
-
+        if (!defined('IN_INSTALL')) {
             $page .= "\n<center>\n" . $current_page . "\n</center>\n";
         } else {
-
             if (defined('IN_MESSAGE')) {
-
                 $page .= "\n<center>\n" . $current_page . "\n</center>\n";
             } else {
-
                 $page .= $current_page;
             }
         }
 
         // Footer
-        if (!defined('IN_INSTALL') && !defined('IN_ADMIN') && !defined('IN_LOGIN')) {
-
+        if (!defined('IN_INSTALL') && !defined('IN_LOGIN')) {
             // Is inside the game
-            if (isset($_GET['page']) && $_GET['page'] != 'galaxy') {
-
-                $page .= $this->parseTemplate($this->getTemplate('general/footer'), '');
-            }
-        }
-
-        if (defined('IN_ADMIN')) {
-
-            $page .= $this->parseTemplate(
-                $this->getTemplate('adm/simple_footer'), ['version' => SYSTEM_VERSION, 'year' => $this->current_year]
+            $page .= $this->template->set(
+                'general/footer',
+                []
             );
         }
 
         if (defined('IN_INSTALL') && !defined('IN_MESSAGE')) {
-
-            $page .= $this->parseTemplate(
-                $this->getTemplate('install/simple_footer'), ['year' => $this->current_year]
+            $page .= $this->template->set(
+                'general/simple_footer',
+                ['year' => $this->current_year]
             );
         }
 
         // Show result page
         die($page);
+    }
+
+    /**
+     * Display the admin page
+     *
+     * @param string $current_page
+     * @param boolean $sidebar
+     * @param boolean $navigation
+     * @param boolean $footer
+     * @return void
+     */
+    public function displayAdmin(string $current_page, bool $sidebar = true, bool $navigation = true, bool $footer = true): void
+    {
+        if ($sidebar) {
+            $parse['sidebar'] = $this->adminSidebar();
+        }
+
+        if ($navigation) {
+            $parse['navigation'] = $this->adminNavigation();
+        }
+
+        if ($footer) {
+            $parse['footer'] = $this->adminFooter();
+        }
+
+        $page = $this->adminSimpleHeader();
+        $page .= $this->adminPage($current_page, ($parse ?? []), ($sidebar && $navigation && $footer));
+        $page .= $this->adminSimpleFooter();
+
+        // Show result page
+        die($page);
+    }
+
+    /**
+     * Set the admin page
+     *
+     * @param string $page
+     * @param array $parse
+     * @return string
+     */
+    private function adminPage(string $page, array $parse, bool $full): string
+    {
+        return $this->template->set(
+            ($full ? 'adm/admin_page_view' : 'adm/simple_admin_page_view'),
+            array_merge($this->langs, $parse, ['page_content' => $page])
+        );
+    }
+
+    /**
+     * Set the admin meta header
+     *
+     * @return string
+     */
+    private function adminSimpleHeader(): string
+    {
+        return $this->template->set(
+            'adm/simple_header',
+            [
+                'title' => 'Admin CP',
+                'admin_public_path' => ADMIN_PUBLIC_PATH,
+            ]
+        );
+    }
+
+    /**
+     * Set the admin sidebar
+     *
+     * @return string
+     */
+    private function adminSidebar(): string
+    {
+        $current_page = isset($_GET['page']) ? $_GET['page'] : null;
+        $items = '';
+        $flag = '';
+        $pages = array(
+            ['moderation', $this->langs['mn_permissions'], '5'],
+            ['server', $this->langs['mn_config_server'], '2'],
+            ['modules', $this->langs['mn_config_modules'], '2'],
+            ['planets', $this->langs['mn_config_planets'], '2'],
+            ['registration', $this->langs['mn_config_registrations'], '2'],
+            ['statistics', $this->langs['mn_config_stats'], '2'],
+            ['premium', $this->langs['mn_premium'], '2'],
+            ['tasks', $this->langs['mn_info_tasks'], '3'],
+            ['errors', $this->langs['mn_info_db'], '3'],
+            ['fleets', $this->langs['mn_info_fleets'], '3'],
+            ['messages', $this->langs['mn_info_messages'], '3'],
+            ['maker', $this->langs['mn_edition_maker'], '4'],
+            ['users', $this->langs['mn_edition_users'], '4'],
+            ['alliances', $this->langs['mn_edition_alliances'], '4'],
+            ['languages', $this->langs['mn_edition_languages'], '4'],
+            ['backup', $this->langs['mn_tools_backup'], '5'],
+            ['encrypter', $this->langs['mn_tools_encrypter'], '5'],
+            ['announcement', $this->langs['mn_tools_global_message'], '5'],
+            ['ban', $this->langs['mn_tools_ban'], '5'],
+            ['rebuildhighscores', $this->langs['mn_tools_manual_update'], '5'],
+            ['update', $this->langs['mn_tools_update'], '5'],
+            ['migrate', $this->langs['mn_tools_migrate'], '5'],
+            ['repair', $this->langs['mn_maintenance_db'], '6'],
+            ['reset', $this->langs['mn_reset_universe'], '6'],
+        );
+        $active_block = 1;
+
+        // BUILD THE MENU
+        foreach ($pages as $key => $data) {
+            $extra = '';
+            $active = '';
+
+            if ($data[2] != $flag) {
+                $flag = $data[2];
+                $items = '';
+            }
+
+            if ($data[0] == 'rebuildhighscores') {
+                $extra = 'onClick="return confirm(\'' . $this->langs['mn_tools_manual_update_confirm'] . '\');"';
+            }
+
+            if ($data[0] == $current_page) {
+                $active = ' active';
+                $active_block = $data[2];
+            }
+
+            $items .= '<a class="collapse-item' . $active . '" href="' . ADM_URL . 'admin.php?page=' . $data[0] . '"  ' . $extra . '>' . $data[1] . '</a>';
+
+            $parse_block[$data[2]] = $items;
+        }
+
+        // PARSE THE MENU AND OTHER DATA
+        $parse = $this->langs;
+        $parse['username'] = $this->current_user['user_name'];
+        $parse['menu_block_2'] = $parse_block[2];
+        $parse['menu_block_3'] = $parse_block[3];
+        $parse['menu_block_4'] = $parse_block[4];
+        $parse['menu_block_5'] = $parse_block[5];
+        $parse['menu_block_6'] = $parse_block[6];
+        $parse['active_1'] = '';
+        $parse['active_1_show'] = '';
+        $parse['active_2'] = '';
+        $parse['active_2_show'] = '';
+        $parse['active_3'] = '';
+        $parse['active_3_show'] = '';
+        $parse['active_4'] = '';
+        $parse['active_4_show'] = '';
+        $parse['active_5'] = '';
+        $parse['active_5_show'] = '';
+        $parse['active_6'] = '';
+        $parse['active_6_show'] = '';
+        $parse['active_' . $active_block] = ' active';
+        $parse['active_' . $active_block . '_show'] = ' show';
+
+        return $this->template->set(
+            'adm/sidebar_view',
+            $parse
+        );
+    }
+
+    /**
+     * Set the admin navigation
+     *
+     * @return string
+     */
+    private function adminNavigation(): string
+    {
+        return $this->template->set(
+            'adm/navigation_view',
+            array_merge(
+                $this->langs,
+                [
+                    'user_name' => $this->current_user['user_name'],
+                    'current_date' => Timing::formatShortDate(time()),
+                ]
+            )
+        );
+    }
+
+    /**
+     * Set the admin footer
+     *
+     * @return string
+     */
+    private function adminFooter(): string
+    {
+        return $this->template->set(
+            'adm/footer_view',
+            [
+                'version' => SYSTEM_VERSION,
+                'year' => $this->current_year,
+            ]
+        );
+    }
+
+    /**
+     * Set admin simple footer
+     *
+     * @return string
+     */
+    private function adminSimpleFooter(): string
+    {
+        return $this->template->set(
+            'adm/simple_footer',
+            [
+                'admin_public_path' => ADMIN_PUBLIC_PATH,
+                'version' => SYSTEM_VERSION,
+            ]
+        );
     }
 
     /**
@@ -161,9 +354,11 @@ class TemplateLib
     public function parseTemplate($template, $array)
     {
         return preg_replace_callback(
-            '#\{([a-z0-9\-_]*?)\}#Ssi', function ($matches) use ($array) {
+            '#\{([a-z0-9\-_]*?)\}#Ssi',
+            function ($matches) use ($array) {
                 return ((isset($array[$matches[1]])) ? $array[$matches[1]] : '');
-            }, $template
+            },
+            $template
         );
     }
 
@@ -182,13 +377,11 @@ class TemplateLib
         $template = @file_get_contents($route);
 
         if ($template) { // We got something
-
             return $template; // Return
         } else {
-
             // Throw Exception
             die('Template not found or empty: <strong>' . $template_name . '</strong><br />
-                Location: <strong>' . $route . '</strong>');
+    Location: <strong>' . $route . '</strong>');
         }
     }
 
@@ -205,9 +398,11 @@ class TemplateLib
     public function parse($array = array(), $template = '')
     {
         return preg_replace_callback(
-            '#\{([a-z0-9\-_]*?)\}#Ssi', function ($matches) use ($array) {
+            '#\{([a-z0-9\-_]*?)\}#Ssi',
+            function ($matches) use ($array) {
                 return ((isset($array[$matches[1]])) ? $array[$matches[1]] : '');
-            }, ($template == '' ? $this->template : $template)
+            },
+            ($template == '' ? $this->template : $template)
         );
     }
 
@@ -235,10 +430,9 @@ class TemplateLib
             // not found
             throw new \Exception(
                 'Template not found or empty: <strong>' . $template_name . '</strong><br />
-                Location: <strong>' . $route . '</strong>'
+    Location: <strong>' . $route . '</strong>'
             );
         } catch (\Exception $e) {
-
             // Throw Exception
             die($e->getMessage());
         }
@@ -251,11 +445,14 @@ class TemplateLib
      */
     private function installHeader()
     {
-        $parse['title'] = 'Install';
-        $parse['js_path'] = '../js/';
-        $parse['css_path'] = '../css/';
-
-        return $this->parseTemplate($this->getTemplate('install/simple_header'), $parse);
+        return $this->template->set(
+            'install/simple_header',
+            [
+                'title' => 'Install',
+                'js_path' => '../js/',
+                'css_path' => '../css/',
+            ]
+        );
     }
 
     /**
@@ -267,7 +464,6 @@ class TemplateLib
     {
         // Update config language to the new setted value
         if (isset($_POST['language'])) {
-
             FunctionsLib::setCurrentLanguage($_POST['language']);
             FunctionsLib::redirect(XGP_ROOT . 'install/');
         }
@@ -283,14 +479,11 @@ class TemplateLib
 
         // BUILD THE MENU
         foreach ($pages as $key => $data) {
-
             if ($data[2] != '') {
-
                 // URL
                 $items .= '<li' . ($current_page == $data[0] ? ' class="active"' : '') .
                     '><a href="index.php?page=' . $data[0] . '&mode=' . $data[2] . '">' . $data[1] . '</a></li>';
             } else {
-
                 // URL
                 $items .= '<li' . ($current_page == $data[0] ? ' class="active"' : '') .
                     '><a href="index.php?page=' . $data[0] . '">' . $data[1] . '</a></li>';
@@ -302,7 +495,10 @@ class TemplateLib
         $parse['menu_items'] = $items;
         $parse['language_select'] = FunctionsLib::getLanguages(FunctionsLib::getCurrentLanguage());
 
-        return $this->parseTemplate($this->getTemplate('install/topnav_view'), $parse);
+        return $this->template->set(
+            'install/topnav_view',
+            $parse
+        );
     }
 
     /**
@@ -324,7 +520,6 @@ class TemplateLib
 
         // BUILD THE MENU
         foreach ($steps as $key => $data) {
-
             // URL
             $items .= '<li' . ($current_mode == $data[0] ? ' class="active"' : '') .
                 '><a href="#">' . $data[1] . '</a></li>';
@@ -334,7 +529,10 @@ class TemplateLib
         $parse = $this->langs;
         $parse['menu_items'] = $items;
 
-        return $this->parseTemplate($this->getTemplate('install/menu_view'), $parse);
+        return $this->template->set(
+            'install/menu_view',
+            $parse
+        );
     }
 
     /**
@@ -353,7 +551,10 @@ class TemplateLib
         $parse['js_path'] = JS_PATH;
         $parse['meta_tags'] = ($metatags) ? $metatags : "";
 
-        return $this->parseTemplate($this->getTemplate('general/simple_header'), $parse);
+        return $this->template->set(
+            'general/simple_header',
+            $parse
+        );
     }
 
     /**
@@ -372,22 +573,26 @@ class TemplateLib
 
         // When vacation mode did not expire
         if ($this->current_user['preference_vacation_mode'] > 0) {
-
             $parse['color'] = '#1DF0F0';
             $parse['message'] = $this->langs['tn_vacation_mode'] . Timing::formatExtendedDate($this->current_user['preference_vacation_mode']);
             $parse['jump_line'] = '<br/>';
 
-            $parse['show_umod_notice'] = $this->parseTemplate($this->getTemplate('general/notices_view'), $parse);
+            $parse['show_umod_notice'] = $this->template->set(
+                'general/notices_view',
+                $parse
+            );
         }
 
         if ($this->current_user['preference_delete_mode'] > 0) {
-
             // When it is in delete mode
             $parse['color'] = '#FF0000';
             $parse['message'] = $this->langs['tn_delete_mode'] . Timing::formatExtendedDate($this->current_user['preference_delete_mode'] + (60 * 60 * 24 * 7));
             $parse['jump_line'] = '';
 
-            $parse['show_umod_notice'] = $this->parseTemplate($this->getTemplate('general/notices_view'), $parse);
+            $parse['show_umod_notice'] = $this->template->set(
+                'general/notices_view',
+                $parse
+            );
         }
 
         // RESOURCES FORMAT
@@ -407,26 +612,22 @@ class TemplateLib
         $technocrat = OfficiersLib::isOfficierActive($this->current_user['premium_officier_technocrat']) ? '' : '_un';
 
         // METAL
-        if (($this->current_planet['planet_metal'] >= $this->current_planet['planet_metal_max'])) {
-
+        if ($this->current_planet['planet_metal'] >= Production::maxStorable($this->current_planet['building_metal_store'])) {
             $metal = FormatLib::colorRed($metal);
         }
 
         // CRYSTAL
-        if (($this->current_planet['planet_crystal'] >= $this->current_planet['planet_crystal_max'])) {
-
+        if ($this->current_planet['planet_crystal'] >= Production::maxStorable($this->current_planet['building_crystal_store'])) {
             $crystal = FormatLib::colorRed($crystal);
         }
 
         // DEUTERIUM
-        if (($this->current_planet['planet_deuterium'] >= $this->current_planet['planet_deuterium_max'])) {
-
+        if ($this->current_planet['planet_deuterium'] >= Production::maxStorable($this->current_planet['building_deuterium_tank'])) {
             $deuterium = FormatLib::colorRed($deuterium);
         }
 
         // ENERGY
         if (($this->current_planet['planet_energy_max'] + $this->current_planet['planet_energy_used']) < 0) {
-
             $energy = FormatLib::colorRed($energy);
         }
 
@@ -441,7 +642,10 @@ class TemplateLib
         $parse['img_geologist'] = $geologist;
         $parse['img_technocrat'] = $technocrat;
 
-        return $this->parseTemplate($this->getTemplate('general/topnav'), $parse);
+        return $this->template->set(
+            'general/topnav',
+            $parse
+        );
     }
 
     /**
@@ -455,7 +659,6 @@ class TemplateLib
         $menu_block2 = '';
         $menu_block3 = '';
         $modules_array = explode(';', FunctionsLib::readConfig('modules'));
-        $sub_template = $this->getTemplate('general/left_menu_row_view');
         $tota_rank = $this->current_user['user_statistic_total_rank'] == '' ?
         $this->current_planet['stats_users'] : $this->current_user['user_statistic_total_rank'];
         $pages = [
@@ -465,7 +668,7 @@ class TemplateLib
             ['resources', $this->langs['lm_resources'], '', 'FFF', '', '1', '3'],
             ['resourceSettings', $this->langs['lm_resources_settings'], '', 'FFF', '', '1', '4'],
             ['station', $this->langs['lm_station'], '', 'FFF', '', '1', '3'],
-            ['trader', $this->langs['lm_trader'], '', 'FF8900', '', '1', '5'],
+            ['traderOverview', $this->langs['lm_trader'], '', 'FF8900', '', '1', '5'],
             ['research', $this->langs['lm_research'], '', 'FFF', '', '1', '6'],
             ['techtree', $this->langs['lm_technology'], '', 'FFF', '', '1', '10'],
             ['shipyard', $this->langs['lm_shipyard'], '', 'FFF', '', '1', '7'],
@@ -487,34 +690,27 @@ class TemplateLib
 
         // BUILD THE MENU
         foreach ($pages as $key => $data) {
-
             // IF THE MODULE IT'S NOT ENABLED, CONTINUE!
             if (isset($modules_array[$data[6]]) && $modules_array[$data[6]] == 0 && $modules_array[$data[6]] != '') {
-
                 continue;
             }
 
             if (!OfficiersLib::isOfficierActive($this->current_user['premium_officier_commander']) && $data[0] == 'empire') {
-
                 continue;
             }
 
             // BUILD URL
             if ($data[2] != '') {
-
                 $link = 'game.php?page=' . $data[0] . '&' . $data[2];
             } else {
-
                 $link = 'game.php?page=' . $data[0];
             }
 
             // POP UP OR NOT
             if ($data[4] == 'true') {
-
                 $link_type = '<a href="#" onClick="f(\'' . $link . '\', \'' . $data[1] . '\')">
                     <font color="' . (($data[3] != 'FFF') ? $data[3] : '') . '">' . $data[1] . '</font></a>';
             } else {
-
                 $link_type = '<a href="' . $link . '">
                     <font color="' . (($data[3] != 'FFF') ? $data[3] : '') . '">' . $data[1] . '</font></a>';
             }
@@ -525,24 +721,32 @@ class TemplateLib
 
             // ONLY FOR THE CHANGELOG
             if ($data[5] == 0) {
-
                 $parse['changelog'] = '(' . $link_type . ')';
             }
 
             // MENU BLOCK [1 - 2 - 3]
             switch ($data[5]) {
                 case '1':
-                    $menu_block1 .= $this->parseTemplate($sub_template, $parse);
+                    $menu_block1 .= $this->template->set(
+                        'general/left_menu_row_view',
+                        $parse
+                    );
 
                     break;
 
                 case '2':
-                    $menu_block2 .= $this->parseTemplate($sub_template, $parse);
+                    $menu_block2 .= $this->template->set(
+                        'general/left_menu_row_view',
+                        $parse
+                    );
 
                     break;
 
                 case '3':
-                    $menu_block3 .= $this->parseTemplate($sub_template, $parse);
+                    $menu_block3 .= $this->template->set(
+                        'general/left_menu_row_view',
+                        $parse
+                    );
 
                     break;
             }
@@ -560,112 +764,10 @@ class TemplateLib
             "<tr><td><div align=\"center\"><a href=\"admin.php\" target=\"_blank\">
             <font color=\"lime\">" . $this->langs['lm_administration'] . "</font></a></div></td></tr>" : "");
 
-        return $this->parseTemplate($this->getTemplate('general/left_menu_view'), $parse);
-    }
-
-    /**
-     * adminHeader
-     *
-     * @param string $metatags Meta tags
-     *
-     * @return string
-     */
-    private function adminHeader($metatags = '')
-    {
-        $parse['title'] = 'Admin CP';
-        $parse['js_path'] = JS_PATH;
-        $parse['css_path'] = CSS_PATH;
-        $parse['-meta-'] = $metatags ? $metatags : '';
-
-        return $this->parseTemplate($this->getTemplate('adm/simple_header'), $parse);
-    }
-
-    /**
-     * adminNavbar
-     *
-     * @return string
-     */
-    private function adminNavbar()
-    {
-        // PARSE THE MENU AND OTHER DATA
-        $parse = $this->langs;
-        $parse['version'] = FunctionsLib::readConfig('version');
-
-        return $this->parseTemplate($this->getTemplate('adm/topnav_view'), $parse);
-    }
-
-    /**
-     * adminMenu
-     *
-     * @return string
-     */
-    private function adminMenu()
-    {
-        $current_page = isset($_GET['page']) ? $_GET['page'] : null;
-        $items = '';
-        $flag = '';
-        $pages = array(
-            ['home', $this->langs['mn_index'], '1'],
-            ['moderation', $this->langs['mn_permissions'], '1'],
-            ['reset', $this->langs['mn_reset_universe'], '1'],
-            ['queries', $this->langs['mn_sql_queries'], '1'],
-            ['server', $this->langs['mn_config_server'], '2'],
-            ['modules', $this->langs['mn_config_modules'], '2'],
-            ['planets', $this->langs['mn_config_planets'], '2'],
-            ['registration', $this->langs['mn_config_registrations'], '2'],
-            ['statistics', $this->langs['mn_config_stats'], '2'],
-            ['premium', $this->langs['mn_premium'], '2'],
-            ['editor', $this->langs['mn_config_changelog'], '2'],
-            ['information', $this->langs['mn_info_general'], '3'],
-            ['errors', $this->langs['mn_info_db'], '3'],
-            ['fleetmovements', $this->langs['mn_info_fleets'], '3'],
-            ['messages', $this->langs['mn_info_messages'], '3'],
-            ['maker', $this->langs['mn_edition_maker'], '4'],
-            ['users', $this->langs['mn_edition_users'], '4'],
-            ['alliances', $this->langs['mn_edition_alliances'], '4'],
-            ['backup', $this->langs['mn_tools_backup'], '5'],
-            ['encrypter', $this->langs['mn_tools_encrypter'], '5'],
-            ['globalmessage', $this->langs['mn_tools_global_message'], '5'],
-            ['ban', $this->langs['mn_tools_ban'], '5'],
-            ['buildstats', $this->langs['mn_tools_manual_update'], '5'],
-            ['update', $this->langs['mn_tools_update'], '5'],
-            ['migrate', $this->langs['mn_tools_migrate'], '5'],
-            ['repair', $this->langs['mn_maintenance_db'], '6'],
+        return $this->template->set(
+            'general/left_menu_view',
+            $parse
         );
-        // BUILD THE MENU
-        foreach ($pages as $key => $data) {
-
-            if ($data[2] != $flag) {
-
-                $flag = $data[2];
-                $items = '';
-            }
-
-            if ($data[0] == 'buildstats') {
-
-                $extra = 'onClick="return confirm(\'' . $this->langs['mn_tools_manual_update_confirm'] . '\');"';
-            } else {
-
-                $extra = '';
-            }
-
-            $items .= '<li' . ($current_page == $data[0] ? ' class="active"' : '') . '>
-                <a href="' . ADM_URL . 'admin.php?page=' . $data[0] . '" ' . $extra . '>' . $data[1] . '</a></li>';
-
-            $parse_block[$data[2]] = $items;
-        }
-
-        // PARSE THE MENU AND OTHER DATA
-        $parse = $this->langs;
-        $parse['username'] = $this->current_user['user_name'];
-        $parse['menu_block_1'] = $parse_block[1];
-        $parse['menu_block_2'] = $parse_block[2];
-        $parse['menu_block_3'] = $parse_block[3];
-        $parse['menu_block_4'] = $parse_block[4];
-        $parse['menu_block_5'] = $parse_block[5];
-        $parse['menu_block_6'] = $parse_block[6];
-
-        return $this->parseTemplate($this->getTemplate('adm/menu_view'), $parse);
     }
 
     /**

@@ -34,11 +34,8 @@ define('DEBUG_MODE', false);
 // LOG DB AND PHP ERRORS
 define('LOG_ERRORS', true);
 
-// ERROR LOGS MAIL
-define('ERROR_LOGS_MAIL', '');
-
-// RUN QUERIES FLAG
-define('ADMIN_ACCESS_QUERY', true);
+// ERROR LOGS MAIL - If you share your errors with XG Proyect we will be able to improve the project faster.
+define('ERROR_LOGS_MAIL', 'errors@xgproyect.org');
 
 /**
  *
@@ -122,6 +119,7 @@ define('BACKUP_PATH', DATA_PATH . 'backups' . DIRECTORY_SEPARATOR);
  *
  */
 define('CSS_PATH', PUBLIC_PATH . 'css' . DIRECTORY_SEPARATOR);
+define('ADMIN_PUBLIC_PATH', PUBLIC_PATH . 'admin' . DIRECTORY_SEPARATOR);
 define('IMG_PATH', PUBLIC_PATH . 'images' . DIRECTORY_SEPARATOR);
 define('PUB_INS_PATH', PUBLIC_PATH . 'install' . DIRECTORY_SEPARATOR);
 define('JS_PATH', PUBLIC_PATH . 'js' . DIRECTORY_SEPARATOR);
@@ -201,8 +199,16 @@ define('DEBRIS_MIN_VISIBLE_SIZE', 300);
 
 // DESTROYED PLANETS LIFE TIME
 define('PLANETS_LIFE_TIME', 24); // IN HOURS
+
 // VACATION TIME THAT AN USER HAS TO BE ON VACATION MODE BEFORE IT CAN REMOVE IT
 define('VACATION_TIME_FORCED', 2); // IN DAYS
+
+// RESOURCE MARKET
+define('BASIC_RESOURCE_MARKET_DM', [
+    'metal' => 4500,
+    'crystal' => 9000,
+    'deuterium' => 13500,
+]);
 
 /**
  *

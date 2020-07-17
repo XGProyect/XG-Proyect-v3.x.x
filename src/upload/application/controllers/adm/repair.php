@@ -31,8 +31,6 @@ use application\libraries\FunctionsLib;
  */
 class Repair extends Controller
 {
-
-    private $langs;
     private $current_user;
 
     /**
@@ -47,22 +45,22 @@ class Repair extends Controller
         // check if session is active
         AdministrationLib::checkSession();
 
+        // load Language
+        parent::loadLang(['adm/global', 'adm/repair']);
+
         $this->_db = new Database();
-        $this->langs = parent::$lang;
         $this->current_user = parent::$users->getUserData();
 
         // Check if the user is allowed to access
         if (AdministrationLib::haveAccess($this->current_user['user_authlevel']) && AdministrationLib::authorization($this->current_user['user_authlevel'], 'config_game') == 1) {
             $this->buildPage($this->current_user);
         } else {
-            die(AdministrationLib::noAccessMessage($this->langs['ge_no_permissions']));
+            die(AdministrationLib::noAccessMessage($this->langs->line('ge_no_permissions')));
         }
     }
 
     /**
-     * __destruct
-     *
-     * @return void
+     * Destructor
      */
     public function __destruct()
     {
@@ -76,7 +74,7 @@ class Repair extends Controller
      */
     private function buildPage()
     {
-        $parse = $this->langs;
+        $parse = $this->langs->language;
         $template = parent::$page->getTemplate('adm/repair_row_view');
         $template_head = parent::$page->getTemplate('adm/repair_row_head_view');
         $result_tpl = parent::$page->getTemplate('adm/repair_result_view');
@@ -95,7 +93,7 @@ class Repair extends Controller
             );
 
             $parse['display'] = 'block';
-            $parse['head'] = parent::$page->parseTemplate($template_head, $this->langs);
+            $parse['head'] = parent::$page->parseTemplate($template_head, $this->langs->language);
             $parse['tables'] = '';
 
             while ($row = $this->_db->fetchArray($tables)) {
@@ -107,13 +105,13 @@ class Repair extends Controller
                 $row['status_style'] = 'text-info';
 
                 $parse['tables'] .= parent::$page->parseTemplate(
-                    $template, array_merge($row, $this->langs)
+                    $template, array_merge($row, $this->langs->language)
                 );
             }
         } else {
 
             $parse['display'] = 'none';
-            $parse['head'] = parent::$page->parseTemplate($result_tpl_head, $this->langs);
+            $parse['head'] = parent::$page->parseTemplate($result_tpl_head, $this->langs->language);
 
             if (isset($_POST['table']) && is_array($_POST['table'])) {
 
@@ -124,18 +122,18 @@ class Repair extends Controller
                     $parse['row'] = $table;
 
                     $this->_db->query("CHECK TABLE " . $table);
-                    $parse['result'] = $this->langs['db_check_ok'];
+                    $parse['result'] = $this->langs->line('db_check_ok');
                     $result_rows .= parent::$page->parseTemplate($result_tpl, $parse);
 
                     if (isset($_POST['Optimize']) && $_POST['Optimize'] == 'yes') {
                         $this->_db->query("OPTIMIZE TABLE " . $table);
-                        $parse['result'] = $this->langs['db_opt'];
+                        $parse['result'] = $this->langs->line('db_opt');
                         $result_rows .= parent::$page->parseTemplate($result_tpl, $parse);
                     }
 
                     if (isset($_POST['Repair']) && $_POST['Repair'] == 'yes') {
                         $this->_db->query("REPAIR TABLE " . $table);
-                        $parse['result'] = $this->langs['db_rep'];
+                        $parse['result'] = $this->langs->line('db_rep');
                         $result_rows .= parent::$page->parseTemplate($result_tpl, $parse);
                     }
                 }
@@ -146,7 +144,7 @@ class Repair extends Controller
             }
         }
 
-        parent::$page->display(
+        parent::$page->displayAdmin(
             parent::$page->parseTemplate(
                 parent::$page->getTemplate('adm/repair_view'), $parse
             )

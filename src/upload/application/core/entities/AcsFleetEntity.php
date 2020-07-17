@@ -16,7 +16,7 @@ namespace application\core\entities;
 use application\core\Entity;
 
 /**
- * Acs Fleet entity Class
+ * AcsFleetEntity Class
  *
  * @category Entity
  * @package  Core

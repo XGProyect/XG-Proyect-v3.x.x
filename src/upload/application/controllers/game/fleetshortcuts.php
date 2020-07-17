@@ -29,7 +29,6 @@ use application\libraries\users\Shortcuts;
  */
 class Fleetshortcuts extends Controller
 {
-
     /**
      *
      * @var int
@@ -68,8 +67,6 @@ class Fleetshortcuts extends Controller
 
     /**
      * Constructor
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -125,7 +122,6 @@ class Fleetshortcuts extends Controller
                 'options' => function ($value) {
 
                     if (in_array($value, ['add', 'edit', 'delete', 'a'])) {
-
                         return $value;
                     }
 
@@ -157,7 +153,6 @@ class Fleetshortcuts extends Controller
         $action = filter_input(INPUT_GET, 'a', FILTER_VALIDATE_INT);
 
         if ($mode) {
-
             $this->_clean_data['mode'] = $mode;
             $this->_clean_data['data'] = $data;
             $this->_clean_data['action'] = $action;
@@ -186,7 +181,8 @@ class Fleetshortcuts extends Controller
             $this->getTemplate()->set(
                 'shortcuts/shortcuts_view',
                 array_merge(
-                    $this->getLang(), $page
+                    $this->getLang(),
+                    $page
                 )
             )
         );
@@ -203,12 +199,10 @@ class Fleetshortcuts extends Controller
         $list_of_shortcuts = [];
 
         if (count($shortcuts) > 0) {
-
             $set_row = true;
             $shortcut_id = 0;
 
             foreach ($shortcuts as $shortcut) {
-
                 $list_of_shortcuts[] = [
                     'row_start' => $set_row ? '<tr height="20">' : '',
                     'shortcut_id' => $shortcut_id++,
@@ -267,7 +261,6 @@ class Fleetshortcuts extends Controller
         $shortcut_id = $this->_clean_data['action'];
 
         if ($shortcut_id === false) {
-
             FunctionsLib::redirect(self::REDIRECT_TARGET);
         }
 
@@ -314,7 +307,8 @@ class Fleetshortcuts extends Controller
             $this->getTemplate()->set(
                 'shortcuts/shortcuts_edit_view',
                 array_merge(
-                    $this->getLang(), $page
+                    $this->getLang(),
+                    $page
                 )
             )
         );
@@ -330,27 +324,22 @@ class Fleetshortcuts extends Controller
         $data = $this->_clean_data['data'];
 
         if (is_array($data)) {
-
             if (!empty($data['name']) && $data['galaxy'] && $data['system'] && $data['planet'] && $data['type']) {
 
                 $mode = $this->_clean_data['mode'];
                 $action = $this->_clean_data['action'];
 
                 if (!is_null($action) && !is_null($mode)) {
-
                     if ($mode == 'edit') {
-
                         $this->_shortcuts->editById(
                             $action, $data['name'], $data['galaxy'], $data['system'], $data['planet'], $data['type']
                         );
                     }
 
                     if ($mode == 'delete') {
-
                         $this->_shortcuts->deleteById($action);
                     }
                 } else {
-
                     $this->_shortcuts->addNew(
                         $data['name'], $data['galaxy'], $data['system'], $data['planet'], $data['type']
                     );

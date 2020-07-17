@@ -17,8 +17,7 @@ use application\core\Controller;
 use application\core\Database;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
-use application\libraries\Timing_library as Timing;
-use const MODULE_ID;
+use application\libraries\TimingLibrary as Timing;
 
 /**
  * Statistics Class
@@ -78,9 +77,9 @@ class Statistics extends Controller
     private function build_page()
     {
         $parse = $this->_lang;
-        $who = ( isset($_POST['who']) ) ? $_POST['who'] : ( ( isset($_GET['who']) ) ? $_GET['who'] : 1 );
-        $type = ( isset($_POST['type']) ) ? $_POST['type'] : ( ( isset($_GET['type']) ) ? $_GET['type'] : 1 );
-        $range = ( isset($_POST['range']) ) ? $_POST['range'] : ( ( isset($_GET['range']) ) ? $_GET['range'] : 1 );
+        $who = (isset($_POST['who'])) ? $_POST['who'] : ((isset($_GET['who'])) ? $_GET['who'] : 1);
+        $type = (isset($_POST['type'])) ? $_POST['type'] : ((isset($_GET['type'])) ? $_GET['type'] : 1);
+        $range = (isset($_POST['range'])) ? $_POST['range'] : ((isset($_GET['range'])) ? $_GET['range'] : 1);
 
         $parse['who'] = "<option value=\"1\"" . (($who == "1") ? " SELECTED" : "") . ">" . $this->_lang['st_player'] . "</option>";
         $parse['who'] .= "<option value=\"2\"" . (($who == "2") ? " SELECTED" : "") . ">" . $this->_lang['st_alliance'] . "</option>";
@@ -142,10 +141,10 @@ class Statistics extends Controller
 
             $start = floor($range / 100 % 100) * 100;
             $query = $this->_db->query(
-                'SELECT s.*, 
-                        u.user_id, 
-                        u.user_name, 
-                        u.user_ally_id, 
+                'SELECT s.*,
+                        u.user_id,
+                        u.user_name,
+                        u.user_ally_id,
                         a.alliance_name
                 FROM ' . USERS_STATISTICS . ' as s
                 INNER JOIN ' . USERS . ' as u ON u.user_id = s.user_statistic_user_id
@@ -237,7 +236,7 @@ class Statistics extends Controller
         for ($page = 0; $page <= $last_page; $page++) {
             $page_value = $page * 100 + 1;
             $page_range = $page_value + 99;
-            $range_list .= "<option value=\"" . $page_value . "\"" . ( ( $range >= $page_value && $range <= $page_range ) ? " SELECTED" : "" ) . ">" . $page_value . "-" . $page_range . "</option>";
+            $range_list .= "<option value=\"" . $page_value . "\"" . (($range >= $page_value && $range <= $page_range) ? " SELECTED" : "") . ">" . $page_value . "-" . $page_range . "</option>";
         }
 
         return $range_list; // RETURN THE LIST

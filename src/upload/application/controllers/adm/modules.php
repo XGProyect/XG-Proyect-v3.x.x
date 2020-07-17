@@ -1,4 +1,7 @@
 <?php
+
+declare (strict_types = 1);
+
 /**
  * Modules Controller
  *
@@ -29,12 +32,22 @@ use application\libraries\FunctionsLib;
  */
 class Modules extends Controller
 {
-
-    private $_lang;
-    private $_current_user;
+    /**
+     * Current user data
+     *
+     * @var array
+     */
+    private $user;
 
     /**
-     * __construct()
+     * Contains the alert string
+     *
+     * @var string
+     */
+    private $alert = '';
+
+    /**
+     * Constructor
      */
     public function __construct()
     {
@@ -43,59 +56,92 @@ class Modules extends Controller
         // check if session is active
         AdministrationLib::checkSession();
 
-        $this->_lang = parent::$lang;
-        $this->_current_user = parent::$users->getUserData();
+        // load Language
+        parent::loadLang(['adm/global', 'adm/modules']);
+
+        // set data
+        $this->user = $this->getUserData();
 
         // Check if the user is allowed to access
-        if (AdministrationLib::haveAccess($this->_current_user['user_authlevel']) && AdministrationLib::authorization($this->_current_user['user_authlevel'], 'edit_users') == 1) {
-            $this->build_page();
-        } else {
-            die(AdministrationLib::noAccessMessage($this->_lang['ge_no_permissions']));
+        if (AdministrationLib::authorization($this->user['user_authlevel'], 'config_game') != 1) {
+            die(AdministrationLib::noAccessMessage($this->langs->line('no_permissions')));
+        }
+
+        // time to do something
+        $this->runAction();
+
+        // build the page
+        $this->buildPage();
+    }
+
+    /**
+     * Run an action
+     *
+     * @return void
+     */
+    private function runAction(): void
+    {
+        $modules = filter_input_array(INPUT_POST);
+
+        if ($modules) {
+            $modules_count = count(explode(';', FunctionsLib::readConfig('modules')));
+
+            for ($i = 0; $i < $modules_count; $i++) {
+                $modules_set[] = (isset($modules["status{$i}"]) ? 1 : 0);
+            }
+
+            FunctionsLib::updateConfig('modules', join(';', $modules_set));
+
+            $this->alert = AdministrationLib::saveMessage('ok', $this->langs->line('mdl_all_ok_message'));
         }
     }
 
     /**
-     * method build_page
-     * param
-     * return main method, loads everything
+     * Build the page
+     *
+     * @return void
      */
-    private function build_page()
+    private function buildPage(): void
     {
-        $parse = $this->_lang;
-        $modules_array = '';
-        $modules_count = count(explode(';', FunctionsLib::readConfig('modules')));
-        $row_template = parent::$page->getTemplate('adm/modules_row_view');
-        $module_rows = '';
-        $parse['alert'] = '';
+        parent::$page->displayAdmin(
+            $this->getTemplate()->set(
+                'adm/modules_view',
+                array_merge(
+                    $this->langs->language,
+                    [
+                        'alert' => $this->alert ?? '',
+                        'modules' => $this->buildModulesList(),
+                    ]
+                )
+            )
+        );
+    }
 
-        // SAVE PAGE
-        if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST['save']) {
-            for ($i = 0; $i <= $modules_count - 2; $i++) {
-                $modules_array .= ( ( isset($_POST["status{$i}"]) ) ? 1 : 0 ) . ';';
+    /**
+     * Build the list of modules
+     *
+     * @return array
+     */
+    private function buildModulesList(): array
+    {
+        $modules_list = [];
+
+        $modules = explode(';', FunctionsLib::readConfig('modules'));
+
+        if ($modules) {
+            foreach ($modules as $module => $status) {
+                if ($status != null) {
+                    $modules_list[] = [
+                        'module' => $module,
+                        'module_name' => $this->langs->language['mdl_modules'][$module],
+                        'module_value' => ($status == 1) ? 'checked' : '',
+                        'color' => ($status == 1) ? 'success' : 'danger',
+                    ];
+                }
             }
-
-            FunctionsLib::updateConfig('modules', $modules_array);
-
-            $parse['alert'] = AdministrationLib::saveMessage('ok', $this->_lang['se_all_ok_message']);
         }
 
-        // SHOW PAGE
-        $modules_array = explode(';', FunctionsLib::readConfig('modules'));
-
-        foreach ($modules_array as $module => $status) {
-            if ($status != NULL) {
-                $parse['module'] = $module;
-                $parse['module_name'] = $this->_lang['module'][$module];
-                $parse['module_value'] = ( $status == 1 ) ? 'checked' : '';
-                $parse['color'] = ( $status == 1 ) ? 'text-success' : 'text-error';
-
-                $module_rows .= parent::$page->parseTemplate($row_template, $parse);
-            }
-        }
-
-        $parse['module_rows'] = $module_rows;
-
-        parent::$page->display(parent::$page->parseTemplate(parent::$page->getTemplate("adm/modules_view"), $parse));
+        return $modules_list;
     }
 }
 

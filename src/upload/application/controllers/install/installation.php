@@ -54,10 +54,8 @@ class Installation extends Controller
         parent::loadModel('install/installation');
 
         if ($this->serverRequirementes()) {
-
             $this->buildPage();
         } else {
-
             die(FunctionsLib::message($this->langs['ins_no_server_requirements'], '', '', false, false));
         }
     }
@@ -147,7 +145,6 @@ class Installation extends Controller
                 }
 
                 if ($continue) {
-
                     FunctionsLib::redirect('?page=installation&mode=step4');
                 }
 
@@ -330,13 +327,11 @@ class Installation extends Controller
 
         // check if tables exist
         if (!$this->tablesExists()) {
-
             return false;
         }
 
         // check for admin account
         if (!$this->adminExists()) {
-
             return false;
         }
 
@@ -354,18 +349,14 @@ class Installation extends Controller
         $arr = [];
 
         foreach ($result as $row) {
-
             foreach ($row as $table) {
-
                 if (strpos($table, DB_PREFIX) !== false) {
-
                     $arr[] = $table;
                 }
             }
         }
 
         if (count($arr) > 0) {
-
             return true;
         }
 
@@ -412,7 +403,6 @@ class Installation extends Controller
         $config_file = @fopen(XGP_ROOT . CONFIGS_PATH . 'config.php', "w");
 
         if (!$config_file) {
-
             return false;
         }
 
@@ -456,7 +446,6 @@ class Installation extends Controller
         require_once XGP_ROOT . PUBLIC_PATH . 'install' . DIRECTORY_SEPARATOR . 'database.php';
 
         if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-
             $this->Installation_Model->setWindowsSqlMode();
         }
 
@@ -464,7 +453,6 @@ class Installation extends Controller
          * Do table creations here...
          */
         foreach ($tables as $table => $query) {
-
             // run query for each table
             $status[$table] = $this->Installation_Model->runSimpleQuery($query);
 
@@ -474,7 +462,6 @@ class Installation extends Controller
             }
         }
         if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-
             $this->Installation_Model->setNormalMode();
         }
 
@@ -520,7 +507,7 @@ class Installation extends Controller
                 'user_register_time' => time(),
                 'user_ip_at_reg' => $_SERVER['REMOTE_ADDR'],
                 'user_agent' => '',
-                'user_current_page' => ''
+                'user_current_page' => '',
             ]
         );
 
@@ -540,7 +527,7 @@ class Installation extends Controller
     private function validateDbData()
     {
         return !empty($this->host) && !empty($this->name) &&
-            !empty($this->user) && !empty($this->prefix);
+        !empty($this->user) && !empty($this->prefix);
     }
 
     /**
@@ -594,7 +581,7 @@ class Installation extends Controller
         $parse['message'] = $message;
 
         return parent::$page->parseTemplate(
-                parent::$page->getTemplate('adm/save_message_view'), $parse
+            parent::$page->getTemplate('adm/save_message_view'), $parse
         );
     }
 }

@@ -16,10 +16,10 @@
             <a class="brand">XG Proyect</a>
             <div class="nav-collapse collapse">
                 <p class="navbar-text pull-right">
-                <div style="float:right;height:0px;padding:0px;margin:0px">	
-                    <form name="change_language" id="change_language" method="post" action="">	
+                <div style="float:right;height:0px;padding:0px;margin:0px">
+                    <form name="change_language" id="change_language" method="post" action="">
                         <select id="language" name="language" onchange="submit()">
-                            <option value="0">{ins_language_select}</option>
+                            <option selected disabled>{ins_language_select}</option>
                             {language_select}
                         </select>
                     </form>

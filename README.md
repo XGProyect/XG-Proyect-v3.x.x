@@ -1,7 +1,7 @@
 
 <p align="center"
     <a href="http://www.xgproyect.org/" target="_blank">
-        <img align="center" src="http://www.xgproyect.org/images/misc/xg-logo.png" title="XG Proyect" alt="xgp-logo">
+        <img align="center" img src="https://xgproyect.org/wp-content/uploads/2019/10/xgp-new-logo-black.png" width="250px" title="XG Proyect" alt="xgp-logo">
     </a>
 </p> 
 
@@ -12,7 +12,7 @@ XG Proyect
 Support: http://www.xgproyect.org/  
 Live Server: http://server.xgproyect.org/  
 
-Require PHP >= 7.1  
+Require PHP >= 7.0  
 Require MySQLi >= 5.0.0  
 
 ![Free](http://www.gnu.org/graphics/agplv3-155x51.png)

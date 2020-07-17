@@ -69,14 +69,14 @@ class Missile extends Missions
                 ]);
 
                 if ($target_data['defense_anti-ballistic_missile'] >= $fleet_row['fleet_amount']) {
-                    $message = $this->langs['ma_all_destroyed'] . '<br>';
+                    $message = $this->langs['sys_all_destroyed'] . '<br>';
                     $amount = $fleet_row['fleet_amount'];
                 } else {
                     $amount = 0;
 
                     if ($target_data['defense_anti-ballistic_missile'] > 0) {
                         $message = $target_data['defense_anti-ballistic_missile'] .
-                        $this->langs['ma_some_destroyed'] . " <br>";
+                        $this->langs['sys_some_destroyed'] . " <br>";
                     }
 
                     $attack = floor(
@@ -132,10 +132,10 @@ class Missile extends Missions
                         $fleet_row['fleet_end_planet']
                     ),
                 ];
-                $message_vorlage = str_replace($search, $replace, $this->langs['ma_missile_string']);
+                $message_vorlage = str_replace($search, $replace, $this->langs['sys_missile_string']);
 
                 if (empty($message) or $message == '') {
-                    $message = $this->langs['ma_planet_without_defens'];
+                    $message = $this->langs['sys_planet_without_defenses'];
                 }
 
                 // send message to the enemy
@@ -145,7 +145,7 @@ class Missile extends Missions
                     $fleet_row['fleet_end_time'],
                     5,
                     $this->langs['sys_mess_tower'],
-                    $this->langs['gl_missile_attack'],
+                    $this->langs['sys_missile_attack'],
                     $message_vorlage . $message
                 );
 
@@ -165,14 +165,14 @@ class Missile extends Missions
     {
         $objectives = [
             0 => [401, 402, 403, 404, 405, 406, 407, 408, 503],
-            1 => [402, 401, 403, 404, 405, 406, 407, 408, 503],
-            2 => [403, 401, 402, 404, 405, 406, 407, 408, 503],
-            3 => [404, 401, 402, 403, 405, 406, 407, 408, 503],
-            4 => [405, 401, 402, 403, 404, 406, 407, 408, 503],
-            5 => [406, 401, 402, 403, 404, 405, 407, 408, 503],
-            6 => [407, 401, 402, 403, 404, 405, 406, 408, 503],
-            7 => [408, 401, 402, 403, 404, 405, 406, 407, 503],
-            8 => [401, 402, 403, 404, 405, 406, 407, 408, 503],
+            1 => [401, 402, 403, 404, 405, 406, 407, 408, 503],
+            2 => [402, 401, 403, 404, 405, 406, 407, 408, 503],
+            3 => [403, 401, 402, 404, 405, 406, 407, 408, 503],
+            4 => [404, 401, 402, 403, 405, 406, 407, 408, 503],
+            5 => [405, 401, 402, 403, 404, 406, 407, 408, 503],
+            6 => [406, 401, 402, 403, 404, 405, 407, 408, 503],
+            7 => [407, 401, 402, 403, 404, 405, 406, 408, 503],
+            8 => [408, 401, 402, 403, 404, 405, 406, 407, 503],
         ];
 
         return $objectives[$primary_objective];

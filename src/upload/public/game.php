@@ -33,6 +33,7 @@ $page = strtr(
         'resources' => 'buildings',
         'resourceSettings' => 'resources',
         'station' => 'buildings',
+        'traderOverview' => 'trader',
         'federationlayer' => 'federation',
         'shortcuts' => 'fleetshortcuts',
         'forums' => 'forum',

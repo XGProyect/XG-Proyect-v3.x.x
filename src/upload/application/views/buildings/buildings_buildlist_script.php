@@ -19,7 +19,7 @@ function t() {
 		if ( s < 0 ) {
 			if (1) {
 				blc.innerHTML = "{bd_finished}<br>" + "<a href=game.php?page={call_program}&planet=" + pl + ">{bd_continue}</a>";
-				window.setTimeout('document.location.href="game.php?page={call_program}&planet=' + pl + '";', 2000);
+				window.setTimeout('document.location.href="game.php?page={call_program}&planet=' + pl + '";', 1000);
 			} else {
 				timeout = 0;
 				blc.innerHTML = "{bd_finished}<br>" + "<a href=game.php?page={call_program}&planet=" + pl + ">{bd_continue}</a>";

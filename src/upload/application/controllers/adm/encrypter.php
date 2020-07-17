@@ -1,4 +1,7 @@
 <?php
+
+declare (strict_types = 1);
+
 /**
  * Encrypter Controller
  *
@@ -28,14 +31,29 @@ use application\libraries\adm\AdministrationLib;
  */
 class Encrypter extends Controller
 {
-
-    private $langs;
-    private $current_user;
+    /**
+     * Current user data
+     *
+     * @var array
+     */
+    private $user;
 
     /**
-     * __construct
+     * Contains the unencrypted password
      *
-     * @return void
+     * @var string
+     */
+    private $unencrypted = '';
+
+    /**
+     * Contains the encrypted password
+     *
+     * @var string
+     */
+    private $encrypted = '';
+
+    /**
+     * Constructor
      */
     public function __construct()
     {
@@ -44,38 +62,57 @@ class Encrypter extends Controller
         // check if session is active
         AdministrationLib::checkSession();
 
-        $this->langs = parent::$lang;
-        $this->current_user = parent::$users->getUserData();
+        // load Language
+        parent::loadLang(['adm/global', 'adm/encrypter']);
+
+        // set data
+        $this->user = $this->getUserData();
 
         // Check if the user is allowed to access
-        if (AdministrationLib::haveAccess($this->current_user['user_authlevel']) && AdministrationLib::authorization($this->current_user['user_authlevel'], 'use_tools') == 1) {
+        if (AdministrationLib::authorization($this->user['user_authlevel'], 'use_tools') != 1) {
+            AdministrationLib::noAccessMessage($this->langs->line('no_permissions'));
+        }
 
-            $this->buildPage();
-        } else {
+        // time to do something
+        $this->runAction();
 
-            die(AdministrationLib::noAccessMessage($this->langs['ge_no_permissions']));
+        // build the page
+        $this->buildPage();
+    }
+
+    /**
+     * Run an action
+     *
+     * @return void
+     */
+    private function runAction(): void
+    {
+        $unencrypted = filter_input(INPUT_POST, 'unencrypted');
+
+        if ($unencrypted) {
+            $this->unencrypted = $unencrypted;
+            $this->encrypted = sha1($unencrypted);
         }
     }
 
     /**
-     * buildPage
+     * Build the page
      *
      * @return void
      */
-    private function buildPage()
+    private function buildPage(): void
     {
-        $parse = $this->langs;
-        $parse['uncrypted'] = '';
-        $parse['encrypted'] = sha1('');
-
-        if (isset($_POST['uncrypted']) && $_POST['uncrypted'] != '') {
-
-            $parse['uncrypted'] = $_POST['uncrypted'];
-            $parse['encrypted'] = sha1($_POST['encrypted']);
-        }
-
-        parent::$page->display(
-            parent::$page->parseTemplate(parent::$page->getTemplate('adm/encrypter_view'), $parse)
+        parent::$page->displayAdmin(
+            $this->getTemplate()->set(
+                'adm/encrypter_view',
+                array_merge(
+                    $this->langs->language,
+                    [
+                        'unencrypted' => $this->unencrypted ?? '',
+                        'encrypted' => $this->encrypted ?? '',
+                    ]
+                )
+            )
         );
     }
 }

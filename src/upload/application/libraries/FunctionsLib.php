@@ -21,7 +21,7 @@ use application\core\XGPCore;
 use application\libraries\messenger\MessagesFormat;
 use application\libraries\messenger\MessagesOptions;
 use application\libraries\messenger\Messenger;
-use application\libraries\Timing_library as Timing;
+use application\libraries\TimingLibrary as Timing;
 use CI_Email;
 
 /**
@@ -231,23 +231,12 @@ abstract class FunctionsLib extends XGPCore
             $parse['middle2'] = '</div>';
         }
 
-        $page = parent::$page->parseTemplate(parent::$page->getTemplate('general/message_body'), $parse);
-
-        if (!defined('IN_ADMIN')) {
-            parent::$page->display(
-                $page,
-                $topnav,
-                (($dest != "") ? "<meta http-equiv=\"refresh\" content=\"$time;URL=$dest\">" : ""),
-                $menu
-            );
-        } else {
-            parent::$page->display(
-                $page,
-                $topnav,
-                (($dest != "") ? "<meta http-equiv=\"refresh\" content=\"$time;URL=$dest\">" : ""),
-                $menu
-            );
-        }
+        parent::$page->display(
+            parent::$page->parseTemplate(parent::$page->getTemplate('general/message_body'), $parse),
+            $topnav,
+            (($dest != "") ? "<meta http-equiv=\"refresh\" content=\"$time;URL=$dest\">" : ""),
+            $menu
+        );
     }
 
     /**
@@ -447,50 +436,54 @@ abstract class FunctionsLib extends XGPCore
      */
     public static function sendEmail($to, $subject, $body, $from, $format = 'text', $headers = '')
     {
-        // require email library
-        $mail_library_path = XGP_ROOT . SYSTEM_PATH . 'libraries/Email.php';
+        try {
+            // require email library
+            $mail_library_path = XGP_ROOT . SYSTEM_PATH . 'ci3_custom' . DIRECTORY_SEPARATOR . 'libraries' . DIRECTORY_SEPARATOR . 'Email.php';
 
-        if (!file_exists($mail_library_path)) {
-            return;
-        }
-
-        // required by the library
-        if (!defined('BASEPATH')) {
-            define('BASEPATH', XGP_ROOT . APP_PATH);
-        }
-
-        // use CI library
-        require_once $mail_library_path;
-
-        $mail = new CI_Email();
-
-        if ($format === 'text' or $format === 'html') {
-            $mail->set_mailtype($format);
-        }
-
-        // from
-        if (is_array($from)) {
-            $mail->from($from['mail'], $from['name']);
-        }
-
-        // to
-        $mail->to($to);
-
-        // headers
-        if (is_array($headers)) {
-            foreach ($headers as $header => $value) {
-                $mail->set_header($header, $value);
+            if (!file_exists($mail_library_path) or !function_exists('mail')) {
+                return false;
             }
+
+            // required by the library
+            if (!defined('BASEPATH')) {
+                define('BASEPATH', XGP_ROOT . APP_PATH);
+            }
+
+            // use CI library
+            require_once $mail_library_path;
+
+            $mail = new CI_Email();
+
+            if ($format === 'text' or $format === 'html') {
+                $mail->set_mailtype($format);
+            }
+
+            // from
+            if (is_array($from)) {
+                $mail->from($from['mail'], $from['name']);
+            }
+
+            // to
+            $mail->to($to);
+
+            // headers
+            if (is_array($headers)) {
+                foreach ($headers as $header => $value) {
+                    $mail->set_header($header, $value);
+                }
+            }
+
+            // subject
+            $mail->subject($subject);
+
+            // message body
+            $mail->message($body);
+
+            // send!
+            return $mail->send();
+        } catch (Exception $e) {
+            return false;
         }
-
-        // subject
-        $mail->subject($subject);
-
-        // message body
-        $mail->message($body);
-
-        // send!
-        $mail->send();
     }
 
     /**
@@ -637,6 +630,11 @@ abstract class FunctionsLib extends XGPCore
      */
     public static function setCurrentLanguage($lang = '')
     {
+        // force english
+        if (!in_array($lang, self::getLanguagesList())) {
+            $lang = 'english';
+        }
+
         $db = new Database();
 
         // set the user language reading the config file
@@ -645,6 +643,26 @@ abstract class FunctionsLib extends XGPCore
         }
 
         setcookie('current_lang', $lang);
+    }
+
+    /**
+     * Get the list of available languages
+     *
+     * @return array
+     */
+    public static function getLanguagesList()
+    {
+        $langs_dir = opendir(XGP_ROOT . LANG_PATH);
+        $exceptions = ['.', '..', '.htaccess', 'index.html', '.DS_Store'];
+        $langs = [];
+
+        while (($lang_dir = readdir($langs_dir)) !== false) {
+            if (!in_array($lang_dir, $exceptions)) {
+                $langs[] = $lang_dir;
+            }
+        }
+
+        return $langs;
     }
 
     /**
@@ -685,7 +703,7 @@ abstract class FunctionsLib extends XGPCore
     public static function checkServer($current_user)
     {
         if (self::readConfig('game_enable') == 0
-            && $current_user['user_authlevel'] < UserRanksEnumerator::admin
+            && $current_user['user_authlevel'] < UserRanksEnumerator::ADMIN
             && !defined('IN_ADMIN')) {
             self::message(stripslashes(FunctionsLib::readConfig('close_reason')), '', '', false, false);
             die();

@@ -13,6 +13,8 @@
  */
 namespace application\models\game;
 
+use application\core\Database;
+
 /**
  * Buildings Class
  *
@@ -25,24 +27,21 @@ namespace application\models\game;
  */
 class Buildings
 {
-
     private $db = null;
 
     /**
      * Constructor
      *
-     * @return void
+     * @param Database $db
      */
-    public function __construct($db)
+    public function __construct(Database $db)
     {
         // use this to make queries
         $this->db = $db;
     }
 
     /**
-     * __destruct
-     *
-     * @return void
+     * Destructor
      */
     public function __destruct()
     {
@@ -50,21 +49,18 @@ class Buildings
     }
 
     /**
-     * Insert a new building queue
+     * Insert a new building queue and deduct resources
      *
-     * @param type $building_id
-     * @param type $queue
-     * @param type $planet_id
-     *
+     * @param array $planet
      * @return void
      */
-    public function updatePlanetBuildingQueue($queue, $building_id, $planet_id)
+    public function updatePlanetBuildingQueue(array $planet): void
     {
         $this->db->query(
-            "UPDATE " . PLANETS . " SET
-                `planet_b_building_id` = '" . $queue . "',
-                `planet_b_building` = '" . $building_id . "'
-            WHERE `planet_id` = '" . $planet_id . "';"
+            "UPDATE `" . PLANETS . "` SET
+                `planet_b_building` = '" . $planet['planet_b_building'] . "',
+                `planet_b_building_id` = '" . $planet['planet_b_building_id'] . "'
+            WHERE `planet_id` = '" . $planet['planet_id'] . "';"
         );
     }
 }

@@ -87,9 +87,12 @@ $lang = [
     'missiles' => 'Misiles',
     'defenses' => 'Defensa',
 
-    // changelog
-    'ch_version' => 'Versión',
-    'ch_description' => 'Descripción',
+    // system
+    'sys_building_queue_build_order' => 'Orden de construcción',
+    'sys_building_queue_destroy_order' => 'Orden de destrucción',
+    'sys_building_queue_not_enough_resources' => 'La %s de tu %s de nivel %s en %s no pudo ejecutarse.<br><br>Recursos insuficientes: %s.',
+    'sys_building_queue_not_enough_resources_from' => 'Mensaje del sistema',
+    'sys_building_queue_not_enough_resources_subject' => 'Producción cancelada',
 ];
 
 /**
@@ -231,84 +234,6 @@ $lang['ov_planet_rename_action'] = 'Nombrar';
 $lang['ov_planet_name_changed'] = 'La contraseña ha sido cambiada.<br /><a href="game.php?page=overview" target="_top">Volver</a>';
 $lang['ov_abandon_planet_not_possible'] = 'No es posible abandonar un planeta cuando hay flotas moviendose';
 $lang['ov_fields'] = 'Campos';
-
-//----------------------------------------------------------------------------//
-//GALAXY
-$lang['gl_no_access_vm_on'] = '¡No puedes utilizar la vista de galaxia mientras estás de vacaciones o tu cuenta no está validada!';
-$lang['gl_no_deuterium_to_view_galaxy'] = '¡No hay suficiente deuterio!';
-$lang['gl_legend'] = 'Leyenda';
-$lang['gl_strong_player'] = 'Jugador fuerte';
-$lang['gl_week_player'] = 'Jugador débil';
-$lang['gl_vacation'] = 'Modo vacaciones';
-$lang['gl_banned'] = 'Usuario suspendido';
-$lang['gl_inactive_seven'] = 'Inactivo 7 días';
-$lang['gl_inactive_twentyeight'] = 'Inactivo 28 días';
-$lang['gl_s'] = 'f';
-$lang['gl_w'] = 'd';
-$lang['gl_v'] = 'v';
-$lang['gl_b'] = 's';
-$lang['gl_i'] = 'i';
-$lang['gl_I'] = 'I';
-$lang['gl_populed_planets'] = 'planetas habitados';
-$lang['gl_out_space'] = 'Espacio exterior';
-$lang['gl_avaible_missiles'] = 'misiles disponibles';
-$lang['gl_fleets'] = 'flotas';
-$lang['gl_avaible_recyclers'] = 'recicladores disponibles';
-$lang['gl_avaible_spyprobes'] = 'sondas disponibles';
-$lang['gl_missil_launch'] = 'Lanzamiento de Misiles';
-$lang['gl_missil_to_launch'] = 'Número de misiles (<b>%d</b> restantes):';
-$lang['gl_objective'] = 'Objetivo';
-$lang['gl_all_defenses'] = 'Todo';
-$lang['gl_missil_launch_action'] = 'OK';
-$lang['gl_galaxy'] = 'Galaxia';
-$lang['gl_solar_system'] = 'Sistema solar';
-$lang['gl_show'] = 'Mostrar';
-$lang['gl_pos'] = 'Pos';
-$lang['gl_planet'] = 'Planeta';
-$lang['gl_name_activity'] = 'Nombre (Actividad)';
-$lang['gl_moon'] = 'Luna';
-$lang['gl_debris'] = 'Escombros';
-$lang['gl_player_estate'] = 'Jugador (Estado)';
-$lang['gl_alliance'] = 'Alianza';
-$lang['gl_actions'] = 'Acciones';
-$lang['gl_spy'] = 'Espiar';
-$lang['gl_buddy_request'] = 'Solicitud de compañeros';
-$lang['gl_missile_attack'] = 'Ataque con misiles';
-$lang['gl_with'] = ' con ';
-$lang['gl_member'] = ' miembro';
-$lang['gl_member_add'] = 's';
-$lang['gl_alliance_page'] = 'Ver página de la alianza';
-$lang['gl_see_on_stats'] = 'Ver en estadísticas';
-$lang['gl_alliance_web_page'] = 'Página principal de la alianza';
-$lang['gl_debris_field'] = 'Campo de escombros';
-$lang['gl_collect'] = 'Recolectar';
-$lang['gl_resources'] = 'Recursos';
-$lang['gl_features'] = 'Características';
-$lang['gl_diameter'] = 'Diámetro';
-$lang['gl_phalanx'] = 'Phalanx';
-$lang['gl_planet_destroyed'] = 'Planeta destruido';
-$lang['gl_player'] = 'Jugador ';
-$lang['gl_in_the_rank'] = ' en el ranking ';
-$lang['gl_stat'] = 'Estadísticas';
-$lang['gl_success'] = 'ok';
-$lang['gl_error'] = 'Error, se produjo un error';
-$lang['gl_no_moon'] = 'Error, no hay luna';
-$lang['gl_noob_protection'] = 'Error, el jugador esta protegido';
-$lang['gl_too_strong'] = 'Error, el jugador es muy fuerte';
-$lang['gl_vacation_mode'] = 'Error, el jugador esta en vacaciones';
-$lang['gl_only_amount_ships'] = 'Error, solo se enviaron %s naves';
-$lang['gl_only_amount_ships_1'] = 'Error, solo se enviaron';
-$lang['gl_only_amount_ships_2'] = 'naves';
-$lang['gl_no_ships'] = 'Error, no hay naves disponibles';
-$lang['gl_no_slots'] = 'Error, no tienes mas slots de flotas disponibles';
-$lang['gl_no_deuterium'] = 'Error, no tienes deuterio suficiente';
-$lang['gl_no_planet'] = 'Error, el planeta no existe';
-$lang['gl_not_enough_storage'] = 'Error, no tienes mas espacio disponible';
-$lang['gl_multi_alarm'] = 'Error, multi alarma';
-$lang['gl_send'] = 'Enviar';
-$lang['gl_ship'] = 'nave';
-$lang['gl_ships'] = 's';
-$lang['gl_to'] = 'a';
 
 //----------------------------------------------------------------------------//
 //PHALANX
@@ -478,51 +403,6 @@ $lang['rs_daily'] = 'Diaria';
 $lang['rs_weekly'] = 'Semanal';
 
 //----------------------------------------------------------------------------//
-//OFFICIERS
-$lang['of_title'] = 'Oficiales';
-$lang['of_recruit'] = 'Reclutar';
-$lang['of_active'] = 'Activo hasta el';
-$lang['of_inactive'] = 'Inactivo';
-$lang['of_commander'] = 'Comandante';
-$lang['of_admiral'] = 'Almirante';
-$lang['of_engineer'] = 'Ingeniero';
-$lang['of_geologist'] = 'Geólogo';
-$lang['of_technocrat'] = 'Tecnócrata';
-$lang['of_get_know'] = '¡Consíguelo ahora!';
-$lang['of_add_admiral'] = '+2 huecos de flota máximos';
-$lang['of_add_engineer'] = 'Minimiza las perdidas de las defensas a la mitad,<br/>+10% de producción de energía';
-$lang['of_add_geologist'] = '+10% producción de minas';
-$lang['of_add_technocrat'] = '+2 al nivel de espionaje,<br/>25% menos tiempo de investigación';
-$lang['of_darkmatter_description'] = 'La Materia Oscura es una sustancia que desde hace apenas unos años se puede almacenar, y aun así esto representa grandes dificultades. De ella se pueden extraer increíbles cantidades de energía. El proceso que se requiere para producir Materia Oscura es complejo y arriesgado, por lo que se ha convertido en un bien muy valioso.
-¡Sólo la materia oscura comprada que aún no se ha consumido protege una cuenta de su eliminación!';
-$lang['of_darkmatter_description_short'] = 'El comandante y los oficiales pueden ser contratados con esta sustancia rara.';
-$lang['of_get_darkmatter'] = 'Obtener materia oscura';
-$lang['of_months'] = '3 meses por';
-$lang['of_week'] = '1 semana por';
-$lang['of_only'] = 'sólo';
-
-//----------------------------------------------------------------------------//
-//TRADER
-$lang['tr_only_positive_numbers'] = '¡Solo se pueden usar números positivos!';
-$lang['tr_not_enought_metal'] = 'No tienes suficiente metal.';
-$lang['tr_not_enought_crystal'] = 'No tienes suficiente cristal.';
-$lang['tr_not_enought_deuterium'] = 'No tienes suficiente deuterio.';
-$lang['tr_exchange_done'] = 'Intercambio realizado con éxito';
-$lang['tr_call_trader'] = 'Llamar a un negociante';
-$lang['tr_call_trader_who_buys'] = 'Llamar a un negociante que compra ';
-$lang['tr_call_trader_submit'] = 'Llamar al comerciante';
-$lang['tr_exchange_quota'] = 'El tipo de intercambio es de 2/1/0.5';
-$lang['tr_sell_metal'] = 'Venta de metal';
-$lang['tr_sell_crystal'] = 'Venta de cristal';
-$lang['tr_sell_deuterium'] = 'Venta de deuterio';
-$lang['tr_resource'] = 'Recurso';
-$lang['tr_amount'] = 'Cantidad';
-$lang['tr_quota_exchange'] = 'Cuota de intercambio';
-$lang['tr_exchange'] = 'Intercambiar';
-$lang['tr_darkmatter_needed'] = 'Necesitas <font color="#FF8900">%s de materia oscura</font> para visitar al Mercader.';
-$lang['tr_full_storage'] = 'El %s esta lleno';
-
-//----------------------------------------------------------------------------//
 //TECHTREE
 $lang['tt_requirements'] = 'Requisitos';
 $lang['tt_lvl'] = 'nivel ';
@@ -591,12 +471,6 @@ $lang['tech'] = array(
     408 => "Cúpula grande de protección",
     502 => "Misiles antibalísticos",
     503 => "Misil interplanetario",
-    600 => "Oficial",
-    601 => "Comandante",
-    602 => "Almirante",
-    603 => "Ingeniero",
-    604 => "Geólogo",
-    605 => "Tecnócrata",
 );
 
 $lang['res']['descriptions'] = array(
@@ -658,12 +532,7 @@ Cada nivel de esta tecnología aumenta el escudo efectivo en un 10% (basado en e
     407 => "La cúpula pequeña de protección cubre el planeta con un delgado campo protector que puede absorber inmensas cantidades de energía.",
     408 => "La cúpula grande de protección proviene de una tecnología de defensa mejorada que absorbe incluso más energía antes de colapsarse.",
     502 => "Los misiles antibalísticos destruyen los misiles interplanetarios.",
-    503 => "Los misiles interplanetarios destruyen los sistemas de defensa del enemigo.",
-    601 => 'El puesto de Comandante se ha establecido por si mismo en la guerra moderna. A causa del simplificado manejo de las estructuras, las instrucciones pueden procesarse más rápidamente. ¡Con él serás capaz de tener una visión general de tu imperio! Esto te permitirá desarrollar estructuras que te llevan a estar a la delantera de tu enemigo.',
-    602 => 'El almirante de flota es un veterano de guerra experimentado y un habilidoso estratega. En las batallas más duras, es capaz de hacerse una idea de la situación y contactar a sus almirantes subordinados. Un emperador sabio puede confiar en su ayuda durante los combates y guiar más flotas al mismo tiempo.',
-    603 => 'El Ingeniero es un especialista en gestión de energía. En tiempos de paz aumenta la energía de todas las colonias. En caso de ataque, garantiza el abastecimiento de energía a los cañones, evitando una posible sobrecarga, lo que conduce a una reducción de defensas perdidas en batalla.',
-    604 => 'El geólogo es un experto en astrominerología y astrocristalografía. Apoyado por su equipo de metalúrgicos e ingenieros en química apoya a gobiernos interplanetarias a la explotación de fuentes de recursos y a la optimización del refinamiento de estos recursos.',
-    605 => 'El gremio de los Tecnócratas está compuesto de auténticos genios y siempre los encontrarás en un mundo donde la lógica humana sería descartada. Desde hace miles de años, ningún ser humano normal ha podido descifrar el código de un tecnócrata. El tecnócrata inspira a los investigadores del imperio con tan sólo su presencia.',
+    503 => "Los misiles interplanetarios destruyen los sistemas de defensa del enemigo. Tus misiles interplanetarios tienen actualmente un alcance de %s sistemas.",
 );
 
 //----------------------------------------------------------------------------//
@@ -846,214 +715,6 @@ $lang['info'][502]['description'] = "Un misil antibalístico puede proteger a tu
 $lang['info'][503]['name'] = "Misil interplanetario";
 $lang['info'][503]['description'] = "Los misiles interplanetarios destruyen los sistemas de defensa del enemigo. Los sistemas de defensa destruidos por los misiles interplanetarios no serán reparados.";
 
-// -------------------------- OFFICIERS ----------------------------------------------------------------------------------------------------//
-$lang['info'][601]['description'] = 'Lista de construcción, Visión del imperio, Vista de galaxia mejorada, Filtro de mensajes, Accesos directos, Sin publicidad';
-$lang['info'][602]['description'] = '+2 huecos de flota máximos';
-$lang['info'][603]['description'] = 'Minimiza las perdidas de las defensas a la mitad,<br/>+10% de producción de energía';
-$lang['info'][604]['description'] = '+10% producción de minas';
-$lang['info'][605]['description'] = '+2 al nivel de espionaje,<br/>25% menos tiempo de investigación';
-
-//----------------------------------------------------------------------------//
-//MESSAGES
-$lang['mg_title'] = 'Mensajes';
-$lang['mg_show_title'] = 'Mostrar';
-$lang['mg_type_title'] = 'Tipo';
-$lang['mg_amount_title'] = 'Cantidad';
-$lang['mg_unread_title'] = 'Sin leer';
-$lang['mg_type'][0] = 'Reportes de espionaje';
-$lang['mg_type'][1] = 'Reportes de Batalla';
-$lang['mg_type'][2] = 'Reportes de expedición';
-$lang['mg_type'][3] = 'Mensajes de la alianza';
-$lang['mg_type'][4] = 'Mensajes de usuarios';
-$lang['mg_type'][5] = 'Otros mensajes';
-$lang['mg_address_book'] = 'Libreta de direcciones';
-$lang['mg_friends_list'] = 'Lista de amigos';
-$lang['mg_alliance'] = 'Alianza propia';
-$lang['mg_operators'] = 'Operadores del juego';
-$lang['mg_notes'] = 'Notas';
-$lang['mg_action'] = 'Acción';
-$lang['mg_date'] = 'Fecha';
-$lang['mg_from'] = 'De';
-$lang['mg_subject'] = 'Asunto';
-$lang['mg_delete_marked'] = 'Borrar mensajes marcados';
-$lang['mg_delete_unmarked'] = 'Borrar todos los mensajes sin marcar';
-$lang['mg_delete_all_shown'] = 'Borrar todos los mensajes mostrados';
-$lang['mg_delete_all'] = 'Borrar todos los mensajes';
-$lang['mg_confirm_action'] = 'ok';
-$lang['mg_no_text'] = 'Falta el mensaje';
-$lang['mg_msg_sended'] = 'Mensaje enviado';
-$lang['mg_no_subject'] = 'Sin asunto';
-$lang['mg_to'] = 'Destinatario';
-$lang['mg_send_message'] = 'Enviar mensaje';
-$lang['mg_message'] = 'Mensaje';
-$lang['mg_chars'] = 'caracteres';
-$lang['mg_send'] = 'Enviar';
-
-//----------------------------------------------------------------------------//
-//ALLIANCE
-$lang['al_description_message'] = 'Mensaje de descripcion de la alianza.';
-$lang['al_web_text'] = 'Web de la alianza';
-$lang['al_request'] = 'Solicitud';
-$lang['al_click_to_send_request'] = 'Click aqui para enviar su solicitud a la alianza';
-$lang['al_tag_required'] = 'La etiqueta de la alianza es muy corta.';
-$lang['al_name_required'] = 'El nombre de la alianza es muy corto.';
-$lang['al_name_already_exists'] = 'El nombre de la alianza "%s" ya existe.';
-$lang['al_tag_already_exists'] = 'La etiqueta de la alianza "%s" ya existe.';
-$lang['al_created'] = 'La alianza %s [%d] ha sido creada';
-$lang['al_continue'] = 'Continuar';
-$lang['al_alliance_closed'] = 'Esta alianza no admite más miembros';
-$lang['al_request_confirmation_message'] = 'Solicitud registrada. Recibiras un mensaje cuando tu solicitud sea aceptada / rechazada. <br><a href="game.php?page=alliance">Volver</a>';
-$lang['al_default_request_text'] = 'Los líderes de la alianza no han creado un ejemplo de solicitud, o no tienen pretenciones.';
-$lang['al_write_request'] = 'Escribir solicitud a la alianza %s';
-$lang['al_request_deleted'] = 'Tu solicitud a la alianza %s ha sido borrada. <br/>Ahora puedes escribir una nueva solicitud o crear tu propia alianza.';
-$lang['al_request_wait_message'] = 'Ya has enviado una solicitud a la alianza %s. <br/>Por favor, espera hasta que recibas una respuesta o borra la solicitud.';
-$lang['al_delete_request'] = 'Borrar solicitud';
-$lang['al_founder_cant_leave_alliance'] = 'El fundador no puede abandonar la alianza.';
-$lang['al_leave_sucess'] = 'Abandonaste la alianza %s con éxito.';
-$lang['al_do_you_really_want_to_go_out'] = '¿Realmente deseas salir de la alianza %s?';
-$lang['al_go_out_yes'] = 'SI';
-$lang['al_circular_sended'] = 'Mensaje circular enviado, Los siguiente(s) miembro(s) recibieron tu mensaje:';
-$lang['al_all_players'] = 'Todos los jugadores';
-$lang['al_no_ranks_defined'] = 'No se definieron rangos.';
-$lang['al_request_text'] = 'Texto de la solicitud';
-$lang['al_inside_text'] = 'Texto interno';
-$lang['al_outside_text'] = 'Texto externo';
-$lang['al_transfer_alliance'] = 'Transferir alianza';
-$lang['al_disolve_alliance'] = 'Disolver alianza';
-$lang['al_founder_rank_text'] = 'Fundador';
-$lang['al_new_member_rank_text'] = 'Nuevo miembro';
-$lang['al_acept_request'] = 'Aceptar';
-$lang['al_you_was_acceted'] = 'Fuiste aceptado en ';
-$lang['al_hi_the_alliance'] = '¡Hola!<br>La alianza <b>';
-$lang['al_has_accepted'] = '</b> a aceptado tu solicitud.<br>Mensaje del fundador: <br>';
-$lang['al_decline_request'] = 'Rechazar';
-$lang['al_you_was_declined'] = 'Fuiste rechazado en ';
-$lang['al_has_declined'] = '</b> a rechazado tu solicitud.<br>Mensaje del fundador: <br>';
-$lang['al_no_requests'] = 'No hay solicitudes';
-$lang['al_request_from'] = 'Solicitud de "%s"';
-$lang['al_no_request_pending'] = 'Hay %n solicitud/es pendiente/s';
-$lang['al_name'] = 'nombre';
-$lang['al_new_name'] = 'Nuevo nombre';
-$lang['al_tag'] = 'etiqueta';
-$lang['al_new_tag'] = 'Nueva etiqueta';
-$lang['al_user_list'] = 'Lista de miembros';
-$lang['al_manage_alliance'] = 'Administrar la alianza';
-$lang['al_send_circular_message'] = 'Enviar correo circular';
-$lang['al_new_requests'] = 'solicitud/es nueva/s';
-$lang['al_save'] = 'Guardar';
-$lang['al_rank_name'] = 'Nombre del Rango';
-$lang['al_ok'] = 'OK';
-$lang['al_number_of_records'] = 'Cantidad de registros';
-$lang['al_num'] = 'Nº';
-$lang['al_member'] = 'Miembro';
-$lang['al_message'] = 'Mensaje';
-$lang['al_position'] = 'Posición';
-$lang['al_points'] = 'Puntos';
-$lang['al_coords'] = 'Coordenadas';
-$lang['al_member_since'] = 'Miembro desde';
-$lang['al_estate'] = 'Estado';
-$lang['al_back'] = 'Volver a la vista general';
-$lang['al_actions'] = 'Acciones';
-$lang['al_change_title'] = '¿Cómo debe la alianza "%s" llamarse de ahora en adelante?';
-$lang['al_change_submit'] = 'Cambiar';
-$lang['al_reply_to_request'] = 'Respuesta a la solicitud';
-$lang['al_reason'] = 'Motivo';
-$lang['al_characters'] = 'caracteres';
-$lang['al_request_list'] = 'Lista de solicitudes';
-$lang['al_candidate'] = 'Candidato';
-$lang['al_request_date'] = 'Fecha de solicitud';
-$lang['al_transfer_alliance'] = 'Transferir alianza';
-$lang['al_transfer_to'] = 'Transferir a';
-$lang['al_transfer_submit'] = 'Transferir';
-$lang['al_ally_information'] = 'Información de la alianza';
-$lang['al_ally_info_tag'] = 'Etiqueta';
-$lang['al_ally_info_name'] = 'Nombre';
-$lang['al_ally_info_members'] = 'Miembros';
-$lang['al_your_request_title'] = 'Tu solicitud';
-$lang['al_applyform_send'] = 'Enviar';
-$lang['al_applyform_reload'] = 'Recargar';
-$lang['al_circular_send_ciruclar'] = 'Enviar correo circular';
-$lang['al_receiver'] = 'Destinatario';
-$lang['al_circular_send_submit'] = 'Enviar';
-$lang['al_circular_reset'] = 'Limpiar';
-$lang['al_alliance'] = 'Alianza';
-$lang['al_alliance_make'] = 'Fundar una alianza';
-$lang['al_alliance_search'] = 'Buscar una alianza';
-$lang['al_your_ally'] = 'Tu alianza';
-$lang['al_rank'] = 'Rango';
-$lang['al_web_site'] = 'Sitio web';
-$lang['al_inside_section'] = 'Sección interna';
-$lang['al_make_alliance'] = 'Fundar alianza';
-$lang['al_make_ally_tag_required'] = 'Etiqueta de la alianza (3-8 caracteres)';
-$lang['al_make_alliance_name_required'] = 'Nombre de la alianza (3-30 caracteres)';
-$lang['al_make_submit'] = 'Fundar';
-$lang['al_find_alliances'] = 'Buscar alianzas';
-$lang['al_find_text'] = 'Buscar';
-$lang['al_find_submit'] = 'Buscar';
-$lang['al_the_nexts_allys_was_founded'] = 'Se han encontrado las siguientes alianzas:';
-$lang['al_manage_ranks'] = 'Ajustar rangos';
-$lang['al_manage_members'] = 'Administrar miembros';
-$lang['al_manage_change_tag'] = 'Cambiar la etiqueta de la alianza';
-$lang['al_manage_change_name'] = 'Cambiar el nombre de la alianza';
-$lang['al_texts'] = 'Textos';
-$lang['al_manage_options'] = 'Opciones';
-$lang['al_manage_image'] = 'Imágen de la alianza';
-$lang['al_manage_requests'] = 'Solicitudes';
-$lang['al_requests_not_allowed'] = 'No permitidas(alianza cerrada)';
-$lang['al_requests_allowed'] = 'Permitidas(alianza abierta)';
-$lang['al_manage_founder_rank'] = 'Rango del fundador';
-$lang['al_configura_ranks'] = 'Configurar los rangos';
-$lang['al_create_new_rank'] = 'Crear rango';
-$lang['al_rank_name'] = 'Nombre del rango';
-$lang['al_create'] = 'Crear';
-$lang['al_legend'] = 'Leyendas';
-$lang['al_legend_disolve_alliance'] = 'Disolver la alianza';
-$lang['al_legend_kick_users'] = 'Expulsar usuarios';
-$lang['al_legend_see_requests'] = 'Ver las solicitudes';
-$lang['al_legend_see_users_list'] = 'Ver la lista de miembros';
-$lang['al_legend_check_requests'] = 'Revisar las solicitudes';
-$lang['al_legend_admin_alliance'] = 'Administrar la alianza';
-$lang['al_legend_see_connected_users'] = 'Ver los miembros conectados';
-$lang['al_legend_create_circular'] = 'Crear un correo circular';
-$lang['al_legend_right_hand'] = '"Mano Derecha" (Necesario para transferir la alianza)';
-$lang['al_requests'] = 'Solicitudes';
-$lang['al_circular_message'] = 'Correo circular';
-$lang['al_leave_alliance'] = 'Abandonar la alianza';
-$lang['al_confirm_remove_member'] = '¿Estás seguro que deseas expulsar a %s?';
-$lang['al_alliance_founder_rank'] = 'Líder';
-
-//----------------------------------------------------------------------------//
-//BUDDY
-$lang['bu_request_exists'] = '¡Ya existe una solicitud a ese jugador!';
-$lang['bu_cannot_request_yourself'] = '¡No puedes solicitarte como amigo a ti mismo!';
-$lang['bu_request_message'] = 'Mensaje de solicitud';
-$lang['bu_player'] = 'Nombre';
-$lang['bu_request_text'] = 'Texto de solicitud';
-$lang['bu_characters'] = 'caracteres';
-$lang['bu_back'] = 'Volver';
-$lang['bu_send'] = 'Enviar';
-$lang['bu_cancel_request'] = 'Cancelar Solicitud';
-$lang['bu_accept'] = 'Aceptar';
-$lang['bu_decline'] = 'Rechazar';
-$lang['bu_delete'] = 'Eliminar';
-$lang['bu_buddy_list'] = 'Lista de Amigos';
-$lang['bu_requests'] = 'Solicitudes de amistad';
-$lang['bu_alliance'] = 'Alianza';
-$lang['bu_coords'] = 'Coordenadas';
-$lang['bu_text'] = 'Texto / Estado';
-$lang['bu_action'] = 'Acción';
-$lang['bu_my_requests'] = 'Mis solicitudes';
-$lang['bu_partners'] = 'Mis Amigos';
-$lang['bu_estate'] = 'Estado';
-$lang['bu_deleted_title'] = 'Amigo perdido';
-$lang['bu_deleted_text'] = 'El jugador %u te ha eliminado de su lista de amigos.';
-$lang['bu_accepted_title'] = 'Solicitud aceptada';
-$lang['bu_accepted_text'] = 'El jugador %u ha aceptado tu solicitud de amistad.';
-$lang['bu_rejected_title'] = 'Solicitud rechazada';
-$lang['bu_rejected_text'] = 'El jugador %u ha rechazado tu solicitud de amistad.';
-$lang['bu_to_accept_title'] = 'Nueva solicitud de amistad';
-$lang['bu_to_accept_text'] = 'El jugador %u te ha enviado una solicitud de amistad.';
-
 //----------------------------------------------------------------------------//
 //STATISTICS
 $lang['st_player'] = 'Jugador';
@@ -1073,18 +734,6 @@ $lang['st_per'] = 'por';
 $lang['st_in_the_positions'] = 'en las posiciones';
 $lang['st_actions'] = 'Acciones';
 $lang['st_ally_request'] = 'Echar solicitud a esta alianza';
-
-//----------------------------------------------------------------------------//
-//BANNED
-$lang['bn_no_players_banned'] = 'No hay jugadores baneados';
-$lang['bn_exists'] = 'Existe ';
-$lang['bn_players_banned'] = ' jugador/es baneado/s';
-$lang['bn_players_banned_list'] = 'Lista de jugadores baneados';
-$lang['bn_player'] = 'Jugador';
-$lang['bn_reason'] = 'Motivo';
-$lang['bn_from'] = 'Desde el';
-$lang['bn_until'] = 'Hasta el';
-$lang['bn_by'] = 'Por';
 
 //----------------------------------------------------------------------------//
 //SYSTEM
@@ -1161,10 +810,6 @@ $lang['sys_tran_mess_user'] = "Una flota proveniente de %s %s llega a tu planeta
 $lang['sys_mess_fleetback'] = "Vuelta de la flota";
 $lang['sys_tran_mess_back'] = "Una flota regreso al planeta %s %s. La flota no entrego recursos.";
 $lang['sys_recy_gotten'] = "Tu flota llego a las coordenadas indicadas y recolecto %s unidades de %s y %s unidades de %s.";
-$lang['sys_notenough_money'] = "No tienes suficientes recursos para construir una %s. Tienes %s de %s, %s de %s y %s de %s y el costo de la construcción era %s de %s, %s de %s y %s de %s";
-$lang['sys_nomore_level'] = "Intentas destruir un edificio ( %s ).";
-$lang['sys_buildlist'] = "Lista de construcción";
-$lang['sys_buildlist_fail'] = "Construcción imposible";
 $lang['sys_gain'] = "Beneficios";
 $lang['sys_fleet_won'] = "Una de tus flotas regresa del planeta %s %s y entrega %s de %s, %s de %s y %s de %s";
 $lang['sys_perte_attaquant'] = "Parte Atacante";
@@ -1183,6 +828,11 @@ $lang['sys_destruc_none'] = ". Las estrellas de la muerte no generan el poder ne
 $lang['sys_the'] = " el ";
 $lang['sys_stay_mess_back'] = "Una de sus flotas vuelve de ";
 $lang['sys_stay_mess_bend'] = " y entrega su mercancía ";
+$lang['sys_missile_attack'] = 'Ataque con misiles';
+$lang['sys_all_destroyed'] = 'Todos los misiles interplanetarios han sido destruidos por los misiles de intercepción.';
+$lang['sys_planet_without_defenses'] = 'Planeta sin defensa.';
+$lang['sys_some_destroyed'] = ' han sido destruidos por los misiles de intercepción.';
+$lang['sys_missile_string'] = 'Un ataque con misiles (%1%) de %2% llega al planeta %3% <br><br>';
 
 //----------------------------------------------------------------------------//
 //class.CheckSession.php
@@ -1239,30 +889,4 @@ $lang['cr_armor'] = 'Blindaje';
 $lang['cr_destroyed'] = '¡Destruida!';
 $lang['cr_no_access'] = '¡El reporte solicitado no existe!';
 
-//----------------------------------------------------------------------------//
-// MissilesAjax.php
-$lang['ma_silo_level'] = 'Debes tener al menos silo al nivel 4';
-$lang['ma_impulse_drive_required'] = 'Debes investigar el Motor de Impulso.';
-$lang['ma_not_send_other_galaxy'] = 'No puedes enviar misiles a otra galaxia.';
-$lang['ma_planet_doesnt_exists'] = 'El planeta objetivo no existe.';
-$lang['ma_cant_send'] = 'No puedes enviar ';
-$lang['ma_missile'] = ' misiles, sólo dispones de ';
-$lang['ma_wrong_target'] = 'Objetivo Incorrecto';
-$lang['ma_no_missiles'] = 'No hay misiles interplanetarios disponibles';
-$lang['ma_add_missile_number'] = 'Ingresar el número de misiles que deseas enviar';
-$lang['ma_misil_launcher'] = 'Lanzamisiles';
-$lang['ma_small_laser'] = 'Láser pequeño';
-$lang['ma_big_laser'] = 'Láser grande';
-$lang['ma_gauss_canyon'] = 'Cañón Gauss';
-$lang['ma_ionic_canyon'] = 'Cañón iónico';
-$lang['ma_buster_canyon'] = 'Cañón de plasma';
-$lang['ma_small_protection_shield'] = 'Cúpula pequeña de protección';
-$lang['ma_big_protection_shield'] = 'Cúpula grande de protección';
-$lang['ma_all'] = 'Todo';
-$lang['ma_missiles_sended'] = ' misiles interplanetarios se enviaron. objetivo principal: ';
-$lang['ma_all_destroyed'] = 'Todos los misiles interplanetarios han sido destruidos por los misiles de intercepción.';
-$lang['ma_planet_without_defens'] = 'Planeta sin defensa.';
-$lang['ma_some_destroyed'] = ' han sido destruidos por los misiles de intercepción.';
-$lang['ma_missile_attack'] = "";
-$lang['ma_missile_string'] = 'Un ataque con misiles (%1%) de %2% llega al planeta %3% <br><br>';
 /* end of INGAME.php */

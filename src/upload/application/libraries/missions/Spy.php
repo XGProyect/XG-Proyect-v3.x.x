@@ -17,7 +17,7 @@ use application\libraries\FleetsLib;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
 use application\libraries\OfficiersLib;
-use application\libraries\Timing_library as Timing;
+use application\libraries\TimingLibrary as Timing;
 
 /**
  * Spy Class
@@ -60,8 +60,8 @@ class Spy extends Missions
                     'galaxy' => $fleet_row['fleet_start_galaxy'],
                     'system' => $fleet_row['fleet_start_system'],
                     'planet' => $fleet_row['fleet_start_planet'],
-                    'type' => $fleet_row['fleet_start_type']
-                ]
+                    'type' => $fleet_row['fleet_start_type'],
+                ],
             ]);
 
             $target_data = $this->Missions_Model->getInquiredUserDataByCords([
@@ -69,8 +69,8 @@ class Spy extends Missions
                     'galaxy' => $fleet_row['fleet_end_galaxy'],
                     'system' => $fleet_row['fleet_end_system'],
                     'planet' => $fleet_row['fleet_end_planet'],
-                    'type' => $fleet_row['fleet_end_type']
-                ]
+                    'type' => $fleet_row['fleet_end_type'],
+                ],
             ]);
 
             $CurrentSpyLvl = OfficiersLib::getMaxEspionage($current_data['research_espionage_technology'], $current_data['premium_officier_technocrat']);
@@ -80,117 +80,117 @@ class Spy extends Missions
             parent::makeUpdate($fleet_row['fleet_end_galaxy'], $fleet_row['fleet_end_system'], $fleet_row['fleet_end_planet'], $fleet_row['fleet_end_type']);
 
             foreach ($fleet as $id => $amount) {
-                
+
                 if ($id == "210") {
-                        $LS = $amount;
-                        $SpyToolDebris = $LS * 300;
+                    $LS = $amount;
+                    $SpyToolDebris = $LS * 300;
 
-                        $MaterialsInfo = $this->spy_target($target_data, 0, $this->langs['sys_spy_maretials']);
-                        $Materials = $MaterialsInfo['String'];
+                    $MaterialsInfo = $this->spy_target($target_data, 0, $this->langs['sys_spy_maretials']);
+                    $Materials = $MaterialsInfo['String'];
 
-                        $PlanetFleetInfo = $this->spy_target($target_data, 1, $this->langs['sys_spy_fleet']);
-                        $PlanetFleet = $Materials;
-                        $PlanetFleet .= $PlanetFleetInfo['String'];
+                    $PlanetFleetInfo = $this->spy_target($target_data, 1, $this->langs['sys_spy_fleet']);
+                    $PlanetFleet = $Materials;
+                    $PlanetFleet .= $PlanetFleetInfo['String'];
 
-                        $PlanetDefenInfo = $this->spy_target($target_data, 2, $this->langs['sys_spy_defenses']);
-                        $PlanetDefense = $PlanetFleet;
-                        $PlanetDefense .= $PlanetDefenInfo['String'];
+                    $PlanetDefenInfo = $this->spy_target($target_data, 2, $this->langs['sys_spy_defenses']);
+                    $PlanetDefense = $PlanetFleet;
+                    $PlanetDefense .= $PlanetDefenInfo['String'];
 
-                        $PlanetBuildInfo = $this->spy_target($target_data, 3, $this->langs['tech'][0]);
-                        $PlanetBuildings = $PlanetDefense;
-                        $PlanetBuildings .= $PlanetBuildInfo['String'];
+                    $PlanetBuildInfo = $this->spy_target($target_data, 3, $this->langs['tech'][0]);
+                    $PlanetBuildings = $PlanetDefense;
+                    $PlanetBuildings .= $PlanetBuildInfo['String'];
 
-                        $TargetTechnInfo = $this->spy_target($target_data, 4, $this->langs['tech'][100]);
-                        $TargetTechnos = $PlanetBuildings;
-                        $TargetTechnos .= $TargetTechnInfo['String'];
+                    $TargetTechnInfo = $this->spy_target($target_data, 4, $this->langs['tech'][100]);
+                    $TargetTechnos = $PlanetBuildings;
+                    $TargetTechnos .= $TargetTechnInfo['String'];
 
-                        $TargetForce = ( $PlanetFleetInfo['Count'] * $LS ) / 4;
+                    $TargetForce = ($PlanetFleetInfo['Count'] * $LS) / 4;
 
-                        if ($TargetForce > 100) {
-                            $TargetForce = 100;
-                        }
-
-                        $TargetChances = mt_rand(0, $TargetForce);
-                        $SpyerChances = mt_rand(0, 100);
-
-                        if ($TargetChances >= $SpyerChances) {
-                            $DestProba = "<font color=\"red\">" . $this->langs['sys_mess_spy_destroyed'] . "</font>";
-                        } elseif ($TargetChances < $SpyerChances) {
-                            $DestProba = sprintf($this->langs['sys_mess_spy_lostproba'], $TargetChances);
-                        }
-
-                        $AttackLink = "<center>";
-                        $AttackLink .= "<a href=\"game.php?page=fleet1&galaxy=" . $fleet_row['fleet_end_galaxy'] . "&system=" . $fleet_row['fleet_end_system'] . "";
-                        $AttackLink .= "&planet=" . $fleet_row['fleet_end_planet'] . "&planettype=" . $fleet_row['fleet_end_type'] . "";
-                        $AttackLink .= "&target_mission=1";
-                        $AttackLink .= " \">" . $this->langs['type_mission'][1] . "";
-                        $AttackLink .= "</a></center>";
-                        $MessageEnd = "<center>" . $DestProba . "</center>";
-
-                        $spionage_difference = abs($CurrentSpyLvl - $TargetSpyLvl);
-
-                        if ($TargetSpyLvl >= $CurrentSpyLvl) {
-                            $ST = pow($spionage_difference, 2);
-                            $resources = 1;
-                            $fleet = $ST + 2;
-                            $defense = $ST + 3;
-                            $buildings = $ST + 5;
-                            $tech = $ST + 7;
-                        }
-
-                        if ($CurrentSpyLvl > $TargetSpyLvl) {
-                            $ST = pow($spionage_difference, 2) * -1;
-                            $resources = 1;
-                            $fleet = $ST + 2;
-                            $defense = $ST + 3;
-                            $buildings = $ST + 5;
-                            $tech = $ST + 7;
-                        }
-
-                        if ($resources <= $LS) {
-                            $SpyMessage = $Materials . "<br />" . $AttackLink . $MessageEnd;
-                        }
-
-                        if ($fleet <= $LS) {
-                            $SpyMessage = $PlanetFleet . "<br />" . $AttackLink . $MessageEnd;
-                        }
-
-                        if ($defense <= $LS) {
-                            $SpyMessage = $PlanetDefense . "<br />" . $AttackLink . $MessageEnd;
-                        }
-
-                        if ($buildings <= $LS) {
-                            $SpyMessage = $PlanetBuildings . "<br />" . $AttackLink . $MessageEnd;
-                        }
-
-                        if ($tech <= $LS) {
-                            $SpyMessage = $TargetTechnos . "<br />" . $AttackLink . $MessageEnd;
-                        }
-
-                        FunctionsLib::sendMessage($fleet_row['fleet_owner'], '', $fleet_row['fleet_start_time'], 0, $this->langs['sys_mess_qg'], $this->langs['sys_mess_spy_report'], $SpyMessage, true);
-
-                        $TargetMessage = $this->langs['sys_mess_spy_ennemyfleet'] . " " . $current_data['planet_name'];
-                        $TargetMessage .= " <a href=\"game.php?page=galaxy&mode=3&galaxy=" . $current_data['planet_galaxy'] . "&system=" . $current_data['planet_system'] . "\">";
-                        $TargetMessage .= "[" . $current_data['planet_galaxy'] . ":" . $current_data['planet_system'] . ":" . $current_data['planet_planet'] . "]</a> (" . $current_data['user_name'] . ") ";
-                        $TargetMessage .= $this->langs['sys_mess_spy_seen_at'] . " " . $target_data['planet_name'];
-                        $TargetMessage .= " <a href=\"game.php?page=galaxy&mode=3&galaxy=" . $target_data['planet_galaxy'] . "&system=" . $target_data['planet_system'] . "\">";
-                        $TargetMessage .= "[" . $target_data['planet_galaxy'] . ":" . $target_data['planet_system'] . ":" . $target_data['planet_planet'] . "]</a>.";
-
-                        FunctionsLib::sendMessage($target_data['planet_user_id'], '', $fleet_row['fleet_start_time'], 0, $this->langs['sys_mess_spy_control'], $this->langs['sys_mess_spy_activity'], $TargetMessage . ' ' . sprintf($this->langs['sys_mess_spy_lostproba'], $TargetChances), true);
-
-                        if ($TargetChances >= $SpyerChances) {
-
-                            $this->Missions_Model->updateCrystalDebrisByPlanetId([
-                                'time' => time(),
-                                'crystal' => (0 + $SpyToolDebris),
-                                'planet_id' => $target_data['planet_id']
-                            ]);
-
-                            parent::removeFleet($fleet_row['fleet_id']);
-                        } else {
-                            parent::returnFleet($fleet_row['fleet_id']);
-                        }
+                    if ($TargetForce > 100) {
+                        $TargetForce = 100;
                     }
+
+                    $TargetChances = mt_rand(0, $TargetForce);
+                    $SpyerChances = mt_rand(0, 100);
+
+                    if ($TargetChances >= $SpyerChances) {
+                        $DestProba = "<font color=\"red\">" . $this->langs['sys_mess_spy_destroyed'] . "</font>";
+                    } elseif ($TargetChances < $SpyerChances) {
+                        $DestProba = sprintf($this->langs['sys_mess_spy_lostproba'], $TargetChances);
+                    }
+
+                    $AttackLink = "<center>";
+                    $AttackLink .= "<a href=\"game.php?page=fleet1&galaxy=" . $fleet_row['fleet_end_galaxy'] . "&system=" . $fleet_row['fleet_end_system'] . "";
+                    $AttackLink .= "&planet=" . $fleet_row['fleet_end_planet'] . "&planettype=" . $fleet_row['fleet_end_type'] . "";
+                    $AttackLink .= "&target_mission=1";
+                    $AttackLink .= " \">" . $this->langs['type_mission'][1] . "";
+                    $AttackLink .= "</a></center>";
+                    $MessageEnd = "<center>" . $DestProba . "</center>";
+
+                    $spionage_difference = abs($CurrentSpyLvl - $TargetSpyLvl);
+
+                    if ($TargetSpyLvl >= $CurrentSpyLvl) {
+                        $ST = pow($spionage_difference, 2);
+                        $resources = 1;
+                        $fleet = $ST + 2;
+                        $defense = $ST + 3;
+                        $buildings = $ST + 5;
+                        $tech = $ST + 7;
+                    }
+
+                    if ($CurrentSpyLvl > $TargetSpyLvl) {
+                        $ST = pow($spionage_difference, 2) * -1;
+                        $resources = 1;
+                        $fleet = $ST + 2;
+                        $defense = $ST + 3;
+                        $buildings = $ST + 5;
+                        $tech = $ST + 7;
+                    }
+
+                    if ($resources <= $LS) {
+                        $SpyMessage = $Materials . "<br />" . $AttackLink . $MessageEnd;
+                    }
+
+                    if ($fleet <= $LS) {
+                        $SpyMessage = $PlanetFleet . "<br />" . $AttackLink . $MessageEnd;
+                    }
+
+                    if ($defense <= $LS) {
+                        $SpyMessage = $PlanetDefense . "<br />" . $AttackLink . $MessageEnd;
+                    }
+
+                    if ($buildings <= $LS) {
+                        $SpyMessage = $PlanetBuildings . "<br />" . $AttackLink . $MessageEnd;
+                    }
+
+                    if ($tech <= $LS) {
+                        $SpyMessage = $TargetTechnos . "<br />" . $AttackLink . $MessageEnd;
+                    }
+
+                    FunctionsLib::sendMessage($fleet_row['fleet_owner'], '', $fleet_row['fleet_start_time'], 0, $this->langs['sys_mess_qg'], $this->langs['sys_mess_spy_report'], $SpyMessage, true);
+
+                    $TargetMessage = $this->langs['sys_mess_spy_ennemyfleet'] . " " . $current_data['planet_name'];
+                    $TargetMessage .= " <a href=\"game.php?page=galaxy&mode=3&galaxy=" . $current_data['planet_galaxy'] . "&system=" . $current_data['planet_system'] . "\">";
+                    $TargetMessage .= "[" . $current_data['planet_galaxy'] . ":" . $current_data['planet_system'] . ":" . $current_data['planet_planet'] . "]</a> (" . $current_data['user_name'] . ") ";
+                    $TargetMessage .= $this->langs['sys_mess_spy_seen_at'] . " " . $target_data['planet_name'];
+                    $TargetMessage .= " <a href=\"game.php?page=galaxy&mode=3&galaxy=" . $target_data['planet_galaxy'] . "&system=" . $target_data['planet_system'] . "\">";
+                    $TargetMessage .= "[" . $target_data['planet_galaxy'] . ":" . $target_data['planet_system'] . ":" . $target_data['planet_planet'] . "]</a>.";
+
+                    FunctionsLib::sendMessage($target_data['planet_user_id'], '', $fleet_row['fleet_start_time'], 0, $this->langs['sys_mess_spy_control'], $this->langs['sys_mess_spy_activity'], $TargetMessage . ' ' . sprintf($this->langs['sys_mess_spy_lostproba'], $TargetChances), true);
+
+                    if ($TargetChances >= $SpyerChances) {
+
+                        $this->Missions_Model->updateCrystalDebrisByPlanetId([
+                            'time' => time(),
+                            'crystal' => (0 + $SpyToolDebris),
+                            'planet_id' => $target_data['planet_id'],
+                        ]);
+
+                        parent::removeFleet($fleet_row['fleet_id']);
+                    } else {
+                        parent::returnFleet($fleet_row['fleet_id']);
+                    }
+                }
             }
         } elseif ($fleet_row['fleet_mess'] == 1 && $fleet_row['fleet_end_time'] <= time()) {
             parent::restoreFleet($fleet_row, true);

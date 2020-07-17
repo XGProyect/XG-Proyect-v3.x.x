@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types = 1);
 
 /**
  * Empire Controller
@@ -17,12 +17,9 @@ declare(strict_types=1);
 namespace application\controllers\game;
 
 use application\core\Controller;
-use application\core\Database;
 use application\libraries\DevelopmentsLib;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
-use const DPATH;
-use const MODULE_ID;
 
 /**
  * Empire Class
@@ -36,19 +33,21 @@ use const MODULE_ID;
  */
 class Empire extends Controller
 {
-
+    /**
+     * The module ID
+     *
+     * @var int
+     */
     const MODULE_ID = 2;
-    
+
     /**
      *
-     * @var type \Users_library
+     * @var array
      */
-    private $_user;
+    private $user;
 
     /**
      * Constructor
-     * 
-     * @return void
      */
     public function __construct()
     {
@@ -64,7 +63,7 @@ class Empire extends Controller
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
         // set data
-        $this->_user = $this->getUserData();
+        $this->user = $this->getUserData();
 
         // build the page
         $this->buildPage();
@@ -72,7 +71,7 @@ class Empire extends Controller
 
     /**
      * Build the page
-     * 
+     *
      * @return void
      */
     private function buildPage()
@@ -84,7 +83,7 @@ class Empire extends Controller
                     $this->getLang(),
                     $this->buildBlocks()
                 )
-            ) 
+            )
         );
     }
 
@@ -95,37 +94,30 @@ class Empire extends Controller
      */
     private function buildBlocks(): array
     {
-        $empire_data            = $this->Empire_Model->getAllPlayerData((int)$this->_user['user_id']);
+        $empire_data = $this->Empire_Model->getAllPlayerData((int) $this->user['user_id']);
 
         foreach ($empire_data as $planet) {
-
             // general data
             foreach (['image', 'name', 'coords', 'fields'] as $element) {
-
                 $empire[$element][] = $this->{'set' . ucfirst($element)}($planet);
             }
 
             // resources data
             foreach (['metal', 'crystal', 'deuterium', 'energy'] as $element) {
-
                 $empire[$element][] = $this->setResources($planet, $element);
             }
 
             // structures and technologies data
             foreach (['resources', 'facilities', 'fleet', 'defenses', 'missiles', 'tech'] as $element) {
-
                 $source = $planet;
 
                 if ($element == 'tech') {
-
-                    $source = $this->_user;
+                    $source = $this->user;
                 }
 
                 foreach ($this->getObjects()->getObjectsList($element) as $element_id) {
-
                     if (!isset($empire[$element][$this->getObjects()->getObjects($element_id)])) {
-
-                        $empire[$element][$this->getObjects()->getObjects($element_id)]['value'] = '<th width="75px">' . (string)$this->getLang()[$this->getObjects()->getObjects($element_id)] . '</th>';
+                        $empire[$element][$this->getObjects()->getObjects($element_id)]['value'] = '<th width="75px">' . (string) $this->getLang()[$this->getObjects()->getObjects($element_id)] . '</th>';
                     }
 
                     $empire[$element][$this->getObjects()->getObjects($element_id)]['value'] .= '<th width="75px">' . $this->setStructureData($planet, $source, $element, $element_id) . '</th>';
@@ -135,7 +127,7 @@ class Empire extends Controller
 
         return array_merge(
             [
-                'amount_of_planets' => count($empire_data) + 1
+                'amount_of_planets' => count($empire_data) + 1,
             ],
             $empire
         );
@@ -152,7 +144,7 @@ class Empire extends Controller
         return [
             'planet_id' => $planet['planet_id'],
             'planet_image' => $planet['planet_image'],
-            'dpath' => DPATH
+            'dpath' => DPATH,
         ];
     }
 
@@ -165,7 +157,7 @@ class Empire extends Controller
     private function setName(array $planet): array
     {
         return [
-            'planet_name' => $planet['planet_name']
+            'planet_name' => $planet['planet_name'],
         ];
     }
 
@@ -175,12 +167,12 @@ class Empire extends Controller
      * @param array $planet
      * @return array
      */
-    private function setCoords(array $planet): array 
+    private function setCoords(array $planet): array
     {
         return [
             'planet_coords' => FormatLib::prettyCoords($planet['planet_galaxy'], $planet['planet_system'], $planet['planet_planet']),
             'planet_galaxy' => $planet['planet_galaxy'],
-            'planet_system' => $planet['planet_system']
+            'planet_system' => $planet['planet_system'],
         ];
     }
 
@@ -190,11 +182,11 @@ class Empire extends Controller
      * @param array $planet
      * @return array
      */
-    private function setFields(array $planet): array 
+    private function setFields(array $planet): array
     {
         return [
             'planet_field_current' => $planet['planet_field_current'],
-            'planet_field_max' => $planet['planet_field_max']
+            'planet_field_max' => $planet['planet_field_max'],
         ];
     }
 
@@ -208,10 +200,9 @@ class Empire extends Controller
     private function setResources(array $planet, string $resource): array
     {
         if ($resource == 'energy') {
-
             return [
                 'used_energy' => (FormatLib::prettyNumber($planet['planet_energy_max'] + $planet['planet_energy_used'])),
-                'max_energy' => FormatLib::prettyNumber($planet['planet_energy_max'])
+                'max_energy' => FormatLib::prettyNumber($planet['planet_energy_max']),
             ];
         }
 
@@ -220,8 +211,8 @@ class Empire extends Controller
             'planet_type' => $planet['planet_type'],
             'planet_current_amount' => FormatLib::prettyNumber($planet['planet_' . $resource]),
             'planet_production' => (
-                FormatLib::prettyNumber($planet['planet_' . $resource .  '_perhour'] + FunctionsLib::readConfig($resource . '_basic_income'))
-            )
+                FormatLib::prettyNumber($planet['planet_' . $resource . '_perhour'] + FunctionsLib::readConfig($resource . '_basic_income'))
+            ),
         ];
     }
 
@@ -236,30 +227,32 @@ class Empire extends Controller
      */
     private function setStructureData(array $planet, array $source, string $element, int $element_id): string
     {
-        switch($element) {
+        switch ($element) {
             case 'resources':
             case 'facilities':
                 $page = DevelopmentsLib::setBuildingPage($element_id);
-            break;
+                break;
             case 'tech':
                 $page = 'research';
-            break;
+                break;
             case 'fleet':
                 $page = 'shipyard';
-            break;
+                break;
             case 'defenses':
             case 'missiles':
                 $page = 'defense';
-            break;
+                break;
             default:
                 throw new \Exception('Undefined element type "' . $element . '". Only possible: build, tech, fleet, defenses and missiles.');
-            break;
+                break;
         }
 
         $url = 'game.php?page=' . $page . '&cp=' . $planet['planet_id'] . '&re=0&planettype=' . $planet['planet_type'];
 
         return FunctionsLib::setUrl(
-            $url, '', $source[$this->getObjects()->getObjects($element_id)]
+            $url,
+            '',
+            $source[$this->getObjects()->getObjects($element_id)]
         );
     }
 }

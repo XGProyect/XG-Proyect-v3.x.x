@@ -60,9 +60,7 @@ class Sessions extends XGPCore
     }
 
     /**
-     * __destruct
-     *
-     * @return void
+     * Destructor
      */
     public function __destruct()
     {

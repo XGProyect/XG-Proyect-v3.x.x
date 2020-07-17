@@ -14,9 +14,8 @@
 namespace application\controllers\adm;
 
 use application\core\Controller;
-use application\core\Database;
-use application\libraries\adm\AdministrationLib;
-use application\libraries\FunctionsLib;
+use application\libraries\adm\AdministrationLib as Administration;
+use application\libraries\FunctionsLib as Functions;
 
 /**
  * Update Class
@@ -30,117 +29,107 @@ use application\libraries\FunctionsLib;
  */
 class Update extends Controller
 {
+    /**
+     * Current user data
+     *
+     * @var array
+     */
+    private $user;
 
-    private $_db;
-    private $langs;
-    private $current_user;
     private $system_version;
     private $db_version;
     private $demo;
     private $output = [];
 
     /**
-     * __construct()
-     * 
-     * @return void
+     * Constructor
      */
     public function __construct()
     {
         parent::__construct();
 
         // check if session is active
-        AdministrationLib::checkSession();
+        Administration::checkSession();
 
-        $this->_db = new Database();
-        $this->langs = parent::$lang;
-        $this->current_user = parent::$users->getUserData();
+        // load Model
+        parent::loadModel('adm/update');
+
+        // load Language
+        parent::loadLang(['adm/global', 'adm/update']);
+
+        // set data
+        $this->user = $this->getUserData();
 
         // Check if the user is allowed to access
-        if (AdministrationLib::haveAccess(
-                $this->current_user['user_authlevel']
-            ) && $this->current_user['user_authlevel'] == 3) {
-
-            $this->buildPage();
-        } else {
-
-            die(AdministrationLib::noAccessMessage($this->langs['ge_no_permissions']));
+        if ($this->user['user_authlevel'] != 3) {
+            Administration::noAccessMessage($this->langs->line('no_permissions'));
         }
+
+        // build the page
+        $this->buildPage();
     }
 
     /**
-     * __destruct
-     * 
-     * @return void
-     */
-    public function __destruct()
-    {
-        if (isset($this->_db)) {
-            
-            $this->_db->closeConnection();
-        }
-    }
-
-    /**
-     * build_page
+     * Build the page
      *
      * @return void
      */
     private function buildPage()
     {
-        $parse = $this->langs;
+        $parse = $this->langs->language;
         $continue = true;
 
         $this->system_version = SYSTEM_VERSION;
-        $this->db_version = FunctionsLib::readConfig('version');
+        $this->db_version = Functions::readConfig('version');
 
         if ($this->system_version == $this->db_version) {
-            die(AdministrationLib::noAccessMessage($this->langs['up_no_update_required']));
+            die(Administration::noAccessMessage($this->langs->line('up_no_update_required')));
         }
 
-        if ($_POST && isset($_POST['send'])) {
+        $parse['alert'] = '';
+        $parse['up_sub_title'] = sprintf($this->langs->line('up_sub_title'), $this->db_version, $this->system_version);
 
+        if ($_POST && isset($_POST['send'])) {
             $this->demo = (isset($_POST['demo_mode']) && $_POST['demo_mode'] == 'on') ? true : false;
 
             if (!$this->checkVersion()) {
-
-                $alerts = $this->langs['up_no_version_file'];
+                $alerts = $this->langs->line('up_no_version_file');
                 $continue = false;
             }
 
             if ($continue) {
-
                 $this->startUpdate();
 
-                $parse['alert'] = AdministrationLib::saveMessage('ok', $this->langs['up_success']);
+                $parse['alert'] = Administration::saveMessage('ok', $this->langs->line('up_success'));
 
                 if ($this->demo) {
-
                     $parse['result'] = print_r($this->output, true);
 
-                    parent::$page->display(
-                        parent::$page->parseTemplate(
-                            parent::$page->getTemplate('adm/update_result_view'), $parse
+                    parent::$page->displayAdmin(
+                        $this->getTemplate()->set(
+                            'adm/update_result_view',
+                            $parse
                         )
                     );
                 } else {
-
-                    die(AdministrationLib::noAccessMessage($this->langs['up_success']));
+                    die(Administration::noAccessMessage($this->langs->line('up_success')));
                 }
             } else {
-                $parse['alert'] = AdministrationLib::saveMessage('warning', $alerts);
+                $parse['alert'] = Administration::saveMessage('warning', $alerts);
             }
         }
 
-        $parse['up_sub_title'] = sprintf($this->langs['up_sub_title'], $this->db_version, $this->system_version);
-
-        parent::$page->display(
-            parent::$page->parseTemplate(parent::$page->getTemplate('adm/update_view'), $parse)
+        parent::$page->displayAdmin(
+            $this->getTemplate()->set(
+                'adm/update_view',
+                $parse
+            )
         );
     }
 
     /**
      * checkVersion
-     * 
+     *
      * @return boolean
      */
     private function checkVersion()
@@ -152,7 +141,7 @@ class Update extends Controller
 
     /**
      * startUpdate
-     * 
+     *
      * @return void
      */
     private function startUpdate()
@@ -163,16 +152,14 @@ class Update extends Controller
         $db_version = strtr($this->db_version, ['v' => '', '.' => '']);
 
         while (($update_dir = readdir($updates_dir)) !== false) {
-
             if (!in_array($update_dir, $exceptions)) {
-
                 $file_version = strtr(
-                    $update_dir, ['update_' => '', '.php' => '']
+                    $update_dir,
+                    ['update_' => '', '.php' => '']
                 );
 
                 // ignore previous versions, we only want the newer ones
                 if ($db_version >= $file_version) {
-
                     continue;
                 }
 
@@ -188,9 +175,7 @@ class Update extends Controller
 
         // Do we have something? Go...
         if (count($files_to_read) > 0) {
-
             foreach ($files_to_read as $version) {
-
                 $this->executeFile($version);
             }
         }
@@ -198,9 +183,9 @@ class Update extends Controller
 
     /**
      * executeFile
-     * 
+     *
      * @param string $version Version number
-     * 
+     *
      * @return void
      */
     private function executeFile($version)
@@ -213,14 +198,10 @@ class Update extends Controller
 
         // Check if there was something
         if (isset($queries) && count($queries) > 0) {
-
             foreach ($queries as $query) {
-
                 if (!$this->demo) {
-
-                    $this->output[] = $this->_db->query($query);
+                    $this->output[] = $this->Update_Model->runQuery($query);
                 } else {
-
                     $this->output[] = $query;
                 }
             }

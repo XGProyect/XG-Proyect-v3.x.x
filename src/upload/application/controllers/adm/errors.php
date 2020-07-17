@@ -1,4 +1,7 @@
 <?php
+
+declare (strict_types = 1);
+
 /**
  * Errors Controller
  *
@@ -15,7 +18,6 @@ namespace application\controllers\adm;
 
 use application\core\Controller;
 use application\libraries\adm\AdministrationLib;
-use application\libraries\FunctionsLib;
 
 /**
  * Errors Class
@@ -29,23 +31,15 @@ use application\libraries\FunctionsLib;
  */
 class Errors extends Controller
 {
-
     /**
+     * Current user data
      *
-     * @var array Language data
+     * @var array
      */
-    private $_lang;
-
-    /**
-     *
-     * @var array User data
-     */
-    private $_user;
+    private $user;
 
     /**
      * Constructor
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -54,27 +48,30 @@ class Errors extends Controller
         // check if session is active
         AdministrationLib::checkSession();
 
-        $this->_lang = $this->getLang();
-        $this->_user = $this->getUserData();
+        // load Language
+        parent::loadLang(['adm/global', 'adm/errors']);
+
+        // set data
+        $this->user = $this->getUserData();
 
         // Check if the user is allowed to access
-        if (AdministrationLib::haveAccess($this->_user['user_authlevel']) && AdministrationLib::authorization($this->_user['user_authlevel'], 'config_game') == 1) {
-            // time to do something
-            $this->runAction();
-
-            // build the page
-            $this->buildPage();
-        } else {
-            die(AdministrationLib::noAccessMessage($this->_lang['ge_no_permissions']));
+        if (AdministrationLib::authorization($this->user['user_authlevel'], 'observation') != 1) {
+            AdministrationLib::noAccessMessage($this->langs->line('no_permissions'));
         }
+
+        // time to do something
+        $this->runAction();
+
+        // build the page
+        $this->buildPage();
     }
 
     /**
-     * Process deleteall request
+     * Run an action
      *
      * @return void
      */
-    private function runAction()
+    private function runAction(): void
     {
         $delete_all = filter_input(INPUT_GET, 'deleteall', FILTER_DEFAULT);
 
@@ -86,8 +83,6 @@ class Errors extends Controller
                     unlink($file_name);
                 }
             }
-
-            FunctionsLib::redirect('admin.php?page=errors');
         }
     }
 
@@ -96,17 +91,16 @@ class Errors extends Controller
      *
      * @return void
      */
-    private function buildPage()
+    private function buildPage(): void
     {
-        $parse = $this->_lang;
-        $list_of_errors = $this->processErrorsLogs();
-
-        $parse['alert'] = '';
-        $parse['errors_list'] = $list_of_errors;
-        $parse['errors_list_resume'] = count($list_of_errors) . $this->_lang['er_errors'];
-
-        parent::$page->display(
-            $this->getTemplate()->set('adm/errors_view', $parse)
+        parent::$page->displayAdmin(
+            $this->getTemplate()->set(
+                'adm/errors_view',
+                array_merge(
+                    $this->langs->language,
+                    $this->processErrorsLogs()
+                )
+            )
         );
     }
 
@@ -115,17 +109,20 @@ class Errors extends Controller
      *
      * @return array
      */
-    private function processErrorsLogs()
+    private function processErrorsLogs(): array
     {
         // list of log files
         $files = $this->getListOfLogFiles();
         $list_of_errors = [];
+        $error_count = 0;
 
         if ($files != '') {
             foreach ($files as $file_name) {
                 $contents = file_get_contents($file_name);
 
                 if ($contents) {
+                    $error_count++;
+
                     $error_columns = explode('|', $contents);
 
                     $list_of_errors[] = [
@@ -135,12 +132,16 @@ class Errors extends Controller
                         'error_message' => $error_columns[4],
                         'error_trace' => $error_columns[5],
                         'error_datetime' => $error_columns[6],
+                        'alert_type' => ($error_columns[3] == 1 ? 'danger' : 'warning'),
                     ];
                 }
             }
         }
 
-        return $list_of_errors;
+        return [
+            'errors_list' => $list_of_errors,
+            'errors_list_resume' => strtr($this->langs->line('er_errors'), ['%s' => $error_count]),
+        ];
     }
 
     /**
@@ -148,7 +149,7 @@ class Errors extends Controller
      *
      * @return array
      */
-    private function getListOfLogFiles()
+    private function getListOfLogFiles(): array
     {
         $logs_path = XGP_ROOT . LOGS_PATH;
 

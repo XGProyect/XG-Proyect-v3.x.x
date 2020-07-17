@@ -68,8 +68,6 @@ class Fleet2 extends Controller
 
     /**
      * Constructor
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -86,8 +84,6 @@ class Fleet2 extends Controller
 
         // set data
         $this->_user = $this->getUserData();
-
-        // set planet data
         $this->_planet = $this->getPlanetData();
 
         // init a new fleets object
@@ -135,7 +131,9 @@ class Fleet2 extends Controller
             $this->getTemplate()->set(
                 'fleet/fleet2_view',
                 array_merge(
-                    $this->getLang(), $page, $this->setInputsData()
+                    $this->getLang(),
+                    $page,
+                    $this->setInputsData()
                 )
             )
         );
