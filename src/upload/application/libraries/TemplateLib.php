@@ -13,6 +13,7 @@
  */
 namespace application\libraries;
 
+use application\core\Template;
 use application\libraries\ProductionLib as Production;
 use application\libraries\TimingLibrary as Timing;
 
@@ -49,6 +50,18 @@ class TemplateLib
         $this->current_planet = $users->getPlanetData();
         $this->langs = $lang;
         $this->current_year = date('Y');
+
+        $this->setTemplate();
+    }
+
+    /**
+     * Set template object
+     *
+     * @return void
+     */
+    private function setTemplate(): void
+    {
+        $this->template = new Template();
     }
 
     /**
@@ -107,12 +120,15 @@ class TemplateLib
         // Footer
         if (!defined('IN_INSTALL') && !defined('IN_LOGIN')) {
             // Is inside the game
-            $page .= $this->parseTemplate($this->getTemplate('general/footer'), '');
+            $page .= $this->template->set(
+                'general/footer',
+                []
+            );
         }
 
         if (defined('IN_INSTALL') && !defined('IN_MESSAGE')) {
-            $page .= $this->parseTemplate(
-                $this->getTemplate('install/simple_footer'),
+            $page .= $this->template->set(
+                'general/simple_footer',
                 ['year' => $this->current_year]
             );
         }
@@ -161,8 +177,8 @@ class TemplateLib
      */
     private function adminPage(string $page, array $parse, bool $full): string
     {
-        return $this->parseTemplate(
-            $this->getTemplate(($full ? 'adm/admin_page_view' : 'adm/simple_admin_page_view')),
+        return $this->template->set(
+            ($full ? 'adm/admin_page_view' : 'adm/simple_admin_page_view'),
             array_merge($this->langs, $parse, ['page_content' => $page])
         );
     }
@@ -174,8 +190,8 @@ class TemplateLib
      */
     private function adminSimpleHeader(): string
     {
-        return $this->parseTemplate(
-            $this->getTemplate('adm/simple_header'),
+        return $this->template->set(
+            'adm/simple_header',
             [
                 'title' => 'Admin CP',
                 'admin_public_path' => ADMIN_PUBLIC_PATH,
@@ -253,11 +269,24 @@ class TemplateLib
         $parse['menu_block_4'] = $parse_block[4];
         $parse['menu_block_5'] = $parse_block[5];
         $parse['menu_block_6'] = $parse_block[6];
+        $parse['active_1'] = '';
+        $parse['active_1_show'] = '';
+        $parse['active_2'] = '';
+        $parse['active_2_show'] = '';
+        $parse['active_3'] = '';
+        $parse['active_3_show'] = '';
+        $parse['active_4'] = '';
+        $parse['active_4_show'] = '';
+        $parse['active_5'] = '';
+        $parse['active_5_show'] = '';
+        $parse['active_6'] = '';
+        $parse['active_6_show'] = '';
         $parse['active_' . $active_block] = ' active';
         $parse['active_' . $active_block . '_show'] = ' show';
 
-        return $this->parseTemplate(
-            $this->getTemplate('adm/sidebar_view'), $parse
+        return $this->template->set(
+            'adm/sidebar_view',
+            $parse
         );
     }
 
@@ -268,8 +297,8 @@ class TemplateLib
      */
     private function adminNavigation(): string
     {
-        return $this->parseTemplate(
-            $this->getTemplate('adm/navigation_view'),
+        return $this->template->set(
+            'adm/navigation_view',
             array_merge(
                 $this->langs,
                 [
@@ -287,8 +316,8 @@ class TemplateLib
      */
     private function adminFooter(): string
     {
-        return $this->parseTemplate(
-            $this->getTemplate('adm/footer_view'),
+        return $this->template->set(
+            'adm/footer_view',
             [
                 'version' => SYSTEM_VERSION,
                 'year' => $this->current_year,
@@ -303,8 +332,8 @@ class TemplateLib
      */
     private function adminSimpleFooter(): string
     {
-        return $this->parseTemplate(
-            $this->getTemplate('adm/simple_footer'),
+        return $this->template->set(
+            'adm/simple_footer',
             [
                 'admin_public_path' => ADMIN_PUBLIC_PATH,
                 'version' => SYSTEM_VERSION,
@@ -352,7 +381,7 @@ class TemplateLib
         } else {
             // Throw Exception
             die('Template not found or empty: <strong>' . $template_name . '</strong><br />
-                Location: <strong>' . $route . '</strong>');
+    Location: <strong>' . $route . '</strong>');
         }
     }
 
@@ -401,7 +430,7 @@ class TemplateLib
             // not found
             throw new \Exception(
                 'Template not found or empty: <strong>' . $template_name . '</strong><br />
-                Location: <strong>' . $route . '</strong>'
+    Location: <strong>' . $route . '</strong>'
             );
         } catch (\Exception $e) {
             // Throw Exception
@@ -416,11 +445,14 @@ class TemplateLib
      */
     private function installHeader()
     {
-        $parse['title'] = 'Install';
-        $parse['js_path'] = '../js/';
-        $parse['css_path'] = '../css/';
-
-        return $this->parseTemplate($this->getTemplate('install/simple_header'), $parse);
+        return $this->template->set(
+            'install/simple_header',
+            [
+                'title' => 'Install',
+                'js_path' => '../js/',
+                'css_path' => '../css/',
+            ]
+        );
     }
 
     /**
@@ -463,7 +495,10 @@ class TemplateLib
         $parse['menu_items'] = $items;
         $parse['language_select'] = FunctionsLib::getLanguages(FunctionsLib::getCurrentLanguage());
 
-        return $this->parseTemplate($this->getTemplate('install/topnav_view'), $parse);
+        return $this->template->set(
+            'install/topnav_view',
+            $parse
+        );
     }
 
     /**
@@ -494,7 +529,10 @@ class TemplateLib
         $parse = $this->langs;
         $parse['menu_items'] = $items;
 
-        return $this->parseTemplate($this->getTemplate('install/menu_view'), $parse);
+        return $this->template->set(
+            'install/menu_view',
+            $parse
+        );
     }
 
     /**
@@ -513,7 +551,10 @@ class TemplateLib
         $parse['js_path'] = JS_PATH;
         $parse['meta_tags'] = ($metatags) ? $metatags : "";
 
-        return $this->parseTemplate($this->getTemplate('general/simple_header'), $parse);
+        return $this->template->set(
+            'general/simple_header',
+            $parse
+        );
     }
 
     /**
@@ -536,7 +577,10 @@ class TemplateLib
             $parse['message'] = $this->langs['tn_vacation_mode'] . Timing::formatExtendedDate($this->current_user['preference_vacation_mode']);
             $parse['jump_line'] = '<br/>';
 
-            $parse['show_umod_notice'] = $this->parseTemplate($this->getTemplate('general/notices_view'), $parse);
+            $parse['show_umod_notice'] = $this->template->set(
+                'general/notices_view',
+                $parse
+            );
         }
 
         if ($this->current_user['preference_delete_mode'] > 0) {
@@ -545,7 +589,10 @@ class TemplateLib
             $parse['message'] = $this->langs['tn_delete_mode'] . Timing::formatExtendedDate($this->current_user['preference_delete_mode'] + (60 * 60 * 24 * 7));
             $parse['jump_line'] = '';
 
-            $parse['show_umod_notice'] = $this->parseTemplate($this->getTemplate('general/notices_view'), $parse);
+            $parse['show_umod_notice'] = $this->template->set(
+                'general/notices_view',
+                $parse
+            );
         }
 
         // RESOURCES FORMAT
@@ -595,7 +642,10 @@ class TemplateLib
         $parse['img_geologist'] = $geologist;
         $parse['img_technocrat'] = $technocrat;
 
-        return $this->parseTemplate($this->getTemplate('general/topnav'), $parse);
+        return $this->template->set(
+            'general/topnav',
+            $parse
+        );
     }
 
     /**
@@ -609,7 +659,6 @@ class TemplateLib
         $menu_block2 = '';
         $menu_block3 = '';
         $modules_array = explode(';', FunctionsLib::readConfig('modules'));
-        $sub_template = $this->getTemplate('general/left_menu_row_view');
         $tota_rank = $this->current_user['user_statistic_total_rank'] == '' ?
         $this->current_planet['stats_users'] : $this->current_user['user_statistic_total_rank'];
         $pages = [
@@ -678,17 +727,26 @@ class TemplateLib
             // MENU BLOCK [1 - 2 - 3]
             switch ($data[5]) {
                 case '1':
-                    $menu_block1 .= $this->parseTemplate($sub_template, $parse);
+                    $menu_block1 .= $this->template->set(
+                        'general/left_menu_row_view',
+                        $parse
+                    );
 
                     break;
 
                 case '2':
-                    $menu_block2 .= $this->parseTemplate($sub_template, $parse);
+                    $menu_block2 .= $this->template->set(
+                        'general/left_menu_row_view',
+                        $parse
+                    );
 
                     break;
 
                 case '3':
-                    $menu_block3 .= $this->parseTemplate($sub_template, $parse);
+                    $menu_block3 .= $this->template->set(
+                        'general/left_menu_row_view',
+                        $parse
+                    );
 
                     break;
             }
@@ -706,7 +764,10 @@ class TemplateLib
             "<tr><td><div align=\"center\"><a href=\"admin.php\" target=\"_blank\">
             <font color=\"lime\">" . $this->langs['lm_administration'] . "</font></a></div></td></tr>" : "");
 
-        return $this->parseTemplate($this->getTemplate('general/left_menu_view'), $parse);
+        return $this->template->set(
+            'general/left_menu_view',
+            $parse
+        );
     }
 
     /**
