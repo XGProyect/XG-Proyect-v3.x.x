@@ -25,3 +25,9 @@ data/xgp.sql
 #
 *.code-workspace
 nbproject/
+
+#
+# composer
+#
+vendor
+composer.lock
