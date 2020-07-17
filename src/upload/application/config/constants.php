@@ -34,7 +34,7 @@ define('DEBUG_MODE', false);
 // LOG DB AND PHP ERRORS
 define('LOG_ERRORS', true);
 
-// ERROR LOGS MAIL
+// ERROR LOGS MAIL - If you share your errors with XG Proyect we will be able to improve the project faster.
 define('ERROR_LOGS_MAIL', 'errors@xgproyect.org');
 
 /**
