@@ -33,7 +33,6 @@ class Reset extends Controller
 
     private $_current_user;
     private $_creator;
-    private $_lang;
 
     /**
      * __construct()
@@ -45,8 +44,10 @@ class Reset extends Controller
         // check if session is active
         AdministrationLib::checkSession();
 
+        // load Language
+        parent::loadLang(['adm/global', 'adm/reset']);
+
         $this->_db = new Database();
-        $this->_lang = parent::$lang;
         $this->_current_user = parent::$users->getUserData();
 
         // Check if the user is allowed to access
@@ -56,7 +57,7 @@ class Reset extends Controller
 
             $this->build_page();
         } else {
-            die(AdministrationLib::noAccessMessage($this->_lang['ge_no_permissions']));
+            die(AdministrationLib::noAccessMessage($this->langs->line('ge_no_permissions')));
         }
     }
 
@@ -179,7 +180,7 @@ class Reset extends Controller
      */
     private function build_page()
     {
-        $parse = $this->_lang;
+        $parse = $this->langs->language;
 
         if ($_POST) {
             if (isset($_POST['resetall']) && $_POST['resetall'] != 'on') {
@@ -372,7 +373,7 @@ class Reset extends Controller
                 $this->reset_universe();
             }
 
-            $parse['alert'] = AdministrationLib::saveMessage('ok', $this->_lang['re_reset_excess']);
+            $parse['alert'] = AdministrationLib::saveMessage('ok', $this->langs->line('re_reset_excess'));
         }
 
         parent::$page->displayAdmin(

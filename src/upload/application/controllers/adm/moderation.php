@@ -31,7 +31,6 @@ class Moderation extends Controller
 {
 
     private $_current_user;
-    private $_lang;
 
     /**
      * __construct()
@@ -43,14 +42,16 @@ class Moderation extends Controller
         // check if session is active
         AdministrationLib::checkSession();
 
-        $this->_lang = parent::$lang;
+        // load Language
+        parent::loadLang(['adm/global', 'adm/moderation']);
+
         $this->_current_user = parent::$users->getUserData();
 
         // Check if the user is allowed to access
         if (AdministrationLib::haveAccess($this->_current_user['user_authlevel']) && $this->_current_user['user_authlevel'] == 3) {
             $this->build_page();
         } else {
-            die(AdministrationLib::noAccessMessage($this->_lang['ge_no_permissions']));
+            die(AdministrationLib::noAccessMessage($this->langs->line('ge_no_permissions')));
         }
     }
 
@@ -61,7 +62,7 @@ class Moderation extends Controller
      */
     private function build_page()
     {
-        $parse = $this->_lang;
+        $parse = $this->langs->language;
         $parse['alert'] = '';
 
         if (isset($_POST['mode']) && $_POST['mode']) {
@@ -83,7 +84,7 @@ class Moderation extends Controller
 
             FunctionsLib::updateConfig('moderation', $QueryEdit);
 
-            $parse['alert'] = AdministrationLib::saveMessage('ok', $this->_lang['mod_all_ok_message']);
+            $parse['alert'] = AdministrationLib::saveMessage('ok', $this->langs->line('mod_all_ok_message'));
         }
 
         $QueryModeration = FunctionsLib::readConfig('moderation');
@@ -137,9 +138,9 @@ class Moderation extends Controller
             $parse['log_a'] = 'checked = "checked"';
         }
 
-        $parse['mods'] = $this->_lang['user_level'][1];
-        $parse['oper'] = $this->_lang['user_level'][2];
-        $parse['adm'] = $this->_lang['user_level'][3];
+        $parse['mods'] = $this->langs->language['user_level'][1];
+        $parse['oper'] = $this->langs->language['user_level'][2];
+        $parse['adm'] = $this->langs->language['user_level'][3];
 
         parent::$page->displayAdmin(
             $this->getTemplate()->set('adm/moderation_view', $parse)

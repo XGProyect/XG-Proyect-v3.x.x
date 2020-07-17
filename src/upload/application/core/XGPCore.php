@@ -133,7 +133,7 @@ abstract class XGPCore
     protected function loadLang($language_file): void
     {
         try {
-            // require email library
+            // require langugage library
             $ci_lang_path = XGP_ROOT . SYSTEM_PATH . 'ci3_custom' . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'Lang.php';
 
             if (!file_exists($ci_lang_path)) {
