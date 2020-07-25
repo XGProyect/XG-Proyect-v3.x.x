@@ -164,17 +164,9 @@ class Galaxy extends Controller
         $planet = $setted_position['planet'];
         $psystem = $setted_position['psystem'];
 
-        // START FIX BY alivan
-        if ($mode != 2) {
-            if (($this->planet['planet_system'] != ($psystem - 1)) && ($this->planet['planet_system'] != isset($_GET['system']) or $this->planet['planet_galaxy'] != isset($_GET['galaxy'])) && ($mode != 0) && ($this->planet['planet_deuterium'] < 10)) {
-                die(FunctionsLib::message($this->langs->line('gl_no_deuterium_to_view_galaxy'), "game.php?page=galaxy&mode=0", 2));
-            } elseif (($this->planet['planet_system'] != ($psystem - 1)) && ($this->planet['planet_system'] != isset($_GET['system']) or $this->planet['planet_galaxy'] != isset($_GET['galaxy'])) && ($mode != 0)) {
-                $this->reduceDeuterium();
-            }
-        } elseif ($mode == 2 && $this->planet['defense_interplanetary_missile'] < 1) {
+        if ($mode == 2 && $this->planet['defense_interplanetary_missile'] < 1) {
             die(FunctionsLib::message($this->langs->line('gl_no_missiles'), "game.php?page=galaxy&mode=0", 2));
         }
-        // END FIX BY alivan
 
         $this->galaxy = $this->Galaxy_Model->getGalaxyDataByGalaxyAndSystem($this->_galaxy, $this->_system);
 
@@ -750,20 +742,6 @@ class Galaxy extends Controller
         }
 
         die($ResultMessage);
-    }
-
-    /**
-     * method reduce_deuterium
-     * param
-     * return reduce deuterium exploring the galaxy
-     */
-    private function reduceDeuterium()
-    {
-        $this->_db->query(
-            "UPDATE " . PLANETS . " SET
-            `planet_deuterium` = `planet_deuterium` -  10
-            WHERE `planet_id` = '" . $this->planet['planet_id'] . "' LIMIT 1"
-        );
     }
 }
 

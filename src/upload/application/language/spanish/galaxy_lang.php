@@ -1,7 +1,6 @@
 <?php
 $lang = [
     'gl_no_access_vm_on' => '¡No puedes utilizar la vista de galaxia mientras estás de vacaciones o tu cuenta no está validada!',
-    'gl_no_deuterium_to_view_galaxy' => '¡No hay suficiente deuterio!',
     'gl_legend' => 'Leyenda',
     'gl_strong_player' => 'Jugador fuerte',
     'gl_week_player' => 'Jugador débil',

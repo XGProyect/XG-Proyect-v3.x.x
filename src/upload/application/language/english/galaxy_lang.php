@@ -1,7 +1,6 @@
 <?php
 $lang = [
     'gl_no_access_vm_on' => 'You cannot use the galaxy view whilst in vacation mode or when your account has not been validated!',
-    'gl_no_deuterium_to_view_galaxy' => 'You don\'t have enough deuterium!',
     'gl_legend' => 'Legend',
     'gl_strong_player' => 'stronger player',
     'gl_week_player' => 'weaker player (newbie)',
