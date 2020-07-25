@@ -206,7 +206,15 @@ class Phalanx extends Controller
         $parse['phl_pl_place'] = $Planet;
         $parse['phl_pl_name'] = $TargetName;
 
-        parent::$page->display(parent::$page->parseTemplate(parent::$page->getTemplate('galaxy/phalanx_body'), $parse), false, '', false);
+        parent::$page->display(
+            $this->getTemplate()->set(
+                'galaxy/phalanx_body',
+                $parse
+            ),
+            false,
+            '',
+            false
+        );
     }
 }
 

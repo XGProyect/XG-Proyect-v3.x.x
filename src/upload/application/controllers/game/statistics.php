@@ -101,7 +101,11 @@ class Statistics extends Controller
 														FROM " . ALLIANCE . ";");
 
             $parse['range'] = $this->build_range_list($MaxAllys['count'], $range);
-            $parse['stat_header'] = parent::$page->parseTemplate(parent::$page->getTemplate('stat/stat_alliancetable_header'), $parse);
+            $parse['stat_header'] = $this->getTemplate()->set(
+                'stat/stat_alliancetable_header',
+                $parse
+            );
+
             $start = floor($range / 100 % 100) * 100;
             $query = $this->_db->query(
                 'SELECT s.*,
@@ -120,7 +124,6 @@ class Statistics extends Controller
 
             $parse['stat_date'] = Timing::formatExtendedDate(FunctionsLib::readConfig('stat_last_update'));
             $parse['stat_values'] = "";
-            $StatAllianceTableTPL = parent::$page->getTemplate('stat/stat_alliancetable');
 
             while ($StatRow = $this->_db->fetchAssoc($query)) {
                 $parse['ally_rank'] = $start;
@@ -132,12 +135,19 @@ class Statistics extends Controller
                 $parse['ally_action'] = $StatRow['alliance_request_notallow'] == 0 ? '<a href="game.php?page=alliance&mode=apply&allyid=' . $StatRow['alliance_id'] . '"><img src="' . DPATH . 'img/m.gif" border="0" title="' . $this->_lang['st_ally_request'] . '" /></a>' : '';
                 $parse['ally_points'] = FormatLib::prettyNumber($StatRow['alliance_statistic_' . $Order]);
                 $parse['ally_members_points'] = FormatLib::prettyNumber(floor($StatRow['alliance_statistic_' . $Order] / $StatRow['ally_members']));
-                $parse['stat_values'] .= parent::$page->parseTemplate($StatAllianceTableTPL, $parse);
+                $parse['stat_values'] .= $this->getTemplate()->set(
+                    'stat/stat_alliancetable',
+                    $parse
+                );
+
                 $start++;
             }
         } else {
             $parse['range'] = $this->build_range_list($this->_current_planet['stats_users'], $range);
-            $parse['stat_header'] = parent::$page->parseTemplate(parent::$page->getTemplate('stat/stat_playertable_header'), $parse);
+            $parse['stat_header'] = $this->getTemplate()->set(
+                'stat/stat_playertable_header',
+                $parse
+            );
 
             $start = floor($range / 100 % 100) * 100;
             $query = $this->_db->query(
@@ -158,7 +168,6 @@ class Statistics extends Controller
             $parse['stat_date'] = Timing::formatExtendedDate(FunctionsLib::readConfig('stat_last_update'));
             $parse['stat_values'] = "";
             $previusId = 0;
-            $StatPlayerTableTPL = parent::$page->getTemplate('stat/stat_playertable');
 
             while ($StatRow = $this->_db->fetchAssoc($query)) {
                 $parse['player_rank'] = $start;
@@ -188,12 +197,20 @@ class Statistics extends Controller
 
                 $parse['player_rankplus'] = $this->rank_difference($ranking);
                 $parse['player_points'] = FormatLib::prettyNumber($StatRow['user_statistic_' . $Order]);
-                $parse['stat_values'] .= parent::$page->parseTemplate($StatPlayerTableTPL, $parse);
+                $parse['stat_values'] .= $this->getTemplate()->set(
+                    'stat/stat_playertable',
+                    $parse
+                );
                 $start++;
             }
         }
 
-        parent::$page->display(parent::$page->parseTemplate(parent::$page->getTemplate('stat/stat_body'), $parse));
+        parent::$page->display(
+            $this->getTemplate()->set(
+                'stat/stat_body',
+                $parse
+            )
+        );
     }
 
     /**

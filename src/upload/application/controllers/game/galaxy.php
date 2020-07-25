@@ -184,7 +184,10 @@ class Galaxy extends Controller
         $parse['current_system'] = $this->planet['planet_system'];
         $parse['current_planet'] = $this->planet['planet_planet'];
         $parse['planet_type'] = $this->planet['planet_type'];
-        $parse['mip'] = ($mode == 2) ? parent::$page->parseTemplate(parent::$page->getTemplate('galaxy/galaxy_missile_selector'), $parse) : " ";
+        $parse['mip'] = ($mode == 2) ? $this->getTemplate()->set(
+            'galaxy/galaxy_missile_selector',
+            $parse
+        ) : ' ';
 
         parent::$page->display(
             $this->getTemplate()->set(

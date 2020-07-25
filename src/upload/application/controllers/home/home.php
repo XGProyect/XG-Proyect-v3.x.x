@@ -139,7 +139,13 @@ class Home extends Controller
             }
 
             parent::$page->display(
-                parent::$page->parseTemplate(parent::$page->getTemplate('home/index_body'), $parse), false, '', false
+                $this->getTemplate()->set(
+                    'home/index_body',
+                    $parse
+                ),
+                false,
+                '',
+                false
             );
         }
     }

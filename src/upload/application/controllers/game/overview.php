@@ -120,7 +120,12 @@ class Overview extends Controller
         $parse['user_rank'] = $this->get_user_rank();
 
         // DISPLAY THE RESULT PAGE
-        parent::$page->display(parent::$page->parseTemplate(parent::$page->getTemplate('overview/overview_body'), $parse));
+        parent::$page->display(
+            $this->getTemplate()->set(
+                'overview/overview_body',
+                $parse
+            )
+        );
     }
 
     /**
@@ -210,7 +215,6 @@ class Overview extends Controller
         $own_fleets = $this->Overview_Model->getOwnFleets($this->_current_user['user_id']);
 
         foreach ($own_fleets as $fleets) {
-
             ######################################
             #
             # own fleets
@@ -339,11 +343,9 @@ class Overview extends Controller
         unset($own_fleets);
 
         if (count($fleet_row) > 0 && $fleet_row != '') {
-
             ksort($fleet_row);
 
             foreach ($fleet_row as $time => $content) {
-
                 $fleet .= $content . "\n";
             }
 

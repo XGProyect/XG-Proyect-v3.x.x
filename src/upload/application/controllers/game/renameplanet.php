@@ -82,10 +82,10 @@ class Renameplanet extends Controller
         $parse['galaxy_planet'] = $this->_current_planet['planet_planet'];
 
         // DEFAULT VIEW
-        $current_view = parent::$page->getTemplate('renameplanet/renameplanet_view');
+        $current_view = 'renameplanet/renameplanet_view';
 
         // CHANGE THE ACTION
-        switch (( isset($_POST['action']) ? $_POST['action'] : NULL)) {
+        switch ((isset($_POST['action']) ? $_POST['action'] : null)) {
             case $this->_lang['ov_planet_rename_action']:
 
                 $this->rename_planet($_POST['newname']);
@@ -95,7 +95,7 @@ class Renameplanet extends Controller
             case $this->_lang['ov_abandon_planet']:
 
                 // DELETE VIEW
-                $current_view = parent::$page->getTemplate('renameplanet/renameplanet_delete_view');
+                $current_view = 'renameplanet/renameplanet_delete_view';
 
                 break;
         } // switch
@@ -105,7 +105,12 @@ class Renameplanet extends Controller
         }
 
         // SET THE VIEW
-        parent::$page->display(parent::$page->parseTemplate($current_view, $parse));
+        parent::$page->display(
+            $this->getTemplate()->set(
+                $current_view,
+                $parse
+            )
+        );
     }
 
     /**
@@ -139,16 +144,18 @@ class Renameplanet extends Controller
     {
         $own_fleet = 0;
         $enemy_fleet = 0;
-        $fleets_incoming = $this->_db->query("SELECT *
-														FROM " . FLEETS . "
-														WHERE ( fleet_owner = '" . intval($this->_current_user['user_id']) . "' AND
-																fleet_start_galaxy='" . intval($this->_current_planet['planet_galaxy']) . "' AND
-																fleet_start_system='" . intval($this->_current_planet['planet_system']) . "' AND
-																fleet_start_planet='" . intval($this->_current_planet['planet_planet']) . "') OR
-															  ( fleet_target_owner = '" . intval($this->_current_user['user_id']) . "' AND
-																fleet_end_galaxy='" . intval($this->_current_planet['planet_galaxy']) . "' AND
-																fleet_end_system='" . intval($this->_current_planet['planet_system']) . "' AND
-																fleet_end_planet='" . intval($this->_current_planet['planet_planet']) . "')");
+        $fleets_incoming = $this->_db->query(
+            "SELECT *
+            FROM " . FLEETS . "
+            WHERE ( fleet_owner = '" . intval($this->_current_user['user_id']) . "' AND
+                    fleet_start_galaxy='" . intval($this->_current_planet['planet_galaxy']) . "' AND
+                    fleet_start_system='" . intval($this->_current_planet['planet_system']) . "' AND
+                    fleet_start_planet='" . intval($this->_current_planet['planet_planet']) . "') OR
+                    ( fleet_target_owner = '" . intval($this->_current_user['user_id']) . "' AND
+                    fleet_end_galaxy='" . intval($this->_current_planet['planet_galaxy']) . "' AND
+                    fleet_end_system='" . intval($this->_current_planet['planet_system']) . "' AND
+                    fleet_end_planet='" . intval($this->_current_planet['planet_planet']) . "')"
+        );
 
         while ($fleet = $this->_db->fetchArray($fleets_incoming)) {
             $own_fleet = $fleet['fleet_owner'];
@@ -163,7 +170,7 @@ class Renameplanet extends Controller
 
         if ($own_fleet > 0) {
             FunctionsLib::message($this->_lang['ov_abandon_planet_not_possible'], 'game.php?page=renameplanet');
-        } elseif (( ( $enemy_fleet > 0 ) && ( $mess < 1 ) ) && $end_type != 2) {
+        } elseif ((($enemy_fleet > 0) && ($mess < 1)) && $end_type != 2) {
             FunctionsLib::message($this->_lang['ov_abandon_planet_not_possible'], 'game.php?page=renameplanet');
         } else {
 
@@ -192,7 +199,6 @@ class Renameplanet extends Controller
                                         u.`user_id` = '" . $this->_current_user['user_id'] . "';"
                     );
                 }
-
 
                 FunctionsLib::message($this->_lang['ov_planet_abandoned'], 'game.php?page=overview');
             } elseif ($this->_current_user['user_home_planet_id'] == $this->_current_user['user_current_planet']) {

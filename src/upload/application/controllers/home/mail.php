@@ -73,7 +73,7 @@ class Mail extends Controller
         $parse['lp_send_pwd_title'] = strtr($this->langs['lp_send_pwd_title'], ['%s' => $game_name]);
         $parse['display'] = 'display: none';
         $parse['error_msg'] = '';
-        $parse['css_path'] = XGP_ROOT . CSS_PATH . 'home/';
+        $parse['css_path'] = CSS_PATH . 'home/';
 
         if ($_POST) {
             $parse['display'] = 'display: block';
@@ -86,7 +86,10 @@ class Mail extends Controller
         }
 
         parent::$page->display(
-            parent::$page->parseTemplate(parent::$page->getTemplate('home/mail_view'), $parse),
+            $this->getTemplate()->set(
+                'home/mail_view',
+                $parse
+            ),
             false,
             '',
             false
@@ -165,8 +168,8 @@ class Mail extends Controller
         $parse['re_mail_text_part1'] = str_replace('%s', $game_name, $this->langs['re_mail_text_part1']);
         $parse['re_mail_text_part7'] = str_replace('%s', $game_name, $this->langs['re_mail_text_part7']);
 
-        $email = parent::$page->parseTemplate(
-            parent::$page->getTemplate('home/recover_password_email_template_view'),
+        $email = $this->getTemplate()->set(
+            'home/recover_password_email_template_view',
             $parse
         );
 

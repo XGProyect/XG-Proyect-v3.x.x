@@ -105,56 +105,56 @@ class Infos extends Controller
         $parse['description'] = $this->_lang['info'][$this->_element_id]['description'];
 
         if ($this->_element_id < 13 or ($this->_element_id == 43 && $this->_current_planet[$this->_resource[43]] > 0)) {
-            $PageTPL = parent::$page->getTemplate('infos/info_buildings_table');
+            $PageTPL = 'infos/info_buildings_table';
         } elseif ($this->_element_id < 200) {
-            $PageTPL = parent::$page->getTemplate('infos/info_buildings_general');
+            $PageTPL = 'infos/info_buildings_general';
         } elseif ($this->_element_id < 400) {
-            $PageTPL = parent::$page->getTemplate('infos/info_buildings_fleet');
+            $PageTPL = 'infos/info_buildings_fleet';
         } elseif ($this->_element_id < 600) {
-            $PageTPL = parent::$page->getTemplate('infos/info_buildings_defense');
+            $PageTPL = 'infos/info_buildings_defense';
         } else {
-            $PageTPL = parent::$page->getTemplate('infos/info_officiers_general');
+            $PageTPL = 'infos/info_officiers_general';
         }
 
         //S�lo hay destroy en <200
         if ($this->_element_id < 200 && $this->_element_id != 33 && $this->_element_id != 41) {
-            $DestroyTPL = parent::$page->getTemplate('infos/info_buildings_destroy');
+            $DestroyTPL = 'infos/info_buildings_destroy';
         }
 
         if ($this->_element_id >= 1 && $this->_element_id <= 3) {
-            $PageTPL = parent::$page->getTemplate('infos/info_buildings_table');
-            $TableHeadTPL = parent::$page->getTemplate('infos/info_production_header');
-            $TableTPL = parent::$page->getTemplate('infos/info_production_body');
+            $PageTPL = 'infos/info_buildings_table';
+            $TableHeadTPL = 'infos/info_production_header';
+            $TableTPL = 'infos/info_production_body';
         } elseif ($this->_element_id == 4) {
-            $PageTPL = parent::$page->getTemplate('infos/info_buildings_table');
-            $TableHeadTPL = parent::$page->getTemplate('infos/info_production_simple_header');
-            $TableTPL = parent::$page->getTemplate('infos/info_production_simple_body');
+            $PageTPL = 'infos/info_buildings_table';
+            $TableHeadTPL = 'infos/info_production_simple_header';
+            $TableTPL = 'infos/info_production_simple_body';
         } elseif ($this->_element_id >= 22 && $this->_element_id <= 24) {
-            $PageTPL = parent::$page->getTemplate('infos/info_buildings_table');
-            $DestroyTPL = parent::$page->getTemplate('infos/info_buildings_destroy');
-            $TableHeadTPL = parent::$page->getTemplate('infos/info_storage_header');
-            $TableTPL = parent::$page->getTemplate('infos/info_storage_table');
+            $PageTPL = 'infos/info_buildings_table';
+            $DestroyTPL = 'infos/info_buildings_destroy';
+            $TableHeadTPL = 'infos/info_storage_header';
+            $TableTPL = 'infos/info_storage_table';
         } elseif ($this->_element_id == 12) {
-            $TableHeadTPL = parent::$page->getTemplate('infos/info_energy_header');
-            $TableTPL = parent::$page->getTemplate('infos/info_energy_body');
+            $TableHeadTPL = 'infos/info_energy_header';
+            $TableTPL = 'infos/info_energy_body';
         } elseif ($this->_element_id == 42) {
-            $PageTPL = parent::$page->getTemplate('infos/info_buildings_table');
-            $TableHeadTPL = parent::$page->getTemplate('infos/info_range_header');
-            $TableTPL = parent::$page->getTemplate('infos/info_range_body');
+            $PageTPL = 'infos/info_buildings_table';
+            $TableHeadTPL = 'infos/info_range_header';
+            $TableTPL = 'infos/info_range_body';
         } elseif ($this->_element_id == 43) {
-            $GateTPL = parent::$page->getTemplate('infos/info_gate_table');
+            $GateTPL = 'infos/info_gate_table';
 
             if ($_POST) {
                 FunctionsLib::message($this->doFleetJump(), "game.php?page=infos&gid=43", 2);
             }
         } elseif ($this->_element_id == 124) {
-            $PageTPL = parent::$page->getTemplate('infos/info_buildings_table');
-            $DestroyTPL = parent::$page->getTemplate('infos/info_buildings_destroy');
-            $TableHeadTPL = parent::$page->getTemplate('infos/info_astrophysics_header');
-            $TableTPL = parent::$page->getTemplate('infos/info_astrophysics_table');
-            $TableFooterTPL = parent::$page->getTemplate('infos/info_astrophysics_footer');
+            $PageTPL = 'infos/info_buildings_table';
+            $DestroyTPL = 'infos/info_buildings_destroy';
+            $TableHeadTPL = 'infos/info_astrophysics_header';
+            $TableTPL = 'infos/info_astrophysics_table';
+            $TableFooterTPL = 'infos/info_astrophysics_footer';
         } elseif ($this->_element_id >= 202 && $this->_element_id <= 250) {
-            $PageTPL = parent::$page->getTemplate('infos/info_buildings_fleet');
+            $PageTPL = 'infos/info_buildings_fleet';
             $parse['element_typ'] = $this->_lang['tech'][200];
             $parse['rf_info_to'] = $this->ShowRapidFireTo();
             $parse['rf_info_fr'] = $this->ShowRapidFireFrom();
@@ -165,6 +165,9 @@ class Infos extends Controller
             $parse['base_speed'] = FormatLib::prettyNumber($this->_pricelist[$this->_element_id]['speed']);
             $parse['base_conso'] = FormatLib::prettyNumber($this->_pricelist[$this->_element_id]['consumption']);
 
+            $parse['upd_speed'] = '';
+            $parse['upd_conso'] = '';
+
             if ($this->_element_id == 202) {
                 $parse['upd_speed'] = "<font color=\"yellow\">(" . FormatLib::prettyNumber($this->_pricelist[$this->_element_id]['speed2']) . ")</font>";
                 $parse['upd_conso'] = "<font color=\"yellow\">(" . FormatLib::prettyNumber($this->_pricelist[$this->_element_id]['consumption2']) . ")</font>";
@@ -172,8 +175,10 @@ class Infos extends Controller
                 $parse['upd_speed'] = "<font color=\"yellow\">(" . FormatLib::prettyNumber($this->_pricelist[$this->_element_id]['speed2']) . ")</font>";
             }
         } elseif ($this->_element_id >= 401 && $this->_element_id <= 550) {
-            $PageTPL = parent::$page->getTemplate('infos/info_buildings_defense');
+            $PageTPL = 'infos/info_buildings_defense';
             $parse['element_typ'] = $this->_lang['tech'][400];
+            $parse['rf_info_to'] = '';
+            $parse['rf_info_fr'] = '';
 
             if ($this->_element_id < 500) {
                 $parse['rf_info_to'] = $this->ShowRapidFireTo();
@@ -186,7 +191,7 @@ class Infos extends Controller
         }
 
         if ($TableHeadTPL != '') {
-            $parse['table_head'] = parent::$page->parseTemplate($TableHeadTPL, $this->_lang);
+            $parse['table_head'] = $this->getTemplate()->set($TableHeadTPL, $this->_lang);
 
             if ($this->_element_id >= 22 && $this->_element_id <= 24) {
                 $parse['table_data'] = $this->storage_table($TableTPL);
@@ -199,11 +204,12 @@ class Infos extends Controller
             }
         }
 
+        $parse['table_footer'] = '';
         if ($TableFooterTPL != '') {
-            $parse['table_footer'] = parent::$page->parseTemplate($TableFooterTPL, $this->_lang);
+            $parse['table_footer'] = $this->getTemplate()->set($TableFooterTPL, $this->_lang);
         }
 
-        $page = parent::$page->parseTemplate($PageTPL, $parse);
+        $page = $this->getTemplate()->set($PageTPL, $parse);
 
         if ($GateTPL != '') {
             if ($this->_current_planet[$this->_resource[$this->_element_id]] > 0) {
@@ -220,7 +226,7 @@ class Infos extends Controller
                 }
                 $parse['gate_dest_moons'] = $this->BuildJumpableMoonCombo($this->_current_user, $this->_current_planet);
                 $parse['gate_fleet_rows'] = $this->BuildFleetListRows($this->_current_planet);
-                $page .= parent::$page->parseTemplate($GateTPL, $parse);
+                $page .= $this->getTemplate()->set($GateTPL, $parse);
             }
         }
 
@@ -239,7 +245,7 @@ class Infos extends Controller
                 $parse['deuterium'] = FormatLib::prettyNumber($NeededRessources['deuterium']);
                 $parse['destroytime'] = FormatLib::prettyTime($DestroyTime);
 
-                $page .= parent::$page->parseTemplate($DestroyTPL, $parse);
+                $page .= $this->getTemplate()->set($DestroyTPL, $parse);
             }
         }
         parent::$page->display($page);
@@ -269,7 +275,7 @@ class Infos extends Controller
                 $ProdFirst = floor($Prod);
             }
 
-            $Table .= parent::$page->parseTemplate($template, $bloc);
+            $Table .= $this->getTemplate()->set($template, $bloc);
         }
 
         return $Table;
@@ -291,7 +297,7 @@ class Infos extends Controller
             $bloc['tech_colonies'] = FormatLib::prettyNumber(FleetsLib::getMaxColonies($BuildLevel));
             $bloc['tech_expeditions'] = FormatLib::prettyNumber(FleetsLib::getMaxExpeditions($BuildLevel));
 
-            $Table .= parent::$page->parseTemplate($template, $bloc);
+            $Table .= $this->getTemplate()->set($template, $bloc);
         }
 
         return $Table;
@@ -432,7 +438,7 @@ class Infos extends Controller
 
     private function BuildFleetListRows()
     {
-        $RowsTPL = parent::$page->getTemplate('infos/info_gate_rows');
+        $RowsTPL = 'infos/info_gate_rows';
         $CurrIdx = 1;
         $Result = "";
         for ($Ship = 200; $Ship < 250; $Ship++) {
@@ -443,7 +449,7 @@ class Infos extends Controller
                     $bloc['fleet_name'] = $this->_lang['tech'][$Ship];
                     $bloc['fleet_max'] = FormatLib::prettyNumber($this->_current_planet[$this->_resource[$Ship]]);
                     $bloc['gate_ship_dispo'] = $this->_lang['in_jump_gate_available'];
-                    $Result .= parent::$page->parseTemplate($RowsTPL, $bloc);
+                    $Result .= $this->getTemplate()->set($RowsTPL, $bloc);
                     $CurrIdx++;
                 }
             }
@@ -491,7 +497,7 @@ class Infos extends Controller
             $bloc['build_lvl'] = ($CurrentBuildtLvl == $BuildLevel) ? "<font color=\"#ff0000\">" . $BuildLevel . "</font>" : $BuildLevel;
             $bloc['build_range'] = ($BuildLevel * $BuildLevel) - 1;
 
-            $Table .= parent::$page->parseTemplate($Template, $bloc);
+            $Table .= $this->getTemplate()->set($Template, $bloc);
         }
 
         return $Table;
@@ -593,7 +599,7 @@ class Infos extends Controller
 
             }
 
-            $Table .= parent::$page->parseTemplate($Template, $bloc);
+            $Table .= $this->getTemplate()->set($Template, $bloc);
         }
 
         return $Table;

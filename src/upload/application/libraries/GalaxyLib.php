@@ -13,6 +13,7 @@
  */
 namespace application\libraries;
 
+use application\core\Template;
 use application\core\XGPCore;
 
 /**
@@ -43,6 +44,7 @@ class GalaxyLib extends XGPCore
     private $pricelist;
     private $formula;
     private $noob;
+    private $template;
 
     /**
      * __construct
@@ -67,7 +69,20 @@ class GalaxyLib extends XGPCore
         $this->pricelist = parent::$objects->getPrice();
         $this->formula = FunctionsLib::loadLibrary('FormulaLib');
         $this->noob = FunctionsLib::loadLibrary('NoobsProtectionLib');
+
+        $this->setTemplate();
     }
+
+    /**
+     * Set template object
+     *
+     * @return void
+     */
+    private function setTemplate(): void
+    {
+        $this->template = new Template();
+    }
+
     ######################################
     #
     # main methods
@@ -89,11 +104,11 @@ class GalaxyLib extends XGPCore
         $this->planet = $planet;
 
         // BLOCK TEMPLATES
-        $block['planet'] = parent::$page->getTemplate('galaxy/galaxy_planet_block');
-        $block['moon'] = parent::$page->getTemplate('galaxy/galaxy_moon_block');
-        $block['debris'] = parent::$page->getTemplate('galaxy/galaxy_debris_block');
-        $block['username'] = parent::$page->getTemplate('galaxy/galaxy_username_block');
-        $block['alliance'] = parent::$page->getTemplate('galaxy/galaxy_alliance_block');
+        $block['planet'] = 'galaxy/galaxy_planet_block';
+        $block['moon'] = 'galaxy/galaxy_moon_block';
+        $block['debris'] = 'galaxy/galaxy_debris_block';
+        $block['username'] = 'galaxy/galaxy_username_block';
+        $block['alliance'] = 'galaxy/galaxy_alliance_block';
 
         // PRE CREATED BLOCK TO PREVENT REDUNDANCY
         $debris_block = $this->debrisBlock();
@@ -103,7 +118,7 @@ class GalaxyLib extends XGPCore
         $row['planet'] = '';
         $row['planetname'] = $this->planetNameBlock();
         $row['moon'] = '';
-        $row['debris'] = $debris_block != '' ? parent::$page->parseTemplate($block['debris'], $debris_block) : '';
+        $row['debris'] = $debris_block != '' ? $this->template->set($block['debris'], $debris_block) : '';
         $row['username'] = '';
         $row['alliance'] = '';
         $row['actions'] = '';
@@ -114,10 +129,10 @@ class GalaxyLib extends XGPCore
             $moon_block = $this->moonBlock();
 
             // PARSE DATA
-            $row['planet'] = parent::$page->parseTemplate($block['planet'], $this->planetBlock());
-            $row['moon'] = $moon_block != '' ? parent::$page->parseTemplate($block['moon'], $moon_block) : '';
-            $row['username'] = parent::$page->parseTemplate($block['username'], $this->usernameBlock());
-            $row['alliance'] = parent::$page->parseTemplate($block['alliance'], $this->allyBlock());
+            $row['planet'] = $this->template->set($block['planet'], $this->planetBlock());
+            $row['moon'] = $moon_block != '' ? $this->template->set($block['moon'], $moon_block) : '';
+            $row['username'] = $this->template->set($block['username'], $this->usernameBlock());
+            $row['alliance'] = $this->template->set($block['alliance'], $this->allyBlock());
             $row['actions'] = $this->actionsBlock();
         }
 
@@ -417,7 +432,7 @@ class GalaxyLib extends XGPCore
      */
     private function allyBlock()
     {
-        $parse = '';
+        $parse = ['tag' => ''];
         $add = '';
 
         if ($this->row_data['user_ally_id'] != 0) {

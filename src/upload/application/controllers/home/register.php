@@ -53,13 +53,11 @@ class Register extends Controller
         $this->langs = parent::$lang;
 
         if (FunctionsLib::readConfig('reg_enable') == 1) {
-
             $this->creator = new PlanetLib();
             $this->current_user = parent::$users;
 
             $this->buildPage();
         } else {
-
             die(FunctionsLib::message($this->langs['re_disabled'], 'index.php', '5', false, false));
         }
     }
@@ -241,12 +239,20 @@ class Register extends Controller
         $parse['re_mail_text_part1'] = str_replace('%s', $game_name, $this->langs['re_mail_text_part1']);
         $parse['re_mail_text_part7'] = str_replace('%s', $game_name, $this->langs['re_mail_text_part7']);
 
-        $email = parent::$page->parseTemplate(parent::$page->getTemplate('home/email_template'), $parse);
+        $email = $this->getTemplate()->set(
+            'home/email_template',
+            $parse
+        );
+
         $status = FunctionsLib::sendEmail(
-            $emailaddress, $this->langs['re_mail_register_at'] . FunctionsLib::readConfig('game_name'), $email, [
+            $emailaddress,
+            $this->langs['re_mail_register_at'] . FunctionsLib::readConfig('game_name'),
+            $email,
+            [
                 'mail' => FunctionsLib::readConfig('admin_email'),
                 'name' => $game_name,
-            ], 'html'
+            ],
+            'html'
         );
 
         return $status;

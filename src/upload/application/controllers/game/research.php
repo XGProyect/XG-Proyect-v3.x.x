@@ -89,8 +89,6 @@ class Research extends Controller
     private function build_page()
     {
         $parse = $this->_lang;
-        $tech_row_template = parent::$page->getTemplate('buildings/buildings_research_row');
-        $tech_script_template = parent::$page->getTemplate('buildings/buildings_research_script');
         $technology_list = '';
 
         // time to do something
@@ -147,21 +145,32 @@ class Research extends Controller
                                 $bloc['tech_home'] = $this->_current_planet['planet_id'];
                                 $bloc['tech_id'] = $this->_current_planet['planet_b_tech_id'];
                             }
-                            $action_link = parent::$page->parseTemplate($tech_script_template, $bloc);
+                            $action_link = $this->getTemplate()->set(
+                                'buildings/buildings_research_script',
+                                $bloc
+                            );
                         } else {
                             $action_link = "<center>-</center>";
                         }
                     }
                     $RowParse['tech_link'] = $action_link;
-                    $technology_list .= parent::$page->parseTemplate($tech_row_template, $RowParse);
+                    $technology_list = $this->getTemplate()->set(
+                        'buildings/buildings_research_row',
+                        $RowParse
+                    );
                 }
             }
         }
 
-        $parse['noresearch'] = (!$this->is_laboratory_in_queue() ? $this->_lang['bd_building_lab'] : '' );
+        $parse['noresearch'] = (!$this->is_laboratory_in_queue() ? $this->_lang['bd_building_lab'] : '');
         $parse['technolist'] = $technology_list;
 
-        parent::$page->display(parent::$page->parseTemplate(parent::$page->getTemplate('buildings/buildings_research'), $parse));
+        parent::$page->display(
+            $this->getTemplate()->set(
+                'buildings/buildings_research',
+                $parse
+            )
+        );
     }
 
     /**
@@ -171,23 +180,23 @@ class Research extends Controller
      */
     private function do_command()
     {
-        $cmd = isset($_GET['cmd']) ? $_GET['cmd'] : NULL;
-        
+        $cmd = isset($_GET['cmd']) ? $_GET['cmd'] : null;
+
         if (!is_null($cmd)) {
             $technology = (int) $_GET['tech'];
 
             if (in_array($technology, $this->_reslist['tech'])) {
-                
+
                 $update_data = false;
-                
+
                 if (is_array($this->_is_working['working_on'])) {
-                    
+
                     $working_planet = $this->_is_working['working_on'];
                 } else {
 
                     $working_planet = $this->_current_planet;
                 }
-                
+
                 switch ($cmd) {
                     // cancel a research
                     case 'cancel':
@@ -202,7 +211,7 @@ class Research extends Controller
                                 $this->_current_user['research_current_research'] = 0;
                                 $update_data = true;
                                 $this->_is_working['is_working'] = false;
-                            }   
+                            }
                         }
 
                         break;
@@ -213,7 +222,7 @@ class Research extends Controller
                         if (DevelopmentsLib::isDevelopmentAllowed($this->_current_user, $working_planet, $technology) && DevelopmentsLib::isDevelopmentPayable($this->_current_user, $working_planet, $technology) && !parent::$users->isOnVacations($this->_current_user)) {
 
                             $costs = DevelopmentsLib::developmentPrice(
-                                    $this->_current_user, $working_planet, $technology
+                                $this->_current_user, $working_planet, $technology
                             );
 
                             $working_planet['planet_metal'] -= $costs['metal'];
@@ -221,7 +230,7 @@ class Research extends Controller
                             $working_planet['planet_deuterium'] -= $costs['deuterium'];
                             $working_planet['planet_b_tech_id'] = $technology;
                             $working_planet['planet_b_tech'] = time() + DevelopmentsLib::developmentTime(
-                                    $this->_current_user, $working_planet, $technology, false, $this->_lab_level
+                                $this->_current_user, $working_planet, $technology, false, $this->_lab_level
                             );
 
                             $this->_current_user['research_current_research'] = $working_planet['planet_id'];
