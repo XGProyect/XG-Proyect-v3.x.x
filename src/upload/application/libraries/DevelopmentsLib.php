@@ -13,6 +13,7 @@
  */
 namespace application\libraries;
 
+use application\core\Template;
 use application\core\XGPCore;
 
 /**
@@ -27,6 +28,15 @@ use application\core\XGPCore;
  */
 class DevelopmentsLib extends XGPCore
 {
+    /**
+     * Return a new instance of Template
+     *
+     * @return Template
+     */
+    public static function getTemplate(): Template
+    {
+        return new Template;
+    }
 
     /**
      * setBuildingPage
@@ -331,7 +341,10 @@ class DevelopmentsLib extends XGPCore
         $parse['call_program'] = $call_program;
         $parse['current_page'] = ($element_id != 0) ? DevelopmentsLib::setBuildingPage($element_id) : $call_program;
 
-        return parent::$page->parseTemplate(parent::$page->getTemplate('buildings/buildings_buildlist_script'), $parse);
+        return self::getTemplate()->set(
+            'buildings/buildings_buildlist_script',
+            $parse
+        );
     }
 
     /**

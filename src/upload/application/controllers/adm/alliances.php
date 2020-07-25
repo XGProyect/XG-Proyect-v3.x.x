@@ -207,7 +207,7 @@ class Alliances extends Controller
         $parse['sel0'] = $this->_alliance_query['alliance_request_notallow'] == 0 ? 'selected' : '';
         $parse['alert_info'] = ($this->_alert_type != '') ? AdministrationLib::saveMessage($this->_alert_type, $this->_alert_info) : '';
 
-        return parent::$page->parseTemplate(parent::$page->getTemplate("adm/alliances_information_view"), $parse);
+        return $this->getTemplate()->set("adm/alliances_information_view", $parse);
     }
 
     /**
@@ -222,7 +222,6 @@ class Alliances extends Controller
         $parse['image_path'] = XGP_ROOT . DEFAULT_SKINPATH;
         $parse['ally_ranks_old'] = base64_encode($this->_alliance_query['alliance_ranks']);
         $alliance_ranks = unserialize($this->_alliance_query['alliance_ranks']);
-        $template = parent::$page->getTemplate("adm/alliances_ranks_row_view");
         $i = 0;
         $ranks = '';
 
@@ -240,14 +239,14 @@ class Alliances extends Controller
                 $rank_data['rechtehand'] = $rank_data['rechtehand'] ? 'checked' : '';
                 $rank_data['i'] = $i++;
 
-                $ranks .= parent::$page->parseTemplate($template, $rank_data);
+                $ranks .= $this->getTemplate()->set("adm/alliances_ranks_row_view", $rank_data);
             }
         }
 
         $parse['ranks_table'] = empty($ranks) ? $this->langs->line('al_no_ranks') : $ranks;
         $parse['alert_info'] = ($this->_alert_type != '') ? AdministrationLib::saveMessage($this->_alert_type, $this->_alert_info) : '';
 
-        return parent::$page->parseTemplate(parent::$page->getTemplate("adm/alliances_ranks_view"), $parse);
+        return $this->getTemplate()->set("adm/alliances_ranks_view", $parse);
     }
 
     /**
@@ -263,7 +262,6 @@ class Alliances extends Controller
         );
         $all_members = $this->get_members();
         $alliance_ranks = unserialize($this->_alliance_query['alliance_ranks']);
-        $template = parent::$page->getTemplate('adm/alliances_members_row_view');
         $members = '';
 
         if (!empty($all_members)) {
@@ -288,14 +286,14 @@ class Alliances extends Controller
                     }
                 }
 
-                $members .= parent::$page->parseTemplate($template, $member);
+                $members .= $this->getTemplate()->set('adm/alliances_members_row_view', $member);
             }
         }
 
         $parse['members_table'] = empty($members) ? '<tr><td colspan="6" class="align_center text-error">' . $this->langs->line('al_no_ranks') . '</td></tr>' : $members;
         $parse['alert_info'] = ($this->_alert_type != '') ? AdministrationLib::saveMessage($this->_alert_type, $this->_alert_info) : '';
 
-        return parent::$page->parseTemplate(parent::$page->getTemplate("adm/alliances_members_view"), $parse);
+        return $this->getTemplate()->set("adm/alliances_members_view", $parse);
     }
     ######################################
     #

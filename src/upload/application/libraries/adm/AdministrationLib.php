@@ -13,6 +13,7 @@
  */
 namespace application\libraries\adm;
 
+use application\core\Template;
 use application\core\XGPCore;
 use application\libraries\FunctionsLib;
 
@@ -28,6 +29,15 @@ use application\libraries\FunctionsLib;
  */
 class AdministrationLib extends XGPCore
 {
+    /**
+     * Return a new instance of Template
+     *
+     * @return Template
+     */
+    public static function getTemplate(): Template
+    {
+        return new Template;
+    }
 
     /**
      * haveAccess
@@ -151,7 +161,10 @@ class AdministrationLib extends XGPCore
             $parse['dismissible'] = 'd-none';
         }
 
-        return parent::$page->parseTemplate(parent::$page->getTemplate('adm/save_message_view'), $parse);
+        return self::getTemplate()->set(
+            'adm/save_message_view',
+            $parse
+        );
     }
 
     /**
@@ -198,7 +211,10 @@ class AdministrationLib extends XGPCore
     {
         $parse['message'] = $message;
 
-        return parent::$page->parseTemplate(parent::$page->getTemplate('adm/popup_view'), $parse);
+        return self::getTemplate()->set(
+            'adm/popup_view',
+            $parse
+        );
     }
 
     /**
@@ -275,11 +291,9 @@ class AdministrationLib extends XGPCore
     public static function updateRequired()
     {
         if (SYSTEM_VERSION != FunctionsLib::readConfig('version')) {
-
             $exclude_pages = ['', 'home', 'update', 'logout'];
 
             if (isset($_GET['page']) && !in_array($_GET['page'], $exclude_pages)) {
-
                 FunctionsLib::redirect(XGP_ROOT . 'admin.php?page=update');
             }
         }

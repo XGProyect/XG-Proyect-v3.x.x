@@ -250,7 +250,7 @@ class TraderLayer extends Controller
     FunctionsLib::message($this->langs['tr_exchange_done'], "game.php?page=traderOverview", 1);
     } else {
 
-    $template = parent::$page->getTemplate('trader/trader_main');
+    $template = 'trader/trader_main';
 
     if (isset($_POST['action'])) {
 
@@ -259,7 +259,7 @@ class TraderLayer extends Controller
     switch ((isset($_POST['choix']) ? $_POST['choix'] : null)) {
 
     case 'metal':
-    $template = parent::$page->getTemplate('trader/trader_metal');
+    $template = 'trader/trader_metal';
 
     $parse['mod_ma_res_a'] = '2';
     $parse['mod_ma_res_b'] = '4';
@@ -267,7 +267,7 @@ class TraderLayer extends Controller
     break;
 
     case 'cristal':
-    $template = parent::$page->getTemplate('trader/trader_cristal');
+    $template = 'trader/trader_cristal';
 
     $parse['mod_ma_res_a'] = '0.5';
     $parse['mod_ma_res_b'] = '2';
@@ -275,7 +275,7 @@ class TraderLayer extends Controller
     break;
 
     case 'deut':
-    $template = parent::$page->getTemplate('trader/trader_deuterium');
+    $template = 'trader/trader_deuterium';
 
     $parse['mod_ma_res_a'] = '0.25';
     $parse['mod_ma_res_b'] = '0.5';
@@ -285,7 +285,7 @@ class TraderLayer extends Controller
     }
     }
 
-    parent::$page->display(parent::$page->parseTemplate($template, $parse));*/
+    parent::$page->display($this->getTemplate()->set($template, $parse));*/
     //}
 
     /**

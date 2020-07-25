@@ -154,7 +154,7 @@ class Research extends Controller
                         }
                     }
                     $RowParse['tech_link'] = $action_link;
-                    $technology_list = $this->getTemplate()->set(
+                    $technology_list .= $this->getTemplate()->set(
                         'buildings/buildings_research_row',
                         $RowParse
                     );

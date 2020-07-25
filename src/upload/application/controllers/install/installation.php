@@ -120,8 +120,8 @@ class Installation extends Controller
                 $parse['v_user'] = $this->user;
                 $parse['v_prefix'] = $this->prefix;
 
-                $current_page = parent::$page->parseTemplate(
-                    parent::$page->getTemplate('install/in_database_view'), $parse
+                $current_page = $this->getTemplate()->set(
+                    'install/in_database_view', $parse
                 );
 
                 break;
@@ -132,8 +132,9 @@ class Installation extends Controller
                 }
 
                 $parse['alert'] = $this->saveMessage($alerts, 'warning');
-                $current_page = parent::$page->parseTemplate(
-                    parent::$page->getTemplate('install/in_database_view'), $parse
+                $current_page = $this->getTemplate()->set(
+                    'install/in_database_view',
+                    $parse
                 );
 
                 break;
@@ -149,8 +150,9 @@ class Installation extends Controller
                 }
 
                 $parse['alert'] = $this->saveMessage($alerts, 'warning');
-                $current_page = parent::$page->parseTemplate(
-                    parent::$page->getTemplate('install/in_database_view'), $parse
+                $current_page = $this->getTemplate()->set(
+                    'install/in_database_view',
+                    $parse
                 );
                 break;
 
@@ -174,8 +176,9 @@ class Installation extends Controller
 
                     $parse['alert'] = $this->saveMessage($error_message, 'warning');
 
-                    $current_page = parent::$page->parseTemplate(
-                        parent::$page->getTemplate('install/in_create_admin_view'), $parse
+                    $current_page = $this->getTemplate()->set(
+                        'install/in_create_admin_view',
+                        $parse
                     );
 
                     $continue = false;
@@ -189,8 +192,9 @@ class Installation extends Controller
                     // set the installation language to the game language
                     FunctionsLib::updateConfig('lang', FunctionsLib::getCurrentLanguage());
 
-                    $current_page = parent::$page->parseTemplate(
-                        parent::$page->getTemplate('install/in_create_admin_done_view'), $this->langs
+                    $current_page = $this->getTemplate()->set(
+                        'install/in_create_admin_done_view',
+                        $this->langs
                     );
 
                     // This will continue on false meaning "This is the end of the installation, no else where to go"
@@ -206,10 +210,10 @@ class Installation extends Controller
         if ($continue) {
 
             switch ((isset($_GET['mode']) ? $_GET['mode'] : '')) {
-
                 case 'step1':
-                    $current_page = parent::$page->parseTemplate(
-                        parent::$page->getTemplate('install/in_database_view'), $this->langs
+                    $current_page = $this->getTemplate()->set(
+                        'install/in_database_view',
+                        $this->langs
                     );
 
                     break;
@@ -219,8 +223,9 @@ class Installation extends Controller
                     $parse['done_config'] = '';
                     $parse['done_connected'] = $this->langs['ins_done_connected'];
                     $parse['done_insert'] = '';
-                    $current_page = parent::$page->parseTemplate(
-                        parent::$page->getTemplate('install/in_done_actions_view'), $parse
+                    $current_page = $this->getTemplate()->set(
+                        'install/in_done_actions_view',
+                        $parse
                     );
 
                     break;
@@ -230,8 +235,9 @@ class Installation extends Controller
                     $parse['done_config'] = $this->langs['ins_done_config'];
                     $parse['done_connected'] = '';
                     $parse['done_insert'] = '';
-                    $current_page = parent::$page->parseTemplate(
-                        parent::$page->getTemplate('install/in_done_actions_view'), $parse
+                    $current_page = $this->getTemplate()->set(
+                        'install/in_done_actions_view',
+                        $parse
                     );
 
                     break;
@@ -241,23 +247,26 @@ class Installation extends Controller
                     $parse['done_config'] = '';
                     $parse['done_connected'] = '';
                     $parse['done_insert'] = $this->langs['ins_done_insert'];
-                    $current_page = parent::$page->parseTemplate(
-                        parent::$page->getTemplate('install/in_done_actions_view'), $parse
+                    $current_page = $this->getTemplate()->set(
+                        'install/in_done_actions_view',
+                        $parse
                     );
 
                     break;
 
                 case 'step5':
                     $parse['step'] = 'step5';
-                    $current_page = parent::$page->parseTemplate(
-                        parent::$page->getTemplate('install/in_create_admin_view'), $parse
+                    $current_page = $this->getTemplate()->set(
+                        'install/in_create_admin_view',
+                        $parse
                     );
 
                     break;
 
                 case 'license':
-                    $current_page = parent::$page->parseTemplate(
-                        parent::$page->getTemplate('install/in_license_view'), $this->langs
+                    $current_page = $this->getTemplate()->set(
+                        'install/in_license_view',
+                        $this->langs
                     );
 
                     break;
@@ -265,8 +274,9 @@ class Installation extends Controller
                 case '':
                 case 'overview':
                 default:
-                    $current_page = parent::$page->parseTemplate(
-                        parent::$page->getTemplate('install/in_welcome_view'), $this->langs
+                    $current_page = $this->getTemplate()->set(
+                        'install/in_welcome_view',
+                        $this->langs
                     );
 
                     break;
@@ -580,8 +590,9 @@ class Installation extends Controller
 
         $parse['message'] = $message;
 
-        return parent::$page->parseTemplate(
-            parent::$page->getTemplate('adm/save_message_view'), $parse
+        return $this->getTemplate()->set(
+            'adm/save_message_view',
+            $parse
         );
     }
 }

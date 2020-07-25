@@ -75,10 +75,6 @@ class Repair extends Controller
     private function buildPage()
     {
         $parse = $this->langs->language;
-        $template = parent::$page->getTemplate('adm/repair_row_view');
-        $template_head = parent::$page->getTemplate('adm/repair_row_head_view');
-        $result_tpl = parent::$page->getTemplate('adm/repair_result_view');
-        $result_tpl_head = parent::$page->getTemplate('adm/repair_result_head_view');
         $parse['alert'] = '';
 
         if (!$_POST) {
@@ -93,48 +89,48 @@ class Repair extends Controller
             );
 
             $parse['display'] = 'block';
-            $parse['head'] = parent::$page->parseTemplate($template_head, $this->langs->language);
+            $parse['head'] = $this->getTemplate()->set('adm/repair_row_head_view', $this->langs->language);
             $parse['tables'] = '';
 
             while ($row = $this->_db->fetchArray($tables)) {
-
                 $row['row'] = $row['table_name'];
                 $row['data'] = FormatLib::prettyBytes($row['data_length']);
                 $row['index'] = FormatLib::prettyBytes($row['index_length']);
                 $row['overhead'] = FormatLib::prettyBytes($row['data_free']);
                 $row['status_style'] = 'text-info';
 
-                $parse['tables'] .= parent::$page->parseTemplate(
-                    $template, array_merge($row, $this->langs->language)
+                $parse['tables'] .= $this->getTemplate()->set(
+                    'adm/repair_row_view',
+                    array_merge(
+                        $row,
+                        $this->langs->language
+                    )
                 );
             }
         } else {
-
             $parse['display'] = 'none';
-            $parse['head'] = parent::$page->parseTemplate($result_tpl_head, $this->langs->language);
+            $parse['head'] = $this->getTemplate()->set('adm/repair_result_head_view', $this->langs->language);
 
             if (isset($_POST['table']) && is_array($_POST['table'])) {
-
                 $result_rows = '';
 
                 foreach ($_POST['table'] as $key => $table) {
-
                     $parse['row'] = $table;
 
                     $this->_db->query("CHECK TABLE " . $table);
                     $parse['result'] = $this->langs->line('db_check_ok');
-                    $result_rows .= parent::$page->parseTemplate($result_tpl, $parse);
+                    $result_rows .= $this->getTemplate()->set('adm/repair_result_view', $parse);
 
                     if (isset($_POST['Optimize']) && $_POST['Optimize'] == 'yes') {
                         $this->_db->query("OPTIMIZE TABLE " . $table);
                         $parse['result'] = $this->langs->line('db_opt');
-                        $result_rows .= parent::$page->parseTemplate($result_tpl, $parse);
+                        $result_rows .= $this->getTemplate()->set('adm/repair_result_view', $parse);
                     }
 
                     if (isset($_POST['Repair']) && $_POST['Repair'] == 'yes') {
                         $this->_db->query("REPAIR TABLE " . $table);
                         $parse['result'] = $this->langs->line('db_rep');
-                        $result_rows .= parent::$page->parseTemplate($result_tpl, $parse);
+                        $result_rows .= $this->getTemplate()->set('adm/repair_result_view', $parse);
                     }
                 }
 
@@ -145,8 +141,9 @@ class Repair extends Controller
         }
 
         parent::$page->displayAdmin(
-            parent::$page->parseTemplate(
-                parent::$page->getTemplate('adm/repair_view'), $parse
+            $this->getTemplate()->set(
+                'adm/repair_view',
+                $parse
             )
         );
     }

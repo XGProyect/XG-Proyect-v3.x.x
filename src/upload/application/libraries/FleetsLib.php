@@ -13,6 +13,7 @@
  */
 namespace application\libraries;
 
+use application\core\Template;
 use application\core\XGPCore;
 use application\libraries\FunctionsLib;
 
@@ -29,6 +30,15 @@ use application\libraries\FunctionsLib;
  */
 class FleetsLib extends XGPCore
 {
+    /**
+     * Return a new instance of Template
+     *
+     * @return Template
+     */
+    public static function getTemplate(): Template
+    {
+        return new Template;
+    }
 
     /**
      * bbCode function.
@@ -317,20 +327,20 @@ class FleetsLib extends XGPCore
             $popup['fleet_resource_crystal'] = FormatLib::prettyNumber($fleet_row['fleet_resource_crystal']);
             $popup['fleet_resource_deuterium'] = FormatLib::prettyNumber($fleet_row['fleet_resource_deuterium']);
 
-            $resources_popup = parent::$page->parseTemplate(
-                parent::$page->jsReady(parent::$page->getTemplate('general/fleet_resources_popup_view')), $popup
+            $resources_popup = parent::$page->jsReady(
+                self::getTemplate()->set(
+                    'general/fleet_resources_popup_view',
+                    $popup
+                )
             );
         } else {
-
             $resources_popup = '';
         }
 
         if ($resources_popup != '') {
-
             $pop_up = "<a href='#' onmouseover=\"return overlib('" . $resources_popup . "');";
             $pop_up .= "\" onmouseout=\"return nd();\" class=\"" . $fleet_type . "\">" . $text . "</a>";
         } else {
-
             $pop_up = $text . "";
         }
 
@@ -453,7 +463,6 @@ class FleetsLib extends XGPCore
 
         $FleetStatus = [0 => 'flight', 1 => 'holding', 2 => 'return'];
         $FleetPrefix = ($Owner) ? 'own' : '';
-        $RowsTPL = parent::$page->getTemplate('overview/overview_fleet_event');
         $MissionType = $fleet_row['fleet_mission'];
         $FleetContent = self::fleetShipsPopup(
             $fleet_row, parent::$lang['cff_flotte'], $FleetPrefix . $FleetStyle[$MissionType], $current_user
@@ -605,7 +614,10 @@ class FleetsLib extends XGPCore
         $bloc['fleet_descr'] = $EventString;
         $bloc['fleet_javas'] = FunctionsLib::chronoApplet($Label, $Record, $Rest, false);
 
-        return parent::$page->parseTemplate($RowsTPL, $bloc);
+        return self::getTemplate()->set(
+            'overview/overview_fleet_event',
+            $bloc
+        );
     }
 
     /**

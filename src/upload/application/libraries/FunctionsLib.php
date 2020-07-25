@@ -17,6 +17,7 @@ use application\core\Database;
 use application\core\enumerators\MessagesEnumerator;
 use application\core\enumerators\UserRanksEnumerator;
 use application\core\Options;
+use application\core\Template;
 use application\core\XGPCore;
 use application\libraries\messenger\MessagesFormat;
 use application\libraries\messenger\MessagesOptions;
@@ -36,6 +37,15 @@ use CI_Email;
  */
 abstract class FunctionsLib extends XGPCore
 {
+    /**
+     * Return a new instance of Template
+     *
+     * @return Template
+     */
+    public static function getTemplate(): Template
+    {
+        return new Template;
+    }
 
     /**
      * loadLibrary
@@ -113,16 +123,19 @@ abstract class FunctionsLib extends XGPCore
     public static function chronoApplet($type, $ref, $value, $init)
     {
         if ($init == true) {
-            $template = parent::$page->getTemplate('general/chrono_applet_init');
+            $template = 'general/chrono_applet_init';
         } else {
-            $template = parent::$page->getTemplate('general/chrono_applet');
+            $template = 'general/chrono_applet';
         }
 
         $parse['type'] = $type;
         $parse['ref'] = $ref;
         $parse['value'] = $value;
 
-        return parent::$page->parseTemplate($template, $parse);
+        return self::getTemplate()->set(
+            $template,
+            $parse
+        );
     }
 
     /**
@@ -232,7 +245,7 @@ abstract class FunctionsLib extends XGPCore
         }
 
         parent::$page->display(
-            parent::$page->parseTemplate(parent::$page->getTemplate('general/message_body'), $parse),
+            self::getTemplate()->set('general/message_body', $parse),
             $topnav,
             (($dest != "") ? "<meta http-equiv=\"refresh\" content=\"$time;URL=$dest\">" : ""),
             $menu
@@ -763,13 +776,12 @@ abstract class FunctionsLib extends XGPCore
      */
     public static function messageBox($title, $message, $goto = '', $button = ' ok ', $two_lines = false)
     {
-        return parent::$page->parseTemplate(
-            parent::$page->getTemplate('alliance/alliance_message_box'),
+        return self::getTemplate()->set(
+            'alliance/alliance_message_box',
             [
                 'goto' => $goto,
                 'title' => $title,
-                'message_box_row' => parent::$page->parseTemplate(
-                    parent::$page->getTemplate('alliance/alliance_message_box_row_' . ($two_lines ? 'two' : 'one')),
+                'message_box_row' => self::getTemplate()->set('alliance/alliance_message_box_row_' . ($two_lines ? 'two' : 'one'),
                     [
                         'message' => $message,
                         'button' => $button,
