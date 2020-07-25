@@ -128,7 +128,7 @@ class TemplateLib
 
         if (defined('IN_INSTALL') && !defined('IN_MESSAGE')) {
             $page .= $this->template->set(
-                'general/simple_footer',
+                'install/simple_footer',
                 ['year' => $this->current_year]
             );
         }
