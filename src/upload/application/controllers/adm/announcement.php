@@ -45,9 +45,9 @@ class Announcement extends Controller
     private $user;
 
     /**
-     * Contains the alert string
+     * Contains the alert array
      *
-     * @var string
+     * @var array
      */
     private $alerts = [];
 
