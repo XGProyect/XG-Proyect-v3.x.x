@@ -14,9 +14,7 @@
 namespace application\controllers\adm;
 
 use application\core\Controller;
-use application\core\Database;
-use application\libraries\adm\AdministrationLib;
-use application\libraries\PlanetLib;
+use application\libraries\adm\AdministrationLib as Administration;
 
 /**
  * Reset Class
@@ -30,354 +28,185 @@ use application\libraries\PlanetLib;
  */
 class Reset extends Controller
 {
-
-    private $_current_user;
-    private $_creator;
+    /**
+     * Current user data
+     *
+     * @var array
+     */
+    private $user;
 
     /**
-     * __construct()
+     * Contains the alert string
+     *
+     * @var string
+     */
+    private $alert = '';
+
+    /**
+     * Constructor
      */
     public function __construct()
     {
         parent::__construct();
 
         // check if session is active
-        AdministrationLib::checkSession();
+        Administration::checkSession();
+
+        // load Model
+        parent::loadModel('adm/reset');
 
         // load Language
         parent::loadLang(['adm/global', 'adm/reset']);
 
-        $this->_db = new Database();
-        $this->_current_user = parent::$users->getUserData();
+        // set data
+        $this->user = $this->getUserData();
 
         // Check if the user is allowed to access
-        if (AdministrationLib::haveAccess($this->_current_user['user_authlevel']) && $this->_current_user['user_authlevel'] == 3) {
-
-            $this->_creator = new PlanetLib();
-
-            $this->build_page();
-        } else {
-            die(AdministrationLib::noAccessMessage($this->langs->line('ge_no_permissions')));
+        if ($this->user['user_authlevel'] != 3) {
+            Administration::noAccessMessage($this->langs->line('no_permissions'));
         }
+
+        // time to do something
+        $this->runAction();
+
+        // build the page
+        $this->buildPage();
     }
 
     /**
-     * method __destruct
-     * param
-     * return close db connection
+     * Run an action
+     *
+     * @return void
      */
-    public function __destruct()
+    private function runAction(): void
     {
-        $this->_db->closeConnection();
-    }
-
-    private function reset_universe()
-    {
-        $this->_db->query("RENAME TABLE " . PLANETS . " TO " . PLANETS . "_s");
-        $this->_db->query("RENAME TABLE " . USERS . " TO " . USERS . "_s");
-
-        $this->_db->query("CREATE  TABLE IF NOT EXISTS " . PLANETS . " ( LIKE " . PLANETS . "_s );");
-        $this->_db->query("CREATE  TABLE IF NOT EXISTS " . USERS . " ( LIKE " . USERS . "_s );");
-
-        $this->_db->query("TRUNCATE TABLE " . ACS . "");
-        $this->_db->query("TRUNCATE TABLE " . ACS_MEMBERS . "");
-        $this->_db->query("TRUNCATE TABLE " . ALLIANCE . "");
-        $this->_db->query("TRUNCATE TABLE " . ALLIANCE_STATISTICS . "");
-        $this->_db->query("TRUNCATE TABLE " . BANNED . "");
-        $this->_db->query("TRUNCATE TABLE " . BUDDY . "");
-        $this->_db->query("TRUNCATE TABLE " . BUILDINGS . "");
-        $this->_db->query("TRUNCATE TABLE " . DEFENSES . "");
-        $this->_db->query("TRUNCATE TABLE " . FLEETS . "");
-        $this->_db->query("TRUNCATE TABLE " . MESSAGES . "");
-        $this->_db->query("TRUNCATE TABLE " . NOTES . "");
-        $this->_db->query("TRUNCATE TABLE " . PREFERENCES . "");
-        $this->_db->query("TRUNCATE TABLE " . PREMIUM . "");
-        $this->_db->query("TRUNCATE TABLE " . REPORTS . "");
-        $this->_db->query("TRUNCATE TABLE " . RESEARCH . "");
-        $this->_db->query("TRUNCATE TABLE " . SESSIONS . "");
-        $this->_db->query("TRUNCATE TABLE " . SHIPS . "");
-        $this->_db->query("TRUNCATE TABLE " . USERS_STATISTICS . "");
-
-        $AllUsers = $this->_db->query(
-            "SELECT
-                `user_name`, `user_password`, `user_email`,`user_authlevel`,`user_galaxy`,`user_system`,`user_planet`, `user_onlinetime`, `user_register_time`, `user_home_planet_id`
-            FROM " . USERS . "_s
-            WHERE 1;"
-        );
-
-        $LimitTime = time() - (15 * (24 * (60 * 60)));
-        $TransUser = 0;
-
-        while ($TheUser = $this->_db->fetchAssoc($AllUsers)) {
-            if ($TheUser['user_onlinetime'] > $LimitTime) {
-                $UserPlanet = $this->_db->queryFetch("SELECT `planet_name`
-																FROM " . PLANETS . "_s
-																WHERE `planet_id` = '" . $TheUser['user_home_planet_id'] . "';");
-                if ($UserPlanet['planet_name'] != "") {
-                    $Time = time();
-
-                    $this->_db->query(
-                        "INSERT INTO " . USERS . " SET
-                            `user_name` = '" . $TheUser['user_name'] . "',
-                            `user_email` = '" . $TheUser['user_email'] . "',
-                            `user_home_planet_id` = '0',
-                            `user_authlevel` = '" . $TheUser['user_authlevel'] . "',
-                            `user_galaxy` = '" . $TheUser['user_galaxy'] . "',
-                            `user_system` = '" . $TheUser['user_system'] . "',
-                            `user_planet` = '" . $TheUser['user_planet'] . "',
-                            `user_register_time` = '" . $TheUser['user_register_time'] . "',
-                            `user_onlinetime` = '" . $Time . "',
-                            `user_password` = '" . $TheUser['user_password'] . "';"
-                    );
-
-                    $last_id = $this->_db->insertId();
-                    $NewUser = $last_id;
-
-                    $this->_db->query("INSERT INTO " . RESEARCH . " SET
-											`research_user_id` = '" . $last_id . "';");
-
-                    $this->_db->query("INSERT INTO " . USERS_STATISTICS . " SET
-											`user_statistic_user_id` = '" . $last_id . "';");
-
-                    $this->_db->query("INSERT INTO " . PREMIUM . " SET
-											`premium_user_id` = '" . $last_id . "';");
-
-                    $this->_db->query("INSERT INTO " . PREFERENCES . " SET
-											`preference_user_id` = '" . $last_id . "';");
-
-                    $this->_db->query("UPDATE " . USERS . " SET
-											`user_banned` = '0'
-											WHERE `user_id` > '1'");
-
-                    $this->_creator->setNewPlanet($TheUser['user_galaxy'], $TheUser['user_system'], $TheUser['user_planet'], $NewUser, $UserPlanet['planet_name'], true);
-
-                    $PlanetID = $this->_db->queryFetch(
-                        "SELECT `planet_id`
-                        FROM " . PLANETS . "
-                        WHERE `planet_user_id` = '" . $NewUser . "'
-                        LIMIT 1;"
-                    );
-
-                    $this->_db->query(
-                        "UPDATE " . USERS . " SET
-                        `user_home_planet_id` = '" . $PlanetID['planet_id'] . "',
-                        `user_current_planet` = '" . $PlanetID['planet_id'] . "'
-                        WHERE `user_id` = '" . $NewUser . "';"
-                    );
-                    $TransUser++;
-                }
-            }
-        }
-
-        $this->_db->query("DROP TABLE " . PLANETS . "_s");
-        $this->_db->query("DROP TABLE " . USERS . "_s");
-    }
-
-    /**
-     * method build_page
-     * param
-     * return main method, loads everything
-     */
-    private function build_page()
-    {
-        $parse = $this->langs->language;
-
         if ($_POST) {
-            if (isset($_POST['resetall']) && $_POST['resetall'] != 'on') {
-                // HANGARES Y DEFENSAS
-                if ($_POST['defenses'] == 'on') {
-                    $this->_db->query("UPDATE " . DEFENSES . " SET
-											`defense_rocket_launcher` = '0',
-											`defense_light_laser` = '0',
-											`defense_heavy_laser` = '0',
-											`defense_gauss_cannon` = '0',
-											`defense_ion_cannon` = '0',
-											`defense_plasma_turret` = '0',
-											`defense_small_shield_dome` = '0',
-											`defense_large_shield_dome` = '0',
-											`defense_anti-ballistic_missile` = '0',
-											`defense_interplanetary_missile` = '0'");
+            if (!isset($_POST['resetall'])) {
+                // reset defenses
+                if (isset($_POST['defenses']) && $_POST['defenses'] == 'on') {
+                    $this->Reset_Model->resetDefenses();
                 }
 
-                if ($_POST['ships'] == 'on') {
-                    $this->_db->query("UPDATE " . SHIPS . " SET
-											`ship_small_cargo_ship` = '0',
-											`ship_big_cargo_ship` = '0',
-											`ship_light_fighter` = '0',
-											`ship_heavy_fighter` = '0',
-											`ship_cruiser` = '0',
-											`ship_battleship` = '0',
-											`ship_colony_ship` = '0',
-											`ship_recycler` = '0',
-											`ship_espionage_probe` = '0',
-											`ship_bomber` = '0',
-											`ship_solar_satellite` = '0',
-											`ship_destroyer` = '0',
-											`ship_deathstar` = '0',
-											`ship_battlecruiser` = '0'");
+                // reset ships
+                if (isset($_POST['ships']) && $_POST['ships'] == 'on') {
+                    $this->Reset_Model->resetShips();
                 }
 
-                if ($_POST['h_d'] == 'on') {
-                    $this->_db->query("UPDATE " . PLANETS . " SET
-											`planet_b_hangar` = '0',
-											`planet_b_hangar_id` = ''");
+                // reset shipyard queues
+                if (isset($_POST['h_d']) && $_POST['h_d'] == 'on') {
+                    $this->Reset_Model->resetShipyardQueues();
                 }
 
-                // EDIFICIOS
-                if ($_POST['edif_p'] == 'on') {
-                    $this->_db->query("UPDATE " . BUILDINGS . " AS b
-											INNER JOIN " . PLANETS . " AS p ON b.building_planet_id = p.`planet_id` SET
-											`building_metal_mine` = '0',
-											`building_crystal_mine` = '0',
-											`building_deuterium_sintetizer` = '0',
-											`building_solar_plant` = '0',
-											`building_fusion_reactor` = '0',
-											`building_robot_factory` = '0',
-											`building_nano_factory` = '0',
-											`building_hangar` = '0',
-											`building_metal_store` = '0',
-											`building_crystal_store` = '0',
-											`building_deuterium_tank` = '0',
-											`building_laboratory` = '0',
-											`building_terraformer` = '0',
-											`building_ally_deposit` = '0',
-											`building_missile_silo` = '0'
-											WHERE p.`planet_type` = '1'");
+                // reset planet buildings
+                if (isset($_POST['edif_p']) && $_POST['edif_p'] == 'on') {
+                    $this->Reset_Model->resetPlanetBuildings();
                 }
 
-                if ($_POST['edif_l'] == 'on') {
-                    $this->_db->query("UPDATE " . BUILDINGS . " AS b
-											INNER JOIN " . PLANETS . " AS p ON b.building_planet_id = p.`planet_id` SET
-											`building_mondbasis` = '0',
-											`building_phalanx` = '0',
-											`building_jump_gate` = '0',
-											`planet_last_jump_time` = '0',
-											`fusion_plant` = '0',
-											`building_robot_factory` = '0',
-											`building_hangar` = '0',
-											`building_metal_store` = '0',
-											`building_crystal_store` = '0',
-											`building_deuterium_tank` = '0',
-											`building_ally_deposit` = '0'
-											WHERE p.`planet_type` = '3'");
+                // reset moon buildings
+                if (isset($_POST['edif_l']) && $_POST['edif_l'] == 'on') {
+                    $this->Reset_Model->resetMoonBuildings();
                 }
 
-                if ($_POST['edif'] == 'on') {
-                    $this->_db->query("UPDATE " . PLANETS . " SET
-											`planet_b_building` = '0',
-											`planet_b_building_id` = ''");
+                // reset buildings queues
+                if (isset($_POST['edif']) && $_POST['edif'] == 'on') {
+                    $this->Reset_Model->resetBuildingsQueues();
                 }
 
-                // INVESTIGACIONES Y OFICIALES
-                if ($_POST['inves'] == 'on') {
-                    $this->_db->query("UPDATE " . RESEARCH . " SET
-											`research_espionage_technology` = '0',
-											`research_computer_technology` = '0',
-											`research_weapons_technology` = '0',
-											`research_shielding_technology` = '0',
-											`research_armour_technology` = '0',
-											`research_energy_technology` = '0',
-											`research_hyperspace_technology` = '0',
-											`research_combustion_drive` = '0',
-											`research_impulse_drive` = '0',
-											`research_hyperspace_drive` = '0',
-											`research_laser_technology` = '0',
-											`research_ionic_technology` = '0',
-											`research_plasma_technology` = '0',
-											`research_intergalactic_research_network` = '0',
-											`research_astrophysics` = '0',
-											`research_graviton_technology` = '0'");
+                // reset research
+                if (isset($_POST['inves']) && $_POST['inves'] == 'on') {
+                    $this->Reset_Model->resetResearch();
                 }
 
-                if ($_POST['ofis'] == 'on') {
-                    $this->_db->query("UPDATE " . PREMIUM . " SET
-											`premium_officier_commander` = '0',
-											`premium_officier_admiral` = '0',
-											`premium_officier_engineer` = '0',
-											`premium_officier_geologist` = '0',
-											`premium_officier_technocrat` = '0'");
+                // reset research queues
+                if (isset($_POST['inves_c']) && $_POST['inves_c'] == 'on') {
+                    $this->Reset_Model->resetResearchQueues();
                 }
 
-                if ($_POST['inves_c'] == 'on') {
-                    $this->_db->query("UPDATE " . PLANETS . " SET
-											`planet_b_tech` = '0',
-											`planet_b_tech_id` = '0'");
-
-                    $this->_db->query("UPDATE " . RESEARCH . " SET
-											`research_current_research` = '0'");
+                // reset officiers
+                if (isset($_POST['ofis']) && $_POST['ofis'] == 'on') {
+                    $this->Reset_Model->resetOfficiers();
                 }
 
-                // RECURSOS
-                if ($_POST['dark'] == 'on') {
-                    $this->_db->query("UPDATE " . PREMIUM . " SET
-											`premium_dark_matter` = '0'");
+                // reset dark matter
+                if (isset($_POST['dark']) && $_POST['dark'] == 'on') {
+                    $this->Reset_Model->resetDarkMatter();
                 }
 
-                if ($_POST['resources'] == 'on') {
-                    $this->_db->query("UPDATE " . PLANETS . " SET
-											`planet_metal` = '0',
-											`planet_crystal` = '0',
-											`planet_deuterium` = '0'");
+                // reset resources
+                if (isset($_POST['resources']) && $_POST['resources'] == 'on') {
+                    $this->Reset_Model->resetResources();
                 }
 
-                // GENERAL
-                if ($_POST['notes'] == 'on') {
-                    $this->_db->query("TRUNCATE TABLE " . NOTES . "");
+                // reset notes
+                if (isset($_POST['notes']) && $_POST['notes'] == 'on') {
+                    $this->Reset_Model->resetNotes();
                 }
 
-                if ($_POST['rw'] == 'on') {
-                    $this->_db->query("TRUNCATE TABLE " . REPORTS . "");
+                // reset reports
+                if (isset($_POST['rw']) && $_POST['rw'] == 'on') {
+                    $this->Reset_Model->resetReports();
                 }
 
-                if ($_POST['friends'] == 'on') {
-                    $this->_db->query("TRUNCATE TABLE " . BUDDY . "");
+                // reset friends
+                if (isset($_POST['friends']) && $_POST['friends'] == 'on') {
+                    $this->Reset_Model->resetFriends();
                 }
 
-                if ($_POST['alliances'] == 'on') {
-                    $this->_db->query("TRUNCATE TABLE " . ALLIANCE . "");
-                    $this->_db->query("TRUNCATE TABLE " . ALLIANCE_STATISTICS . "");
-                    $this->_db->query("UPDATE " . USERS . " SET
-											`user_ally_id` = '0',
-											`user_ally_request` = '0',
-											`user_ally_request_text` = 'NULL',
-											`user_ally_register_time` = '0',
-											`user_ally_rank_id` = '0'");
+                // reset alliances
+                if (isset($_POST['alliances']) && $_POST['alliances'] == 'on') {
+                    $this->Reset_Model->resetAlliances();
                 }
 
-                if ($_POST['fleets'] == 'on') {
-                    $this->_db->query("TRUNCATE TABLE " . ACS . "");
-                    $this->_db->query("TRUNCATE TABLE " . ACS_MEMBERS . "");
-                    $this->_db->query("TRUNCATE TABLE " . FLEETS . "");
+                // reset fleets
+                if (isset($_POST['fleets']) && $_POST['fleets'] == 'on') {
+                    $this->Reset_Model->resetFleets();
                 }
 
-                if ($_POST['banneds'] == 'on') {
-                    $this->_db->query("TRUNCATE TABLE " . BANNED . "");
-                    $this->_db->query("UPDATE " . USERS . " SET
-											`user_banned` = '0'
-											WHERE `user_id` > '1'");
+                // reset banned
+                if (isset($_POST['banneds']) && $_POST['banneds'] == 'on') {
+                    $this->Reset_Model->resetBanned();
                 }
 
-                if ($_POST['messages'] == 'on') {
-                    $this->_db->query("TRUNCATE TABLE " . MESSAGES . "");
+                // reset messages
+                if (isset($_POST['messages']) && $_POST['messages'] == 'on') {
+                    $this->Reset_Model->resetMessages();
                 }
 
-                if ($_POST['statpoints'] == 'on') {
-                    $this->_db->query("TRUNCATE TABLE " . USERS_STATISTICS . "");
-                    $this->_db->query("TRUNCATE TABLE " . ALLIANCE_STATISTICS . "");
+                // reset statistics
+                if (isset($_POST['statpoints']) && $_POST['statpoints'] == 'on') {
+                    $this->Reset_Model->resetStatistics();
                 }
 
-                if ($_POST['moons'] == 'on') {
-                    $this->_db->query("DELETE FROM " . PLANETS . " WHERE `planet_type` = '3'");
+                // reset moons
+                if (isset($_POST['moons']) && $_POST['moons'] == 'on') {
+                    $this->Reset_Model->resetMoons();
                 }
-            } else { // REINICIAR TODO
-                $this->reset_universe();
+            } else {
+                // reset everything
+                $this->Reset_Model->resetAll();
             }
 
-            $parse['alert'] = AdministrationLib::saveMessage('ok', $this->langs->line('re_reset_excess'));
+            $this->alert = Administration::saveMessage('ok', $this->langs->line('re_reset_excess'));
         }
+    }
 
+    /**
+     * Build the page
+     *
+     * @return void
+     */
+    private function buildPage(): void
+    {
         parent::$page->displayAdmin(
-            $this->getTemplate()->set('adm/reset_view', $parse)
+            $this->getTemplate()->set(
+                'adm/reset_view',
+                array_merge(
+                    $this->langs->language,
+                    [
+                        'alert' => $this->alert ? $this->alert : '',
+                    ]
+                )
+            )
         );
     }
 }
