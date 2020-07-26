@@ -14,8 +14,7 @@
 namespace application\controllers\adm;
 
 use application\core\Controller;
-use application\core\Database;
-use application\libraries\adm\AdministrationLib;
+use application\libraries\adm\AdministrationLib as Administration;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
 
@@ -43,28 +42,22 @@ class Repair extends Controller
         parent::__construct();
 
         // check if session is active
-        AdministrationLib::checkSession();
+        Administration::checkSession();
+
+        // load Model
+        parent::loadModel('adm/repair');
 
         // load Language
         parent::loadLang(['adm/global', 'adm/repair']);
 
-        $this->_db = new Database();
         $this->current_user = parent::$users->getUserData();
 
         // Check if the user is allowed to access
-        if (AdministrationLib::haveAccess($this->current_user['user_authlevel']) && AdministrationLib::authorization($this->current_user['user_authlevel'], 'config_game') == 1) {
-            $this->buildPage($this->current_user);
-        } else {
-            die(AdministrationLib::noAccessMessage($this->langs->line('ge_no_permissions')));
+        if (Administration::authorization($this->current_user['user_authlevel'], 'config_game') != 1) {
+            Administration::noAccessMessage($this->langs->line('no_permissions'));
         }
-    }
 
-    /**
-     * Destructor
-     */
-    public function __destruct()
-    {
-        $this->_db->closeConnection();
+        $this->buildPage($this->current_user);
     }
 
     /**
@@ -78,21 +71,13 @@ class Repair extends Controller
         $parse['alert'] = '';
 
         if (!$_POST) {
-            $tables = $this->_db->query(
-                "SELECT
-                    `table_name`,
-                    `data_length`,
-                    `index_length`,
-                    `data_free`
-                FROM information_schema.TABLES
-                WHERE table_schema = '" . DB_NAME . "';"
-            );
+            $tables = $this->Repair_Model->getAllTables();
 
             $parse['display'] = 'block';
             $parse['head'] = $this->getTemplate()->set('adm/repair_row_head_view', $this->langs->language);
             $parse['tables'] = '';
 
-            while ($row = $this->_db->fetchArray($tables)) {
+            foreach ($tables as $row) {
                 $row['row'] = $row['table_name'];
                 $row['data'] = FormatLib::prettyBytes($row['data_length']);
                 $row['index'] = FormatLib::prettyBytes($row['index_length']);
@@ -117,18 +102,18 @@ class Repair extends Controller
                 foreach ($_POST['table'] as $key => $table) {
                     $parse['row'] = $table;
 
-                    $this->_db->query("CHECK TABLE " . $table);
+                    $this->Repair_Model->checkTable($table);
                     $parse['result'] = $this->langs->line('db_check_ok');
                     $result_rows .= $this->getTemplate()->set('adm/repair_result_view', $parse);
 
                     if (isset($_POST['Optimize']) && $_POST['Optimize'] == 'yes') {
-                        $this->_db->query("OPTIMIZE TABLE " . $table);
+                        $this->Repair_Model->optimizeTable($table);
                         $parse['result'] = $this->langs->line('db_opt');
                         $result_rows .= $this->getTemplate()->set('adm/repair_result_view', $parse);
                     }
 
                     if (isset($_POST['Repair']) && $_POST['Repair'] == 'yes') {
-                        $this->_db->query("REPAIR TABLE " . $table);
+                        $this->Repair_Model->repairTable($table);
                         $parse['result'] = $this->langs->line('db_rep');
                         $result_rows .= $this->getTemplate()->set('adm/repair_result_view', $parse);
                     }
