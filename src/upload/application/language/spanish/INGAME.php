@@ -93,6 +93,18 @@ $lang = [
     'sys_building_queue_not_enough_resources' => 'La %s de tu %s de nivel %s en %s no pudo ejecutarse.<br><br>Recursos insuficientes: %s.',
     'sys_building_queue_not_enough_resources_from' => 'Mensaje del sistema',
     'sys_building_queue_not_enough_resources_subject' => 'Producción cancelada',
+
+    // topnav
+    'tn_commander' => 'Comandante',
+    'tn_admiral' => 'Almirante',
+    'tn_engineer' => 'Ingeniero',
+    'tn_geologist' => 'Geólogo',
+    'tn_technocrat' => 'Tecnócrata',
+    'tn_add_admiral' => '+2 huecos de flota máximos',
+    'tn_add_engineer' => 'Minimiza las perdidas de las defensas a la mitad,<br/>+10% de producción de energía',
+    'tn_add_geologist' => '+10% producción de minas',
+    'tn_add_technocrat' => '+2 al nivel de espionaje,<br/>25% menos tiempo de investigación',
+    'tn_get_now' => '¡Consíguelo ahora!',
 ];
 
 /**

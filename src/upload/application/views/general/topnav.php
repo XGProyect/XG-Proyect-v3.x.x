@@ -67,33 +67,33 @@
 
                             <td align="center" width="35" class='header'>
                                 <a href='game.php?page=officier' accesskey="o">
-                                    <img border="0" src="{dpath}premium/commander_ikon{img_commander}.gif" width="32" height="32" alt="{of_commander}"
-                                         onmouseover="return overlib('<center><font size=1 color=white><b><br>{of_commander}</font><br><br><a href=game.php?page=officier><font size=1 color=lime>{of_get_know}</b></font></a></center>', LEFT, WIDTH, 150);" onmouseout="return nd();">
+                                    <img border="0" src="{dpath}premium/commander_ikon{img_commander}.gif" width="32" height="32" alt="{tn_commander}"
+                                         onmouseover="return overlib('<center><font size=1 color=white><b><br>{tn_commander}</font><br><br><a href=game.php?page=officier><font size=1 color=lime>{tn_get_now}</b></font></a></center>', LEFT, WIDTH, 150);" onmouseout="return nd();">
                                 </a>
                             </td>
                             <td align="center" width="35" class='header'>
                                 <a href='game.php?page=officier' accesskey="o">
-                                    <img border="0" src="{dpath}premium/admiral_ikon{img_admiral}.gif" width="32" height="32" alt="{of_admiral}"
-                                         onmouseover="return overlib('<center><font size=1 color=white><b><br>{of_admiral}</font><br><font size=1 color=skyblue>&amp;nbsp;{of_add_admiral}</font><br><br><a href=game.php?page=officier><font size=1 color=lime>{of_get_know}</b></font></a></center>', LEFT, WIDTH, 150);" onmouseout="return nd();">
+                                    <img border="0" src="{dpath}premium/admiral_ikon{img_admiral}.gif" width="32" height="32" alt="{tn_admiral}"
+                                         onmouseover="return overlib('<center><font size=1 color=white><b><br>{tn_admiral}</font><br><font size=1 color=skyblue>&amp;nbsp;{tn_add_admiral}</font><br><br><a href=game.php?page=officier><font size=1 color=lime>{tn_get_now}</b></font></a></center>', LEFT, WIDTH, 150);" onmouseout="return nd();">
 
                                 </a>
                             </td>
                             <td align="center" width="35" class='header'>
                                 <a href='game.php?page=officier' accesskey="o">
-                                    <img border="0" src="{dpath}premium/ingenieur_ikon{img_engineer}.gif" width="32" height="32" alt="{of_engineer}"
-                                         onmouseover="return overlib('<center><font size=1 color=white><b><br>{of_engineer}</font><br><font size=1 color=skyblue>{of_add_engineer}</font><br><br><a href=game.php?page=officier><font size=1 color=lime>{of_get_know}</b></font></a></center>', LEFT, WIDTH, 150);" onmouseout="return nd();">
+                                    <img border="0" src="{dpath}premium/ingenieur_ikon{img_engineer}.gif" width="32" height="32" alt="{tn_engineer}"
+                                         onmouseover="return overlib('<center><font size=1 color=white><b><br>{tn_engineer}</font><br><font size=1 color=skyblue>{tn_add_engineer}</font><br><br><a href=game.php?page=officier><font size=1 color=lime>{tn_get_now}</b></font></a></center>', LEFT, WIDTH, 150);" onmouseout="return nd();">
                                 </a>
                             </td>
                             <td align="center" width="35" class='header'>
                                 <a href='game.php?page=officier' accesskey="o">
-                                    <img border="0" src="{dpath}premium/geologe_ikon{img_geologist}.gif" width="32" height="32" alt="{of_geologist}"
-                                         onmouseover="return overlib('<center><font size=1 color=white><b><br>{of_geologist}</font><br><font size=1 color=skyblue>{of_add_geologist}</font><br><br><a href=game.php?page=officier><font size=1 color=lime>{of_get_know}</b></font></a></center>', LEFT, WIDTH, 150);" onmouseout="return nd();">
+                                    <img border="0" src="{dpath}premium/geologe_ikon{img_geologist}.gif" width="32" height="32" alt="{tn_geologist}"
+                                         onmouseover="return overlib('<center><font size=1 color=white><b><br>{tn_geologist}</font><br><font size=1 color=skyblue>{tn_add_geologist}</font><br><br><a href=game.php?page=officier><font size=1 color=lime>{tn_get_now}</b></font></a></center>', LEFT, WIDTH, 150);" onmouseout="return nd();">
                                 </a>
                             </td>
                             <td align="center" width="35" class='header'>
                                 <a href='game.php?page=officier' accesskey="o">
-                                    <img border="0" src="{dpath}premium/technokrat_ikon{img_technocrat}.gif" width="32" height="32" alt="{of_technocrat}"
-                                         onmouseover="return overlib('<center><font size=1 color=white><b><br>{of_technocrat}</font><br><font size=1 color=skyblue>{of_add_technocrat}</font><br><br><a href=game.php?page=officier><font size=1 color=lime>{of_get_know}</b></font></a></center>', LEFT, WIDTH, 150);" onmouseout="return nd();">
+                                    <img border="0" src="{dpath}premium/technokrat_ikon{img_technocrat}.gif" width="32" height="32" alt="{tn_technocrat}"
+                                         onmouseover="return overlib('<center><font size=1 color=white><b><br>{tn_technocrat}</font><br><font size=1 color=skyblue>{tn_add_technocrat}</font><br><br><a href=game.php?page=officier><font size=1 color=lime>{tn_get_now}</b></font></a></center>', LEFT, WIDTH, 150);" onmouseout="return nd();">
                                 </a>
                             </td>
                             <td align="center" class='header'></td>

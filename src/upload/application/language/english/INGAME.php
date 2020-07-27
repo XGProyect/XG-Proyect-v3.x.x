@@ -93,6 +93,18 @@ $lang = [
     'sys_building_queue_not_enough_resources' => 'The %s of your building %s level %s at %s could not be performed.<br><br>Insufficient resources: %s.',
     'sys_building_queue_not_enough_resources_from' => 'System Message',
     'sys_building_queue_not_enough_resources_subject' => 'Production cancelled',
+
+    //topnav
+    'tn_commander' => 'Commander',
+    'tn_admiral' => 'Admiral',
+    'tn_engineer' => 'Engineer',
+    'tn_geologist' => 'Geologist',
+    'tn_technocrat' => 'Technocrat',
+    'tn_add_admiral' => '+2 max. fleet slots',
+    'tn_add_engineer' => 'Minimizes losses in half defenses,<br/>+10% energy production',
+    'tn_add_geologist' => '+10% mine production',
+    'tn_add_technocrat' => '+2 Espionage level,<br/>25% Less time for research',
+    'tn_get_now' => 'Get now!',
 ];
 
 /**
