@@ -14,7 +14,6 @@
 namespace application\controllers\adm;
 
 use application\core\Controller;
-use application\core\Database;
 use application\libraries\adm\AdministrationLib;
 use application\libraries\FunctionsLib;
 
@@ -49,10 +48,12 @@ class Alliances extends Controller
         // check if session is active
         AdministrationLib::checkSession();
 
+        // load Model
+        parent::loadModel('adm/alliances');
+
         // load Language
         parent::loadLang(['adm/global', 'adm/alliances']);
 
-        $this->_db = new Database();
         $this->_current_user = parent::$users->getUserData();
 
         // Check if the user is allowed to access
@@ -63,15 +64,6 @@ class Alliances extends Controller
         }
     }
 
-    /**
-     * method __destruct
-     * param
-     * return close db connection
-     */
-    public function __destruct()
-    {
-        $this->_db->closeConnection();
-    }
     ######################################
     #
     # main methods
@@ -101,16 +93,11 @@ class Alliances extends Controller
                     $this->save_data($type);
                 }
 
-                $this->_alliance_query = $this->_db->queryFetch(
-                    "SELECT a.*, als.*
-                    FROM " . ALLIANCE . " AS a
-                    INNER JOIN " . ALLIANCE_STATISTICS . " AS als ON als.alliance_statistic_alliance_id = a.alliance_id
-                    WHERE (a.`alliance_id` = '{$this->_id}')
-                    LIMIT 1;"
-                );
+                $this->_alliance_query = $this->Alliances_Model->getAllAllianceDataById($this->_id);
             }
         }
 
+        $parse['al_sub_title'] = '';
         $parse['type'] = ($type != '') ? $type : 'info';
         $parse['alliance'] = ($alliance != '') ? $alliance : '';
         $parse['status'] = ($alliance != '') ? '' : ' disabled';
@@ -202,7 +189,7 @@ class Alliances extends Controller
         $parse += (array) $this->_alliance_query;
         $parse['al_alliance_information'] = str_replace('%s', $this->_alliance_query['alliance_name'], $this->langs->line('al_alliance_information'));
         $parse['alliance_register_time'] = ($this->_alliance_query['alliance_register_time'] == 0) ? '-' : date(FunctionsLib::readConfig('date_format_extended'), $this->_alliance_query['alliance_register_time']);
-        $parse['alliance_owner'] = $this->build_users_combo($this->_alliance_query['alliance_owner']);
+        $parse['alliance_owner_picker'] = $this->build_users_combo($this->_alliance_query['alliance_owner']);
         $parse['sel1'] = $this->_alliance_query['alliance_request_notallow'] == 1 ? 'selected' : '';
         $parse['sel0'] = $this->_alliance_query['alliance_request_notallow'] == 0 ? 'selected' : '';
         $parse['alert_info'] = ($this->_alert_type != '') ? AdministrationLib::saveMessage($this->_alert_type, $this->_alert_info) : '';
@@ -260,14 +247,12 @@ class Alliances extends Controller
         $parse['al_alliance_members'] = str_replace(
             '%s', $this->_alliance_query['alliance_name'], $this->langs->line('al_alliance_members')
         );
-        $all_members = $this->get_members();
+        $all_members = $this->Alliances_Model->getAllianceMembers($this->_id);
         $alliance_ranks = unserialize($this->_alliance_query['alliance_ranks']);
         $members = '';
 
         if (!empty($all_members)) {
-
-            while ($member = $this->_db->fetchAssoc($all_members)) {
-
+            foreach ($all_members as $member) {
                 $member['alliance_request'] = ($member['user_ally_request']) ? $this->langs->line('al_request_yes') : $this->langs->line('al_request_no');
                 $member['ally_request_text'] = ($member['user_ally_request_text']) ? $this->langs->line('ally_request_text') : '-';
                 $member['alliance_register_time'] = date(FunctionsLib::readConfig('date_format_extended'), $member['user_ally_register_time']);
@@ -327,19 +312,19 @@ class Alliances extends Controller
         $errors = '';
 
         if ($alliance_name != $alliance_name_orig) {
-            if ($alliance_name == '' or !$this->check_name($alliance_name)) {
+            if ($alliance_name == '' or !$this->Alliances_Model->checkAllianceName($alliance_name)) {
                 $errors .= $this->langs->line('al_error_alliance_name') . '<br />';
             }
         }
 
         if ($alliance_tag != $alliance_tag_orig) {
-            if ($alliance_tag == '' or !$this->check_tag($alliance_tag)) {
+            if ($alliance_tag == '' or !$this->Alliances_Model->checkAllianceTag($alliance_tag)) {
                 $errors .= $this->langs->line('al_error_alliance_tag') . '<br />';
             }
         }
 
         if ($alliance_owner != $alliance_owner_orig) {
-            if ($alliance_owner <= 0 or $this->check_founder($alliance_owner)) {
+            if ($alliance_owner <= 0 or $this->Alliances_Model->checkAllianceFounder($alliance_owner)) {
                 $errors .= $this->langs->line('al_error_founder') . '<br />';
             }
         }
@@ -348,18 +333,19 @@ class Alliances extends Controller
             $this->_alert_info = $errors;
             $this->_alert_type = 'warning';
         } else {
-            $this->_db->query("UPDATE " . ALLIANCE . " SET
-									`alliance_name` = '" . $this->_db->escapeValue($alliance_name) . "',
-									`alliance_tag` = '" . $this->_db->escapeValue($alliance_tag) . "',
-									`alliance_owner` = '" . $alliance_owner . "',
-									`alliance_owner_range` = '" . $this->_db->escapeValue($alliance_owner_range) . "',
-									`alliance_web` = '" . $this->_db->escapeValue($alliance_web) . "',
-									`alliance_image` = '" . $this->_db->escapeValue($alliance_image) . "',
-									`alliance_description` = '" . $this->_db->escapeValue($alliance_description) . "',
-									`alliance_text` = '" . $this->_db->escapeValue($alliance_text) . "',
-									`alliance_request` = '" . $this->_db->escapeValue($alliance_request) . "',
-									`alliance_request_notallow` = '" . $this->_db->escapeValue($alliance_request_notallow) . "'
-									WHERE `alliance_id` = '" . $this->_id . "';");
+            $this->Alliances_Model->updateAllianceData([
+                'alliance_name' => $alliance_name,
+                'alliance_tag' => $alliance_tag,
+                'alliance_owner' => $alliance_owner,
+                'alliance_owner_range' => $alliance_owner_range,
+                'alliance_web' => $alliance_web,
+                'alliance_image' => $alliance_image,
+                'alliance_description' => $alliance_description,
+                'alliance_text' => $alliance_text,
+                'alliance_request' => $alliance_request,
+                'alliance_request_notallow' => $alliance_request_notallow,
+                'alliance_id' => $this->_id,
+            ]);
 
             $this->_alert_info = $this->langs->line('al_all_ok_message');
             $this->_alert_type = 'ok';
@@ -373,28 +359,15 @@ class Alliances extends Controller
      */
     private function save_ranks()
     {
-        $alliance_ranks = unserialize(base64_decode($_POST['ally_ranks_old']));
+        $alliance_ranks = [];
+
+        if (!empty($_POST['ally_ranks_old'])) {
+            $alliance_ranks = unserialize(base64_decode($_POST['ally_ranks_old']));
+        }
 
         if (isset($_POST['create_rank'])) {
             if (!empty($_POST['rank_name'])) {
-                $alliance_ranks[] = array(
-                    'name' => $this->_db->escapeValue(strip_tags($_POST['rank_name'])),
-                    'mails' => 0,
-                    'delete' => 0,
-                    'kick' => 0,
-                    'bewerbungen' => 0,
-                    'administrieren' => 0,
-                    'bewerbungenbearbeiten' => 0,
-                    'memberlist' => 0,
-                    'onlinestatus' => 0,
-                    'rechtehand' => 0,
-                );
-
-                $ranks = serialize($alliance_ranks);
-
-                $this->_db->query("UPDATE `" . ALLIANCE . "` SET
-										`alliance_ranks`= '" . $ranks . "'
-											WHERE `alliance_id`= '" . $this->_id . "'");
+                $this->Alliances_Model->createAllianceRank($alliance_ranks, $_POST['rank_name'], $this->_id);
 
                 $this->_alert_info = $this->langs->line('al_rank_added');
                 $this->_alert_type = 'ok';
@@ -405,43 +378,14 @@ class Alliances extends Controller
         }
 
         if (isset($_POST['save_ranks'])) {
-            $ally_ranks_new = array();
-
-            foreach ($_POST['id'] as $id) {
-                $ally_ranks_new[$id]['name'] = $alliance_ranks[$id]['name'];
-                $ally_ranks_new[$id]['delete'] = isset($_POST['u' . $id . 'r0']) ? 1 : 0;
-                $ally_ranks_new[$id]['kick'] = isset($_POST['u' . $id . 'r1']) ? 1 : 0;
-                $ally_ranks_new[$id]['bewerbungen'] = isset($_POST['u' . $id . 'r2']) ? 1 : 0;
-                $ally_ranks_new[$id]['memberlist'] = isset($_POST['u' . $id . 'r3']) ? 1 : 0;
-                $ally_ranks_new[$id]['bewerbungenbearbeiten'] = isset($_POST['u' . $id . 'r4']) ? 1 : 0;
-                $ally_ranks_new[$id]['administrieren'] = isset($_POST['u' . $id . 'r5']) ? 1 : 0;
-                $ally_ranks_new[$id]['onlinestatus'] = isset($_POST['u' . $id . 'r6']) ? 1 : 0;
-                $ally_ranks_new[$id]['mails'] = isset($_POST['u' . $id . 'r7']) ? 1 : 0;
-                $ally_ranks_new[$id]['rechtehand'] = isset($_POST['u' . $id . 'r8']) ? 1 : 0;
-            }
-
-            $ranks = serialize($ally_ranks_new);
-
-            $this->_db->query("UPDATE `" . ALLIANCE . "` SET
-									`alliance_ranks` = '" . $ranks . "'
-									WHERE `alliance_id`= '" . $this->_id . "'");
+            $this->Alliances_Model->updateAllianceRanks($alliance_ranks, $_POST['id'], $this->_id);
 
             $this->_alert_info = $this->langs->line('al_rank_saved');
             $this->_alert_type = 'ok';
         }
 
         if (isset($_POST['delete_ranks'])) {
-            foreach ($_POST['delete_message'] as $id => $active) {
-                if ($active == 'on') {
-                    unset($alliance_ranks[$id]);
-                }
-            }
-
-            $this->_db->query(
-                "UPDATE `" . ALLIANCE . "` SET
-                `alliance_ranks` = '" . serialize($alliance_ranks) . "'
-                WHERE `alliance_id`= '" . $this->_id . "'"
-            );
+            $this->Alliances_Model->deleteAllianceRanks($alliance_ranks, $_POST['delete_message'], $this->_id);
 
             $this->_alert_info = $this->langs->line('al_rank_removed');
             $this->_alert_type = 'ok';
@@ -456,30 +400,19 @@ class Alliances extends Controller
     private function save_members()
     {
         if (isset($_POST['delete_members'])) {
-            $ids_array = '';
+            $ids_string = '';
 
             if (isset($_POST['delete_message'])) {
                 foreach ($_POST['delete_message'] as $user_id => $delete_status) {
                     if ($delete_status == 'on' && $user_id > 0 && is_numeric($user_id)) {
-                        $ids_array .= $user_id . ',';
+                        $ids_string .= $user_id . ',';
                     }
                 }
 
-                $amount = $this->_db->queryFetch(
-                    "SELECT
-                        COUNT(`user_id`) AS `Amount`
-                    FROM `" . USERS . "`
-                    WHERE `user_ally_id` = '" . $this->_id . "';"
-                );
+                $amount = $this->Alliances_Model->countAllianceMembers($this->_id);
 
                 if ($amount['Amount'] > 1) {
-                    $this->_db->query(
-                        "UPDATE " . USERS . " SET
-                        `user_ally_id` = 0,
-                        `user_ally_request` = 0,
-                        `user_ally_request_text` = '',
-                        `user_ally_rank_id` = 0
-                        WHERE `user_id` IN (" . rtrim($ids_array, ',') . ")");
+                    $this->Alliances_Model->removeAllianceMembers($ids_string);
 
                     // RETURN THE ALERT
                     $this->_alert_info = $this->langs->line('us_all_ok_message');
@@ -506,10 +439,9 @@ class Alliances extends Controller
     private function build_users_combo($user_id)
     {
         $combo_rows = '';
-        $users = $this->_db->query("SELECT `user_id`, `user_name`
-												FROM " . USERS . ";");
+        $users = $this->Alliances_Model->getAllUsers();
 
-        while ($users_row = $this->_db->fetchArray($users)) {
+        foreach ($users as $users_row) {
             $combo_rows .= '<option value="' . $users_row['user_id'] . '" ' . ($users_row['user_id'] == $user_id ? ' selected' : '') . '>' . $users_row['user_name'] . '</option>';
         }
 
@@ -528,109 +460,11 @@ class Alliances extends Controller
      */
     private function check_alliance($alliance)
     {
-        $alliance_query = $this->_db->queryFetch("SELECT `alliance_id`
-															FROM " . ALLIANCE . "
-															WHERE `alliance_name` = '" . $alliance . "' OR
-																	`alliance_tag` = '" . $alliance . "';");
+        $alliance_query = $this->Alliances_Model->checkAllianceByNameOrTag($alliance);
 
         $this->_id = $alliance_query['alliance_id'];
 
         return ($alliance_query['alliance_id'] != '' && $alliance_query != null);
-    }
-
-    /**
-     * method check_tag
-     * param $alliance_tag
-     * return the validated the ally tag
-     */
-    private function check_tag($alliance_tag)
-    {
-        $alliance_tag = trim($alliance_tag);
-        $alliance_tag = htmlspecialchars_decode($alliance_tag, ENT_QUOTES);
-
-        if ($alliance_tag == '' or is_null($alliance_tag) or (strlen($alliance_tag) < 3) or (strlen($alliance_tag) > 8)) {
-            return false;
-        }
-
-        $alliance_tag = $this->_db->escapeValue($alliance_tag);
-
-        $check_tag = $this->_db->queryFetch(
-            "SELECT `alliance_tag`
-            FROM `" . ALLIANCE . "`
-            WHERE `alliance_tag` = '" . $alliance_tag . "'"
-        );
-
-        if ($check_tag) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * method check_name
-     * param $alliance_name
-     * return the validated the ally name
-     */
-    private function check_name($alliance_name)
-    {
-        $alliance_name = trim($alliance_name);
-        $alliance_name = htmlspecialchars_decode($alliance_name, ENT_QUOTES);
-
-        if ($alliance_name == '' or is_null($alliance_name) or (strlen($alliance_name) < 3) or (strlen($alliance_name) > 30)) {
-            return false;
-        }
-
-        $alliance_name = $this->_db->escapeValue($alliance_name);
-
-        $check_name = $this->_db->queryFetch(
-            "SELECT `alliance_name`
-            FROM `" . ALLIANCE . "`
-            WHERE `alliance_name` = '" . $alliance_name . "'"
-        );
-
-        if ($check_name) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * method check_founder
-     * param $user_id
-     * return the ally ID to verify
-     */
-    private function check_founder($user_id)
-    {
-        $ally_data = $this->_db->queryFetch("SELECT `user_ally_id`, `user_ally_request`
-													FROM `" . USERS . "`
-													WHERE `user_id` = '" . $user_id . "';");
-
-        return ($ally_data['user_ally_id'] > 0 && !empty($ally_data['user_ally_id']) && $ally_data['user_ally_request'] > 0 && !empty($ally_data['user_ally_request']));
-    }
-
-    /**
-     * method get_members
-     * param
-     * return the list of users that belong to the alliance
-     */
-    private function get_members()
-    {
-        return $this->_db->query(
-            "SELECT u.`user_id`,
-                u.`user_name`,
-                u.`user_ally_request`,
-                u.`user_ally_request_text`,
-                u.`user_ally_register_time`,
-                u.`user_ally_rank_id`,
-                a.`alliance_owner`,
-                a.`alliance_owner_range`,
-                a.`alliance_ranks`
-            FROM `" . USERS . "` AS u
-            LEFT JOIN `" . ALLIANCE . "` AS a ON a.`alliance_id` = u.`user_ally_id`
-            WHERE u.`user_ally_id` = '" . $this->_id . "';"
-        );
     }
 }
 
