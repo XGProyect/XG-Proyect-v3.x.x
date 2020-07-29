@@ -13,7 +13,7 @@
  */
 namespace application\models\adm;
 
-use application\core\Database;
+use application\core\Model;
 
 /**
  * Announcement Class
@@ -25,29 +25,8 @@ use application\core\Database;
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-class Announcement
+class Announcement extends Model
 {
-    private $db = null;
-
-    /**
-     * Constructor
-     *
-     * @param Database $db
-     */
-    public function __construct(Database $db)
-    {
-        // use this to make queries
-        $this->db = $db;
-    }
-
-    /**
-     * Destructor
-     */
-    public function __destruct()
-    {
-        $this->db->closeConnection();
-    }
-
     /**
      * Get all server users
      *
@@ -55,13 +34,13 @@ class Announcement
      */
     public function getAllPlayers(): array
     {
-        return $this->db->queryFetchAll(
+        return $this->db->query(
             "SELECT
                 `user_id`,
                 `user_name`,
                 `user_email`
             FROM `" . USERS . "`;"
-        );
+        )->result_array();
     }
 }
 

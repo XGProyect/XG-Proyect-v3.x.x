@@ -14,6 +14,7 @@
 namespace application\models\adm;
 
 use application\core\Database;
+use application\core\Model;
 
 /**
  * Home Class
@@ -25,29 +26,8 @@ use application\core\Database;
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-class Home
+class Home extends Model
 {
-    private $db = null;
-
-    /**
-     * Constructor
-     *
-     * @param Database $db
-     */
-    public function __construct(Database $db)
-    {
-        // use this to make queries
-        $this->db = $db;
-    }
-
-    /**
-     * Destructor
-     */
-    public function __destruct()
-    {
-        $this->db->closeConnection();
-    }
-
     /**
      * Get database version
      *
@@ -55,7 +35,7 @@ class Home
      */
     public function getDbVersion(): string
     {
-        return $this->db->serverInfo();
+        return $this->db->version();
     }
 
     /**
@@ -65,12 +45,12 @@ class Home
      */
     public function getDbSize(): array
     {
-        return $this->db->queryFetch(
+        return $this->db->query(
             "SELECT
                 SUM(data_length + index_length) AS 'db_size'
             FROM information_schema.TABLES
-            WHERE table_schema = '" . $this->db->escapeValue(DB_NAME) . "';"
-        );
+            WHERE table_schema = " . $this->db->escape(DB_NAME) . ";"
+        )->row_array();
     }
 
     /**
@@ -80,7 +60,7 @@ class Home
      */
     public function getUsersStats(): array
     {
-        return $this->db->queryFetch(
+        return $this->db->query(
             "SELECT
                 (
                     SELECT
@@ -134,8 +114,8 @@ class Home
                     FROM
                         `" . ALLIANCE_STATISTICS . "` s
                 ) AS `average_alliance_points`"
-        );
+        )->row_array();
     }
 }
 
-/* end of login.php */
+/* end of home.php */
