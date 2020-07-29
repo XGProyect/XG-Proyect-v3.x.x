@@ -311,7 +311,7 @@ class Alliances extends Controller
         $alliance_name = isset($_POST['alliance_name']) ? $_POST['alliance_name'] : '';
         $alliance_name_orig = isset($_POST['alliance_name_orig']) ? $_POST['alliance_name_orig'] : '';
         $alliance_tag = isset($_POST['alliance_tag']) ? $_POST['alliance_tag'] : '';
-        $alliance_tag_orig = isset($_POST['ally_tag_orig']) ? $_POST['ally_tag_orig'] : '';
+        $alliance_tag_orig = isset($_POST['alliance_tag_orig']) ? $_POST['alliance_tag_orig'] : '';
         $alliance_owner = isset($_POST['alliance_owner']) ? $_POST['alliance_owner'] : '';
         $alliance_owner_orig = isset($_POST['alliance_owner_orig']) ? $_POST['alliance_owner_orig'] : '';
         $alliance_owner_range = isset($_POST['alliance_owner_range']) ? $_POST['alliance_owner_range'] : '';

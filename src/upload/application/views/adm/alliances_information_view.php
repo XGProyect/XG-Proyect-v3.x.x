@@ -30,7 +30,7 @@
                             <td>{al_alliance_information_owner}</td>
                             <td>
                                 <select name="alliance_owner">
-                                    {alliance_owner}
+                                    {alliance_owner_picker}
                                 </select>
                             </td>
                         </tr>
