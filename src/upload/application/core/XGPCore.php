@@ -142,11 +142,6 @@ abstract class XGPCore
                 return;
             }
 
-            // required by the library
-            if (!defined('BASEPATH')) {
-                define('BASEPATH', XGP_ROOT . APP_PATH);
-            }
-
             // use CI library
             require_once $ci_lang_path;
 

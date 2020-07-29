@@ -88,11 +88,6 @@ class Template
             return;
         }
 
-        // required by the library
-        if (!defined('BASEPATH')) {
-            define('BASEPATH', XGP_ROOT . APP_PATH);
-        }
-
         // use CI library
         require_once $parser_library_path;
 
