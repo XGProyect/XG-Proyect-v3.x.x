@@ -206,7 +206,7 @@ class Alliances extends Controller
     {
         $parse = $this->langs->language;
         $parse['al_alliance_ranks'] = str_replace('%s', $this->_alliance_query['alliance_name'], $this->langs->line('al_alliance_ranks'));
-        $parse['image_path'] = XGP_ROOT . DEFAULT_SKINPATH;
+        $parse['image_path'] = DEFAULT_SKINPATH;
         $parse['ally_ranks_old'] = base64_encode($this->_alliance_query['alliance_ranks']);
         $alliance_ranks = unserialize($this->_alliance_query['alliance_ranks']);
         $i = 0;
