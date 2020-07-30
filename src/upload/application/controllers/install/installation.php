@@ -81,9 +81,10 @@ class Installation extends Controller
         }
 
         // ACTION FOR THE CURRENT PAGE
+        $parse['alert'] = '';
+
         switch ((isset($_POST['page']) ? $_POST['page'] : '')) {
             case 'step1':
-
                 $this->host = isset($_POST['host']) ? $_POST['host'] : null;
                 $this->user = isset($_POST['user']) ? $_POST['user'] : null;
                 $this->password = isset($_POST['password']) ? $_POST['password'] : null;
@@ -185,7 +186,6 @@ class Installation extends Controller
                 }
 
                 if ($continue) {
-
                     // set last stat update
                     FunctionsLib::updateConfig('stat_last_update', time());
 
@@ -208,12 +208,20 @@ class Installation extends Controller
         }
 
         if ($continue) {
-
             switch ((isset($_GET['mode']) ? $_GET['mode'] : '')) {
                 case 'step1':
                     $current_page = $this->getTemplate()->set(
                         'install/in_database_view',
-                        $this->langs
+                        array_merge(
+                            [
+                                'alert' => '',
+                                'v_host' => '',
+                                'v_user' => '',
+                                'v_db' => '',
+                                'v_prefix' => '',
+                            ],
+                            $this->langs
+                        )
                     );
 
                     break;
@@ -276,7 +284,7 @@ class Installation extends Controller
                 default:
                     $current_page = $this->getTemplate()->set(
                         'install/in_welcome_view',
-                        $this->langs
+                        array_merge($parse, $this->langs)
                     );
 
                     break;
@@ -589,7 +597,7 @@ class Installation extends Controller
         $parse['message'] = $message;
 
         return $this->getTemplate()->set(
-            'adm/save_message_view',
+            'install/save_message_view',
             $parse
         );
     }

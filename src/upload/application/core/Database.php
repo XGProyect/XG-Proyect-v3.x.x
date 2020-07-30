@@ -138,7 +138,6 @@ class Database
     public function tryDatabase($db_name)
     {
         if (empty($db_name)) {
-
             return false;
         }
 
@@ -177,7 +176,10 @@ class Database
     public function closeConnection()
     {
         if (isset($this->connection) && (is_resource($this->connection) or is_object($this->connection))) {
-            $this->connection->close();
+            if ($this->connection->connect_errno == 0) {
+                $this->connection->close();
+            }
+
             unset($this->connection);
 
             return true;
