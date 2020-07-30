@@ -30,14 +30,36 @@ use application\core\XGPCore;
  */
 class NoobsProtectionLib extends XGPCore
 {
-
+    /**
+     * Protection on/off
+     *
+     * @var bool
+     */
     private $protection;
+
+    /**
+     * Minimum amount of points (base points)
+     *
+     * @var int
+     */
     private $protectiontime;
+
+    /**
+     * Protection multiplier
+     *
+     * @var int
+     */
     private $protectionmulti;
+
+    /**
+     * Minimum allowed level
+     *
+     * @var int
+     */
     private $allowed_level;
 
     /**
-     * __construct()
+     * Constructor
      */
     public function __construct()
     {
@@ -57,10 +79,10 @@ class NoobsProtectionLib extends XGPCore
     {
         $configs = $this->Noobsprotectionlib_Model->readAllConfigs();
 
-        $this->protection = $configs['noobprotection'];
-        $this->protectiontime = $configs['noobprotectiontime'];
-        $this->protectionmulti = $configs['noobprotectionmulti'];
-        $this->allowed_level = $configs['stat_admin_level'];
+        $this->protection = (bool) $configs['noobprotection'];
+        $this->protectiontime = (int) $configs['noobprotectiontime'];
+        $this->protectionmulti = (int) $configs['noobprotectionmulti'];
+        $this->allowed_level = (int) $configs['stat_admin_level'];
     }
 
     /**
