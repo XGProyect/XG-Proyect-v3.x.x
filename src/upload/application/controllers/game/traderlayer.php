@@ -142,7 +142,7 @@ class TraderLayer extends Controller
 
     if ($this->current_planet['planet_metal'] > $necessaire) {
 
-    $this->_db->query(
+    $this->db->query(
     "UPDATE " . PLANETS . " SET
     `planet_metal` = `planet_metal` - " . round($necessaire) . ",
     `planet_crystal` = `planet_crystal` + " . round($_POST['cristal']) . ",
@@ -184,7 +184,7 @@ class TraderLayer extends Controller
 
     if ($this->current_planet['planet_crystal'] > $necessaire) {
 
-    $this->_db->query(
+    $this->db->query(
     "UPDATE " . PLANETS . " SET
     `planet_metal` = `planet_metal` + " . round($_POST['metal']) . ",
     `planet_crystal` = `planet_crystal` - " . round($necessaire) . ",
@@ -226,7 +226,7 @@ class TraderLayer extends Controller
 
     if ($this->current_planet['planet_deuterium'] > $necessaire) {
 
-    $this->_db->query(
+    $this->db->query(
     "UPDATE " . PLANETS . " SET
     `planet_metal` = `planet_metal` + " . round($_POST['metal']) . ",
     `planet_crystal` = `planet_crystal` + " . round($_POST['cristal']) . ",

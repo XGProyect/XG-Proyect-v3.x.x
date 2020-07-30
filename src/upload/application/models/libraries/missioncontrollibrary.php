@@ -1,6 +1,6 @@
 <?php
 /**
- * Users_library Model
+ * MissionControlLibrary Model
  *
  * PHP Version 7.1+
  *
@@ -16,7 +16,7 @@ namespace application\models\libraries;
 use application\core\Database;
 
 /**
- * Users_library Class
+ * MissionControlLibrary Class
  *
  * @category Classes
  * @package  Application
