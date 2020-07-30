@@ -293,11 +293,9 @@ class Installation extends Controller
      */
     private function serverRequirementes()
     {
-        if (version_compare(PHP_VERSION, '5.5.0', '<')) {
-
+        if (version_compare(PHP_VERSION, '7.1.0', '<')) {
             return false;
         } else {
-
             return true;
         }
     }

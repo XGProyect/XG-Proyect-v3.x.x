@@ -1,7 +1,7 @@
 <?php
 // SOME MESSAGES
 $lang['404_error'] = 'The requested page doesn\'t exists';
-$lang['ins_no_server_requirements'] = 'Your server / hosting does not meet the minimum requirements needed to run XG Proyect.<br /><br />Requirements: <br />- PHP 5.5.x<br />- MySQL 5.5.x';
+$lang['ins_no_server_requirements'] = 'Your server / hosting does not meet the minimum requirements needed to run XG Proyect.<br /><br />Requirements: <br />- PHP 7.1+<br />- MySQL 5.5+';
 $lang['ins_not_writable'] = 'You must provide write permission (chmod 777) to the application/config directory to continue with the installation.';
 $lang['ins_already_installed'] = 'XG Proyect is already installed. Select an option: <br /><br /> - <a href="../admin.php?page=update">Update</a> <br /> - <a href="../admin.php?page=migrate">Migrate</a> <br /> - <a href="../">Back to the game</a> <br /><br />In case you do not want to take any action, for safety, we recommend <span style="color:red;text-decoration:underline;">DELETE</span> the install directory.';
 

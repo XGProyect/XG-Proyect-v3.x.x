@@ -151,7 +151,6 @@ class Techtree extends Controller
         $list_of_requirements = [];
 
         if (!isset($this->_requirements[$object])) {
-
             return $list_of_requirements;
         }
 
