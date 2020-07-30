@@ -54,7 +54,7 @@ class Database
     private $debug;
 
     /**
-     * createPlanetWithOptions
+     * Constructor
      *
      * @param array $data Data
      *
