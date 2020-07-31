@@ -76,6 +76,8 @@ class Repair extends Controller
             $parse['display'] = 'block';
             $parse['head'] = $this->getTemplate()->set('adm/repair_row_head_view', $this->langs->language);
             $parse['tables'] = '';
+            $parse['np_general'] = '';
+            $parse['results'] = '';
 
             foreach ($tables as $row) {
                 $row['row'] = $row['table_name'];

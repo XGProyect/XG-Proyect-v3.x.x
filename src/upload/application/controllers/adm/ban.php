@@ -102,6 +102,9 @@ class Ban extends Controller
     {
         $parse = $this->langs->language;
         $parse['js_path'] = JS_PATH;
+        $parse['alert'] = '';
+        $parse['bn_sub_title'] = '';
+        $parse['np_general'] = '';
 
         if (isset($_POST['unban_name']) && $_POST['unban_name']) {
             $username = $this->_db->escapeValue($_POST['unban_name']);
@@ -134,6 +137,9 @@ class Ban extends Controller
     {
         $parse = $this->langs->language;
         $parse['js_path'] = JS_PATH;
+        $parse['alert'] = '';
+        $parse['bn_sub_title'] = '';
+        $parse['reason'] = '';
         $ban_name = isset($_GET['ban_name']) ? $this->_db->escapeValue($_GET['ban_name']) : null;
 
         if (isset($_GET['banuser']) && isset($_GET['ban_name'])) {

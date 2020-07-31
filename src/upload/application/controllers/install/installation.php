@@ -165,13 +165,10 @@ class Installation extends Controller
                 $create_account_status = $this->createAccount();
 
                 if ($create_account_status < 0) {
-
                     // Failure
                     if ($create_account_status == -1) {
-
                         $error_message = $this->langs['ins_adm_empty_fields_error'];
                     } else {
-
                         $error_message = $this->langs['ins_adm_invalid_email_address'];
                     }
 
@@ -194,7 +191,7 @@ class Installation extends Controller
 
                     $current_page = $this->getTemplate()->set(
                         'install/in_create_admin_done_view',
-                        $this->langs
+                        array_merge($parse, $this->langs)
                     );
 
                     // This will continue on false meaning "This is the end of the installation, no else where to go"
@@ -337,7 +334,6 @@ class Installation extends Controller
 
         // if no db object
         if (!defined('DB_NAME')) {
-
             return false;
         }
 
