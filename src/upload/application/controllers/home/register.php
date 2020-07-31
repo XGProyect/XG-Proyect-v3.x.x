@@ -82,18 +82,14 @@ class Register extends Controller
         if ($_POST) {
 
             if (!$this->runValidations()) {
-
                 if ($this->error_id != '') {
-
                     $url = 'index.php?character=' . $_POST['character'] . '&email=' . $_POST['email'] . '&error=' . $this->error_id;
                 } else {
-
                     $url = 'index.php';
                 }
 
                 FunctionsLib::redirect($url);
             } else {
-
                 $user_password = $_POST['password'];
                 $user_name = $_POST['character'];
                 $user_email = $_POST['email'];
@@ -120,7 +116,7 @@ class Register extends Controller
                     for ($galaxy = $last_galaxy; $galaxy <= MAX_GALAXY_IN_WORLD; $galaxy++) {
                         for ($system = $last_system; $system <= MAX_SYSTEM_IN_GALAXY; $system++) {
                             for ($pos = $last_planet; $pos <= 4; $pos++) {
-                                $planet = round(mt_rand(4, 12));
+                                $planet = mt_rand(4, 12);
 
                                 switch ($last_planet) {
                                     case 1:

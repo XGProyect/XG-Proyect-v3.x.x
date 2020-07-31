@@ -23,12 +23,12 @@
                                 <table class="table table-borderless" width="100%" cellspacing="0">
                                     <tr>
                                         <td>{mk_user_name}</th>
-                                        <td><input class="form-control" type="text" name="name"></th>
+                                        <td><input class="form-control" type="text" name="name" minlength="4" maxlength="20"></th>
                                     </tr>
                                     <tr>
                                         <td>{mk_user_pass}</th>
                                         <td>
-                                            <input class="form-control" type="password" name="password">
+                                            <input class="form-control" type="text" name="password" minlength="8">
                                             <input class="form-input-check" type="checkbox" checked="checked"
                                                 name="password_check"> {mk_user_password_random}
                                             </th>
