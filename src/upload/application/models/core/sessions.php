@@ -121,14 +121,14 @@ class Sessions
      * @param string $sid
      * @return string
      */
-    public function deleteSessionDataById(string $sid): int
+    public function deleteSessionDataById(string $sid): bool
     {
         $this->db->query(
             "DELETE FROM `" . SESSIONS . "`
             WHERE `session_id` = '" . $this->db->escapeValue($sid) . "'"
         );
 
-        return $this->db->affectedRows();
+        return ($this->db->affectedRows() > 0);
     }
 
     /**
@@ -137,14 +137,14 @@ class Sessions
      * @param integer $expire
      * @return string
      */
-    public function cleanSessionData(int $expire): int
+    public function cleanSessionData(int $expire): bool
     {
         $this->db->query(
             "DELETE FROM `" . SESSIONS . "`
             WHERE DATE_ADD(`session_last_accessed`, INTERVAL " . $expire . " SECOND) < NOW()"
         );
 
-        return $this->db->affectedRows();
+        return ($this->db->affectedRows() > 0);
     }
 }
 
