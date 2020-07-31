@@ -17,7 +17,7 @@
                         </tr>
                         <tr>
                             <td>{us_user_information_password}</td>
-                            <td><input type="text" class="form-control" name="password" value=""></td>
+                            <td><input type="text" class="form-control" name="password" value="" minlength="8"></td>
                         </tr>
                         <tr>
                             <td>{us_user_information_email}</td>
