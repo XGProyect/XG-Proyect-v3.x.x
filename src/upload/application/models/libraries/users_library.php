@@ -207,7 +207,7 @@ class Users_library
      *
      * @return array
      */
-    public function setUserDataByUserName($user_name)
+    public function setUserDataByUserId($user_id)
     {
         if (!defined('IN_ADMIN')) {
             return $this->db->queryFetch(
@@ -223,21 +223,22 @@ class Users_library
                         FROM `" . MESSAGES . "`
                         WHERE `message_receiver` = u.`user_id` AND `message_read` = 0
                     ) AS `new_message`
-                FROM " . USERS . " AS u
-                INNER JOIN " . PREFERENCES . " AS pr ON pr.preference_user_id = u.user_id
-                INNER JOIN " . USERS_STATISTICS . " AS usul ON usul.user_statistic_user_id = u.user_id
-                INNER JOIN " . PREMIUM . " AS pre ON pre.premium_user_id = u.user_id
-                INNER JOIN " . RESEARCH . " AS r ON r.research_user_id = u.user_id
-                LEFT JOIN " . ALLIANCE . " AS a ON a.alliance_id = u.user_ally_id
-                WHERE (u.user_name = '" . $this->db->escapeValue($user_name) . "')
+                FROM `" . USERS . "` AS u
+                INNER JOIN `" . PREFERENCES . "` AS pr ON pr.preference_user_id = u.user_id
+                INNER JOIN `" . USERS_STATISTICS . "` AS usul ON usul.user_statistic_user_id = u.user_id
+                INNER JOIN `" . PREMIUM . "` AS pre ON pre.premium_user_id = u.user_id
+                INNER JOIN `" . RESEARCH . "` AS r ON r.research_user_id = u.user_id
+                LEFT JOIN `" . ALLIANCE . "` AS a ON a.alliance_id = u.user_ally_id
+                WHERE (u.`user_id` = '" . (int) $user_id . "')
                 LIMIT 1;"
             );
         }
 
         return $this->db->queryFetch(
-            "SELECT u.*
-            FROM " . USERS . " AS u
-            WHERE (u.user_name = '" . $this->db->escapeValue($user_name) . "')
+            "SELECT
+                u.*
+            FROM `" . USERS . "` AS u
+            WHERE (u.`user_id` = '" . (int) $user_id . "')
             LIMIT 1;"
         );
     }

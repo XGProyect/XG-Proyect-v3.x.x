@@ -74,14 +74,12 @@ class Users_library
     public function userLogin($user_id = 0, $user_name = '', $password = '')
     {
         if ($user_id != 0 && !empty($user_name) && !empty($password)) {
-
             $_SESSION['user_id'] = $user_id;
             $_SESSION['user_name'] = $user_name;
             $_SESSION['user_password'] = sha1($password . '-' . SECRETWORD);
 
             return true;
         } else {
-
             return false;
         }
     }
@@ -211,7 +209,7 @@ class Users_library
      */
     private function setUserData()
     {
-        $user_row = $this->Users_Model->setUserDataByUserName($_SESSION['user_name']);
+        $user_row = $this->Users_Model->setUserDataByUserId($_SESSION['user_id']);
 
         FunctionsLib::displayLoginErrors($user_row);
 
