@@ -28,7 +28,7 @@
                                     <tr>
                                         <td>{mk_user_pass}</th>
                                         <td>
-                                            <input class="form-control" type="text" name="password" minlength="8">
+                                            <input class="form-control" type="password" name="password" minlength="8">
                                             <input class="form-input-check" type="checkbox" checked="checked"
                                                 name="password_check"> {mk_user_password_random}
                                             </th>
