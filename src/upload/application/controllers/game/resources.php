@@ -14,7 +14,6 @@
 namespace application\controllers\game;
 
 use application\core\Controller;
-use application\core\Database;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
 use application\libraries\OfficiersLib;
@@ -49,13 +48,15 @@ class Resources extends Controller
     {
         parent::__construct();
 
+        // load Model
+        parent::loadModel('game/resources');
+
         // check if session is active
         parent::$users->checkSession();
 
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
-        $this->_db = new Database();
         $this->_lang = parent::$lang;
         $this->_resource = parent::$objects->getObjects();
         $this->_prod_grid = parent::$objects->getProduction();
@@ -64,16 +65,6 @@ class Resources extends Controller
         $this->_current_planet = parent::$users->getPlanetData();
 
         $this->build_page();
-    }
-
-    /**
-     * method __destruct
-     * param
-     * return close db connection
-     */
-    public function __destruct()
-    {
-        $this->_db->closeConnection();
     }
 
     /**
@@ -227,10 +218,7 @@ class Resources extends Controller
                 }
             }
 
-            $this->_db->query("UPDATE " . PLANETS . " SET
-									`planet_id` = '" . $this->_current_planet['planet_id'] . "'
-									$SubQry
-									WHERE `planet_id` = '" . $this->_current_planet['planet_id'] . "';");
+            $this->Resources_Model->updateCurrentPlanet($this->_current_planet, $SubQry);
 
             FunctionsLib::redirect('game.php?page=resourceSettings');
         }
