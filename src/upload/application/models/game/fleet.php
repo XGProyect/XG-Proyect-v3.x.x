@@ -288,6 +288,56 @@ class Fleet
     }
 
     /**
+     * Insert a new missiles mission into the fleets table
+     *
+     * @param array $data
+     * @return void
+     */
+    public function insertNewMissilesMission(array $data): void
+    {
+        try {
+            $this->db->beginTransaction();
+
+            $this->db->query(
+                "INSERT INTO `" . FLEETS . "` SET
+                `fleet_owner` = '" . $data['fleet_owner'] . "',
+                `fleet_mission` = '10',
+                `fleet_amount` = " . $data['fleet_amount'] . ",
+                `fleet_array` = '" . $data['fleet_array'] . "',
+                `fleet_start_time` = '" . $data['fleet_start_time'] . "',
+                `fleet_start_galaxy` = '" . $data['fleet_start_galaxy'] . "',
+                `fleet_start_system` = '" . $data['fleet_start_system'] . "',
+                `fleet_start_planet` ='" . $data['fleet_start_planet'] . "',
+                `fleet_start_type` = '1',
+                `fleet_end_time` = '" . $data['fleet_end_time'] . "',
+                `fleet_end_stay` = '0',
+                `fleet_end_galaxy` = '" . $data['fleet_end_galaxy'] . "',
+                `fleet_end_system` = '" . $data['fleet_end_system'] . "',
+                `fleet_end_planet` = '" . $data['fleet_end_planet'] . "',
+                `fleet_end_type` = '1',
+                `fleet_target_obj` = '" . $data['fleet_target_obj'] . "',
+                `fleet_resource_metal` = '0',
+                `fleet_resource_crystal` = '0',
+                `fleet_resource_deuterium` = '0',
+                `fleet_target_owner` = '" . $data['fleet_target_owner'] . "',
+                `fleet_group` = '0',
+                `fleet_mess` = '0',
+                `fleet_creation` = '" . time() . "';"
+            );
+
+            $this->db->query(
+                "UPDATE `" . DEFENSES . "` SET
+                    `defense_interplanetary_missile` = `defense_interplanetary_missile` - " . $data['fleet_amount'] . "
+                WHERE `defense_planet_id` =  '" . $data['user_current_planet'] . "'"
+            );
+
+            $this->db->commitTransaction();
+        } catch (Exception $e) {
+            $this->db->rollbackTransaction();
+        }
+    }
+
+    /**
      * Update planet based on the received values
      *
      * @param array $planet_data Planet Data
