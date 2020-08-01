@@ -47,7 +47,6 @@ class Installation extends Controller
     {
         parent::__construct();
 
-        $this->_db = new Database();
         $this->langs = parent::$lang;
         $this->_planet = new PlanetLib();
 
@@ -492,8 +491,8 @@ class Installation extends Controller
         }
 
         // some default values
-        $adm_name = $this->_db->escapeValue($_POST['adm_user']);
-        $adm_email = $this->_db->escapeValue($_POST['adm_email']);
+        $adm_name = $this->Installation_Model->escapeValue($_POST['adm_user']);
+        $adm_email = $this->Installation_Model->escapeValue($_POST['adm_email']);
         $adm_pass = sha1($_POST['adm_pass']);
 
         // create user and its planet
@@ -530,8 +529,7 @@ class Installation extends Controller
      */
     private function validateDbData()
     {
-        return !empty($this->host) && !empty($this->name) &&
-        !empty($this->user) && !empty($this->prefix);
+        return (!empty($this->host) && !empty($this->name) && !empty($this->user) && !empty($this->prefix));
     }
 
     /**

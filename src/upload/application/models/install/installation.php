@@ -137,6 +137,17 @@ class Installation
         // Change it back to original sql_mode
         $this->db->query('set @@global.sql_mode = @orig_mode');
     }
+
+    /**
+     * Escape a value
+     *
+     * @param string $var
+     * @return string
+     */
+    public function escapeValue($var): string
+    {
+        return $this->db->escapeValue($var);
+    }
 }
 
 /* end of installation.php */
