@@ -138,17 +138,13 @@ class Galaxy extends Controller
      */
     private function buildPage(): void
     {
-        $fleetmax = FleetsLib::getMaxFleets($this->user['research_computer_technology'], $this->user['premium_officier_admiral']);
+        // fleets
+        $max_fleets = FleetsLib::getMaxFleets($this->user['research_computer_technology'], $this->user['premium_officier_admiral']);
+        $current_fleets = $this->Galaxy_Model->countAmountFleetsByUserId($this->user['user_id']);
+
+        // missiles and espionage probes
         $CurrentPlID = $this->planet['planet_id'];
         $CurrentSP = $this->planet['ship_espionage_probe'];
-
-        $maxfleet = $this->_db->query(
-            "SELECT `fleet_id`
-            FROM " . FLEETS . "
-            WHERE `fleet_owner` = '" . intval($this->user['user_id']) . "';"
-        );
-
-        $maxfleet_count = $this->_db->numRows($maxfleet);
 
         if (!isset($mode)) {
             if (isset($_GET['mode'])) {
@@ -173,8 +169,8 @@ class Galaxy extends Controller
         $parse['system'] = $this->_system;
         $parse['planet'] = $planet;
         $parse['currentmip'] = $this->planet['defense_interplanetary_missile'];
-        $parse['maxfleetcount'] = $maxfleet_count;
-        $parse['fleetmax'] = $fleetmax;
+        $parse['maxfleetcount'] = $current_fleets;
+        $parse['fleetmax'] = $max_fleets;
         $parse['recyclers'] = FormatLib::prettyNumber($this->planet['ship_recycler']);
         $parse['spyprobes'] = FormatLib::prettyNumber($CurrentSP);
         $parse['missile_count'] = sprintf($this->langs->line('gl_missil_to_launch'), $this->planet['defense_interplanetary_missile']);

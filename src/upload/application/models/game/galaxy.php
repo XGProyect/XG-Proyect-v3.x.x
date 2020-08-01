@@ -1,4 +1,7 @@
 <?php
+
+declare (strict_types = 1);
+
 /**
  * Galaxy Model
  *
@@ -144,6 +147,102 @@ class Galaxy
             ORDER BY p.planet_planet;"
         );
     }
+
+    /**
+     * Get amount of fleets that the user has
+     *
+     * @param integer $user_id
+     * @return array
+     */
+    public function countAmountFleetsByUserId(int $user_id): int
+    {
+        return $this->db->queryFetch(
+            "SELECT
+                COUNT(`fleet_id`) AS total_fleets
+            FROM `" . FLEETS . "`
+            WHERE `fleet_owner` = '" . $user_id . "';"
+        )['total_fleets'];
+    }
+
+    /**
+     * Get target user data by coords
+     *
+     * @param integer $galaxy
+     * @param integer $system
+     * @param integer $planet
+     * @return array
+     */
+    public function getTargetUserDataByCoords(int $galaxy, int $system, int $planet): array
+    {
+        return $this->db->queryFetch(
+            "SELECT
+                u.`user_id`,
+                u.`user_onlinetime`,
+                pr.`preference_vacation_mode`
+            FROM `" . USERS . "` AS u
+            INNER JOIN `" . PREFERENCES . "` AS pr ON pr.preference_user_id = u.user_id
+            WHERE u.user_id = (
+                SELECT `planet_user_id`
+                FROM `" . PLANETS . "`
+                WHERE planet_galaxy = " . $galaxy . "  AND
+                    planet_system = " . $system . " AND
+                    planet_planet = " . $planet . " AND
+                    planet_type = 1
+                LIMIT 1
+                )
+            LIMIT 1"
+        );
+    }
+
+    /**
+     * Insert a new missiles mission into the fleets table
+     *
+     * @param array $data
+     * @return void
+     */
+    public function insertNewMissilesMission(array $data): void
+    {
+        try {
+            $this->db->beginTransaction();
+
+            $this->db->query(
+                "INSERT INTO `" . FLEETS . "` SET
+                `fleet_owner` = '" . $data['fleet_owner'] . "',
+                `fleet_mission` = '10',
+                `fleet_amount` = " . $data['fleet_amount'] . ",
+                `fleet_array` = '" . $data['fleet_array'] . "',
+                `fleet_start_time` = '" . $data['fleet_start_time'] . "',
+                `fleet_start_galaxy` = '" . $data['fleet_start_galaxy'] . "',
+                `fleet_start_system` = '" . $data['fleet_start_system'] . "',
+                `fleet_start_planet` ='" . $data['fleet_start_planet'] . "',
+                `fleet_start_type` = '1',
+                `fleet_end_time` = '" . $data['fleet_end_time'] . "',
+                `fleet_end_stay` = '0',
+                `fleet_end_galaxy` = '" . $data['fleet_end_galaxy'] . "',
+                `fleet_end_system` = '" . $data['fleet_end_system'] . "',
+                `fleet_end_planet` = '" . $data['fleet_end_planet'] . "',
+                `fleet_end_type` = '1',
+                `fleet_target_obj` = '" . $data['fleet_target_obj'] . "',
+                `fleet_resource_metal` = '0',
+                `fleet_resource_crystal` = '0',
+                `fleet_resource_deuterium` = '0',
+                `fleet_target_owner` = '" . $data['fleet_target_owner'] . "',
+                `fleet_group` = '0',
+                `fleet_mess` = '0',
+                `fleet_creation` = '" . time() . "';"
+            );
+
+            $this->db->query(
+                "UPDATE `" . DEFENSES . "` SET
+                    `defense_interplanetary_missile` = `defense_interplanetary_missile` - " . $data['fleet_amount'] . "
+                WHERE `defense_planet_id` =  '" . $data['user_current_planet'] . "'"
+            );
+
+            $this->db->commitTransaction();
+        } catch (Exception $e) {
+            $this->db->rollbackTransaction();
+        }
+    }
 }
 
-/* end of banned.php */
+/* end of galaxy.php */
