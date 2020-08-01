@@ -197,6 +197,8 @@ class Galaxy extends Controller
                         'js_path' => JS_PATH,
                         'list_of_positions' => $this->buildPositionsList(),
                         'planet_count' => $this->planet_count,
+                        'max_galaxy' => MAX_GALAXY_IN_WORLD,
+                        'max_system' => MAX_SYSTEM_IN_GALAXY,
                     ],
                     $parse
                 )
