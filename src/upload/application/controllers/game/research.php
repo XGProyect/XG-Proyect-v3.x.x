@@ -14,7 +14,6 @@
 namespace application\controllers\game;
 
 use application\core\Controller;
-use application\core\Database;
 use application\libraries\DevelopmentsLib;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
@@ -55,7 +54,9 @@ class Research extends Controller
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
-        $this->_db = new Database();
+        // load Model
+        parent::loadModel('game/research');
+
         $this->_current_user = parent::$users->getUserData();
         $this->_current_planet = parent::$users->getPlanetData();
         $this->_lang = parent::$lang;
@@ -69,16 +70,6 @@ class Research extends Controller
             $this->handle_technologie_build();
             $this->build_page();
         }
-    }
-
-    /**
-     * method __destruct
-     * param
-     * return close db connection
-     */
-    public function __destruct()
-    {
-        $this->_db->closeConnection();
     }
 
     /**
@@ -96,11 +87,8 @@ class Research extends Controller
 
         // build the page
         foreach ($this->_lang['tech'] as $tech => $tech_name) {
-
             if ($tech > 105 && $tech <= 199) {
-
                 if (DevelopmentsLib::isDevelopmentAllowed($this->_current_user, $this->_current_planet, $tech)) {
-
                     $RowParse['dpath'] = DPATH;
                     $RowParse['tech_id'] = $tech;
                     $building_level = $this->_current_user[$this->_resource[$tech]];
@@ -112,34 +100,25 @@ class Research extends Controller
                     $RowParse['search_time'] = DevelopmentsLib::formatedDevelopmentTime($SearchTime);
 
                     if (!$this->_is_working['is_working']) {
-
                         if (DevelopmentsLib::isDevelopmentPayable($this->_current_user, $this->_current_planet, $tech) && !parent::$users->isOnVacations($this->_current_user)) {
-
                             if (!$this->is_laboratory_in_queue()) {
-
                                 $action_link = FormatLib::colorRed($this->_lang['bd_research']);
                             } else {
-
                                 $action_link = FunctionsLib::setUrl('game.php?page=research&cmd=search&tech=' . $tech, '', FormatLib::colorGreen($this->_lang['bd_research']));
                             }
                         } else {
-
                             $action_link = FormatLib::colorRed($this->_lang['bd_research']);
                         }
                     } else {
-
                         if ($this->_is_working['working_on']['planet_b_tech_id'] == $tech) {
-
                             $bloc = $this->_lang;
 
                             if ($this->_is_working['working_on']['planet_id'] != $this->_current_planet['planet_id']) {
-
                                 $bloc['tech_time'] = $this->_is_working['working_on']['planet_b_tech'] - time();
                                 $bloc['tech_name'] = $this->_lang['bd_from'] . $this->_is_working['working_on']['planet_name'] . '<br /> ' . FormatLib::prettyCoords($this->_is_working['working_on']['planet_galaxy'], $this->_is_working['working_on']['planet_system'], $this->_is_working['working_on']['planet_planet']);
                                 $bloc['tech_home'] = $this->_is_working['working_on']['planet_id'];
                                 $bloc['tech_id'] = $this->_is_working['working_on']['planet_b_tech_id'];
                             } else {
-
                                 $bloc['tech_time'] = $this->_current_planet['planet_b_tech'] - time();
                                 $bloc['tech_name'] = '';
                                 $bloc['tech_home'] = $this->_current_planet['planet_id'];
@@ -242,31 +221,17 @@ class Research extends Controller
                 }
 
                 if ($update_data == true) {
-
-                    $this->_db->query(
-                        "UPDATE " . PLANETS . " AS p, " . RESEARCH . " AS r SET
-                        p.`planet_b_tech_id` = '" . $working_planet['planet_b_tech_id'] . "',
-                        p.`planet_b_tech` = '" . $working_planet['planet_b_tech'] . "',
-                        p.`planet_metal` = '" . $working_planet['planet_metal'] . "',
-                        p.`planet_crystal` = '" . $working_planet['planet_crystal'] . "',
-                        p.`planet_deuterium` = '" . $working_planet['planet_deuterium'] . "',
-                        r.`research_current_research` = '" . $this->_current_user['research_current_research'] . "'
-                        WHERE p.`planet_id` = '" . $working_planet['planet_id'] . "'
-                                AND r.`research_user_id` = '" . $this->_current_user['user_id'] . "';"
-                    );
+                    $this->Research_Model->startNewResearch($working_planet, $this->_current_user);
                 }
 
                 $this->_current_planet = $working_planet;
 
                 if (is_array($this->_is_working['working_on'])) {
-
                     $this->_is_working['working_on'] = $working_planet;
                 } else {
-
                     $this->_current_planet = $working_planet;
 
                     if ($cmd == 'search') {
-
                         $this->_is_working['working_on'] = $this->_current_planet;
                     }
                 }
@@ -328,9 +293,7 @@ class Research extends Controller
 
         if ($this->_current_user['research_current_research'] != 0) {
             if ($this->_current_user['research_current_research'] != $this->_current_planet['planet_id']) {
-                $working_planet = $this->_db->queryFetch("SELECT `planet_id`, `planet_name`, `planet_b_tech`, `planet_b_tech_id`, `planet_galaxy`, `planet_system`, `planet_planet`
-																FROM " . PLANETS . "
-																WHERE `planet_id` = '" . (int) $this->_current_user['research_current_research'] . "';");
+                $working_planet = $this->Research_Model->getPlanetResearching($this->_current_user['research_current_research']);
             }
 
             if (isset($working_planet)) {
@@ -365,15 +328,7 @@ class Research extends Controller
     private function set_labs_amount()
     {
         $labs_limit = $this->_current_user[$this->_resource[123]] + 1;
-        $labs_level = $this->_db->queryFetch(
-            "SELECT SUM(`building_laboratory`) AS `total_level`
-            FROM " . BUILDINGS . " AS b
-            INNER JOIN " . PLANETS . " AS p ON p.`planet_id` = b.building_planet_id
-            WHERE planet_user_id='" . (int) $this->_current_user['user_id'] . "'
-            ORDER BY building_laboratory DESC LIMIT " . $labs_limit . ""
-        );
-
-        $this->_lab_level = $labs_level['total_level'];
+        $this->_lab_level = $this->Research_Model->getAllLabsLevel($this->_current_user['user_id'], $labs_limit);
     }
 }
 
