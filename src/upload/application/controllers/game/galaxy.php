@@ -162,7 +162,6 @@ class Galaxy extends Controller
         $this->_galaxy = $setted_position['galaxy'];
         $this->_system = $setted_position['system'];
         $planet = $setted_position['planet'];
-        $psystem = $setted_position['psystem'];
 
         if ($mode == 2 && $this->planet['defense_interplanetary_missile'] < 1) {
             die(FunctionsLib::message($this->langs->line('gl_no_missiles'), "game.php?page=galaxy&mode=0", 2));
@@ -259,7 +258,6 @@ class Galaxy extends Controller
         $return['galaxy'] = '';
         $return['system'] = '';
         $return['planet'] = '';
-        $return['psystem'] = '';
 
         switch ($mode) {
             case 0:
@@ -328,7 +326,6 @@ class Galaxy extends Controller
         $return['galaxy'] = $galaxy;
         $return['system'] = $system;
         $return['planet'] = isset($planet) ? $planet : null;
-        $return['psystem'] = isset($_POST['system']) ? $_POST['system'] : null;
 
         return $return;
     }
