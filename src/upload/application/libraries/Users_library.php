@@ -195,11 +195,7 @@ class Users_library
      */
     private function isSessionSet()
     {
-        if (!isset($_SESSION['user_id']) or !isset($_SESSION['user_name']) or !isset($_SESSION['user_password'])) {
-            return false;
-        } else {
-            return true;
-        }
+        return !(!isset($_SESSION['user_id']) or !isset($_SESSION['user_name']) or !isset($_SESSION['user_password']));
     }
 
     /**

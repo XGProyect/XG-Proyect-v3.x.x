@@ -157,11 +157,7 @@ class NoobsProtectionLib extends XGPCore
      */
     public function isRankVisible(int $user_auth_level): bool
     {
-        if ($user_auth_level <= $this->allowed_level) {
-            return true;
-        }
-
-        return false;
+        return ($user_auth_level <= $this->allowed_level);
     }
 }
 

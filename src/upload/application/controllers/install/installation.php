@@ -298,11 +298,7 @@ class Installation extends Controller
      */
     private function serverRequirementes()
     {
-        if (version_compare(PHP_VERSION, '7.1.0', '<')) {
-            return false;
-        } else {
-            return true;
-        }
+        return !(version_compare(PHP_VERSION, '7.1.0', '<'));
     }
 
     /**
@@ -368,11 +364,7 @@ class Installation extends Controller
             }
         }
 
-        if (count($arr) > 0) {
-            return true;
-        }
-
-        return false;
+        return (count($arr) > 0);
     }
 
     /**

@@ -425,14 +425,7 @@ class DevelopmentsLib extends XGPCore
      */
     public static function areFieldsAvailable($current_planet)
     {
-        if ($current_planet['planet_field_current'] < self::maxFields($current_planet)
-        ) {
-
-            return true;
-        } else {
-
-            return false;
-        }
+        return ($current_planet['planet_field_current'] < self::maxFields($current_planet));
     }
 }
 

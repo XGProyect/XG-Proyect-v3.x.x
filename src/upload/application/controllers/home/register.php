@@ -293,11 +293,7 @@ class Register extends Controller
             $this->error_id = 2;
         }
 
-        if ($errors > 0) {
-            return false;
-        } else {
-            return true;
-        }
+        return ($errors <= 0);
     }
 
     /**

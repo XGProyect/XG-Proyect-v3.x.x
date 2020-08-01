@@ -133,12 +133,7 @@ class Tasks extends Controller
      */
     private function isTaskScheduled(string $task): bool
     {
-        //  backup case
-        if ($task == 'last_backup' && Functions::readConfig('auto_backup') == 0) {
-            return false;
-        }
-
-        return true;
+        return !($task == 'last_backup' && Functions::readConfig('auto_backup') == 0);
     }
 
     /**

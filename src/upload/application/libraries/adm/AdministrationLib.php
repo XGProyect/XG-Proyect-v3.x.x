@@ -48,11 +48,7 @@ class AdministrationLib extends XGPCore
      */
     public static function haveAccess($user_level)
     {
-        if ($user_level >= 1) {
-            return true;
-        } else {
-            return false;
-        }
+        return ($user_level >= 1);
     }
 
     /**
@@ -76,11 +72,7 @@ class AdministrationLib extends XGPCore
      */
     public static function installDirExists()
     {
-        if (file_exists(XGP_ROOT . PUBLIC_PATH . 'install/')) {
-            return true;
-        } else {
-            return false;
-        }
+        return (file_exists(XGP_ROOT . PUBLIC_PATH . 'install/'));
     }
 
     /**
@@ -276,11 +268,7 @@ class AdministrationLib extends XGPCore
      */
     private static function isSessionSet()
     {
-        if (!isset($_SESSION['admin_id']) or !isset($_SESSION['admin_name']) or !isset($_SESSION['admin_password'])) {
-            return false;
-        } else {
-            return true;
-        }
+        return !(!isset($_SESSION['admin_id']) or !isset($_SESSION['admin_name']) or !isset($_SESSION['admin_password']));
     }
 
     /**
