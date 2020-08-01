@@ -268,61 +268,46 @@ class Galaxy extends Controller
                 $planet = $this->planet['planet_planet'];
                 break;
             case 1:
-                // ONLY NUMBERS
-                $_POST['galaxy'] = (isset($_POST['galaxy']) && intval($_POST['galaxy'])) ? preg_replace("[^0-9]", "", $_POST['galaxy']) : 1;
-                $_POST['system'] = (isset($_POST['system']) && intval($_POST['system'])) ? preg_replace("[^0-9]", "", $_POST['system']) : 1;
+                // validate, we want only numbers
+                $galaxy = (isset($_POST['galaxy']) && intval($_POST['galaxy'])) ? preg_replace("[^0-9]", "", $_POST['galaxy']) : 1;
+                $system = (isset($_POST['system']) && intval($_POST['system'])) ? preg_replace("[^0-9]", "", $_POST['system']) : 1;
 
-                // DO NOT GO FAR FAR AWAY.. xD
-                $_POST['galaxy'] = $_POST['galaxy'] > MAX_GALAXY_IN_WORLD ? MAX_GALAXY_IN_WORLD : $_POST['galaxy'];
-                $_POST['system'] = $_POST['system'] > MAX_SYSTEM_IN_GALAXY ? MAX_SYSTEM_IN_GALAXY : $_POST['system'];
+                /**
+                 * Change galaxy
+                 */
+                if (isset($_POST['galaxyRight'])) {
+                    if ($galaxy >= MAX_GALAXY_IN_WORLD) {
+                        $galaxy = 1;
+                    } else {
+                        $galaxy++;
+                    }
+                }
 
                 if (isset($_POST['galaxyLeft'])) {
-                    if ($_POST['galaxy'] < 1) {
-                        $_POST['galaxy'] = 1;
-                        $galaxy = 1;
-                    } elseif ($_POST['galaxy'] == 1) {
-                        $_POST['galaxy'] = 1;
-                        $galaxy = 1;
-                    } else {
-                        $galaxy = $_POST['galaxy'] - 1;
-                    }
-                } elseif (isset($_POST['galaxyRight'])) {
-                    if ($_POST['galaxy'] > MAX_GALAXY_IN_WORLD or $_POST['galaxyRight'] > MAX_GALAXY_IN_WORLD) {
-                        $_POST['galaxy'] = MAX_GALAXY_IN_WORLD;
-                        $_POST['galaxyRight'] = MAX_GALAXY_IN_WORLD;
-                        $galaxy = MAX_GALAXY_IN_WORLD;
-                    } elseif ($_POST['galaxy'] == MAX_GALAXY_IN_WORLD) {
-                        $_POST['galaxy'] = MAX_GALAXY_IN_WORLD;
+                    if ($galaxy <= 1) {
                         $galaxy = MAX_GALAXY_IN_WORLD;
                     } else {
-                        $galaxy = $_POST['galaxy'] + 1;
+                        $galaxy--;
                     }
-                } else {
-                    $galaxy = $_POST['galaxy'];
+                }
+
+                /**
+                 * Change system
+                 */
+                if (isset($_POST['systemRight'])) {
+                    if ($system >= MAX_SYSTEM_IN_GALAXY) {
+                        $system = 1;
+                    } else {
+                        $system++;
+                    }
                 }
 
                 if (isset($_POST['systemLeft'])) {
-                    if ($_POST['system'] < 1) {
-                        $_POST['system'] = 1;
-                        $system = 1;
-                    } elseif ($_POST['system'] == 1) {
-                        $_POST['system'] = 1;
-                        $system = 1;
-                    } else {
-                        $system = $_POST['system'] - 1;
-                    }
-                } elseif (isset($_POST['systemRight'])) {
-                    if ($_POST['system'] > MAX_SYSTEM_IN_GALAXY or $_POST['systemRight'] > MAX_SYSTEM_IN_GALAXY) {
-                        $_POST['system'] = MAX_SYSTEM_IN_GALAXY;
-                        $system = MAX_SYSTEM_IN_GALAXY;
-                    } elseif ($_POST['system'] == MAX_SYSTEM_IN_GALAXY) {
-                        $_POST['system'] = MAX_SYSTEM_IN_GALAXY;
+                    if ($system <= 1) {
                         $system = MAX_SYSTEM_IN_GALAXY;
                     } else {
-                        $system = $_POST['system'] + 1;
+                        $system--;
                     }
-                } else {
-                    $system = $_POST['system'];
                 }
                 break;
             case 2:
