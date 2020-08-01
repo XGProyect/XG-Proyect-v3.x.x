@@ -57,7 +57,7 @@ class PlanetLib
      * @param integer $galaxy
      * @param integer $system
      * @param integer $position
-     * @return array
+     * @return array|null
      */
     public function checkPlanetExists(int $galaxy, int $system, int $position): ?array
     {
@@ -77,7 +77,7 @@ class PlanetLib
      * @param integer $galaxy
      * @param integer $system
      * @param integer $position
-     * @return array
+     * @return array|null
      */
     public function checkMoonExists(int $galaxy, int $system, int $position): ?array
     {

@@ -70,7 +70,7 @@ class Alliances
      * Check if an alliance exists verifying its name or tag
      *
      * @param string $alliance
-     * @return boolean
+     * @return array|null
      */
     public function checkAllianceByNameOrTag(string $alliance): ?array
     {
