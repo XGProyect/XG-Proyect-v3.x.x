@@ -16,7 +16,7 @@ declare (strict_types = 1);
  */
 namespace application\models\adm;
 
-use application\core\Database;
+use application\core\Model;
 
 /**
  * Ban Class
@@ -28,29 +28,8 @@ use application\core\Database;
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-class Ban
+class Ban extends Model
 {
-    private $db = null;
-
-    /**
-     * Constructor
-     *
-     * @param Database $db
-     */
-    public function __construct(Database $db)
-    {
-        // use this to make queries
-        $this->db = $db;
-    }
-
-    /**
-     * Destructor
-     */
-    public function __destruct()
-    {
-        $this->db->closeConnection();
-    }
-
     /**
      * Unban user by username
      *

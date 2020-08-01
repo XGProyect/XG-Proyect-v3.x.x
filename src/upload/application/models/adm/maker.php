@@ -13,7 +13,7 @@
  */
 namespace application\models\adm;
 
-use application\core\Database;
+use application\core\Model;
 use application\libraries\PlanetLib;
 
 /**
@@ -26,29 +26,8 @@ use application\libraries\PlanetLib;
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-class Maker
+class Maker extends Model
 {
-    private $db = null;
-
-    /**
-     * Constructor
-     *
-     * @param Database $db
-     */
-    public function __construct(Database $db)
-    {
-        // use this to make queries
-        $this->db = $db;
-    }
-
-    /**
-     * Destructor
-     */
-    public function __destruct()
-    {
-        $this->db->closeConnection();
-    }
-
     /**
      * Get list of users without an alliance or without pending requests
      *

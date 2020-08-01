@@ -13,7 +13,7 @@
  */
 namespace application\models\adm;
 
-use application\core\Database;
+use application\core\Model;
 use application\libraries\FunctionsLib as Functions;
 
 /**
@@ -26,29 +26,8 @@ use application\libraries\FunctionsLib as Functions;
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-class Users
+class Users extends Model
 {
-    private $db = null;
-
-    /**
-     * Constructor
-     *
-     * @param Database $db
-     */
-    public function __construct(Database $db)
-    {
-        // use this to make queries
-        $this->db = $db;
-    }
-
-    /**
-     * Destructor
-     */
-    public function __destruct()
-    {
-        $this->db->closeConnection();
-    }
-
     /**
      * Check if the user exists, returns true if it does, false if the user doesn't exist
      *

@@ -86,7 +86,7 @@ abstract class FunctionsLib extends XGPCore
             $class_name = 'application\models\\' . strtr($model, ['/' => '\\']);
 
             // Create new $library object
-            return new $class_name(new Database());
+            return new $class_name();
         } else {
             // ups!
             return false;

@@ -13,9 +13,9 @@
  */
 namespace application\models\game;
 
-use application\core\Database;
 use application\core\entities\FleetEntity;
 use application\core\enumerators\MissionsEnumerator as Missions;
+use application\core\Model;
 
 /**
  * Fleet Class
@@ -27,29 +27,8 @@ use application\core\enumerators\MissionsEnumerator as Missions;
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-class Fleet
+class Fleet extends Model
 {
-    private $db = null;
-
-    /**
-     * Constructor
-     *
-     * @param Database $db
-     */
-    public function __construct(Database $db)
-    {
-        // use this to make queries
-        $this->db = $db;
-    }
-
-    /**
-     * Destructor
-     */
-    public function __destruct()
-    {
-        $this->db->closeConnection();
-    }
-
     /**
      * Get ships by planet id
      *

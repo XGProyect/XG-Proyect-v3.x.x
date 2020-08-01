@@ -13,7 +13,7 @@
  */
 namespace application\models\libraries\missions;
 
-use application\core\Database;
+use application\core\Model;
 use application\libraries\FleetsLib;
 
 /**
@@ -26,29 +26,8 @@ use application\libraries\FleetsLib;
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-class Missions
+class Missions extends Model
 {
-    private $db = null;
-
-    /**
-     * Constructor
-     *
-     * @param Database $db
-     */
-    public function __construct(Database $db)
-    {
-        // use this to make queries
-        $this->db = $db;
-    }
-
-    /**
-     * Destructor
-     */
-    public function __destruct()
-    {
-        $this->db->closeConnection();
-    }
-
     /**
      * Delete a fleet by its ID
      *
