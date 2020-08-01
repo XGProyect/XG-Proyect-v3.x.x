@@ -16,6 +16,7 @@ namespace application\libraries;
 use application\core\Template;
 use application\core\XGPCore;
 use application\libraries\FunctionsLib;
+use application\libraries\TimingLibrary as Timing;
 
 /**
  * FleetsLib Class
@@ -613,6 +614,7 @@ class FleetsLib extends XGPCore
         $bloc['fleet_order'] = $Label . $Record;
         $bloc['fleet_descr'] = $EventString;
         $bloc['fleet_javas'] = FunctionsLib::chronoApplet($Label, $Record, $Rest, false);
+        $bloc['fleet_time'] = Timing::formatExtendedDate($Time);
 
         return self::getTemplate()->set(
             'overview/overview_fleet_event',
