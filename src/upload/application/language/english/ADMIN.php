@@ -52,6 +52,7 @@ $lang['mn_tools_title'] = 'Tools';
 $lang['mn_tools_backup'] = 'Backups';
 $lang['mn_tools_encrypter'] = 'Password encrypter';
 $lang['mn_tools_global_message'] = 'Announcement';
+$lang['mn_edit_changelog'] = 'Changelog';
 $lang['mn_tools_ban'] = 'Banning';
 $lang['mn_tools_manual_update'] = 'Rebuild highscores';
 $lang['mn_tools_update'] = 'Update';

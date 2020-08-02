@@ -52,6 +52,7 @@ $lang['mn_tools_title'] = 'Herramientas';
 $lang['mn_tools_backup'] = 'Backups';
 $lang['mn_tools_encrypter'] = 'Encriptador de claves';
 $lang['mn_tools_global_message'] = 'Anuncios';
+$lang['mn_edit_changelog'] = 'Changelog';
 $lang['mn_tools_ban'] = 'Suspensiones';
 $lang['mn_tools_manual_update'] = 'Regenerar clasificación';
 $lang['mn_tools_manual_update_confirm'] = '¿Estás seguro que deseas regenerar la clasificación?';
