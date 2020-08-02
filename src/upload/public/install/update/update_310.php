@@ -36,7 +36,7 @@ PRIMARY KEY (`language_id`),
 UNIQUE KEY `language_id` (`language_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 $queries[] = "INSERT INTO `" . LANGUAGES . "` (`language_id`, `language_name`) VALUES
-(1, 'Spanish'),
+(1, 'EspaÃ±ol'),
 (2, 'English');";
 $queries[] = "CREATE TABLE `" . PREFERENCES . "` (
 `preference_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,

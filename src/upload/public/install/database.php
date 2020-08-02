@@ -188,7 +188,7 @@ UNIQUE KEY `language_id` (`language_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 
 $tables['languages_insert'] = "INSERT INTO `" . LANGUAGES . "` (`language_id`, `language_name`) VALUES
-(1, 'Spanish'),
+(1, 'EspaÃ±ol'),
 (2, 'English');";
 
 $tables['messages'] = "CREATE TABLE `" . MESSAGES . "` (
