@@ -1,47 +1,4 @@
 <?php
-// index
-$lang['hm_keywords'] = 'Juego, navegador, online, gratis, legendario, MMOG, ciencia ficción, espacio, nave';
-$lang['hm_description'] = 'XG Proyect - ¡El juego legendario en el espacio! Descubre un universo junto con miles de jugadores.';
-$lang['hm_title'] = 'Página inicial de %s';
-$lang['hm_field_required'] = 'Se requiere este campo';
-$lang['hm_must_accept_tandc'] = 'Tienes que aceptar los T&Cs.';
-$lang['hm_username_length'] = 'Se permiten entre 3 y 20 caracteres.';
-$lang['hm_password_length'] = 'Se permiten entre 8 y 20 caracteres.';
-$lang['hm_valid_email_address'] = '¡Tienes que introducir una dirección de correo electrónico válida!';
-$lang['hm_not_valid_characters'] = 'Contiene caracteres no v\u00e1lidos.';
-$lang['hm_username_underscore'] = 'Tu nombre no puede empezar ni terminar con una barra baja.';
-$lang['hm_username_space'] = 'Tu nombre no puede empezar ni terminar con un espacio.';
-$lang['hm_username_many_underscore'] = 'Tu nombre no puede contener m\u00e1s de 3 barras bajas en total.';
-$lang['hm_username_many_spaces'] = 'Tu nombre no puede contener m\u00e1s de 3 espacios en total.';
-$lang['hm_username_underscore_continued'] = 'No puedes utilizar dos o m\u00e1s barras bajas seguidas.';
-$lang['hm_username_spaces_continued'] = 'No puedes utilizar dos o m\u00e1s espacios seguidos.';
-$lang['hm_username_available'] = 'Este nombre de usuario est\u00e1 disponible.';
-$lang['hm_username_loading'] = 'Cargando... Por favor, espera';
-$lang['hm_username_not_available'] = 'Este nombre de usuario ya no est\u00e1 disponible.';
-$lang['hm_email_not_available'] = '¡La dirección de E-mail ya está en uso!';
-$lang['hm_only_characters'] = 'Utilizar s\u00f3lo caracteres.';
-$lang['hm_hidden_title'] = 'XGProyect - Conquista el universo';
-$lang['hm_login_button'] = 'Entrar';
-$lang['hm_close_button'] = 'Cerrar';
-$lang['hm_universe'] = 'Universo:';
-$lang['hm_username'] = 'Nombre de usuario:';
-$lang['hm_username_mail'] = 'Dirección de E-Mail:';
-$lang['hm_password'] = 'Contraseña:';
-$lang['hm_password_forgot'] = '¿Contraseña olvidada?';
-$lang['hm_play_for_free'] = '¡JUEGA GRATUITAMENTE!';
-$lang['hm_terms_accept'] = 'Con el login acepto los';
-$lang['hm_terms'] = 'T&Cs';
-$lang['hm_mail_address'] = 'Dirección de E-Mail:';
-$lang['hm_password_level'] = 'Seguridad de contraseña:';
-$lang['hm_accept'] = 'Acepto los';
-$lang['hm_and'] = 'y la';
-$lang['hm_policy'] = 'Declaración de protección de datos';
-$lang['hm_register'] = 'Registrarse';
-$lang['hm_home'] = 'Home';
-$lang['hm_about'] = 'Sobre XGP';
-$lang['hm_media'] = 'Media';
-$lang['hm_forum'] = 'Foro';
-
 // ajax - home
 $lang['aj_home_conquer_universe'] = 'XG Proyect - Conquista el universo';
 $lang['aj_home_description'] = '<em>XG Proyect</em> es un juego de estrategia localizado en el espacio. Miles de jugadores por todo el mundo compiten al mismo tiempo. Para jugar sólo necesitas un navegador web.';
