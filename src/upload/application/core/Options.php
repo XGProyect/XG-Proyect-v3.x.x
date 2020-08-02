@@ -43,7 +43,8 @@ class Options extends XGPCore
     {
         parent::__construct();
 
-        $this->_db = new Database();
+        // load model
+        parent::loadModel('core/options');
     }
 
     /**
@@ -72,15 +73,9 @@ class Options extends XGPCore
     public function getOptions($option = '')
     {
         if ($option == '') {
-            return $this->_db->query(
-                "SELECT * FROM `" . OPTIONS . "`;"
-            );
+            return $this->Options_Model->getAllOptions();
         } else {
-            return $this->_db->queryFetch(
-                "SELECT *
-                    FROM `" . OPTIONS . "`
-                    WHERE `option_name` = '" . $option . "';"
-            )['option_value'];
+            return $this->Options_Model->getOption($option);
         }
     }
 
@@ -95,11 +90,7 @@ class Options extends XGPCore
     public function writeOptions($option, $value = '')
     {
         if ($option != '') {
-            if ($this->_db->query(
-                "UPDATE `" . OPTIONS . "`
-                    SET `option_value` = '" . $value . "'
-                    WHERE `option_name` = '" . $option . "';"
-            )) {
+            if ($this->Options_Model->writeOption($option, $value)) {
                 return true;
             }
         }
@@ -117,16 +108,7 @@ class Options extends XGPCore
      */
     public function insertOption($option, $value = '')
     {
-        if ($option != '') {
-            if ($this->_db->query(
-                "INSERT INTO `" . OPTIONS . "`
-                    (`option_name`, `option_value`) VALUES('" . $option . "', '" . $value . "');"
-            )) {
-                return true;
-            }
-        }
-
-        return false;
+        return $this->writeOptions($option, $value);
     }
 
     /**
@@ -139,10 +121,7 @@ class Options extends XGPCore
     public function deleteOption($option)
     {
         if ($option != '') {
-            if ($this->_db->query(
-                "DELETE `" . OPTIONS . "`
-                    WHERE `option_name` = '" . $option . "';"
-            )) {
+            if ($this->Options_Model->deleteOption($option)) {
                 return true;
             }
         }
