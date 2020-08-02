@@ -99,19 +99,17 @@ class Ban extends Model
                     "UPDATE `" . BANNED . "`  SET
                         `banned_who` = '" . $ban_data['ban_name'] . "',
                         `banned_theme` = '" . $ban_data['ban_reason'] . "',
-                        `banned_who2` = '" . $ban_data['ban_name'] . "',
                         `banned_time` = '" . $ban_data['ban_time'] . "',
                         `banned_longer` = '" . $ban_data['ban_until'] . "',
                         `banned_author` = '" . $ban_data['ban_author'] . "',
                         `banned_email` = '" . $ban_data['ban_author_email'] . "'
-                    WHERE `banned_who2` = '" . $ban_data['ban_name'] . "';"
+                    WHERE `banned_who` = '" . $ban_data['ban_name'] . "';"
                 );
             } else {
                 $this->db->query(
                     "INSERT INTO `" . BANNED . "` SET
                         `banned_who` = '" . $ban_data['ban_name'] . "',
                         `banned_theme` = '" . $ban_data['ban_reason'] . "',
-                        `banned_who2` = '" . $ban_data['ban_name'] . "',
                         `banned_time` = '" . $ban_data['ban_time'] . "',
                         `banned_longer` = '" . $ban_data['ban_until'] . "',
                         `banned_author` = '" . $ban_data['ban_author'] . "',

@@ -74,7 +74,6 @@ $tables['banned'] = "CREATE TABLE `" . BANNED . "` (
 `banned_id` bigint(11) NOT NULL AUTO_INCREMENT,
 `banned_who` varchar(64) NOT NULL DEFAULT '',
 `banned_theme` text NOT NULL,
-`banned_who2` varchar(64) NOT NULL DEFAULT '',
 `banned_time` int(11) NOT NULL DEFAULT '0',
 `banned_longer` int(11) NOT NULL DEFAULT '0',
 `banned_author` varchar(64) NOT NULL DEFAULT '',
