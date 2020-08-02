@@ -63,3 +63,4 @@ $queries[] = "ALTER TABLE `" . USERS . "` CHANGE `user_agent` `user_agent` TEXT 
 $queries[] = "ALTER TABLE `" . PLANETS . "` DROP `planet_metal_max`, DROP `planet_crystal_max`, DROP `planet_deuterium_max`;";
 $queries[] = "UPDATE `" . OPTIONS . "` SET `option_value` = '1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;0;1;1' WHERE `option_name` = 'modules';";
 $queries[] = "ALTER TABLE `" . MESSAGES . "` CHANGE `message_from` `message_from` VARCHAR(65) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;";
+$queries[] = "INSERT INTO `" . OPTIONS . "` (`option_name`, `option_value`) VALUES ('registration_dark_matter', '0');";

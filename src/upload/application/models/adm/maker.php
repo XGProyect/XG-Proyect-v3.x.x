@@ -14,6 +14,7 @@
 namespace application\models\adm;
 
 use application\core\Model;
+use application\libraries\FunctionsLib as Functions;
 use application\libraries\PlanetLib;
 
 /**
@@ -179,8 +180,8 @@ class Maker extends Model
             );
 
             $this->db->query(
-                "INSERT INTO `" . PREMIUM . "` SET
-                    `premium_user_id` = '" . $last_user_id . "';"
+                "INSERT INTO `" . PREMIUM . "` (`premium_user_id`, `premium_dark_matter`)
+                VALUES('" . $last_user_id . "', '" . Functions::readConfig('registration_dark_matter') . "');"
             );
 
             $this->db->query(

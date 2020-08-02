@@ -14,6 +14,7 @@
 namespace application\models\libraries;
 
 use application\core\Model;
+use application\libraries\FunctionsLib as Functions;
 
 /**
  * Users_library Class
@@ -339,7 +340,8 @@ class Users_library extends Model
     public function createPremium($user_id)
     {
         $this->db->query(
-            "INSERT INTO " . PREMIUM . " SET `premium_user_id` = '" . $user_id . "';"
+            "INSERT INTO `" . PREMIUM . "` (`premium_user_id`, `premium_dark_matter`)
+            VALUES('" . $user_id . "', '" . Functions::readConfig('registration_dark_matter') . "');"
         );
     }
 

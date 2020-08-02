@@ -4,6 +4,7 @@ $lang = [
     'pr_sub_title' => 'Todo lo que implique materia oscura puede ser administrado desde aquí. Desde oficiales hasta el mercader.',
     'pr_general' => 'General',
     'pr_pay_url' => 'URL de pago',
+    'pr_registration_dark_matter' => 'Materia Oscura al comienzo',
     'pr_trader' => 'Mercado de recursos - Cambiar recursos',
     'pr_trader_price' => 'Costo para llamar al Mercader (Materia Oscura)',
     'pr_merchant_base_min_exchange_rate' => 'Tasa de cambio mínima',

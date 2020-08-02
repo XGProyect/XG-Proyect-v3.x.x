@@ -38,6 +38,17 @@
                                                     cols="75" rows="5" placeholder="{premium_url}">{premium_url}</textarea>
                                             </td>
                                         </tr>
+                                        <tr>
+                                            <td>
+                                                <span>
+                                                    {pr_registration_dark_matter}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <input class="form-control" type="number" name="registration_dark_matter" min="0"
+                                                    value="{registration_dark_matter}">
+                                            </td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>

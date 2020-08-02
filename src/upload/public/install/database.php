@@ -270,7 +270,8 @@ $tables['options_insert'] = "INSERT INTO `" . OPTIONS . "` (`option_name`, `opti
 ('merchant_base_max_exchange_rate', '1'),
 ('merchant_metal_multiplier', '3'),
 ('merchant_crystal_multiplier', '2'),
-('merchant_deuterium_multiplier', '1');";
+('merchant_deuterium_multiplier', '1'),
+('registration_dark_matter', '0');";
 
 $tables['planets'] = "CREATE TABLE `" . PLANETS . "` (
 `planet_id` bigint(11) NOT NULL AUTO_INCREMENT,

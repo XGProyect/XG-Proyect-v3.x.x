@@ -40,6 +40,7 @@ class Premium extends Controller
         'merchant_metal_multiplier' => FILTER_VALIDATE_FLOAT,
         'merchant_crystal_multiplier' => FILTER_VALIDATE_FLOAT,
         'merchant_deuterium_multiplier' => FILTER_VALIDATE_FLOAT,
+        'registration_dark_matter' => FILTER_VALIDATE_INT,
     ];
 
     /**
@@ -97,7 +98,7 @@ class Premium extends Controller
             $data = array_diff($data, [null, false]);
 
             foreach ($data as $option => $value) {
-                if ((is_numeric($value) && $value > 0) or is_string($value)) {
+                if ((is_numeric($value) && $value >= 0) or is_string($value)) {
                     FunctionsLib::updateConfig($option, $value);
                 }
             }
