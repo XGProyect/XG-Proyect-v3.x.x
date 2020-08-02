@@ -73,7 +73,7 @@ class Users_library
      */
     public function userLogin($user_id = 0, $user_name = '', $password = '')
     {
-        if ($user_id != 0 && !empty($user_name) && !empty($password)) {
+        if ($user_id != 0 && !empty($user_name) && !empty($password) && (strlen($password) == 40)) {
             $_SESSION['user_id'] = $user_id;
             $_SESSION['user_name'] = $user_name;
             $_SESSION['user_password'] = sha1($password . '-' . SECRETWORD);
