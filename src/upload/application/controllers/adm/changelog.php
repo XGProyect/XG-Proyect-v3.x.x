@@ -76,8 +76,17 @@ class Changelog extends Controller
      */
     private function runAction(): void
     {
-        $sub_page = filter_input(INPUT_GET, 'sub_page');
+        $allowed_actions = ['add', 'edit', 'delete'];
+        $sub_page = filter_input(INPUT_GET, 'action');
+        $changelog_id = filter_input(INPUT_GET, 'changelogId', FILTER_VALIDATE_INT);
 
+        if (isset($sub_page) && isset($changelog_id)) {
+            $this->{$sub_page . 'Action'}($changelog_id);
+        }
+
+        if (isset($sub_page) && !isset($changelog_id)) {
+            $this->{$sub_page . 'Action'}();
+        }
     }
 
     /**
@@ -118,6 +127,67 @@ class Changelog extends Controller
         }
 
         return $entries_list;
+    }
+
+    private function addAction(): void
+    {
+        parent::$page->displayAdmin(
+            $this->getTemplate()->set(
+                'adm/changelog_form_view',
+                array_merge(
+                    $this->langs->language,
+                    [
+                        'current_action' => $this->langs->line('ch_add_action'),
+                        'languages' => $this->getAllLanguages(),
+                    ]
+                )
+            )
+        );
+    }
+
+    private function editAction(int $changelog_id): void
+    {
+        parent::$page->displayAdmin(
+            $this->getTemplate()->set(
+                'adm/changelog_form_view',
+                array_merge(
+                    $this->langs->language
+                )
+            )
+        );
+    }
+
+    private function saveAction(): void
+    {
+
+    }
+
+    private function deleteAction(int $changelog_id): void
+    {
+
+    }
+
+    /**
+     * Build the list of languages
+     *
+     * @param integer $default_language
+     * @return array
+     */
+    private function getAllLanguages(int $default_language = 0): array
+    {
+        $languages = $this->Changelog_Model->getAllLanguages();
+        $list_of_languages = [];
+
+        foreach ($languages as $language) {
+            $list_of_languages[] = array_merge(
+                $language,
+                [
+                    'selected' => ($default_language == $language['language_id'] ? 'selected' : ''),
+                ]
+            );
+        }
+
+        return $list_of_languages;
     }
 }
 

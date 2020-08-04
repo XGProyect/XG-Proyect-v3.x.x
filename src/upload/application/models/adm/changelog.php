@@ -67,6 +67,21 @@ class Changelog extends Model
     {
 
     }
+
+    /**
+     * Get the full list of languages
+     *
+     * @return array
+     */
+    public function getAllLanguages(): array
+    {
+        return $this->db->queryFetchAll(
+            "SELECT
+                l.*
+            FROM `" . LANGUAGES . "` AS l
+            ORDER BY l.`language_name`"
+        );
+    }
 }
 
 /* end of changelog.php */

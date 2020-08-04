@@ -12,6 +12,11 @@ $lang = [
     'ch_the_description' => 'Description',
     'ch_edit_this' => 'Edit this entry',
     'ch_delete_this' => 'Delete this entry',
+    'ch_add_action' => 'Add a new entry',
+    'ch_edit_action' => 'Edit entry: %s',
+    'ch_pick_language' => 'Pick language',
+    'ch_characters' => 'characters',
+    'ch_save' => 'Save entry',
 ];
 
 /* end of changelog_lang.php */
