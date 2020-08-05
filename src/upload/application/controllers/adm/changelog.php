@@ -160,7 +160,7 @@ class Changelog extends Controller
         parent::$page->displayAdmin(
             $this->getTemplate()->set(
                 'adm/changelog_form_view',
-                $this->getActionData('edit')
+                $this->getActionData('edit', $changelog_id)
             )
         );
     }
@@ -169,9 +169,10 @@ class Changelog extends Controller
      * Get data to build the action add or action edit pages
      *
      * @param string $action
+     * @param integer $changelog_id
      * @return array
      */
-    private function getActionData(string $action): array
+    private function getActionData(string $action, int $changelog_id = 0): array
     {
         return array_merge(
             $this->langs->language,
@@ -181,7 +182,7 @@ class Changelog extends Controller
                 'action' => $action,
                 'current_action' => $this->langs->line('ch_' . $action . '_action'),
                 'changelog_version' => '',
-                'languages' => $this->getAllLanguages(),
+                'languages' => $this->getAllLanguages($changelog_id),
             ]
         );
     }
@@ -195,8 +196,35 @@ class Changelog extends Controller
     private function saveAction(): void
     {
         // post actions
-        $data = filter_input_array(INPUT_POST);
+        $data = filter_input_array(INPUT_POST, [
+            'action' => [
+                'filter' => FILTER_CALLBACK,
+                'options' => [$this, 'isValidAction'],
+            ],
+            'changelog_date' => [
+                'filter' => FILTER_CALLBACK,
+                'options' => [$this, 'isValidDate'],
+            ],
+            'changelog_version' => [
+                'filter' => FILTER_CALLBACK,
+                'options' => [$this, 'isValidVersion'],
+            ],
+            'changelog_language' => [
+                'filter' => FILTER_VALIDATE_INT,
+                'options' => [
+                    'default' => 1,
+                    'min_range' => 1,
+                ],
+            ],
+            'text' => [
+                'filter' => FILTER_SANITIZE_STRING,
+            ], // changelog description
+        ]);
 
+        // clean data, remove nulls and false, which didn't pass validations
+        $data = array_diff($data, [null, false]);
+
+        //var_dump($data);die();
         if (isset($data) && $data['action'] == 'add') {
 
         }
@@ -232,6 +260,60 @@ class Changelog extends Controller
         }
 
         return $list_of_languages;
+    }
+
+    /**
+     * Check if it is a valid action, add or edit
+     *
+     * @param string|null $action
+     * @return string|null
+     */
+    private function isValidAction(?string $action): ?string
+    {
+        if (\in_array($action, ['add', 'edit'])) {
+            return $action;
+        }
+
+        return null;
+    }
+
+    /**
+     * Check if it is a valid date
+     *
+     * @param string|null $date
+     * @return string|null
+     */
+    private function isValidDate(?string $date): ?string
+    {
+        try {
+            $datetime = new \DateTime($date);
+
+            return $datetime->format('Y-m-d');
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
+
+    /**
+     * Performs a regular expression check to determine if a valid version was provided
+     *
+     * @param string|null $version
+     * @return boolean
+     */
+    private function isValidVersion(?string $version): ?string
+    {
+        preg_match_all(
+            '/^(0|[1-9]\d*)\.((0|[1-9]\d*)\.)?(0|[1-9]\d*)(-(0|[1-9]\d*|\d*[a-zA-Z][0-9a-zA-Z]*))?$/',
+            $version,
+            $matches //,
+            //PREG_UNMATCHED_AS_NULL
+        );
+
+        if (isset($matches[0][0])) {
+            return $matches[0][0];
+        }
+
+        return null;
     }
 }
 
