@@ -76,6 +76,7 @@ class Changelog extends Controller
      */
     private function runAction(): void
     {
+        // route to the right page
         $allowed_actions = ['add', 'edit', 'delete'];
         $sub_page = filter_input(INPUT_GET, 'action');
         $changelog_id = filter_input(INPUT_GET, 'changelogId', FILTER_VALIDATE_INT);
@@ -129,37 +130,80 @@ class Changelog extends Controller
         return $entries_list;
     }
 
+    /**
+     * Show add a new entry page
+     *
+     * @return void
+     */
     private function addAction(): void
     {
+        $this->saveAction();
+
         parent::$page->displayAdmin(
             $this->getTemplate()->set(
                 'adm/changelog_form_view',
-                array_merge(
-                    $this->langs->language,
-                    [
-                        'current_action' => $this->langs->line('ch_add_action'),
-                        'languages' => $this->getAllLanguages(),
-                    ]
-                )
+                $this->getActionData('add')
             )
         );
     }
 
+    /**
+     * Show edit an existing entry page
+     *
+     * @param integer $changelog_id
+     * @return void
+     */
     private function editAction(int $changelog_id): void
     {
+        $this->saveAction();
+
         parent::$page->displayAdmin(
             $this->getTemplate()->set(
                 'adm/changelog_form_view',
-                array_merge(
-                    $this->langs->language
-                )
+                $this->getActionData('edit')
             )
         );
     }
 
+    /**
+     * Get data to build the action add or action edit pages
+     *
+     * @param string $action
+     * @return array
+     */
+    private function getActionData(string $action): array
+    {
+        return array_merge(
+            $this->langs->language,
+            [
+                'js_path' => JS_PATH,
+                'alert' => '',
+                'action' => $action,
+                'current_action' => $this->langs->line('ch_' . $action . '_action'),
+                'changelog_version' => '',
+                'languages' => $this->getAllLanguages(),
+            ]
+        );
+    }
+
+    /**
+     * Save action to add/edit a record
+     *
+     * @param string $source
+     * @return void
+     */
     private function saveAction(): void
     {
+        // post actions
+        $data = filter_input_array(INPUT_POST);
 
+        if (isset($data) && $data['action'] == 'add') {
+
+        }
+
+        if (isset($data) && $data['action'] == 'edit') {
+
+        }
     }
 
     private function deleteAction(int $changelog_id): void

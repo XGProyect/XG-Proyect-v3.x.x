@@ -2,6 +2,7 @@
 <div class="container-fluid">
     {alert}
     <form action="" method="POST" name="changelog">
+        <input type="hidden" name="action" value="{action}">
         <!-- Page Heading -->
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800">{ch_title}</h1>
@@ -23,24 +24,37 @@
                                 <table class="table table-borderless" width="100%" cellspacing="0">
                                     <tr>
                                         <td>
-                                            <input class="form-control" type="date" name="changelog_date" min="1000-01-01" max="3000-12-31">
+                                            <input class="form-control" type="date" name="changelog_date"
+                                                min="1000-01-01" max="3000-12-31" required>
                                         </td>
                                         <td>
-                                            <input class="form-control" type="text" name="changelog_version" value="{changelog_version}" placeholder="{ch_version}">
+                                            <div class="row">
+                                                <div class="col-11">
+                                                    <input class="form-control" type="text" name="changelog_version"
+                                                        value="{changelog_version}" placeholder="{ch_version}"
+                                                        pattern="^(0|[1-9]\d*)\.((0|[1-9]\d*)\.)?(0|[1-9]\d*)(-(0|[1-9]\d*|\d*[a-zA-Z][0-9a-zA-Z]*))?$"
+                                                        required>
+                                                </div>
+                                                <div class="col-1">
+                                                    <i class="fas fa-question-circle" data-toggle="popover"
+                                                        data-trigger="hover" data-content="{ch_version_info}"
+                                                        data-html="true"></i>
+                                                </div>
+                                            </div>
                                         </td>
                                         <td>
-                                        <select class="form-control" name="changelog_language">
-                                            <option value="">{ch_pick_language}</option>
-                                            {languages}
-                                            <option value="{language_id}" {selected}>{language_name}</option>
-                                            {/languages}
-                                        </select>
+                                            <select class="form-control" name="changelog_language" required>
+                                                <option value="">{ch_pick_language}</option>
+                                                {languages}
+                                                <option value="{language_id}" {selected}>{language_name}</option>
+                                                {/languages}
+                                            </select>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td colspan="3">
                                             <textarea class="form-control" name="text" rows="10"
-                                                onkeyup="javascript:cntChars('changelog', 5000);"></textarea>
+                                                onkeyup="javascript:cntChars('changelog', 5000);" required></textarea>
                                             (<span id="cntChars">0</span> / 5000 {ch_characters})
                                         </td>
                                     </tr>

@@ -14,6 +14,7 @@ $lang = [
     'ch_delete_this' => 'Delete this entry',
     'ch_add_action' => 'Add a new entry',
     'ch_edit_action' => 'Edit entry: %s',
+    'ch_version_info' => 'Valid version examples are:<br>1.1<br>1.12.3<br>10.12.1-12b<br>3.2.0-1b',
     'ch_pick_language' => 'Pick language',
     'ch_characters' => 'characters',
     'ch_save' => 'Save entry',
