@@ -250,11 +250,11 @@ class Changelog extends Controller
             // clean data, remove nulls and false, which didn't pass validations
             $data = array_diff($data, [null, false]);
 
-            if (isset($data) && $data['action'] == 'add') {
+            if ($data['action'] == 'add') {
                 $this->Changelog_Model->addEntry($data);
             }
 
-            if (isset($data) && $data['action'] == 'edit') {
+            if ($data['action'] == 'edit') {
                 $this->Changelog_Model->updateEntry($data);
             }
         }

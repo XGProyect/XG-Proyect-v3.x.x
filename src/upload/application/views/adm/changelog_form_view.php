@@ -3,7 +3,7 @@
     {alert}
     <form action="" method="POST" name="changelog">
         <input type="hidden" name="action" value="{action}">
-        <input type="hidden" name="action" value="{changelog_id}">
+        <input type="hidden" name="changelog_id" value="{changelog_id}">
         <!-- Page Heading -->
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800">{ch_title}</h1>
