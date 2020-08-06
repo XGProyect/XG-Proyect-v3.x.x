@@ -188,7 +188,7 @@ UNIQUE KEY `language_id` (`language_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 
 $tables['languages_insert'] = "INSERT INTO `" . LANGUAGES . "` (`language_id`, `language_name`) VALUES
-(1, 'EspaÃ±ol'),
+(1, 'Español'),
 (2, 'English');";
 
 $tables['messages'] = "CREATE TABLE `" . MESSAGES . "` (
@@ -202,7 +202,7 @@ $tables['messages'] = "CREATE TABLE `" . MESSAGES . "` (
 `message_text` text CHARACTER SET utf8,
 `message_read` TINYINT( 1 ) UNSIGNED NOT NULL DEFAULT  '0',
 PRIMARY KEY  (`message_id`)
-) ENGINE=InnoDB;";
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;";
 
 $tables['notes'] = "CREATE TABLE `" . NOTES . "` (
 `note_id` bigint(11) NOT NULL AUTO_INCREMENT,

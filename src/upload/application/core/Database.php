@@ -126,6 +126,9 @@ class Database
             return false;
         }
 
+        // force utf8 to avoid weird characters
+        $this->connection->set_charset("utf8");
+
         return true;
     }
 
