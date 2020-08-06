@@ -13,6 +13,8 @@
  */
 namespace application\libraries;
 
+use application\libraries\FunctionsLib;
+
 /**
  * Users Class
  *
@@ -76,7 +78,7 @@ class Users_library
         if ($user_id != 0 && !empty($user_name) && !empty($password) && (strlen($password) == 40)) {
             $_SESSION['user_id'] = $user_id;
             $_SESSION['user_name'] = $user_name;
-            $_SESSION['user_password'] = sha1($password . '-' . SECRETWORD);
+            $_SESSION['user_password'] = FunctionsLib::encrypt($password . '-' . SECRETWORD);
 
             return true;
         } else {

@@ -174,7 +174,7 @@ class Renameplanet extends Controller
             FunctionsLib::message($this->_lang['ov_abandon_planet_not_possible'], 'game.php?page=renameplanet');
         } else {
 
-            if (sha1($_POST['pw']) == $this->_current_user['user_password'] && $this->_current_user['user_home_planet_id'] != $this->_current_user['user_current_planet']) {
+            if (FunctionsLib::encrypt($_POST['pw']) == $this->_current_user['user_password'] && $this->_current_user['user_home_planet_id'] != $this->_current_user['user_current_planet']) {
 
                 if ($this->_current_planet['moon_id'] != 0) {
 

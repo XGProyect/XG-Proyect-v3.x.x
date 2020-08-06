@@ -500,7 +500,7 @@ class Users extends Controller
         }
 
         if ($password != '') {
-            $password = "'" . sha1($password) . "'";
+            $password = "'" . FunctionsLib::encrypt($password) . "'";
         } else {
             $password = "`user_password`";
         }

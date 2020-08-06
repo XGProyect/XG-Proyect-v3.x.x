@@ -736,7 +736,7 @@ abstract class FunctionsLib extends XGPCore
             FunctionsLib::redirect(SYSTEM_ROOT);
         }
 
-        if (sha1($user_row['user_password'] . "-" . SECRETWORD) != $_SESSION['user_password'] && !defined('IN_LOGIN')) {
+        if (FunctionsLib::encrypt($user_row['user_password'] . "-" . SECRETWORD) != $_SESSION['user_password'] && !defined('IN_LOGIN')) {
             FunctionsLib::redirect(SYSTEM_ROOT);
         }
 
@@ -789,6 +789,44 @@ abstract class FunctionsLib extends XGPCore
                 ),
             ]
         );
+    }
+
+    /**
+     * Encrypt a password
+     *
+     * @param string $password
+     * @return string
+     */
+    public static function encrypt(string $password): string
+    {
+        return sha1($password);
+    }
+
+    /**
+     * Generate a random string, using a cryptographically secure
+     * pseudorandom number generator (random_int)
+     *
+     * For PHP 7, random_int is a PHP core function
+     * For PHP 5.x, depends on https://github.com/paragonie/random_compat
+     *
+     * @param int $length      How many characters do we want?
+     * @param string $keyspace A string of all possible characters to select from
+     *
+     * @return string
+     *
+     * @link https://stackoverflow.com/questions/6101956/generating-a-random-password-in-php/31284266#31284266
+     */
+    public static function generatePassword(int $length = 16, string $keyspace = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'): string
+    {
+        $str = '';
+        $max = mb_strlen($keyspace, '8bit') - 1;
+        if ($max < 1) {
+            throw new Exception('$keyspace must be at least two characters long');
+        }
+        for ($i = 0; $i < $length; ++$i) {
+            $str .= $keyspace[random_int(0, $max)];
+        }
+        return $str;
     }
 }
 

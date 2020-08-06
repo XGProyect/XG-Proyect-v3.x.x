@@ -18,6 +18,7 @@ namespace application\controllers\adm;
 
 use application\core\Controller;
 use application\libraries\adm\AdministrationLib;
+use application\libraries\FunctionsLib as Functions;
 
 /**
  * Encrypter Class
@@ -91,7 +92,7 @@ class Encrypter extends Controller
 
         if ($unencrypted) {
             $this->unencrypted = $unencrypted;
-            $this->encrypted = sha1($unencrypted);
+            $this->encrypted = Functions::encrypt($unencrypted);
         }
     }
 

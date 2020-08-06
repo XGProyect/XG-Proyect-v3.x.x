@@ -14,6 +14,7 @@
 namespace application\models\adm;
 
 use application\core\Model;
+use application\libraries\FunctionsLib as Functions;
 
 /**
  * Login Class
@@ -43,7 +44,7 @@ class Login extends Model
                 `user_password`
             FROM `" . USERS . "`
             WHERE `user_email` = '" . $this->db->escapeValue($user_email) . "'
-                AND `user_password` = '" . sha1($user_password) . "'
+                AND `user_password` = '" . Functions::encrypt($user_password) . "'
                 AND `user_authlevel` >= '1'
             LIMIT 1"
         );

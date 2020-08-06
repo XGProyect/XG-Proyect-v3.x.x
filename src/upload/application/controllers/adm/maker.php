@@ -171,7 +171,7 @@ class Maker extends Controller
             }
 
             if (isset($_POST['password_check']) && $_POST['password_check']) {
-                $pass = $this->generatePassword();
+                $pass = Functions::generatePassword();
             } else {
                 if (strlen($pass) < 4) {
                     $error .= $this->langs->line('mk_user_invalid_password');

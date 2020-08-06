@@ -13,6 +13,8 @@
  */
 namespace application\libraries;
 
+use application\libraries\FunctionsLib as Functions;
+
 /**
  * DebugLib Class
  *
@@ -202,7 +204,7 @@ class DebugLib
     private function writeErrors(string $text, string $type): void
     {
         $file_name = $type . '-error-' . date('Ymd') . '-' . time();
-        $file_code = sha1($file_name . $text);
+        $file_code = Functions::encrypt($file_name . $text);
         $file = XGP_ROOT . LOGS_PATH . $file_name . '-' . $file_code . '.txt';
 
         if (!file_exists($file)) {

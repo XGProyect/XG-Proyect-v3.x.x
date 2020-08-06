@@ -17,6 +17,7 @@ declare (strict_types = 1);
 namespace application\models\home;
 
 use application\core\Model;
+use application\libraries\FunctionsLib as Functions;
 
 /**
  * Home Class
@@ -49,7 +50,7 @@ class Home extends Model
             LEFT JOIN `" . BANNED . "` AS b
                 ON b.`banned_who` = u.`user_name`
             WHERE `user_email` = '" . $this->db->escapeValue($email) . "'
-                AND `user_password` = '" . sha1($password) . "'
+                AND `user_password` = '" . Functions::encrypt($password) . "'
             LIMIT 1"
         );
     }

@@ -97,33 +97,6 @@ class Mail extends Controller
     }
 
     /**
-     * Generate a random string, using a cryptographically secure
-     * pseudorandom number generator (random_int)
-     *
-     * For PHP 7, random_int is a PHP core function
-     * For PHP 5.x, depends on https://github.com/paragonie/random_compat
-     *
-     * @param int $length      How many characters do we want?
-     * @param string $keyspace A string of all possible characters to select from
-     *
-     * @return string
-     *
-     * @link https://stackoverflow.com/questions/6101956/generating-a-random-password-in-php/31284266#31284266
-     */
-    private function generatePassword(int $length, string $keyspace = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'): string
-    {
-        $str = '';
-        $max = mb_strlen($keyspace, '8bit') - 1;
-        if ($max < 1) {
-            throw new Exception('$keyspace must be at least two characters long');
-        }
-        for ($i = 0; $i < $length; ++$i) {
-            $str .= $keyspace[random_int(0, $max)];
-        }
-        return $str;
-    }
-
-    /**
      * processRequest
      *
      * @param string $mail E-Mail
@@ -146,7 +119,7 @@ class Mail extends Controller
 
             $this->_db->query(
                 "UPDATE " . USERS . " SET
-                `user_password` ='" . sha1($new_password) . "'
+                `user_password` ='" . FunctionsLib::encrypt($new_password) . "'
                 WHERE `user_email`='" . $this->_db->escapeValue($mail) . "'
                 LIMIT 1;"
             );
@@ -169,7 +142,7 @@ class Mail extends Controller
 
         $parse = $this->langs;
         $parse['user_name'] = $UserName;
-        $parse['user_pass'] = $this->generatePassword();
+        $parse['user_pass'] = FunctionsLib::generatePassword();
         $parse['game_url'] = GAMEURL;
         $parse['re_mail_text_part1'] = str_replace('%s', $game_name, $this->langs['re_mail_text_part1']);
         $parse['re_mail_text_part7'] = str_replace('%s', $game_name, $this->langs['re_mail_text_part7']);

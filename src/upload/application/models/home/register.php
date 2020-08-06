@@ -17,6 +17,7 @@ declare (strict_types = 1);
 namespace application\models\home;
 
 use application\core\Model;
+use application\libraries\FunctionsLib as Functions;
 use application\libraries\PlanetLib;
 use application\libraries\Users_library;
 
@@ -96,7 +97,7 @@ class Register extends Model
 
             $this->user_name = $this->db->escapeValue(strip_tags($new_user_data['new_user_name']));
             $this->user_email = $this->db->escapeValue($new_user_data['new_user_email']);
-            $this->user_password = sha1($new_user_data['new_user_password']);
+            $this->user_password = Functions::encrypt($new_user_data['new_user_password']);
 
             // create the new user
             $this->user_id = $user->createUserWithOptions(
