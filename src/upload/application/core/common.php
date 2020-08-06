@@ -75,7 +75,7 @@ if (!defined('IN_INSTALL')) {
     $current_page = isset($_GET['page']) ? $_GET['page'] : '';
 
     // Sessions
-    $session = new Sessions;
+    new Sessions;
 
     // Hooks
     $hooks = new Hooks;

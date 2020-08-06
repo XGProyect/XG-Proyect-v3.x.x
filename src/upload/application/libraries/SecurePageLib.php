@@ -61,8 +61,6 @@ class SecurePageLib
                     $value = htmlentities($value, ENT_QUOTES, 'UTF-8', false);
                 }
             }
-
-            //$value = mysql_real_escape_string ( $value );
         } else {
             $c = 0;
 
