@@ -61,28 +61,36 @@ class Alliance extends Model
      */
     public function createNewAlliance($alliance_name, $alliance_tag, $user_id, $founder_rank)
     {
-        $this->db->query(
-            "INSERT INTO " . ALLIANCE . " SET
-            `alliance_name`='" . $alliance_name . "',
-            `alliance_tag`='" . $alliance_tag . "' ,
-            `alliance_owner`='" . (int) $user_id . "',
-            `alliance_owner_range` = '" . $founder_rank . "',
-            `alliance_register_time`='" . time() . "'"
-        );
+        try {
+            $this->db->beginTransaction();
 
-        $new_ally_id = $this->db->insertId();
+            $this->db->query(
+                "INSERT INTO " . ALLIANCE . " SET
+                `alliance_name`='" . $alliance_name . "',
+                `alliance_tag`='" . $alliance_tag . "' ,
+                `alliance_owner`='" . (int) $user_id . "',
+                `alliance_owner_range` = '" . $founder_rank . "',
+                `alliance_register_time`='" . time() . "'"
+            );
 
-        $this->db->query(
-            "INSERT INTO " . ALLIANCE_STATISTICS . " SET
-            `alliance_statistic_alliance_id`='" . $new_ally_id . "'"
-        );
+            $new_ally_id = $this->db->insertId();
 
-        $this->db->query(
-            "UPDATE " . USERS . " SET
-            `user_ally_id`='" . $new_ally_id . "',
-            `user_ally_register_time`='" . time() . "'
-            WHERE `user_id`='" . (int) $user_id . "'"
-        );
+            $this->db->query(
+                "INSERT INTO " . ALLIANCE_STATISTICS . " SET
+                `alliance_statistic_alliance_id`='" . $new_ally_id . "'"
+            );
+
+            $this->db->query(
+                "UPDATE " . USERS . " SET
+                `user_ally_id`='" . $new_ally_id . "',
+                `user_ally_register_time`='" . time() . "'
+                WHERE `user_id`='" . (int) $user_id . "'"
+            );
+
+            $this->db->commitTransaction();
+        } catch (Exception $e) {
+            $this->db->rollbackTransaction();
+        }
     }
 
     /**
@@ -416,17 +424,25 @@ class Alliance extends Model
      */
     public function deleteAlliance($alliance_id)
     {
-        $this->db->query(
-            "UPDATE `" . USERS . "` SET
-                `user_ally_id` = '0'
-            WHERE `user_ally_id` = '" . $alliance_id . "'"
-        );
+        try {
+            $this->db->beginTransaction();
 
-        $this->db->query(
-            "DELETE FROM `" . ALLIANCE . "`
-            WHERE `alliance_id` = '" . $alliance_id . "'
-            LIMIT 1"
-        );
+            $this->db->query(
+                "UPDATE `" . USERS . "` SET
+                    `user_ally_id` = '0'
+                WHERE `user_ally_id` = '" . $alliance_id . "'"
+            );
+
+            $this->db->query(
+                "DELETE FROM `" . ALLIANCE . "`
+                WHERE `alliance_id` = '" . $alliance_id . "'
+                LIMIT 1"
+            );
+
+            $this->db->commitTransaction();
+        } catch (Exception $e) {
+            $this->db->rollbackTransaction();
+        }
     }
 
     /**
