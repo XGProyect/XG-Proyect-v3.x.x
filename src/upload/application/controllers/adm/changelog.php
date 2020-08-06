@@ -18,6 +18,7 @@ namespace application\controllers\adm;
 
 use application\core\Controller;
 use application\libraries\adm\AdministrationLib;
+use application\libraries\FunctionsLib as Functions;
 
 /**
  * Changelog Class
@@ -117,7 +118,7 @@ class Changelog extends Controller
      */
     private function buildListOfEntries(): array
     {
-        $entries = $this->Changelog_Model->getAllItems();
+        $entries = $this->Changelog_Model->getAllEntries();
         $entries_list = [];
 
         foreach ($entries as $entry) {
@@ -142,7 +143,9 @@ class Changelog extends Controller
         parent::$page->displayAdmin(
             $this->getTemplate()->set(
                 'adm/changelog_form_view',
-                $this->getActionData('add')
+                array_merge(
+                    $this->getActionData('add')
+                )
             )
         );
     }
@@ -174,15 +177,37 @@ class Changelog extends Controller
      */
     private function getActionData(string $action, int $changelog_id = 0): array
     {
+        $changelog_lang_id = 0;
+        $changelog_version = '';
+        $changelog_date = date('Y-m-d');
+        $changelog_description = '';
+
+        if ($action == 'edit') {
+            if ($result = $this->Changelog_Model->getSingleEntry($changelog_id)) {
+                $changelog_lang_id = $result->getChangelogLangId();
+                $changelog_version = $result->getChangelogVersion();
+                $changelog_date = $result->getChangelogDate();
+                $changelog_description = $result->getChangelogDescription();
+            } else {
+                Functions::redirect('admin.php?page=changelog');
+            }
+        }
+
         return array_merge(
             $this->langs->language,
             [
                 'js_path' => JS_PATH,
                 'alert' => '',
                 'action' => $action,
-                'current_action' => $this->langs->line('ch_' . $action . '_action'),
-                'changelog_version' => '',
-                'languages' => $this->getAllLanguages($changelog_id),
+                'changelog_id' => $changelog_id,
+                'current_action' => strtr(
+                    $this->langs->line('ch_' . $action . '_action'),
+                    ['%s' => $changelog_date]
+                ),
+                'changelog_date' => $changelog_date,
+                'changelog_version' => $changelog_version,
+                'languages' => $this->getAllLanguages($changelog_lang_id),
+                'changelog_description' => $changelog_description,
             ]
         );
     }
@@ -221,16 +246,17 @@ class Changelog extends Controller
             ], // changelog description
         ]);
 
-        // clean data, remove nulls and false, which didn't pass validations
-        $data = array_diff($data, [null, false]);
+        if ($data) {
+            // clean data, remove nulls and false, which didn't pass validations
+            $data = array_diff($data, [null, false]);
 
-        //var_dump($data);die();
-        if (isset($data) && $data['action'] == 'add') {
+            if (isset($data) && $data['action'] == 'add') {
+                $this->Changelog_Model->addEntry($data);
+            }
 
-        }
-
-        if (isset($data) && $data['action'] == 'edit') {
-
+            if (isset($data) && $data['action'] == 'edit') {
+                $this->Changelog_Model->updateEntry($data);
+            }
         }
     }
 
@@ -245,7 +271,7 @@ class Changelog extends Controller
      * @param integer $default_language
      * @return array
      */
-    private function getAllLanguages(int $default_language = 0): array
+    private function getAllLanguages(int $default_language): array
     {
         $languages = $this->Changelog_Model->getAllLanguages();
         $list_of_languages = [];
@@ -305,8 +331,7 @@ class Changelog extends Controller
         preg_match_all(
             '/^(0|[1-9]\d*)\.((0|[1-9]\d*)\.)?(0|[1-9]\d*)(-(0|[1-9]\d*|\d*[a-zA-Z][0-9a-zA-Z]*))?$/',
             $version,
-            $matches //,
-            //PREG_UNMATCHED_AS_NULL
+            $matches
         );
 
         if (isset($matches[0][0])) {

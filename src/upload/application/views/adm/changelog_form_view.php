@@ -3,6 +3,7 @@
     {alert}
     <form action="" method="POST" name="changelog">
         <input type="hidden" name="action" value="{action}">
+        <input type="hidden" name="action" value="{changelog_id}">
         <!-- Page Heading -->
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800">{ch_title}</h1>
@@ -25,7 +26,7 @@
                                     <tr>
                                         <td>
                                             <input class="form-control" type="date" name="changelog_date"
-                                                min="1000-01-01" max="3000-12-31" required>
+                                                value="{changelog_date}" min="1000-01-01" max="3000-12-31" required>
                                         </td>
                                         <td>
                                             <div class="row">
@@ -54,7 +55,8 @@
                                     <tr>
                                         <td colspan="3">
                                             <textarea class="form-control" name="text" rows="10"
-                                                onkeyup="javascript:cntChars('changelog', 5000);" required></textarea>
+                                                onkeyup="javascript:cntChars('changelog', 5000);"
+                                                required>{changelog_description}</textarea>
                                             (<span id="cntChars">0</span> / 5000 {ch_characters})
                                         </td>
                                     </tr>
