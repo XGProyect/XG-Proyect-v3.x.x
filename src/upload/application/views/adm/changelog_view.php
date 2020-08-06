@@ -27,20 +27,6 @@
                             <div class="table-responsive">
                                 <table class="table table-borderless" width="100%" cellspacing="0">
                                     <tr>
-                                        <td colspan="8">
-                                            <button type="submit" class="btn btn-danger btn-icon-split">
-                                                <span class="icon text-white-50">
-                                                    <i class="fas fa-trash-alt"></i>
-                                                </span>
-                                                <span class="text">{ch_delete_selected}</span>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th>
-                                            <input class="form-check-input" type="checkbox" name="checkall"
-                                                id="checkall">
-                                        </th>
                                         <th>{ch_date}</th>
                                         <th>{ch_version}</th>
                                         <th>{ch_language}</th>
@@ -49,10 +35,6 @@
                                     {changelog}
                                     <tr data-toggle="collapse" data-target="#toggle{changelog_id}" aria-expanded="false"
                                         aria-controls="toggle{changelog_id}">
-                                        <td>
-                                            <input class="form-check-input" type="checkbox"
-                                                name="delete_entries[{changelog_id}]">
-                                        </td>
                                         <td>{changelog_date}</td>
                                         <td>{changelog_version}</td>
                                         <td>{changelog_language}</td>
@@ -71,7 +53,7 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td colspan="8">
+                                        <td colspan="4">
                                             <div class="collapse" id="toggle{changelog_id}">
                                                 <div class="card shadow mb-4">
                                                     <div
@@ -106,16 +88,6 @@
                                         </td>
                                     </tr>
                                     {/changelog}
-                                    <tr>
-                                        <td colspan="8">
-                                            <button type="submit" class="btn btn-danger btn-icon-split">
-                                                <span class="icon text-white-50">
-                                                    <i class="fas fa-trash-alt"></i>
-                                                </span>
-                                                <span class="text">{ch_delete_selected}</span>
-                                            </button>
-                                        </td>
-                                    </tr>
                                 </table>
                             </div>
                         </div>

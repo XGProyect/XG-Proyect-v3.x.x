@@ -4,7 +4,6 @@ $lang = [
     'ch_new_item' => 'Add new entry',
     'ch_sub_title' => 'From here you will be able to modify the list of changes (changlog) of your server. Such section is located on the left menu of your game.',
     'ch_general' => 'List of changes',
-    'ch_delete_selected' => 'Delete selected entries',
     'ch_date' => 'Entry date',
     'ch_version' => 'Entry version',
     'ch_language' => 'Entry language',
@@ -18,6 +17,9 @@ $lang = [
     'ch_pick_language' => 'Pick language',
     'ch_characters' => 'characters',
     'ch_save' => 'Save entry',
+    'ch_action_add_done' => 'Entry successfully added!',
+    'ch_action_edit_done' => 'Entry successfully edited!',
+    'ch_action_delete_done' => 'Entry successfully deleted!',
 ];
 
 /* end of changelog_lang.php */

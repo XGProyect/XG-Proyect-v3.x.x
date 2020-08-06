@@ -45,7 +45,7 @@ class Changelog extends Model
             FROM `" . CHANGELOG . "` AS c
             INNER JOIN `" . LANGUAGES . "` AS l
                 ON l.`language_id` = c.`changelog_lang_id`
-            ORDER BY c.`changelog_date` DESC, c.`changelog_version` ASC"
+            ORDER BY c.`changelog_date` DESC, c.`changelog_version` DESC"
         );
     }
 
@@ -96,14 +96,49 @@ class Changelog extends Model
         }
     }
 
-    public function updateEntry(int $changelog_id)
+    /**
+     * Edit an existing entry validating the language id
+     *
+     * @param array $data
+     * @return void
+     */
+    public function updateEntry(array $data): void
     {
+        try {
+            $this->db->beginTransaction();
 
+            $this->db->query(
+                "UPDATE `" . CHANGELOG . "` AS c SET
+                    c.`changelog_lang_id` = (
+                        SELECT
+                            l.`language_id`
+                        FROM `" . LANGUAGES . "` AS l
+                        WHERE l.`language_id` = '" . $data['changelog_language'] . "'
+                        LIMIT 1
+                    ),
+                    c.`changelog_version` = '" . $data['changelog_version'] . "',
+                    c.`changelog_date` = '" . $data['changelog_date'] . "',
+                    c.`changelog_description` = '" . $data['text'] . "'
+                WHERE c.`changelog_id` = '" . $data['changelog_id'] . "';"
+            );
+
+            $this->db->commitTransaction();
+        } catch (Exception $e) {
+            $this->db->rollbackTransaction();
+        }
     }
 
-    public function deleteEntry(int $changelog_id)
+    /**
+     * Delete a changelog entry
+     *
+     * @param integer $changelog_id
+     * @return void
+     */
+    public function deleteEntry(int $changelog_id): void
     {
-
+        $this->db->query(
+            "DELETE FROM `" . CHANGELOG . "` WHERE `changelog_id` = '" . $changelog_id . "';"
+        );
     }
 
     /**

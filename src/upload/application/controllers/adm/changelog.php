@@ -17,8 +17,10 @@ declare (strict_types = 1);
 namespace application\controllers\adm;
 
 use application\core\Controller;
-use application\libraries\adm\AdministrationLib;
+use application\libraries\adm\AdministrationLib as Administration;
 use application\libraries\FunctionsLib as Functions;
+use DateTime;
+use Exception;
 
 /**
  * Changelog Class
@@ -47,7 +49,7 @@ class Changelog extends Controller
         parent::__construct();
 
         // check if session is active
-        AdministrationLib::checkSession();
+        Administration::checkSession();
 
         // load Model
         parent::loadModel('adm/changelog');
@@ -59,8 +61,8 @@ class Changelog extends Controller
         $this->user = $this->getUserData();
 
         // Check if the user is allowed to access
-        if (AdministrationLib::authorization($this->user['user_authlevel'], 'edit_users') != 1) {
-            AdministrationLib::noAccessMessage($this->langs->line('no_permissions'));
+        if (Administration::authorization($this->user['user_authlevel'], 'edit_users') != 1) {
+            Administration::noAccessMessage($this->langs->line('no_permissions'));
         }
 
         // time to do something
@@ -105,6 +107,7 @@ class Changelog extends Controller
                     $this->langs->language,
                     [
                         'changelog' => $this->buildListOfEntries(),
+                        'alert' => $this->getAlertMessage(),
                     ]
                 )
             )
@@ -129,6 +132,26 @@ class Changelog extends Controller
         }
 
         return $entries_list;
+    }
+
+    /**
+     * Get the alert message
+     *
+     * @return string
+     */
+    private function getAlertMessage(): string
+    {
+        $action_type = filter_input(INPUT_GET, 'success');
+        $alert = '';
+
+        if ($action_type) {
+            $alert = Administration::saveMessage(
+                'ok',
+                $this->langs->line('ch_action_' . $action_type . '_done')
+            );
+        }
+
+        return $alert;
     }
 
     /**
@@ -197,7 +220,6 @@ class Changelog extends Controller
             $this->langs->language,
             [
                 'js_path' => JS_PATH,
-                'alert' => '',
                 'action' => $action,
                 'changelog_id' => $changelog_id,
                 'current_action' => strtr(
@@ -222,6 +244,9 @@ class Changelog extends Controller
     {
         // post actions
         $data = filter_input_array(INPUT_POST, [
+            'changelog_id' => [
+                'filter' => FILTER_VALIDATE_INT,
+            ],
             'action' => [
                 'filter' => FILTER_CALLBACK,
                 'options' => [$this, 'isValidAction'],
@@ -247,22 +272,40 @@ class Changelog extends Controller
         ]);
 
         if ($data) {
-            // clean data, remove nulls and false, which didn't pass validations
-            $data = array_diff($data, [null, false]);
+            $valid = true;
 
-            if ($data['action'] == 'add') {
-                $this->Changelog_Model->addEntry($data);
+            foreach ($data as $field => $value) {
+                if ($value === false or $value === null) {
+                    $valid = false;
+                    break;
+                }
             }
 
-            if ($data['action'] == 'edit') {
-                $this->Changelog_Model->updateEntry($data);
+            if ($valid) {
+                if ($data['action'] == 'add') {
+                    $this->Changelog_Model->addEntry($data);
+                }
+
+                if ($data['action'] == 'edit') {
+                    $this->Changelog_Model->updateEntry($data);
+                }
+
+                Functions::redirect('admin.php?page=changelog&success=' . $data['action']);
             }
         }
     }
 
+    /**
+     * Delete an existing record
+     *
+     * @param integer $changelog_id
+     * @return void
+     */
     private function deleteAction(int $changelog_id): void
     {
+        $this->Changelog_Model->deleteEntry($changelog_id);
 
+        Functions::redirect('admin.php?page=changelog&success=delete');
     }
 
     /**
@@ -312,10 +355,10 @@ class Changelog extends Controller
     private function isValidDate(?string $date): ?string
     {
         try {
-            $datetime = new \DateTime($date);
+            $datetime = new DateTime($date);
 
             return $datetime->format('Y-m-d');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return null;
         }
     }

@@ -225,6 +225,7 @@ class TemplateLib
             ['users', $this->langs['mn_edition_users'], '4'],
             ['alliances', $this->langs['mn_edition_alliances'], '4'],
             ['languages', $this->langs['mn_edition_languages'], '4'],
+            ['changelog', $this->langs['mn_edit_changelog'], '4'],
             ['backup', $this->langs['mn_tools_backup'], '5'],
             ['encrypter', $this->langs['mn_tools_encrypter'], '5'],
             ['announcement', $this->langs['mn_tools_global_message'], '5'],

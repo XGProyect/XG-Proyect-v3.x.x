@@ -1,6 +1,5 @@
 <script src="{js_path}cntchar-min.js" type="text/javascript"></script>
 <div class="container-fluid">
-    {alert}
     <form action="" method="POST" name="changelog">
         <input type="hidden" name="action" value="{action}">
         <input type="hidden" name="changelog_id" value="{changelog_id}">
