@@ -97,24 +97,30 @@ class Mail extends Controller
     }
 
     /**
-     * generatePassword
+     * Generate a random string, using a cryptographically secure
+     * pseudorandom number generator (random_int)
+     *
+     * For PHP 7, random_int is a PHP core function
+     * For PHP 5.x, depends on https://github.com/paragonie/random_compat
+     *
+     * @param int $length      How many characters do we want?
+     * @param string $keyspace A string of all possible characters to select from
      *
      * @return string
+     *
+     * @link https://stackoverflow.com/questions/6101956/generating-a-random-password-in-php/31284266#31284266
      */
-    private function generatePassword()
+    private function generatePassword(int $length, string $keyspace = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'): string
     {
-        $characters = "aazertyuiopqsdfghjklmwxcvbnAZERTYUIOPQSDFGHJKLMWXCVBN1234567890";
-        $count = strlen($characters);
-        $new_pass = "";
-        $lenght = 6;
-        srand((double) microtime() * 1000000);
-
-        for ($i = 0; $i < $lenght; $i++) {
-            $character_boucle = mt_rand(0, $count - 1);
-            $new_pass = $new_pass . substr($characters, $character_boucle, 1);
+        $str = '';
+        $max = mb_strlen($keyspace, '8bit') - 1;
+        if ($max < 1) {
+            throw new Exception('$keyspace must be at least two characters long');
         }
-
-        return $new_pass;
+        for ($i = 0; $i < $length; ++$i) {
+            $str .= $keyspace[random_int(0, $max)];
+        }
+        return $str;
     }
 
     /**
