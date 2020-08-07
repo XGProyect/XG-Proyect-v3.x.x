@@ -68,16 +68,14 @@ class Users_library
      * userLogin
      *
      * @param int    $user_id   User ID
-     * @param string $user_name User name
      * @param string $password  Password
      *
      * @return void
      */
-    public function userLogin($user_id = 0, $user_name = '', $password = '')
+    public function userLogin($user_id = 0, $password = '')
     {
-        if ($user_id != 0 && !empty($user_name) && !empty($password) && (strlen($password) == 60)) {
+        if ($user_id != 0 && !empty($password) && (strlen($password) == 60)) {
             $_SESSION['user_id'] = $user_id;
-            $_SESSION['user_name'] = $user_name;
             $_SESSION['user_password'] = FunctionsLib::hash($password . '-' . SECRETWORD);
 
             return true;
@@ -197,7 +195,7 @@ class Users_library
      */
     private function isSessionSet()
     {
-        return !(!isset($_SESSION['user_id']) or !isset($_SESSION['user_name']) or !isset($_SESSION['user_password']));
+        return !(!isset($_SESSION['user_id']) or !isset($_SESSION['user_password']));
     }
 
     /**

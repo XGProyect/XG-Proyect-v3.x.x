@@ -68,7 +68,7 @@ class Home extends Controller
                     $this->Home_Model->removeBan($login['user_name']);
                 }
 
-                if (parent::$users->userLogin($login['user_id'], $login['user_name'], $login['user_password'])) {
+                if (parent::$users->userLogin($login['user_id'], $login['user_password'])) {
                     $this->Home_Model->setUserHomeCurrentPlanet($login['user_id']);
 
                     // redirect to game

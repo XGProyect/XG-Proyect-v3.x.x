@@ -213,18 +213,18 @@ class AdministrationLib extends XGPCore
      * adminLogin
      *
      * @param int    $admin_id   Admin ID
-     * @param string $admin_name Admin name
      * @param string $password   Password
      *
      * @return void
      */
-    public static function adminLogin($admin_id = 0, $admin_name = '', $password = '')
+    public static function adminLogin($admin_id = 0, $password = '')
     {
-        if ($admin_id != 0 && !empty($admin_name) && !empty($password)) {
-            parent::$users->userLogin($admin_id, $admin_name, $password);
+        if ($admin_id != 0 && !empty($password)) {
+            // login as a user
+            parent::$users->userLogin($admin_id, $password);
 
+            // admin login
             $_SESSION['admin_id'] = $admin_id;
-            $_SESSION['admin_name'] = $admin_name;
             $_SESSION['admin_password'] = FunctionsLib::hash($password . '-' . SECRETWORD);
 
             return true;
@@ -257,7 +257,6 @@ class AdministrationLib extends XGPCore
     public static function closeSession()
     {
         unset($_SESSION['admin_id']);
-        unset($_SESSION['admin_name']);
         unset($_SESSION['admin_password']);
     }
 
@@ -268,7 +267,7 @@ class AdministrationLib extends XGPCore
      */
     private static function isSessionSet()
     {
-        return !(!isset($_SESSION['admin_id']) or !isset($_SESSION['admin_name']) or !isset($_SESSION['admin_password']));
+        return !(!isset($_SESSION['admin_id']) or !isset($_SESSION['admin_password']));
     }
 
     /**

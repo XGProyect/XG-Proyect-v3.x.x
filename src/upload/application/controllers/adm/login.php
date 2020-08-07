@@ -72,7 +72,7 @@ class Login extends Controller
 
             if ($login) {
                 if (password_verify($login_data['inputPassword'], $login['user_password'])
-                    && AdministrationLib::adminLogin($login['user_id'], $login['user_name'], $login['user_password'])) {
+                    && AdministrationLib::adminLogin($login['user_id'], $login['user_password'])) {
                     $redirect = filter_input(INPUT_GET, 'redirect', FILTER_SANITIZE_STRING) ?? 'home';
 
                     if ($redirect == '') {

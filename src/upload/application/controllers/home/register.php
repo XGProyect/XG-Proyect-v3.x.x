@@ -128,7 +128,7 @@ class Register extends Controller
                 }
 
                 // User login
-                if (parent::$users->userLogin($new_user['user_id'], $new_user['user_name'], $new_user['user_hashed_password'])) {
+                if (parent::$users->userLogin($new_user['user_id'], $new_user['user_hashed_password'])) {
                     // Redirect to game
                     FunctionsLib::redirect(SYSTEM_ROOT . 'game.php?page=overview');
                 }

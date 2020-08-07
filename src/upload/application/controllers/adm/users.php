@@ -540,10 +540,7 @@ class Users extends Controller
                 'id' => $this->_id,
             ]);
 
-            if ($this->_current_user['user_id'] == $this->_id) {
-                $_SESSION['user_name'] = $username;
-            } else {
-                // clean up
+            if ($this->_current_user['user_id'] != $this->_id) {
                 $this->Users_Model->deleteSessionByUserId($this->_id);
             }
 
