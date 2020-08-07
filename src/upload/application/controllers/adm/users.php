@@ -63,9 +63,9 @@ class Users extends Controller
         $this->_current_user = $this->getUserData();
         $this->_stats = new Statistics_library();
 
-        // Check if the user is allowed to access
-        if (Administration::authorization($this->_current_user['user_authlevel'], 'edit_users') != 1) {
-            Administration::noAccessMessage($this->langs->line('no_permissions'));
+        // check if the user is allowed to access
+        if (!Administration::authorization(__CLASS__, (int) $this->_current_user['user_authlevel'])) {
+            die(Administration::noAccessMessage($this->langs->line('no_permissions')));
         }
 
         // time to do something

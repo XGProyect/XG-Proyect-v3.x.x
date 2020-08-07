@@ -17,7 +17,7 @@ declare (strict_types = 1);
 namespace application\controllers\adm;
 
 use application\core\Controller;
-use application\libraries\adm\AdministrationLib;
+use application\libraries\adm\AdministrationLib as Administration;
 use application\libraries\FunctionsLib;
 
 /**
@@ -54,7 +54,7 @@ class Modules extends Controller
         parent::__construct();
 
         // check if session is active
-        AdministrationLib::checkSession();
+        Administration::checkSession();
 
         // load Language
         parent::loadLang(['adm/global', 'adm/modules']);
@@ -62,9 +62,9 @@ class Modules extends Controller
         // set data
         $this->user = $this->getUserData();
 
-        // Check if the user is allowed to access
-        if (AdministrationLib::authorization($this->user['user_authlevel'], 'config_game') != 1) {
-            die(AdministrationLib::noAccessMessage($this->langs->line('no_permissions')));
+        // check if the user is allowed to access
+        if (!Administration::authorization(__CLASS__, (int) $this->user['user_authlevel'])) {
+            die(Administration::noAccessMessage($this->langs->line('no_permissions')));
         }
 
         // time to do something
@@ -92,7 +92,7 @@ class Modules extends Controller
 
             FunctionsLib::updateConfig('modules', join(';', $modules_set));
 
-            $this->alert = AdministrationLib::saveMessage('ok', $this->langs->line('mdl_all_ok_message'));
+            $this->alert = Administration::saveMessage('ok', $this->langs->line('mdl_all_ok_message'));
         }
     }
 

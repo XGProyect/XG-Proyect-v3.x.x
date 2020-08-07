@@ -59,7 +59,7 @@ class Home extends Controller
         // set data
         $this->user = $this->getUserData();
 
-        // Check if the user is allowed to access
+        // check if the user is allowed to access
         if (!AdministrationLib::haveAccess($this->user['user_authlevel'])) {
             AdministrationLib::noAccessMessage($this->langs->line('no_permissions'));
         }

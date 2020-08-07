@@ -52,12 +52,12 @@ class Repair extends Controller
 
         $this->current_user = parent::$users->getUserData();
 
-        // Check if the user is allowed to access
-        if (Administration::authorization($this->current_user['user_authlevel'], 'config_game') != 1) {
-            Administration::noAccessMessage($this->langs->line('no_permissions'));
+        // check if the user is allowed to access
+        if (!Administration::authorization(__CLASS__, (int) $this->current_user['user_authlevel'])) {
+            die(Administration::noAccessMessage($this->langs->line('no_permissions')));
         }
 
-        $this->buildPage($this->current_user);
+        $this->buildPage();
     }
 
     /**

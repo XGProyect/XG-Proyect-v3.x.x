@@ -57,8 +57,8 @@ class Tasks extends Controller
         // set data
         $this->user = $this->getUserData();
 
-        // Check if the user is allowed to access
-        if (AdministrationLib::authorization($this->user['user_authlevel'], 'observation') != 1) {
+        // check if the user is allowed to access
+        if (!AdministrationLib::authorization(__CLASS__, (int) $this->user['user_authlevel'])) {
             die(AdministrationLib::noAccessMessage($this->langs->line('no_permissions')));
         }
 

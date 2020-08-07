@@ -51,12 +51,12 @@ class Ban extends Controller
 
         $this->_current_user = parent::$users->getUserData();
 
-        // Check if the user is allowed to access
-        if (AdministrationLib::haveAccess($this->_current_user['user_authlevel']) && AdministrationLib::authorization($this->_current_user['user_authlevel'], 'edit_users') == 1) {
-            $this->build_page();
-        } else {
-            die(AdministrationLib::noAccessMessage($this->langs->line('ge_no_permissions')));
+        // check if the user is allowed to access
+        if (!AdministrationLib::authorization(__CLASS__, (int) $this->_current_user['user_authlevel'])) {
+            die(AdministrationLib::noAccessMessage($this->langs->line('no_permissions')));
         }
+
+        $this->build_page();
     }
 
     /**

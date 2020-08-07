@@ -15,6 +15,7 @@ namespace application\libraries\adm;
 
 use application\core\Template;
 use application\core\XGPCore;
+use application\libraries\adm\Permissions;
 use application\libraries\FunctionsLib;
 
 /**
@@ -83,39 +84,12 @@ class AdministrationLib extends XGPCore
      *
      * @return array
      */
-    public static function authorization($user_level, $permission)
+    public static function authorization(string $module, int $user_level)
     {
-        $QueryModeration = FunctionsLib::readConfig('moderation');
-        $QueryModerationEx = explode(";", $QueryModeration);
-        $Moderator = explode(",", $QueryModerationEx[0]);
-        $Operator = explode(",", $QueryModerationEx[1]);
-        $Administrator = explode(",", $QueryModerationEx[2]);
+        $cleaned_module_name = strtolower(substr(strrchr($module, "\\"), 1));
+        $permissions = new Permissions(FunctionsLib::readConfig('admin_permissions'));
 
-        if ($user_level == 1) {
-            $permissions['observation'] = $Moderator[0];
-            $permissions['edit_users'] = $Moderator[1];
-            $permissions['config_game'] = $Moderator[2];
-            $permissions['use_tools'] = $Moderator[3];
-            $permissions['track_activity'] = $Moderator[4];
-        }
-
-        if ($user_level == 2) {
-            $permissions['observation'] = $Operator[0];
-            $permissions['edit_users'] = $Operator[1];
-            $permissions['config_game'] = $Operator[2];
-            $permissions['use_tools'] = $Operator[3];
-            $permissions['track_activity'] = $Operator[4];
-        }
-
-        if ($user_level == 3) {
-            $permissions['observation'] = 1;
-            $permissions['edit_users'] = 1;
-            $permissions['config_game'] = 1;
-            $permissions['use_tools'] = 1;
-            $permissions['track_activity'] = $Administrator[0];
-        }
-
-        return $permissions[$permission];
+        return $permissions->isAccessAllowed($cleaned_module_name, $user_level);
     }
 
     /**

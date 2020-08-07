@@ -3,7 +3,7 @@
 declare (strict_types = 1);
 
 /**
- * Encrypter Controller
+ * Permissions Controller
  *
  * PHP Version 7.1+
  *
@@ -12,16 +12,18 @@ declare (strict_types = 1);
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
- * @version  3.0.0
+ * @version  3.1.0
  */
 namespace application\controllers\adm;
 
 use application\core\Controller;
+use application\core\enumerators\UserRanksEnumerator as UserRanks;
 use application\libraries\adm\AdministrationLib as Administration;
+use application\libraries\adm\Permissions as Per;
 use application\libraries\FunctionsLib as Functions;
 
 /**
- * Encrypter Class
+ * Permissions Class
  *
  * @category Classes
  * @package  Application
@@ -30,7 +32,7 @@ use application\libraries\FunctionsLib as Functions;
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-class Encrypter extends Controller
+class Permissions extends Controller
 {
     /**
      * Current user data
@@ -40,18 +42,11 @@ class Encrypter extends Controller
     private $user;
 
     /**
-     * Contains the unencrypted password
+     * Contains the alert string
      *
      * @var string
      */
-    private $unencrypted = '';
-
-    /**
-     * Contains the encrypted password
-     *
-     * @var string
-     */
-    private $encrypted = '';
+    private $alert = '';
 
     /**
      * Constructor
@@ -64,7 +59,7 @@ class Encrypter extends Controller
         Administration::checkSession();
 
         // load Language
-        parent::loadLang(['adm/global', 'adm/encrypter']);
+        parent::loadLang(['adm/global', 'adm/permissions']);
 
         // set data
         $this->user = $this->getUserData();
@@ -74,11 +69,27 @@ class Encrypter extends Controller
             die(Administration::noAccessMessage($this->langs->line('no_permissions')));
         }
 
+        // init a new permissions object
+        $this->setUpPermissions();
+
         // time to do something
         $this->runAction();
 
         // build the page
         $this->buildPage();
+    }
+
+    /**
+     * Creates a new preferences object that will handle all the preferences
+     * creation methods and actions
+     *
+     * @return void
+     */
+    private function setUpPermissions(): void
+    {
+        $this->permissions = new Per(
+            Functions::readConfig('admin_permissions')
+        );
     }
 
     /**
@@ -88,12 +99,7 @@ class Encrypter extends Controller
      */
     private function runAction(): void
     {
-        $unencrypted = filter_input(INPUT_POST, 'unencrypted');
 
-        if ($unencrypted) {
-            $this->unencrypted = $unencrypted;
-            $this->encrypted = Functions::hash($unencrypted);
-        }
     }
 
     /**
@@ -105,17 +111,40 @@ class Encrypter extends Controller
     {
         parent::$page->displayAdmin(
             $this->getTemplate()->set(
-                'adm/encrypter_view',
+                'adm/permissions_view',
                 array_merge(
                     $this->langs->language,
-                    [
-                        'unencrypted' => $this->unencrypted ?? '',
-                        'encrypted' => $this->encrypted ?? '',
-                    ]
+                    $this->buildListOfPermissions()
                 )
             )
         );
     }
+
+    /**
+     * Build the list of permissions
+     *
+     * @return array
+     */
+    private function buildListOfPermissions(): array
+    {
+        $list_of_permissions = [];
+
+        foreach ($this->permissions->getAllPermissionsAsArray() as $module => $roles) {
+            $list_of_permissions[] = [
+                'page_module' => $module,
+                'go_role' => UserRanks::GO,
+                'sgo_role' => UserRanks::SGO,
+                'ga_role' => UserRanks::ADMIN,
+                'go_checked' => ($roles[UserRanks::GO] == 1) ? 'checked' : '',
+                'sgo_checked' => ($roles[UserRanks::SGO] == 1) ? 'checked' : '',
+                'ga_checked' => ($roles[UserRanks::ADMIN] == 1) ? 'checked' : '',
+            ];
+        }
+
+        return [
+            'permissions_list' => $list_of_permissions,
+        ];
+    }
 }
 
-/* end of encrypter.php */
+/* end of permissions.php */

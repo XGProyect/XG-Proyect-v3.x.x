@@ -1,0 +1,69 @@
+<?php
+/**
+ * Admin pages enumerator
+ *
+ * PHP Version 7.1+
+ *
+ * @category Library
+ * @package  Application
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.1.0
+ */
+namespace application\core\enumerators;
+
+/**
+ * AdminPagesEnumerator Class
+ *
+ * @category Enumerator
+ * @package  Core
+ * @author   XG Proyect Team
+ * @license  http://www.xgproyect.org XG Proyect
+ * @link     http://www.xgproyect.org
+ * @version  3.1.0
+ */
+abstract class AdminPagesEnumerator
+{
+    const CONFIGURATION = [
+        'server',
+        'modules',
+        'planets',
+        'registration',
+        'statistics',
+        'premium',
+    ];
+
+    const INFORMATION = [
+        'tasks',
+        'errors',
+        'fleets',
+        'messages',
+    ];
+
+    const EDITION = [
+        'maker',
+        'users',
+        'alliances',
+        'languages',
+        'changelog',
+        'permissions',
+    ];
+
+    const TOOLS = [
+        'backup',
+        'encrypter',
+        'announcement',
+        'ban',
+        'rebuildhighscores',
+        'update',
+        'migrate',
+    ];
+
+    const MAINTENANCE = [
+        'repair',
+        'reset',
+    ];
+}
+
+/* end of AdminPagesEnumerator.php */

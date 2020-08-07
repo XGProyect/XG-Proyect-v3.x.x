@@ -54,9 +54,9 @@ class Errors extends Controller
         // set data
         $this->user = $this->getUserData();
 
-        // Check if the user is allowed to access
-        if (AdministrationLib::authorization($this->user['user_authlevel'], 'observation') != 1) {
-            AdministrationLib::noAccessMessage($this->langs->line('no_permissions'));
+        // check if the user is allowed to access
+        if (!AdministrationLib::authorization(__CLASS__, (int) $this->user['user_authlevel'])) {
+            die(AdministrationLib::noAccessMessage($this->langs->line('no_permissions')));
         }
 
         // time to do something
