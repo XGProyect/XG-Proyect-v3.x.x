@@ -159,7 +159,7 @@ class Register extends Controller
         $parse['re_mail_text_part7'] = str_replace('%s', $game_name, $this->langs->line('re_mail_text_part7'));
 
         $email = $this->getTemplate()->set(
-            'home/email_template',
+            'home/welcome_email_template_view',
             $parse
         );
 
