@@ -14,7 +14,6 @@
 namespace application\core;
 
 use application\libraries\DebugLib;
-use application\libraries\FunctionsLib as Functions;
 use mysqli;
 
 /**
@@ -558,7 +557,7 @@ class Database
         }
 
         // SAVE FILE
-        $file_name = 'db-backup-' . date('Ymd') . '-' . time() . '-' . (Functions::encrypt(implode(',', $tables))) . '.sql';
+        $file_name = 'db-backup-' . date('Ymd') . '-' . time() . '-' . (sha1(implode(',', $tables))) . '.sql';
         $handle = fopen(XGP_ROOT . BACKUP_PATH . $file_name, 'w+');
         $writed = fwrite($handle, $return);
 
