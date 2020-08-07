@@ -557,7 +557,7 @@ class Database
         }
 
         // SAVE FILE
-        $file_name = 'db-backup-' . date('Ymd') . '-' . time() . '-' . (sha1(implode(',', $tables))) . '.sql';
+        $file_name = 'db-backup-' . date('Ymd') . '-' . time() . '-' . (sha1(join(',', $tables))) . '.sql';
         $handle = fopen(XGP_ROOT . BACKUP_PATH . $file_name, 'w+');
         $writed = fwrite($handle, $return);
 

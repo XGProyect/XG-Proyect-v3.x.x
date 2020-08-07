@@ -481,7 +481,7 @@ class Destroy extends Missions
         $idAtts = $report->getAttackersId();
         $idDefs = $report->getDefendersId();
         $idAll = array_merge($idAtts, $idDefs);
-        $owners = implode(',', $idAll);
+        $owners = join(',', $idAll);
         $rid = md5($report) . time();
         $report_data = $report . $this->buildDestroyReport($fleet_row, $report, $planet_name);
 
@@ -670,7 +670,7 @@ class Destroy extends Missions
         }
 
         // updating flying fleets
-        $id_string = implode(',', $emptyFleets);
+        $id_string = join(',', $emptyFleets);
 
         if (!empty($id_string)) {
 
@@ -745,7 +745,7 @@ class Destroy extends Missions
         ]);
 
         // Updating flying fleets
-        $id_string = implode(",", $emptyFleets);
+        $id_string = join(",", $emptyFleets);
 
         if (!empty($id_string)) {
 

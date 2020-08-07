@@ -221,7 +221,7 @@ class UpdatesLibrary extends XGPCore
                     }
                 }
 
-                $new_queue = (count($queue_array) == 0) ? 0 : implode(';', $queue_array);
+                $new_queue = (count($queue_array) == 0) ? 0 : join(';', $queue_array);
 
                 $current_planet['planet_b_building'] = 0;
                 $current_planet['planet_b_building_id'] = $new_queue;
@@ -328,10 +328,10 @@ class UpdatesLibrary extends XGPCore
 
                             $prevData = $element_data[3];
 
-                            $recalculated_queue[$queue_item] = implode(",", $element_data);
+                            $recalculated_queue[$queue_item] = join(",", $element_data);
                         }
 
-                        $new_queue = implode(";", $recalculated_queue);
+                        $new_queue = join(";", $recalculated_queue);
 
                         if ($new_queue == '') {
                             $new_queue = '0';
@@ -402,7 +402,7 @@ class UpdatesLibrary extends XGPCore
                         foreach ($queue_array as $num => $info) {
                             $fix_ele = explode(",", $info);
                             $fix_ele[3] = $fix_ele[3] - $build_time; // build end time
-                            $queue_array[$num] = implode(",", $fix_ele);
+                            $queue_array[$num] = join(",", $fix_ele);
                         }
 
                         $actual_count = count($queue_array);

@@ -583,9 +583,9 @@ class Buildings extends Controller
                     $BuildEndTime += $current_build_time;
                     $ListIDArray[2] = $current_build_time;
                     $ListIDArray[3] = $BuildEndTime;
-                    $QueueArray[$ID] = implode(",", $ListIDArray);
+                    $QueueArray[$ID] = join(",", $ListIDArray);
                 }
-                $NewQueue = implode(";", $QueueArray);
+                $NewQueue = join(";", $QueueArray);
                 $ReturnValue = true;
                 $BuildEndTime = '0';
             } else {
@@ -656,11 +656,11 @@ class Buildings extends Controller
                     $nextListIDArray = explode(",", $QueueArray[$ID + 1]);
                     $nextBuildEndTime = $nextListIDArray[3] - $lastB[2];
                     $nextListIDArray[3] = $nextBuildEndTime;
-                    $QueueArray[$ID] = implode(",", $nextListIDArray);
+                    $QueueArray[$ID] = join(",", $nextListIDArray);
                 }
 
                 unset($QueueArray[$ActualCount - 1]);
-                $NewQueue = implode(";", $QueueArray);
+                $NewQueue = join(";", $QueueArray);
             }
 
             $this->_planet['planet_b_building_id'] = $NewQueue;
@@ -766,7 +766,7 @@ class Buildings extends Controller
                 }
 
                 $QueueArray[$ActualCount] = $building . "," . $BuildLevel . "," . $BuildTime . "," . $BuildEndTime . "," . $BuildMode;
-                $NewQueue = implode(";", $QueueArray);
+                $NewQueue = join(";", $QueueArray);
 
                 $this->_planet['planet_b_building_id'] = $NewQueue;
             }

@@ -436,7 +436,7 @@ class Attack extends Missions
         $idAtts = $report->getAttackersId();
         $idDefs = $report->getDefendersId();
         $idAll = array_merge($idAtts, $idDefs);
-        $owners = implode(',', $idAll);
+        $owners = join(',', $idAll);
         $rid = md5($report) . time();
 
         $this->Missions_Model->insertReport([
@@ -616,7 +616,7 @@ class Attack extends Missions
         }
 
         // updating flying fleets
-        $id_string = implode(',', $emptyFleets);
+        $id_string = join(',', $emptyFleets);
 
         if (!empty($id_string)) {
 
@@ -691,7 +691,7 @@ class Attack extends Missions
         ]);
 
         // Updating flying fleets
-        $id_string = implode(",", $emptyFleets);
+        $id_string = join(",", $emptyFleets);
 
         if (!empty($id_string)) {
 

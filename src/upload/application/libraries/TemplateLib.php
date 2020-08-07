@@ -790,7 +790,7 @@ class TemplateLib
             }
         }
 
-        return implode($new_lines);
+        return join($new_lines);
     }
 }
 
