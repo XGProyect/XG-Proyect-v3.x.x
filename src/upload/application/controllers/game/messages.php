@@ -447,7 +447,7 @@ class Messages extends Controller
                 }
 
                 if (isset($message_ids)) {
-                    $this->Messages_Model->deleteByOwnerAndIds($this->user['user_id'], join($message_ids, ','));
+                    $this->Messages_Model->deleteByOwnerAndIds($this->user['user_id'], join(',', $message_ids));
                 }
                 break;
             case 'deleteunmarked':
@@ -461,7 +461,7 @@ class Messages extends Controller
                 }
 
                 if (isset($message_ids)) {
-                    $this->Messages_Model->deleteByOwnerAndIds($this->user['user_id'], join($message_ids, ','));
+                    $this->Messages_Model->deleteByOwnerAndIds($this->user['user_id'], join(',', $message_ids));
                 }
                 break;
             case 'deleteallshown':

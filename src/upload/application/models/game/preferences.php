@@ -102,7 +102,7 @@ class Preferences extends Model
 
         $this->db->query(
             "UPDATE " . USERS . " AS u, " . PREFERENCES . " AS p SET
-            " . join($columns_to_update, ', ') . "
+            " . join(', ', $columns_to_update) . "
             WHERE u.`user_id` = '" . $user_id . "'
                 AND p.`preference_user_id` = '" . $user_id . "';"
         );
