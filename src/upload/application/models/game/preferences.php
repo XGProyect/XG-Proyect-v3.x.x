@@ -185,6 +185,7 @@ class Preferences extends Model
             $this->db->query(
                 "UPDATE `" . PREFERENCES . "` pr, `" . PLANETS . "` p SET
                     pr.`preference_vacation_mode` = NULL,
+                    p.`planet_last_update` = '" . time() . "',
                     p.`planet_building_metal_mine_percent` = '10',
                     p.`planet_building_crystal_mine_percent` = '10',
                     p.`planet_building_deuterium_sintetizer_percent` = '10',
