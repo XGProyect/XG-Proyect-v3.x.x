@@ -210,6 +210,9 @@ define('BASIC_RESOURCE_MARKET_DM', [
     'deuterium' => 13500,
 ]);
 
+// PHALANX COST
+define('PHALANX_COST', 10000);
+
 /**
  *
  * DATABASE RELATED
