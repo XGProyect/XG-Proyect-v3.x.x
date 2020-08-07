@@ -9,10 +9,10 @@
         <td>{ma_mail_text_part1}</td>
     </tr>
     <tr>
-        <td>{ma_mail_text_part2}: {user_pass}</td>
+        <td>{ma_mail_text_part2}: <strong>{user_pass}</strong></td>
     </tr>
     <tr>
-        <td>{ma_mail_text_part3}: {game_url}</td>
+        <td>{ma_mail_text_part3}: <a href="{game_url}" target="_blank">{game_url}</a></td>
     </tr>
     <tr>
         <td>&nbsp;</td>

@@ -11,7 +11,7 @@
 
     <body id="login">
 
-        <form method="post" name="ogame">
+        <form method="post" name="recoverpassword">
             <h1><span>{game_name}</span></h1>
             <div id="error" style="{display}">
                 <p>{error_msg}</p>

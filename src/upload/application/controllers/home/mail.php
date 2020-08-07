@@ -20,7 +20,7 @@ use application\core\Controller;
 use application\libraries\FunctionsLib as Functions;
 
 /**
- * Recoverpassword Class
+ * Mail Class
  *
  * @category Classes
  * @package  Application
@@ -110,13 +110,10 @@ class Mail extends Controller
                     $this->langs->language,
                     [
                         'game_name' => $this->game_name,
-                        'display' => $this->send_result != '' ? 'display: block' : 'display: none',
-                        'ma_send_pwd_title' => strtr($this->langs->line('ma_send_pwd_title'), ['%s' => $this->game_name]),
-                        'display' => 'display: none',
-                        'error_msg' => '',
                         'css_path' => CSS_PATH . 'home/',
+                        'display' => $this->send_result != '' ? 'display: block' : 'display: none',
                         'error_msg' => $this->send_result,
-
+                        'ma_send_pwd_title' => strtr($this->langs->line('ma_send_pwd_title'), ['%s' => $this->game_name]),
                     ]
                 )
             ),
