@@ -17,14 +17,14 @@
                 <p>{error_msg}</p>
             </div>
             <div id="loginwrapper">
-                <h2>{lp_send_pwd_title}</h2>
+                <h2>{ma_send_pwd_title}</h2>
                 <div class="textLeft wrap-inner">
-                    <label for="login">{lp_label}</label>
+                    <label for="login">{ma_label}</label>
                     <input type="text" name="email" id="login" tabindex="1" class="input" />
-                    <input type="submit" value="{lp_value}" tabindex="2" class="start" />
+                    <input type="submit" value="{ma_value}" tabindex="2" class="start" />
                 </div>
                 <div id="advice">
-                    <p>{lp_advice}</p>
+                    <p>{ma_advice}</p>
                 </div>
                 <br class="clear" />
             </div>

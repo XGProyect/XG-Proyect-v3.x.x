@@ -30,12 +30,4 @@ $lang['aj_media_concept_art'] = 'Concept Art';
 $lang['ge_home_planet'] = 'Homeworld';
 $lang['ge_colony'] = 'Colony';
 
-// lost password
-$lang['lp_send_pwd_title'] = 'Send %s password';
-$lang['lp_label'] = 'Email address';
-$lang['lp_value'] = 'send login data';
-$lang['lp_advice'] = 'Please enter your email address';
-$lang['lp_error'] = 'There is no account with the given email address!';
-$lang['lp_sent'] = 'Email has been sent successfully!';
-$lang['lp_mail_title'] = 'New password';
 /* end of HOME.php */

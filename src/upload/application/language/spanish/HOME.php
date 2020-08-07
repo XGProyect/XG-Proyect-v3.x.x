@@ -30,12 +30,4 @@ $lang['aj_media_concept_art'] = 'Arte conceptual';
 $lang['ge_home_planet'] = 'Planeta Principal';
 $lang['ge_colony'] = 'Colonia';
 
-// lost password
-$lang['lp_send_pwd_title'] = 'Enviar contraseña de %s';
-$lang['lp_label'] = 'Dirección de e-mail';
-$lang['lp_value'] = 'Enviar datos de acceso';
-$lang['lp_advice'] = 'Por favor, introduce la dirección permanente de e-mail de tu cuenta de juego.';
-$lang['lp_error'] = '¡No hay ninguna cuenta con la dirección de E-Mail introducida!';
-$lang['lp_sent'] = '¡El E-Mail ha sido enviado satisfactoriamente!';
-$lang['lp_mail_title'] = 'Nueva contraseña';
 /* end of HOME.php */

@@ -1,4 +1,7 @@
 <?php
+
+declare (strict_types = 1);
+
 /**
  * Mail Controller
  *
@@ -14,8 +17,7 @@
 namespace application\controllers\home;
 
 use application\core\Controller;
-use application\core\Database;
-use application\libraries\FunctionsLib;
+use application\libraries\FunctionsLib as Functions;
 
 /**
  * Recoverpassword Class
@@ -29,66 +31,94 @@ use application\libraries\FunctionsLib;
  */
 class Mail extends Controller
 {
-
     /**
+     * Contains the game name
      *
-     * @var array
+     * @var string
      */
-    private $langs;
+    private $game_name = '';
 
     /**
-     * __construct
+     * Contains the send email result message
      *
-     * @return void
+     * @var string
+     */
+    private $send_result = '';
+
+    /**
+     * Constructor
      */
     public function __construct()
     {
         parent::__construct();
 
-        $this->_db = new Database();
-        $this->langs = parent::$lang;
+        // load Model
+        parent::loadModel('home/mail');
 
+        // load Language
+        parent::loadLang('home/mail');
+
+        // init some recurrent data
+        $this->setUpData();
+
+        // time to do something
+        $this->runAction();
+
+        // build the page
         $this->buildPage();
     }
 
     /**
-     * Destructor
-     */
-    public function __destruct()
-    {
-        $this->_db->closeConnection();
-    }
-
-    /**
-     * buildPage
+     * Set up some data that will be accessed many times
      *
      * @return void
      */
-    private function buildPage()
+    private function setUpData(): void
     {
-        $parse = $this->langs;
-        $game_name = FunctionsLib::readConfig('game_name');
+        $this->game_name = Functions::readConfig('game_name');
+    }
 
-        $parse['game_name'] = $game_name;
-        $parse['lp_send_pwd_title'] = strtr($this->langs['lp_send_pwd_title'], ['%s' => $game_name]);
-        $parse['display'] = 'display: none';
-        $parse['error_msg'] = '';
-        $parse['css_path'] = CSS_PATH . 'home/';
+    /**
+     * Run an action
+     *
+     * @return void
+     */
+    private function runAction(): void
+    {
+        $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
 
-        if ($_POST) {
-            $parse['display'] = 'display: block';
-
-            if ($this->processRequest($_POST['email'])) {
-                $parse['error_msg'] = $this->langs['lp_sent'];
+        if ($email) {
+            if ($this->processRequest($email)) {
+                $this->send_result = $this->langs->line('ma_sent');
             } else {
-                $parse['error_msg'] = $this->langs['lp_error'];
+                $this->send_result = $this->langs->line('ma_error');
             }
         }
+    }
 
+    /**
+     * Build the page
+     *
+     * @return void
+     */
+    private function buildPage(): void
+    {
         parent::$page->display(
             $this->getTemplate()->set(
                 'home/mail_view',
-                $parse
+                array_merge(
+                    $this->langs->language,
+                    [
+                        'game_name' => $this->game_name,
+                        'display' => $this->send_result != '' ? 'display: block' : 'display: none',
+                        'ma_send_pwd_title' => strtr($this->langs->line('ma_send_pwd_title'), ['%s' => $this->game_name]),
+                        'display' => 'display: none',
+                        'error_msg' => '',
+                        'css_path' => CSS_PATH . 'home/',
+                        'error_msg' => $this->send_result,
+
+                    ]
+                )
             ),
             false,
             '',
@@ -97,73 +127,59 @@ class Mail extends Controller
     }
 
     /**
-     * processRequest
+     * Process the request
      *
-     * @param string $mail E-Mail
-     *
-     * @return void
+     * @param string $email
+     * @return boolean
      */
-    private function processRequest($mail)
+    private function processRequest(string $email): bool
     {
-        $ExistMail = $this->_db->queryFetch(
-            "SELECT `user_name`
-            FROM " . USERS . "
-            WHERE `user_email` = '" . $this->_db->escapeValue($mail) . "'
-            LIMIT 1;"
-        );
+        $user_name = $this->Mail_Model->getEmailUsername($email);
 
-        if (empty($ExistMail['user_name'])) {
-            return false;
-        } else {
-            $new_password = $this->sendPassEmail($mail, $ExistMail['user_name']);
+        if ($user_name) {
+            $new_password = Functions::generatePassword();
 
-            $this->_db->query(
-                "UPDATE " . USERS . " SET
-                `user_password` ='" . FunctionsLib::encrypt($new_password) . "'
-                WHERE `user_email`='" . $this->_db->escapeValue($mail) . "'
-                LIMIT 1;"
-            );
+            if ($this->sendPassEmail($email, $new_password)) {
+                $this->Mail_Model->setUserNewPassword($email, $new_password);
 
-            return true;
+                return true;
+            }
         }
+
+        return false;
     }
 
     /**
-     * sendPassEmail
+     * Send email with the new password
      *
-     * @param string $emailaddress Email Address
-     * @param string $UserName     User Name
-     *
-     * @return string
+     * @param string $email
+     * @param string $new_password
+     * @return boolean
      */
-    private function sendPassEmail($emailaddress, $UserName)
+    private function sendPassEmail(string $email, string $new_password): bool
     {
-        $game_name = FunctionsLib::readConfig('game_name');
-
-        $parse = $this->langs;
-        $parse['user_name'] = $UserName;
-        $parse['user_pass'] = FunctionsLib::generatePassword();
-        $parse['game_url'] = GAMEURL;
-        $parse['re_mail_text_part1'] = str_replace('%s', $game_name, $this->langs['re_mail_text_part1']);
-        $parse['re_mail_text_part7'] = str_replace('%s', $game_name, $this->langs['re_mail_text_part7']);
-
-        $email = $this->getTemplate()->set(
+        $email_template = $this->getTemplate()->set(
             'home/recover_password_email_template_view',
-            $parse
+            array_merge(
+                $this->langs->language,
+                [
+                    'user_pass' => $new_password,
+                    'game_url' => GAMEURL,
+                    'ma_mail_text_part5' => strtr($this->langs->line('ma_mail_text_part5'), ['%s' => $this->game_name]),
+                ]
+            )
         );
 
-        FunctionsLib::sendEmail(
-            $emailaddress,
-            $this->langs['lp_mail_title'],
+        return Functions::sendEmail(
             $email,
+            $this->langs->line('ma_mail_title'),
+            $email_template,
             [
-                'mail' => FunctionsLib::readConfig('admin_email'),
-                'name' => $game_name,
+                'mail' => Functions::readConfig('admin_email'),
+                'name' => $this->game_name,
             ]
         );
-
-        return $parse['user_pass'];
     }
 }
 
-/* end of recoverpassword.php */
+/* end of mail.php */
