@@ -155,7 +155,7 @@ class Renameplanet extends Controller
         } elseif ((($enemy_fleet > 0) && ($mess < 1)) && $end_type != 2) {
             FunctionsLib::message($this->_lang['ov_abandon_planet_not_possible'], 'game.php?page=renameplanet');
         } else {
-            if (FunctionsLib::encrypt($_POST['pw']) == $this->_current_user['user_password'] && $this->_current_user['user_home_planet_id'] != $this->_current_user['user_current_planet']) {
+            if (password_verify($_POST['pw'], $this->_current_user['user_password']) && $this->_current_user['user_home_planet_id'] != $this->_current_user['user_current_planet']) {
                 if ($this->_current_planet['moon_id'] != 0) {
                     $this->Renameplanet_Model->deleteMoonAndPlanet(
                         $this->_current_user['user_id'],

@@ -68,10 +68,11 @@ class Login extends Controller
         ]);
 
         if ($login_data) {
-            $login = $this->Login_Model->getLoginData($login_data['inputEmail'], $login_data['inputPassword']);
+            $login = $this->Login_Model->getLoginData($login_data['inputEmail']);
 
             if ($login) {
-                if (AdministrationLib::adminLogin($login['user_id'], $login['user_name'], $login['user_password'])) {
+                if (password_verify($login_data['inputPassword'], $login['user_password'])
+                    && AdministrationLib::adminLogin($login['user_id'], $login['user_name'], $login['user_password'])) {
                     $redirect = filter_input(INPUT_GET, 'redirect', FILTER_SANITIZE_STRING) ?? 'home';
 
                     if ($redirect == '') {

@@ -17,7 +17,6 @@ declare (strict_types = 1);
 namespace application\models\home;
 
 use application\core\Model;
-use application\libraries\FunctionsLib as Functions;
 
 /**
  * Home Class
@@ -35,10 +34,9 @@ class Home extends Model
      * Get the user based on the provided credentials
      *
      * @param string $email
-     * @param string $password
      * @return array|null
      */
-    public function getUserWithProvidedCredentials(string $email, string $password): ?array
+    public function getUserWithProvidedCredentials(string $email): ?array
     {
         return $this->db->queryFetch(
             "SELECT
@@ -50,7 +48,6 @@ class Home extends Model
             LEFT JOIN `" . BANNED . "` AS b
                 ON b.`banned_who` = u.`user_name`
             WHERE `user_email` = '" . $this->db->escapeValue($email) . "'
-                AND `user_password` = '" . Functions::encrypt($password) . "'
             LIMIT 1"
         );
     }

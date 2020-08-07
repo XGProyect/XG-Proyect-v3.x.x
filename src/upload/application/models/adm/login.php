@@ -14,7 +14,6 @@
 namespace application\models\adm;
 
 use application\core\Model;
-use application\libraries\FunctionsLib as Functions;
 
 /**
  * Login Class
@@ -32,10 +31,9 @@ class Login extends Model
      * Get user data to login
      *
      * @param string $user_email
-     * @param string $user_password
      * @return array
      */
-    public function getLoginData(string $user_email, string $user_password): array
+    public function getLoginData(string $user_email): array
     {
         $result = $this->db->queryFetch(
             "SELECT
@@ -44,7 +42,6 @@ class Login extends Model
                 `user_password`
             FROM `" . USERS . "`
             WHERE `user_email` = '" . $this->db->escapeValue($user_email) . "'
-                AND `user_password` = '" . Functions::encrypt($user_password) . "'
                 AND `user_authlevel` >= '1'
             LIMIT 1"
         );

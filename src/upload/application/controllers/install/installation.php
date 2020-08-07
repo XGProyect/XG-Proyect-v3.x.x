@@ -493,7 +493,7 @@ class Installation extends Controller
         // some default values
         $adm_name = $this->Installation_Model->escapeValue($_POST['adm_user']);
         $adm_email = $this->Installation_Model->escapeValue($_POST['adm_email']);
-        $adm_pass = FunctionsLib::encrypt($_POST['adm_pass']);
+        $adm_pass = FunctionsLib::hash($_POST['adm_pass']);
 
         // create user and its planet
         parent::$users->createUserWithOptions(

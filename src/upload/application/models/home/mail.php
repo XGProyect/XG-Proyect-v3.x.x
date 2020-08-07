@@ -59,7 +59,7 @@ class Mail extends Model
     {
         $this->db->query(
             "UPDATE `" . USERS . "` SET
-                `user_password` = '" . Functions::encrypt($new_password) . "'
+                `user_password` = '" . Functions::hash($new_password) . "'
             WHERE `user_email` = '" . $this->db->escapeValue($email) . "'
             LIMIT 1;"
         );

@@ -736,7 +736,7 @@ abstract class FunctionsLib extends XGPCore
             FunctionsLib::redirect(SYSTEM_ROOT);
         }
 
-        if (FunctionsLib::encrypt($user_row['user_password'] . "-" . SECRETWORD) != $_SESSION['user_password'] && !defined('IN_LOGIN')) {
+        if (!password_verify(($user_row['user_password'] . "-" . SECRETWORD), $_SESSION['user_password']) && !defined('IN_LOGIN')) {
             FunctionsLib::redirect(SYSTEM_ROOT);
         }
 
@@ -797,9 +797,9 @@ abstract class FunctionsLib extends XGPCore
      * @param string $password
      * @return string
      */
-    public static function encrypt(string $password): string
+    public static function hash(string $password): string
     {
-        return sha1($password);
+        return password_hash($password, PASSWORD_BCRYPT);
     }
 
     /**

@@ -92,7 +92,7 @@ class Encrypter extends Controller
 
         if ($unencrypted) {
             $this->unencrypted = $unencrypted;
-            $this->encrypted = Functions::encrypt($unencrypted);
+            $this->encrypted = Functions::hash($unencrypted);
         }
     }
 

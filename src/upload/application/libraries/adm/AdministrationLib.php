@@ -225,7 +225,7 @@ class AdministrationLib extends XGPCore
 
             $_SESSION['admin_id'] = $admin_id;
             $_SESSION['admin_name'] = $admin_name;
-            $_SESSION['admin_password'] = FunctionsLib::encrypt($password . '-' . SECRETWORD);
+            $_SESSION['admin_password'] = FunctionsLib::hash($password . '-' . SECRETWORD);
 
             return true;
         } else {

@@ -164,7 +164,7 @@ class Maker extends Model
                     `user_register_time` = '" . $time . "',
                     `user_onlinetime` = '" . $time . "',
                     `user_authlevel` = '" . $auth . "',
-                    `user_password` = '" . Functions::encrypt($pass) . "';"
+                    `user_password` = '" . Functions::hash($pass) . "';"
             );
 
             $last_user_id = $this->db->insertId();
