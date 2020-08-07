@@ -14,7 +14,6 @@
 namespace application\controllers\game;
 
 use application\core\Controller;
-use application\core\Database;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
 use application\libraries\TimingLibrary as Timing;
@@ -48,25 +47,17 @@ class Statistics extends Controller
         // check if session is active
         parent::$users->checkSession();
 
+        // load Model
+        parent::loadModel('game/statistics');
+
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
-        $this->_db = new Database();
         $this->_lang = parent::$lang;
         $this->_current_user = parent::$users->getUserData();
         $this->_current_planet = parent::$users->getPlanetData();
 
         $this->build_page();
-    }
-
-    /**
-     * method __destruct
-     * param
-     * return close db connection
-     */
-    public function __destruct()
-    {
-        $this->_db->closeConnection();
     }
 
     /**
@@ -97,35 +88,23 @@ class Statistics extends Controller
         $OldRank = $data['oldrank'];
 
         if ($who == 2) {
-            $MaxAllys = $this->_db->queryFetch("SELECT COUNT(`alliance_id`) AS `count`
-														FROM " . ALLIANCE . ";");
+            $MaxAllys = $this->Statistics_Model->countAlliances();
 
-            $parse['range'] = $this->build_range_list($MaxAllys['count'], $range);
+            $parse['range'] = $this->build_range_list($MaxAllys, $range);
             $parse['stat_header'] = $this->getTemplate()->set(
                 'stat/stat_alliancetable_header',
                 $parse
             );
 
             $start = floor($range / 100 % 100) * 100;
-            $query = $this->_db->query(
-                'SELECT s.*,
-                a.alliance_id,
-                a.alliance_tag,
-                a.alliance_name,
-                a.alliance_request_notallow,
-                (SELECT COUNT(user_id) AS `ally_members` FROM `' . USERS . '` WHERE `user_ally_id` = a.`alliance_id`) AS `ally_members`
-                FROM ' . ALLIANCE_STATISTICS . ' AS s
-                INNER JOIN  ' . ALLIANCE . ' AS a ON a.alliance_id = s.alliance_statistic_alliance_id
-                ORDER BY `alliance_statistic_' . $Order . '` DESC, `alliance_statistic_total_rank` ASC
-                LIMIT ' . $start . ',100;'
-            );
+            $query = $this->Statistics_Model->getAlliances($Order, $start);
 
             $start++;
 
             $parse['stat_date'] = Timing::formatExtendedDate(FunctionsLib::readConfig('stat_last_update'));
             $parse['stat_values'] = "";
 
-            while ($StatRow = $this->_db->fetchAssoc($query)) {
+            foreach ($query as $StatRow) {
                 $parse['ally_rank'] = $start;
                 $ranking = $StatRow['alliance_statistic_' . $OldRank] - $StatRow['alliance_statistic_' . $Rank];
                 $parse['ally_rankplus'] = $this->rank_difference($ranking);
@@ -150,26 +129,14 @@ class Statistics extends Controller
             );
 
             $start = floor($range / 100 % 100) * 100;
-            $query = $this->_db->query(
-                'SELECT s.*,
-                        u.user_id,
-                        u.user_name,
-                        u.user_ally_id,
-                        a.alliance_name
-                FROM ' . USERS_STATISTICS . ' as s
-                INNER JOIN ' . USERS . ' as u ON u.user_id = s.user_statistic_user_id
-                LEFT JOIN ' . ALLIANCE . ' AS a ON a.alliance_id = u.user_ally_id
-                WHERE `user_authlevel` <= ' . FunctionsLib::readConfig('stat_admin_level') . '
-                ORDER BY `user_statistic_' . $Order . '` DESC, `user_statistic_total_rank` ASC
-                LIMIT ' . $start . ',100;'
-            );
+            $query = $this->Statistics_Model->getUsers($Order, $start);
 
             $start++;
             $parse['stat_date'] = Timing::formatExtendedDate(FunctionsLib::readConfig('stat_last_update'));
             $parse['stat_values'] = "";
             $previusId = 0;
 
-            while ($StatRow = $this->_db->fetchAssoc($query)) {
+            foreach ($query as $StatRow) {
                 $parse['player_rank'] = $start;
                 $ranking = $StatRow['user_statistic_' . $OldRank] - $StatRow['user_statistic_' . $Rank];
 
