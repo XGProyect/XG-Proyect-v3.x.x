@@ -1,6 +1,6 @@
 <?php
 /**
- * Update Library
+ * Updates Library
  *
  * PHP Version 7.1+
  *
@@ -22,7 +22,7 @@ use application\libraries\OfficiersLib as Officiers;
 use application\libraries\ProductionLib as Production;
 
 /**
- * Update Class
+ * UpdatesLibrary Class
  *
  * @category Classes
  * @package  Application
@@ -447,6 +447,12 @@ class UpdatesLibrary extends XGPCore
         $game_crystal_basic_income = Functions::readConfig('crystal_basic_income');
         $game_deuterium_basic_income = Functions::readConfig('deuterium_basic_income');
 
+        if ($current_user['preference_vacation_mode'] > 0) {
+            $game_metal_basic_income = 0;
+            $game_crystal_basic_income = 0;
+            $game_deuterium_basic_income = 0;
+        }
+
         $current_planet['planet_metal_max'] = Production::maxStorable($current_planet[$resource[22]]);
         $current_planet['planet_crystal_max'] = Production::maxStorable($current_planet[$resource[23]]);
         $current_planet['planet_deuterium_max'] = Production::maxStorable($current_planet[$resource[24]]);
@@ -769,4 +775,4 @@ class UpdatesLibrary extends XGPCore
     }
 }
 
-/* end of Update.php */
+/* end of UpdatesLibrary.php */

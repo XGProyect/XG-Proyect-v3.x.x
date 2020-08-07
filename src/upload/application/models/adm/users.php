@@ -350,16 +350,11 @@ class Users extends Model
             $vacation_condition = " AND p.`planet_user_id` = '" . (int) $user_id . "'";
             $vacation_query = "
 			pr.`preference_vacation_mode` = {$preference_vacation_mode},
-			p.`planet_metal_perhour` = '" . Functions::readConfig('metal_basic_income') . "',
-			p.`planet_crystal_perhour` = '" . Functions::readConfig('crystal_basic_income') . "',
-			p.`planet_deuterium_perhour` = '" . Functions::readConfig('deuterium_basic_income') . "',
-			p.`planet_energy_used` = '0',
-			p.`planet_energy_max` = '0',
-			p.`planet_building_metal_mine_percent` = '0',
-			p.`planet_building_crystal_mine_percent` = '0',
-			p.`planet_building_deuterium_sintetizer_percent` = '0',
-			p.`planet_building_solar_plant_percent` = '0',
-			p.`planet_building_fusion_reactor_percent` = '0',
+            p.`planet_building_metal_mine_percent` = '0',
+            p.`planet_building_crystal_mine_percent` = '0',
+            p.`planet_building_deuterium_sintetizer_percent` = '0',
+            p.`planet_building_solar_plant_percent` = '0',
+            p.`planet_building_fusion_reactor_percent` = '0',
 			p.`planet_ship_solar_satellite_percent` = '0',";
         }
 

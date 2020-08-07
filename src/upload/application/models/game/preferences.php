@@ -17,7 +17,6 @@ declare (strict_types = 1);
 namespace application\models\game;
 
 use application\core\Model;
-use application\libraries\FunctionsLib as Functions;
 
 /**
  * Preferences Class
@@ -158,11 +157,6 @@ class Preferences extends Model
             $this->db->query(
                 "UPDATE `" . PREFERENCES . "` pr, `" . PLANETS . "` p SET
                     pr.`preference_vacation_mode` = '" . time() . "',
-                    p.`planet_metal_perhour` = '" . Functions::readConfig('metal_basic_income') . "',
-                    p.`planet_crystal_perhour` = '" . Functions::readConfig('crystal_basic_income') . "',
-                    p.`planet_deuterium_perhour` = '" . Functions::readConfig('deuterium_basic_income') . "',
-                    p.`planet_energy_used` = '0',
-                    p.`planet_energy_max` = '0',
                     p.`planet_building_metal_mine_percent` = '0',
                     p.`planet_building_crystal_mine_percent` = '0',
                     p.`planet_building_deuterium_sintetizer_percent` = '0',

@@ -75,13 +75,14 @@ class Resources extends Controller
     private function build_page()
     {
         $parse = $this->_lang;
+
         $game_metal_basic_income = FunctionsLib::readConfig('metal_basic_income');
         $game_crystal_basic_income = FunctionsLib::readConfig('crystal_basic_income');
         $game_deuterium_basic_income = FunctionsLib::readConfig('deuterium_basic_income');
         $game_energy_basic_income = FunctionsLib::readConfig('energy_basic_income');
         $game_resource_multiplier = FunctionsLib::readConfig('resource_multiplier');
 
-        if ($this->_current_planet['planet_type'] == 3) {
+        if ($this->_current_user['preference_vacation_mode'] > 0 or $this->_current_planet['planet_type'] == 3) {
             $game_metal_basic_income = 0;
             $game_crystal_basic_income = 0;
             $game_deuterium_basic_income = 0;
