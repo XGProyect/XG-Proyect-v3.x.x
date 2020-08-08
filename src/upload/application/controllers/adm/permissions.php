@@ -99,7 +99,28 @@ class Permissions extends Controller
      */
     private function runAction(): void
     {
+        $permissions = filter_input_array(INPUT_POST);
 
+        if ($permissions) {
+            $modules = $this->permissions->getAdminModules();
+            $roles = $this->permissions->getRoles(true);
+
+            foreach ($modules as $module) {
+                foreach ($module as $module_name) {
+                    foreach ($roles as $role) {
+                        if (isset($permissions[$module_name][$role]) && $permissions[$module_name][$role] == 'on') {
+                            $this->permissions->grantAccess($module_name, $role);
+                        } else {
+                            $this->permissions->removeAccess($module_name, $role);
+                        }
+                    }
+                }
+            }
+
+            $this->permissions->savePermissions();
+
+            $this->alert = Administration::saveMessage('ok', $this->langs->line('pr_all_ok_message'));
+        }
     }
 
     /**

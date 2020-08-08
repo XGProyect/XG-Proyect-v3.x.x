@@ -15,6 +15,7 @@ namespace application\libraries\adm;
 
 use application\core\enumerators\AdminPagesEnumerator as AdminPages;
 use application\core\enumerators\UserRanksEnumerator as UserRanks;
+use application\libraries\FunctionsLib as Functions;
 
 /**
  * Permissions Class
@@ -28,6 +29,13 @@ use application\core\enumerators\UserRanksEnumerator as UserRanks;
  */
 class Permissions
 {
+    /**
+     * Defines if the admin role can be modified
+     *
+     * @var bool
+     */
+    private const ALLOW_ADMIN_MODIFICATION = false;
+
     /**
      * Contains the permissions array
      *
@@ -78,13 +86,19 @@ class Permissions
      *
      * @return array
      */
-    public function getRoles(): array
+    public function getRoles(bool $no_admin = false): array
     {
-        return [
+        $roles = [
             UserRanks::GO,
             UserRanks::SGO,
             UserRanks::ADMIN,
         ];
+
+        if ($no_admin) {
+            unset($roles[array_search(UserRanks::ADMIN, $roles)]);
+        }
+
+        return $roles;
     }
 
     /**
@@ -114,6 +128,16 @@ class Permissions
     }
 
     /**
+     * Save permissions to DB
+     *
+     * @return void
+     */
+    public function savePermissions(): void
+    {
+        Functions::updateConfig('admin_permissions', $this->getAllPermissionsAsJsonString());
+    }
+
+    /**
      * Check if access is allowed, returns true if it is
      *
      * @param string $module
@@ -134,7 +158,7 @@ class Permissions
      */
     public function grantAccess(string $module, int $role): void
     {
-        if ($this->moduleExists($module) && $this->roleExists($role)) {
+        if ($this->moduleExists($module) && $this->roleExists($role) && $this->isRoleEditable($role)) {
             $this->permissions[$module][$role] = 1;
         }
     }
@@ -148,7 +172,7 @@ class Permissions
      */
     public function removeAccess(string $module, int $role): void
     {
-        if ($this->moduleExists($module) && $this->roleExists($role)) {
+        if ($this->moduleExists($module) && $this->roleExists($role) && $this->isRoleEditable($role)) {
             $this->permissions[$module][$role] = 0;
         }
     }
@@ -161,18 +185,33 @@ class Permissions
      */
     public function moduleExists(string $module): bool
     {
-        return in_array($module, $this->getAdminModules());
+        return Functions::inMultiarray($module, $this->getAdminModules());
     }
 
     /**
      * Check if the role exists
      *
-     * @param string $module
+     * @param string $role
      * @return boolean
      */
-    public function roleExists(string $module): bool
+    public function roleExists(string $role): bool
     {
         return in_array($role, $this->getRoles());
+    }
+
+    /**
+     * Check if the role is editable
+     *
+     * @param integer $role
+     * @return boolean
+     */
+    private function isRoleEditable(int $role): bool
+    {
+        if ($role == UserRanks::ADMIN) {
+            return ALLOW_ADMIN_MODIFICATION;
+        }
+
+        return true;
     }
 
     /**

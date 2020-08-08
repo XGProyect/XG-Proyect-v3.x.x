@@ -5,12 +5,12 @@
         <!-- Page Heading -->
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800">{pr_title}</h1>
-            <a href="admin.php?page=changelog&action=add" class="btn btn-primary btn-icon-split">
+            <button type="submit" class="btn btn-primary btn-icon-split">
                 <span class="icon text-white-50">
                     <i class="fas fa-save"></i>
                 </span>
                 <span class="text">{pr_save_all}</span>
-            </a>
+            </button>
         </div>
         <p class="mb-4">{pr_sub_title}</p>
 
