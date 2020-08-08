@@ -104,6 +104,16 @@ class Permissions
     }
 
     /**
+     * Get the admin sections
+     *
+     * @return array
+     */
+    public function getAdminSections(): array
+    {
+        return AdminPages::SECTIONS;
+    }
+
+    /**
      * Check if access is allowed, returns true if it is
      *
      * @param string $module

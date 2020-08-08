@@ -14,36 +14,41 @@
         </div>
         <p class="mb-4">{pr_sub_title}</p>
 
+        {sections_list}
         <div class="row">
             <div class="col-lg-12">
                 <div class="card shadow mb-4">
                     <!-- Card Header - Accordion -->
-                    <a href="#collapseGeneral" class="d-block card-header py-3" data-toggle="collapse" role="button"
-                        aria-expanded="true" aria-controls="collapseGeneral">
-                        <h6 class="m-0 font-weight-bold text-primary">{pr_general}</h6>
+                    <a href="#collapse{section_name}" class="d-block card-header py-3" data-toggle="collapse" role="button"
+                        aria-expanded="true" aria-controls="collapse{section_name}">
+                        <h6 class="m-0 font-weight-bold text-primary">{section_title}</h6>
                     </a>
                     <!-- Card Content - Collapse -->
-                    <div class="collapse show" id="collapseGeneral" style="">
+                    <div class="collapse show" id="collapse{section_name}" style="">
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table table-borderless" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
-                                            <th></th>
-                                            <th>{ge_go}</th>
-                                            <th>{ge_sgo}</th>
-                                            <th>{ge_ga}</th>
+                                            <th width="25%"></th>
+                                            {roles_list}
+                                            <th width="25%" class="text-center">{role_name}</th>
+                                            {/roles_list}
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {permissions_list}
+                                        {modules_list}
                                         <tr>
-                                            <td><a href="admin.php?page={page_module}">{page_module}</a></td>
-                                            <td><input class="form-check-input" type="checkbox" name="{page_module}[{go_role}]" {go_checked}></td>
-                                            <td><input class="form-check-input" type="checkbox" name="{page_module}[{sgo_role}]" {sgo_checked}></td>
-                                            <td><input class="form-check-input" type="checkbox" name="{page_module}[{ga_role}]" {ga_checked} disabled></td>
+                                            <td>
+                                                <a href="admin.php?page={page_module}">{page_module_title}</a>
+                                            </td>
+                                            {permissions_list}
+                                            <td class="text-center">
+                                                <input class="form-check-input" type="checkbox" name="{module}[{role}]" {permission_checked} {permission_disabled}>
+                                            </td>
+                                            {/permissions_list}
                                         </tr>
-                                        {/permissions_list}
+                                        {/modules_list}
                                     </tbody>
                                 </table>
                             </div>
@@ -52,5 +57,6 @@
                 </div>
             </div>
         </div>
+        {/sections_list}
     </form>
 </div>

@@ -114,10 +114,29 @@ class Permissions extends Controller
                 'adm/permissions_view',
                 array_merge(
                     $this->langs->language,
+                    ['alert' => $this->alert ?? ''],
                     $this->buildListOfPermissions()
                 )
             )
         );
+    }
+
+    /**
+     * Build list of roles
+     *
+     * @return array
+     */
+    private function buildRolesList(): array
+    {
+        $roles_list = [];
+
+        foreach ($this->permissions->getRoles() as $role) {
+            $roles_list[$role] = [
+                'role_name' => $this->langs->language['user_level'][$role],
+            ];
+        }
+
+        return $roles_list;
     }
 
     /**
@@ -127,22 +146,52 @@ class Permissions extends Controller
      */
     private function buildListOfPermissions(): array
     {
-        $list_of_permissions = [];
+        $sections_list = [];
+        $modules_list = [];
+        $permissions_list = [];
 
-        foreach ($this->permissions->getAllPermissionsAsArray() as $module => $roles) {
-            $list_of_permissions[] = [
-                'page_module' => $module,
-                'go_role' => UserRanks::GO,
-                'sgo_role' => UserRanks::SGO,
-                'ga_role' => UserRanks::ADMIN,
-                'go_checked' => ($roles[UserRanks::GO] == 1) ? 'checked' : '',
-                'sgo_checked' => ($roles[UserRanks::SGO] == 1) ? 'checked' : '',
-                'ga_checked' => ($roles[UserRanks::ADMIN] == 1) ? 'checked' : '',
+        // get necessary data
+        $sections = $this->permissions->getAdminSections();
+        $modules = $this->permissions->getAdminModules();
+        $roles = $this->buildRolesList();
+
+        // build sections array
+        foreach ($sections as $section_id => $section) {
+            // build modules array
+            foreach ($modules[$section_id] as $module) {
+                // build permissions array
+                foreach ($roles as $role => $name) {
+                    $permissions_list[] = [
+                        'module' => $module,
+                        'role' => $role,
+                        'permission_checked' => ($this->permissions->isAccessAllowed($module, $role) ? 'checked' : ''),
+                        'permission_disabled' => ($role == UserRanks::ADMIN ? 'disabled' : ''),
+                    ];
+                }
+
+                // put all inside
+                $modules_list[] = [
+                    'page_module' => $module,
+                    'page_module_title' => $this->langs->language['admin_menu'][$module],
+                    'permissions_list' => $permissions_list,
+                ];
+
+                unset($permissions_list); // reset
+            }
+
+            // put all inside
+            $sections_list[$section_id] = [
+                'section_name' => ucfirst($section),
+                'section_title' => $this->langs->language['admin_menu'][$section],
+                'roles_list' => $roles,
+                'modules_list' => $modules_list,
             ];
+
+            unset($modules_list); // reset
         }
 
         return [
-            'permissions_list' => $list_of_permissions,
+            'sections_list' => $sections_list,
         ];
     }
 }

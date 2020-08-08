@@ -25,6 +25,14 @@ namespace application\core\enumerators;
  */
 abstract class AdminPagesEnumerator
 {
+    const SECTIONS = [
+        'configuration',
+        'information',
+        'edition',
+        'tools',
+        'maintenance',
+    ];
+
     const CONFIGURATION = [
         'server',
         'modules',

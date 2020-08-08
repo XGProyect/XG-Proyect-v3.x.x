@@ -61,7 +61,7 @@
                                             </li>
                                             <li>
                                                 <a class="dropdown-item"
-                                                    href="admin.php?page=moderation&moderation=2&user={user}">
+                                                    href="admin.php?page=permissions">
                                                     <i class="fas fa-user-tag"></i>
                                                     {us_change_permissions}
                                                 </a>
