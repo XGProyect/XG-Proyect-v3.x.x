@@ -1,6 +1,7 @@
 {
-    "require": {
-        "bartlett/php-compatinfo": "^5.3"
+    "require-dev": {
+        "bartlett/php-compatinfo": "^5.3",
+        "phpdocumentor/phpdocumentor": "2.*"
     },
     "scripts": {
         "phpcompatinfo": [
