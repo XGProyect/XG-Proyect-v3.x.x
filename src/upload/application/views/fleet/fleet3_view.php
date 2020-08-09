@@ -5,9 +5,9 @@
     }
 </script>
 <form action="game.php?page=fleet4" method="post" onsubmit='this.submit.disabled = true;'>
-    <input type="hidden" name="thisresource1"  value="{metal}" />
-    <input type="hidden" name="thisresource2"  value="{crystal}" />
-    <input type="hidden" name="thisresource3"  value="{deuterium}" />
+    <input type="hidden" name="thisresource1"  value="{this_metal}" />
+    <input type="hidden" name="thisresource2"  value="{this_crystal}" />
+    <input type="hidden" name="thisresource3"  value="{this_deuterium}" />
     <input type="hidden" name="thisgalaxy"     value="{this_galaxy}" />
     <input type="hidden" name="thissystem"     value="{this_system}" />
     <input type="hidden" name="thisplanet"     value="{this_planet}" />
@@ -22,7 +22,7 @@
         <input type="hidden" name="consumption{ship_id}" value="{consumption}" />
         <input type="hidden" name="speed{ship_id}" value="{speed}" />
         <input type="hidden" name="capacity{ship_id}" value="{capacity}" />
-        <input type="hidden" name="ship{ship_id}" value="{ship}" />    
+        <input type="hidden" name="ship{ship_id}" value="{ship}" />
     {/fleet_block}
     <br />
     <div id="content">
@@ -54,17 +54,17 @@
                             <td colspan="3" class="c">{fl_resources}</td>
                         </tr>
                         <tr height="20">
-                            <th>{Metal}</th>
+                            <th>{metal}</th>
                             <th><a href="javascript:maxResource('1');">{fl_max}</a></th>
                             <th><input name="resource1" size="10" onchange="calculateTransportCapacity();" type="text"></th>
                         </tr>
                         <tr height="20">
-                            <th>{Crystal}</th>
+                            <th>{crystal}</th>
                             <th><a href="javascript:maxResource('2');">{fl_max}</a></th>
                             <th><input name="resource2" size="10" onchange="calculateTransportCapacity();" type="text"></th>
                         </tr>
                         <tr height="20">
-                            <th>{Deuterium}</th>
+                            <th>{deuterium}</th>
                             <th><a href="javascript:maxResource('3');">{fl_max}</a></th>
                             <th><input name="resource3" size="10" onchange="calculateTransportCapacity();" type="text"></th>
                         </tr>

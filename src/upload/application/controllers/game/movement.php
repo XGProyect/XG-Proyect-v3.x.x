@@ -86,6 +86,9 @@ class Movement extends Controller
         // load Model
         parent::loadModel('game/fleet');
 
+        // load Language
+        parent::loadLang(['global', 'objects', 'game/fleet']);
+
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
@@ -169,7 +172,7 @@ class Movement extends Controller
             $this->getTemplate()->set(
                 'game/movements_view',
                 array_merge(
-                    $this->getLang(),
+                    $this->langs->language,
                     $page
                 )
             )
@@ -205,7 +208,7 @@ class Movement extends Controller
             foreach ($this->fleets->getFleets() as $fleet) {
                 $list_of_movements[] = [
                     'num' => ++$fleet_count,
-                    'fleet_mission' => $this->getLang()['type_mission'][$fleet->getFleetMission()],
+                    'fleet_mission' => $this->langs->language['type_mission'][$fleet->getFleetMission()],
                     'title' => $this->buildTitleBlock($fleet->getFleetMess()),
                     'tooltip' => $this->buildToolTipBlock($fleet->getFleetMess()),
                     'fleet_amount' => FormatLib::prettyNumber($fleet->getFleetAmount()),
@@ -241,10 +244,10 @@ class Movement extends Controller
     private function buildTitleBlock(int $fleet_mess): string
     {
         if (FleetsLib::isFleetReturning($fleet_mess)) {
-            return $this->getLang()['fl_r'];
+            return $this->langs->line('fl_r');
         }
 
-        return $this->getLang()['fl_a'];
+        return $this->langs->line('fl_a');
     }
 
     /**
@@ -257,10 +260,10 @@ class Movement extends Controller
     private function buildToolTipBlock(int $fleet_mess): string
     {
         if (FleetsLib::isFleetReturning($fleet_mess)) {
-            return $this->getLang()['fl_returning'];
+            return $this->langs->line('fl_returning');
         }
 
-        return $this->getLang()['fl_onway'];
+        return $this->langs->line('fl_onway');
     }
 
     /**
@@ -272,11 +275,12 @@ class Movement extends Controller
      */
     private function buildShipsBlock(string $fleet_array): string
     {
+        $objects = parent::$objects->getObjects();
         $ships = FleetsLib::getFleetShipsArray($fleet_array);
         $tooltips = [];
 
         foreach ($ships as $ship => $amount) {
-            $tooltips[] = $this->getLang()['tech'][$ship] . ':' . $amount;
+            $tooltips[] = $this->langs->language[$objects[$ship]] . ' :' . $amount;
         }
 
         return count($tooltips) > 0 ? join("\n", $tooltips) : '';
@@ -296,11 +300,11 @@ class Movement extends Controller
         if ($fleet->getFleetMess() == 0) {
             $actions = '<form action="game.php?page=movement&action=return" method="post">';
             $actions .= '<input type="hidden" name="fleetid" value="' . $fleet->getFleetId() . '">';
-            $actions .= '<input type="submit" name="send" value="' . $this->getLang()['fl_send_back'] . '">';
+            $actions .= '<input type="submit" name="send" value="' . $this->langs->line('fl_send_back') . '">';
             $actions .= '</form>';
 
             if ($fleet->getFleetMission() == Missions::attack) {
-                $content = '<input type="button" value="' . $this->getLang()['fl_acs'] . '">';
+                $content = '<input type="button" value="' . $this->langs->line('fl_acs') . '">';
                 $attributes = 'onClick="f(\'game.php?page=federationlayer&fleet=' . $fleet->getFleetId() . '\', \'\')"';
 
                 $actions .= FunctionsLib::setUrl('#', '', $content, $attributes);

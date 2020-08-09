@@ -79,6 +79,9 @@ class Fleet2 extends Controller
         // load Model
         parent::loadModel('game/fleet');
 
+        // load Language
+        parent::loadLang(['global', 'game/fleet']);
+
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
@@ -131,7 +134,7 @@ class Fleet2 extends Controller
             $this->getTemplate()->set(
                 'fleet/fleet2_view',
                 array_merge(
-                    $this->getLang(),
+                    $this->langs->language,
                     $page,
                     $this->setInputsData()
                 )
@@ -221,7 +224,7 @@ class Fleet2 extends Controller
             $list_of_options[] = [
                 'value' => $value,
                 'selected' => ($value == $data['planet_type']) ? 'selected' : '',
-                'title' => $this->getLang()[$label],
+                'title' => $this->langs->line($label),
             ];
         }
 
@@ -247,16 +250,13 @@ class Fleet2 extends Controller
         $shortcuts_list = $shortcuts->getAllAsArray();
 
         if ($shortcuts_list) {
-
             $list_of_shortcuts = [];
 
             foreach ($shortcuts_list as $shortcut) {
-
                 if ($shortcut != '') {
-
                     $description = $shortcut['name'] . ' ' . FormatLib::prettyCoords(
                         $shortcut['g'], $shortcut['s'], $shortcut['p']
-                    ) . ' ' . $this->getLang()['planet_type_shortcuts'][$shortcut['pt']];
+                    ) . ' ' . $this->langs->language['planet_type_shortcuts'][$shortcut['pt']];
 
                     $list_of_shortcuts[] = [
                         'value' => $shortcut['g'] . ';' . $shortcut['s'] . ';' . $shortcut['p'] . ';' . $shortcut['pt'],
@@ -277,13 +277,13 @@ class Fleet2 extends Controller
 
             $shortcut_row = $this->getTemplate()->set(
                 'fleet/fleet2_shortcuts_noshortcuts_row',
-                ['shorcut_message' => $this->getLang()['fl_no_shortcuts']]
+                ['shorcut_message' => $this->langs->line('fl_no_shortcuts')]
             );
         }
 
         return $this->getTemplate()->set(
             'fleet/fleet2_shortcuts',
-            array_merge($this->getLang(), ['shortcuts_rows' => $shortcut_row])
+            array_merge($this->langs->language, ['shortcuts_rows' => $shortcut_row])
         );
     }
 
@@ -308,7 +308,7 @@ class Fleet2 extends Controller
                         $planet['planet_galaxy'],
                         $planet['planet_system'],
                         $planet['planet_planet']
-                    ) . ($planet['planet_type'] == PlanetTypes::moon ? ' (' . $this->getLang()['fcm_moon'] . ')' : ''),
+                    ) . ($planet['planet_type'] == PlanetTypes::moon ? ' (' . $this->langs->line('moon') . ')' : ''),
                 ];
             }
 
@@ -323,7 +323,7 @@ class Fleet2 extends Controller
 
         return $this->getTemplate()->set(
             'fleet/fleet2_shortcuts_noshortcuts_row',
-            ['shorcut_message' => $this->getLang()['fl_no_colony']]
+            ['shorcut_message' => $this->langs->line('fl_no_colony')]
         );
     }
 

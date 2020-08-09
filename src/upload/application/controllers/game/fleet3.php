@@ -89,6 +89,9 @@ class Fleet3 extends Controller
         // load Model
         parent::loadModel('game/fleet');
 
+        // load Language
+        parent::loadLang(['global', 'game/fleet']);
+
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
@@ -142,7 +145,7 @@ class Fleet3 extends Controller
             $this->getTemplate()->set(
                 'fleet/fleet3_view',
                 array_merge(
-                    $this->getLang(),
+                    $this->langs->language,
                     $page,
                     $inputs_data
                 )
@@ -206,7 +209,7 @@ class Fleet3 extends Controller
             $this->_planet['planet_galaxy'],
             $this->_planet['planet_system'],
             $this->_planet['planet_planet']
-        ) . ' - ' . $this->getLang()['planet_type'][$this->_planet['planet_type']];
+        ) . ' - ' . $this->langs->language['planet_type'][$this->_planet['planet_type']];
     }
 
     /**
@@ -223,8 +226,8 @@ class Fleet3 extends Controller
             foreach ($list_of_missions as $mission) {
                 $mission_selector[] = [
                     'value' => $mission,
-                    'mission' => $this->getLang()['type_mission'][$mission],
-                    'expedition_message' => $mission == Missions::expedition ? $this->getLang()['fl_expedition_alert_message'] : '',
+                    'mission' => $this->langs->language['type_mission'][$mission],
+                    'expedition_message' => $mission == Missions::expedition ? $this->langs->line('fl_expedition_alert_message') : '',
                     'id' => $mission == Missions::expedition ? ' ' : 'inpuT_' . $mission,
                     'checked' => $mission == $this->_current_mission ? ' checked="checked"' : '',
                 ];
@@ -273,7 +276,7 @@ class Fleet3 extends Controller
             return $this->getTemplate()->set(
                 'fleet/fleet3_stay_row',
                 array_merge(
-                    $this->getLang(),
+                    $this->langs->language,
                     [
                         'stay_type' => $stay_type,
                         'options' => $options,
@@ -525,9 +528,9 @@ class Fleet3 extends Controller
         ];
 
         return [
-            'metal' => floor($this->_planet['planet_metal']),
-            'crystal' => floor($this->_planet['planet_crystal']),
-            'deuterium' => floor($this->_planet['planet_deuterium']),
+            'this_metal' => floor($this->_planet['planet_metal']),
+            'this_crystal' => floor($this->_planet['planet_crystal']),
+            'this_deuterium' => floor($this->_planet['planet_deuterium']),
             'this_galaxy' => $this->_planet['planet_galaxy'],
             'this_system' => $this->_planet['planet_system'],
             'this_planet' => $this->_planet['planet_planet'],

@@ -86,6 +86,9 @@ class Fleet1 extends Controller
         // load Model
         parent::loadModel('game/fleet');
 
+        // load Language
+        parent::loadLang(['objects', 'game/fleet']);
+
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
@@ -157,7 +160,9 @@ class Fleet1 extends Controller
             $this->getTemplate()->set(
                 'fleet/fleet1_view',
                 array_merge(
-                    $this->getLang(), $page, $this->setInputsData()
+                    $this->langs->language,
+                    $page,
+                    $this->setInputsData()
                 )
             )
         );
@@ -171,8 +176,7 @@ class Fleet1 extends Controller
     private function buildNoSlotBlock()
     {
         if (!$this->checkAvailableSlot()) {
-
-            return $this->getTemplate()->set('fleet/fleet1_noslots_row', $this->getLang());
+            return $this->getTemplate()->set('fleet/fleet1_noslots_row', $this->langs->language);
         }
 
         return null;
@@ -193,11 +197,8 @@ class Fleet1 extends Controller
         $list_of_ships = [];
 
         if ($ships != null) {
-
             foreach ($ships as $ship_name => $ship_amount) {
-
                 if ($ship_amount != 0) {
-
                     $this->_ship_count += $ship_amount;
 
                     $ship_id = array_search($ship_name, $objects);
@@ -230,9 +231,9 @@ class Fleet1 extends Controller
      */
     private function buildShipName($ship_name, $ship_id)
     {
-        $title = $this->getLang()['fl_speed_title'] . FleetsLib::fleetMaxSpeed('', $ship_id, $this->_user);
+        $title = $this->langs->line('fl_speed_title') . FleetsLib::fleetMaxSpeed('', $ship_id, $this->_user);
 
-        return FunctionsLib::setUrl('', $title, $this->getLang()[$ship_name]);
+        return FunctionsLib::setUrl('', $title, $this->langs->line($ship_name));
     }
 
     /**
@@ -257,11 +258,10 @@ class Fleet1 extends Controller
     private function buildMaxShipsLink($ship_id)
     {
         if ($ship_id == Ships::ship_solar_satellite) {
-
             return null;
         }
 
-        return FunctionsLib::setUrl('#', '', $this->getLang()['fl_max'], 'onclick="javascript:maxShip(\'ship' . $ship_id . '\');"');
+        return FunctionsLib::setUrl('#', '', $this->langs->line('fl_max'), 'onclick="javascript:maxShip(\'ship' . $ship_id . '\');"');
     }
 
     /**
@@ -274,7 +274,6 @@ class Fleet1 extends Controller
     private function buildShipsInput($ship_id)
     {
         if ($ship_id == Ships::ship_solar_satellite) {
-
             return null;
         }
 
@@ -290,8 +289,7 @@ class Fleet1 extends Controller
     {
         if ($this->_ship_count > 0
             && $this->checkAvailableSlot()) {
-
-            return $this->getTemplate()->set('fleet/fleet1_selector_row', $this->getLang());
+            return $this->getTemplate()->set('fleet/fleet1_selector_row', $this->langs->language);
         }
 
         return '';
@@ -305,8 +303,7 @@ class Fleet1 extends Controller
     private function buildNoShipsBlock()
     {
         if ($this->_ship_count <= 0) {
-
-            return $this->getTemplate()->set('fleet/fleet1_noships_row', $this->getLang());
+            return $this->getTemplate()->set('fleet/fleet1_noships_row', $this->langs->language);
         }
 
         return '';
@@ -321,8 +318,7 @@ class Fleet1 extends Controller
     {
         if ($this->_ship_count > 0
             && $this->checkAvailableSlot()) {
-
-            return $this->getTemplate()->set('fleet/fleet1_button', $this->getLang());
+            return $this->getTemplate()->set('fleet/fleet1_button', $this->langs->language);
         }
 
         return '';
