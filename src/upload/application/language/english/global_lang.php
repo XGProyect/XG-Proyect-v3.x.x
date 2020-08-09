@@ -5,6 +5,7 @@ $lang = [
     'crystal' => 'Crystal',
     'deuterium' => 'Deuterium',
     'dark_matter' => 'Dark Matter',
+    'energy' => 'Energy',
 
     // types of planets or galaxy objects
     'planet_type' => [

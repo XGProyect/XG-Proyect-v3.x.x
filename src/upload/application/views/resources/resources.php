@@ -7,10 +7,10 @@
                     <td class="c" colspan="5">{Production_of_resources_in_the_planet}</td>
                 </tr><tr>
                     <th height="22">&nbsp;</th>
-                    <th width="60">{Metal}</th>
-                    <th width="60">{Crystal}</th>
-                    <th width="60">{Deuterium}</th>
-                    <th width="60">{Energy}</th>
+                    <th width="60">{metal}</th>
+                    <th width="60">{crystal}</th>
+                    <th width="60">{deuterium}</th>
+                    <th width="60">{energy}</th>
                 </tr><tr>
                     <th height="22">{rs_basic_income}</th>
                     <td class="k">{metal_basic_income}</td>

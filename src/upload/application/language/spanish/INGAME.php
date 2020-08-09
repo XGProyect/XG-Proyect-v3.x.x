@@ -251,18 +251,6 @@ $lang['bd_finished'] = 'Terminado';
 $lang['bd_from'] = 'de<br />';
 
 //----------------------------------------------------------------------------//
-//RESOURCES
-$lang['rs_amount'] = 'cantidad';
-$lang['rs_lvl'] = 'nivel';
-$lang['rs_production_on_planet'] = 'Producción de recursos en el planeta "%s"';
-$lang['rs_basic_income'] = 'Ingresos básicos';
-$lang['rs_storage_capacity'] = 'Capacidad de los almacenes';
-$lang['rs_calculate'] = 'Calcular';
-$lang['rs_sum'] = 'Suma';
-$lang['rs_daily'] = 'Diaria';
-$lang['rs_weekly'] = 'Semanal';
-
-//----------------------------------------------------------------------------//
 //TECHTREE
 $lang['tt_requirements'] = 'Requisitos';
 $lang['tt_lvl'] = 'nivel ';

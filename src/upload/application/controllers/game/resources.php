@@ -34,7 +34,6 @@ class Resources extends Controller
 
     const MODULE_ID = 4;
 
-    private $_lang;
     private $_resource;
     private $_prod_grid;
     private $_reslist;
@@ -51,13 +50,15 @@ class Resources extends Controller
         // load Model
         parent::loadModel('game/resources');
 
+        // load Language
+        parent::loadLang(['global', 'objects', 'game/resources']);
+
         // check if session is active
         parent::$users->checkSession();
 
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
-        $this->_lang = parent::$lang;
         $this->_resource = parent::$objects->getObjects();
         $this->_prod_grid = parent::$objects->getProduction();
         $this->_reslist = parent::$objects->getObjectsList();
@@ -74,7 +75,7 @@ class Resources extends Controller
      */
     private function build_page()
     {
-        $parse = $this->_lang;
+        $parse = $this->langs->language;
 
         $game_metal_basic_income = FunctionsLib::readConfig('metal_basic_income');
         $game_crystal_basic_income = FunctionsLib::readConfig('crystal_basic_income');
@@ -150,8 +151,8 @@ class Resources extends Controller
                 $CurrRow['name'] = $this->_resource[$ProdID];
                 $CurrRow['percent'] = $this->_current_planet[$Field];
                 $CurrRow['option'] = $this->build_options($CurrRow['percent']);
-                $CurrRow['type'] = $this->_lang['tech'][$ProdID];
-                $CurrRow['level'] = ($ProdID > 200) ? $this->_lang['rs_amount'] : $this->_lang['rs_lvl'];
+                $CurrRow['type'] = $this->langs->language[$this->_resource[$ProdID]];
+                $CurrRow['level'] = ($ProdID > 200) ? $this->langs->line('rs_amount') : $this->langs->line('rs_lvl');
                 $CurrRow['level_type'] = $this->_current_planet[$this->_resource[$ProdID]];
                 $CurrRow['metal_type'] = FormatLib::prettyNumber($metal);
                 $CurrRow['crystal_type'] = FormatLib::prettyNumber($crystal);
@@ -168,7 +169,7 @@ class Resources extends Controller
             }
         }
 
-        $parse['Production_of_resources_in_the_planet'] = str_replace('%s', $this->_current_planet['planet_name'], $this->_lang['rs_production_on_planet']);
+        $parse['Production_of_resources_in_the_planet'] = str_replace('%s', $this->_current_planet['planet_name'], $this->langs->line('rs_production_on_planet'));
 
         $parse['production_level'] = $this->prod_level($this->_current_planet['planet_energy_used'], $this->_current_planet['planet_energy_max']);
         $parse['metal_basic_income'] = $game_metal_basic_income;

@@ -5,6 +5,7 @@ $lang = [
     'crystal' => 'Cristal',
     'deuterium' => 'Deuterio',
     'dark_matter' => 'Materia Oscura',
+    'energy' => 'Energía',
 
     // shortcuts
     'dark_matter_short' => 'MO',
