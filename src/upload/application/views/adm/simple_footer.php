@@ -21,7 +21,7 @@
     <script type="text/javascript">
         $(document).ready(function () {
             // color pickers
-            $('[name=color-picker]').on('change', function(){
+            $('[name=color-picker]').change(function(){
                 $('[name=text]').css('color', $(this).val());
             });
 
