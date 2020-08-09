@@ -85,7 +85,7 @@ class Combatreport extends Controller
     private function setUpReport()
     {
         $this->report = new Report(
-            $this->Combatreport_Model->getReportById(filter_input(INPUT_GET, 'report')),
+            [$this->Combatreport_Model->getReportById(filter_input(INPUT_GET, 'report'))],
             $this->user['user_id']
         );
     }

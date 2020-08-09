@@ -115,7 +115,7 @@ class Report
      *
      * @return array
      */
-    public function getFirstReportOwnersAsArray()
+    public function getFirstReportOwnersAsArray(): array
     {
         $owners = [];
 
@@ -126,7 +126,7 @@ class Report
             }
         }
 
-        return $owners[0];
+        return $owners[0] ?? $owners;
     }
 
     /**
@@ -195,7 +195,9 @@ class Report
     private function setUp($reports)
     {
         foreach ($reports as $report) {
-            $this->_reports[] = $this->createNewReportEntity($report);
+            if (is_array($report)) {
+                $this->_reports[] = $this->createNewReportEntity($report);
+            }
         }
     }
 
