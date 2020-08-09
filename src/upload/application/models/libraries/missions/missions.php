@@ -348,6 +348,7 @@ class Missions extends Model
                 `report_owners` = '" . $data['owners'] . "',
                 `report_rid` = '" . $data['rid'] . "',
                 `report_content` = '" . $data['content'] . "',
+                `report_destroyed` = '" . $data['destroyed'] . "',
                 `report_time` = '" . $data['time'] . "'"
             );
         }

@@ -483,6 +483,7 @@ class Destroy extends Missions
         $idAll = array_merge($idAtts, $idDefs);
         $owners = join(',', $idAll);
         $rid = md5($report) . time();
+        $destroyed = ($report->getLastRoundNumber() == 1) ? 1 : 0;
         $report_data = $report . $this->buildDestroyReport($fleet_row, $report, $planet_name);
 
         $this->Missions_Model->insertReport([
@@ -490,6 +491,7 @@ class Destroy extends Missions
             'rid' => $rid,
             'content' => addslashes($report_data),
             'time' => time(),
+            'destroyed' => $destroyed,
         ]);
 
         foreach ($idAtts as $id) {

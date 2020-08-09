@@ -438,12 +438,14 @@ class Attack extends Missions
         $idAll = array_merge($idAtts, $idDefs);
         $owners = join(',', $idAll);
         $rid = md5($report) . time();
+        $destroyed = ($report->getLastRoundNumber() == 1) ? 1 : 0;
 
         $this->Missions_Model->insertReport([
             'owners' => $owners,
             'rid' => $rid,
             'content' => addslashes($report),
             'time' => time(),
+            'destroyed' => $destroyed,
         ]);
 
         foreach ($idAtts as $id) {

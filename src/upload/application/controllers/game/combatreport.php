@@ -128,16 +128,16 @@ class Combatreport extends Controller
     {
         // When the fleet was destroyed in the first row
         if ($this->report->getAllReportsOwnedByUserId()[0]->getReportDestroyed() == ReportStatus::fleetDestroyed) {
-            return $this->getTemplate()->set('combatreport/combatreport_no_fleet_view', $this->langs->language);
+            return $this->getTemplate()->set('combatreport/combatreport_contact_lost_view', $this->langs->language);
         }
 
         // any other case
         $content = stripslashes($this->report->getAllReports()[0]->getReportContent());
-
+        /*
         foreach ($this->langs->line('cr_tech_short') as $id => $s_name) {
-            $search = [$id];
-            $replace = [$s_name];
-            $content = str_replace($search, $replace, $content);
+        $search = [$id];
+        $replace = [$s_name];
+        $content = str_replace($search, $replace, $content);
         }
 
         $no_fleet = $this->getTemplate()->set('combatreport/combatreport_no_fleet_view', $this->langs->language);
@@ -145,7 +145,7 @@ class Combatreport extends Controller
 
         $search = [$no_fleet];
         $replace = [$destroyed];
-        $content = str_replace($search, $replace, $content);
+        $content = str_replace($search, $replace, $content);*/
 
         return $content;
     }
