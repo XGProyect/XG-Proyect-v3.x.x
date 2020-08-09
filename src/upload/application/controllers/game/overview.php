@@ -36,7 +36,6 @@ class Overview extends Controller
 
     const MODULE_ID = 1;
 
-    private $_lang;
     private $_current_user;
     private $_current_planet;
     private $_noob;
@@ -54,10 +53,12 @@ class Overview extends Controller
         // load Model
         parent::loadModel('game/overview');
 
+        // load Language
+        parent::loadLang(['global', 'overview']);
+
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
-        $this->_lang = parent::$lang;
         $this->_current_user = parent::$users->getUserData();
         $this->_current_planet = parent::$users->getPlanetData();
         $this->_noob = FunctionsLib::loadLibrary('NoobsProtectionLib');
@@ -73,7 +74,7 @@ class Overview extends Controller
     private function build_page()
     {
         // SOME DEFAULT VALUES
-        $parse = $this->_lang;
+        $parse = $this->langs->language;
         $parse['dpath'] = DPATH;
 
         ######################################
@@ -137,7 +138,7 @@ class Overview extends Controller
     private function get_current_work($user_planet, $is_current_planet = true)
     {
         // THE PLANET IS "FREE" BY DEFAULT
-        $building_block = $this->_lang['ov_free'];
+        $building_block = $this->langs->line('ov_free');
 
         if (!$is_current_planet) {
             // UPDATE THE PLANET INFORMATION FIRST, MAY BE SOMETHING HAS JUST FINISHED
@@ -154,7 +155,7 @@ class Overview extends Controller
                 // THE BUILDING BLOCK
                 if ($is_current_planet) {
                     $building_block = DevelopmentsLib::currentBuilding("overview", $building);
-                    $building_block .= $this->_lang['tech'][$building] . ' (' . $level . ')';
+                    $building_block .= $this->langs->language['tech'][$building] . ' (' . $level . ')';
                     $building_block .= "<br /><div id=\"blc\" class=\"z\">" . FormatLib::prettyTime($time_to_end) . "</div>";
                     $building_block .= "\n<script language=\"JavaScript\">";
                     $building_block .= "\n	pp = \"" . $time_to_end . "\";\n";
@@ -164,7 +165,7 @@ class Overview extends Controller
                     $building_block .= "\n	t();\n";
                     $building_block .= "\n</script>\n";
                 } else {
-                    $building_block = '' . $this->_lang['tech'][$building] . ' (' . $level . ')';
+                    $building_block = '' . $this->langs->language[$building] . ' (' . $level . ')';
                     $building_block .= '<br><font color="#7f7f7f">(' . FormatLib::prettyTime($time_to_end) . ')</font>';
                 }
             }
@@ -187,11 +188,11 @@ class Overview extends Controller
             $new_message = '<tr>';
 
             if ($this->_current_user['new_message'] == 1) {
-                $new_message .= '<th colspan="4">' . FunctionsLib::setUrl('game.php?page=messages', $this->_lang['ov_have_new_message'], $this->_lang['ov_have_new_message']) . '</th>';
+                $new_message .= '<th colspan="4">' . FunctionsLib::setUrl('game.php?page=messages', $this->langs->line('ov_have_new_message'), $this->langs->line('ov_have_new_message')) . '</th>';
             }
 
             if ($this->_current_user['new_message'] > 1) {
-                $link_text = str_replace('%m', FormatLib::prettyNumber($this->_current_user['new_message']), $this->_lang['ov_have_new_messages']);
+                $link_text = str_replace('%m', FormatLib::prettyNumber($this->_current_user['new_message']), $this->langs->line('ov_have_new_messages'));
                 $new_message .= '<th colspan="4">' . FunctionsLib::setUrl('game.php?page=messages', $link_text, $link_text) . '</th>';
             }
 
@@ -366,7 +367,7 @@ class Overview extends Controller
         $return['moon'] = '';
 
         if ($this->_current_planet['moon_id'] != 0 && $this->_current_planet['moon_destroyed'] == 0 && $this->_current_planet['planet_type'] == 1) {
-            $moon_name = $this->_current_planet['moon_name'] . " (" . $this->_lang['fcm_moon'] . ")";
+            $moon_name = $this->_current_planet['moon_name'] . " (" . $this->langs->line('moon') . ")";
             $url = 'game.php?page=overview&cp=' . $this->_current_planet['moon_id'] . '&re=0';
             $image = DPATH . 'planets/' . $this->_current_planet['moon_image'] . '.jpg';
             $attributes = 'height="50" width="50"';
@@ -430,7 +431,7 @@ class Overview extends Controller
         $total_rank = $this->_current_user['user_statistic_total_rank'] == '' ? $this->_current_planet['stats_users'] : $this->_current_user['user_statistic_total_rank'];
 
         if ($this->_noob->isRankVisible($this->_current_user['user_authlevel'])) {
-            $user_rank = FormatLib::prettyNumber($this->_current_user['user_statistic_total_points']) . " (" . $this->_lang['ov_place'] . ' ' . FunctionsLib::setUrl('game.php?page=statistics&range=' . $total_rank, $total_rank, $total_rank) . ' ' . $this->_lang['ov_of'] . ' ' . $this->_current_planet['stats_users'] . ")";
+            $user_rank = FormatLib::prettyNumber($this->_current_user['user_statistic_total_points']) . " (" . $this->langs->line('ov_place') . ' ' . FunctionsLib::setUrl('game.php?page=statistics&range=' . $total_rank, $total_rank, $total_rank) . ' ' . $this->langs->line('ov_of') . ' ' . $this->_current_planet['stats_users'] . ")";
         }
 
         return $user_rank;

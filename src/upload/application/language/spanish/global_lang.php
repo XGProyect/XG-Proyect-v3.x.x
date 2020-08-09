@@ -8,6 +8,10 @@ $lang = [
 
     // shortcuts
     'dark_matter_short' => 'MO',
+
+    // galaxy objects
+    'planet' => 'Planeta',
+    'moon' => 'Luna',
 ];
 
 /* end of global_lang.php */

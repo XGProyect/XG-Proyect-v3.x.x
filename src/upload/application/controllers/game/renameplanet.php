@@ -31,7 +31,6 @@ class Renameplanet extends Controller
 
     const MODULE_ID = 1;
 
-    private $_lang;
     private $_current_user;
     private $_current_planet;
 
@@ -48,10 +47,12 @@ class Renameplanet extends Controller
         // load Model
         parent::loadModel('game/renameplanet');
 
+        // load Language
+        parent::loadLang('renameplanet');
+
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
-        $this->_lang = parent::$lang;
         $this->_current_user = parent::$users->getUserData();
         $this->_current_planet = parent::$users->getPlanetData();
 
@@ -65,7 +66,7 @@ class Renameplanet extends Controller
      */
     private function build_page()
     {
-        $parse = $this->_lang;
+        $parse = $this->langs->language;
         $parse['planet_name'] = $this->_current_planet['planet_name'];
         $parse['planet_id'] = $this->_current_planet['planet_id'];
         $parse['galaxy_galaxy'] = $this->_current_planet['planet_galaxy'];
@@ -77,13 +78,13 @@ class Renameplanet extends Controller
 
         // CHANGE THE ACTION
         switch ((isset($_POST['action']) ? $_POST['action'] : null)) {
-            case $this->_lang['ov_planet_rename_action']:
+            case $this->langs->line('rp_planet_rename_action'):
 
                 $this->rename_planet($_POST['newname']);
 
                 break;
 
-            case $this->_lang['ov_abandon_planet']:
+            case $this->langs->line('rp_abandon_planet'):
 
                 // DELETE VIEW
                 $current_view = 'renameplanet/renameplanet_delete_view';
@@ -114,12 +115,12 @@ class Renameplanet extends Controller
         $new_name = strip_tags(trim($new_name));
 
         if (preg_match("/[^A-z0-9_\- ]/", $new_name) == 1) {
-            FunctionsLib::message($this->_lang['ov_newname_error'], "game.php?page=renameplanet", 2);
+            FunctionsLib::message($this->langs->line('rp_newname_error'), "game.php?page=renameplanet", 2);
         }
 
         if ($new_name != '') {
             $this->Renameplanet_Model->updatePlanetName($new_name, $this->_current_user['user_current_planet']);
-            FunctionsLib::message($this->_lang['ov_planet_name_changed'], "game.php?page=renameplanet", 2);
+            FunctionsLib::message($this->langs->line('rp_planet_name_changed'), "game.php?page=renameplanet", 2);
         }
     }
 
@@ -151,9 +152,9 @@ class Renameplanet extends Controller
         }
 
         if ($own_fleet > 0) {
-            FunctionsLib::message($this->_lang['ov_abandon_planet_not_possible'], 'game.php?page=renameplanet');
+            FunctionsLib::message($this->langs->line('rp_abandon_planet_not_possible'), 'game.php?page=renameplanet');
         } elseif ((($enemy_fleet > 0) && ($mess < 1)) && $end_type != 2) {
-            FunctionsLib::message($this->_lang['ov_abandon_planet_not_possible'], 'game.php?page=renameplanet');
+            FunctionsLib::message($this->langs->line('rp_abandon_planet_not_possible'), 'game.php?page=renameplanet');
         } else {
             if (password_verify($_POST['pw'], $this->_current_user['user_password']) && $this->_current_user['user_home_planet_id'] != $this->_current_user['user_current_planet']) {
                 if ($this->_current_planet['moon_id'] != 0) {
@@ -168,11 +169,11 @@ class Renameplanet extends Controller
                     $this->Renameplanet_Model->deletePlanet($this->_current_user['user_id'], $this->_current_user['user_current_planet']);
                 }
 
-                FunctionsLib::message($this->_lang['ov_planet_abandoned'], 'game.php?page=overview');
+                FunctionsLib::message($this->langs->line('rp_planet_abandoned'), 'game.php?page=overview');
             } elseif ($this->_current_user['user_home_planet_id'] == $this->_current_user['user_current_planet']) {
-                FunctionsLib::message($this->_lang['ov_principal_planet_cant_abanone'], 'game.php?page=renameplanet');
+                FunctionsLib::message($this->langs->line('rp_principal_planet_cant_abanone'), 'game.php?page=renameplanet');
             } else {
-                FunctionsLib::message($this->_lang['ov_wrong_pass'], 'game.php?page=renameplanet');
+                FunctionsLib::message($this->langs->line('rp_wrong_pass'), 'game.php?page=renameplanet');
             }
         }
     }

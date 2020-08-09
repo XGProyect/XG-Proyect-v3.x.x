@@ -209,45 +209,6 @@ $lang['lm_administration'] = 'Administración';
 $lang['lm_module_not_accesible'] = 'No se ha encontrado la página.';
 
 //----------------------------------------------------------------------------//
-//OVERVIEW
-$lang['ov_newname_error'] = 'Has introducido algún caracter ilegal. Sólo puedes introducir caracteres alfanuméricos.';
-$lang['ov_planet_abandoned'] = 'Planeta abandonado con éxito.';
-$lang['ov_principal_planet_cant_abanone'] = 'El planeta principal no puede ser abandonado.';
-$lang['ov_wrong_pass'] = 'Contraseña incorrecta, vuelve a ingresarla.';
-$lang['ov_have_new_message'] = 'Tienes 1 mensaje nuevo';
-$lang['ov_have_new_messages'] = 'Tienes %m mensajes nuevos';
-$lang['ov_free'] = 'Libre';
-$lang['ov_news'] = 'Noticias';
-$lang['ov_place'] = 'Lugar';
-$lang['ov_of'] = 'de';
-$lang['ov_planet'] = 'Planeta';
-$lang['ov_server_time'] = 'Hora del servidor';
-$lang['ov_events'] = 'Eventos';
-$lang['ov_diameter'] = 'Diámetro';
-$lang['ov_distance_unit'] = 'km';
-$lang['ov_temperature'] = 'Temperatura';
-$lang['ov_aprox'] = 'aprox.';
-$lang['ov_temp_unit'] = 'ºC';
-$lang['ov_to'] = 'hasta';
-$lang['ov_position'] = 'Posición';
-$lang['ov_points'] = 'Puntos';
-$lang['ov_security_request'] = 'Petición de seguridad';
-$lang['ov_security_confirm'] = 'Confirmar borrado de planeta';
-$lang['ov_with_pass'] = 'con contraseña';
-$lang['ov_password'] = 'Contraseña';
-$lang['ov_delete_planet'] = '¡Borrar planeta!';
-$lang['ov_your_planet'] = 'Tu planeta';
-$lang['ov_coords'] = 'Coordenadas';
-$lang['ov_abandon_planet'] = 'Abandonar colonia';
-$lang['ov_planet_name'] = 'Nombre';
-$lang['ov_actions'] = 'Acciones';
-$lang['ov_planet_rename'] = 'Nombrar';
-$lang['ov_planet_rename_action'] = 'Nombrar';
-$lang['ov_planet_name_changed'] = 'La contraseña ha sido cambiada.<br /><a href="game.php?page=overview" target="_top">Volver</a>';
-$lang['ov_abandon_planet_not_possible'] = 'No es posible abandonar un planeta cuando hay flotas moviendose';
-$lang['ov_fields'] = 'Campos';
-
-//----------------------------------------------------------------------------//
 //PHALANX
 $lang['px_no_deuterium'] = '¡No tienes deuterio!';
 $lang['px_scan_position'] = 'Escanear posición';
