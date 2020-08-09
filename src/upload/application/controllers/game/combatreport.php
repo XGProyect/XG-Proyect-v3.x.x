@@ -58,6 +58,9 @@ class Combatreport extends Controller
         // load Model
         parent::loadModel('game/combatreport');
 
+        // load Language
+        parent::loadLang('game/combatreport');
+
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
@@ -96,8 +99,8 @@ class Combatreport extends Controller
     {
         $owners = $this->report->getFirstReportOwnersAsArray();
 
-        if (!in_array($this->user['user_id'], $owners)) {
-            FunctionsLib::message($this->getLang()['cr_no_access'], '', 0, false, false, false);
+        if (!isset($owners) or !in_array($this->user['user_id'], $owners)) {
+            FunctionsLib::message($this->langs->line('cr_no_access'), '', 0, false, false, false);
         }
     }
 
@@ -125,20 +128,20 @@ class Combatreport extends Controller
     {
         // When the fleet was destroyed in the first row
         if ($this->report->getAllReportsOwnedByUserId()[0]->getReportDestroyed() == ReportStatus::fleetDestroyed) {
-            return $this->getTemplate()->set('combatreport/combatreport_no_fleet_view', $this->getLang());
+            return $this->getTemplate()->set('combatreport/combatreport_no_fleet_view', $this->langs->language);
         }
 
         // any other case
         $content = stripslashes($this->report->getAllReports()[0]->getReportContent());
 
-        foreach ($this->getLang()['tech_rc'] as $id => $s_name) {
+        foreach ($this->langs->line('cr_tech_short') as $id => $s_name) {
             $search = [$id];
             $replace = [$s_name];
             $content = str_replace($search, $replace, $content);
         }
 
-        $no_fleet = $this->getTemplate()->set('combatreport/combatreport_no_fleet_view', $this->getLang());
-        $destroyed = $this->getTemplate()->set('combatreport/combatreport_destroyed_view', $this->getLang());
+        $no_fleet = $this->getTemplate()->set('combatreport/combatreport_no_fleet_view', $this->langs->language);
+        $destroyed = $this->getTemplate()->set('combatreport/combatreport_destroyed_view', $this->langs->language);
 
         $search = [$no_fleet];
         $replace = [$destroyed];

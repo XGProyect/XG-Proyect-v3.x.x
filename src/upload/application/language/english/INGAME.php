@@ -141,32 +141,6 @@ $lang['user_level'] = array(
     '3' => 'Administrator',
 );
 
-//SHORT NAMES FOR COMBAT REPORTS
-$lang['tech_rc'] = array(
-    202 => "S. cargo",
-    203 => "L. cargo",
-    204 => "F. light",
-    205 => "F. heavy",
-    206 => "Cruiser",
-    207 => "Battleship",
-    208 => "Col. Ship",
-    209 => "Recycler",
-    210 => "Probes",
-    211 => "Bomber",
-    212 => "S. Satellite",
-    213 => "Destroyer",
-    214 => "Deathstar",
-    215 => "Battlecru.",
-    401 => "Rocket L.",
-    402 => "Light L.",
-    403 => "Heavy L.",
-    404 => "Gauss C.",
-    405 => "Ion C.",
-    406 => "Plasma T.",
-    407 => "S. Dome",
-    408 => "L. Dome",
-);
-
 //----------------------------------------------------------------------------//
 //TOPNAV
 $lang['tn_vacation_mode'] = 'Vacation mode active until ';
@@ -674,17 +648,5 @@ $lang['fcm_moon'] = 'Moon';
 $lang['fcp_colony'] = 'Colony';
 $lang['fgp_require'] = 'Requires: ';
 $lang['fgf_time'] = 'Construction Time: ';
-
-//----------------------------------------------------------------------------//
-// CombatReport.php
-$lang['cr_lost_contact'] = 'Contact was lost with the attacking fleet.';
-$lang['cr_first_round'] = '(The fleet was destroyed in the first round)';
-$lang['cr_type'] = 'Type';
-$lang['cr_total'] = 'Total';
-$lang['cr_weapons'] = 'Weapons';
-$lang['cr_shields'] = 'Shields';
-$lang['cr_armor'] = 'Armor';
-$lang['cr_destroyed'] = 'Destroyed!';
-$lang['cr_no_access'] = 'The requested report doesn\'t exists';
 
 /* end of INGAME.php */
