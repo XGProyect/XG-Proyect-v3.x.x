@@ -17,7 +17,7 @@ declare (strict_types = 1);
 namespace application\controllers\adm;
 
 use application\core\Controller;
-use application\libraries\adm\AdministrationLib;
+use application\libraries\adm\AdministrationLib as Administration;
 use application\libraries\FormatLib as Format;
 use application\libraries\FunctionsLib;
 
@@ -48,7 +48,7 @@ class Home extends Controller
         parent::__construct();
 
         // check if session is active
-        AdministrationLib::checkSession();
+        Administration::checkSession();
 
         // load Model
         parent::loadModel('adm/home');
@@ -60,8 +60,8 @@ class Home extends Controller
         $this->user = $this->getUserData();
 
         // check if the user is allowed to access
-        if (!AdministrationLib::haveAccess($this->user['user_authlevel'])) {
-            AdministrationLib::noAccessMessage($this->langs->line('no_permissions'));
+        if (!Administration::haveAccess($this->user['user_authlevel'])) {
+            Administration::noAccessMessage($this->langs->line('no_permissions'));
         }
 
         // build the page
@@ -119,7 +119,7 @@ class Home extends Controller
                 $alert[] = $this->langs->line('hm_old_version');
             }
 
-            if (AdministrationLib::installDirExists()) {
+            if (Administration::installDirExists()) {
                 $alert[] = $this->langs->line('hm_install_file_detected');
             }
 

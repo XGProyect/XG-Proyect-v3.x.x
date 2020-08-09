@@ -17,7 +17,7 @@ declare (strict_types = 1);
 namespace application\controllers\adm;
 
 use application\core\Controller;
-use application\libraries\adm\AdministrationLib;
+use application\libraries\adm\AdministrationLib as Administration;
 use application\libraries\FormatLib as Format;
 use application\libraries\FunctionsLib as Functions;
 use application\libraries\TimingLibrary as Timing;
@@ -49,7 +49,7 @@ class Tasks extends Controller
         parent::__construct();
 
         // check if session is active
-        AdministrationLib::checkSession();
+        Administration::checkSession();
 
         // load Language
         parent::loadLang(['adm/global', 'adm/tasks']);
@@ -58,8 +58,8 @@ class Tasks extends Controller
         $this->user = $this->getUserData();
 
         // check if the user is allowed to access
-        if (!AdministrationLib::authorization(__CLASS__, (int) $this->user['user_authlevel'])) {
-            die(AdministrationLib::noAccessMessage($this->langs->line('no_permissions')));
+        if (!Administration::authorization(__CLASS__, (int) $this->user['user_authlevel'])) {
+            die(Administration::noAccessMessage($this->langs->line('no_permissions')));
         }
 
         // build the page

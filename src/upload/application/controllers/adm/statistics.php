@@ -18,7 +18,7 @@ namespace application\controllers\adm;
 
 use application\core\Controller;
 use application\core\enumerators\UserRanksEnumerator as UserRanks;
-use application\libraries\adm\AdministrationLib;
+use application\libraries\adm\AdministrationLib as Administration;
 use application\libraries\FunctionsLib;
 
 /**
@@ -77,7 +77,7 @@ class Statistics extends Controller
         parent::__construct();
 
         // check if session is active
-        AdministrationLib::checkSession();
+        Administration::checkSession();
 
         // load Language
         parent::loadLang(['adm/global', 'adm/statistics']);
@@ -86,8 +86,8 @@ class Statistics extends Controller
         $this->user = $this->getUserData();
 
         // check if the user is allowed to access
-        if (!AdministrationLib::authorization(__CLASS__, (int) $this->user['user_authlevel'])) {
-            die(AdministrationLib::noAccessMessage($this->langs->line('no_permissions')));
+        if (!Administration::authorization(__CLASS__, (int) $this->user['user_authlevel'])) {
+            die(Administration::noAccessMessage($this->langs->line('no_permissions')));
         }
 
         // time to do something
@@ -113,7 +113,7 @@ class Statistics extends Controller
                 FunctionsLib::updateConfig($option, $value);
             }
 
-            $this->alert = AdministrationLib::saveMessage('ok', $this->langs->line('cs_all_ok_message'));
+            $this->alert = Administration::saveMessage('ok', $this->langs->line('cs_all_ok_message'));
         }
     }
 

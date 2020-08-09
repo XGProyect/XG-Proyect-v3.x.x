@@ -14,7 +14,7 @@
 namespace application\controllers\adm;
 
 use application\core\Controller;
-use application\libraries\adm\AdministrationLib;
+use application\libraries\adm\AdministrationLib as Administration;
 use application\libraries\FunctionsLib;
 
 /**
@@ -46,7 +46,7 @@ class Alliances extends Controller
         parent::__construct();
 
         // check if session is active
-        AdministrationLib::checkSession();
+        Administration::checkSession();
 
         // load Model
         parent::loadModel('adm/alliances');
@@ -57,8 +57,8 @@ class Alliances extends Controller
         $this->_current_user = parent::$users->getUserData();
 
         // check if the user is allowed to access
-        if (!AdministrationLib::authorization(__CLASS__, (int) $this->_current_user['user_authlevel'])) {
-            die(AdministrationLib::noAccessMessage($this->langs->line('no_permissions')));
+        if (!Administration::authorization(__CLASS__, (int) $this->_current_user['user_authlevel'])) {
+            die(Administration::noAccessMessage($this->langs->line('no_permissions')));
         }
 
         $this->build_page();
@@ -85,7 +85,7 @@ class Alliances extends Controller
 
         if ($alliance != '') {
             if (!$this->check_alliance($alliance)) {
-                $parse['alert'] = AdministrationLib::saveMessage('error', $this->langs->line('al_nothing_found'));
+                $parse['alert'] = Administration::saveMessage('error', $this->langs->line('al_nothing_found'));
                 $alliance = '';
             } else {
                 if ($_POST) {
@@ -192,7 +192,7 @@ class Alliances extends Controller
         $parse['alliance_owner_picker'] = $this->build_users_combo($this->_alliance_query['alliance_owner']);
         $parse['sel1'] = $this->_alliance_query['alliance_request_notallow'] == 1 ? 'selected' : '';
         $parse['sel0'] = $this->_alliance_query['alliance_request_notallow'] == 0 ? 'selected' : '';
-        $parse['alert_info'] = ($this->_alert_type != '') ? AdministrationLib::saveMessage($this->_alert_type, $this->_alert_info) : '';
+        $parse['alert_info'] = ($this->_alert_type != '') ? Administration::saveMessage($this->_alert_type, $this->_alert_info) : '';
 
         return $this->getTemplate()->set("adm/alliances_information_view", $parse);
     }
@@ -231,7 +231,7 @@ class Alliances extends Controller
         }
 
         $parse['ranks_table'] = empty($ranks) ? $this->langs->line('al_no_ranks') : $ranks;
-        $parse['alert_info'] = ($this->_alert_type != '') ? AdministrationLib::saveMessage($this->_alert_type, $this->_alert_info) : '';
+        $parse['alert_info'] = ($this->_alert_type != '') ? Administration::saveMessage($this->_alert_type, $this->_alert_info) : '';
 
         return $this->getTemplate()->set("adm/alliances_ranks_view", $parse);
     }
@@ -276,7 +276,7 @@ class Alliances extends Controller
         }
 
         $parse['members_table'] = empty($members) ? '<tr><td colspan="6" class="align_center text-error">' . $this->langs->line('al_no_ranks') . '</td></tr>' : $members;
-        $parse['alert_info'] = ($this->_alert_type != '') ? AdministrationLib::saveMessage($this->_alert_type, $this->_alert_info) : '';
+        $parse['alert_info'] = ($this->_alert_type != '') ? Administration::saveMessage($this->_alert_type, $this->_alert_info) : '';
 
         return $this->getTemplate()->set("adm/alliances_members_view", $parse);
     }

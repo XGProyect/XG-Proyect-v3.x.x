@@ -17,7 +17,7 @@ declare (strict_types = 1);
 namespace application\controllers\adm;
 
 use application\core\Controller;
-use application\libraries\adm\AdministrationLib;
+use application\libraries\adm\AdministrationLib as Administration;
 use application\libraries\FunctionsLib;
 
 /**
@@ -65,7 +65,7 @@ class Premium extends Controller
         parent::__construct();
 
         // check if session is active
-        AdministrationLib::checkSession();
+        Administration::checkSession();
 
         // load Language
         parent::loadLang(['adm/global', 'adm/premium']);
@@ -74,8 +74,8 @@ class Premium extends Controller
         $this->user = $this->getUserData();
 
         // check if the user is allowed to access
-        if (!AdministrationLib::authorization(__CLASS__, (int) $this->user['user_authlevel'])) {
-            die(AdministrationLib::noAccessMessage($this->langs->line('no_permissions')));
+        if (!Administration::authorization(__CLASS__, (int) $this->user['user_authlevel'])) {
+            die(Administration::noAccessMessage($this->langs->line('no_permissions')));
         }
 
         // time to do something
@@ -103,7 +103,7 @@ class Premium extends Controller
                 }
             }
 
-            $this->alert = AdministrationLib::saveMessage('ok', $this->langs->line('pr_all_ok_message'));
+            $this->alert = Administration::saveMessage('ok', $this->langs->line('pr_all_ok_message'));
         }
     }
 

@@ -14,7 +14,7 @@
 namespace application\controllers\adm;
 
 use application\core\Controller;
-use application\libraries\adm\AdministrationLib;
+use application\libraries\adm\AdministrationLib as Administration;
 use application\libraries\FunctionsLib;
 
 /**
@@ -41,7 +41,7 @@ class Ban extends Controller
         parent::__construct();
 
         // check if session is active
-        AdministrationLib::checkSession();
+        Administration::checkSession();
 
         // load Model
         parent::loadModel('adm/ban');
@@ -52,8 +52,8 @@ class Ban extends Controller
         $this->_current_user = parent::$users->getUserData();
 
         // check if the user is allowed to access
-        if (!AdministrationLib::authorization(__CLASS__, (int) $this->_current_user['user_authlevel'])) {
-            die(AdministrationLib::noAccessMessage($this->langs->line('no_permissions')));
+        if (!Administration::authorization(__CLASS__, (int) $this->_current_user['user_authlevel'])) {
+            die(Administration::noAccessMessage($this->langs->line('no_permissions')));
         }
 
         $this->build_page();
@@ -102,7 +102,7 @@ class Ban extends Controller
 
             $this->Ban_Model->unbanUser($username);
 
-            $parse['alert'] = AdministrationLib::saveMessage('ok', (str_replace('%s', $username, $this->langs->line('bn_lift_ban_success'))));
+            $parse['alert'] = Administration::saveMessage('ok', (str_replace('%s', $username, $this->langs->line('bn_lift_ban_success'))));
         }
 
         $parse['users_list'] = $this->get_users_list();
@@ -138,14 +138,14 @@ class Ban extends Controller
             if ($banned_user) {
                 $parse['banned_until'] = $this->langs->line('bn_banned_until') . ' (' . date(FunctionsLib::readConfig('date_format_extended'), $banned_user['banned_longer']) . ')';
                 $parse['reason'] = $banned_user['banned_theme'];
-                $parse['changedate'] = '<div style="float:left">' . $this->langs->line('bn_change_date') . '</div><div style="float:right">' . AdministrationLib::showPopUp($this->langs->line('bn_edit_ban_help')) . '</div>';
+                $parse['changedate'] = '<div style="float:left">' . $this->langs->line('bn_change_date') . '</div><div style="float:right">' . Administration::showPopUp($this->langs->line('bn_edit_ban_help')) . '</div>';
             }
 
             $parse['vacation'] = $banned_user['preference_vacation_mode'] ? 'checked="checked"' : '';
 
             if (isset($_POST['bannow']) && $_POST['bannow']) {
                 if (!is_numeric($_POST['days']) or !is_numeric($_POST['hour'])) {
-                    $parse['alert'] = AdministrationLib::saveMessage('warning', $this->langs->line('bn_all_fields_required'));
+                    $parse['alert'] = Administration::saveMessage('warning', $this->langs->line('bn_all_fields_required'));
                 } else {
                     $reas = (string) $_POST['text'];
                     $days = (int) $_POST['days'];
@@ -180,7 +180,7 @@ class Ban extends Controller
                         $vacation_mode
                     );
 
-                    $parse['alert'] = AdministrationLib::saveMessage('ok', (str_replace('%s', $ban_name, $this->langs->line('bn_ban_success'))));
+                    $parse['alert'] = Administration::saveMessage('ok', (str_replace('%s', $ban_name, $this->langs->line('bn_ban_success'))));
                 }
             }
         } else {
