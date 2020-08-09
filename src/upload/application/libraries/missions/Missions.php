@@ -49,7 +49,10 @@ class Missions extends XGPCore
         // load model
         parent::loadModel('libraries/missions/missions');
 
-        $this->langs = parent::$lang;
+        // load Language
+        parent::loadLang('game/combatreport');
+
+        $this->langs = parent::$lang + $this->langs->language;
         $this->resource = parent::$objects->getObjects();
         $this->pricelist = parent::$objects->getPrice();
         $this->combat_caps = parent::$objects->getCombatSpecs();
