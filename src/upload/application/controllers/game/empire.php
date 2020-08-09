@@ -59,6 +59,9 @@ class Empire extends Controller
         // load Model
         parent::loadModel('game/empire');
 
+        // load Language
+        parent::loadLang(['global', 'constructions', 'defenses', 'technologies', 'ships', 'game/empire']);
+
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
@@ -80,7 +83,7 @@ class Empire extends Controller
             $this->getTemplate()->set(
                 'game/empire_view',
                 array_merge(
-                    $this->getLang(),
+                    $this->langs->language,
                     $this->buildBlocks()
                 )
             )
@@ -104,7 +107,7 @@ class Empire extends Controller
 
             // resources data
             foreach (['metal', 'crystal', 'deuterium', 'energy'] as $element) {
-                $empire[$element][] = $this->setResources($planet, $element);
+                $empire[$element . '_row'][] = $this->setResources($planet, $element);
             }
 
             // structures and technologies data
@@ -117,7 +120,7 @@ class Empire extends Controller
 
                 foreach ($this->getObjects()->getObjectsList($element) as $element_id) {
                     if (!isset($empire[$element][$this->getObjects()->getObjects($element_id)])) {
-                        $empire[$element][$this->getObjects()->getObjects($element_id)]['value'] = '<th width="75px">' . (string) $this->getLang()[$this->getObjects()->getObjects($element_id)] . '</th>';
+                        $empire[$element][$this->getObjects()->getObjects($element_id)]['value'] = '<th width="75px">' . (string) $this->langs->line($this->getObjects()->getObjects($element_id)) . '</th>';
                     }
 
                     $empire[$element][$this->getObjects()->getObjects($element_id)]['value'] .= '<th width="75px">' . $this->setStructureData($planet, $source, $element, $element_id) . '</th>';

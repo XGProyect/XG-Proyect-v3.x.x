@@ -202,19 +202,6 @@ $lang['lm_administration'] = 'Administración';
 $lang['lm_module_not_accesible'] = 'No se ha encontrado la página.';
 
 //----------------------------------------------------------------------------//
-//EMPIRE
-$lang['iv_imperium_title'] = 'Visión del Imperio';
-$lang['iv_planet'] = 'Planeta';
-$lang['iv_name'] = 'Nombre';
-$lang['iv_coords'] = 'Coordenadas';
-$lang['iv_fields'] = 'Campos';
-$lang['iv_resources'] = 'Recursos';
-$lang['iv_buildings'] = 'Edificios';
-$lang['iv_technology'] = 'Tecnologías';
-$lang['iv_ships'] = 'Naves';
-$lang['iv_defenses'] = 'Defensas';
-
-//----------------------------------------------------------------------------//
 //BUILDINGS - RESEARCH - SHIPYARD - DEFENSES
 $lang['bd_dismantle'] = 'Desmontar';
 $lang['bd_interrupt'] = 'Interrumpir';

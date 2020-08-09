@@ -202,19 +202,6 @@ $lang['lm_administration'] = 'Administration';
 $lang['lm_module_not_accesible'] = 'Page could not be found.';
 
 //----------------------------------------------------------------------------//
-//EMPIRE
-$lang['iv_imperium_title'] = 'Empire View';
-$lang['iv_planet'] = 'Planet';
-$lang['iv_name'] = 'Name';
-$lang['iv_coords'] = 'Coords';
-$lang['iv_fields'] = 'Fields';
-$lang['iv_resources'] = 'Resources';
-$lang['iv_buildings'] = 'Facilities';
-$lang['iv_technology'] = 'Research';
-$lang['iv_ships'] = 'Fleet';
-$lang['iv_defenses'] = 'Defenses';
-
-//----------------------------------------------------------------------------//
 //BUILDINGS - RESEARCH - SHIPYARD - DEFENSES
 $lang['bd_dismantle'] = 'Dismantle';
 $lang['bd_interrupt'] = 'Interrupt';

@@ -3,10 +3,10 @@
     <table border="0" cellpadding="0" cellspacing="1" width="750px">
         <tbody>
             <tr height="20px" valign="left">
-                <td class="c" colspan="{amount_of_planets}">{iv_imperium_title}</td>
+                <td class="c" colspan="{amount_of_planets}">{em_imperium_title}</td>
             </tr>
             <tr height="75px">
-                <th width="75px">{iv_planet}</th>
+                <th width="75px">{em_planet}</th>
                 {image}
                 <th width="75px">
                     <a href="game.php?page=overview&cp={planet_id}&re=0">
@@ -16,7 +16,7 @@
                 {/image}
             </tr>
             <tr height="20px">
-                <th width="75px">{iv_name}</th>
+                <th width="75px">{em_name}</th>
                 {name}
                 <th width="75px">
                     {planet_name}
@@ -24,7 +24,7 @@
                 {/name}
             </tr>
             <tr height="20px">
-                <th width="75px">{iv_coords}</th>
+                <th width="75px">{em_coords}</th>
                 {coords}
                 <th width="75px">
                     <a href="game.php?page=galaxy&mode=3&galaxy={planet_galaxy}&system={planet_system}">{planet_coords}</a>
@@ -32,7 +32,7 @@
                 {/coords}
             </tr>
             <tr height="20px">
-                <th width="75px">{iv_fields}</th>
+                <th width="75px">{em_fields}</th>
                 {fields}
                 <th width="75px">
                     {planet_field_current} / {planet_field_max}
@@ -40,42 +40,42 @@
                 {/fields}
             </tr>
             <tr>
-                <td class="c" colspan="{amount_of_planets}" align="left">{iv_resources}</td>
+                <td class="c" colspan="{amount_of_planets}" align="left">{em_resources}</td>
             </tr>
             <tr>
-                <th width="75px">{Metal}</th>
-                {metal}
+                <th width="75px">{metal}</th>
+                {metal_row}
                 <th width="75px">
                     <a href="game.php?page=resources&cp={planet_id}&re=0&planettype={planet_type}">{planet_current_amount}</a> / {planet_production}
                 </th>
-                {/metal}
+                {/metal_row}
             </tr>
             <tr>
-                <th width="75px">{Crystal}</th>
-                {crystal}
+                <th width="75px">{crystal}</th>
+                {crystal_row}
                 <th width="75px">
                     <a href="game.php?page=resources&cp={planet_id}&re=0&planettype={planet_type}">{planet_current_amount}</a> / {planet_production}
                 </th>
-                {/crystal}
+                {/crystal_row}
             </tr>
             <tr>
-                <th width="75px">{Deuterium}</th>
-                {deuterium}
+                <th width="75px">{deuterium}</th>
+                {deuterium_row}
                 <th width="75px">
                     <a href="game.php?page=resources&cp={planet_id}&re=0&planettype={planet_type}">{planet_current_amount}</a> / {planet_production}
                 </th>
-                {/deuterium}
+                {/deuterium_row}
             </tr>
             <tr>
-                <th width="75px">{Energy}</th>
-                {energy}
+                <th width="75px">{energy}</th>
+                {energy_row}
                 <th width="75px">
                     {used_energy} / {max_energy}
                 </th>
-                {/energy}
+                {/energy_row}
             </tr>
             <tr>
-                <td class="c" colspan="{amount_of_planets}" align="left">{iv_resources}</td>
+                <td class="c" colspan="{amount_of_planets}" align="left">{em_resources}</td>
             </tr>
             {resources}
             <tr>
@@ -83,7 +83,7 @@
             </tr>
             {/resources}
             <tr>
-                <td class="c" colspan="{amount_of_planets}" align="left">{iv_buildings}</td>
+                <td class="c" colspan="{amount_of_planets}" align="left">{em_buildings}</td>
             </tr>
             {facilities}
             <tr>
@@ -91,7 +91,7 @@
             </tr>
             {/facilities}
             <tr height="20px">
-                <td class="c" colspan="{amount_of_planets}" align="left">{iv_defenses}</td>
+                <td class="c" colspan="{amount_of_planets}" align="left">{em_defenses}</td>
             </tr>
             {defenses}
             <tr>
@@ -104,7 +104,7 @@
             </tr>
             {/missiles}
             <tr height="20px">
-                <td class="c" colspan="{amount_of_planets}" align="left">{iv_technology}</td>
+                <td class="c" colspan="{amount_of_planets}" align="left">{em_technology}</td>
             </tr>
             {tech}
             <tr>
@@ -112,7 +112,7 @@
             </tr>
             {/tech}
             <tr height="20px">
-                <td class="c" colspan="{amount_of_planets}" align="left">{iv_ships}</td>
+                <td class="c" colspan="{amount_of_planets}" align="left">{em_ships}</td>
             </tr>
             {fleet}
             <tr>
