@@ -547,26 +547,6 @@ $lang['info'][503]['name'] = "Interplanetary Missiles";
 $lang['info'][503]['description'] = 'Interplanetary Missiles (IPM) are your offensive weapon to destroy the defences of your target. Using state of the art tracking technology, each missile targets a certain number of defences for destruction. Tipped with an anti-matter bomb, they deliver a destructive force so severe that destroyed shields and defences cannot be repaired. The only way to counter these missiles is with ABMs.';
 
 //----------------------------------------------------------------------------//
-//STATISTICS
-$lang['st_player'] = 'Player';
-$lang['st_alliance'] = 'Alliance';
-$lang['st_points'] = 'Points';
-$lang['st_fleets'] = 'Fleet';
-$lang['st_researh'] = 'Research';
-$lang['st_buildings'] = 'Building';
-$lang['st_defenses'] = 'Defense';
-$lang['st_position'] = 'Rank';
-$lang['st_members'] = 'Member';
-$lang['st_per_member'] = 'Per Member';
-$lang['st_statistics'] = 'Statistics';
-$lang['st_updated'] = 'Updated';
-$lang['st_show'] = 'show';
-$lang['st_per'] = 'by';
-$lang['st_in_the_positions'] = 'in ranks';
-$lang['st_actions'] = 'Actions';
-$lang['st_ally_request'] = 'Send request to this alliance';
-
-//----------------------------------------------------------------------------//
 //SYSTEM
 $lang['sys_attacker_lostunits'] = "The attacker has lost a total of";
 $lang['sys_defender_lostunits'] = "The defender has lost a total of";

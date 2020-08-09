@@ -33,7 +33,6 @@ class Statistics extends Controller
 
     const MODULE_ID = 16;
 
-    private $_lang;
     private $_current_user;
     private $_current_planet;
 
@@ -50,10 +49,12 @@ class Statistics extends Controller
         // load Model
         parent::loadModel('game/statistics');
 
+        // load Language
+        parent::loadLang(['global', 'game/statistics']);
+
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
-        $this->_lang = parent::$lang;
         $this->_current_user = parent::$users->getUserData();
         $this->_current_planet = parent::$users->getPlanetData();
 
@@ -67,19 +68,19 @@ class Statistics extends Controller
      */
     private function build_page()
     {
-        $parse = $this->_lang;
+        $parse = $this->langs->language;
         $who = (isset($_POST['who'])) ? $_POST['who'] : ((isset($_GET['who'])) ? $_GET['who'] : 1);
         $type = (isset($_POST['type'])) ? $_POST['type'] : ((isset($_GET['type'])) ? $_GET['type'] : 1);
         $range = (isset($_POST['range'])) ? $_POST['range'] : ((isset($_GET['range'])) ? $_GET['range'] : 1);
 
-        $parse['who'] = "<option value=\"1\"" . (($who == "1") ? " SELECTED" : "") . ">" . $this->_lang['st_player'] . "</option>";
-        $parse['who'] .= "<option value=\"2\"" . (($who == "2") ? " SELECTED" : "") . ">" . $this->_lang['st_alliance'] . "</option>";
+        $parse['who'] = "<option value=\"1\"" . (($who == "1") ? " SELECTED" : "") . ">" . $this->langs->line('st_player') . "</option>";
+        $parse['who'] .= "<option value=\"2\"" . (($who == "2") ? " SELECTED" : "") . ">" . $this->langs->line('st_alliance') . "</option>";
 
-        $parse['type'] = "<option value=\"1\"" . (($type == "1") ? " SELECTED" : "") . ">" . $this->_lang['st_points'] . "</option>";
-        $parse['type'] .= "<option value=\"2\"" . (($type == "2") ? " SELECTED" : "") . ">" . $this->_lang['st_fleets'] . "</option>";
-        $parse['type'] .= "<option value=\"3\"" . (($type == "3") ? " SELECTED" : "") . ">" . $this->_lang['st_researh'] . "</option>";
-        $parse['type'] .= "<option value=\"4\"" . (($type == "4") ? " SELECTED" : "") . ">" . $this->_lang['st_buildings'] . "</option>";
-        $parse['type'] .= "<option value=\"5\"" . (($type == "5") ? " SELECTED" : "") . ">" . $this->_lang['st_defenses'] . "</option>";
+        $parse['type'] = "<option value=\"1\"" . (($type == "1") ? " SELECTED" : "") . ">" . $this->langs->line('st_points') . "</option>";
+        $parse['type'] .= "<option value=\"2\"" . (($type == "2") ? " SELECTED" : "") . ">" . $this->langs->line('st_fleets') . "</option>";
+        $parse['type'] .= "<option value=\"3\"" . (($type == "3") ? " SELECTED" : "") . ">" . $this->langs->line('st_researh') . "</option>";
+        $parse['type'] .= "<option value=\"4\"" . (($type == "4") ? " SELECTED" : "") . ">" . $this->langs->line('st_buildings') . "</option>";
+        $parse['type'] .= "<option value=\"5\"" . (($type == "5") ? " SELECTED" : "") . ">" . $this->langs->line('st_defenses') . "</option>";
 
         $data = $this->ranking_type($type);
         $Order = $data['order'];
@@ -111,7 +112,7 @@ class Statistics extends Controller
                 $parse['ally_id'] = $StatRow['alliance_id'];
                 $parse['alliance_name'] = $StatRow['alliance_name'];
                 $parse['ally_members'] = $StatRow['ally_members'];
-                $parse['ally_action'] = $StatRow['alliance_request_notallow'] == 0 ? '<a href="game.php?page=alliance&mode=apply&allyid=' . $StatRow['alliance_id'] . '"><img src="' . DPATH . 'img/m.gif" border="0" title="' . $this->_lang['st_ally_request'] . '" /></a>' : '';
+                $parse['ally_action'] = $StatRow['alliance_request_notallow'] == 0 ? '<a href="game.php?page=alliance&mode=apply&allyid=' . $StatRow['alliance_id'] . '"><img src="' . DPATH . 'img/m.gif" border="0" title="' . $this->langs->line('st_ally_request') . '" /></a>' : '';
                 $parse['ally_points'] = FormatLib::prettyNumber($StatRow['alliance_statistic_' . $Order]);
                 $parse['ally_members_points'] = FormatLib::prettyNumber(floor($StatRow['alliance_statistic_' . $Order] / $StatRow['ally_members']));
                 $parse['stat_values'] .= $this->getTemplate()->set(
@@ -147,7 +148,7 @@ class Statistics extends Controller
                 }
 
                 if ($StatRow['user_id'] != $this->_current_user['user_id']) {
-                    $parse['player_mes'] = '<a href="game.php?page=chat&playerId=' . $StatRow['user_id'] . '"><img src="' . DPATH . 'img/m.gif" border="0" title="' . $this->_lang['write_message'] . '" /></a>';
+                    $parse['player_mes'] = '<a href="game.php?page=chat&playerId=' . $StatRow['user_id'] . '"><img src="' . DPATH . 'img/m.gif" border="0" title="' . $this->langs->line('write_message') . '" /></a>';
                 } else {
                     $parse['player_mes'] = "";
                 }

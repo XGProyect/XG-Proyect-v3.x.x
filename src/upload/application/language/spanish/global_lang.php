@@ -25,6 +25,9 @@ $lang = [
     // galaxy objects
     'planet' => 'Planeta',
     'moon' => 'Luna',
+
+    // other
+    'write_message' => 'Escribir mensaje',
 ];
 
 /* end of global_lang.php */

@@ -557,26 +557,6 @@ $lang['info'][503]['name'] = "Misil interplanetario";
 $lang['info'][503]['description'] = "Los misiles interplanetarios destruyen los sistemas de defensa del enemigo. Los sistemas de defensa destruidos por los misiles interplanetarios no serán reparados.";
 
 //----------------------------------------------------------------------------//
-//STATISTICS
-$lang['st_player'] = 'Jugador';
-$lang['st_alliance'] = 'Alianza';
-$lang['st_points'] = 'Puntos';
-$lang['st_fleets'] = 'Flotas';
-$lang['st_researh'] = 'Investigación';
-$lang['st_buildings'] = 'Edificios';
-$lang['st_defenses'] = 'Defensas';
-$lang['st_position'] = 'Posición';
-$lang['st_members'] = 'Miembros';
-$lang['st_per_member'] = 'Por Miembro';
-$lang['st_statistics'] = 'Estadísticas';
-$lang['st_updated'] = 'Actualizadas';
-$lang['st_show'] = 'Mostrar';
-$lang['st_per'] = 'por';
-$lang['st_in_the_positions'] = 'en las posiciones';
-$lang['st_actions'] = 'Acciones';
-$lang['st_ally_request'] = 'Echar solicitud a esta alianza';
-
-//----------------------------------------------------------------------------//
 //SYSTEM
 $lang['sys_attacker_lostunits'] = "El atacante ha perdido un total de";
 $lang['sys_defender_lostunits'] = "El defensor ha perdido un total de";
