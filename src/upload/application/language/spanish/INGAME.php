@@ -209,12 +209,6 @@ $lang['lm_administration'] = 'Administración';
 $lang['lm_module_not_accesible'] = 'No se ha encontrado la página.';
 
 //----------------------------------------------------------------------------//
-//PHALANX
-$lang['px_no_deuterium'] = '¡No tienes deuterio!';
-$lang['px_scan_position'] = 'Escanear posición';
-$lang['px_fleet_movement'] = 'Movimiento actual de flotas';
-
-//----------------------------------------------------------------------------//
 //EMPIRE
 $lang['iv_imperium_title'] = 'Visión del Imperio';
 $lang['iv_planet'] = 'Planeta';

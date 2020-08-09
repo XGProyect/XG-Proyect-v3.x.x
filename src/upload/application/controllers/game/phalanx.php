@@ -32,7 +32,6 @@ class Phalanx extends Controller
 
     const MODULE_ID = 11;
 
-    private $_lang;
     private $_formula;
     private $_current_user;
     private $_current_planet;
@@ -50,10 +49,12 @@ class Phalanx extends Controller
         // load Model
         parent::loadModel('game/phalanx');
 
+        // load Language
+        parent::loadLang('phalanx');
+
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
-        $this->_lang = parent::$lang;
         $this->_current_user = parent::$users->getUserData();
         $this->_current_planet = parent::$users->getPlanetData();
         $this->_formula = FunctionsLib::loadLibrary('FormulaLib');
@@ -68,7 +69,7 @@ class Phalanx extends Controller
      */
     private function build_page()
     {
-        $parse = $this->_lang;
+        $parse = $this->langs->language;
         /* range */
         $radar_limit_inf = $this->_current_planet['planet_system'] - $this->_formula->phalanxRange($this->_current_planet['building_phalanx']);
         $radar_limit_sup = $this->_current_planet['planet_system'] + $this->_formula->phalanxRange($this->_current_planet['building_phalanx']);
@@ -172,7 +173,7 @@ class Phalanx extends Controller
             $parse['phl_er_deuter'] = '';
         } else {
             $parse['phl_fleets_table'] = '';
-            $parse['phl_er_deuter'] = $this->_lang['px_no_deuterium'];
+            $parse['phl_er_deuter'] = $this->langs->line('px_no_deuterium');
         }
 
         $parse['phl_pl_galaxy'] = $Galaxy;
