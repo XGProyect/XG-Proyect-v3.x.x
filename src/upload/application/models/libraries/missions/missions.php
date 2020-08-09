@@ -169,10 +169,12 @@ class Missions extends Model
             return $this->db->queryFetch(
                 "SELECT u.*,
                     r.*,
-                    pr.*
+                    pr.*,
+                    pref.preference_vacation_mode
                 FROM `" . USERS . "` AS u
                 INNER JOIN `" . RESEARCH . "` AS r ON r.research_user_id = u.user_id
                 INNER JOIN `" . PREMIUM . "` AS pr ON pr.premium_user_id = u.user_id
+                INNER JOIN `" . PREFERENCES . "` AS pref ON pref.preference_user_id = u.user_id
                 WHERE u.`user_id` = '" . $user_id . "'
                 LIMIT 1;"
             );
