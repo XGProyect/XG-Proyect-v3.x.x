@@ -7,8 +7,20 @@ $lang = [
     'dark_matter' => 'Materia Oscura',
     'energy' => 'Energía',
 
+    // types of planets or galaxy objects
+    'planet_type' => [
+        1 => 'Planeta',
+        2 => 'Escombros',
+        3 => 'Luna',
+    ],
+
     // shortcuts
     'dark_matter_short' => 'MO',
+    'planet_type_short' => [
+        1 => '(P)',
+        2 => '(E)',
+        3 => '(L)',
+    ],
 
     // galaxy objects
     'planet' => 'Planeta',

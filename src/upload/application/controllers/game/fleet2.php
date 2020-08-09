@@ -256,7 +256,7 @@ class Fleet2 extends Controller
                 if ($shortcut != '') {
                     $description = $shortcut['name'] . ' ' . FormatLib::prettyCoords(
                         $shortcut['g'], $shortcut['s'], $shortcut['p']
-                    ) . ' ' . $this->langs->language['planet_type_shortcuts'][$shortcut['pt']];
+                    ) . ' ' . $this->langs->language['planet_type_short'][$shortcut['pt']];
 
                     $list_of_shortcuts[] = [
                         'value' => $shortcut['g'] . ';' . $shortcut['s'] . ';' . $shortcut['p'] . ';' . $shortcut['pt'],

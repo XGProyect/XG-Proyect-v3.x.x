@@ -16,7 +16,7 @@ $lang = [
 
     // shortcuts
     'dark_matter_short' => 'DM',
-    'planet_type_shortcuts' => [
+    'planet_type_short' => [
         1 => '(P)',
         2 => '(D)',
         3 => '(M)',

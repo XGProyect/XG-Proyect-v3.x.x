@@ -73,13 +73,6 @@ $lang = [
         3 => 'Moon',
     ],
 
-    // types of planets or galaxy objects
-    'planet_type_shortcuts' => [
-        1 => '(P)',
-        2 => '(D)',
-        3 => '(M)',
-    ],
-
     // type of structures
     'construction' => 'Construction',
     'research' => 'Research',
