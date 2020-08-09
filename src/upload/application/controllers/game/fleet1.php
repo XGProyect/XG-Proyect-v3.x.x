@@ -87,7 +87,7 @@ class Fleet1 extends Controller
         parent::loadModel('game/fleet');
 
         // load Language
-        parent::loadLang(['objects', 'game/fleet']);
+        parent::loadLang(['ships', 'game/fleet']);
 
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));

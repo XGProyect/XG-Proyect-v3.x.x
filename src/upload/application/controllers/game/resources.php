@@ -51,7 +51,7 @@ class Resources extends Controller
         parent::loadModel('game/resources');
 
         // load Language
-        parent::loadLang(['global', 'objects', 'game/resources']);
+        parent::loadLang(['global', 'constructions', 'ships', 'game/resources']);
 
         // check if session is active
         parent::$users->checkSession();

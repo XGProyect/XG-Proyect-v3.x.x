@@ -87,7 +87,7 @@ class Movement extends Controller
         parent::loadModel('game/fleet');
 
         // load Language
-        parent::loadLang(['global', 'objects', 'game/fleet']);
+        parent::loadLang(['missions', 'ships', 'game/fleet']);
 
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
