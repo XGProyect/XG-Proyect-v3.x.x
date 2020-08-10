@@ -16,6 +16,7 @@ namespace application\core;
 use application\libraries\TemplateLib;
 use application\libraries\Users_library;
 use CI_Lang;
+use Exception;
 
 /**
  * XGPCore Class
@@ -118,8 +119,8 @@ abstract class XGPCore
             }
 
             // not found
-            throw new \Exception('Model not defined');
-        } catch (\Exception $e) {
+            throw new Exception('Model not defined');
+        } catch (Exception $e) {
             die('Fatal error: ' . $e->getMessage());
         }
     }
@@ -138,7 +139,7 @@ abstract class XGPCore
 
             if (!file_exists($ci_lang_path)) {
                 // not found
-                throw new \Exception('Language file "' . $language_file . '" not defined');
+                throw new Exception('Language file "' . $language_file . '" not defined');
                 return;
             }
 
@@ -152,7 +153,7 @@ abstract class XGPCore
 
             $this->langs = new CI_Lang;
             $this->langs->load($language_file, DEFAULT_LANG);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             die('Fatal error: ' . $e->getMessage());
         }
     }
