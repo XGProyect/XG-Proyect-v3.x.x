@@ -556,7 +556,6 @@ class Alliance extends Controller
 
         $ranks = $this->alliance->getCurrentAllianceRankObject();
         $list_of_ranks = $ranks->getAllRanksAsArray();
-
         $ranks_list = [];
 
         if (is_array($list_of_ranks)) {
@@ -760,7 +759,7 @@ class Alliance extends Controller
         $kick = filter_input(INPUT_GET, 'kick', FILTER_VALIDATE_INT);
         $rank = filter_input(INPUT_GET, 'rank', FILTER_VALIDATE_INT);
         $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-        $new_rank = filter_input(INPUT_POST, 'newrang', FILTER_VALIDATE_INT);
+        $new_rank = filter_input(INPUT_POST, 'newrang', FILTER_VALIDATE_INT, ['options' => ['default' => 0]]);
 
         if (isset($kick)
             && $this->alliance->hasAccess(AllianceRanks::kick)
@@ -776,7 +775,7 @@ class Alliance extends Controller
             && $id != $this->alliance->getCurrentAlliance()->getAllianceOwner()) {
             $ranks = $this->alliance->getCurrentAllianceRankObject();
 
-            if ($ranks->getUserRankById($new_rank) != null) {
+            if ($ranks->getUserRankById($new_rank) != null or $new_rank == 0) {
                 $this->Alliance_Model->updateUserRank($id, $new_rank);
             }
         }
@@ -1125,16 +1124,18 @@ class Alliance extends Controller
 
         $list_of_members = [];
 
-        foreach ($users as $user) {
-            $rank_name = $ranksObject->getUserRankById($user['user_ally_rank_id'])['rank'];
-            $right_hand = $ranksObject->getUserRankById($user['user_ally_rank_id'])['rights'][AllianceRanks::right_hand];
+        if (isset($users)) {
+            foreach ($users as $user) {
+                $rank_name = $ranksObject->getUserRankById($user['user_ally_rank_id'])['rank'];
+                $right_hand = $ranksObject->getUserRankById($user['user_ally_rank_id'])['rights'][AllianceRanks::right_hand];
 
-            if (isset($right_hand) && $right_hand == SwitchInt::on) {
-                $list_of_members[] = [
-                    'user_id' => $user['user_id'],
-                    'user_name' => $user['user_name'],
-                    'user_rank' => $rank_name,
-                ];
+                if (isset($right_hand) && $right_hand == SwitchInt::on) {
+                    $list_of_members[] = [
+                        'user_id' => $user['user_id'],
+                        'user_name' => $user['user_name'],
+                        'user_rank' => $rank_name,
+                    ];
+                }
             }
         }
 
