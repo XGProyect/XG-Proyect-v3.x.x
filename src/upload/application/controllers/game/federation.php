@@ -94,6 +94,9 @@ class Federation extends Controller
         parent::loadModel('game/fleet');
         parent::loadModel('game/buddies');
 
+        // load Language
+        parent::loadLang('game/fleet');
+
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
@@ -176,7 +179,7 @@ class Federation extends Controller
             $this->getTemplate()->set(
                 'fleet/fleet_federation_view',
                 array_merge(
-                    $this->getLang(),
+                    $this->langs->language,
                     $page
                 )
             ),
@@ -212,14 +215,14 @@ class Federation extends Controller
                         $own_fleet->getFleetGroup()
                     );
 
-                    $invite_message = $this->getLang()['fl_player'] . $this->_user['user_name'] . $this->getLang()['fl_acs_invitation_message'];
+                    $invite_message = $this->langs->line('fl_player') . $this->_user['user_name'] . $this->langs->line('fl_acs_invitation_message');
                     FunctionsLib::sendMessage(
                         $member,
                         $this->_user['user_id'],
                         '',
                         5,
                         $this->_user['user_name'],
-                        $this->getLang()['fl_acs_invitation_title'],
+                        $this->langs->line('fl_acs_invitation_title'),
                         $invite_message
                     );
                 }
@@ -272,11 +275,11 @@ class Federation extends Controller
                 $this->addAcsMember($user_id);
 
                 $this->_message = FormatLib::customColor(
-                    $this->getLang()['fl_player'] . ' ' . $user_name . ' ' . $this->getLang()['fl_add_to_attack'], 'lime'
+                    $this->langs->line('fl_player') . ' ' . $user_name . ' ' . $this->langs->line('fl_add_to_attack'), 'lime'
                 );
             } else {
                 $this->_message = FormatLib::colorRed(
-                    $this->getLang()['fl_player'] . ' ' . $user_name . ' ' . $this->getLang()['fl_dont_exist']
+                    $this->langs->line('fl_player') . ' ' . $user_name . ' ' . $this->langs->line('fl_dont_exist')
                 );
             }
         }
@@ -402,9 +405,7 @@ class Federation extends Controller
         );
 
         if (count($members) > 0) {
-
             foreach ($members as $member) {
-
                 ++$this->_members_count;
 
                 $list_of_members[] = [
