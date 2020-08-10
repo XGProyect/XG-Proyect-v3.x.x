@@ -413,20 +413,22 @@ class Alliance extends Controller
      */
     private function getApplySection()
     {
-        $request = filter_input_array(INPUT_POST);
-
         if (!$this->alliance->getCurrentAlliance()->getAllianceRequestNotAllow()) {
             FunctionsLib::message($this->langs->line('al_alliance_closed'), 'game.php?page=alliance', 3);
         }
 
-        if ($request['send'] != null && !empty($request['text'])) {
-            $this->Alliance_Model->createNewUserRequest(
-                $this->getAllianceId(),
-                $request['text'],
-                $this->user['user_id']
-            );
+        $request = filter_input_array(INPUT_POST);
 
-            FunctionsLib::message($this->langs->line('al_request_confirmation_message'), 'game.php?page=alliance', 3);
+        if (isset($request)) {
+            if ($request['send'] != null && !empty($request['text'])) {
+                $this->Alliance_Model->createNewUserRequest(
+                    $this->getAllianceId(),
+                    $request['text'],
+                    $this->user['user_id']
+                );
+
+                FunctionsLib::message($this->langs->line('al_request_confirmation_message'), 'game.php?page=alliance', 3);
+            }
         }
 
         return $this->getTemplate()->set('alliance/alliance_apply_form_view', array_merge(
@@ -1164,7 +1166,7 @@ class Alliance extends Controller
     {
         if (!$this->user['user_ally_id']
             && !$this->user['user_ally_request']
-            && !$this->alliance->getCurrentAlliance()->getAllianceRequestNotAllow()) {
+            && $this->alliance->getCurrentAlliance()->getAllianceRequestNotAllow()) {
             $url = FunctionsLib::setUrl(
                 'game.php?page=alliance&mode=apply&allyid=' . $this->getAllianceId(),
                 $this->langs->line('al_click_to_send_request'),

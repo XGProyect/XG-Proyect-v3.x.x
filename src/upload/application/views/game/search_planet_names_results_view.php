@@ -10,7 +10,7 @@
         {results}
         <tr>
             <th>{user_name}</th>
-            <th><a href="game.php?page=alliance&mode=ainfo&id={alliance_id}">{alliance_name}</a></th>
+            <th><a href="game.php?page=alliance&mode=ainfo&allyid={alliance_id}">{alliance_name}</a></th>
             <th>{planet_name}</th>
             <th><a href="game.php?page=galaxy&mode=3&galaxy={planet_galaxy}&system={planet_system}">{planet_position}</a></th>
             <th>{user_rank}</th>
