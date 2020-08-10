@@ -777,6 +777,16 @@ abstract class FunctionsLib extends XGPCore
     }
 
     /**
+     * Generate a random password
+     *
+     * @return string
+     */
+    public static function generatePassword(): string
+    {
+        return FunctionsLib::randomString(16);
+    }
+
+    /**
      * Generate a random string, using a cryptographically secure
      * pseudorandom number generator (random_int)
      *
@@ -790,7 +800,7 @@ abstract class FunctionsLib extends XGPCore
      *
      * @link https://stackoverflow.com/questions/6101956/generating-a-random-password-in-php/31284266#31284266
      */
-    public static function generatePassword(int $length = 16, string $keyspace = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'): string
+    public static function randomString(int $length, string $keyspace = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'): string
     {
         $str = '';
         $max = mb_strlen($keyspace, '8bit') - 1;
