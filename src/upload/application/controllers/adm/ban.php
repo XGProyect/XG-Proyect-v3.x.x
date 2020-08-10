@@ -156,8 +156,10 @@ class Ban extends Controller
                     $ban_time += $hour * 3600;
                     $vacation_mode = isset($_POST['vacat']) ?? null;
 
-                    if ($banned_user['banned_longer'] > time()) {
-                        $ban_time += ($banned_user['banned_longer'] - time());
+                    if (isset($banned_user)) {
+                        if ($banned_user['banned_longer'] > time()) {
+                            $ban_time += ($banned_user['banned_longer'] - time());
+                        }
                     }
 
                     if (($ban_time + $current_time) < time()) {

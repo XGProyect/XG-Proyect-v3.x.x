@@ -94,7 +94,7 @@ class Ban extends Model
         try {
             $this->db->beginTransaction();
 
-            if ($banned_user) {
+            if (isset($banned_user)) {
                 $this->db->query(
                     "UPDATE `" . BANNED . "`  SET
                         `banned_who` = '" . $ban_data['ban_name'] . "',
