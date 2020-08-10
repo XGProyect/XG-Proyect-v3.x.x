@@ -24,10 +24,12 @@ $lang = [
 
     // galaxy objects
     'planet' => 'Planet',
+    'colony' => 'Colony',
     'moon' => 'Moon',
 
     // other
     'write_message' => 'Write Message',
+    'homeworld' => 'Homeworld',
 
     // banning
     'bg_account_banned_message' => 'YOUR ACCOUNT HAS BEEN SUSPENDED',

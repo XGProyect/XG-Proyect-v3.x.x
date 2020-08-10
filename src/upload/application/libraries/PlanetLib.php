@@ -13,7 +13,10 @@
  */
 namespace application\libraries;
 
+use application\core\Language;
 use application\core\XGPCore;
+use application\libraries\FormulaLib;
+use application\libraries\FunctionsLib;
 
 /**
  * PlanetLib Class
@@ -52,7 +55,9 @@ class PlanetLib extends XGPCore
         // load model
         parent::loadModel('libraries/planetlib');
 
-        $this->langs = parent::$lang;
+        // load Language
+        $this->loadLanguage();
+
         $this->formula = new FormulaLib();
     }
 
@@ -75,10 +80,10 @@ class PlanetLib extends XGPCore
         if (!$planet_exist) {
             $planet = $this->formula->getPlanetSize($position, $main);
             $temp = $this->formula->setPlanetTemp($position);
-            $name = ($name == '') ? $this->langs['ge_colony'] : $name;
+            $name = ($name == '') ? $this->langs->line('colony') : $name;
 
             if ($main == true) {
-                $name = $this->langs['ge_home_planet'];
+                $name = $this->langs->line('homeworld');
             }
 
             $this->Planetlib_Model->createNewPlanet(
@@ -163,6 +168,19 @@ class PlanetLib extends XGPCore
         }
 
         return false;
+    }
+
+    /**
+     * Load CI language
+     *
+     * @return void
+     */
+    private function loadLanguage()
+    {
+        $lang = new Language();
+        $lang = $lang->loadLang('global', true);
+
+        $this->langs = $lang;
     }
 }
 

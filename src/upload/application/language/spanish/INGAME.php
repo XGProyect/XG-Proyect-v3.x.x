@@ -116,9 +116,6 @@ $lang['Darkmatter'] = 'Materia Oscura';
 $lang['Energy'] = 'Energía';
 $lang['Messages'] = 'Mensajes';
 $lang['write_message'] = 'Escribir mensaje';
-$lang['ge_home_planet'] = 'Planeta Principal';
-$lang['ge_colony'] = 'Colonia';
-
 $lang['online'] = 'Conectado';
 $lang['minutes'] = '15 min';
 $lang['offline'] = 'Desconectado';

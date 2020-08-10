@@ -28,7 +28,6 @@ use Exception;
  */
 class Language
 {
-
     /**
      *
      * @var array
@@ -50,7 +49,7 @@ class Language
     {
         $languages_loaded = $this->getFileName();
 
-        if (defined('DEFAULT_LANG')) {
+        if (defined('DEFAULT_LANG') && $languages_loaded) {
             foreach ($languages_loaded as $load) {
                 $route = XGP_ROOT . LANG_PATH . DEFAULT_LANG . '/' . $load . '.' . $this->lang_extension;
 
@@ -90,6 +89,8 @@ class Language
      */
     private function getFileName()
     {
+        $required = [];
+
         if (defined('IN_ADMIN')) {
             $required[] = 'ADMIN';
         }
@@ -100,10 +101,6 @@ class Language
 
         if (defined('IN_INSTALL')) {
             $required[] = 'INSTALL';
-        }
-
-        if (defined('IN_LOGIN')) {
-            $required[] = 'HOME';
         }
 
         return $required;
