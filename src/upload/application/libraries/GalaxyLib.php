@@ -381,6 +381,7 @@ class GalaxyLib extends XGPCore
 
         // POP UP BLOCK DATA
         $parse = $this->langs;
+        $parse['actions'] = '';
         $parse['username'] = $this->row_data['user_name'];
         $parse['current_rank'] = $this->row_data['user_statistic_total_rank'];
         $parse['start'] = (floor($this->row_data['user_statistic_total_rank'] / 100) * 100) + 1;
