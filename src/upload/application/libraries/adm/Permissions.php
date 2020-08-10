@@ -16,6 +16,7 @@ namespace application\libraries\adm;
 use application\core\enumerators\AdminPagesEnumerator as AdminPages;
 use application\core\enumerators\UserRanksEnumerator as UserRanks;
 use application\libraries\FunctionsLib as Functions;
+use JsonException;
 
 /**
  * Permissions Class
@@ -78,7 +79,11 @@ class Permissions
      */
     public function getAllPermissionsAsJsonString(): string
     {
-        return json_encode($this->permissions);
+        try {
+            return json_encode($this->permissions, JSON_THROW_ON_ERROR);
+        } catch (JsonException $e) {
+            die('JSON Error - ' . $e->getMessage() . ' on ' . __CLASS__ . ', line: ' . $e->getLine());
+        }
     }
 
     /**
@@ -222,7 +227,11 @@ class Permissions
      */
     private function setPermissions(string $permissions): void
     {
-        $this->permissions = json_decode($permissions, true);
+        try {
+            $this->permissions = json_decode($permissions, true, 512, JSON_THROW_ON_ERROR);
+        } catch (JsonException $e) {
+            die('JSON Error - ' . $e->getMessage() . ' on ' . __CLASS__ . ', line: ' . $e->getLine());
+        }
     }
 
     /**

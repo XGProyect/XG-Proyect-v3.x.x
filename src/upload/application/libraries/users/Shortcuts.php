@@ -15,6 +15,7 @@ namespace application\libraries\users;
 
 use application\libraries\FunctionsLib;
 use Exception;
+use JsonException;
 
 /**
  * Shortcuts Class
@@ -65,7 +66,11 @@ class Shortcuts
      */
     private function setShortcuts($shortcuts)
     {
-        $this->_shortcuts = json_decode($shortcuts, true);
+        try {
+            $this->_shortcuts = json_decode($shortcuts, true, 512, JSON_THROW_ON_ERROR);
+        } catch (JsonException $e) {
+            die('JSON Error - ' . $e->getMessage() . ' on ' . __CLASS__ . ', line: ' . $e->getLine());
+        }
     }
 
     /**
@@ -182,7 +187,11 @@ class Shortcuts
      */
     public function getAllAsJsonString()
     {
-        return json_encode($this->_shortcuts);
+        try {
+            return json_encode($this->_shortcuts, JSON_THROW_ON_ERROR);
+        } catch (JsonException $e) {
+            die('JSON Error - ' . $e->getMessage() . ' on ' . __CLASS__ . ', line: ' . $e->getLine());
+        }
     }
 
     /**

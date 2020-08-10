@@ -20,6 +20,7 @@ use application\core\Controller;
 use application\libraries\adm\AdministrationLib as Administration;
 use application\libraries\FormatLib as Format;
 use application\libraries\FunctionsLib;
+use JsonException;
 
 /**
  * Home Class
@@ -157,30 +158,37 @@ class Home extends Controller
      */
     private function checkUpdates(): bool
     {
-        if (function_exists('file_get_contents')) {
-            $file_data = @file_get_contents(
-                'https://xgproyect.org/current.php',
-                false,
-                stream_context_create(
-                    ['https' =>
-                        [
-                            'timeout' => 1, // one second
-                        ],
-                    ]
-                )
-            );
+        try {
+            if (function_exists('file_get_contents')) {
+                $file_data = @file_get_contents(
+                    'https://xgproyect.org/current.php',
+                    false,
+                    stream_context_create(
+                        ['https' =>
+                            [
+                                'timeout' => 1, // one second
+                            ],
+                        ]
+                    )
+                );
 
-            if ($file_data) {
-                $system_v = FunctionsLib::readConfig('version');
-                $last_v = @json_decode(
-                    $file_data
-                )->version;
+                if ($file_data) {
+                    $system_v = FunctionsLib::readConfig('version');
+                    $last_v = @json_decode(
+                        $file_data,
+                        false,
+                        512,
+                        JSON_THROW_ON_ERROR
+                    )->version;
 
-                return version_compare($system_v, $last_v, '<');
+                    return version_compare($system_v, $last_v, '<');
+                }
             }
-        }
 
-        return false;
+            return false;
+        } catch (JsonException $e) {
+            return false;
+        }
     }
 
     /**

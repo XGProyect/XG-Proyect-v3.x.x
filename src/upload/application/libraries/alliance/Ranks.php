@@ -17,6 +17,7 @@ use application\core\enumerators\AllianceRanksEnumerator as AllianceRanks;
 use application\core\enumerators\SwitchIntEnumerator as SwitchInt;
 use application\libraries\FunctionsLib;
 use Exception;
+use JsonException;
 
 /**
  * Ranks Class
@@ -69,7 +70,11 @@ class Ranks
      */
     private function setRanks($ranks)
     {
-        $this->_ranks = json_decode($ranks, true);
+        try {
+            $this->_ranks = json_decode($ranks, true, 512, JSON_THROW_ON_ERROR);
+        } catch (JsonException $e) {
+            die('JSON Error - ' . $e->getMessage() . ' on ' . __CLASS__ . ', line: ' . $e->getLine());
+        }
     }
 
     /**
@@ -184,7 +189,11 @@ class Ranks
      */
     public function getAllRanksAsJsonString()
     {
-        return json_encode($this->_ranks);
+        try {
+            return json_encode($this->_ranks, JSON_THROW_ON_ERROR);
+        } catch (JsonException $e) {
+            die('JSON Error - ' . $e->getMessage() . ' on ' . __CLASS__ . ', line: ' . $e->getLine());
+        }
     }
 
     /**
