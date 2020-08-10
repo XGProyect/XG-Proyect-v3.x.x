@@ -102,12 +102,12 @@ class Chat extends Controller
         $this->_message_data['error_block'] = false;
         $this->_message_data['error_text'] = $this->langs->line('pm_msg_sended');
         $this->_message_data['error_color'] = '#00FF00';
-        $this->_message_data['subject'] = $message_sent['subject'];
-        $this->_message_data['text'] = $message_sent['text'];
 
         if ($message_sent) {
             $errors = 0;
             $this->_message_data['error_block'] = true;
+            $this->_message_data['subject'] = $message_sent['subject'];
+            $this->_message_data['text'] = $message_sent['text'];
 
             if (!$message_sent['subject']) {
                 $errors++;
