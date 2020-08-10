@@ -99,10 +99,6 @@ class Language
             $required[] = 'INGAME';
         }
 
-        if (defined('IN_INSTALL')) {
-            $required[] = 'INSTALL';
-        }
-
         return $required;
     }
 

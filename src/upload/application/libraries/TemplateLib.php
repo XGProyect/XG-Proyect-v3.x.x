@@ -29,7 +29,6 @@ use application\libraries\TimingLibrary as Timing;
  */
 class TemplateLib
 {
-
     private $current_user;
     private $current_planet;
     private $langs;
@@ -83,20 +82,6 @@ class TemplateLib
             if (defined('IN_LOGIN')) {
                 die($current_page);
             }
-
-            // For the Install page
-            if (defined('IN_INSTALL')) {
-                $page .= $this->installHeader($metatags);
-                $page .= $menu ? $this->installMenu() : ''; // MENU
-                $page .= $topnav ? $this->installNavbar() : ''; // TOP NAVIGATION BAR
-            }
-        }
-
-        // For the Install page
-        if (defined('IN_INSTALL') && defined('IN_MESSAGE')) {
-            $page .= $this->installHeader($metatags);
-            $page .= $menu ? $this->installMenu() : ''; // MENU
-            $page .= $topnav ? $this->installNavbar() : ''; // TOP NAVIGATION BAR
         }
 
         // Anything else
@@ -126,12 +111,27 @@ class TemplateLib
             );
         }
 
-        if (defined('IN_INSTALL') && !defined('IN_MESSAGE')) {
-            $page .= $this->template->set(
-                'install/simple_footer',
-                ['year' => $this->current_year]
-            );
-        }
+        // Show result page
+        die($page);
+    }
+
+    /**
+     * Display the installation page
+     *
+     * @param string $current_page
+     * @param array $langs
+     * @return void
+     */
+    public function displayInstall($current_page, $langs): void
+    {
+        $page = $this->installHeader();
+        $page .= $this->installMenu($langs); // MENU
+        $page .= $this->installNavbar($langs); // TOP NAVIGATION BAR
+        $page .= $current_page;
+        $page .= $this->template->set(
+            'install/simple_footer',
+            ['year' => $this->current_year]
+        );
 
         // Show result page
         die($page);
@@ -461,7 +461,7 @@ class TemplateLib
      *
      * @return string
      */
-    private function installNavbar()
+    private function installNavbar($langs)
     {
         // Update config language to the new setted value
         if (isset($_POST['language'])) {
@@ -473,9 +473,9 @@ class TemplateLib
         $items = '';
 
         $pages = [
-            0 => array('installation', $this->langs['ins_overview'], 'overview'),
-            1 => array('installation', $this->langs['ins_license'], 'license'),
-            2 => array('installation', $this->langs['ins_install'], 'step1'),
+            0 => array('installation', $langs['ins_overview'], 'overview'),
+            1 => array('installation', $langs['ins_license'], 'license'),
+            2 => array('installation', $langs['ins_install'], 'step1'),
         ];
 
         // BUILD THE MENU
@@ -492,7 +492,7 @@ class TemplateLib
         }
 
         // PARSE THE MENU AND OTHER DATA
-        $parse = $this->langs;
+        $parse = $langs;
         $parse['menu_items'] = $items;
         $parse['language_select'] = FunctionsLib::getLanguages(FunctionsLib::getCurrentLanguage());
 
@@ -507,16 +507,16 @@ class TemplateLib
      *
      * @return string
      */
-    private function installMenu()
+    private function installMenu($langs)
     {
         $current_mode = isset($_GET['mode']) ? $_GET['mode'] : null;
         $items = '';
         $steps = [
-            0 => ['step1', $this->langs['ins_step1']],
-            1 => ['step2', $this->langs['ins_step2']],
-            2 => ['step3', $this->langs['ins_step3']],
-            3 => ['step4', $this->langs['ins_step4']],
-            4 => ['step5', $this->langs['ins_step5']],
+            0 => ['step1', $langs['ins_step1']],
+            1 => ['step2', $langs['ins_step2']],
+            2 => ['step3', $langs['ins_step3']],
+            3 => ['step4', $langs['ins_step4']],
+            4 => ['step5', $langs['ins_step5']],
         ];
 
         // BUILD THE MENU
@@ -527,7 +527,7 @@ class TemplateLib
         }
 
         // PARSE THE MENU AND OTHER DATA
-        $parse = $this->langs;
+        $parse = $langs;
         $parse['menu_items'] = $items;
 
         return $this->template->set(
