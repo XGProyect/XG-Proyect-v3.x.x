@@ -744,7 +744,7 @@ abstract class FunctionsLib extends XGPCore
             $parse = parent::$lang;
             $parse['banned_until'] = Timing::formatExtendedDate($user_row['user_banned']);
 
-            die(parent::$page->get('home/banned_message')->parse($parse));
+            die(self::getTemplate()->set('home/banned_message', $parse));
         }
     }
 
