@@ -104,12 +104,13 @@ class Search extends Controller
             'search_text' => FILTER_SANITIZE_STRING,
         ]);
 
-        $this->search_terms['search_type'] = $search_query['search_type'];
-        $this->search_terms[$search_query['search_type']] = 'selected = "selected"';
-        $this->search_terms['search_text'] = $search_query['search_text'];
         $this->search_terms['error_block'] = $this->langs->line('sh_error_empty');
 
         if (!empty($search_query['search_text'])) {
+            $this->search_terms['search_type'] = $search_query['search_type'];
+            $this->search_terms[$search_query['search_type']] = 'selected = "selected"';
+            $this->search_terms['search_text'] = $search_query['search_text'];
+
             switch ($search_query['search_type']) {
                 case 'player_name':
                 default:
