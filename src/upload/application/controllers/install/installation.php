@@ -65,20 +65,20 @@ class Installation extends Controller
         $parse = $this->langs->language;
         $continue = true;
 
-        if ($this->serverRequirementes()) {
+        if (!$this->serverRequirementes()) {
             $alert = $this->saveMessage($this->langs->line('ins_no_server_requirements'), 'error');
             $continue = false;
         }
 
         // VERIFICATION - WE NEED THE config DIR WRITABLE
         if (!$this->isWritable()) {
-            $alert = $this->saveMessage($this->langs->line('ins_not_writable'), 'warning');
+            $alert = $this->saveMessage($this->langs->line('ins_not_writable'), 'error');
             $continue = false;
         }
 
         // VERIFICATION - WE DON'T WANT ANOTHER INSTALLATION
         if ($this->isInstalled()) {
-            $alert = $this->saveMessage($this->langs->line('ins_already_installed'), 'warning');
+            $alert = $this->saveMessage($this->langs->line('ins_already_installed'), 'error');
             $continue = false;
         }
 
