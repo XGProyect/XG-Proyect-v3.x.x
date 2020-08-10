@@ -127,7 +127,7 @@ class Ban extends Model
             $this->db->query(
                 "UPDATE `" . USERS . "` AS u, `" . PREFERENCES . "` AS pr, `" . PLANETS . "` AS p SET
                     u.`user_banned` = '" . $ban_data['ban_until'] . "',
-                    pr.`preference_vacation_mode` = " . (isset($vacation_mode) ? "'" . time() . "'" : 'NULL') . ",
+                    pr.`preference_vacation_mode` = " . (isset($vacation_mode) && $vacation_mode != '' ? "'" . time() . "'" : 'NULL') . ",
                     p.`planet_building_metal_mine_percent` = '0',
                     p.`planet_building_crystal_mine_percent` = '0',
                     p.`planet_building_deuterium_sintetizer_percent` = '0',

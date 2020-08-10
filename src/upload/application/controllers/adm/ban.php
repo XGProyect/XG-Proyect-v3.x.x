@@ -125,9 +125,9 @@ class Ban extends Controller
         $parse['alert'] = '';
         $parse['bn_sub_title'] = '';
         $parse['reason'] = '';
-        $ban_name = isset($_GET['ban_name']) ?? null;
+        $ban_name = isset($_GET['ban_name']) ? $_GET['ban_name'] : null;
 
-        if (isset($_GET['banuser']) && isset($_GET['ban_name'])) {
+        if (isset($_GET['banuser']) && isset($ban_name)) {
             $parse['name'] = $ban_name;
             $parse['banned_until'] = '';
             $parse['changedate'] = $this->langs->line('bn_auto_lift_ban_message');
@@ -139,9 +139,8 @@ class Ban extends Controller
                 $parse['banned_until'] = $this->langs->line('bn_banned_until') . ' (' . date(FunctionsLib::readConfig('date_format_extended'), $banned_user['banned_longer']) . ')';
                 $parse['reason'] = $banned_user['banned_theme'];
                 $parse['changedate'] = '<div style="float:left">' . $this->langs->line('bn_change_date') . '</div><div style="float:right">' . Administration::showPopUp($this->langs->line('bn_edit_ban_help')) . '</div>';
+                $parse['vacation'] = $banned_user['preference_vacation_mode'] ? 'checked="checked"' : '';
             }
-
-            $parse['vacation'] = $banned_user['preference_vacation_mode'] ? 'checked="checked"' : '';
 
             if (isset($_POST['bannow']) && $_POST['bannow']) {
                 if (!is_numeric($_POST['days']) or !is_numeric($_POST['hour'])) {
