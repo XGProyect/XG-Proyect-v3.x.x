@@ -446,7 +446,7 @@ class FleetsLib extends XGPCore
      *
      * @return void
      */
-    public static function flyingFleetsTable($fleet_row, $Status, $Owner, $Label, $Record, $current_user)
+    public static function flyingFleetsTable($fleet_row, $Status, $Owner, $Label, $Record, $current_user, $acs_owner = false)
     {
         $FleetStyle = [
             1 => 'attack',
@@ -461,9 +461,13 @@ class FleetsLib extends XGPCore
             10 => 'missile',
             15 => 'transport',
         ];
+        $FleetPrefix = '';
+
+        if ($Owner or $acs_owner) {
+            $FleetPrefix = 'own';
+        }
 
         $FleetStatus = [0 => 'flight', 1 => 'holding', 2 => 'return'];
-        $FleetPrefix = ($Owner) ? 'own' : '';
         $MissionType = $fleet_row['fleet_mission'];
         $FleetContent = self::fleetShipsPopup(
             $fleet_row, parent::$lang['cff_flotte'], $FleetPrefix . $FleetStyle[$MissionType], $current_user
@@ -473,12 +477,9 @@ class FleetsLib extends XGPCore
         $TargetType = $fleet_row['fleet_end_type'];
 
         if ($Status != 2) {
-
             if ($StartType == 1) {
-
                 $StartID = parent::$lang['cff_from_the_planet'];
             } elseif ($StartType == 3) {
-
                 $StartID = parent::$lang['cff_from_the_moon'];
             }
 
@@ -486,7 +487,6 @@ class FleetsLib extends XGPCore
             $StartID .= FleetsLib::startLink($fleet_row, $FleetPrefix . $FleetStyle[$MissionType]);
 
             if ($MissionType != 15) {
-
                 switch ($TargetType) {
                     case 1:
                         $TargetID = parent::$lang['cff_the_planet'];
@@ -501,19 +501,15 @@ class FleetsLib extends XGPCore
                         break;
                 }
             } else {
-
                 $TargetID = parent::$lang['cff_the_position'];
             }
 
             $TargetID .= $fleet_row['target_planet_name'] . " ";
             $TargetID .= FleetsLib::targetLink($fleet_row, $FleetPrefix . $FleetStyle[$MissionType]);
         } else {
-
             if ($StartType == 1) {
-
                 $StartID = parent::$lang['cff_to_the_planet'];
             } elseif ($StartType == 3) {
-
                 $StartID = parent::$lang['cff_the_moon'];
             }
 
@@ -521,7 +517,6 @@ class FleetsLib extends XGPCore
             $StartID .= FleetsLib::startLink($fleet_row, $FleetPrefix . $FleetStyle[$MissionType]);
 
             if ($MissionType != 15) {
-
                 switch ($TargetType) {
                     case 1:
                         $TargetID = parent::$lang['cff_from_planet'];
@@ -545,7 +540,6 @@ class FleetsLib extends XGPCore
         }
 
         if ($MissionType == 10) {
-
             $EventString = parent::$lang['cff_missile_attack'] .
             " ( " . FleetsLib::getFleetShipsArray($fleet_row['fleet_array'])[503] . " ) ";
             $Time = $fleet_row['fleet_start_time'];

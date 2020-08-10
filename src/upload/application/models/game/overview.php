@@ -43,30 +43,43 @@ class Overview extends Model
                     po.`planet_name` AS `start_planet_name`,
                     pt.`planet_name` AS `target_planet_name`,
                     uo.`user_name` AS `start_planet_user`,
-                    ut.`user_name` AS `target_planet_user`
+                    ut.`user_name` AS `target_planet_user`,
+                    (
+                        SELECT
+                            GROUP_CONCAT(am.`acs_user_id`)
+                        FROM `" . ACS_MEMBERS . "` am
+                        WHERE am.`acs_group_id` = f.fleet_group
+                    ) AS `acs_members`
                 FROM `" . FLEETS . "` f
                     INNER JOIN `" . USERS . "` uo
                     	ON uo.`user_id` = f.`fleet_owner`
                     LEFT JOIN `" . USERS . "` ut
                     	ON ut.`user_id` = f.`fleet_target_owner`
-                    INNER JOIN `" . PLANETS . "` po
+                    LEFT JOIN `" . ACS . "` acs
                 	ON
                         (
+                            acs.acs_galaxy = f.fleet_end_galaxy AND
+                            acs.acs_system = f.fleet_end_system AND
+                            acs.acs_planet = f.fleet_end_planet AND
+                            acs.acs_planet_type = f.fleet_end_type
+                        )
+                    INNER JOIN `" . PLANETS . "` po
+                	    ON (
                             po.planet_galaxy = f.fleet_start_galaxy AND
                             po.planet_system = f.fleet_start_system AND
                             po.planet_planet = f.fleet_start_planet AND
                             po.planet_type = f.fleet_start_type
-                        )
+                    )
                     LEFT JOIN `" . PLANETS . "` pt
-                	ON
-                        (
+                	    ON (
                             pt.planet_galaxy = f.fleet_end_galaxy AND
                             pt.planet_system = f.fleet_end_system AND
                             pt.planet_planet = f.fleet_end_planet AND
                             pt.planet_type = f.fleet_end_type
-                        )
-                WHERE f.`fleet_owner` = '" . $user_id . "' OR
-                    f.`fleet_target_owner` = '" . $user_id . "'"
+                    )
+                WHERE (f.`fleet_owner` = '" . $user_id . "'
+                    OR f.`fleet_target_owner` = '" . $user_id . "')
+                    OR f.`fleet_group` = acs.`acs_id`"
             );
         }
 

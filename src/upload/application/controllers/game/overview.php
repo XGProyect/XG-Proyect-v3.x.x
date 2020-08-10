@@ -316,6 +316,12 @@ class Overview extends Controller
             ######################################
 
             if ($fleets['fleet_owner'] != $this->_current_user['user_id']) {
+                $acs_member = false;
+
+                if (in_array($this->_current_user['user_id'], explode(',', $fleets['acs_members']))) {
+                    $acs_member = true;
+                }
+
                 if ($fleets['fleet_mission'] != 8) {
                     $record++;
 
@@ -330,11 +336,11 @@ class Overview extends Controller
                     $fleet_row[$stay_block_id] = !isset($fleet_row[$stay_block_id]) ? '' : $fleet_row[$stay_block_id];
 
                     if ($start_time > time()) {
-                        $fleet_row[$start_block_id] = FleetsLib::flyingFleetsTable($fleets, 0, false, 'ofs', $record, $this->_current_user);
+                        $fleet_row[$start_block_id] = FleetsLib::flyingFleetsTable($fleets, 0, false, 'ofs', $record, $this->_current_user, $acs_member);
                     }
                     if ($fleets['fleet_mission'] == 5) {
                         if ($stay_time > time()) {
-                            $fleet_row[$stay_block_id] = FleetsLib::flyingFleetsTable($fleets, 1, false, 'oft', $record, $this->_current_user);
+                            $fleet_row[$stay_block_id] = FleetsLib::flyingFleetsTable($fleets, 1, false, 'oft', $record, $this->_current_user, $acs_member);
                         }
                     }
                 }
