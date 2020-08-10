@@ -99,13 +99,13 @@ class Users extends Controller
         if ($user != '') {
             $checked_user = $this->Users_Model->checkUser($user);
 
-            $this->_id = $checked_user['user_id'];
-            $this->_authlevel = $checked_user['user_authlevel'];
-
             if (!$checked_user) {
                 $parse['alert'] = Administration::saveMessage('error', $this->langs->line('us_nothing_found'));
                 $user = '';
             } else {
+                $this->_id = $checked_user['user_id'];
+                $this->_authlevel = $checked_user['user_authlevel'];
+
                 // initial data
                 $this->_user_query = $this->Users_Model->getUserDataById($this->_id);
 
