@@ -447,6 +447,7 @@ class GalaxyLib extends XGPCore
                 htmlspecialchars($this->row_data['alliance_name'], ENT_COMPAT)
             );
 
+            $parse['web'] = '';
             $parse['ally_members'] = $this->row_data['ally_members'];
             $parse['add'] = $add;
             $parse['ally_id'] = $this->row_data['user_ally_id'];
