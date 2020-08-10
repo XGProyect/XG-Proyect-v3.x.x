@@ -333,8 +333,8 @@ class Messages extends Controller
         if ($members) {
             foreach ($members as $member) {
                 $members_list[] = [
-                    'user_name' => $buddy['user_name'],
-                    'user_id' => $buddy['user_id'],
+                    'user_name' => $member['user_name'],
+                    'user_id' => $member['user_id'],
                     'dpath' => DPATH,
                 ];
             }
