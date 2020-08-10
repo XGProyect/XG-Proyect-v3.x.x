@@ -53,7 +53,7 @@ class Chat extends Controller
     private $_message_data = [];
 
     /**
-     * __construct()
+     * Constructor
      */
     public function __construct()
     {

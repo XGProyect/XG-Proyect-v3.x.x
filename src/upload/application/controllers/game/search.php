@@ -64,7 +64,7 @@ class Search extends Controller
     private $results = [];
 
     /**
-     * __construct()
+     * Constructor
      */
     public function __construct()
     {
