@@ -34,6 +34,9 @@ class Home extends Controller
     {
         parent::__construct();
 
+        // load Language
+        parent::loadLang('ajax/home');
+
         // build the page
         $this->buildPage();
     }
@@ -46,7 +49,7 @@ class Home extends Controller
     private function buildPage()
     {
         parent::$page->display(
-            $this->getTemplate()->set('ajax/home_view', $this->getLang()),
+            $this->getTemplate()->set('ajax/home_view', $this->langs->language),
             false,
             '',
             false
