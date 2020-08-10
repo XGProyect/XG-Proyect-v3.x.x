@@ -22,7 +22,6 @@ use application\core\XGPCore;
 use application\libraries\messenger\MessagesFormat;
 use application\libraries\messenger\MessagesOptions;
 use application\libraries\messenger\Messenger;
-use application\libraries\TimingLibrary as Timing;
 use CI_Email;
 
 /**
@@ -720,31 +719,6 @@ abstract class FunctionsLib extends XGPCore
             && !defined('IN_ADMIN')) {
             self::message(stripslashes(FunctionsLib::readConfig('close_reason')), '', '', false, false);
             die();
-        }
-    }
-
-    /**
-     * Display login errors
-     *
-     * @param array $user_row User Row
-     *
-     * @return void
-     */
-    public static function displayLoginErrors($user_row)
-    {
-        if ($user_row['user_id'] != $_SESSION['user_id'] && !defined('IN_LOGIN')) {
-            FunctionsLib::redirect(SYSTEM_ROOT);
-        }
-
-        if (!password_verify(($user_row['user_password'] . "-" . SECRETWORD), $_SESSION['user_password']) && !defined('IN_LOGIN')) {
-            FunctionsLib::redirect(SYSTEM_ROOT);
-        }
-
-        if ($user_row['user_banned'] > 0) {
-            $parse = parent::$lang;
-            $parse['banned_until'] = Timing::formatExtendedDate($user_row['user_banned']);
-
-            die(self::getTemplate()->set('home/banned_message', $parse));
         }
     }
 

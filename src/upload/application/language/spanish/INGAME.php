@@ -617,11 +617,6 @@ $lang['sys_some_destroyed'] = ' han sido destruidos por los misiles de intercepc
 $lang['sys_missile_string'] = 'Un ataque con misiles (%1%) de %2% llega al planeta %3% <br><br>';
 
 //----------------------------------------------------------------------------//
-//class.CheckSession.php
-$lang['css_account_banned_message'] = 'SU CUENTA HA SIDO SUSPENDIDA';
-$lang['css_account_banned_expire'] = 'Expiraci&oacute;n:';
-
-//----------------------------------------------------------------------------//
 // FLEET MOVEMENTS
 $lang['cff_no_fleet_data'] = 'No hay datos de la flota';
 $lang['cff_aproaching'] = 'Se aproximan ';

@@ -28,6 +28,10 @@ $lang = [
 
     // other
     'write_message' => 'Write Message',
+
+    // banning
+    'bg_account_banned_message' => 'YOUR ACCOUNT HAS BEEN SUSPENDED',
+    'bg_account_banned_expire' => 'Expiration:',
 ];
 
 /* end of global_lang.php */

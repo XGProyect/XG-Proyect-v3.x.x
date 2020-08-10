@@ -607,11 +607,6 @@ $lang['sys_some_destroyed'] = ' has been destroyed by interceptor missiles.';
 $lang['sys_missile_string'] = 'Missiles attack (%1%) from %2% arrive to planet %3% <br><br>';
 
 //----------------------------------------------------------------------------//
-//class.CheckSession.php
-$lang['css_account_banned_message'] = 'YOUR ACCOUNT HAS BEEN SUSPENDED';
-$lang['css_account_banned_expire'] = 'Expiration:';
-
-//----------------------------------------------------------------------------//
 // FLEET MOVEMENTS
 $lang['cff_no_fleet_data'] = 'No fleet data';
 $lang['cff_aproaching'] = 'They approach ';
