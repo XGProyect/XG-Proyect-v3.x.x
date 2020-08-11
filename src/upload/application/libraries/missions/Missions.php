@@ -36,11 +36,7 @@ class Missions extends XGPCore
     protected $combat_caps;
 
     /**
-     * bbCode function.
-     *
-     * @param string $string String
-     *
-     * @return void
+     * Constructor
      */
     public function __construct()
     {
