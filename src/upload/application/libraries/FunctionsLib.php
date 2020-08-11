@@ -557,50 +557,6 @@ abstract class FunctionsLib extends XGPCore
     }
 
     /**
-     * Like in_array but going deeper
-     *
-     * @param string $needle   Needle
-     * @param array  $haystack Haystack
-     *
-     * @return boolean
-     */
-    public static function inMultiarray($needle, $haystack)
-    {
-        foreach ($haystack as $key => $value) {
-            if ($value == $needle) {
-                return true;
-            } elseif (is_array($value)) {
-                if (self::inMultiarray($needle, $value)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Like array search but going deeper
-     *
-     * @param string $needle   Needle
-     * @param array  $haystack Haystack
-     *
-     * @return boolean
-     */
-    public static function recursiveArraySearch($needle, $haystack)
-    {
-        foreach ($haystack as $key => $value) {
-            $current_key = $key;
-
-            if ($needle === $value or (is_array($value) && self::recursiveArraySearch($needle, $value) !== false)) {
-                return $current_key;
-            }
-        }
-
-        return false;
-    }
-
-    /**
      * redirect
      *
      * @param string $route Route

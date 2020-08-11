@@ -14,7 +14,7 @@
 namespace application\libraries\messenger;
 
 use application\core\enumerators\MessagesEnumerator;
-use application\libraries\FunctionsLib;
+use application\helpers\StringsHelper;
 
 /**
  * MessagesOptions Class
@@ -164,7 +164,7 @@ final class MessagesOptions
             $this->_message_text = stripslashes($message_text);
         } else {
 
-            $this->_message_text = FunctionsLib::formatText($message_text);
+            $this->_message_text = StringsHelper::escapeString($message_text);
         }
     }
 

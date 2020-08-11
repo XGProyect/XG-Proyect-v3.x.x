@@ -16,6 +16,7 @@ namespace application\controllers\game;
 use application\core\Controller;
 use application\core\enumerators\MessagesEnumerator;
 use application\core\enumerators\SwitchIntEnumerator as SwitchInt;
+use application\helpers\ArraysHelper;
 use application\libraries\FunctionsLib;
 use application\libraries\OfficiersLib;
 
@@ -160,8 +161,8 @@ class Messages extends Controller
             $get_messages = '';
 
             foreach ($data as $field => $value) {
-                if (FunctionsLib::inMultiarray($field, $this->message_type)) {
-                    $type_id = FunctionsLib::recursiveArraySearch($field, $this->message_type);
+                if (ArraysHelper::inMultiArray($field, $this->message_type)) {
+                    $type_id = ArraysHelper::multiArraySearch($field, $this->message_type);
                     $get_messages .= $type_id . ',';
                     $active[$type_id] = 1;
                 }
@@ -469,8 +470,8 @@ class Messages extends Controller
 
                 if (isset($data['dsp']) && $data['dsp'] == 1) {
                     foreach ($data as $field => $value) {
-                        if (FunctionsLib::inMultiarray($field, $this->message_type)) {
-                            $type_id = FunctionsLib::recursiveArraySearch($field, $this->message_type);
+                        if (ArraysHelper::inMultiArray($field, $this->message_type)) {
+                            $type_id = ArraysHelper::multiArraySearch($field, $this->message_type);
                             break;
                         }
                     }

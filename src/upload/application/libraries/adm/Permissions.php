@@ -15,6 +15,7 @@ namespace application\libraries\adm;
 
 use application\core\enumerators\AdminPagesEnumerator as AdminPages;
 use application\core\enumerators\UserRanksEnumerator as UserRanks;
+use application\helpers\ArraysHelper;
 use application\libraries\FunctionsLib as Functions;
 use JsonException;
 
@@ -190,7 +191,7 @@ class Permissions
      */
     public function moduleExists(string $module): bool
     {
-        return Functions::inMultiarray($module, $this->getAdminModules());
+        return ArraysHelper::inMultiArray($module, $this->getAdminModules());
     }
 
     /**
