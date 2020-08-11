@@ -99,6 +99,8 @@ abstract class FunctionsLib extends XGPCore
      * @param string $text Text
      *
      * @return string
+     *
+     * @deprecated since version v3.1.0, will be removed on v3.2.0 - use StringsHelper::escapeString
      */
     public static function formatText($text)
     {
