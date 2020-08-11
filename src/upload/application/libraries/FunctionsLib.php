@@ -19,6 +19,7 @@ use application\core\enumerators\UserRanksEnumerator;
 use application\core\Options;
 use application\core\Template;
 use application\core\XGPCore;
+use application\helpers\StringsHelper;
 use application\libraries\messenger\MessagesFormat;
 use application\libraries\messenger\MessagesOptions;
 use application\libraries\messenger\Messenger;
@@ -723,21 +724,6 @@ abstract class FunctionsLib extends XGPCore
     }
 
     /**
-     * Replicates the behavior of mysql_real_escape_string
-     *
-     * @param string $value Value to escape
-     *
-     * @return string
-     */
-    public static function escapeString($value)
-    {
-        $search = ["\\", "\x00", "\n", "\r", "'", '"', "\x1a"];
-        $replace = ["\\\\", "\\0", "\\n", "\\r", "\'", '\"', "\\Z"];
-
-        return str_replace($search, $replace, $value);
-    }
-
-    /**
      * Shows a message box
      *
      * @param string $title     Box Tittle
@@ -783,34 +769,7 @@ abstract class FunctionsLib extends XGPCore
      */
     public static function generatePassword(): string
     {
-        return FunctionsLib::randomString(16);
-    }
-
-    /**
-     * Generate a random string, using a cryptographically secure
-     * pseudorandom number generator (random_int)
-     *
-     * For PHP 7, random_int is a PHP core function
-     * For PHP 5.x, depends on https://github.com/paragonie/random_compat
-     *
-     * @param int $length      How many characters do we want?
-     * @param string $keyspace A string of all possible characters to select from
-     *
-     * @return string
-     *
-     * @link https://stackoverflow.com/questions/6101956/generating-a-random-password-in-php/31284266#31284266
-     */
-    public static function randomString(int $length, string $keyspace = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'): string
-    {
-        $str = '';
-        $max = mb_strlen($keyspace, '8bit') - 1;
-        if ($max < 1) {
-            throw new Exception('$keyspace must be at least two characters long');
-        }
-        for ($i = 0; $i < $length; ++$i) {
-            $str .= $keyspace[random_int(0, $max)];
-        }
-        return $str;
+        return StringsHelper::randomString(16);
     }
 }
 

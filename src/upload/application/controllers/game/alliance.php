@@ -16,6 +16,7 @@ namespace application\controllers\game;
 use application\core\Controller;
 use application\core\enumerators\AllianceRanksEnumerator as AllianceRanks;
 use application\core\enumerators\SwitchIntEnumerator as SwitchInt;
+use application\helpers\StringsHelper;
 use application\libraries\alliance\Alliances;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
@@ -682,9 +683,9 @@ class Alliance extends Controller
             $this->Alliance_Model->updateAllianceSettings(
                 $this->getAllianceId(),
                 [
-                    'alliance_owner_range' => ($post['owner_range'] ? FunctionsLib::escapeString($post['owner_range']) : ''),
-                    'alliance_web' => ($post['web'] ? FunctionsLib::escapeString($post['web']) : ''),
-                    'alliance_image' => ($post['image'] ? FunctionsLib::escapeString($post['image']) : ''),
+                    'alliance_owner_range' => ($post['owner_range'] ? StringsHelper::escapeString($post['owner_range']) : ''),
+                    'alliance_web' => ($post['web'] ? StringsHelper::escapeString($post['web']) : ''),
+                    'alliance_image' => ($post['image'] ? StringsHelper::escapeString($post['image']) : ''),
                     'alliance_request_notallow' => $post['request_notallow'],
                 ]
             );

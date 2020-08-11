@@ -343,6 +343,7 @@ class Fleetshortcuts extends Controller
                         $this->_shortcuts->deleteById($action);
                     }
                 } else {
+
                     $this->_shortcuts->addNew(
                         $data['name'], $data['galaxy'], $data['system'], $data['planet'], $data['type']
                     );

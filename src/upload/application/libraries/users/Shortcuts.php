@@ -13,7 +13,7 @@
  */
 namespace application\libraries\users;
 
-use application\libraries\FunctionsLib;
+use application\helpers\StringsHelper;
 use Exception;
 use JsonException;
 
@@ -67,7 +67,9 @@ class Shortcuts
     private function setShortcuts($shortcuts)
     {
         try {
-            $this->_shortcuts = json_decode($shortcuts, true, 512, JSON_THROW_ON_ERROR);
+            if (!empty($shortcuts)) {
+                $this->_shortcuts = json_decode($shortcuts, true, 512, JSON_THROW_ON_ERROR);
+            }
         } catch (JsonException $e) {
             die('JSON Error - ' . $e->getMessage() . ' on ' . __CLASS__ . ', line: ' . $e->getLine());
         }
@@ -103,7 +105,7 @@ class Shortcuts
                 throw new Exception('Name cannot be empty or null');
             }
 
-            $filtered_name = FunctionsLib::escapeString(strip_tags($name));
+            $filtered_name = StringsHelper::escapeString(strip_tags($name));
 
             $this->_shortcuts[] = [
                 'name' => $filtered_name,
@@ -140,7 +142,7 @@ class Shortcuts
                 throw new Exception('Shortcut ID doesn\'t exists');
             }
 
-            $filtered_name = FunctionsLib::escapeString(strip_tags($name));
+            $filtered_name = StringsHelper::escapeString(strip_tags($name));
 
             $this->_shortcuts[$shortcut_id] = [
                 'name' => $filtered_name,

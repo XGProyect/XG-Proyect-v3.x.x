@@ -15,7 +15,7 @@ namespace application\libraries\alliance;
 
 use application\core\enumerators\AllianceRanksEnumerator as AllianceRanks;
 use application\core\enumerators\SwitchIntEnumerator as SwitchInt;
-use application\libraries\FunctionsLib;
+use application\helpers\StringsHelper;
 use Exception;
 use JsonException;
 
@@ -101,7 +101,7 @@ class Ranks
                 throw new Exception('Name cannot be empty or null');
             }
 
-            $filtered_name = FunctionsLib::escapeString(strip_tags($name));
+            $filtered_name = StringsHelper::escapeString(strip_tags($name));
 
             $this->_ranks[] = [
                 'rank' => $filtered_name,

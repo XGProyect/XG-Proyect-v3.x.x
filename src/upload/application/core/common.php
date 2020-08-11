@@ -42,6 +42,7 @@ require_once XGP_ROOT . CORE_PATH . 'AutoLoader.php';
 // Auto load a few things
 AutoLoader::registerDirectory(XGP_ROOT . CORE_PATH);
 AutoLoader::registerDirectory(XGP_ROOT . LIB_PATH);
+AutoLoader::registerDirectory(XGP_ROOT . HELPERS_PATH);
 
 // XGP error handler
 new ErrorHandler;
