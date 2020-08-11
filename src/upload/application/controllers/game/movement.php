@@ -16,6 +16,7 @@ namespace application\controllers\game;
 use application\core\Controller;
 use application\core\entities\FleetEntity;
 use application\core\enumerators\MissionsEnumerator as Missions;
+use application\helpers\UrlHelper;
 use application\libraries\FleetsLib;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
@@ -307,7 +308,7 @@ class Movement extends Controller
                 $content = '<input type="button" value="' . $this->langs->line('fl_acs') . '">';
                 $attributes = 'onClick="f(\'game.php?page=federationlayer&fleet=' . $fleet->getFleetId() . '\', \'\')"';
 
-                $actions .= FunctionsLib::setUrl('#', '', $content, $attributes);
+                $actions .= UrlHelper::setUrl('#', $content, '', $attributes);
             }
         }
 

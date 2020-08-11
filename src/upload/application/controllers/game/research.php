@@ -14,6 +14,7 @@
 namespace application\controllers\game;
 
 use application\core\Controller;
+use application\helpers\UrlHelper;
 use application\libraries\DevelopmentsLib;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
@@ -104,7 +105,7 @@ class Research extends Controller
                             if (!$this->is_laboratory_in_queue()) {
                                 $action_link = FormatLib::colorRed($this->_lang['bd_research']);
                             } else {
-                                $action_link = FunctionsLib::setUrl('game.php?page=research&cmd=search&tech=' . $tech, '', FormatLib::colorGreen($this->_lang['bd_research']));
+                                $action_link = UrlHelper::setUrl('game.php?page=research&cmd=search&tech=' . $tech, FormatLib::colorGreen($this->_lang['bd_research']));
                             }
                         } else {
                             $action_link = FormatLib::colorRed($this->_lang['bd_research']);

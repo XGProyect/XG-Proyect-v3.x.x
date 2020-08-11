@@ -15,11 +15,14 @@ namespace application\libraries;
 
 use application\core\enumerators\BuildingsEnumerator;
 use application\core\XGPCore;
+use application\helpers\UrlHelper;
 use application\libraries\DevelopmentsLib as Developments;
 use application\libraries\FormatLib as Format;
 use application\libraries\FunctionsLib as Functions;
+use application\libraries\MissionControlLibrary;
 use application\libraries\OfficiersLib as Officiers;
 use application\libraries\ProductionLib as Production;
+use application\libraries\Statistics_library;
 
 /**
  * UpdatesLibrary Class
@@ -371,9 +374,8 @@ class UpdatesLibrary extends XGPCore
                                 $lang['sys_building_queue_' . $build_mode . '_order'],
                                 $element_name,
                                 $level,
-                                Functions::setUrl(
+                                UrlHelper::setUrl(
                                     'game.php?page=galaxy&mode=3&galaxy=' . $current_planet['planet_galaxy'] . '&system=' . $current_planet['planet_system'],
-                                    '',
                                     $current_planet['planet_name'] . ' ' . Format::prettyCoords(
                                         $current_planet['planet_galaxy'],
                                         $current_planet['planet_system'],

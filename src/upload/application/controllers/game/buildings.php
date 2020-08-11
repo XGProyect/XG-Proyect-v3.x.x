@@ -14,6 +14,7 @@
 namespace application\controllers\game;
 
 use application\core\Controller;
+use application\helpers\UrlHelper;
 use application\libraries\buildings\Building;
 use application\libraries\DevelopmentsLib;
 use application\libraries\FormatLib;
@@ -372,7 +373,7 @@ class Buildings extends Controller
             }
 
             if ($queue_element > 0) {
-                return FunctionsLib::setUrl($build_url, '', $this->buildButton('allowed_for_queue'));
+                return UrlHelper::setUrl($build_url, $this->buildButton('allowed_for_queue'));
             }
         }
 
@@ -387,7 +388,7 @@ class Buildings extends Controller
             return $this->buildButton('not_allowed');
         }
 
-        return FunctionsLib::setUrl($build_url, '', $this->buildButton('allowed'));
+        return UrlHelper::setUrl($build_url, $this->buildButton('allowed'));
     }
 
     /**

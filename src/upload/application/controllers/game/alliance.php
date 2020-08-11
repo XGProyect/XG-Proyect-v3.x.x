@@ -17,6 +17,7 @@ use application\core\Controller;
 use application\core\enumerators\AllianceRanksEnumerator as AllianceRanks;
 use application\core\enumerators\SwitchIntEnumerator as SwitchInt;
 use application\helpers\StringsHelper;
+use application\helpers\UrlHelper;
 use application\libraries\alliance\Alliances;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
@@ -344,7 +345,7 @@ class Alliance extends Controller
 
             foreach ($results->getAlliances() as $result) {
                 $list_of_results[] = [
-                    'ally_tag' => FunctionsLib::setUrl('game.php?page=alliance&mode=apply&allyid=' . $result->getAllianceId(), '', $result->getAllianceTag()),
+                    'ally_tag' => UrlHelper::setUrl('game.php?page=alliance&mode=apply&allyid=' . $result->getAllianceId(), $result->getAllianceTag()),
                     'alliance_name' => $result->getAllianceName(),
                     'ally_members' => $result->getAllianceMembers(),
                 ];
@@ -1168,7 +1169,7 @@ class Alliance extends Controller
         if (!$this->user['user_ally_id']
             && !$this->user['user_ally_request']
             && $this->alliance->getCurrentAlliance()->getAllianceRequestNotAllow()) {
-            $url = FunctionsLib::setUrl(
+            $url = UrlHelper::setUrl(
                 'game.php?page=alliance&mode=apply&allyid=' . $this->getAllianceId(),
                 $this->langs->line('al_click_to_send_request'),
                 $this->langs->line('al_click_to_send_request')
@@ -1232,7 +1233,7 @@ class Alliance extends Controller
         $list_of_members = '';
 
         if ($this->alliance->hasAccess(AllianceRanks::view_member_list)) {
-            $list_of_members = ' (' . FunctionsLib::setUrl('game.php?page=alliance&mode=memberslist', '', $this->langs->line('al_user_list')) . ')';
+            $list_of_members = ' (' . UrlHelper::setUrl('game.php?page=alliance&mode=memberslist', $this->langs->line('al_user_list')) . ')';
         }
 
         return [
@@ -1252,7 +1253,7 @@ class Alliance extends Controller
         $admin_area = '';
 
         if ($this->alliance->hasAccess(AllianceRanks::administration)) {
-            $admin_area = ' (' . FunctionsLib::setUrl('game.php?page=alliance&mode=admin&edit=ally', '', $this->langs->line('al_manage_alliance')) . ')';
+            $admin_area = ' (' . UrlHelper::setUrl('game.php?page=alliance&mode=admin&edit=ally', $this->langs->line('al_manage_alliance')) . ')';
         }
 
         return [
@@ -1274,9 +1275,8 @@ class Alliance extends Controller
         )['total_requests'];
 
         if ($this->alliance->hasAccess(AllianceRanks::application_management) && $count != 0) {
-            $requests = FunctionsLib::setUrl(
+            $requests = UrlHelper::setUrl(
                 'game.php?page=alliance&mode=admin&edit=requests',
-                '',
                 $count . ' ' . $this->langs->line('al_new_requests')
             );
         }
@@ -1297,7 +1297,7 @@ class Alliance extends Controller
         if ($this->alliance->hasAccess(AllianceRanks::send_circular)) {
             return [
                 'detail_title' => $this->langs->line('al_circular_message'),
-                'detail_content' => FunctionsLib::setUrl('game.php?page=alliance&mode=circular', '', $this->langs->line('al_send_circular_message')),
+                'detail_content' => UrlHelper::setUrl('game.php?page=alliance&mode=circular', $this->langs->line('al_send_circular_message')),
             ];
         }
     }
@@ -1330,8 +1330,8 @@ class Alliance extends Controller
         $alliance_web_url = $this->alliance->getCurrentAlliance()->getAllianceWeb();
 
         if ($alliance_web_url != '') {
-            $url = FunctionsLib::prepUrl($alliance_web_url);
-            $alliance_web = FunctionsLib::setUrl($url, '', $url, 'target="_blank"');
+            $url = UrlHelper::prepUrl($alliance_web_url);
+            $alliance_web = UrlHelper::setUrl($url, '', $url, 'target="_blank"');
         }
 
         return [
@@ -1489,13 +1489,13 @@ class Alliance extends Controller
             $action = 'game.php?page=alliance&mode=admin&edit=members&kick=' . $member_id;
             $content = FunctionsLib::setImage(DPATH . 'alliance/abort.gif');
             $attributes = 'onclick="javascript:return confirm(\'' . strtr($this->langs->line('al_confirm_remove_member'), ['%s' => $member_name]) . '\');"';
-            $kick_user = FunctionsLib::setUrl($action, '', $content, $attributes);
+            $kick_user = UrlHelper::setUrl($action, $content, '', $attributes);
         }
 
         if ($this->alliance->hasAccess(AllianceRanks::administration)) {
             $action = 'game.php?page=alliance&mode=admin&edit=members&rank=' . $member_id;
             $content = FunctionsLib::setImage(DPATH . 'alliance/key.gif');
-            $change_rank = FunctionsLib::setUrl($action, '', $content);
+            $change_rank = UrlHelper::setUrl($action, $content);
         }
 
         if (empty($kick_user) && empty($change_rank)) {

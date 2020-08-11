@@ -17,6 +17,7 @@ use application\core\Controller;
 use application\core\enumerators\MessagesEnumerator;
 use application\core\enumerators\SwitchIntEnumerator as SwitchInt;
 use application\helpers\ArraysHelper;
+use application\helpers\UrlHelper;
 use application\libraries\FunctionsLib;
 use application\libraries\OfficiersLib;
 
@@ -236,10 +237,10 @@ class Messages extends Controller
     private function setMessageReply(int $from): string
     {
         if ($from > 0) {
-            return FunctionsLib::setUrl(
+            return UrlHelper::setUrl(
                 'game.php?page=chat&playerId=' . $from,
-                $this->langs->line('mg_send_message'),
-                FunctionsLib::setImage(DPATH . '/img/m.gif', $this->langs->line('mg_send_message'))
+                FunctionsLib::setImage(DPATH . '/img/m.gif', $this->langs->line('mg_send_message')),
+                $this->langs->line('mg_send_message')
             );
         }
 

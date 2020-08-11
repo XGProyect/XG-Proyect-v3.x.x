@@ -15,6 +15,7 @@ namespace application\libraries;
 
 use application\core\Template;
 use application\core\XGPCore;
+use application\helpers\UrlHelper;
 use application\libraries\FunctionsLib;
 use application\libraries\TimingLibrary as Timing;
 
@@ -277,13 +278,15 @@ class FleetsLib extends XGPCore
     public static function startLink($fleet_row, $fleet_type)
     {
         $coords = FormatLib::prettyCoords(
-            $fleet_row['fleet_start_galaxy'], $fleet_row['fleet_start_system'], $fleet_row['fleet_start_planet']
+            $fleet_row['fleet_start_galaxy'],
+            $fleet_row['fleet_start_system'],
+            $fleet_row['fleet_start_planet']
         );
 
         $link = "game.php?page=galaxy&mode=3&galaxy=" .
             $fleet_row['fleet_start_galaxy'] . "&system=" . $fleet_row['fleet_start_system'];
 
-        return FunctionsLib::setUrl($link, '', $coords, $fleet_type);
+        return UrlHelper::setUrl($link, $coords, '', $fleet_type);
     }
 
     /**
@@ -303,7 +306,7 @@ class FleetsLib extends XGPCore
         $link = "game.php?page=galaxy&mode=3&galaxy=" .
             $fleet_row['fleet_end_galaxy'] . "&system=" . $fleet_row['fleet_end_system'];
 
-        return FunctionsLib::setUrl($link, '', $coords, $fleet_type);
+        return UrlHelper::setUrl($link, $coords, '', $fleet_type);
     }
 
     /**

@@ -17,9 +17,11 @@ declare (strict_types = 1);
 namespace application\controllers\game;
 
 use application\core\Controller;
+use application\helpers\UrlHelper;
 use application\libraries\DevelopmentsLib;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
+use Exception;
 
 /**
  * Empire Class
@@ -246,15 +248,14 @@ class Empire extends Controller
                 $page = 'defense';
                 break;
             default:
-                throw new \Exception('Undefined element type "' . $element . '". Only possible: build, tech, fleet, defenses and missiles.');
+                throw new Exception('Undefined element type "' . $element . '". Only possible: build, tech, fleet, defenses and missiles.');
                 break;
         }
 
         $url = 'game.php?page=' . $page . '&cp=' . $planet['planet_id'] . '&re=0&planettype=' . $planet['planet_type'];
 
-        return FunctionsLib::setUrl(
+        return UrlHelper::setUrl(
             $url,
-            '',
             $source[$this->getObjects()->getObjects($element_id)]
         );
     }

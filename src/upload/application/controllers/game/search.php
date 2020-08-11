@@ -18,6 +18,7 @@ namespace application\controllers\game;
 
 use application\core\Controller;
 use application\core\enumerators\SwitchIntEnumerator as SwitchInt;
+use application\helpers\UrlHelper;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
 
@@ -231,9 +232,8 @@ class Search extends Controller
     private function setPosition(int $user_rank, int $user_level): string
     {
         if ($this->noob->isRankVisible($user_level)) {
-            return FunctionsLib::setUrl(
+            return UrlHelper::setUrl(
                 'game.php?page=statistics&start=' . $user_rank,
-                '',
                 FormatLib::prettyNumber($user_rank)
             );
         } else {
@@ -249,16 +249,16 @@ class Search extends Controller
      */
     private function getPlayersActions(int $user_id): string
     {
-        $chatLink = FunctionsLib::setUrl(
+        $chatLink = UrlHelper::setUrl(
             'game.php?page=chat&playerId=' . $user_id,
-            $this->langs->line('sh_tip_apply'),
-            FunctionsLib::setImage(DPATH . '/img/m.gif', $this->langs->line('sh_tip_write'))
+            FunctionsLib::setImage(DPATH . '/img/m.gif', $this->langs->line('sh_tip_write')),
+            $this->langs->line('sh_tip_apply')
         );
 
-        $buddyLink = FunctionsLib::setUrl(
+        $buddyLink = UrlHelper::setUrl(
             '#',
-            $this->langs->line('sh_tip_apply'),
             FunctionsLib::setImage(DPATH . '/img/b.gif', $this->langs->line('sh_tip_buddy_request')),
+            $this->langs->line('sh_tip_apply'),
             'onClick="f(\'game.php?page=buddies&mode=2&u=' . $user_id . '\', \'' . $this->langs->line('sh_tip_buddy_request') . '\')"'
         );
 
@@ -275,10 +275,10 @@ class Search extends Controller
     private function getAllianceApplicationAction(int $alliance_id, int $alliance_requests): string
     {
         if ($alliance_requests == SwitchInt::on) {
-            return FunctionsLib::setUrl(
+            return UrlHelper::setUrl(
                 'game.php?page=alliance&mode=apply&allyid=' . $alliance_id,
-                $this->langs->line('sh_tip_apply'),
-                FunctionsLib::setImage(DPATH . '/img/m.gif', $this->langs->line('sh_tip_apply'))
+                FunctionsLib::setImage(DPATH . '/img/m.gif', $this->langs->line('sh_tip_apply')),
+                $this->langs->line('sh_tip_apply')
             );
         }
 

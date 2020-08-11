@@ -17,6 +17,7 @@ declare (strict_types = 1);
 namespace application\controllers\adm;
 
 use application\core\Controller;
+use application\helpers\UrlHelper;
 use application\libraries\adm\AdministrationLib as Administration;
 use application\libraries\FormatLib as Format;
 use application\libraries\FunctionsLib as Functions;
@@ -139,7 +140,7 @@ class Server extends Controller
 
         // FORUM LINK
         if (isset($_POST['forum_url']) && $_POST['forum_url'] != '') {
-            $this->game_config['forum_url'] = Functions::prepUrl($_POST['forum_url']);
+            $this->game_config['forum_url'] = UrlHelper::prepUrl($_POST['forum_url']);
         }
 
         // ACTIVATE SERVER

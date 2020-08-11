@@ -14,10 +14,13 @@
 namespace application\libraries\missions;
 
 use application\core\enumerators\ShipsEnumerator as Ships;
+use application\helpers\UrlHelper;
 use application\libraries\combatreport\Report;
 use application\libraries\FleetsLib;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
+use application\libraries\missions\Attack_lang;
+use application\libraries\missions\Missions;
 use application\libraries\UpdatesLibrary;
 use Battle;
 use DebugManager;
@@ -836,8 +839,11 @@ class Destroy extends Missions
         $js = "OnClick=\'f(\"game.php?page=combatreport&report=" . $rid . "\", \"\");\'";
         $content = $this->langs['sys_mess_destruc_report'] . ' ' . FormatLib::prettyCoords($g, $s, $p);
 
-        return FunctionsLib::setUrl(
-            '', '', $content, $style . ' ' . $js
+        return UrlHelper::setUrl(
+            '',
+            $content,
+            '',
+            $style . ' ' . $js
         );
     }
 

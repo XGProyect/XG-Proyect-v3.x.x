@@ -17,6 +17,7 @@ declare (strict_types = 1);
 namespace application\controllers\adm;
 
 use application\core\Controller;
+use application\helpers\UrlHelper;
 use application\libraries\adm\AdministrationLib as Administration;
 use application\libraries\FormatLib as Format;
 use application\libraries\FunctionsLib as Functions;
@@ -143,11 +144,11 @@ class Tasks extends Controller
      */
     private function getStatLastUpdateActions(): string
     {
-        return Functions::setUrl(
+        return UrlHelper::setUrl(
             'admin.php?page=rebuildhighscores',
-            $this->langs->line('ta_buildstats_title'),
             '<i class="fas fa-play" data-toggle="popover" data-placement="top"
-            data-trigger="hover" data-content="' . $this->langs->line('ta_buildstats_title') . '"></i>'
+            data-trigger="hover" data-content="' . $this->langs->line('ta_buildstats_title') . '"></i>',
+            $this->langs->line('ta_buildstats_title')
         );
     }
 
@@ -158,11 +159,11 @@ class Tasks extends Controller
      */
     private function getLastBackupActions(): string
     {
-        return Functions::setUrl(
+        return UrlHelper::setUrl(
             'admin.php?page=backup',
-            $this->langs->line('ta_backup_title'),
             '<i class="fas fa-cogs" data-toggle="popover" data-placement="top"
-            data-trigger="hover" data-content="' . $this->langs->line('ta_backup_title') . '"></i>'
+            data-trigger="hover" data-content="' . $this->langs->line('ta_backup_title') . '"></i>',
+            $this->langs->line('ta_backup_title')
         );
     }
 

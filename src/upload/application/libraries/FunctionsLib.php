@@ -192,26 +192,6 @@ abstract class FunctionsLib extends XGPCore
     }
 
     /**
-     * prepUrl
-     *
-     * @param string $url URL
-     *
-     * @return string
-     */
-    public static function prepUrl($url = '')
-    {
-        if ($url == 'http://' or $url == '') {
-            return '';
-        }
-
-        if (substr($url, 0, 7) != 'http://' && substr($url, 0, 8) != 'https://') {
-            $url = 'http://' . $url;
-        }
-
-        return $url;
-    }
-
-    /**
      * fleetSpeedFactor
      *
      * @return string
@@ -509,33 +489,6 @@ abstract class FunctionsLib extends XGPCore
     public static function getDefaultVacationTime()
     {
         return (time() + (3600 * 24 * VACATION_TIME_FORCED));
-    }
-
-    /**
-     * setUrl
-     *
-     * @param string $url        URL
-     * @param string $title      Title
-     * @param string $content    Content - Visible part
-     * @param string $attributes Attributes - css & js
-     *
-     * @return string
-     */
-    public static function setUrl($url, $title = '', $content, $attributes = '')
-    {
-        if (empty($url)) {
-            $url = '#';
-        }
-
-        if (!empty($title)) {
-            $title = 'title="' . $title . '"';
-        }
-
-        if (!empty($attributes)) {
-            $attributes = ' ' . $attributes;
-        }
-
-        return '<a href="' . $url . '" ' . $title . ' ' . $attributes . '>' . $content . '</a>';
     }
 
     /**

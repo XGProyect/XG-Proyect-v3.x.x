@@ -15,6 +15,7 @@ namespace application\controllers\game;
 
 use application\core\Controller;
 use application\core\enumerators\ShipsEnumerator as Ships;
+use application\helpers\UrlHelper;
 use application\libraries\FleetsLib;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
@@ -233,7 +234,7 @@ class Fleet1 extends Controller
     {
         $title = $this->langs->line('fl_speed_title') . FleetsLib::fleetMaxSpeed('', $ship_id, $this->_user);
 
-        return FunctionsLib::setUrl('', $title, $this->langs->line($ship_name));
+        return UrlHelper::setUrl('', $this->langs->line($ship_name), $title);
     }
 
     /**
@@ -261,7 +262,7 @@ class Fleet1 extends Controller
             return null;
         }
 
-        return FunctionsLib::setUrl('#', '', $this->langs->line('fl_max'), 'onclick="javascript:maxShip(\'ship' . $ship_id . '\');"');
+        return UrlHelper::setUrl('#', $this->langs->line('fl_max'), '', 'onclick="javascript:maxShip(\'ship' . $ship_id . '\');"');
     }
 
     /**

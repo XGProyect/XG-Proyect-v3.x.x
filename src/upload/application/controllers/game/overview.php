@@ -14,6 +14,7 @@
 namespace application\controllers\game;
 
 use application\core\Controller;
+use application\helpers\UrlHelper;
 use application\libraries\DevelopmentsLib;
 use application\libraries\FleetsLib;
 use application\libraries\FormatLib;
@@ -188,12 +189,12 @@ class Overview extends Controller
             $new_message = '<tr>';
 
             if ($this->_current_user['new_message'] == 1) {
-                $new_message .= '<th colspan="4">' . FunctionsLib::setUrl('game.php?page=messages', $this->langs->line('ov_have_new_message'), $this->langs->line('ov_have_new_message')) . '</th>';
+                $new_message .= '<th colspan="4">' . UrlHelper::setUrl('game.php?page=messages', $this->langs->line('ov_have_new_message'), $this->langs->line('ov_have_new_message')) . '</th>';
             }
 
             if ($this->_current_user['new_message'] > 1) {
                 $link_text = str_replace('%m', FormatLib::prettyNumber($this->_current_user['new_message']), $this->langs->line('ov_have_new_messages'));
-                $new_message .= '<th colspan="4">' . FunctionsLib::setUrl('game.php?page=messages', $link_text, $link_text) . '</th>';
+                $new_message .= '<th colspan="4">' . UrlHelper::setUrl('game.php?page=messages', $link_text, $link_text) . '</th>';
             }
 
             $new_message .= '</tr>';
@@ -378,7 +379,7 @@ class Overview extends Controller
             $image = DPATH . 'planets/' . $this->_current_planet['moon_image'] . '.jpg';
             $attributes = 'height="50" width="50"';
 
-            $return['moon_img'] = FunctionsLib::setUrl($url, $moon_name, FunctionsLib::setImage($image, $moon_name, $attributes));
+            $return['moon_img'] = UrlHelper::setUrl($url, FunctionsLib::setImage($image, $moon_name, $attributes), $moon_name);
             $return['moon'] = $moon_name;
         }
 
@@ -404,7 +405,7 @@ class Overview extends Controller
                 $attributes = 'height="50" width="50"';
 
                 $planet_block .= '<th>' . $user_planet['planet_name'] . '<br>';
-                $planet_block .= FunctionsLib::setUrl($url, $user_planet['planet_name'], FunctionsLib::setImage($image, $user_planet['planet_name'], $attributes));
+                $planet_block .= UrlHelper::setUrl($url, FunctionsLib::setImage($image, $user_planet['planet_name'], $user_planet['planet_name'], $attributes));
                 $planet_block .= '<center>';
                 $planet_block .= $this->get_current_work($user_planet, false);
                 $planet_block .= '</center></th>';
@@ -437,7 +438,7 @@ class Overview extends Controller
         $total_rank = $this->_current_user['user_statistic_total_rank'] == '' ? $this->_current_planet['stats_users'] : $this->_current_user['user_statistic_total_rank'];
 
         if ($this->_noob->isRankVisible($this->_current_user['user_authlevel'])) {
-            $user_rank = FormatLib::prettyNumber($this->_current_user['user_statistic_total_points']) . " (" . $this->langs->line('ov_place') . ' ' . FunctionsLib::setUrl('game.php?page=statistics&range=' . $total_rank, $total_rank, $total_rank) . ' ' . $this->langs->line('ov_of') . ' ' . $this->_current_planet['stats_users'] . ")";
+            $user_rank = FormatLib::prettyNumber($this->_current_user['user_statistic_total_points']) . " (" . $this->langs->line('ov_place') . ' ' . UrlHelper::setUrl('game.php?page=statistics&range=' . $total_rank, $total_rank, $total_rank) . ' ' . $this->langs->line('ov_of') . ' ' . $this->_current_planet['stats_users'] . ")";
         }
 
         return $user_rank;
