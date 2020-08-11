@@ -702,7 +702,7 @@ class Alliance extends Controller
 
             $this->Alliance_Model->{'updateAlliance' . $callback[$t]}(
                 $this->getAllianceId(),
-                FunctionsLib::formatText($post['text'])
+                StringsHelper::escapeString($post['text'])
             );
 
             FunctionsLib::redirect('game.php?page=alliance&mode=admin&edit=ally&t=' . $t);
