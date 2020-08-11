@@ -16,6 +16,7 @@ $lang = [
 
     // fleet missions
     'mi_fleet_command' => 'Ordenes de la flota',
+    'mi_planet_coordinates' => '[%s:%s:%s]',
 ];
 
 /* end of missions_lang.php */
