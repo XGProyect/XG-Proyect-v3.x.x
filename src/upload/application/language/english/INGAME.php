@@ -506,37 +506,13 @@ $lang['info'][503]['description'] = 'Interplanetary Missiles (IPM) are your offe
 
 //----------------------------------------------------------------------------//
 //SYSTEM
-$lang['sys_attacker_lostunits'] = "The attacker has lost a total of";
-$lang['sys_defender_lostunits'] = "The defender has lost a total of";
-$lang['sys_units'] = "units";
-$lang['debree_field_1'] = "A debris field";
-$lang['debree_field_2'] = "floating in the orbit of the planet.";
-$lang['sys_gcdrunits'] = "At these space coordinates now float %s %s and %s %s.";
-$lang['sys_moonproba'] = "The probability that a moon emerge from the rubble is:";
-$lang['sys_moonbuilt'] = "The huge amount of metal and glass are functioning and form a lunar satellite in orbit the planet %s [%d:%d:%d]!";
 $lang['sys_attack_title'] = "Fleets clash in ";
-$lang['sys_attack_round'] = "Round";
-$lang['sys_attack_attacker_pos'] = "Attacker";
-$lang['sys_attack_techologies'] = "Weapons: %d %% Shield: %d %% Armor: %d %% ";
-$lang['sys_attack_defender_pos'] = "Defender";
 $lang['sys_ship_type'] = "Type";
 $lang['sys_ship_count'] = "Amount";
 $lang['sys_ship_weapon'] = "Weapons";
 $lang['sys_ship_shield'] = "Shield";
 $lang['sys_ship_armour'] = "Armor";
 $lang['sys_destroyed'] = "Destroyed";
-$lang['fleet_attack_1'] = "The attacking fleet fires a total force of";
-$lang['fleet_attack_2'] = "on the defender. The defender's shields absorb";
-$lang['fleet_defs_1'] = "The defending fleet fires a total force of";
-$lang['fleet_defs_2'] = "on the attacker. The attacker's shields absorb";
-$lang['damage'] = "points of damage,";
-$lang['with'] = 'with';
-$lang['shots'] = 'shots';
-$lang['sys_attacker_won'] = "The attacker has won the battle";
-$lang['sys_defender_won'] = "The defender has won the battle";
-$lang['sys_both_won'] = "The battle ended in a draw";
-$lang['sys_stealed_ressources'] = "obtaining";
-$lang['sys_and'] = "and";
 $lang['sys_mess_tower'] = "Control Tower";
 $lang['sys_mess_attack_report'] = "Battle Report";
 $lang['sys_spy_maretials'] = "Resources";

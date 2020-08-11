@@ -516,37 +516,13 @@ $lang['info'][503]['description'] = "Los misiles interplanetarios destruyen los 
 
 //----------------------------------------------------------------------------//
 //SYSTEM
-$lang['sys_attacker_lostunits'] = "El atacante ha perdido un total de";
-$lang['sys_defender_lostunits'] = "El defensor ha perdido un total de";
-$lang['sys_units'] = "unidades";
-$lang['debree_field_1'] = "Un campo de escombros de";
-$lang['debree_field_2'] = "flotan en la orbita del planeta.";
-$lang['sys_gcdrunits'] = "En estas coordenadas flotan %s unidades de %s y %s unidades de %s";
-$lang['sys_moonproba'] = "La probabilidad de que surja una luna de los escombros es de:";
-$lang['sys_moonbuilt'] = "Las enormes cantidad de metal y cristal se fusionan y forman un satélite lunar en la orbita del planeta %s [%d:%d:%d]!";
 $lang['sys_attack_title'] = "Las flotas se enfrentan en ";
-$lang['sys_attack_round'] = "Ronda";
-$lang['sys_attack_attacker_pos'] = "Atacante";
-$lang['sys_attack_techologies'] = "Armas: %d %% Escudo: %d %% Blindaje: %d %% ";
-$lang['sys_attack_defender_pos'] = "Defensor";
 $lang['sys_ship_type'] = "Tipo";
 $lang['sys_ship_count'] = "Cantidad";
 $lang['sys_ship_weapon'] = "Armas";
 $lang['sys_ship_shield'] = "Escudo";
 $lang['sys_ship_armour'] = "Blindaje";
 $lang['sys_destroyed'] = "Destruido";
-$lang['fleet_attack_1'] = "La flota atacante dispara con una fuerza total de";
-$lang['fleet_attack_2'] = "sobre el defensor. Los escudos del defensor absorben";
-$lang['fleet_defs_1'] = "La flota defensora dispara con una fuerza total de";
-$lang['fleet_defs_2'] = "sobre el atacante. Los escudos del atacante absorben";
-$lang['damage'] = "puntos de daño,";
-$lang['with'] = 'con';
-$lang['shots'] = 'disparos';
-$lang['sys_attacker_won'] = "El atacante ha ganado la batalla";
-$lang['sys_defender_won'] = "El defensor ha ganado la batalla";
-$lang['sys_both_won'] = "La batalla termino en empate";
-$lang['sys_stealed_ressources'] = "obteniendo";
-$lang['sys_and'] = "y";
 $lang['sys_mess_tower'] = "Torre de control";
 $lang['sys_mess_attack_report'] = "Reporte de batalla";
 $lang['sys_spy_maretials'] = "Recursos en";
