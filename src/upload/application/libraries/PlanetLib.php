@@ -147,7 +147,7 @@ class PlanetLib extends XGPCore
 
             $this->Planetlib_Model->createNewPlanet(
                 [
-                    'planet_name' => $name == '' ? $this->langs['fcm_moon'] : $name,
+                    'planet_name' => $name == '' ? $this->langs->line('moon') : $name,
                     'planet_user_id' => $owner,
                     'planet_galaxy' => $galaxy,
                     'planet_system' => $system,
