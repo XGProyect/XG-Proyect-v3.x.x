@@ -514,7 +514,6 @@ $lang['sys_ship_shield'] = "Shield";
 $lang['sys_ship_armour'] = "Armor";
 $lang['sys_destroyed'] = "Destroyed";
 $lang['sys_mess_tower'] = "Control Tower";
-$lang['sys_mess_attack_report'] = "Battle Report";
 $lang['sys_spy_maretials'] = "Resources";
 $lang['sys_spy_fleet'] = "Fleet";
 $lang['sys_spy_defenses'] = "Defense";
@@ -613,7 +612,6 @@ $lang['cff_flotte'] = ' fleets';
 //----------------------------------------------------------------------------//
 // EXTRA LANGUAGE FUNCTIONS
 $lang['fcm_moon'] = 'Moon';
-$lang['fcp_colony'] = 'Colony';
 $lang['fgp_require'] = 'Requires: ';
 $lang['fgf_time'] = 'Construction Time: ';
 

@@ -1,5 +1,6 @@
 <?php
 $lang = [
+    'cr_combat_report_title' => 'Reporte de batalla',
     'cr_lost_contact' => 'Se perdió el contacto con la flota atacante.',
     'cr_first_round' => '(La flota fue destruida en la primer ronda)',
     'cr_type' => 'Tipo',

@@ -775,7 +775,7 @@ class Attack extends Missions
     {
         $style = 'style="color:' . $color . ';"';
         $js = "OnClick=\'f(\"game.php?page=combatreport&report=" . $rid . "\", \"\");\'";
-        $content = $this->langs['sys_mess_attack_report'] . ' ' . FormatLib::prettyCoords($g, $s, $p);
+        $content = $this->langs['cr_combat_report_title'] . ' ' . FormatLib::prettyCoords($g, $s, $p);
 
         return UrlHelper::setUrl(
             '',
