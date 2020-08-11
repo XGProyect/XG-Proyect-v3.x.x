@@ -86,7 +86,6 @@ class Maker extends Controller
      */
     private function runAction(): void
     {
-
     }
 
     /**
@@ -295,7 +294,6 @@ class Maker extends Controller
 
             if ($moon_planet && is_numeric($planet_id)) {
                 if ($moon_planet['id_moon'] == '' && $moon_planet['planet_type'] == 1 && $moon_planet['planet_destroyed'] == 0) {
-
                     $galaxy = (int) $moon_planet['planet_galaxy'];
                     $system = (int) $moon_planet['planet_system'];
                     $planet = (int) $moon_planet['planet_planet'];

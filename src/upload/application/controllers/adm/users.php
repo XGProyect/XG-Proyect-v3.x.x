@@ -111,7 +111,7 @@ class Users extends Controller
 
                 // save the data
                 if (isset($_POST['send_data']) && $_POST['send_data']) {
-                    $this->save_data($type);
+                    $this->saveData($type);
                 }
 
                 // get refreshed data
@@ -132,7 +132,7 @@ class Users extends Controller
         $parse['status_box'] = ($user != '' && $this->_id != $this->_current_user['user_id']) ? '' : ' disabled';
         $parse['tag'] = ($user != '') ? 'a' : 'button';
         $parse['user_rank'] = Administration::returnRank($this->_authlevel);
-        $parse['content'] = ($user != '' && $type != '') ? $this->get_data($type) : '';
+        $parse['content'] = ($user != '' && $type != '') ? $this->getData($type) : '';
 
         parent::$page->displayAdmin(
             $this->getTemplate()->set('adm/users_view', $parse)
@@ -140,65 +140,65 @@ class Users extends Controller
     }
 
     /**
-     * method get_data
+     * method getData
      * param $type
      * return the page for the current type
      */
-    private function get_data($type)
+    private function getData($type)
     {
         switch ($type) {
             case 'info':
             case '':
             default:
-                return $this->get_data_info();
+                return $this->getDataInfo();
                 break;
 
             case 'settings':
-                return $this->get_data_settings();
+                return $this->getDataSettings();
                 break;
 
             case 'research':
-                return $this->get_data_research();
+                return $this->getDataResearch();
                 break;
 
             case 'premium':
-                return $this->get_data_premium();
+                return $this->getDataPremium();
                 break;
 
             case 'planets':
-                return $this->get_data_planets();
+                return $this->getDataPlanets();
                 break;
 
             case 'moons':
-                return $this->get_data_moons();
+                return $this->getDataMoons();
                 break;
         }
     }
 
     /**
-     * method save_data
+     * method saveData
      * param $type
      * return save data for the current type
      */
-    private function save_data($type)
+    private function saveData($type)
     {
         switch ($type) {
             case 'info':
             case '':
             default:
-                $this->save_info();
+                $this->saveInfo();
                 break;
 
             case 'settings':
-                $this->save_settings();
+                $this->saveSettings();
                 break;
 
             case 'research':
-                $this->save_research();
+                $this->saveResearch();
                 break;
 
             case 'premium':
-                $this->save_premium();
+                $this->savePremium();
                 break;
 
             case 'planets':
@@ -206,7 +206,7 @@ class Users extends Controller
                     case '':
                     case 'planet':
                     default:
-                        $this->save_planet(1);
+                        $this->savePlanet(1);
                         break;
 
                     case 'buildings':
@@ -214,11 +214,11 @@ class Users extends Controller
                         break;
 
                     case 'ships':
-                        $this->save_ships(1);
+                        $this->saveShips(1);
                         break;
 
                     case 'defenses':
-                        $this->save_defenses(1);
+                        $this->saveDefenses(1);
                         break;
                 }
 
@@ -229,7 +229,7 @@ class Users extends Controller
                     case '':
                     case 'moon':
                     default:
-                        $this->save_planet(3);
+                        $this->savePlanet(3);
                         break;
 
                     case 'buildings':
@@ -237,11 +237,11 @@ class Users extends Controller
                         break;
 
                     case 'ships':
-                        $this->save_ships(3);
+                        $this->saveShips(3);
                         break;
 
                     case 'defenses':
-                        $this->save_defenses(3);
+                        $this->saveDefenses(3);
                         break;
                 }
 
@@ -250,33 +250,33 @@ class Users extends Controller
     }
 
     /**
-     * delete_data
+     * deleteData
      *
      * @param type $type Type
      *
      * @return void
      */
-    private function delete_data($type)
+    private function deleteData($type)
     {
         switch ($type) {
             case 'planet':
-                //$this->delete_planet();
+                //$this->deletePlanet();
 
                 break;
 
             case 'moon':
-                //$this->delete_moon();
+                //$this->deleteMoon();
 
                 break;
         }
     }
 
     /**
-     * method refresh_page
+     * method refreshPage
      * param
      * return refresh the page
      */
-    private function refresh_page()
+    private function refreshPage()
     {
         // SET PARAMS
         $page = (isset($_GET['page']) ? '?page=' . $_GET['page'] : '');
@@ -288,7 +288,7 @@ class Users extends Controller
     }
     ######################################
     #
-    # get_data methods
+    # getData methods
     #
     ######################################
 
@@ -297,7 +297,7 @@ class Users extends Controller
      *
      * @return void
      */
-    private function get_data_info(): string
+    private function getDataInfo(): string
     {
         $parse = $this->langs->language;
         $parse += (array) $this->_user_query;
@@ -321,12 +321,12 @@ class Users extends Controller
      *
      * @return string
      */
-    private function get_data_settings(): string
+    private function getDataSettings(): string
     {
         $parse = $this->langs->language;
         $parse['settings'] = str_replace('%s', $this->_user_query['user_name'], $this->langs->line('us_user_settings'));
-        $parse['preference_planet_sort'] = $this->planet_sort_combo();
-        $parse['preference_planet_sort_sequence'] = $this->planet_order_combo();
+        $parse['preference_planet_sort'] = $this->planetSortCombo();
+        $parse['preference_planet_sort_sequence'] = $this->planetOrderCombo();
         $parse['preference_spy_probes'] = $this->_user_query['preference_spy_probes'];
         $parse['preference_vacations_status'] = ($this->_user_query['preference_vacation_mode'] > 0) ? ' checked="checked" ' : '';
         $parse['preference_vacation_mode'] = ($this->_user_query['preference_vacation_mode'] > 0) ? $this->vacationSet() : '';
@@ -341,7 +341,7 @@ class Users extends Controller
      * param
      * return the research page for the current user
      */
-    private function get_data_research()
+    private function getDataResearch()
     {
         $parse = $this->langs->language;
         $parse += (array) $this->_user_query;
@@ -353,11 +353,11 @@ class Users extends Controller
     }
 
     /**
-     * method get_data_premium
+     * method getDataPremium
      * param
      * return the premium page for the current user
      */
-    private function get_data_premium()
+    private function getDataPremium()
     {
         $parse = $this->langs->language;
         $parse['premium'] = str_replace('%s', $this->_user_query['user_name'], $this->langs->line('us_user_premium'));
@@ -369,11 +369,11 @@ class Users extends Controller
     }
 
     /**
-     * method get_data_planets
+     * method getDataPlanets
      * param
      * return the planets page for the current user
      */
-    private function get_data_planets()
+    private function getDataPlanets()
     {
         $planets_query = $this->Users_Model->getAllPlanetsData($this->_id, $this->_planet, $this->_edit);
         $parse = $this->langs->language;
@@ -403,7 +403,7 @@ class Users extends Controller
 
             case ($this->_edit == 'delete'):
                 $this->Users_Model->softDeletePlanetById($this->_planet);
-                $this->refresh_page();
+                $this->refreshPage();
                 break;
 
             case '':
@@ -419,11 +419,11 @@ class Users extends Controller
     }
 
     /**
-     * method get_data_moons
+     * method getDataMoons
      * param
      * return the moons page for the current user
      */
-    private function get_data_moons()
+    private function getDataMoons()
     {
         $moons_query = $this->Users_Model->getAllMoonsData($this->_id, $this->_moon, $this->_edit);
         $parse = $this->langs->language;
@@ -453,7 +453,7 @@ class Users extends Controller
 
             case ($this->_edit == 'delete'):
                 $this->Users_Model->softDeleteMoonById($this->_moon);
-                $this->refresh_page();
+                $this->refreshPage();
                 break;
 
             case '':
@@ -474,11 +474,11 @@ class Users extends Controller
     ######################################
 
     /**
-     * method save_info
+     * method saveInfo
      * param
      * return save information for the current user
      */
-    private function save_info()
+    private function saveInfo()
     {
         $username = isset($_POST['username']) ? $_POST['username'] : '';
         $password = isset($_POST['password']) ? $_POST['password'] : '';
@@ -550,11 +550,11 @@ class Users extends Controller
     }
 
     /**
-     * method save_settings
+     * method saveSettings
      * param
      * return save settings for the current user
      */
-    private function save_settings()
+    private function saveSettings()
     {
         $this->Users_Model->saveUserPreferences($_POST, $this->_id, $this->_user_query);
 
@@ -563,11 +563,11 @@ class Users extends Controller
     }
 
     /**
-     * method save_research
+     * method saveResearch
      * param
      * return save research for the current user
      */
-    private function save_research(): void
+    private function saveResearch(): void
     {
         $this->Users_Model->saveTechnologies($_POST, $this->_id);
 
@@ -580,11 +580,11 @@ class Users extends Controller
     }
 
     /**
-     * method save_premium
+     * method savePremium
      * param
      * return save research for the current user
      */
-    private function save_premium(): void
+    private function savePremium(): void
     {
         $this->Users_Model->savePremium($_POST, $this->_id, $this->_user_query);
 
@@ -594,11 +594,11 @@ class Users extends Controller
     }
 
     /**
-     * method save_planet
+     * method savePlanet
      * param $type
      * return save planet for the current user
      */
-    private function save_planet($type = 1): void
+    private function savePlanet($type = 1): void
     {
         $id_get = $this->_planet;
 
@@ -643,11 +643,11 @@ class Users extends Controller
     }
 
     /**
-     * method save_ships
+     * method saveShips
      * param $type
      * return save ships for the current planet
      */
-    private function save_ships($type = 1)
+    private function saveShips($type = 1)
     {
         $id_get = $this->_planet;
 
@@ -666,11 +666,11 @@ class Users extends Controller
     }
 
     /**
-     * method save_defenses
+     * method saveDefenses
      * param $type
      * return save defenses for the current planet
      */
-    private function save_defenses($type = 1)
+    private function saveDefenses($type = 1)
     {
         $id_get = $this->_planet;
 
@@ -794,11 +794,11 @@ class Users extends Controller
     }
 
     /**
-     * method planet_sort_combo
+     * method planetSortCombo
      * param
      * return planet sort combo
      */
-    private function planet_sort_combo()
+    private function planetSortCombo()
     {
         $sort = '';
         $sort_types = array(
@@ -817,11 +817,11 @@ class Users extends Controller
     }
 
     /**
-     * method planet_order_combo
+     * method planetOrderCombo
      * param
      * return planet order combo
      */
-    private function planet_order_combo()
+    private function planetOrderCombo()
     {
         $order = '';
         $order_types = array(
@@ -837,11 +837,11 @@ class Users extends Controller
     }
 
     /**
-     * method premium_combo
+     * method premiumCombo
      * param $expire_date
      * return premium combo
      */
-    private function premium_combo($expire_date)
+    private function premiumCombo($expire_date)
     {
         $premium = '';
         $premium_types = array(
@@ -897,11 +897,11 @@ class Users extends Controller
     }
 
     /**
-     * method build_image_combo
+     * method buildImageCombo
      * param $current_image
      * return image combo
      */
-    private function build_image_combo($current_image)
+    private function buildImageCombo($current_image)
     {
         $images_dir = opendir(XGP_ROOT . DEFAULT_SKINPATH . 'planets');
         $exceptions = array('.', '..', '.htaccess', 'index.html', '.DS_Store', 'small');
@@ -978,7 +978,7 @@ class Users extends Controller
                         'status' => ($expire == 0) ? $this->langs->line('us_user_premium_inactive') : ($this->langs->line('us_user_premium_active_until') . date(Functions::readConfig('date_format'), $expire)),
                         'status_style' => ($expire == 0) ? 'text-danger' : 'text-success',
                         'field' => $officier,
-                        'combo' => $this->premium_combo($expire),
+                        'combo' => $this->premiumCombo($expire),
                     ];
                 }
             }
@@ -1094,7 +1094,7 @@ class Users extends Controller
         $parse['planet_b_building_id'] = $this->buildProcessQueue($parse['planet_b_building_id']);
         $parse['planet_b_tech'] = $parse['planet_b_tech'] > 0 ? date(Functions::readConfig('date_format_extended'), $parse['planet_b_tech']) : '-';
         $parse['planet_b_hangar'] = $parse['planet_b_hangar'] > 0 ? date(Functions::readConfig('date_format_extended'), $parse['planet_b_hangar']) : '-';
-        $parse['planet_image'] = $this->build_image_combo($parse['planet_image']);
+        $parse['planet_image'] = $this->buildImageCombo($parse['planet_image']);
         $parse['planet_building_metal_mine_percent'] = $this->buildPercentCombo($parse['planet_building_metal_mine_percent']);
         $parse['planet_building_crystal_mine_percent'] = $this->buildPercentCombo($parse['planet_building_crystal_mine_percent']);
         $parse['planet_building_deuterium_sintetizer_percent'] = $this->buildPercentCombo($parse['planet_building_deuterium_sintetizer_percent']);
@@ -1211,31 +1211,31 @@ class Users extends Controller
     ######################################
 
     /**
-     * delete_planet
+     * deletePlanet
      *
      * @param int $id_planet Planet ID
      *
      * @return void
      */
-    private function delete_planet($id_planet = 0)
+    private function deletePlanet($id_planet = 0)
     {
         if ($id_planet == 0) {
             $id_planet = $this->_planet;
         }
 
-        $this->delete_moon();
+        $this->deleteMoon();
 
         $this->Users_Model->deletePlanetById($id_planet);
     }
 
     /**
-     * delete_moon
+     * deleteMoon
      *
      * @param int $id_moon Moon ID
      *
      * @return void
      */
-    private function delete_moon($id_moon = 0)
+    private function deleteMoon($id_moon = 0)
     {
         if ($id_moon == 0) {
             $id_moon = $this->_moon;

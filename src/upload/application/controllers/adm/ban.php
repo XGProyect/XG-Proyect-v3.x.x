@@ -56,27 +56,25 @@ class Ban extends Controller
             die(Administration::noAccessMessage($this->langs->line('no_permissions')));
         }
 
-        $this->build_page();
+        $this->buildPage();
     }
 
     /**
-     * method build_page
+     * method buildPage
      * param
      * return main method, loads everything
      */
-    private function build_page()
+    private function buildPage()
     {
         switch ((isset($_GET['mode']) ? $_GET['mode'] : '')) {
             case 'ban':
-
-                $view = $this->show_ban();
+                $view = $this->showBan();
 
                 break;
 
             case '':
             default:
-
-                $view = $this->show_default();
+                $view = $this->showDefault();
 
                 break;
         }
@@ -85,11 +83,11 @@ class Ban extends Controller
     }
 
     /**
-     * method show_default
+     * method showDefault
      * param
      * return build the default page
      */
-    private function show_default()
+    private function showDefault()
     {
         $parse = $this->langs->language;
         $parse['js_path'] = JS_PATH;
@@ -105,8 +103,8 @@ class Ban extends Controller
             $parse['alert'] = Administration::saveMessage('ok', (str_replace('%s', $username, $this->langs->line('bn_lift_ban_success'))));
         }
 
-        $parse['users_list'] = $this->get_users_list();
-        $parse['banned_list'] = $this->get_banned_list();
+        $parse['users_list'] = $this->getUsersList();
+        $parse['banned_list'] = $this->getBannedList();
         $parse['users_amount'] = $this->_users_count;
         $parse['banned_amount'] = $this->_banned_count;
 
@@ -114,11 +112,11 @@ class Ban extends Controller
     }
 
     /**
-     * method show_ban
+     * method showBan
      * param
      * return build the ban page
      */
-    private function show_ban()
+    private function showBan()
     {
         $parse = $this->langs->language;
         $parse['js_path'] = JS_PATH;
@@ -192,11 +190,11 @@ class Ban extends Controller
     }
 
     /**
-     * method get_users_list
+     * method getUsersList
      * param
      * return the users list (left select)
      */
-    private function get_users_list()
+    private function getUsersList()
     {
         $query_order = (isset($_GET['order']) && $_GET['order'] == 'id') ? 'user_id' : 'user_name';
         $where_authlevel = '';
@@ -236,11 +234,11 @@ class Ban extends Controller
     }
 
     /**
-     * method get_banned_list
+     * method getBannedList
      * param
      * return the banned users list (right select)
      */
-    private function get_banned_list()
+    private function getBannedList()
     {
         $order = (isset($_GET['order2']) && $_GET['order2'] == 'id') ? 'user_id' : 'user_name';
         $banned_list = '';

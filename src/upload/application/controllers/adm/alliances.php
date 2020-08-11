@@ -61,7 +61,7 @@ class Alliances extends Controller
             die(Administration::noAccessMessage($this->langs->line('no_permissions')));
         }
 
-        $this->build_page();
+        $this->buidPage();
     }
 
     ######################################
@@ -71,11 +71,11 @@ class Alliances extends Controller
     ######################################
 
     /**
-     * method build_page
+     * method buidPage
      * param
      * return main method, loads everything
      */
-    private function build_page()
+    private function buidPage()
     {
         $parse = $this->langs->language;
         $parse['alert'] = '';
@@ -84,13 +84,13 @@ class Alliances extends Controller
         $this->_edit = isset($_GET['edit']) ? trim($_GET['edit']) : null;
 
         if ($alliance != '') {
-            if (!$this->check_alliance($alliance)) {
+            if (!$this->checkAlliance($alliance)) {
                 $parse['alert'] = Administration::saveMessage('error', $this->langs->line('al_nothing_found'));
                 $alliance = '';
             } else {
                 if ($_POST) {
                     // save the data
-                    $this->save_data($type);
+                    $this->saveData($type);
                 }
 
                 $this->_alliance_query = $this->Alliances_Model->getAllAllianceDataById($this->_id);
@@ -103,7 +103,7 @@ class Alliances extends Controller
         $parse['status'] = ($alliance != '') ? '' : ' disabled';
         $parse['status_box'] = ($alliance != '') ? '' : ' disabled';
         $parse['tag'] = ($alliance != '') ? 'a' : 'button';
-        $parse['content'] = ($alliance != '' && $type != '') ? $this->get_data($type) : '';
+        $parse['content'] = ($alliance != '' && $type != '') ? $this->getData($type) : '';
 
         parent::$page->displayAdmin(
             $this->getTemplate()->set('adm/alliances_view', $parse)
@@ -111,85 +111,79 @@ class Alliances extends Controller
     }
 
     /**
-     * method get_data
+     * method getData
      * param $type
      * return the page for the current type
      */
-    private function get_data($type)
+    private function getData($type)
     {
         switch ($type) {
             case 'info':
             case '':
             default:
-
-                return $this->get_data_info();
+                return $this->getDataInfo();
 
                 break;
 
             case 'ranks':
-
-                return $this->get_data_ranks();
+                return $this->getDataRanks();
 
                 break;
 
             case 'members':
-
-                return $this->get_data_members();
+                return $this->getDataMembers();
 
                 break;
         }
     }
 
     /**
-     * method save_data
+     * method saveData
      * param $type
      * return save data for the current type
      */
-    private function save_data($type)
+    private function saveData($type)
     {
         switch ($type) {
             case 'info':
             case '':
             default:
-
                 // save the data
                 if (isset($_POST['send_data']) && $_POST['send_data']) {
-                    $this->save_info();
+                    $this->saveInfo();
                 }
 
                 break;
 
             case 'ranks':
-
-                $this->save_ranks();
+                $this->saveRanks();
 
                 break;
 
             case 'members':
-
-                $this->save_members();
+                $this->saveMembers();
 
                 break;
         }
     }
     ######################################
     #
-    # get_data methods
+    # getData methods
     #
     ######################################
 
     /**
-     * method get_data_info
+     * method getDataInfo
      * param
      * return the information page for the current alliance
      */
-    private function get_data_info()
+    private function getDataInfo()
     {
         $parse = $this->langs->language;
         $parse += (array) $this->_alliance_query;
         $parse['al_alliance_information'] = str_replace('%s', $this->_alliance_query['alliance_name'], $this->langs->line('al_alliance_information'));
         $parse['alliance_register_time'] = ($this->_alliance_query['alliance_register_time'] == 0) ? '-' : date(FunctionsLib::readConfig('date_format_extended'), $this->_alliance_query['alliance_register_time']);
-        $parse['alliance_owner_picker'] = $this->build_users_combo($this->_alliance_query['alliance_owner']);
+        $parse['alliance_owner_picker'] = $this->buildUsersCombo($this->_alliance_query['alliance_owner']);
         $parse['sel1'] = $this->_alliance_query['alliance_request_notallow'] == 1 ? 'selected' : '';
         $parse['sel0'] = $this->_alliance_query['alliance_request_notallow'] == 0 ? 'selected' : '';
         $parse['alert_info'] = ($this->_alert_type != '') ? Administration::saveMessage($this->_alert_type, $this->_alert_info) : '';
@@ -198,11 +192,11 @@ class Alliances extends Controller
     }
 
     /**
-     * method get_data_ranks
+     * method getDataRanks
      * param
      * return the ranks page for the current alliance
      */
-    private function get_data_ranks()
+    private function getDataRanks()
     {
         $parse = $this->langs->language;
         $parse['al_alliance_ranks'] = str_replace('%s', $this->_alliance_query['alliance_name'], $this->langs->line('al_alliance_ranks'));
@@ -214,7 +208,6 @@ class Alliances extends Controller
 
         if (!empty($alliance_ranks)) {
             foreach ($alliance_ranks as $rank_id => $rank_data) {
-
                 $rank_data['delete'] = $rank_data['delete'] ? 'checked' : '';
                 $rank_data['kick'] = $rank_data['kick'] ? 'checked' : '';
                 $rank_data['bewerbungen'] = $rank_data['bewerbungen'] ? 'checked' : '';
@@ -237,15 +230,17 @@ class Alliances extends Controller
     }
 
     /**
-     * method get_research_info
+     * method getDataMembers
      * param
      * return the research page for the current user
      */
-    private function get_data_members()
+    private function getDataMembers()
     {
         $parse = $this->langs->language;
         $parse['al_alliance_members'] = str_replace(
-            '%s', $this->_alliance_query['alliance_name'], $this->langs->line('al_alliance_members')
+            '%s',
+            $this->_alliance_query['alliance_name'],
+            $this->langs->line('al_alliance_members')
         );
         $all_members = $this->Alliances_Model->getAllianceMembers($this->_id);
         $alliance_ranks = unserialize($this->_alliance_query['alliance_ranks']);
@@ -258,15 +253,11 @@ class Alliances extends Controller
                 $member['alliance_register_time'] = date(FunctionsLib::readConfig('date_format_extended'), $member['user_ally_register_time']);
 
                 if ($member['user_id'] == $member['alliance_owner']) {
-
                     $member['ally_rank'] = $member['alliance_owner_range'];
                 } else {
-
                     if (isset($member['ally_rank'])) {
-
                         $member['ally_rank'] = $alliance_ranks[$member['ally_rank']]['name'];
                     } else {
-
                         $member['ally_rank'] = $this->langs->line('al_rank_not_defined');
                     }
                 }
@@ -287,11 +278,11 @@ class Alliances extends Controller
     ######################################
 
     /**
-     * method save_info
+     * method saveInfo
      * param
      * return save information for the current user
      */
-    private function save_info()
+    private function saveInfo()
     {
         $alliance_name = isset($_POST['alliance_name']) ? $_POST['alliance_name'] : '';
         $alliance_name_orig = isset($_POST['alliance_name_orig']) ? $_POST['alliance_name_orig'] : '';
@@ -353,11 +344,11 @@ class Alliances extends Controller
     }
 
     /**
-     * method save_ranks
+     * method saveRanks
      * param
      * return save ranks for the current alliance
      */
-    private function save_ranks()
+    private function saveRanks()
     {
         $alliance_ranks = [];
 
@@ -377,7 +368,7 @@ class Alliances extends Controller
             }
         }
 
-        if (isset($_POST['save_ranks'])) {
+        if (isset($_POST['saveRanks'])) {
             $this->Alliances_Model->updateAllianceRanks($alliance_ranks, $_POST['id'], $this->_id);
 
             $this->_alert_info = $this->langs->line('al_rank_saved');
@@ -397,7 +388,7 @@ class Alliances extends Controller
      * param
      * return save research for the current user
      */
-    private function save_members()
+    private function saveMembers()
     {
         if (isset($_POST['delete_members'])) {
             $ids_string = '';
@@ -432,11 +423,11 @@ class Alliances extends Controller
     ######################################
 
     /**
-     * method build_users_combo
+     * method buildUsersCombo
      * param $user_id
      * return the list of users
      */
-    private function build_users_combo($user_id)
+    private function buildUsersCombo($user_id)
     {
         $combo_rows = '';
         $users = $this->Alliances_Model->getAllUsers();
@@ -454,11 +445,11 @@ class Alliances extends Controller
     ######################################
 
     /**
-     * method check_alliance
+     * method checkAlliance
      * param $alliance
      * return true if alliance exists, false if alliance doesn't exist
      */
-    private function check_alliance($alliance)
+    private function checkAlliance($alliance)
     {
         $alliance_query = $this->Alliances_Model->checkAllianceByNameOrTag($alliance);
 
