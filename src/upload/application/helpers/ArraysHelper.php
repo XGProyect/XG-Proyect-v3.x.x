@@ -57,13 +57,13 @@ abstract class ArraysHelper
      * @param array $haystack
      * @return array|null
      */
-    public static function multiArraySearch(string $needle, array $haystack): ?array
+    public static function multiArraySearch(string $needle, array $haystack): ?int
     {
         foreach ($haystack as $key => $value) {
             $current_key = $key;
 
-            if ($needle === $value or (is_array($value) && self::multiArraySearch($needle, $value) !== false)) {
-                return $current_key;
+            if ($needle === $value or (is_array($value) && self::multiArraySearch($needle, $value) !== null)) {
+                return (int) $current_key;
             }
         }
 
