@@ -505,26 +505,13 @@ $lang['info'][503]['name'] = "Interplanetary Missiles";
 $lang['info'][503]['description'] = 'Interplanetary Missiles (IPM) are your offensive weapon to destroy the defences of your target. Using state of the art tracking technology, each missile targets a certain number of defences for destruction. Tipped with an anti-matter bomb, they deliver a destructive force so severe that destroyed shields and defences cannot be repaired. The only way to counter these missiles is with ABMs.';
 
 //----------------------------------------------------------------------------//
-//SYSTEM
+//old lines
 $lang['sys_attack_title'] = "Fleets clash in ";
 $lang['sys_ship_type'] = "Type";
 $lang['sys_ship_count'] = "Amount";
 $lang['sys_ship_weapon'] = "Weapons";
 $lang['sys_ship_shield'] = "Shield";
 $lang['sys_ship_armour'] = "Armor";
-$lang['sys_destroyed'] = "Destroyed";
-$lang['sys_mess_tower'] = "Control Tower";
-$lang['sys_spy_maretials'] = "Resources";
-$lang['sys_spy_fleet'] = "Fleet";
-$lang['sys_spy_defenses'] = "Defense";
-$lang['sys_mess_qg'] = "Headquarters";
-$lang['sys_mess_spy_report'] = "Report espionage";
-$lang['sys_mess_spy_lostproba'] = "Probability of detection of the fleet of spy : %d %% ";
-$lang['sys_mess_spy_control'] = "Space Control";
-$lang['sys_mess_spy_activity'] = "Espionage activity";
-$lang['sys_mess_spy_ennemyfleet'] = "An enemy fleet on the planet";
-$lang['sys_mess_spy_seen_at'] = "was seen near your planet";
-$lang['sys_mess_spy_destroyed'] = "Your fleet has been destroyed espionage";
 $lang['sys_stay_mess_stay'] = "Parking Fleet";
 $lang['sys_stay_mess_start'] = "your fleet arrives on the planet";
 $lang['sys_stay_mess_end'] = " and offers the following resources : ";
@@ -569,7 +556,6 @@ $lang['sys_destruc_mess'] = "A fleet from planet %s [%d:%d:%d] goes to planet mo
 $lang['sys_destruc_moon'] = ". The tremors began to shake the surface of the moon, after a few moments the moon couldn't longer resist and blows into thousand of pieces, mission accomplished, the fleet returns to the planet of origin.";
 $lang['sys_destruc_ds'] = ". The tremors began to shake the surface of the moon, but something goes wrong, the Death Stars graviton also causes tremors making the Death Stars blow into thousand of pieces.";
 $lang['sys_destruc_none'] = ". The Death Stars didn't generate enough power, the mission failed and the ships returned.";
-$lang['sys_the'] = " the ";
 $lang['sys_stay_mess_back'] = "One of your fleet return from ";
 $lang['sys_stay_mess_bend'] = " and offers ";
 $lang['sys_missile_attack'] = 'Missile Attack';

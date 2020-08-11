@@ -1,5 +1,6 @@
 <?php
 $lang = [
+    // global
     'type_mission' => [
         1 => 'Attack',
         2 => 'ACS Attack',
@@ -12,6 +13,9 @@ $lang = [
         9 => 'Destroy',
         15 => 'Expedition',
     ],
+
+    // fleet missions
+    'mi_fleet_command' => 'Fleet Command',
 ];
 
 /* end of missions_lang.php */

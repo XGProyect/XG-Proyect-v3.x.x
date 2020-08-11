@@ -515,26 +515,13 @@ $lang['info'][503]['name'] = "Misil interplanetario";
 $lang['info'][503]['description'] = "Los misiles interplanetarios destruyen los sistemas de defensa del enemigo. Los sistemas de defensa destruidos por los misiles interplanetarios no serán reparados.";
 
 //----------------------------------------------------------------------------//
-//SYSTEM
+//old lines
 $lang['sys_attack_title'] = "Las flotas se enfrentan en ";
 $lang['sys_ship_type'] = "Tipo";
 $lang['sys_ship_count'] = "Cantidad";
 $lang['sys_ship_weapon'] = "Armas";
 $lang['sys_ship_shield'] = "Escudo";
 $lang['sys_ship_armour'] = "Blindaje";
-$lang['sys_destroyed'] = "Destruido";
-$lang['sys_mess_tower'] = "Torre de control";
-$lang['sys_spy_maretials'] = "Recursos en";
-$lang['sys_spy_fleet'] = "Flota";
-$lang['sys_spy_defenses'] = "Defensas";
-$lang['sys_mess_qg'] = "Cuartel General";
-$lang['sys_mess_spy_report'] = "Reporte de espionaje";
-$lang['sys_mess_spy_lostproba'] = "La probabilidad de contra-espionaje es del %d %%";
-$lang['sys_mess_spy_control'] = "Control del espacio";
-$lang['sys_mess_spy_activity'] = "Acción de espionaje";
-$lang['sys_mess_spy_ennemyfleet'] = "Se ha detectado una flota del planeta";
-$lang['sys_mess_spy_seen_at'] = "cerca de tu planeta";
-$lang['sys_mess_spy_destroyed'] = "Tu flota de espionaje ha sido destruida";
 $lang['sys_stay_mess_stay'] = "Estacionamiento de flota";
 $lang['sys_stay_mess_start'] = "Tu flota llega al planeta";
 $lang['sys_stay_mess_end'] = " y ofrece los siguientes recursos: ";
@@ -579,7 +566,6 @@ $lang['sys_destruc_mess'] = "Una flota del planeta %s [%d:%d:%d] se dirige a la 
 $lang['sys_destruc_moon'] = ". Los temblores empiezan a sacudir la superficie de la luna, despues de unos instantes la luna no soporta mas y vuela en mil pedazos, mision cumplida, la flota vuelve al planeta de origen.";
 $lang['sys_destruc_ds'] = ". Los temblores empiezan a sacudir la superficie de la luna, pero algo sale mal, el graviton en las estrellas de la muerte también provoca temblores y las estrellas de la muerte vuelan en mil pedazos.";
 $lang['sys_destruc_none'] = ". Las estrellas de la muerte no generan el poder necesario, la mision falla y las naves vuelven de regreso.";
-$lang['sys_the'] = " el ";
 $lang['sys_stay_mess_back'] = "Una de sus flotas vuelve de ";
 $lang['sys_stay_mess_bend'] = " y entrega su mercancía ";
 $lang['sys_missile_attack'] = 'Ataque con misiles';
