@@ -15,6 +15,7 @@ namespace application\controllers\install;
 
 use application\core\Controller;
 use application\core\Database;
+use application\helpers\StringsHelper;
 use application\libraries\FunctionsLib as Functions;
 use application\libraries\PlanetLib;
 
@@ -430,7 +431,7 @@ class Installation extends Controller
         $data .= "defined('DB_PASS') ? NULL : define('DB_PASS', '" . $this->password . "');\n";
         $data .= "defined('DB_NAME') ? NULL : define('DB_NAME', '" . $this->name . "');\n";
         $data .= "defined('DB_PREFIX') ? NULL : define('DB_PREFIX', '" . $this->prefix . "');\n";
-        $data .= "defined('SECRETWORD') ? NULL : define('SECRETWORD', 'xgp-" . Functions::randomString(16) . "');\n";
+        $data .= "defined('SECRETWORD') ? NULL : define('SECRETWORD', 'xgp-" . StringsHelper::randomString(16) . "');\n";
         $data .= "?>";
 
         // create the new file
