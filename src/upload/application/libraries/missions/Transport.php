@@ -119,7 +119,7 @@ class Transport extends Missions
             $this->Missions_Model->updateReturningFleetResources($fleet_row['fleet_id']);
         } elseif ($fleet_row['fleet_end_time'] < time()) {
             $this->transportMessage(
-                $start_owner_id, $message[3], $fleet_row['fleet_end_time'], $this->langs->line('mi_fleet_back')
+                $start_owner_id, $message[3], $fleet_row['fleet_end_time'], $this->langs->line('mi_fleet_back_title')
             );
 
             parent::restoreFleet($fleet_row, true);
