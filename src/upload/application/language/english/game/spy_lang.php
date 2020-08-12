@@ -11,7 +11,8 @@ $lang = [
     'spy_activity_title' => 'Espionage activity',
     'spy_activity_enemy' => 'An enemy fleet on the planet',
     'spy_activity_enemy_seen' => 'was seen near your planet',
-    'spy_result_destroyed' => 'Your fleet has been destroyed espionage',
+    'spy_result_destroyed_title' => 'Contact was lost with the attacking fleet.<br>%s',
+    'spy_result_destroyed' => '(The fleet was destroyed in the first round)',
 ];
 
 /* end of spy_lang.php */

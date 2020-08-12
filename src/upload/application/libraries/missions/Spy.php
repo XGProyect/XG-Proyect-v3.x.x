@@ -110,9 +110,16 @@ class Spy extends Missions
                     $SpyerChances = mt_rand(0, 100);
 
                     if ($TargetChances >= $SpyerChances) {
-                        $DestProba = "<font color=\"red\">" . $this->langs->line('spy_result_destroyed') . "</font>";
-                    } elseif ($TargetChances < $SpyerChances) {
-                        $DestProba = sprintf($this->langs->line('spy_report_detection'), $TargetChances);
+                        FunctionsLib::sendMessage(
+                            $fleet_row['fleet_owner'],
+                            '',
+                            time(),
+                            0,
+                            $this->langs->line('mi_fleet_command'),
+                            sprintf($this->langs->line('spy_result_destroyed_title'), FormatLib::prettyCoords($fleet_row['fleet_end_galaxy'], $fleet_row['fleet_end_system'], $fleet_row['fleet_end_planet'])),
+                            $this->langs->line('spy_result_destroyed'),
+                            true
+                        );
                     }
 
                     $AttackLink = "<center>";
@@ -121,7 +128,7 @@ class Spy extends Missions
                     $AttackLink .= "&target_mission=1";
                     $AttackLink .= " \">" . $this->langs->language['type_mission'][1] . "";
                     $AttackLink .= "</a></center>";
-                    $MessageEnd = "<center>" . $DestProba . "</center>";
+                    $MessageEnd = "<center>" . sprintf($this->langs->line('spy_report_detection'), $TargetChances) . "</center>";
 
                     $spionage_difference = abs($CurrentSpyLvl - $TargetSpyLvl);
 
