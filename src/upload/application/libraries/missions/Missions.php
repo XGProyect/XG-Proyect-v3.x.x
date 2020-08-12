@@ -89,13 +89,11 @@ class Missions extends XGPCore
     protected function restoreFleet($fleet_row, $start = true)
     {
         if ($start) {
-
             $galaxy = $fleet_row['fleet_start_galaxy'];
             $system = $fleet_row['fleet_start_system'];
             $planet = $fleet_row['fleet_start_planet'];
             $type = $fleet_row['fleet_start_type'];
         } else {
-
             $galaxy = $fleet_row['fleet_end_galaxy'];
             $system = $fleet_row['fleet_end_system'];
             $planet = $fleet_row['fleet_end_planet'];
@@ -108,7 +106,6 @@ class Missions extends XGPCore
         $ships_fields = '';
 
         foreach ($ships as $id => $amount) {
-
             $ships_fields .= "`" . $this->resource[$id] . "` = `" .
             $this->resource[$id] . "` + '" . $amount . "', ";
         }
@@ -149,13 +146,11 @@ class Missions extends XGPCore
     protected function storeResources($fleet_row, $start = false)
     {
         if ($start) {
-
             $galaxy = $fleet_row['fleet_start_galaxy'];
             $system = $fleet_row['fleet_start_system'];
             $planet = $fleet_row['fleet_start_planet'];
             $type = $fleet_row['fleet_start_type'];
         } else {
-
             $galaxy = $fleet_row['fleet_end_galaxy'];
             $system = $fleet_row['fleet_end_system'];
             $planet = $fleet_row['fleet_end_planet'];
