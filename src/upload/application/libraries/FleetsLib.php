@@ -43,11 +43,11 @@ class FleetsLib extends XGPCore
     }
 
     /**
-     * bbCode function.
+     * Determine ship consumption
      *
-     * @param string $string String
-     *
-     * @return int
+     * @param int $ship
+     * @param array $user
+     * @return void
      */
     public static function shipConsumption($ship, $user)
     {

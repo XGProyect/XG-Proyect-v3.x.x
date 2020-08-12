@@ -203,10 +203,11 @@ class Spy extends Missions
     }
 
     /**
-     * bbCode function.
+     * Spy the target
      *
-     * @param string $string String
-     *
+     * @param array $target_data
+     * @param int $mode
+     * @param string $TitleString
      * @return void
      */
     private function spy_target($target_data, $mode, $TitleString)

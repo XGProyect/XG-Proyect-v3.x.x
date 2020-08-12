@@ -42,10 +42,9 @@ class Colonize extends Missions
     }
 
     /**
-     * bbCode function.
+     * Colonize mission
      *
-     * @param string $string String
-     *
+     * @param array $fleet_row
      * @return void
      */
     public function colonizeMission($fleet_row)
@@ -76,7 +75,7 @@ class Colonize extends Missions
                     $this->colonize_message($fleet_row['fleet_owner'], $message[1], $fleet_row['fleet_start_time']);
 
                     parent::returnFleet($fleet_row['fleet_id']);
-                } elseif (!$this->position_allowed($fleet_row['fleet_end_planet'], $colonization_check['astro_level'])) {
+                } elseif (!$this->positionAllowed($fleet_row['fleet_end_planet'], $colonization_check['astro_level'])) {
                     $this->colonize_message($fleet_row['fleet_owner'], $message[4], $fleet_row['fleet_start_time']);
 
                     parent::returnFleet($fleet_row['fleet_id']);
@@ -144,10 +143,9 @@ class Colonize extends Missions
     }
 
     /**
-     * bbCode function.
+     * Build new fleet
      *
-     * @param string $string String
-     *
+     * @param array $fleet_array
      * @return void
      */
     private function build_new_fleet($fleet_array)
@@ -171,10 +169,11 @@ class Colonize extends Missions
     }
 
     /**
-     * bbCode function.
+     * Send colonization message
      *
-     * @param string $string String
-     *
+     * @param int $owner
+     * @param string $message
+     * @param int $time
      * @return void
      */
     private function colonize_message($owner, $message, $time)
@@ -183,13 +182,13 @@ class Colonize extends Missions
     }
 
     /**
-     * bbCode function.
+     * Check if position is allowed
      *
-     * @param string $string String
-     *
-     * @return void
+     * @param int $position
+     * @param int $level
+     * @return bool
      */
-    private function position_allowed($position, $level)
+    private function positionAllowed(int $position, int $level): bool
     {
         // CHECK IF THE POSITION IS NEAR THE SPACE LIMITS
         if ($position <= 3 or $position >= 13) {
