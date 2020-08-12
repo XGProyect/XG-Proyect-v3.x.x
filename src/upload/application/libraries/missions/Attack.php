@@ -40,7 +40,7 @@ use Ship;
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
- * @version  3.0.0
+ * @version  3.1.0
  */
 class Attack extends Missions
 {
@@ -51,9 +51,7 @@ class Attack extends Missions
     const DEFENSE_MAX_ID = 408;
 
     /**
-     * __construct
-     *
-     * @return void
+     * Constructor
      */
     public function __construct()
     {

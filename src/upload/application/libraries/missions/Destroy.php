@@ -40,7 +40,7 @@ use Ship;
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
- * @version  3.0.0
+ * @version  3.1.0
  */
 class Destroy extends Missions
 {
@@ -64,7 +64,7 @@ class Destroy extends Missions
     private $_formula;
 
     /**
-     * __construct()
+     * Constructor
      */
     public function __construct()
     {
