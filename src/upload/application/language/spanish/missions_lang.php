@@ -15,7 +15,9 @@ $lang = [
     ],
 
     // fleet missions
-    'mi_fleet_command' => 'Ordenes de la flota',
+    'mi_fleet_back_title' => 'Retorno de una flota', // ok
+    'mi_fleet_back' => 'Tu flota vuelve del planeta %s %s al planeta %s %s.<br><br>La flota no trae recursos.', // ok
+    'mi_fleet_command' => 'Ordenes de la flota', // ok
     'mi_planet_coordinates' => '[%s:%s:%s]',
 ];
 

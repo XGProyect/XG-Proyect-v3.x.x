@@ -24,19 +24,19 @@ use application\libraries\FunctionsLib;
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
- * @version  3.0.0
+ * @version  3.1.0
  */
 class Transport extends Missions
 {
-
     /**
-     * __construct
-     *
-     * @return void
+     * Constructor
      */
     public function __construct()
     {
         parent::__construct();
+
+        // load Language
+        parent::loadLang(['missions', 'game/transport']);
     }
 
     /**
@@ -54,15 +54,15 @@ class Transport extends Missions
                     'galaxy' => $fleet_row['fleet_start_galaxy'],
                     'system' => $fleet_row['fleet_start_system'],
                     'planet' => $fleet_row['fleet_start_planet'],
-                    'type' => $fleet_row['fleet_start_type']
+                    'type' => $fleet_row['fleet_start_type'],
                 ],
                 'end' => [
                     'galaxy' => $fleet_row['fleet_end_galaxy'],
                     'system' => $fleet_row['fleet_end_system'],
                     'planet' => $fleet_row['fleet_end_planet'],
-                    'type' => $fleet_row['fleet_end_type']
-                ]
-            ]
+                    'type' => $fleet_row['fleet_end_type'],
+                ],
+            ],
         ]);
 
         // SOME REQUIRED VALUES
@@ -73,38 +73,53 @@ class Transport extends Missions
 
         // DIFFERENT TYPES OF MESSAGES
         $message[1] = sprintf(
-            $this->langs['sys_tran_mess_owner'], $target_name, FleetsLib::targetLink($fleet_row, ''), $fleet_row['fleet_resource_metal'], $this->langs['Metal'], $fleet_row['fleet_resource_crystal'], $this->langs['Crystal'], $fleet_row['fleet_resource_deuterium'], $this->langs['Deuterium']
+            $this->langs->line('tra_delivered_resources'),
+            $start_name,
+            FleetsLib::startLink($fleet_row, ''),
+            $target_name,
+            FleetsLib::targetLink($fleet_row, ''),
+            $fleet_row['fleet_resource_metal'],
+            $fleet_row['fleet_resource_crystal'],
+            $fleet_row['fleet_resource_deuterium']
         );
 
         $message[2] = sprintf(
-            $this->langs['sys_tran_mess_user'], $start_name, FleetsLib::startLink($fleet_row, ''), $target_name, FleetsLib::targetLink($fleet_row, ''), $fleet_row['fleet_resource_metal'], $this->langs['Metal'], $fleet_row['fleet_resource_crystal'], $this->langs['Crystal'], $fleet_row['fleet_resource_deuterium'], $this->langs['Deuterium']
+            $this->langs->line('tra_delivered_resources'),
+            $start_name,
+            FleetsLib::startLink($fleet_row, ''),
+            $target_name,
+            FleetsLib::targetLink($fleet_row, ''),
+            $fleet_row['fleet_resource_metal'],
+            $fleet_row['fleet_resource_crystal'],
+            $fleet_row['fleet_resource_deuterium']
         );
 
         $message[3] = sprintf(
-            $this->langs['sys_tran_mess_back'], $start_name, FleetsLib::startLink($fleet_row, '')
+            $this->langs->line('mi_fleet_back'),
+            $target_name,
+            FleetsLib::targetLink($fleet_row, ''),
+            $start_name,
+            FleetsLib::startLink($fleet_row, '')
         );
 
         if ($fleet_row['fleet_mess'] == 0 && $fleet_row['fleet_start_time'] <= time()) {
-
             parent::storeResources($fleet_row, false);
 
             $this->transportMessage(
-                $start_owner_id, $message[1], $fleet_row['fleet_start_time'], $this->langs['sys_mess_transport']
+                $start_owner_id, $message[1], $fleet_row['fleet_start_time'], $this->langs->line('tra_reaching')
             );
 
             // MESSAGE FOR THE OTHER USER, IN CASE WE ARE TRANSPORTING TO ANOTHER USER
-            if ($target_owner_id <> $start_owner_id) {
-
+            if ($target_owner_id != $start_owner_id) {
                 $this->transportMessage(
-                    $target_owner_id, $message[2], $fleet_row['fleet_start_time'], $this->langs['sys_mess_transport']
+                    $target_owner_id, $message[2], $fleet_row['fleet_start_time'], $this->langs->line('tra_reaching')
                 );
             }
 
             $this->Missions_Model->updateReturningFleetResources($fleet_row['fleet_id']);
         } elseif ($fleet_row['fleet_end_time'] < time()) {
-
             $this->transportMessage(
-                $start_owner_id, $message[3], $fleet_row['fleet_end_time'], $this->langs['sys_mess_fleetback']
+                $start_owner_id, $message[3], $fleet_row['fleet_end_time'], $this->langs->line('mi_fleet_back')
             );
 
             parent::restoreFleet($fleet_row, true);
@@ -124,7 +139,7 @@ class Transport extends Missions
      */
     private function transportMessage($owner, $message, $time, $status_message)
     {
-        FunctionsLib::sendMessage($owner, '', $time, 5, $this->langs['sys_mess_tower'], $status_message, $message);
+        FunctionsLib::sendMessage($owner, '', $time, 5, $this->langs->line('mi_fleet_command'), $status_message, $message);
     }
 }
 
