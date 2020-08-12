@@ -15,7 +15,6 @@ namespace application\controllers\game;
 
 use application\core\Controller;
 use application\libraries\combatreport\Report;
-use application\libraries\enumerators\ReportStatusEnumerator as ReportStatus;
 use application\libraries\FunctionsLib;
 
 /**
@@ -126,11 +125,6 @@ class Combatreport extends Controller
      */
     private function getReportTemplate()
     {
-        // When the fleet was destroyed in the first row
-        if ($this->report->getAllReportsOwnedByUserId()[0]->getReportDestroyed() == ReportStatus::fleetDestroyed) {
-            return $this->getTemplate()->set('combatreport/combatreport_contact_lost_view', $this->langs->language);
-        }
-
         // any other case
         $content = stripslashes($this->report->getAllReports()[0]->getReportContent());
         /*

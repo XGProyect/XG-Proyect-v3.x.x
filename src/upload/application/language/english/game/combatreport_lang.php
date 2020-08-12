@@ -1,8 +1,6 @@
 <?php
 $lang = [
-    'cr_combat_report_title' => 'Battle Report',
-    'cr_lost_contact' => 'Contact was lost with the attacking fleet.',
-    'cr_first_round' => '(The fleet was destroyed in the first round)',
+    'cr_combat_report_title' => 'Combat Report %s %s', // ok
     'cr_type' => 'Type',
     'cr_total' => 'Total',
     'cr_technologies' => 'Weapons: %d%% Shields: %d%% Armour: %d%%', // ok
