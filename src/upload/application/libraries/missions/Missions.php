@@ -29,8 +29,6 @@ use application\libraries\UpdatesLibrary;
  */
 class Missions extends XGPCore
 {
-
-    protected $langs;
     protected $resource;
     protected $pricelist;
     protected $combat_caps;
@@ -45,10 +43,6 @@ class Missions extends XGPCore
         // load model
         parent::loadModel('libraries/missions/missions');
 
-        // load Language
-        parent::loadLang('game/combatreport');
-
-        $this->langs = parent::$lang + $this->langs->language;
         $this->resource = parent::$objects->getObjects();
         $this->pricelist = parent::$objects->getPrice();
         $this->combat_caps = parent::$objects->getCombatSpecs();
@@ -113,7 +107,6 @@ class Missions extends XGPCore
         $fuel_return = 0;
 
         if ($fleet_row['fleet_mission'] == 4 && !$start) {
-
             $fuel_return = $fleet_row['fleet_fuel'] / 2;
         }
 

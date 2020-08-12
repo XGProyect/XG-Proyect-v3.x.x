@@ -536,7 +536,6 @@ $lang['sys_expe_found_ships'] = "Tus exploradores han encontrado una flota aband
 $lang['sys_expe_back_home'] = "Tu expedición regresó al hangar.";
 $lang['sys_tran_mess_owner'] = "Una de tus flota llega a %s %s y entrega su mercancía: %s de %s, %s de %s y %s de %s.";
 $lang['sys_tran_mess_user'] = "Una flota proveniente de %s %s llega a tu planeta y entrega su mercancía: %s de %s, %s de %s y %s de %s.";
-$lang['sys_fleet_won'] = "Una de tus flotas regresa del planeta %s %s y entrega %s de %s, %s de %s y %s de %s";
 $lang['sys_mess_destruc_report'] = "Reporte de Destruccion";
 $lang['sys_destruc_lune'] = "La probabilidad de destruir la luna es de: %d %% ";
 $lang['sys_destruc_rip'] = "La probabilidad de que sean destruidas las estrellas de la muerte es de: %d %% ";

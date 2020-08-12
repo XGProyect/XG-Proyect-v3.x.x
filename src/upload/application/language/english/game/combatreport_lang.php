@@ -1,6 +1,5 @@
 <?php
 $lang = [
-    'cr_combat_report_title' => 'Combat Report %s %s', // ok
     'cr_type' => 'Type',
     'cr_total' => 'Total',
     'cr_technologies' => 'Weapons: %d%% Shields: %d%% Armour: %d%%', // ok

@@ -526,7 +526,6 @@ $lang['sys_expe_found_ships'] = "Your expedition ran into the shipyards of a col
 $lang['sys_expe_back_home'] = "Your expedition returned to the hangar.";
 $lang['sys_tran_mess_owner'] = "Your fleet has reached the planet %s %s and delivered its goods:<br>%s: %s %s: %s %s: %s.";
 $lang['sys_tran_mess_user'] = "Your fleet is returning from planet %s %s.<br><br>The fleet is delivering %s %s, %s %s and %s %s.";
-$lang['sys_fleet_won'] = "Your fleet is returning from planet %s %s.<br><br>The fleet is delivering %s %s, %s %s and %s %s.";
 $lang['sys_mess_destruc_report'] = "Destruction Report";
 $lang['sys_destruc_lune'] = "The probability of destroying the moon is: %d %% ";
 $lang['sys_destruc_rip'] = "The probability that the stars of death are destroyed is: %d %% ";
