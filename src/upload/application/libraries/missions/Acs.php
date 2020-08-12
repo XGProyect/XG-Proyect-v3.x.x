@@ -1,4 +1,7 @@
 <?php
+
+declare (strict_types = 1);
+
 /**
  * Acs Library
  *
@@ -34,21 +37,23 @@ class Acs extends Missions
     }
 
     /**
-     * acsMission
+     * ACS Attack - attack between several players
      *
-     * @param array $fleet_row Fleet row
-     *
+     * @param array $fleet
      * @return void
      */
-    public function acsMission($fleet_row)
+    public function acsMission(array $fleet): void
     {
-        if ($fleet_row['fleet_mess'] == 0 && $fleet_row['fleet_start_time'] > time()) {
-            parent::returnFleet($fleet_row['fleet_id']);
+        // do mission
+        if (parent::canStartMission($fleet)) {
+            parent::returnFleet($fleet['fleet_id']);
         }
 
-        if ($fleet_row['fleet_end_time'] <= time()) {
-            parent::restoreFleet($fleet_row);
-            parent::removeFleet($fleet_row['fleet_id']);
+        // complete mission
+        if (parent::canCompleteMission($fleet)) {
+            // transfer the ships to the planet
+            parent::restoreFleet($fleet);
+            parent::removeFleet($fleet['fleet_id']);
         }
     }
 }
