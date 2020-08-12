@@ -94,7 +94,10 @@ class Recycle extends Missions
             );
 
             $this->recycleMessage(
-                $fleet_row['fleet_owner'], $message, $fleet_row['fleet_start_time'], $this->langs->line('rec_report_title')
+                $fleet_row['fleet_owner'],
+                $message,
+                $fleet_row['fleet_start_time'],
+                sprintf($this->langs->line('rec_report_title'), FleetsLib::targetLink($fleet_row, ''))
             );
         } elseif ($fleet_row['fleet_end_time'] <= time()) {
             $message = sprintf(
