@@ -1,4 +1,7 @@
 <?php
+
+declare (strict_types = 1);
+
 /**
  * Transport Library
  *
@@ -13,8 +16,10 @@
  */
 namespace application\libraries\missions;
 
-use application\libraries\FleetsLib;
-use application\libraries\FunctionsLib;
+use application\libraries\FleetsLib as Fleets;
+use application\libraries\FormatLib as Format;
+use application\libraries\FunctionsLib as Functions;
+use application\libraries\missions\Missions;
 
 /**
  * Transport Class
@@ -40,106 +45,167 @@ class Transport extends Missions
     }
 
     /**
-     * transportMission
+     * Transport mission - deliver resources between planets
      *
-     * @param array $fleet_row Fleet row
-     *
+     * @param array $fleet
      * @return void
      */
-    public function transportMission($fleet_row)
+    public function transportMission(array $fleet): void
     {
-        $friendly_planet = $this->Missions_Model->getFriendlyPlanetData([
-            'coords' => [
-                'start' => [
-                    'galaxy' => $fleet_row['fleet_start_galaxy'],
-                    'system' => $fleet_row['fleet_start_system'],
-                    'planet' => $fleet_row['fleet_start_planet'],
-                    'type' => $fleet_row['fleet_start_type'],
-                ],
-                'end' => [
-                    'galaxy' => $fleet_row['fleet_end_galaxy'],
-                    'system' => $fleet_row['fleet_end_system'],
-                    'planet' => $fleet_row['fleet_end_planet'],
-                    'type' => $fleet_row['fleet_end_type'],
-                ],
-            ],
-        ]);
+        // get required data
+        $trading_planets = $this->getTradingPlanetsData($fleet);
 
-        // SOME REQUIRED VALUES
-        $start_name = $friendly_planet['start_name'];
-        $start_owner_id = $friendly_planet['start_id'];
-        $target_name = $friendly_planet['target_name'];
-        $target_owner_id = $friendly_planet['target_id'];
+        // do mission
+        if (parent::canStartMission($fleet)) {
+            // messages
+            $this->sendDeliveryMessageToOwner($fleet, $trading_planets);
+            $this->sendDeliveryMessageToReceiver($fleet, $trading_planets);
 
-        // DIFFERENT TYPES OF MESSAGES
-        $message[1] = sprintf(
-            $this->langs->line('tra_delivered_resources'),
-            $start_name,
-            FleetsLib::startLink($fleet_row, ''),
-            $target_name,
-            FleetsLib::targetLink($fleet_row, ''),
-            $fleet_row['fleet_resource_metal'],
-            $fleet_row['fleet_resource_crystal'],
-            $fleet_row['fleet_resource_deuterium']
-        );
+            // transfer the fleet resources to the planet
+            parent::storeResources($fleet, false);
+            $this->Missions_Model->updateReturningFleetResources($fleet['fleet_id']);
+        }
 
-        $message[2] = sprintf(
-            $this->langs->line('tra_delivered_resources'),
-            $start_name,
-            FleetsLib::startLink($fleet_row, ''),
-            $target_name,
-            FleetsLib::targetLink($fleet_row, ''),
-            $fleet_row['fleet_resource_metal'],
-            $fleet_row['fleet_resource_crystal'],
-            $fleet_row['fleet_resource_deuterium']
-        );
+        // complete mission
+        if (parent::canCompleteMission($fleet)) {
+            // message
+            $this->sendReturnMessage($fleet, $trading_planets);
 
-        $message[3] = sprintf(
-            $this->langs->line('mi_fleet_back'),
-            $target_name,
-            FleetsLib::targetLink($fleet_row, ''),
-            $start_name,
-            FleetsLib::startLink($fleet_row, '')
-        );
-
-        if ($fleet_row['fleet_mess'] == 0 && $fleet_row['fleet_start_time'] <= time()) {
-            parent::storeResources($fleet_row, false);
-
-            $this->transportMessage(
-                $start_owner_id, $message[1], $fleet_row['fleet_start_time'], $this->langs->line('tra_reaching')
-            );
-
-            // MESSAGE FOR THE OTHER USER, IN CASE WE ARE TRANSPORTING TO ANOTHER USER
-            if ($target_owner_id != $start_owner_id) {
-                $this->transportMessage(
-                    $target_owner_id, $message[2], $fleet_row['fleet_start_time'], $this->langs->line('tra_reaching')
-                );
-            }
-
-            $this->Missions_Model->updateReturningFleetResources($fleet_row['fleet_id']);
-        } elseif ($fleet_row['fleet_end_time'] < time()) {
-            $this->transportMessage(
-                $start_owner_id, $message[3], $fleet_row['fleet_end_time'], $this->langs->line('mi_fleet_back_title')
-            );
-
-            parent::restoreFleet($fleet_row, true);
-            parent::removeFleet($fleet_row['fleet_id']);
+            // transfer the ships to the planet
+            parent::restoreFleet($fleet);
+            parent::removeFleet($fleet['fleet_id']);
         }
     }
 
     /**
-     * transportMessage
+     * Get data for the planets that are trading resources
      *
-     * @param int    $owner          Owner
-     * @param string $message        Message
-     * @param int    $time           Time
-     * @param string $status_message Status message
+     * @param array $fleet
+     * @return array
+     */
+    private function getTradingPlanetsData(array $fleet): array
+    {
+        return $this->Missions_Model->getFriendlyPlanetData([
+            'coords' => [
+                'start' => [
+                    'galaxy' => $fleet['fleet_start_galaxy'],
+                    'system' => $fleet['fleet_start_system'],
+                    'planet' => $fleet['fleet_start_planet'],
+                    'type' => $fleet['fleet_start_type'],
+                ],
+                'end' => [
+                    'galaxy' => $fleet['fleet_end_galaxy'],
+                    'system' => $fleet['fleet_end_system'],
+                    'planet' => $fleet['fleet_end_planet'],
+                    'type' => $fleet['fleet_end_type'],
+                ],
+            ],
+        ]);
+    }
+
+    /**
+     * Send a delivery message to the fleet owner
      *
+     * @param array $fleet
+     * @param array $trading_planets
      * @return void
      */
-    private function transportMessage($owner, $message, $time, $status_message)
+    private function sendDeliveryMessageToOwner(array $fleet, array $trading_planets): void
     {
-        FunctionsLib::sendMessage($owner, '', $time, 5, $this->langs->line('mi_fleet_command'), $status_message, $message);
+        // parse data to message
+        $message = sprintf(
+            $this->langs->line('tra_delivered_resources'),
+            $trading_planets['start_name'],
+            Fleets::startLink($fleet, ''),
+            $trading_planets['target_name'],
+            Fleets::targetLink($fleet, ''),
+            Format::prettyNumber($fleet['fleet_resource_metal']),
+            Format::prettyNumber($fleet['fleet_resource_crystal']),
+            Format::prettyNumber($fleet['fleet_resource_deuterium'])
+        );
+
+        // send message
+        Functions::sendMessage(
+            $trading_planets['start_id'],
+            '',
+            $fleet['fleet_start_time'],
+            5,
+            $this->langs->line('mi_fleet_command'),
+            $this->langs->line('tra_reaching'),
+            $message
+        );
+    }
+
+    /**
+     * Send a delivery message to the receiver, only if the target planet is not a planet from the same user
+     *
+     * @param array $fleet
+     * @param array $trading_planets
+     * @return void
+     */
+    private function sendDeliveryMessageToReceiver(array $fleet, array $trading_planets): void
+    {
+        if ($trading_planets['start_id'] != $trading_planets['target_id']) {
+            // parse data to message
+            $message = sprintf(
+                $this->langs->line('tra_incoming_delivery'),
+                $trading_planets['start_user_name'],
+                $start_name,
+                Fleets::startLink($fleet, ''),
+                $target_name,
+                Fleets::targetLink($fleet, ''),
+                Format::prettyNumber($fleet['fleet_resource_metal']),
+                Format::prettyNumber($fleet['fleet_resource_crystal']),
+                Format::prettyNumber($fleet['fleet_resource_deuterium']),
+                Format::prettyNumber($trading_planets['target_metal']),
+                Format::prettyNumber($trading_planets['target_crystal']),
+                Format::prettyNumber($trading_planets['target_deuterium']),
+                Format::prettyNumber($trading_planets['target_metal'] + $fleet['fleet_resource_metal']),
+                Format::prettyNumber($trading_planets['target_crystal'] + $fleet['fleet_resource_crystal']),
+                Format::prettyNumber($trading_planets['target_deuterium'] + $fleet['fleet_resource_deuterium'])
+            );
+
+            // send message
+            Functions::sendMessage(
+                $trading_planets['target_id'],
+                '',
+                $fleet['fleet_start_time'],
+                5,
+                $this->langs->line('tra_incoming_from'),
+                $this->langs->line('tra_incoming_title'),
+                $message
+            );
+        }
+    }
+
+    /**
+     * Send a message informing that the fleet is back
+     *
+     * @param array $fleet
+     * @param array $trading_planets
+     * @return void
+     */
+    private function sendReturnMessage(array $fleet, array $trading_planets): void
+    {
+        // parse data to message
+        $message = sprintf(
+            $this->langs->line('mi_fleet_back'),
+            $trading_planets['target_name'],
+            Fleets::targetLink($fleet, ''),
+            $trading_planets['start_name'],
+            Fleets::startLink($fleet, '')
+        );
+
+        // send message
+        Functions::sendMessage(
+            $trading_planets['start_id'],
+            '',
+            $fleet['fleet_end_time'],
+            5,
+            $this->langs->line('mi_fleet_command'),
+            $this->langs->line('mi_fleet_back_title'),
+            $message
+        );
     }
 }
 

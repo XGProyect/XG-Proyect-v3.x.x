@@ -459,11 +459,18 @@ class Missions extends Model
     {
         if (is_array($data)) {
             return $this->db->queryFetch(
-                "SELECT pc1.`planet_user_id` AS start_id,
-                    pc1.`planet_name` AS start_name,
-                    pc2.`planet_user_id` AS target_id,
-                    pc2.`planet_name` AS target_name
-                FROM " . PLANETS . " AS pc1, " . PLANETS . " AS pc2
+                "SELECT
+                    pc1.`planet_user_id` AS `start_id`,
+                    pc1.`planet_name` AS `start_name`,
+                    pc2.`planet_user_id` AS `target_id`,
+                    pc2.`planet_name` AS `target_name`,
+                    pc2.`planet_metal` AS `target_metal`,
+                    pc2.`planet_crystal` AS `target_crystal`,
+                    pc2.`planet_deuterium` AS `target_deuterium`,
+                    u.`user_name` AS `start_user_name`
+                FROM `" . PLANETS . "` AS pc1 JOIN `" . PLANETS . "` AS pc2
+                LEFT JOIN `" . USERS . "` AS u
+                    ON u.`user_id` = pc1.`planet_user_id`
                 WHERE pc1.planet_galaxy = '" . $data['coords']['start']['galaxy'] . "' AND
                     pc1.`planet_system` = '" . $data['coords']['start']['system'] . "' AND
                     pc1.`planet_planet` = '" . $data['coords']['start']['planet'] . "' AND

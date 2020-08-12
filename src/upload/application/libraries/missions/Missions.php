@@ -197,6 +197,28 @@ class Missions extends XGPCore
         // update planet resources and queues
         UpdatesLibrary::updatePlanetResources($target_user, $target_planet, time());
     }
+
+    /**
+     * Check if the mission can be started
+     *
+     * @param array $fleet
+     * @return boolean
+     */
+    protected function canStartMission(array $fleet): bool
+    {
+        return ($fleet['fleet_mess'] == 0 && $fleet['fleet_start_time'] <= time());
+    }
+
+    /**
+     * Check if the mission can be completed
+     *
+     * @param array $fleet
+     * @return boolean
+     */
+    protected function canCompleteMission(array $fleet): bool
+    {
+        return ($fleet['fleet_end_time'] <= time());
+    }
 }
 
 /* end of missions.php */
