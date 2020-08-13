@@ -16,9 +16,11 @@ declare (strict_types = 1);
  */
 namespace application\libraries\missions;
 
+use application\helpers\StringsHelper;
 use application\libraries\FleetsLib as Fleets;
 use application\libraries\FormatLib as Format;
 use application\libraries\FunctionsLib as Functions;
+use application\libraries\missions\Missions;
 
 /**
  * Deploy Class
@@ -80,18 +82,6 @@ class Deploy extends Missions
      */
     private function sendDeploymentMessage(array $fleet): void
     {
-        // parse data to message
-        $message = sprintf(
-            $this->langs->line('dep_report_deployed'),
-            $fleet['planet_start_name'],
-            Fleets::startLink($fleet, ''),
-            $fleet['planet_end_name'],
-            Fleets::targetLink($fleet, ''),
-            Format::prettyNumber($fleet['fleet_resource_metal']),
-            Format::prettyNumber($fleet['fleet_resource_crystal']),
-            Format::prettyNumber($fleet['fleet_resource_deuterium'])
-        );
-
         // send message
         Functions::sendMessage(
             $fleet['fleet_owner'],
@@ -100,7 +90,15 @@ class Deploy extends Missions
             5,
             $this->langs->line('mi_fleet_command'),
             $this->langs->line('dep_report_title'),
-            $message
+            StringsHelper::parseReplacements($this->langs->line('dep_report_deployed'), [
+                $fleet['planet_start_name'],
+                Fleets::startLink($fleet, ''),
+                $fleet['planet_end_name'],
+                Fleets::targetLink($fleet, ''),
+                Format::prettyNumber($fleet['fleet_resource_metal']),
+                Format::prettyNumber($fleet['fleet_resource_crystal']),
+                Format::prettyNumber($fleet['fleet_resource_deuterium']),
+            ])
         );
     }
 
@@ -112,17 +110,26 @@ class Deploy extends Missions
      */
     private function sendReturnMessage(array $fleet): void
     {
-        // parse data to message
-        $message = sprintf(
-            $this->langs->line('mi_fleet_back_with_resources'),
+        $text = $this->langs->line('dep_report_back');
+        $replacements = [
             $fleet['planet_end_name'],
             Fleets::targetLink($fleet, ''),
             $fleet['planet_start_name'],
             Fleets::startLink($fleet, ''),
-            Format::prettyNumber($fleet['fleet_resource_metal']),
-            Format::prettyNumber($fleet['fleet_resource_crystal']),
-            Format::prettyNumber($fleet['fleet_resource_deuterium'])
-        );
+        ];
+
+        if (Fleets::hasResources($fleet)) {
+            $text = $this->langs->line('dep_report_deployed');
+            $replacements = [
+                $fleet['planet_end_name'],
+                Fleets::targetLink($fleet, ''),
+                $fleet['planet_start_name'],
+                Fleets::startLink($fleet, ''),
+                Format::prettyNumber($fleet['fleet_resource_metal']),
+                Format::prettyNumber($fleet['fleet_resource_crystal']),
+                Format::prettyNumber($fleet['fleet_resource_deuterium']),
+            ];
+        }
 
         // send message
         Functions::sendMessage(
@@ -131,8 +138,8 @@ class Deploy extends Missions
             $fleet['fleet_end_time'],
             5,
             $this->langs->line('mi_fleet_command'),
-            $this->langs->line('mi_fleet_back_title'),
-            $message
+            $this->langs->line('dep_report_title'),
+            StringsHelper::parseReplacements($text, $replacements)
         );
     }
 }

@@ -16,6 +16,7 @@ declare (strict_types = 1);
  */
 namespace application\libraries\missions;
 
+use application\helpers\StringsHelper;
 use application\libraries\FleetsLib as Fleets;
 use application\libraries\FormatLib as Format;
 use application\libraries\FunctionsLib as Functions;
@@ -112,18 +113,6 @@ class Transport extends Missions
      */
     private function sendDeliveryMessageToOwner(array $fleet, array $trading_planets): void
     {
-        // parse data to message
-        $message = sprintf(
-            $this->langs->line('tra_delivered_resources'),
-            $trading_planets['start_name'],
-            Fleets::startLink($fleet, ''),
-            $trading_planets['target_name'],
-            Fleets::targetLink($fleet, ''),
-            Format::prettyNumber($fleet['fleet_resource_metal']),
-            Format::prettyNumber($fleet['fleet_resource_crystal']),
-            Format::prettyNumber($fleet['fleet_resource_deuterium'])
-        );
-
         // send message
         Functions::sendMessage(
             $trading_planets['start_id'],
@@ -132,7 +121,15 @@ class Transport extends Missions
             5,
             $this->langs->line('mi_fleet_command'),
             $this->langs->line('tra_reaching'),
-            $message
+            StringsHelper::parseReplacements($this->langs->line('tra_delivered_resources'), [
+                $trading_planets['start_name'],
+                Fleets::startLink($fleet, ''),
+                $trading_planets['target_name'],
+                Fleets::targetLink($fleet, ''),
+                Format::prettyNumber($fleet['fleet_resource_metal']),
+                Format::prettyNumber($fleet['fleet_resource_crystal']),
+                Format::prettyNumber($fleet['fleet_resource_deuterium']),
+            ])
         );
     }
 
@@ -146,25 +143,6 @@ class Transport extends Missions
     private function sendDeliveryMessageToReceiver(array $fleet, array $trading_planets): void
     {
         if ($trading_planets['start_id'] != $trading_planets['target_id']) {
-            // parse data to message
-            $message = sprintf(
-                $this->langs->line('tra_incoming_delivery'),
-                $trading_planets['start_user_name'],
-                $start_name,
-                Fleets::startLink($fleet, ''),
-                $target_name,
-                Fleets::targetLink($fleet, ''),
-                Format::prettyNumber($fleet['fleet_resource_metal']),
-                Format::prettyNumber($fleet['fleet_resource_crystal']),
-                Format::prettyNumber($fleet['fleet_resource_deuterium']),
-                Format::prettyNumber($trading_planets['target_metal']),
-                Format::prettyNumber($trading_planets['target_crystal']),
-                Format::prettyNumber($trading_planets['target_deuterium']),
-                Format::prettyNumber($trading_planets['target_metal'] + $fleet['fleet_resource_metal']),
-                Format::prettyNumber($trading_planets['target_crystal'] + $fleet['fleet_resource_crystal']),
-                Format::prettyNumber($trading_planets['target_deuterium'] + $fleet['fleet_resource_deuterium'])
-            );
-
             // send message
             Functions::sendMessage(
                 $trading_planets['target_id'],
@@ -173,7 +151,22 @@ class Transport extends Missions
                 5,
                 $this->langs->line('tra_incoming_from'),
                 $this->langs->line('tra_incoming_title'),
-                $message
+                StringsHelper::parseReplacements($this->langs->line('tra_incoming_delivery'), [
+                    $trading_planets['start_user_name'],
+                    $start_name,
+                    Fleets::startLink($fleet, ''),
+                    $target_name,
+                    Fleets::targetLink($fleet, ''),
+                    Format::prettyNumber($fleet['fleet_resource_metal']),
+                    Format::prettyNumber($fleet['fleet_resource_crystal']),
+                    Format::prettyNumber($fleet['fleet_resource_deuterium']),
+                    Format::prettyNumber($trading_planets['target_metal']),
+                    Format::prettyNumber($trading_planets['target_crystal']),
+                    Format::prettyNumber($trading_planets['target_deuterium']),
+                    Format::prettyNumber($trading_planets['target_metal'] + $fleet['fleet_resource_metal']),
+                    Format::prettyNumber($trading_planets['target_crystal'] + $fleet['fleet_resource_crystal']),
+                    Format::prettyNumber($trading_planets['target_deuterium'] + $fleet['fleet_resource_deuterium']),
+                ])
             );
         }
     }
@@ -187,14 +180,26 @@ class Transport extends Missions
      */
     private function sendReturnMessage(array $fleet, array $trading_planets): void
     {
-        // parse data to message
-        $message = sprintf(
-            $this->langs->line('mi_fleet_back'),
+        $text = $this->langs->line('mi_fleet_back_without_resources');
+        $replacements = [
             $trading_planets['target_name'],
             Fleets::targetLink($fleet, ''),
             $trading_planets['start_name'],
-            Fleets::startLink($fleet, '')
-        );
+            Fleets::startLink($fleet, ''),
+        ];
+
+        if (Fleets::hasResources($fleet)) {
+            $text = $this->langs->line('mi_fleet_back_with_resources');
+            $replacements = [
+                $fleet['planet_end_name'],
+                Fleets::targetLink($fleet, ''),
+                $fleet['planet_start_name'],
+                Fleets::startLink($fleet, ''),
+                Format::prettyNumber($fleet['fleet_resource_metal']),
+                Format::prettyNumber($fleet['fleet_resource_crystal']),
+                Format::prettyNumber($fleet['fleet_resource_deuterium']),
+            ];
+        }
 
         // send message
         Functions::sendMessage(
@@ -204,7 +209,7 @@ class Transport extends Missions
             5,
             $this->langs->line('mi_fleet_command'),
             $this->langs->line('mi_fleet_back_title'),
-            $message
+            StringsHelper::parseReplacements($text, $replacements)
         );
     }
 }

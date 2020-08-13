@@ -654,6 +654,17 @@ class FleetsLib extends XGPCore
     {
         return unserialize($fleet_array);
     }
+
+    /**
+     * Check if the fleet has resources
+     *
+     * @param array $fleet
+     * @return boolean
+     */
+    public static function hasResources(array $fleet): bool
+    {
+        return ($fleet['fleet_resource_metal'] != 0 or $fleet['fleet_resource_crystal'] != 0 or $fleet['fleet_resource_deuterium'] != 0);
+    }
 }
 
 /* end of FleetsLib.php */

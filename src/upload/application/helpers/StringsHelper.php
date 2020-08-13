@@ -75,6 +75,21 @@ abstract class StringsHelper
             "\x1a" => "\\Z",
         ]);
     }
+
+    /**
+     * Parse a line of text and replace its variables with the provided replacements
+     *
+     * @param string $text
+     * @param array ...$replacements
+     * @return string
+     */
+    public static function parseReplacements(string $text, array $replacements): string
+    {
+        return sprintf(
+            $text,
+            ...$replacements
+        );
+    }
 }
 
 /* end of StringsHelper.php */
