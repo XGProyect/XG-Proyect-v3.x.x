@@ -70,6 +70,9 @@ class Destroy extends Missions
     {
         parent::__construct();
 
+        // load Language
+        parent::loadLang(['missions', 'game/destroy']);
+
         $this->_formula = FunctionsLib::loadLibrary('FormulaLib');
     }
 
@@ -94,7 +97,6 @@ class Destroy extends Missions
         ]);
 
         if ($fleet_row['fleet_mess'] == 0 && $fleet_row['fleet_start_time'] <= time()) {
-
             // require several stuff
             require XGP_ROOT . VENDOR_PATH .
                 'battle_engine' . DIRECTORY_SEPARATOR .
@@ -108,11 +110,9 @@ class Destroy extends Missions
             LangManager::getInstance()->setImplementation(new Attack_lang($this->langs));
 
             if ($fleet_row['fleet_group'] > 0) {
-
                 $this->Missions_Model->deleteAcsFleetById($fleet_row['fleet_group']);
                 $this->Missions_Model->updateAcsFleetStatusByGroupId($fleet_row['fleet_group']);
             } else {
-
                 parent::returnFleet($fleet_row['fleet_id']);
             }
 
@@ -127,11 +127,9 @@ class Destroy extends Missions
 
             // If we have a ACS attack
             if ($fleet_row['fleet_group'] != 0) {
-
                 $fleets = $this->Missions_Model->getAllAcsFleetsByGroupId($fleet_row['fleet_group']);
                 $attackers = $this->getPlayerGroupFromQuery($fleets);
             } else {
-
                 $attackers = $this->getPlayerGroup($fleet_row);
             }
 
@@ -153,29 +151,22 @@ class Destroy extends Missions
             $homeFleet = new HomeFleet(0);
 
             for ($i = self::DEFENSE_MIN_ID; $i <= self::DEFENSE_MAX_ID; $i++) {
-
                 if (isset($this->resource[$i]) && isset($target_planet[$this->resource[$i]])) {
-
                     if ($target_planet[$this->resource[$i]] != 0) {
-
                         $homeFleet->addShipType($this->getShipType($i, $target_planet[$this->resource[$i]]));
                     }
                 }
             }
 
             for ($i = self::SHIP_MIN_ID; $i <= self::SHIP_MAX_ID; $i++) {
-
                 if (isset($this->resource[$i]) && isset($target_planet[$this->resource[$i]])) {
-
                     if ($target_planet[$this->resource[$i]] != 0) {
-
                         $homeFleet->addShipType($this->getShipType($i, $target_planet[$this->resource[$i]]));
                     }
                 }
             }
 
             if (!$defenders->existPlayer($target_userID)) {
-
                 $player = new Player($target_userID, array($homeFleet));
 
                 $player->setTech(
@@ -190,7 +181,6 @@ class Destroy extends Missions
 
                 $defenders->addPlayer($player);
             } else {
-
                 $defenders->getPlayer($target_userID)->addDefense($homeFleet);
             }
             //-------------------------------------------------------------------------
@@ -245,11 +235,24 @@ class Destroy extends Missions
         } elseif ($fleet_row['fleet_mess'] == 1 && $fleet_row['fleet_end_time'] <= time()) {
 
             $message = sprintf(
-                $this->langs['sys_fleet_won'], $target_planet['planet_name'], FleetsLib::targetLink($fleet_row, ''), FormatLib::prettyNumber($fleet_row['fleet_resource_metal']), $this->langs['Metal'], FormatLib::prettyNumber($fleet_row['fleet_resource_crystal']), $this->langs['Crystal'], FormatLib::prettyNumber($fleet_row['fleet_resource_deuterium']), $this->langs['Deuterium']
+                $this->langs->line('mi_fleet_back_with_resources'),
+                $fleet_row['planet_end_name'],
+                FleetsLib::targetLink($fleet_row, ''),
+                $fleet_row['planet_start_name'],
+                FleetsLib::startLink($fleet_row, ''),
+                FormatLib::prettyNumber($fleet_row['fleet_resource_metal']),
+                FormatLib::prettyNumber($fleet_row['fleet_resource_crystal']),
+                FormatLib::prettyNumber($fleet_row['fleet_resource_deuterium'])
             );
 
             FunctionsLib::sendMessage(
-                $fleet_row['fleet_owner'], '', $fleet_row['fleet_end_time'], 1, $this->langs['sys_mess_tower'], $this->langs['sys_mess_fleetback'], $message
+                $fleet_row['fleet_owner'],
+                '',
+                $fleet_row['fleet_end_time'],
+                1,
+                $this->langs->line('mi_fleet_command'),
+                $this->langs->line('mi_fleet_back_title'),
+                $message
             );
 
             parent::restoreFleet($fleet_row, true);
@@ -515,7 +518,7 @@ class Destroy extends Missions
             );
 
             FunctionsLib::sendMessage(
-                $id, '', $fleet_row['fleet_start_time'], 1, $this->langs['sys_mess_tower'], $raport, ''
+                $id, '', $fleet_row['fleet_start_time'], 1, $this->langs->line('mi_fleet_command'), $raport, ''
             );
         }
 
@@ -537,7 +540,7 @@ class Destroy extends Missions
             );
 
             FunctionsLib::sendMessage(
-                $id, '', $fleet_row['fleet_start_time'], 1, $this->langs['sys_mess_tower'], $raport, ''
+                $id, '', $fleet_row['fleet_start_time'], 1, $this->langs->line('mi_fleet_command'), $raport, ''
             );
         }
     }
@@ -753,7 +756,6 @@ class Destroy extends Missions
         $id_string = join(",", $emptyFleets);
 
         if (!empty($id_string)) {
-
             $this->Missions_Model->deleteMultipleFleetsByIds($id_string);
         }
     }
@@ -837,7 +839,7 @@ class Destroy extends Missions
     {
         $style = 'style="color:' . $color . ';"';
         $js = "OnClick=\'f(\"game.php?page=combatreport&report=" . $rid . "\", \"\");\'";
-        $content = $this->langs['sys_mess_destruc_report'] . ' ' . FormatLib::prettyCoords($g, $s, $p);
+        $content = $this->langs->line('des_report_title') . ' ' . FormatLib::prettyCoords($g, $s, $p);
 
         return UrlHelper::setUrl(
             '',
@@ -859,7 +861,7 @@ class Destroy extends Missions
     private function buildDestroyReport(array $fleet_row, $report, string $planet_name): string
     {
         $destruction_info = sprintf(
-            $this->langs['sys_destruc_mess'],
+            $this->langs->line('des_report_start'),
             $planet_name,
             $fleet_row['fleet_start_galaxy'],
             $fleet_row['fleet_start_system'],
@@ -869,26 +871,15 @@ class Destroy extends Missions
             $fleet_row['fleet_end_planet']
         );
 
+        $raport[] = $destruction_info;
+
         if ($report->attackerHasWin()) {
-
-            $raport[] = $destruction_info;
-            $raport[] = $this->langs['sys_destruc_mess1'] . $this->langs['sys_destruc_' . $this->_destruction['destroyed']];
-            $raport[] = sprintf($this->langs['sys_destruc_lune'], $this->_destruction['moon_chance']);
-            $raport[] = sprintf($this->langs['sys_destruc_rip'], $this->_destruction['ds_chance']);
-
-        } elseif ($report->isAdraw()) {
-
-            $raport[] = $destruction_info;
-            $raport[] = $this->langs['sys_destruc_stop'] . $this->langs['sys_destruc_' . $this->_destruction['destroyed']];
-            $raport[] = sprintf($this->langs['sys_destruc_lune'], $this->_destruction['moon_chance']);
-            $raport[] = sprintf($this->langs['sys_destruc_rip'], $this->_destruction['ds_chance']);
+            $raport[] = $this->langs->line('des_result_' . $this->_destruction['destroyed']);
         } else {
-
-            $raport[] = $destruction_info;
-            $raport[] = $this->langs['sys_destruc_stop'] . $this->langs['sys_destruc_' . $this->_destruction['destroyed']];
-            $raport[] = sprintf($this->langs['sys_destruc_lune'], $this->_destruction['moon_chance']);
-            $raport[] = sprintf($this->langs['sys_destruc_rip'], $this->_destruction['ds_chance']);
+            $raport[] = $this->langs->line('des_report_defender');
         }
+
+        $raport[] = sprintf($this->langs->line('des_moon_ds_chances'), $this->_destruction['moon_chance'], $this->_destruction['ds_chance']);
 
         return join("<br/>", $raport);
     }
