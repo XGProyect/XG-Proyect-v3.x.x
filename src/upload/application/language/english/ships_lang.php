@@ -1,6 +1,6 @@
 <?php
 $lang = [
-    // ships
+    'ships' => 'Ships',
     'ship_small_cargo_ship' => 'Small Cargo',
     'ship_big_cargo_ship' => 'Large Cargo',
     'ship_light_fighter' => 'Light Fighter',

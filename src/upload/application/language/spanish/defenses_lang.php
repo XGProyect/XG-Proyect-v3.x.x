@@ -1,5 +1,7 @@
 <?php
 $lang = [
+    'defenses' => 'Defensa',
+    'missiles' => 'Misiles',
     'defense_rocket_launcher' => 'Lanzamisiles',
     'defense_light_laser' => 'Láser pequeño',
     'defense_heavy_laser' => 'Láser grande',

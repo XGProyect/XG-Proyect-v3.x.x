@@ -1,6 +1,6 @@
 <?php
 $lang = [
-    // ships
+    'ships' => 'Naves',
     'ship_small_cargo_ship' => 'Nave pequeña de carga',
     'ship_big_cargo_ship' => 'Nave grande de carga',
     'ship_light_fighter' => 'Cazador ligero',
