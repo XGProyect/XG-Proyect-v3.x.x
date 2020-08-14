@@ -13,11 +13,16 @@
  */
 namespace application\libraries;
 
+use application\core\Language;
 use application\core\Template;
 use application\core\XGPCore;
 use application\helpers\UrlHelper;
+use application\libraries\FleetsLib;
+use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
+use application\libraries\OfficiersLib;
 use application\libraries\TimingLibrary as Timing;
+use CI_Lang;
 
 /**
  * FleetsLib Class
@@ -27,21 +32,11 @@ use application\libraries\TimingLibrary as Timing;
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
- * @version  3.0.0
+ * @version  3.1.0
  *
  */
 class FleetsLib extends XGPCore
 {
-    /**
-     * Return a new instance of Template
-     *
-     * @return Template
-     */
-    public static function getTemplate(): Template
-    {
-        return new Template;
-    }
-
     /**
      * Determine ship consumption
      *
@@ -323,10 +318,6 @@ class FleetsLib extends XGPCore
         $total_resources = $fleet_row['fleet_resource_metal'] + $fleet_row['fleet_resource_crystal'] + $fleet_row['fleet_resource_deuterium'];
 
         if ($total_resources != 0) {
-
-            $popup['Metal'] = parent::$lang['Metal'];
-            $popup['Crystal'] = parent::$lang['Crystal'];
-            $popup['Deuterium'] = parent::$lang['Deuterium'];
             $popup['fleet_resource_metal'] = FormatLib::prettyNumber($fleet_row['fleet_resource_metal']);
             $popup['fleet_resource_crystal'] = FormatLib::prettyNumber($fleet_row['fleet_resource_crystal']);
             $popup['fleet_resource_deuterium'] = FormatLib::prettyNumber($fleet_row['fleet_resource_deuterium']);
@@ -334,7 +325,7 @@ class FleetsLib extends XGPCore
             $resources_popup = parent::$page->jsReady(
                 self::getTemplate()->set(
                     'general/fleet_resources_popup_view',
-                    $popup
+                    array_merge($popup, self::loadLanguage(['global'])->language)
                 )
             );
         } else {
@@ -363,6 +354,9 @@ class FleetsLib extends XGPCore
      */
     public static function fleetShipsPopup($fleet_row, $text, $fleet_type, $current_user = '')
     {
+        $lang = static::loadLanguage(['game/events', 'ships']);
+        $objects = parent::$objects->getObjects();
+
         $ships = self::getFleetShipsArray($fleet_row['fleet_array']);
         $pop_up = "<a href='#' onmouseover=\"return overlib('";
         $pop_up .= "<table width=200>";
@@ -374,40 +368,32 @@ class FleetsLib extends XGPCore
         if ($espionage_tech < 2 && $fleet_row['fleet_owner'] != $current_user['user_id']) {
 
             $pop_up .= "<tr><td width=50% align=left><font color=white>" .
-            parent::$lang['cff_no_fleet_data'] . "<font></td></tr>";
+            $lang->line('ev_no_fleet_data') . "<font></td></tr>";
         } elseif ($espionage_tech >= 2 && $espionage_tech < 4 && $fleet_row['fleet_owner'] != $current_user['user_id']) {
-
             $pop_up .= "<tr><td width=50% align=left><font color=white>" .
-            parent::$lang['cff_aproaching'] . $fleet_row['fleet_amount'] .
-            parent::$lang['cff_ships'] . "<font></td></tr>";
+            $lang->line('ev_aproaching') . $fleet_row['fleet_amount'] .
+            $lang->line('ev_ships') . "<font></td></tr>";
         } else {
-
             if ($fleet_row['fleet_owner'] != $current_user['user_id']) {
-
                 $pop_up .= "<tr><td width=100% align=left><font color=white>" .
-                parent::$lang['cff_aproaching'] . $fleet_row['fleet_amount'] . parent::$lang['cff_ships'] .
+                $lang->line('ev_aproaching') . $fleet_row['fleet_amount'] . $lang->line('ev_ships') .
                     ":<font></td></tr>";
             }
 
             foreach ($ships as $ship => $amount) {
-
                 if ($fleet_row['fleet_owner'] == $current_user['user_id']) {
-
                     $pop_up .= "<tr><td width=50% align=left><font color=white>" .
-                    parent::$lang['tech'][$ship] .
+                    $lang->language[$objects[$ship]] .
                     ":<font></td><td width=50% align=right><font color=white>" .
                     FormatLib::prettyNumber($amount) . "<font></td></tr>";
                 } elseif ($fleet_row['fleet_owner'] != $current_user['user_id']) {
-
                     if ($espionage_tech >= 4 && $espionage_tech < 8) {
-
                         $pop_up .= "<tr><td width=50% align=left><font color=white>" .
-                        parent::$lang['tech'][$ship] .
+                        $lang->language[$objects[$ship]] .
                             "<font></td></tr>";
                     } elseif ($espionage_tech >= 8) {
-
                         $pop_up .= "<tr><td width=50% align=left><font color=white>" .
-                        parent::$lang['tech'][$ship] .
+                        $lang->language[$objects[$ship]] .
                         ":<font></td><td width=50% align=right><font color=white>" .
                         FormatLib::prettyNumber($amount) . "<font></td></tr>";
                     }
@@ -451,6 +437,8 @@ class FleetsLib extends XGPCore
      */
     public static function flyingFleetsTable($fleet_row, $Status, $Owner, $Label, $Record, $current_user, $acs_owner = false)
     {
+        $lang = static::loadLanguage(['game/events', 'missions']);
+
         $FleetStyle = [
             1 => 'attack',
             2 => 'federation',
@@ -473,7 +461,10 @@ class FleetsLib extends XGPCore
         $FleetStatus = [0 => 'flight', 1 => 'holding', 2 => 'return'];
         $MissionType = $fleet_row['fleet_mission'];
         $FleetContent = self::fleetShipsPopup(
-            $fleet_row, parent::$lang['cff_flotte'], $FleetPrefix . $FleetStyle[$MissionType], $current_user
+            $fleet_row,
+            $lang->line('ev_fleet'),
+            $FleetPrefix . $FleetStyle[$MissionType],
+            $current_user
         );
 
         $StartType = $fleet_row['fleet_start_type'];
@@ -481,9 +472,9 @@ class FleetsLib extends XGPCore
 
         if ($Status != 2) {
             if ($StartType == 1) {
-                $StartID = parent::$lang['cff_from_the_planet'];
+                $StartID = $lang->line('ev_from_the_planet');
             } elseif ($StartType == 3) {
-                $StartID = parent::$lang['cff_from_the_moon'];
+                $StartID = $lang->line('ev_from_the_moon');
             }
 
             $StartID .= $fleet_row['start_planet_name'] . " ";
@@ -492,28 +483,28 @@ class FleetsLib extends XGPCore
             if ($MissionType != 15) {
                 switch ($TargetType) {
                     case 1:
-                        $TargetID = parent::$lang['cff_the_planet'];
+                        $TargetID = $lang->line('ev_the_planet');
                         break;
 
                     case 2:
-                        $TargetID = parent::$lang['cff_debris_field'];
+                        $TargetID = $lang->line('ev_debris_field');
                         break;
 
                     case 3:
-                        $TargetID = parent::$lang['cff_to_the_moon'];
+                        $TargetID = $lang->line('ev_to_the_moon');
                         break;
                 }
             } else {
-                $TargetID = parent::$lang['cff_the_position'];
+                $TargetID = $lang->line('ev_the_position');
             }
 
             $TargetID .= $fleet_row['target_planet_name'] . " ";
             $TargetID .= FleetsLib::targetLink($fleet_row, $FleetPrefix . $FleetStyle[$MissionType]);
         } else {
             if ($StartType == 1) {
-                $StartID = parent::$lang['cff_to_the_planet'];
+                $StartID = $lang->line('ev_to_the_planet');
             } elseif ($StartType == 3) {
-                $StartID = parent::$lang['cff_the_moon'];
+                $StartID = $lang->line('ev_the_moon');
             }
 
             $StartID .= $fleet_row['start_planet_name'] . " ";
@@ -522,20 +513,20 @@ class FleetsLib extends XGPCore
             if ($MissionType != 15) {
                 switch ($TargetType) {
                     case 1:
-                        $TargetID = parent::$lang['cff_from_planet'];
+                        $TargetID = $lang->line('ev_from_planet');
                         break;
 
                     case 2:
-                        $TargetID = parent::$lang['cff_from_debris_field'];
+                        $TargetID = $lang->line('ev_from_debris_field');
                         break;
 
                     case 3:
-                        $TargetID = parent::$lang['cff_from_the_moon'];
+                        $TargetID = $lang->line('ev_from_the_moon');
                         break;
                 }
             } else {
 
-                $TargetID = parent::$lang['cff_from_position'];
+                $TargetID = $lang->line('ev_from_position');
             }
 
             $TargetID .= $fleet_row['target_planet_name'] . " ";
@@ -543,25 +534,25 @@ class FleetsLib extends XGPCore
         }
 
         if ($MissionType == 10) {
-            $EventString = parent::$lang['cff_missile_attack'] .
+            $EventString = $lang->line('ev_missile_attack') .
             " ( " . FleetsLib::getFleetShipsArray($fleet_row['fleet_array'])[503] . " ) ";
             $Time = $fleet_row['fleet_start_time'];
             $Rest = $Time - time();
 
             $EventString .= $StartID;
-            $EventString .= parent::$lang['cff_to'];
+            $EventString .= $lang->line('ev_to');
             $EventString .= $TargetID;
             $EventString .= ".";
         } else {
             if ($Owner == true) {
 
-                $EventString = parent::$lang['cff_one_of_your'];
+                $EventString = $lang->line('ev_one_of_your');
                 $EventString .= $FleetContent;
             } else {
 
-                $EventString = parent::$lang['cff_a'];
+                $EventString = $lang->line('ev_a');
                 $EventString .= $FleetContent;
-                $EventString .= parent::$lang['cff_of'];
+                $EventString .= $lang->line('ev_of');
                 $EventString .= self::enemyLink($fleet_row);
             }
 
@@ -570,37 +561,37 @@ class FleetsLib extends XGPCore
                     $Time = $fleet_row['fleet_start_time'];
                     $Rest = $Time - time();
 
-                    $EventString .= parent::$lang['cff_goes'];
+                    $EventString .= $lang->line('ev_goes');
                     $EventString .= $StartID;
-                    $EventString .= parent::$lang['cff_toward'];
+                    $EventString .= $lang->line('ev_toward');
                     $EventString .= $TargetID;
-                    $EventString .= parent::$lang['cff_with_the_mission_of'];
+                    $EventString .= $lang->line('ev_with_the_mission_of');
                     break;
 
                 case 1:
                     $Time = $fleet_row['fleet_end_stay'];
                     $Rest = $Time - time();
 
-                    $EventString .= parent::$lang['cff_goes'];
+                    $EventString .= $lang->line('ev_goes');
                     $EventString .= $StartID;
-                    $EventString .= parent::$lang['cff_to_explore'];
+                    $EventString .= $lang->line('ev_to_explore');
                     $EventString .= $TargetID;
-                    $EventString .= parent::$lang['cff_with_the_mission_of'];
+                    $EventString .= $lang->line('ev_with_the_mission_of');
                     break;
 
                 case 2:
                     $Time = $fleet_row['fleet_end_time'];
                     $Rest = $Time - time();
 
-                    $EventString .= parent::$lang['cff_comming_back'];
+                    $EventString .= $lang->line('ev_comming_back');
                     $EventString .= $TargetID;
                     $EventString .= $StartID;
-                    $EventString .= parent::$lang['cff_with_the_mission_of'];
+                    $EventString .= $lang->line('ev_with_the_mission_of');
                     break;
             }
 
             $EventString .= self::fleetResourcesPopup(
-                $fleet_row, parent::$lang['type_mission'][$MissionType], $FleetPrefix . $FleetStyle[$MissionType]
+                $fleet_row, $lang->language['type_mission'][$MissionType], $FleetPrefix . $FleetStyle[$MissionType]
             );
         }
 
@@ -664,6 +655,28 @@ class FleetsLib extends XGPCore
     public static function hasResources(array $fleet): bool
     {
         return ($fleet['fleet_resource_metal'] != 0 or $fleet['fleet_resource_crystal'] != 0 or $fleet['fleet_resource_deuterium'] != 0);
+    }
+
+    /**
+     * Return a new instance of Template
+     *
+     * @return Template
+     */
+    private static function getTemplate(): Template
+    {
+        return new Template;
+    }
+
+    /**
+     * Load CI language
+     *
+     * @return void
+     */
+    private static function loadLanguage(array $required_lang): CI_Lang
+    {
+        $lang = new Language;
+
+        return $lang->loadLang($required_lang, true);
     }
 }
 

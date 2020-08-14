@@ -6,18 +6,6 @@ $lang = [
     'sys_building_queue_not_enough_resources' => 'La %s de tu %s de nivel %s en %s no pudo ejecutarse.<br><br>Recursos insuficientes: %s.',
     'sys_building_queue_not_enough_resources_from' => 'Mensaje del sistema',
     'sys_building_queue_not_enough_resources_subject' => 'Producción cancelada',
-
-    // topnav
-    'tn_commander' => 'Comandante',
-    'tn_admiral' => 'Almirante',
-    'tn_engineer' => 'Ingeniero',
-    'tn_geologist' => 'Geólogo',
-    'tn_technocrat' => 'Tecnócrata',
-    'tn_add_admiral' => '+2 huecos de flota máximos',
-    'tn_add_engineer' => 'Minimiza las perdidas de las defensas a la mitad,<br/>+10% de producción de energía',
-    'tn_add_geologist' => '+10% producción de minas',
-    'tn_add_technocrat' => '+2 al nivel de espionaje,<br/>25% menos tiempo de investigación',
-    'tn_get_now' => '¡Consíguelo ahora!',
 ];
 
 /**
@@ -29,13 +17,15 @@ $lang = [
  */
 
 //SERVER GENERALS
+// DevelopmentsLib.php & UpdatesLibrary.php
 $lang['Metal'] = 'Metal';
 $lang['Crystal'] = 'Cristal';
 $lang['Deuterium'] = 'Deuterio';
 $lang['Darkmatter'] = 'Materia Oscura';
 $lang['Energy'] = 'Energía';
-$lang['Messages'] = 'Mensajes';
-$lang['write_message'] = 'Escribir mensaje';
+$lang['write_message'] = 'Escribir mensaje'; //FleetsLib.php
+
+// TimingLib.php
 $lang['online'] = 'Conectado';
 $lang['minutes'] = '15 min';
 $lang['offline'] = 'Desconectado';
@@ -52,40 +42,6 @@ $lang['type_mission'][7] = 'Colonizar';
 $lang['type_mission'][8] = 'Reciclar campo de escombros';
 $lang['type_mission'][9] = 'Destruir';
 $lang['type_mission'][15] = 'Expedición';
-
-//----------------------------------------------------------------------------//
-//TOPNAV
-$lang['tn_vacation_mode'] = 'Modo vacaciones activo hasta el ';
-$lang['tn_vacation_mode_active'] = "Modo vacaciones activo";
-$lang['tn_delete_mode'] = 'Tu cuenta se encuentra en modo borrar. La misma será borrada el ';
-
-//----------------------------------------------------------------------------//
-//LEFT MENU
-$lang['lm_overview'] = 'Resumen';
-$lang['lm_galaxy'] = 'Galaxia';
-$lang['lm_empire'] = 'Imperio';
-$lang['lm_fleet'] = 'Flota';
-$lang['lm_movement'] = 'Movimientos de flota';
-$lang['lm_resources'] = 'Recursos';
-$lang['lm_resources_settings'] = 'Opciones de recursos';
-$lang['lm_station'] = 'Instalaciones';
-$lang['lm_research'] = 'Investigación';
-$lang['lm_shipyard'] = 'Hangar';
-$lang['lm_defenses'] = 'Defensa';
-$lang['lm_officiers'] = 'Casino';
-$lang['lm_trader'] = 'Mercader';
-$lang['lm_technology'] = 'Técnica';
-$lang['lm_messages'] = 'Mensajes';
-$lang['lm_alliance'] = 'Alianza';
-$lang['lm_buddylist'] = 'Amigos';
-$lang['lm_notes'] = 'Notas';
-$lang['lm_statistics'] = 'Clasificación';
-$lang['lm_search'] = 'Búsqueda';
-$lang['lm_options'] = 'Opciones';
-$lang['lm_forums'] = 'Foro';
-$lang['lm_logout'] = 'Salir';
-$lang['lm_administration'] = 'Administración';
-$lang['lm_module_not_accesible'] = 'No se ha encontrado la página.';
 
 //----------------------------------------------------------------------------//
 //BUILDINGS - RESEARCH - SHIPYARD - DEFENSES
@@ -250,39 +206,7 @@ Cada nivel de esta tecnología aumenta el escudo efectivo en un 10% (basado en e
 );
 
 //----------------------------------------------------------------------------//
-// FLEET MOVEMENTS
-$lang['cff_no_fleet_data'] = 'No hay datos de la flota';
-$lang['cff_aproaching'] = 'Se aproximan ';
-$lang['cff_ships'] = ' naves';
-$lang['cff_from_the_planet'] = 'desde el planeta ';
-$lang['cff_from_the_moon'] = 'desde la luna ';
-$lang['cff_the_planet'] = 'el planeta ';
-$lang['cff_debris_field'] = 'campo de escombros ';
-$lang['cff_to_the_moon'] = 'a la luna ';
-$lang['cff_the_position'] = 'la posición ';
-$lang['cff_to_the_planet'] = ' a el planeta ';
-$lang['cff_the_moon'] = ' la luna ';
-$lang['cff_from_planet'] = 'del planeta ';
-$lang['cff_from_debris_field'] = 'del campo de escombros ';
-$lang['cff_from_the_moon'] = 'de la luna ';
-$lang['cff_from_position'] = 'de la posición ';
-$lang['cff_missile_attack'] = 'Ataque con misiles';
-$lang['cff_to'] = ' a ';
-$lang['cff_one_of_your'] = 'Una de tus ';
-$lang['cff_a'] = 'Una ';
-$lang['cff_of'] = ' de ';
-$lang['cff_goes'] = ' se dirige ';
-$lang['cff_toward'] = ' hacia ';
-$lang['cff_with_the_mission_of'] = '. Con la misión de: ';
-$lang['cff_to_explore'] = ' a explorar ';
-$lang['cff_comming_back'] = ' vuelve ';
-$lang['cff_back'] = 'Regresando';
-$lang['cff_to_destination'] = 'Llendo a destino';
-$lang['cff_flotte'] = ' flotas';
-
-//----------------------------------------------------------------------------//
 // EXTRA LANGUAGE FUNCTIONS
-$lang['fcm_moon'] = 'Luna';
 $lang['fgp_require'] = 'Requiere: ';
 $lang['fgf_time'] = 'Tiempo: ';
 

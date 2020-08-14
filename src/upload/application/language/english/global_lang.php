@@ -30,6 +30,7 @@ $lang = [
     // other
     'write_message' => 'Write Message',
     'homeworld' => 'Homeworld',
+    'module_not_accesible' => 'Page could not be found.',
 
     // banning
     'bg_account_banned_message' => 'YOUR ACCOUNT HAS BEEN SUSPENDED',

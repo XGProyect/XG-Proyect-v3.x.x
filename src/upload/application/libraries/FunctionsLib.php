@@ -15,7 +15,6 @@ namespace application\libraries;
 
 use application\core\Database;
 use application\core\enumerators\MessagesEnumerator;
-use application\core\enumerators\PlanetTypesEnumerator;
 use application\core\enumerators\UserRanksEnumerator;
 use application\core\Options;
 use application\core\Template;
@@ -264,101 +263,7 @@ abstract class FunctionsLib extends XGPCore
     public static function moduleMessage($access_level)
     {
         if ($access_level == 0) {
-            die(self::message(parent::$lang['lm_module_not_accesible'], '', '', true));
-        }
-    }
-
-    /**
-     * sortPlanets
-     *
-     * @param array $current_user Current user
-     *
-     * @return array
-     */
-    public static function sortPlanets($current_user)
-    {
-        $db = new Database();
-        $order = $current_user['preference_planet_sort_sequence'] == 1 ? "DESC" : "ASC"; // up or down
-        $sort = $current_user['preference_planet_sort'];
-
-        $planets = "SELECT `planet_id`, `planet_name`, `planet_galaxy`, `planet_system`, `planet_planet`, `planet_type`
-                    FROM " . PLANETS . "
-                    WHERE `planet_user_id` = '" . (int) $current_user['user_id'] . "'
-                        AND `planet_destroyed` = 0 ORDER BY ";
-
-        switch ($sort) {
-            case 0: // emergence
-            default:
-                $planets .= "`planet_id` " . $order;
-                break;
-            case 1: // coordinates
-                $planets .= "`planet_galaxy` " . $order . ", `planet_system` " . $order . ", `planet_planet` " . $order . ", `planet_type` " . $order;
-                break;
-            case 2: // alphabet
-                $planets .= "`planet_name` " . $order;
-                break;
-            case 3: // size
-                $planets .= "`planet_diameter` " . $order;
-                break;
-            case 4: // used_fields
-                $planets .= "`planet_field_current` " . $order;
-                break;
-        }
-
-        return $db->query($planets);
-    }
-
-    /**
-     * buildPlanetList
-     *
-     * @param array $current_user      Current user
-     * @param int   $current_planet_id Current planet ID
-     *
-     * @return mixed
-     */
-    public static function buildPlanetList($current_user, $current_planet_id = 0)
-    {
-        $db = new Database();
-        $list = '';
-        $user_planets = self::sortPlanets($current_user);
-
-        $page = isset($_GET['page']) ? $_GET['page'] : '';
-        $gid = isset($_GET['gid']) ? $_GET['gid'] : '';
-        $mode = isset($_GET['mode']) ? $_GET['mode'] : '';
-
-        if ($user_planets) {
-            while ($planets = $db->fetchArray($user_planets)) {
-                if ($current_planet_id != $planets['planet_id']) {
-                    $list .= "\n<option ";
-                    $list .= (($planets['planet_id'] == $current_user['user_current_planet']) ?
-                        'selected="selected" ' : '');
-
-                    // FOR TOPNAVIGATION BAR PLANET LIST
-                    if ($current_planet_id == 0) {
-                        $list .= "value=\"game.php?page=" . $page . "&gid=" .
-                            $gid . "&cp=" . $planets['planet_id'] . "";
-                        $list .= "&amp;mode=" . $mode;
-                        $list .= "&amp;re=0\">";
-                    } else {
-                        // FOR FLEETS2 PAGE COLONIES SHORTCUTS
-                        $list .= "value=\"" . $planets['planet_galaxy'] . ';' . $planets['planet_system'] . ';' .
-                            $planets['planet_planet'] . ';' . $planets['planet_type'] . "\">";
-                    }
-
-                    $list .= (($planets['planet_type'] != PlanetTypesEnumerator::MOON) ? $planets['planet_name'] : $planets['planet_name'] . ' (' . parent::$lang['fcm_moon'] . ')');
-                    $list .= "&nbsp;[" . $planets['planet_galaxy'] . ":";
-                    $list .= $planets['planet_system'] . ":";
-                    $list .= $planets['planet_planet'];
-                    $list .= "]&nbsp;&nbsp;</option>";
-                }
-            }
-        }
-
-        // IF THE LIST OF PLANETS IS EMPTY WE SHOULD RETURN false
-        if ($list !== '') {
-            return $list;
-        } else {
-            return false;
+            die(self::message(parent::$lang['module_not_accesible'], '', '', true));
         }
     }
 

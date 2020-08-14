@@ -56,8 +56,7 @@ abstract class XGPCore
      */
     private function setLangClass()
     {
-        $languages = new Language();
-        self::$lang = $languages->lang();
+        self::$lang = new Language();
     }
 
     /**

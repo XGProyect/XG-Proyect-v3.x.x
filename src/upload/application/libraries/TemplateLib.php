@@ -13,7 +13,13 @@
  */
 namespace application\libraries;
 
+use application\core\Database;
+use application\core\enumerators\PlanetTypesEnumerator;
+use application\core\Language;
 use application\core\Template;
+use application\libraries\FormatLib;
+use application\libraries\FunctionsLib;
+use application\libraries\OfficiersLib;
 use application\libraries\ProductionLib as Production;
 use application\libraries\TimingLibrary as Timing;
 
@@ -43,7 +49,7 @@ class TemplateLib
      *
      * @return void
      */
-    public function __construct($lang, $users)
+    public function __construct(Language $lang, object $users)
     {
         $this->current_user = $users->getUserData();
         $this->current_planet = $users->getPlanetData();
@@ -565,17 +571,18 @@ class TemplateLib
      */
     private function gameNavbar()
     {
-        $parse = $this->langs;
+        $lang = $this->langs->loadLang(['global', 'game/navigation'], true);
+
+        $parse = $lang->language;
         $parse['dpath'] = DPATH;
         $parse['image'] = $this->current_planet['planet_image'];
-        $parse['planetlist'] = FunctionsLib::buildPlanetList($this->current_user);
-
+        $parse['planetlist'] = $this->buildPlanetList();
         $parse['show_umod_notice'] = '';
 
         // When vacation mode did not expire
         if ($this->current_user['preference_vacation_mode'] > 0) {
             $parse['color'] = '#1DF0F0';
-            $parse['message'] = $this->langs['tn_vacation_mode'] . Timing::formatExtendedDate($this->current_user['preference_vacation_mode']);
+            $parse['message'] = $lang->line('tn_vacation_mode') . Timing::formatExtendedDate($this->current_user['preference_vacation_mode']);
             $parse['jump_line'] = '<br/>';
 
             $parse['show_umod_notice'] = $this->template->set(
@@ -587,7 +594,7 @@ class TemplateLib
         if ($this->current_user['preference_delete_mode'] > 0) {
             // When it is in delete mode
             $parse['color'] = '#FF0000';
-            $parse['message'] = $this->langs['tn_delete_mode'] . Timing::formatExtendedDate($this->current_user['preference_delete_mode'] + (60 * 60 * 24 * 7));
+            $parse['message'] = $lang->line('tn_delete_mode') . Timing::formatExtendedDate($this->current_user['preference_delete_mode'] + (60 * 60 * 24 * 7));
             $parse['jump_line'] = '';
 
             $parse['show_umod_notice'] = $this->template->set(
@@ -632,11 +639,11 @@ class TemplateLib
             $energy = FormatLib::colorRed($energy);
         }
 
-        $parse['metal'] = $metal;
-        $parse['crystal'] = $crystal;
-        $parse['deuterium'] = $deuterium;
-        $parse['darkmatter'] = $darkmatter;
-        $parse['energy'] = $energy;
+        $parse['re_metal'] = $metal;
+        $parse['re_crystal'] = $crystal;
+        $parse['re_deuterium'] = $deuterium;
+        $parse['re_darkmatter'] = $darkmatter;
+        $parse['re_energy'] = $energy;
         $parse['img_commander'] = $commander;
         $parse['img_admiral'] = $admiral;
         $parse['img_engineer'] = $engineer;
@@ -656,6 +663,8 @@ class TemplateLib
      */
     private function gameMenu()
     {
+        $lang = $this->langs->loadLang('game/menu', true);
+
         $menu_block1 = '';
         $menu_block2 = '';
         $menu_block3 = '';
@@ -664,29 +673,29 @@ class TemplateLib
         $this->current_planet['stats_users'] : $this->current_user['user_statistic_total_rank'];
         $pages = [
             ['changelog', SYSTEM_VERSION, '', 'FFF', '', '0', '0'],
-            ['overview', $this->langs['lm_overview'], '', 'FFF', '', '1', '1'],
-            ['empire', $this->langs['lm_empire'], '', 'FFF', '', '1', '2'],
-            ['resources', $this->langs['lm_resources'], '', 'FFF', '', '1', '3'],
-            ['resourceSettings', $this->langs['lm_resources_settings'], '', 'FFF', '', '1', '4'],
-            ['station', $this->langs['lm_station'], '', 'FFF', '', '1', '3'],
-            ['traderOverview', $this->langs['lm_trader'], '', 'FF8900', '', '1', '5'],
-            ['research', $this->langs['lm_research'], '', 'FFF', '', '1', '6'],
-            ['techtree', $this->langs['lm_technology'], '', 'FFF', '', '1', '10'],
-            ['shipyard', $this->langs['lm_shipyard'], '', 'FFF', '', '1', '7'],
-            ['defense', $this->langs['lm_defenses'], '', 'FFF', '', '1', '12'],
-            ['fleet1', $this->langs['lm_fleet'], '', 'FFF', '', '1', '8'],
-            ['movement', $this->langs['lm_movement'], '', 'FFF', '', '1', '9'],
-            ['galaxy', $this->langs['lm_galaxy'], 'mode=0', 'FFF', '', '1', '11'],
-            ['alliance', $this->langs['lm_alliance'], '', 'FFF', '', '1', '13'],
-            ['officier', $this->langs['lm_officiers'], '', 'FF8900', '', '1', '15'],
-            ['messages', $this->langs['lm_messages'], '', 'FFF', '', '1', '18'],
-            ['statistics', $this->langs['lm_statistics'], 'range=' . $tota_rank, 'FFF', '', '2', '16'],
-            ['notes', $this->langs['lm_notes'], '', 'FFF', 'true', '2', '19'],
-            ['buddies', $this->langs['lm_buddylist'], '', 'FFF', '', '2', '20'],
-            ['search', $this->langs['lm_search'], '', 'FFF', '', '2', '17'],
-            ['preferences', $this->langs['lm_options'], '', 'FFF', '', '2', '21'],
-            ['logout', $this->langs['lm_logout'], '', 'FFF', '', '2', ''],
-            ['forums', $this->langs['lm_forums'], '', 'FFF', '', '3', '14'],
+            ['overview', $lang->line('lm_overview'), '', 'FFF', '', '1', '1'],
+            ['empire', $lang->line('lm_empire'), '', 'FFF', '', '1', '2'],
+            ['resources', $lang->line('lm_resources'), '', 'FFF', '', '1', '3'],
+            ['resourceSettings', $lang->line('lm_resources_settings'), '', 'FFF', '', '1', '4'],
+            ['station', $lang->line('lm_station'), '', 'FFF', '', '1', '3'],
+            ['traderOverview', $lang->line('lm_trader'), '', 'FF8900', '', '1', '5'],
+            ['research', $lang->line('lm_research'), '', 'FFF', '', '1', '6'],
+            ['techtree', $lang->line('lm_technology'), '', 'FFF', '', '1', '10'],
+            ['shipyard', $lang->line('lm_shipyard'), '', 'FFF', '', '1', '7'],
+            ['defense', $lang->line('lm_defenses'), '', 'FFF', '', '1', '12'],
+            ['fleet1', $lang->line('lm_fleet'), '', 'FFF', '', '1', '8'],
+            ['movement', $lang->line('lm_movement'), '', 'FFF', '', '1', '9'],
+            ['galaxy', $lang->line('lm_galaxy'), 'mode=0', 'FFF', '', '1', '11'],
+            ['alliance', $lang->line('lm_alliance'), '', 'FFF', '', '1', '13'],
+            ['officier', $lang->line('lm_officiers'), '', 'FF8900', '', '1', '15'],
+            ['messages', $lang->line('lm_messages'), '', 'FFF', '', '1', '18'],
+            ['statistics', $lang->line('lm_statistics'), 'range=' . $tota_rank, 'FFF', '', '2', '16'],
+            ['notes', $lang->line('lm_notes'), '', 'FFF', 'true', '2', '19'],
+            ['buddies', $lang->line('lm_buddylist'), '', 'FFF', '', '2', '20'],
+            ['search', $lang->line('lm_search'), '', 'FFF', '', '2', '17'],
+            ['preferences', $lang->line('lm_options'), '', 'FFF', '', '2', '21'],
+            ['logout', $lang->line('lm_logout'), '', 'FFF', '', '2', ''],
+            ['forums', $lang->line('lm_forums'), '', 'FFF', '', '3', '14'],
         ];
 
         // BUILD THE MENU
@@ -763,7 +772,7 @@ class TemplateLib
         $parse['menu_block3'] = $menu_block3;
         $parse['admin_link'] = (($this->current_user['user_authlevel'] > 0) ?
             "<tr><td><div align=\"center\"><a href=\"admin.php\" target=\"_blank\">
-            <font color=\"lime\">" . $this->langs['lm_administration'] . "</font></a></div></td></tr>" : "");
+            <font color=\"lime\">" . $lang->line('lm_administration') . "</font></a></div></td></tr>" : "");
 
         return $this->template->set(
             'general/left_menu_view',
@@ -791,6 +800,88 @@ class TemplateLib
         }
 
         return join($new_lines);
+    }
+
+    /**
+     * Build the list of planet
+     *
+     * @return void
+     */
+    private function buildPlanetList()
+    {
+        $lang = $this->langs->loadLang('global', true);
+
+        $db = new Database();
+        $list = '';
+        $user_planets = $this->sortPlanets();
+
+        $page = isset($_GET['page']) ? $_GET['page'] : '';
+        $gid = isset($_GET['gid']) ? $_GET['gid'] : '';
+        $mode = isset($_GET['mode']) ? $_GET['mode'] : '';
+
+        if ($user_planets) {
+            while ($planets = $db->fetchArray($user_planets)) {
+                $list .= "\n<option ";
+                $list .= (($planets['planet_id'] == $this->current_user['user_current_planet']) ?
+                    'selected="selected" ' : '');
+
+                $list .= "value=\"game.php?page=" . $page . "&gid=" .
+                    $gid . "&cp=" . $planets['planet_id'] . "";
+                $list .= "&amp;mode=" . $mode;
+                $list .= "&amp;re=0\">";
+
+                $list .= (($planets['planet_type'] != PlanetTypesEnumerator::MOON) ? $planets['planet_name'] : $planets['planet_name'] . ' (' . $lang->line('moon') . ')');
+                $list .= "&nbsp;[" . $planets['planet_galaxy'] . ":";
+                $list .= $planets['planet_system'] . ":";
+                $list .= $planets['planet_planet'];
+                $list .= "]&nbsp;&nbsp;</option>";
+            }
+        }
+
+        // IF THE LIST OF PLANETS IS EMPTY WE SHOULD RETURN false
+        if ($list !== '') {
+            return $list;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Sort planets
+     *
+     * @return void
+     */
+    private function sortPlanets()
+    {
+        $db = new Database();
+        $order = $this->current_user['preference_planet_sort_sequence'] == 1 ? "DESC" : "ASC"; // up or down
+        $sort = $this->current_user['preference_planet_sort'];
+
+        $planets = "SELECT `planet_id`, `planet_name`, `planet_galaxy`, `planet_system`, `planet_planet`, `planet_type`
+                    FROM " . PLANETS . "
+                    WHERE `planet_user_id` = '" . (int) $this->current_user['user_id'] . "'
+                        AND `planet_destroyed` = 0 ORDER BY ";
+
+        switch ($sort) {
+            case 0: // emergence
+            default:
+                $planets .= "`planet_id` " . $order;
+                break;
+            case 1: // coordinates
+                $planets .= "`planet_galaxy` " . $order . ", `planet_system` " . $order . ", `planet_planet` " . $order . ", `planet_type` " . $order;
+                break;
+            case 2: // alphabet
+                $planets .= "`planet_name` " . $order;
+                break;
+            case 3: // size
+                $planets .= "`planet_diameter` " . $order;
+                break;
+            case 4: // used_fields
+                $planets .= "`planet_field_current` " . $order;
+                break;
+        }
+
+        return $db->query($planets);
     }
 }
 

@@ -6,18 +6,6 @@ $lang = [
     'sys_building_queue_not_enough_resources' => 'The %s of your building %s level %s at %s could not be performed.<br><br>Insufficient resources: %s.',
     'sys_building_queue_not_enough_resources_from' => 'System Message',
     'sys_building_queue_not_enough_resources_subject' => 'Production cancelled',
-
-    //topnav
-    'tn_commander' => 'Commander',
-    'tn_admiral' => 'Admiral',
-    'tn_engineer' => 'Engineer',
-    'tn_geologist' => 'Geologist',
-    'tn_technocrat' => 'Technocrat',
-    'tn_add_admiral' => '+2 max. fleet slots',
-    'tn_add_engineer' => 'Minimizes losses in half defenses,<br/>+10% energy production',
-    'tn_add_geologist' => '+10% mine production',
-    'tn_add_technocrat' => '+2 Espionage level,<br/>25% Less time for research',
-    'tn_get_now' => 'Get now!',
 ];
 
 /**
@@ -29,13 +17,15 @@ $lang = [
  */
 
 //SERVER GENERALS
+// DevelopmentsLib.php & UpdatesLibrary.php
 $lang['Metal'] = 'Metal';
 $lang['Crystal'] = 'Crystal';
 $lang['Deuterium'] = 'Deuterium';
 $lang['Darkmatter'] = 'Dark Matter';
 $lang['Energy'] = 'Energy';
-$lang['Messages'] = 'Messages';
-$lang['write_message'] = 'Write Message';
+$lang['write_message'] = 'Write Message'; //FleetsLib.php
+
+// TimingLib.php
 $lang['online'] = 'Online';
 $lang['minutes'] = '15 min';
 $lang['offline'] = 'Offline';
@@ -52,40 +42,6 @@ $lang['type_mission'][7] = 'Colonize';
 $lang['type_mission'][8] = 'Recycle';
 $lang['type_mission'][9] = 'Destroy';
 $lang['type_mission'][15] = 'Expedition';
-
-//----------------------------------------------------------------------------//
-//TOPNAV
-$lang['tn_vacation_mode'] = 'Vacation mode active until ';
-$lang['tn_vacation_mode_active'] = "Vacation mode active";
-$lang['tn_delete_mode'] = 'Your account was set for deletion. Deletion date: ';
-
-//----------------------------------------------------------------------------//
-//LEFT MENU
-$lang['lm_overview'] = 'Overview';
-$lang['lm_galaxy'] = 'Galaxy';
-$lang['lm_empire'] = 'Empire';
-$lang['lm_fleet'] = 'Fleet';
-$lang['lm_movement'] = 'Fleet movement';
-$lang['lm_resources'] = 'Resources';
-$lang['lm_resources_settings'] = 'Resource settings';
-$lang['lm_station'] = 'Facilities';
-$lang['lm_research'] = 'Research';
-$lang['lm_shipyard'] = 'Shipyard';
-$lang['lm_defenses'] = 'Defense';
-$lang['lm_officiers'] = 'Recruit Officers';
-$lang['lm_trader'] = 'Merchant';
-$lang['lm_technology'] = 'Technology';
-$lang['lm_messages'] = 'Messages';
-$lang['lm_alliance'] = 'Alliance';
-$lang['lm_buddylist'] = 'Buddies';
-$lang['lm_notes'] = 'Notes';
-$lang['lm_statistics'] = 'Highscore';
-$lang['lm_search'] = 'Search';
-$lang['lm_options'] = 'Options';
-$lang['lm_forums'] = 'Board';
-$lang['lm_logout'] = 'Log out';
-$lang['lm_administration'] = 'Administration';
-$lang['lm_module_not_accesible'] = 'Page could not be found.';
 
 //----------------------------------------------------------------------------//
 //BUILDINGS - RESEARCH - SHIPYARD - DEFENSES
@@ -250,39 +206,7 @@ $lang['res']['descriptions'] = array(
 );
 
 //----------------------------------------------------------------------------//
-// FLEET MOVEMENTS
-$lang['cff_no_fleet_data'] = 'No fleet data';
-$lang['cff_aproaching'] = 'They approach ';
-$lang['cff_ships'] = ' ships';
-$lang['cff_from_the_planet'] = 'from the planet ';
-$lang['cff_from_the_moon'] = 'from the moon ';
-$lang['cff_the_planet'] = 'the planet ';
-$lang['cff_debris_field'] = 'debris field ';
-$lang['cff_to_the_moon'] = 'to the moon ';
-$lang['cff_the_position'] = 'position ';
-$lang['cff_to_the_planet'] = ' to planet ';
-$lang['cff_the_moon'] = ' the moon ';
-$lang['cff_from_planet'] = 'the planet ';
-$lang['cff_from_debris_field'] = 'the debris field ';
-$lang['cff_from_the_moon'] = 'of the moon ';
-$lang['cff_from_position'] = 'position ';
-$lang['cff_missile_attack'] = 'Missile attack';
-$lang['cff_to'] = ' to ';
-$lang['cff_one_of_your'] = 'One of your ';
-$lang['cff_a'] = 'One ';
-$lang['cff_of'] = ' of ';
-$lang['cff_goes'] = ' goes ';
-$lang['cff_toward'] = ' toward ';
-$lang['cff_with_the_mission_of'] = '. With the mission of: ';
-$lang['cff_to_explore'] = ' to explore ';
-$lang['cff_comming_back'] = ' comes back from ';
-$lang['cff_back'] = 'Comming back';
-$lang['cff_to_destination'] = 'Heading to destination';
-$lang['cff_flotte'] = ' fleets';
-
-//----------------------------------------------------------------------------//
 // EXTRA LANGUAGE FUNCTIONS
-$lang['fcm_moon'] = 'Moon';
 $lang['fgp_require'] = 'Requires: ';
 $lang['fgf_time'] = 'Construction Time: ';
 

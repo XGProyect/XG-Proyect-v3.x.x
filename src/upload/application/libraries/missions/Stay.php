@@ -73,7 +73,7 @@ class Stay extends Missions
 
         // DIFFERENT TYPES OF MESSAGES
         $message[1] = sprintf(
-            $this->langs->line('sys_tran_mess_owner'),
+            $this->langs->line('stay_mess_owner'),
             $target_name,
             FleetsLib::targetLink($fleet_row, ''),
             $fleet_row['fleet_resource_metal'],
@@ -82,7 +82,7 @@ class Stay extends Missions
         );
 
         $message[2] = sprintf(
-            $this->langs->line('sys_tran_mess_user'),
+            $this->langs->line('stay_mess_user'),
             $start_name,
             FleetsLib::startLink($fleet_row, ''),
             $target_name,

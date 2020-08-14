@@ -52,7 +52,7 @@ class Expedition extends Missions
         parent::__construct();
 
         // load Language
-        parent::loadLang(['missions', 'game/expedition', 'ships']);
+        parent::loadLang(['global', 'missions', 'game/expedition', 'ships']);
     }
 
     /**
@@ -233,13 +233,13 @@ class Expedition extends Missions
             $message = sprintf(
                 $this->langs->line('exp_found_goods'),
                 FormatLib::prettyNumber($found_metal),
-                $this->langs->line('Metal'),
+                $this->langs->line('metal'),
                 FormatLib::prettyNumber($found_crystal),
-                $this->langs->line('Crystal'),
+                $this->langs->line('crystal'),
                 FormatLib::prettyNumber($found_deuterium),
-                $this->langs->line('Deuterium'),
+                $this->langs->line('deuterium'),
                 FormatLib::prettyNumber($found_darkmatter),
-                $this->langs->line('Darkmatter')
+                $this->langs->line('dark_matter')
             );
 
             $this->expeditionMessage($fleet_row['fleet_owner'], $message, $fleet_row['fleet_end_stay']);

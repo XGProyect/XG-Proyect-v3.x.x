@@ -42,21 +42,21 @@
                         </tr>
 
                         <tr class='header'>
-                            <td align="center" class='header' width="85"><i><b><font color="#ffffff">{Metal}</font></b></i></td>
-                            <td align="center" class='header' width="85"><i><b><font color="#ffffff">{Crystal}</font></b></i></td>
-                            <td align="center" class='header' width="85"><i><b><font color="#ffffff">{Deuterium}</font></b></i></td>
-                            <td align="center" class='header' width="85"><i><b><font color="#ffffff">{Darkmatter}</font></b></i></td>
+                            <td align="center" class='header' width="85"><i><b><font color="#ffffff">{metal}</font></b></i></td>
+                            <td align="center" class='header' width="85"><i><b><font color="#ffffff">{crystal}</font></b></i></td>
+                            <td align="center" class='header' width="85"><i><b><font color="#ffffff">{deuterium}</font></b></i></td>
+                            <td align="center" class='header' width="85"><i><b><font color="#ffffff">{dark_matter}</font></b></i></td>
 
-                            <td align="center" class='header' width="85"><i><b><font color="#ffffff">{Energy}</font></b></i></td>
+                            <td align="center" class='header' width="85"><i><b><font color="#ffffff">{energy}</font></b></i></td>
 
                         </tr>
                         <tr class='header'>
-                            <td align="center" class='header' width="90"><font >{metal}</font></td>
-                            <td align="center" class='header' width="90"><font >{crystal}</font></td>
-                            <td align="center" class='header' width="90"><font >{deuterium}</font></td>
-                            <td align="center" class='header' width="90"><font color="#FFFFFF">{darkmatter}</font></DIV></td>
+                            <td align="center" class='header' width="90"><font >{re_metal}</font></td>
+                            <td align="center" class='header' width="90"><font >{re_crystal}</font></td>
+                            <td align="center" class='header' width="90"><font >{re_deuterium}</font></td>
+                            <td align="center" class='header' width="90"><font color="#FFFFFF">{re_darkmatter}</font></DIV></td>
 
-                            <td align="center" class='header' width="90">{energy}</td>
+                            <td align="center" class='header' width="90">{re_energy}</td>
 
                         </tr>
                     </table></td>
