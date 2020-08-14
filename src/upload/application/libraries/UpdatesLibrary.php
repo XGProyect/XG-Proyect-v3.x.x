@@ -14,6 +14,7 @@
 namespace application\libraries;
 
 use application\core\enumerators\BuildingsEnumerator;
+use application\core\enumerators\PlanetTypesEnumerator;
 use application\core\XGPCore;
 use application\helpers\UrlHelper;
 use application\libraries\DevelopmentsLib as Developments;
@@ -532,7 +533,7 @@ class UpdatesLibrary extends XGPCore
             }
         }
 
-        if ($current_planet['planet_type'] == 3) {
+        if ($current_planet['planet_type'] == PlanetTypesEnumerator::MOON) {
             $game_metal_basic_income = 0;
             $game_crystal_basic_income = 0;
             $game_deuterium_basic_income = 0;

@@ -537,7 +537,6 @@ class Fleet4 extends Controller
                 or ($target['planet_debris_metal'] == 0
                     && $target['planet_debris_crystal'] == 0
                     && time() > ($target['planet_invisible_start_time'] + DEBRIS_LIFE_TIME))) {
-
                 return false;
             }
         }
@@ -545,9 +544,8 @@ class Fleet4 extends Controller
         if ($data['mission'] == Missions::destroy) {
             if ($this->_own_planet
                 or !$this->_occupied_planet
-                or ($this->getTargetData()['type'] != PlanetTypes::moon)
+                or ($this->getTargetData()['type'] != PlanetTypes::MOON)
                 or !isset($fleet[Ships::ship_deathstar])) {
-
                 return false;
             }
         }

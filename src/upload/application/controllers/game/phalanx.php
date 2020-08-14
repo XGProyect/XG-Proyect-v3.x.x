@@ -14,6 +14,7 @@
 namespace application\controllers\game;
 
 use application\core\Controller;
+use application\core\enumerators\PlanetTypesEnumerator;
 use application\libraries\FleetsLib;
 use application\libraries\FunctionsLib;
 
@@ -82,7 +83,7 @@ class Phalanx extends Controller
         $Planet = (int) $_GET['planet'];
         $PlType = (int) $_GET['planettype'];
         /* cheater detection */
-        if ($System < $radar_limit_inf or $System > $radar_limit_sup or $Galaxy != $this->_current_planet['planet_galaxy'] or $PlType != 1 or $this->_current_planet['planet_type'] != 3) {
+        if ($System < $radar_limit_inf or $System > $radar_limit_sup or $Galaxy != $this->_current_planet['planet_galaxy'] or $PlType != PlanetTypesEnumerator::PLANET or $this->_current_planet['planet_type'] != PlanetTypesEnumerator::MOON) {
             FunctionsLib::redirect('game.php?page=galaxy');
         }
 

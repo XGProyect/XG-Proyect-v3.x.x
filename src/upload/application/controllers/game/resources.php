@@ -14,6 +14,7 @@
 namespace application\controllers\game;
 
 use application\core\Controller;
+use application\core\enumerators\PlanetTypesEnumerator;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
 use application\libraries\OfficiersLib;
@@ -83,7 +84,7 @@ class Resources extends Controller
         $game_energy_basic_income = FunctionsLib::readConfig('energy_basic_income');
         $game_resource_multiplier = FunctionsLib::readConfig('resource_multiplier');
 
-        if ($this->_current_user['preference_vacation_mode'] > 0 or $this->_current_planet['planet_type'] == 3) {
+        if ($this->_current_user['preference_vacation_mode'] > 0 or $this->_current_planet['planet_type'] == PlanetTypesEnumerator::MOON) {
             $game_metal_basic_income = 0;
             $game_crystal_basic_income = 0;
             $game_deuterium_basic_income = 0;

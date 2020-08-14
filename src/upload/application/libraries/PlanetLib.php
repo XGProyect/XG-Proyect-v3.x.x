@@ -13,6 +13,7 @@
  */
 namespace application\libraries;
 
+use application\core\enumerators\PlanetTypesEnumerator;
 use application\core\Language;
 use application\core\XGPCore;
 use application\libraries\FormulaLib;
@@ -94,7 +95,7 @@ class PlanetLib extends XGPCore
                     'planet_system' => $system,
                     'planet_planet' => $position,
                     'planet_last_update' => time(),
-                    'planet_type' => '1',
+                    'planet_type' => PlanetTypesEnumerator::PLANET,
                     'planet_image' => $this->formula->setPlanetImage($system, $position),
                     'planet_diameter' => $planet['planet_diameter'],
                     'planet_field_max' => $planet['planet_field_max'],
@@ -153,7 +154,7 @@ class PlanetLib extends XGPCore
                     'planet_system' => $system,
                     'planet_planet' => $position,
                     'planet_last_update' => time(),
-                    'planet_type' => '3',
+                    'planet_type' => PlanetTypesEnumerator::MOON,
                     'planet_image' => 'mond',
                     'planet_diameter' => $size,
                     'planet_field_max' => $max_fields,

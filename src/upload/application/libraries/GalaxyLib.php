@@ -13,6 +13,7 @@
  */
 namespace application\libraries;
 
+use application\core\enumerators\PlanetTypesEnumerator;
 use application\core\Template;
 use application\core\XGPCore;
 use application\helpers\UrlHelper;
@@ -671,7 +672,7 @@ class GalaxyLib extends XGPCore
         if (($this->currentplanet['building_phalanx'] != 0)
             && ($this->row_data['user_id'] != $this->current_user['user_id'])
             && ($this->row_data['planet_galaxy'] == $this->currentplanet['planet_galaxy'])
-            && ($this->currentplanet['planet_type']) == 3) {
+            && ($this->currentplanet['planet_type']) == PlanetTypesEnumerator::MOON) {
             return $this->isInRange($this->formula->phalanxRange($this->currentplanet['building_phalanx']));
         }
     }

@@ -14,6 +14,7 @@
 namespace application\controllers\adm;
 
 use application\core\Controller;
+use application\core\enumerators\PlanetTypesEnumerator;
 use application\libraries\adm\AdministrationLib as Administration;
 use application\libraries\FormatLib as Format;
 use application\libraries\FunctionsLib as Functions;
@@ -1085,8 +1086,8 @@ class Users extends Controller
         $parse += $planets_data;
         $parse['planet_user_id'] = $this->buildUsersCombo($parse['planet_user_id']);
         $parse['planet_last_update'] = date(Functions::readConfig('date_format_extended'), $parse['planet_last_update']);
-        $parse['type1'] = $parse['planet_type'] == 1 ? ' selected' : '';
-        $parse['type2'] = $parse['planet_type'] == 3 ? ' selected' : '';
+        $parse['type1'] = $parse['planet_type'] == PlanetTypesEnumerator::PLANET ? ' selected' : '';
+        $parse['type2'] = $parse['planet_type'] == PlanetTypesEnumerator::MOON ? ' selected' : '';
         $parse['dest1'] = $parse['planet_destroyed'] > 0 ? ' selected' : '';
         $parse['dest2'] = $parse['planet_destroyed'] <= 0 ? ' selected' : '';
         $parse['planet_destroyed'] = $parse['planet_destroyed'] > 0 ? date(Functions::readConfig('date_format_extended'), $parse['planet_destroyed']) : '-';

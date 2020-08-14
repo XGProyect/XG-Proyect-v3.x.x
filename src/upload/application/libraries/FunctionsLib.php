@@ -15,6 +15,7 @@ namespace application\libraries;
 
 use application\core\Database;
 use application\core\enumerators\MessagesEnumerator;
+use application\core\enumerators\PlanetTypesEnumerator;
 use application\core\enumerators\UserRanksEnumerator;
 use application\core\Options;
 use application\core\Template;
@@ -344,7 +345,7 @@ abstract class FunctionsLib extends XGPCore
                             $planets['planet_planet'] . ';' . $planets['planet_type'] . "\">";
                     }
 
-                    $list .= (($planets['planet_type'] != 3) ? $planets['planet_name'] : $planets['planet_name'] . ' (' . parent::$lang['fcm_moon'] . ')');
+                    $list .= (($planets['planet_type'] != PlanetTypesEnumerator::MOON) ? $planets['planet_name'] : $planets['planet_name'] . ' (' . parent::$lang['fcm_moon'] . ')');
                     $list .= "&nbsp;[" . $planets['planet_galaxy'] . ":";
                     $list .= $planets['planet_system'] . ":";
                     $list .= $planets['planet_planet'];

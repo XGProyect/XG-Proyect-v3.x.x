@@ -14,6 +14,7 @@
 namespace application\controllers\game;
 
 use application\core\Controller;
+use application\core\enumerators\PlanetTypesEnumerator;
 use application\helpers\UrlHelper;
 use application\libraries\DevelopmentsLib;
 use application\libraries\FleetsLib;
@@ -373,7 +374,7 @@ class Overview extends Controller
         $return['moon_img'] = '';
         $return['moon'] = '';
 
-        if ($this->_current_planet['moon_id'] != 0 && $this->_current_planet['moon_destroyed'] == 0 && $this->_current_planet['planet_type'] == 1) {
+        if ($this->_current_planet['moon_id'] != 0 && $this->_current_planet['moon_destroyed'] == 0 && $this->_current_planet['planet_type'] == PlanetTypesEnumerator::PLANET) {
             $moon_name = $this->_current_planet['moon_name'] . " (" . $this->langs->line('moon') . ")";
             $url = 'game.php?page=overview&cp=' . $this->_current_planet['moon_id'] . '&re=0';
             $image = DPATH . 'planets/' . $this->_current_planet['moon_image'] . '.jpg';
@@ -399,7 +400,7 @@ class Overview extends Controller
         $planet_block = '<tr>';
 
         foreach ($planets_query as $user_planet) {
-            if ($user_planet['planet_id'] != $this->_current_user['user_current_planet'] && $user_planet['planet_type'] != 3) {
+            if ($user_planet['planet_id'] != $this->_current_user['user_current_planet'] && $user_planet['planet_type'] != PlanetTypesEnumerator::MOON) {
                 $url = 'game.php?page=overview&cp=' . $user_planet['planet_id'] . '&re=0';
                 $image = DPATH . 'planets/small/s_' . $user_planet['planet_image'] . '.jpg';
                 $attributes = 'height="50" width="50"';

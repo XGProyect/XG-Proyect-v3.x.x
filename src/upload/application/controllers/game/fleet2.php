@@ -205,9 +205,9 @@ class Fleet2 extends Controller
     private function buildPlanetTypesBlock()
     {
         $planet_type = [
-            'fl_planet' => PlanetTypes::planet,
-            'fl_debris' => PlanetTypes::debris,
-            'fl_moon' => PlanetTypes::moon,
+            'fl_planet' => PlanetTypes::PLANET,
+            'fl_debris' => PlanetTypes::DEBRIS,
+            'fl_moon' => PlanetTypes::MOON,
         ];
 
         $data = filter_input_array(INPUT_POST, [
@@ -220,7 +220,6 @@ class Fleet2 extends Controller
         $list_of_options = [];
 
         foreach ($planet_type as $label => $value) {
-
             $list_of_options[] = [
                 'value' => $value,
                 'selected' => ($value == $data['planet_type']) ? 'selected' : '',
@@ -298,9 +297,7 @@ class Fleet2 extends Controller
         $list_of_planets = [];
 
         if ($planets) {
-
             foreach ($planets as $planet) {
-
                 $list_of_planets[] = [
                     'value' => $planet['planet_galaxy'] . ';' . $planet['planet_system'] . ';' . $planet['planet_planet'] . ';' . $planet['planet_type'],
                     'selected' => '',
@@ -308,7 +305,7 @@ class Fleet2 extends Controller
                         $planet['planet_galaxy'],
                         $planet['planet_system'],
                         $planet['planet_planet']
-                    ) . ($planet['planet_type'] == PlanetTypes::moon ? ' (' . $this->langs->line('moon') . ')' : ''),
+                    ) . ($planet['planet_type'] == PlanetTypes::MOON ? ' (' . $this->langs->line('moon') . ')' : ''),
                 ];
             }
 

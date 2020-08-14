@@ -17,6 +17,7 @@ declare (strict_types = 1);
 namespace application\controllers\adm;
 
 use application\core\Controller;
+use application\core\enumerators\PlanetTypesEnumerator;
 use application\core\enumerators\UserRanksEnumerator as UserRanks;
 use application\libraries\adm\AdministrationLib as Administration;
 use application\libraries\FormatLib as Format;
@@ -293,7 +294,7 @@ class Maker extends Controller
             $moon_planet = $this->Maker_Model->checkMoon($planet_id);
 
             if ($moon_planet && is_numeric($planet_id)) {
-                if ($moon_planet['id_moon'] == '' && $moon_planet['planet_type'] == 1 && $moon_planet['planet_destroyed'] == 0) {
+                if ($moon_planet['id_moon'] == '' && $moon_planet['planet_type'] == PlanetTypesEnumerator::PLANET && $moon_planet['planet_destroyed'] == 0) {
                     $galaxy = (int) $moon_planet['planet_galaxy'];
                     $system = (int) $moon_planet['planet_system'];
                     $planet = (int) $moon_planet['planet_planet'];

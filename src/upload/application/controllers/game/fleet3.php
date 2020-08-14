@@ -342,7 +342,7 @@ class Fleet3 extends Controller
         ];
 
         $mission_rules = [
-            PlanetTypes::planet => [
+            PlanetTypes::PLANET => [
                 'own' => [
                     Missions::transport,
                     Missions::deploy,
@@ -357,7 +357,7 @@ class Fleet3 extends Controller
                     Missions::colonize,
                 ],
             ],
-            PlanetTypes::debris => [
+            PlanetTypes::DEBRIS => [
                 'own' => [
                     Missions::deploy,
                     Missions::recycle,
@@ -367,7 +367,7 @@ class Fleet3 extends Controller
                     Missions::recycle,
                 ],
             ],
-            PlanetTypes::moon => [
+            PlanetTypes::MOON => [
                 'own' => [
                     Missions::transport,
                     Missions::deploy,
