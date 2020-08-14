@@ -20,10 +20,6 @@ $lang['ge_sgo'] = 'Super Operator (SGo)';
 $lang['ge_ga'] = 'Administrator (GA)';
 $lang['ge_yes'] = 'YES';
 $lang['ge_no'] = 'NO';
-$lang['user_level'][0] = 'Player';
-$lang['user_level'][1] = 'Operator (GO)';
-$lang['user_level'][2] = 'Super Operator (SGo)';
-$lang['user_level'][3] = 'Administrator (GA)';
 
 // MENU
 $lang['mn_general'] = 'General';

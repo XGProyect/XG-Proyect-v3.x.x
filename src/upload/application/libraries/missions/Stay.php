@@ -34,6 +34,9 @@ class Stay extends Missions
     public function __construct()
     {
         parent::__construct();
+
+        // load Language
+        parent::loadLang(['missions', 'game/stay']);
     }
 
     /**
@@ -51,15 +54,15 @@ class Stay extends Missions
                     'galaxy' => $fleet_row['fleet_start_galaxy'],
                     'system' => $fleet_row['fleet_start_system'],
                     'planet' => $fleet_row['fleet_start_planet'],
-                    'type' => $fleet_row['fleet_start_type']
+                    'type' => $fleet_row['fleet_start_type'],
                 ],
                 'end' => [
                     'galaxy' => $fleet_row['fleet_end_galaxy'],
                     'system' => $fleet_row['fleet_end_system'],
                     'planet' => $fleet_row['fleet_end_planet'],
-                    'type' => $fleet_row['fleet_end_type']
-                ]
-            ]
+                    'type' => $fleet_row['fleet_end_type'],
+                ],
+            ],
         ]);
 
         // SOME REQUIRED VALUES
@@ -70,40 +73,52 @@ class Stay extends Missions
 
         // DIFFERENT TYPES OF MESSAGES
         $message[1] = sprintf(
-            $this->langs['sys_tran_mess_owner'], $target_name, FleetsLib::targetLink($fleet_row, ''), $fleet_row['fleet_resource_metal'], $this->langs['Metal'], $fleet_row['fleet_resource_crystal'], $this->langs['Crystal'], $fleet_row['fleet_resource_deuterium'], $this->langs['Deuterium']
+            $this->langs->line('sys_tran_mess_owner'),
+            $target_name,
+            FleetsLib::targetLink($fleet_row, ''),
+            $fleet_row['fleet_resource_metal'],
+            $fleet_row['fleet_resource_crystal'],
+            $fleet_row['fleet_resource_deuterium']
         );
 
         $message[2] = sprintf(
-            $this->langs['sys_tran_mess_user'], $start_name, FleetsLib::startLink($fleet_row, ''), $target_name, FleetsLib::targetLink($fleet_row, ''), $fleet_row['fleet_resource_metal'], $this->langs['Metal'], $fleet_row['fleet_resource_crystal'], $this->langs['Crystal'], $fleet_row['fleet_resource_deuterium'], $this->langs['Deuterium']
+            $this->langs->line('sys_tran_mess_user'),
+            $start_name,
+            FleetsLib::startLink($fleet_row, ''),
+            $target_name,
+            FleetsLib::targetLink($fleet_row, ''),
+            $fleet_row['fleet_resource_metal'],
+            $fleet_row['fleet_resource_crystal'],
+            $fleet_row['fleet_resource_deuterium']
         );
 
         $message[3] = sprintf(
-            $this->langs['sys_tran_mess_back'], $start_name, FleetsLib::startLink($fleet_row, '')
+            $this->langs->line('mi_fleet_back_without_resources'),
+            $target_name,
+            FleetsLib::targetLink($fleet_row, ''),
+            $start_name,
+            FleetsLib::startLink($fleet_row, '')
         );
 
         if ($fleet_row['fleet_mess'] == 0) {
-
             if ($fleet_row['fleet_start_time'] <= time()) {
-
                 $this->stayMessage(
-                    $start_owner_id, $message[1], $fleet_row['fleet_start_time'], $this->langs['sys_mess_transport']
+                    $start_owner_id, $message[1], $fleet_row['fleet_start_time'], $this->langs->line('stay_report_title')
                 );
 
                 $this->stayMessage(
-                    $target_owner_id, $message[2], $fleet_row['fleet_start_time'], $this->langs['sys_mess_transport']
+                    $target_owner_id, $message[2], $fleet_row['fleet_start_time'], $this->langs->line('stay_report_title')
                 );
 
                 $this->startStay($fleet_row['fleet_id']);
             }
 
             if ($fleet_row['fleet_end_stay'] <= time()) {
-
                 parent::returnFleet($fleet_row['fleet_id']);
             }
         } elseif ($fleet_row['fleet_end_time'] < time()) {
-
             $this->stayMessage(
-                $start_owner_id, $message[3], $fleet_row['fleet_end_time'], $this->langs['sys_mess_fleetback']
+                $start_owner_id, $message[3], $fleet_row['fleet_end_time'], $this->langs->line('mi_fleet_back_title')
             );
 
             parent::restoreFleet($fleet_row, true);
@@ -135,7 +150,7 @@ class Stay extends Missions
      */
     private function stayMessage($owner, $message, $time, $status_message)
     {
-        FunctionsLib::sendMessage($owner, '', $time, 5, $this->langs['sys_mess_tower'], $status_message, $message);
+        FunctionsLib::sendMessage($owner, '', $time, 5, $this->langs->line('mi_fleet_command'), $status_message, $message);
     }
 }
 

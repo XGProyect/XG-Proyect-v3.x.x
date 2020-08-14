@@ -206,7 +206,7 @@ class Missions extends XGPCore
      */
     protected function canStartMission(array $fleet): bool
     {
-        return ($fleet['fleet_mess'] == 0 && $fleet['fleet_start_time'] <= time());
+        return ($fleet['fleet_mess'] == 0 && $fleet['fleet_start_time'] <= time() && $fleet['fleet_end_stay'] <= time());
     }
 
     /**

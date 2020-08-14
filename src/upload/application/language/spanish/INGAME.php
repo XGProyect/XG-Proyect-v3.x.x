@@ -47,6 +47,8 @@ $lang['online'] = 'Conectado';
 $lang['minutes'] = '15 min';
 $lang['offline'] = 'Desconectado';
 
+// used by FleetsLib.php and GalaxyLib.php
+// TODO: refactor and remove
 $lang['type_mission'][1] = 'Atacar';
 $lang['type_mission'][2] = 'Ataq. confederación';
 $lang['type_mission'][3] = 'Transportar';
@@ -57,13 +59,6 @@ $lang['type_mission'][7] = 'Colonizar';
 $lang['type_mission'][8] = 'Reciclar campo de escombros';
 $lang['type_mission'][9] = 'Destruir';
 $lang['type_mission'][15] = 'Expedición';
-
-$lang['user_level'] = array(
-    '0' => 'Jugador',
-    '1' => 'Moderador',
-    '2' => 'Operador',
-    '3' => 'Administrador',
-);
 
 //----------------------------------------------------------------------------//
 //TOPNAV
@@ -440,31 +435,6 @@ $lang['info'][502]['name'] = "Misiles antibalísticos";
 $lang['info'][502]['description'] = "Un misil antibalístico puede proteger a tu planeta de un misíl interplanetario que se está aproximando.";
 $lang['info'][503]['name'] = "Misil interplanetario";
 $lang['info'][503]['description'] = "Los misiles interplanetarios destruyen los sistemas de defensa del enemigo. Los sistemas de defensa destruidos por los misiles interplanetarios no serán reparados.";
-
-//----------------------------------------------------------------------------//
-//old lines
-$lang['sys_attack_title'] = "Las flotas se enfrentan en ";
-$lang['sys_ship_type'] = "Tipo";
-$lang['sys_ship_count'] = "Cantidad";
-$lang['sys_ship_weapon'] = "Armas";
-$lang['sys_ship_shield'] = "Escudo";
-$lang['sys_ship_armour'] = "Blindaje";
-$lang['sys_stay_mess_stay'] = "Estacionamiento de flota";
-$lang['sys_expe_report'] = "Reporte de expedicion";
-$lang['sys_expe_blackholl_1'] = "La flota fue arrastrada hacia un agujero negro, esta parcialmente destruida.";
-$lang['sys_expe_blackholl_2'] = "La flota fue arrastrada hacia un agujero negro, y fue completamente destruida!";
-$lang['sys_expe_nothing_1'] = "Tus exploradores tomaron grandes fotos. Pero no han encontrado recursos";
-$lang['sys_expe_nothing_2'] = "Tus exploradores han pasado todo el tiempo en el área seleccionada. Pero no han encontrado nada.";
-$lang['sys_expe_found_goods'] = "La flota ha descubierto una nave no tripulada! <br> Tus exploradores han recuperado %s de %s, %s de %s, %s de %s y %s de %s.";
-$lang['sys_expe_found_ships'] = "Tus exploradores han encontrado una flota abandonada, la dominaron y vienen de regreso. <br> Escuadron:";
-$lang['sys_expe_back_home'] = "Tu expedición regresó al hangar.";
-$lang['sys_tran_mess_owner'] = "Una de tus flota llega a %s %s y entrega su mercancía: %s de %s, %s de %s y %s de %s.";
-$lang['sys_tran_mess_user'] = "Una flota proveniente de %s %s llega a tu planeta y entrega su mercancía: %s de %s, %s de %s y %s de %s.";
-$lang['sys_missile_attack'] = 'Ataque con misiles';
-$lang['sys_all_destroyed'] = 'Todos los misiles interplanetarios han sido destruidos por los misiles de intercepción.';
-$lang['sys_planet_without_defenses'] = 'Planeta sin defensa.';
-$lang['sys_some_destroyed'] = ' han sido destruidos por los misiles de intercepción.';
-$lang['sys_missile_string'] = 'Un ataque con misiles (%1%) de %2% llega al planeta %3% <br><br>';
 
 //----------------------------------------------------------------------------//
 // FLEET MOVEMENTS

@@ -47,6 +47,8 @@ $lang['online'] = 'Online';
 $lang['minutes'] = '15 min';
 $lang['offline'] = 'Offline';
 
+// used by FleetsLib.php and GalaxyLib.php
+// TODO: refactor and remove
 $lang['type_mission'][1] = 'Attack';
 $lang['type_mission'][2] = 'ACS Attack';
 $lang['type_mission'][3] = 'Transport';
@@ -57,13 +59,6 @@ $lang['type_mission'][7] = 'Colonize';
 $lang['type_mission'][8] = 'Recycle';
 $lang['type_mission'][9] = 'Destroy';
 $lang['type_mission'][15] = 'Expedition';
-
-$lang['user_level'] = array(
-    '0' => 'Player',
-    '1' => 'Moderator',
-    '2' => 'Operator',
-    '3' => 'Administrator',
-);
 
 //----------------------------------------------------------------------------//
 //TOPNAV
@@ -430,31 +425,6 @@ $lang['info'][502]['name'] = "Anti-Ballistic Missiles";
 $lang['info'][502]['description'] = 'Anti Ballistic Missiles (ABM) are your only line of defence when attacked by Interplanetary Missiles (IPM) on your planet or moon. When a launch of IPMs is detected, these missiles automatically arm, process a launch code in their flight computers, target the inbound IPM, and launch to intercept. During the flight, the target IPM is constantly tracked and course corrections are applied until the ABM reaches the target and destroys the attacking IPM. Each ABM destroys one incoming IPM.';
 $lang['info'][503]['name'] = "Interplanetary Missiles";
 $lang['info'][503]['description'] = 'Interplanetary Missiles (IPM) are your offensive weapon to destroy the defences of your target. Using state of the art tracking technology, each missile targets a certain number of defences for destruction. Tipped with an anti-matter bomb, they deliver a destructive force so severe that destroyed shields and defences cannot be repaired. The only way to counter these missiles is with ABMs.';
-
-//----------------------------------------------------------------------------//
-//old lines
-$lang['sys_attack_title'] = "Fleets clash in ";
-$lang['sys_ship_type'] = "Type";
-$lang['sys_ship_count'] = "Amount";
-$lang['sys_ship_weapon'] = "Weapons";
-$lang['sys_ship_shield'] = "Shield";
-$lang['sys_ship_armour'] = "Armor";
-$lang['sys_stay_mess_stay'] = "Parking Fleet";
-$lang['sys_expe_report'] = "Report of expedition";
-$lang['sys_expe_blackholl_1'] = "The fleet was sucked into a black hole is partially destroyed.";
-$lang['sys_expe_blackholl_2'] = "The fleet was sucked into a black hole, and was completely destroyed!";
-$lang['sys_expe_nothing_1'] = "Your exploration nearly ran into a neutron stars gravitation field and needed some time to free itself. Because of that a lot of Deuterium was consumed and the expedition fleet had to come back without any results.";
-$lang['sys_expe_nothing_2'] = "Besides some quaint, small pets from a unknown mash planet, this expedition brings nothing thrilling back from the trip.";
-$lang['sys_expe_found_goods'] = "The fleet has discovered an unmanned spacecraft! <br> His scouts have recovered %s de %s, %s de %s, %s de %s y %s de %s.";
-$lang['sys_expe_found_ships'] = "Your expedition ran into the shipyards of a colony that was deserted eons ago. In the shipyards hangar they discover some ships that could be salvaged. The technicians are trying to get some of them to fly again.<br><br>The following ships are now part of the fleet:";
-$lang['sys_expe_back_home'] = "Your expedition returned to the hangar.";
-$lang['sys_tran_mess_owner'] = "Your fleet has reached the planet %s %s and delivered its goods:<br>%s: %s %s: %s %s: %s.";
-$lang['sys_tran_mess_user'] = "Your fleet is returning from planet %s %s.<br><br>The fleet is delivering %s %s, %s %s and %s %s.";
-$lang['sys_missile_attack'] = 'Missile Attack';
-$lang['sys_all_destroyed'] = 'All interplanetary missiles has been destroyed by interceptor missiles.';
-$lang['sys_planet_without_defenses'] = 'Planet without defenses';
-$lang['sys_some_destroyed'] = ' has been destroyed by interceptor missiles.';
-$lang['sys_missile_string'] = 'Missiles attack (%1%) from %2% arrive to planet %3% <br><br>';
 
 //----------------------------------------------------------------------------//
 // FLEET MOVEMENTS
