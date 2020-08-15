@@ -59,7 +59,7 @@ class Permissions extends Controller
         Administration::checkSession();
 
         // load Language
-        parent::loadLang(['adm/global', 'adm/permissions']);
+        parent::loadLang(['adm/global', 'adm/permissions', 'adm/menu']);
 
         // set data
         $this->user = $this->getUserData();
@@ -193,7 +193,7 @@ class Permissions extends Controller
                 // put all inside
                 $modules_list[] = [
                     'page_module' => $module,
-                    'page_module_title' => $this->langs->language['admin_menu'][$module],
+                    'page_module_title' => $this->langs->language[$module],
                     'permissions_list' => $permissions_list,
                 ];
 
@@ -203,7 +203,7 @@ class Permissions extends Controller
             // put all inside
             $sections_list[$section_id] = [
                 'section_name' => ucfirst($section),
-                'section_title' => $this->langs->language['admin_menu'][$section],
+                'section_title' => $this->langs->language[$section],
                 'roles_list' => $roles,
                 'modules_list' => $modules_list,
             ];

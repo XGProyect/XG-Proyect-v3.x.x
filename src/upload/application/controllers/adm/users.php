@@ -132,7 +132,7 @@ class Users extends Controller
         $parse['status'] = ($user != '') ? '' : ' disabled';
         $parse['status_box'] = ($user != '' && $this->_id != $this->_current_user['user_id']) ? '' : ' disabled';
         $parse['tag'] = ($user != '') ? 'a' : 'button';
-        $parse['user_rank'] = Administration::returnRank($this->_authlevel);
+        $parse['user_rank'] = $this->langs->language['user_level'][$this->_authlevel];
         $parse['content'] = ($user != '' && $type != '') ? $this->getData($type) : '';
 
         parent::$page->displayAdmin(

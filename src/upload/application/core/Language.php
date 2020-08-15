@@ -91,10 +91,6 @@ class Language
     {
         $required = [];
 
-        if (defined('IN_ADMIN')) {
-            $required[] = 'ADMIN';
-        }
-
         if (defined('IN_GAME')) {
             $required[] = 'INGAME';
         }

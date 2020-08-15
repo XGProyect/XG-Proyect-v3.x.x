@@ -13,6 +13,7 @@
  */
 namespace application\libraries\adm;
 
+use application\core\Language;
 use application\core\Template;
 use application\core\XGPCore;
 use application\libraries\adm\Permissions;
@@ -102,18 +103,21 @@ class AdministrationLib extends XGPCore
      */
     public static function saveMessage($result, $message, $dismissible = true)
     {
+        $lang = new Language;
+        $lang = $lang->loadLang('adm/global', true);
+
         switch ($result) {
             case 'ok':
                 $parse['color'] = 'alert-success';
-                $parse['status'] = parent::$lang['gn_ok_title'];
+                $parse['status'] = $lang->line('gn_ok_title');
                 break;
             case 'error':
                 $parse['color'] = 'alert-danger';
-                $parse['status'] = parent::$lang['gn_error_title'];
+                $parse['status'] = $lang->line('gn_error_title');
                 break;
             case 'warning':
                 $parse['color'] = 'alert-warning';
-                $parse['status'] = parent::$lang['gn_warning_title'];
+                $parse['status'] = $lang->line('gn_warning_title');
                 break;
             case 'info':
                 $parse['color'] = 'alert-info';
@@ -131,39 +135,6 @@ class AdministrationLib extends XGPCore
             'adm/save_message_view',
             $parse
         );
-    }
-
-    /**
-     * returnRank
-     *
-     * @param int $authlevel Auth level
-     *
-     * @return string
-     */
-    public static function returnRank($authlevel)
-    {
-        switch ($authlevel) {
-            default:
-            case 0:
-                return parent::$lang['ge_user'];
-
-                break;
-
-            case 1:
-                return parent::$lang['ge_go'];
-
-                break;
-
-            case 2:
-                return parent::$lang['ge_sgo'];
-
-                break;
-
-            case 3:
-                return parent::$lang['ge_ga'];
-
-                break;
-        }
     }
 
     /**

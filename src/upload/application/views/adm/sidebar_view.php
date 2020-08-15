@@ -13,7 +13,7 @@
 
     <!-- Heading -->
     <div class="sidebar-heading">
-        {mn_general}
+        {general}
     </div>
 
     <!-- Nav Item - Pages Collapse Menu -->
@@ -21,7 +21,7 @@
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true"
             aria-controls="collapseOne">
             <i class="fas fa-fw fa-cogs"></i>
-            <span>{mn_config_title}</span>
+            <span>{configuration}</span>
         </a>
         <div id="collapseOne" class="collapse{active_2_show}" aria-labelledby="headingOne" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
@@ -35,7 +35,7 @@
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true"
             aria-controls="collapseTwo">
             <i class="fas fa-fw fa-info-circle"></i>
-            <span>{mn_info_title}</span>
+            <span>{information}</span>
         </a>
         <div id="collapseTwo" class="collapse{active_3_show}" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
@@ -49,7 +49,7 @@
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true"
             aria-controls="collapseThree">
             <i class="fas fa-fw fa-pen"></i>
-            <span>{mn_edition_title}</span>
+            <span>{edition}</span>
         </a>
         <div id="collapseThree" class="collapse{active_4_show}" aria-labelledby="headingThree" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
@@ -63,7 +63,7 @@
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFour" aria-expanded="true"
             aria-controls="collapseFour">
             <i class="fas fa-fw fa-tools"></i>
-            <span>{mn_tools_title}</span>
+            <span>{tools}</span>
         </a>
         <div id="collapseFour" class="collapse{active_5_show}" aria-labelledby="headingFour" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
@@ -77,7 +77,7 @@
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFive" aria-expanded="true"
             aria-controls="collapseFive">
             <i class="fas fa-fw fa-brush"></i>
-            <span>{mn_maintenance_title}</span>
+            <span>{maintenance}</span>
         </a>
         <div id="collapseFive" class="collapse{active_6_show}" aria-labelledby="headingFive" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">

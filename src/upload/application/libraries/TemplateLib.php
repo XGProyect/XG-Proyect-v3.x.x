@@ -185,7 +185,7 @@ class TemplateLib
     {
         return $this->template->set(
             ($full ? 'adm/admin_page_view' : 'adm/simple_admin_page_view'),
-            array_merge($this->langs, $parse, ['page_content' => $page])
+            array_merge($parse, ['page_content' => $page])
         );
     }
 
@@ -212,35 +212,38 @@ class TemplateLib
      */
     private function adminSidebar(): string
     {
+        $lang = new Language;
+        $lang = $lang->loadLang('adm/menu', true);
+
         $current_page = isset($_GET['page']) ? $_GET['page'] : null;
         $items = '';
         $flag = '';
         $pages = array(
-            ['server', $this->langs['mn_config_server'], '2'],
-            ['modules', $this->langs['mn_config_modules'], '2'],
-            ['planets', $this->langs['mn_config_planets'], '2'],
-            ['registration', $this->langs['mn_config_registrations'], '2'],
-            ['statistics', $this->langs['mn_config_stats'], '2'],
-            ['premium', $this->langs['mn_premium'], '2'],
-            ['tasks', $this->langs['mn_info_tasks'], '3'],
-            ['errors', $this->langs['mn_info_db'], '3'],
-            ['fleets', $this->langs['mn_info_fleets'], '3'],
-            ['messages', $this->langs['mn_info_messages'], '3'],
-            ['maker', $this->langs['mn_edition_maker'], '4'],
-            ['users', $this->langs['mn_edition_users'], '4'],
-            ['alliances', $this->langs['mn_edition_alliances'], '4'],
-            ['languages', $this->langs['mn_edition_languages'], '4'],
-            ['changelog', $this->langs['mn_edit_changelog'], '4'],
-            ['permissions', $this->langs['mn_permissions'], '4'],
-            ['backup', $this->langs['mn_tools_backup'], '5'],
-            ['encrypter', $this->langs['mn_tools_encrypter'], '5'],
-            ['announcement', $this->langs['mn_tools_global_message'], '5'],
-            ['ban', $this->langs['mn_tools_ban'], '5'],
-            ['rebuildhighscores', $this->langs['mn_tools_manual_update'], '5'],
-            ['update', $this->langs['mn_tools_update'], '5'],
-            ['migrate', $this->langs['mn_tools_migrate'], '5'],
-            ['repair', $this->langs['mn_maintenance_db'], '6'],
-            ['reset', $this->langs['mn_reset_universe'], '6'],
+            ['server', '2'],
+            ['modules', '2'],
+            ['planets', '2'],
+            ['registration', '2'],
+            ['statistics', '2'],
+            ['premium', '2'],
+            ['tasks', '3'],
+            ['errors', '3'],
+            ['fleets', '3'],
+            ['messages', '3'],
+            ['maker', '4'],
+            ['users', '4'],
+            ['alliances', '4'],
+            ['languages', '4'],
+            ['changelog', '4'],
+            ['permissions', '4'],
+            ['backup', '5'],
+            ['encrypter', '5'],
+            ['announcement', '5'],
+            ['ban', '5'],
+            ['rebuildhighscores', '5'],
+            ['update', '5'],
+            ['migrate', '5'],
+            ['repair', '6'],
+            ['reset', '6'],
         );
         $active_block = 1;
 
@@ -249,28 +252,27 @@ class TemplateLib
             $extra = '';
             $active = '';
 
-            if ($data[2] != $flag) {
-                $flag = $data[2];
+            if ($data[1] != $flag) {
+                $flag = $data[1];
                 $items = '';
             }
 
             if ($data[0] == 'rebuildhighscores') {
-                $extra = 'onClick="return confirm(\'' . $this->langs['mn_tools_manual_update_confirm'] . '\');"';
+                $extra = 'onClick="return confirm(\'' . $lang->line('tools_manual_update_confirm') . '\');"';
             }
 
             if ($data[0] == $current_page) {
                 $active = ' active';
-                $active_block = $data[2];
+                $active_block = $data[1];
             }
 
-            $items .= '<a class="collapse-item' . $active . '" href="' . ADM_URL . 'admin.php?page=' . $data[0] . '"  ' . $extra . '>' . $data[1] . '</a>';
+            $items .= '<a class="collapse-item' . $active . '" href="' . ADM_URL . 'admin.php?page=' . $data[0] . '"  ' . $extra . '>' . $lang->line($data[0]) . '</a>';
 
-            $parse_block[$data[2]] = $items;
+            $parse_block[$data[1]] = $items;
         }
 
         // PARSE THE MENU AND OTHER DATA
-        $parse = $this->langs;
-        $parse['username'] = $this->current_user['user_name'];
+        $parse = $lang->language;
         $parse['menu_block_2'] = $parse_block[2];
         $parse['menu_block_3'] = $parse_block[3];
         $parse['menu_block_4'] = $parse_block[4];
@@ -304,10 +306,12 @@ class TemplateLib
      */
     private function adminNavigation(): string
     {
+        $lang = new Language;
+
         return $this->template->set(
             'adm/navigation_view',
             array_merge(
-                $this->langs,
+                $lang->loadLang('adm/navigation', true)->language,
                 [
                     'user_name' => $this->current_user['user_name'],
                     'current_date' => Timing::formatShortDate(time()),
