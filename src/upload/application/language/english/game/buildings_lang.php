@@ -32,6 +32,11 @@ $lang = [
         'building_jump_gate' => 'The huge quantum leaps are transmitters that are capable of sending large fleets throughout the universe without loss of time.',
         'building_missile_silo' => 'Missile silos are used to store missiles.',
     ],
+    'bd_building_queue_build_order' => 'Building Order',
+    'bd_building_queue_destroy_order' => 'Demolition Order',
+    'bd_building_queue_not_enough_resources' => 'The %s of your building %s level %s at %s could not be performed.<br><br>Insufficient resources: %s.',
+    'bd_building_queue_not_enough_resources_from' => 'System Message',
+    'bd_building_queue_not_enough_resources_subject' => 'Production cancelled',
 ];
 
 /* end of buildings_lang.php */

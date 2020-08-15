@@ -65,7 +65,6 @@ abstract class Controller extends XGPCore
         $this->setUserData();
         $this->setPlanetData();
         $this->setObjects();
-        $this->setLang();
         $this->setTemplate();
     }
 
@@ -97,16 +96,6 @@ abstract class Controller extends XGPCore
     private function setObjects(): void
     {
         $this->objects_list = parent::$objects;
-    }
-
-    /**
-     * Set languages data
-     *
-     * @return void
-     */
-    private function setLang(): void
-    {
-        $this->langs = parent::$lang;
     }
 
     /**

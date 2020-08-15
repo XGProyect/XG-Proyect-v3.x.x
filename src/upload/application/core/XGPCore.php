@@ -26,11 +26,10 @@ use Exception;
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
- * @version  3.0.0
+ * @version  3.1.0
  */
 abstract class XGPCore
 {
-
     protected static $lang;
     protected static $users;
     protected static $objects;
@@ -43,20 +42,9 @@ abstract class XGPCore
      */
     public function __construct()
     {
-        $this->setLangClass(); // LANGUAGE
         $this->setUsersClass(); // USERS
         $this->setObjectsClass(); // OBJECTS
         $this->setTemplateClass(); // TEMPLATE
-    }
-
-    /**
-     * setLangClass
-     *
-     * @return void
-     */
-    private function setLangClass()
-    {
-        self::$lang = new Language();
     }
 
     /**
@@ -86,7 +74,7 @@ abstract class XGPCore
      */
     private function setTemplateClass()
     {
-        self::$page = new TemplateLib(self::$lang, self::$users);
+        self::$page = new TemplateLib(self::$users);
     }
 
     /**

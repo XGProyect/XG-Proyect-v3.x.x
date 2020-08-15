@@ -15,6 +15,7 @@ namespace application\libraries;
 
 use application\core\enumerators\BuildingsEnumerator;
 use application\core\enumerators\PlanetTypesEnumerator;
+use application\core\Language;
 use application\core\XGPCore;
 use application\helpers\UrlHelper;
 use application\libraries\DevelopmentsLib as Developments;
@@ -269,7 +270,8 @@ class UpdatesLibrary extends XGPCore
     public static function setFirstElement(&$current_planet, $current_user): void
     {
         $db = Functions::modelLoader('libraries/UpdatesLibrary');
-        $lang = parent::$lang;
+        $lang = new Language;
+        $lang = $lang->loadLang(['global', 'constructions', 'game/buildings'], true);
         $resource = parent::$objects->getObjects();
 
         if ($current_planet['planet_b_building'] == 0) {
@@ -343,7 +345,7 @@ class UpdatesLibrary extends XGPCore
 
                         $loop = false;
                     } else {
-                        $element_name = $lang['tech'][$element];
+                        $element_name = $lang->language[$resource[$element]];
 
                         if ($no_more_level == true) {
                             $message = '';
@@ -359,20 +361,20 @@ class UpdatesLibrary extends XGPCore
                             $insufficient = [];
 
                             if ($price['metal'] > $current_planet['planet_metal']) {
-                                $insufficient[] = $lang['Metal'];
+                                $insufficient[] = $lang->line('metal');
                             }
 
                             if ($price['crystal'] > $current_planet['planet_crystal']) {
-                                $insufficient[] = $lang['Crystal'];
+                                $insufficient[] = $lang->line('crystal');
                             }
 
                             if ($price['deuterium'] > $current_planet['planet_deuterium']) {
-                                $insufficient[] = $lang['Deuterium'];
+                                $insufficient[] = $lang->line('deuterium');
                             }
 
                             $message = sprintf(
-                                $lang['sys_building_queue_not_enough_resources'],
-                                $lang['sys_building_queue_' . $build_mode . '_order'],
+                                $lang->line('bd_building_queue_not_enough_resources'),
+                                $lang->line('bd_building_queue_' . $build_mode . '_order'),
                                 $element_name,
                                 $level,
                                 UrlHelper::setUrl(
@@ -393,8 +395,8 @@ class UpdatesLibrary extends XGPCore
                                 0,
                                 '',
                                 5,
-                                $lang['sys_building_queue_not_enough_resources_from'],
-                                $lang['sys_building_queue_not_enough_resources_subject'],
+                                $lang->line('bd_building_queue_not_enough_resources_from'),
+                                $lang->line('bd_building_queue_not_enough_resources_subject'),
                                 $message,
                                 true
                             );

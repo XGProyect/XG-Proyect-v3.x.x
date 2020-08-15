@@ -32,6 +32,11 @@ $lang = [
         'building_jump_gate' => 'El saltos cuánticos son transmisores enormes que son capaces de enviar grandes flotas a través del universo sin perdida de tiempo.',
         'building_missile_silo' => 'El silo es un lugar de almacenamiento y lanzamiento de misiles planetarios.',
     ],
+    'bd_building_queue_build_order' => 'Orden de construcción',
+    'bd_building_queue_destroy_order' => 'Orden de destrucción',
+    'bd_building_queue_not_enough_resources' => 'La %s de tu %s de nivel %s en %s no pudo ejecutarse.<br><br>Recursos insuficientes: %s.',
+    'bd_building_queue_not_enough_resources_from' => 'Mensaje del sistema',
+    'bd_building_queue_not_enough_resources_subject' => 'Producción cancelada',
 ];
 
 /* end of buildings_lang.php */

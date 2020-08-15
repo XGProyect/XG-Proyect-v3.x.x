@@ -36,7 +36,6 @@ $lang = [
     'gl_alliance' => 'Alianza',
     'gl_actions' => 'Acciones',
     'gl_spy' => 'Espionaje',
-    'gl_write_message' => 'Escribir mensaje',
     'gl_buddy_request' => 'Enviar solicitud de amigos',
     'gl_missile_attack' => 'Ataque con misiles',
     'gl_with' => ' con ',

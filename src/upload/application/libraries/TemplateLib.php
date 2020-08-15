@@ -42,21 +42,18 @@ class TemplateLib
     private $template;
 
     /**
-     * __construct
+     * Constructor
      *
-     * @param array $lang  Language
-     * @param array $users Users
-     *
-     * @return void
+     * @param object $users
      */
-    public function __construct(Language $lang, object $users)
+    public function __construct(object $users)
     {
         $this->current_user = $users->getUserData();
         $this->current_planet = $users->getPlanetData();
-        $this->langs = $lang;
         $this->current_year = date('Y');
 
         $this->setTemplate();
+        $this->setLanguage();
     }
 
     /**
@@ -66,7 +63,17 @@ class TemplateLib
      */
     private function setTemplate(): void
     {
-        $this->template = new Template();
+        $this->template = new Template;
+    }
+
+    /**
+     * Set language object
+     *
+     * @return void
+     */
+    private function setLanguage(): void
+    {
+        $this->langs = new Language;
     }
 
     /**
@@ -212,8 +219,7 @@ class TemplateLib
      */
     private function adminSidebar(): string
     {
-        $lang = new Language;
-        $lang = $lang->loadLang('adm/menu', true);
+        $lang = $this->langs->loadLang('adm/menu', true);
 
         $current_page = isset($_GET['page']) ? $_GET['page'] : null;
         $items = '';
@@ -306,12 +312,10 @@ class TemplateLib
      */
     private function adminNavigation(): string
     {
-        $lang = new Language;
-
         return $this->template->set(
             'adm/navigation_view',
             array_merge(
-                $lang->loadLang('adm/navigation', true)->language,
+                $this->langs->loadLang('adm/navigation', true)->language,
                 [
                     'user_name' => $this->current_user['user_name'],
                     'current_date' => Timing::formatShortDate(time()),

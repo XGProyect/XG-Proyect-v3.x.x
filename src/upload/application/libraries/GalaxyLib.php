@@ -396,7 +396,7 @@ class GalaxyLib extends XGPCore
             $parse['actions'] = "<td>";
             $parse['actions'] .= str_replace('"', '', UrlHelper::setUrl(
                 'game.php?page=chat&playerId=' . $this->row_data['user_id'],
-                $this->langs['gl_write_message']
+                $this->langs['write_message']
             ));
             $parse['actions'] .= "</td></tr><tr><td>";
             $parse['actions'] .= str_replace('"', '', UrlHelper::setUrl(
@@ -488,7 +488,7 @@ class GalaxyLib extends XGPCore
             $this->planet . ", 1, " . $this->current_user['preference_spy_probes'] . ");\"";
             $links .= UrlHelper::setUrl('', $image, '', $attributes) . '&nbsp;';
 
-            $image = FunctionsLib::setImage(DPATH . 'img/m.gif', $this->langs['gl_write_message']);
+            $image = FunctionsLib::setImage(DPATH . 'img/m.gif', $this->langs['write_message']);
             $url = 'game.php?page=chat&playerId=' . $this->row_data['user_id'];
             $links .= UrlHelper::setUrl($url, $image) . '&nbsp;';
 

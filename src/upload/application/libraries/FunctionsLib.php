@@ -16,6 +16,7 @@ namespace application\libraries;
 use application\core\Database;
 use application\core\enumerators\MessagesEnumerator;
 use application\core\enumerators\UserRanksEnumerator;
+use application\core\Language;
 use application\core\Options;
 use application\core\Template;
 use application\core\XGPCore;
@@ -263,7 +264,8 @@ abstract class FunctionsLib extends XGPCore
     public static function moduleMessage($access_level)
     {
         if ($access_level == 0) {
-            die(self::message(parent::$lang['module_not_accesible'], '', '', true));
+            $lang = new Language;
+            die(self::message($lang->loadLang('global', true)->line('module_not_accesible'), '', '', true));
         }
     }
 

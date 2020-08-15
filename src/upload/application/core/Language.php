@@ -24,7 +24,7 @@ use Exception;
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
- * @version  3.0.0
+ * @version  3.1.0
  */
 class Language
 {
@@ -41,61 +41,10 @@ class Language
     private $lang_extension = 'php';
 
     /**
-     * __construct
-     *
-     * @return void
+     * Constructor
      */
     public function __construct()
     {
-        $languages_loaded = $this->getFileName();
-
-        if (defined('DEFAULT_LANG') && $languages_loaded) {
-            foreach ($languages_loaded as $load) {
-                $route = XGP_ROOT . LANG_PATH . DEFAULT_LANG . '/' . $load . '.' . $this->lang_extension;
-
-                // WE GOT SOMETHING
-                if (file_exists($route)) {
-                    // GET THE LANGUAGE PACK
-                    include $route;
-                }
-            }
-
-            // WE GOT SOMETHING
-            if (!empty($lang)) {
-                // SET DATA
-                $this->lang = $lang;
-            } else {
-                // THROW EXCEPTION
-                die('Language not found or empty: <strong>' . $load . '</strong><br/>
-                    Location: <strong>' . $route . '</strong>');
-            }
-        }
-    }
-
-    /**
-     * lang
-     *
-     * @return array
-     */
-    public function lang()
-    {
-        return $this->lang;
-    }
-
-    /**
-     * getFileName
-     *
-     * @return array
-     */
-    private function getFileName()
-    {
-        $required = [];
-
-        if (defined('IN_GAME')) {
-            $required[] = 'INGAME';
-        }
-
-        return $required;
     }
 
     /**
