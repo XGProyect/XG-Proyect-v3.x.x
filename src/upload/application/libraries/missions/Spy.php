@@ -13,11 +13,12 @@
  */
 namespace application\libraries\missions;
 
+use application\helpers\StringsHelper;
 use application\libraries\FleetsLib;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
+use application\libraries\missions\Missions;
 use application\libraries\OfficiersLib;
-use application\libraries\TimingLibrary as Timing;
 
 /**
  * Spy Class
@@ -51,7 +52,8 @@ class Spy extends Missions
      */
     public function spyMission($fleet_row)
     {
-        if ($fleet_row['fleet_mess'] == 0 && $fleet_row['fleet_start_time'] <= time()) {
+        // do mission
+        if (parent::canStartMission($fleet_row)) {
             $current_data = $this->Missions_Model->getSpyUserDataByCords([
                 'coords' => [
                     'galaxy' => $fleet_row['fleet_start_galaxy'],
@@ -81,22 +83,22 @@ class Spy extends Missions
                     $LS = $amount;
                     $SpyToolDebris = $LS * 300;
 
-                    $MaterialsInfo = $this->spy_target($target_data, 0, $this->langs->line('spy_report_resources'));
+                    $MaterialsInfo = $this->generateSpyReport($target_data, 0, $this->langs->line('spy_report_resources'));
                     $Materials = $MaterialsInfo['String'];
 
-                    $PlanetFleetInfo = $this->spy_target($target_data, 1, $this->langs->line('spy_report_fleet'));
+                    $PlanetFleetInfo = $this->generateSpyReport($target_data, 1, $this->langs->line('spy_report_fleet'));
                     $PlanetFleet = $Materials;
                     $PlanetFleet .= $PlanetFleetInfo['String'];
 
-                    $PlanetDefenInfo = $this->spy_target($target_data, 2, $this->langs->line('spy_report_defenses'));
+                    $PlanetDefenInfo = $this->generateSpyReport($target_data, 2, $this->langs->line('spy_report_defenses'));
                     $PlanetDefense = $PlanetFleet;
                     $PlanetDefense .= $PlanetDefenInfo['String'];
 
-                    $PlanetBuildInfo = $this->spy_target($target_data, 3, $this->langs->line('spy_report_buildings'));
+                    $PlanetBuildInfo = $this->generateSpyReport($target_data, 3, $this->langs->line('spy_report_buildings'));
                     $PlanetBuildings = $PlanetDefense;
                     $PlanetBuildings .= $PlanetBuildInfo['String'];
 
-                    $TargetTechnInfo = $this->spy_target($target_data, 4, $this->langs->line('spy_report_research'));
+                    $TargetTechnInfo = $this->generateSpyReport($target_data, 4, $this->langs->line('spy_report_research'));
                     $TargetTechnos = $PlanetBuildings;
                     $TargetTechnos .= $TargetTechnInfo['String'];
 
@@ -113,7 +115,7 @@ class Spy extends Missions
                         FunctionsLib::sendMessage(
                             $fleet_row['fleet_owner'],
                             '',
-                            time(),
+                            $fleet['fleet_start_time'],
                             0,
                             $this->langs->line('mi_fleet_command'),
                             sprintf($this->langs->line('spy_result_destroyed_title'), FormatLib::prettyCoords($fleet_row['fleet_end_galaxy'], $fleet_row['fleet_end_system'], $fleet_row['fleet_end_planet'])),
@@ -172,16 +174,18 @@ class Spy extends Missions
                         $SpyMessage = $TargetTechnos . "<br />" . $AttackLink . $MessageEnd;
                     }
 
-                    FunctionsLib::sendMessage($fleet_row['fleet_owner'], '', $fleet_row['fleet_start_time'], 0, $this->langs->line('mi_fleet_command'), $this->langs->line('spy_report_title'), $SpyMessage, true);
+                    FunctionsLib::sendMessage(
+                        $fleet_row['fleet_owner'],
+                        '',
+                        $fleet_row['fleet_start_time'],
+                        0,
+                        $this->langs->line('mi_fleet_command'),
+                        sprintf($this->langs->line('spy_report_title'), $target_data['planet_name'], FormatLib::prettyCoords($target_data['planet_galaxy'], $target_data['planet_system'], $target_data['planet_planet'])),
+                        $SpyMessage,
+                        true
+                    );
 
-                    $TargetMessage = $this->langs->line('spy_activity_enemy') . " " . $current_data['planet_name'];
-                    $TargetMessage .= " <a href=\"game.php?page=galaxy&mode=3&galaxy=" . $current_data['planet_galaxy'] . "&system=" . $current_data['planet_system'] . "\">";
-                    $TargetMessage .= "[" . $current_data['planet_galaxy'] . ":" . $current_data['planet_system'] . ":" . $current_data['planet_planet'] . "]</a> (" . $current_data['user_name'] . ") ";
-                    $TargetMessage .= $this->langs->line('spy_activity_enemy_seen') . " " . $target_data['planet_name'];
-                    $TargetMessage .= " <a href=\"game.php?page=galaxy&mode=3&galaxy=" . $target_data['planet_galaxy'] . "&system=" . $target_data['planet_system'] . "\">";
-                    $TargetMessage .= "[" . $target_data['planet_galaxy'] . ":" . $target_data['planet_system'] . ":" . $target_data['planet_planet'] . "]</a>.";
-
-                    FunctionsLib::sendMessage($target_data['planet_user_id'], '', $fleet_row['fleet_start_time'], 0, $this->langs->line('mi_fleet_command'), $this->langs->line('spy_activity_title'), $TargetMessage . ' ' . sprintf($this->langs->line('spy_report_detection'), $TargetChances), true);
+                    $this->sendReportToTarget($fleet_row, $current_data, $target_data, $TargetChances);
 
                     if ($TargetChances >= $SpyerChances) {
                         $this->Missions_Model->updateCrystalDebrisByPlanetId([
@@ -207,10 +211,10 @@ class Spy extends Missions
      *
      * @param array $target_data
      * @param int $mode
-     * @param string $TitleString
+     * @param string $report_title
      * @return void
      */
-    private function spy_target($target_data, $mode, $TitleString)
+    private function generateSpyReport($target_data, $mode, $report_title)
     {
         $LookAtLoop = true;
         $Count = 0;
@@ -219,10 +223,8 @@ class Spy extends Missions
             case 0:
 
                 $String = "<table width=\"440\"><tr><td class=\"c\" colspan=\"5\">";
-                $String .= $TitleString . " " . $target_data['planet_name'];
-                $String .= " <a href=\"game.php?page=galaxy&mode=3&galaxy=" . $target_data['planet_galaxy'] . "&system=" . $target_data['planet_system'] . "\">";
-                $String .= "[" . $target_data['planet_galaxy'] . ":" . $target_data['planet_system'] . ":" . $target_data['planet_planet'] . "]</a>";
-                $String .= $this->langs->line('spy_the') . Timing::formatExtendedDate(time()) . "</td>";
+                $String .= $report_title;
+                $String .= "</td>";
                 $String .= "</tr><tr>";
                 $String .= "<td width=220>" . $this->langs->line('metal') . "</td><td width=220 align=right>" . FormatLib::prettyNumber($target_data['planet_metal']) . "</td><td>&nbsp;</td>";
                 $String .= "<td width=220>" . $this->langs->line('crystal') . "</td></td><td width=220 align=right>" . FormatLib::prettyNumber($target_data['planet_crystal']) . "</td>";
@@ -271,7 +273,7 @@ class Spy extends Missions
         }
 
         if ($LookAtLoop == true) {
-            $String = "<table width=\"440\" cellspacing=\"1\"><tr><td class=\"c\" colspan=\"" . ((2 * 2) + (2 - 1)) . "\">" . $TitleString . "</td></tr>";
+            $String = "<table width=\"440\" cellspacing=\"1\"><tr><td class=\"c\" colspan=\"" . ((2 * 2) + (2 - 1)) . "\">" . $report_title . "</td></tr>";
             $Count = 0;
             $CurrentLook = 0;
 
@@ -318,6 +320,45 @@ class Spy extends Missions
         $return['Count'] = $Count;
 
         return $return;
+    }
+
+    /**
+     * Send a report to the target informing that their planet is being spy
+     *
+     * @param array $fleet
+     * @param array $user
+     * @param array $target
+     * @param integer $chances
+     * @return void
+     */
+    private function sendReportToTarget(array $fleet, array $user, array $target, int $chances): void
+    {
+        FunctionsLib::sendMessage(
+            $target['planet_user_id'],
+            '',
+            $fleet['fleet_start_time'],
+            0,
+            $this->langs->line('spy_activity_from'),
+            StringsHelper::parseReplacements(
+                $this->langs->line('spy_activity_title'),
+                [
+                    $target['planet_name'],
+                    FormatLib::prettyCoords($target['planet_galaxy'], $target['planet_system'], $target['planet_planet']),
+                ]
+            ),
+            StringsHelper::parseReplacements(
+                $this->langs->line('spy_activity_enemy_seen'),
+                [
+                    $user['planet_name'],
+                    FormatLib::prettyCoords($user['planet_galaxy'], $user['planet_system'], $user['planet_planet']),
+                    $user['user_name'],
+                    $target['planet_name'],
+                    FormatLib::prettyCoords($target['planet_galaxy'], $target['planet_system'], $target['planet_planet']),
+                    $chances,
+                ]
+            ),
+            true
+        );
     }
 }
 
