@@ -25,11 +25,6 @@ $lang['Darkmatter'] = 'Materia Oscura';
 $lang['Energy'] = 'Energía';
 $lang['write_message'] = 'Escribir mensaje'; //FleetsLib.php
 
-// TimingLib.php
-$lang['online'] = 'Conectado';
-$lang['minutes'] = '15 min';
-$lang['offline'] = 'Desconectado';
-
 // used by FleetsLib.php and GalaxyLib.php
 // TODO: refactor and remove
 $lang['type_mission'][1] = 'Atacar';

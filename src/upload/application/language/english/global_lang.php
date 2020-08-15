@@ -36,6 +36,11 @@ $lang = [
     // banning
     'bg_account_banned_message' => 'YOUR ACCOUNT HAS BEEN SUSPENDED',
     'bg_account_banned_expire' => 'Expiration:',
+
+    // online status
+    'online' => 'Online',
+    'minutes' => '15 min',
+    'offline' => 'Offline',
 ];
 
 /* end of global_lang.php */

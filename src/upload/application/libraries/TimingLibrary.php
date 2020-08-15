@@ -13,6 +13,7 @@
  */
 namespace application\libraries;
 
+use application\core\Language;
 use application\core\XGPCore;
 
 /**
@@ -36,17 +37,20 @@ abstract class TimingLibrary extends XGPCore
      */
     public static function setOnlineStatus($online_time)
     {
+        $lang = new Language;
+        $lang = $lang->loadLang('global', true);
+
         $color = 'red';
-        $status = parent::$lang['offline'];
+        $status = $lang->line('offline');
 
         if ($online_time + 60 * 15 >= time()) {
             $color = 'yellow';
-            $status = parent::$lang['minutes'];
+            $status = $lang->line('minutes');
         }
 
         if ($online_time + 60 * 10 >= time()) {
             $color = 'lime';
-            $status = parent::$lang['online'];
+            $status = $lang->line('online');
         }
 
         return FormatLib::customColor($status, $color);
