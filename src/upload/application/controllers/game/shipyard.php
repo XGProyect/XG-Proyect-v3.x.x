@@ -109,6 +109,9 @@ class Shipyard extends Controller
         // load Model
         parent::loadModel('game/shipyard');
 
+        // load Language
+        parent::loadLang(['global', 'game/shipyard', 'defenses', 'ships']);
+
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
@@ -231,7 +234,7 @@ class Shipyard extends Controller
     private function showShipyardUpgradeMessage()
     {
         if ($this->building_in_progress) {
-            return FormatLib::colorRed($this->getLang()['bd_building_shipyard']);
+            return FormatLib::colorRed($this->langs->line('sy_building_shipyard'));
         }
 
         return '';
@@ -268,7 +271,7 @@ class Shipyard extends Controller
 
         $item_to_parse['dpath'] = DPATH;
         $item_to_parse['element'] = $item_id;
-        $item_to_parse['element_name'] = $this->getLang()['tech'][$item_id];
+        $item_to_parse['element_name'] = $this->langs->language[$this->getObjects()->getObjects($item_id)];
         $item_to_parse['element_description'] = $this->getItemDescription($item_id);
         $item_to_parse['element_price'] = $this->getItemPriceWithFormat($item_id);
         $item_to_parse['building_time'] = $this->getItemTimeWithFormat($item_id);
@@ -288,12 +291,12 @@ class Shipyard extends Controller
     {
         if ($item_id == Defenses::defense_interplanetary_missile) {
             return strtr(
-                $this->getLang()['res']['descriptions'][$item_id],
+                $this->langs->language['descriptions'][$this->getObjects()->getObjects($item_id)],
                 ['%s' => $this->formula->missileRange($this->user['research_impulse_drive'])]
             );
         }
 
-        return $this->getLang()['res']['descriptions'][$item_id];
+        return $this->langs->language['descriptions'][$this->getObjects()->getObjects($item_id)];
     }
 
     /**
@@ -309,6 +312,7 @@ class Shipyard extends Controller
             $this->user,
             $this->planet,
             $item_id,
+            $this->langs,
             false
         );
     }
@@ -323,7 +327,8 @@ class Shipyard extends Controller
     private function getItemTimeWithFormat($item_id)
     {
         return DevelopmentsLib::formatedDevelopmentTime(
-            $this->getItemTime($item_id)
+            $this->getItemTime($item_id),
+            $this->langs->line('sy_time')
         );
     }
 
@@ -358,7 +363,7 @@ class Shipyard extends Controller
             return '';
         }
 
-        return ' (' . $this->getLang()['bd_available'] . FormatLib::prettyNumber($amount) . ')';
+        return ' (' . $this->langs->line('sy_available') . FormatLib::prettyNumber($amount) . ')';
     }
 
     /**
@@ -373,7 +378,7 @@ class Shipyard extends Controller
         if (!$this->building_in_progress && !parent::$users->isOnVacations($this->user)
         ) {
             if ($this->isShieldDomeAvailable($item_id)) {
-                return FormatLib::colorRed($this->getLang()['bd_protection_shield_only_one']);
+                return FormatLib::colorRed($this->langs->line('sy_protection_shield_only_one'));
             } else {
                 $box_data = [];
                 $box_data['item_id'] = $item_id;
@@ -411,7 +416,7 @@ class Shipyard extends Controller
         if (!$this->building_in_progress && !parent::$users->isOnVacations($this->user)) {
             return $this->getTemplate()->set(
                 'shipyard/shipyard_build_button',
-                $this->getLang()
+                $this->langs->language
             );
         }
 
@@ -440,7 +445,7 @@ class Shipyard extends Controller
                     $item_time = $this->getItemTime($item_values[0]);
 
                     $item_time_per_type .= $item_time . ',';
-                    $item_name_per_type .= '\'' . html_entity_decode($this->getLang()['tech'][$item_values[0]], ENT_COMPAT, "utf-8") . '\',';
+                    $item_name_per_type .= '\'' . html_entity_decode($this->langs->language[$this->getObjects()->getObjects($item_values[0])], ENT_COMPAT, "utf-8") . '\',';
                     $item_amount_per_type .= $item_values[1] . ',';
 
                     // $item_values[1] = amount
@@ -448,7 +453,7 @@ class Shipyard extends Controller
                 }
             }
 
-            $block = $this->getLang();
+            $block = $this->langs->language;
             $block['a'] = $item_amount_per_type;
             $block['b'] = $item_name_per_type;
             $block['c'] = $item_time_per_type;
@@ -539,7 +544,7 @@ class Shipyard extends Controller
     private function showShipyardRequiredMessage()
     {
         if ($this->planet[$this->getObjects()->getObjects(21)] == 0) {
-            FunctionsLib::message($this->getLang()['bd_shipyard_required'], '', '', true);
+            FunctionsLib::message($this->langs->line('sy_shipyard_required'), '', '', true);
         }
     }
 

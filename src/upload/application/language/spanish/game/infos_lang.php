@@ -8,7 +8,6 @@ $lang = [
     'in_jump_gate_available' => 'disponible',
     'in_rf_again' => 'Fuego rápido contra',
     'in_rf_from' => 'Fuego rápido de',
-    'in_level' => 'Nivel',
     'in_prod_p_hour' => 'Produción/hora',
     'in_difference' => 'Diferencia',
     'in_used_energy' => 'Consumo de energía',

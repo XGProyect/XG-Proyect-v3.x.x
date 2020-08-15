@@ -153,7 +153,7 @@ class Resources extends Controller
                 $CurrRow['percent'] = $this->_current_planet[$Field];
                 $CurrRow['option'] = $this->build_options($CurrRow['percent']);
                 $CurrRow['type'] = $this->langs->language[$this->_resource[$ProdID]];
-                $CurrRow['level'] = ($ProdID > 200) ? $this->langs->line('rs_amount') : $this->langs->line('rs_lvl');
+                $CurrRow['level'] = ($ProdID > 200) ? $this->langs->line('rs_amount') : $this->langs->line('level');
                 $CurrRow['level_type'] = $this->_current_planet[$this->_resource[$ProdID]];
                 $CurrRow['metal_type'] = FormatLib::prettyNumber($metal);
                 $CurrRow['crystal_type'] = FormatLib::prettyNumber($crystal);

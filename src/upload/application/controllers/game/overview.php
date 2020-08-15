@@ -56,7 +56,7 @@ class Overview extends Controller
         parent::loadModel('game/overview');
 
         // load Language
-        parent::loadLang(['global', 'overview']);
+        parent::loadLang(['global', 'overview', 'game/buildings', 'constructions']);
 
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
@@ -154,10 +154,11 @@ class Overview extends Controller
                 $building = $current_building[0]; // THE BUILDING
                 $level = $current_building[1]; // THE LEVEL
                 $time_to_end = $current_building[3] - time(); // THE TIME
+
                 // THE BUILDING BLOCK
                 if ($is_current_planet) {
-                    $building_block = DevelopmentsLib::currentBuilding("overview", $building);
-                    $building_block .= $this->langs->language['tech'][$building] . ' (' . $level . ')';
+                    $building_block = DevelopmentsLib::currentBuilding("overview", $this->langs->language, $building);
+                    $building_block .= $this->langs->language[$this->getObjects()->getObjects($building)] . ' (' . $level . ')';
                     $building_block .= "<br /><div id=\"blc\" class=\"z\">" . FormatLib::prettyTime($time_to_end) . "</div>";
                     $building_block .= "\n<script language=\"JavaScript\">";
                     $building_block .= "\n	pp = \"" . $time_to_end . "\";\n";

@@ -93,7 +93,7 @@ class Research extends Controller
                 $RowParse['dpath'] = DPATH;
                 $RowParse['tech_id'] = $tech;
                 $building_level = $this->_current_user[$this->_resource[$tech]];
-                $RowParse['tech_level'] = DevelopmentsLib::setLevelFormat($building_level, $tech, $this->_current_user);
+                $RowParse['tech_level'] = DevelopmentsLib::setLevelFormat($building_level, $this->langs, $tech, $this->_current_user);
                 $RowParse['tech_name'] = $this->langs->line($this->_resource[$tech]);
                 $RowParse['tech_descr'] = $this->langs->language['descriptions'][$this->_resource[$tech]];
                 $RowParse['tech_price'] = DevelopmentsLib::formatedDevelopmentPrice($this->_current_user, $this->_current_planet, $tech, $this->langs);

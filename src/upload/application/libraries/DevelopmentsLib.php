@@ -326,16 +326,14 @@ class DevelopmentsLib extends XGPCore
      *
      * @return string
      */
-    public static function currentBuilding($call_program, $element_id = 0)
+    public static function currentBuilding($call_program, $lang, $element_id = 0)
     {
-        $parse = parent::$lang;
-
         $parse['call_program'] = $call_program;
         $parse['current_page'] = ($element_id != 0) ? DevelopmentsLib::setBuildingPage($element_id) : $call_program;
 
         return self::getTemplate()->set(
             'buildings/buildings_buildlist_script',
-            $parse
+            array_merge($parse, $lang)
         );
     }
 
@@ -354,7 +352,7 @@ class DevelopmentsLib extends XGPCore
 
         // check if is base level
         if ($level != 0) {
-            $return_level = ' (' . $lang['level'] . ' ' . $level . ')';
+            $return_level = ' (' . $lang->line('level') . $level . ')';
         }
 
         // check a commander plus
@@ -362,7 +360,7 @@ class DevelopmentsLib extends XGPCore
             case 106:
                 if (OfficiersLib::isOfficierActive($current_user['premium_officier_technocrat'])) {
                     $return_level .= FormatLib::strongText(
-                        FormatLib::colorGreen(' +' . TECHNOCRATE_SPY . $lang['spy'])
+                        FormatLib::colorGreen(' +' . TECHNOCRATE_SPY . $lang->line('re_spy'))
                     );
                 }
 
@@ -371,7 +369,7 @@ class DevelopmentsLib extends XGPCore
             case 108:
                 if (OfficiersLib::isOfficierActive($current_user['premium_officier_admiral'])) {
                     $return_level .= FormatLib::strongText(
-                        FormatLib::colorGreen(' +' . AMIRAL . $lang['commander'])
+                        FormatLib::colorGreen(' +' . AMIRAL . $lang->line('re_commander'))
                     );
                 }
 

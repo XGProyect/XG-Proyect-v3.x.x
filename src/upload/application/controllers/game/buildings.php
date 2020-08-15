@@ -227,7 +227,7 @@ class Buildings extends Controller
         $queue = $this->showQueue();
 
         if ($this->_commander_active && $queue['lenght'] > 0) {
-            $return['BuildListScript'] = DevelopmentsLib::currentBuilding($this->getCurrentPage());
+            $return['BuildListScript'] = DevelopmentsLib::currentBuilding($this->getCurrentPage(), $this->langs->language);
             $return['BuildList'] = $queue['buildlist'];
         }
 
@@ -268,7 +268,7 @@ class Buildings extends Controller
     {
         return DevelopmentsLib::setLevelFormat(
             $this->getBuildingLevel($building_id),
-            ['level' => $this->langs->line('bd_level')]
+            $this->langs
         );
     }
 
@@ -416,7 +416,7 @@ class Buildings extends Controller
 
             return $this->getTemplate()->set(
                 'buildings/buildings_build_script',
-                array_merge($block, $this->getLang())
+                array_merge($block, $this->langs->language)
             );
         }
 
