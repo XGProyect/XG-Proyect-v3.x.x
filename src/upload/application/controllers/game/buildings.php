@@ -84,6 +84,9 @@ class Buildings extends Controller
         // load Model
         parent::loadModel('game/buildings');
 
+        // load Language
+        parent::loadLang(['global', 'game/buildings', 'constructions']);
+
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
@@ -245,8 +248,8 @@ class Buildings extends Controller
         $item_to_parse['dpath'] = DPATH;
         $item_to_parse['i'] = $building_id;
         $item_to_parse['nivel'] = $this->getBuildingLevelWithFormat($building_id);
-        $item_to_parse['n'] = $this->getLang()['tech'][$building_id];
-        $item_to_parse['descriptions'] = $this->getLang()['res']['descriptions'][$building_id];
+        $item_to_parse['n'] = $this->langs->language[$this->getObjects()->getObjects()[$building_id]];
+        $item_to_parse['descriptions'] = $this->langs->language['descriptions'][$this->getObjects()->getObjects()[$building_id]];
         $item_to_parse['price'] = $this->getBuildingPriceWithFormat($building_id);
         $item_to_parse['time'] = $this->getBuildingTimeWithFormat($building_id);
         $item_to_parse['click'] = $this->getActionButton($building_id);
@@ -264,7 +267,8 @@ class Buildings extends Controller
     private function getBuildingLevelWithFormat($building_id)
     {
         return DevelopmentsLib::setLevelFormat(
-            $this->getBuildingLevel($building_id)
+            $this->getBuildingLevel($building_id),
+            ['level' => $this->langs->line('bd_level')]
         );
     }
 
@@ -281,8 +285,9 @@ class Buildings extends Controller
             $this->_user,
             $this->_planet,
             $building_id,
+            $this->langs,
             true,
-            $this->getBuildingLevel($building_id)
+            $this->getBuildingLevel($building_id),
         );
     }
 
@@ -296,7 +301,8 @@ class Buildings extends Controller
     private function getBuildingTimeWithFormat($building_id)
     {
         return DevelopmentsLib::formatedDevelopmentTime(
-            $this->getBuildingTime($building_id)
+            $this->getBuildingTime($building_id),
+            $this->langs->line('bd_time')
         );
     }
 
@@ -463,7 +469,7 @@ class Buildings extends Controller
         ];
 
         $color = ucfirst($listOfButtons[$button_code]['color']);
-        $text = $this->getLang()[$listOfButtons[$button_code]['lang']];
+        $text = $this->langs->language[$listOfButtons[$button_code]['lang']];
         $methodName = 'color' . $color;
 
         return FormatLib::$methodName($text);
@@ -782,7 +788,7 @@ class Buildings extends Controller
      */
     private function showQueue(&$Sprice = false)
     {
-        $lang = $this->getLang();
+        $lang = $this->langs->language;
         $CurrentQueue = $this->_planet['planet_b_building_id'];
         $QueueID = 0;
         $to_destroy = 0;
@@ -815,7 +821,7 @@ class Buildings extends Controller
                     $BuildLevel = $BuildArray[1];
                     $BuildMode = $BuildArray[4];
                     $BuildTime = $BuildEndTime - time();
-                    $ElementTitle = $this->getLang()['tech'][$building];
+                    $ElementTitle = $this->langs->language[$this->getObjects()->getObjects()[$building]];
 
                     if (isset($Sprice[$building]) && $Sprice !== false && $BuildLevel > $Sprice[$building]) {
                         $Sprice[$building] = $BuildLevel;
@@ -826,13 +832,13 @@ class Buildings extends Controller
                         if ($BuildMode == 'build') {
                             $ListIDRow .= "	<td class=\"l\" colspan=\"2\">" . $ListID . ".: " . $ElementTitle . " " . $BuildLevel . "</td>";
                         } else {
-                            $ListIDRow .= "	<td class=\"l\" colspan=\"2\">" . $ListID . ".: " . $ElementTitle . " " . $BuildLevel . " " . $this->getLang()['bd_dismantle'] . "</td>";
+                            $ListIDRow .= "	<td class=\"l\" colspan=\"2\">" . $ListID . ".: " . $ElementTitle . " " . $BuildLevel . " " . $this->langs->line('bd_dismantle') . "</td>";
                         }
                         $ListIDRow .= "	<td class=\"k\">";
 
                         if ($ListID == 1) {
                             $ListIDRow .= "		<div id=\"blc\" class=\"z\">" . $BuildTime . "<br>";
-                            $ListIDRow .= "		<a href=\"game.php?page=" . $this->getCurrentPage() . "&listid=" . $ListID . "&amp;cmd=cancel&amp;planet=" . $PlanetID . "\">" . $this->getLang()['bd_interrupt'] . "</a></div>";
+                            $ListIDRow .= "		<a href=\"game.php?page=" . $this->getCurrentPage() . "&listid=" . $ListID . "&amp;cmd=cancel&amp;planet=" . $PlanetID . "\">" . $this->langs->line('bd_interrupt') . "</a></div>";
                             $ListIDRow .= "		<script language=\"JavaScript\">";
                             $ListIDRow .= "			pp = \"" . $BuildTime . "\";\n";
                             $ListIDRow .= "			pk = \"" . $ListID . "\";\n";
@@ -843,7 +849,7 @@ class Buildings extends Controller
                             $ListIDRow .= "		<strong color=\"lime\"><br><font color=\"lime\">" . Timing::formatExtendedDate($BuildEndTime) . "</font></strong>";
                         } else {
                             $ListIDRow .= "		<font color=\"red\">";
-                            $ListIDRow .= "		<a href=\"game.php?page=" . $this->getCurrentPage() . "&listid=" . $ListID . "&amp;cmd=remove&amp;planet=" . $PlanetID . "\">" . $this->getLang()['bd_cancel'] . "</a></font>";
+                            $ListIDRow .= "		<a href=\"game.php?page=" . $this->getCurrentPage() . "&listid=" . $ListID . "&amp;cmd=remove&amp;planet=" . $PlanetID . "\">" . $this->langs->line('bd_cancel') . "</a></font>";
                         }
 
                         $ListIDRow .= "	</td>";

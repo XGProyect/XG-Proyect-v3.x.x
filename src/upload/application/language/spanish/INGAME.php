@@ -45,13 +45,7 @@ $lang['type_mission'][15] = 'Expedición';
 
 //----------------------------------------------------------------------------//
 //BUILDINGS - RESEARCH - SHIPYARD - DEFENSES
-$lang['bd_dismantle'] = 'Desmontar';
-$lang['bd_interrupt'] = 'Interrumpir';
 $lang['bd_cancel'] = 'Cancelar';
-$lang['bd_working'] = 'Trabajando';
-$lang['bd_build'] = 'Mejorar';
-$lang['bd_add_to_list'] = 'En cola';
-$lang['bd_no_more_fields'] = 'No hay espacio en el planeta';
 $lang['bd_remaining'] = 'Restantes';
 $lang['bd_lab_required'] = '¡Es necesario construir primero un laboratorio de investigación en este planeta!';
 $lang['bd_building_lab'] = 'No se puede investigar cuando se esta ampliando el laboratorio';
@@ -144,24 +138,6 @@ $lang['tech'] = array(
 );
 
 $lang['res']['descriptions'] = array(
-    1 => "Las minas de metal proveen los recursos básicos de un imperio emergente, y permiten la construcción de edificios y naves.",
-    2 => "Los cristales son el recurso principal usado para construir circuitos electrónicos y ciertas aleaciones.",
-    3 => "El deuterio se usa como combustible para naves, y se recolecta en el mar profundo. Es una sustancia muy escasa, y por ello, relativamente cara.",
-    4 => "Las plantas de energía solar convierten energía fotónica en energía eléctrica, para su uso en casi todos los edificios y estructuras.",
-    12 => "Un reactor de fusión nuclear que produce un átomo de helio a partir de dos átomos de deuterio usando una presión extremadamente alta y una elevadísima temperatura.",
-    14 => "Las fábricas de robots proporcionan unidades baratas y de fácil construcción que pueden ser usadas para mejorar o construir cualquier estructura planetaria. Cada nivel de mejora de la fábrica aumenta la eficiencia y el numero de unidades robóticas que ayudan en la construcción.",
-    15 => "La fábrica de nanobots es la última evolución de la robótica. Cada mejora proporciona nanobots más y más eficientes que incrementan la velocidad de construcción.",
-    21 => "El hangar es el lugar donde se construyen naves y estructuras de defensa planetaria.",
-    22 => "Almacén de metal sin procesar.",
-    23 => "Almacén de cristal sin procesar.",
-    24 => "Contenedores enormes para almacenar deuterio.",
-    31 => "Se necesita un laboratorio de investigación para conducir la investigación en nuevas tecnologías.",
-    33 => "El Terraformer es necesario para habilitar áreas inaccesibles de tu planeta para edificar infraestructuras.",
-    34 => "El depósito de la alianza ofrece la posibilidad de repostar a las flotas aliadas que estén estacionadas en la órbita ayudando a defender.",
-    41 => "Dado que la luna no tiene atmósfera, se necesita una base lunar para generar espacio habitable.",
-    42 => "Usando el sensor phalanx, las flotas de otros imperios pueden ser descubiertas y observadas. Cuanto mayor sea la cadena de sensores phalanx, mayor el rango que pueda escanear.",
-    43 => "El saltos cuánticos son transmisores enormes que son capaces de enviar grandes flotas a través del universo sin perdida de tiempo.",
-    44 => "El silo es un lugar de almacenamiento y lanzamiento de misiles planetarios.",
     106 => "Usando esta tecnología, puede obtenerse información sobre otros planetas.",
     108 => "Cuanto más elevado sea el nivel de tecnología de computación, más flotas podrás controlar simultaneamente. Cada nivel adicional de esta tecnologia, aumenta el numero de flotas en 1.",
     109 => "Este tipo de tecnología incrementa la eficiencia de tus sistemas de armamento. Cada mejora de la tecnología militar añade un 10% de potencia a la base de daño de cualquier arma disponible.",

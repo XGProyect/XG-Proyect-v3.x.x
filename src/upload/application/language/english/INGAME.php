@@ -45,14 +45,7 @@ $lang['type_mission'][15] = 'Expedition';
 
 //----------------------------------------------------------------------------//
 //BUILDINGS - RESEARCH - SHIPYARD - DEFENSES
-$lang['bd_dismantle'] = 'Dismantle';
-$lang['bd_interrupt'] = 'Interrupt';
 $lang['bd_cancel'] = 'cancel';
-$lang['bd_working'] = 'Working';
-$lang['bd_build'] = 'build';
-$lang['bd_build_next_level'] = 'upgrade level ';
-$lang['bd_add_to_list'] = 'Add to list';
-$lang['bd_no_more_fields'] = 'No more room on the planet';
 $lang['bd_remaining'] = 'Remaining';
 $lang['bd_lab_required'] = 'You need to build a research laboratory on this planet first!';
 $lang['bd_building_lab'] = 'Can not research when the laboratory is expanding';
@@ -145,24 +138,6 @@ $lang['tech'] = array(
 );
 
 $lang['res']['descriptions'] = array(
-    1 => "Used in the extraction of metal ore, metal mines are of primary importance to all emerging and established empires.",
-    2 => "Crystals are the main resource used to build electronic circuits and form certain alloy compounds.",
-    3 => "Deuterium Synthesizers draw the trace Deuterium content from the water on a planet.",
-    4 => "Solar power plants absorb energy from solar radiation. All mines need energy to operate.",
-    12 => "The fusion reactor uses deuterium to produce energy.",
-    14 => "Robotic factories provide construction robots to aid in the construction of buildings. Each level increases the speed of the upgrade of buildings.",
-    15 => "This is the ultimate in robotics technology. Each level cuts the construction time for buildings, ships, and defences.",
-    21 => "All types of ships and defensive facilities are built in the planetary shipyard.",
-    22 => "Provides storage for excess metal.",
-    23 => "Provides storage for excess crystal.",
-    24 => "Giant tanks for storing newly-extracted deuterium.",
-    31 => "A research lab is required in order to conduct research into new technologies.",
-    33 => "The terraformer increases the usable surface of planets.",
-    34 => "The alliance depot supplies fuel to friendly fleets in orbit helping with defence.",
-    41 => "Because the moon has no atmosphere, you need a moon base to generate living space.",
-    42 => "Using the sensor phalanx, the fleets of other empires can be discovered and observed. The larger the sensor chain phalanx, the greater the range to scan.",
-    43 => "The huge quantum leaps are transmitters that are capable of sending large fleets throughout the universe without loss of time.",
-    44 => "Missile silos are used to store missiles.",
     106 => "Information about other planets and moons can be gained using this technology.",
     108 => "More fleets can be commanded by increasing computer capacities. Each level of computer technology increases the maximum number of fleets by one.",
     109 => "Weapons technology makes weapons systems more efficient. Each level of weapons technology increases the weapon strength of units by 10 % of the base value.",
