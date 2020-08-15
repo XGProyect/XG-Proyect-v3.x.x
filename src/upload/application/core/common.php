@@ -13,89 +13,203 @@
  * @version  3.1.0
  */
 
+namespace application\core;
 
-use application\core\ErrorHandler;
 use application\core\Hooks;
 use application\core\Sessions;
 use application\libraries\FunctionsLib;
 use application\libraries\SecurePageLib;
 use application\libraries\UpdatesLibrary;
-
-$config_file = XGP_ROOT . 'application' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'config.php';
-$installed = false;
-
-if (file_exists($config_file)) {
-    require $config_file;
-
-    if (defined('DB_HOST') && defined('DB_USER') && defined('DB_PASS') && defined('DB_NAME') && defined('DB_PREFIX')) {
-        $installed = true;
-    }
-}
+use AutoLoader;
 
 // Require some stuff
 require_once XGP_ROOT . 'application' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'constants.php';
 require_once XGP_ROOT . CORE_PATH . 'AutoLoader.php';
 
-// Auto load a few things
-AutoLoader::registerDirectory(XGP_ROOT . CORE_PATH);
-AutoLoader::registerDirectory(XGP_ROOT . LIB_PATH);
-AutoLoader::registerDirectory(XGP_ROOT . HELPERS_PATH);
+class Common
+{
+    /**
+     * Contains the value that indicated if the game is installed or not
+     *
+     * @var boolean
+     */
+    private $is_installed = false;
 
-// XGP error handler
-new ErrorHandler;
-
-// some values by default
-$lang = [];
-
-// DEFAULT LANGUAGE
-if ($installed) {
-    if (defined('IN_INSTALL')) {
-        $set = false;
-    } else {
-        $set = true;
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->bootUp();
     }
-} else {
-    $set = false;
-}
 
-define('DEFAULT_LANG', FunctionsLib::getCurrentLanguage($set));
+    /**
+     * Return a new session object
+     *
+     * @return Sessions|null
+     */
+    public function setSession(): ?Sessions
+    {
+        if (!defined('IN_INSTALL')) {
+            return new Sessions;
+        }
 
-// check if is installed
-if ($installed == false && !defined('IN_INSTALL')) {
-    FunctionsLib::redirect(SYSTEM_ROOT . 'install/');
-}
+        return null;
+    }
 
-// when we are not in the install section
-if (!defined('IN_INSTALL')) {
-    // set time zone
-    date_default_timezone_set(FunctionsLib::readConfig('date_time_zone'));
+    /**
+     * Return a new Hooks objects
+     *
+     * @return Hooks|null
+     */
+    public function setHooks(): ?Hooks
+    {
+        if (!defined('IN_INSTALL')) {
+            $hooks = new Hooks;
 
-    $current_page = isset($_GET['page']) ? $_GET['page'] : '';
+            // Before load stuff
+            $hooks->call_hook('before_loads');
 
-    // Sessions
-    $session = new Sessions;
+            return $hooks;
+        }
 
-    // Hooks
-    $hooks = new Hooks;
+        return null;
+    }
 
-    // Before load stuff
-    $hooks->call_hook('before_loads');
+    /**
+     * Set secure page to escape requests
+     *
+     * @return void
+     */
+    public function setSecure(): void
+    {
+        if (!defined('IN_INSTALL') && (!defined('IN_LOGIN') or 'IN_LOGIN' != true)) {
+            $current_page = isset($_GET['page']) ? $_GET['page'] : '';
 
-    if (!defined('IN_LOGIN') or 'IN_LOGIN' != true) {
-        $exclude = ['languages'];
+            $exclude = ['languages'];
 
-        if (!in_array($current_page, $exclude)) {
-            SecurePageLib::run();
+            if (!in_array($current_page, $exclude)) {
+                SecurePageLib::run();
+            }
         }
     }
 
-    if (!defined('IN_ADMIN')) {
-        define('SHIP_DEBRIS_FACTOR', FunctionsLib::readConfig('fleet_cdr') / 100);
-        define('DEFENSE_DEBRIS_FACTOR', FunctionsLib::readConfig('defs_cdr') / 100);
+    /**
+     * Set updates
+     *
+     * @return void
+     */
+    public function setUpdates(): void
+    {
+        if (!defined('IN_INSTALL') && !defined('IN_ADMIN')) {
+            define('SHIP_DEBRIS_FACTOR', FunctionsLib::readConfig('fleet_cdr') / 100);
+            define('DEFENSE_DEBRIS_FACTOR', FunctionsLib::readConfig('defs_cdr') / 100);
 
-        // Several updates
-        new UpdatesLibrary;
+            // Several updates
+            new UpdatesLibrary;
+        }
+    }
+
+    /**
+     * Start the system
+     *
+     * @return void
+     */
+    private function bootUp(): void
+    {
+        $this->autoLoad();
+        $this->setErrorHandler();
+        $this->isGameInstalled();
+        $this->setSystemTimezone();
+    }
+
+    /**
+     * Auto load the core, libraries and helpers
+     *
+     * @return void
+     */
+    private function autoLoad(): void
+    {
+        AutoLoader::registerDirectory(XGP_ROOT . CORE_PATH);
+        AutoLoader::registerDirectory(XGP_ROOT . LIB_PATH);
+        AutoLoader::registerDirectory(XGP_ROOT . HELPERS_PATH);
+    }
+
+    /**
+     * Set a new error handler
+     *
+     * @return void
+     */
+    private function setErrorHandler(): void
+    {
+        // XGP error handler
+        new ErrorHandler;
+    }
+
+    /**
+     * Check if the game is installed
+     *
+     * @return void
+     */
+    private function isGameInstalled(): void
+    {
+        try {
+            $config_file = XGP_ROOT . 'application' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'config.php';
+
+            if (file_exists($config_file)) {
+                require $config_file;
+
+                // check if it is installed
+                if (defined('DB_HOST') && defined('DB_USER') && defined('DB_PASS') && defined('DB_NAME') && defined('DB_PREFIX')) {
+                    $this->is_installed = true;
+                }
+
+                // set language
+                $this->initLanguage();
+
+                if (!$this->is_installed && !defined('IN_INSTALL')) {
+                    FunctionsLib::redirect(SYSTEM_ROOT . 'install/');
+                }
+            } else {
+                throw new Exception('Error #001 - config.php file doesn\'t exists!');
+            }
+        } catch (Exception $e) {
+            die($e->getMessage());
+        }
+    }
+
+    /**
+     * Init the default language
+     *
+     * @return void
+     */
+    private function initLanguage(): void
+    {
+        $set = false;
+
+        if ($this->is_installed && !defined('IN_INSTALL')) {
+            $set = true;
+        }
+
+        define('DEFAULT_LANG', FunctionsLib::getCurrentLanguage($set));
+    }
+
+    /**
+     * Set the system timezone
+     *
+     * @return void
+     */
+    private function setSystemTimezone(): void
+    {
+        if (!defined('IN_INSTALL')) {
+            date_default_timezone_set(FunctionsLib::readConfig('date_time_zone'));
+        }
     }
 }
+
+$bootUp = new Common;
+
+$session = $bootUp->setSession();
+$hooks = $bootUp->setHooks();
 
 /* end of common.php */

@@ -224,35 +224,31 @@ define('PHALANX_COST', 10000);
 # Constants should not be changed, unless you know what you are doing!
 #
 ###########################################################################
-// TO PREVENT ERRORS
-if (!defined('DB_PREFIX')) {
-    define('DB_PREFIX', '');
-}
 
 // TABLES
-define('ACS', DB_PREFIX . 'acs');
-define('ACS_MEMBERS', DB_PREFIX . 'acs_members');
-define('ALLIANCE', DB_PREFIX . 'alliance');
-define('ALLIANCE_STATISTICS', DB_PREFIX . 'alliance_statistics');
-define('BANNED', DB_PREFIX . 'banned');
-define('BUDDY', DB_PREFIX . 'buddys');
-define('BUILDINGS', DB_PREFIX . 'buildings');
-define('CHANGELOG', DB_PREFIX . 'changelog');
-define('DEFENSES', DB_PREFIX . 'defenses');
-define('FLEETS', DB_PREFIX . 'fleets');
-define('LANGUAGES', DB_PREFIX . 'languages');
-define('MESSAGES', DB_PREFIX . 'messages');
-define('NOTES', DB_PREFIX . 'notes');
-define('OPTIONS', DB_PREFIX . 'options');
-define('PLANETS', DB_PREFIX . 'planets');
-define('PREFERENCES', DB_PREFIX . 'preferences');
-define('PREMIUM', DB_PREFIX . 'premium');
-define('RESEARCH', DB_PREFIX . 'research');
-define('REPORTS', DB_PREFIX . 'reports');
-define('SESSIONS', DB_PREFIX . 'sessions');
-define('SHIPS', DB_PREFIX . 'ships');
-define('USERS', DB_PREFIX . 'users');
-define('USERS_STATISTICS', DB_PREFIX . 'users_statistics');
+define('ACS', '{xgp_prefix}acs');
+define('ACS_MEMBERS', '{xgp_prefix}acs_members');
+define('ALLIANCE', '{xgp_prefix}alliance');
+define('ALLIANCE_STATISTICS', '{xgp_prefix}alliance_statistics');
+define('BANNED', '{xgp_prefix}banned');
+define('BUDDY', '{xgp_prefix}buddys');
+define('BUILDINGS', '{xgp_prefix}buildings');
+define('CHANGELOG', '{xgp_prefix}changelog');
+define('DEFENSES', '{xgp_prefix}defenses');
+define('FLEETS', '{xgp_prefix}fleets');
+define('LANGUAGES', '{xgp_prefix}languages');
+define('MESSAGES', '{xgp_prefix}messages');
+define('NOTES', '{xgp_prefix}notes');
+define('OPTIONS', '{xgp_prefix}options');
+define('PLANETS', '{xgp_prefix}planets');
+define('PREFERENCES', '{xgp_prefix}preferences');
+define('PREMIUM', '{xgp_prefix}premium');
+define('RESEARCH', '{xgp_prefix}research');
+define('REPORTS', '{xgp_prefix}reports');
+define('SESSIONS', '{xgp_prefix}sessions');
+define('SHIPS', '{xgp_prefix}ships');
+define('USERS', '{xgp_prefix}users');
+define('USERS_STATISTICS', '{xgp_prefix}users_statistics');
 
 // FOR MAILING
 $charset = 'UTF-8';
