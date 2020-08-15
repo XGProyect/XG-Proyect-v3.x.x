@@ -43,12 +43,6 @@ class Database
 
     /**
      *
-     * @var boolean
-     */
-    private $magic_quotes_active;
-
-    /**
-     *
      * @var DebugLib
      */
     private $debug;
@@ -66,10 +60,6 @@ class Database
 
         $this->debug = new DebugLib();
         $this->openConnection();
-
-        if (version_compare(PHP_VERSION, '7.3.0', '<')) {
-            $this->magic_quotes_active = get_magic_quotes_gpc();
-        }
     }
 
     /**
@@ -284,11 +274,6 @@ class Database
      */
     public function escapeValue($value)
     {
-        // undo any magic quote effects so mysqli_real_escape_string can do the work
-        if ($this->magic_quotes_active) {
-            $value = stripslashes($value);
-        }
-
         return $this->connection->real_escape_string($value);
     }
 
