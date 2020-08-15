@@ -39,6 +39,10 @@ final class ErrorHandler
      */
     public function __construct()
     {
+        // report all errors
+        error_reporting(E_ALL);
+        ini_set('display_errors', 0);
+
         $this->createNewDebugObject();
 
         set_error_handler([$this, 'errorHandler']);

@@ -10,12 +10,9 @@
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
- * @version  3.0.0
+ * @version  3.1.0
  */
 
-// report all errors
-error_reporting(E_ALL);
-ini_set('display_errors', 0);
 
 use application\core\ErrorHandler;
 use application\core\Hooks;
