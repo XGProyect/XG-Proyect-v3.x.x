@@ -175,7 +175,7 @@ class Empire extends Controller
     private function setCoords(array $planet): array
     {
         return [
-            'planet_coords' => FormatLib::prettyCoords($planet['planet_galaxy'], $planet['planet_system'], $planet['planet_planet']),
+            'planet_coords' => FormatLib::prettyCoords((int) $planet['planet_galaxy'], (int) $planet['planet_system'], (int) $planet['planet_planet']),
             'planet_galaxy' => $planet['planet_galaxy'],
             'planet_system' => $planet['planet_system'],
         ];
