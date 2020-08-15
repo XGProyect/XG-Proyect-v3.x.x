@@ -102,8 +102,8 @@ class Techtree extends Controller
             'list_of_constructions' => $this->buildBlock('build'),
             'list_of_research' => $this->buildBlock('tech'),
             'list_of_ships' => $this->buildBlock('fleet'),
-            'list_of_missiles' => $this->buildBlock('missiles'),
             'list_of_defenses' => $this->buildBlock('defenses'),
+            'list_of_missiles' => $this->buildBlock('missiles'),
         ];
 
         // display the page
