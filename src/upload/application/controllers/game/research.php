@@ -36,7 +36,6 @@ class Research extends Controller
 
     private $_current_user;
     private $_current_planet;
-    private $_lang;
     private $_resource;
     private $_reslist;
     private $_is_working;
@@ -58,14 +57,16 @@ class Research extends Controller
         // load Model
         parent::loadModel('game/research');
 
+        // load Language
+        parent::loadLang(['global', 'game/research', 'technologies']);
+
         $this->_current_user = parent::$users->getUserData();
         $this->_current_planet = parent::$users->getPlanetData();
-        $this->_lang = parent::$lang;
         $this->_resource = parent::$objects->getObjects();
         $this->_reslist = parent::$objects->getObjectsList();
 
         if ($this->_current_planet[$this->_resource[31]] == 0) {
-            FunctionsLib::message($this->_lang['bd_lab_required'], '', '', true);
+            FunctionsLib::message($this->langs->line('re_lab_required'), '', '', true);
         } else {
             $this->set_labs_amount();
             $this->handle_technologie_build();
@@ -80,69 +81,67 @@ class Research extends Controller
      */
     private function build_page()
     {
-        $parse = $this->_lang;
+        $parse = $this->langs->language;
         $technology_list = '';
 
         // time to do something
         $this->do_command();
 
         // build the page
-        foreach ($this->_lang['tech'] as $tech => $tech_name) {
-            if ($tech > 105 && $tech <= 199) {
-                if (DevelopmentsLib::isDevelopmentAllowed($this->_current_user, $this->_current_planet, $tech)) {
-                    $RowParse['dpath'] = DPATH;
-                    $RowParse['tech_id'] = $tech;
-                    $building_level = $this->_current_user[$this->_resource[$tech]];
-                    $RowParse['tech_level'] = DevelopmentsLib::setLevelFormat($building_level, $tech, $this->_current_user);
-                    $RowParse['tech_name'] = $tech_name;
-                    $RowParse['tech_descr'] = $this->_lang['res']['descriptions'][$tech];
-                    $RowParse['tech_price'] = DevelopmentsLib::formatedDevelopmentPrice($this->_current_user, $this->_current_planet, $tech);
-                    $SearchTime = DevelopmentsLib::developmentTime($this->_current_user, $this->_current_planet, $tech, false, $this->_lab_level);
-                    $RowParse['search_time'] = DevelopmentsLib::formatedDevelopmentTime($SearchTime);
+        foreach ($this->_reslist['tech'] as $tech) {
+            if (DevelopmentsLib::isDevelopmentAllowed($this->_current_user, $this->_current_planet, $tech)) {
+                $RowParse['dpath'] = DPATH;
+                $RowParse['tech_id'] = $tech;
+                $building_level = $this->_current_user[$this->_resource[$tech]];
+                $RowParse['tech_level'] = DevelopmentsLib::setLevelFormat($building_level, $tech, $this->_current_user);
+                $RowParse['tech_name'] = $this->langs->line($this->_resource[$tech]);
+                $RowParse['tech_descr'] = $this->langs->language['descriptions'][$this->_resource[$tech]];
+                $RowParse['tech_price'] = DevelopmentsLib::formatedDevelopmentPrice($this->_current_user, $this->_current_planet, $tech, $this->langs);
+                $SearchTime = DevelopmentsLib::developmentTime($this->_current_user, $this->_current_planet, $tech, false, $this->_lab_level);
+                $RowParse['search_time'] = DevelopmentsLib::formatedDevelopmentTime($SearchTime, $this->langs->line('re_time'));
 
-                    if (!$this->_is_working['is_working']) {
-                        if (DevelopmentsLib::isDevelopmentPayable($this->_current_user, $this->_current_planet, $tech) && !parent::$users->isOnVacations($this->_current_user)) {
-                            if (!$this->is_laboratory_in_queue()) {
-                                $action_link = FormatLib::colorRed($this->_lang['bd_research']);
-                            } else {
-                                $action_link = UrlHelper::setUrl('game.php?page=research&cmd=search&tech=' . $tech, FormatLib::colorGreen($this->_lang['bd_research']));
-                            }
+                if (!$this->_is_working['is_working']) {
+                    if (DevelopmentsLib::isDevelopmentPayable($this->_current_user, $this->_current_planet, $tech) && !parent::$users->isOnVacations($this->_current_user)) {
+                        if (!$this->is_laboratory_in_queue()) {
+                            $action_link = FormatLib::colorRed($this->langs->line('re_research'));
                         } else {
-                            $action_link = FormatLib::colorRed($this->_lang['bd_research']);
+                            $action_link = UrlHelper::setUrl('game.php?page=research&cmd=search&tech=' . $tech, FormatLib::colorGreen($this->langs->line('re_research')));
                         }
                     } else {
-                        if ($this->_is_working['working_on']['planet_b_tech_id'] == $tech) {
-                            $bloc = $this->_lang;
-
-                            if ($this->_is_working['working_on']['planet_id'] != $this->_current_planet['planet_id']) {
-                                $bloc['tech_time'] = $this->_is_working['working_on']['planet_b_tech'] - time();
-                                $bloc['tech_name'] = $this->_lang['bd_from'] . $this->_is_working['working_on']['planet_name'] . '<br /> ' . FormatLib::prettyCoords($this->_is_working['working_on']['planet_galaxy'], $this->_is_working['working_on']['planet_system'], $this->_is_working['working_on']['planet_planet']);
-                                $bloc['tech_home'] = $this->_is_working['working_on']['planet_id'];
-                                $bloc['tech_id'] = $this->_is_working['working_on']['planet_b_tech_id'];
-                            } else {
-                                $bloc['tech_time'] = $this->_current_planet['planet_b_tech'] - time();
-                                $bloc['tech_name'] = '';
-                                $bloc['tech_home'] = $this->_current_planet['planet_id'];
-                                $bloc['tech_id'] = $this->_current_planet['planet_b_tech_id'];
-                            }
-                            $action_link = $this->getTemplate()->set(
-                                'buildings/buildings_research_script',
-                                $bloc
-                            );
-                        } else {
-                            $action_link = "<center>-</center>";
-                        }
+                        $action_link = FormatLib::colorRed($this->langs->line('re_research'));
                     }
-                    $RowParse['tech_link'] = $action_link;
-                    $technology_list .= $this->getTemplate()->set(
-                        'buildings/buildings_research_row',
-                        $RowParse
-                    );
+                } else {
+                    if ($this->_is_working['working_on']['planet_b_tech_id'] == $tech) {
+                        $bloc = $this->langs->language;
+
+                        if ($this->_is_working['working_on']['planet_id'] != $this->_current_planet['planet_id']) {
+                            $bloc['tech_time'] = $this->_is_working['working_on']['planet_b_tech'] - time();
+                            $bloc['tech_name'] = $this->langs->line('re_from') . $this->_is_working['working_on']['planet_name'] . '<br /> ' . FormatLib::prettyCoords($this->_is_working['working_on']['planet_galaxy'], $this->_is_working['working_on']['planet_system'], $this->_is_working['working_on']['planet_planet']);
+                            $bloc['tech_home'] = $this->_is_working['working_on']['planet_id'];
+                            $bloc['tech_id'] = $this->_is_working['working_on']['planet_b_tech_id'];
+                        } else {
+                            $bloc['tech_time'] = $this->_current_planet['planet_b_tech'] - time();
+                            $bloc['tech_name'] = '';
+                            $bloc['tech_home'] = $this->_current_planet['planet_id'];
+                            $bloc['tech_id'] = $this->_current_planet['planet_b_tech_id'];
+                        }
+                        $action_link = $this->getTemplate()->set(
+                            'buildings/buildings_research_script',
+                            $bloc
+                        );
+                    } else {
+                        $action_link = "<center>-</center>";
+                    }
                 }
+                $RowParse['tech_link'] = $action_link;
+                $technology_list .= $this->getTemplate()->set(
+                    'buildings/buildings_research_row',
+                    $RowParse
+                );
             }
         }
 
-        $parse['noresearch'] = (!$this->is_laboratory_in_queue() ? $this->_lang['bd_building_lab'] : '');
+        $parse['noresearch'] = (!$this->is_laboratory_in_queue() ? $this->langs->line('re_building_lab') : '');
         $parse['technolist'] = $technology_list;
 
         parent::$page->display(

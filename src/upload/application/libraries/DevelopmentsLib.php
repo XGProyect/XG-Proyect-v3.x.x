@@ -172,7 +172,7 @@ class DevelopmentsLib extends XGPCore
         }
 
         $is_buyeable = true;
-        $text = $lang->line('fgp_require');
+        $text = $lang->line('require');
         $array = [
             'metal' => $lang->line('metal'),
             'crystal' => $lang->line('crystal'),

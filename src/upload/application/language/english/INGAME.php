@@ -47,12 +47,6 @@ $lang['type_mission'][15] = 'Expedition';
 //BUILDINGS - RESEARCH - SHIPYARD - DEFENSES
 $lang['bd_cancel'] = 'cancel';
 $lang['bd_remaining'] = 'Remaining';
-$lang['bd_lab_required'] = 'You need to build a research laboratory on this planet first!';
-$lang['bd_building_lab'] = 'Can not research when the laboratory is expanding';
-$lang['bd_lvl'] = 'level';
-$lang['bd_spy'] = ' spy';
-$lang['bd_commander'] = ' commander';
-$lang['bd_research'] = 'research';
 $lang['bd_shipyard_required'] = 'You need to build a shipyard on this planet first!';
 $lang['bd_building_shipyard'] = 'You can not build ships when the shipyard is upgrading';
 $lang['bd_available'] = 'Available: ';
@@ -64,7 +58,6 @@ $lang['bd_operating'] = '(Working)';
 $lang['bd_continue'] = 'continue';
 $lang['bd_ready'] = 'finished';
 $lang['bd_finished'] = 'finished';
-$lang['bd_from'] = 'from<br />';
 
 //----------------------------------------------------------------------------//
 //TECHTREE
@@ -138,22 +131,6 @@ $lang['tech'] = array(
 );
 
 $lang['res']['descriptions'] = array(
-    106 => "Information about other planets and moons can be gained using this technology.",
-    108 => "More fleets can be commanded by increasing computer capacities. Each level of computer technology increases the maximum number of fleets by one.",
-    109 => "Weapons technology makes weapons systems more efficient. Each level of weapons technology increases the weapon strength of units by 10 % of the base value.",
-    110 => "Shielding technology makes the shields on ships and defensive facilities more efficient. Each level of shield technology increases the strength of the shields by 10 % of the base value.",
-    111 => "Special alloys improve the armour on ships and defensive structures. The effectiveness of the armour can be increased by 10 % per level.",
-    113 => "The command of different types of energy is necessary for many new technologies.",
-    114 => "By integrating the 4th and 5th dimensions it is now possible to research a new kind of drive that is more economical and efficient.",
-    115 => "The development of this drive makes some ships faster, although each level increases speed by only 10 % of the base value.",
-    117 => "The impulse drive is based on the reaction principle. Further development of this drive makes some ships faster, although each level increases speed by only 20 % of the base value.",
-    118 => "Hyperspace drive warps space around a ship. The development of this drive makes some ships faster, although each level increases speed by only 30 % of the base value.",
-    120 => "Focusing light produces a beam that causes damage when it strikes an object.",
-    121 => "The concentration of ions allows for the construction of cannons, which can inflict enormous damage and reduce the deconstruction costs per level by 4%.",
-    122 => "A further development of ion technology which accelerates high-energy plasma, which then inflicts devastating damage and additionally optimises the production of metal, crystal and deuterium (1%/0.66%/0.33% per level).",
-    123 => "Researchers on different planets communicate via this network.",
-    124 => "With an astrophysics research module, ships can undertake long expeditions. Every second level of this technology will allow you to colonise an extra planet.",
-    199 => "Firing a concentrated charge of graviton particles can create an artificial gravity field, which can destroy ships or even moons.",
     202 => "The small cargo is an agile ship which can quickly transport resources to other planets.",
     203 => "This cargo ship has a much larger cargo capacity than the small cargo, and is generally faster thanks to an improved drive.",
     204 => "This is the first fighting ship all emperors will build. The light fighter is an agile ship, but vulnerable on its own. In mass numbers, they can become a great threat to any empire. They are the first to accompany small and large cargoes to hostile planets with minor defences.",
@@ -179,10 +156,5 @@ $lang['res']['descriptions'] = array(
     502 => "Anti-Ballistic Missiles destroy attacking interplanetary missiles",
     503 => "Interplanetary Missiles destroy enemy defences. Your interplanetary missiles have got a coverage of %s systems.",
 );
-
-//----------------------------------------------------------------------------//
-// EXTRA LANGUAGE FUNCTIONS
-$lang['fgp_require'] = 'Requires: ';
-$lang['fgf_time'] = 'Construction Time: ';
 
 /* end of INGAME.php */

@@ -47,12 +47,6 @@ $lang['type_mission'][15] = 'Expedición';
 //BUILDINGS - RESEARCH - SHIPYARD - DEFENSES
 $lang['bd_cancel'] = 'Cancelar';
 $lang['bd_remaining'] = 'Restantes';
-$lang['bd_lab_required'] = '¡Es necesario construir primero un laboratorio de investigación en este planeta!';
-$lang['bd_building_lab'] = 'No se puede investigar cuando se esta ampliando el laboratorio';
-$lang['bd_lvl'] = 'Nivel';
-$lang['bd_spy'] = ' espia';
-$lang['bd_commander'] = ' comandante';
-$lang['bd_research'] = 'Investigar';
 $lang['bd_shipyard_required'] = '¡Debes construir un hangar en este planeta para continuar!';
 $lang['bd_building_shipyard'] = 'No puedes fabricar durante la ampliación del hangar, fábrica de robots o nanobots';
 $lang['bd_available'] = 'Disponible: ';
@@ -64,7 +58,6 @@ $lang['bd_operating'] = '(En funcionamiento)';
 $lang['bd_continue'] = 'Continuar';
 $lang['bd_ready'] = 'Listo';
 $lang['bd_finished'] = 'Terminado';
-$lang['bd_from'] = 'de<br />';
 
 //----------------------------------------------------------------------------//
 //TECHTREE
@@ -138,23 +131,6 @@ $lang['tech'] = array(
 );
 
 $lang['res']['descriptions'] = array(
-    106 => "Usando esta tecnología, puede obtenerse información sobre otros planetas.",
-    108 => "Cuanto más elevado sea el nivel de tecnología de computación, más flotas podrás controlar simultaneamente. Cada nivel adicional de esta tecnologia, aumenta el numero de flotas en 1.",
-    109 => "Este tipo de tecnología incrementa la eficiencia de tus sistemas de armamento. Cada mejora de la tecnología militar añade un 10% de potencia a la base de daño de cualquier arma disponible.",
-    110 => "La tecnología de defensa se usa para generar un escudo de partículas protectoras alrededor de tus estructuras.
-Cada nivel de esta tecnología aumenta el escudo efectivo en un 10% (basado en el nivel de una estructura dada).",
-    111 => "Las aleaciones altamente sofisticadas ayudan a incrementar el blindaje de una nave añadiendo el 10% de su fuerza en cada nivel a la fuerza base.",
-    113 => "Entendiendo la tecnología de diferentes tipos de energía, muchas investigaciones nuevas y avanzadas pueden ser adaptadas. La tecnología de energía es de gran importancia para un laboratorio de investigación moderno.",
-    114 => "Incorporando la cuarta y quinta dimensión en la tecnología de propulsión, se puede disponer de un nuevo tipo de motor; que es más eficiente y usa menos combustible que los convencionales.",
-    115 => "Ejecutar investigaciones en esta tecnología proporciona motores de combustión siempre más rapido, aunque cada nivel aumenta solamente la velocidad en un 10% de la velocidad base de una nave dada.",
-    117 => "El sistema del motor de impulso se basa en el principio de la repulsión de partículas. La materia repelida es basura generada por el reactor de fusión usado para proporcionar la energía necesaria para este tipo de motor de propulsión.",
-    118 => "Los motores de hiperespacio permiten entrar al mismo a través de una ventana hiperespacial para reducir drásticamente el tiempo de viaje. El hiperespacio es un espacio alternativo con más de 3 dimensiones.",
-    120 => "La Tecnología láser es un importante conocimiento; conduce a la luz monocromática firmemente enfocada sobre un objetivo. El daño puede ser ligero o moderado dependiendo de la potencia del rayo...",
-    121 => "La Tecnología iónica enfoca un rayo de iones acelerados en un objetivo, lo que puede provocar un gran daño debido a su naturaleza de electrones cargados de energía.",
-    122 => "Las armas de plasma son incluso más peligrosas que cualquier otro sistema de armamento conocido, debido a la naturaleza agresiva del plasma.",
-    123 => "Los científicos de tus planetas pueden comunicarse entre ellos a través de esta red.",
-    124 => "Las naves pueden realizar expediciones largas con el modulo de investigación. Cada segundo nivel de esta tecnología permitirá colonizar un planeta adicional.",
-    199 => "A través del disparo de partículas concentradas de gravitón se genera un campo gravitacional artificial con suficiente potencia y poder de atracción para destruir no solo naves, sino lunas enteras.",
     202 => "Las naves pequeñas de carga son naves muy ágiles usadas para transportar recursos desde un planeta a otro",
     203 => "La nave grande de carga es una versión avanzada de las naves pequeñas de carga, permitiendo así una mayor capacidad de almacenamiento y velocidades más altas gracias a un mejor sistema de propulsión.",
     204 => "El cazador ligero es una nave maniobrable que puedes encontrar en casi cualquier planeta. El coste no es particularmente alto, pero asimismo el escudo y la capacidad de carga son muy bajas.",
@@ -180,10 +156,4 @@ Cada nivel de esta tecnología aumenta el escudo efectivo en un 10% (basado en e
     502 => "Los misiles antibalísticos destruyen los misiles interplanetarios.",
     503 => "Los misiles interplanetarios destruyen los sistemas de defensa del enemigo. Tus misiles interplanetarios tienen actualmente un alcance de %s sistemas.",
 );
-
-//----------------------------------------------------------------------------//
-// EXTRA LANGUAGE FUNCTIONS
-$lang['fgp_require'] = 'Requiere: ';
-$lang['fgf_time'] = 'Tiempo: ';
-
 /* end of INGAME.php */

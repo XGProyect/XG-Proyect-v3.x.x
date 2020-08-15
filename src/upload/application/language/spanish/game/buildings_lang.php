@@ -8,6 +8,7 @@ $lang = [
     'bd_no_more_fields' => 'No hay espacio en el planeta',
     'bd_level' => 'Nivel',
     'bd_time' => 'Tiempo: ',
+    'require' => 'Requiere: ',
     'descriptions' => [
         'building_metal_mine' => 'Las minas de metal proveen los recursos básicos de un imperio emergente, y permiten la construcción de edificios y naves.',
         'building_crystal_mine' => 'Los cristales son el recurso principal usado para construir circuitos electrónicos y ciertas aleaciones.',

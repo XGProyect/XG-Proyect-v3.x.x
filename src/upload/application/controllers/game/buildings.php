@@ -287,7 +287,7 @@ class Buildings extends Controller
             $building_id,
             $this->langs,
             true,
-            $this->getBuildingLevel($building_id),
+            $this->getBuildingLevel($building_id)
         );
     }
 
