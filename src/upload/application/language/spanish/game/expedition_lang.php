@@ -12,6 +12,7 @@ $lang = [
     // found resources
     'exp_new_resources_1' => 'En un planetoide abondonado han sido encontradas algunas zonas de recursos fácilmente accesibles y se han recolectado allí algunos recursos satisfactoriamente. Se ha capturado %s de %s.', // ok
     'exp_new_resources_2' => 'Tu expedición descubrió un pequeño asteroide en el cual se pueden reciclar algunos recursos. Se ha capturado %s de %s.', // ok
+    'exp_new_resources_3' => '', // ok
 
     // found primitive enemy
     'exp_primitive_enemy_1' => 'Algunos bárbaros primitivos están atacándonos con naves espaciales que no deberían ser llamadas como tal. Si nos disparan en serio, nos veremos forzados a devolver el fuego.', // ok
