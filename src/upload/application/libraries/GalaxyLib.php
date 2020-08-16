@@ -193,12 +193,11 @@ class GalaxyLib extends XGPCore
 
         // PARSE THE DATA
         $parse = $this->langs;
-        $parse['dpath'] = DPATH;
         $parse['name'] = $this->row_data['planet_name'];
         $parse['galaxy'] = $this->galaxy;
         $parse['system'] = $this->system;
         $parse['planet'] = $this->planet;
-        $parse['image'] = $this->row_data['planet_image'];
+        $parse['image'] = DPATH . 'planets' . DIRECTORY_SEPARATOR . 'small' . DIRECTORY_SEPARATOR . 's_' . $this->row_data['planet_image'] . '.jpg';
         $parse['links'] = '';
 
         // LOOP THRU ACTIONS
@@ -283,11 +282,11 @@ class GalaxyLib extends XGPCore
         // CHECK MOON STATUS AND COMPLETE DATA IF REQUIRED
         if ($this->row_data['destroyed_moon'] == 0 && $this->row_data['id_luna'] != 0) {
             $parse = $this->langs;
-            $parse['dpath'] = DPATH;
             $parse['name_moon'] = $this->row_data['name_moon'];
             $parse['galaxy'] = $this->galaxy;
             $parse['system'] = $this->system;
             $parse['planet'] = $this->planet;
+            $parse['image'] = DPATH . 'planets' . DIRECTORY_SEPARATOR . 'small' . DIRECTORY_SEPARATOR . 's_mond.jpg';
             $parse['planet_diameter'] = FormatLib::prettyNumber($this->row_data['planet_diameter']);
             $parse['links'] = '';
 
@@ -324,10 +323,10 @@ class GalaxyLib extends XGPCore
             }
 
             $parse = $this->langs;
-            $parse['dpath'] = DPATH;
             $parse['galaxy'] = $this->galaxy;
             $parse['system'] = $this->system;
             $parse['planet'] = $this->planet;
+            $parse['image'] = DPATH . 'planets' . DIRECTORY_SEPARATOR . 'debris.jpg';
             $parse['planettype'] = self::PLANET_TYPE;
             $parse['recsended'] = $recyclers_sended;
             $parse['planet_debris_metal'] = FormatLib::prettyNumber($this->row_data['metal']);
