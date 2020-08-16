@@ -149,11 +149,6 @@ class UpdatesLibrary extends XGPCore
      */
     private function updateFleets()
     {
-        // language issues if is not present
-        if (!defined('IN_GAME')) {
-            define('IN_GAME', true);
-        }
-
         // let's start the missions control process
         $mission_control = new MissionControlLibrary();
         $mission_control->arrivingFleets();

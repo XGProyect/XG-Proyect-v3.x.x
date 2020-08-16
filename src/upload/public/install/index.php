@@ -11,11 +11,15 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
+use application\core\common;
 
 define('IN_INSTALL', true);
 define('XGP_ROOT', '../../');
 
 require XGP_ROOT . 'application' . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'common.php';
+
+$system = new Common;
+$system->bootUp('install');
 
 $page = isset($_GET['page']) ? $_GET['page'] : 'installation';
 $file_name = XGP_ROOT . INSTALL_PATH . $page . '.php';

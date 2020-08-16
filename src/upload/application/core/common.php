@@ -15,6 +15,7 @@
 
 namespace application\core;
 
+use application\core\ErrorHandler;
 use application\core\Hooks;
 use application\core\Sessions;
 use application\libraries\FunctionsLib;
@@ -29,6 +30,13 @@ require_once XGP_ROOT . CORE_PATH . 'AutoLoader.php';
 
 class Common
 {
+    private const APPLICATIONS = [
+        'home' => ['setSystemTimezone', 'setSession', 'setHooks', 'setUpdates'],
+        'admin' => ['setSystemTimezone', 'setSecure', 'setSession', 'setHooks'],
+        'game' => ['setSystemTimezone', 'setSecure', 'setSession', 'setHooks', 'setUpdates'],
+        'install' => [],
+    ];
+
     /**
      * Contains the value that indicated if the game is installed or not
      *
@@ -37,91 +45,67 @@ class Common
     private $is_installed = false;
 
     /**
+     * Contains the Session object
+     *
+     * @var Sessions
+     */
+    private $session = null;
+
+    /**
+     * Contains the Hooks object
+     *
+     * @var Hooks
+     */
+    private $hooks = null;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
-        $this->bootUp();
-    }
-
-    /**
-     * Return a new session object
-     *
-     * @return Sessions|null
-     */
-    public function setSession(): ?Sessions
-    {
-        if (!defined('IN_INSTALL')) {
-            return new Sessions;
-        }
-
-        return null;
-    }
-
-    /**
-     * Return a new Hooks objects
-     *
-     * @return Hooks|null
-     */
-    public function setHooks(): ?Hooks
-    {
-        if (!defined('IN_INSTALL')) {
-            $hooks = new Hooks;
-
-            // Before load stuff
-            $hooks->call_hook('before_loads');
-
-            return $hooks;
-        }
-
-        return null;
-    }
-
-    /**
-     * Set secure page to escape requests
-     *
-     * @return void
-     */
-    public function setSecure(): void
-    {
-        if (!defined('IN_INSTALL') && (!defined('IN_LOGIN') or 'IN_LOGIN' != true)) {
-            $current_page = isset($_GET['page']) ? $_GET['page'] : '';
-
-            $exclude = ['languages'];
-
-            if (!in_array($current_page, $exclude)) {
-                SecurePageLib::run();
-            }
-        }
-    }
-
-    /**
-     * Set updates
-     *
-     * @return void
-     */
-    public function setUpdates(): void
-    {
-        if (!defined('IN_INSTALL') && !defined('IN_ADMIN')) {
-            define('SHIP_DEBRIS_FACTOR', FunctionsLib::readConfig('fleet_cdr') / 100);
-            define('DEFENSE_DEBRIS_FACTOR', FunctionsLib::readConfig('defs_cdr') / 100);
-
-            // Several updates
-            new UpdatesLibrary;
-        }
     }
 
     /**
      * Start the system
      *
+     * @param string $application
      * @return void
      */
-    private function bootUp(): void
+    public function bootUp(string $application): void
     {
+        // overall loads
         $this->autoLoad();
         $this->setErrorHandler();
         $this->isGameInstalled();
-        $this->setSystemTimezone();
+
+        // specific pages load or executions
+        if (isset(self::APPLICATIONS[$application])) {
+            foreach (self::APPLICATIONS[$application] as $methods) {
+                if (!empty($methods)) {
+                    $this->$methods();
+                }
+            }
+        }
+    }
+
+    /**
+     * Get session
+     *
+     * @return Sessions
+     */
+    public function getSession(): Sessions
+    {
+        return $this->session;
+    }
+
+    /**
+     * Get hooks
+     *
+     * @return Hooks
+     */
+    public function getHooks(): Hooks
+    {
+        return $this->hooks;
     }
 
     /**
@@ -202,15 +186,60 @@ class Common
      */
     private function setSystemTimezone(): void
     {
-        if (!defined('IN_INSTALL')) {
-            date_default_timezone_set(FunctionsLib::readConfig('date_time_zone'));
+        date_default_timezone_set(FunctionsLib::readConfig('date_time_zone'));
+    }
+
+    /**
+     * Return a new session object
+     *
+     * @return Sessions
+     */
+    private function setSession(): void
+    {
+        $this->session = new Sessions;
+    }
+
+    /**
+     * Return a new Hooks objects
+     *
+     * @return Hooks
+     */
+    private function setHooks(): void
+    {
+        $this->hooks = new Hooks;
+
+        // Before load stuff
+        $this->hooks->call_hook('before_loads');
+    }
+
+    /**
+     * Set secure page to escape requests
+     *
+     * @return void
+     */
+    private function setSecure(): void
+    {
+        $current_page = isset($_GET['page']) ? $_GET['page'] : '';
+
+        $exclude = ['languages'];
+
+        if (!in_array($current_page, $exclude)) {
+            SecurePageLib::run();
         }
     }
+
+    /**
+     * Set updates
+     *
+     * @return void
+     */
+    private function setUpdates(): void
+    {
+        define('SHIP_DEBRIS_FACTOR', FunctionsLib::readConfig('fleet_cdr') / 100);
+        define('DEFENSE_DEBRIS_FACTOR', FunctionsLib::readConfig('defs_cdr') / 100);
+
+        // Several updates
+        new UpdatesLibrary;
+    }
 }
-
-$bootUp = new Common;
-
-$session = $bootUp->setSession();
-$hooks = $bootUp->setHooks();
-
 /* end of common.php */
