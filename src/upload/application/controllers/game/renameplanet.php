@@ -14,7 +14,6 @@
 namespace application\controllers\game;
 
 use application\core\Controller;
-use application\core\Database;
 use application\libraries\FunctionsLib;
 
 /**
@@ -32,7 +31,6 @@ class Renameplanet extends Controller
 
     const MODULE_ID = 1;
 
-    private $_lang;
     private $_current_user;
     private $_current_planet;
 
@@ -46,25 +44,19 @@ class Renameplanet extends Controller
         // check if session is active
         parent::$users->checkSession();
 
+        // load Model
+        parent::loadModel('game/renameplanet');
+
+        // load Language
+        parent::loadLang('game/renameplanet');
+
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
-        $this->_db = new Database();
-        $this->_lang = parent::$lang;
         $this->_current_user = parent::$users->getUserData();
         $this->_current_planet = parent::$users->getPlanetData();
 
         $this->build_page();
-    }
-
-    /**
-     * method __destruct
-     * param
-     * return close db connection
-     */
-    public function __destruct()
-    {
-        $this->_db->closeConnection();
     }
 
     /**
@@ -74,7 +66,7 @@ class Renameplanet extends Controller
      */
     private function build_page()
     {
-        $parse = $this->_lang;
+        $parse = $this->langs->language;
         $parse['planet_name'] = $this->_current_planet['planet_name'];
         $parse['planet_id'] = $this->_current_planet['planet_id'];
         $parse['galaxy_galaxy'] = $this->_current_planet['planet_galaxy'];
@@ -82,20 +74,20 @@ class Renameplanet extends Controller
         $parse['galaxy_planet'] = $this->_current_planet['planet_planet'];
 
         // DEFAULT VIEW
-        $current_view = parent::$page->getTemplate('renameplanet/renameplanet_view');
+        $current_view = 'renameplanet/renameplanet_view';
 
         // CHANGE THE ACTION
-        switch (( isset($_POST['action']) ? $_POST['action'] : NULL)) {
-            case $this->_lang['ov_planet_rename_action']:
+        switch ((isset($_POST['action']) ? $_POST['action'] : null)) {
+            case $this->langs->line('rp_planet_rename_action'):
 
                 $this->rename_planet($_POST['newname']);
 
                 break;
 
-            case $this->_lang['ov_abandon_planet']:
+            case $this->langs->line('rp_abandon_planet'):
 
                 // DELETE VIEW
-                $current_view = parent::$page->getTemplate('renameplanet/renameplanet_delete_view');
+                $current_view = 'renameplanet/renameplanet_delete_view';
 
                 break;
         } // switch
@@ -105,7 +97,12 @@ class Renameplanet extends Controller
         }
 
         // SET THE VIEW
-        parent::$page->display(parent::$page->parseTemplate($current_view, $parse));
+        parent::$page->display(
+            $this->getTemplate()->set(
+                $current_view,
+                $parse
+            )
+        );
     }
 
     /**
@@ -115,18 +112,15 @@ class Renameplanet extends Controller
      */
     private function rename_planet($new_name)
     {
-        $new_name = $this->_db->escapeValue(strip_tags(trim($new_name)));
+        $new_name = strip_tags(trim($new_name));
 
         if (preg_match("/[^A-z0-9_\- ]/", $new_name) == 1) {
-            FunctionsLib::message($this->_lang['ov_newname_error'], "game.php?page=renameplanet", 2);
+            FunctionsLib::message($this->langs->line('rp_newname_error'), "game.php?page=renameplanet", 2);
         }
 
-        if ($new_name != "") {
-            $this->_db->query("UPDATE " . PLANETS . "
-									SET `planet_name` = '" . $new_name . "'
-									WHERE `planet_id` = '" . intval($this->_current_user['user_current_planet']) . "'
-									LIMIT 1;");
-            FunctionsLib::message($this->_lang['ov_planet_name_changed'], "game.php?page=renameplanet", 2);
+        if ($new_name != '') {
+            $this->Renameplanet_Model->updatePlanetName($new_name, $this->_current_user['user_current_planet']);
+            FunctionsLib::message($this->langs->line('rp_planet_name_changed'), "game.php?page=renameplanet", 2);
         }
     }
 
@@ -139,18 +133,14 @@ class Renameplanet extends Controller
     {
         $own_fleet = 0;
         $enemy_fleet = 0;
-        $fleets_incoming = $this->_db->query("SELECT *
-														FROM " . FLEETS . "
-														WHERE ( fleet_owner = '" . intval($this->_current_user['user_id']) . "' AND
-																fleet_start_galaxy='" . intval($this->_current_planet['planet_galaxy']) . "' AND
-																fleet_start_system='" . intval($this->_current_planet['planet_system']) . "' AND
-																fleet_start_planet='" . intval($this->_current_planet['planet_planet']) . "') OR
-															  ( fleet_target_owner = '" . intval($this->_current_user['user_id']) . "' AND
-																fleet_end_galaxy='" . intval($this->_current_planet['planet_galaxy']) . "' AND
-																fleet_end_system='" . intval($this->_current_planet['planet_system']) . "' AND
-																fleet_end_planet='" . intval($this->_current_planet['planet_planet']) . "')");
+        $fleets_incoming = $this->Renameplanet_Model->getFleets(
+            $this->_current_user['user_id'],
+            $this->_current_planet['planet_galaxy'],
+            $this->_current_planet['planet_system'],
+            $this->_current_planet['planet_planet']
+        );
 
-        while ($fleet = $this->_db->fetchArray($fleets_incoming)) {
+        foreach ($fleets_incoming as $fleet) {
             $own_fleet = $fleet['fleet_owner'];
             $enemy_fleet = $fleet['fleet_target_owner'];
 
@@ -162,43 +152,28 @@ class Renameplanet extends Controller
         }
 
         if ($own_fleet > 0) {
-            FunctionsLib::message($this->_lang['ov_abandon_planet_not_possible'], 'game.php?page=renameplanet');
-        } elseif (( ( $enemy_fleet > 0 ) && ( $mess < 1 ) ) && $end_type != 2) {
-            FunctionsLib::message($this->_lang['ov_abandon_planet_not_possible'], 'game.php?page=renameplanet');
+            FunctionsLib::message($this->langs->line('rp_abandon_planet_not_possible'), 'game.php?page=renameplanet');
+        } elseif ((($enemy_fleet > 0) && ($mess < 1)) && $end_type != 2) {
+            FunctionsLib::message($this->langs->line('rp_abandon_planet_not_possible'), 'game.php?page=renameplanet');
         } else {
-
-            if (sha1($_POST['pw']) == $this->_current_user['user_password'] && $this->_current_user['user_home_planet_id'] != $this->_current_user['user_current_planet']) {
-
+            if (password_verify($_POST['pw'], $this->_current_user['user_password']) && $this->_current_user['user_home_planet_id'] != $this->_current_user['user_current_planet']) {
                 if ($this->_current_planet['moon_id'] != 0) {
-
-                    $this->_db->query(
-                        "UPDATE " . PLANETS . " AS p, " . PLANETS . " AS m, " . USERS . " AS u SET
-                        p.`planet_destroyed` = '" . (time() + (PLANETS_LIFE_TIME * 3600)) . "',
-                        m.`planet_destroyed` = '" . (time() + (PLANETS_LIFE_TIME * 3600)) . "',
-                        u.`user_current_planet` = u.`user_home_planet_id`
-                        WHERE p.`planet_id` = '" . $this->_current_user['user_current_planet'] . "' AND
-                            m.`planet_galaxy` = '" . $this->_current_planet['planet_galaxy'] . "' AND
-                            m.`planet_system` = '" . $this->_current_planet['planet_system'] . "' AND
-                            m.`planet_planet` = '" . $this->_current_planet['planet_planet'] . "' AND
-                            m.`planet_type` = '3' AND
-                            u.`user_id` = '" . $this->_current_user['user_id'] . "';"
+                    $this->Renameplanet_Model->deleteMoonAndPlanet(
+                        $this->_current_user['user_id'],
+                        $this->_current_user['user_current_planet'],
+                        $this->_current_planet['planet_galaxy'],
+                        $this->_current_planet['planet_system'],
+                        $this->_current_planet['planet_planet']
                     );
                 } else {
-                    $this->_db->query(
-                        "UPDATE " . PLANETS . " AS p, " . USERS . " AS u SET
-                        p.`planet_destroyed` = '" . (time() + (PLANETS_LIFE_TIME * 3600)) . "',
-                        u.`user_current_planet` = u.`user_home_planet_id`
-                        WHERE p.`planet_id` = '" . $this->_current_user['user_current_planet'] . "' AND
-                                        u.`user_id` = '" . $this->_current_user['user_id'] . "';"
-                    );
+                    $this->Renameplanet_Model->deletePlanet($this->_current_user['user_id'], $this->_current_user['user_current_planet']);
                 }
 
-
-                FunctionsLib::message($this->_lang['ov_planet_abandoned'], 'game.php?page=overview');
+                FunctionsLib::message($this->langs->line('rp_planet_abandoned'), 'game.php?page=overview');
             } elseif ($this->_current_user['user_home_planet_id'] == $this->_current_user['user_current_planet']) {
-                FunctionsLib::message($this->_lang['ov_principal_planet_cant_abanone'], 'game.php?page=renameplanet');
+                FunctionsLib::message($this->langs->line('rp_principal_planet_cant_abanone'), 'game.php?page=renameplanet');
             } else {
-                FunctionsLib::message($this->_lang['ov_wrong_pass'], 'game.php?page=renameplanet');
+                FunctionsLib::message($this->langs->line('rp_wrong_pass'), 'game.php?page=renameplanet');
             }
         }
     }

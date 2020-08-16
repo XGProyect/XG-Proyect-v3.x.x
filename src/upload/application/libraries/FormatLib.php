@@ -14,6 +14,7 @@
 namespace application\libraries;
 
 use application\core\enumerators\ImportanceEnumerator as Importance;
+use application\helpers\UrlHelper;
 
 /**
  * FormatLib Class
@@ -252,17 +253,19 @@ class FormatLib
     }
 
     /**
-     * prettyCoords
+     * Format the coordinates providing a link
      *
-     * @param int $galaxy Galaxy
-     * @param int $system System
-     * @param int $planet Planet
-     *
-     * @return
+     * @param int $galaxy
+     * @param int $system
+     * @param int $planet
+     * @return void
      */
-    public static function prettyCoords($galaxy, $system, $planet)
+    public static function prettyCoords(int $galaxy, int $system, int $planet): string
     {
-        return "[$galaxy:$system:$planet]";
+        return UrlHelper::setUrl(
+            'game.php?page=galaxy&mode=3&galaxy=' . $galaxy . '&system=' . $system,
+            "[$galaxy:$system:$planet]"
+        );
     }
 
     /**

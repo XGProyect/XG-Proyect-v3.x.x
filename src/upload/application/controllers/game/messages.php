@@ -16,6 +16,8 @@ namespace application\controllers\game;
 use application\core\Controller;
 use application\core\enumerators\MessagesEnumerator;
 use application\core\enumerators\SwitchIntEnumerator as SwitchInt;
+use application\helpers\ArraysHelper;
+use application\helpers\UrlHelper;
 use application\libraries\FunctionsLib;
 use application\libraries\OfficiersLib;
 
@@ -63,7 +65,7 @@ class Messages extends Controller
         parent::loadModel('game/messages');
 
         // load Language
-        parent::loadLang('messages');
+        parent::loadLang('game/messages');
 
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
@@ -160,8 +162,8 @@ class Messages extends Controller
             $get_messages = '';
 
             foreach ($data as $field => $value) {
-                if (FunctionsLib::inMultiarray($field, $this->message_type)) {
-                    $type_id = FunctionsLib::recursiveArraySearch($field, $this->message_type);
+                if (ArraysHelper::inMultiArray($field, $this->message_type)) {
+                    $type_id = ArraysHelper::multiArraySearch($field, $this->message_type);
                     $get_messages .= $type_id . ',';
                     $active[$type_id] = 1;
                 }
@@ -235,10 +237,10 @@ class Messages extends Controller
     private function setMessageReply(int $from): string
     {
         if ($from > 0) {
-            return FunctionsLib::setUrl(
+            return UrlHelper::setUrl(
                 'game.php?page=chat&playerId=' . $from,
-                $this->langs->line('mg_send_message'),
-                FunctionsLib::setImage(DPATH . '/img/m.gif', $this->langs->line('mg_send_message'))
+                FunctionsLib::setImage(DPATH . '/img/m.gif', $this->langs->line('mg_send_message')),
+                $this->langs->line('mg_send_message')
             );
         }
 
@@ -333,8 +335,8 @@ class Messages extends Controller
         if ($members) {
             foreach ($members as $member) {
                 $members_list[] = [
-                    'user_name' => $buddy['user_name'],
-                    'user_id' => $buddy['user_id'],
+                    'user_name' => $member['user_name'],
+                    'user_id' => $member['user_id'],
                     'dpath' => DPATH,
                 ];
             }
@@ -447,7 +449,7 @@ class Messages extends Controller
                 }
 
                 if (isset($message_ids)) {
-                    $this->Messages_Model->deleteByOwnerAndIds($this->user['user_id'], join($message_ids, ','));
+                    $this->Messages_Model->deleteByOwnerAndIds($this->user['user_id'], join(',', $message_ids));
                 }
                 break;
             case 'deleteunmarked':
@@ -461,7 +463,7 @@ class Messages extends Controller
                 }
 
                 if (isset($message_ids)) {
-                    $this->Messages_Model->deleteByOwnerAndIds($this->user['user_id'], join($message_ids, ','));
+                    $this->Messages_Model->deleteByOwnerAndIds($this->user['user_id'], join(',', $message_ids));
                 }
                 break;
             case 'deleteallshown':
@@ -469,8 +471,8 @@ class Messages extends Controller
 
                 if (isset($data['dsp']) && $data['dsp'] == 1) {
                     foreach ($data as $field => $value) {
-                        if (FunctionsLib::inMultiarray($field, $this->message_type)) {
-                            $type_id = FunctionsLib::recursiveArraySearch($field, $this->message_type);
+                        if (ArraysHelper::inMultiArray($field, $this->message_type)) {
+                            $type_id = ArraysHelper::multiArraySearch($field, $this->message_type);
                             break;
                         }
                     }

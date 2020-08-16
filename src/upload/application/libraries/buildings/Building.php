@@ -181,11 +181,7 @@ class Building
             $queue_size = MAX_BUILDING_QUEUE_SIZE;
         }
 
-        if ($this->getCountElementsOnQueue() < $queue_size) {
-            return false;
-        }
-
-        return true;
+        return !($this->getCountElementsOnQueue() < $queue_size);
     }
 
     /**

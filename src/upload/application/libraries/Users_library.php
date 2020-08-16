@@ -13,6 +13,11 @@
  */
 namespace application\libraries;
 
+use application\core\Language;
+use application\core\Template;
+use application\libraries\FunctionsLib as Functions;
+use application\libraries\TimingLibrary as Timing;
+
 /**
  * Users Class
  *
@@ -37,14 +42,14 @@ class Users_library
      */
     public function __construct()
     {
-        $this->Users_Model = FunctionsLib::modelLoader('libraries/users_library');
+        $this->Users_Model = Functions::modelLoader('libraries/users_library');
 
         if ($this->isSessionSet()) {
             // Get user data and check it
             $this->setUserData();
 
             // Check game close
-            FunctionsLib::checkServer($this->user_data);
+            Functions::checkServer($this->user_data);
 
             if (!defined('IN_ADMIN')) {
                 // Set the changed planet
@@ -66,22 +71,18 @@ class Users_library
      * userLogin
      *
      * @param int    $user_id   User ID
-     * @param string $user_name User name
      * @param string $password  Password
      *
      * @return void
      */
-    public function userLogin($user_id = 0, $user_name = '', $password = '')
+    public function userLogin($user_id = 0, $password = '')
     {
-        if ($user_id != 0 && !empty($user_name) && !empty($password)) {
-
+        if ($user_id != 0 && !empty($password) && (strlen($password) == 60)) {
             $_SESSION['user_id'] = $user_id;
-            $_SESSION['user_name'] = $user_name;
-            $_SESSION['user_password'] = sha1($password . '-' . SECRETWORD);
+            $_SESSION['user_password'] = Functions::hash($password . '-' . SECRETWORD);
 
             return true;
         } else {
-
             return false;
         }
     }
@@ -114,7 +115,7 @@ class Users_library
     public function checkSession()
     {
         if (!$this->isSessionSet()) {
-            FunctionsLib::redirect(SYSTEM_ROOT);
+            Functions::redirect(SYSTEM_ROOT);
         }
     }
 
@@ -197,11 +198,7 @@ class Users_library
      */
     private function isSessionSet()
     {
-        if (!isset($_SESSION['user_id']) or !isset($_SESSION['user_name']) or !isset($_SESSION['user_password'])) {
-            return false;
-        } else {
-            return true;
-        }
+        return !(!isset($_SESSION['user_id']) or !isset($_SESSION['user_password']));
     }
 
     /**
@@ -211,9 +208,9 @@ class Users_library
      */
     private function setUserData()
     {
-        $user_row = $this->Users_Model->setUserDataByUserName($_SESSION['user_name']);
+        $user_row = $this->Users_Model->setUserDataByUserId($_SESSION['user_id']);
 
-        FunctionsLib::displayLoginErrors($user_row);
+        $this->displayLoginErrors($user_row);
 
         // update user activity data
         $this->Users_Model->updateUserActivityData(
@@ -231,6 +228,35 @@ class Users_library
     }
 
     /**
+     * Display login errors
+     *
+     * @param array $user_row User Row
+     *
+     * @return void
+     */
+    private function displayLoginErrors($user_row)
+    {
+        if ($user_row['user_id'] != $_SESSION['user_id'] && !defined('IN_LOGIN')) {
+            Functions::redirect(SYSTEM_ROOT);
+        }
+
+        if (!password_verify(($user_row['user_password'] . "-" . SECRETWORD), $_SESSION['user_password']) && !defined('IN_LOGIN')) {
+            Functions::redirect(SYSTEM_ROOT);
+        }
+
+        if ($user_row['user_banned'] > 0) {
+            $core = new Language();
+            $ci_lang = $core->loadLang('game/global', true);
+
+            $parse = $ci_lang->language;
+            $parse['banned_until'] = Timing::formatExtendedDate($user_row['user_banned']);
+
+            $template = new Template();
+            die($template->set('home/banned_message', $parse));
+        }
+    }
+
+    /**
      * setPlanetData
      *
      * @return void
@@ -239,7 +265,7 @@ class Users_library
     {
         $this->planet_data = $this->Users_Model->setPlanetData(
             $this->user_data['user_current_planet'],
-            FunctionsLib::readConfig('stat_admin_level')
+            Functions::readConfig('stat_admin_level')
         );
     }
 

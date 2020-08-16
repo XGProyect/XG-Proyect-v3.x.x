@@ -87,7 +87,7 @@ class Preferences extends Controller
         parent::loadModel('game/preferences');
 
         // load Language
-        parent::loadLang('preferences');
+        parent::loadLang('game/preferences');
 
         // Check module access
         Functions::moduleMessage(Functions::isModuleAccesible(self::MODULE_ID));
@@ -358,7 +358,7 @@ class Preferences extends Controller
         if (isset($preferences['new_user_name'])
             && isset($preferences['confirmation_user_password'])
             && $this->preferences->isNickNameChangeAllowed()) {
-            if (sha1($preferences['confirmation_user_password']) == $this->user['user_password']) {
+            if (password_verify($preferences['confirmation_user_password'], $this->user['user_password'])) {
                 $user_name_len = strlen(trim($preferences['new_user_name']));
 
                 if ($user_name_len > 3 && $user_name_len <= 20) {
@@ -390,8 +390,8 @@ class Preferences extends Controller
     {
         if (isset($preferences['current_user_password'])
             && isset($preferences['new_user_password'])) {
-            if (sha1($preferences['current_user_password']) == $this->user['user_password']) {
-                $this->fields_to_update['user_password'] = sha1(trim($preferences['new_user_password']));
+            if (password_verify($preferences['current_user_password'], $this->user['user_password'])) {
+                $this->fields_to_update['user_password'] = Functions::hash(trim($preferences['new_user_password']));
             } else {
                 $this->error = $this->langs->line('pr_error_wrong_password');
             }
@@ -408,7 +408,7 @@ class Preferences extends Controller
     {
         if (isset($preferences['new_user_email'])
             && isset($preferences['confirmation_email_password'])) {
-            if (sha1($preferences['confirmation_email_password']) == $this->user['user_password']) {
+            if (password_verify($preferences['confirmation_email_password'], $this->user['user_password'])) {
                 $user_email_len = strlen(trim($preferences['new_user_email']));
 
                 if ($user_email_len > 4 && $user_email_len <= 64) {

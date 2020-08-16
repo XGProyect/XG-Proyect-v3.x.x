@@ -157,6 +157,9 @@ class Fleet4 extends Controller
         // load Model
         parent::loadModel('game/fleet');
 
+        // load Language
+        parent::loadLang('game/fleet');
+
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
@@ -348,7 +351,7 @@ class Fleet4 extends Controller
             && $this->_target_data['user_authlevel'] >= 1
             && $this->_user['user_authlevel'] == 0) {
             $this->showMessage(
-                $this->getLang()['fl_admins_cannot_be_attacked']
+                $this->langs->line('fl_admins_cannot_be_attacked')
             );
         }
 
@@ -363,7 +366,7 @@ class Fleet4 extends Controller
     private function validateOwnVacations()
     {
         if (parent::$users->isOnVacations($this->_user)) {
-            $this->showMessage($this->getLang()['fl_vacation_mode_active']);
+            $this->showMessage($this->langs->line('fl_vacation_mode_active'));
         }
 
         // set owner
@@ -388,7 +391,7 @@ class Fleet4 extends Controller
         if (isset($this->_target_data)
             && parent::$users->isOnVacations($this->_target_data)
             && $this->_clean_input_data['mission'] != Missions::recycle) {
-            $this->showMessage($this->getLang()['fl_in_vacation_player']);
+            $this->showMessage($this->langs->line('fl_in_vacation_player'));
         }
 
         return true;
@@ -501,7 +504,7 @@ class Fleet4 extends Controller
         if ($data['mission'] == Missions::deploy
             && !$this->_own_planet) {
             $this->showMessage(
-                FormatLib::colorRed($this->getLang()['fl_deploy_only_your_planets'])
+                FormatLib::colorRed($this->langs->line('fl_deploy_only_your_planets'))
             );
         }
 
@@ -512,7 +515,7 @@ class Fleet4 extends Controller
 
             if ($this->_target_data['user_ally_id'] != $this->_user['user_ally_id'] && !$is_buddy) {
                 $this->showMessage(
-                    FormatLib::colorRed($this->getLang()['fl_stay_not_on_enemy'])
+                    FormatLib::colorRed($this->langs->line('fl_stay_not_on_enemy'))
                 );
             }
         }
@@ -524,7 +527,7 @@ class Fleet4 extends Controller
 
             if ($this->_occupied_planet) {
                 $this->showMessage(
-                    FormatLib::colorRed($this->getLang()['fl_planet_populed'])
+                    FormatLib::colorRed($this->langs->line('fl_planet_populed'))
                 );
             }
         }
@@ -534,7 +537,6 @@ class Fleet4 extends Controller
                 or ($target['planet_debris_metal'] == 0
                     && $target['planet_debris_crystal'] == 0
                     && time() > ($target['planet_invisible_start_time'] + DEBRIS_LIFE_TIME))) {
-
                 return false;
             }
         }
@@ -542,9 +544,8 @@ class Fleet4 extends Controller
         if ($data['mission'] == Missions::destroy) {
             if ($this->_own_planet
                 or !$this->_occupied_planet
-                or ($this->getTargetData()['type'] != PlanetTypes::moon)
+                or ($this->getTargetData()['type'] != PlanetTypes::MOON)
                 or !isset($fleet[Ships::ship_deathstar])) {
-
                 return false;
             }
         }
@@ -558,13 +559,13 @@ class Fleet4 extends Controller
 
             if ($max_expeditions <= 0) {
                 $this->showMessage(
-                    FormatLib::colorRed($this->getLang()['fl_expedition_tech_required'])
+                    FormatLib::colorRed($this->langs->line('fl_expedition_tech_required'))
                 );
             }
 
             if ($max_expeditions <= $expeditions) {
                 $this->showMessage(
-                    FormatLib::colorRed($this->getLang()['fl_expedition_fleets_limit'])
+                    FormatLib::colorRed($this->langs->line('fl_expedition_fleets_limit'))
                 );
             }
         } else {
@@ -615,14 +616,14 @@ class Fleet4 extends Controller
             if ($noob->isWeak($user_points, $target_points)
                 && in_array($this->_clean_input_data['mission'], $disallow_weak)) {
                 $this->showMessage(
-                    FormatLib::customColor($this->getLang()['fl_week_player'], 'lime')
+                    FormatLib::customColor($this->langs->line('fl_week_player'), 'lime')
                 );
             }
 
             if ($noob->isStrong($user_points, $target_points)
                 && in_array($this->_clean_input_data['mission'], $disallow_strong)) {
                 $this->showMessage(
-                    FormatLib::colorRed($this->getLang()['fl_strong_player'])
+                    FormatLib::colorRed($this->langs->line('fl_strong_player'))
                 );
             }
         }
@@ -646,7 +647,7 @@ class Fleet4 extends Controller
 
         if ($max_fleets <= $fleets) {
             $this->showMessage(
-                $this->getLang()['fl_no_slots']
+                $this->langs->line('fl_no_slots')
             );
         }
 
@@ -667,7 +668,7 @@ class Fleet4 extends Controller
         if ($metal + $crystal + $deuterium < 1
             && $this->_clean_input_data['mission'] == Missions::transport) {
             $this->showMessage(
-                FormatLib::customColor($this->getLang()['fl_empty_transport'], 'lime')
+                FormatLib::customColor($this->langs->line('fl_empty_transport'), 'lime')
             );
         }
 
@@ -718,13 +719,13 @@ class Fleet4 extends Controller
 
         if (!$stock_valid) {
             $this->showMessage(
-                FormatLib::colorRed($this->getLang()['fl_no_enought_deuterium'] . FormatLib::prettyNumber($consumption))
+                FormatLib::colorRed($this->langs->line('fl_no_enought_deuterium') . FormatLib::prettyNumber($consumption))
             );
         }
 
         if ($storage_needed > $this->_fleet_storage) {
             $this->showMessage(
-                FormatLib::colorRed($this->getLang()['fl_no_enought_cargo_capacity'] . FormatLib::prettyNumber($storage_needed - $this->_fleet_storage))
+                FormatLib::colorRed($this->langs->line('fl_no_enought_cargo_capacity') . FormatLib::prettyNumber($storage_needed - $this->_fleet_storage))
             );
         }
 

@@ -28,7 +28,6 @@ namespace application\core;
  */
 abstract class Controller extends XGPCore
 {
-
     /**
      * Contains the current user data
      *
@@ -51,13 +50,6 @@ abstract class Controller extends XGPCore
     private $objects_list = [];
 
     /**
-     * Contains the whole set of language lines
-     *
-     * @var array
-     */
-    private $langs = [];
-
-    /**
      *
      * @var \Template
      */
@@ -73,7 +65,6 @@ abstract class Controller extends XGPCore
         $this->setUserData();
         $this->setPlanetData();
         $this->setObjects();
-        $this->setLang();
         $this->setTemplate();
     }
 
@@ -105,16 +96,6 @@ abstract class Controller extends XGPCore
     private function setObjects(): void
     {
         $this->objects_list = parent::$objects;
-    }
-
-    /**
-     * Set languages data
-     *
-     * @return void
-     */
-    private function setLang(): void
-    {
-        $this->langs = parent::$lang;
     }
 
     /**
@@ -155,16 +136,6 @@ abstract class Controller extends XGPCore
     protected function getObjects(): Objects
     {
         return $this->objects_list;
-    }
-
-    /**
-     * Return the languages
-     *
-     * @return array
-     */
-    protected function getLang(): array
-    {
-        return $this->langs;
     }
 
     /**

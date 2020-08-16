@@ -25,7 +25,7 @@ use application\libraries\FunctionsLib;
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
- * @version  3.0.0
+ * @version  3.1.0
  */
 class Expedition extends Missions
 {
@@ -45,13 +45,14 @@ class Expedition extends Missions
     private $all_destroyed = false;
 
     /**
-     * __construct
-     *
-     * @return void
+     * Constructor
      */
     public function __construct()
     {
         parent::__construct();
+
+        // load Language
+        parent::loadLang(['game/global', 'game/missions', 'game/expedition', 'game/ships']);
     }
 
     /**
@@ -63,54 +64,54 @@ class Expedition extends Missions
      */
     public function expeditionMission($fleet_row)
     {
-        if ($fleet_row['fleet_mess'] == 0) {
-            if ($fleet_row['fleet_end_stay'] < time()) {
-                $ships_points = $this->setShipsPoints();
-                $ships = FleetsLib::getFleetShipsArray($fleet_row['fleet_array']);
-                $fleet_capacity = 0;
-                $fleet_points = 0;
-                $current_fleet = [];
+        // do mission
+        if (parent::canStartMission($fleet_row)) {
+            $ships_points = $this->setShipsPoints();
+            $ships = FleetsLib::getFleetShipsArray($fleet_row['fleet_array']);
+            $fleet_capacity = 0;
+            $fleet_points = 0;
+            $current_fleet = [];
 
-                foreach ($ships as $id => $count) {
-                    $current_fleet[$id] = $count;
-                    $fleet_capacity += $this->pricelist[$id]['capacity'] * $count;
-                    $fleet_points += ($count * $ships_points[$id]);
-                }
+            foreach ($ships as $id => $count) {
+                $current_fleet[$id] = $count;
+                $fleet_capacity += $this->pricelist[$id]['capacity'] * $count;
+                $fleet_points += ($count * $ships_points[$id]);
+            }
 
-                // GET A NUMBER BETWEEN 0 AND 10 RANDOMLY
-                $this->hazard = mt_rand(0, 10);
+            // GET A NUMBER BETWEEN 0 AND 10 RANDOMLY
+            $this->hazard = mt_rand(0, 10);
 
-                // EXPEDITION RESULT "HAZARD"
-                switch ($this->hazard) {
-                    // BLACKHOLE
-                    case (($this->hazard < 3)):
-                        $this->hazardBlackhole($fleet_row, $current_fleet);
-                        break;
-                    // NOTHING
-                    case (($this->hazard == 3)):
-                        $this->hazardNothing($fleet_row);
-                        break;
-                    // RESOURCES
-                    case ((($this->hazard >= 4) && ($this->hazard < 7))):
-                        $this->hazardResources($fleet_row, $fleet_capacity);
-                        break;
-                    // NOTHING
-                    case (($this->hazard == 7)):
-                        $this->hazardNothing($fleet_row);
-                        break;
-                    // SHIPS
-                    case ((($this->hazard >= 8) && ($this->hazard < 11))):
-                        $this->hazardShips($fleet_row, $fleet_points, $current_fleet);
-                        break;
-                }
+            // EXPEDITION RESULT "HAZARD"
+            switch ($this->hazard) {
+                // BLACKHOLE
+                case (($this->hazard < 3)):
+                    $this->hazardBlackhole($fleet_row, $current_fleet);
+                    break;
+                // NOTHING
+                case (($this->hazard == 3)):
+                    $this->hazardNothing($fleet_row);
+                    break;
+                // RESOURCES
+                case ((($this->hazard >= 4) && ($this->hazard < 7))):
+                    $this->hazardResources($fleet_row, $fleet_capacity);
+                    break;
+                // NOTHING
+                case (($this->hazard == 7)):
+                    $this->hazardNothing($fleet_row);
+                    break;
+                // SHIPS
+                case ((($this->hazard >= 8) && ($this->hazard < 11))):
+                    $this->hazardShips($fleet_row, $fleet_points, $current_fleet);
+                    break;
             }
         }
 
-        if ($fleet_row['fleet_end_time'] < time()) {
+        // complete mission
+        if (parent::canCompleteMission($fleet_row)) {
             if (!$this->all_destroyed) {
                 $this->expeditionMessage(
                     $fleet_row['fleet_owner'],
-                    $this->langs['sys_expe_back_home'],
+                    $this->langs->line('exp_back_home'),
                     $fleet_row['fleet_end_time']
                 );
 
@@ -138,7 +139,7 @@ class Expedition extends Missions
 
             $this->expeditionMessage(
                 $fleet_row['fleet_owner'],
-                $this->langs['sys_expe_blackholl_2'],
+                $this->langs->line('exp_blackholl_2'),
                 $fleet_row['fleet_end_stay']
             );
 
@@ -158,7 +159,7 @@ class Expedition extends Missions
             if (!$this->all_destroyed) {
                 $this->expeditionMessage(
                     $fleet_row['fleet_owner'],
-                    $this->langs['sys_expe_blackholl_1'],
+                    $this->langs->line('exp_blackholl_1'),
                     $fleet_row['fleet_end_stay']
                 );
 
@@ -169,7 +170,7 @@ class Expedition extends Missions
             } else {
                 $this->expeditionMessage(
                     $fleet_row['fleet_owner'],
-                    $this->langs['sys_expe_blackholl_2'],
+                    $this->langs->line('exp_blackholl_2'),
                     $fleet_row['fleet_end_stay']
                 );
 
@@ -189,7 +190,7 @@ class Expedition extends Missions
     {
         $this->expeditionMessage(
             $fleet_row['fleet_owner'],
-            $this->langs['sys_expe_nothing_' . mt_rand(1, 2)],
+            $this->langs->line('exp_nothing_' . mt_rand(1, 6)),
             $fleet_row['fleet_end_stay']
         );
 
@@ -230,15 +231,15 @@ class Expedition extends Missions
             ]);
 
             $message = sprintf(
-                $this->langs['sys_expe_found_goods'],
+                $this->langs->line('exp_found_goods'),
                 FormatLib::prettyNumber($found_metal),
-                $this->langs['Metal'],
+                $this->langs->line('metal'),
                 FormatLib::prettyNumber($found_crystal),
-                $this->langs['Crystal'],
+                $this->langs->line('crystal'),
                 FormatLib::prettyNumber($found_deuterium),
-                $this->langs['Deuterium'],
+                $this->langs->line('deuterium'),
                 FormatLib::prettyNumber($found_darkmatter),
-                $this->langs['Darkmatter']
+                $this->langs->line('dark_matter')
             );
 
             $this->expeditionMessage($fleet_row['fleet_owner'], $message, $fleet_row['fleet_end_stay']);
@@ -281,7 +282,7 @@ class Expedition extends Missions
         if ($found_ship != null) {
             foreach ($found_ship as $ship => $count) {
                 if ($count != 0) {
-                    $found_ship_message .= $count . " " . $this->langs['tech'][$ship] . ",";
+                    $found_ship_message .= $this->langs->line($this->resource[$ship]) . ": " . $count . "<br>";
                 }
             }
         }
@@ -291,7 +292,7 @@ class Expedition extends Missions
             'fleet_id' => $fleet_row['fleet_id'],
         ]);
 
-        $message = $this->langs['sys_expe_found_ships'] . $found_ship_message;
+        $message = sprintf($this->langs->line('exp_new_ships_' . mt_rand(1, 5)), $found_ship_message);
 
         $this->expeditionMessage($fleet_row['fleet_owner'], $message, $fleet_row['fleet_end_stay']);
     }
@@ -340,8 +341,8 @@ class Expedition extends Missions
             '',
             $time,
             5,
-            $this->langs['sys_mess_qg'],
-            $this->langs['sys_expe_report'],
+            $this->langs->line('mi_fleet_command'),
+            $this->langs->line('exp_report_title'),
             $message
         );
     }

@@ -14,8 +14,7 @@
 namespace application\controllers\adm;
 
 use application\core\Controller;
-use application\core\Database;
-use application\libraries\adm\AdministrationLib;
+use application\libraries\adm\AdministrationLib as Administration;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
 
@@ -43,28 +42,22 @@ class Repair extends Controller
         parent::__construct();
 
         // check if session is active
-        AdministrationLib::checkSession();
+        Administration::checkSession();
+
+        // load Model
+        parent::loadModel('adm/repair');
 
         // load Language
         parent::loadLang(['adm/global', 'adm/repair']);
 
-        $this->_db = new Database();
         $this->current_user = parent::$users->getUserData();
 
-        // Check if the user is allowed to access
-        if (AdministrationLib::haveAccess($this->current_user['user_authlevel']) && AdministrationLib::authorization($this->current_user['user_authlevel'], 'config_game') == 1) {
-            $this->buildPage($this->current_user);
-        } else {
-            die(AdministrationLib::noAccessMessage($this->langs->line('ge_no_permissions')));
+        // check if the user is allowed to access
+        if (!Administration::authorization(__CLASS__, (int) $this->current_user['user_authlevel'])) {
+            die(Administration::noAccessMessage($this->langs->line('no_permissions')));
         }
-    }
 
-    /**
-     * Destructor
-     */
-    public function __destruct()
-    {
-        $this->_db->closeConnection();
+        $this->buildPage();
     }
 
     /**
@@ -75,66 +68,56 @@ class Repair extends Controller
     private function buildPage()
     {
         $parse = $this->langs->language;
-        $template = parent::$page->getTemplate('adm/repair_row_view');
-        $template_head = parent::$page->getTemplate('adm/repair_row_head_view');
-        $result_tpl = parent::$page->getTemplate('adm/repair_result_view');
-        $result_tpl_head = parent::$page->getTemplate('adm/repair_result_head_view');
         $parse['alert'] = '';
 
         if (!$_POST) {
-            $tables = $this->_db->query(
-                "SELECT
-                    `table_name`,
-                    `data_length`,
-                    `index_length`,
-                    `data_free`
-                FROM information_schema.TABLES
-                WHERE table_schema = '" . DB_NAME . "';"
-            );
+            $tables = $this->Repair_Model->getAllTables();
 
             $parse['display'] = 'block';
-            $parse['head'] = parent::$page->parseTemplate($template_head, $this->langs->language);
+            $parse['head'] = $this->getTemplate()->set('adm/repair_row_head_view', $this->langs->language);
             $parse['tables'] = '';
+            $parse['np_general'] = '';
+            $parse['results'] = '';
 
-            while ($row = $this->_db->fetchArray($tables)) {
-
+            foreach ($tables as $row) {
                 $row['row'] = $row['table_name'];
                 $row['data'] = FormatLib::prettyBytes($row['data_length']);
                 $row['index'] = FormatLib::prettyBytes($row['index_length']);
                 $row['overhead'] = FormatLib::prettyBytes($row['data_free']);
                 $row['status_style'] = 'text-info';
 
-                $parse['tables'] .= parent::$page->parseTemplate(
-                    $template, array_merge($row, $this->langs->language)
+                $parse['tables'] .= $this->getTemplate()->set(
+                    'adm/repair_row_view',
+                    array_merge(
+                        $row,
+                        $this->langs->language
+                    )
                 );
             }
         } else {
-
             $parse['display'] = 'none';
-            $parse['head'] = parent::$page->parseTemplate($result_tpl_head, $this->langs->language);
+            $parse['head'] = $this->getTemplate()->set('adm/repair_result_head_view', $this->langs->language);
 
             if (isset($_POST['table']) && is_array($_POST['table'])) {
-
                 $result_rows = '';
 
                 foreach ($_POST['table'] as $key => $table) {
-
                     $parse['row'] = $table;
 
-                    $this->_db->query("CHECK TABLE " . $table);
+                    $this->Repair_Model->checkTable($table);
                     $parse['result'] = $this->langs->line('db_check_ok');
-                    $result_rows .= parent::$page->parseTemplate($result_tpl, $parse);
+                    $result_rows .= $this->getTemplate()->set('adm/repair_result_view', $parse);
 
                     if (isset($_POST['Optimize']) && $_POST['Optimize'] == 'yes') {
-                        $this->_db->query("OPTIMIZE TABLE " . $table);
+                        $this->Repair_Model->optimizeTable($table);
                         $parse['result'] = $this->langs->line('db_opt');
-                        $result_rows .= parent::$page->parseTemplate($result_tpl, $parse);
+                        $result_rows .= $this->getTemplate()->set('adm/repair_result_view', $parse);
                     }
 
                     if (isset($_POST['Repair']) && $_POST['Repair'] == 'yes') {
-                        $this->_db->query("REPAIR TABLE " . $table);
+                        $this->Repair_Model->repairTable($table);
                         $parse['result'] = $this->langs->line('db_rep');
-                        $result_rows .= parent::$page->parseTemplate($result_tpl, $parse);
+                        $result_rows .= $this->getTemplate()->set('adm/repair_result_view', $parse);
                     }
                 }
 
@@ -145,8 +128,9 @@ class Repair extends Controller
         }
 
         parent::$page->displayAdmin(
-            parent::$page->parseTemplate(
-                parent::$page->getTemplate('adm/repair_view'), $parse
+            $this->getTemplate()->set(
+                'adm/repair_view',
+                $parse
             )
         );
     }

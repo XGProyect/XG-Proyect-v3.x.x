@@ -11,14 +11,17 @@
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
+use application\core\common;
 use application\libraries\FunctionsLib;
 
-define('IN_GAME', true);
 define('XGP_ROOT', realpath(dirname(__DIR__)) . DIRECTORY_SEPARATOR);
 
 require XGP_ROOT . 'application' . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'common.php';
 
-$hooks->call_hook('before_page');
+$system = new Common;
+$system->bootUp('game');
+
+$system->getHooks()->call_hook('before_page');
 
 $page = filter_input(INPUT_GET, 'page');
 
@@ -46,7 +49,7 @@ $file_name = XGP_ROOT . GAME_PATH . $page . '.php';
 if (isset($page)) {
     // logout
     if ($page == 'logout') {
-        $session->delete();
+        $system->getSession()->delete();
         FunctionsLib::redirect(SYSTEM_ROOT);
     }
 
@@ -61,7 +64,7 @@ if (isset($page)) {
 }
 
 // call hooks
-if (!$hooks->call_hook('new_page')) {
+if (!$system->getHooks()->call_hook('new_page')) {
     FunctionsLib::redirect('game.php?page=overview');
 }
 

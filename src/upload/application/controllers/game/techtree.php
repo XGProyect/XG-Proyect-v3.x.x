@@ -66,6 +66,9 @@ class Techtree extends Controller
         // check if session is active
         parent::$users->checkSession();
 
+        // load Language
+        parent::loadLang(['game/global', 'game/constructions', 'game/defenses', 'game/ships', 'game/technologies']);
+
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
@@ -99,8 +102,8 @@ class Techtree extends Controller
             'list_of_constructions' => $this->buildBlock('build'),
             'list_of_research' => $this->buildBlock('tech'),
             'list_of_ships' => $this->buildBlock('fleet'),
-            'list_of_missiles' => $this->buildBlock('missiles'),
             'list_of_defenses' => $this->buildBlock('defenses'),
+            'list_of_missiles' => $this->buildBlock('missiles'),
         ];
 
         // display the page
@@ -108,7 +111,7 @@ class Techtree extends Controller
             $this->getTemplate()->set(
                 'game/techtree_view',
                 array_merge(
-                    $this->getLang(), $page
+                    $this->langs->language, $page
                 )
             )
         );
@@ -127,10 +130,9 @@ class Techtree extends Controller
         $list_of_objects = [];
 
         foreach ($objects as $object) {
-
             $list_of_objects[] = [
                 'tt_info' => $object,
-                'tt_name' => $this->getLang()['tech'][$object],
+                'tt_name' => $this->langs->language[$this->_resource[$object]],
                 'tt_detail' => '',
                 'requirements' => join('<br/>', $this->getRequirements($object)),
             ];
@@ -151,7 +153,6 @@ class Techtree extends Controller
         $list_of_requirements = [];
 
         if (!isset($this->_requirements[$object])) {
-
             return $list_of_requirements;
         }
 
@@ -169,7 +170,7 @@ class Techtree extends Controller
 
             $list_of_requirements[] = FormatLib::{'color' . $color}(
                 FormatLib::formatLevel(
-                    $this->getLang()['tech'][$requirement], $this->getLang()['tt_lvl'], $level
+                    $this->langs->language[$this->_resource[$requirement]], $this->langs->line('level'), $level
                 )
             );
 

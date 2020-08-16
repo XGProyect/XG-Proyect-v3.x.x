@@ -5,7 +5,7 @@
     <div class="hero-unit">
         <h1>{ins_install_title}</h1>
         <br />
-        <form action="{dis_ins_btn}" method="post">
+        <form action="" method="post">
             <input type="hidden" name="page" value="step1" />
             <div align="left">
                 <h2>{ins_connection_data_title}</h2>

@@ -79,10 +79,10 @@ final class Queue
             $queue = $this->queue;
 
             foreach ($queue as $element_id => $content) {
-                $queue[$element_id] = implode(self::ITEM_SEPARATOR, $content);
+                $queue[$element_id] = join(self::ITEM_SEPARATOR, $content);
             }
 
-            $this->queue = implode(self::QUEUE_SEPARATOR, $queue);
+            $this->queue = join(self::QUEUE_SEPARATOR, $queue);
         }
     }
 

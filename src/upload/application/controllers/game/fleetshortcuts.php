@@ -78,6 +78,9 @@ class Fleetshortcuts extends Controller
         // load Model
         parent::loadModel('game/shortcuts');
 
+        // load Language
+        parent::loadLang(['game/global', 'game/fleet']);
+
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
@@ -173,7 +176,7 @@ class Fleetshortcuts extends Controller
          */
         $page = [
             'shortcuts' => $this->buildShortcuts(),
-            'no_shortcuts' => $this->_shortcuts_count <= 0 ? '<th colspan="2">' . $this->getLang()['fl_no_shortcuts'] . '</th>' : '',
+            'no_shortcuts' => $this->_shortcuts_count <= 0 ? '<th colspan="2">' . $this->langs->line('fl_no_shortcuts') . '</th>' : '',
         ];
 
         // display the page
@@ -181,7 +184,7 @@ class Fleetshortcuts extends Controller
             $this->getTemplate()->set(
                 'shortcuts/shortcuts_view',
                 array_merge(
-                    $this->getLang(),
+                    $this->langs->language,
                     $page
                 )
             )
@@ -198,7 +201,7 @@ class Fleetshortcuts extends Controller
         $shortcuts = $this->_shortcuts->getAllAsArray();
         $list_of_shortcuts = [];
 
-        if (count($shortcuts) > 0) {
+        if ($shortcuts && count($shortcuts) > 0) {
             $set_row = true;
             $shortcut_id = 0;
 
@@ -210,7 +213,7 @@ class Fleetshortcuts extends Controller
                     'shortcut_galaxy' => $shortcut['g'],
                     'shortcut_system' => $shortcut['s'],
                     'shortcut_planet' => $shortcut['p'],
-                    'shortcut_type' => $this->getLang()['planet_type_shortcuts'][$shortcut['pt']],
+                    'shortcut_type' => $this->langs->language['planet_type_short'][$shortcut['pt']],
                     'row_end' => !$set_row ? '</tr>' : '',
                 ];
 
@@ -307,7 +310,7 @@ class Fleetshortcuts extends Controller
             $this->getTemplate()->set(
                 'shortcuts/shortcuts_edit_view',
                 array_merge(
-                    $this->getLang(),
+                    $this->langs->language,
                     $page
                 )
             )
@@ -340,6 +343,7 @@ class Fleetshortcuts extends Controller
                         $this->_shortcuts->deleteById($action);
                     }
                 } else {
+
                     $this->_shortcuts->addNew(
                         $data['name'], $data['galaxy'], $data['system'], $data['planet'], $data['type']
                     );

@@ -17,7 +17,8 @@ declare (strict_types = 1);
 namespace application\controllers\adm;
 
 use application\core\Controller;
-use application\libraries\adm\AdministrationLib;
+use application\libraries\adm\AdministrationLib as Administration;
+use application\libraries\FunctionsLib as Functions;
 
 /**
  * Encrypter Class
@@ -60,7 +61,7 @@ class Encrypter extends Controller
         parent::__construct();
 
         // check if session is active
-        AdministrationLib::checkSession();
+        Administration::checkSession();
 
         // load Language
         parent::loadLang(['adm/global', 'adm/encrypter']);
@@ -68,9 +69,9 @@ class Encrypter extends Controller
         // set data
         $this->user = $this->getUserData();
 
-        // Check if the user is allowed to access
-        if (AdministrationLib::authorization($this->user['user_authlevel'], 'use_tools') != 1) {
-            AdministrationLib::noAccessMessage($this->langs->line('no_permissions'));
+        // check if the user is allowed to access
+        if (!Administration::authorization(__CLASS__, (int) $this->user['user_authlevel'])) {
+            die(Administration::noAccessMessage($this->langs->line('no_permissions')));
         }
 
         // time to do something
@@ -91,7 +92,7 @@ class Encrypter extends Controller
 
         if ($unencrypted) {
             $this->unencrypted = $unencrypted;
-            $this->encrypted = sha1($unencrypted);
+            $this->encrypted = Functions::hash($unencrypted);
         }
     }
 

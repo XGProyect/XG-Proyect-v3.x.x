@@ -13,7 +13,7 @@
  */
 namespace application\models\adm;
 
-use application\core\Database;
+use application\core\Model;
 
 /**
  * Home Class
@@ -25,29 +25,8 @@ use application\core\Database;
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-class Home
+class Home extends Model
 {
-    private $db = null;
-
-    /**
-     * Constructor
-     *
-     * @param Database $db
-     */
-    public function __construct(Database $db)
-    {
-        // use this to make queries
-        $this->db = $db;
-    }
-
-    /**
-     * Destructor
-     */
-    public function __destruct()
-    {
-        $this->db->closeConnection();
-    }
-
     /**
      * Get database version
      *

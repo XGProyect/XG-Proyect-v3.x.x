@@ -17,9 +17,11 @@ declare (strict_types = 1);
 namespace application\controllers\game;
 
 use application\core\Controller;
+use application\helpers\UrlHelper;
 use application\libraries\DevelopmentsLib;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
+use Exception;
 
 /**
  * Empire Class
@@ -59,6 +61,9 @@ class Empire extends Controller
         // load Model
         parent::loadModel('game/empire');
 
+        // load Language
+        parent::loadLang(['game/global', 'game/constructions', 'game/defenses', 'game/technologies', 'game/ships', 'game/empire']);
+
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
@@ -80,7 +85,7 @@ class Empire extends Controller
             $this->getTemplate()->set(
                 'game/empire_view',
                 array_merge(
-                    $this->getLang(),
+                    $this->langs->language,
                     $this->buildBlocks()
                 )
             )
@@ -104,7 +109,7 @@ class Empire extends Controller
 
             // resources data
             foreach (['metal', 'crystal', 'deuterium', 'energy'] as $element) {
-                $empire[$element][] = $this->setResources($planet, $element);
+                $empire[$element . '_row'][] = $this->setResources($planet, $element);
             }
 
             // structures and technologies data
@@ -117,7 +122,7 @@ class Empire extends Controller
 
                 foreach ($this->getObjects()->getObjectsList($element) as $element_id) {
                     if (!isset($empire[$element][$this->getObjects()->getObjects($element_id)])) {
-                        $empire[$element][$this->getObjects()->getObjects($element_id)]['value'] = '<th width="75px">' . (string) $this->getLang()[$this->getObjects()->getObjects($element_id)] . '</th>';
+                        $empire[$element][$this->getObjects()->getObjects($element_id)]['value'] = '<th width="75px">' . (string) $this->langs->line($this->getObjects()->getObjects($element_id)) . '</th>';
                     }
 
                     $empire[$element][$this->getObjects()->getObjects($element_id)]['value'] .= '<th width="75px">' . $this->setStructureData($planet, $source, $element, $element_id) . '</th>';
@@ -170,7 +175,7 @@ class Empire extends Controller
     private function setCoords(array $planet): array
     {
         return [
-            'planet_coords' => FormatLib::prettyCoords($planet['planet_galaxy'], $planet['planet_system'], $planet['planet_planet']),
+            'planet_coords' => FormatLib::prettyCoords((int) $planet['planet_galaxy'], (int) $planet['planet_system'], (int) $planet['planet_planet']),
             'planet_galaxy' => $planet['planet_galaxy'],
             'planet_system' => $planet['planet_system'],
         ];
@@ -243,15 +248,14 @@ class Empire extends Controller
                 $page = 'defense';
                 break;
             default:
-                throw new \Exception('Undefined element type "' . $element . '". Only possible: build, tech, fleet, defenses and missiles.');
+                throw new Exception('Undefined element type "' . $element . '". Only possible: build, tech, fleet, defenses and missiles.');
                 break;
         }
 
         $url = 'game.php?page=' . $page . '&cp=' . $planet['planet_id'] . '&re=0&planettype=' . $planet['planet_type'];
 
-        return FunctionsLib::setUrl(
+        return UrlHelper::setUrl(
             $url,
-            '',
             $source[$this->getObjects()->getObjects($element_id)]
         );
     }

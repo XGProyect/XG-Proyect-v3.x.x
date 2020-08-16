@@ -1,4 +1,7 @@
 <?php
+
+declare (strict_types = 1);
+
 /**
  * Noobs Protection Library
  *
@@ -13,7 +16,6 @@
  */
 namespace application\libraries;
 
-use application\core\Database;
 use application\core\XGPCore;
 
 /**
@@ -24,40 +26,73 @@ use application\core\XGPCore;
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
- * @version  3.0.0
+ * @version  3.1.0
  */
 class NoobsProtectionLib extends XGPCore
 {
-
+    /**
+     * Protection on/off
+     *
+     * @var bool
+     */
     private $protection;
+
+    /**
+     * Minimum amount of points (base points)
+     *
+     * @var int
+     */
     private $protectiontime;
+
+    /**
+     * Protection multiplier
+     *
+     * @var int
+     */
     private $protectionmulti;
+
+    /**
+     * Minimum allowed level
+     *
+     * @var int
+     */
     private $allowed_level;
 
     /**
-     * __construct()
+     * Constructor
      */
     public function __construct()
     {
+        // load model
+        parent::loadModel('libraries/noobsprotectionlib');
 
-        $this->_db = new Database();
-        $configs = FunctionsLib::readConfig('', true);
-
-        $this->protection = $configs['noobprotection'];
-        $this->protectiontime = $configs['noobprotectiontime'];
-        $this->protectionmulti = $configs['noobprotectionmulti'];
-        $this->allowed_level = $configs['stat_admin_level'];
+        // set configs
+        $this->setAllSettings();
     }
 
     /**
-     * isWeak
+     * Set all configs
      *
-     * @param int $current_points Current points
-     * @param int $other_points   Other points
-     *
-     * return boolean
+     * @return void
      */
-    public function isWeak($current_points, $other_points)
+    public function setAllSettings(): void
+    {
+        $configs = $this->Noobsprotectionlib_Model->readAllConfigs();
+
+        $this->protection = (bool) $configs['noobprotection'];
+        $this->protectiontime = (int) $configs['noobprotectiontime'];
+        $this->protectionmulti = (int) $configs['noobprotectionmulti'];
+        $this->allowed_level = (int) $configs['stat_admin_level'];
+    }
+
+    /**
+     * Check if the first compared player is stronger than the second compared player
+     *
+     * @param integer $current_points
+     * @param integer $other_points
+     * @return boolean
+     */
+    public function isWeak(int $current_points, int $other_points): bool
     {
         if ($this->protection) {
             if ($this->protectionmulti == 0) {
@@ -77,14 +112,13 @@ class NoobsProtectionLib extends XGPCore
     }
 
     /**
-     * isStrong
+     * Check if the first compared player is stronger than the second compared player
      *
-     * @param int $current_points Current points
-     * @param int $other_points   Other points
-     *
-     * return boolean
+     * @param integer $current_points
+     * @param integer $other_points
+     * @return boolean
      */
-    public function isStrong($current_points, $other_points)
+    public function isStrong(int $current_points, int $other_points): bool
     {
         if ($this->protection) {
             if ($this->protectionmulti == 0) {
@@ -104,43 +138,26 @@ class NoobsProtectionLib extends XGPCore
     }
 
     /**
-     * returnPoints
+     * Return points for both requested users
      *
-     * @param int $current_user_id Current user id
-     * @param int $other_user_id   Other user id
-     *
-     * return int
+     * @param integer $current_user_id
+     * @param integer $other_user_id
+     * @return array
      */
-    public function returnPoints($current_user_id, $other_user_id)
+    public function returnPoints(int $current_user_id, int $other_user_id): array
     {
-        $user_points = $this->_db->queryFetch(
-            "SELECT
-            (SELECT user_statistic_total_points
-                    FROM " . USERS_STATISTICS . "
-                            WHERE `user_statistic_user_id` = " . $current_user_id . "
-                            ) AS user_points,
-            (SELECT user_statistic_total_points
-                    FROM " . USERS_STATISTICS . "
-                            WHERE `user_statistic_user_id` = " . $other_user_id . "
-                            ) AS target_points"
-        );
-        return $user_points;
+        return $this->Noobsprotectionlib_Model->returnBothPartiesPoints($current_user_id, $other_user_id);
     }
 
     /**
      * Determines if the rank can be shown or not
      *
-     * @param int $user_auth_level User authorization level (0-3)
-     *
+     * @param integer $user_auth_level
      * @return boolean
      */
-    public function isRankVisible($user_auth_level)
+    public function isRankVisible(int $user_auth_level): bool
     {
-        if ($user_auth_level <= $this->allowed_level) {
-            return true;
-        }
-
-        return false;
+        return ($user_auth_level <= $this->allowed_level);
     }
 }
 

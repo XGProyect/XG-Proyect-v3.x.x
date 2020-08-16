@@ -34,6 +34,9 @@ class Media extends Controller
     {
         parent::__construct();
 
+        // load Language
+        parent::loadLang('ajax/media');
+
         // build the page
         $this->buildPage();
     }
@@ -46,7 +49,7 @@ class Media extends Controller
     private function buildPage()
     {
         parent::$page->display(
-            $this->getTemplate()->set('ajax/media_view', $this->getLang()),
+            $this->getTemplate()->set('ajax/media_view', $this->langs->language),
             false,
             '',
             false

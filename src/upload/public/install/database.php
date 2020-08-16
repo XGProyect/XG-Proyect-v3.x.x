@@ -74,7 +74,6 @@ $tables['banned'] = "CREATE TABLE `" . BANNED . "` (
 `banned_id` bigint(11) NOT NULL AUTO_INCREMENT,
 `banned_who` varchar(64) NOT NULL DEFAULT '',
 `banned_theme` text NOT NULL,
-`banned_who2` varchar(64) NOT NULL DEFAULT '',
 `banned_time` int(11) NOT NULL DEFAULT '0',
 `banned_longer` int(11) NOT NULL DEFAULT '0',
 `banned_author` varchar(64) NOT NULL DEFAULT '',
@@ -189,7 +188,7 @@ UNIQUE KEY `language_id` (`language_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 
 $tables['languages_insert'] = "INSERT INTO `" . LANGUAGES . "` (`language_id`, `language_name`) VALUES
-(1, 'Spanish'),
+(1, 'Español'),
 (2, 'English');";
 
 $tables['messages'] = "CREATE TABLE `" . MESSAGES . "` (
@@ -203,7 +202,7 @@ $tables['messages'] = "CREATE TABLE `" . MESSAGES . "` (
 `message_text` text CHARACTER SET utf8,
 `message_read` TINYINT( 1 ) UNSIGNED NOT NULL DEFAULT  '0',
 PRIMARY KEY  (`message_id`)
-) ENGINE=InnoDB;";
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;";
 
 $tables['notes'] = "CREATE TABLE `" . NOTES . "` (
 `note_id` bigint(11) NOT NULL AUTO_INCREMENT,
@@ -244,7 +243,7 @@ $tables['options_insert'] = "INSERT INTO `" . OPTIONS . "` (`option_name`, `opti
 ('noobprotectiontime', '50000'),
 ('noobprotectionmulti', '5'),
 ('modules', '1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;0;1;1'),
-('moderation', '1,1,0,0,1,0;1,1,0,1,1,0;1;'),
+('admin_permissions', '{\"server\":{\"1\":0,\"2\":0,\"3\":1},\"modules\":{\"1\":0,\"2\":0,\"3\":1},\"planets\":{\"1\":0,\"2\":1,\"3\":1},\"registration\":{\"1\":0,\"2\":1,\"3\":1},\"statistics\":{\"1\":0,\"2\":1,\"3\":1},\"premium\":{\"1\":0,\"2\":0,\"3\":1},\"tasks\":{\"1\":0,\"2\":0,\"3\":1},\"errors\":{\"1\":0,\"2\":0,\"3\":1},\"fleets\":{\"1\":1,\"2\":1,\"3\":1},\"messages\":{\"1\":1,\"2\":1,\"3\":1},\"maker\":{\"1\":0,\"2\":1,\"3\":1},\"users\":{\"1\":1,\"2\":1,\"3\":1},\"alliances\":{\"1\":1,\"2\":1,\"3\":1},\"languages\":{\"1\":0,\"2\":0,\"3\":1},\"changelog\":{\"1\":0,\"2\":0,\"3\":1},\"permissions\":{\"1\":0,\"2\":0,\"3\":1},\"backup\":{\"1\":0,\"2\":1,\"3\":1},\"encrypter\":{\"1\":1,\"2\":1,\"3\":1},\"announcement\":{\"1\":0,\"2\":1,\"3\":1},\"ban\":{\"1\":1,\"2\":1,\"3\":1},\"rebuildhighscores\":{\"1\":0,\"2\":1,\"3\":1},\"update\":{\"1\":0,\"2\":0,\"3\":1},\"migrate\":{\"1\":0,\"2\":0,\"3\":1},\"repair\":{\"1\":0,\"2\":0,\"3\":1},\"reset\":{\"1\":0,\"2\":0,\"3\":1}}'),
 ('initial_fields', '163'),
 ('metal_basic_income', '90'),
 ('crystal_basic_income', '45'),
@@ -270,7 +269,8 @@ $tables['options_insert'] = "INSERT INTO `" . OPTIONS . "` (`option_name`, `opti
 ('merchant_base_max_exchange_rate', '1'),
 ('merchant_metal_multiplier', '3'),
 ('merchant_crystal_multiplier', '2'),
-('merchant_deuterium_multiplier', '1');";
+('merchant_deuterium_multiplier', '1'),
+('registration_dark_matter', '0');";
 
 $tables['planets'] = "CREATE TABLE `" . PLANETS . "` (
 `planet_id` bigint(11) NOT NULL AUTO_INCREMENT,

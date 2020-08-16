@@ -20,6 +20,11 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
+            // color pickers
+            $('[name=color-picker]').change(function(){
+                $('[name=text]').css('color', $(this).val());
+            });
+
             // popovers
             $('[data-toggle="popover"]').popover({
                 trigger: 'hover'

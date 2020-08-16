@@ -13,7 +13,7 @@
  */
 namespace application\models\adm;
 
-use application\core\Database;
+use application\core\Model;
 
 /**
  * Login Class
@@ -25,37 +25,15 @@ use application\core\Database;
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-class Login
+class Login extends Model
 {
-    private $db = null;
-
-    /**
-     * Constructor
-     *
-     * @param Database $db
-     */
-    public function __construct(Database $db)
-    {
-        // use this to make queries
-        $this->db = $db;
-    }
-
-    /**
-     * Destructor
-     */
-    public function __destruct()
-    {
-        $this->db->closeConnection();
-    }
-
     /**
      * Get user data to login
      *
      * @param string $user_email
-     * @param string $user_password
      * @return array
      */
-    public function getLoginData(string $user_email, string $user_password): array
+    public function getLoginData(string $user_email): array
     {
         $result = $this->db->queryFetch(
             "SELECT
@@ -64,7 +42,6 @@ class Login
                 `user_password`
             FROM `" . USERS . "`
             WHERE `user_email` = '" . $this->db->escapeValue($user_email) . "'
-                AND `user_password` = '" . sha1($user_password) . "'
                 AND `user_authlevel` >= '1'
             LIMIT 1"
         );

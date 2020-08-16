@@ -17,6 +17,7 @@ declare (strict_types = 1);
 namespace application\controllers\adm;
 
 use application\core\Controller;
+use application\core\enumerators\PlanetTypesEnumerator;
 use application\core\enumerators\UserRanksEnumerator as UserRanks;
 use application\libraries\adm\AdministrationLib as Administration;
 use application\libraries\FormatLib as Format;
@@ -67,9 +68,9 @@ class Maker extends Controller
         // set data
         $this->user = $this->getUserData();
 
-        // Check if the user is allowed to access
-        if (Administration::authorization($this->user['user_authlevel'], 'edit_users') != 1) {
-            Administration::noAccessMessage($this->langs->line('no_permissions'));
+        // check if the user is allowed to access
+        if (!Administration::authorization(__CLASS__, (int) $this->user['user_authlevel'])) {
+            die(Administration::noAccessMessage($this->langs->line('no_permissions')));
         }
 
         // time to do something
@@ -86,7 +87,6 @@ class Maker extends Controller
      */
     private function runAction(): void
     {
-
     }
 
     /**
@@ -171,7 +171,7 @@ class Maker extends Controller
             }
 
             if (isset($_POST['password_check']) && $_POST['password_check']) {
-                $pass = $this->generatePassword();
+                $pass = Functions::generatePassword();
             } else {
                 if (strlen($pass) < 4) {
                     $error .= $this->langs->line('mk_user_invalid_password');
@@ -294,8 +294,7 @@ class Maker extends Controller
             $moon_planet = $this->Maker_Model->checkMoon($planet_id);
 
             if ($moon_planet && is_numeric($planet_id)) {
-                if ($moon_planet['id_moon'] == '' && $moon_planet['planet_type'] == 1 && $moon_planet['planet_destroyed'] == 0) {
-
+                if ($moon_planet['id_moon'] == '' && $moon_planet['planet_type'] == PlanetTypesEnumerator::PLANET && $moon_planet['planet_destroyed'] == 0) {
                     $galaxy = (int) $moon_planet['planet_galaxy'];
                     $system = (int) $moon_planet['planet_system'];
                     $planet = (int) $moon_planet['planet_planet'];
@@ -386,7 +385,7 @@ class Maker extends Controller
             if (isset($_GET['planet']) && $_GET['planet'] > 0) {
                 $combo_rows .= '<option value="' . $planets_row['planet_id'] . '" ' . ($_GET['planet'] == $planets_row['planet_id'] ? 'selected' : '') . ' >' . $planets_row['planet_name'] . ' [' . $planets_row['planet_galaxy'] . ':' . $planets_row['planet_system'] . ':' . $planets_row['planet_planet'] . ']' . '</option>';
             } else {
-                $combo_rows .= '<option value="' . $planets_row['planet_id'] . '">' . $planets_row['planet_name'] . ' ' . Format::prettyCoords($planets_row['planet_galaxy'], $planets_row['planet_system'], $planets_row['planet_planet']) . '</option>';
+                $combo_rows .= '<option value="' . $planets_row['planet_id'] . '">' . $planets_row['planet_name'] . ' ' . Format::prettyCoords((int) $planets_row['planet_galaxy'], (int) $planets_row['planet_system'], (int) $planets_row['planet_planet']) . '</option>';
             }
         }
 

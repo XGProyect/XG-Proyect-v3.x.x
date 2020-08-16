@@ -1,6 +1,6 @@
 <?php
 /**
- * Users_library Model
+ * MissionControlLibrary Model
  *
  * PHP Version 7.1+
  *
@@ -13,10 +13,10 @@
  */
 namespace application\models\libraries;
 
-use application\core\Database;
+use application\core\Model;
 
 /**
- * Users_library Class
+ * MissionControlLibrary Class
  *
  * @category Classes
  * @package  Application
@@ -25,29 +25,8 @@ use application\core\Database;
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-class MissionControlLibrary
+class MissionControlLibrary extends Model
 {
-    private $db = null;
-
-    /**
-     * Constructor
-     *
-     * @param Database $db
-     */
-    public function __construct(Database $db)
-    {
-        // use this to make queries
-        $this->db = $db;
-    }
-
-    /**
-     * Destructor
-     */
-    public function __destruct()
-    {
-        $this->db->closeConnection();
-    }
-
     /**
      * Return a list of all the arriving fleets that are going
      * to be processed at this time.
@@ -57,35 +36,26 @@ class MissionControlLibrary
     public function getArrivingFleets()
     {
         return $this->db->queryFetchAll(
-            "SELECT f.*
-            FROM `" . FLEETS . "` f, `" . FLEETS . "` sf
-            WHERE
-            (
-                (
-                    f.`fleet_start_galaxy` = sf.`fleet_start_galaxy` AND
-                    f.`fleet_start_system` = sf.`fleet_start_system` AND
-                    f.`fleet_start_planet` = sf.`fleet_start_planet` AND
-                    f.`fleet_start_type` = sf.`fleet_start_type`
-                )
-                OR
-                (
-                    f.`fleet_end_galaxy` = sf.`fleet_start_galaxy` AND
-                    f.`fleet_end_system` = sf.`fleet_start_system` AND
-                    f.`fleet_end_planet` = sf.`fleet_start_planet` AND
-                    f.`fleet_end_type`= sf.`fleet_start_type`
-                )
+            "SELECT
+                f.*,
+                sp.`planet_name` AS `planet_start_name`,
+                ep.`planet_name` AS `planet_end_name`
+            FROM `" . FLEETS . "` f
+            LEFT JOIN `" . PLANETS . "` sp
+                ON (sp.`planet_galaxy` = f.`fleet_start_galaxy` AND
+                    sp.`planet_system` = f.`fleet_start_system` AND
+                    sp.`planet_planet` = f.`fleet_start_planet` AND
+                    sp.`planet_type` = f.`fleet_start_type`
             )
-            AND
-            (
-                f.`fleet_start_time` < '" . time() . "'
-                    OR f.`fleet_end_time` < '" . time() . "'
+            LEFT JOIN `" . PLANETS . "` ep
+                ON (ep.`planet_galaxy` = f.`fleet_end_galaxy` AND
+                    ep.`planet_system` = f.`fleet_end_system` AND
+                    ep.`planet_planet` = f.`fleet_end_planet` AND
+                    ep.`planet_type` = f.`fleet_end_type`
             )
-            AND
-            (
-                sf.`fleet_start_time` <= '" . time() . "'
-                    AND sf.`fleet_mess` ='0'
-            )
-            GROUP BY f.`fleet_id`
+            WHERE f.`fleet_start_time` <= '" . time() . "'
+                AND f.`fleet_mess` = '0'
+            GROUP BY f.`fleet_id`, sp.`planet_name`, ep.`planet_name`
             ORDER BY f.`fleet_id` ASC"
         );
     }
@@ -99,34 +69,26 @@ class MissionControlLibrary
     public function getReturningFleets()
     {
         return $this->db->queryFetchAll(
-            "SELECT f.*
-            FROM `" . FLEETS . "` f, `" . FLEETS . "` ef
-            WHERE
-            (
-                (
-                    f.`fleet_start_galaxy` = ef.`fleet_end_galaxy` AND
-                    f.`fleet_start_system` = ef.`fleet_end_system` AND
-                    f.`fleet_start_planet` = ef.`fleet_end_planet` AND
-                    f.`fleet_start_type` = ef.`fleet_end_type`
-                )
-                OR
-                (
-                    f.`fleet_end_galaxy` = ef.`fleet_end_galaxy` AND
-                    f.`fleet_end_system` = ef.`fleet_end_system` AND
-                    f.`fleet_end_planet` = ef.`fleet_end_planet` AND
-                    f.`fleet_end_type`= ef.`fleet_end_type`
-                )
+            "SELECT
+                f.*,
+                sp.`planet_name` AS `planet_start_name`,
+                ep.`planet_name` AS `planet_end_name`
+            FROM `" . FLEETS . "` f
+            LEFT JOIN `" . PLANETS . "` sp
+                ON (sp.`planet_galaxy` = f.`fleet_start_galaxy` AND
+                    sp.`planet_system` = f.`fleet_start_system` AND
+                    sp.`planet_planet` = f.`fleet_start_planet` AND
+                    sp.`planet_type` = f.`fleet_start_type`
             )
-            AND
-            (
-                f.`fleet_start_time` < '" . time() . "'
-                    OR f.`fleet_end_time` < '" . time() . "'
+            LEFT JOIN `" . PLANETS . "` ep
+                ON (ep.`planet_galaxy` = f.`fleet_end_galaxy` AND
+                    ep.`planet_system` = f.`fleet_end_system` AND
+                    ep.`planet_planet` = f.`fleet_end_planet` AND
+                    ep.`planet_type` = f.`fleet_end_type`
             )
-            AND
-            (
-                ef.`fleet_start_time` <= '" . time() . "'
-            )
-            GROUP BY f.`fleet_id`
+            WHERE f.`fleet_end_time` <= '" . time() . "'
+                AND f.`fleet_mess` <> '0'
+            GROUP BY f.`fleet_id`, sp.`planet_name`, ep.`planet_name`
             ORDER BY f.`fleet_id` ASC"
         );
     }

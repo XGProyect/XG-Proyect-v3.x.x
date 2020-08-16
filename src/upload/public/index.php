@@ -12,10 +12,15 @@
  * @version  3.1.0
  */
 
+use Application\core\Common;
+
 define('IN_LOGIN', true);
 define('XGP_ROOT', realpath(dirname(__DIR__)) . DIRECTORY_SEPARATOR);
 
 require XGP_ROOT . 'application' . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'common.php';
+
+$system = new Common;
+$system->bootUp('home');
 
 $page = filter_input(INPUT_GET, 'page');
 

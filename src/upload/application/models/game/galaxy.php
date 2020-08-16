@@ -1,4 +1,7 @@
 <?php
+
+declare (strict_types = 1);
+
 /**
  * Galaxy Model
  *
@@ -13,7 +16,7 @@
  */
 namespace application\models\game;
 
-use application\core\Database;
+use application\core\Model;
 
 /**
  * Galaxy Class
@@ -25,29 +28,8 @@ use application\core\Database;
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-class Galaxy
+class Galaxy extends Model
 {
-    private $db = null;
-
-    /**
-     * Constructor
-     *
-     * @param Database $db
-     */
-    public function __construct(Database $db)
-    {
-        // use this to make queries
-        $this->db = $db;
-    }
-
-    /**
-     * Destructor
-     */
-    public function __destruct()
-    {
-        $this->db->closeConnection();
-    }
-
     /**
      * Get galaxy data by galaxy and system
      *
@@ -144,6 +126,77 @@ class Galaxy
             ORDER BY p.planet_planet;"
         );
     }
+
+    /**
+     * Get amount of fleets that the user has
+     *
+     * @param integer $user_id
+     * @return array
+     */
+    public function countAmountFleetsByUserId(int $user_id): int
+    {
+        return (int) $this->db->queryFetch(
+            "SELECT
+                COUNT(`fleet_id`) AS total_fleets
+            FROM `" . FLEETS . "`
+            WHERE `fleet_owner` = '" . $user_id . "';"
+        )['total_fleets'];
+    }
+
+    /**
+     * Get target user data by coords
+     *
+     * @param integer $galaxy
+     * @param integer $system
+     * @param integer $planet
+     * @param integer $planet_type
+     * @return array|null
+     */
+    public function getTargetUserDataByCoords(int $galaxy, int $system, int $planet, int $planet_type = 1): ?array
+    {
+        return $this->db->queryFetch(
+            "SELECT
+                u.`user_id`,
+                u.`user_onlinetime`,
+                u.`user_authlevel`,
+                pr.`preference_vacation_mode`
+            FROM `" . USERS . "` AS u
+            INNER JOIN `" . PREFERENCES . "` AS pr ON pr.preference_user_id = u.user_id
+            WHERE u.user_id = (
+                SELECT `planet_user_id`
+                FROM `" . PLANETS . "`
+                WHERE planet_galaxy = " . $galaxy . "  AND
+                    planet_system = " . $system . " AND
+                    planet_planet = " . $planet . " AND
+                    planet_type = " . $planet_type . "
+                LIMIT 1
+                )
+            LIMIT 1"
+        );
+    }
+
+    /**
+     * Get planet debris by coordinates
+     *
+     * @param integer $galaxy
+     * @param integer $system
+     * @param integer $planet
+     * @return array|null
+     */
+    public function getPlanetDebrisByCoords(int $galaxy, int $system, int $planet): ?array
+    {
+        return $this->db->queryFetch(
+            "SELECT
+                `planet_invisible_start_time`,
+                `planet_debris_metal`,
+                `planet_debris_crystal`
+            FROM `" . PLANETS . "`
+            WHERE `planet_galaxy` = '" . $galaxy . "'
+                AND `planet_system` = '" . $system . "'
+                AND `planet_planet` = '" . $planet . "'
+                AND `planet_type` = 1;"
+        );
+    }
 }
 
-/* end of banned.php */
+/* end of galaxy.php */

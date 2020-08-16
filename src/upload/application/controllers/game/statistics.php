@@ -14,7 +14,6 @@
 namespace application\controllers\game;
 
 use application\core\Controller;
-use application\core\Database;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
 use application\libraries\TimingLibrary as Timing;
@@ -34,7 +33,6 @@ class Statistics extends Controller
 
     const MODULE_ID = 16;
 
-    private $_lang;
     private $_current_user;
     private $_current_planet;
 
@@ -48,25 +46,19 @@ class Statistics extends Controller
         // check if session is active
         parent::$users->checkSession();
 
+        // load Model
+        parent::loadModel('game/statistics');
+
+        // load Language
+        parent::loadLang(['game/global', 'game/statistics']);
+
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
-        $this->_db = new Database();
-        $this->_lang = parent::$lang;
         $this->_current_user = parent::$users->getUserData();
         $this->_current_planet = parent::$users->getPlanetData();
 
         $this->build_page();
-    }
-
-    /**
-     * method __destruct
-     * param
-     * return close db connection
-     */
-    public function __destruct()
-    {
-        $this->_db->closeConnection();
     }
 
     /**
@@ -76,19 +68,19 @@ class Statistics extends Controller
      */
     private function build_page()
     {
-        $parse = $this->_lang;
+        $parse = $this->langs->language;
         $who = (isset($_POST['who'])) ? $_POST['who'] : ((isset($_GET['who'])) ? $_GET['who'] : 1);
         $type = (isset($_POST['type'])) ? $_POST['type'] : ((isset($_GET['type'])) ? $_GET['type'] : 1);
         $range = (isset($_POST['range'])) ? $_POST['range'] : ((isset($_GET['range'])) ? $_GET['range'] : 1);
 
-        $parse['who'] = "<option value=\"1\"" . (($who == "1") ? " SELECTED" : "") . ">" . $this->_lang['st_player'] . "</option>";
-        $parse['who'] .= "<option value=\"2\"" . (($who == "2") ? " SELECTED" : "") . ">" . $this->_lang['st_alliance'] . "</option>";
+        $parse['who'] = "<option value=\"1\"" . (($who == "1") ? " SELECTED" : "") . ">" . $this->langs->line('st_player') . "</option>";
+        $parse['who'] .= "<option value=\"2\"" . (($who == "2") ? " SELECTED" : "") . ">" . $this->langs->line('st_alliance') . "</option>";
 
-        $parse['type'] = "<option value=\"1\"" . (($type == "1") ? " SELECTED" : "") . ">" . $this->_lang['st_points'] . "</option>";
-        $parse['type'] .= "<option value=\"2\"" . (($type == "2") ? " SELECTED" : "") . ">" . $this->_lang['st_fleets'] . "</option>";
-        $parse['type'] .= "<option value=\"3\"" . (($type == "3") ? " SELECTED" : "") . ">" . $this->_lang['st_researh'] . "</option>";
-        $parse['type'] .= "<option value=\"4\"" . (($type == "4") ? " SELECTED" : "") . ">" . $this->_lang['st_buildings'] . "</option>";
-        $parse['type'] .= "<option value=\"5\"" . (($type == "5") ? " SELECTED" : "") . ">" . $this->_lang['st_defenses'] . "</option>";
+        $parse['type'] = "<option value=\"1\"" . (($type == "1") ? " SELECTED" : "") . ">" . $this->langs->line('st_points') . "</option>";
+        $parse['type'] .= "<option value=\"2\"" . (($type == "2") ? " SELECTED" : "") . ">" . $this->langs->line('st_fleets') . "</option>";
+        $parse['type'] .= "<option value=\"3\"" . (($type == "3") ? " SELECTED" : "") . ">" . $this->langs->line('st_researh') . "</option>";
+        $parse['type'] .= "<option value=\"4\"" . (($type == "4") ? " SELECTED" : "") . ">" . $this->langs->line('st_buildings') . "</option>";
+        $parse['type'] .= "<option value=\"5\"" . (($type == "5") ? " SELECTED" : "") . ">" . $this->langs->line('st_defenses') . "</option>";
 
         $data = $this->ranking_type($type);
         $Order = $data['order'];
@@ -97,70 +89,55 @@ class Statistics extends Controller
         $OldRank = $data['oldrank'];
 
         if ($who == 2) {
-            $MaxAllys = $this->_db->queryFetch("SELECT COUNT(`alliance_id`) AS `count`
-														FROM " . ALLIANCE . ";");
+            $MaxAllys = $this->Statistics_Model->countAlliances();
 
-            $parse['range'] = $this->build_range_list($MaxAllys['count'], $range);
-            $parse['stat_header'] = parent::$page->parseTemplate(parent::$page->getTemplate('stat/stat_alliancetable_header'), $parse);
-            $start = floor($range / 100 % 100) * 100;
-            $query = $this->_db->query(
-                'SELECT s.*,
-                a.alliance_id,
-                a.alliance_tag,
-                a.alliance_name,
-                a.alliance_request_notallow,
-                (SELECT COUNT(user_id) AS `ally_members` FROM `' . USERS . '` WHERE `user_ally_id` = a.`alliance_id`) AS `ally_members`
-                FROM ' . ALLIANCE_STATISTICS . ' AS s
-                INNER JOIN  ' . ALLIANCE . ' AS a ON a.alliance_id = s.alliance_statistic_alliance_id
-                ORDER BY `alliance_statistic_' . $Order . '` DESC, `alliance_statistic_total_rank` ASC
-                LIMIT ' . $start . ',100;'
+            $parse['range'] = $this->build_range_list($MaxAllys, $range);
+            $parse['stat_header'] = $this->getTemplate()->set(
+                'stat/stat_alliancetable_header',
+                $parse
             );
+
+            $start = floor($range / 100 % 100) * 100;
+            $query = $this->Statistics_Model->getAlliances($Order, $start);
 
             $start++;
 
             $parse['stat_date'] = Timing::formatExtendedDate(FunctionsLib::readConfig('stat_last_update'));
             $parse['stat_values'] = "";
-            $StatAllianceTableTPL = parent::$page->getTemplate('stat/stat_alliancetable');
 
-            while ($StatRow = $this->_db->fetchAssoc($query)) {
+            foreach ($query as $StatRow) {
                 $parse['ally_rank'] = $start;
                 $ranking = $StatRow['alliance_statistic_' . $OldRank] - $StatRow['alliance_statistic_' . $Rank];
                 $parse['ally_rankplus'] = $this->rank_difference($ranking);
                 $parse['ally_id'] = $StatRow['alliance_id'];
                 $parse['alliance_name'] = $StatRow['alliance_name'];
                 $parse['ally_members'] = $StatRow['ally_members'];
-                $parse['ally_action'] = $StatRow['alliance_request_notallow'] == 0 ? '<a href="game.php?page=alliance&mode=apply&allyid=' . $StatRow['alliance_id'] . '"><img src="' . DPATH . 'img/m.gif" border="0" title="' . $this->_lang['st_ally_request'] . '" /></a>' : '';
+                $parse['ally_action'] = $StatRow['alliance_request_notallow'] == 1 ? '<a href="game.php?page=alliance&mode=apply&allyid=' . $StatRow['alliance_id'] . '"><img src="' . DPATH . 'img/m.gif" border="0" title="' . $this->langs->line('st_ally_request') . '" /></a>' : '';
                 $parse['ally_points'] = FormatLib::prettyNumber($StatRow['alliance_statistic_' . $Order]);
                 $parse['ally_members_points'] = FormatLib::prettyNumber(floor($StatRow['alliance_statistic_' . $Order] / $StatRow['ally_members']));
-                $parse['stat_values'] .= parent::$page->parseTemplate($StatAllianceTableTPL, $parse);
+                $parse['stat_values'] .= $this->getTemplate()->set(
+                    'stat/stat_alliancetable',
+                    $parse
+                );
+
                 $start++;
             }
         } else {
             $parse['range'] = $this->build_range_list($this->_current_planet['stats_users'], $range);
-            $parse['stat_header'] = parent::$page->parseTemplate(parent::$page->getTemplate('stat/stat_playertable_header'), $parse);
+            $parse['stat_header'] = $this->getTemplate()->set(
+                'stat/stat_playertable_header',
+                $parse
+            );
 
             $start = floor($range / 100 % 100) * 100;
-            $query = $this->_db->query(
-                'SELECT s.*,
-                        u.user_id,
-                        u.user_name,
-                        u.user_ally_id,
-                        a.alliance_name
-                FROM ' . USERS_STATISTICS . ' as s
-                INNER JOIN ' . USERS . ' as u ON u.user_id = s.user_statistic_user_id
-                LEFT JOIN ' . ALLIANCE . ' AS a ON a.alliance_id = u.user_ally_id
-                WHERE `user_authlevel` <= ' . FunctionsLib::readConfig('stat_admin_level') . '
-                ORDER BY `user_statistic_' . $Order . '` DESC, `user_statistic_total_rank` ASC
-                LIMIT ' . $start . ',100;'
-            );
+            $query = $this->Statistics_Model->getUsers($Order, $start);
 
             $start++;
             $parse['stat_date'] = Timing::formatExtendedDate(FunctionsLib::readConfig('stat_last_update'));
             $parse['stat_values'] = "";
             $previusId = 0;
-            $StatPlayerTableTPL = parent::$page->getTemplate('stat/stat_playertable');
 
-            while ($StatRow = $this->_db->fetchAssoc($query)) {
+            foreach ($query as $StatRow) {
                 $parse['player_rank'] = $start;
                 $ranking = $StatRow['user_statistic_' . $OldRank] - $StatRow['user_statistic_' . $Rank];
 
@@ -171,7 +148,7 @@ class Statistics extends Controller
                 }
 
                 if ($StatRow['user_id'] != $this->_current_user['user_id']) {
-                    $parse['player_mes'] = '<a href="game.php?page=chat&playerId=' . $StatRow['user_id'] . '"><img src="' . DPATH . 'img/m.gif" border="0" title="' . $this->_lang['write_message'] . '" /></a>';
+                    $parse['player_mes'] = '<a href="game.php?page=chat&playerId=' . $StatRow['user_id'] . '"><img src="' . DPATH . 'img/m.gif" border="0" title="' . $this->langs->line('write_message') . '" /></a>';
                 } else {
                     $parse['player_mes'] = "";
                 }
@@ -188,12 +165,20 @@ class Statistics extends Controller
 
                 $parse['player_rankplus'] = $this->rank_difference($ranking);
                 $parse['player_points'] = FormatLib::prettyNumber($StatRow['user_statistic_' . $Order]);
-                $parse['stat_values'] .= parent::$page->parseTemplate($StatPlayerTableTPL, $parse);
+                $parse['stat_values'] .= $this->getTemplate()->set(
+                    'stat/stat_playertable',
+                    $parse
+                );
                 $start++;
             }
         }
 
-        parent::$page->display(parent::$page->parseTemplate(parent::$page->getTemplate('stat/stat_body'), $parse));
+        parent::$page->display(
+            $this->getTemplate()->set(
+                'stat/stat_body',
+                $parse
+            )
+        );
     }
 
     /**

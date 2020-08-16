@@ -13,6 +13,7 @@
  */
 namespace application\libraries;
 
+use application\core\Template;
 use application\core\XGPCore;
 
 /**
@@ -27,6 +28,15 @@ use application\core\XGPCore;
  */
 class DevelopmentsLib extends XGPCore
 {
+    /**
+     * Return a new instance of Template
+     *
+     * @return Template
+     */
+    public static function getTemplate(): Template
+    {
+        return new Template;
+    }
 
     /**
      * setBuildingPage
@@ -152,30 +162,26 @@ class DevelopmentsLib extends XGPCore
      * @return string
      */
     public static function formatedDevelopmentPrice(
-        $current_user, $current_planet, $element, $userfactor = true, $level = false
+        $current_user, $current_planet, $element, $lang, $userfactor = true, $level = false
     ) {
         $resource = parent::$objects->getObjects();
         $pricelist = parent::$objects->getPrice();
-        $lang = parent::$lang;
 
         if ($userfactor && ($level === false)) {
-
             $level = (isset($current_planet[$resource[$element]])) ? $current_planet[$resource[$element]] : $current_user[$resource[$element]];
         }
 
         $is_buyeable = true;
-        $text = $lang['fgp_require'];
+        $text = $lang->line('require');
         $array = [
-            'metal' => $lang['Metal'],
-            'crystal' => $lang['Crystal'],
-            'deuterium' => $lang['Deuterium'],
-            'energy_max' => $lang['Energy'],
+            'metal' => $lang->line('metal'),
+            'crystal' => $lang->line('crystal'),
+            'deuterium' => $lang->line('deuterium'),
+            'energy_max' => $lang->line('energy'),
         ];
 
         foreach ($array as $res_type => $ResTitle) {
-
             if (isset($pricelist[$element][$res_type]) && $pricelist[$element][$res_type] != 0) {
-
                 $text .= $ResTitle . ": ";
 
                 if ($userfactor) {
@@ -199,7 +205,6 @@ class DevelopmentsLib extends XGPCore
                     $text .= "<span class=\"noresources\">" . FormatLib::prettyNumber($cost) . "</span></t></b> ";
                     $is_buyeable = false;
                 } else {
-
                     $text .= "<b style=\"color:lime;\">" . FormatLib::prettyNumber($cost) . "</b> ";
                 }
             }
@@ -232,13 +237,11 @@ class DevelopmentsLib extends XGPCore
         }
 
         if (in_array($element, $reslist['build'])) {
-
             $cost_metal = floor($pricelist[$element]['metal'] * pow($pricelist[$element]['factor'], $level));
             $cost_crystal = floor($pricelist[$element]['crystal'] * pow($pricelist[$element]['factor'], $level));
             $time = (($cost_crystal + $cost_metal) / FunctionsLib::readConfig('game_speed')) * (1 / ($current_planet[$resource['14']] + 1)) * pow(0.5, $current_planet[$resource['15']]);
             $time = floor(($time * 60 * 60));
         } elseif (in_array($element, $reslist['tech'])) {
-
             $cost_metal = floor($pricelist[$element]['metal'] * pow($pricelist[$element]['factor'], $level));
             $cost_crystal = floor($pricelist[$element]['crystal'] * pow($pricelist[$element]['factor'], $level));
             $intergal_lab = $current_user[$resource[123]];
@@ -256,7 +259,6 @@ class DevelopmentsLib extends XGPCore
                 )) ? TECHNOCRATE_SPEED : 0))
             );
         } elseif (in_array($element, $reslist['defense'])) {
-
             $time = (($pricelist[$element]['metal'] + $pricelist[$element]['crystal']) / FunctionsLib::readConfig('game_speed')) * (1 / ($current_planet[$resource['21']] + 1)) * pow(1 / 2, $current_planet[$resource['15']]);
             $time = floor(($time * 60 * 60));
         } elseif (in_array($element, $reslist['fleet'])) {
@@ -278,9 +280,9 @@ class DevelopmentsLib extends XGPCore
      *
      * @return string
      */
-    public static function formatedDevelopmentTime($time)
+    public static function formatedDevelopmentTime($time, $lang_line)
     {
-        return "<br>" . parent::$lang['fgf_time'] . FormatLib::prettyTime($time);
+        return "<br>" . $lang_line . FormatLib::prettyTime($time);
     }
 
     /**
@@ -324,14 +326,15 @@ class DevelopmentsLib extends XGPCore
      *
      * @return string
      */
-    public static function currentBuilding($call_program, $element_id = 0)
+    public static function currentBuilding($call_program, $lang, $element_id = 0)
     {
-        $parse = parent::$lang;
-
         $parse['call_program'] = $call_program;
         $parse['current_page'] = ($element_id != 0) ? DevelopmentsLib::setBuildingPage($element_id) : $call_program;
 
-        return parent::$page->parseTemplate(parent::$page->getTemplate('buildings/buildings_buildlist_script'), $parse);
+        return self::getTemplate()->set(
+            'buildings/buildings_buildlist_script',
+            array_merge($parse, $lang)
+        );
     }
 
     /**
@@ -343,23 +346,21 @@ class DevelopmentsLib extends XGPCore
      *
      * @return void
      */
-    public static function setLevelFormat($level, $element = '', $current_user = '')
+    public static function setLevelFormat($level, $lang, $element = '', $current_user = '')
     {
         $return_level = '';
 
         // check if is base level
         if ($level != 0) {
-
-            $return_level = ' (' . parent::$lang['bd_lvl'] . ' ' . $level . ')';
+            $return_level = ' (' . $lang->line('level') . $level . ')';
         }
 
         // check a commander plus
         switch ($element) {
             case 106:
                 if (OfficiersLib::isOfficierActive($current_user['premium_officier_technocrat'])) {
-
                     $return_level .= FormatLib::strongText(
-                        FormatLib::colorGreen(' +' . TECHNOCRATE_SPY . parent::$lang['bd_spy'])
+                        FormatLib::colorGreen(' +' . TECHNOCRATE_SPY . $lang->line('re_spy'))
                     );
                 }
 
@@ -367,9 +368,8 @@ class DevelopmentsLib extends XGPCore
 
             case 108:
                 if (OfficiersLib::isOfficierActive($current_user['premium_officier_admiral'])) {
-
                     $return_level .= FormatLib::strongText(
-                        FormatLib::colorGreen(' +' . AMIRAL . parent::$lang['bd_commander'])
+                        FormatLib::colorGreen(' +' . AMIRAL . $lang->line('re_commander'))
                     );
                 }
 
@@ -412,14 +412,7 @@ class DevelopmentsLib extends XGPCore
      */
     public static function areFieldsAvailable($current_planet)
     {
-        if ($current_planet['planet_field_current'] < self::maxFields($current_planet)
-        ) {
-
-            return true;
-        } else {
-
-            return false;
-        }
+        return ($current_planet['planet_field_current'] < self::maxFields($current_planet));
     }
 }
 

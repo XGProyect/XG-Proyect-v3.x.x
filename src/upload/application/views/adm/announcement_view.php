@@ -34,6 +34,7 @@
                                                     value="{an_none}" type="text" placeholder="{an_subject}">
                                             </td>
                                             <td width="20%">
+                                                <!--<input class="form-control" name="color-picker" type="color">-->
                                                 <select class="form-control" name="color-picker">
                                                     <option disabled selected>{al_color}</option>
                                                     {colors}

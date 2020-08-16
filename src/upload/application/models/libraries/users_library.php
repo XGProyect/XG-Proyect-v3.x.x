@@ -13,7 +13,8 @@
  */
 namespace application\models\libraries;
 
-use application\core\Database;
+use application\core\Model;
+use application\libraries\FunctionsLib as Functions;
 
 /**
  * Users_library Class
@@ -25,29 +26,8 @@ use application\core\Database;
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-class Users_library
+class Users_library extends Model
 {
-    private $db = null;
-
-    /**
-     * Constructor
-     *
-     * @param Database $db
-     */
-    public function __construct(Database $db)
-    {
-        // use this to make queries
-        $this->db = $db;
-    }
-
-    /**
-     * Destructor
-     */
-    public function __destruct()
-    {
-        $this->db->closeConnection();
-    }
-
     /**
      * Get alliance ID
      *
@@ -207,7 +187,7 @@ class Users_library
      *
      * @return array
      */
-    public function setUserDataByUserName($user_name)
+    public function setUserDataByUserId($user_id)
     {
         if (!defined('IN_ADMIN')) {
             return $this->db->queryFetch(
@@ -223,21 +203,22 @@ class Users_library
                         FROM `" . MESSAGES . "`
                         WHERE `message_receiver` = u.`user_id` AND `message_read` = 0
                     ) AS `new_message`
-                FROM " . USERS . " AS u
-                INNER JOIN " . PREFERENCES . " AS pr ON pr.preference_user_id = u.user_id
-                INNER JOIN " . USERS_STATISTICS . " AS usul ON usul.user_statistic_user_id = u.user_id
-                INNER JOIN " . PREMIUM . " AS pre ON pre.premium_user_id = u.user_id
-                INNER JOIN " . RESEARCH . " AS r ON r.research_user_id = u.user_id
-                LEFT JOIN " . ALLIANCE . " AS a ON a.alliance_id = u.user_ally_id
-                WHERE (u.user_name = '" . $this->db->escapeValue($user_name) . "')
+                FROM `" . USERS . "` AS u
+                INNER JOIN `" . PREFERENCES . "` AS pr ON pr.preference_user_id = u.user_id
+                INNER JOIN `" . USERS_STATISTICS . "` AS usul ON usul.user_statistic_user_id = u.user_id
+                INNER JOIN `" . PREMIUM . "` AS pre ON pre.premium_user_id = u.user_id
+                INNER JOIN `" . RESEARCH . "` AS r ON r.research_user_id = u.user_id
+                LEFT JOIN `" . ALLIANCE . "` AS a ON a.alliance_id = u.user_ally_id
+                WHERE (u.`user_id` = '" . (int) $user_id . "')
                 LIMIT 1;"
             );
         }
 
         return $this->db->queryFetch(
-            "SELECT u.*
-            FROM " . USERS . " AS u
-            WHERE (u.user_name = '" . $this->db->escapeValue($user_name) . "')
+            "SELECT
+                u.*
+            FROM `" . USERS . "` AS u
+            WHERE (u.`user_id` = '" . (int) $user_id . "')
             LIMIT 1;"
         );
     }
@@ -359,7 +340,8 @@ class Users_library
     public function createPremium($user_id)
     {
         $this->db->query(
-            "INSERT INTO " . PREMIUM . " SET `premium_user_id` = '" . $user_id . "';"
+            "INSERT INTO `" . PREMIUM . "` (`premium_user_id`, `premium_dark_matter`)
+            VALUES('" . $user_id . "', '" . Functions::readConfig('registration_dark_matter') . "');"
         );
     }
 

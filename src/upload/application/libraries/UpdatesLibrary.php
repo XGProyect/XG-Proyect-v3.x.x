@@ -1,6 +1,6 @@
 <?php
 /**
- * Update Library
+ * Updates Library
  *
  * PHP Version 7.1+
  *
@@ -14,15 +14,20 @@
 namespace application\libraries;
 
 use application\core\enumerators\BuildingsEnumerator;
+use application\core\enumerators\PlanetTypesEnumerator;
+use application\core\Language;
 use application\core\XGPCore;
+use application\helpers\UrlHelper;
 use application\libraries\DevelopmentsLib as Developments;
 use application\libraries\FormatLib as Format;
 use application\libraries\FunctionsLib as Functions;
+use application\libraries\MissionControlLibrary;
 use application\libraries\OfficiersLib as Officiers;
 use application\libraries\ProductionLib as Production;
+use application\libraries\Statistics_library;
 
 /**
- * Update Class
+ * UpdatesLibrary Class
  *
  * @category Classes
  * @package  Application
@@ -144,11 +149,6 @@ class UpdatesLibrary extends XGPCore
      */
     private function updateFleets()
     {
-        // language issues if is not present
-        if (!defined('IN_GAME')) {
-            define('IN_GAME', true);
-        }
-
         // let's start the missions control process
         $mission_control = new MissionControlLibrary();
         $mission_control->arrivingFleets();
@@ -221,7 +221,7 @@ class UpdatesLibrary extends XGPCore
                     }
                 }
 
-                $new_queue = (count($queue_array) == 0) ? 0 : implode(';', $queue_array);
+                $new_queue = (count($queue_array) == 0) ? 0 : join(';', $queue_array);
 
                 $current_planet['planet_b_building'] = 0;
                 $current_planet['planet_b_building_id'] = $new_queue;
@@ -265,7 +265,8 @@ class UpdatesLibrary extends XGPCore
     public static function setFirstElement(&$current_planet, $current_user): void
     {
         $db = Functions::modelLoader('libraries/UpdatesLibrary');
-        $lang = parent::$lang;
+        $lang = new Language;
+        $lang = $lang->loadLang(['game/global', 'game/constructions', 'game/buildings'], true);
         $resource = parent::$objects->getObjects();
 
         if ($current_planet['planet_b_building'] == 0) {
@@ -328,10 +329,10 @@ class UpdatesLibrary extends XGPCore
 
                             $prevData = $element_data[3];
 
-                            $recalculated_queue[$queue_item] = implode(",", $element_data);
+                            $recalculated_queue[$queue_item] = join(",", $element_data);
                         }
 
-                        $new_queue = implode(";", $recalculated_queue);
+                        $new_queue = join(";", $recalculated_queue);
 
                         if ($new_queue == '') {
                             $new_queue = '0';
@@ -339,7 +340,7 @@ class UpdatesLibrary extends XGPCore
 
                         $loop = false;
                     } else {
-                        $element_name = $lang['tech'][$element];
+                        $element_name = $lang->language[$resource[$element]];
 
                         if ($no_more_level == true) {
                             $message = '';
@@ -355,25 +356,24 @@ class UpdatesLibrary extends XGPCore
                             $insufficient = [];
 
                             if ($price['metal'] > $current_planet['planet_metal']) {
-                                $insufficient[] = $lang['Metal'];
+                                $insufficient[] = $lang->line('metal');
                             }
 
                             if ($price['crystal'] > $current_planet['planet_crystal']) {
-                                $insufficient[] = $lang['Crystal'];
+                                $insufficient[] = $lang->line('crystal');
                             }
 
                             if ($price['deuterium'] > $current_planet['planet_deuterium']) {
-                                $insufficient[] = $lang['Deuterium'];
+                                $insufficient[] = $lang->line('deuterium');
                             }
 
                             $message = sprintf(
-                                $lang['sys_building_queue_not_enough_resources'],
-                                $lang['sys_building_queue_' . $build_mode . '_order'],
+                                $lang->line('bd_building_queue_not_enough_resources'),
+                                $lang->line('bd_building_queue_' . $build_mode . '_order'),
                                 $element_name,
                                 $level,
-                                Functions::setUrl(
+                                UrlHelper::setUrl(
                                     'game.php?page=galaxy&mode=3&galaxy=' . $current_planet['planet_galaxy'] . '&system=' . $current_planet['planet_system'],
-                                    '',
                                     $current_planet['planet_name'] . ' ' . Format::prettyCoords(
                                         $current_planet['planet_galaxy'],
                                         $current_planet['planet_system'],
@@ -390,8 +390,8 @@ class UpdatesLibrary extends XGPCore
                                 0,
                                 '',
                                 5,
-                                $lang['sys_building_queue_not_enough_resources_from'],
-                                $lang['sys_building_queue_not_enough_resources_subject'],
+                                $lang->line('bd_building_queue_not_enough_resources_from'),
+                                $lang->line('bd_building_queue_not_enough_resources_subject'),
                                 $message,
                                 true
                             );
@@ -402,7 +402,7 @@ class UpdatesLibrary extends XGPCore
                         foreach ($queue_array as $num => $info) {
                             $fix_ele = explode(",", $info);
                             $fix_ele[3] = $fix_ele[3] - $build_time; // build end time
-                            $queue_array[$num] = implode(",", $fix_ele);
+                            $queue_array[$num] = join(",", $fix_ele);
                         }
 
                         $actual_count = count($queue_array);
@@ -446,6 +446,12 @@ class UpdatesLibrary extends XGPCore
         $game_metal_basic_income = Functions::readConfig('metal_basic_income');
         $game_crystal_basic_income = Functions::readConfig('crystal_basic_income');
         $game_deuterium_basic_income = Functions::readConfig('deuterium_basic_income');
+
+        if ($current_user['preference_vacation_mode'] > 0) {
+            $game_metal_basic_income = 0;
+            $game_crystal_basic_income = 0;
+            $game_deuterium_basic_income = 0;
+        }
 
         $current_planet['planet_metal_max'] = Production::maxStorable($current_planet[$resource[22]]);
         $current_planet['planet_crystal_max'] = Production::maxStorable($current_planet[$resource[23]]);
@@ -524,7 +530,7 @@ class UpdatesLibrary extends XGPCore
             }
         }
 
-        if ($current_planet['planet_type'] == 3) {
+        if ($current_planet['planet_type'] == PlanetTypesEnumerator::MOON) {
             $game_metal_basic_income = 0;
             $game_crystal_basic_income = 0;
             $game_deuterium_basic_income = 0;
@@ -769,4 +775,4 @@ class UpdatesLibrary extends XGPCore
     }
 }
 
-/* end of Update.php */
+/* end of UpdatesLibrary.php */

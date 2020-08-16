@@ -13,7 +13,7 @@
  */
 namespace application\models\game;
 
-use application\core\Database;
+use application\core\Model;
 
 /**
  * Combat Report Class
@@ -25,29 +25,8 @@ use application\core\Database;
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-class Combatreport
+class Combatreport extends Model
 {
-    private $db = null;
-
-    /**
-     * Constructor
-     *
-     * @param Database $db
-     */
-    public function __construct(Database $db)
-    {
-        // use this to make queries
-        $this->db = $db;
-    }
-
-    /**
-     * Destructor
-     */
-    public function __destruct()
-    {
-        $this->db->closeConnection();
-    }
-
     /**
      * Get report by its Id
      *
@@ -55,15 +34,14 @@ class Combatreport
      *
      * @return array
      */
-    public function getReportById($report_id)
+    public function getReportById($report_id): ?array
     {
-        $result[] = $this->db->queryFetch(
-            "SELECT *
+        return $this->db->queryFetch(
+            "SELECT
+                *
             FROM `" . REPORTS . "`
             WHERE `report_rid` = '" . $this->db->escapeValue($report_id) . "';"
         );
-
-        return $result;
     }
 }
 

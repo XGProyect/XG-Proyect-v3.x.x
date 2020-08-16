@@ -14,8 +14,7 @@
 namespace application\controllers\home;
 
 use application\core\Controller;
-use application\core\Database;
-use application\libraries\FunctionsLib;
+use application\libraries\FunctionsLib as Functions;
 
 /**
  * Home Class
@@ -29,140 +28,137 @@ use application\libraries\FunctionsLib;
  */
 class Home extends Controller
 {
-
     /**
-     *
-     * @var array
-     */
-    private $langs;
-
-    /**
-     * __construct
-     *
-     * @return void
+     * Constructor
      */
     public function __construct()
     {
         parent::__construct();
 
-        $this->_db = new Database();
-        $this->langs = parent::$lang;
+        // load Model
+        parent::loadModel('home/home');
 
+        // load Language
+        parent::loadLang('home/home');
+
+        // time to do something
+        $this->runAction();
+
+        // build the page
         $this->buildPage();
     }
 
     /**
-     * Destructor
-     */
-    public function __destruct()
-    {
-        $this->_db->closeConnection();
-    }
-
-    /**
-     * buildPages
+     * Run an action
      *
      * @return void
      */
-    private function buildPage()
+    private function runAction(): void
     {
-        $parse = $this->langs;
+        $login_data = filter_input_array(INPUT_POST, [
+            'login' => FILTER_VALIDATE_EMAIL,
+            'pass' => FILTER_SANITIZE_STRING,
+        ]);
 
-        if ($_POST) {
+        if ($login_data) {
+            $login = $this->Home_Model->getUserWithProvidedCredentials($login_data['login']);
 
-            $login = $this->_db->queryFetch(
-                "SELECT `user_id`, `user_name`, `user_password`, `user_banned`
-                FROM " . USERS . "
-                WHERE `user_email` = '" . $this->_db->escapeValue($_POST['login']) . "'
-                    AND `user_password` = '" . sha1($_POST['pass']) . "'
-                LIMIT 1"
-            );
+            if (password_verify($login_data['pass'], $login['user_password'])) {
+                if (isset($login['banned_longer']) && $login['banned_longer'] <= time()) {
+                    $this->Home_Model->removeBan($login['user_name']);
+                }
 
-            if ($login['user_banned'] <= time()) {
-                $this->removeBan($login['user_name']);
-            }
+                if (parent::$users->userLogin($login['user_id'], $login['user_password'])) {
+                    $this->Home_Model->setUserHomeCurrentPlanet($login['user_id']);
 
-            if ($login) {
-
-                // User login
-                if (parent::$users->userLogin($login['user_id'], $login['user_name'], $login['user_password'])) {
-
-                    // Update current planet
-                    $this->_db->query(
-                        "UPDATE " . USERS . " SET
-                        `user_current_planet` = `user_home_planet_id`
-                        WHERE `user_id` ='" . $login['user_id'] . "'"
-                    );
-
-                    // Redirect to game
-                    FunctionsLib::redirect('game.php?page=overview');
+                    // redirect to game
+                    Functions::redirect('game.php?page=overview');
                 }
             }
 
-            // If login fails
-            FunctionsLib::redirect('index.php');
-        } else {
-            $parse['year'] = date('Y');
-            $parse['version'] = SYSTEM_VERSION;
-            $parse['servername'] = strtr($this->langs['hm_title'], ['%s' => FunctionsLib::readConfig('game_name')]);
-            $parse['game_logo'] = FunctionsLib::readConfig('game_logo');
-            $parse['forum_url'] = FunctionsLib::readConfig('forum_url');
-            $parse['js_path'] = JS_PATH . 'home/';
-            $parse['css_path'] = CSS_PATH . 'home/';
-            $parse['img_path'] = IMG_PATH . 'home/';
-            $parse['base_path'] = SYSTEM_ROOT;
-            $parse['extra_js_error'] = '';
-            $parse['user_name'] = isset($_GET['character']) ? $_GET['character'] : '';
-            $parse['user_email'] = isset($_GET['email']) ? $_GET['email'] : '';
-
-            if (isset($_GET['error']) && $_GET['error'] > 0) {
-
-                switch ($_GET['error']) {
-
-                    case 1:
-                        $div_id = '#username';
-                        $message = $this->langs['hm_username_not_available'];
-                        break;
-
-                    case 2:
-                        $div_id = '#email';
-                        $message = $this->langs['hm_email_not_available'];
-                        break;
-
-                    default:
-                        $div_id = '';
-                        $message = '';
-                        break;
-                }
-
-                $parse['extra_js_error'] = '$.validationEngine.buildPrompt("' . $div_id . '", "' . $message . '", "error");';
-            }
-
-            parent::$page->display(
-                parent::$page->parseTemplate(parent::$page->getTemplate('home/index_body'), $parse), false, '', false
-            );
+            // if login failed
+            Functions::redirect('index.php');
         }
     }
 
     /**
-     * removeBan
-     *
-     * @param string $user_name User name
+     * Build the page
      *
      * @return void
      */
-    private function removeBan($user_name)
+    private function buildPage(): void
     {
-        $this->_db->query(
-            "UPDATE " . USERS . " SET
-            `user_banned` = '0'
-            WHERE `user_name` = '" . $user_name . "' LIMIT 1;"
+        parent::$page->display(
+            $this->getTemplate()->set(
+                'home/index_body',
+                array_merge(
+                    $this->langs->language,
+                    $this->getPageData()
+                )
+            ),
+            false,
+            '',
+            false
         );
+    }
 
-        $this->_db->query(
-            "DELETE FROM " . BANNED . "
-            WHERE `banned_who` = '" . $user_name . "'"
-        );
+    /**
+     * Get the page data to fully parse it
+     *
+     * @return array
+     */
+    private function getPageData(): array
+    {
+        return [
+            'servername' => strtr($this->langs->line('hm_title'), ['%s' => Functions::readConfig('game_name')]),
+            'css_path' => CSS_PATH . 'home/',
+            'js_path' => JS_PATH . 'home/',
+            'game_logo' => Functions::readConfig('game_logo'),
+            'extra_js_error' => $this->getErrors(),
+            'img_path' => IMG_PATH . 'home/',
+            'base_path' => SYSTEM_ROOT,
+            'user_name' => isset($_GET['character']) ? $_GET['character'] : '',
+            'user_email' => isset($_GET['email']) ? $_GET['email'] : '',
+            'forum_url' => Functions::readConfig('forum_url'),
+            'version' => SYSTEM_VERSION,
+            'year' => date('Y'),
+        ];
+    }
+
+    /**
+     * Get the error data
+     *
+     * @return string
+     */
+    private function getErrors(): string
+    {
+        $errors = filter_input(INPUT_GET, 'error', FILTER_VALIDATE_INT, [
+            'options' => [
+                'default' => 0,
+                'min_range' => 1,
+                'max_range' => 2,
+            ],
+        ]);
+
+        switch ($errors) {
+            case 1:
+                $div_id = '#username';
+                $message = $this->langs->line('hm_username_not_available');
+                break;
+
+            case 2:
+                $div_id = '#email';
+                $message = $this->langs->line('hm_email_not_available');
+                break;
+
+            case 0:
+            default:
+                $div_id = '';
+                $message = '';
+                break;
+        }
+
+        return '$.validationEngine.buildPrompt("' . $div_id . '", "' . $message . '", "error");';
     }
 }
 

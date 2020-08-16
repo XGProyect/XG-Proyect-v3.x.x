@@ -17,9 +17,10 @@ declare (strict_types = 1);
 namespace application\controllers\adm;
 
 use application\core\Controller;
-use application\libraries\adm\AdministrationLib;
+use application\libraries\adm\AdministrationLib as Administration;
 use application\libraries\FormatLib as Format;
 use application\libraries\FunctionsLib;
+use JsonException;
 
 /**
  * Home Class
@@ -48,7 +49,7 @@ class Home extends Controller
         parent::__construct();
 
         // check if session is active
-        AdministrationLib::checkSession();
+        Administration::checkSession();
 
         // load Model
         parent::loadModel('adm/home');
@@ -59,9 +60,9 @@ class Home extends Controller
         // set data
         $this->user = $this->getUserData();
 
-        // Check if the user is allowed to access
-        if (!AdministrationLib::haveAccess($this->user['user_authlevel'])) {
-            AdministrationLib::noAccessMessage($this->langs->line('no_permissions'));
+        // check if the user is allowed to access
+        if (!Administration::haveAccess($this->user['user_authlevel'])) {
+            Administration::noAccessMessage($this->langs->line('no_permissions'));
         }
 
         // build the page
@@ -119,7 +120,7 @@ class Home extends Controller
                 $alert[] = $this->langs->line('hm_old_version');
             }
 
-            if (AdministrationLib::installDirExists()) {
+            if (Administration::installDirExists()) {
                 $alert[] = $this->langs->line('hm_install_file_detected');
             }
 
@@ -157,30 +158,37 @@ class Home extends Controller
      */
     private function checkUpdates(): bool
     {
-        if (function_exists('file_get_contents')) {
-            $file_data = @file_get_contents(
-                'https://xgproyect.org/current.php',
-                false,
-                stream_context_create(
-                    ['https' =>
-                        [
-                            'timeout' => 1, // one second
-                        ],
-                    ]
-                )
-            );
+        try {
+            if (function_exists('file_get_contents')) {
+                $file_data = @file_get_contents(
+                    'https://xgproyect.org/current.php',
+                    false,
+                    stream_context_create(
+                        ['https' =>
+                            [
+                                'timeout' => 1, // one second
+                            ],
+                        ]
+                    )
+                );
 
-            if ($file_data) {
-                $system_v = FunctionsLib::readConfig('version');
-                $last_v = @json_decode(
-                    $file_data
-                )->version;
+                if ($file_data) {
+                    $system_v = FunctionsLib::readConfig('version');
+                    $last_v = @json_decode(
+                        $file_data,
+                        false,
+                        512,
+                        JSON_THROW_ON_ERROR
+                    )->version;
 
-                return version_compare($system_v, $last_v, '<');
+                    return version_compare($system_v, $last_v, '<');
+                }
             }
-        }
 
-        return false;
+            return false;
+        } catch (JsonException $e) {
+            return false;
+        }
     }
 
     /**

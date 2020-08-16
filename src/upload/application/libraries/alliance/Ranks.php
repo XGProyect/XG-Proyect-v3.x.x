@@ -15,8 +15,9 @@ namespace application\libraries\alliance;
 
 use application\core\enumerators\AllianceRanksEnumerator as AllianceRanks;
 use application\core\enumerators\SwitchIntEnumerator as SwitchInt;
-use application\libraries\FunctionsLib;
+use application\helpers\StringsHelper;
 use Exception;
+use JsonException;
 
 /**
  * Ranks Class
@@ -51,13 +52,11 @@ class Ranks
     {
         try {
             if (is_array($alliance_ranks)) {
-
                 throw new Exception('JSON Expected!');
             }
 
             $this->setRanks($alliance_ranks);
         } catch (Exception $e) {
-
             die('Caught exception: ' . $e->getMessage() . "\n");
         }
     }
@@ -69,7 +68,13 @@ class Ranks
      */
     private function setRanks($ranks)
     {
-        $this->_ranks = json_decode($ranks, true);
+        try {
+            if (!empty($ranks)) {
+                $this->_ranks = json_decode($ranks, true, 512, JSON_THROW_ON_ERROR);
+            }
+        } catch (JsonException $e) {
+            die('JSON Error - ' . $e->getMessage() . ' on ' . __CLASS__ . ', line: ' . $e->getLine());
+        }
     }
 
     /**
@@ -93,11 +98,10 @@ class Ranks
     {
         try {
             if (empty($name) or is_null($name)) {
-
                 throw new Exception('Name cannot be empty or null');
             }
 
-            $filtered_name = FunctionsLib::escapeString(strip_tags($name));
+            $filtered_name = StringsHelper::escapeString(strip_tags($name));
 
             $this->_ranks[] = [
                 'rank' => $filtered_name,
@@ -116,7 +120,6 @@ class Ranks
 
             return $this->getRanks();
         } catch (Exception $e) {
-
             die('Caught exception: ' . $e->getMessage() . "\n");
         }
     }
@@ -135,12 +138,10 @@ class Ranks
     {
         try {
             if (!isset($this->getRanks()[$this->validateRankId($rank_id)])) {
-
                 throw new Exception('Rank ID doesn\'t exists');
             }
 
             if (!is_array($rights) or count($rights) != 9) {
-
                 throw new Exception('Array of rights is invalid, not an array or not 9 elements');
             }
 
@@ -148,7 +149,6 @@ class Ranks
 
             return $this->getRanks();
         } catch (Exception $e) {
-
             die('Caught exception: ' . $e->getMessage() . "\n");
         }
     }
@@ -184,7 +184,11 @@ class Ranks
      */
     public function getAllRanksAsJsonString()
     {
-        return json_encode($this->_ranks);
+        try {
+            return json_encode($this->_ranks, JSON_THROW_ON_ERROR);
+        } catch (JsonException $e) {
+            die('JSON Error - ' . $e->getMessage() . ' on ' . __CLASS__ . ', line: ' . $e->getLine());
+        }
     }
 
     /**
@@ -221,12 +225,10 @@ class Ranks
     private function validateRankId($rank_id)
     {
         if ($rank_id < 0) {
-
             return 0;
         }
 
         if ($rank_id > count($this->_ranks)) {
-
             return count($this->_ranks) - 1;
         }
 

@@ -17,6 +17,7 @@ declare (strict_types = 1);
 namespace application\controllers\adm;
 
 use application\core\Controller;
+use application\helpers\UrlHelper;
 use application\libraries\adm\AdministrationLib as Administration;
 use application\libraries\FormatLib as Format;
 use application\libraries\FunctionsLib as Functions;
@@ -67,15 +68,18 @@ class Server extends Controller
         // check if session is active
         Administration::checkSession();
 
+        // load Model
+        parent::loadModel('adm/server');
+
         // load Language
         parent::loadLang(['adm/global', 'adm/server']);
 
         // set data
         $this->user = $this->getUserData();
 
-        // Check if the user is allowed to access
-        if (Administration::authorization($this->user['user_authlevel'], 'config_game') != 1) {
-            Administration::noAccessMessage($this->langs->line('no_permissions'));
+        // check if the user is allowed to access
+        if (!Administration::authorization(__CLASS__, (int) $this->user['user_authlevel'])) {
+            die(Administration::noAccessMessage($this->langs->line('no_permissions')));
         }
 
         // time to do something
@@ -136,7 +140,7 @@ class Server extends Controller
 
         // FORUM LINK
         if (isset($_POST['forum_url']) && $_POST['forum_url'] != '') {
-            $this->game_config['forum_url'] = Functions::prepUrl($_POST['forum_url']);
+            $this->game_config['forum_url'] = UrlHelper::prepUrl($_POST['forum_url']);
         }
 
         // ACTIVATE SERVER
@@ -226,7 +230,7 @@ class Server extends Controller
      */
     private function buildPage(): void
     {
-        $this->game_config = Functions::readConfig('', true);
+        $this->game_config = $this->Server_Model->readAllConfigs();
         $parse = $this->langs->language;
         $parse['alert'] = '';
 
@@ -234,26 +238,8 @@ class Server extends Controller
             // CHECK BEFORE SAVE
             $this->runAction();
 
-            Functions::updateConfig('game_name', $this->game_config['game_name']);
-            Functions::updateConfig('game_logo', $this->game_config['game_logo']);
-            Functions::updateConfig('lang', $this->game_config['lang']);
-            Functions::updateConfig('game_speed', $this->game_config['game_speed']);
-            Functions::updateConfig('fleet_speed', $this->game_config['fleet_speed']);
-            Functions::updateConfig('resource_multiplier', $this->game_config['resource_multiplier']);
-            Functions::updateConfig('admin_email', $this->game_config['admin_email']);
-            Functions::updateConfig('forum_url', $this->game_config['forum_url']);
-            Functions::updateConfig('reg_enable', $this->game_config['reg_enable']);
-            Functions::updateConfig('game_enable', $this->game_config['game_enable']);
-            Functions::updateConfig('close_reason', $this->game_config['close_reason']);
-            Functions::updateConfig('date_time_zone', $this->game_config['date_time_zone']);
-            Functions::updateConfig('date_format', $this->game_config['date_format']);
-            Functions::updateConfig('date_format_extended', $this->game_config['date_format_extended']);
-            Functions::updateConfig('adm_attack', $this->game_config['adm_attack']);
-            Functions::updateConfig('fleet_cdr', $this->game_config['fleet_cdr']);
-            Functions::updateConfig('defs_cdr', $this->game_config['defs_cdr']);
-            Functions::updateConfig('noobprotection', $this->game_config['noobprotection']);
-            Functions::updateConfig('noobprotectiontime', $this->game_config['noobprotectiontime']);
-            Functions::updateConfig('noobprotectionmulti', $this->game_config['noobprotectionmulti']);
+            // update all the settings
+            $this->Server_Model->updateConfigs($this->game_config);
 
             $parse['alert'] = Administration::saveMessage('ok', $this->langs->line('se_all_ok_message'));
         }
@@ -268,12 +254,12 @@ class Server extends Controller
         $parse['forum_url'] = $this->game_config['forum_url'];
         $parse['closed'] = $this->game_config['game_enable'] == 1 ? " checked = 'checked' " : "";
         $parse['close_reason'] = stripslashes($this->game_config['close_reason']);
-        $parse['date_time_zone'] = $this->time_zone_picker();
+        $parse['date_time_zone'] = $this->timeZonePicker();
         $parse['date_format'] = $this->game_config['date_format'];
         $parse['date_format_extended'] = $this->game_config['date_format_extended'];
         $parse['adm_attack'] = $this->game_config['adm_attack'] == 1 ? " checked = 'checked' " : "";
-        $parse['ships'] = $this->percentage_picker($this->game_config['fleet_cdr']);
-        $parse['defenses'] = $this->percentage_picker($this->game_config['defs_cdr']);
+        $parse['ships'] = $this->percentagePicker($this->game_config['fleet_cdr']);
+        $parse['defenses'] = $this->percentagePicker($this->game_config['defs_cdr']);
         $parse['noobprot'] = $this->game_config['noobprotection'] == 1 ? " checked = 'checked' " : "";
         $parse['noobprot2'] = $this->game_config['noobprotectiontime'];
         $parse['noobprot3'] = $this->game_config['noobprotectionmulti'];
@@ -284,16 +270,16 @@ class Server extends Controller
     }
 
     /**
-     * method time_zone_picker
+     * method timeZonePicker
      * param
      * return return the select options
      */
-    private function time_zone_picker()
+    private function timeZonePicker()
     {
         $utc = new DateTimeZone('UTC');
         $dt = new DateTime('now', $utc);
         $time_zones = '';
-        $current_time_zone = Functions::readConfig('date_time_zone');
+        $current_time_zone = $this->Server_Model->readConfig('date_time_zone');
 
         // Get the data
         foreach (DateTimeZone::listIdentifiers() as $tz) {
@@ -311,7 +297,7 @@ class Server extends Controller
 
         // Build the combo
         foreach ($time_zones_data as $offset => $tz) {
-            $time_zones .= '<optgroup label="GMT' . $this->format_offset($offset) . '">';
+            $time_zones .= '<optgroup label="GMT' . $this->formatOffset($offset) . '">';
 
             foreach ($tz as $key => $zone) {
                 $time_zones .= '<option value="' . $zone . '" ' . ($current_time_zone == $zone ? ' selected' : '') . ' >' . $zone . '</option>';
@@ -325,11 +311,11 @@ class Server extends Controller
     }
 
     /**
-     * method format_offset
+     * method formatOffset
      * param
      * return return the format offset
      */
-    private function format_offset($offset)
+    private function formatOffset($offset)
     {
         $hours = $offset / 3600;
         $remainder = $offset % 3600;
@@ -351,12 +337,11 @@ class Server extends Controller
      *
      * @return string
      */
-    private function percentage_picker($current_percentage)
+    private function percentagePicker($current_percentage)
     {
         $options = '';
 
         for ($i = 0; $i <= 10; $i++) {
-
             $selected = '';
 
             if ($i * 10 == $current_percentage) {

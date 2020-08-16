@@ -4,6 +4,7 @@ $lang = [
     'pr_sub_title' => 'Everything that involves dark matter can be managed here. From officers to merchants.',
     'pr_general' => 'General',
     'pr_pay_url' => 'Payment URL',
+    'pr_registration_dark_matter' => 'Initial Dark Matter',
     'pr_trader' => 'Resource Market - Exchange resources',
     'pr_trader_price' => 'Price to call the merchant (Dark Matter)',
     'pr_merchant_base_min_exchange_rate' => 'Minimum exchange rate',

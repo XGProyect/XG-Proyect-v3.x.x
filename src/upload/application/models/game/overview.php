@@ -13,7 +13,7 @@
  */
 namespace application\models\game;
 
-use application\core\Database;
+use application\core\Model;
 
 /**
  * Overview Class
@@ -23,31 +23,10 @@ use application\core\Database;
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
- * @version  3.0.2
+ * @version  3.1.0
  */
-class Overview
+class Overview extends Model
 {
-    private $db = null;
-
-    /**
-     * Constructor
-     *
-     * @param Database $db
-     */
-    public function __construct(Database $db)
-    {
-        // use this to make queries
-        $this->db = $db;
-    }
-
-    /**
-     * Destructor
-     */
-    public function __destruct()
-    {
-        $this->db->closeConnection();
-    }
-
     /**
      * Get own fleets
      *
@@ -64,30 +43,43 @@ class Overview
                     po.`planet_name` AS `start_planet_name`,
                     pt.`planet_name` AS `target_planet_name`,
                     uo.`user_name` AS `start_planet_user`,
-                    ut.`user_name` AS `target_planet_user`
+                    ut.`user_name` AS `target_planet_user`,
+                    (
+                        SELECT
+                            GROUP_CONCAT(am.`acs_user_id`)
+                        FROM `" . ACS_MEMBERS . "` am
+                        WHERE am.`acs_group_id` = f.fleet_group
+                    ) AS `acs_members`
                 FROM `" . FLEETS . "` f
                     INNER JOIN `" . USERS . "` uo
                     	ON uo.`user_id` = f.`fleet_owner`
                     LEFT JOIN `" . USERS . "` ut
                     	ON ut.`user_id` = f.`fleet_target_owner`
-                    INNER JOIN `" . PLANETS . "` po
+                    LEFT JOIN `" . ACS . "` acs
                 	ON
                         (
+                            acs.acs_galaxy = f.fleet_end_galaxy AND
+                            acs.acs_system = f.fleet_end_system AND
+                            acs.acs_planet = f.fleet_end_planet AND
+                            acs.acs_planet_type = f.fleet_end_type
+                        )
+                    INNER JOIN `" . PLANETS . "` po
+                	    ON (
                             po.planet_galaxy = f.fleet_start_galaxy AND
                             po.planet_system = f.fleet_start_system AND
                             po.planet_planet = f.fleet_start_planet AND
                             po.planet_type = f.fleet_start_type
-                        )
+                    )
                     LEFT JOIN `" . PLANETS . "` pt
-                	ON
-                        (
+                	    ON (
                             pt.planet_galaxy = f.fleet_end_galaxy AND
                             pt.planet_system = f.fleet_end_system AND
                             pt.planet_planet = f.fleet_end_planet AND
                             pt.planet_type = f.fleet_end_type
-                        )
-                WHERE f.`fleet_owner` = '" . $user_id . "' OR
-                    f.`fleet_target_owner` = '" . $user_id . "'"
+                    )
+                WHERE (f.`fleet_owner` = '" . $user_id . "'
+                    OR f.`fleet_target_owner` = '" . $user_id . "')
+                    OR f.`fleet_group` = acs.`acs_id`"
             );
         }
 

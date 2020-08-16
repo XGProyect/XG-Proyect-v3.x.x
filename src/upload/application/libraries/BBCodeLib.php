@@ -13,6 +13,8 @@
  */
 namespace application\libraries;
 
+use application\helpers\UrlHelper;
+
 /**
  * BBCodeLib Class
  *
@@ -51,7 +53,7 @@ class BBCodeLib
             '/\[color=(.*?)\](.*?)\[\/color\]/is' => '$this->setFontColor(\'\\1\',\'\\2\')',
             '/\[font=(.*?)\](.*?)\[\/font\]/is' => '$this->setFontFamiliy(\'\\1\',\'\\2\')',
             '/\[bg=(.*?)\](.*?)\[\/bg\]/is' => '$this->setBackgroundColor(\'\\1\',\'\\2\')',
-            '/\[size=(.*?)\](.*?)\[\/size\]/is' => '$this->setFontSize(\'\\1\',\'\\2\')'
+            '/\[size=(.*?)\](.*?)\[\/size\]/is' => '$this->setFontSize(\'\\1\',\'\\2\')',
         ];
 
         $string = stripslashes($string);
@@ -59,8 +61,8 @@ class BBCodeLib
         foreach ($bbcodes as $bbcode => $html) {
             $string = preg_replace_callback(
                 $bbcode, function ($matches) use ($html) {
-                return $this->getBbCode($matches, $html);
-            }, $string
+                    return $this->getBbCode($matches, $html);
+                }, $string
             );
         }
 
@@ -81,7 +83,7 @@ class BBCodeLib
 
             $replacements = [
                 '\1' => isset($matches[1]) ? $matches[1] : '',
-                '\2' => isset($matches[2]) ? $matches[2] : ''
+                '\2' => isset($matches[2]) ? $matches[2] : '',
             ];
 
             return eval('return ' . strtr($replace, $replacements) . ';');
@@ -195,12 +197,12 @@ class BBCodeLib
         $title = htmlspecialchars(stripslashes($title), ENT_QUOTES);
         $url = trim($url);
         $exclude = [
-            'data', 'file', 'javascript', 'jar', '#'
+            'data', 'file', 'javascript', 'jar', '#',
         ];
 
         if (in_array(strstr($url, ':', true), $exclude) == false) {
 
-            return '<a  href="' . $url . '" title="' . $title . '">' . $title . '</a>';
+            return UrlHelper::setUrl($url, $title, $title);
         }
     }
 

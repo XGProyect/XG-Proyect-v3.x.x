@@ -17,7 +17,7 @@ declare (strict_types = 1);
 namespace application\controllers\adm;
 
 use application\core\Controller;
-use application\libraries\adm\AdministrationLib;
+use application\libraries\adm\AdministrationLib as Administration;
 use application\libraries\FunctionsLib;
 
 /**
@@ -40,7 +40,7 @@ class Login extends Controller
         parent::__construct();
 
         // check if session is active
-        AdministrationLib::checkSession();
+        Administration::checkSession();
 
         // load Model
         parent::loadModel('adm/login');
@@ -68,10 +68,11 @@ class Login extends Controller
         ]);
 
         if ($login_data) {
-            $login = $this->Login_Model->getLoginData($login_data['inputEmail'], $login_data['inputPassword']);
+            $login = $this->Login_Model->getLoginData($login_data['inputEmail']);
 
             if ($login) {
-                if (AdministrationLib::adminLogin($login['user_id'], $login['user_name'], $login['user_password'])) {
+                if (password_verify($login_data['inputPassword'], $login['user_password'])
+                    && Administration::adminLogin($login['user_id'], $login['user_password'])) {
                     $redirect = filter_input(INPUT_GET, 'redirect', FILTER_SANITIZE_STRING) ?? 'home';
 
                     if ($redirect == '') {
@@ -122,7 +123,7 @@ class Login extends Controller
         $error = filter_input(INPUT_GET, 'error', FILTER_VALIDATE_INT);
 
         if ($error == 1) {
-            return AdministrationLib::saveMessage('error', $this->langs->line('lg_error_wrong_data'), false);
+            return Administration::saveMessage('error', $this->langs->line('lg_error_wrong_data'), false);
         }
 
         return '';

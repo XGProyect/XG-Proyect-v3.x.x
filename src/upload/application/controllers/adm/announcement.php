@@ -45,9 +45,9 @@ class Announcement extends Controller
     private $user;
 
     /**
-     * Contains the alert string
+     * Contains the alert array
      *
-     * @var string
+     * @var array
      */
     private $alerts = [];
 
@@ -70,9 +70,9 @@ class Announcement extends Controller
         // set data
         $this->user = $this->getUserData();
 
-        // Check if the user is allowed to access
-        if (Administration::authorization($this->user['user_authlevel'], 'use_tools') != 1) {
-            Administration::noAccessMessage($this->langs->line('no_permissions'));
+        // check if the user is allowed to access
+        if (!Administration::authorization(__CLASS__, (int) $this->user['user_authlevel'])) {
+            die(Administration::noAccessMessage($this->langs->line('no_permissions')));
         }
 
         // time to do something

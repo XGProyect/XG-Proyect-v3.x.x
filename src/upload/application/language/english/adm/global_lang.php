@@ -7,12 +7,9 @@ $lang = [
         2 => 'Super Operator (SGo)',
         3 => 'Administrator (GA)',
     ],
-
-    // lines below need review
-    'ge_user' => 'Player',
-    'ge_go' => 'Operator (GO)',
-    'ge_sgo' => 'Super Operator (SGo)',
-    'ge_ga' => 'Administrator (GA)',
+    'gn_error_title' => 'Alert!',
+    'gn_warning_title' => 'Warning!',
+    'gn_ok_title' => 'Ok!',
     'ge_yes' => 'YES',
     'ge_no' => 'NO',
 ];

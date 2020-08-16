@@ -29,23 +29,32 @@ use application\libraries\FunctionsLib;
  */
 class Recycle extends Missions
 {
-
     /**
+     * Contains the target planet debris amount
      *
-     * @var string
+     * @var array
      */
-    private $planet_name;
+    private $planet_debris = [
+        'metal' => 0,
+        'crystal' => 0,
+    ];
 
     /**
-     * bbCode function.
+     * Contains the maximum capacity of the recyclers
      *
-     * @param string $string String
-     *
-     * @return void
+     * @var integer
+     */
+    private $recyclers_capacity = 0;
+
+    /**
+     * Constructor
      */
     public function __construct()
     {
         parent::__construct();
+
+        // load Language
+        parent::loadLang(['game/missions', 'game/recycle']);
     }
 
     /**
@@ -74,20 +83,36 @@ class Recycle extends Missions
             ]);
 
             $message = sprintf(
-                $this->langs['sys_recy_gotten'], FormatLib::prettyNumber($recycled_resources['metal']), $this->langs['Metal'], FormatLib::prettyNumber($recycled_resources['crystal']), $this->langs['Crystal']
+                $this->langs->line('rec_result'),
+                FormatLib::prettyNumber($fleet_row['fleet_amount']),
+                FormatLib::prettyNumber($this->recyclers_capacity),
+                FleetsLib::targetLink($fleet_row, ''),
+                FormatLib::prettyNumber($this->planet_debris['metal']),
+                FormatLib::prettyNumber($this->planet_debris['crystal']),
+                FormatLib::prettyNumber($recycled_resources['metal']),
+                FormatLib::prettyNumber($recycled_resources['crystal'])
             );
 
             $this->recycleMessage(
-                $fleet_row['fleet_owner'], $message, $fleet_row['fleet_start_time'], $this->langs['sys_recy_report']
+                $fleet_row['fleet_owner'],
+                $message,
+                $fleet_row['fleet_start_time'],
+                sprintf($this->langs->line('rec_report_title'), FleetsLib::targetLink($fleet_row, ''))
             );
         } elseif ($fleet_row['fleet_end_time'] <= time()) {
-
             $message = sprintf(
-                $this->langs['sys_tran_mess_user'], $this->planet_name, FleetsLib::targetLink($fleet_row, ''), FormatLib::prettyNumber($fleet_row['fleet_resource_metal']), $this->langs['Metal'], FormatLib::prettyNumber($fleet_row['fleet_resource_crystal']), $this->langs['Crystal'], FormatLib::prettyNumber($fleet_row['fleet_resource_deuterium']), $this->langs['Deuterium']
+                $this->langs->line('mi_fleet_back_with_resources'),
+                $fleet_row['planet_end_name'],
+                FleetsLib::targetLink($fleet_row, ''),
+                $fleet_row['planet_start_name'],
+                FleetsLib::startLink($fleet_row, ''),
+                FormatLib::prettyNumber($fleet_row['fleet_resource_metal']),
+                FormatLib::prettyNumber($fleet_row['fleet_resource_crystal']),
+                FormatLib::prettyNumber($fleet_row['fleet_resource_deuterium']),
             );
 
             $this->recycleMessage(
-                $fleet_row['fleet_owner'], $message, $fleet_row['fleet_end_time'], $this->langs['sys_mess_fleetback']
+                $fleet_row['fleet_owner'], $message, $fleet_row['fleet_end_time'], $this->langs->line('mi_fleet_back_title')
             );
 
             parent::restoreFleet($fleet_row, true);
@@ -112,7 +137,10 @@ class Recycle extends Missions
             ],
         ]);
 
-        $this->planet_name = $target_planet['target_name'];
+        $this->planet_debris = [
+            'metal' => $target_planet['planet_debris_metal'],
+            'crystal' => $target_planet['planet_debris_crystal'],
+        ];
 
         // SOME REQUIRED VALUES
         $ships = FleetsLib::getFleetShipsArray($fleet_row['fleet_array']);
@@ -123,35 +151,28 @@ class Recycle extends Missions
 
         // CALCULATE STORAGE FOR EACH KIND OF SHIP
         foreach ($ships as $id => $amount) {
-
             if ($id == 209) {
-
                 $recycle_capacity += $this->pricelist[$id]['capacity'] * $amount;
             } else {
-
                 $other_capacity += $this->pricelist[$id]['capacity'] * $amount;
             }
         }
 
         if ($current_resources > $other_capacity) {
-
             $recycle_capacity -= ($current_resources - $other_capacity);
         }
 
-        if (($target_planet['planet_debris_metal'] + $target_planet['planet_debris_crystal']) <= $recycle_capacity) {
+        $this->recyclers_capacity = $recycle_capacity;
 
+        if (($target_planet['planet_debris_metal'] + $target_planet['planet_debris_crystal']) <= $recycle_capacity) {
             $recycled_resources['metal'] = $target_planet['planet_debris_metal'];
             $recycled_resources['crystal'] = $target_planet['planet_debris_crystal'];
         } else {
-
             if (($target_planet['planet_debris_metal'] > $recycle_capacity / 2) && ($target_planet['planet_debris_crystal'] > $recycle_capacity / 2)) {
-
                 $recycled_resources['metal'] = $recycle_capacity / 2;
                 $recycled_resources['crystal'] = $recycle_capacity / 2;
             } else {
-
                 if ($target_planet['planet_debris_metal'] > $target_planet['planet_debris_crystal']) {
-
                     $recycled_resources['crystal'] = $target_planet['planet_debris_crystal'];
 
                     if ($target_planet['planet_debris_metal'] >
@@ -159,19 +180,15 @@ class Recycle extends Missions
 
                         $recycled_resources['metal'] = $recycle_capacity - $recycled_resources['crystal'];
                     } else {
-
                         $recycled_resources['metal'] = $target_planet['planet_debris_metal'];
                     }
                 } else {
-
                     $recycled_resources['metal'] = $target_planet['planet_debris_metal'];
 
                     if ($target_planet['planet_debris_crystal'] >
                         ($recycle_capacity - $recycled_resources['metal'])) {
-
                         $recycled_resources['crystal'] = $recycle_capacity - $recycled_resources['metal'];
                     } else {
-
                         $recycled_resources['crystal'] = $target_planet['planet_debris_crystal'];
                     }
                 }
@@ -194,7 +211,7 @@ class Recycle extends Missions
     private function recycleMessage($owner, $message, $time, $status_message)
     {
         FunctionsLib::sendMessage(
-            $owner, '', $time, 5, $this->langs['sys_mess_spy_control'], $status_message, $message
+            $owner, '', $time, 5, $this->langs->line('rec_report_from'), $status_message, $message
         );
     }
 }

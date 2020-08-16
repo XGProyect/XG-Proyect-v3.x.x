@@ -13,7 +13,8 @@
  */
 namespace application\models\adm;
 
-use application\core\Database;
+use application\core\Model;
+use application\libraries\FunctionsLib as Functions;
 use application\libraries\PlanetLib;
 
 /**
@@ -26,29 +27,8 @@ use application\libraries\PlanetLib;
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-class Maker
+class Maker extends Model
 {
-    private $db = null;
-
-    /**
-     * Constructor
-     *
-     * @param Database $db
-     */
-    public function __construct(Database $db)
-    {
-        // use this to make queries
-        $this->db = $db;
-    }
-
-    /**
-     * Destructor
-     */
-    public function __destruct()
-    {
-        $this->db->closeConnection();
-    }
-
     /**
      * Get list of users without an alliance or without pending requests
      *
@@ -184,7 +164,7 @@ class Maker
                     `user_register_time` = '" . $time . "',
                     `user_onlinetime` = '" . $time . "',
                     `user_authlevel` = '" . $auth . "',
-                    `user_password` = '" . sha1($pass) . "';"
+                    `user_password` = '" . Functions::hash($pass) . "';"
             );
 
             $last_user_id = $this->db->insertId();
@@ -200,8 +180,8 @@ class Maker
             );
 
             $this->db->query(
-                "INSERT INTO `" . PREMIUM . "` SET
-                    `premium_user_id` = '" . $last_user_id . "';"
+                "INSERT INTO `" . PREMIUM . "` (`premium_user_id`, `premium_dark_matter`)
+                VALUES('" . $last_user_id . "', '" . Functions::readConfig('registration_dark_matter') . "');"
             );
 
             $this->db->query(

@@ -16,12 +16,14 @@ namespace application\libraries;
 use application\core\Database;
 use application\core\enumerators\MessagesEnumerator;
 use application\core\enumerators\UserRanksEnumerator;
+use application\core\Language;
 use application\core\Options;
+use application\core\Template;
 use application\core\XGPCore;
+use application\helpers\StringsHelper;
 use application\libraries\messenger\MessagesFormat;
 use application\libraries\messenger\MessagesOptions;
 use application\libraries\messenger\Messenger;
-use application\libraries\TimingLibrary as Timing;
 use CI_Email;
 
 /**
@@ -36,6 +38,15 @@ use CI_Email;
  */
 abstract class FunctionsLib extends XGPCore
 {
+    /**
+     * Return a new instance of Template
+     *
+     * @return Template
+     */
+    public static function getTemplate(): Template
+    {
+        return new Template;
+    }
 
     /**
      * loadLibrary
@@ -76,7 +87,7 @@ abstract class FunctionsLib extends XGPCore
             $class_name = 'application\models\\' . strtr($model, ['/' => '\\']);
 
             // Create new $library object
-            return new $class_name(new Database());
+            return new $class_name();
         } else {
             // ups!
             return false;
@@ -89,6 +100,8 @@ abstract class FunctionsLib extends XGPCore
      * @param string $text Text
      *
      * @return string
+     *
+     * @deprecated since version v3.1.0, will be removed on v3.2.0 - use StringsHelper::escapeString
      */
     public static function formatText($text)
     {
@@ -113,16 +126,19 @@ abstract class FunctionsLib extends XGPCore
     public static function chronoApplet($type, $ref, $value, $init)
     {
         if ($init == true) {
-            $template = parent::$page->getTemplate('general/chrono_applet_init');
+            $template = 'general/chrono_applet_init';
         } else {
-            $template = parent::$page->getTemplate('general/chrono_applet');
+            $template = 'general/chrono_applet';
         }
 
         $parse['type'] = $type;
         $parse['ref'] = $ref;
         $parse['value'] = $value;
 
-        return parent::$page->parseTemplate($template, $parse);
+        return self::getTemplate()->set(
+            $template,
+            $parse
+        );
     }
 
     /**
@@ -177,26 +193,6 @@ abstract class FunctionsLib extends XGPCore
     }
 
     /**
-     * prepUrl
-     *
-     * @param string $url URL
-     *
-     * @return string
-     */
-    public static function prepUrl($url = '')
-    {
-        if ($url == 'http://' or $url == '') {
-            return '';
-        }
-
-        if (substr($url, 0, 7) != 'http://' && substr($url, 0, 8) != 'https://') {
-            $url = 'http://' . $url;
-        }
-
-        return $url;
-    }
-
-    /**
      * fleetSpeedFactor
      *
      * @return string
@@ -232,7 +228,7 @@ abstract class FunctionsLib extends XGPCore
         }
 
         parent::$page->display(
-            parent::$page->parseTemplate(parent::$page->getTemplate('general/message_body'), $parse),
+            self::getTemplate()->set('general/message_body', $parse),
             $topnav,
             (($dest != "") ? "<meta http-equiv=\"refresh\" content=\"$time;URL=$dest\">" : ""),
             $menu
@@ -268,101 +264,8 @@ abstract class FunctionsLib extends XGPCore
     public static function moduleMessage($access_level)
     {
         if ($access_level == 0) {
-            die(self::message(parent::$lang['lm_module_not_accesible'], '', '', true));
-        }
-    }
-
-    /**
-     * sortPlanets
-     *
-     * @param array $current_user Current user
-     *
-     * @return array
-     */
-    public static function sortPlanets($current_user)
-    {
-        $db = new Database();
-        $order = $current_user['preference_planet_sort_sequence'] == 1 ? "DESC" : "ASC"; // up or down
-        $sort = $current_user['preference_planet_sort'];
-
-        $planets = "SELECT `planet_id`, `planet_name`, `planet_galaxy`, `planet_system`, `planet_planet`, `planet_type`
-                    FROM " . PLANETS . "
-                    WHERE `planet_user_id` = '" . (int) $current_user['user_id'] . "'
-                        AND `planet_destroyed` = 0 ORDER BY ";
-
-        switch ($sort) {
-            case 0: // emergence
-            default:
-                $planets .= "`planet_id` " . $order;
-                break;
-            case 1: // coordinates
-                $planets .= "`planet_galaxy` " . $order . ", `planet_system` " . $order . ", `planet_planet` " . $order . ", `planet_type` " . $order;
-                break;
-            case 2: // alphabet
-                $planets .= "`planet_name` " . $order;
-                break;
-            case 3: // size
-                $planets .= "`planet_diameter` " . $order;
-                break;
-            case 4: // used_fields
-                $planets .= "`planet_field_current` " . $order;
-                break;
-        }
-
-        return $db->query($planets);
-    }
-
-    /**
-     * buildPlanetList
-     *
-     * @param array $current_user      Current user
-     * @param int   $current_planet_id Current planet ID
-     *
-     * @return mixed
-     */
-    public static function buildPlanetList($current_user, $current_planet_id = 0)
-    {
-        $db = new Database();
-        $list = '';
-        $user_planets = self::sortPlanets($current_user);
-
-        $page = isset($_GET['page']) ? $_GET['page'] : '';
-        $gid = isset($_GET['gid']) ? $_GET['gid'] : '';
-        $mode = isset($_GET['mode']) ? $_GET['mode'] : '';
-
-        if ($user_planets) {
-            while ($planets = $db->fetchArray($user_planets)) {
-                if ($current_planet_id != $planets['planet_id']) {
-                    $list .= "\n<option ";
-                    $list .= (($planets['planet_id'] == $current_user['user_current_planet']) ?
-                        'selected="selected" ' : '');
-
-                    // FOR TOPNAVIGATION BAR PLANET LIST
-                    if ($current_planet_id == 0) {
-                        $list .= "value=\"game.php?page=" . $page . "&gid=" .
-                            $gid . "&cp=" . $planets['planet_id'] . "";
-                        $list .= "&amp;mode=" . $mode;
-                        $list .= "&amp;re=0\">";
-                    } else {
-                        // FOR FLEETS2 PAGE COLONIES SHORTCUTS
-                        $list .= "value=\"" . $planets['planet_galaxy'] . ';' . $planets['planet_system'] . ';' .
-                            $planets['planet_planet'] . ';' . $planets['planet_type'] . "\">";
-                    }
-
-                    $list .= (($planets['planet_type'] != 3) ? $planets['planet_name'] : $planets['planet_name'] . ' (' . parent::$lang['fcm_moon'] . ')');
-                    $list .= "&nbsp;[" . $planets['planet_galaxy'] . ":";
-                    $list .= $planets['planet_system'] . ":";
-                    $list .= $planets['planet_planet'];
-                    $list .= "]&nbsp;&nbsp;</option>";
-                }
-            }
-        }
-
-        // IF THE LIST OF PLANETS IS EMPTY WE SHOULD RETURN false
-        if ($list !== '') {
-            return $list;
-        } else {
-            return false;
+            $lang = new Language;
+            die(self::message($lang->loadLang('game/global', true)->line('module_not_accesible'), '', '', true));
         }
     }
 
@@ -497,33 +400,6 @@ abstract class FunctionsLib extends XGPCore
     }
 
     /**
-     * setUrl
-     *
-     * @param string $url        URL
-     * @param string $title      Title
-     * @param string $content    Content - Visible part
-     * @param string $attributes Attributes - css & js
-     *
-     * @return string
-     */
-    public static function setUrl($url, $title = '', $content, $attributes = '')
-    {
-        if (empty($url)) {
-            $url = '#';
-        }
-
-        if (!empty($title)) {
-            $title = 'title="' . $title . '"';
-        }
-
-        if (!empty($attributes)) {
-            $attributes = ' ' . $attributes;
-        }
-
-        return '<a href="' . $url . '" ' . $title . ' ' . $attributes . '>' . $content . '</a>';
-    }
-
-    /**
      * setImage
      *
      * @param string $path       Image path
@@ -539,50 +415,6 @@ abstract class FunctionsLib extends XGPCore
         }
 
         return '<img src="' . $path . '" title="' . $title . '" border="0"' . $attributes . '>';
-    }
-
-    /**
-     * Like in_array but going deeper
-     *
-     * @param string $needle   Needle
-     * @param array  $haystack Haystack
-     *
-     * @return boolean
-     */
-    public static function inMultiarray($needle, $haystack)
-    {
-        foreach ($haystack as $key => $value) {
-            if ($value == $needle) {
-                return true;
-            } elseif (is_array($value)) {
-                if (self::inMultiarray($needle, $value)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Like array search but going deeper
-     *
-     * @param string $needle   Needle
-     * @param array  $haystack Haystack
-     *
-     * @return boolean
-     */
-    public static function recursiveArraySearch($needle, $haystack)
-    {
-        foreach ($haystack as $key => $value) {
-            $current_key = $key;
-
-            if ($needle === $value or (is_array($value) && self::recursiveArraySearch($needle, $value) !== false)) {
-                return $current_key;
-            }
-        }
-
-        return false;
     }
 
     /**
@@ -711,46 +543,6 @@ abstract class FunctionsLib extends XGPCore
     }
 
     /**
-     * Display login errors
-     *
-     * @param array $user_row User Row
-     *
-     * @return void
-     */
-    public static function displayLoginErrors($user_row)
-    {
-        if ($user_row['user_id'] != $_SESSION['user_id'] && !defined('IN_LOGIN')) {
-            FunctionsLib::redirect(SYSTEM_ROOT);
-        }
-
-        if (sha1($user_row['user_password'] . "-" . SECRETWORD) != $_SESSION['user_password'] && !defined('IN_LOGIN')) {
-            FunctionsLib::redirect(SYSTEM_ROOT);
-        }
-
-        if ($user_row['user_banned'] > 0) {
-            $parse = parent::$lang;
-            $parse['banned_until'] = Timing::formatExtendedDate($user_row['user_banned']);
-
-            die(parent::$page->get('home/banned_message')->parse($parse));
-        }
-    }
-
-    /**
-     * Replicates the behavior of mysql_real_escape_string
-     *
-     * @param string $value Value to escape
-     *
-     * @return string
-     */
-    public static function escapeString($value)
-    {
-        $search = ["\\", "\x00", "\n", "\r", "'", '"', "\x1a"];
-        $replace = ["\\\\", "\\0", "\\n", "\\r", "\'", '\"', "\\Z"];
-
-        return str_replace($search, $replace, $value);
-    }
-
-    /**
      * Shows a message box
      *
      * @param string $title     Box Tittle
@@ -763,13 +555,12 @@ abstract class FunctionsLib extends XGPCore
      */
     public static function messageBox($title, $message, $goto = '', $button = ' ok ', $two_lines = false)
     {
-        return parent::$page->parseTemplate(
-            parent::$page->getTemplate('alliance/alliance_message_box'),
+        return self::getTemplate()->set(
+            'alliance/alliance_message_box',
             [
                 'goto' => $goto,
                 'title' => $title,
-                'message_box_row' => parent::$page->parseTemplate(
-                    parent::$page->getTemplate('alliance/alliance_message_box_row_' . ($two_lines ? 'two' : 'one')),
+                'message_box_row' => self::getTemplate()->set('alliance/alliance_message_box_row_' . ($two_lines ? 'two' : 'one'),
                     [
                         'message' => $message,
                         'button' => $button,
@@ -777,6 +568,27 @@ abstract class FunctionsLib extends XGPCore
                 ),
             ]
         );
+    }
+
+    /**
+     * Encrypt a password
+     *
+     * @param string $password
+     * @return string
+     */
+    public static function hash(string $password): string
+    {
+        return password_hash($password, PASSWORD_BCRYPT);
+    }
+
+    /**
+     * Generate a random password
+     *
+     * @return string
+     */
+    public static function generatePassword(): string
+    {
+        return StringsHelper::randomString(16);
     }
 }
 

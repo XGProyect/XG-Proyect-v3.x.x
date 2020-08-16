@@ -8,8 +8,8 @@
         </tr>
         {results}
         <tr>
-            <th><a href="game.php?page=alliance&mode=ainfo&id={alliance_id}">{alliance_tag}</a></th>
-            <th><a href="game.php?page=alliance&mode=ainfo&id={alliance_id}">{alliance_name}</a></th>
+            <th><a href="game.php?page=alliance&mode=ainfo&allyid={alliance_id}">{alliance_tag}</a></th>
+            <th><a href="game.php?page=alliance&mode=ainfo&allyid={alliance_id}">{alliance_name}</a></th>
             <th>{alliance_members}</th>
             <th><a href="game.php?page=statistics&range=1">{alliance_points}</a></th>
             <th>{alliance_actions}</th>

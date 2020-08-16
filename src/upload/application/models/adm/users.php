@@ -13,7 +13,7 @@
  */
 namespace application\models\adm;
 
-use application\core\Database;
+use application\core\Model;
 use application\libraries\FunctionsLib as Functions;
 
 /**
@@ -26,29 +26,8 @@ use application\libraries\FunctionsLib as Functions;
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-class Users
+class Users extends Model
 {
-    private $db = null;
-
-    /**
-     * Constructor
-     *
-     * @param Database $db
-     */
-    public function __construct(Database $db)
-    {
-        // use this to make queries
-        $this->db = $db;
-    }
-
-    /**
-     * Destructor
-     */
-    public function __destruct()
-    {
-        $this->db->closeConnection();
-    }
-
     /**
      * Check if the user exists, returns true if it does, false if the user doesn't exist
      *
@@ -356,13 +335,14 @@ class Users
             $vacation_head = " , `" . PLANETS . "` AS p";
             $vacation_condition = " AND p.`planet_user_id` = '" . (int) $user_id . "'";
             $vacation_query = "
-			pr.`preference_vacation_mode` = {$preference_vacation_mode},
-			p.`planet_building_metal_mine_percent` = '10',
-			p.`planet_building_crystal_mine_percent` = '10',
-			p.`planet_building_deuterium_sintetizer_percent` = '10',
-			p.`planet_building_solar_plant_percent` = '10',
-			p.`planet_building_fusion_reactor_percent` = '10',
-			p.`planet_ship_solar_satellite_percent` = '10',";
+                pr.`preference_vacation_mode` = {$preference_vacation_mode},
+                p.`planet_last_update` = '" . time() . "',
+                p.`planet_building_metal_mine_percent` = '10',
+                p.`planet_building_crystal_mine_percent` = '10',
+                p.`planet_building_deuterium_sintetizer_percent` = '10',
+                p.`planet_building_solar_plant_percent` = '10',
+                p.`planet_building_fusion_reactor_percent` = '10',
+                p.`planet_ship_solar_satellite_percent` = '10',";
         } elseif ($current_user['preference_vacation_mode'] == 0
             or is_null($current_user['preference_vacation_mode'])
             && $preference_vacations_status == 1) {
@@ -370,18 +350,13 @@ class Users
             $vacation_head = " , `" . PLANETS . "` AS p";
             $vacation_condition = " AND p.`planet_user_id` = '" . (int) $user_id . "'";
             $vacation_query = "
-			pr.`preference_vacation_mode` = {$preference_vacation_mode},
-			p.`planet_metal_perhour` = '" . Functions::readConfig('metal_basic_income') . "',
-			p.`planet_crystal_perhour` = '" . Functions::readConfig('crystal_basic_income') . "',
-			p.`planet_deuterium_perhour` = '" . Functions::readConfig('deuterium_basic_income') . "',
-			p.`planet_energy_used` = '0',
-			p.`planet_energy_max` = '0',
-			p.`planet_building_metal_mine_percent` = '0',
-			p.`planet_building_crystal_mine_percent` = '0',
-			p.`planet_building_deuterium_sintetizer_percent` = '0',
-			p.`planet_building_solar_plant_percent` = '0',
-			p.`planet_building_fusion_reactor_percent` = '0',
-			p.`planet_ship_solar_satellite_percent` = '0',";
+                pr.`preference_vacation_mode` = {$preference_vacation_mode},
+                p.`planet_building_metal_mine_percent` = '0',
+                p.`planet_building_crystal_mine_percent` = '0',
+                p.`planet_building_deuterium_sintetizer_percent` = '0',
+                p.`planet_building_solar_plant_percent` = '0',
+                p.`planet_building_fusion_reactor_percent` = '0',
+                p.`planet_ship_solar_satellite_percent` = '0',";
         }
 
         $this->db->query(

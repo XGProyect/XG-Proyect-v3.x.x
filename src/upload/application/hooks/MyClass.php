@@ -39,7 +39,9 @@ class MyClass extends XGPCore
         parent::__construct();
 
         // this is just a test, please always use a model!!!
-        $this->_db = new Database();
+        // example of a model: parent::loadModel('myclass');
+        // how to use it? $this->Myclass_Model->doSomething($param, $param);
+        $this->db = new Database();
     }
 
     /**
@@ -50,7 +52,7 @@ class MyClass extends XGPCore
      */
     public function myMethod(array $params = array()): void
     {
-        $query = $this->_db->queryFetch(
+        $query = $this->db->queryFetch(
             "SELECT `user_name` FROM `" . USERS . "` u WHERE u.`user_id` = '1'"
         );
 

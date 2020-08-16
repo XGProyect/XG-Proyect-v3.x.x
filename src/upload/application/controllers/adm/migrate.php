@@ -62,9 +62,9 @@ class Migrate extends Controller
         // set data
         $this->user = $this->getUserData();
 
-        // Check if the user is allowed to access
-        if ($this->user['user_authlevel'] != 3) {
-            Administration::noAccessMessage($this->langs->line('no_permissions'));
+        // check if the user is allowed to access
+        if (!Administration::authorization(__CLASS__, (int) $this->user['user_authlevel'])) {
+            die(Administration::noAccessMessage($this->langs->line('no_permissions')));
         }
 
         // build the page

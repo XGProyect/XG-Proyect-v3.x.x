@@ -1,5 +1,5 @@
 <br>
-{bd_actual_production}
+{sy_actual_production}
 <div id=bx class=z></div>
 <script  type="text/javascript">
 v  = new Date();
@@ -11,7 +11,7 @@ of = 1;
 c  = new Array({c}'');
 b  = new Array({b}'');
 a  = new Array({a}'');
-aa = '{bd_completed}';
+aa = '{sy_completed}';
 
 function t() {
 	if ( hs == 0 ) {
@@ -70,7 +70,7 @@ function xd() {
 			ae = " ";
 		}
 		if ( iv == p ) {
-			act = " {bd_operating}";
+			act = " {sy_operating}";
 		} else {
 			act = "";
 		}
@@ -81,6 +81,7 @@ function xd() {
 window.onload = t;
 </script>
 <br />
+{sy_remaining}
 <form name="Atr" method="get" action="game.php?page={current_page}">
 <input type="hidden" name="mode" value="fleet">
 <table width="530">

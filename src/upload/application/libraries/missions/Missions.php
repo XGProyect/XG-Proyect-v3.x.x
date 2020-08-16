@@ -29,18 +29,12 @@ use application\libraries\UpdatesLibrary;
  */
 class Missions extends XGPCore
 {
-
-    protected $langs;
     protected $resource;
     protected $pricelist;
     protected $combat_caps;
 
     /**
-     * bbCode function.
-     *
-     * @param string $string String
-     *
-     * @return void
+     * Constructor
      */
     public function __construct()
     {
@@ -49,7 +43,6 @@ class Missions extends XGPCore
         // load model
         parent::loadModel('libraries/missions/missions');
 
-        $this->langs = parent::$lang;
         $this->resource = parent::$objects->getObjects();
         $this->pricelist = parent::$objects->getPrice();
         $this->combat_caps = parent::$objects->getCombatSpecs();
@@ -90,13 +83,11 @@ class Missions extends XGPCore
     protected function restoreFleet($fleet_row, $start = true)
     {
         if ($start) {
-
             $galaxy = $fleet_row['fleet_start_galaxy'];
             $system = $fleet_row['fleet_start_system'];
             $planet = $fleet_row['fleet_start_planet'];
             $type = $fleet_row['fleet_start_type'];
         } else {
-
             $galaxy = $fleet_row['fleet_end_galaxy'];
             $system = $fleet_row['fleet_end_system'];
             $planet = $fleet_row['fleet_end_planet'];
@@ -109,7 +100,6 @@ class Missions extends XGPCore
         $ships_fields = '';
 
         foreach ($ships as $id => $amount) {
-
             $ships_fields .= "`" . $this->resource[$id] . "` = `" .
             $this->resource[$id] . "` + '" . $amount . "', ";
         }
@@ -117,7 +107,6 @@ class Missions extends XGPCore
         $fuel_return = 0;
 
         if ($fleet_row['fleet_mission'] == 4 && !$start) {
-
             $fuel_return = $fleet_row['fleet_fuel'] / 2;
         }
 
@@ -150,13 +139,11 @@ class Missions extends XGPCore
     protected function storeResources($fleet_row, $start = false)
     {
         if ($start) {
-
             $galaxy = $fleet_row['fleet_start_galaxy'];
             $system = $fleet_row['fleet_start_system'];
             $planet = $fleet_row['fleet_start_planet'];
             $type = $fleet_row['fleet_start_type'];
         } else {
-
             $galaxy = $fleet_row['fleet_end_galaxy'];
             $system = $fleet_row['fleet_end_system'];
             $planet = $fleet_row['fleet_end_planet'];
@@ -209,6 +196,28 @@ class Missions extends XGPCore
 
         // update planet resources and queues
         UpdatesLibrary::updatePlanetResources($target_user, $target_planet, time());
+    }
+
+    /**
+     * Check if the mission can be started
+     *
+     * @param array $fleet
+     * @return boolean
+     */
+    protected function canStartMission(array $fleet): bool
+    {
+        return ($fleet['fleet_mess'] == 0 && $fleet['fleet_start_time'] <= time() && $fleet['fleet_end_stay'] <= time());
+    }
+
+    /**
+     * Check if the mission can be completed
+     *
+     * @param array $fleet
+     * @return boolean
+     */
+    protected function canCompleteMission(array $fleet): bool
+    {
+        return ($fleet['fleet_end_time'] <= time());
     }
 }
 

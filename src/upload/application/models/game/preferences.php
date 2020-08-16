@@ -16,8 +16,7 @@ declare (strict_types = 1);
  */
 namespace application\models\game;
 
-use application\core\Database;
-use application\libraries\FunctionsLib as Functions;
+use application\core\Model;
 
 /**
  * Preferences Class
@@ -29,29 +28,8 @@ use application\libraries\FunctionsLib as Functions;
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-class Preferences
+class Preferences extends Model
 {
-    private $db = null;
-
-    /**
-     * Constructor
-     *
-     * @param Database $db
-     */
-    public function __construct(Database $db)
-    {
-        // use this to make queries
-        $this->db = $db;
-    }
-
-    /**
-     * Destructor
-     */
-    public function __destruct()
-    {
-        $this->db->closeConnection();
-    }
-
     /**
      * Get all preferences by a certain user
      *
@@ -124,7 +102,7 @@ class Preferences
 
         $this->db->query(
             "UPDATE " . USERS . " AS u, " . PREFERENCES . " AS p SET
-            " . join($columns_to_update, ', ') . "
+            " . join(', ', $columns_to_update) . "
             WHERE u.`user_id` = '" . $user_id . "'
                 AND p.`preference_user_id` = '" . $user_id . "';"
         );
@@ -179,11 +157,6 @@ class Preferences
             $this->db->query(
                 "UPDATE `" . PREFERENCES . "` pr, `" . PLANETS . "` p SET
                     pr.`preference_vacation_mode` = '" . time() . "',
-                    p.`planet_metal_perhour` = '" . Functions::readConfig('metal_basic_income') . "',
-                    p.`planet_crystal_perhour` = '" . Functions::readConfig('crystal_basic_income') . "',
-                    p.`planet_deuterium_perhour` = '" . Functions::readConfig('deuterium_basic_income') . "',
-                    p.`planet_energy_used` = '0',
-                    p.`planet_energy_max` = '0',
                     p.`planet_building_metal_mine_percent` = '0',
                     p.`planet_building_crystal_mine_percent` = '0',
                     p.`planet_building_deuterium_sintetizer_percent` = '0',
@@ -212,6 +185,7 @@ class Preferences
             $this->db->query(
                 "UPDATE `" . PREFERENCES . "` pr, `" . PLANETS . "` p SET
                     pr.`preference_vacation_mode` = NULL,
+                    p.`planet_last_update` = '" . time() . "',
                     p.`planet_building_metal_mine_percent` = '10',
                     p.`planet_building_crystal_mine_percent` = '10',
                     p.`planet_building_deuterium_sintetizer_percent` = '10',

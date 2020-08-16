@@ -14,8 +14,7 @@
 namespace application\controllers\adm;
 
 use application\core\Controller;
-use application\core\Database;
-use application\libraries\adm\AdministrationLib;
+use application\libraries\adm\AdministrationLib as Administration;
 use application\libraries\FunctionsLib;
 
 /**
@@ -42,50 +41,40 @@ class Ban extends Controller
         parent::__construct();
 
         // check if session is active
-        AdministrationLib::checkSession();
+        Administration::checkSession();
+
+        // load Model
+        parent::loadModel('adm/ban');
 
         // load Language
         parent::loadLang(['adm/global', 'adm/ban']);
 
-        $this->_db = new Database();
         $this->_current_user = parent::$users->getUserData();
 
-        // Check if the user is allowed to access
-        if (AdministrationLib::haveAccess($this->_current_user['user_authlevel']) && AdministrationLib::authorization($this->_current_user['user_authlevel'], 'edit_users') == 1) {
-            $this->build_page();
-        } else {
-            die(AdministrationLib::noAccessMessage($this->langs->line('ge_no_permissions')));
+        // check if the user is allowed to access
+        if (!Administration::authorization(__CLASS__, (int) $this->_current_user['user_authlevel'])) {
+            die(Administration::noAccessMessage($this->langs->line('no_permissions')));
         }
+
+        $this->buildPage();
     }
 
     /**
-     * method __destruct
-     * param
-     * return close db connection
-     */
-    public function __destruct()
-    {
-        $this->_db->closeConnection();
-    }
-
-    /**
-     * method build_page
+     * method buildPage
      * param
      * return main method, loads everything
      */
-    private function build_page()
+    private function buildPage()
     {
         switch ((isset($_GET['mode']) ? $_GET['mode'] : '')) {
             case 'ban':
-
-                $view = $this->show_ban();
+                $view = $this->showBan();
 
                 break;
 
             case '':
             default:
-
-                $view = $this->show_default();
+                $view = $this->showDefault();
 
                 break;
         }
@@ -94,78 +83,66 @@ class Ban extends Controller
     }
 
     /**
-     * method show_default
+     * method showDefault
      * param
      * return build the default page
      */
-    private function show_default()
+    private function showDefault()
     {
         $parse = $this->langs->language;
         $parse['js_path'] = JS_PATH;
+        $parse['alert'] = '';
+        $parse['bn_sub_title'] = '';
+        $parse['np_general'] = '';
 
         if (isset($_POST['unban_name']) && $_POST['unban_name']) {
-            $username = $this->_db->escapeValue($_POST['unban_name']);
+            $username = $_POST['unban_name'];
 
-            $this->_db->query("DELETE FROM `" . BANNED . "`
-									WHERE `banned_who` = '" . $username . "'");
+            $this->Ban_Model->unbanUser($username);
 
-            $this->_db->query("UPDATE `" . USERS . "` SET
-									`user_banned` = '0'
-									WHERE `user_name` = '" . $username . "'
-									LIMIT 1");
-
-            $parse['alert'] = AdministrationLib::saveMessage('ok', (str_replace('%s', $username, $this->langs->line('bn_lift_ban_success'))));
+            $parse['alert'] = Administration::saveMessage('ok', (str_replace('%s', $username, $this->langs->line('bn_lift_ban_success'))));
         }
 
-        $parse['users_list'] = $this->get_users_list();
-        $parse['banned_list'] = $this->get_banned_list();
+        $parse['users_list'] = $this->getUsersList();
+        $parse['banned_list'] = $this->getBannedList();
         $parse['users_amount'] = $this->_users_count;
         $parse['banned_amount'] = $this->_banned_count;
 
-        return parent::$page->parseTemplate(parent::$page->getTemplate('adm/ban_view'), $parse);
+        return $this->getTemplate()->set('adm/ban_view', $parse);
     }
 
     /**
-     * method show_ban
+     * method showBan
      * param
      * return build the ban page
      */
-    private function show_ban()
+    private function showBan()
     {
         $parse = $this->langs->language;
         $parse['js_path'] = JS_PATH;
-        $ban_name = isset($_GET['ban_name']) ? $this->_db->escapeValue($_GET['ban_name']) : null;
+        $parse['alert'] = '';
+        $parse['bn_sub_title'] = '';
+        $parse['reason'] = '';
+        $ban_name = isset($_GET['ban_name']) ? $_GET['ban_name'] : null;
 
-        if (isset($_GET['banuser']) && isset($_GET['ban_name'])) {
+        if (isset($_GET['banuser']) && isset($ban_name)) {
             $parse['name'] = $ban_name;
             $parse['banned_until'] = '';
             $parse['changedate'] = $this->langs->line('bn_auto_lift_ban_message');
             $parse['vacation'] = '';
 
-            $banned_user = $this->_db->queryFetch(
-                "SELECT
-                                b.*,
-                                p.`preference_user_id`,
-                                p.`preference_vacation_mode`
-                            FROM `" . BANNED . "` AS b
-                            INNER JOIN `" . PREFERENCES . "` AS p
-                                ON p.`preference_user_id` = (SELECT `user_id`
-                                                            FROM `" . USERS . "`
-                                                                WHERE `user_name` = '" . $ban_name . "'
-                                                                LIMIT 1)
-                            WHERE `banned_who` = '" . $ban_name . "'"
-            );
+            $banned_user = $this->Ban_Model->getBannedUserData($ban_name);
+
             if ($banned_user) {
                 $parse['banned_until'] = $this->langs->line('bn_banned_until') . ' (' . date(FunctionsLib::readConfig('date_format_extended'), $banned_user['banned_longer']) . ')';
                 $parse['reason'] = $banned_user['banned_theme'];
-                $parse['changedate'] = '<div style="float:left">' . $this->langs->line('bn_change_date') . '</div><div style="float:right">' . AdministrationLib::showPopUp($this->langs->line('bn_edit_ban_help')) . '</div>';
+                $parse['changedate'] = '<div style="float:left">' . $this->langs->line('bn_change_date') . '</div><div style="float:right">' . Administration::showPopUp($this->langs->line('bn_edit_ban_help')) . '</div>';
+                $parse['vacation'] = $banned_user['preference_vacation_mode'] ? 'checked="checked"' : '';
             }
-
-            $parse['vacation'] = $banned_user['preference_vacation_mode'] ? 'checked="checked"' : '';
 
             if (isset($_POST['bannow']) && $_POST['bannow']) {
                 if (!is_numeric($_POST['days']) or !is_numeric($_POST['hour'])) {
-                    $parse['alert'] = AdministrationLib::saveMessage('warning', $this->langs->line('bn_all_fields_required'));
+                    $parse['alert'] = Administration::saveMessage('warning', $this->langs->line('bn_all_fields_required'));
                 } else {
                     $reas = (string) $_POST['text'];
                     $days = (int) $_POST['days'];
@@ -175,9 +152,12 @@ class Ban extends Controller
                     $current_time = time();
                     $ban_time = $days * 86400;
                     $ban_time += $hour * 3600;
+                    $vacation_mode = isset($_POST['vacat']) ?? null;
 
-                    if ($banned_user['banned_longer'] > time()) {
-                        $ban_time += ($banned_user['banned_longer'] - time());
+                    if (isset($banned_user)) {
+                        if ($banned_user['banned_longer'] > time()) {
+                            $ban_time += ($banned_user['banned_longer'] - time());
+                        }
                     }
 
                     if (($ban_time + $current_time) < time()) {
@@ -186,57 +166,35 @@ class Ban extends Controller
                         $banned_until = $current_time + $ban_time;
                     }
 
-                    if ($banned_user) {
-                        $this->_db->query("UPDATE " . BANNED . "  SET
-											`banned_who` = '" . $ban_name . "',
-											`banned_theme` = '" . $reas . "',
-											`banned_who2` = '" . $ban_name . "',
-											`banned_time` = '" . $current_time . "',
-											`banned_longer` = '" . $banned_until . "',
-											`banned_author` = '" . $admin_name . "',
-											`banned_email` = '" . $admin_mail . "'
-											WHERE `banned_who2` = '" . $ban_name . "';");
-                    } else {
-                        $this->_db->query("INSERT INTO " . BANNED . " SET
-											`banned_who` = '" . $ban_name . "',
-											`banned_theme` = '" . $reas . "',
-											`banned_who2` = '" . $ban_name . "',
-											`banned_time` = '" . $current_time . "',
-											`banned_longer` = '" . $banned_until . "',
-											`banned_author` = '" . $admin_name . "',
-											`banned_email` = '" . $admin_mail . "';");
-                    }
+                    $this->Ban_Model->setOrUpdateBan(
+                        $banned_user,
+                        [
+                            'ban_name' => $ban_name,
+                            'ban_reason' => $reas,
+                            'ban_time' => $current_time,
+                            'ban_until' => $banned_until,
+                            'ban_author' => $admin_name,
+                            'ban_author_email' => $admin_mail,
+                        ],
+                        $vacation_mode
+                    );
 
-                    $user_id = $this->_db->queryFetch("SELECT `user_id`
-																FROM " . USERS . "
-																WHERE `user_name` = '" . $ban_name . "' LIMIT 1");
-
-                    $this->_db->query("UPDATE " . USERS . " AS u, " . PREFERENCES . " AS pr, " . PLANETS . " AS p SET
-											u.`user_banned` = '" . $banned_until . "',
-											pr.`preference_vacation_mode` = " . (isset($_POST['vacat']) ? "'" . time() . "'" : 'NULL') . ",
-											p.`planet_building_metal_mine_percent` = '0',
-											p.`planet_building_crystal_mine_percent` = '0',
-											p.`planet_building_deuterium_sintetizer_percent` = '0'
-											WHERE u.`user_id` = " . $user_id['user_id'] . "
-													AND pr.`preference_user_id` = " . $user_id['user_id'] . "
-													AND p.`planet_user_id` = " . $user_id['user_id'] . ";");
-
-                    $parse['alert'] = AdministrationLib::saveMessage('ok', (str_replace('%s', $ban_name, $this->langs->line('bn_ban_success'))));
+                    $parse['alert'] = Administration::saveMessage('ok', (str_replace('%s', $ban_name, $this->langs->line('bn_ban_success'))));
                 }
             }
         } else {
             FunctionsLib::redirect('admin.php?page=ban');
         }
 
-        return parent::$page->parseTemplate(parent::$page->getTemplate("adm/ban_result_view"), $parse);
+        return $this->getTemplate()->set("adm/ban_result_view", $parse);
     }
 
     /**
-     * method get_users_list
+     * method getUsersList
      * param
      * return the users list (left select)
      */
-    private function get_users_list()
+    private function getUsersList()
     {
         $query_order = (isset($_GET['order']) && $_GET['order'] == 'id') ? 'user_id' : 'user_name';
         $where_authlevel = '';
@@ -256,12 +214,9 @@ class Ban extends Controller
         }
 
         // get the users according to the filters
-        $users_query = $this->_db->query("SELECT `user_id`, `user_name`, `user_banned`
-																FROM `" . USERS . "`
-																" . $where_authlevel . " " . $where_banned . "
-																ORDER BY " . $query_order . " ASC");
+        $users_query = $this->Ban_Model->getListOfUsers($where_authlevel, $where_banned, $query_order);
 
-        while ($user = $this->_db->fetchArray($users_query)) {
+        foreach ($users_query as $user) {
             $status = '';
 
             if ($user['user_banned'] == 1) {
@@ -273,34 +228,31 @@ class Ban extends Controller
             $this->_users_count++;
         }
 
-        $this->_db->freeResult($users_query); // free resources
+        unset($users_query); // free resources
 
         return $users_list; // return builded list
     }
 
     /**
-     * method get_banned_list
+     * method getBannedList
      * param
      * return the banned users list (right select)
      */
-    private function get_banned_list()
+    private function getBannedList()
     {
         $order = (isset($_GET['order2']) && $_GET['order2'] == 'id') ? 'user_id' : 'user_name';
         $banned_list = '';
 
         // get the banned users
-        $banned_query = $this->_db->query("SELECT `user_id`, `user_name`
-													FROM `" . USERS . "`
-													WHERE `user_banned` <> '0'
-													ORDER BY " . $order . " ASC");
+        $banned_query = $this->Ban_Model->getBannedUsers($order);
 
-        while ($user = $this->_db->fetchArray($banned_query)) {
+        foreach ($banned_query as $user) {
             $banned_list .= '<option value="' . $user['user_name'] . '">' . $user['user_name'] . '&nbsp;&nbsp;(ID:&nbsp;' . $user['user_id'] . ')</option>';
 
             $this->_banned_count++;
         }
 
-        $this->_db->freeResult($banned_query); // free resources
+        unset($banned_query); // free resources
 
         return $banned_list; // return builded list
     }

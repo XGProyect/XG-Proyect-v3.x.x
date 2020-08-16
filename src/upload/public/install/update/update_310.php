@@ -36,7 +36,7 @@ PRIMARY KEY (`language_id`),
 UNIQUE KEY `language_id` (`language_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 $queries[] = "INSERT INTO `" . LANGUAGES . "` (`language_id`, `language_name`) VALUES
-(1, 'Spanish'),
+(1, 'Español'),
 (2, 'English');";
 $queries[] = "CREATE TABLE `" . PREFERENCES . "` (
 `preference_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -63,3 +63,6 @@ $queries[] = "ALTER TABLE `" . USERS . "` CHANGE `user_agent` `user_agent` TEXT 
 $queries[] = "ALTER TABLE `" . PLANETS . "` DROP `planet_metal_max`, DROP `planet_crystal_max`, DROP `planet_deuterium_max`;";
 $queries[] = "UPDATE `" . OPTIONS . "` SET `option_value` = '1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;0;1;1' WHERE `option_name` = 'modules';";
 $queries[] = "ALTER TABLE `" . MESSAGES . "` CHANGE `message_from` `message_from` VARCHAR(65) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;";
+$queries[] = "INSERT INTO `" . OPTIONS . "` (`option_name`, `option_value`) VALUES ('registration_dark_matter', '0');";
+$queries[] = "ALTER TABLE `" . BANNED . "` DROP `banned_who2`;";
+$queries[] = "UPDATE `" . OPTIONS . "` SET `option_name` = 'admin_permissions', `option_value` = '{\"server\":{\"1\":0,\"2\":0,\"3\":1},\"modules\":{\"1\":0,\"2\":0,\"3\":1},\"planets\":{\"1\":0,\"2\":1,\"3\":1},\"registration\":{\"1\":0,\"2\":1,\"3\":1},\"statistics\":{\"1\":0,\"2\":1,\"3\":1},\"premium\":{\"1\":0,\"2\":0,\"3\":1},\"tasks\":{\"1\":0,\"2\":0,\"3\":1},\"errors\":{\"1\":0,\"2\":0,\"3\":1},\"fleets\":{\"1\":1,\"2\":1,\"3\":1},\"messages\":{\"1\":1,\"2\":1,\"3\":1},\"maker\":{\"1\":0,\"2\":1,\"3\":1},\"users\":{\"1\":1,\"2\":1,\"3\":1},\"alliances\":{\"1\":1,\"2\":1,\"3\":1},\"languages\":{\"1\":0,\"2\":0,\"3\":1},\"changelog\":{\"1\":0,\"2\":0,\"3\":1},\"permissions\":{\"1\":0,\"2\":0,\"3\":1},\"backup\":{\"1\":0,\"2\":1,\"3\":1},\"encrypter\":{\"1\":1,\"2\":1,\"3\":1},\"announcement\":{\"1\":0,\"2\":1,\"3\":1},\"ban\":{\"1\":1,\"2\":1,\"3\":1},\"rebuildhighscores\":{\"1\":0,\"2\":1,\"3\":1},\"update\":{\"1\":0,\"2\":0,\"3\":1},\"migrate\":{\"1\":0,\"2\":0,\"3\":1},\"repair\":{\"1\":0,\"2\":0,\"3\":1},\"reset\":{\"1\":0,\"2\":0,\"3\":1}}' WHERE option_name = 'moderation'";

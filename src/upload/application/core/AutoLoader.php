@@ -117,7 +117,7 @@ class AutoLoader
         // First, see if we've registered the entire namespace.
         $namespacedClassName = str_replace('\\', '_', $className);
         if (isset(static::$namespaceClassNames[$namespacedClassName])) {
-            require_once(static::$namespaceClassNames[$namespacedClassName]);
+            require_once static::$namespaceClassNames[$namespacedClassName];
             return;
         }
 
@@ -132,7 +132,7 @@ class AutoLoader
         }
 
         if (isset(AutoLoader::$directoryClassNames[$className])) {
-            require_once(AutoLoader::$directoryClassNames[$className]);
+            require_once AutoLoader::$directoryClassNames[$className];
         }
     }
 }

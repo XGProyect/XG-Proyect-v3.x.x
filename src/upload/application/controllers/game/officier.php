@@ -64,7 +64,7 @@ class Officier extends Controller
         parent::loadModel('game/officier');
 
         // load Language
-        parent::loadLang(['global', 'officier']);
+        parent::loadLang(['game/global', 'game/officier']);
 
         // set data
         $this->user = $this->getUserData();
@@ -211,11 +211,7 @@ class Officier extends Controller
      */
     private function isOfficierAccesible(int $officier, string $time): bool
     {
-        if ($this->getObjects()->getPrice($officier, $time) <= $this->user['premium_dark_matter']) {
-            return true;
-        }
-
-        return false;
+        return ($this->getObjects()->getPrice($officier, $time) <= $this->user['premium_dark_matter']);
     }
 
     /**

@@ -16,6 +16,7 @@ namespace application\core;
 use application\libraries\TemplateLib;
 use application\libraries\Users_library;
 use CI_Lang;
+use Exception;
 
 /**
  * XGPCore Class
@@ -25,11 +26,10 @@ use CI_Lang;
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
- * @version  3.0.0
+ * @version  3.1.0
  */
 abstract class XGPCore
 {
-
     protected static $lang;
     protected static $users;
     protected static $objects;
@@ -42,21 +42,9 @@ abstract class XGPCore
      */
     public function __construct()
     {
-        $this->setLangClass(); // LANGUAGE
         $this->setUsersClass(); // USERS
         $this->setObjectsClass(); // OBJECTS
         $this->setTemplateClass(); // TEMPLATE
-    }
-
-    /**
-     * setLangClass
-     *
-     * @return void
-     */
-    private function setLangClass()
-    {
-        $languages = new Language();
-        self::$lang = $languages->lang();
     }
 
     /**
@@ -86,7 +74,7 @@ abstract class XGPCore
      */
     private function setTemplateClass()
     {
-        self::$page = new TemplateLib(self::$lang, self::$users);
+        self::$page = new TemplateLib(self::$users);
     }
 
     /**
@@ -112,14 +100,14 @@ abstract class XGPCore
                     require_once $model_file;
 
                     $class_route = strtr(MODELS_PATH . $class_route . DIRECTORY_SEPARATOR . $class_name, ['/' => '\\']);
-                    $this->{$class_name . '_Model'} = new $class_route(new Database());
+                    $this->{$class_name . '_Model'} = new $class_route();
                     return;
                 }
             }
 
             // not found
-            throw new \Exception('Model not defined');
-        } catch (\Exception $e) {
+            throw new Exception('Model not defined');
+        } catch (Exception $e) {
             die('Fatal error: ' . $e->getMessage());
         }
     }
@@ -138,7 +126,7 @@ abstract class XGPCore
 
             if (!file_exists($ci_lang_path)) {
                 // not found
-                throw new \Exception('Language file "' . $language_file . '" not defined');
+                throw new Exception('Language file "' . $language_file . '" not defined');
                 return;
             }
 
@@ -152,7 +140,7 @@ abstract class XGPCore
 
             $this->langs = new CI_Lang;
             $this->langs->load($language_file, DEFAULT_LANG);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             die('Fatal error: ' . $e->getMessage());
         }
     }

@@ -14,6 +14,7 @@
 namespace application\controllers\game;
 
 use application\core\Controller;
+use application\helpers\UrlHelper;
 use application\libraries\FunctionsLib;
 use application\libraries\TimingLibrary as Timing;
 
@@ -60,7 +61,7 @@ class Banned extends Controller
         parent::loadModel('game/banned');
 
         // load Language
-        parent::loadLang('banned');
+        parent::loadLang('game/banned');
 
         // build the page
         $this->buildPage();
@@ -106,7 +107,7 @@ class Banned extends Controller
                     'reason' => $u['banned_theme'],
                     'since' => Timing::formatExtendedDate($u['banned_time']),
                     'until' => Timing::formatExtendedDate($u['banned_longer']),
-                    'by' => FunctionsLib::setUrl(
+                    'by' => UrlHelper::setUrl(
                         'mailto:' . $u['banned_email'],
                         $u['banned_author'],
                         $u['banned_author']

@@ -13,7 +13,13 @@
  */
 namespace application\libraries;
 
+use application\core\Database;
+use application\core\enumerators\PlanetTypesEnumerator;
+use application\core\Language;
 use application\core\Template;
+use application\libraries\FormatLib;
+use application\libraries\FunctionsLib;
+use application\libraries\OfficiersLib;
 use application\libraries\ProductionLib as Production;
 use application\libraries\TimingLibrary as Timing;
 
@@ -29,7 +35,6 @@ use application\libraries\TimingLibrary as Timing;
  */
 class TemplateLib
 {
-
     private $current_user;
     private $current_planet;
     private $langs;
@@ -37,21 +42,18 @@ class TemplateLib
     private $template;
 
     /**
-     * __construct
+     * Constructor
      *
-     * @param array $lang  Language
-     * @param array $users Users
-     *
-     * @return void
+     * @param object $users
      */
-    public function __construct($lang, $users)
+    public function __construct(object $users)
     {
         $this->current_user = $users->getUserData();
         $this->current_planet = $users->getPlanetData();
-        $this->langs = $lang;
         $this->current_year = date('Y');
 
         $this->setTemplate();
+        $this->setLanguage();
     }
 
     /**
@@ -61,7 +63,17 @@ class TemplateLib
      */
     private function setTemplate(): void
     {
-        $this->template = new Template();
+        $this->template = new Template;
+    }
+
+    /**
+     * Set language object
+     *
+     * @return void
+     */
+    private function setLanguage(): void
+    {
+        $this->langs = new Language;
     }
 
     /**
@@ -83,20 +95,6 @@ class TemplateLib
             if (defined('IN_LOGIN')) {
                 die($current_page);
             }
-
-            // For the Install page
-            if (defined('IN_INSTALL')) {
-                $page .= $this->installHeader($metatags);
-                $page .= $menu ? $this->installMenu() : ''; // MENU
-                $page .= $topnav ? $this->installNavbar() : ''; // TOP NAVIGATION BAR
-            }
-        }
-
-        // For the Install page
-        if (defined('IN_INSTALL') && defined('IN_MESSAGE')) {
-            $page .= $this->installHeader($metatags);
-            $page .= $menu ? $this->installMenu() : ''; // MENU
-            $page .= $topnav ? $this->installNavbar() : ''; // TOP NAVIGATION BAR
         }
 
         // Anything else
@@ -126,12 +124,27 @@ class TemplateLib
             );
         }
 
-        if (defined('IN_INSTALL') && !defined('IN_MESSAGE')) {
-            $page .= $this->template->set(
-                'general/simple_footer',
-                ['year' => $this->current_year]
-            );
-        }
+        // Show result page
+        die($page);
+    }
+
+    /**
+     * Display the installation page
+     *
+     * @param string $current_page
+     * @param array $langs
+     * @return void
+     */
+    public function displayInstall($current_page, $langs): void
+    {
+        $page = $this->installHeader();
+        $page .= $this->installMenu($langs); // MENU
+        $page .= $this->installNavbar($langs); // TOP NAVIGATION BAR
+        $page .= $current_page;
+        $page .= $this->template->set(
+            'install/simple_footer',
+            ['year' => $this->current_year]
+        );
 
         // Show result page
         die($page);
@@ -179,7 +192,7 @@ class TemplateLib
     {
         return $this->template->set(
             ($full ? 'adm/admin_page_view' : 'adm/simple_admin_page_view'),
-            array_merge($this->langs, $parse, ['page_content' => $page])
+            array_merge($parse, ['page_content' => $page])
         );
     }
 
@@ -206,34 +219,37 @@ class TemplateLib
      */
     private function adminSidebar(): string
     {
+        $lang = $this->langs->loadLang('adm/menu', true);
+
         $current_page = isset($_GET['page']) ? $_GET['page'] : null;
         $items = '';
         $flag = '';
         $pages = array(
-            ['moderation', $this->langs['mn_permissions'], '5'],
-            ['server', $this->langs['mn_config_server'], '2'],
-            ['modules', $this->langs['mn_config_modules'], '2'],
-            ['planets', $this->langs['mn_config_planets'], '2'],
-            ['registration', $this->langs['mn_config_registrations'], '2'],
-            ['statistics', $this->langs['mn_config_stats'], '2'],
-            ['premium', $this->langs['mn_premium'], '2'],
-            ['tasks', $this->langs['mn_info_tasks'], '3'],
-            ['errors', $this->langs['mn_info_db'], '3'],
-            ['fleets', $this->langs['mn_info_fleets'], '3'],
-            ['messages', $this->langs['mn_info_messages'], '3'],
-            ['maker', $this->langs['mn_edition_maker'], '4'],
-            ['users', $this->langs['mn_edition_users'], '4'],
-            ['alliances', $this->langs['mn_edition_alliances'], '4'],
-            ['languages', $this->langs['mn_edition_languages'], '4'],
-            ['backup', $this->langs['mn_tools_backup'], '5'],
-            ['encrypter', $this->langs['mn_tools_encrypter'], '5'],
-            ['announcement', $this->langs['mn_tools_global_message'], '5'],
-            ['ban', $this->langs['mn_tools_ban'], '5'],
-            ['rebuildhighscores', $this->langs['mn_tools_manual_update'], '5'],
-            ['update', $this->langs['mn_tools_update'], '5'],
-            ['migrate', $this->langs['mn_tools_migrate'], '5'],
-            ['repair', $this->langs['mn_maintenance_db'], '6'],
-            ['reset', $this->langs['mn_reset_universe'], '6'],
+            ['server', '2'],
+            ['modules', '2'],
+            ['planets', '2'],
+            ['registration', '2'],
+            ['statistics', '2'],
+            ['premium', '2'],
+            ['tasks', '3'],
+            ['errors', '3'],
+            ['fleets', '3'],
+            ['messages', '3'],
+            ['maker', '4'],
+            ['users', '4'],
+            ['alliances', '4'],
+            ['languages', '4'],
+            ['changelog', '4'],
+            ['permissions', '4'],
+            ['backup', '5'],
+            ['encrypter', '5'],
+            ['announcement', '5'],
+            ['ban', '5'],
+            ['rebuildhighscores', '5'],
+            ['update', '5'],
+            ['migrate', '5'],
+            ['repair', '6'],
+            ['reset', '6'],
         );
         $active_block = 1;
 
@@ -242,28 +258,27 @@ class TemplateLib
             $extra = '';
             $active = '';
 
-            if ($data[2] != $flag) {
-                $flag = $data[2];
+            if ($data[1] != $flag) {
+                $flag = $data[1];
                 $items = '';
             }
 
             if ($data[0] == 'rebuildhighscores') {
-                $extra = 'onClick="return confirm(\'' . $this->langs['mn_tools_manual_update_confirm'] . '\');"';
+                $extra = 'onClick="return confirm(\'' . $lang->line('tools_manual_update_confirm') . '\');"';
             }
 
             if ($data[0] == $current_page) {
                 $active = ' active';
-                $active_block = $data[2];
+                $active_block = $data[1];
             }
 
-            $items .= '<a class="collapse-item' . $active . '" href="' . ADM_URL . 'admin.php?page=' . $data[0] . '"  ' . $extra . '>' . $data[1] . '</a>';
+            $items .= '<a class="collapse-item' . $active . '" href="' . ADM_URL . 'admin.php?page=' . $data[0] . '"  ' . $extra . '>' . $lang->line($data[0]) . '</a>';
 
-            $parse_block[$data[2]] = $items;
+            $parse_block[$data[1]] = $items;
         }
 
         // PARSE THE MENU AND OTHER DATA
-        $parse = $this->langs;
-        $parse['username'] = $this->current_user['user_name'];
+        $parse = $lang->language;
         $parse['menu_block_2'] = $parse_block[2];
         $parse['menu_block_3'] = $parse_block[3];
         $parse['menu_block_4'] = $parse_block[4];
@@ -300,7 +315,7 @@ class TemplateLib
         return $this->template->set(
             'adm/navigation_view',
             array_merge(
-                $this->langs,
+                $this->langs->loadLang('adm/navigation', true)->language,
                 [
                     'user_name' => $this->current_user['user_name'],
                     'current_date' => Timing::formatShortDate(time()),
@@ -386,59 +401,6 @@ class TemplateLib
     }
 
     /**
-     * parse the data into the provided template
-     *
-     * @param array  $array    Values to parse
-     * @param string $template Template
-     *
-     * @return void
-     *
-     * @deprecated since version v3.1.0, will be removed on v3.2.0
-     */
-    public function parse($array = array(), $template = '')
-    {
-        return preg_replace_callback(
-            '#\{([a-z0-9\-_]*?)\}#Ssi',
-            function ($matches) use ($array) {
-                return ((isset($array[$matches[1]])) ? $array[$matches[1]] : '');
-            },
-            ($template == '' ? $this->template : $template)
-        );
-    }
-
-    /**
-     * get the provided template
-     *
-     * @param string $template_name Template name
-     *
-     * @return string
-     *
-     * @deprecated since version v3.1.0, will be removed on v3.2.0
-     */
-    public function get($template_name)
-    {
-        try {
-            $route = XGP_ROOT . TEMPLATE_DIR . $template_name . '.php';
-            $template = @file_get_contents($route);
-
-            if ($template) { // We got something
-                $this->template = $template;
-
-                return $this;
-            }
-
-            // not found
-            throw new \Exception(
-                'Template not found or empty: <strong>' . $template_name . '</strong><br />
-    Location: <strong>' . $route . '</strong>'
-            );
-        } catch (\Exception $e) {
-            // Throw Exception
-            die($e->getMessage());
-        }
-    }
-
-    /**
      * installHeader
      *
      * @return string
@@ -460,7 +422,7 @@ class TemplateLib
      *
      * @return string
      */
-    private function installNavbar()
+    private function installNavbar($langs)
     {
         // Update config language to the new setted value
         if (isset($_POST['language'])) {
@@ -472,9 +434,9 @@ class TemplateLib
         $items = '';
 
         $pages = [
-            0 => array('installation', $this->langs['ins_overview'], 'overview'),
-            1 => array('installation', $this->langs['ins_license'], 'license'),
-            2 => array('installation', $this->langs['ins_install'], 'step1'),
+            0 => array('installation', $langs['ins_overview'], 'overview'),
+            1 => array('installation', $langs['ins_license'], 'license'),
+            2 => array('installation', $langs['ins_install'], 'step1'),
         ];
 
         // BUILD THE MENU
@@ -491,7 +453,7 @@ class TemplateLib
         }
 
         // PARSE THE MENU AND OTHER DATA
-        $parse = $this->langs;
+        $parse = $langs;
         $parse['menu_items'] = $items;
         $parse['language_select'] = FunctionsLib::getLanguages(FunctionsLib::getCurrentLanguage());
 
@@ -506,16 +468,16 @@ class TemplateLib
      *
      * @return string
      */
-    private function installMenu()
+    private function installMenu($langs)
     {
         $current_mode = isset($_GET['mode']) ? $_GET['mode'] : null;
         $items = '';
         $steps = [
-            0 => ['step1', $this->langs['ins_step1']],
-            1 => ['step2', $this->langs['ins_step2']],
-            2 => ['step3', $this->langs['ins_step3']],
-            3 => ['step4', $this->langs['ins_step4']],
-            4 => ['step5', $this->langs['ins_step5']],
+            0 => ['step1', $langs['ins_step1']],
+            1 => ['step2', $langs['ins_step2']],
+            2 => ['step3', $langs['ins_step3']],
+            3 => ['step4', $langs['ins_step4']],
+            4 => ['step5', $langs['ins_step5']],
         ];
 
         // BUILD THE MENU
@@ -526,7 +488,7 @@ class TemplateLib
         }
 
         // PARSE THE MENU AND OTHER DATA
-        $parse = $this->langs;
+        $parse = $langs;
         $parse['menu_items'] = $items;
 
         return $this->template->set(
@@ -564,17 +526,18 @@ class TemplateLib
      */
     private function gameNavbar()
     {
-        $parse = $this->langs;
+        $lang = $this->langs->loadLang(['game/global', 'game/navigation'], true);
+
+        $parse = $lang->language;
         $parse['dpath'] = DPATH;
         $parse['image'] = $this->current_planet['planet_image'];
-        $parse['planetlist'] = FunctionsLib::buildPlanetList($this->current_user);
-
+        $parse['planetlist'] = $this->buildPlanetList();
         $parse['show_umod_notice'] = '';
 
         // When vacation mode did not expire
         if ($this->current_user['preference_vacation_mode'] > 0) {
             $parse['color'] = '#1DF0F0';
-            $parse['message'] = $this->langs['tn_vacation_mode'] . Timing::formatExtendedDate($this->current_user['preference_vacation_mode']);
+            $parse['message'] = $lang->line('tn_vacation_mode') . Timing::formatExtendedDate($this->current_user['preference_vacation_mode']);
             $parse['jump_line'] = '<br/>';
 
             $parse['show_umod_notice'] = $this->template->set(
@@ -586,7 +549,7 @@ class TemplateLib
         if ($this->current_user['preference_delete_mode'] > 0) {
             // When it is in delete mode
             $parse['color'] = '#FF0000';
-            $parse['message'] = $this->langs['tn_delete_mode'] . Timing::formatExtendedDate($this->current_user['preference_delete_mode'] + (60 * 60 * 24 * 7));
+            $parse['message'] = $lang->line('tn_delete_mode') . Timing::formatExtendedDate($this->current_user['preference_delete_mode'] + (60 * 60 * 24 * 7));
             $parse['jump_line'] = '';
 
             $parse['show_umod_notice'] = $this->template->set(
@@ -631,11 +594,11 @@ class TemplateLib
             $energy = FormatLib::colorRed($energy);
         }
 
-        $parse['metal'] = $metal;
-        $parse['crystal'] = $crystal;
-        $parse['deuterium'] = $deuterium;
-        $parse['darkmatter'] = $darkmatter;
-        $parse['energy'] = $energy;
+        $parse['re_metal'] = $metal;
+        $parse['re_crystal'] = $crystal;
+        $parse['re_deuterium'] = $deuterium;
+        $parse['re_darkmatter'] = $darkmatter;
+        $parse['re_energy'] = $energy;
         $parse['img_commander'] = $commander;
         $parse['img_admiral'] = $admiral;
         $parse['img_engineer'] = $engineer;
@@ -655,6 +618,8 @@ class TemplateLib
      */
     private function gameMenu()
     {
+        $lang = $this->langs->loadLang('game/menu', true);
+
         $menu_block1 = '';
         $menu_block2 = '';
         $menu_block3 = '';
@@ -663,29 +628,29 @@ class TemplateLib
         $this->current_planet['stats_users'] : $this->current_user['user_statistic_total_rank'];
         $pages = [
             ['changelog', SYSTEM_VERSION, '', 'FFF', '', '0', '0'],
-            ['overview', $this->langs['lm_overview'], '', 'FFF', '', '1', '1'],
-            ['empire', $this->langs['lm_empire'], '', 'FFF', '', '1', '2'],
-            ['resources', $this->langs['lm_resources'], '', 'FFF', '', '1', '3'],
-            ['resourceSettings', $this->langs['lm_resources_settings'], '', 'FFF', '', '1', '4'],
-            ['station', $this->langs['lm_station'], '', 'FFF', '', '1', '3'],
-            ['traderOverview', $this->langs['lm_trader'], '', 'FF8900', '', '1', '5'],
-            ['research', $this->langs['lm_research'], '', 'FFF', '', '1', '6'],
-            ['techtree', $this->langs['lm_technology'], '', 'FFF', '', '1', '10'],
-            ['shipyard', $this->langs['lm_shipyard'], '', 'FFF', '', '1', '7'],
-            ['defense', $this->langs['lm_defenses'], '', 'FFF', '', '1', '12'],
-            ['fleet1', $this->langs['lm_fleet'], '', 'FFF', '', '1', '8'],
-            ['movement', $this->langs['lm_movement'], '', 'FFF', '', '1', '9'],
-            ['galaxy', $this->langs['lm_galaxy'], 'mode=0', 'FFF', '', '1', '11'],
-            ['alliance', $this->langs['lm_alliance'], '', 'FFF', '', '1', '13'],
-            ['officier', $this->langs['lm_officiers'], '', 'FF8900', '', '1', '15'],
-            ['messages', $this->langs['lm_messages'], '', 'FFF', '', '1', '18'],
-            ['statistics', $this->langs['lm_statistics'], 'range=' . $tota_rank, 'FFF', '', '2', '16'],
-            ['notes', $this->langs['lm_notes'], '', 'FFF', 'true', '2', '19'],
-            ['buddies', $this->langs['lm_buddylist'], '', 'FFF', '', '2', '20'],
-            ['search', $this->langs['lm_search'], '', 'FFF', '', '2', '17'],
-            ['preferences', $this->langs['lm_options'], '', 'FFF', '', '2', '21'],
-            ['logout', $this->langs['lm_logout'], '', 'FFF', '', '2', ''],
-            ['forums', $this->langs['lm_forums'], '', 'FFF', '', '3', '14'],
+            ['overview', $lang->line('lm_overview'), '', 'FFF', '', '1', '1'],
+            ['empire', $lang->line('lm_empire'), '', 'FFF', '', '1', '2'],
+            ['resources', $lang->line('lm_resources'), '', 'FFF', '', '1', '3'],
+            ['resourceSettings', $lang->line('lm_resources_settings'), '', 'FFF', '', '1', '4'],
+            ['station', $lang->line('lm_station'), '', 'FFF', '', '1', '3'],
+            ['traderOverview', $lang->line('lm_trader'), '', 'FF8900', '', '1', '5'],
+            ['research', $lang->line('lm_research'), '', 'FFF', '', '1', '6'],
+            ['techtree', $lang->line('lm_technology'), '', 'FFF', '', '1', '10'],
+            ['shipyard', $lang->line('lm_shipyard'), '', 'FFF', '', '1', '7'],
+            ['defense', $lang->line('lm_defenses'), '', 'FFF', '', '1', '12'],
+            ['fleet1', $lang->line('lm_fleet'), '', 'FFF', '', '1', '8'],
+            ['movement', $lang->line('lm_movement'), '', 'FFF', '', '1', '9'],
+            ['galaxy', $lang->line('lm_galaxy'), 'mode=0', 'FFF', '', '1', '11'],
+            ['alliance', $lang->line('lm_alliance'), '', 'FFF', '', '1', '13'],
+            ['officier', $lang->line('lm_officiers'), '', 'FF8900', '', '1', '15'],
+            ['messages', $lang->line('lm_messages'), '', 'FFF', '', '1', '18'],
+            ['statistics', $lang->line('lm_statistics'), 'range=' . $tota_rank, 'FFF', '', '2', '16'],
+            ['notes', $lang->line('lm_notes'), '', 'FFF', 'true', '2', '19'],
+            ['buddies', $lang->line('lm_buddylist'), '', 'FFF', '', '2', '20'],
+            ['search', $lang->line('lm_search'), '', 'FFF', '', '2', '17'],
+            ['preferences', $lang->line('lm_options'), '', 'FFF', '', '2', '21'],
+            ['logout', $lang->line('lm_logout'), '', 'FFF', '', '2', ''],
+            ['forums', $lang->line('lm_forums'), '', 'FFF', '', '3', '14'],
         ];
 
         // BUILD THE MENU
@@ -762,7 +727,7 @@ class TemplateLib
         $parse['menu_block3'] = $menu_block3;
         $parse['admin_link'] = (($this->current_user['user_authlevel'] > 0) ?
             "<tr><td><div align=\"center\"><a href=\"admin.php\" target=\"_blank\">
-            <font color=\"lime\">" . $this->langs['lm_administration'] . "</font></a></div></td></tr>" : "");
+            <font color=\"lime\">" . $lang->line('lm_administration') . "</font></a></div></td></tr>" : "");
 
         return $this->template->set(
             'general/left_menu_view',
@@ -789,7 +754,89 @@ class TemplateLib
             }
         }
 
-        return implode($new_lines);
+        return join($new_lines);
+    }
+
+    /**
+     * Build the list of planet
+     *
+     * @return void
+     */
+    private function buildPlanetList()
+    {
+        $lang = $this->langs->loadLang('game/global', true);
+
+        $db = new Database();
+        $list = '';
+        $user_planets = $this->sortPlanets();
+
+        $page = isset($_GET['page']) ? $_GET['page'] : '';
+        $gid = isset($_GET['gid']) ? $_GET['gid'] : '';
+        $mode = isset($_GET['mode']) ? $_GET['mode'] : '';
+
+        if ($user_planets) {
+            while ($planets = $db->fetchArray($user_planets)) {
+                $list .= "\n<option ";
+                $list .= (($planets['planet_id'] == $this->current_user['user_current_planet']) ?
+                    'selected="selected" ' : '');
+
+                $list .= "value=\"game.php?page=" . $page . "&gid=" .
+                    $gid . "&cp=" . $planets['planet_id'] . "";
+                $list .= "&amp;mode=" . $mode;
+                $list .= "&amp;re=0\">";
+
+                $list .= (($planets['planet_type'] != PlanetTypesEnumerator::MOON) ? $planets['planet_name'] : $planets['planet_name'] . ' (' . $lang->line('moon') . ')');
+                $list .= "&nbsp;[" . $planets['planet_galaxy'] . ":";
+                $list .= $planets['planet_system'] . ":";
+                $list .= $planets['planet_planet'];
+                $list .= "]&nbsp;&nbsp;</option>";
+            }
+        }
+
+        // IF THE LIST OF PLANETS IS EMPTY WE SHOULD RETURN false
+        if ($list !== '') {
+            return $list;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Sort planets
+     *
+     * @return void
+     */
+    private function sortPlanets()
+    {
+        $db = new Database();
+        $order = $this->current_user['preference_planet_sort_sequence'] == 1 ? "DESC" : "ASC"; // up or down
+        $sort = $this->current_user['preference_planet_sort'];
+
+        $planets = "SELECT `planet_id`, `planet_name`, `planet_galaxy`, `planet_system`, `planet_planet`, `planet_type`
+                    FROM " . PLANETS . "
+                    WHERE `planet_user_id` = '" . (int) $this->current_user['user_id'] . "'
+                        AND `planet_destroyed` = 0 ORDER BY ";
+
+        switch ($sort) {
+            case 0: // emergence
+            default:
+                $planets .= "`planet_id` " . $order;
+                break;
+            case 1: // coordinates
+                $planets .= "`planet_galaxy` " . $order . ", `planet_system` " . $order . ", `planet_planet` " . $order . ", `planet_type` " . $order;
+                break;
+            case 2: // alphabet
+                $planets .= "`planet_name` " . $order;
+                break;
+            case 3: // size
+                $planets .= "`planet_diameter` " . $order;
+                break;
+            case 4: // used_fields
+                $planets .= "`planet_field_current` " . $order;
+                break;
+        }
+
+        return $db->query($planets);
     }
 }
 

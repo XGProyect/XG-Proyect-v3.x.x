@@ -34,6 +34,9 @@ class Info extends Controller
     {
         parent::__construct();
 
+        // load Language
+        parent::loadLang('ajax/info');
+
         // build the page
         $this->buildPage();
     }
@@ -46,7 +49,7 @@ class Info extends Controller
     private function buildPage()
     {
         parent::$page->display(
-            $this->getTemplate()->set('ajax/info_view', $this->getLang()),
+            $this->getTemplate()->set('ajax/info_view', $this->langs->language),
             false,
             '',
             false

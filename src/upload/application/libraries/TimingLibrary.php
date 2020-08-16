@@ -13,7 +13,7 @@
  */
 namespace application\libraries;
 
-use application\core\XGPCore;
+use application\core\Language;
 
 /**
  * Timing Library Class
@@ -25,7 +25,7 @@ use application\core\XGPCore;
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-abstract class TimingLibrary extends XGPCore
+abstract class TimingLibrary
 {
     /**
      * Return an string with the online time formatted
@@ -36,17 +36,20 @@ abstract class TimingLibrary extends XGPCore
      */
     public static function setOnlineStatus($online_time)
     {
+        $lang = new Language;
+        $lang = $lang->loadLang('game/global', true);
+
         $color = 'red';
-        $status = parent::$lang['offline'];
+        $status = $lang->line('offline');
 
         if ($online_time + 60 * 15 >= time()) {
             $color = 'yellow';
-            $status = parent::$lang['minutes'];
+            $status = $lang->line('minutes');
         }
 
         if ($online_time + 60 * 10 >= time()) {
             $color = 'lime';
-            $status = parent::$lang['online'];
+            $status = $lang->line('online');
         }
 
         return FormatLib::customColor($status, $color);

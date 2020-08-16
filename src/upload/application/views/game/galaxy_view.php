@@ -229,7 +229,7 @@
                                 <input type="button" name="galaxyLeft" value="&lt;-" onClick="galaxy_submit('galaxyLeft')">
                             </td>
                             <td style="background-color: transparent">
-                                <input type="text" name="galaxy" value="{galaxy}" size="5" maxlength="3" tabindex="1">
+                                <input type="number" name="galaxy" value="{galaxy}" style="width:50px;" min="1" max="{max_galaxy}" tabindex="1">
                             </td>
                             <td style="background-color: transparent">
                                 <input type="button" name="galaxyRight" value="-&gt;" onClick="galaxy_submit('galaxyRight')">
@@ -241,7 +241,7 @@
                                 <input type="button" name="systemLeft" value="&lt;-" onClick="galaxy_submit('systemLeft')">
                             </td>
                             <td style="background-color: transparent">
-                                <input type="text" name="system" value="{system}" size="5" maxlength="3" tabindex="2">
+                                <input type="number" name="system" value="{system}" style="width:50px;" min="1" max="{max_system}" tabindex="2">
                             </td>
                             <td style="background-color: transparent">
                                 <input type="button" name="systemRight" value="-&gt;" onClick="galaxy_submit('systemRight')">

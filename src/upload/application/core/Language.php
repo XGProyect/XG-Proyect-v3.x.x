@@ -13,6 +13,9 @@
  */
 namespace application\core;
 
+use CI_Lang;
+use Exception;
+
 /**
  * Language Class
  *
@@ -21,11 +24,10 @@ namespace application\core;
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
- * @version  3.0.0
+ * @version  3.1.0
  */
 class Language
 {
-
     /**
      *
      * @var array
@@ -39,71 +41,49 @@ class Language
     private $lang_extension = 'php';
 
     /**
-     * __construct
-     *
-     * @return void
+     * Constructor
      */
     public function __construct()
     {
-        $languages_loaded = $this->getFileName();
-
-        if (defined('DEFAULT_LANG')) {
-            foreach ($languages_loaded as $load) {
-                $route = XGP_ROOT . LANG_PATH . DEFAULT_LANG . '/' . $load . '.' . $this->lang_extension;
-
-                // WE GOT SOMETHING
-                if (file_exists($route)) {
-                    // GET THE LANGUAGE PACK
-                    include $route;
-                }
-            }
-
-            // WE GOT SOMETHING
-            if (!empty($lang)) {
-                // SET DATA
-                $this->lang = $lang;
-            } else {
-                // THROW EXCEPTION
-                die('Language not found or empty: <strong>' . $load . '</strong><br/>
-                    Location: <strong>' . $route . '</strong>');
-            }
-        }
     }
 
     /**
-     * lang
+     * Load a language file using CI Library
      *
-     * @return array
+     * @param string|array $language_file
+     * @return void
      */
-    public function lang()
+    public function loadLang($language_file, $return = false)
     {
-        return $this->lang;
-    }
+        try {
+            // require langugage library
+            $ci_lang_path = XGP_ROOT . SYSTEM_PATH . 'ci3_custom' . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'Lang.php';
 
-    /**
-     * getFileName
-     *
-     * @return array
-     */
-    private function getFileName()
-    {
-        if (defined('IN_ADMIN')) {
-            $required[] = 'ADMIN';
+            if (!file_exists($ci_lang_path)) {
+                // not found
+                throw new Exception('Language file "' . $language_file . '" not defined');
+                return;
+            }
+
+            // required by the library
+            if (!defined('BASEPATH')) {
+                define('BASEPATH', XGP_ROOT . APP_PATH);
+            }
+
+            // use CI library
+            require_once $ci_lang_path;
+
+            if ($return) {
+                $lang = new CI_Lang;
+                $lang->load($language_file, DEFAULT_LANG);
+                return $lang;
+            }
+
+            $this->langs = new CI_Lang;
+            $this->langs->load($language_file, DEFAULT_LANG);
+        } catch (Exception $e) {
+            die('Fatal error: ' . $e->getMessage());
         }
-
-        if (defined('IN_GAME')) {
-            $required[] = 'INGAME';
-        }
-
-        if (defined('IN_INSTALL')) {
-            $required[] = 'INSTALL';
-        }
-
-        if (defined('IN_LOGIN')) {
-            $required[] = 'HOME';
-        }
-
-        return $required;
     }
 }
 

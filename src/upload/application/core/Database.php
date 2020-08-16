@@ -28,7 +28,6 @@ use mysqli;
  */
 class Database
 {
-
     /**
      *
      * @var string
@@ -43,44 +42,53 @@ class Database
 
     /**
      *
-     * @var boolean
-     */
-    private $magic_quotes_active;
-
-    /**
-     *
      * @var DebugLib
      */
     private $debug;
 
     /**
-     * createPlanetWithOptions
+     * DB Data
      *
-     * @param array $data Data
-     *
-     * @return void
+     * @var array
+     */
+    private $db_data = [
+        'host' => '',
+        'user' => '',
+        'pass' => '',
+        'name' => '',
+        'prefix' => '',
+    ];
+
+    /**
+     * Constructor
      */
     public function __construct()
     {
-        require_once XGP_ROOT . 'application' . DIRECTORY_SEPARATOR . 'libraries' . DIRECTORY_SEPARATOR . 'DebugLib.php';
+        require_once XGP_ROOT . 'application' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'config.php';
+
+        if (defined('DB_HOST') && defined('DB_USER') && defined('DB_PASS') && defined('DB_NAME') && defined('DB_PREFIX')) {
+            $this->db_data = [
+                'host' => DB_HOST,
+                'user' => DB_USER,
+                'pass' => DB_PASS,
+                'name' => DB_NAME,
+                'prefix' => DB_PREFIX,
+            ];
+        }
 
         $this->debug = new DebugLib();
         $this->openConnection();
-
-        if (version_compare(PHP_VERSION, '7.3.0', '<')) {
-            $this->magic_quotes_active = get_magic_quotes_gpc();
-        }
     }
 
     /**
-     * openConnection
+     * Open connection
      *
-     * @return boolean
+     * @return void
      */
     public function openConnection()
     {
-        if (defined('DB_HOST') && defined('DB_USER') && defined('DB_PASS') && defined('DB_NAME')) {
-            if (!$this->tryConnection(DB_HOST, DB_USER, DB_PASS)) {
+        if (isset($this->db_data['host']) && isset($this->db_data['user']) && isset($this->db_data['pass']) && isset($this->db_data['name'])) {
+            if (!$this->tryConnection($this->db_data['host'], $this->db_data['user'], $this->db_data['pass'])) {
                 if (!defined('IN_INSTALL')) {
                     die($this->debug->error(
                         -1,
@@ -88,7 +96,7 @@ class Database
                     ));
                 }
             } else {
-                if (!$this->tryDatabase(DB_NAME)) {
+                if (!$this->tryDatabase($this->db_data['name'])) {
                     if (!defined('IN_INSTALL')) {
                         die($this->debug->error(
                             -1,
@@ -125,6 +133,9 @@ class Database
             return false;
         }
 
+        // force utf8 to avoid weird characters
+        $this->connection->set_charset("utf8");
+
         return true;
     }
 
@@ -138,7 +149,6 @@ class Database
     public function tryDatabase($db_name)
     {
         if (empty($db_name)) {
-
             return false;
         }
 
@@ -177,7 +187,10 @@ class Database
     public function closeConnection()
     {
         if (isset($this->connection) && (is_resource($this->connection) or is_object($this->connection))) {
-            $this->connection->close();
+            if ($this->connection->connect_errno == 0) {
+                $this->connection->close();
+            }
+
             unset($this->connection);
 
             return true;
@@ -193,9 +206,10 @@ class Database
      *
      * @return mixed
      */
-    public function query($sql = false)
+    public function query($sql = '')
     {
-        if ($sql != false) {
+        if ($sql != '') {
+            $sql = $this->prepareSql($sql);
             $this->last_query = $sql;
             $result = @$this->connection->query($sql);
 
@@ -214,9 +228,10 @@ class Database
      *
      * @return mixed
      */
-    public function queryFetch($sql = false)
+    public function queryFetch($sql = '')
     {
-        if ($sql != false) {
+        if ($sql != '') {
+            $sql = $this->prepareSql($sql);
             $this->last_query = $sql;
             $result = @$this->connection->query($sql);
 
@@ -235,9 +250,10 @@ class Database
      *
      * @return mixed
      */
-    public function queryFetchAll($sql = false)
+    public function queryFetchAll($sql = '')
     {
-        if ($sql != false) {
+        if ($sql != '') {
+            $sql = $this->prepareSql($sql);
             $this->last_query = $sql;
             $result = @$this->connection->query($sql);
 
@@ -256,9 +272,10 @@ class Database
      *
      * @return mixed
      */
-    public function queryMulty($sql = false)
+    public function queryMulty($sql = '')
     {
-        if ($sql != false) {
+        if ($sql != '') {
+            $sql = $this->prepareSql($sql);
             $this->last_query = $sql;
             $result = @$this->connection->multi_query($sql);
 
@@ -279,11 +296,6 @@ class Database
      */
     public function escapeValue($value)
     {
-        // undo any magic quote effects so mysqli_real_escape_string can do the work
-        if ($this->magic_quotes_active) {
-            $value = stripslashes($value);
-        }
-
         return $this->connection->real_escape_string($value);
     }
 
@@ -413,28 +425,6 @@ class Database
     }
 
     /**
-     * confirmQuery
-     *
-     * @param array $result Result set
-     *
-     * @return void
-     */
-    private function confirmQuery($result)
-    {
-        if (!$result) {
-            $output = "Database query failed: " . $this->connection->error;
-
-            // uncomment below line when you want to debug your last query
-            $output .= " Last SQL Query: " . $this->last_query;
-
-            die($this->debug->error(-1, $output));
-        }
-
-        // DEBUG LOG
-        $this->debug->add($this->last_query);
-    }
-
-    /**
      * Set the auto commit for transactions
      *
      * @param bool $status
@@ -496,12 +486,10 @@ class Database
     {
         // GET ALL THE TABLES
         if ($tables == '*') {
-
             $tables = array();
             $result = $this->query('SHOW TABLES');
 
             while ($row = $this->fetchRow($result)) {
-
                 $tables[] = $row[0];
             }
         } else {
@@ -512,7 +500,6 @@ class Database
 
         //CYCLE TROUGHT
         foreach ($tables as $table) {
-
             $result = $this->query('SELECT * FROM ' . $table);
             $num_fields = $this->numFields($result);
 
@@ -521,26 +508,20 @@ class Database
             $return .= "\n\n" . $row2[1] . ";\n\n";
 
             for ($i = 0; $i < $num_fields; $i++) {
-
                 while ($row = $this->fetchRow($result)) {
-
                     $return .= 'INSERT INTO ' . $table . ' VALUES(';
 
                     for ($j = 0; $j < $num_fields; $j++) {
-
                         $row[$j] = addslashes($row[$j]);
                         $row[$j] = str_replace("\n", "\\n", $row[$j]);
 
                         if (isset($row[$j])) {
-
                             $return .= '"' . $row[$j] . '"';
                         } else {
-
                             $return .= '""';
                         }
 
                         if ($j < ($num_fields - 1)) {
-
                             $return .= ',';
                         }
                     }
@@ -552,13 +533,46 @@ class Database
         }
 
         // SAVE FILE
-        $file_name = 'db-backup-' . date('Ymd') . '-' . time() . '-' . (sha1(implode(',', $tables))) . '.sql';
+        $file_name = 'db-backup-' . date('Ymd') . '-' . time() . '-' . (sha1(join(',', $tables))) . '.sql';
         $handle = fopen(XGP_ROOT . BACKUP_PATH . $file_name, 'w+');
         $writed = fwrite($handle, $return);
 
         fclose($handle);
 
         return $writed;
+    }
+
+    /**
+     * confirmQuery
+     *
+     * @param array $result Result set
+     *
+     * @return void
+     */
+    private function confirmQuery($result)
+    {
+        if (!$result) {
+            $output = "Database query failed: " . $this->connection->error;
+
+            // uncomment below line when you want to debug your last query
+            $output .= " Last SQL Query: " . $this->last_query;
+
+            die($this->debug->error(-1, $output));
+        }
+
+        // DEBUG LOG
+        $this->debug->add($this->last_query);
+    }
+
+    /**
+     * Prepares the query string to be ready to be executed
+     *
+     * @param string $query
+     * @return string
+     */
+    private function prepareSql(string $query): string
+    {
+        return strtr($query, ['{xgp_prefix}' => $this->db_data['prefix']]);
     }
 }
 
