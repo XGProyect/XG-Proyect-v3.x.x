@@ -51,7 +51,7 @@ class Phalanx extends Controller
         parent::loadModel('game/phalanx');
 
         // load Language
-        parent::loadLang('phalanx');
+        parent::loadLang('game/phalanx');
 
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));

@@ -58,7 +58,7 @@ class Research extends Controller
         parent::loadModel('game/research');
 
         // load Language
-        parent::loadLang(['global', 'game/research', 'technologies']);
+        parent::loadLang(['game/global', 'game/research', 'game/technologies']);
 
         $this->_current_user = parent::$users->getUserData();
         $this->_current_planet = parent::$users->getPlanetData();

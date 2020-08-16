@@ -265,7 +265,7 @@ abstract class FunctionsLib extends XGPCore
     {
         if ($access_level == 0) {
             $lang = new Language;
-            die(self::message($lang->loadLang('global', true)->line('module_not_accesible'), '', '', true));
+            die(self::message($lang->loadLang('game/global', true)->line('module_not_accesible'), '', '', true));
         }
     }
 

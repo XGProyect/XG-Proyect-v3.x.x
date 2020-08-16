@@ -64,7 +64,7 @@ class Officier extends Controller
         parent::loadModel('game/officier');
 
         // load Language
-        parent::loadLang(['global', 'officier']);
+        parent::loadLang(['game/global', 'game/officier']);
 
         // set data
         $this->user = $this->getUserData();

@@ -80,7 +80,7 @@ class Alliance extends Controller
         parent::loadModel('game/alliance');
 
         // load Language
-        parent::loadLang('alliance');
+        parent::loadLang('game/alliance');
 
         // load Library
         $this->bbcode = FunctionsLib::loadLibrary('BBCodeLib');

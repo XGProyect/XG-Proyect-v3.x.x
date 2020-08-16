@@ -61,7 +61,7 @@ class Banned extends Controller
         parent::loadModel('game/banned');
 
         // load Language
-        parent::loadLang('banned');
+        parent::loadLang('game/banned');
 
         // build the page
         $this->buildPage();

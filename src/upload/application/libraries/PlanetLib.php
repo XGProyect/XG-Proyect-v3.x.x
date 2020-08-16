@@ -179,7 +179,7 @@ class PlanetLib extends XGPCore
     private function loadLanguage()
     {
         $lang = new Language();
-        $lang = $lang->loadLang('global', true);
+        $lang = $lang->loadLang('game/global', true);
 
         $this->langs = $lang;
     }

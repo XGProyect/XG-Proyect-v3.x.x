@@ -62,7 +62,7 @@ class Empire extends Controller
         parent::loadModel('game/empire');
 
         // load Language
-        parent::loadLang(['global', 'constructions', 'defenses', 'technologies', 'ships', 'game/empire']);
+        parent::loadLang(['game/global', 'game/constructions', 'game/defenses', 'game/technologies', 'game/ships', 'game/empire']);
 
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));

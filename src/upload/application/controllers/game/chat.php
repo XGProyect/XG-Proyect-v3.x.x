@@ -66,7 +66,7 @@ class Chat extends Controller
         parent::loadModel('game/messages');
 
         // load Language
-        parent::loadLang('chat');
+        parent::loadLang('game/chat');
 
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));

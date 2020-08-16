@@ -36,7 +36,7 @@ class Stay extends Missions
         parent::__construct();
 
         // load Language
-        parent::loadLang(['missions', 'game/stay']);
+        parent::loadLang(['game/missions', 'game/stay']);
     }
 
     /**

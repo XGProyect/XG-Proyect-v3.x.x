@@ -37,7 +37,7 @@ abstract class TimingLibrary
     public static function setOnlineStatus($online_time)
     {
         $lang = new Language;
-        $lang = $lang->loadLang('global', true);
+        $lang = $lang->loadLang('game/global', true);
 
         $color = 'red';
         $status = $lang->line('offline');

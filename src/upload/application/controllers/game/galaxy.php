@@ -84,7 +84,7 @@ class Galaxy extends Controller
         parent::loadModel('game/galaxy');
 
         // load Language
-        parent::loadLang(['global', 'defenses', 'missions', 'galaxy']);
+        parent::loadLang(['game/global', 'game/defenses', 'game/missions', 'game/galaxy']);
 
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));

@@ -526,7 +526,7 @@ class TemplateLib
      */
     private function gameNavbar()
     {
-        $lang = $this->langs->loadLang(['global', 'game/navigation'], true);
+        $lang = $this->langs->loadLang(['game/global', 'game/navigation'], true);
 
         $parse = $lang->language;
         $parse['dpath'] = DPATH;
@@ -764,7 +764,7 @@ class TemplateLib
      */
     private function buildPlanetList()
     {
-        $lang = $this->langs->loadLang('global', true);
+        $lang = $this->langs->loadLang('game/global', true);
 
         $db = new Database();
         $list = '';

@@ -60,7 +60,7 @@ class TraderLayer extends Controller
         parent::loadModel('game/trader');
 
         // load Language
-        parent::loadLang(['global', 'trader']);
+        parent::loadLang(['game/global', 'game/trader']);
 
         // Check module access
         Functions::moduleMessage(Functions::isModuleAccesible(self::MODULE_ID));

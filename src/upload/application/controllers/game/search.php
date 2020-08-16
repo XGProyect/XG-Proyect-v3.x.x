@@ -78,7 +78,7 @@ class Search extends Controller
         parent::loadModel('game/search');
 
         // load Language
-        parent::loadLang('search');
+        parent::loadLang('game/search');
 
         // load library
         $this->noob = FunctionsLib::loadLibrary('NoobsProtectionLib');

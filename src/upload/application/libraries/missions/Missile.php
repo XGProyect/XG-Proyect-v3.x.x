@@ -36,7 +36,7 @@ class Missile extends Missions
         parent::__construct();
 
         // load Language
-        parent::loadLang(['missions', 'game/missile', 'defenses']);
+        parent::loadLang(['game/missions', 'game/missile', 'game/defenses']);
     }
 
     /**

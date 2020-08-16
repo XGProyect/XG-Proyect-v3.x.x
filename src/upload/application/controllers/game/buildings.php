@@ -85,7 +85,7 @@ class Buildings extends Controller
         parent::loadModel('game/buildings');
 
         // load Language
-        parent::loadLang(['global', 'game/buildings', 'constructions']);
+        parent::loadLang(['game/global', 'game/buildings', 'game/constructions']);
 
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));

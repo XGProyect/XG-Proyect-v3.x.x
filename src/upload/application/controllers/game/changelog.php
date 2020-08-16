@@ -46,7 +46,7 @@ class Changelog extends Controller
         parent::loadModel('game/changelog');
 
         // load Language
-        parent::loadLang('changelog');
+        parent::loadLang('game/changelog');
 
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));

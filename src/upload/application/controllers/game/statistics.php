@@ -50,7 +50,7 @@ class Statistics extends Controller
         parent::loadModel('game/statistics');
 
         // load Language
-        parent::loadLang(['global', 'game/statistics']);
+        parent::loadLang(['game/global', 'game/statistics']);
 
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));

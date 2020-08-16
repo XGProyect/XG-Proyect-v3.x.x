@@ -246,7 +246,7 @@ class Users_library
 
         if ($user_row['user_banned'] > 0) {
             $core = new Language();
-            $ci_lang = $core->loadLang('global', true);
+            $ci_lang = $core->loadLang('game/global', true);
 
             $parse = $ci_lang->language;
             $parse['banned_until'] = Timing::formatExtendedDate($user_row['user_banned']);

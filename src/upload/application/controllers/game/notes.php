@@ -72,7 +72,7 @@ class Notes extends Controller
         parent::loadModel('game/notes');
 
         // load Language
-        parent::loadLang('notes');
+        parent::loadLang('game/notes');
 
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));

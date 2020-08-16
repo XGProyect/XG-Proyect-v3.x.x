@@ -58,7 +58,7 @@ class Infos extends Controller
         parent::loadModel('game/infos');
 
         // load Language
-        parent::loadLang(['global', 'game/infos', 'constructions', 'defenses', 'ships', 'technologies']);
+        parent::loadLang(['game/global', 'game/infos', 'game/constructions', 'game/defenses', 'game/ships', 'game/technologies']);
 
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));

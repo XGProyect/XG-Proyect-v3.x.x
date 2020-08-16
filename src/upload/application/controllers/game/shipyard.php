@@ -110,7 +110,7 @@ class Shipyard extends Controller
         parent::loadModel('game/shipyard');
 
         // load Language
-        parent::loadLang(['global', 'game/shipyard', 'defenses', 'ships']);
+        parent::loadLang(['game/global', 'game/shipyard', 'game/defenses', 'game/ships']);
 
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));

@@ -41,7 +41,7 @@ class Spy extends Missions
         parent::__construct();
 
         // load Language
-        parent::loadLang(['global', 'missions', 'game/spy', 'constructions', 'defenses', 'ships', 'technologies']);
+        parent::loadLang(['game/global', 'game/missions', 'game/spy', 'game/constructions', 'game/defenses', 'game/ships', 'game/technologies']);
     }
 
     /**

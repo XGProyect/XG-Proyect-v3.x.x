@@ -325,7 +325,7 @@ class FleetsLib extends XGPCore
             $resources_popup = parent::$page->jsReady(
                 self::getTemplate()->set(
                     'general/fleet_resources_popup_view',
-                    array_merge($popup, self::loadLanguage(['global'])->language)
+                    array_merge($popup, self::loadLanguage(['game/global'])->language)
                 )
             );
         } else {
@@ -354,7 +354,7 @@ class FleetsLib extends XGPCore
      */
     public static function fleetShipsPopup($fleet_row, $text, $fleet_type, $current_user = '')
     {
-        $lang = static::loadLanguage(['game/events', 'ships']);
+        $lang = static::loadLanguage(['game/events', 'game/ships']);
         $objects = parent::$objects->getObjects();
 
         $ships = self::getFleetShipsArray($fleet_row['fleet_array']);
@@ -437,7 +437,7 @@ class FleetsLib extends XGPCore
      */
     public static function flyingFleetsTable($fleet_row, $Status, $Owner, $Label, $Record, $current_user, $acs_owner = false)
     {
-        $lang = static::loadLanguage(['game/events', 'missions']);
+        $lang = static::loadLanguage(['game/events', 'game/missions']);
 
         $FleetStyle = [
             1 => 'attack',

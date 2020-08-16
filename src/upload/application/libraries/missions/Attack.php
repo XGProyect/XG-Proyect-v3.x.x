@@ -58,7 +58,7 @@ class Attack extends Missions
         parent::__construct();
 
         // load Language
-        parent::loadLang(['missions', 'game/attack', 'game/combatreport']);
+        parent::loadLang(['game/missions', 'game/attack', 'game/combatreport']);
     }
 
     /**

@@ -71,7 +71,7 @@ class Destroy extends Missions
         parent::__construct();
 
         // load Language
-        parent::loadLang(['missions', 'game/destroy']);
+        parent::loadLang(['game/missions', 'game/destroy']);
 
         $this->_formula = FunctionsLib::loadLibrary('FormulaLib');
     }

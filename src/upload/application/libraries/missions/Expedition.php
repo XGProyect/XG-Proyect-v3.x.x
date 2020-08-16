@@ -52,7 +52,7 @@ class Expedition extends Missions
         parent::__construct();
 
         // load Language
-        parent::loadLang(['global', 'missions', 'game/expedition', 'ships']);
+        parent::loadLang(['game/global', 'game/missions', 'game/expedition', 'game/ships']);
     }
 
     /**

@@ -266,7 +266,7 @@ class UpdatesLibrary extends XGPCore
     {
         $db = Functions::modelLoader('libraries/UpdatesLibrary');
         $lang = new Language;
-        $lang = $lang->loadLang(['global', 'constructions', 'game/buildings'], true);
+        $lang = $lang->loadLang(['game/global', 'game/constructions', 'game/buildings'], true);
         $resource = parent::$objects->getObjects();
 
         if ($current_planet['planet_b_building'] == 0) {

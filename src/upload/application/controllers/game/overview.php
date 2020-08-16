@@ -56,7 +56,7 @@ class Overview extends Controller
         parent::loadModel('game/overview');
 
         // load Language
-        parent::loadLang(['global', 'overview', 'game/buildings', 'constructions']);
+        parent::loadLang(['game/global', 'game/overview', 'game/buildings', 'game/constructions']);
 
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));

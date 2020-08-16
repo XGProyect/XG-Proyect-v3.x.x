@@ -67,7 +67,7 @@ class Techtree extends Controller
         parent::$users->checkSession();
 
         // load Language
-        parent::loadLang(['global', 'constructions', 'defenses', 'ships', 'technologies']);
+        parent::loadLang(['game/global', 'game/constructions', 'game/defenses', 'game/ships', 'game/technologies']);
 
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));

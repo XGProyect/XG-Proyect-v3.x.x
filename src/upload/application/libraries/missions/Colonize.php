@@ -38,7 +38,7 @@ class Colonize extends Missions
         parent::__construct();
 
         // load Language
-        parent::loadLang(['missions', 'game/colonize']);
+        parent::loadLang(['game/missions', 'game/colonize']);
     }
 
     /**
