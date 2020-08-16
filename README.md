@@ -13,6 +13,7 @@ Support: http://www.xgproyect.org/
 Live Server: http://server.xgproyect.org/  
 
 Require PHP >= 7.3+ 
+
 Require MySQLi >= 5.5+ 
 
 ![Free](http://www.gnu.org/graphics/agplv3-155x51.png)
