@@ -44,7 +44,6 @@ use Ship;
  */
 class Destroy extends Missions
 {
-
     const SHIP_MIN_ID = 202;
     const SHIP_MAX_ID = 215;
     const DEFENSE_MIN_ID = 401;
@@ -71,7 +70,7 @@ class Destroy extends Missions
         parent::__construct();
 
         // load Language
-        parent::loadLang(['game/missions', 'game/destroy']);
+        parent::loadLang(['game/missions', 'game/destroy', 'game/defenses', 'game/ships']);
 
         $this->_formula = FunctionsLib::loadLibrary('FormulaLib');
     }
@@ -107,7 +106,7 @@ class Destroy extends Missions
                 'missions' . DIRECTORY_SEPARATOR . 'Attack_lang.php';
 
             // set language for the reports
-            LangManager::getInstance()->setImplementation(new Attack_lang($this->langs));
+            LangManager::getInstance()->setImplementation(new Attack_lang($this->langs, $this->resource));
 
             if ($fleet_row['fleet_group'] > 0) {
                 $this->Missions_Model->deleteAcsFleetById($fleet_row['fleet_group']);

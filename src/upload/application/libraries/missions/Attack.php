@@ -58,7 +58,7 @@ class Attack extends Missions
         parent::__construct();
 
         // load Language
-        parent::loadLang(['game/missions', 'game/attack', 'game/combatreport']);
+        parent::loadLang(['game/missions', 'game/attack', 'game/combatreport', 'game/defenses', 'game/ships']);
     }
 
     /**
@@ -94,7 +94,7 @@ class Attack extends Missions
                 'missions' . DIRECTORY_SEPARATOR . 'Attack_lang.php';
 
             // set language for the reports
-            LangManager::getInstance()->setImplementation(new Attack_lang($this->langs));
+            LangManager::getInstance()->setImplementation(new Attack_lang($this->langs, $this->resource));
 
             if ($fleet_row['fleet_group'] > 0) {
                 $this->Missions_Model->deleteAcsFleetById($fleet_row['fleet_group']);
