@@ -11,6 +11,7 @@ $lang = [
 
     // found resources
     'exp_new_resources_1' => '',
+    'exp_new_resources_2' => 'Your expedition discovered a small asteroid from which some resources could be harvested. %s %s have been captured.', // ok
 
     // found primitive enemy
     'exp_primitive_enemy_1' => 'Some primitive barbarians are attacking us with spaceships that can\'t even be named as such. If the fire gets serious we will be forced to fire back.', // ok
@@ -48,7 +49,7 @@ $lang = [
 
     // exploration status
     'exp_status_fresh_1' => 'Entry from the communications officers logbook: It seems that this part of the universe has not been explored yet.', // ok
-    'exp_status_fresh_2' => '',
+    'exp_status_fresh_2' => 'Entry from the communications officers logbook: It feels great to be the first ones traveling through an unexplored sector.',
 
     // old lines
     'exp_blackholl_1' => 'The fleet was sucked into a black hole is partially destroyed.',

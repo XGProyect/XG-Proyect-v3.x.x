@@ -39,7 +39,7 @@
             });
 
             // check version
-            $.getJSON('https://www.xgproyect.org/current.php', function (data) {
+            $.getJSON('https://updates.xgproyect.org/latest.php', function (data) {
                 $.each(data, function (index, element) {
                     if (compareversion('{version}', element)) {
                         $('.badge-counter').html('1');

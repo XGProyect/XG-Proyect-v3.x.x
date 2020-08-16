@@ -161,7 +161,7 @@ class Home extends Controller
         try {
             if (function_exists('file_get_contents')) {
                 $file_data = @file_get_contents(
-                    'https://xgproyect.org/current.php',
+                    'https://updates.xgproyect.org/latest.php',
                     false,
                     stream_context_create(
                         ['https' =>
