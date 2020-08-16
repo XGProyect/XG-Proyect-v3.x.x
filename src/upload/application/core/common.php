@@ -148,18 +148,18 @@ class Common
                 if (defined('DB_HOST') && defined('DB_USER') && defined('DB_PASS') && defined('DB_NAME') && defined('DB_PREFIX')) {
                     $this->is_installed = true;
                 }
-
-                // set language
-                $this->initLanguage();
-
-                if (!$this->is_installed && !defined('IN_INSTALL')) {
-                    FunctionsLib::redirect(SYSTEM_ROOT . 'install/');
-                }
             } else {
-                throw new Exception('Error #001 - config.php file doesn\'t exists!');
+                fopen($config_file, 'w+');
+            }
+
+            // set language
+            $this->initLanguage();
+
+            if (!$this->is_installed && !defined('IN_INSTALL')) {
+                FunctionsLib::redirect(SYSTEM_ROOT . 'install/');
             }
         } catch (Exception $e) {
-            die($e->getMessage());
+            die('Error #0001' . $e->getMessage());
         }
     }
 
