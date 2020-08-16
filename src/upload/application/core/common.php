@@ -49,7 +49,7 @@ class Common
      *
      * @var Sessions
      */
-    private $session = null;
+    private $sessions = null;
 
     /**
      * Contains the Hooks object
@@ -95,7 +95,7 @@ class Common
      */
     public function getSession(): Sessions
     {
-        return $this->session;
+        return $this->sessions;
     }
 
     /**
@@ -196,7 +196,7 @@ class Common
      */
     private function setSession(): void
     {
-        $this->session = new Sessions;
+        $this->sessions = new Sessions;
     }
 
     /**
