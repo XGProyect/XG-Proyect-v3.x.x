@@ -23,21 +23,19 @@ use application\core\Database;
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
- * @version  3.0.0
+ * @version  3.1.0
  */
 class Options extends XGPCore
 {
 
     /**
      *
-     * @var Xml
+     * @var Options
      */
     private static $instance = null;
 
     /**
-     * __construct
-     *
-     * @return void
+     * Constructor
      */
     public function __construct()
     {
