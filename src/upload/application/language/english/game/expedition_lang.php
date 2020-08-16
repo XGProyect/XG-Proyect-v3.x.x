@@ -11,8 +11,8 @@ $lang = [
 
     // found resources
     'exp_new_resources_1' => '',
-    'exp_new_resources_2' => 'Your expedition discovered a small asteroid from which some resources could be harvested. %s %s have been captured.', // ok
-    'exp_new_resources_3' => 'Your expedition found an ancient, fully loaded but deserted freighter convoy. Some of the resources could be rescued. %s %s have been captured.', // ok
+    'exp_new_resources_2' => 'Your expedition discovered a small asteroid from which some resources could be harvested.<br><br>%s %s have been captured.', // ok
+    'exp_new_resources_3' => 'Your expedition found an ancient, fully loaded but deserted freighter convoy. Some of the resources could be rescued.<br><br>%s %s have been captured.', // ok
 
     // found primitive enemy
     'exp_primitive_enemy_1' => 'Some primitive barbarians are attacking us with spaceships that can\'t even be named as such. If the fire gets serious we will be forced to fire back.', // ok
@@ -28,7 +28,7 @@ $lang = [
 
     // found dark matter
     'exp_dm_1' => '',
-    'exp_dm_2' => 'Our expedition took over a ghost ship which was transporting a small amount of Dark Matter. We didn\'t find any hints of what happened to the original crew of the ship, but our technicians where able to rescue the Dark Matter.', // ok
+    'exp_dm_2' => 'Our expedition took over a ghost ship which was transporting a small amount of Dark Matter. We didn\'t find any hints of what happened to the original crew of the ship, but our technicians where able to rescue the Dark Matter.<br><br>Dark Matter %s have been captured.', // ok
 
     // delay
     'exp_delay_1' => '',

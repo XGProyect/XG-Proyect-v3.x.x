@@ -10,8 +10,8 @@ $lang = [
     'exp_new_ships_5' => '',
 
     // found resources
-    'exp_new_resources_1' => 'En un planetoide abondonado han sido encontradas algunas zonas de recursos fácilmente accesibles y se han recolectado allí algunos recursos satisfactoriamente. Se ha capturado %s de %s.', // ok
-    'exp_new_resources_2' => 'Tu expedición descubrió un pequeño asteroide en el cual se pueden reciclar algunos recursos. Se ha capturado %s de %s.', // ok
+    'exp_new_resources_1' => 'En un planetoide abondonado han sido encontradas algunas zonas de recursos fácilmente accesibles y se han recolectado allí algunos recursos satisfactoriamente.<br><br>Se ha capturado %s de %s.', // ok
+    'exp_new_resources_2' => 'Tu expedición descubrió un pequeño asteroide en el cual se pueden reciclar algunos recursos.<br><br>Se ha capturado %s de %s.', // ok
     'exp_new_resources_3' => '', // ok
 
     // found primitive enemy
@@ -27,7 +27,7 @@ $lang = [
     'exp_trader' => 'Tu flota en expedición tuvo un corto contacto con una raza de aliens un poco vergonzosa. Estos anunciaron que van a enviar a un representante con bienes de comercio a tus mundos.', // ok
 
     // found dark matter
-    'exp_dm_1' => 'La expedición siguió algunas señales fuera de lo común y descrubrió un asteroide. En el núcle del asteroide se encontraba una pequeña cantidad de Materia Oscura. El asteroide fue transportado a bordo y los exploradores intentan extrar la Materia Oscura. Se ha capturado %s de %s.', // ok
+    'exp_dm_1' => 'La expedición siguió algunas señales fuera de lo común y descrubrió un asteroide. En el núcle del asteroide se encontraba una pequeña cantidad de Materia Oscura. El asteroide fue transportado a bordo y los exploradores intentan extrar la Materia Oscura.<br><br>Se ha capturado %s de %s.', // ok
     'exp_dm_2' => '',
 
     // delay
