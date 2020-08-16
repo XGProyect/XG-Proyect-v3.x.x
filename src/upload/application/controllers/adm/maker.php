@@ -385,7 +385,7 @@ class Maker extends Controller
             if (isset($_GET['planet']) && $_GET['planet'] > 0) {
                 $combo_rows .= '<option value="' . $planets_row['planet_id'] . '" ' . ($_GET['planet'] == $planets_row['planet_id'] ? 'selected' : '') . ' >' . $planets_row['planet_name'] . ' [' . $planets_row['planet_galaxy'] . ':' . $planets_row['planet_system'] . ':' . $planets_row['planet_planet'] . ']' . '</option>';
             } else {
-                $combo_rows .= '<option value="' . $planets_row['planet_id'] . '">' . $planets_row['planet_name'] . ' ' . Format::prettyCoords($planets_row['planet_galaxy'], $planets_row['planet_system'], $planets_row['planet_planet']) . '</option>';
+                $combo_rows .= '<option value="' . $planets_row['planet_id'] . '">' . $planets_row['planet_name'] . ' ' . Format::prettyCoords((int) $planets_row['planet_galaxy'], (int) $planets_row['planet_system'], (int) $planets_row['planet_planet']) . '</option>';
             }
         }
 
