@@ -21,6 +21,7 @@ use application\libraries\FunctionsLib;
 use application\libraries\SecurePageLib;
 use application\libraries\UpdatesLibrary;
 use AutoLoader;
+use Exception;
 
 // Require some stuff
 require_once XGP_ROOT . 'application' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'constants.php';
