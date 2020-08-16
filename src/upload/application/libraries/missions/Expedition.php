@@ -190,7 +190,7 @@ class Expedition extends Missions
     {
         $this->expeditionMessage(
             $fleet_row['fleet_owner'],
-            $this->langs->line('exp_nothing_' . mt_rand(1, 2)),
+            $this->langs->line('exp_nothing_' . mt_rand(1, 6)),
             $fleet_row['fleet_end_stay']
         );
 
@@ -282,7 +282,7 @@ class Expedition extends Missions
         if ($found_ship != null) {
             foreach ($found_ship as $ship => $count) {
                 if ($count != 0) {
-                    $found_ship_message .= $count . " " . $this->langs->line($this->resource[$ship]) . ",";
+                    $found_ship_message .= $this->langs->line($this->resource[$ship]) . ": " . $count . "<br>";
                 }
             }
         }
@@ -292,7 +292,7 @@ class Expedition extends Missions
             'fleet_id' => $fleet_row['fleet_id'],
         ]);
 
-        $message = $this->langs->line('exp_found_ships') . $found_ship_message;
+        $message = sprintf($this->langs->line('exp_new_ships_' . mt_rand(1, 5)), $found_ship_message);
 
         $this->expeditionMessage($fleet_row['fleet_owner'], $message, $fleet_row['fleet_end_stay']);
     }
@@ -342,7 +342,7 @@ class Expedition extends Missions
             $time,
             5,
             $this->langs->line('mi_fleet_command'),
-            $this->langs->line('exp_report'),
+            $this->langs->line('exp_report_title'),
             $message
         );
     }
