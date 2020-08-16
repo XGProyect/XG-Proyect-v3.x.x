@@ -426,12 +426,12 @@ class Installation extends Controller
         }
 
         $data = "<?php\n";
-        $data .= "defined('DB_HOST') ? NULL : define('DB_HOST', '" . $this->host . "');\n";
-        $data .= "defined('DB_USER') ? NULL : define('DB_USER', '" . $this->user . "');\n";
-        $data .= "defined('DB_PASS') ? NULL : define('DB_PASS', '" . $this->password . "');\n";
-        $data .= "defined('DB_NAME') ? NULL : define('DB_NAME', '" . $this->name . "');\n";
-        $data .= "defined('DB_PREFIX') ? NULL : define('DB_PREFIX', '" . $this->prefix . "');\n";
-        $data .= "defined('SECRETWORD') ? NULL : define('SECRETWORD', 'xgp-" . StringsHelper::randomString(16) . "');\n";
+        $data .= "defined('DB_HOST') ? null : define('DB_HOST', '" . $this->host . "');\n";
+        $data .= "defined('DB_USER') ? null : define('DB_USER', '" . $this->user . "');\n";
+        $data .= "defined('DB_PASS') ? null : define('DB_PASS', '" . $this->password . "');\n";
+        $data .= "defined('DB_NAME') ? null : define('DB_NAME', '" . $this->name . "');\n";
+        $data .= "defined('DB_PREFIX') ? null : define('DB_PREFIX', '" . $this->prefix . "');\n";
+        $data .= "defined('SECRETWORD') ? null : define('SECRETWORD', 'xgp-" . StringsHelper::randomString(16) . "');\n";
         $data .= "?>";
 
         // create the new file
