@@ -43,15 +43,15 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="logoutModal">{nv_ready_to_leave}</h5>
+                    <h5 class="modal-title" id="logoutModal">{ready_to_leave}</h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
-                <div class="modal-body">{nv_ready_to_leave_instructions}</div>
+                <div class="modal-body">{ready_to_leave_instructions}</div>
                 <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">{nv_ready_to_leave_cancel}</button>
-                    <a class="btn btn-primary" href="admin.php?page=logout">{nv_ready_to_leave_logout}</a>
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">{ready_to_leave_cancel}</button>
+                    <a class="btn btn-primary" href="admin.php?page=logout">{ready_to_leave_logout}</a>
                 </div>
             </div>
         </div>

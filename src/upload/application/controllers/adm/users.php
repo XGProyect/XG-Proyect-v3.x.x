@@ -15,6 +15,7 @@ namespace application\controllers\adm;
 
 use application\core\Controller;
 use application\core\enumerators\PlanetTypesEnumerator;
+use application\core\enumerators\UserRanksEnumerator as UserRanks;
 use application\libraries\adm\AdministrationLib as Administration;
 use application\libraries\FormatLib as Format;
 use application\libraries\FunctionsLib as Functions;
@@ -308,7 +309,7 @@ class Users extends Controller
         $parse['alliances'] = $this->buildAllianceCombo($this->_user_query);
         $parse['user_register_time'] = ($this->_user_query['user_register_time'] == 0) ? '-' : date(Functions::readConfig('date_format_extended'), $this->_user_query['user_register_time']);
         $parse['user_onlinetime'] = $this->lastActivity($this->_user_query['user_onlinetime']);
-        $parse['sel' . $this->_user_query['user_authlevel']] = 'selected';
+        $parse['user_roles'] = $this->buildUsersRolesList();
         $parse['user_banned'] = ($this->_user_query['user_banned'] <= 0) ? '<p class="text-error">' . $this->langs->line('ge_no') : '<p class="text-success">' . $this->langs->line('ge_yes');
         $parse['user_banned'] .= ($this->_user_query['user_banned'] > 0) ? $this->langs->line('us_user_information_banned_until') . date(Functions::readConfig('date_format'), $this->_user_query['user_banned']) . '</p>' : '</p>';
         $parse['user_fleet_shortcuts'] = $this->buildShortcutsCombo($this->_user_query['user_fleet_shortcuts']);
@@ -1267,6 +1268,32 @@ class Users extends Controller
         }
 
         return '<p class="text-danger">' . $this->langs->line('us_offline') . '</p>';
+    }
+
+    /**
+     * Build users roles list
+     *
+     * @return void
+     */
+    private function buildUsersRolesList()
+    {
+        $roles_list = [];
+        $roles = [
+            UserRanks::PLAYER,
+            UserRanks::GO,
+            UserRanks::SGO,
+            UserRanks::ADMIN,
+        ];
+
+        foreach ($roles as $role) {
+            $roles_list[] = [
+                'role_id' => $role,
+                'role_sel' => ($role == $this->_user_query['user_authlevel'] ? 'selected' : ''),
+                'role_name' => $this->langs->language['user_level'][$role],
+            ];
+        }
+
+        return $roles_list;
     }
 
     /**
