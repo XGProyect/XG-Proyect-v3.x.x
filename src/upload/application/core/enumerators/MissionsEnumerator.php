@@ -25,17 +25,17 @@ namespace application\core\enumerators;
  */
 abstract class MissionsEnumerator
 {
-    const attack = 1;
-    const acs = 2;
-    const transport = 3;
-    const deploy = 4;
-    const stay = 5;
-    const spy = 6;
-    const colonize = 7;
-    const recycle = 8;
-    const destroy = 9;
-    const missile = 10;
-    const expedition = 15;
+    const ATTACK = 1;
+    const ACS = 2;
+    const TRANSPORT = 3;
+    const DEPLOY = 4;
+    const STAY = 5;
+    const SPY = 6;
+    const COLONIZE = 7;
+    const RECYCLE = 8;
+    const DESTROY = 9;
+    const MISSILE = 10;
+    const EXPEDITION = 15;
 }
 
 /* end of MissionsEnumerator.php */

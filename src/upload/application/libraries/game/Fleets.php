@@ -174,7 +174,7 @@ class Fleets
 
             $this->setFleetsCount();
 
-            if ($data->getFleetMission() == Missions::expedition) {
+            if ($data->getFleetMission() == Missions::EXPEDITION) {
                 $this->setExpeditionsCount();
             }
         }

@@ -214,7 +214,7 @@ class Galaxy extends Controller
             $this->planet,
             $this->_galaxy,
             $this->_system,
-            $this->langs->language
+            $this->langs
         );
 
         // set the current planets

@@ -227,8 +227,8 @@ class Fleet3 extends Controller
                 $mission_selector[] = [
                     'value' => $mission,
                     'mission' => $this->langs->language['type_mission'][$mission],
-                    'expedition_message' => $mission == Missions::expedition ? $this->langs->line('fl_expedition_alert_message') : '',
-                    'id' => $mission == Missions::expedition ? ' ' : 'inpuT_' . $mission,
+                    'expedition_message' => $mission == Missions::EXPEDITION ? $this->langs->line('fl_expedition_alert_message') : '',
+                    'id' => $mission == Missions::EXPEDITION ? ' ' : 'inpuT_' . $mission,
                     'checked' => $mission == $this->_current_mission ? ' checked="checked"' : '',
                 ];
             }
@@ -250,7 +250,7 @@ class Fleet3 extends Controller
         $options = [];
         $stay_type = '';
 
-        if (in_array(Missions::expedition, $this->_allowed_missions)) {
+        if (in_array(Missions::EXPEDITION, $this->_allowed_missions)) {
             $stay_type = 'expeditiontime';
 
             for ($i = 1; $i <= $max_exp_time; $i++) {
@@ -261,7 +261,7 @@ class Fleet3 extends Controller
             }
         }
 
-        if (in_array(Missions::stay, $this->_allowed_missions)) {
+        if (in_array(Missions::STAY, $this->_allowed_missions)) {
             $stay_type = 'holdingtime';
 
             foreach ($hours as $hour) {
@@ -300,86 +300,86 @@ class Fleet3 extends Controller
          */
         $ships_rules = [
             Ships::ship_small_cargo_ship => [
-                Missions::attack, Missions::acs, Missions::transport, Missions::deploy, Missions::stay, Missions::expedition,
+                Missions::ATTACK, Missions::ACS, Missions::TRANSPORT, Missions::DEPLOY, Missions::STAY, Missions::EXPEDITION,
             ],
             Ships::ship_big_cargo_ship => [
-                Missions::attack, Missions::acs, Missions::transport, Missions::deploy, Missions::stay, Missions::expedition,
+                Missions::ATTACK, Missions::ACS, Missions::TRANSPORT, Missions::DEPLOY, Missions::STAY, Missions::EXPEDITION,
             ],
             Ships::ship_light_fighter => [
-                Missions::attack, Missions::acs, Missions::transport, Missions::deploy, Missions::stay, Missions::expedition,
+                Missions::ATTACK, Missions::ACS, Missions::TRANSPORT, Missions::DEPLOY, Missions::STAY, Missions::EXPEDITION,
             ],
             Ships::ship_heavy_fighter => [
-                Missions::attack, Missions::acs, Missions::transport, Missions::deploy, Missions::stay, Missions::expedition,
+                Missions::ATTACK, Missions::ACS, Missions::TRANSPORT, Missions::DEPLOY, Missions::STAY, Missions::EXPEDITION,
             ],
             Ships::ship_cruiser => [
-                Missions::attack, Missions::acs, Missions::transport, Missions::deploy, Missions::stay, Missions::expedition,
+                Missions::ATTACK, Missions::ACS, Missions::TRANSPORT, Missions::DEPLOY, Missions::STAY, Missions::EXPEDITION,
             ],
             Ships::ship_battleship => [
-                Missions::attack, Missions::acs, Missions::transport, Missions::deploy, Missions::stay, Missions::expedition,
+                Missions::ATTACK, Missions::ACS, Missions::TRANSPORT, Missions::DEPLOY, Missions::STAY, Missions::EXPEDITION,
             ],
             Ships::ship_colony_ship => [
-                Missions::deploy, Missions::colonize, Missions::expedition,
+                Missions::DEPLOY, Missions::COLONIZE, Missions::EXPEDITION,
             ],
             Ships::ship_recycler => [
-                Missions::deploy, Missions::recycle, Missions::expedition,
+                Missions::DEPLOY, Missions::RECYCLE, Missions::EXPEDITION,
             ],
             Ships::ship_espionage_probe => [
-                Missions::attack, Missions::acs, Missions::deploy, Missions::stay, Missions::spy, Missions::expedition,
+                Missions::ATTACK, Missions::ACS, Missions::DEPLOY, Missions::STAY, Missions::SPY, Missions::EXPEDITION,
             ],
             Ships::ship_bomber => [
-                Missions::attack, Missions::acs, Missions::transport, Missions::deploy, Missions::stay, Missions::expedition,
+                Missions::ATTACK, Missions::ACS, Missions::TRANSPORT, Missions::DEPLOY, Missions::STAY, Missions::EXPEDITION,
             ],
             Ships::ship_solar_satellite => [],
             Ships::ship_destroyer => [
-                Missions::attack, Missions::acs, Missions::transport, Missions::deploy, Missions::stay, Missions::expedition,
+                Missions::ATTACK, Missions::ACS, Missions::TRANSPORT, Missions::DEPLOY, Missions::STAY, Missions::EXPEDITION,
             ],
             Ships::ship_deathstar => [
-                Missions::attack, Missions::acs, Missions::transport, Missions::deploy, Missions::stay, Missions::destroy, Missions::expedition,
+                Missions::ATTACK, Missions::ACS, Missions::TRANSPORT, Missions::DEPLOY, Missions::STAY, Missions::DESTROY, Missions::EXPEDITION,
             ],
             Ships::ship_battlecruiser => [
-                Missions::attack, Missions::acs, Missions::transport, Missions::deploy, Missions::stay, Missions::expedition,
+                Missions::ATTACK, Missions::ACS, Missions::TRANSPORT, Missions::DEPLOY, Missions::STAY, Missions::EXPEDITION,
             ],
         ];
 
         $mission_rules = [
             PlanetTypes::PLANET => [
                 'own' => [
-                    Missions::transport,
-                    Missions::deploy,
-                    Missions::stay,
+                    Missions::TRANSPORT,
+                    Missions::DEPLOY,
+                    Missions::STAY,
                 ],
                 'other' => [
-                    Missions::attack,
-                    Missions::acs,
-                    Missions::transport,
-                    Missions::stay,
-                    Missions::spy,
-                    Missions::colonize,
+                    Missions::ATTACK,
+                    Missions::ACS,
+                    Missions::TRANSPORT,
+                    Missions::STAY,
+                    Missions::SPY,
+                    Missions::COLONIZE,
                 ],
             ],
             PlanetTypes::DEBRIS => [
                 'own' => [
-                    Missions::deploy,
-                    Missions::recycle,
+                    Missions::DEPLOY,
+                    Missions::RECYCLE,
                 ],
                 'other' => [
-                    Missions::deploy,
-                    Missions::recycle,
+                    Missions::DEPLOY,
+                    Missions::RECYCLE,
                 ],
             ],
             PlanetTypes::MOON => [
                 'own' => [
-                    Missions::transport,
-                    Missions::deploy,
-                    Missions::stay,
+                    Missions::TRANSPORT,
+                    Missions::DEPLOY,
+                    Missions::STAY,
                 ],
                 'other' => [
-                    Missions::attack,
-                    Missions::acs,
-                    Missions::transport,
-                    Missions::stay,
-                    Missions::spy,
-                    Missions::destroy,
+                    Missions::ATTACK,
+                    Missions::ACS,
+                    Missions::TRANSPORT,
+                    Missions::STAY,
+                    Missions::SPY,
+                    Missions::DESTROY,
                 ],
             ],
         ];
@@ -412,12 +412,12 @@ class Fleet3 extends Controller
         }
 
         if ($_SESSION['fleet_data']['target']['planet'] == (MAX_PLANET_IN_SYSTEM + 1)) {
-            $possible_missions = [Missions::expedition];
+            $possible_missions = [Missions::EXPEDITION];
         } else {
             $possible_missions = $mission_rules[$_SESSION['fleet_data']['target']['type']][$action_type];
 
-            if (!$acs && in_array(Missions::acs, $possible_missions)) {
-                unset($possible_missions[array_search(Missions::acs, $possible_missions)]);
+            if (!$acs && in_array(Missions::ACS, $possible_missions)) {
+                unset($possible_missions[array_search(Missions::ACS, $possible_missions)]);
             }
         }
 

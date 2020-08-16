@@ -390,7 +390,7 @@ class Fleet4 extends Controller
 
         if (isset($this->_target_data)
             && parent::$users->isOnVacations($this->_target_data)
-            && $this->_clean_input_data['mission'] != Missions::recycle) {
+            && $this->_clean_input_data['mission'] != Missions::RECYCLE) {
             $this->showMessage($this->langs->line('fl_in_vacation_player'));
         }
 
@@ -407,7 +407,7 @@ class Fleet4 extends Controller
         $target_data = $this->getTargetData();
 
         if ($target_data['group'] > 0
-            && $this->_clean_input_data['mission'] == Missions::acs) {
+            && $this->_clean_input_data['mission'] == Missions::ACS) {
             $target_string = 'g' . (int) $target_data['galaxy'] .
             's' . (int) $target_data['system'] .
             'p' . (int) $target_data['planet'] .
@@ -485,13 +485,13 @@ class Fleet4 extends Controller
         // target data
         $target = $this->_target_data;
 
-        if ($data['mission'] == Missions::attack) {
+        if ($data['mission'] == Missions::ATTACK) {
             if ($this->_own_planet) {
                 return false;
             }
         }
 
-        if ($data['mission'] == Missions::spy) {
+        if ($data['mission'] == Missions::SPY) {
             if (!isset($fleet[Ships::ship_espionage_probe])) {
                 return false;
             }
@@ -501,14 +501,14 @@ class Fleet4 extends Controller
             }
         }
 
-        if ($data['mission'] == Missions::deploy
+        if ($data['mission'] == Missions::DEPLOY
             && !$this->_own_planet) {
             $this->showMessage(
                 FormatLib::colorRed($this->langs->line('fl_deploy_only_your_planets'))
             );
         }
 
-        if ($data['mission'] == Missions::stay) {
+        if ($data['mission'] == Missions::STAY) {
             $is_buddy = $this->Fleet_Model->getBuddies(
                 $this->_planet['planet_user_id'], $this->_target_data['planet_user_id']
             ) >= 1;
@@ -520,7 +520,7 @@ class Fleet4 extends Controller
             }
         }
 
-        if ($data['mission'] == Missions::colonize) {
+        if ($data['mission'] == Missions::COLONIZE) {
             if (!isset($fleet[Ships::ship_colony_ship])) {
                 return false;
             }
@@ -532,7 +532,7 @@ class Fleet4 extends Controller
             }
         }
 
-        if ($data['mission'] == Missions::recycle) {
+        if ($data['mission'] == Missions::RECYCLE) {
             if ((count($target) <= 0)
                 or ($target['planet_debris_metal'] == 0
                     && $target['planet_debris_crystal'] == 0
@@ -541,7 +541,7 @@ class Fleet4 extends Controller
             }
         }
 
-        if ($data['mission'] == Missions::destroy) {
+        if ($data['mission'] == Missions::DESTROY) {
             if ($this->_own_planet
                 or !$this->_occupied_planet
                 or ($this->getTargetData()['type'] != PlanetTypes::MOON)
@@ -550,7 +550,7 @@ class Fleet4 extends Controller
             }
         }
 
-        if ($data['mission'] == Missions::expedition
+        if ($data['mission'] == Missions::EXPEDITION
             && !$this->_occupied_planet) {
             $expeditions = $this->_fleets->getExpeditionsCount();
             $max_expeditions = FleetsLib::getMaxExpeditions(
@@ -569,7 +569,7 @@ class Fleet4 extends Controller
                 );
             }
         } else {
-            if ($data['mission'] != Missions::colonize
+            if ($data['mission'] != Missions::COLONIZE
                 && !$this->_occupied_planet) {
                 return false;
             }
@@ -606,11 +606,11 @@ class Fleet4 extends Controller
             $target_points = $points['target_points'];
 
             $disallow_weak = [
-                Missions::attack, Missions::acs, Missions::spy, Missions::destroy,
+                Missions::ATTACK, Missions::ACS, Missions::SPY, Missions::DESTROY,
             ];
 
             $disallow_strong = [
-                Missions::attack, Missions::acs, Missions::stay, Missions::spy, Missions::destroy,
+                Missions::ATTACK, Missions::ACS, Missions::STAY, Missions::SPY, Missions::DESTROY,
             ];
 
             if ($noob->isWeak($user_points, $target_points)
@@ -666,7 +666,7 @@ class Fleet4 extends Controller
         $deuterium = $this->_clean_input_data['resource3'];
 
         if ($metal + $crystal + $deuterium < 1
-            && $this->_clean_input_data['mission'] == Missions::transport) {
+            && $this->_clean_input_data['mission'] == Missions::TRANSPORT) {
             $this->showMessage(
                 FormatLib::customColor($this->langs->line('fl_empty_transport'), 'lime')
             );
@@ -759,12 +759,12 @@ class Fleet4 extends Controller
         $stay_duration = 0;
         $stay_time = 0;
 
-        if ($this->_clean_input_data['mission'] == Missions::expedition) {
+        if ($this->_clean_input_data['mission'] == Missions::EXPEDITION) {
             $stay_duration = $this->_clean_input_data['expeditiontime'] * 3600;
             $stay_time = $start_time + $stay_duration;
         }
 
-        if ($this->_clean_input_data['mission'] == Missions::stay) {
+        if ($this->_clean_input_data['mission'] == Missions::STAY) {
             $stay_duration = $this->_clean_input_data['holdingtime'] * 3600;
             $stay_time = $start_time + $stay_duration;
         }
