@@ -451,11 +451,13 @@ class Alliances extends Controller
      */
     private function checkAlliance($alliance)
     {
-        $alliance_query = $this->Alliances_Model->checkAllianceByNameOrTag($alliance);
+        if ($alliance_query = $this->Alliances_Model->checkAllianceByNameOrTag($alliance)) {
+            $this->_id = $alliance_query['alliance_id'];
 
-        $this->_id = $alliance_query['alliance_id'];
+            return true;
+        }
 
-        return ($alliance_query['alliance_id'] != '' && $alliance_query != null);
+        return false;
     }
 }
 
