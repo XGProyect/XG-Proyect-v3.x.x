@@ -19,6 +19,7 @@ $lang = [
     'exp_primitive_enemy_2' => '',
     'exp_primitive_enemy_3' => 'We caught some radio transmissions from some drunk pirates. Seems like we will be under attack soon.',
     'exp_primitive_enemy_4' => '',
+    'exp_primitive_enemy_5' => 'Some really desperate space pirates tried to capture our expedition fleet.', // ok
 
     // found advanced enemy
     'exp_advanced_enemy_1' => '',

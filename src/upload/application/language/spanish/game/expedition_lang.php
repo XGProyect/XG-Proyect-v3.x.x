@@ -19,6 +19,7 @@ $lang = [
     'exp_primitive_enemy_2' => 'La señal de emergencia que la expedición siguió, resultó ser un montaje de algunos bucaneros estelares. La batalla no se pudo evitar.', // ok
     'exp_primitive_enemy_3' => 'Capturamos algunos mensajes de radio de algunos piratas borrachos. Pareciera como si nos quisieran atacar.', // ok
     'exp_primitive_enemy_4' => 'Tuvimos que luchar contra algunos piratas que por suerte no eran muchos.', // ok
+    'exp_primitive_enemy_5' => '',
 
     // found advanced enemy
     'exp_advanced_enemy_1' => '¡Algunas naves de apariencia exótica atacaron la expedición sin previo aviso!', // ok
