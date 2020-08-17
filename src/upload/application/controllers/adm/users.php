@@ -1007,6 +1007,7 @@ class Users extends Controller
             $parse['planet_name'] = $planets['planet_name'];
             $parse['planet_image'] = $planets['planet_image'];
             $parse['planet_status'] = '';
+            $parse['planet_image_style'] = '';
             $style = '';
 
             if ($planets['planet_destroyed'] != 0) {
