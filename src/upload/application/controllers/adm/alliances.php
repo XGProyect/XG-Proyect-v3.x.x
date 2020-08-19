@@ -42,7 +42,14 @@ class Alliances extends Controller
     private $_current_user;
 
     /**
-     * __construct()
+     * Contains the alliance ranks
+     *
+     * @var Ranks
+     */
+    private $ranks = null;
+
+    /**
+     * Constructor
      */
     public function __construct()
     {
@@ -92,6 +99,7 @@ class Alliances extends Controller
                 $alliance = '';
             } else {
                 $this->_alliance_query = $this->Alliances_Model->getAllAllianceDataById($this->_id);
+                $this->ranks = new Ranks($this->_alliance_query['alliance_ranks']);
 
                 if ($_POST) {
                     // save the data
@@ -201,12 +209,10 @@ class Alliances extends Controller
      */
     private function getDataRanks()
     {
-        $ranks = new Ranks($this->_alliance_query['alliance_ranks']);
-
         $parse = $this->langs->language;
         $parse['al_alliance_ranks'] = str_replace('%s', $this->_alliance_query['alliance_name'], $this->langs->line('al_alliance_ranks'));
         $parse['image_path'] = DEFAULT_SKINPATH;
-        $alliance_ranks = $ranks->getAllRanksAsArray();
+        $alliance_ranks = $this->ranks->getAllRanksAsArray();
         $i = 0;
         $rank_row = '';
 
@@ -251,7 +257,7 @@ class Alliances extends Controller
             $this->langs->line('al_alliance_members')
         );
         $all_members = $this->Alliances_Model->getAllianceMembers($this->_id);
-        $alliance_ranks = unserialize($this->_alliance_query['alliance_ranks']);
+
         $members = '';
 
         if (!empty($all_members)) {
@@ -263,8 +269,8 @@ class Alliances extends Controller
                 if ($member['user_id'] == $member['alliance_owner']) {
                     $member['ally_rank'] = $member['alliance_owner_range'];
                 } else {
-                    if (isset($member['ally_rank'])) {
-                        $member['ally_rank'] = $alliance_ranks[$member['ally_rank']]['name'];
+                    if (isset($member['user_ally_rank_id'])) {
+                        $member['ally_rank'] = $this->ranks->getUserRankById($member['user_ally_rank_id'])['rank'];
                     } else {
                         $member['ally_rank'] = $this->langs->line('al_rank_not_defined');
                     }
@@ -358,17 +364,15 @@ class Alliances extends Controller
      */
     private function saveRanks()
     {
-        $ranks = new Ranks($this->_alliance_query['alliance_ranks']);
-
         if (isset($_POST['create_rank'])) {
             if (!empty($_POST['rank_name'])) {
-                $ranks->addNew(
+                $this->ranks->addNew(
                     $_POST['rank_name']
                 );
 
                 $this->Alliances_Model->updateAllianceRanks(
                     $this->_id,
-                    $ranks->getAllRanksAsJsonString()
+                    $this->ranks->getAllRanksAsJsonString()
                 );
 
                 $this->_alert_info = $this->langs->line('al_rank_added');
@@ -382,7 +386,7 @@ class Alliances extends Controller
         // edit rights for each rank
         if (isset($_POST['save_ranks'])) {
             foreach ($_POST['id'] as $id) {
-                $ranks->editRankById(
+                $this->ranks->editRankById(
                     $id,
                     [
                         AllianceRanks::delete => isset($_POST['u' . $id . 'r1']) ? SwitchInt::on : SwitchInt::off,
@@ -400,7 +404,7 @@ class Alliances extends Controller
 
             $this->Alliances_Model->updateAllianceRanks(
                 $this->_id,
-                $ranks->getAllRanksAsJsonString()
+                $this->ranks->getAllRanksAsJsonString()
             );
 
             $this->_alert_info = $this->langs->line('al_rank_saved');
@@ -410,12 +414,12 @@ class Alliances extends Controller
         // delete a rank
         if (isset($_POST['delete_ranks'])) {
             foreach ($_POST['id'] as $rank_id) {
-                $ranks->deleteRankById($rank_id);
+                $this->ranks->deleteRankById($rank_id);
             }
 
             $this->Alliances_Model->updateAllianceRanks(
                 $this->_id,
-                $ranks->getAllRanksAsJsonString()
+                $this->ranks->getAllRanksAsJsonString()
             );
 
             $this->_alert_info = $this->langs->line('al_rank_removed');
