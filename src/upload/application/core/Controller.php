@@ -123,13 +123,14 @@ abstract class Controller extends XGPCore
      */
     private function isServerOpen(): void
     {
-        $user_level = isset($this->current_user['user_authlevel']) ?? 0;
+        if (!defined('IN_INSTALL') && !defined('IN_ADMIN')) {
+            $user_level = isset($this->current_user['user_authlevel']) ?? 0;
 
-        if (FunctionsLib::readConfig('game_enable') == SwitchInt::off
-            && $user_level < UserRanksEnumerator::ADMIN
-            && !defined('IN_ADMIN')) {
-            FunctionsLib::message(FunctionsLib::readConfig('close_reason'), '', '', false, false);
-            die();
+            if (FunctionsLib::readConfig('game_enable') == SwitchInt::off
+                && $user_level < UserRanksEnumerator::ADMIN) {
+                FunctionsLib::message(FunctionsLib::readConfig('close_reason'), '', '', false, false);
+                die();
+            }
         }
     }
 
