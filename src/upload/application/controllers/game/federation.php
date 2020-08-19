@@ -270,7 +270,9 @@ class Federation extends Controller
     private function searchUser(string $user_name): void
     {
         if (!empty($user_name)) {
-            $user_id = $this->Fleet_Model->getUserIdByName($user_name);
+            $fleet_id = filter_input(INPUT_GET, 'fleet', FILTER_VALIDATE_INT);
+
+            $user_id = $this->Fleet_Model->getUserIdByName($user_name, $fleet_id);
             if ($user_id > 0 && $user_id != $this->_user['user_id']) {
                 $this->addAcsMember($user_id);
 
