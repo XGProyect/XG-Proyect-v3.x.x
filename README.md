@@ -1,6 +1,6 @@
 
 <p align="center"
-    <a href="http://www.xgproyect.org/" target="_blank">
+    <a href="https://www.xgproyect.org/" target="_blank">
         <img align="center" img src="https://xgproyect.org/wp-content/uploads/2019/10/xgp-new-logo-black.png" width="250px" title="XG Proyect" alt="xgp-logo">
     </a>
 </p> 
@@ -9,13 +9,13 @@ XG Proyect
 ====
 
 **X**treme **G**amez **Proyect**o  
-Support: http://www.xgproyect.org/  
-Live Server: http://server.xgproyect.org/  
+Support: https://www.xgproyect.org/  
+Live Server: Coming soon!  
 
 Require PHP >= 7.3+  
 Require MySQLi >= 5.5+  
 
-![Free](http://www.gnu.org/graphics/agplv3-155x51.png)
+![Free](https://www.gnu.org/graphics/agplv3-155x51.png)
 
 ## How to get XG Proyect?
 
@@ -35,8 +35,8 @@ On the other hand, it's a pleasure to see people using XG Proyect.
 
 The following are tools or frameworks that we use to do our coding experience better!
 
-![Codeigniter](http://codeigniter.com/assets/images/ci-logo.png) **Codeigniter**
+![Codeigniter](https://codeigniter.com/assets/images/ci-logo.png) **Codeigniter**
 
 ![PHPDocumentor](https://www.phpdoc.org/bundles/phpdocumentorwebsite/images/logo-icon.png) **PHP Documentor**
 
-[**PHP CompatInfo**](http://php5.laurent-laville.org/compatinfo/)
+[**PHP CompatInfo**](https://php5.laurent-laville.org/compatinfo/)
