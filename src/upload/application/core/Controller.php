@@ -16,6 +16,12 @@ declare (strict_types = 1);
  */
 namespace application\core;
 
+use application\core\enumerators\SwitchIntEnumerator as SwitchInt;
+use application\core\enumerators\UserRanksEnumerator;
+use application\core\Template;
+use application\core\XGPCore;
+use application\libraries\FunctionsLib;
+
 /**
  * Controller Class
  *
@@ -66,6 +72,8 @@ abstract class Controller extends XGPCore
         $this->setPlanetData();
         $this->setObjects();
         $this->setTemplate();
+
+        $this->isServerOpen();
     }
 
     /**
@@ -106,6 +114,23 @@ abstract class Controller extends XGPCore
     private function setTemplate(): void
     {
         $this->template = new Template();
+    }
+
+    /**
+     * Check if the server is open
+     *
+     * @return void
+     */
+    private function isServerOpen(): void
+    {
+        $user_level = isset($this->current_user['user_authlevel']) ?? 0;
+
+        if (FunctionsLib::readConfig('game_enable') == SwitchInt::off
+            && $user_level < UserRanksEnumerator::ADMIN
+            && !defined('IN_ADMIN')) {
+            FunctionsLib::message(FunctionsLib::readConfig('close_reason'), '', '', false, false);
+            die();
+        }
     }
 
     /**
