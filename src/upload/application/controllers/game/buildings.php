@@ -720,7 +720,7 @@ class Buildings extends Controller
 
         if ($QueueID != false && Developments::isDevelopmentAllowed($this->_user, $this->_planet, $building)) {
             if ($QueueID <= 1) {
-                if (Developments::isDevelopmentPayable($this->_user, $this->_planet, $building, true, false) && !parent::$users->isOnVacations($this->_user)) {
+                if (Developments::isDevelopmentPayable($this->_user, $this->_planet, $building, true, !$AddMode) && !parent::$users->isOnVacations($this->_user)) {
                     $continue = true;
                 }
             } else {
@@ -760,7 +760,7 @@ class Buildings extends Controller
                         $BuildTime = Developments::developmentTime($this->_user, $this->_planet, $building);
                     } else {
                         $BuildLevel = $ActualLevel - 1;
-                        $BuildTime = Developments::developmentTime($this->_user, $this->_planet, $building) / 2;
+                        $BuildTime = Developments::destroyTime(Developments::developmentTime($this->_user, $this->_planet, $building));
                     }
                 }
 
