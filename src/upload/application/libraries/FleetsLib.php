@@ -418,7 +418,7 @@ class FleetsLib extends XGPCore
     {
         $url = 'game.php?page=chat&playerId=' . $fleet_row['fleet_owner'];
         $image = FunctionsLib::setImage(DPATH . '/img/m.gif');
-        $link = $fleet_row['start_planet_user'] . ' ' . FunctionsLib::setUrl($url, '', $image);
+        $link = $fleet_row['start_planet_user'] . ' ' . UrlHelper::setUrl($url, '', $image);
 
         return $link;
     }
