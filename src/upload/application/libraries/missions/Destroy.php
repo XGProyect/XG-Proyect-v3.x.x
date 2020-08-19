@@ -44,7 +44,6 @@ use Ship;
  */
 class Destroy extends Missions
 {
-
     const SHIP_MIN_ID = 202;
     const SHIP_MAX_ID = 215;
     const DEFENSE_MIN_ID = 401;
@@ -71,7 +70,7 @@ class Destroy extends Missions
         parent::__construct();
 
         // load Language
-        parent::loadLang(['game/missions', 'game/destroy']);
+        parent::loadLang(['game/missions', 'game/destroy', 'game/defenses', 'game/ships']);
 
         $this->_formula = FunctionsLib::loadLibrary('FormulaLib');
     }
@@ -107,7 +106,7 @@ class Destroy extends Missions
                 'missions' . DIRECTORY_SEPARATOR . 'Attack_lang.php';
 
             // set language for the reports
-            LangManager::getInstance()->setImplementation(new Attack_lang($this->langs));
+            LangManager::getInstance()->setImplementation(new Attack_lang($this->langs, $this->resource));
 
             if ($fleet_row['fleet_group'] > 0) {
                 $this->Missions_Model->deleteAcsFleetById($fleet_row['fleet_group']);
@@ -478,11 +477,10 @@ class Destroy extends Missions
      *
      * @param array  $fleet_row    Fleet Row
      * @param Report $report       Report
-     * @param string $planet_name  Planet Name
      *
      * @return void
      */
-    private function createNewReportAndSendIt($fleet_row, $report, $planet_name)
+    private function createNewReportAndSendIt($fleet_row, $report)
     {
         $idAtts = $report->getAttackersId();
         $idDefs = $report->getDefendersId();
@@ -490,7 +488,7 @@ class Destroy extends Missions
         $owners = join(',', $idAll);
         $rid = md5($report) . time();
         $destroyed = ($report->getLastRoundNumber() == 1) ? 1 : 0;
-        $report_data = $report . $this->buildDestroyReport($fleet_row, $report, $planet_name);
+        $report_data = $report . $this->buildDestroyReport($fleet_row, $report);
 
         $this->Missions_Model->insertReport([
             'owners' => $owners,
@@ -854,21 +852,25 @@ class Destroy extends Missions
      *
      * @param array  $fleet_row
      * @param type   $report
-     * @param string $planet_name
      *
      * @return string
      */
-    private function buildDestroyReport(array $fleet_row, $report, string $planet_name): string
+    private function buildDestroyReport(array $fleet_row, $report): string
     {
         $destruction_info = sprintf(
             $this->langs->line('des_report_start'),
-            $planet_name,
-            $fleet_row['fleet_start_galaxy'],
-            $fleet_row['fleet_start_system'],
-            $fleet_row['fleet_start_planet'],
-            $fleet_row['fleet_end_galaxy'],
-            $fleet_row['fleet_end_system'],
-            $fleet_row['fleet_end_planet']
+            $fleet_row['planet_start_name'],
+            FormatLib::prettyCoords(
+                (int) $fleet_row['fleet_start_galaxy'],
+                (int) $fleet_row['fleet_start_system'],
+                (int) $fleet_row['fleet_start_planet']
+            ),
+            $fleet_row['planet_end_name'],
+            FormatLib::prettyCoords(
+                (int) $fleet_row['fleet_end_galaxy'],
+                (int) $fleet_row['fleet_end_system'],
+                (int) $fleet_row['fleet_end_planet']
+            )
         );
 
         $raport[] = $destruction_info;

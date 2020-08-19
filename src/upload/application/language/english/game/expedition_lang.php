@@ -11,12 +11,15 @@ $lang = [
 
     // found resources
     'exp_new_resources_1' => '',
+    'exp_new_resources_2' => 'Your expedition discovered a small asteroid from which some resources could be harvested.<br><br>%s %s have been captured.', // ok
+    'exp_new_resources_3' => 'Your expedition found an ancient, fully loaded but deserted freighter convoy. Some of the resources could be rescued.<br><br>%s %s have been captured.', // ok
 
     // found primitive enemy
     'exp_primitive_enemy_1' => 'Some primitive barbarians are attacking us with spaceships that can\'t even be named as such. If the fire gets serious we will be forced to fire back.', // ok
     'exp_primitive_enemy_2' => '',
     'exp_primitive_enemy_3' => 'We caught some radio transmissions from some drunk pirates. Seems like we will be under attack soon.',
     'exp_primitive_enemy_4' => '',
+    'exp_primitive_enemy_5' => 'Some really desperate space pirates tried to capture our expedition fleet.', // ok
 
     // found advanced enemy
     'exp_advanced_enemy_1' => '',
@@ -26,7 +29,7 @@ $lang = [
 
     // found dark matter
     'exp_dm_1' => '',
-    'exp_dm_2' => 'Our expedition took over a ghost ship which was transporting a small amount of Dark Matter. We didn\'t find any hints of what happened to the original crew of the ship, but our technicians where able to rescue the Dark Matter.', // ok
+    'exp_dm_2' => 'Our expedition took over a ghost ship which was transporting a small amount of Dark Matter. We didn\'t find any hints of what happened to the original crew of the ship, but our technicians where able to rescue the Dark Matter.<br><br>Dark Matter %s have been captured.', // ok
 
     // delay
     'exp_delay_1' => '',
@@ -48,7 +51,7 @@ $lang = [
 
     // exploration status
     'exp_status_fresh_1' => 'Entry from the communications officers logbook: It seems that this part of the universe has not been explored yet.', // ok
-    'exp_status_fresh_2' => '',
+    'exp_status_fresh_2' => 'Entry from the communications officers logbook: It feels great to be the first ones traveling through an unexplored sector.',
 
     // old lines
     'exp_blackholl_1' => 'The fleet was sucked into a black hole is partially destroyed.',

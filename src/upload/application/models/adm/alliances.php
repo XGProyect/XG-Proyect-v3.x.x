@@ -239,89 +239,17 @@ class Alliances extends Model
     }
 
     /**
-     * Create a new alliance ranks
+     * Update alliance ranks
      *
-     * @param string $rank_name
-     * @param integer $alliance_id
-     * @return void
+     * @param int    $alliance_id Alliance ID
+     * @param string $ranks       Ranks
      */
-    public function createAllianceRank(array $all_ranks, string $rank_name, int $alliance_id): void
+    public function updateAllianceRanks($alliance_id, $ranks)
     {
-        $all_ranks[] = [
-            'name' => $this->db->escapeValue(strip_tags($rank_name)),
-            'mails' => 0,
-            'delete' => 0,
-            'kick' => 0,
-            'bewerbungen' => 0,
-            'administrieren' => 0,
-            'bewerbungenbearbeiten' => 0,
-            'memberlist' => 0,
-            'onlinestatus' => 0,
-            'rechtehand' => 0,
-        ];
-
-        $ranks = serialize($all_ranks);
-
         $this->db->query(
             "UPDATE `" . ALLIANCE . "` SET
                 `alliance_ranks` = '" . $ranks . "'
-            WHERE `alliance_id` = '" . $alliance_id . "'"
-        );
-    }
-
-    /**
-     * Update the alliance ranks
-     *
-     * @param string $rank_name
-     * @param integer $alliance_id
-     * @return void
-     */
-    public function updateAllianceRanks(array $all_ranks, array $updated_ranks, int $alliance_id): void
-    {
-        $ally_ranks_new = [];
-
-        foreach ($updated_ranks as $id) {
-            $ally_ranks_new[$id]['name'] = $all_ranks[$id]['name'];
-            $ally_ranks_new[$id]['delete'] = isset($_POST['u' . $id . 'r0']) ? 1 : 0;
-            $ally_ranks_new[$id]['kick'] = isset($_POST['u' . $id . 'r1']) ? 1 : 0;
-            $ally_ranks_new[$id]['bewerbungen'] = isset($_POST['u' . $id . 'r2']) ? 1 : 0;
-            $ally_ranks_new[$id]['memberlist'] = isset($_POST['u' . $id . 'r3']) ? 1 : 0;
-            $ally_ranks_new[$id]['bewerbungenbearbeiten'] = isset($_POST['u' . $id . 'r4']) ? 1 : 0;
-            $ally_ranks_new[$id]['administrieren'] = isset($_POST['u' . $id . 'r5']) ? 1 : 0;
-            $ally_ranks_new[$id]['onlinestatus'] = isset($_POST['u' . $id . 'r6']) ? 1 : 0;
-            $ally_ranks_new[$id]['mails'] = isset($_POST['u' . $id . 'r7']) ? 1 : 0;
-            $ally_ranks_new[$id]['rechtehand'] = isset($_POST['u' . $id . 'r8']) ? 1 : 0;
-        }
-
-        $ranks = serialize($ally_ranks_new);
-
-        $this->db->query(
-            "UPDATE `" . ALLIANCE . "` SET
-                `alliance_ranks` = '" . $ranks . "'
-            WHERE `alliance_id` = '" . $alliance_id . "'"
-        );
-    }
-
-    /**
-     * Undocumented function
-     *
-     * @param array $ally_ranks
-     * @param array $ranks_to_delete
-     * @param integer $alliance_id
-     * @return void
-     */
-    public function deleteAllianceRanks(array $ally_ranks, array $ranks_to_delete, int $alliance_id): void
-    {
-        foreach ($ranks_to_delete as $id => $active) {
-            if ($active == 'on') {
-                unset($ally_ranks[$id]);
-            }
-        }
-
-        $this->db->query(
-            "UPDATE `" . ALLIANCE . "` SET
-                `alliance_ranks` = '" . serialize($ally_ranks) . "'
-            WHERE `alliance_id`= '" . $alliance_id . "'"
+            WHERE `alliance_id` = '" . (int) $alliance_id . "'"
         );
     }
 }

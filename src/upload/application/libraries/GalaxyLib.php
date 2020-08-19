@@ -13,6 +13,7 @@
  */
 namespace application\libraries;
 
+use application\core\enumerators\MissionsEnumerator as Missions;
 use application\core\enumerators\PlanetTypesEnumerator;
 use application\core\Template;
 use application\core\XGPCore;
@@ -192,12 +193,12 @@ class GalaxyLib extends XGPCore
         }
 
         // PARSE THE DATA
-        $parse = $this->langs;
+        $parse = $this->langs->language;
         $parse['name'] = $this->row_data['planet_name'];
         $parse['galaxy'] = $this->galaxy;
         $parse['system'] = $this->system;
         $parse['planet'] = $this->planet;
-        $parse['image'] = DPATH . 'planets' . DIRECTORY_SEPARATOR . 'small' . DIRECTORY_SEPARATOR . 's_' . $this->row_data['planet_image'] . '.jpg';
+        $parse['image'] = strtr(DPATH, ['\\' => '/']) . 'planets/small/s_' . $this->row_data['planet_image'] . '.jpg';
         $parse['links'] = '';
 
         // LOOP THRU ACTIONS
@@ -239,7 +240,7 @@ class GalaxyLib extends XGPCore
                 }
             }
         } else {
-            $planetname = $this->langs['gl_planet_destroyed'];
+            $planetname = $this->langs->line('gl_planet_destroyed');
         }
 
         return $planetname;
@@ -281,12 +282,12 @@ class GalaxyLib extends XGPCore
 
         // CHECK MOON STATUS AND COMPLETE DATA IF REQUIRED
         if ($this->row_data['destroyed_moon'] == 0 && $this->row_data['id_luna'] != 0) {
-            $parse = $this->langs;
+            $parse = $this->langs->language;
             $parse['name_moon'] = $this->row_data['name_moon'];
             $parse['galaxy'] = $this->galaxy;
             $parse['system'] = $this->system;
             $parse['planet'] = $this->planet;
-            $parse['image'] = DPATH . 'planets' . DIRECTORY_SEPARATOR . 'small' . DIRECTORY_SEPARATOR . 's_mond.jpg';
+            $parse['image'] = strtr(DPATH, ['\\' => '/']) . 'planets/small/s_mond.jpg';
             $parse['planet_diameter'] = FormatLib::prettyNumber($this->row_data['planet_diameter']);
             $parse['links'] = '';
 
@@ -322,11 +323,11 @@ class GalaxyLib extends XGPCore
                 $recyclers_sended = $this->currentplanet['ship_recycler'];
             }
 
-            $parse = $this->langs;
+            $parse = $this->langs->language;
             $parse['galaxy'] = $this->galaxy;
             $parse['system'] = $this->system;
             $parse['planet'] = $this->planet;
-            $parse['image'] = DPATH . 'planets' . DIRECTORY_SEPARATOR . 'debris.jpg';
+            $parse['image'] = strtr(DPATH, ['\\' => '/']) . 'planets/debris.jpg';
             $parse['planettype'] = self::PLANET_TYPE;
             $parse['recsended'] = $recyclers_sended;
             $parse['planet_debris_metal'] = FormatLib::prettyNumber($this->row_data['metal']);
@@ -353,34 +354,34 @@ class GalaxyLib extends XGPCore
         $status['noob_protection'] = '';
 
         if ($this->row_data['preference_vacation_mode'] > 0) {
-            $status['vacation'] = '<span class="vacation">' . $this->langs['gl_v'] . '</span>';
+            $status['vacation'] = '<span class="vacation">' . $this->langs->line('gl_v') . '</span>';
         }
 
         if ($this->row_data['user_banned']) {
             $status['banned'] = '<span class="banned">' . UrlHelper::setUrl(
                 'game.php?page=banned',
-                $this->langs['gl_b']
+                $this->langs->line('gl_b')
             ) . '</span>';
         }
 
         if ($this->row_data['user_onlinetime'] < (time() - 60 * 60 * 24 * 7) && $this->row_data['user_onlinetime'] > (time() - 60 * 60 * 24 * 28)) {
-            $status['inactive'] = '<span class="inactive">' . $this->langs['gl_i'] . '</span>';
+            $status['inactive'] = '<span class="inactive">' . $this->langs->line('gl_i') . '</span>';
         }
 
         if ($this->row_data['user_onlinetime'] < (time() - 60 * 60 * 24 * 28)) {
-            $status['inactive'] .= '<span class="longinactive">' . $this->langs['gl_I'] . '</span>';
+            $status['inactive'] .= '<span class="longinactive">' . $this->langs->line('gl_I') . '</span>';
         }
 
         if ($this->noob->isWeak($MyGameLevel, $HeGameLevel)) {
-            $status['noob_protection'] = '<span class="noob">' . $this->langs['gl_w'] . '</span>';
+            $status['noob_protection'] = '<span class="noob">' . $this->langs->line('gl_w') . '</span>';
         }
 
         if ($this->noob->isStrong($MyGameLevel, $HeGameLevel)) {
-            $status['noob_protection'] = '<span class="strong">' . $this->langs['gl_s'] . '</span>';
+            $status['noob_protection'] = '<span class="strong">' . $this->langs->line('gl_s') . '</span>';
         }
 
         // POP UP BLOCK DATA
-        $parse = $this->langs;
+        $parse = $this->langs->language;
         $parse['actions'] = '';
         $parse['username'] = $this->row_data['user_name'];
         $parse['current_rank'] = $this->row_data['user_statistic_total_rank'];
@@ -395,12 +396,12 @@ class GalaxyLib extends XGPCore
             $parse['actions'] = "<td>";
             $parse['actions'] .= str_replace('"', '', UrlHelper::setUrl(
                 'game.php?page=chat&playerId=' . $this->row_data['user_id'],
-                $this->langs['write_message']
+                $this->langs->line('write_message')
             ));
             $parse['actions'] .= "</td></tr><tr><td>";
             $parse['actions'] .= str_replace('"', '', UrlHelper::setUrl(
                 "game.php?page=buddies&mode=2&u=" . $this->row_data['user_id'],
-                $this->langs['gl_buddy_request']
+                $this->langs->line('gl_buddy_request')
             ));
             $parse['actions'] .= "</td></tr><tr>";
 
@@ -435,10 +436,10 @@ class GalaxyLib extends XGPCore
 
         if ($this->row_data['user_ally_id'] != 0) {
             if ($this->row_data['ally_members'] > 1) {
-                $add = $this->langs['gl_member_add'];
+                $add = $this->langs->line('gl_member_add');
             }
 
-            $parse = $this->langs;
+            $parse = $this->langs->language;
             $parse['alliance_name'] = str_replace(
                 "'",
                 "\'",
@@ -453,7 +454,7 @@ class GalaxyLib extends XGPCore
             if ($this->row_data['alliance_web'] != '') {
                 $web_url = UrlHelper::setUrl(
                     UrlHelper::prepUrl($this->row_data['alliance_web']),
-                    $this->langs['gl_alliance_web_page'],
+                    $this->langs->line('gl_alliance_web_page'),
                     '',
                     'target="_new"'
                 );
@@ -482,21 +483,21 @@ class GalaxyLib extends XGPCore
         $links = '';
 
         if ($this->row_data['user_id'] != $this->current_user['user_id']) {
-            $image = FunctionsLib::setImage(DPATH . 'img/e.gif', $this->langs['gl_spy']);
+            $image = FunctionsLib::setImage(DPATH . 'img/e.gif', $this->langs->line('gl_spy'));
             $attributes = "onclick=\"javascript:doit(6, " . $this->galaxy . ", " . $this->system . ", " .
             $this->planet . ", 1, " . $this->current_user['preference_spy_probes'] . ");\"";
             $links .= UrlHelper::setUrl('', $image, '', $attributes) . '&nbsp;';
 
-            $image = FunctionsLib::setImage(DPATH . 'img/m.gif', $this->langs['write_message']);
+            $image = FunctionsLib::setImage(DPATH . 'img/m.gif', $this->langs->line('write_message'));
             $url = 'game.php?page=chat&playerId=' . $this->row_data['user_id'];
             $links .= UrlHelper::setUrl($url, $image) . '&nbsp;';
 
-            $image = FunctionsLib::setImage(DPATH . 'img/b.gif', $this->langs['gl_buddy_request']);
+            $image = FunctionsLib::setImage(DPATH . 'img/b.gif', $this->langs->line('gl_buddy_request'));
             $url = "game.php?page=buddies&mode=2&u=" . $this->row_data['user_id'];
             $links .= UrlHelper::setUrl($url, $image) . '&nbsp;';
 
             if ($this->isMissileActive()) {
-                $image = FunctionsLib::setImage(DPATH . 'img/r.gif', $this->langs['gl_missile_attack']);
+                $image = FunctionsLib::setImage(DPATH . 'img/r.gif', $this->langs->line('gl_missile_attack'));
                 $url = 'game.php?page=galaxy&mode=2&galaxy=' . $this->galaxy . '&system=' . $this->system .
                 '&planet=' . $this->planet . '&current=' . $this->current_user['user_current_planet'];
                 $links .= UrlHelper::setUrl($url, $image) . '&nbsp;';
@@ -522,7 +523,7 @@ class GalaxyLib extends XGPCore
     {
         $url = "game.php?page=fleet1&galaxy=" . $this->galaxy . "&amp;system=" . $this->system . "&amp;planet=" .
         $this->planet . "&amp;planettype=" . $planet_type . "&amp;target_mission=1";
-        return str_replace('"', '', UrlHelper::setUrl($url, $this->langs['type_mission'][1]));
+        return str_replace('"', '', UrlHelper::setUrl($url, $this->langs->language['type_mission'][Missions::ATTACK]));
     }
 
     /**
@@ -536,7 +537,7 @@ class GalaxyLib extends XGPCore
     {
         $url = "game.php?page=fleet1&galaxy=" . $this->galaxy . "&system=" . $this->system .
         "&planet=" . $this->planet . "&planettype=" . $planet_type . "&target_mission=3";
-        return str_replace('"', '', UrlHelper::setUrl($url, $this->langs['type_mission'][3]));
+        return str_replace('"', '', UrlHelper::setUrl($url, $this->langs->language['type_mission'][Missions::TRANSPORT]));
     }
 
     /**
@@ -550,7 +551,7 @@ class GalaxyLib extends XGPCore
     {
         $url = "game.php?page=fleet1&galaxy=" . $this->galaxy . "&system=" . $this->system .
         "&planet=" . $this->planet . "&planettype=" . $planet_type . "&target_mission=4";
-        return str_replace('"', '', UrlHelper::setUrl($url, $this->langs['type_mission'][4]));
+        return str_replace('"', '', UrlHelper::setUrl($url, $this->langs->language['type_mission'][Missions::DEPLOY]));
     }
 
     /**
@@ -564,7 +565,7 @@ class GalaxyLib extends XGPCore
     {
         $url = "game.php?page=fleet1&galaxy=" . $this->galaxy . "&system=" . $this->system .
         "&planet=" . $this->planet . "&planettype=" . $planet_type . "&target_mission=5";
-        return str_replace('"', '', UrlHelper::setUrl($url, $this->langs['type_mission'][5]));
+        return str_replace('"', '', UrlHelper::setUrl($url, $this->langs->language['type_mission'][Missions::STAY]));
     }
 
     /**
@@ -578,7 +579,7 @@ class GalaxyLib extends XGPCore
     {
         $attributes = "onclick=&#039javascript:doit(6, " . $this->galaxy . ", " . $this->system . ", " .
         $this->planet . ", " . $planet_type . ", " . $this->current_user['preference_spy_probes'] . ");&#039";
-        return str_replace('"', '', UrlHelper::setUrl('', $this->langs['type_mission'][6], '', $attributes));
+        return str_replace('"', '', UrlHelper::setUrl('', $this->langs->language['type_mission'][Missions::SPY], '', $attributes));
     }
 
     /**
@@ -592,7 +593,7 @@ class GalaxyLib extends XGPCore
     {
         $url = "game.php?page=fleet1&galaxy=" . $this->galaxy . "&system=" . $this->system . "&planet=" .
         $this->planet . "&planettype=" . $planet_type . "&target_mission=9";
-        return str_replace('"', '', UrlHelper::setUrl($url, $this->langs['type_mission'][9]));
+        return str_replace('"', '', UrlHelper::setUrl($url, $this->langs->language['type_mission'][Missions::DESTROY]));
     }
 
     /**
@@ -606,7 +607,7 @@ class GalaxyLib extends XGPCore
     {
         $url = "game.php?page=galaxy&mode=2&galaxy=" . $this->galaxy . "&system=" . $this->system . "&planet=" .
         $this->planet . "&current=" . $this->current_user['user_current_planet'];
-        return str_replace('"', '', UrlHelper::setUrl($url, $this->langs['gl_missile_attack']));
+        return str_replace('"', '', UrlHelper::setUrl($url, $this->langs->language['gl_missile_attack']));
     }
 
     /**
@@ -620,7 +621,7 @@ class GalaxyLib extends XGPCore
     {
         $attributes = "onclick=fenster(&#039;game.php?page=phalanx&galaxy=" . $this->galaxy . "&amp;system=" .
         $this->system . "&amp;planet=" . $this->planet . "&amp;planettype=" . $planet_type . "&#039;)";
-        return str_replace('"', '', UrlHelper::setUrl('', $this->langs['gl_phalanx'], '', $attributes));
+        return str_replace('"', '', UrlHelper::setUrl('', $this->langs->line('gl_phalanx'), '', $attributes));
     }
     ######################################
     #

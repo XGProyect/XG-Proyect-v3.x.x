@@ -190,7 +190,7 @@ class Search extends Controller
                 $list_of_results[] = array_merge(
                     $results,
                     [
-                        'planet_position' => FormatLib::prettyCoords($results['planet_galaxy'], $results['planet_system'], $results['planet_planet']),
+                        'planet_position' => FormatLib::prettyCoords((int) $results['planet_galaxy'], (int) $results['planet_system'], (int) $results['planet_planet']),
                         'user_rank' => $this->setPosition((int) $results['user_rank'], (int) $results['user_authlevel']),
                         'user_actions' => $this->getPlayersActions((int) $results['user_id']),
                     ]
@@ -211,7 +211,7 @@ class Search extends Controller
                 $list_of_results[] = array_merge(
                     $results,
                     [
-                        'planet_position' => FormatLib::prettyCoords($results['planet_galaxy'], $results['planet_system'], $results['planet_planet']),
+                        'planet_position' => FormatLib::prettyCoords((int) $results['planet_galaxy'], (int) $results['planet_system'], (int) $results['planet_planet']),
                         'user_rank' => $this->setPosition((int) $results['user_rank'], (int) $results['user_authlevel']),
                         'user_actions' => $this->getPlayersActions((int) $results['user_id']),
                     ]

@@ -1122,8 +1122,13 @@ class Alliance extends Controller
 
         $ranksObject = $this->alliance->getCurrentAllianceRankObject();
 
-        $users = $this->Alliance_Model->getAllianceMembersById(
-            $this->getAllianceId()
+        $users = array_filter(
+            $this->Alliance_Model->getAllianceMembersById(
+                $this->getAllianceId()
+            ),
+            function ($user) {
+                return $user['user_ally_rank_id'] != 0;
+            }
         );
 
         $list_of_members = [];
@@ -1131,9 +1136,9 @@ class Alliance extends Controller
         if (isset($users)) {
             foreach ($users as $user) {
                 $rank_name = $ranksObject->getUserRankById($user['user_ally_rank_id'])['rank'];
-                $right_hand = $ranksObject->getUserRankById($user['user_ally_rank_id'])['rights'][AllianceRanks::right_hand];
+                $rights = $ranksObject->getUserRankById($user['user_ally_rank_id'])['rights'];
 
-                if (isset($right_hand) && $right_hand == SwitchInt::on) {
+                if (isset($rights[AllianceRanks::right_hand]) && $rights[AllianceRanks::right_hand] == SwitchInt::on) {
                     $list_of_members[] = [
                         'user_id' => $user['user_id'],
                         'user_name' => $user['user_name'],

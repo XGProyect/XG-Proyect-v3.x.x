@@ -459,11 +459,11 @@ class Fleet extends Model
                 $acs = $this->getAcsOwner($fleet->getFleetGroup());
 
                 if ($acs['acs_owner'] == $fleet->getFleetOwner()
-                    && $fleet->getFleetMission() == Missions::attack) {
+                    && $fleet->getFleetMission() == Missions::ATTACK) {
                     $this->removeAcs($fleet->getFleetGroup());
                 }
 
-                if ($fleet->getFleetMission() == Missions::acs) {
+                if ($fleet->getFleetMission() == Missions::ACS) {
                     $this->db->query(
                         "UPDATE `" . FLEETS . "` f SET
                             f.`fleet_group` = '0'

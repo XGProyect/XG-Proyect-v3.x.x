@@ -48,9 +48,6 @@ class Users_library
             // Get user data and check it
             $this->setUserData();
 
-            // Check game close
-            Functions::checkServer($this->user_data);
-
             if (!defined('IN_ADMIN')) {
                 // Set the changed planet
                 $this->setPlanet();

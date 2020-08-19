@@ -97,6 +97,8 @@ class Repair extends Controller
         } else {
             $parse['display'] = 'none';
             $parse['head'] = $this->getTemplate()->set('adm/repair_result_head_view', $this->langs->language);
+            $parse['tables'] = '';
+            $parse['np_general'] = '';
 
             if (isset($_POST['table']) && is_array($_POST['table'])) {
                 $result_rows = '';

@@ -39,13 +39,14 @@
             });
 
             // check version
-            $.getJSON('https://www.xgproyect.org/current.php', function (data) {
+            $('.badge-counter').html('');
+            $('.dropdown-list').hide();
+
+            $.getJSON('//updates.xgproyect.org/latest.php', function (data) {
                 $.each(data, function (index, element) {
                     if (compareversion('{version}', element)) {
                         $('.badge-counter').html('1');
-                    } else {
-                        $('.badge-counter').html('');
-                        $('.dropdown-list').hide();
+                        $('.dropdown-list').css('display', '')
                     }
                 });
             });

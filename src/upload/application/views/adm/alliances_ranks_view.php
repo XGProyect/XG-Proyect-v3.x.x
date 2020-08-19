@@ -10,7 +10,6 @@
             <div class="table-responsive">
                 {alert_info}
                 <form name="save_ranks" method="post" action="">
-                    <input type="hidden" name="ally_ranks_old" value="{ally_ranks_old}">
                     <table class="table table-borderless" width="100%" cellspacing="0">
                         <tr>
                             <th colspan="11">{al_configure_ranks}</th>

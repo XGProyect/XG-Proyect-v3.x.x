@@ -16,7 +16,7 @@ namespace application\controllers\game;
 use application\core\Controller;
 use application\helpers\UrlHelper;
 use application\libraries\buildings\Building;
-use application\libraries\DevelopmentsLib;
+use application\libraries\DevelopmentsLib as Developments;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
 use application\libraries\OfficiersLib;
@@ -227,7 +227,7 @@ class Buildings extends Controller
         $queue = $this->showQueue();
 
         if ($this->_commander_active && $queue['lenght'] > 0) {
-            $return['BuildListScript'] = DevelopmentsLib::currentBuilding($this->getCurrentPage(), $this->langs->language);
+            $return['BuildListScript'] = Developments::currentBuilding($this->getCurrentPage(), $this->langs->language);
             $return['BuildList'] = $queue['buildlist'];
         }
 
@@ -266,7 +266,7 @@ class Buildings extends Controller
      */
     private function getBuildingLevelWithFormat($building_id)
     {
-        return DevelopmentsLib::setLevelFormat(
+        return Developments::setLevelFormat(
             $this->getBuildingLevel($building_id),
             $this->langs
         );
@@ -281,7 +281,7 @@ class Buildings extends Controller
      */
     private function getBuildingPriceWithFormat($building_id)
     {
-        return DevelopmentsLib::formatedDevelopmentPrice(
+        return Developments::formatedDevelopmentPrice(
             $this->_user,
             $this->_planet,
             $building_id,
@@ -300,7 +300,7 @@ class Buildings extends Controller
      */
     private function getBuildingTimeWithFormat($building_id)
     {
-        return DevelopmentsLib::formatedDevelopmentTime(
+        return Developments::formatedDevelopmentTime(
             $this->getBuildingTime($building_id),
             $this->langs->line('bd_time')
         );
@@ -327,7 +327,7 @@ class Buildings extends Controller
      */
     private function getBuildingTime($building_id)
     {
-        return DevelopmentsLib::developmentTime(
+        return Developments::developmentTime(
             $this->_user,
             $this->_planet,
             $building_id,
@@ -348,9 +348,9 @@ class Buildings extends Controller
         $build_url = 'game.php?page=' . $this->getCurrentPage() . '&cmd=insert&building=' . $building_id;
 
         // validations
-        $is_development_payable = DevelopmentsLib::isDevelopmentPayable($this->_user, $this->_planet, $building_id, true, false);
+        $is_development_payable = Developments::isDevelopmentPayable($this->_user, $this->_planet, $building_id, true, false);
         $is_on_vacations = parent::$users->isOnVacations($this->_user);
-        $have_fields = DevelopmentsLib::areFieldsAvailable($this->_planet);
+        $have_fields = Developments::areFieldsAvailable($this->_planet);
         $is_queue_full = $this->_building->isQueueFull();
         $queue_element = $this->_building->getCountElementsOnQueue();
 
@@ -486,11 +486,11 @@ class Buildings extends Controller
     {
         $working_buildings = [14, 15, 21];
 
-        if ($building_id == 31 && DevelopmentsLib::isLabWorking($this->_user)) {
+        if ($building_id == 31 && Developments::isLabWorking($this->_user)) {
             return true;
         }
 
-        if (in_array($building_id, $working_buildings) && DevelopmentsLib::isShipyardWorking($this->_planet)) {
+        if (in_array($building_id, $working_buildings) && Developments::isShipyardWorking($this->_planet)) {
             return true;
         }
 
@@ -542,7 +542,7 @@ class Buildings extends Controller
         return array_filter(
             $allowed_buildings[$this->getCurrentPage()][$this->_planet['planet_type']],
             function ($value) {
-                return DevelopmentsLib::isDevelopmentAllowed(
+                return Developments::isDevelopmentAllowed(
                     $this->_user,
                     $this->_planet,
                     $value
@@ -586,7 +586,7 @@ class Buildings extends Controller
                         $ListIDArray[1] -= 1;
                     }
 
-                    $current_build_time = DevelopmentsLib::developmentTime($this->_user, $this->_planet, $ListIDArray[0]);
+                    $current_build_time = Developments::developmentTime($this->_user, $this->_planet, $ListIDArray[0]);
                     $BuildEndTime += $current_build_time;
                     $ListIDArray[2] = $current_build_time;
                     $ListIDArray[3] = $BuildEndTime;
@@ -608,7 +608,7 @@ class Buildings extends Controller
             }
 
             if ($building != false) {
-                $Needed = DevelopmentsLib::developmentPrice($this->_user, $this->_planet, $building, true, $ForDestroy);
+                $Needed = Developments::developmentPrice($this->_user, $this->_planet, $building, true, $ForDestroy);
                 $this->_planet['planet_metal'] += $Needed['metal'];
                 $this->_planet['planet_crystal'] += $Needed['crystal'];
                 $this->_planet['planet_deuterium'] += $Needed['deuterium'];
@@ -687,7 +687,7 @@ class Buildings extends Controller
         $resource = $this->getObjects()->getObjects();
         $CurrentQueue = $this->_planet['planet_b_building_id'];
         $queue = $this->showQueue();
-        $max_fields = DevelopmentsLib::maxFields($this->_planet);
+        $max_fields = Developments::maxFields($this->_planet);
         $QueueArray = [];
 
         if ($AddMode) {
@@ -718,9 +718,9 @@ class Buildings extends Controller
 
         $continue = false;
 
-        if ($QueueID != false && DevelopmentsLib::isDevelopmentAllowed($this->_user, $this->_planet, $building)) {
+        if ($QueueID != false && Developments::isDevelopmentAllowed($this->_user, $this->_planet, $building)) {
             if ($QueueID <= 1) {
-                if (DevelopmentsLib::isDevelopmentPayable($this->_user, $this->_planet, $building, true, false) && !parent::$users->isOnVacations($this->_user)) {
+                if (Developments::isDevelopmentPayable($this->_user, $this->_planet, $building, true, !$AddMode) && !parent::$users->isOnVacations($this->_user)) {
                     $continue = true;
                 }
             } else {
@@ -745,22 +745,22 @@ class Buildings extends Controller
                     if ($AddMode == true) {
                         $BuildLevel = $ActualLevel + 1 + $InArray;
                         $this->_planet[$resource[$building]] += $InArray;
-                        $BuildTime = DevelopmentsLib::developmentTime($this->_user, $this->_planet, $building);
+                        $BuildTime = Developments::developmentTime($this->_user, $this->_planet, $building);
                         $this->_planet[$resource[$building]] -= $InArray;
                     } else {
                         $BuildLevel = $ActualLevel - 1 - $InArray;
                         $this->_planet[$resource[$building]] -= $InArray;
-                        $BuildTime = DevelopmentsLib::developmentTime($this->_user, $this->_planet, $building) / 2;
+                        $BuildTime = Developments::destroyTime(Developments::developmentTime($this->_user, $this->_planet, $building));
                         $this->_planet[$resource[$building]] += $InArray;
                     }
                 } else {
                     $ActualLevel = $this->_planet[$resource[$building]];
                     if ($AddMode == true) {
                         $BuildLevel = $ActualLevel + 1;
-                        $BuildTime = DevelopmentsLib::developmentTime($this->_user, $this->_planet, $building);
+                        $BuildTime = Developments::developmentTime($this->_user, $this->_planet, $building);
                     } else {
                         $BuildLevel = $ActualLevel - 1;
-                        $BuildTime = DevelopmentsLib::developmentTime($this->_user, $this->_planet, $building) / 2;
+                        $BuildTime = Developments::destroyTime(Developments::developmentTime($this->_user, $this->_planet, $building));
                     }
                 }
 

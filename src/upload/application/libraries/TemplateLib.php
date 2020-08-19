@@ -192,7 +192,7 @@ class TemplateLib
     {
         return $this->template->set(
             ($full ? 'adm/admin_page_view' : 'adm/simple_admin_page_view'),
-            array_merge($parse, ['page_content' => $page])
+            array_merge($this->langs->loadLang('adm/popups', true)->language, $parse, ['page_content' => $page])
         );
     }
 

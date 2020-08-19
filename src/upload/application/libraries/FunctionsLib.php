@@ -15,7 +15,6 @@ namespace application\libraries;
 
 use application\core\Database;
 use application\core\enumerators\MessagesEnumerator;
-use application\core\enumerators\UserRanksEnumerator;
 use application\core\Language;
 use application\core\Options;
 use application\core\Template;
@@ -523,23 +522,6 @@ abstract class FunctionsLib extends XGPCore
         }
 
         return $lang_options;
-    }
-
-    /**
-     * checkServer
-     *
-     * @param array $current_user Current user
-     *
-     * @return void
-     */
-    public static function checkServer($current_user)
-    {
-        if (self::readConfig('game_enable') == 0
-            && $current_user['user_authlevel'] < UserRanksEnumerator::ADMIN
-            && !defined('IN_ADMIN')) {
-            self::message(stripslashes(FunctionsLib::readConfig('close_reason')), '', '', false, false);
-            die();
-        }
     }
 
     /**

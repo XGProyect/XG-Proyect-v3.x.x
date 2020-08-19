@@ -209,10 +209,12 @@ class Ranks
      * @param int $rank_id Rank ID
      *
      * @return array
+     *
+     * @todo this method shouldn't be here, this is a task for the Alliance library, when we refactor the admin alliances page we need to remove this
      */
     public function getUserRankById($rank_id)
     {
-        return $this->getRankById($rank_id - 1);
+        return $this->getRankById($this->validateRankId($rank_id - 1));
     }
 
     /**

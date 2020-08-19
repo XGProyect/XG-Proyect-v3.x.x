@@ -10,14 +10,16 @@ $lang = [
     'exp_new_ships_5' => '',
 
     // found resources
-    'exp_new_resources_1' => 'En un planetoide abondonado han sido encontradas algunas zonas de recursos fácilmente accesibles y se han recolectado allí algunos recursos satisfactoriamente. Se ha capturado %s de %s.', // ok
-    'exp_new_resources_2' => 'Tu expedición descubrió un pequeño asteroide en el cual se pueden reciclar algunos recursos. Se ha capturado %s de %s.', // ok
+    'exp_new_resources_1' => 'En un planetoide abondonado han sido encontradas algunas zonas de recursos fácilmente accesibles y se han recolectado allí algunos recursos satisfactoriamente.<br><br>Se ha capturado %s de %s.', // ok
+    'exp_new_resources_2' => 'Tu expedición descubrió un pequeño asteroide en el cual se pueden reciclar algunos recursos.<br><br>Se ha capturado %s de %s.', // ok
+    'exp_new_resources_3' => '', // ok
 
     // found primitive enemy
     'exp_primitive_enemy_1' => 'Algunos bárbaros primitivos están atacándonos con naves espaciales que no deberían ser llamadas como tal. Si nos disparan en serio, nos veremos forzados a devolver el fuego.', // ok
     'exp_primitive_enemy_2' => 'La señal de emergencia que la expedición siguió, resultó ser un montaje de algunos bucaneros estelares. La batalla no se pudo evitar.', // ok
     'exp_primitive_enemy_3' => 'Capturamos algunos mensajes de radio de algunos piratas borrachos. Pareciera como si nos quisieran atacar.', // ok
     'exp_primitive_enemy_4' => 'Tuvimos que luchar contra algunos piratas que por suerte no eran muchos.', // ok
+    'exp_primitive_enemy_5' => '',
 
     // found advanced enemy
     'exp_advanced_enemy_1' => '¡Algunas naves de apariencia exótica atacaron la expedición sin previo aviso!', // ok
@@ -26,7 +28,7 @@ $lang = [
     'exp_trader' => 'Tu flota en expedición tuvo un corto contacto con una raza de aliens un poco vergonzosa. Estos anunciaron que van a enviar a un representante con bienes de comercio a tus mundos.', // ok
 
     // found dark matter
-    'exp_dm_1' => 'La expedición siguió algunas señales fuera de lo común y descrubrió un asteroide. En el núcle del asteroide se encontraba una pequeña cantidad de Materia Oscura. El asteroide fue transportado a bordo y los exploradores intentan extrar la Materia Oscura. Se ha capturado %s de %s.', // ok
+    'exp_dm_1' => 'La expedición siguió algunas señales fuera de lo común y descrubrió un asteroide. En el núcle del asteroide se encontraba una pequeña cantidad de Materia Oscura. El asteroide fue transportado a bordo y los exploradores intentan extrar la Materia Oscura.<br><br>Se ha capturado %s de %s.', // ok
     'exp_dm_2' => '',
 
     // delay

@@ -304,7 +304,7 @@ class Movement extends Controller
             $actions .= '<input type="submit" name="send" value="' . $this->langs->line('fl_send_back') . '">';
             $actions .= '</form>';
 
-            if ($fleet->getFleetMission() == Missions::attack) {
+            if ($fleet->getFleetMission() == Missions::ATTACK) {
                 $content = '<input type="button" value="' . $this->langs->line('fl_acs') . '">';
                 $attributes = 'onClick="f(\'game.php?page=federationlayer&fleet=' . $fleet->getFleetId() . '\', \'\')"';
 

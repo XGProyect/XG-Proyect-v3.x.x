@@ -27,10 +27,9 @@
                             <td>{us_user_information_level}</td>
                             <td>
                                 <select name="authlevel" class="form-control">
-                                    <option value="0" {sel0}>{ge_user}</option>
-                                    <option value="1" {sel1}>{ge_go}</option>
-                                    <option value="2" {sel2}>{ge_sgo}</option>
-                                    <option value="3" {sel3}>{ge_ga}</option>
+                                    {user_roles}
+                                        <option value="{role_id}" {role_sel}>{role_name}</option>
+                                    {/user_roles}
                                 </select>
                             </td>
                         </tr>

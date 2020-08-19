@@ -385,7 +385,7 @@ class Users extends Model
         // build middle
         foreach ($technologies as $tech => $level) {
             if (strpos($tech, 'research_') !== false) {
-                $level = (isset($level) ? $level : 0);
+                $level = (isset($level) ? (int) $level : 0);
                 $query_string .= "`{$this->db->escapeValue($tech)}` = '" . (int) $level . "',";
             }
         }
@@ -516,7 +516,7 @@ class Users extends Model
         // build middle
         foreach ($buildings as $building => $level) {
             if (strpos($building, 'building_') !== false) {
-                $level = (isset($level) ? $level : 0);
+                $level = (isset($level) ? (int) $level : 0);
                 $query_string .= "`{$this->db->escapeValue($building)}` = '" . (int) $level . "',";
                 $total_fields += $level;
             }
@@ -547,7 +547,7 @@ class Users extends Model
         // build middle
         foreach ($ships as $ship => $amount) {
             if (strpos($ship, 'ship_') !== false) {
-                $amount = (isset($amount) ? $amount : 0);
+                $amount = (isset($amount) ? (int) $amount : 0);
                 $query_string .= "`{$this->db->escapeValue($ship)}` = '" . (int) $amount . "',";
             }
         }
@@ -577,7 +577,7 @@ class Users extends Model
         // build middle
         foreach ($defenses as $defense => $amount) {
             if (strpos($defense, 'defense_') !== false) {
-                $amount = (isset($amount) ? $amount : 0);
+                $amount = (isset($amount) ? (int) $amount : 0);
                 $query_string .= "`{$this->db->escapeValue($defense)}` = '" . (int) $amount . "',";
             }
         }

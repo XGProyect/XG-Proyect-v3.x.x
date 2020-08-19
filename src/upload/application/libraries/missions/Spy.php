@@ -129,7 +129,7 @@ class Spy extends Missions
                     $AttackLink .= "<a href=\"game.php?page=fleet1&galaxy=" . $fleet_row['fleet_end_galaxy'] . "&system=" . $fleet_row['fleet_end_system'] . "";
                     $AttackLink .= "&planet=" . $fleet_row['fleet_end_planet'] . "&planettype=" . $fleet_row['fleet_end_type'] . "";
                     $AttackLink .= "&target_mission=1";
-                    $AttackLink .= " \">" . $this->langs->language['type_mission'][MissionsEnumerator::attack] . "";
+                    $AttackLink .= " \">" . $this->langs->language['type_mission'][MissionsEnumerator::ATTACK] . "";
                     $AttackLink .= "</a></center>";
                     $MessageEnd = "<center>" . sprintf($this->langs->line('spy_report_detection'), $TargetChances) . "</center>";
 
