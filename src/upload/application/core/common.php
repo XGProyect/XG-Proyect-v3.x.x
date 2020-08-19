@@ -76,7 +76,7 @@ class Common
         // overall loads
         $this->autoLoad();
         $this->setErrorHandler();
-        $this->isGameInstalled();
+        $this->isServerInstalled();
 
         // specific pages load or executions
         if (isset(self::APPLICATIONS[$application])) {
@@ -132,11 +132,11 @@ class Common
     }
 
     /**
-     * Check if the game is installed
+     * Check if the server is installed
      *
      * @return void
      */
-    private function isGameInstalled(): void
+    private function isServerInstalled(): void
     {
         try {
             $config_file = XGP_ROOT . 'application' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'config.php';
