@@ -198,7 +198,7 @@ class GalaxyLib extends XGPCore
         $parse['galaxy'] = $this->galaxy;
         $parse['system'] = $this->system;
         $parse['planet'] = $this->planet;
-        $parse['image'] = DPATH . 'planets' . DIRECTORY_SEPARATOR . 'small' . DIRECTORY_SEPARATOR . 's_' . $this->row_data['planet_image'] . '.jpg';
+        $parse['image'] = strtr(DPATH, ['\\' => '/']) . 'planets/small/s_' . $this->row_data['planet_image'] . '.jpg';
         $parse['links'] = '';
 
         // LOOP THRU ACTIONS
@@ -287,7 +287,7 @@ class GalaxyLib extends XGPCore
             $parse['galaxy'] = $this->galaxy;
             $parse['system'] = $this->system;
             $parse['planet'] = $this->planet;
-            $parse['image'] = DPATH . 'planets' . DIRECTORY_SEPARATOR . 'small' . DIRECTORY_SEPARATOR . 's_mond.jpg';
+            $parse['image'] = strtr(DPATH, ['\\' => '/']) . 'planets/small/s_mond.jpg';
             $parse['planet_diameter'] = FormatLib::prettyNumber($this->row_data['planet_diameter']);
             $parse['links'] = '';
 
@@ -327,7 +327,7 @@ class GalaxyLib extends XGPCore
             $parse['galaxy'] = $this->galaxy;
             $parse['system'] = $this->system;
             $parse['planet'] = $this->planet;
-            $parse['image'] = DPATH . 'planets' . DIRECTORY_SEPARATOR . 'debris.jpg';
+            $parse['image'] = strtr(DPATH, ['\\' => '/']) . 'planets/debris.jpg';
             $parse['planettype'] = self::PLANET_TYPE;
             $parse['recsended'] = $recyclers_sended;
             $parse['planet_debris_metal'] = FormatLib::prettyNumber($this->row_data['metal']);
