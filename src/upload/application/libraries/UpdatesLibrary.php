@@ -316,6 +316,9 @@ class UpdatesLibrary extends XGPCore
                             $element_data = explode(",", $data);
                             $previous_time = $element_data[2];
                             $element_data[2] = Developments::developmentTime($current_user, $current_planet, $element_data[0]);
+                            if ($for_destroy) {
+                                $element_data[2] = Developments::destroyTime($element_data[2]);
+                            }
 
                             if ($prevData == 0) {
                                 // remove the previous building time and add the new building time

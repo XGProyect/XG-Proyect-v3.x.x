@@ -274,6 +274,19 @@ class DevelopmentsLib extends XGPCore
     }
 
     /**
+     * Check if the building is for destroy and calculate
+     *
+     * @param integer $time
+     * @return integer
+     */
+    public static function destroyTime(int $time): int
+    {
+        $destroy_time = $time / 2;
+
+        return ($destroy_time < 1 ? 1 : $destroy_time);
+    }
+
+    /**
      * formatedDevelopmentTime
      *
      * @param int $time Time
