@@ -35,10 +35,8 @@ On the other hand, it's a pleasure to see people using XG Proyect.
 
 The following are tools or frameworks that we use to do our coding experience better!
 
-<p style="text-align: center;">
-    ![Codeigniter](https://codeigniter.com/assets/images/ci-logo.png) **Codeigniter**
+![Codeigniter](https://codeigniter.com/assets/images/ci-logo.png) **Codeigniter**
 
-    ![PHPDocumentor](https://www.phpdoc.org/bundles/phpdocumentorwebsite/images/logo-icon.png) **PHP Documentor**
+![PHPDocumentor](https://www.phpdoc.org/bundles/phpdocumentorwebsite/images/logo-icon.png) **PHP Documentor**
 
-    [**PHP CompatInfo**](https://php5.laurent-laville.org/compatinfo/)
-</p>
+[**PHP CompatInfo**](https://php5.laurent-laville.org/compatinfo/)
