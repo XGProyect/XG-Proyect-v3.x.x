@@ -1,8 +1,8 @@
-<form action="game.php?page=galaxy&missiles=true&c={current}&mode=2&galaxy={galaxy}&system={system}&planet={planet}" method="POST">
+<form action="game.php?page=galaxy&missiles=true&c={current}&mode=2&galaxy={selected_galaxy}&system={selected_system}&planet={selected_planet}" method="POST">
     <tr>
     <table border="0">
         <tr>
-            <td class="c" colspan="2">{gl_missil_launch} [{galaxy}:{system}:{planet}]</td>
+            <td class="c" colspan="2">{gl_missil_launch} {coords}</td>
         </tr>
         <tr>
 

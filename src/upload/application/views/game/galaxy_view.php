@@ -229,7 +229,7 @@
                                 <input type="button" name="galaxyLeft" value="&lt;-" onClick="galaxy_submit('galaxyLeft')">
                             </td>
                             <td style="background-color: transparent">
-                                <input type="number" name="galaxy" value="{galaxy}" style="width:50px;" min="1" max="{max_galaxy}" tabindex="1">
+                                <input type="number" name="galaxy" value="{selected_galaxy}" style="width:50px;" min="1" max="{max_galaxy}" tabindex="1">
                             </td>
                             <td style="background-color: transparent">
                                 <input type="button" name="galaxyRight" value="-&gt;" onClick="galaxy_submit('galaxyRight')">
@@ -241,7 +241,7 @@
                                 <input type="button" name="systemLeft" value="&lt;-" onClick="galaxy_submit('systemLeft')">
                             </td>
                             <td style="background-color: transparent">
-                                <input type="number" name="system" value="{system}" style="width:50px;" min="1" max="{max_system}" tabindex="2">
+                                <input type="number" name="system" value="{selected_system}" style="width:50px;" min="1" max="{max_system}" tabindex="2">
                             </td>
                             <td style="background-color: transparent">
                                 <input type="button" name="systemRight" value="-&gt;" onClick="galaxy_submit('systemRight')">
@@ -250,7 +250,7 @@
                                 <input type="submit" value="{gl_go}">
                             </td>
                             <td style="background-color: transparent; width: 50%; text-align: right;">
-                                <a href="game.php?page=fleet1&amp;galaxy={galaxy}&amp;system={system}&amp;planet=16&amp;planettype=1&amp;target_mission=15">
+                                <a href="game.php?page=fleet1&amp;galaxy={selected_galaxy}&amp;system={selected_system}&amp;planet=16&amp;planettype=1&amp;target_mission=15">
                                     <input type="button" value="{gl_expedition}">
                                 </a>
                             </td>

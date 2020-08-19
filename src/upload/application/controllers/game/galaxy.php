@@ -164,9 +164,9 @@ class Galaxy extends Controller
 
         $this->galaxy = $this->Galaxy_Model->getGalaxyDataByGalaxyAndSystem($this->_galaxy, $this->_system);
 
-        $parse['galaxy'] = $this->_galaxy;
-        $parse['system'] = $this->_system;
-        $parse['planet'] = $planet;
+        $parse['selected_galaxy'] = $this->_galaxy;
+        $parse['selected_system'] = $this->_system;
+        $parse['selected_planet'] = $planet;
         $parse['currentmip'] = $this->planet['defense_interplanetary_missile'];
         $parse['maxfleetcount'] = $current_fleets;
         $parse['fleetmax'] = $max_fleets;
@@ -177,10 +177,11 @@ class Galaxy extends Controller
         $parse['current_galaxy'] = $this->planet['planet_galaxy'];
         $parse['current_system'] = $this->planet['planet_system'];
         $parse['current_planet'] = $this->planet['planet_planet'];
+        $parse['coords'] = FormatLib::prettyCoords((int) $this->_galaxy, (int) $this->_system, (int) $planet);
         $parse['planet_type'] = $this->planet['planet_type'];
         $parse['mip'] = ($mode == 2) ? $this->getTemplate()->set(
             'galaxy/galaxy_missile_selector',
-            $parse
+            array_merge($parse, $this->langs->language)
         ) : ' ';
 
         parent::$page->display(
