@@ -29,7 +29,7 @@ We are happy to deliver this software giving others the possibility to have a go
 On the other hand, it's a pleasure to see people using XG Proyect.  
 <a href="https://github.com/XGProyect/XG-Proyect-v3.x.x/issues" target="_blank">Create a ticket</a> on GitHub so I can put your game logo here!  
 
-![xgproyect](http://www.xgproyect.org/images/misc/xg-logo.png)
+<img align="center" img src="https://xgproyect.org/wp-content/uploads/2019/10/xgp-new-logo-black.png" width="150px" title="XG Proyect" alt="xgp-logo">
 
 ## We support
 
