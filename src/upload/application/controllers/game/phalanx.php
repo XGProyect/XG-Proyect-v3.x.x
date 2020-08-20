@@ -104,7 +104,7 @@ class Phalanx extends Controller
             if ($target_moon === false) {
                 $TargetMoonIsDestroyed = true;
             } else {
-                $TargetMoonIsDestroyed = $target_moon['planet_destroyed'] !== 0;
+                $TargetMoonIsDestroyed = (isset($target_moon['planet_destroyed']) && $target_moon['planet_destroyed'] !== 0);
             }
 
             $FleetToTarget = $this->Phalanx_Model->getFleetsToTarget($Galaxy, $System, $Planet);
