@@ -2,7 +2,7 @@
 /**
  * Messenger Library
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Library
  * @package  Application
@@ -14,7 +14,7 @@
 namespace application\libraries\messenger;
 
 use application\core\enumerators\MessagesEnumerator;
-use application\libraries\FunctionsLib;
+use application\helpers\StringsHelper;
 
 /**
  * MessagesOptions Class
@@ -54,7 +54,7 @@ final class MessagesOptions
     private $_type;
 
     /**
-     * 
+     *
      * @var type
      */
     private $_from;
@@ -73,7 +73,7 @@ final class MessagesOptions
 
     /**
      *
-     * @var type 
+     * @var type
      */
     private $_message_format;
 
@@ -84,7 +84,7 @@ final class MessagesOptions
 
     public function getSender()
     {
-        return $this->_sender;
+        return $this->_sender == '' ? 0 : $this->_sender;
     }
 
     public function getTime()
@@ -94,9 +94,9 @@ final class MessagesOptions
 
     public function getType()
     {
-        if ($this->_type == '' or ! is_object($this->_type)) {
+        if ($this->_type == '' or !is_object($this->_type)) {
 
-            return MessagesEnumerator::general;
+            return MessagesEnumerator::GENERAL;
         }
 
         return $this->_type;
@@ -164,7 +164,7 @@ final class MessagesOptions
             $this->_message_text = stripslashes($message_text);
         } else {
 
-            $this->_message_text = FunctionsLib::formatText($message_text);
+            $this->_message_text = StringsHelper::escapeString($message_text);
         }
     }
 

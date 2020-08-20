@@ -2,7 +2,7 @@
 /**
  * Hooks
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Core
  * @package  Application
@@ -26,16 +26,16 @@ namespace application\core;
 class Hooks
 {
 
-    var $_enabled = false;
-    var $_hooks = array();
-    var $_in_progress = false;
+    public $_enabled = false;
+    public $_hooks = array();
+    public $_in_progress = false;
 
     /**
      * __construct
      *
      * @return void
      */
-    function __construct()
+    public function __construct()
     {
         $this->initialize();
     }
@@ -45,7 +45,7 @@ class Hooks
      *
      * @return void
      */
-    function initialize()
+    public function initialize()
     {
         // IF HOOKS ARE NOT ENABLED THERE IS NOTHING ELSE TO DO
         if (HOOKS_ENABLED === false) {
@@ -54,10 +54,10 @@ class Hooks
 
         // GRAB THE HOOKS FILE, IF THERE ARE NO HOOKS, WE'RE DONE
         if (is_file(XGP_ROOT . 'application' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'hooks.php')) {
-            include ( XGP_ROOT . 'application' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'hooks.php' );
+            include XGP_ROOT . 'application' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'hooks.php';
         }
 
-        if (!isset($hook) or ! is_array($hook)) {
+        if (!isset($hook) or !is_array($hook)) {
             return;
         }
 
@@ -70,9 +70,9 @@ class Hooks
      *
      * @return void
      */
-    function call_hook($which = '')
+    public function call_hook($which = '')
     {
-        if (!$this->_enabled or ! isset($this->_hooks[$which])) {
+        if (!$this->_enabled or !isset($this->_hooks[$which])) {
             return false;
         }
 
@@ -92,7 +92,7 @@ class Hooks
      *
      * @return void
      */
-    function run_hook($data)
+    public function run_hook($data)
     {
         if (!is_array($data)) {
             return false;
@@ -104,7 +104,7 @@ class Hooks
         }
 
         // SET FILE PATH
-        if (!isset($data['filepath']) or ! isset($data['filename'])) {
+        if (!isset($data['filepath']) or !isset($data['filename'])) {
             return false;
         }
 
@@ -141,14 +141,14 @@ class Hooks
         // CALL THE CLASS AND / OR FUNCTION
         if ($class !== false) {
             if (!class_exists($class)) {
-                require ( $filepath );
+                require $filepath;
             }
 
             $HOOK = new $class;
             $HOOK->$function($params);
         } else {
             if (!function_exists($function)) {
-                require ( $filepath );
+                require $filepath;
             }
 
             $function($params);

@@ -1,8 +1,11 @@
 <?php
+
+declare (strict_types = 1);
+
 /**
  * Errors Controller
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Controller
  * @package  Application
@@ -14,8 +17,7 @@
 namespace application\controllers\adm;
 
 use application\core\Controller;
-use application\libraries\adm\AdministrationLib;
-use application\libraries\FunctionsLib;
+use application\libraries\adm\AdministrationLib as Administration;
 
 /**
  * Errors Class
@@ -29,112 +31,99 @@ use application\libraries\FunctionsLib;
  */
 class Errors extends Controller
 {
-
     /**
+     * Current user data
      *
-     * @var array Language data
+     * @var array
      */
-    private $_lang;
-
-    /**
-     *
-     * @var array User data 
-     */
-    private $_user;
+    private $user;
 
     /**
      * Constructor
-     * 
-     * @return void
      */
     public function __construct()
     {
         parent::__construct();
 
         // check if session is active
-        AdministrationLib::checkSession();
+        Administration::checkSession();
 
-        $this->_lang = $this->getLang();
-        $this->_user = $this->getUserData();
+        // load Language
+        parent::loadLang(['adm/global', 'adm/errors']);
 
-        // Check if the user is allowed to access
-        if (AdministrationLib::haveAccess($this->_user['user_authlevel']) && AdministrationLib::authorization($this->_user['user_authlevel'], 'config_game') == 1) {
+        // set data
+        $this->user = $this->getUserData();
 
-            // time to do something
-            $this->runAction();
-            
-            // build the page
-            $this->buildPage();
-        } else {
-
-            die(AdministrationLib::noAccessMessage($this->_lang['ge_no_permissions']));
+        // check if the user is allowed to access
+        if (!Administration::authorization(__CLASS__, (int) $this->user['user_authlevel'])) {
+            die(Administration::noAccessMessage($this->langs->line('no_permissions')));
         }
+
+        // time to do something
+        $this->runAction();
+
+        // build the page
+        $this->buildPage();
     }
 
     /**
-     * Process deleteall request
-     * 
+     * Run an action
+     *
      * @return void
      */
-    private function runAction()
+    private function runAction(): void
     {
         $delete_all = filter_input(INPUT_GET, 'deleteall', FILTER_DEFAULT);
-        
-        if ($delete_all == 'yes') {
-            
-            $files  = $this->getListOfLogFiles();
-            
-            if ($files != '') {
 
-                foreach($files as $file_name) {
-                    
+        if ($delete_all == 'yes') {
+            $files = $this->getListOfLogFiles();
+
+            if ($files != '') {
+                foreach ($files as $file_name) {
                     unlink($file_name);
                 }
             }
-            
-            FunctionsLib::redirect('admin.php?page=errors');
         }
     }
-    
+
     /**
      * Build the page
-     * 
+     *
      * @return void
      */
-    private function buildPage()
+    private function buildPage(): void
     {
-        $parse                  = $this->_lang;
-        $list_of_errors         = $this->processErrorsLogs();
-        
-        $parse['alert']             = '';
-        $parse['errors_list']       = $list_of_errors;
-        $parse['errors_list_resume']= count($list_of_errors) . $this->_lang['er_errors'];
-
-        parent::$page->display(
-            $this->getTemplate()->set('adm/errors_view', $parse)
+        parent::$page->displayAdmin(
+            $this->getTemplate()->set(
+                'adm/errors_view',
+                array_merge(
+                    $this->langs->language,
+                    $this->processErrorsLogs()
+                )
+            )
         );
     }
-    
+
     /**
      * Parse the recovered log files
-     * 
+     *
      * @return array
      */
-    private function processErrorsLogs()
-    {        
+    private function processErrorsLogs(): array
+    {
         // list of log files
-        $files          = $this->getListOfLogFiles();
+        $files = $this->getListOfLogFiles();
         $list_of_errors = [];
-        
+        $error_count = 0;
+
         if ($files != '') {
-            
-            foreach($files as $file_name) {
-                
+            foreach ($files as $file_name) {
                 $contents = file_get_contents($file_name);
 
                 if ($contents) {
+                    $error_count++;
 
-                    $error_columns  = explode('|', $contents);
+                    $error_columns = explode('|', $contents);
 
                     $list_of_errors[] = [
                         'user_ip' => $error_columns[1],
@@ -142,24 +131,28 @@ class Errors extends Controller
                         'error_code' => $error_columns[3],
                         'error_message' => $error_columns[4],
                         'error_trace' => $error_columns[5],
-                        'error_datetime' => $error_columns[6]
-                    ];   
+                        'error_datetime' => $error_columns[6],
+                        'alert_type' => ($error_columns[3] == 1 ? 'danger' : 'warning'),
+                    ];
                 }
             }
         }
-        
-        return $list_of_errors;
+
+        return [
+            'errors_list' => $list_of_errors,
+            'errors_list_resume' => strtr($this->langs->line('er_errors'), ['%s' => $error_count]),
+        ];
     }
-    
+
     /**
      * Get a list of the log files
-     * 
+     *
      * @return array
      */
-    private function getListOfLogFiles()
+    private function getListOfLogFiles(): array
     {
-        $logs_path  = XGP_ROOT . LOGS_PATH;
-        
+        $logs_path = XGP_ROOT . LOGS_PATH;
+
         // list of log files
         return glob($logs_path . '*.txt');
     }

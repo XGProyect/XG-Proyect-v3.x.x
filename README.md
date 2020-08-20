@@ -1,21 +1,21 @@
 
 <p align="center"
-    <a href="http://www.xgproyect.org/" target="_blank">
-        <img align="center" src="http://www.xgproyect.org/images/misc/xg-logo.png" title="XG Proyect" alt="xgp-logo">
+    <a href="https://www.xgproyect.org/" target="_blank">
+        <img align="center" img src="https://xgproyect.org/wp-content/uploads/2019/10/xgp-new-logo-black.png" width="250px" title="XG Proyect" alt="xgp-logo">
     </a>
 </p> 
 
 XG Proyect
 ====
 
-**X**treme **G**amez Proyect  
-Support: http://www.xgproyect.org/  
-Live Server: http://server.xgproyect.org/  
+**X**treme **G**amez **Proyect**o  
+Support: https://www.xgproyect.org/  
+Live Server: Coming soon!  
 
-Require PHP >= 5.4  
-Require MySQLi >= 5.0.0  
+Require PHP >= 7.3+  
+Require MySQLi >= 5.5+  
 
-![Free](http://www.gnu.org/graphics/agplv3-155x51.png)
+![Free](https://www.gnu.org/graphics/agplv3-155x51.png)
 
 ## How to get XG Proyect?
 
@@ -27,14 +27,16 @@ Point you browser to your localhost and follow the step by step instructions pro
 
 We are happy to deliver this software giving others the possibility to have a good OGame Clon.  
 On the other hand, it's a pleasure to see people using XG Proyect.  
-<a href="http://www.xgproyect.org/privatemessage/new/1" target="_blank">Send me a PM</a> in the forum so I can put your game logo here!  
+<a href="https://github.com/XGProyect/XG-Proyect-v3.x.x/issues" target="_blank">Create a ticket</a> on GitHub so I can put your game logo here!  
 
-![xgproyect](http://www.xgproyect.org/images/misc/xg-logo.png)
+<img align="center" img src="https://xgproyect.org/wp-content/uploads/2019/10/xgp-new-logo-black.png" width="150px" title="XG Proyect" alt="xgp-logo">
 
 ## We support
 
 The following are tools or frameworks that we use to do our coding experience better!
 
-![Codeigniter](http://codeigniter.com/assets/images/ci-logo.png) **Codeigniter**
+![Codeigniter](https://codeigniter.com/assets/images/ci-logo.png) **Codeigniter**
 
-[**PHP CompatInfo**](http://php5.laurent-laville.org/compatinfo/)
+![PHPDocumentor](https://www.phpdoc.org/bundles/phpdocumentorwebsite/images/logo-icon.png) **PHP Documentor**
+
+[**PHP CompatInfo**](https://php5.laurent-laville.org/compatinfo/)

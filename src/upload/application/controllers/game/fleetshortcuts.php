@@ -2,21 +2,20 @@
 /**
  * Fleetshortcuts Controller
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Controller
  * @package  Application
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
- * @version  3.0.0
+ * @version  3.1.0
  */
 namespace application\controllers\game;
 
 use application\core\Controller;
-use application\core\Database;
 use application\libraries\FunctionsLib;
-use application\libraries\OfficiersLib;
+use application\libraries\users\Shortcuts;
 
 /**
  * Fleetshortcuts Class
@@ -30,14 +29,44 @@ use application\libraries\OfficiersLib;
  */
 class Fleetshortcuts extends Controller
 {
-
+    /**
+     *
+     * @var int
+     */
     const MODULE_ID = 8;
 
-    private $_current_user;
-    private $_lang;
+    /**
+     *
+     * @var string
+     */
+    const REDIRECT_TARGET = 'game.php?page=shortcuts';
 
     /**
-     * __construct()
+     *
+     * @var array
+     */
+    private $_user;
+
+    /**
+     *
+     * @var \Shortcuts
+     */
+    private $_shortcuts = null;
+
+    /**
+     *
+     * @var int
+     */
+    private $_shortcuts_count = 0;
+
+    /**
+     *
+     * @var array
+     */
+    private $_clean_data = [];
+
+    /**
+     * Constructor
      */
     public function __construct()
     {
@@ -46,177 +75,287 @@ class Fleetshortcuts extends Controller
         // check if session is active
         parent::$users->checkSession();
 
+        // load Model
+        parent::loadModel('game/shortcuts');
+
+        // load Language
+        parent::loadLang(['game/global', 'game/fleet']);
+
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
-        $this->_db = new Database();
-        $this->_current_user = parent::$users->getUserData();
-        $this->_lang = parent::$lang;
+        // set data
+        $this->_user = $this->getUserData();
 
-        if (!OfficiersLib::isOfficierActive($this->_current_user['premium_officier_commander'])) {
+        // init a new shortcut object
+        $this->setUpShortcuts();
 
-            FunctionsLib::redirect('game.php?page=officier');
-        } else {
+        // time to do something
+        $this->runAction();
 
-            $this->build_page();
+        // build the page
+        $this->buildPage();
+    }
+
+    /**
+     * Creates a new shortcut object that will handle all the shortcuts
+     * creation methods and actions
+     *
+     * @return void
+     */
+    private function setUpShortcuts()
+    {
+        $this->_shortcuts = new Shortcuts(
+            $this->_user['user_fleet_shortcuts']
+        );
+    }
+
+    /**
+     * Run an action
+     *
+     * @return void
+     */
+    private function runAction()
+    {
+        $mode = filter_input(
+            INPUT_GET,
+            'mode',
+            FILTER_CALLBACK,
+            [
+                'options' => function ($value) {
+
+                    if (in_array($value, ['add', 'edit', 'delete', 'a'])) {
+                        return $value;
+                    }
+
+                    return false;
+                },
+            ]
+        );
+
+        $data = filter_input_array(INPUT_POST, [
+            'name' => FILTER_SANITIZE_STRING,
+            'galaxy' => [
+                'filter' => FILTER_VALIDATE_INT,
+                'options' => ['min_range' => 1, 'max_range' => MAX_GALAXY_IN_WORLD],
+            ],
+            'system' => [
+                'filter' => FILTER_VALIDATE_INT,
+                'options' => ['min_range' => 1, 'max_range' => MAX_SYSTEM_IN_GALAXY],
+            ],
+            'planet' => [
+                'filter' => FILTER_VALIDATE_INT,
+                'options' => ['min_range' => 1, 'max_range' => (MAX_PLANET_IN_SYSTEM + 1)],
+            ],
+            'type' => [
+                'filter' => FILTER_VALIDATE_INT,
+                'options' => ['min_range' => 1, 'max_range' => 3],
+            ],
+        ]);
+
+        $action = filter_input(INPUT_GET, 'a', FILTER_VALIDATE_INT);
+
+        if ($mode) {
+            $this->_clean_data['mode'] = $mode;
+            $this->_clean_data['data'] = $data;
+            $this->_clean_data['action'] = $action;
+
+            $this->{$mode . 'Shortcut'}();
         }
     }
 
     /**
-     * method __destruct
-     * param
-     * return close db connection
+     * Build the page
+     *
+     * @return void
      */
-    public function __destruct()
+    private function buildPage()
     {
-        $this->_db->closeConnection();
+        /**
+         * Parse the items
+         */
+        $page = [
+            'shortcuts' => $this->buildShortcuts(),
+            'no_shortcuts' => $this->_shortcuts_count <= 0 ? '<th colspan="2">' . $this->langs->line('fl_no_shortcuts') . '</th>' : '',
+        ];
+
+        // display the page
+        parent::$page->display(
+            $this->getTemplate()->set(
+                'shortcuts/shortcuts_view',
+                array_merge(
+                    $this->langs->language,
+                    $page
+                )
+            )
+        );
     }
 
     /**
-     * method build_page
-     * param
-     * return main method, loads everything
+     * Build the shortcuts list
+     *
+     * @return array
      */
-    private function build_page()
+    private function buildShortcuts(): array
     {
-        if (!empty($_GET['mode'])) {
-            $mode = $_GET['mode'];
+        $shortcuts = $this->_shortcuts->getAllAsArray();
+        $list_of_shortcuts = [];
 
-            if ($mode == "add" && !empty($_POST['galaxy']) && !empty($_POST['system']) && !empty($_POST['planet'])) {
-                $this->addFleetShortcuts($this->_db->escapeValue(strip_tags($_POST['name'])), (int) $_POST['galaxy'], (int) $_POST['system'], (int) $_POST['planet'], (int) $_POST['moon']);
-            } elseif ($mode == "edit" && isset($_GET['a']) && !empty($_POST['galaxy']) && !empty($_POST['system']) && !empty($_POST['planet'])) {
-                $this->saveFleetShortcuts((int) $_GET['a'], $this->_db->escapeValue(strip_tags($_POST['name'])), (int) $_POST['galaxy'], (int) $_POST['system'], (int) $_POST['planet'], (int) $_POST['moon']);
-            } elseif ($mode == "delete" && isset($_GET['a'])) {
-                $this->deleteFleetShortcuts((int) $_GET['a']);
-            } elseif (isset($_GET['a'])) {
-                $this->showEditPanelWithID((int) $_GET['a']);
-            } else {
-                $this->showEditPanel();
+        if ($shortcuts && count($shortcuts) > 0) {
+            $set_row = true;
+            $shortcut_id = 0;
+
+            foreach ($shortcuts as $shortcut) {
+                $list_of_shortcuts[] = [
+                    'row_start' => $set_row ? '<tr height="20">' : '',
+                    'shortcut_id' => $shortcut_id++,
+                    'shortcut_name' => $shortcut['name'],
+                    'shortcut_galaxy' => $shortcut['g'],
+                    'shortcut_system' => $shortcut['s'],
+                    'shortcut_planet' => $shortcut['p'],
+                    'shortcut_type' => $this->langs->language['planet_type_short'][$shortcut['pt']],
+                    'row_end' => !$set_row ? '</tr>' : '',
+                ];
+
+                ++$this->_shortcuts_count;
+
+                $set_row = !$set_row;
             }
-        } else {
-            $this->showAll();
         }
+
+        return $list_of_shortcuts;
     }
 
-    private function showEditPanel()
+    /**
+     * Create a shortcut
+     *
+     * @return void
+     */
+    private function addShortcut(): void
     {
-        $parse = $this->_lang;
-        $parse['mode'] = "add";
-        $parse['visibility'] = "hidden";
+        $this->setData();
 
-        parent::$page->display(parent::$page->parseTemplate(parent::$page->getTemplate('shortcuts/shortcuts_editPanel'), $parse));
+        /**
+         * Parse the items
+         */
+        $page = [
+            'mode' => 'add',
+            'visibility' => 'hidden',
+            'shortcut_id' => '',
+            'name' => '',
+            'galaxy' => '',
+            'system' => '',
+            'planet' => '',
+            'type' => '',
+        ];
+
+        $this->buildEdit($page);
     }
 
-    private function showEditPanelWithID($id)
+    /**
+     * Edit a shortcut
+     *
+     * @return void
+     */
+    private function editShortcut(): void
     {
-        $parse = $this->_lang;
-        $parse['shortcut_id'] = "&a=" . $id;
-        $parse['mode'] = "edit";
+        $this->setData();
 
-        $scarray = explode(";", $this->_current_user['user_fleet_shortcuts']);
-        $c = explode(',', $scarray[$id]);
+        $shortcut_id = $this->_clean_data['action'];
 
-        $parse['name'] = $c[0];
-        $parse['galaxy'] = $c[1];
-        $parse['system'] = $c[2];
-        $parse['planet'] = $c[3];
-        $parse['moon' . $c[4]] = 'selected="selected"';
-        $parse['visibility'] = "button";
+        if ($shortcut_id === false) {
+            FunctionsLib::redirect(self::REDIRECT_TARGET);
+        }
 
-        parent::$page->display(parent::$page->parseTemplate(parent::$page->getTemplate('shortcuts/shortcuts_editPanel'), $parse));
+        $shortcut = $this->_shortcuts->getById($shortcut_id);
+
+        /**
+         * Parse the items
+         */
+        $page = [
+            'mode' => 'edit',
+            'visibility' => 'button',
+            'shortcut_id' => '&a=' . $shortcut_id,
+            'name' => $shortcut['name'],
+            'galaxy' => $shortcut['g'],
+            'system' => $shortcut['s'],
+            'planet' => $shortcut['p'],
+            'type' . $shortcut['pt'] => 'selected="selected"',
+        ];
+
+        $this->buildEdit($page);
     }
 
-    private function saveFleetShortcuts($id, $name, $galaxy, $system, $planet, $moon)
+    /**
+     * Delete a shortcut
+     *
+     * @return void
+     */
+    private function deleteShortcut(): void
     {
-        $scarray = explode(";", $this->_current_user['user_fleet_shortcuts']);
-        $scarray[$id] = "{$name},{$galaxy},{$system},{$planet},{$moon};";
-
-        $this->_current_user['user_fleet_shortcuts'] = implode(";", $scarray);
-
-        $this->_db->query("UPDATE " . USERS . " SET
-								user_fleet_shortcuts='" . ($this->_current_user['user_fleet_shortcuts']) . "'
-								WHERE user_id=" . ($this->_current_user['user_id']));
-
-        FunctionsLib::redirect('game.php?page=shortcuts');
+        $this->setData();
     }
 
-    private function addFleetShortcuts($name, $galaxy, $system, $planet, $moon)
+    /**
+     * Build the edit view
+     *
+     * @param array $page Page Data
+     *
+     * @return void
+     */
+    private function buildEdit(array $page): void
     {
-        $this->_current_user['user_fleet_shortcuts'] .= "{$name},{$galaxy},{$system},{$planet},{$moon};";
-
-        $this->_db->query("UPDATE " . USERS . " SET
-								user_fleet_shortcuts='" . ($this->_current_user['user_fleet_shortcuts']) . "'
-								WHERE user_id=" . ($this->_current_user['user_id']));
-
-        FunctionsLib::redirect('game.php?page=shortcuts');
+        // display the page
+        parent::$page->display(
+            $this->getTemplate()->set(
+                'shortcuts/shortcuts_edit_view',
+                array_merge(
+                    $this->langs->language,
+                    $page
+                )
+            )
+        );
     }
 
-    private function deleteFleetShortcuts($id)
+    /**
+     * Set and save the post data if valid
+     *
+     * @return void
+     */
+    private function setData(): void
     {
-        $scarray = explode(";", $this->_current_user['user_fleet_shortcuts']);
+        $data = $this->_clean_data['data'];
 
-        unset($scarray[$id]);
+        if (is_array($data)) {
+            if (!empty($data['name']) && $data['galaxy'] && $data['system'] && $data['planet'] && $data['type']) {
 
-        $this->_current_user['user_fleet_shortcuts'] = implode(";", $scarray);
+                $mode = $this->_clean_data['mode'];
+                $action = $this->_clean_data['action'];
 
-        $this->_db->query("UPDATE " . USERS . " SET
-							user_fleet_shortcuts='" . ($this->_current_user['user_fleet_shortcuts']) . "'
-							WHERE user_id=" . ($this->_current_user['user_id']));
-
-        FunctionsLib::redirect('game.php?page=shortcuts');
-    }
-
-    private function showAll()
-    {
-        $parse = $this->_lang;
-
-        if ($this->_current_user['user_fleet_shortcuts']) {
-
-            $scarray = explode(";", $this->_current_user['user_fleet_shortcuts']);
-            $sx = true;
-            $e = 0;
-            $ShortcutsRowTPL = parent::$page->getTemplate("shortcuts/shortcuts_row");
-            $parse['block_rows'] = '';
-
-            foreach ($scarray as $a => $b) {
-                if (!empty($b)) {
-                    $c = explode(',', $b);
-
-                    if ($sx) {
-                        $parse['block_rows'] .= "<tr height=\"20\">";
+                if (!is_null($action) && !is_null($mode)) {
+                    if ($mode == 'edit') {
+                        $this->_shortcuts->editById(
+                            $action, $data['name'], $data['galaxy'], $data['system'], $data['planet'], $data['type']
+                        );
                     }
 
-                    $block['shortcut_id'] = $e++;
-                    $block['shortcut_name'] = $c[0];
-                    $block['shortcut_galaxy'] = $c[1];
-                    $block['shortcut_system'] = $c[2];
-                    $block['shortcut_planet'] = $c[3];
-
-                    if ($c[4] == 2) {
-                        $block['shortcut_moon'] = $this->_lang['fl_debris_shortcut'];
-                    } elseif ($c[4] == 3) {
-                        $block['shortcut_moon'] = $this->_lang['fl_moon_shortcut'];
-                    } else {
-                        $block['shortcut_moon'] = "";
+                    if ($mode == 'delete') {
+                        $this->_shortcuts->deleteById($action);
                     }
+                } else {
 
-                    $parse['block_rows'] .= parent::$page->parseTemplate($ShortcutsRowTPL, $block);
-
-                    if (!$sx) {
-                        $parse['block_rows'] .= "</tr>";
-                    }
-
-                    $sx = !$sx;
+                    $this->_shortcuts->addNew(
+                        $data['name'], $data['galaxy'], $data['system'], $data['planet'], $data['type']
+                    );
                 }
-            }
-            if (!$sx) {
-                $parse['block_rows'] .= "<td>&nbsp;</td></tr>";
-            }
-        } else {
-            $parse['block_rows'] = "<th colspan=\"2\">" . $this->_lang['fl_no_shortcuts'] . "</th>";
-        }
 
-        parent::$page->display(parent::$page->parseTemplate(parent::$page->getTemplate('shortcuts/shortcuts_table'), $parse));
+                $this->Shortcuts_Model->updateShortcuts(
+                    $this->_user['user_id'], $this->_shortcuts->getAllAsJsonString()
+                );
+            }
+
+            FunctionsLib::redirect(self::REDIRECT_TARGET);
+        }
     }
 }
 

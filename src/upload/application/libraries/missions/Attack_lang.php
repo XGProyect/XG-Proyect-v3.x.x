@@ -2,7 +2,7 @@
 /**
  * Attack Language Library
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Library
  * @package  Application
@@ -29,6 +29,7 @@ class Attack_lang implements Lang
 {
 
     private $lang;
+    private $objects;
 
     /**
      * Constructor
@@ -37,9 +38,10 @@ class Attack_lang implements Lang
      *
      * @return void
      */
-    public function __construct($lang)
+    public function __construct($lang, $objects)
     {
         $this->lang = $lang;
+        $this->objects = $objects;
     }
 
     /**
@@ -51,7 +53,7 @@ class Attack_lang implements Lang
      */
     public function getShipName($id)
     {
-        return $this->lang['tech'][$id];
+        return $this->lang->language[$this->objects[$id]];
     }
 
     /**
@@ -64,7 +66,7 @@ class Attack_lang implements Lang
      */
     public function getAttackersAttackingDescr($amount, $damage)
     {
-        return $this->lang['fleet_attack_1'] . ' ' . $damage . " " . $this->lang['damage'] . " with $amount shots ";
+        return sprintf($this->lang->line('cr_fleet_attack_1'), $amount, $damage);
     }
 
     /**
@@ -76,7 +78,7 @@ class Attack_lang implements Lang
      */
     public function getDefendersDefendingDescr($damage)
     {
-        return $this->lang['fleet_attack_2'] . ' ' . $damage . ' ' . $this->lang['damage'];
+        return sprintf($this->lang->line('cr_fleet_attack_2'), $damage);
     }
 
     /**
@@ -89,7 +91,7 @@ class Attack_lang implements Lang
      */
     public function getDefendersAttackingDescr($amount, $damage)
     {
-        return $this->lang['fleet_defs_1'] . ' ' . $damage . " " . $this->lang['damage'] . " with $amount shots ";
+        return sprintf($this->lang->line('cr_fleet_defs_1'), $amount, $damage);
     }
 
     /**
@@ -101,7 +103,21 @@ class Attack_lang implements Lang
      */
     public function getAttackersDefendingDescr($damage)
     {
-        return $this->lang['fleet_defs_2'] . ' ' . $damage . ' ' . $this->lang['damage'];
+        return sprintf($this->lang->line('cr_fleet_defs_2'), $damage);
+    }
+
+    /**
+     * getTechs
+     *
+     * @param type $weaponsTech
+     * @param type $shieldsTech
+     * @param type $armourTech
+     *
+     * @return string
+     */
+    public function getTechs($weaponsTech, $shieldsTech, $armourTech)
+    {
+        return sprintf($this->lang->line('cr_technologies'), ($weaponsTech * 10), ($shieldsTech * 10), ($armourTech * 10));
     }
 
     /**
@@ -111,7 +127,7 @@ class Attack_lang implements Lang
      */
     public function getAttackerHasWon()
     {
-        return $this->lang['sys_attacker_won'];
+        return $this->lang->line('cr_attacker_won');
     }
 
     /**
@@ -121,7 +137,7 @@ class Attack_lang implements Lang
      */
     public function getDefendersHasWon()
     {
-        return $this->lang['sys_defender_won'];
+        return $this->lang->line('cr_defender_won');
     }
 
     /**
@@ -131,7 +147,7 @@ class Attack_lang implements Lang
      */
     public function getDraw()
     {
-        return $this->lang['sys_both_won'];
+        return $this->lang->line('cr_both_won');
     }
 
     /**
@@ -145,9 +161,7 @@ class Attack_lang implements Lang
      */
     public function getStoleDescr($metal, $crystal, $deuterium)
     {
-        return $this->lang['sys_stealed_ressources'] . " $metal " . $this->lang['Metal'] .
-            ", $crystal " . $this->lang['Crystal'] . " " . $this->lang['sys_and'] .
-            " $deuterium " . $this->lang['Deuterium'];
+        return sprintf($this->lang->line('cr_stealed_ressources'), $metal, $crystal, $deuterium);
     }
 
     /**
@@ -159,7 +173,7 @@ class Attack_lang implements Lang
      */
     public function getAttackersLostUnits($units)
     {
-        return $this->lang['sys_attacker_lostunits'] . " $units " . $this->lang['sys_units'] . '.';
+        return sprintf($this->lang->line('cr_attacker_lostunits'), $units);
     }
 
     /**
@@ -171,7 +185,7 @@ class Attack_lang implements Lang
      */
     public function getDefendersLostUnits($units)
     {
-        return $this->lang['sys_defender_lostunits'] . " $units " . $this->lang['sys_units'] . '.';
+        return sprintf($this->lang->line('cr_defender_lostunits'), $units);
     }
 
     /**
@@ -184,8 +198,7 @@ class Attack_lang implements Lang
      */
     public function getFloatingDebris($metal, $crystal)
     {
-        return $this->lang['debree_field_1'] . ":  $metal " . $this->lang['Metal'] .
-            " $crystal " . $this->lang['Crystal'] . ' ' . $this->lang['debree_field_2'] . '.';
+        return sprintf($this->lang->line('cr_debris_units'), $metal, $crystal);
     }
 
     /**
@@ -197,17 +210,22 @@ class Attack_lang implements Lang
      */
     public function getMoonProb($prob)
     {
-        return $this->lang['sys_moonproba'] . " $prob% .";
+        return sprintf($this->lang->line('cr_moonproba'), $prob);
     }
 
     /**
      * getNewMoon
      *
+     * @param int $name
+     * @param int $galaxy
+     * @param int $system
+     * @param int $planet
+     *
      * @return string
      */
-    public function getNewMoon()
+    public function getNewMoon($name, $galaxy, $system, $planet)
     {
-        return $this->lang['sys_moonbuilt'];
+        return sprintf($this->lang->line('cr_moonbuilt'), $name, $galaxy, $system, $planet);
     }
 }
 

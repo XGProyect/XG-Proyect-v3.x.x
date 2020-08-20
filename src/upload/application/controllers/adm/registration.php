@@ -1,8 +1,11 @@
 <?php
+
+declare (strict_types = 1);
+
 /**
  * Registration Controller
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Controller
  * @package  Application
@@ -14,7 +17,7 @@
 namespace application\controllers\adm;
 
 use application\core\Controller;
-use application\libraries\adm\AdministrationLib;
+use application\libraries\adm\AdministrationLib as Administration;
 use application\libraries\FunctionsLib;
 
 /**
@@ -29,89 +32,124 @@ use application\libraries\FunctionsLib;
  */
 class Registration extends Controller
 {
-
-    private $_current_user;
-    private $_game_config;
-    private $_lang;
+    const REGISTRATION_SETTINGS = [
+        'reg_enable' => FILTER_SANITIZE_STRING,
+        'reg_welcome_message' => FILTER_SANITIZE_STRING,
+        'reg_welcome_email' => FILTER_SANITIZE_STRING,
+    ];
 
     /**
-     * __construct()
+     * Current user data
+     *
+     * @var array
+     */
+    private $user;
+
+    /**
+     * Contains the alert string
+     *
+     * @var string
+     */
+    private $alert = '';
+
+    /**
+     * Constructor
      */
     public function __construct()
     {
         parent::__construct();
 
         // check if session is active
-        AdministrationLib::checkSession();
+        Administration::checkSession();
 
-        $this->_lang = parent::$lang;
-        $this->_current_user = parent::$users->getUserData();
+        // load Language
+        parent::loadLang(['adm/global', 'adm/registration']);
 
-        // Check if the user is allowed to access
-        if (AdministrationLib::haveAccess($this->_current_user['user_authlevel']) && AdministrationLib::authorization($this->_current_user['user_authlevel'], 'config_game') == 1) {
-            $this->_game_config = FunctionsLib::readConfig('', true);
+        // set data
+        $this->user = $this->getUserData();
 
-            $this->build_page();
-        } else {
-            die(AdministrationLib::noAccessMessage($this->_lang['ge_no_permissions']));
+        // check if the user is allowed to access
+        if (!Administration::authorization(__CLASS__, (int) $this->user['user_authlevel'])) {
+            die(Administration::noAccessMessage($this->langs->line('no_permissions')));
+        }
+
+        // time to do something
+        $this->runAction();
+
+        // build the page
+        $this->buildPage();
+    }
+
+    /**
+     * Run an action
+     *
+     * @return void
+     */
+    private function runAction(): void
+    {
+        $data = filter_input_array(INPUT_POST, self::REGISTRATION_SETTINGS, true);
+
+        if ($data) {
+            foreach ($data as $option => $value) {
+                FunctionsLib::updateConfig($option, ($value == 'on' ? 1 : 0));
+            }
+
+            $this->alert = Administration::saveMessage('ok', $this->langs->line('ur_all_ok_message'));
         }
     }
 
     /**
-     * method build_page
-     * param
-     * return main method, loads everything
+     * Build the page
+     *
+     * @return void
      */
-    private function build_page()
+    private function buildPage(): void
     {
-        $parse = $this->_lang;
-        $parse['alert'] = '';
-
-        if (isset($_POST['opt_save']) && $_POST['opt_save'] == '1') {
-            // CHECK BEFORE SAVE
-            $this->run_validations();
-
-            FunctionsLib::updateConfig('reg_enable', $this->_game_config['reg_enable']);
-            FunctionsLib::updateConfig('reg_welcome_message', $this->_game_config['reg_welcome_message']);
-            FunctionsLib::updateConfig('reg_welcome_email', $this->_game_config['reg_welcome_email']);
-
-            $parse['alert'] = AdministrationLib::saveMessage('ok', $this->_lang['ur_all_ok_message']);
-        }
-
-        $parse['reg_closed'] = $this->_game_config['reg_enable'] == 1 ? " checked = 'checked' " : "";
-        $parse['reg_welcome_message'] = $this->_game_config['reg_welcome_message'] == 1 ? " checked = 'checked' " : "";
-        $parse['reg_welcome_email'] = $this->_game_config['reg_welcome_email'] == 1 ? " checked = 'checked' " : "";
-
-        parent::$page->display(parent::$page->parseTemplate(parent::$page->getTemplate('adm/registration_view'), $parse));
+        parent::$page->displayAdmin(
+            $this->getTemplate()->set(
+                'adm/registration_view',
+                array_merge(
+                    $this->langs->language,
+                    $this->getNewUserRegistrationSettings(),
+                    [
+                        'alert' => $this->alert ?? '',
+                    ]
+                )
+            )
+        );
     }
 
     /**
-     * method run_validations
-     * param
-     * return Run validations before insert data into the configuration file, if some data is not correctly validated it's not inserted.
+     * Get new user registration settings
+     *
+     * @return void
      */
-    private function run_validations()
+    private function getNewUserRegistrationSettings()
     {
-        // Activate registrations
-        if (isset($_POST['reg_closed']) && $_POST['reg_closed'] == 'on') {
-            $this->_game_config['reg_enable'] = 1;
-        } else {
-            $this->_game_config['reg_enable'] = 0;
+        return $this->setChecked(
+            array_filter(
+                FunctionsLib::readConfig('', true),
+                function ($key) {
+                    return array_key_exists($key, self::REGISTRATION_SETTINGS);
+                },
+                ARRAY_FILTER_USE_KEY
+            )
+        );
+    }
+
+    /**
+     * Coverts the setting value from an int to a "checked"
+     *
+     * @param array $settings
+     * @return array
+     */
+    private function setChecked(array $settings): array
+    {
+        foreach ($settings as $key => $value) {
+            $settings[$key] = $value == 1 ? 'checked="checked"' : '';
         }
 
-        // Enable welcome message
-        if (isset($_POST['reg_welcome_message']) && $_POST['reg_welcome_message'] == 'on') {
-            $this->_game_config['reg_welcome_message'] = 1;
-        } else {
-            $this->_game_config['reg_welcome_message'] = 0;
-        }
-
-        // Enable welcome email
-        if (isset($_POST['reg_welcome_email']) && $_POST['reg_welcome_email'] == 'on') {
-            $this->_game_config['reg_welcome_email'] = 1;
-        } else {
-            $this->_game_config['reg_welcome_email'] = 0;
-        }
+        return $settings;
     }
 }
 

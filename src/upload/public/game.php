@@ -2,7 +2,7 @@
 /**
  * Game File
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Root File
  * @package  N/A
@@ -11,43 +11,50 @@
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
+use application\core\common;
 use application\libraries\FunctionsLib;
 
-define('IN_GAME', true);
 define('XGP_ROOT', realpath(dirname(__DIR__)) . DIRECTORY_SEPARATOR);
 
 require XGP_ROOT . 'application' . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'common.php';
 
-$hooks->call_hook('before_page');
+$system = new Common;
+$system->bootUp('game');
 
-$page = isset($_GET['page']) ? $_GET['page'] : FunctionsLib::redirect('game.php?page=overview');
+$system->getHooks()->call_hook('before_page');
 
-// some replacements to adapt the pages
+$page = filter_input(INPUT_GET, 'page');
+
+if (is_null($page)) {
+    FunctionsLib::redirect('game.php?page=overview');
+}
+
+// kind of a mapping
 $page = strtr(
-    $page, array(
-    'resources' => 'buildings',
-    'resourceSettings' => 'resources',
-    'station' => 'buildings',
-    'federationlayer' => 'federation',
-    'shortcuts' => 'fleetshortcuts',
-    'forums' => 'forum',
-    'defense' => 'shipyard',
-    )
+    $page,
+    [
+        'resources' => 'buildings',
+        'resourceSettings' => 'resources',
+        'station' => 'buildings',
+        'traderOverview' => 'trader',
+        'federationlayer' => 'federation',
+        'shortcuts' => 'fleetshortcuts',
+        'forums' => 'forum',
+        'defense' => 'shipyard',
+    ]
 );
 
 $file_name = XGP_ROOT . GAME_PATH . $page . '.php';
 
 if (isset($page)) {
-
     // logout
     if ($page == 'logout') {
-        $session->delete();
+        $system->getSession()->delete();
         FunctionsLib::redirect(SYSTEM_ROOT);
     }
 
     // other pages
     if (file_exists($file_name)) {
-
         include $file_name;
 
         $class_name = 'application\controllers\game\\' . ucfirst($page);
@@ -57,7 +64,7 @@ if (isset($page)) {
 }
 
 // call hooks
-if (!$hooks->call_hook('new_page')) {
+if (!$system->getHooks()->call_hook('new_page')) {
     FunctionsLib::redirect('game.php?page=overview');
 }
 

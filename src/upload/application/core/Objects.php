@@ -2,7 +2,7 @@
 /**
  * Objects
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Core
  * @package  Application
@@ -62,10 +62,8 @@ class Objects
     public function getObjects($object_id = null)
     {
         if (!empty($object_id)) {
-
             return $this->objects[$object_id];
         } else {
-
             return $this->objects;
         }
     }
@@ -80,10 +78,8 @@ class Objects
     public function getRelations($object_id = null)
     {
         if (!empty($object_id)) {
-
             return $this->relations[$object_id];
         } else {
-
             return $this->relations;
         }
     }
@@ -99,16 +95,12 @@ class Objects
     public function getPrice($object_id = null, $resource = '')
     {
         if (!empty($object_id)) {
-
             if (empty($resource)) {
-
                 return $this->price[$object_id];
             } else {
-
                 return $this->price[$object_id][$resource];
             }
         } else {
-
             return $this->price;
         }
     }
@@ -124,16 +116,12 @@ class Objects
     public function getCombatSpecs($object_id = null, $type = '')
     {
         if (!empty($object_id)) {
-
             if (empty($type)) {
-
                 return $this->combat_specs[$object_id];
             } else {
-
                 return $this->combat_specs[$object_id][$type];
             }
         } else {
-
             return $this->combat_specs;
         }
     }
@@ -148,10 +136,8 @@ class Objects
     public function getProduction($object_id = null)
     {
         if (!empty($object_id)) {
-
             return $this->production[$object_id];
         } else {
-
             return $this->production;
         }
     }
@@ -166,10 +152,8 @@ class Objects
     public function getObjectsList($object_id = null)
     {
         if (!empty($object_id)) {
-
             return $this->objects_list[$object_id];
         } else {
-
             return $this->objects_list;
         }
     }

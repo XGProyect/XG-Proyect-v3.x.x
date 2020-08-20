@@ -1,8 +1,11 @@
 <?php
+
+declare (strict_types = 1);
+
 /**
  * Planets Controller
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Controller
  * @package  Application
@@ -14,8 +17,8 @@
 namespace application\controllers\adm;
 
 use application\core\Controller;
-use application\libraries\adm\AdministrationLib;
-use application\libraries\FunctionsLib;
+use application\libraries\adm\AdministrationLib as Administration;
+use application\libraries\FunctionsLib as Functions;
 
 /**
  * Planets Class
@@ -29,97 +32,111 @@ use application\libraries\FunctionsLib;
  */
 class Planets extends Controller
 {
-
-    private $_current_user;
-    private $_game_config;
-    private $_lang;
+    const PLANET_SETTINGS = [
+        'initial_fields' => FILTER_VALIDATE_INT,
+        'metal_basic_income' => FILTER_VALIDATE_INT,
+        'crystal_basic_income' => FILTER_VALIDATE_INT,
+        'deuterium_basic_income' => FILTER_VALIDATE_INT,
+        'energy_basic_income' => FILTER_VALIDATE_INT,
+    ];
 
     /**
-     * __construct()
+     * Current user data
+     *
+     * @var array
+     */
+    private $user;
+
+    /**
+     * Contains the alert string
+     *
+     * @var string
+     */
+    private $alert = '';
+
+    /**
+     * Constructor
      */
     public function __construct()
     {
         parent::__construct();
 
         // check if session is active
-        AdministrationLib::checkSession();
+        Administration::checkSession();
 
-        $this->_lang = parent::$lang;
-        $this->_current_user = parent::$users->getUserData();
+        // load Language
+        parent::loadLang(['adm/global', 'adm/planets']);
 
-        // Check if the user is allowed to access
-        if (AdministrationLib::haveAccess($this->_current_user['user_authlevel']) && AdministrationLib::authorization($this->_current_user['user_authlevel'], 'config_game') == 1) {
-            $this->_game_config = FunctionsLib::readConfig('', true);
+        // set data
+        $this->user = $this->getUserData();
 
-            $this->build_page();
-        } else {
-            die(AdministrationLib::noAccessMessage($this->_lang['ge_no_permissions']));
+        // check if the user is allowed to access
+        if (!Administration::authorization(__CLASS__, (int) $this->user['user_authlevel'])) {
+            die(Administration::noAccessMessage($this->langs->line('no_permissions')));
+        }
+
+        // time to do something
+        $this->runAction();
+
+        // build the page
+        $this->buildPage();
+    }
+
+    /**
+     * Run an action
+     *
+     * @return void
+     */
+    private function runAction(): void
+    {
+        $data = filter_input_array(INPUT_POST, self::PLANET_SETTINGS);
+
+        if ($data) {
+            $data = array_diff($data, [null, false]);
+
+            foreach ($data as $option => $value) {
+                Functions::updateConfig($option, $value);
+            }
+
+            $this->alert = Administration::saveMessage('ok', $this->langs->line('np_all_ok_message'));
         }
     }
 
     /**
-     * method build_page
-     * param
-     * return main method, loads everything
+     * Build the page
+     *
+     * @return void
      */
-    private function build_page()
+    private function buildPage(): void
     {
-        $parse = $this->_lang;
-        $parse['alert'] = '';
-
-        if (isset($_POST['opt_save']) && $_POST['opt_save'] == '1') {
-            // CHECK BEFORE SAVE
-            $this->run_validations();
-
-            FunctionsLib::updateConfig('initial_fields', $this->_game_config['initial_fields']);
-            FunctionsLib::updateConfig('metal_basic_income', $this->_game_config['metal_basic_income']);
-            FunctionsLib::updateConfig('crystal_basic_income', $this->_game_config['crystal_basic_income']);
-            FunctionsLib::updateConfig('deuterium_basic_income', $this->_game_config['deuterium_basic_income']);
-            FunctionsLib::updateConfig('energy_basic_income', $this->_game_config['energy_basic_income']);
-
-            $parse['alert'] = AdministrationLib::saveMessage('ok', $this->_lang['np_all_ok_message']);
-        }
-
-        $parse['initial_fields'] = $this->_game_config['initial_fields'];
-        $parse['metal_basic_income'] = $this->_game_config['metal_basic_income'];
-        $parse['crystal_basic_income'] = $this->_game_config['crystal_basic_income'];
-        $parse['deuterium_basic_income'] = $this->_game_config['deuterium_basic_income'];
-        $parse['energy_basic_income'] = $this->_game_config['energy_basic_income'];
-
-        parent::$page->display(parent::$page->parseTemplate(parent::$page->getTemplate('adm/planets_view'), $parse));
+        parent::$page->displayAdmin(
+            $this->getTemplate()->set(
+                'adm/planets_view',
+                array_merge(
+                    $this->langs->language,
+                    $this->getNewPlanetSettings(),
+                    [
+                        'alert' => $this->alert ?? '',
+                    ]
+                )
+            )
+        );
     }
 
     /**
-     * method run_validations
-     * param
-     * return Run validations before insert data into the configuration file, if some data is not correctly validated it's not inserted.
+     * Get new planet settings
+     *
+     * @return void
      */
-    private function run_validations()
+    private function getNewPlanetSettings(): array
     {
-        // Initial fields
-        if (isset($_POST['initial_fields']) && is_numeric($_POST['initial_fields'])) {
-            $this->_game_config['initial_fields'] = $_POST['initial_fields'];
-        }
-
-        // Metal production
-        if (isset($_POST['metal_basic_income']) && is_numeric($_POST['metal_basic_income'])) {
-            $this->_game_config['metal_basic_income'] = $_POST['metal_basic_income'];
-        }
-
-        // Crystal production
-        if (isset($_POST['crystal_basic_income']) && is_numeric($_POST['crystal_basic_income'])) {
-            $this->_game_config['crystal_basic_income'] = $_POST['crystal_basic_income'];
-        }
-
-        // Deuterium production
-        if (isset($_POST['deuterium_basic_income']) && is_numeric($_POST['deuterium_basic_income'])) {
-            $this->_game_config['deuterium_basic_income'] = $_POST['deuterium_basic_income'];
-        }
-
-        // Energy production
-        if (isset($_POST['energy_basic_income']) && is_numeric($_POST['energy_basic_income'])) {
-            $this->_game_config['energy_basic_income'] = $_POST['energy_basic_income'];
-        }
+        return array_filter(
+            Functions::readConfig('', true),
+            function ($key) {
+                return array_key_exists($key, self::PLANET_SETTINGS);
+            },
+            ARRAY_FILTER_USE_KEY
+        );
     }
 }
 

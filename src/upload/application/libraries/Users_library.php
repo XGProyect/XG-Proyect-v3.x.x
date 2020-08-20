@@ -2,7 +2,7 @@
 /**
  * Users Library
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Library
  * @package  Application
@@ -12,6 +12,11 @@
  * @version  3.1.0
  */
 namespace application\libraries;
+
+use application\core\Language;
+use application\core\Template;
+use application\libraries\FunctionsLib as Functions;
+use application\libraries\TimingLibrary as Timing;
 
 /**
  * Users Class
@@ -37,27 +42,25 @@ class Users_library
      */
     public function __construct()
     {
-        $this->Users_Model = FunctionsLib::modelLoader('libraries/users_library');
+        $this->Users_Model = Functions::modelLoader('libraries/users_library');
 
         if ($this->isSessionSet()) {
-
             // Get user data and check it
             $this->setUserData();
 
-            // Check game close
-            FunctionsLib::checkServer($this->user_data);
+            if (!defined('IN_ADMIN')) {
+                // Set the changed planet
+                $this->setPlanet();
 
-            // Set the changed planet
-            $this->setPlanet();
+                // Get planet data and check it
+                $this->setPlanetData();
 
-            // Get planet data and check it
-            $this->setPlanetData();
+                // Update resources, ships, defenses & technologies
+                UpdatesLibrary::updatePlanetResources($this->user_data, $this->planet_data, time());
 
-            // Update resources, ships, defenses & technologies
-            Updates_library::updatePlanetResources($this->user_data, $this->planet_data, time());
-
-            // Update buildings queue
-            Updates_library::updateBuildingsQueue($this->planet_data, $this->user_data);
+                // Update buildings queue
+                UpdatesLibrary::updateBuildingsQueue($this->planet_data, $this->user_data);
+            }
         }
     }
 
@@ -65,22 +68,18 @@ class Users_library
      * userLogin
      *
      * @param int    $user_id   User ID
-     * @param string $user_name User name
      * @param string $password  Password
      *
      * @return void
      */
-    public function userLogin($user_id = 0, $user_name = '', $password = '')
+    public function userLogin($user_id = 0, $password = '')
     {
-        if ($user_id != 0 && !empty($user_name) && !empty($password)) {
-
+        if ($user_id != 0 && !empty($password) && (strlen($password) == 60)) {
             $_SESSION['user_id'] = $user_id;
-            $_SESSION['user_name'] = $user_name;
-            $_SESSION['user_password'] = sha1($password . '-' . SECRETWORD);
+            $_SESSION['user_password'] = Functions::hash($password . '-' . SECRETWORD);
 
             return true;
         } else {
-
             return false;
         }
     }
@@ -113,8 +112,7 @@ class Users_library
     public function checkSession()
     {
         if (!$this->isSessionSet()) {
-
-            FunctionsLib::redirect(SYSTEM_ROOT);
+            Functions::redirect(SYSTEM_ROOT);
         }
     }
 
@@ -130,19 +128,15 @@ class Users_library
         $user_data = $this->Users_Model->getAllyIdByUserId($user_id);
 
         if ($user_data['user_ally_id'] != 0) {
-
             $alliance = $this->Users_Model->getAllianceDataByAllianceId($user_data['user_ally_id']);
 
             if ($alliance['ally_members'] > 1 && (isset($alliance['alliance_ranks']) && !is_null($alliance['alliance_ranks']))) {
-
                 $ranks = unserialize($alliance['alliance_ranks']);
                 $userRank = null;
 
                 // search for an user that has permission to receive the alliance.
                 foreach ($ranks as $id => $rank) {
-
                     if ($rank['rechtehand'] == 1) {
-
                         $userRank = $id;
                         break;
                     }
@@ -150,14 +144,11 @@ class Users_library
 
                 // check and update
                 if (is_numeric($userRank)) {
-
                     $this->Users_Model->updateAllianceOwner($alliance['alliance_id'], $userRank);
                 } else {
-
                     $this->Users_Model->deleteAlliance($alliance['alliance_id']);
                 }
             } else {
-
                 $this->Users_Model->deleteAlliance($alliance['alliance_id']);
             }
         }
@@ -169,7 +160,7 @@ class Users_library
     }
 
     /**
-     * isOnVacations
+     * Check if user is on vacations
      *
      * @param array $user User data
      *
@@ -177,13 +168,19 @@ class Users_library
      */
     public function isOnVacations($user)
     {
-        if ($user['setting_vacations_status'] == 1) {
+        return ($user['preference_vacation_mode'] > 0);
+    }
 
-            return true;
-        } else {
-
-            return false;
-        }
+    /**
+     * Check if user is inactive
+     *
+     * @param array $user User data
+     *
+     * @return boolean
+     */
+    public function isInactive($user)
+    {
+        return ($user['user_onlinetime'] < (time() - ONE_WEEK));
     }
     ###########################################################################
     #
@@ -198,13 +195,7 @@ class Users_library
      */
     private function isSessionSet()
     {
-        if (!isset($_SESSION['user_id']) or ! isset($_SESSION['user_name']) or ! isset($_SESSION['user_password'])) {
-
-            return false;
-        } else {
-
-            return true;
-        }
+        return !(!isset($_SESSION['user_id']) or !isset($_SESSION['user_password']));
     }
 
     /**
@@ -214,13 +205,16 @@ class Users_library
      */
     private function setUserData()
     {
-        $user_row = $this->Users_Model->setUserDataByUserName($_SESSION['user_name']);
+        $user_row = $this->Users_Model->setUserDataByUserId($_SESSION['user_id']);
 
-        FunctionsLib::displayLoginErrors($user_row);
+        $this->displayLoginErrors($user_row);
 
         // update user activity data
         $this->Users_Model->updateUserActivityData(
-            $_SERVER['REQUEST_URI'], $_SERVER['REMOTE_ADDR'], $_SERVER['HTTP_USER_AGENT'], $_SESSION['user_id']
+            $_SERVER['REQUEST_URI'],
+            $_SERVER['REMOTE_ADDR'],
+            $_SERVER['HTTP_USER_AGENT'],
+            $_SESSION['user_id']
         );
 
         // pass the data
@@ -231,6 +225,35 @@ class Users_library
     }
 
     /**
+     * Display login errors
+     *
+     * @param array $user_row User Row
+     *
+     * @return void
+     */
+    private function displayLoginErrors($user_row)
+    {
+        if ($user_row['user_id'] != $_SESSION['user_id'] && !defined('IN_LOGIN')) {
+            Functions::redirect(SYSTEM_ROOT);
+        }
+
+        if (!password_verify(($user_row['user_password'] . "-" . SECRETWORD), $_SESSION['user_password']) && !defined('IN_LOGIN')) {
+            Functions::redirect(SYSTEM_ROOT);
+        }
+
+        if ($user_row['user_banned'] > 0) {
+            $core = new Language();
+            $ci_lang = $core->loadLang('game/global', true);
+
+            $parse = $ci_lang->language;
+            $parse['banned_until'] = Timing::formatExtendedDate($user_row['user_banned']);
+
+            $template = new Template();
+            die($template->set('home/banned_message', $parse));
+        }
+    }
+
+    /**
      * setPlanetData
      *
      * @return void
@@ -238,7 +261,8 @@ class Users_library
     private function setPlanetData()
     {
         $this->planet_data = $this->Users_Model->setPlanetData(
-            $this->user_data['user_current_planet'], FunctionsLib::readConfig('stat_admin_level')
+            $this->user_data['user_current_planet'],
+            Functions::readConfig('stat_admin_level')
         );
     }
 
@@ -253,11 +277,9 @@ class Users_library
         $restore = isset($_GET['re']) ? (int) $_GET['re'] : '';
 
         if (isset($select) && is_numeric($select) && isset($restore) && $restore == 0 && $select != 0) {
-
             $owned = $this->Users_Model->getUserPlanetByIdAndUserId($select, $this->user_data['user_id']);
 
             if ($owned) {
-
                 $this->user_data['current_planet'] = $select;
                 $this->Users_Model->changeUserPlanetByUserId($select, $this->user_data['user_id']);
             }
@@ -275,7 +297,6 @@ class Users_library
     public function createUserWithOptions($data, $full_insert = true)
     {
         if (is_array($data)) {
-
             $insert_query = 'INSERT INTO ' . USERS . ' SET ';
 
             foreach ($data as $column => $value) {
@@ -290,7 +311,6 @@ class Users_library
 
             // insert extra required tables
             if ($full_insert) {
-
                 // create the buildings, defenses and ships tables
                 $this->Users_Model->createPremium($user_id);
                 $this->Users_Model->createResearch($user_id);

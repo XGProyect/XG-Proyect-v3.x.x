@@ -2,7 +2,7 @@
 /**
  * Report entity
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Core
  * @package  Application
@@ -13,10 +13,10 @@
  */
 namespace application\core\entities;
 
-use Exception;
+use application\core\Entity;
 
 /**
- * Report Entity Class
+ * ReportEntity Class
  *
  * @category Entity
  * @package  Core
@@ -25,98 +25,69 @@ use Exception;
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-class ReportEntity
+class ReportEntity extends Entity
 {
 
     /**
+     * Constructor
      *
-     * @var array
+     * @param array $data Data
+     *
+     * @return void
      */
-    private $_report = [];
-
-    /**
-     * Init with the report data
-     * 
-     * @param array $report Report
-     */
-    public function __construct($report)
+    public function __construct($data)
     {
-        $this->setReport($report);
-    }
-
-    /**
-     * Set the current planet
-     * 
-     * @param array $report Report
-     * 
-     * @throws Exception
-     * 
-     * @retun void
-     */
-    private function setReport($report)
-    {
-        try {
-
-            if (!is_array($report)) {
-                
-                return  null;
-            }
-            
-            $this->_report = $report;
-        } catch (Exception $e) {
-
-            die('Caught exception: ' . $e->getMessage() . "\n");
-        }
+        parent::__construct($data);
     }
 
     /**
      * Return the report owners
-     * 
+     *
      * @return string
      */
     public function getReportOwners()
     {
-        return $this->_report['report_owners'];
+        return $this->data['report_owners'];
     }
 
     /**
      * Return the report rid
-     * 
+     *
      * @return string
      */
     public function getReportId()
     {
-        return $this->_report['report_rid'];
+        return $this->data['report_rid'];
     }
 
     /**
      * Return the report content
-     * 
+     *
      * @return string
      */
     public function getReportContent()
     {
-        return $this->_report['report_content'];
+        return $this->data['report_content'];
     }
 
     /**
      * Return the report destroyed
-     * 
+     *
      * @return string
      */
     public function getReportDestroyed()
     {
-        return $this->_report['report_destroyed'];
+        return $this->data['report_destroyed'];
     }
 
     /**
      * Return the report time
-     * 
+     *
      * @return string
      */
     public function getReportTime()
     {
-        return $this->_report['report_time'];
+        return $this->data['report_time'];
     }
 }
 

@@ -2,7 +2,7 @@
 /**
  * Buddies Status Enumerator
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Library
  * @package  Application
@@ -25,10 +25,8 @@ namespace application\libraries\enumerators;
  */
 abstract class BuddiesStatusEnumerator
 {
-
     const isBuddy = 1;
     const isNotBuddy = 0;
-
 }
 
 /* end of BuddiesStatusEnumerator.php */

@@ -2,7 +2,7 @@
 /**
  * Attack Library
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Library
  * @package  Application
@@ -13,11 +13,15 @@
  */
 namespace application\libraries\missions;
 
+use application\helpers\UrlHelper;
+use application\libraries\combatreport\Report;
 use application\libraries\FleetsLib;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
+use application\libraries\missions\Attack_lang;
+use application\libraries\missions\Missions;
 use application\libraries\PlanetLib;
-use application\libraries\Updates_library;
+use application\libraries\UpdatesLibrary;
 use Battle;
 use DebugManager;
 use Defense;
@@ -36,7 +40,7 @@ use Ship;
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
- * @version  3.0.0
+ * @version  3.1.0
  */
 class Attack extends Missions
 {
@@ -47,13 +51,14 @@ class Attack extends Missions
     const DEFENSE_MAX_ID = 408;
 
     /**
-     * __construct
-     *
-     * @return void
+     * Constructor
      */
     public function __construct()
     {
         parent::__construct();
+
+        // load Language
+        parent::loadLang(['game/missions', 'game/attack', 'game/combatreport', 'game/defenses', 'game/ships']);
     }
 
     /**
@@ -74,12 +79,11 @@ class Attack extends Missions
                 'galaxy' => $fleet_row['fleet_end_galaxy'],
                 'system' => $fleet_row['fleet_end_system'],
                 'planet' => $fleet_row['fleet_end_planet'],
-                'type' => $fleet_row['fleet_end_type']
-            ]
+                'type' => $fleet_row['fleet_end_type'],
+            ],
         ]);
 
         if ($fleet_row['fleet_mess'] == 0 && $fleet_row['fleet_start_time'] <= time()) {
-
             // require several stuff
             require XGP_ROOT . VENDOR_PATH .
                 'battle_engine' . DIRECTORY_SEPARATOR .
@@ -90,21 +94,19 @@ class Attack extends Missions
                 'missions' . DIRECTORY_SEPARATOR . 'Attack_lang.php';
 
             // set language for the reports
-            LangManager::getInstance()->setImplementation(new Attack_lang($this->langs));
+            LangManager::getInstance()->setImplementation(new Attack_lang($this->langs, $this->resource));
 
             if ($fleet_row['fleet_group'] > 0) {
-
                 $this->Missions_Model->deleteAcsFleetById($fleet_row['fleet_group']);
                 $this->Missions_Model->updateAcsFleetStatusByGroupId($fleet_row['fleet_group']);
             } else {
-
                 parent::returnFleet($fleet_row['fleet_id']);
             }
 
             $targetUser = $this->Missions_Model->getAllUserDataByUserId($target_planet['planet_user_id']);
             $target_userID = $targetUser['user_id'];
 
-            Updates_library::updatePlanetResources($targetUser, $target_planet, time());
+            UpdatesLibrary::updatePlanetResources($targetUser, $target_planet, time());
 
             //----------------------- prepare players for battle ----------------------
             // attackers fleet sum
@@ -112,11 +114,9 @@ class Attack extends Missions
 
             // If we have a ACS attack
             if ($fleet_row['fleet_group'] != 0) {
-
                 $fleets = $this->Missions_Model->getAllAcsFleetsByGroupId($fleet_row['fleet_group']);
                 $attackers = $this->getPlayerGroupFromQuery($fleets);
             } else {
-
                 $attackers = $this->getPlayerGroup($fleet_row);
             }
 
@@ -127,9 +127,9 @@ class Attack extends Missions
                         'galaxy' => $fleet_row['fleet_end_galaxy'],
                         'system' => $fleet_row['fleet_end_system'],
                         'planet' => $fleet_row['fleet_end_planet'],
-                        'type' => $fleet_row['fleet_end_type']
+                        'type' => $fleet_row['fleet_end_type'],
                     ],
-                    'time' => time()
+                    'time' => time(),
                 ]
             );
             $defenders = $this->getPlayerGroupFromQuery($def, $targetUser);
@@ -138,74 +138,89 @@ class Attack extends Missions
             $homeFleet = new HomeFleet(0);
 
             for ($i = self::DEFENSE_MIN_ID; $i <= self::DEFENSE_MAX_ID; $i++) {
-
                 if (isset($this->resource[$i]) && isset($target_planet[$this->resource[$i]])) {
-
                     if ($target_planet[$this->resource[$i]] != 0) {
-
                         $homeFleet->addShipType($this->getShipType($i, $target_planet[$this->resource[$i]]));
                     }
                 }
             }
 
             for ($i = self::SHIP_MIN_ID; $i <= self::SHIP_MAX_ID; $i++) {
-
                 if (isset($this->resource[$i]) && isset($target_planet[$this->resource[$i]])) {
-
                     if ($target_planet[$this->resource[$i]] != 0) {
-
                         $homeFleet->addShipType($this->getShipType($i, $target_planet[$this->resource[$i]]));
                     }
                 }
             }
 
             if (!$defenders->existPlayer($target_userID)) {
-
                 $player = new Player($target_userID, array($homeFleet));
 
                 $player->setTech(
-                    $targetUser['research_weapons_technology'], $targetUser['research_shielding_technology'], $targetUser['research_armour_technology']
+                    $targetUser['research_weapons_technology'],
+                    $targetUser['research_shielding_technology'],
+                    $targetUser['research_armour_technology']
+                );
+
+                $player->setCoords(
+                    $fleet_row['fleet_end_galaxy'],
+                    $fleet_row['fleet_end_system'],
+                    $fleet_row['fleet_end_planet']
                 );
 
                 $player->setName($targetUser['user_name']);
 
                 $defenders->addPlayer($player);
             } else {
-
                 $defenders->getPlayer($target_userID)->addDefense($homeFleet);
             }
             //-------------------------------------------------------------------------
             //------------------------------ battle -----------------------------------
             $battle = new Battle($attackers, $defenders);
-            $startBattle = DebugManager::runDebugged(
-                    array($battle, 'startBattle'), $errorHandler, $exceptionHandler
-            );
+            $startBattle = DebugManager::runDebugged(array($battle, 'startBattle'), $errorHandler, $exceptionHandler);
 
             $startBattle();
             //-------------------------------------------------------------------------
             //-------------------------- after battle stuff ---------------------------
             $report = $battle->getReport();
             $steal = $this->updateAttackers(
-                $report->getPresentationAttackersFleetOnRound('START'), $report->getAfterBattleAttackers(), $target_planet
+                $report->getPresentationAttackersFleetOnRound('START'),
+                $report->getAfterBattleAttackers(),
+                $target_planet
             );
 
             $report->setSteal($steal);
 
             $this->updateDefenders(
-                $report->getPresentationDefendersFleetOnRound('START'), $report->getAfterBattleDefenders(), $target_planet, $steal
+                $report->getPresentationDefendersFleetOnRound('START'),
+                $report->getAfterBattleDefenders(),
+                $target_planet,
+                $steal
             );
 
             $this->updateDebris($fleet_row, $report);
             $this->updateMoon($fleet_row, $report, $target_userID);
-            $this->createNewReportAndSendIt($fleet_row, $report);
+            $this->createNewReportAndSendIt($fleet_row, $report, $target_planet['planet_name']);
         } elseif ($fleet_row['fleet_end_time'] <= time()) {
-
             $message = sprintf(
-                $this->langs['sys_fleet_won'], $target_planet['planet_name'], FleetsLib::targetLink($fleet_row, ''), FormatLib::prettyNumber($fleet_row['fleet_resource_metal']), $this->langs['Metal'], FormatLib::prettyNumber($fleet_row['fleet_resource_crystal']), $this->langs['Crystal'], FormatLib::prettyNumber($fleet_row['fleet_resource_deuterium']), $this->langs['Deuterium']
+                $this->langs->line('mi_fleet_back_with_resources'),
+                $fleet_row['planet_end_name'],
+                FleetsLib::targetLink($fleet_row, ''),
+                $fleet_row['planet_start_name'],
+                FleetsLib::startLink($fleet_row, ''),
+                FormatLib::prettyNumber($fleet_row['fleet_resource_metal']),
+                FormatLib::prettyNumber($fleet_row['fleet_resource_crystal']),
+                FormatLib::prettyNumber($fleet_row['fleet_resource_deuterium'])
             );
 
             FunctionsLib::sendMessage(
-                $fleet_row['fleet_owner'], '', $fleet_row['fleet_end_time'], 1, $this->langs['sys_mess_tower'], $this->langs['sys_mess_fleetback'], $message
+                $fleet_row['fleet_owner'],
+                '',
+                $fleet_row['fleet_end_time'],
+                1,
+                $this->langs->line('mi_fleet_command'),
+                $this->langs->line('mi_fleet_back_title'),
+                $message
             );
 
             parent::restoreFleet($fleet_row);
@@ -229,7 +244,6 @@ class Attack extends Missions
         $power = $this->combat_caps[$id]['attack'];
 
         if ($id >= self::SHIP_MIN_ID && $id <= self::SHIP_MAX_ID) {
-
             return new Ship($id, $count, $rf, $shield, $cost, $power);
         }
 
@@ -253,13 +267,13 @@ class Attack extends Missions
                 'time' => time(),
                 'debris' => [
                     'metal' => $metal,
-                    'crystal' => $crystal
+                    'crystal' => $crystal,
                 ],
                 'coords' => [
                     'galaxy' => $fleet_row['fleet_end_galaxy'],
                     'system' => $fleet_row['fleet_end_system'],
-                    'planet' => $fleet_row['fleet_end_planet']
-                ]
+                    'planet' => $fleet_row['fleet_end_planet'],
+                ],
             ]
         );
     }
@@ -274,19 +288,13 @@ class Attack extends Missions
     private function getPlayerGroup($fleet_row)
     {
         $playerGroup = new PlayerGroup();
-        $serializedTypes = explode(';', $fleet_row['fleet_array']);
+        $serializedTypes = FleetsLib::getFleetShipsArray($fleet_row['fleet_array']);
         $idPlayer = $fleet_row['fleet_owner'];
         $fleet = new Fleet($fleet_row['fleet_id']);
 
-        foreach ($serializedTypes as $serializedType) {
-
-            if (!empty($serializedType)) {
-
-                list($id, $count) = explode(',', $serializedType);
-
-                if ($id != 0 && $count != 0) {
-                    $fleet->addShipType($this->getShipType($id, $count));
-                }
+        foreach ($serializedTypes as $id => $count) {
+            if ($id != 0 && $count != 0) {
+                $fleet->addShipType($this->getShipType($id, $count));
             }
         }
 
@@ -298,6 +306,10 @@ class Attack extends Missions
         );
 
         $player->setName($player_info['user_name']);
+
+        $player->setCoords(
+            $fleet_row['fleet_start_galaxy'], $fleet_row['fleet_start_system'], $fleet_row['fleet_start_planet']
+        );
 
         $playerGroup->addPlayer($player);
 
@@ -312,65 +324,58 @@ class Attack extends Missions
      *
      * @return \PlayerGroup
      */
-    private function getPlayerGroupFromQuery($result, $target_user = false)
+    private function getPlayerGroupFromQuery($result, ?array $target_user = [])
     {
         $playerGroup = new PlayerGroup();
 
         if (!is_null($result)) {
-
             foreach ($result as $fleet_row) {
-
                 //making the current fleet object
-                $serializedTypes = explode(';', $fleet_row['fleet_array']);
+                $serializedTypes = FleetsLib::getFleetShipsArray($fleet_row['fleet_array']);
                 $idPlayer = $fleet_row['fleet_owner'];
                 $fleet = new Fleet($fleet_row['fleet_id']);
 
-                foreach ($serializedTypes as $serializedType) {
-
-                    if (!empty($serializedType)) {
-
-                        list ( $id, $count ) = explode(',', $serializedType);
-
-                        if ($id != 0 && $count != 0) {
-                            $fleet->addShipType($this->getShipType($id, $count));
-                        }
+                foreach ($serializedTypes as $id => $count) {
+                    if ($id != 0 && $count != 0) {
+                        $fleet->addShipType($this->getShipType($id, $count));
                     }
                 }
 
                 //making the player object and add it to playerGroup object
                 if (!$playerGroup->existPlayer($idPlayer)) {
-
-                    if ($target_user !== false && $target_user['user_id'] == $idPlayer) {
-
+                    if (!empty($target_user) && $target_user['user_id'] == $idPlayer) {
                         $player_info = $target_user;
                     } else {
-
                         $player_info = $this->Missions_Model->getTechnologiesByUserId($idPlayer);
                     }
 
-                    if ($target_user['planet_id'] == $idPlayer) {
-
+                    if (isset($target_user['planet_id']) && $target_user['planet_id'] == $idPlayer) {
                         $fleetSouther = new Fleet();
                         $player = new Player($idPlayer, [$fleetSouther]);
                     } else {
-
                         $player = new Player($idPlayer, [$fleet]);
                     }
 
                     $player->setTech(
-                        $player_info['research_weapons_technology'], $player_info['research_shielding_technology'], $player_info['research_armour_technology']
+                        $player_info['research_weapons_technology'],
+                        $player_info['research_shielding_technology'],
+                        $player_info['research_armour_technology']
+                    );
+
+                    $player->setCoords(
+                        $fleet_row['fleet_start_galaxy'],
+                        $fleet_row['fleet_start_system'],
+                        $fleet_row['fleet_start_planet']
                     );
 
                     $player->setName($player_info['user_name']);
 
                     $playerGroup->addPlayer($player);
 
-                    if ($target_user['planet_id'] == $idPlayer) {
-
+                    if (isset($target_user['planet_id']) && $target_user['planet_id'] == $idPlayer) {
                         $playerGroup->getPlayer($idPlayer)->addFleet($fleet);
                     }
                 } else {
-
                     $playerGroup->getPlayer($idPlayer)->addFleet($fleet);
                 }
             }
@@ -404,8 +409,8 @@ class Attack extends Missions
             'coords' => [
                 'galaxy' => $galaxy,
                 'system' => $system,
-                'planet' => $planet
-            ]
+                'planet' => $planet,
+            ],
         ]);
 
         if ($moon_exists['planet_id'] != null) {
@@ -417,7 +422,7 @@ class Attack extends Missions
 
         // create the moon
         $_creator = new PlanetLib();
-        $_creator->setNewMoon($galaxy, $system, $planet, $target_userId, '', '', $size);
+        $_creator->setNewMoon($galaxy, $system, $planet, $target_userId);
     }
 
     /**
@@ -428,62 +433,56 @@ class Attack extends Missions
      *
      * @return void
      */
-    private function createNewReportAndSendIt($fleet_row, $report)
+    private function createNewReportAndSendIt($fleet_row, $report, $target_planet_name)
     {
         $idAtts = $report->getAttackersId();
         $idDefs = $report->getDefendersId();
         $idAll = array_merge($idAtts, $idDefs);
-        $owners = implode(',', $idAll);
+        $owners = join(',', $idAll);
         $rid = md5($report) . time();
+        $destroyed = ($report->getLastRoundNumber() == 1) ? 1 : 0;
 
         $this->Missions_Model->insertReport([
             'owners' => $owners,
             'rid' => $rid,
             'content' => addslashes($report),
-            'time' => time()
+            'time' => time(),
+            'destroyed' => $destroyed,
         ]);
 
         foreach ($idAtts as $id) {
-
             if ($report->attackerHasWin()) {
-
                 $style = 'green';
             } elseif ($report->isAdraw()) {
-
                 $style = 'orange';
             } else {
-
                 $style = 'red';
             }
 
             $raport = $this->buildReportLink(
-                $style, $rid, $fleet_row['fleet_end_galaxy'], $fleet_row['fleet_end_system'], $fleet_row['fleet_end_planet']
+                $style, $rid, $target_planet_name, $fleet_row['fleet_end_galaxy'], $fleet_row['fleet_end_system'], $fleet_row['fleet_end_planet']
             );
 
             FunctionsLib::sendMessage(
-                $id, '', $fleet_row['fleet_start_time'], 1, $this->langs['sys_mess_tower'], $raport, ''
+                $id, '', $fleet_row['fleet_start_time'], 1, $this->langs->line('mi_fleet_command'), $raport, ''
             );
         }
 
         foreach ($idDefs as $id) {
-
             if ($report->attackerHasWin()) {
-
                 $style = 'red';
             } elseif ($report->isAdraw()) {
-
                 $style = 'orange';
             } else {
-
                 $style = 'green';
             }
 
             $raport = $this->buildReportLink(
-                $style, $rid, $fleet_row['fleet_end_galaxy'], $fleet_row['fleet_end_system'], $fleet_row['fleet_end_planet']
+                $style, $rid, $target_planet_name, $fleet_row['fleet_end_galaxy'], $fleet_row['fleet_end_system'], $fleet_row['fleet_end_planet']
             );
 
             FunctionsLib::sendMessage(
-                $id, '', $fleet_row['fleet_start_time'], 1, $this->langs['sys_mess_tower'], $raport, ''
+                $id, '', $fleet_row['fleet_start_time'], 1, $this->langs->line('mi_fleet_command'), $raport, ''
             );
         }
     }
@@ -500,11 +499,8 @@ class Attack extends Missions
         $capacity = 0;
 
         foreach ($players->getIterator() as $idPlayer => $player) {
-
             foreach ($player->getIterator() as $idFleet => $fleet) {
-
                 foreach ($fleet->getIterator() as $idShipType => $shipType) {
-
                     $capacity += $shipType->getCount() * $this->pricelist[$idShipType]['capacity'];
                 }
             }
@@ -530,67 +526,61 @@ class Attack extends Missions
         $steal = array(
             'metal' => 0,
             'crystal' => 0,
-            'deuterium' => 0
+            'deuterium' => 0,
         );
 
         foreach ($playerGroupBeforeBattle->getIterator() as $idPlayer => $player) {
-
             $existPlayer = $playerGroupAfterBattle->existPlayer($idPlayer);
             $Xplayer = null;
 
             if ($existPlayer) {
-
                 $Xplayer = $playerGroupAfterBattle->getPlayer($idPlayer);
             }
 
             foreach ($player->getIterator() as $idFleet => $fleet) {
-
                 $existFleet = $existPlayer && $Xplayer->existFleet($idFleet);
                 $Xfleet = null;
 
                 if ($existFleet) {
-
                     $Xfleet = $Xplayer->getFleet($idFleet);
                 } else {
-
                     $emptyFleets[] = $idFleet;
                 }
 
                 $fleetCapacity = 0;
                 $totalCount = 0;
-                $fleetArray = '';
+                $fleetArray = [];
 
                 foreach ($fleet as $idShipType => $fighters) {
-
                     $existShipType = $existFleet && $Xfleet->existShipType($idShipType);
                     $amount = 0;
 
                     if ($existShipType) {
-
                         $XshipType = $Xfleet->getShipType($idShipType);
                         $amount = $XshipType->getCount();
                         $fleetCapacity += $amount * $this->pricelist[$idShipType]['capacity'];
                         $totalCount += $amount;
-                        $fleetArray .= "$idShipType,$amount;";
+                        $fleetArray[$idShipType] = $amount;
                     }
                 }
 
                 if ($existFleet) {
-
                     $fleetSteal = array(
                         'metal' => 0,
                         'crystal' => 0,
-                        'deuterium' => 0
+                        'deuterium' => 0,
                     );
 
                     if ($playerGroupAfterBattle->battleResult == BATTLE_WIN) {
-
                         $corrispectiveMetal = $target_planet['planet_metal'] * $fleetCapacity / $capacity;
                         $corrispectiveCrystal = $target_planet['planet_crystal'] * $fleetCapacity / $capacity;
                         $corrispectiveDeuterium = $target_planet['planet_deuterium'] * $fleetCapacity / $capacity;
 
                         $fleetSteal = $this->plunder(
-                            $fleetCapacity, $corrispectiveMetal, $corrispectiveCrystal, $corrispectiveDeuterium
+                            $fleetCapacity,
+                            $corrispectiveMetal,
+                            $corrispectiveCrystal,
+                            $corrispectiveDeuterium
                         );
 
                         $steal['metal'] += $fleetSteal['metal'];
@@ -599,12 +589,12 @@ class Attack extends Missions
                     }
 
                     $this->Missions_Model->updateReturningFleetData([
-                        'ships' => substr($fleetArray, 0, -1),
+                        'ships' => FleetsLib::setFleetShipsArray($fleetArray),
                         'amount' => $totalCount,
                         'stolen' => [
                             'metal' => $fleetSteal['metal'],
                             'crystal' => $fleetSteal['crystal'],
-                            'deuterium' => $fleetSteal['deuterium']
+                            'deuterium' => $fleetSteal['deuterium'],
                         ],
                         'fleet_id' => $idFleet,
                     ]);
@@ -613,10 +603,9 @@ class Attack extends Missions
         }
 
         // updating flying fleets
-        $id_string = implode(',', $emptyFleets);
+        $id_string = join(',', $emptyFleets);
 
         if (!empty($id_string)) {
-
             $this->Missions_Model->deleteMultipleFleetsByIds($id_string);
         }
 
@@ -640,33 +629,26 @@ class Attack extends Missions
         $emptyFleets = array();
 
         foreach ($playerGroupBeforeBattle->getIterator() as $idPlayer => $player) {
-
             $existPlayer = $playerGroupAfterBattle->existPlayer($idPlayer);
 
             if ($existPlayer) {
-
                 $Xplayer = $playerGroupAfterBattle->getPlayer($idPlayer);
             }
 
             foreach ($player->getIterator() as $idFleet => $fleet) {
-
                 $existFleet = $existPlayer && $Xplayer->existFleet($idFleet);
 
                 if ($existFleet) {
-
                     $Xfleet = $Xplayer->getFleet($idFleet);
                 } else {
-
                     $emptyFleets[] = $idFleet;
                 }
 
                 foreach ($fleet as $idShipType => $fighters) {
-
                     $existShipType = $existFleet && $Xfleet->existShipType($idShipType);
                     $amount = 0;
 
                     if ($existShipType) {
-
                         $XshipType = $Xfleet->getShipType($idShipType);
                         $amount = $XshipType->getCount();
                     }
@@ -682,16 +664,15 @@ class Attack extends Missions
             'stolen' => [
                 'metal' => $steal['metal'],
                 'crystal' => $steal['crystal'],
-                'deuterium' => $steal['deuterium']
+                'deuterium' => $steal['deuterium'],
             ],
-            'planet_id' => $target_planet['planet_id']
+            'planet_id' => $target_planet['planet_id'],
         ]);
 
         // Updating flying fleets
-        $id_string = implode(",", $emptyFleets);
+        $id_string = join(",", $emptyFleets);
 
         if (!empty($id_string)) {
-
             $this->Missions_Model->deleteMultipleFleetsByIds($id_string);
         }
     }
@@ -719,7 +700,7 @@ class Attack extends Missions
         $steal = array(
             'metal' => 0,
             'crystal' => 0,
-            'deuterium' => 0
+            'deuterium' => 0,
         );
 
         // Max resources that can be take
@@ -771,16 +752,19 @@ class Attack extends Missions
      *
      * @return string
      */
-    private function buildReportLink($color, $rid, $g, $s, $p)
+    private function buildReportLink($color, $rid, $target_planet_name, $g, $s, $p)
     {
         $style = 'style="color:' . $color . ';"';
         $js = "OnClick=\'f(\"game.php?page=combatreport&report=" . $rid . "\", \"\");\'";
-        $content = $this->langs['sys_mess_attack_report'] . ' ' . FormatLib::prettyCoords($g, $s, $p);
+        $content = sprintf($this->langs->line('at_report_title'), $target_planet_name, FormatLib::prettyCoords($g, $s, $p));
 
-        return FunctionsLib::setUrl(
-                '', '', $content, $style . ' ' . $js
+        return UrlHelper::setUrl(
+            '',
+            $content,
+            '',
+            $style . ' ' . $js
         );
     }
 }
 
-/* end of attack.php */
+/* end of Attack.php */

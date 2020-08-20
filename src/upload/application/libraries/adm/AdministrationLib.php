@@ -2,7 +2,7 @@
 /**
  * Administration Library
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Library
  * @package  Application
@@ -13,8 +13,10 @@
  */
 namespace application\libraries\adm;
 
-use application\core\Database;
+use application\core\Language;
+use application\core\Template;
 use application\core\XGPCore;
+use application\libraries\adm\Permissions;
 use application\libraries\FunctionsLib;
 
 /**
@@ -29,6 +31,15 @@ use application\libraries\FunctionsLib;
  */
 class AdministrationLib extends XGPCore
 {
+    /**
+     * Return a new instance of Template
+     *
+     * @return Template
+     */
+    public static function getTemplate(): Template
+    {
+        return new Template;
+    }
 
     /**
      * haveAccess
@@ -39,13 +50,7 @@ class AdministrationLib extends XGPCore
      */
     public static function haveAccess($user_level)
     {
-        if ($user_level >= 1) {
-
-            return true;
-        } else {
-
-            return false;
-        }
+        return ($user_level >= 1);
     }
 
     /**
@@ -57,8 +62,8 @@ class AdministrationLib extends XGPCore
      */
     public static function noAccessMessage($mes = '')
     {
-        FunctionsLib::message(
-            self::saveMessage('error', $mes, false), '', '', true
+        parent::$page->displayAdmin(
+            self::saveMessage('error', $mes, false)
         );
     }
 
@@ -69,13 +74,7 @@ class AdministrationLib extends XGPCore
      */
     public static function installDirExists()
     {
-        if (file_exists(XGP_ROOT . PUBLIC_PATH . 'install/')) {
-
-            return true;
-        } else {
-
-            return false;
-        }
+        return (file_exists(XGP_ROOT . PUBLIC_PATH . 'install/'));
     }
 
     /**
@@ -86,39 +85,12 @@ class AdministrationLib extends XGPCore
      *
      * @return array
      */
-    public static function authorization($user_level, $permission)
+    public static function authorization(string $module, int $user_level)
     {
-        $QueryModeration = FunctionsLib::readConfig('moderation');
-        $QueryModerationEx = explode(";", $QueryModeration);
-        $Moderator = explode(",", $QueryModerationEx[0]);
-        $Operator = explode(",", $QueryModerationEx[1]);
-        $Administrator = explode(",", $QueryModerationEx[2]);
+        $cleaned_module_name = strtolower(substr(strrchr($module, "\\"), 1));
+        $permissions = new Permissions(FunctionsLib::readConfig('admin_permissions'));
 
-        if ($user_level == 1) {
-            $permissions['observation'] = $Moderator[0];
-            $permissions['edit_users'] = $Moderator[1];
-            $permissions['config_game'] = $Moderator[2];
-            $permissions['use_tools'] = $Moderator[3];
-            $permissions['track_activity'] = $Moderator[4];
-        }
-
-        if ($user_level == 2) {
-            $permissions['observation'] = $Operator[0];
-            $permissions['edit_users'] = $Operator[1];
-            $permissions['config_game'] = $Operator[2];
-            $permissions['use_tools'] = $Operator[3];
-            $permissions['track_activity'] = $Operator[4];
-        }
-
-        if ($user_level == 3) {
-            $permissions['observation'] = 1;
-            $permissions['edit_users'] = 1;
-            $permissions['config_game'] = 1;
-            $permissions['use_tools'] = 1;
-            $permissions['track_activity'] = $Administrator[0];
-        }
-
-        return $permissions[$permission];
+        return $permissions->isAccessAllowed($cleaned_module_name, $user_level);
     }
 
     /**
@@ -131,64 +103,38 @@ class AdministrationLib extends XGPCore
      */
     public static function saveMessage($result, $message, $dismissible = true)
     {
+        $lang = new Language;
+        $lang = $lang->loadLang('adm/global', true);
+
         switch ($result) {
             case 'ok':
                 $parse['color'] = 'alert-success';
-                $parse['status'] = parent::$lang['gn_ok_title'];
+                $parse['status'] = $lang->line('gn_ok_title');
                 break;
-
             case 'error':
-                $parse['color'] = 'alert-error';
-                $parse['status'] = parent::$lang['gn_error_title'];
+                $parse['color'] = 'alert-danger';
+                $parse['status'] = $lang->line('gn_error_title');
                 break;
-
             case 'warning':
-                $parse['color'] = 'alert-block';
-                $parse['status'] = parent::$lang['gn_warning_title'];
+                $parse['color'] = 'alert-warning';
+                $parse['status'] = $lang->line('gn_warning_title');
+                break;
+            case 'info':
+                $parse['color'] = 'alert-info';
+                $parse['status'] = '';
                 break;
         }
 
         $parse['message'] = $message;
 
         if (!$dismissible) {
-
-            $parse['dismissible'] = 'hide';
+            $parse['dismissible'] = 'd-none';
         }
 
-        return parent::$page->parseTemplate(parent::$page->getTemplate('adm/save_message_view'), $parse);
-    }
-
-    /**
-     * returnRank
-     *
-     * @param int $authlevel Auth level
-     *
-     * @return string
-     */
-    public static function returnRank($authlevel)
-    {
-        switch ($authlevel) {
-            default:
-            case 0:
-                return parent::$lang['ge_user'];
-
-                break;
-
-            case 1:
-                return parent::$lang['ge_go'];
-
-                break;
-
-            case 2:
-                return parent::$lang['ge_sgo'];
-
-                break;
-
-            case 3:
-                return parent::$lang['ge_ga'];
-
-                break;
-        }
+        return self::getTemplate()->set(
+            'adm/save_message_view',
+            $parse
+        );
     }
 
     /**
@@ -202,31 +148,32 @@ class AdministrationLib extends XGPCore
     {
         $parse['message'] = $message;
 
-        return parent::$page->parseTemplate(parent::$page->getTemplate('adm/popup_view'), $parse);
+        return self::getTemplate()->set(
+            'adm/popup_view',
+            $parse
+        );
     }
 
     /**
      * adminLogin
      *
      * @param int    $admin_id   Admin ID
-     * @param string $admin_name Admin name
      * @param string $password   Password
      *
      * @return void
      */
-    public static function adminLogin($admin_id = 0, $admin_name = '', $password = '')
+    public static function adminLogin($admin_id = 0, $password = '')
     {
-        if ($admin_id != 0 && !empty($admin_name) && !empty($password)) {
+        if ($admin_id != 0 && !empty($password)) {
+            // login as a user
+            parent::$users->userLogin($admin_id, $password);
 
-            parent::$users->userLogin($admin_id, $admin_name, $password);
-
+            // admin login
             $_SESSION['admin_id'] = $admin_id;
-            $_SESSION['admin_name'] = $admin_name;
-            $_SESSION['admin_password'] = sha1($password . '-' . SECRETWORD);
+            $_SESSION['admin_password'] = FunctionsLib::hash($password . '-' . SECRETWORD);
 
             return true;
         } else {
-
             return false;
         }
     }
@@ -239,45 +186,10 @@ class AdministrationLib extends XGPCore
     public static function checkSession()
     {
         if (!self::isSessionSet()) {
+            $page = filter_input(INPUT_GET, 'page', FILTER_SANITIZE_STRING);
 
-            $db = new Database();
-            $parse = parent::$lang;
-
-            if ($_POST) {
-
-                $login = $db->queryFetch(
-                    "SELECT `user_id`, `user_name`, `user_password`
-                    FROM " . USERS . "
-                    WHERE `user_email` = '" . $db->escapeValue($_POST['inputEmail']) . "'
-                        AND `user_password` = '" . sha1($_POST['inputPassword']) . "'
-                        AND `user_authlevel` >= '1'
-                        LIMIT 1"
-                );
-
-                if ($login) {
-
-                    // User login
-                    if (self::adminLogin($login['user_id'], $login['user_name'], $login['user_password'])) {
-
-                        // Redirect to game
-                        FunctionsLib::redirect('admin.php');
-                    }
-                }
-
-                // If login fails
-                FunctionsLib::redirect(SYSTEM_ROOT . 'admin.php?error=1');
-            } else {
-
-                $parse['alert'] = '';
-
-                if (isset($_GET['error']) && $_GET['error'] == 1) {
-
-                    $parse['alert'] = self::saveMessage('error', parent::$lang['lg_error_wrong_data'], false);
-                }
-
-                parent::$page->display(
-                    parent::$page->parseTemplate(parent::$page->getTemplate('adm/login_view'), $parse), false, '', false
-                );
+            if ($page != 'login') {
+                FunctionsLib::redirect(SYSTEM_ROOT . 'admin.php?page=login&redirect=' . $page);
             }
         }
     }
@@ -290,7 +202,6 @@ class AdministrationLib extends XGPCore
     public static function closeSession()
     {
         unset($_SESSION['admin_id']);
-        unset($_SESSION['admin_name']);
         unset($_SESSION['admin_password']);
     }
 
@@ -301,28 +212,20 @@ class AdministrationLib extends XGPCore
      */
     private static function isSessionSet()
     {
-        if (!isset($_SESSION['admin_id']) or ! isset($_SESSION['admin_name']) or ! isset($_SESSION['admin_password'])) {
-
-            return false;
-        } else {
-
-            return true;
-        }
+        return !(!isset($_SESSION['admin_id']) or !isset($_SESSION['admin_password']));
     }
 
     /**
      * Check if an update is required
-     * 
+     *
      * @return void
      */
     public static function updateRequired()
     {
         if (SYSTEM_VERSION != FunctionsLib::readConfig('version')) {
-
             $exclude_pages = ['', 'home', 'update', 'logout'];
 
             if (isset($_GET['page']) && !in_array($_GET['page'], $exclude_pages)) {
-
                 FunctionsLib::redirect(XGP_ROOT . 'admin.php?page=update');
             }
         }

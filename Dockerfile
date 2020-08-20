@@ -1,4 +1,4 @@
-FROM php:7.1-apache
+FROM php:7.3-apache
 
 # install the PHP extensions we need
 RUN set -ex; \
@@ -9,6 +9,7 @@ RUN set -ex; \
 	apt-get install -y --no-install-recommends \
 		libjpeg-dev \
 		libpng-dev \
+		libzip-dev \
 	; \
 	\
 	docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr; \

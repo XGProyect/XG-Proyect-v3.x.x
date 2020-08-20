@@ -2,7 +2,7 @@
 /**
  * Shipyard Model
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Model
  * @package  Application
@@ -12,6 +12,8 @@
  * @version  3.0.4
  */
 namespace application\models\game;
+
+use application\core\Model;
 
 /**
  * Shipyard Class
@@ -23,35 +25,13 @@ namespace application\models\game;
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-class Shipyard
+class Shipyard extends Model
 {
-
-    private $db = null;
-
-    /**
-     * __construct()
-     */
-    public function __construct($db)
-    {
-        // use this to make queries
-        $this->db = $db;
-    }
-
-    /**
-     * __destruct
-     * 
-     * @return void
-     */
-    public function __destruct()
-    {
-        $this->db->closeConnection();
-    }
-
     /**
      * Update the planets table, set the items to build and reduce the resources
-     * 
+     *
      * @param array $planet Current planet data
-     * 
+     *
      * @return void
      */
     public function insertItemsToBuild($resources, $shipyard_queue, $planet_id)

@@ -1,8 +1,11 @@
 <?php
+
+declare (strict_types = 1);
+
 /**
  * Acs Library
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Library
  * @package  Application
@@ -21,15 +24,12 @@ namespace application\libraries\missions;
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
- * @version  3.0.0
+ * @version  3.1.0
  */
 class Acs extends Missions
 {
-
     /**
-     * __construct
-     *
-     * @return void
+     * Constructor
      */
     public function __construct()
     {
@@ -37,23 +37,23 @@ class Acs extends Missions
     }
 
     /**
-     * acsMission
+     * ACS Attack - attack between several players
      *
-     * @param array $fleet_row Fleet row
-     *
+     * @param array $fleet
      * @return void
      */
-    public function acsMission($fleet_row)
+    public function acsMission(array $fleet): void
     {
-        if ($fleet_row['fleet_mess'] == 0 && $fleet_row['fleet_start_time'] > time()) {
-
-            parent::returnFleet($fleet_row['fleet_id']);
+        // do mission
+        if (parent::canStartMission($fleet)) {
+            parent::returnFleet($fleet['fleet_id']);
         }
 
-        if ($fleet_row['fleet_end_time'] <= time()) {
-
-            parent::restoreFleet($fleet_row);
-            parent::removeFleet($fleet_row['fleet_id']);
+        // complete mission
+        if (parent::canCompleteMission($fleet)) {
+            // transfer the ships to the planet
+            parent::restoreFleet($fleet);
+            parent::removeFleet($fleet['fleet_id']);
         }
     }
 }

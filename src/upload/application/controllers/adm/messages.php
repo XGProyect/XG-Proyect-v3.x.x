@@ -1,8 +1,11 @@
 <?php
+
+declare (strict_types = 1);
+
 /**
  * Messages Controller
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Controller
  * @package  Application
@@ -14,9 +17,9 @@
 namespace application\controllers\adm;
 
 use application\core\Controller;
-use application\core\Database;
-use application\libraries\adm\AdministrationLib;
-use application\libraries\FunctionsLib;
+use application\core\enumerators\MessagesEnumerator;
+use application\libraries\adm\AdministrationLib as Administration;
+use application\libraries\TimingLibrary as Timing;
 
 /**
  * Messages Class
@@ -30,250 +33,213 @@ use application\libraries\FunctionsLib;
  */
 class Messages extends Controller
 {
-
-    private $_lang;
-    private $_alert;
-    private $_current_user;
+    /**
+     * Current user data
+     *
+     * @var array
+     */
+    private $user;
 
     /**
-     * __construct()
+     * Contains the alert string
+     *
+     * @var string
+     */
+    private $alert = '';
+
+    /**
+     * Contains a list of results
+     *
+     * @var array
+     */
+    private $results = [];
+
+    /**
+     * Constructor
      */
     public function __construct()
     {
         parent::__construct();
 
         // check if session is active
-        AdministrationLib::checkSession();
+        Administration::checkSession();
 
-        $this->_db = new Database();
-        $this->_lang = parent::$lang;
-        $this->_current_user = parent::$users->getUserData();
+        // load Model
+        parent::loadModel('adm/messages');
 
-        // Check if the user is allowed to access
-        if (AdministrationLib::haveAccess($this->_current_user['user_authlevel']) && AdministrationLib::authorization($this->_current_user['user_authlevel'], 'observation') == 1) {
-            $this->build_page();
-        } else {
-            die(AdministrationLib::noAccessMessage($this->_lang['ge_no_permissions']));
+        // load Language
+        parent::loadLang(['adm/global', 'adm/messages']);
+
+        // set data
+        $this->user = $this->getUserData();
+
+        // check if the user is allowed to access
+        if (!Administration::authorization(__CLASS__, (int) $this->user['user_authlevel'])) {
+            die(Administration::noAccessMessage($this->langs->line('no_permissions')));
         }
+
+        // time to do something
+        $this->runAction();
+
+        // build the page
+        $this->buildPage();
     }
 
     /**
-     * method __destruct
-     * param
-     * return close db connection
+     * Run an action
+     *
+     * @return void
      */
-    public function __destruct()
+    private function runAction(): void
     {
-        $this->_db->closeConnection();
+        $action = filter_input_array(INPUT_POST);
+        $single_delete = filter_input_array(INPUT_GET, [
+            'action' => FILTER_SANITIZE_STRING,
+            'messageId' => [
+                'filter' => FILTER_VALIDATE_INT,
+                'options' => ['min_range' => 0],
+            ],
+        ]);
+
+        if ($action) {
+            $filtered_action = array_filter(
+                $action,
+                function ($value) {
+                    return !is_null($value) && $value !== false && $value !== '';
+                }
+            );
+
+            if (isset($filtered_action['search'])) {
+                $this->doSearch($filtered_action);
+            }
+
+            if (isset($filtered_action['delete_messages'])) {
+                $this->deleteMessages($filtered_action['delete_messages']);
+            }
+        }
+
+        if (isset($single_delete['action']) == 'delete'
+            && isset($single_delete['messageId'])) {
+            $this->deleteMessage($single_delete['messageId']);
+        }
     }
 
     /**
-     * method build_page
-     * param
-     * return main method, loads everything
+     * Build the page
+     *
+     * @return void
      */
-    private function build_page()
+    private function buildPage(): void
     {
-        $parse = $this->_lang;
-        $parse['days_options'] = $this->days_combo(); // days combo with pre selected current day
-        $parse['months_options'] = $this->months_combo(); // months combo with pre selected current month
-        $parse['years_options'] = $this->years_combo(); // years combo with pre selected current year
-
-        if ($_POST && isset($_POST['search'])) {
-            $parse['results'] = $this->do_search();
-        }
-
-        if ($_POST && isset($_POST['delete'])) {
-            $this->delete_messages();
-
-            $parse['results'] = '';
-        }
-
-        $parse['alert'] = $this->_alert != '' ? $this->_alert : '';
-
-        parent::$page->display(parent::$page->parseTemplate(parent::$page->getTemplate('adm/messages_view'), $parse));
+        parent::$page->displayAdmin(
+            $this->getTemplate()->set(
+                'adm/messages_view',
+                array_merge(
+                    $this->langs->language,
+                    $this->buildMessageTypeBlock(),
+                    [
+                        'alert' => $this->alert,
+                        'results' => $this->results,
+                        'show_search' => $this->results ? '' : 'show',
+                        'show_results' => $this->results ? 'show' : '',
+                    ]
+                )
+            )
+        );
     }
 
     /**
-     * method do_search
-     * param
-     * return do the search
+     * Execute messages search
+     *
+     * @return void
      */
-    private function do_search()
+    private function doSearch(array $to_search): void
     {
         // build the query, run the query and return the result
-        $search_result = $this->_db->query($this->build_search_query());
-        $template = parent::$page->getTemplate('adm/messages_row_view');
-        $results = '';
+        $search_results = $this->Messages_Model->getAllMessagesFiltered($to_search);
+        $results_list = [];
 
-        if ($search_result !== false) {
-            // loop thru the results
-            while ($search_data = $this->_db->fetchArray($search_result)) {
-                $search_data['mg_show_hide'] = $this->_lang['mg_show_hide'];
-                $search_data['message_time'] = date(FunctionsLib::readConfig('date_format_extended'), $search_data['message_time']);
-                $search_data['message_text'] = stripslashes(nl2br($search_data['message_text']));
-
-                $results .= parent::$page->parseTemplate($template, $search_data);
+        if ($search_results) {
+            foreach ($search_results as $result) {
+                $results_list[] = array_merge(
+                    $this->langs->language,
+                    $result,
+                    [
+                        'message_time' => Timing::formatExtendedDate($result['message_time']),
+                        'message_type' => $this->langs->language['mg_types'][$result['message_type']],
+                        'message_text' => nl2br($result['message_text']),
+                    ]
+                );
             }
 
-            // return search results with table format of course
-            return $results;
+            $this->results = $results_list;
+        } else {
+            $this->alert = Administration::saveMessage('warning', $this->langs->line('mg_no_results'));
         }
-
-        $this->_alert = AdministrationLib::saveMessage('warning', $this->_lang['mg_no_results']);
     }
 
     /**
-     * method delete_messages
-     * param
-     * return delete messages
+     * Delete a single message
+     *
+     * @param integer $message_id
+     * @return void
      */
-    private function delete_messages()
+    private function deleteMessage(int $message_id): void
     {
-        $ids_array = '';
+        $this->Messages_Model->deleteAllMessagesByIds([$message_id]);
+
+        $this->alert = Administration::saveMessage('ok', $this->langs->line('mg_delete_ok'));
+    }
+
+    /**
+     * Delete multiple messages
+     *
+     * @param array $messages
+     * @return void
+     */
+    private function deleteMessages(array $messages): void
+    {
+        $ids = [];
 
         // build the ID's list to delete, we're going to delete them all in one single query
-        foreach ($_POST['delete_message'] as $message_id => $delete_status) {
+        foreach ($messages as $message_id => $delete_status) {
             if ($delete_status == 'on' && $message_id > 0 && is_numeric($message_id)) {
-                $ids_array .= $message_id . ',';
+                $ids[] = $message_id;
             }
         }
 
-        // delete messages
-        $this->_db->query("DELETE FROM `" . MESSAGES . "`
-								WHERE `message_id` IN (" . rtrim($ids_array, ',') . ")");
+        $this->Messages_Model->deleteAllMessagesByIds($ids);
 
-        // show alert
-        $this->_alert = AdministrationLib::saveMessage('ok', $this->_lang['mg_delete_ok']);
+        $this->alert = Administration::saveMessage('ok', $this->langs->line('mg_delete_ok'));
     }
 
     /**
-     * method build_search_query
-     * param
-     * return build the search query
+     * Build the list of message types
+     *
+     * @return array
      */
-    private function build_search_query()
+    private function buildMessageTypeBlock(): array
     {
-        // search by message id
-        if (isset($_POST['message_id']) && !empty($_POST['message_id'])) {
-            $message_id = (int) $_POST['message_id'];
+        $options_list = [];
+        $message_types = [
+            MessagesEnumerator::ESPIO,
+            MessagesEnumerator::COMBAT,
+            MessagesEnumerator::EXP,
+            MessagesEnumerator::ALLY,
+            MessagesEnumerator::USER,
+            MessagesEnumerator::GENERAL,
+        ];
 
-            if ($message_id > 0) {
-                $query_search['message_id'] = "(`message_id` = '" . $message_id . "')";
-            }
+        foreach ($message_types as $type) {
+            $options_list[] = [
+                'value' => $type,
+                'name' => $this->langs->language['mg_types'][$type],
+            ];
         }
 
-        // search by username or user id
-        if (isset($_POST['message_user']) && !empty($_POST['message_user'])) {
-            $message_user = $_POST['message_user'];
-
-            if (is_numeric($message_user)) {
-                $message_user = (int) $message_user;
-
-                if ($message_user > 0) {
-                    $query_search['message_user'] = "(`message_sender` = '" . $message_user . "' OR `message_receiver` = '" . $message_user . "')";
-                }
-            } elseif (is_string($message_user)) {
-                $query_search['message_user'] = "(`message_sender` = (SELECT `user_id` FROM `" . USERS . "` WHERE `user_name` = '" . $message_user . "' LIMIT 1) OR `message_receiver` = (SELECT `user_id` FROM `" . USERS . "` WHERE `user_name` = '" . $message_user . "' LIMIT 1))";
-            }
-        }
-
-        // search by message subject/planets coords/planet name
-        if (isset($_POST['message_subject']) && !empty($_POST['message_subject'])) {
-            $query_search['message_subject'] = "(`message_subject` = '" . $_POST['message_subject'] . "')";
-        }
-
-        // search by date, also we validate here
-        if (isset($_POST['message_day']) && isset($_POST['message_month']) && isset($_POST['message_year'])) {
-            if (checkdate($_POST['message_month'], $_POST['message_day'], $_POST['message_year'])) {
-                $current_time = $_POST['message_day'] . '-' . $_POST['message_month'] . '-' . $_POST['message_year'];
-                $current_time = strtotime($current_time);
-
-                $query_search['message_time'] = "(`message_time` >= '" . $current_time . "' AND `message_time` <= '" . $current_time . "')";
-            }
-        }
-
-        // search by message type
-        if (isset($_POST['message_type']) && !empty($_POST['message_type'])) {
-            $message_type = (int) $_POST['message_type'];
-
-            if ($message_type > 0) {
-                $query_search['message_type'] = "(`message_type` = '" . $message_type . "')";
-            }
-        }
-
-        // search by message text
-        if (isset($_POST['message_text']) && !empty($_POST['message_text'])) {
-            $message_text = (string) $_POST['message_text'];
-
-            $query_search['message_text'] = "(`message_text` LIKE '%" . $message_text . "%')";
-        }
-
-        if (isset($query_search)) {
-            $search_query_string = "SELECT m.*, u1.`user_name` AS sender, u2.`user_name` AS receiver
-											FROM `" . MESSAGES . "` AS m
-											LEFT JOIN `" . USERS . "` as u1 ON u1.`user_id` = m.`message_sender`
-											LEFT JOIN `" . USERS . "` as u2 ON u2.`user_id` = m.`message_receiver`
-											WHERE ";
-
-            foreach ($query_search as $what => $content) {
-                $search_query_string .= $content . ' AND ';
-            }
-
-            $search_query_string = rtrim($search_query_string, ' AND ') . ';';
-
-            return $search_query_string;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * method days_combo
-     * param
-     * return the set of options for the days combo box
-     */
-    private function days_combo()
-    {
-        $days_combo = '';
-
-        for ($day = 1; $day <= 31; $day++) {
-            $days_combo .= '<option value="' . $day . '">' . $day . '</option>';
-        }
-
-        return $days_combo;
-    }
-
-    /**
-     * method months_combo
-     * param
-     * return the set of options for the month combo box
-     */
-    private function months_combo()
-    {
-        $month_combo = '';
-
-        for ($month = 1; $month <= 12; $month++) {
-            $month_combo .= '<option value="' . $month . '">' . $month . '</option>';
-        }
-
-        return $month_combo;
-    }
-
-    /**
-     * method years_combo
-     * param
-     * return the set of options for the years combo box
-     */
-    private function years_combo()
-    {
-        $year_combo = '';
-
-        for ($year = date('Y'); $year >= 2008; $year--) { // 2008 the year XG Proyect started :)
-            $year_combo .= '<option value="' . $year . '">' . $year . '</option>';
-        }
-
-        return $year_combo;
+        return [
+            'type_options' => $options_list,
+        ];
     }
 }
 

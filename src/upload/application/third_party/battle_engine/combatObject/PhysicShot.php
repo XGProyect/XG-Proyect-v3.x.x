@@ -26,18 +26,16 @@
  * @version 6-03-2015
  * @link https://github.com/jstar88/opbe
  */
-
 class PhysicShot
 {
+
     private $shipType;
     private $damage;
     private $count;
-
     private $assorbedDamage = 0;
     private $bouncedDamage = 0;
     private $hullDamage = 0;
     private $cellDestroyed = 0;
-
 
     /**
      * PhysicShot::__construct()
@@ -60,7 +58,6 @@ class PhysicShot
         $this->count = $count;
     }
 
-
     /**
      * PhysicShot::getAssorbedDamage()
      * Return the damage assorbed by shield
@@ -70,7 +67,6 @@ class PhysicShot
     {
         return $this->assorbedDamage;
     }
-
 
     /**
      * PhysicShot::getBouncedDamage()
@@ -82,7 +78,6 @@ class PhysicShot
         return $this->bouncedDamage;
     }
 
-
     /**
      * PhysicShot::getHullDamage()
      * Return the damage assorbed by hull
@@ -92,7 +87,6 @@ class PhysicShot
     {
         return $this->hullDamage;
     }
-
 
     /**
      * PhysicShot::getPureDamage()
@@ -104,7 +98,6 @@ class PhysicShot
         return $this->damage * $this->count;
     }
 
-
     /**
      * PhysicShot::getHitShips()
      * Return the number of hitten ships.
@@ -115,20 +108,18 @@ class PhysicShot
         return min($this->count, $this->fighters->getCount());
     }
 
-
     /**
      * PhysicShot::start()
      * Start the system
      * @return
      */
     public function start()
-    {     
+    {
         $this->bounce();
         $this->assorb();
         $this->inflict();
     }
-    
-    
+
     /**
      * PhysicShot::bounce()
      * If the shield is disabled, then bounced damaged is zero.
@@ -164,8 +155,7 @@ class PhysicShot
         $shieldCellValue = $this->fighters->getShieldCellValue();
         $unbauncedDamage = $this->clamp($damage, $shieldCellValue);
         $currentShield = $this->fighters->getCurrentShield();
-        if (USE_HITSHIP_LIMITATION)
-        {
+        if (USE_HITSHIP_LIMITATION) {
             $currentShield = $currentShield * $this->getHitShips() / $this->fighters->getCount();
         }
         $this->assorbedDamage = min($unbauncedDamage * $count, $currentShield);
@@ -193,11 +183,9 @@ class PhysicShot
      */
     private function clamp($a, $b)
     {
-        if ($a > $b)
-        {
+        if ($a > $b) {
             return $a;
         }
         return 0;
     }
-
 }

@@ -26,28 +26,22 @@
  * @version 6-3-1015
  * @link https://github.com/jstar88/opbe
  */
-
 class ShipType extends Type
 {
 
     private $originalPower;
     private $originalShield;
-
     private $singleShield;
     private $singleLife;
     private $singlePower;
-
     private $fullShield;
     private $fullLife;
     private $fullPower;
-
     protected $currentShield;
     protected $currentLife;
-
     private $weapons_tech = 0;
     private $shields_tech = 0;
     private $armour_tech = 0;
-
     private $rf;
     protected $lastShots;
     protected $lastShipHit;
@@ -89,7 +83,6 @@ class ShipType extends Type
         $this->setShieldsTech($shields_tech);
     }
 
-
     /**
      * ShipType::setWeaponsTech()
      * Set new weapon techs level.
@@ -109,7 +102,6 @@ class ShipType extends Type
         $this->singlePower *= $incr;
         $this->fullPower *= $incr;
     }
-
 
     /**
      * ShipType::setShieldsTech()
@@ -132,7 +124,6 @@ class ShipType extends Type
         $this->currentShield *= $incr;
     }
 
-
     /**
      * ShipType::setArmourTech()
      * Set new armour techs level
@@ -154,7 +145,6 @@ class ShipType extends Type
         $this->currentLife *= $incr;
     }
 
-
     /**
      * ShipType::increment()
      * Increment the amount of ships of this type.
@@ -166,12 +156,10 @@ class ShipType extends Type
     public function increment($number, $newLife = null, $newShield = null)
     {
         parent::increment($number);
-        if ($newLife == null)
-        {
+        if ($newLife == null) {
             $newLife = $this->singleLife;
         }
-        if ($newShield == null)
-        {
+        if ($newShield == null) {
             $newShield = $this->singleShield;
         }
         $this->fullLife += $this->singleLife * $number;
@@ -181,7 +169,6 @@ class ShipType extends Type
         $this->currentLife += $newLife * $number;
         $this->currentShield += $newShield * $number;
     }
-
 
     /**
      * ShipType::decrement()
@@ -194,12 +181,10 @@ class ShipType extends Type
     public function decrement($number, $remainLife = null, $remainShield = null)
     {
         parent::decrement($number);
-        if ($remainLife == null)
-        {
+        if ($remainLife == null) {
             $remainLife = $this->singleLife;
         }
-        if ($remainShield == null)
-        {
+        if ($remainShield == null) {
             $remainShield = $this->singleShield;
         }
         $this->fullLife -= $this->singleLife * $number;
@@ -209,7 +194,6 @@ class ShipType extends Type
         $this->currentLife -= $remainLife * $number;
         $this->currentShield -= $remainShield * $number;
     }
-
 
     /**
      * ShipType::setCount()
@@ -223,16 +207,12 @@ class ShipType extends Type
     {
         parent::setCount($number);
         $diff = $number - $this->getCount();
-        if ($diff > 0)
-        {
+        if ($diff > 0) {
             $this->increment($diff, $life, $shield);
-        }
-        elseif ($diff < 0)
-        {
+        } elseif ($diff < 0) {
             $this->decrement($diff, $life, $shield);
         }
     }
-
 
     /**
      * ShipType::getCost()
@@ -244,7 +224,6 @@ class ShipType extends Type
         return $this->cost;
     }
 
-
     /**
      * ShipType::getWeaponsTech()
      * Get the level of current weapon tech.
@@ -254,7 +233,6 @@ class ShipType extends Type
     {
         return $this->weapons_tech;
     }
-
 
     /**
      * ShipType::getShieldsTech()
@@ -266,7 +244,6 @@ class ShipType extends Type
         return $this->shields_tech;
     }
 
-
     /**
      * ShipType::getArmourTech()
      * Get the level of current armour tech.
@@ -276,7 +253,6 @@ class ShipType extends Type
     {
         return $this->armour_tech;
     }
-
 
     /**
      * ShipType::getRfTo()
@@ -289,7 +265,6 @@ class ShipType extends Type
         return (isset($this->rf[$other->getId()])) ? $this->rf[$other->getId()] : 0;
     }
 
-
     /**
      * ShipType::getRF()
      * Get an array of rapid fire
@@ -299,7 +274,6 @@ class ShipType extends Type
     {
         return $this->rf;
     }
-
 
     /**
      * ShipType::getShield()
@@ -311,7 +285,6 @@ class ShipType extends Type
         return $this->singleShield;
     }
 
-
     /**
      * ShipType::getShieldCellValue()
      * Get the shield cell value of a single ship of this type.
@@ -319,13 +292,11 @@ class ShipType extends Type
      */
     public function getShieldCellValue()
     {
-        if ($this->isShieldDisabled())
-        {
+        if ($this->isShieldDisabled()) {
             return 0;
         }
         return $this->singleShield / SHIELD_CELLS;
     }
-
 
     /**
      * ShipType::getHull()
@@ -337,7 +308,6 @@ class ShipType extends Type
         return $this->singleLife;
     }
 
-
     /**
      * ShipType::getPower()
      * Get the power value of a single ship of this type.
@@ -347,7 +317,6 @@ class ShipType extends Type
     {
         return $this->singlePower;
     }
-
 
     /**
      * ShipType::getCurrentShield()
@@ -359,7 +328,6 @@ class ShipType extends Type
         return $this->currentShield;
     }
 
-
     /**
      * ShipType::getCurrentLife()
      * Get the current hull value of a all ships of this type.
@@ -370,7 +338,6 @@ class ShipType extends Type
         return $this->currentLife;
     }
 
-
     /**
      * ShipType::getCurrentPower()
      * Get the current attack power value of a all ships of this type.
@@ -380,7 +347,6 @@ class ShipType extends Type
     {
         return $this->fullPower;
     }
-
 
     /**
      * ShipType::inflictDamage()
@@ -406,14 +372,12 @@ class ShipType extends Type
         $ps->start();
         log_var('$ps->getAssorbedDamage()', $ps->getAssorbedDamage());
         $this->currentShield -= $ps->getAssorbedDamage();
-        if ($this->currentShield < 0 && $this->currentShield > -EPSILON)
-        {
+        if ($this->currentShield < 0 && $this->currentShield > -EPSILON) {
             log_comment('fixing double number currentshield');
             $this->currentShield = 0;
         }
         $this->currentLife -= $ps->getHullDamage();
-        if ($this->currentLife < 0 && $this->currentLife > -EPSILON)
-        {
+        if ($this->currentLife < 0 && $this->currentLife > -EPSILON) {
             log_comment('fixing double number currentlife');
             $this->currentLife = 0;
         }
@@ -423,21 +387,17 @@ class ShipType extends Type
         log_var('lastShipHit after', $this->lastShipHit);
         log_var('lastShots after', $this->lastShots);
 
-        if ($this->currentLife < 0)
-        {
+        if ($this->currentLife < 0) {
             throw new Exception('Negative currentLife!');
         }
-        if ($this->currentShield < 0)
-        {
+        if ($this->currentShield < 0) {
             throw new Exception('Negative currentShield!');
         }
-        if ($this->lastShipHit < 0)
-        {
+        if ($this->lastShipHit < 0) {
             throw new Exception('Negative lastShipHit!');
         }
         return $ps; //for web
     }
-
 
     /**
      * ShipType::cleanShips()
@@ -459,7 +419,6 @@ class ShipType extends Type
         return $sc;
     }
 
-
     /**
      * ShipType::repairShields()
      * Repair all shields.
@@ -469,7 +428,6 @@ class ShipType extends Type
     {
         $this->currentShield = $this->fullShield;
     }
-
 
     /**
      * ShipType::__toString()
@@ -483,7 +441,6 @@ class ShipType extends Type
         return $return;
     }
 
-
     /**
      * ShipType::isShieldDisabled()
      * Return true if the current shield of each ships are almost zero.
@@ -493,7 +450,6 @@ class ShipType extends Type
     {
         return $this->currentShield / $this->getCount() < 0.01;
     }
-
 
     /**
      * ShipType::cloneMe()

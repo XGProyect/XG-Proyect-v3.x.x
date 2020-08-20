@@ -2,7 +2,7 @@
 /**
  * Infos Controller
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Controller
  * @package  Application
@@ -14,7 +14,6 @@
 namespace application\controllers\game;
 
 use application\core\Controller;
-use application\core\Database;
 use application\libraries\DevelopmentsLib;
 use application\libraries\FleetsLib;
 use application\libraries\FormatLib;
@@ -37,7 +36,6 @@ class Infos extends Controller
 
     const MODULE_ID = 24;
 
-    private $_lang;
     private $_current_user;
     private $_current_planet;
     private $_element_id;
@@ -56,30 +54,24 @@ class Infos extends Controller
         // check if session is active
         parent::$users->checkSession();
 
+        // load Model
+        parent::loadModel('game/infos');
+
+        // load Language
+        parent::loadLang(['game/global', 'game/infos', 'game/constructions', 'game/defenses', 'game/ships', 'game/technologies']);
+
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
-        $this->_db = new Database();
-        $this->_lang = parent::$lang;
         $this->_resource = parent::$objects->getObjects();
         $this->_pricelist = parent::$objects->getPrice();
         $this->_combat_caps = parent::$objects->getCombatSpecs();
         $this->_prod_grid = parent::$objects->getProduction();
         $this->_current_user = parent::$users->getUserData();
         $this->_current_planet = parent::$users->getPlanetData();
-        $this->_element_id = isset($_GET['gid']) ? (int) $_GET['gid'] : NULL;
+        $this->_element_id = isset($_GET['gid']) ? (int) $_GET['gid'] : null;
 
         $this->build_page();
-    }
-
-    /**
-     * method __destruct
-     * param
-     * return close db connection
-     */
-    public function __destruct()
-    {
-        $this->_db->closeConnection();
     }
 
     /**
@@ -98,64 +90,64 @@ class Infos extends Controller
         $TableHeadTPL = '';
         $TableFooterTPL = '';
 
-        $parse = $this->_lang;
+        $parse = $this->langs->language;
         $parse['dpath'] = DPATH;
-        $parse['name'] = $this->_lang['info'][$this->_element_id]['name'];
+        $parse['name'] = $this->langs->language[$this->_resource[$this->_element_id]];
         $parse['image'] = $this->_element_id;
-        $parse['description'] = $this->_lang['info'][$this->_element_id]['description'];
+        $parse['description'] = $this->langs->language['info'][$this->_resource[$this->_element_id]];
 
-        if ($this->_element_id < 13 or ( $this->_element_id == 43 && $this->_current_planet[$this->_resource[43]] > 0 )) {
-            $PageTPL = parent::$page->getTemplate('infos/info_buildings_table');
+        if ($this->_element_id < 13 or ($this->_element_id == 43 && $this->_current_planet[$this->_resource[43]] > 0)) {
+            $PageTPL = 'infos/info_buildings_table';
         } elseif ($this->_element_id < 200) {
-            $PageTPL = parent::$page->getTemplate('infos/info_buildings_general');
+            $PageTPL = 'infos/info_buildings_general';
         } elseif ($this->_element_id < 400) {
-            $PageTPL = parent::$page->getTemplate('infos/info_buildings_fleet');
+            $PageTPL = 'infos/info_buildings_fleet';
         } elseif ($this->_element_id < 600) {
-            $PageTPL = parent::$page->getTemplate('infos/info_buildings_defense');
+            $PageTPL = 'infos/info_buildings_defense';
         } else {
-            $PageTPL = parent::$page->getTemplate('infos/info_officiers_general');
+            $PageTPL = 'infos/info_officiers_general';
         }
 
         //S�lo hay destroy en <200
         if ($this->_element_id < 200 && $this->_element_id != 33 && $this->_element_id != 41) {
-            $DestroyTPL = parent::$page->getTemplate('infos/info_buildings_destroy');
+            $DestroyTPL = 'infos/info_buildings_destroy';
         }
 
         if ($this->_element_id >= 1 && $this->_element_id <= 3) {
-            $PageTPL = parent::$page->getTemplate('infos/info_buildings_table');
-            $TableHeadTPL = parent::$page->getTemplate('infos/info_production_header');
-            $TableTPL = parent::$page->getTemplate('infos/info_production_body');
+            $PageTPL = 'infos/info_buildings_table';
+            $TableHeadTPL = 'infos/info_production_header';
+            $TableTPL = 'infos/info_production_body';
         } elseif ($this->_element_id == 4) {
-            $PageTPL = parent::$page->getTemplate('infos/info_buildings_table');
-            $TableHeadTPL = parent::$page->getTemplate('infos/info_production_simple_header');
-            $TableTPL = parent::$page->getTemplate('infos/info_production_simple_body');
+            $PageTPL = 'infos/info_buildings_table';
+            $TableHeadTPL = 'infos/info_production_simple_header';
+            $TableTPL = 'infos/info_production_simple_body';
         } elseif ($this->_element_id >= 22 && $this->_element_id <= 24) {
-            $PageTPL = parent::$page->getTemplate('infos/info_buildings_table');
-            $DestroyTPL = parent::$page->getTemplate('infos/info_buildings_destroy');
-            $TableHeadTPL = parent::$page->getTemplate('infos/info_storage_header');
-            $TableTPL = parent::$page->getTemplate('infos/info_storage_table');
+            $PageTPL = 'infos/info_buildings_table';
+            $DestroyTPL = 'infos/info_buildings_destroy';
+            $TableHeadTPL = 'infos/info_storage_header';
+            $TableTPL = 'infos/info_storage_table';
         } elseif ($this->_element_id == 12) {
-            $TableHeadTPL = parent::$page->getTemplate('infos/info_energy_header');
-            $TableTPL = parent::$page->getTemplate('infos/info_energy_body');
+            $TableHeadTPL = 'infos/info_energy_header';
+            $TableTPL = 'infos/info_energy_body';
         } elseif ($this->_element_id == 42) {
-            $PageTPL = parent::$page->getTemplate('infos/info_buildings_table');
-            $TableHeadTPL = parent::$page->getTemplate('infos/info_range_header');
-            $TableTPL = parent::$page->getTemplate('infos/info_range_body');
+            $PageTPL = 'infos/info_buildings_table';
+            $TableHeadTPL = 'infos/info_range_header';
+            $TableTPL = 'infos/info_range_body';
         } elseif ($this->_element_id == 43) {
-            $GateTPL = parent::$page->getTemplate('infos/info_gate_table');
+            $GateTPL = 'infos/info_gate_table';
 
             if ($_POST) {
                 FunctionsLib::message($this->doFleetJump(), "game.php?page=infos&gid=43", 2);
             }
         } elseif ($this->_element_id == 124) {
-            $PageTPL = parent::$page->getTemplate('infos/info_buildings_table');
-            $DestroyTPL = parent::$page->getTemplate('infos/info_buildings_destroy');
-            $TableHeadTPL = parent::$page->getTemplate('infos/info_astrophysics_header');
-            $TableTPL = parent::$page->getTemplate('infos/info_astrophysics_table');
-            $TableFooterTPL = parent::$page->getTemplate('infos/info_astrophysics_footer');
+            $PageTPL = 'infos/info_buildings_table';
+            $DestroyTPL = 'infos/info_buildings_destroy';
+            $TableHeadTPL = 'infos/info_astrophysics_header';
+            $TableTPL = 'infos/info_astrophysics_table';
+            $TableFooterTPL = 'infos/info_astrophysics_footer';
         } elseif ($this->_element_id >= 202 && $this->_element_id <= 250) {
-            $PageTPL = parent::$page->getTemplate('infos/info_buildings_fleet');
-            $parse['element_typ'] = $this->_lang['tech'][200];
+            $PageTPL = 'infos/info_buildings_fleet';
+            $parse['element_typ'] = $this->langs->language['ships'];
             $parse['rf_info_to'] = $this->ShowRapidFireTo();
             $parse['rf_info_fr'] = $this->ShowRapidFireFrom();
             $parse['hull_pt'] = FormatLib::prettyNumber($this->_pricelist[$this->_element_id]['metal'] + $this->_pricelist[$this->_element_id]['crystal']);
@@ -165,6 +157,9 @@ class Infos extends Controller
             $parse['base_speed'] = FormatLib::prettyNumber($this->_pricelist[$this->_element_id]['speed']);
             $parse['base_conso'] = FormatLib::prettyNumber($this->_pricelist[$this->_element_id]['consumption']);
 
+            $parse['upd_speed'] = '';
+            $parse['upd_conso'] = '';
+
             if ($this->_element_id == 202) {
                 $parse['upd_speed'] = "<font color=\"yellow\">(" . FormatLib::prettyNumber($this->_pricelist[$this->_element_id]['speed2']) . ")</font>";
                 $parse['upd_conso'] = "<font color=\"yellow\">(" . FormatLib::prettyNumber($this->_pricelist[$this->_element_id]['consumption2']) . ")</font>";
@@ -172,8 +167,10 @@ class Infos extends Controller
                 $parse['upd_speed'] = "<font color=\"yellow\">(" . FormatLib::prettyNumber($this->_pricelist[$this->_element_id]['speed2']) . ")</font>";
             }
         } elseif ($this->_element_id >= 401 && $this->_element_id <= 550) {
-            $PageTPL = parent::$page->getTemplate('infos/info_buildings_defense');
-            $parse['element_typ'] = $this->_lang['tech'][400];
+            $PageTPL = 'infos/info_buildings_defense';
+            $parse['element_typ'] = $this->langs->language['defenses'];
+            $parse['rf_info_to'] = '';
+            $parse['rf_info_fr'] = '';
 
             if ($this->_element_id < 500) {
                 $parse['rf_info_to'] = $this->ShowRapidFireTo();
@@ -186,7 +183,7 @@ class Infos extends Controller
         }
 
         if ($TableHeadTPL != '') {
-            $parse['table_head'] = parent::$page->parseTemplate($TableHeadTPL, $this->_lang);
+            $parse['table_head'] = $this->getTemplate()->set($TableHeadTPL, $this->langs->language);
 
             if ($this->_element_id >= 22 && $this->_element_id <= 24) {
                 $parse['table_data'] = $this->storage_table($TableTPL);
@@ -199,11 +196,12 @@ class Infos extends Controller
             }
         }
 
+        $parse['table_footer'] = '';
         if ($TableFooterTPL != '') {
-            $parse['table_footer'] = parent::$page->parseTemplate($TableFooterTPL, $this->_lang);
+            $parse['table_footer'] = $this->getTemplate()->set($TableFooterTPL, $this->langs->language);
         }
 
-        $page = parent::$page->parseTemplate($PageTPL, $parse);
+        $page = $this->getTemplate()->set($PageTPL, $parse);
 
         if ($GateTPL != '') {
             if ($this->_current_planet[$this->_resource[$this->_element_id]] > 0) {
@@ -220,7 +218,7 @@ class Infos extends Controller
                 }
                 $parse['gate_dest_moons'] = $this->BuildJumpableMoonCombo($this->_current_user, $this->_current_planet);
                 $parse['gate_fleet_rows'] = $this->BuildFleetListRows($this->_current_planet);
-                $page .= parent::$page->parseTemplate($GateTPL, $parse);
+                $page .= $this->getTemplate()->set($GateTPL, $parse);
             }
         }
 
@@ -231,15 +229,15 @@ class Infos extends Controller
                 $DestroyTime = $DestroyTime < 1 ? 1 : $DestroyTime;
                 $parse['destroyurl'] = "game.php?page=" . DevelopmentsLib::setBuildingPage($this->_element_id) . "&cmd=destroy&building=" . $this->_element_id;
                 $parse['levelvalue'] = $this->_current_planet[$this->_resource[$this->_element_id]];
-                $parse['nfo_metal'] = $this->_lang['Metal'];
-                $parse['nfo_crysta'] = $this->_lang['Crystal'];
-                $parse['nfo_deuter'] = $this->_lang['Deuterium'];
-                $parse['metal'] = FormatLib::prettyNumber($NeededRessources['metal']);
-                $parse['crystal'] = FormatLib::prettyNumber($NeededRessources['crystal']);
-                $parse['deuterium'] = FormatLib::prettyNumber($NeededRessources['deuterium']);
+                $parse['metal'] = $this->langs->line('metal');
+                $parse['crysta'] = $this->langs->line('crystal');
+                $parse['deuterium'] = $this->langs->line('deuterium');
+                $parse['nfo_metal'] = FormatLib::prettyNumber($NeededRessources['metal']);
+                $parse['nfo_crystal'] = FormatLib::prettyNumber($NeededRessources['crystal']);
+                $parse['nfo_deuterium'] = FormatLib::prettyNumber($NeededRessources['deuterium']);
                 $parse['destroytime'] = FormatLib::prettyTime($DestroyTime);
 
-                $page .= parent::$page->parseTemplate($DestroyTPL, $parse);
+                $page .= $this->getTemplate()->set($DestroyTPL, $parse);
             }
         }
         parent::$page->display($page);
@@ -261,15 +259,15 @@ class Infos extends Controller
         for ($BuildLevel = $BuildStartLvl; $BuildLevel < $BuildStartLvl + 15; ++$BuildLevel) {
             $Prod = ProductionLib::maxStorable($BuildLevel);
 
-            $bloc['build_lvl'] = ( $CurrentBuildtLvl == $BuildLevel ) ? "<font color=\"#ff0000\">" . $BuildLevel . "</font>" : $BuildLevel;
+            $bloc['build_lvl'] = ($CurrentBuildtLvl == $BuildLevel) ? "<font color=\"#ff0000\">" . $BuildLevel . "</font>" : $BuildLevel;
             $bloc['build_prod'] = FormatLib::prettyNumber($Prod);
-            $bloc['build_prod_diff'] = FormatLib::colorNumber(FormatLib::prettyNumber(( $Prod - $ActualProd)));
+            $bloc['build_prod_diff'] = FormatLib::colorNumber(FormatLib::prettyNumber(($Prod - $ActualProd)));
 
             if ($ProdFirst == 0) {
                 $ProdFirst = floor($Prod);
             }
 
-            $Table .= parent::$page->parseTemplate($template, $bloc);
+            $Table .= $this->getTemplate()->set($template, $bloc);
         }
 
         return $Table;
@@ -287,11 +285,11 @@ class Infos extends Controller
         $Table = "";
 
         for ($BuildLevel = $BuildStartLvl; $BuildLevel < $BuildStartLvl + 15; ++$BuildLevel) {
-            $bloc['tech_lvl'] = ( $CurrentBuildtLvl == $BuildLevel ) ? "<font color=\"#ff0000\">" . $BuildLevel . "</font>" : $BuildLevel;
+            $bloc['tech_lvl'] = ($CurrentBuildtLvl == $BuildLevel) ? "<font color=\"#ff0000\">" . $BuildLevel . "</font>" : $BuildLevel;
             $bloc['tech_colonies'] = FormatLib::prettyNumber(FleetsLib::getMaxColonies($BuildLevel));
             $bloc['tech_expeditions'] = FormatLib::prettyNumber(FleetsLib::getMaxExpeditions($BuildLevel));
 
-            $Table .= parent::$page->parseTemplate($template, $bloc);
+            $Table .= $this->getTemplate()->set($template, $bloc);
         }
 
         return $Table;
@@ -323,7 +321,7 @@ class Infos extends Controller
 
     /**
      * doFleetJump
-     * 
+     *
      * @return string
      */
     private function doFleetJump()
@@ -339,18 +337,12 @@ class Infos extends Controller
                 $TargetPlanet = isset($_POST['jmpto']) ? $_POST['jmpto'] : '';
 
                 if (!is_int($TargetPlanet)) {
-                    $RetMessage = $this->_lang['in_jump_gate_error_data'];
+                    $RetMessage = $this->langs->line('in_jump_gate_error_data');
                 }
 
-                $TargetGate = $this->_db->queryFetch(
-                    "SELECT p.`planet_id`, b.`building_jump_gate`, p.`planet_last_jump_time`
-                    FROM `" . PLANETS . "` AS p
-                    INNER JOIN `" . BUILDINGS . "` AS b ON b.`building_planet_id` = p.`planet_id`
-                    WHERE p.`planet_id` = '" . $TargetPlanet . "';"
-                );
+                $TargetGate = $this->Infos_Model->getTargetGate($TargetPlanet);
 
                 if ($TargetGate['building_jump_gate'] > 0) {
-
                     $RestString = $this->GetNextJumpWaitTime($TargetGate);
                     $NextDestTime = $RestString['value'];
 
@@ -361,71 +353,50 @@ class Infos extends Controller
                         $SubQueryDes = '';
 
                         for ($Ship = 200; $Ship < 300; $Ship++) {
-
                             $ShipLabel = "c" . $Ship;
                             $gemi_kontrol = isset($_POST[$ShipLabel]) ? $_POST[$ShipLabel] : null;
 
                             if (is_numeric($gemi_kontrol)) {
-
                                 if ($gemi_kontrol > $this->_current_planet[$this->_resource[$Ship]]) {
-
                                     $ShipArray[$Ship] = $this->_current_planet[$this->_resource[$Ship]];
                                 } else {
-
                                     $ShipArray[$Ship] = $gemi_kontrol;
                                 }
 
-
                                 if ($ShipArray[$Ship] > 0) {
-
                                     $SubQueryOri .= "`" . $this->_resource[$Ship] . "` = `" . $this->_resource[$Ship] . "` - '" . $ShipArray[$Ship] . "', ";
                                     $SubQueryDes .= "`" . $this->_resource[$Ship] . "` = `" . $this->_resource[$Ship] . "` + '" . $ShipArray[$Ship] . "', ";
                                 }
                             }
                         }
                         if ($SubQueryOri != "") {
-
-                            $this->_db->query(
-                                "UPDATE " . PLANETS . ", " . USERS . ", " . SHIPS . " SET
-                                    $SubQueryOri
-                                    `planet_last_jump_time` = '" . $JumpTime . "',
-                                    `user_current_planet` = '" . $TargetGate['planet_id'] . "'
-                                WHERE `planet_id` = '" . $this->_current_planet['planet_id'] . "' 
-                                    AND `ship_planet_id` = '" . $this->_current_planet['planet_id'] . "' 
-                                    AND `user_id` = '" . $this->_current_user['user_id'] . "';"
-                            );
-
-                            $this->_db->query(
-                                "UPDATE " . PLANETS . ", " . SHIPS . " SET
-                                $SubQueryDes
-                                `planet_last_jump_time` = '" . $JumpTime . "'
-                                WHERE `planet_id` = '" . $TargetGate['planet_id'] . "'
-                                    AND `ship_planet_id` = '" . $TargetGate['planet_id'] . "';"
+                            $this->Infos_Model->doJump(
+                                $SubQueryOri,
+                                $SubQueryDes,
+                                $JumpTime,
+                                $this->_current_planet['planet_id'],
+                                $TargetGate['planet_id'],
+                                $this->_current_user['user_id']
                             );
 
                             $this->_current_planet['planet_last_jump_time'] = $JumpTime;
 
                             $RestString = $this->GetNextJumpWaitTime($this->_current_planet);
-                            $RetMessage = $this->_lang['in_jump_gate_done'] . $RestString['string'];
+                            $RetMessage = $this->langs->line('in_jump_gate_done') . $RestString['string'];
                         } else {
-
-                            $RetMessage = $this->_lang['in_jump_gate_error_data'];
+                            $RetMessage = $this->langs->line('in_jump_gate_error_data');
                         }
                     } else {
-
-                        $RetMessage = $this->_lang['in_jump_gate_not_ready_target'] . $RestString['string'];
+                        $RetMessage = $this->langs->line('in_jump_gate_not_ready_target') . $RestString['string'];
                     }
                 } else {
-
-                    $RetMessage = $this->_lang['in_jump_gate_doesnt_have_one'];
+                    $RetMessage = $this->langs->line('in_jump_gate_doesnt_have_one');
                 }
             } else {
-
-                $RetMessage = $this->_lang['in_jump_gate_already_used'] . $RestString['string'];
+                $RetMessage = $this->langs->line('in_jump_gate_already_used') . $RestString['string'];
             }
         } else {
-
-            $RetMessage = $this->_lang['in_jump_gate_error_data'];
+            $RetMessage = $this->langs->line('in_jump_gate_error_data');
         }
 
         return $RetMessage;
@@ -433,7 +404,7 @@ class Infos extends Controller
 
     private function BuildFleetListRows()
     {
-        $RowsTPL = parent::$page->getTemplate('infos/info_gate_rows');
+        $RowsTPL = 'infos/info_gate_rows';
         $CurrIdx = 1;
         $Result = "";
         for ($Ship = 200; $Ship < 250; $Ship++) {
@@ -441,10 +412,10 @@ class Infos extends Controller
                 if ($this->_current_planet[$this->_resource[$Ship]] > 0) {
                     $bloc['idx'] = $CurrIdx;
                     $bloc['fleet_id'] = $Ship;
-                    $bloc['fleet_name'] = $this->_lang['tech'][$Ship];
+                    $bloc['fleet_name'] = $this->langs->language[$this->_resource[$Ship]];
                     $bloc['fleet_max'] = FormatLib::prettyNumber($this->_current_planet[$this->_resource[$Ship]]);
-                    $bloc['gate_ship_dispo'] = $this->_lang['in_jump_gate_available'];
-                    $Result .= parent::$page->parseTemplate($RowsTPL, $bloc);
+                    $bloc['gate_ship_dispo'] = $this->langs->line('in_jump_gate_available');
+                    $Result .= $this->getTemplate()->set($RowsTPL, $bloc);
                     $CurrIdx++;
                 }
             }
@@ -454,21 +425,17 @@ class Infos extends Controller
 
     private function BuildJumpableMoonCombo()
     {
-        $MoonList = $this->_db->query(
-            "SELECT *
-            FROM `" . PLANETS . "` AS m
-            INNER JOIN `" . BUILDINGS . "` AS b ON b.building_planet_id = m.planet_id
-            WHERE m.`planet_type` = '3' AND
-                m.`planet_user_id` = '" . $this->_current_user['user_id'] . "';"
-        );
+        $MoonList = $this->Infos_Model->getListOfMoons($this->_current_user['user_id']);
 
         $Combo = "";
 
-        while ($CurMoon = $this->_db->fetchAssoc($MoonList)) {
+        foreach ($MoonList as $CurMoon) {
             if ($CurMoon['planet_id'] != $this->_current_planet['planet_id']) {
                 $RestString = $this->GetNextJumpWaitTime($CurMoon);
-                if ($CurMoon[$this->_resource[43]] >= 1)
+                if ($CurMoon[$this->_resource[43]] >= 1) {
                     $Combo .= "<option value=\"" . $CurMoon['planet_id'] . "\">[" . $CurMoon['planet_galaxy'] . ":" . $CurMoon['planet_system'] . ":" . $CurMoon['planet_planet'] . "] " . $CurMoon['planet_name'] . $RestString['string'] . "</option>\n";
+                }
+
             }
         }
         return $Combo;
@@ -490,7 +457,7 @@ class Infos extends Controller
             $bloc['build_lvl'] = ($CurrentBuildtLvl == $BuildLevel) ? "<font color=\"#ff0000\">" . $BuildLevel . "</font>" : $BuildLevel;
             $bloc['build_range'] = ($BuildLevel * $BuildLevel) - 1;
 
-            $Table .= parent::$page->parseTemplate($Template, $bloc);
+            $Table .= $this->getTemplate()->set($Template, $bloc);
         }
 
         return $Table;
@@ -506,8 +473,8 @@ class Infos extends Controller
         $game_resource_multiplier = FunctionsLib::readConfig('resource_multiplier');
 
         // BOOST
-        $geologe_boost = 1 + ( 1 * ( OfficiersLib::isOfficierActive($this->_current_user['premium_officier_geologist']) ? GEOLOGUE : 0 ) );
-        $engineer_boost = 1 + ( 1 * ( OfficiersLib::isOfficierActive($this->_current_user['premium_officier_engineer']) ? ENGINEER_ENERGY : 0 ) );
+        $geologe_boost = 1 + (1 * (OfficiersLib::isOfficierActive($this->_current_user['premium_officier_geologist']) ? GEOLOGUE : 0));
+        $engineer_boost = 1 + (1 * (OfficiersLib::isOfficierActive($this->_current_user['premium_officier_engineer']) ? ENGINEER_ENERGY : 0));
 
         // PRODUCTION FORMULAS
         $metal_prod = eval($this->_prod_grid[$this->_element_id]['formule']['metal']);
@@ -535,8 +502,9 @@ class Infos extends Controller
         }
 
         $BuildStartLvl = $CurrentBuildtLvl - 2;
-        if ($BuildStartLvl < 1)
+        if ($BuildStartLvl < 1) {
             $BuildStartLvl = 1;
+        }
 
         $Table = "";
         $ProdFirst = 0;
@@ -561,13 +529,15 @@ class Infos extends Controller
 
             $bloc['build_lvl'] = ($CurrentBuildtLvl == $BuildLevel) ? "<font color=\"#ff0000\">" . $BuildLevel . "</font>" : $BuildLevel;
 
-            if ($ProdFirst > 0)
-                if ($this->_element_id != 12)
+            if ($ProdFirst > 0) {
+                if ($this->_element_id != 12) {
                     $bloc['build_gain'] = "<font color=\"lime\">(" . FormatLib::prettyNumber(floor($Prod[$this->_element_id] - $ProdFirst)) . ")</font>";
-                else
+                } else {
                     $bloc['build_gain'] = "<font color=\"lime\">(" . FormatLib::prettyNumber(floor($Prod[4] - $ProdFirst)) . ")</font>";
-            else
+                }
+            } else {
                 $bloc['build_gain'] = "";
+            }
 
             if ($this->_element_id != 12) {
                 $bloc['build_prod'] = FormatLib::prettyNumber(floor($Prod[$this->_element_id]));
@@ -581,13 +551,15 @@ class Infos extends Controller
                 $bloc['build_need_diff'] = FormatLib::colorNumber(FormatLib::prettyNumber(floor($Prod[3] - $ActualNeed)));
             }
             if ($ProdFirst == 0) {
-                if ($this->_element_id != 12)
+                if ($this->_element_id != 12) {
                     $ProdFirst = floor($Prod[$this->_element_id]);
-                else
+                } else {
                     $ProdFirst = floor($Prod[4]);
+                }
+
             }
 
-            $Table .= parent::$page->parseTemplate($Template, $bloc);
+            $Table .= $this->getTemplate()->set($Template, $bloc);
         }
 
         return $Table;
@@ -597,8 +569,10 @@ class Infos extends Controller
     {
         $ResultString = "";
         for ($Type = 200; $Type < 500; $Type++) {
-            if (isset($this->_combat_caps[$this->_element_id]['sd'][$Type]) && $this->_combat_caps[$this->_element_id]['sd'][$Type] > 1)
-                $ResultString .= $this->_lang['in_rf_again'] . " " . $this->_lang['tech'][$Type] . " <font color=\"#00ff00\">" . $this->_combat_caps[$this->_element_id]['sd'][$Type] . "</font><br>";
+            if (isset($this->_combat_caps[$this->_element_id]['sd'][$Type]) && $this->_combat_caps[$this->_element_id]['sd'][$Type] > 1) {
+                $ResultString .= $this->langs->line('in_rf_again') . " " . $this->langs->language[$this->_resource[$Type]] . " <font color=\"#00ff00\">" . $this->_combat_caps[$this->_element_id]['sd'][$Type] . "</font><br>";
+            }
+
         }
         return $ResultString;
     }
@@ -607,8 +581,10 @@ class Infos extends Controller
     {
         $ResultString = "";
         for ($Type = 200; $Type < 500; $Type++) {
-            if (isset($this->_combat_caps[$Type]['sd'][$this->_element_id]) && $this->_combat_caps[$Type]['sd'][$this->_element_id] > 1)
-                $ResultString .= $this->_lang['in_rf_from'] . " " . $this->_lang['tech'][$Type] . " <font color=\"#ff0000\">" . $this->_combat_caps[$Type]['sd'][$this->_element_id] . "</font><br>";
+            if (isset($this->_combat_caps[$Type]['sd'][$this->_element_id]) && $this->_combat_caps[$Type]['sd'][$this->_element_id] > 1) {
+                $ResultString .= $this->langs->line('in_rf_from') . " " . $this->langs->language[$this->_resource[$Type]] . " <font color=\"#ff0000\">" . $this->_combat_caps[$Type]['sd'][$this->_element_id] . "</font><br>";
+            }
+
         }
         return $ResultString;
     }

@@ -1,26 +1,26 @@
 #############################################################################
-#             ESTA VERSIÓN DE XG PROYECT FUE DECARGADA DESDE			
+#               ESTA VERSIÓN DE XG PROYECT FUE DECARGADA DESDE			
 #
 #
-#				WWW.XGPROYECT.ORG
+#				                WWW.XGPROYECT.ORG
 #
 #
 #
-#		ESTE PACK ES OPEN SOURCE... NADIE TE PUEDE COBRAR POR EL
+#		    ESTE PACK ES OPEN SOURCE... NADIE TE PUEDE COBRAR POR EL
 #
-#			LA LICENCIA SE ENCUENTRA EN EL INSTALADOR
+#			        LA LICENCIA SE ENCUENTRA EN EL INSTALADOR
 #
 #
-#		GRACIAS POR DESCARGAR EL PACK Y HABERNOS ELEGIDO
+#		        GRACIAS POR DESCARGAR EL PACK Y HABERNOS ELEGIDO
 #
 #
 #############################################################################
 
 REQUERIMIENTOS RECOMENDADOS
-+ PHP 5.5+
++ PHP 7.3+
 + MySQL 5.5+
 
 OPCIONES
 + Instalar
 + Actualizar
-+ Migrar 2.10.X -> 3.0.X
++ Migrar 2.X.X -> 3.1.X

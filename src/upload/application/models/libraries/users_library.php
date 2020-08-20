@@ -2,7 +2,7 @@
 /**
  * Users_library Model
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Model
  * @package  Application
@@ -12,6 +12,9 @@
  * @version  3.1.0
  */
 namespace application\models\libraries;
+
+use application\core\Model;
+use application\libraries\FunctionsLib as Functions;
 
 /**
  * Users_library Class
@@ -23,57 +26,35 @@ namespace application\models\libraries;
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-class Users_library
+class Users_library extends Model
 {
-
-    private $db = null;
-
-    /**
-     * __construct()
-     */
-    public function __construct($db)
-    {
-        // use this to make queries
-        $this->db = $db;
-    }
-
-    /**
-     * __destruct
-     * 
-     * @return void
-     */
-    public function __destruct()
-    {
-        $this->db->closeConnection();
-    }
-
     /**
      * Get alliance ID
-     * 
+     *
      * @param int $user_id User ID
-     * 
+     *
      * @return array
      */
     public function getAllyIdByUserId($user_id)
     {
         return $this->db->queryFetch(
-                "SELECT `user_ally_id` FROM " . USERS . " WHERE `user_id` = '" . $user_id . "';"
+            "SELECT `user_ally_id` FROM " . USERS . " WHERE `user_id` = '" . $user_id . "';"
         );
     }
 
     /**
      * Get alliance data
-     * 
+     *
      * @param array $alliance_id Alliance ID
-     * 
+     *
      * @return array
      */
     public function getAllianceDataByAllianceId($alliance_id)
     {
         return $this->db->queryFetch(
-                "SELECT a.`alliance_id`, a.`alliance_ranks`,
-                (SELECT COUNT(user_id) AS `ally_members` 
-                    FROM `" . USERS . "` 
+            "SELECT a.`alliance_id`, a.`alliance_ranks`,
+                (SELECT COUNT(user_id) AS `ally_members`
+                    FROM `" . USERS . "`
                     WHERE `user_ally_id` = '" . $alliance_id . "') AS `ally_members`
             FROM " . ALLIANCE . " AS a
             WHERE a.`alliance_id` = '" . $alliance_id . "';"
@@ -82,19 +63,19 @@ class Users_library
 
     /**
      * Update the alliance owner
-     * 
+     *
      * @param array $alliance_id Alliance ID
      * @param int   $user_rank   Rank ID
-     * 
+     *
      * @return type
      */
     public function updateAllianceOwner($alliance_id, $user_rank)
     {
         return $this->db->query(
-                "UPDATE `" . ALLIANCE . "` SET 
-                `alliance_owner` = 
+            "UPDATE `" . ALLIANCE . "` SET
+                `alliance_owner` =
                 (
-                    SELECT `user_id` 
+                    SELECT `user_id`
                     FROM `" . USERS . "`
                     WHERE `user_ally_rank_id` = '" . $user_rank . "'
                         AND `user_ally_id` = '" . $alliance_id . "'
@@ -106,9 +87,9 @@ class Users_library
 
     /**
      * Delete alliance
-     * 
+     *
      * @param Int $alliance_id Alliance ID
-     * 
+     *
      * @return void
      */
     public function deleteAllianceById($alliance_id)
@@ -120,7 +101,7 @@ class Users_library
         );
 
         $this->db->query(
-            "UPDATE `" . USERS . "` SET 
+            "UPDATE `" . USERS . "` SET
                 `user_ally_id` = '0',
                 `user_ally_request` = '0',
                 `user_ally_request_text` = '',
@@ -132,9 +113,9 @@ class Users_library
 
     /**
      * Delete the planet and its related data like buildings, defenses and ships.
-     * 
+     *
      * @param int $user_id User ID
-     * 
+     *
      * @return void
      */
     public function deletePlanetsAndRelatedDataByUserId($user_id)
@@ -150,50 +131,50 @@ class Users_library
 
     /**
      * Delete the planet and its related data like buildings, defenses and ships.
-     * 
+     *
      * @param int $user_id User ID
-     * 
+     *
      * @return void
      */
     public function deleteMessagesByUserId($user_id)
     {
         $this->db->query(
-            "DELETE FROM " . MESSAGES . " 
+            "DELETE FROM " . MESSAGES . "
                 WHERE `message_sender` = '" . $user_id . "' OR `message_receiver` = '" . $user_id . "';"
         );
     }
 
     /**
      * Delete the planet and its related data like buildings, defenses and ships.
-     * 
+     *
      * @param int $user_id User ID
-     * 
+     *
      * @return void
      */
     public function deleteBuddysByUserId($user_id)
     {
         $this->db->query(
-            "DELETE FROM " . BUDDY . " 
+            "DELETE FROM " . BUDDY . "
                 WHERE `buddy_sender` = '" . $user_id . "' OR `buddy_receiver` = '" . $user_id . "';"
         );
     }
 
     /**
      * Delete the planet and its related data like buildings, defenses and ships.
-     * 
+     *
      * @param int $user_id User ID
-     * 
+     *
      * @return void
      */
     public function deleteUserDataById($user_id)
     {
         $this->db->query(
-            "DELETE r,f,n,p,se,s,u FROM " . USERS . " AS u
+            "DELETE r,f,n,p,pr,s,u FROM " . USERS . " AS u
             INNER JOIN " . RESEARCH . " AS r ON r.research_user_id = u.user_id
             LEFT JOIN " . FLEETS . " AS f ON f.fleet_owner = u.user_id
             LEFT JOIN " . NOTES . " AS n ON n.note_owner = u.user_id
             INNER JOIN " . PREMIUM . " AS p ON p.premium_user_id = u.user_id
-            INNER JOIN " . SETTINGS . " AS se ON se.setting_user_id = u.user_id
+            INNER JOIN " . PREFERENCES . " AS pr ON pr.preference_user_id = u.user_id
             INNER JOIN " . USERS_STATISTICS . " AS s ON s.user_statistic_user_id = u.user_id
             WHERE u.`user_id` = '" . $user_id . "';"
         );
@@ -201,43 +182,55 @@ class Users_library
 
     /**
      * Get the user data by user name
-     * 
+     *
      * @param string $user_name User Name
-     * 
+     *
      * @return array
      */
-    public function setUserDataByUserName($user_name)
+    public function setUserDataByUserId($user_id)
     {
-        return $this->db->queryFetch(
+        if (!defined('IN_ADMIN')) {
+            return $this->db->queryFetch(
                 "SELECT u.*,
-                pre.*,
-                se.*,
-                usul.user_statistic_total_rank,
-                usul.user_statistic_total_points,
-                r.*,
-                a.alliance_name,
-                (SELECT COUNT(`message_id`) AS `new_message` 
-                FROM `" . MESSAGES . "` 
-                WHERE `message_receiver` = u.`user_id` AND `message_read` = 0) AS `new_message`
-            FROM " . USERS . " AS u
-            INNER JOIN " . SETTINGS . " AS se ON se.setting_user_id = u.user_id
-            INNER JOIN " . USERS_STATISTICS . " AS usul ON usul.user_statistic_user_id = u.user_id
-            INNER JOIN " . PREMIUM . " AS pre ON pre.premium_user_id = u.user_id
-            INNER JOIN " . RESEARCH . " AS r ON r.research_user_id = u.user_id
-            LEFT JOIN " . ALLIANCE . " AS a ON a.alliance_id = u.user_ally_id
-            WHERE (u.user_name = '" . $this->db->escapeValue($user_name) . "')
+                    pre.*,
+                    pr.*,
+                    usul.user_statistic_total_rank,
+                    usul.user_statistic_total_points,
+                    r.*,
+                    a.alliance_name,
+                    (
+                        SELECT COUNT(`message_id`) AS `new_message`
+                        FROM `" . MESSAGES . "`
+                        WHERE `message_receiver` = u.`user_id` AND `message_read` = 0
+                    ) AS `new_message`
+                FROM `" . USERS . "` AS u
+                INNER JOIN `" . PREFERENCES . "` AS pr ON pr.preference_user_id = u.user_id
+                INNER JOIN `" . USERS_STATISTICS . "` AS usul ON usul.user_statistic_user_id = u.user_id
+                INNER JOIN `" . PREMIUM . "` AS pre ON pre.premium_user_id = u.user_id
+                INNER JOIN `" . RESEARCH . "` AS r ON r.research_user_id = u.user_id
+                LEFT JOIN `" . ALLIANCE . "` AS a ON a.alliance_id = u.user_ally_id
+                WHERE (u.`user_id` = '" . (int) $user_id . "')
+                LIMIT 1;"
+            );
+        }
+
+        return $this->db->queryFetch(
+            "SELECT
+                u.*
+            FROM `" . USERS . "` AS u
+            WHERE (u.`user_id` = '" . (int) $user_id . "')
             LIMIT 1;"
         );
     }
 
     /**
      * Update some data
-     * 
+     *
      * @param string $request_uri Requested URL
      * @param string $remote_addr Remote IP Address
      * @param string $user_agent  User agent/browser
      * @param int    $user_id     User ID
-     * 
+     *
      * @return void
      */
     public function updateUserActivityData($request_uri, $remote_addr, $user_agent, $user_id)
@@ -255,22 +248,22 @@ class Users_library
 
     /**
      * Set the user current planet data
-     * 
+     *
      * @param int $planet_id   Planet ID
      * @param int $admin_level Admin Level
-     * 
+     *
      * @return type
      */
     public function setPlanetData($planet_id, $admin_level)
     {
         return $this->db->queryFetch(
-                "SELECT p.*, b.*, d.*, s.*,
+            "SELECT p.*, b.*, d.*, s.*,
             m.planet_id AS moon_id,
             m.planet_name AS moon_name,
             m.planet_image AS moon_image,
             m.planet_destroyed AS moon_destroyed,
             m.planet_image AS moon_image,
-            (SELECT COUNT(user_statistic_user_id) AS stats_users 
+            (SELECT COUNT(user_statistic_user_id) AS stats_users
                 FROM `" . USERS_STATISTICS . "` AS s
                 INNER JOIN " . USERS . " AS u ON u.user_id = s.user_statistic_user_id
                 WHERE u.`user_authlevel` <= " . $admin_level . ") AS stats_users
@@ -290,16 +283,16 @@ class Users_library
 
     /**
      * Validate if the requested planet belongs to the current user
-     * 
+     *
      * @param int $planet_id Planet ID
      * @param int $user_id   User ID
-     * 
+     *
      * @return array
      */
     public function getUserPlanetByIdAndUserId($planet_id, $user_id)
     {
         return $this->db->queryFetch(
-                "SELECT `planet_id`
+            "SELECT `planet_id`
             FROM " . PLANETS . "
             WHERE `planet_id` = '" . $planet_id . "'
             AND `planet_user_id` = '" . $user_id . "';"
@@ -308,10 +301,10 @@ class Users_library
 
     /**
      * Change the user current planet
-     * 
+     *
      * @param int $planet_id Planet ID
      * @param int $user_id   User ID
-     * 
+     *
      * @return void
      */
     public function changeUserPlanetByUserId($planet_id, $user_id)
@@ -325,9 +318,9 @@ class Users_library
 
     /**
      * Insert a new user and return their ID
-     * 
+     *
      * @param string $insert_query Insert Query
-     * 
+     *
      * @return int
      */
     public function createNewUser($insert_query)
@@ -339,23 +332,24 @@ class Users_library
 
     /**
      * Create premium record
-     * 
+     *
      * @param type $user_id The user id
-     * 
+     *
      * @return void
      */
     public function createPremium($user_id)
     {
         $this->db->query(
-            "INSERT INTO " . PREMIUM . " SET `premium_user_id` = '" . $user_id . "';"
+            "INSERT INTO `" . PREMIUM . "` (`premium_user_id`, `premium_dark_matter`)
+            VALUES('" . $user_id . "', '" . Functions::readConfig('registration_dark_matter') . "');"
         );
     }
 
     /**
      * Create research record
-     * 
+     *
      * @param type $user_id The user id
-     * 
+     *
      * @return void
      */
     public function createResearch($user_id)
@@ -367,23 +361,23 @@ class Users_library
 
     /**
      * Create settings record
-     * 
+     *
      * @param type $user_id The user id
-     * 
+     *
      * @return void
      */
     public function createSettings($user_id)
     {
         $this->db->query(
-            "INSERT INTO " . SETTINGS . " SET `setting_user_id` = '" . $user_id . "';"
+            "INSERT INTO " . PREFERENCES . " SET `preference_user_id` = '" . $user_id . "';"
         );
     }
 
     /**
      * Create statistics record
-     * 
+     *
      * @param type $user_id The user id
-     * 
+     *
      * @return void
      */
     public function createUserStatistics($user_id)

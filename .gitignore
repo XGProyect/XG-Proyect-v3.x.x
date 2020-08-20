@@ -1,5 +1,33 @@
+#
+# application
+#
 src/upload/application/config/config.php
 src/upload/application/logs/*.txt
+
+#
+# tests
+#
 src/upload/tests/build/
 src/upload/tests/_reports/
-src/docs/
+
+#
+# docs
+#
+/docs/*
+
+#
+# docker
+#
+data/xgp.sql
+
+#
+# IDE
+#
+*.code-workspace
+nbproject/
+
+#
+# composer
+#
+vendor
+composer.lock

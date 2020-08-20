@@ -2,7 +2,7 @@
 /**
  * Switch Int enumerator
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Library
  * @package  Application
@@ -25,10 +25,8 @@ namespace application\core\enumerators;
  */
 abstract class SwitchIntEnumerator
 {
-
     const on = 1;
     const off = 0;
-
 }
 
 /* end of SwitchIntEnumerator.php */

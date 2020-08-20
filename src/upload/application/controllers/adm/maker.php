@@ -1,8 +1,11 @@
 <?php
+
+declare (strict_types = 1);
+
 /**
  * Maker Controller
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Controller
  * @package  Application
@@ -14,11 +17,11 @@
 namespace application\controllers\adm;
 
 use application\core\Controller;
-use application\core\Database;
-use application\libraries\adm\AdministrationLib;
-use application\libraries\FormatLib;
-use application\libraries\FunctionsLib;
-use application\libraries\PlanetLib;
+use application\core\enumerators\PlanetTypesEnumerator;
+use application\core\enumerators\UserRanksEnumerator as UserRanks;
+use application\libraries\adm\AdministrationLib as Administration;
+use application\libraries\FormatLib as Format;
+use application\libraries\FunctionsLib as Functions;
 
 /**
  * Maker Class
@@ -32,148 +35,253 @@ use application\libraries\PlanetLib;
  */
 class Maker extends Controller
 {
-
-    private $_current_user;
-    private $_creator;
-    private $_alert;
-    private $_lang;
+    /**
+     * Current user data
+     *
+     * @var array
+     */
+    private $user;
 
     /**
-     * __construct()
+     * Contains the alert string
+     *
+     * @var string
+     */
+    private $alert = '';
+
+    /**
+     * Constructor
      */
     public function __construct()
     {
         parent::__construct();
 
         // check if session is active
-        AdministrationLib::checkSession();
+        Administration::checkSession();
 
-        $this->_db = new Database();
-        $this->_lang = parent::$lang;
-        $this->_creator = new PlanetLib();
-        $this->_current_user = parent::$users->getUserData();
+        // load Model
+        parent::loadModel('adm/maker');
 
-        // Check if the user is allowed to access
-        if (AdministrationLib::haveAccess($this->_current_user['user_authlevel']) && AdministrationLib::authorization($this->_current_user['user_authlevel'], 'edit_users') == 1) {
-            $this->build_page();
-        } else {
-            die(AdministrationLib::noAccessMessage($this->_lang['ge_no_permissions']));
-        }
-    }
+        // load Language
+        parent::loadLang(['adm/global', 'adm/maker']);
 
-    /**
-     * method __destruct
-     * param
-     * return close db connection
-     */
-    public function __destruct()
-    {
-        $this->_db->closeConnection();
-    }
+        // set data
+        $this->user = $this->getUserData();
 
-    /**
-     * method build_page
-     * param
-     * return main method, loads everything
-     */
-    private function build_page()
-    {
-        $parse = $this->_lang;
-
-        switch (( isset($_GET['mode']) ? $_GET['mode'] : '')) {
-            case 'alliance':
-
-                $parse['content'] = $this->make_alliace();
-
-                break;
-
-            case 'moon':
-
-                $parse['content'] = $this->make_moon();
-
-                break;
-
-            case 'planet':
-
-                $parse['content'] = $this->make_planet();
-
-                break;
-
-            case 'user':
-
-                $parse['content'] = $this->make_user();
-
-                break;
-
-            case '':
-            default:
-
-                $parse['content'] = '';
-
-                break;
+        // check if the user is allowed to access
+        if (!Administration::authorization(__CLASS__, (int) $this->user['user_authlevel'])) {
+            die(Administration::noAccessMessage($this->langs->line('no_permissions')));
         }
 
-        $parse['alert'] = $this->_alert;
+        // time to do something
+        $this->runAction();
 
-        parent::$page->display(parent::$page->parseTemplate(parent::$page->getTemplate('adm/maker_main_view'), $parse));
+        // build the page
+        $this->buildPage();
     }
 
     /**
-     * method make_alliace
-     * param
-     * return a created alliance
+     * Run an action
+     *
+     * @return void
      */
-    private function make_alliace()
+    private function runAction(): void
     {
-        $parse = $this->_lang;
-        $parse['founders_combo'] = $this->build_alliance_users_combo();
+    }
 
-        if (isset($_POST['add_alliance']) && $_POST['add_alliance']) {
-            $alliance_name = $this->_db->escapeValue((string) $_POST['name']);
-            $alliance_tag = $this->_db->escapeValue((string) $_POST['tag']);
-            $alliance_founder = (int) $_POST['founder'];
+    /**
+     * Build the page
+     *
+     * @return void
+     */
+    private function buildPage(): void
+    {
+        parent::$page->displayAdmin(
+            $this->getTemplate()->set(
+                'adm/maker_view',
+                array_merge(
+                    $this->langs->language,
+                    $this->makeUser(),
+                    $this->makeAlliace(),
+                    $this->makePlanet(),
+                    $this->makeMoon(),
+                    [
+                        'alert' => $this->alert ?? '',
+                    ]
+                )
+            )
+        );
+    }
 
-            $check_alliance = $this->_db->queryFetch("SELECT `alliance_id`
-																FROM `" . ALLIANCE . "`
-																WHERE `alliance_name` = '" . $alliance_name . "'
-																	OR `alliance_tag` = '" . $alliance_tag . "';");
+    /**
+     * Create a new user
+     *
+     * @return array
+     */
+    private function makeUser(): array
+    {
+        $parse = $this->buildLevelCombo();
 
-            if (!$check_alliance && !empty($alliance_founder) && $alliance_founder > 0) {
-                $this->_db->query("INSERT INTO `" . ALLIANCE . "` SET
-										`alliance_name`='" . $alliance_name . "',
-										`alliance_tag`='" . $alliance_tag . "' ,
-										`alliance_owner`='" . $alliance_founder . "',
-										`alliance_owner_range` = '" . $this->_lang['mk_alliance_founder_rank'] . "',
-										`alliance_register_time`='" . time() . "'");
+        if (isset($_POST['add_user']) && $_POST['add_user']) {
+            $name = (string) $_POST['name'];
+            $pass = (string) $_POST['password'];
+            $email = (string) $_POST['email'];
+            $galaxy = (int) $_POST['galaxy'];
+            $system = (int) $_POST['system'];
+            $planet = (int) $_POST['planet'];
+            $auth = (int) $_POST['authlevel'];
+            $i = 0;
+            $error = '';
 
-                $new_alliance_id = $this->_db->insertId();
+            $check_user = $this->Maker_Model->checkUserName($name);
+            $check_email = $this->Maker_Model->checkUserEmail($email);
+            $check_planet = $this->Maker_Model->checkPlanet($galaxy, $system, $planet);
 
-                $this->_db->query("INSERT INTO " . ALLIANCE_STATISTICS . " SET
-										`alliance_statistic_alliance_id`='" . $new_alliance_id . "'");
+            if (!is_numeric($galaxy) && !is_numeric($system) && !is_numeric($planet)) {
+                $error = $this->langs->line('mk_user_only_numbers');
+                $i++;
+            } elseif ($galaxy > MAX_GALAXY_IN_WORLD or $system > MAX_SYSTEM_IN_GALAXY || $planet > MAX_PLANET_IN_SYSTEM || $galaxy < 1 || $system < 1 || $planet < 1) {
+                $error = $this->langs->line('mk_user_wrong_coords');
+                $i++;
+            }
 
-                $this->_db->query("UPDATE `" . USERS . "` SET
-										`user_ally_id`='" . $new_alliance_id . "',
-										`user_ally_register_time`='" . time() . "'
-										WHERE `user_id`='" . $alliance_founder . "'");
+            if (!$name or !$email or !$galaxy or !$system or !$planet) {
+                $error .= $this->langs->line('mk_user_complete_all');
+                $i++;
+            }
 
-                $this->_alert = AdministrationLib::saveMessage('ok', $this->_lang['mk_alliance_added']);
+            if (!Functions::validEmail(strip_tags($email))) {
+                $error .= $this->langs->line('mk_user_invalid_email');
+                $i++;
+            }
+
+            if ($check_user) {
+                $error .= $this->langs->line('mk_user_existing_name');
+                $i++;
+            }
+
+            if ($check_email) {
+                $error .= $this->langs->line('mk_user_existing_email');
+                $i++;
+            }
+
+            if ($check_planet['count'] != 0) {
+                $error .= $this->langs->line('mk_user_existing_planet');
+                $i++;
+            }
+
+            if (isset($_POST['password_check']) && $_POST['password_check']) {
+                $pass = Functions::generatePassword();
             } else {
-                $this->_alert = AdministrationLib::saveMessage('warning', $this->_lang['mk_alliance_all_fields']);
+                if (strlen($pass) < 4) {
+                    $error .= $this->langs->line('mk_user_invalid_password');
+                    $i++;
+                }
+            }
+
+            if ($i == 0) {
+                $this->Maker_Model->createNewUser($name, $email, $auth, $pass, $galaxy, $system, $planet);
+
+                $this->alert = Administration::saveMessage('ok', strtr($this->langs->line('mk_user_added'), ['%s' => $pass]));
+            } else {
+                $this->alert = Administration::saveMessage('warning', '<br/>' . $error);
             }
         }
 
-        return parent::$page->parseTemplate(parent::$page->getTemplate('adm/maker_alliance_view'), $parse);
+        return $parse;
     }
 
     /**
-     * method make_moon
-     * param
-     * return a created moon
+     * Create a new alliance
+     *
+     * @return array
      */
-    private function make_moon()
+    private function makeAlliace(): array
     {
-        $parse = $this->_lang;
-        $parse['planets_combo'] = $this->build_planet_combo();
+        $parse['founders_combo'] = $this->buildAllianceUsersCombo();
+
+        if (isset($_POST['add_alliance']) && $_POST['add_alliance']) {
+            $alliance_name = (string) $_POST['name'];
+            $alliance_tag = (string) $_POST['tag'];
+            $alliance_founder = (int) $_POST['founder'];
+
+            $check_alliance = $this->Maker_Model->checkAlliance($alliance_name, $alliance_tag);
+
+            if (!$check_alliance && !empty($alliance_founder) && $alliance_founder > 0) {
+                $this->Maker_Model->createAlliance($alliance_name, $alliance_tag, $alliance_founder, $this->langs->line('mk_alliance_founder_rank'));
+
+                $this->alert = Administration::saveMessage('ok', $this->langs->line('mk_alliance_added'));
+            } else {
+                $this->alert = Administration::saveMessage('warning', $this->langs->line('mk_alliance_all_fields'));
+            }
+        }
+
+        return $parse;
+    }
+
+    /**
+     * Create a new planet
+     *
+     * @return array
+     */
+    private function makePlanet(): array
+    {
+        $parse['users_combo'] = $this->buildUsersCombo();
+
+        if (isset($_POST['add_planet']) && $_POST['add_planet']) {
+            $user_id = (int) $_POST['user'];
+            $galaxy = (int) $_POST['galaxy'];
+            $system = (int) $_POST['system'];
+            $planet = (int) $_POST['planet'];
+            $name = (string) $_POST['name'];
+            $field_max = (int) $_POST['planet_field_max'];
+            $i = 0;
+
+            $check_planet = $this->Maker_Model->checkPlanet($galaxy, $system, $planet);
+            $user_query = $this->Maker_Model->checkUserById($user_id);
+
+            if ($check_planet['count'] == 0 && $user_query) {
+                if ($galaxy < 1 or $system < 1 or $planet < 1 or !is_numeric($galaxy) or !is_numeric($system) or !is_numeric($planet)) {
+                    $error = $this->langs->line('mk_planet_unavailable_coords');
+                    $i++;
+                }
+
+                if ($galaxy > MAX_GALAXY_IN_WORLD or $system > MAX_SYSTEM_IN_GALAXY or $planet > MAX_PLANET_IN_SYSTEM) {
+                    $error .= $this->langs->line('mk_planet_wrong_coords');
+                    $i++;
+                }
+
+                if ($i == 0) {
+                    if ($field_max <= 0 && !is_numeric($field_max)) {
+                        $field_max = '163';
+                    }
+
+                    if (strlen($name) <= 0) {
+                        $name = $this->langs->line('mk_planet_default_name');
+                    }
+
+                    $this->Maker_Model->createNewPlanet($galaxy, $system, $planet, $user_id, $field_max, $name);
+
+                    $this->alert = Administration::saveMessage('ok', $this->langs->line('mk_planet_added'));
+                } else {
+                    $this->alert = Administration::saveMessage('warning', $error);
+                }
+            } else {
+                $this->alert = Administration::saveMessage('warning', $this->langs->line('mk_planet_unavailable_coords'));
+            }
+        }
+
+        return $parse;
+    }
+
+    /**
+     * Create a new moon
+     *
+     * @return array
+     */
+    private function makeMoon(): array
+    {
+        $parse['planets_combo'] = $this->buildPlanetCombo();
 
         if (isset($_POST['add_moon']) && $_POST['add_moon']) {
             $planet_id = (int) $_POST['planet'];
@@ -183,35 +291,14 @@ class Maker extends Controller
             $temp_max = (int) $_POST['planet_temp_max'];
             $max_fields = (int) $_POST['planet_field_max'];
 
-            $moon_planet = $this->_db->queryFetch(
-                "SELECT p.*, (SELECT `planet_id`
-                FROM " . PLANETS . "
-                WHERE `planet_galaxy` = (SELECT `planet_galaxy`
-                                                                        FROM " . PLANETS . "
-                                                                        WHERE `planet_id` = '" . $planet_id . "'
-                                                                                AND `planet_type` = 1)
-                                AND `planet_system` = (SELECT `planet_system`
-                                                                                FROM " . PLANETS . "
-                                                                                WHERE `planet_id` = '" . $planet_id . "'
-                                                                                        AND `planet_type` = 1)
-                                AND `planet_planet` = (SELECT `planet_planet`
-                                                                                FROM " . PLANETS . "
-                                                                                WHERE `planet_id` = '" . $planet_id . "'
-                                                                                        AND `planet_type` = 1)
-                                AND `planet_type` = 3) AS id_moon
-                FROM " . PLANETS . " AS p
-                WHERE p.`planet_id` = '" . $planet_id . "' AND
-                p.`planet_type` = '1'"
-            );
-
+            $moon_planet = $this->Maker_Model->checkMoon($planet_id);
 
             if ($moon_planet && is_numeric($planet_id)) {
-                if ($moon_planet['id_moon'] == '' && $moon_planet['planet_type'] == 1 && $moon_planet['planet_destroyed'] == 0) {
-
-                    $galaxy = $moon_planet['planet_galaxy'];
-                    $system = $moon_planet['planet_system'];
-                    $planet = $moon_planet['planet_planet'];
-                    $owner = $moon_planet['planet_user_id'];
+                if ($moon_planet['id_moon'] == '' && $moon_planet['planet_type'] == PlanetTypesEnumerator::PLANET && $moon_planet['planet_destroyed'] == 0) {
+                    $galaxy = (int) $moon_planet['planet_galaxy'];
+                    $system = (int) $moon_planet['planet_system'];
+                    $planet = (int) $moon_planet['planet_planet'];
+                    $owner = (int) $moon_planet['planet_user_id'];
 
                     $size = 0;
                     $errors = 0;
@@ -223,7 +310,7 @@ class Maker extends Controller
                             $size = $diameter;
                         } else {
                             $errors++;
-                            $this->_alert = AdministrationLib::saveMessage('warning', $this->_lang['mk_moon_only_numbers']);
+                            $this->alert = Administration::saveMessage('warning', $this->langs->line('mk_moon_only_numbers'));
                         }
                     }
 
@@ -233,243 +320,49 @@ class Maker extends Controller
                             $maxtemp = $temp_max;
                         } else {
                             $errors++;
-                            $this->_alert = AdministrationLib::saveMessage('warning', $this->_lang['mk_moon_only_numbers']);
+                            $this->alert = Administration::saveMessage('warning', $this->langs->line('mk_moon_only_numbers'));
                         }
                     }
 
                     if ($errors == 0) {
-                        $this->_creator->setNewMoon(
-                            $galaxy, $system, $planet, $owner, $moon_name, 0, $size, $max_fields, $mintemp, $maxtemp
+                        $this->Maker_Model->createNewMoon(
+                            $galaxy,
+                            $system,
+                            $planet,
+                            $owner,
+                            $moon_name,
+                            $size,
+                            $max_fields,
+                            $mintemp,
+                            $maxtemp
                         );
 
-                        $this->_alert = AdministrationLib::saveMessage('ok', $this->_lang['mk_moon_added']);
+                        $this->alert = Administration::saveMessage('ok', $this->langs->line('mk_moon_added'));
                     }
                 } else {
-                    $this->_alert = AdministrationLib::saveMessage('warning', $this->_lang['mk_moon_add_errors']);
+                    $this->alert = Administration::saveMessage('warning', $this->langs->line('mk_moon_add_errors'));
                 }
             } else {
-                $this->_alert = AdministrationLib::saveMessage('error', $this->_lang['mk_moon_planet_doesnt_exist']);
+                $this->alert = Administration::saveMessage('error', $this->langs->line('mk_moon_planet_doesnt_exist'));
             }
         }
 
-        return parent::$page->parseTemplate(parent::$page->getTemplate('adm/maker_moon_view'), $parse);
+        return $parse;
     }
 
     /**
-     * method make_planet
-     * param
-     * return a created planet
+     * Build the list of users combo
+     *
+     * @return string
      */
-    private function make_planet()
-    {
-        $parse = $this->_lang;
-        $parse['users_combo'] = $this->build_users_combo();
-
-        if (isset($_POST['add_planet']) && $_POST['add_planet']) {
-            $user_id = (int) $_POST['user'];
-            $galaxy = (int) $_POST['galaxy'];
-            $system = (int) $_POST['system'];
-            $planet = (int) $_POST['planet'];
-            $name = (string) $_POST['name'];
-            $field_max = (int) $_POST['planet_field_max'];
-            $i = 0;
-
-            $planet_query = $this->_db->queryFetch("SELECT *
-																FROM " . PLANETS . "
-																WHERE `planet_galaxy` = '" . $galaxy . "' AND
-																		`planet_system` = '" . $system . "' AND
-																		`planet_planet` = '" . $planet . "'");
-
-            $user_query = $this->_db->queryFetch("SELECT *
-															FROM " . USERS . "
-															WHERE `user_id` = '" . $user_id . "'");
-
-            if (is_numeric($user_id) && isset($user_id) && !$planet_query && $user_query) {
-                if ($galaxy < 1 or $system < 1 or $planet < 1 or ! is_numeric($galaxy) or ! is_numeric($system) or ! is_numeric($planet)) {
-                    $error = $this->_lang['mk_planet_unavailable_coords'];
-                    $i++;
-                }
-
-                if ($galaxy > MAX_GALAXY_IN_WORLD or $system > MAX_SYSTEM_IN_GALAXY or $planet > MAX_PLANET_IN_SYSTEM) {
-                    $error .= $this->_lang['mk_planet_wrong_coords'];
-                    $i++;
-                }
-
-                if ($i == 0) {
-                    if ($field_max <= 0 && !is_numeric($field_max)) {
-                        $field_max = '163';
-                    }
-
-                    if (strlen($name) <= 0) {
-                        $name = $this->_lang['mk_planet_default_name'];
-                    }
-
-                    $this->_creator->setNewPlanet($galaxy, $system, $planet, $user_id, '', '', false);
-
-                    $this->_db->query("UPDATE " . PLANETS . " SET
-											`planet_field_max` = '" . $field_max . "',
-											`planet_name` = '" . $name . "'
-											WHERE `planet_galaxy` = '" . $galaxy . "'
-												AND `planet_system` = '" . $system . "'
-												AND `planet_planet` = '" . $planet . "'
-												AND `planet_type` = '1'");
-
-                    $this->_alert = AdministrationLib::saveMessage('ok', $this->_lang['mk_planet_added']);
-                } else {
-                    $this->_alert = AdministrationLib::saveMessage('warning', $error);
-                }
-            } else {
-                $this->_alert = AdministrationLib::saveMessage('warning', $this->_lang['mk_planet_unavailable_coords']);
-            }
-        }
-
-        return parent::$page->parseTemplate(parent::$page->getTemplate('adm/maker_planet_view'), $parse);
-    }
-
-    /**
-     * method make_user
-     * param
-     * return a created user
-     */
-    private function make_user()
-    {
-        $parse = $this->_lang;
-        $parse['level_combo'] = $this->build_level_combo();
-
-        if (isset($_POST['add_user']) && $_POST['add_user']) {
-            $name = (string) $_POST['name'];
-            $pass = (string) $_POST['password'];
-            $email = (string) $_POST['email'];
-            $galaxy = (int) $_POST['galaxy'];
-            $system = (int) $_POST['system'];
-            $planet = (int) $_POST['planet'];
-            $auth = (int) $_POST['authlevel'];
-            $time = time();
-            $i = 0;
-            $error = '';
-
-            $check_user = $this->_db->queryFetch("SELECT `user_name`
-														FROM " . USERS . "
-														WHERE `user_name` = '" . $this->_db->escapeValue($_POST['name']) . "'
-														LIMIT 1");
-
-            $check_email = $this->_db->queryFetch("SELECT `user_email`
-														FROM " . USERS . "
-														WHERE `user_email` = '" . $this->_db->escapeValue($_POST['email']) . "'
-														LIMIT 1");
-
-            $check_planet = $this->_db->queryFetch("SELECT COUNT(planet_id) AS count
-														FROM " . PLANETS . "
-														WHERE `planet_galaxy` = '" . $galaxy . "' AND
-																`planet_system` = '" . $system . "' AND
-																`planet_planet` = '" . $planet . "' LIMIT 1");
-
-
-            if (!is_numeric($galaxy) && !is_numeric($system) && !is_numeric($planet)) {
-                $error = $this->_lang['mk_user_only_numbers'];
-                $i++;
-            } elseif ($galaxy > MAX_GALAXY_IN_WORLD or $system > MAX_SYSTEM_IN_GALAXY || $planet > MAX_PLANET_IN_SYSTEM || $galaxy < 1 || $system < 1 || $planet < 1) {
-                $error = $this->_lang['mk_user_wrong_coords'];
-                $i++;
-            }
-
-            if (!$name or ! $email or ! $galaxy or ! $system or ! $planet) {
-                $error .= $this->_lang['mk_user_complete_all'];
-                $i++;
-            }
-
-            if (!FunctionsLib::validEmail(strip_tags($email))) {
-                $error .= $this->_lang['mk_user_invalid_email'];
-                $i++;
-            }
-
-            if ($check_user) {
-                $error .= $this->_lang['mk_user_existing_name'];
-                $i++;
-            }
-
-            if ($check_email) {
-                $error .= $this->_lang['mk_user_existing_email'];
-                $i++;
-            }
-
-            if ($check_planet['count'] != 0) {
-                $error .= $this->_lang['mk_user_existing_planet'];
-                $i++;
-            }
-
-            if (isset($_POST['password_check']) && $_POST['password_check']) {
-                $pass = $this->generate_password();
-            } else {
-                if (strlen($pass) < 4) {
-                    $error .= $this->_lang['mk_user_invalid_password'];
-                    $i++;
-                }
-            }
-
-            if ($i == 0) {
-
-                $this->_db->query("INSERT INTO " . USERS . " SET
-										`user_name` = '" . $this->_db->escapeValue(strip_tags($name)) . "',
-										`user_email` = '" . $this->_db->escapeValue($email) . "',
-										`user_email_permanent` = '" . $this->_db->escapeValue($email) . "',
-										`user_ip_at_reg` = '" . $_SERVER['REMOTE_ADDR'] . "',
-										`user_home_planet_id` = '0',
-										`user_register_time` = '" . $time . "',
-										`user_onlinetime` = '" . $time . "',
-										`user_authlevel` = '" . $auth . "',
-										`user_password`='" . sha1($pass) . "';");
-
-                $last_user_id = $this->_db->insertId();
-
-                $this->_creator->setNewPlanet($galaxy, $system, $planet, $last_user_id, '', true);
-
-                $last_planet_id = $this->_db->insertId();
-
-                $this->_db->query("UPDATE " . USERS . " SET
-										`user_home_planet_id` = '" . $last_planet_id . "',
-										`user_current_planet` = '" . $last_planet_id . "',
-										`user_galaxy` = '" . $galaxy . "',
-										`user_system` = '" . $system . "',
-										`user_planet` = '" . $planet . "'
-										WHERE `user_id` = '" . $last_user_id . "'
-										LIMIT 1;");
-
-                $this->_db->query("INSERT INTO " . RESEARCH . " SET
-										`research_user_id` = '" . $last_user_id . "';");
-
-                $this->_db->query("INSERT INTO " . USERS_STATISTICS . " SET
-										`user_statistic_user_id` = '" . $last_user_id . "';");
-
-                $this->_db->query("INSERT INTO " . PREMIUM . " SET
-										`premium_user_id` = '" . $last_user_id . "';");
-
-                $this->_db->query("INSERT INTO " . SETTINGS . " SET
-										`setting_user_id` = '" . $last_user_id . "';");
-
-                $this->_alert = AdministrationLib::saveMessage('ok', str_replace('%s', $pass, $this->_lang['mk_user_added']));
-            } else {
-                $this->_alert = AdministrationLib::saveMessage('warning', '<br/>' . $error);
-            }
-        }
-
-        return parent::$page->parseTemplate(parent::$page->getTemplate('adm/maker_user_view'), $parse);
-    }
-
-    /**
-     * method build_users_combo
-     * param
-     * return the list of users
-     */
-    private function build_users_combo()
+    private function buildUsersCombo(): string
     {
         $combo_rows = '';
-        $users = $this->_db->query("SELECT `user_id`, `user_name`
-												FROM " . USERS . ";");
+        $users = $this->Maker_Model->getAllServerUsers();
 
-        while ($users_row = $this->_db->fetchArray($users)) {
+        foreach ($users as $users_row) {
             if (isset($_GET['user']) && $_GET['user'] > 0) {
-                $combo_rows .= '<option value="' . $users_row['user_id'] . '" ' . ( $_GET['user'] == $users_row['user_id'] ? ' selected' : '' ) . '>' . $users_row['user_name'] . '</option>';
+                $combo_rows .= '<option value="' . $users_row['user_id'] . '" ' . ($_GET['user'] == $users_row['user_id'] ? ' selected' : '') . '>' . $users_row['user_name'] . '</option>';
             } else {
                 $combo_rows .= '<option value="' . $users_row['user_id'] . '">' . $users_row['user_name'] . '</option>';
             }
@@ -479,23 +372,20 @@ class Maker extends Controller
     }
 
     /**
-     * method build_planet_combo
-     * param
-     * return the list of the user planets
+     * Build the list of planets combo
+     *
+     * @return string
      */
-    private function build_planet_combo()
+    private function buildPlanetCombo(): string
     {
         $combo_rows = '';
-        $planets = $this->_db->query("SELECT `planet_id`, `planet_name`, `planet_galaxy`, `planet_system`, `planet_planet`
-												FROM `" . PLANETS . "`
-												WHERE `planet_destroyed` = '0'
-													AND `planet_type` = '1';");
+        $planets = $this->Maker_Model->getAllActivePlanets();
 
-        while ($planets_row = $this->_db->fetchArray($planets)) {
+        foreach ($planets as $planets_row) {
             if (isset($_GET['planet']) && $_GET['planet'] > 0) {
-                $combo_rows .= '<option value="' . $planets_row['planet_id'] . '" ' . ( $_GET['planet'] == $planets_row['planet_id'] ? 'selected' : '' ) . ' >' . $planets_row['planet_name'] . ' [' . $planets_row['planet_galaxy'] . ':' . $planets_row['planet_system'] . ':' . $planets_row['planet_planet'] . ']' . '</option>';
+                $combo_rows .= '<option value="' . $planets_row['planet_id'] . '" ' . ($_GET['planet'] == $planets_row['planet_id'] ? 'selected' : '') . ' >' . $planets_row['planet_name'] . ' [' . $planets_row['planet_galaxy'] . ':' . $planets_row['planet_system'] . ':' . $planets_row['planet_planet'] . ']' . '</option>';
             } else {
-                $combo_rows .= '<option value="' . $planets_row['planet_id'] . '">' . $planets_row['planet_name'] . ' ' . FormatLib::prettyCoords($planets_row['planet_galaxy'], $planets_row['planet_system'], $planets_row['planet_planet']) . '</option>';
+                $combo_rows .= '<option value="' . $planets_row['planet_id'] . '">' . $planets_row['planet_name'] . ' ' . Format::prettyCoords((int) $planets_row['planet_galaxy'], (int) $planets_row['planet_system'], (int) $planets_row['planet_planet']) . '</option>';
             }
         }
 
@@ -503,35 +393,43 @@ class Maker extends Controller
     }
 
     /**
-     * method build_level_combo
-     * param
-     * return the list of the user levels
+     * Build the list of levels combo
+     *
+     * @return array
      */
-    private function build_level_combo()
+    private function buildLevelCombo(): array
     {
-        $combo_rows = '';
+        $user_levels = [];
+        $ranks = [
+            UserRanks::PLAYER,
+            UserRanks::GO,
+            UserRanks::SGO,
+            UserRanks::ADMIN,
+        ];
 
-        foreach ($this->_lang['user_level'] as $level_id => $level_text) {
-            $combo_rows .= '<option value="' . $level_id . '">' . $level_text . '</option>';
+        foreach ($ranks as $rank_id) {
+            $user_levels[] = [
+                'id' => $rank_id,
+                'name' => $this->langs->language['user_level'][$rank_id],
+            ];
         }
 
-        return $combo_rows;
+        return [
+            'user_levels' => $user_levels,
+        ];
     }
 
     /**
-     * method build_alliance_users_combo
-     * param
-     * return the list of users without alliance
+     * Build the list of alliances combo
+     *
+     * @return string
      */
-    private function build_alliance_users_combo()
+    private function buildAllianceUsersCombo(): string
     {
         $combo_rows = '';
-        $users = $this->_db->query("SELECT `user_id`, `user_name`
-												FROM `" . USERS . "`
-												WHERE `user_ally_id` = '0'
-													AND `user_ally_request` = '0';");
+        $users = $this->Maker_Model->getUsersWithoutAlliance();
 
-        while ($users_row = $this->_db->fetchArray($users)) {
+        foreach ($users as $users_row) {
             $combo_rows .= '<option value="' . $users_row['user_id'] . '">' . $users_row['user_name'] . '</option>';
         }
 
@@ -539,17 +437,17 @@ class Maker extends Controller
     }
 
     /**
-     * generate_password()
-     * param
-     * return generates a password
-     * */
-    private function generate_password()
+     * Generates a new random password
+     *
+     * @return string
+     */
+    private function generatePassword(): string
     {
-        $characters = "aazertyuiopqsdfghjklmwxcvbnAZERTYUIOPQSDFGHJKLMWXCVBN1234567890";
+        $characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
         $count = strlen($characters);
-        $new_pass = "";
-        $lenght = 6;
-        srand((double) microtime() * 1000000);
+        $new_pass = '';
+        $lenght = 16;
+        srand((int) microtime() * 1000000);
 
         for ($i = 0; $i < $lenght; $i++) {
             $character_boucle = mt_rand(0, $count - 1);

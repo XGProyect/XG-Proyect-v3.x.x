@@ -1,8 +1,11 @@
 <?php
+
+declare (strict_types = 1);
+
 /**
- * XGPCore
+ * Controller
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Core
  * @package  Application
@@ -13,52 +16,50 @@
  */
 namespace application\core;
 
+use application\core\enumerators\SwitchIntEnumerator as SwitchInt;
+use application\core\enumerators\UserRanksEnumerator;
+use application\core\Template;
+use application\core\XGPCore;
+use application\libraries\FunctionsLib;
+
 /**
- * XGPCore Class
+ * Controller Class
  *
  * @category Classes
  * @package  Application
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
- * @version  3.0.0
+ * @version  3.1.0
  */
 abstract class Controller extends XGPCore
 {
-
     /**
      * Contains the current user data
-     * 
-     * @var array 
+     *
+     * @var array
      */
-    private $_current_user = [];
+    private $current_user = [];
 
     /**
      * Contains the current planet data
-     * 
-     * @var array 
+     *
+     * @var array
      */
-    private $_current_planet = [];
+    private $current_planet = [];
 
     /**
      * Contains the whole set of objects by request
-     * 
-     * @var array 
+     *
+     * @var array
      */
-    private $_objects = [];
-
-    /**
-     * Contains the whole set of language lines
-     * 
-     * @var array 
-     */
-    private $_langs = [];
+    private $objects_list = [];
 
     /**
      *
-     * @var type 
+     * @var \Template
      */
-    private $_template = null;
+    private $template = null;
 
     /**
      * Constructor
@@ -70,97 +71,107 @@ abstract class Controller extends XGPCore
         $this->setUserData();
         $this->setPlanetData();
         $this->setObjects();
-        $this->setLang();
         $this->setTemplate();
+
+        $this->isServerOpen();
     }
 
     /**
      * Set the user Data
+     *
+     * @return void
      */
-    private function setUserData()
+    private function setUserData(): void
     {
-        $this->_current_user = parent::$users->getUserData();
+        $this->current_user = parent::$users->getUserData();
     }
 
     /**
      * Set the planet Data
+     *
+     * @return void
      */
-    private function setPlanetData()
+    private function setPlanetData(): void
     {
-        $this->_current_planet = parent::$users->getPlanetData();
+        $this->current_planet = parent::$users->getPlanetData();
     }
 
     /**
      * Set objects data
+     *
+     * @return void
      */
-    private function setObjects()
+    private function setObjects(): void
     {
-        $this->_objects = parent::$objects;
+        $this->objects_list = parent::$objects;
     }
 
     /**
-     * Set languages data
+     * Set template data
+     *
+     * @return void
      */
-    private function setLang()
+    private function setTemplate(): void
     {
-        $this->_langs = parent::$lang;
+        $this->template = new Template();
     }
 
     /**
-     * Set languages data
+     * Check if the server is open
+     *
+     * @return void
      */
-    private function setTemplate()
+    private function isServerOpen(): void
     {
-        $this->_template = new Template();
+        if (!defined('IN_INSTALL') && !defined('IN_ADMIN')) {
+            $user_level = isset($this->current_user['user_authlevel']) ?? 0;
+
+            if (FunctionsLib::readConfig('game_enable') == SwitchInt::off
+                && $user_level < UserRanksEnumerator::ADMIN) {
+                FunctionsLib::message(FunctionsLib::readConfig('close_reason'), '', '', false, false);
+                die();
+            }
+        }
     }
 
     /**
      * Return the user data
-     * 
+     *
      * @return array
      */
-    protected function getUserData()
+    protected function getUserData(): array
     {
-        return $this->_current_user;
+        return $this->current_user;
     }
 
     /**
      * Return the planet data
-     * 
-     * @return Planet
+     *
+     * @return array
      */
-    protected function getPlanetData()
+    protected function getPlanetData(): array
     {
-        return $this->_current_planet;
+        return $this->current_planet;
     }
 
     /**
      * Return the objects data
-     * 
-     * @return Objects
+     *
+     * @return \Objects
      */
-    protected function getObjects()
+    protected function getObjects(): Objects
     {
-        return $this->_objects;
+        return $this->objects_list;
     }
 
     /**
-     * Return the languages
-     * 
-     * @return array
+     * Returns the template
+     *
+     * @return \Template
      */
-    protected function getLang()
+    protected function getTemplate(): Template
     {
-        return $this->_langs;
-    }
-
-    /**
-     * 
-     * @return type
-     */
-    protected function getTemplate()
-    {
-        return $this->_template;
+        return $this->template;
     }
 }
 

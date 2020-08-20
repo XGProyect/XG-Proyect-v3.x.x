@@ -28,6 +28,7 @@
  */
 class Battle
 {
+
     private $attackers;
     private $defenders;
     private $report;
@@ -47,6 +48,7 @@ class Battle
         $this->battleStarted = false;
         $this->report = new BattleReport();
     }
+
     /**
      * Battle::startBattle()
      * 
@@ -62,13 +64,11 @@ class Battle
         log_var('defenders', $this->defenders);
         $round = new Round($this->attackers, $this->defenders, 0);
         $this->report->addRound($round);
-        for ($i = 1; $i <= ROUNDS; $i++)
-        {
+        for ($i = 1; $i <= ROUNDS; $i++) {
             $att_lose = $this->attackers->isEmpty();
             $deff_lose = $this->defenders->isEmpty();
             //if one of they are empty then battle is ended, so update the status
-            if ($att_lose || $deff_lose)
-            {
+            if ($att_lose || $deff_lose) {
                 $this->checkWhoWon($att_lose, $deff_lose);
                 $this->report->setBattleResult($this->attackers->battleResult, $this->defenders->battleResult);
                 if (!$debug)
@@ -91,6 +91,7 @@ class Battle
             ob_get_clean();
         return true;
     }
+
     /**
      * Battle::checkWhoWon()
      * Assign to groups the status win,lose or draw
@@ -100,18 +101,13 @@ class Battle
      */
     private function checkWhoWon($att_lose, $deff_lose)
     {
-        if ($att_lose && !$deff_lose)
-        {
+        if ($att_lose && !$deff_lose) {
             $this->attackers->battleResult = BATTLE_LOSE;
             $this->defenders->battleResult = BATTLE_WIN;
-        }
-        elseif (!$att_lose && $deff_lose)
-        {
+        } elseif (!$att_lose && $deff_lose) {
             $this->attackers->battleResult = BATTLE_WIN;
             $this->defenders->battleResult = BATTLE_LOSE;
-        }
-        else
-        {
+        } else {
             $this->attackers->battleResult = BATTLE_DRAW;
             $this->defenders->battleResult = BATTLE_DRAW;
         }
@@ -126,6 +122,7 @@ class Battle
     {
         return $this->report->__toString();
     }
+
     /**
      * Battle::getReport()
      * Start the battle if not and return the report.
@@ -133,8 +130,7 @@ class Battle
      */
     public function getReport()
     {
-        if (!$this->battleStarted)
-        {
+        if (!$this->battleStarted) {
             $this->startBattle();
         }
         return $this->report;

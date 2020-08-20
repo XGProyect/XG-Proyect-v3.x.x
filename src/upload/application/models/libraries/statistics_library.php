@@ -2,7 +2,7 @@
 /**
  * Statistics_library Model
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Model
  * @package  Application
@@ -12,6 +12,8 @@
  * @version  3.1.0
  */
 namespace application\models\libraries;
+
+use application\core\Model;
 
 /**
  * Statistics_library Class
@@ -23,56 +25,34 @@ namespace application\models\libraries;
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-class Statistics_library
+class Statistics_library extends Model
 {
-
-    private $db = null;
-
     /**
-     * __construct()
-     */
-    public function __construct($db)
-    {
-        // use this to make queries
-        $this->db = $db;
-    }
-
-    /**
-     * __destruct
-     * 
-     * @return void
-     */
-    public function __destruct()
-    {
-        $this->db->closeConnection();
-    }
-
-    /**
-     * 
+     *
      * @param type $user_id
-     * 
+     *
      * @return array
      */
     public function getResearchToUpdate($user_id)
     {
         return $this->db->queryFetch(
-                "SELECT * 
+            "SELECT *
             FROM `" . RESEARCH . "` ttu
             WHERE ttu.research_user_id = '" . $user_id . "';"
         );
     }
 
     /**
-     * 
+     *
      * @param string $what      What
      * @param int    $planet_id Planet ID
-     * 
+     *
      * @return array
      */
     public function getPlanetElementToUpdate($what, $planet_id)
     {
         return $this->db->queryFetch(
-                "SELECT * 
+            "SELECT *
             FROM `" . DB_PREFIX . $what . "` ttu
             WHERE ttu." . rtrim($what, 's') . "_planet_id = '" . $planet_id . "';"
         );
@@ -80,31 +60,31 @@ class Statistics_library
 
     /**
      * Update points based on the provided parameters
-     * 
+     *
      * @param string $what    What
      * @param int    $points  Points
      * @param int    $user_id User ID
-     * 
+     *
      * @return void
      */
     public function updatePoints($what, $points, $user_id)
     {
         $this->db->query(
-            "UPDATE " . USERS_STATISTICS . " SET 
-                `user_statistic_" . $what . "_points` = '" . $points . "' 
+            "UPDATE " . USERS_STATISTICS . " SET
+                `user_statistic_" . $what . "_points` = '" . $points . "'
             WHERE `user_statistic_user_id` = '" . $user_id . "'"
         );
     }
 
     /**
      * Fetch all users statistics
-     * 
+     *
      * @return array
      */
     public function getAllUserStatsData()
     {
         return $this->db->queryFetchAll(
-                "SELECT `user_statistic_user_id`,
+            "SELECT `user_statistic_user_id`,
             `user_statistic_technology_rank`,
             `user_statistic_technology_points`,
             `user_statistic_buildings_rank`,
@@ -114,9 +94,9 @@ class Statistics_library
             `user_statistic_ships_rank`,
             `user_statistic_ships_points`,
             `user_statistic_total_rank`,
-            (user_statistic_buildings_points 
-                + user_statistic_defenses_points 
-                + user_statistic_ships_points 
+            (user_statistic_buildings_points
+                + user_statistic_defenses_points
+                + user_statistic_ships_points
                 + user_statistic_technology_points
             ) AS total_points
             FROM " . USERS_STATISTICS . "
@@ -126,13 +106,13 @@ class Statistics_library
 
     /**
      * Fetch all alliance statistics
-     * 
+     *
      * @return array
      */
     public function getAllAllianceStatsData()
     {
         return $this->db->queryFetchAll(
-                "SELECT a.`alliance_id`,
+            "SELECT a.`alliance_id`,
             ass.alliance_statistic_technology_rank,
             ass.alliance_statistic_buildings_rank,
             ass.alliance_statistic_defenses_rank,
@@ -153,9 +133,9 @@ class Statistics_library
 
     /**
      * Run a single query based on a provided query string
-     * 
+     *
      * @param string $query Query
-     * 
+     *
      * @return void
      */
     public function runSingleQuery($query)

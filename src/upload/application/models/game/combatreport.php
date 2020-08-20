@@ -2,7 +2,7 @@
 /**
  * Combat Report Model
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Model
  * @package  Application
@@ -12,6 +12,8 @@
  * @version  3.1.0
  */
 namespace application\models\game;
+
+use application\core\Model;
 
 /**
  * Combat Report Class
@@ -23,46 +25,23 @@ namespace application\models\game;
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-class Combatreport
+class Combatreport extends Model
 {
-
-    private $db = null;
-
-    /**
-     * __construct()
-     */
-    public function __construct($db)
-    {
-        // use this to make queries
-        $this->db = $db;
-    }
-
-    /**
-     * __destruct
-     * 
-     * @return void
-     */
-    public function __destruct()
-    {
-        $this->db->closeConnection();
-    }
-    
     /**
      * Get report by its Id
-     * 
+     *
      * @param string $report_id Report ID
-     * 
+     *
      * @return array
      */
-    public function getReportById($report_id)
+    public function getReportById($report_id): ?array
     {
-        $result[] = $this->db->queryFetch(
-            "SELECT *
+        return $this->db->queryFetch(
+            "SELECT
+                *
             FROM `" . REPORTS . "`
             WHERE `report_rid` = '" . $this->db->escapeValue($report_id) . "';"
         );
-        
-        return $result;
     }
 }
 

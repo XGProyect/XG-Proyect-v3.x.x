@@ -1,40 +1,41 @@
 '3.1.0' =>
-CORE
-[#000] Reworked project structure, some files were moved around and relocated for better comprehension.-
-[#000] Reworked how the core and libraries are loaded. AutoLoader class is now being used.-
-[#000] Converted database.php into a library, not longer attached to the core.-
-[#000] Created several models files to store in one places all the queries related to a controller or library.-
-[#000] Reworked how many libraries are included.-
-[#000] Fixed issue that was causing admins to be locked out when they set the game as disabled.-
-[#000] Improved file access security.-
-[#000] Vendors was relocated to third_party.-
-[#000] New system folder created, to adapt to future plans.-
-[#000] Reworked missions system.-
+Core
+[#000] New core, for all the pages, PHP 7.3+.-
+[#000] Migrated to Parser library by CodeIgniter.-
+[#000] Migrated queries to Models.-
+[#000] New error handler class that properly handles notices, warnings and fatal errors (only fatal errors are blockers from now on).-
+[#000] Changelog migrated into the database using two new tables "languages" and "changelog".-
+[#000] Pages templates structure simplified to follow the controllers and models structure into adm, ajax, game, home and install.-
+[#000] New core to handle languages (by CodeIgniter) and allow multiple language load, each page has its own language and not the whole languge array.-
+[#000] Migrated languages to individual files.-
+[#000] Several code improvements making a better use of enumerators, entities, helpers, libraries, etc.-
+[#000] Many controllers were completely rewritten.-
 
-ADMIN
-[#000] Modified config.php file writable alert.-
+Security
+[#000] Replaced sha-1 with BCrypt.-
+[#000] Usernames were removed from sessions.-
 
-MISSIONS
-[#000] Fixed duplicates issue.-
+Project
+[#000] Added Unit Testing.-
+[#000] Added Docker.-
+[#000] Added Composer to quickly run a few things.-
 
-DEBUG
-[#000] Added PHP Errors tracking, will be saved into the data/logs directory.-
-[#000] Improved how error reporting and logging works. New LOG_ERRORS constant allows to keep track of PHP errors and DB errors, all or none.
+Improvements
+[#000] Seach pages includes new texts and simplified view.-
+[#000] Menu UI set a little bit closer to OGame's redesign.-
+[#000] New single page for private messages called "chat", will provably mutate into a real chat in the future.-
+[#000] Options page rewritten into preferences page, with simplified amount of features, deprecating many from the old ogame version.-
 
-BUILDINGS
-[#000] Rewritten the code to handle the buildings queue, created new buildings library.-
-[#000] Reworked buildings page structure.-
-
-SHIPYARD & DEFENSES
-[#177] Fixed several notices in the shipyard and defenses pages.-
-[#179] Fixed ship and defenses construction in the shipyard and defenses pages (also notices and warnings).-
-[#000] Rewritten and merged into a single page, similar behavior to buildings pages (resources, facilities).-
-
-REGISTER
-[#176] Fixed registration issues
-
-TEST
-[#000] Created testing structure to implement Unit Testing.-
+Features
+[#000][game] New variables for the Bomber.-
+[#000][game] New feature to refill storages was added to the trader, on the Resource Market section.-
+[#000][admin] New admin panel design.-
+[#000][admin] New functionality to manage fleets through the admin panel, allowing admins to restart and returns fleets, finish missions or delete fleets.-
+[#000][admin] New functionality to manage backup through the admin panel, allowing admins to review, delete and download the backups.-
+[#000][admin] New functionality to add custom colors to the annoucements (previously global messages).-
+[#000][admin] New functionality to see which emails were sent and which did not in the annoucements page (previously global messages).-
+[#000][admin] New functionality to manage the changelog through the admin panel.-
+[#000][admin] New and improved functionality to manage the administration permissions and roles through the admin panel.-
 
 '3.0.4' =>
 CORE

@@ -2,7 +2,7 @@
 /**
  * Constants
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Core
  * @package  Application
@@ -18,9 +18,9 @@
 ###########################################################################
 
 /**
- * 
+ *
  * SYSTEM CONFIGURATION
- * 
+ *
  */
 // GAME FILES VERSION
 define('SYSTEM_VERSION', '3.1.0');
@@ -34,23 +34,29 @@ define('DEBUG_MODE', false);
 // LOG DB AND PHP ERRORS
 define('LOG_ERRORS', true);
 
-// ERROR LOGS MAIL
-define('ERROR_LOGS_MAIL', '');
-
-// RUN QUERIES FLAG
-define('ADMIN_ACCESS_QUERY', true);
+// ERROR LOGS MAIL - If you share your errors with XG Proyect we will be able to improve the project faster.
+define('ERROR_LOGS_MAIL', 'errors@xgproyect.org');
 
 /**
- * 
+ *
  * SYSTEM PATHS CONFIGURATION
- * 
+ *
  */
-define('PROTOCOL', ($_SERVER['HTTPS'] == 'on' ? 'https://' : 'http://'));
+if ((!empty($_SERVER['REQUEST_SCHEME']) && $_SERVER['REQUEST_SCHEME'] == 'https') ||
+    (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ||
+    (!empty($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == '443')) {
+    define('PROTOCOL', 'https://');
+} else {
+    define('PROTOCOL', 'http://');
+}
 
 // BASE PATH
 define(
-    'BASE_PATH', $_SERVER['HTTP_HOST'] . str_replace(
-        '/' . basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']
+    'BASE_PATH',
+    $_SERVER['HTTP_HOST'] . str_replace(
+        '/' . basename($_SERVER['SCRIPT_NAME']),
+        '',
+        $_SERVER['SCRIPT_NAME']
     )
 );
 
@@ -64,9 +70,9 @@ define('GAMEURL', PROTOCOL . $_SERVER['HTTP_HOST'] . '/');
 define('ADM_URL', PROTOCOL . strtr(BASE_PATH, ['public' => '']));
 
 /**
- * 
+ *
  * GLOBAL DIRECTORY STRUCTURE
- * 
+ *
  */
 define('APP_PATH', 'application' . DIRECTORY_SEPARATOR);
 define('DATA_PATH', 'data' . DIRECTORY_SEPARATOR);
@@ -74,15 +80,16 @@ define('PUBLIC_PATH', 'public' . DIRECTORY_SEPARATOR);
 define('SYSTEM_PATH', 'system' . DIRECTORY_SEPARATOR);
 
 /**
- * 
+ *
  * APPLICATION DIRECTORY STRUCTURE
- * 
+ *
  */
 define('CONFIGS_PATH', APP_PATH . 'config' . DIRECTORY_SEPARATOR);
 define('CONTROLLERS_PATH', APP_PATH . 'controllers' . DIRECTORY_SEPARATOR);
 define('CORE_PATH', APP_PATH . 'core' . DIRECTORY_SEPARATOR);
 define('HOOKS_PATH', APP_PATH . 'hooks' . DIRECTORY_SEPARATOR);
 define('LANG_PATH', APP_PATH . 'language' . DIRECTORY_SEPARATOR);
+define('HELPERS_PATH', APP_PATH . 'helpers' . DIRECTORY_SEPARATOR);
 define('LIB_PATH', APP_PATH . 'libraries' . DIRECTORY_SEPARATOR);
 define('LOGS_PATH', APP_PATH . 'logs' . DIRECTORY_SEPARATOR);
 define('MODELS_PATH', APP_PATH . 'models' . DIRECTORY_SEPARATOR);
@@ -90,9 +97,9 @@ define('VENDOR_PATH', APP_PATH . 'third_party' . DIRECTORY_SEPARATOR);
 define('TEMPLATE_DIR', APP_PATH . 'views' . DIRECTORY_SEPARATOR);
 
 /**
- * 
+ *
  * CONTROLLERS DIRECTORY STRUCTURE
- * 
+ *
  */
 define('ADMIN_PATH', CONTROLLERS_PATH . 'adm' . DIRECTORY_SEPARATOR);
 define('AJAX_PATH', CONTROLLERS_PATH . 'ajax' . DIRECTORY_SEPARATOR);
@@ -101,46 +108,55 @@ define('HOME_PATH', CONTROLLERS_PATH . 'home' . DIRECTORY_SEPARATOR);
 define('INSTALL_PATH', CONTROLLERS_PATH . 'install' . DIRECTORY_SEPARATOR);
 
 /**
- * 
+ *
  * DATA DIRECTORY STRUCTURE
- * 
+ *
  */
 define('BACKUP_PATH', DATA_PATH . 'backups' . DIRECTORY_SEPARATOR);
 
 /**
- * 
+ *
  * PUBLIC DIRECTORY STRUCTURE
- * 
+ *
  */
 define('CSS_PATH', PUBLIC_PATH . 'css' . DIRECTORY_SEPARATOR);
+define('ADMIN_PUBLIC_PATH', PUBLIC_PATH . 'admin' . DIRECTORY_SEPARATOR);
 define('IMG_PATH', PUBLIC_PATH . 'images' . DIRECTORY_SEPARATOR);
 define('PUB_INS_PATH', PUBLIC_PATH . 'install' . DIRECTORY_SEPARATOR);
 define('JS_PATH', PUBLIC_PATH . 'js' . DIRECTORY_SEPARATOR);
 define('UPLOAD_PATH', PUBLIC_PATH . 'upload' . DIRECTORY_SEPARATOR);
 
 /**
- * 
+ *
  * INSTALL DIRECTORY STRUCTURE
- * 
+ *
  */
 define('MIGRATION_PATH', PUB_INS_PATH . 'migration' . DIRECTORY_SEPARATOR);
 define('UPDATE_PATH', PUB_INS_PATH . 'update' . DIRECTORY_SEPARATOR);
 
-
 /**
- * 
+ *
  * SKIN DIRECTORY STRUCTURE
- * 
+ *
  */
 define('SKIN_PATH', UPLOAD_PATH . 'skins' . DIRECTORY_SEPARATOR);
 define('DEFAULT_SKINPATH', SKIN_PATH . 'xgproyect' . DIRECTORY_SEPARATOR);
 define('DPATH', DEFAULT_SKINPATH);
 
 /**
- * 
+ *
+ * TIMING CONSTANTS
+ *
+ */
+define('ONE_DAY', (60 * 60 * 24)); // 1 DAY
+define('ONE_WEEK', (ONE_DAY * 7)); // 1 WEEK
+define('ONE_MONTH', (ONE_DAY * 30)); // 1 MONTH
+
+/**
+ *
  * GAME MECHANICS RELATED
  * You can change almost anything below without breaking the game
- * 
+ *
  */
 // UNIVERSE DATA, GALAXY, SYSTEMS AND PLANETS || DEFAULT 9-499-15 RESPECTIVELY
 define('MAX_GALAXY_IN_WORLD', 9);
@@ -179,58 +195,67 @@ define('TECHNOCRATE_SPY', 2);
 define('TECHNOCRATE_SPEED', 0.25);
 
 // INVISIBLES DEBRIS
-define('DEBRIS_LIFE_TIME', 604800);
+define('DEBRIS_LIFE_TIME', ONE_WEEK);
 define('DEBRIS_MIN_VISIBLE_SIZE', 300);
 
 // DESTROYED PLANETS LIFE TIME
 define('PLANETS_LIFE_TIME', 24); // IN HOURS
+
 // VACATION TIME THAT AN USER HAS TO BE ON VACATION MODE BEFORE IT CAN REMOVE IT
 define('VACATION_TIME_FORCED', 2); // IN DAYS
 
+// RESOURCE MARKET
+define('BASIC_RESOURCE_MARKET_DM', [
+    'metal' => 4500,
+    'crystal' => 9000,
+    'deuterium' => 13500,
+]);
+
+// PHALANX COST
+define('PHALANX_COST', 10000);
+
 /**
- * 
- * DATABASE RELATED 
- * 
+ *
+ * DATABASE RELATED
+ *
  */
 ###########################################################################
 #
 # Constants should not be changed, unless you know what you are doing!
 #
 ###########################################################################
-// TO PREVENT ERRORS
-if (!defined('DB_PREFIX')) {
-
-    define('DB_PREFIX', '');
-}
 
 // TABLES
-define('ACS_FLEETS', DB_PREFIX . 'acs_fleets');
-define('ALLIANCE', DB_PREFIX . 'alliance');
-define('ALLIANCE_STATISTICS', DB_PREFIX . 'alliance_statistics');
-define('BANNED', DB_PREFIX . 'banned');
-define('BUDDY', DB_PREFIX . 'buddys');
-define('BUILDINGS', DB_PREFIX . 'buildings');
-define('DEFENSES', DB_PREFIX . 'defenses');
-define('FLEETS', DB_PREFIX . 'fleets');
-define('MESSAGES', DB_PREFIX . 'messages');
-define('NOTES', DB_PREFIX . 'notes');
-define('OPTIONS', DB_PREFIX . 'options');
-define('PLANETS', DB_PREFIX . 'planets');
-define('PREMIUM', DB_PREFIX . 'premium');
-define('RESEARCH', DB_PREFIX . 'research');
-define('REPORTS', DB_PREFIX . 'reports');
-define('SESSIONS', DB_PREFIX . 'sessions');
-define('SETTINGS', DB_PREFIX . 'settings');
-define('SHIPS', DB_PREFIX . 'ships');
-define('USERS', DB_PREFIX . 'users');
-define('USERS_STATISTICS', DB_PREFIX . 'users_statistics');
+define('ACS', '{xgp_prefix}acs');
+define('ACS_MEMBERS', '{xgp_prefix}acs_members');
+define('ALLIANCE', '{xgp_prefix}alliance');
+define('ALLIANCE_STATISTICS', '{xgp_prefix}alliance_statistics');
+define('BANNED', '{xgp_prefix}banned');
+define('BUDDY', '{xgp_prefix}buddys');
+define('BUILDINGS', '{xgp_prefix}buildings');
+define('CHANGELOG', '{xgp_prefix}changelog');
+define('DEFENSES', '{xgp_prefix}defenses');
+define('FLEETS', '{xgp_prefix}fleets');
+define('LANGUAGES', '{xgp_prefix}languages');
+define('MESSAGES', '{xgp_prefix}messages');
+define('NOTES', '{xgp_prefix}notes');
+define('OPTIONS', '{xgp_prefix}options');
+define('PLANETS', '{xgp_prefix}planets');
+define('PREFERENCES', '{xgp_prefix}preferences');
+define('PREMIUM', '{xgp_prefix}premium');
+define('RESEARCH', '{xgp_prefix}research');
+define('REPORTS', '{xgp_prefix}reports');
+define('SESSIONS', '{xgp_prefix}sessions');
+define('SHIPS', '{xgp_prefix}ships');
+define('USERS', '{xgp_prefix}users');
+define('USERS_STATISTICS', '{xgp_prefix}users_statistics');
 
 // FOR MAILING
 $charset = 'UTF-8';
 ini_set('default_charset', $charset);
 
 if (extension_loaded('mbstring')) {
-    define('MB_ENABLED', TRUE);
+    define('MB_ENABLED', true);
     // mbstring.internal_encoding is deprecated starting with PHP 5.6
     // and it's usage triggers E_DEPRECATED messages.
     @ini_set('mbstring.internal_encoding', $charset);
@@ -238,18 +263,18 @@ if (extension_loaded('mbstring')) {
     // That's utilized by CI_Utf8, but it's also done for consistency with iconv.
     mb_substitute_character('none');
 } else {
-    define('MB_ENABLED', FALSE);
+    define('MB_ENABLED', false);
 }
 
 // There's an ICONV_IMPL constant, but the PHP manual says that using
 // iconv's predefined constants is "strongly discouraged".
 if (extension_loaded('iconv')) {
-    define('ICONV_ENABLED', TRUE);
+    define('ICONV_ENABLED', true);
     // iconv.internal_encoding is deprecated starting with PHP 5.6
     // and it's usage triggers E_DEPRECATED messages.
     @ini_set('iconv.internal_encoding', $charset);
 } else {
-    define('ICONV_ENABLED', FALSE);
+    define('ICONV_ENABLED', false);
 }
 
 /* end of constants.php */

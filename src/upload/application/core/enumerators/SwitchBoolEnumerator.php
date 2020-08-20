@@ -2,7 +2,7 @@
 /**
  * Switch Bool enumerator
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Library
  * @package  Application
@@ -25,10 +25,8 @@ namespace application\core\enumerators;
  */
 abstract class SwitchBoolEnumerator
 {
-
     const on = true;
     const off = false;
-
 }
 
 /* end of SwitchBoolEnumerator.php */

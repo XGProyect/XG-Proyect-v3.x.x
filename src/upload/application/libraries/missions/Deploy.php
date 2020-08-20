@@ -1,8 +1,11 @@
 <?php
+
+declare (strict_types = 1);
+
 /**
  * Deploy Library
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Library
  * @package  Application
@@ -13,9 +16,11 @@
  */
 namespace application\libraries\missions;
 
-use application\libraries\FleetsLib;
-use application\libraries\FormatLib;
-use application\libraries\FunctionsLib;
+use application\helpers\StringsHelper;
+use application\libraries\FleetsLib as Fleets;
+use application\libraries\FormatLib as Format;
+use application\libraries\FunctionsLib as Functions;
+use application\libraries\missions\Missions;
 
 /**
  * Deploy Class
@@ -25,70 +30,117 @@ use application\libraries\FunctionsLib;
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
- * @version  3.0.0
+ * @version  3.1.0
  */
 class Deploy extends Missions
 {
-
     /**
-     * __construct
-     *
-     * @return void
+     * Constructor
      */
     public function __construct()
     {
         parent::__construct();
+
+        // load Language
+        parent::loadLang(['game/missions', 'game/deploy']);
     }
 
     /**
-     * deployMission
+     * Deploy mission - move fleets from one planet to another
      *
-     * @param array $fleet_row Fleet row
-     *
+     * @param array $fleet
      * @return void
      */
-    public function deployMission($fleet_row)
+    public function deployMission(array $fleet): void
     {
-        if ($fleet_row['fleet_mess'] == 0) {
+        // by default we send ships to the target
+        $start_planet = false;
 
-            if ($fleet_row['fleet_start_time'] <= time()) {
+        // do mission
+        if (parent::canStartMission($fleet)) {
+            // message
+            $this->sendDeploymentMessage($fleet);
+        } elseif (parent::canCompleteMission($fleet)) {
+            // in this case, complete mission = cancel mission,
+            // since deployment can only go one way, except if the fleet it's returned
+            $start_planet = true;
 
-                $target_coords = sprintf(
-                    $this->langs['sys_adress_planet'], $fleet_row['fleet_end_galaxy'], $fleet_row['fleet_end_system'], $fleet_row['fleet_end_planet']
-                );
-
-                $target_resources = sprintf(
-                    $this->langs['sys_stay_mess_goods'], $this->langs['Metal'], FormatLib::prettyNumber($fleet_row['fleet_resource_metal']), $this->langs['Crystal'], FormatLib::prettyNumber($fleet_row['fleet_resource_crystal']), $this->langs['Deuterium'], FormatLib::prettyNumber($fleet_row['fleet_resource_deuterium'])
-                );
-
-                $target_message = $this->langs['sys_stay_mess_start'] . "<a href=\"game.php?page=galaxy&mode=3&galaxy=" .
-                    $fleet_row['fleet_end_galaxy'] . "&system=" . $fleet_row['fleet_end_system'] . "\">";
-                $target_message .= $target_coords . "</a>" . $this->langs['sys_stay_mess_end'] .
-                    "<br />" . $target_resources;
-
-                FunctionsLib::sendMessage(
-                    $fleet_row['fleet_target_owner'], '', $fleet_row['fleet_start_time'], 5, $this->langs['sys_mess_qg'], $this->langs['sys_stay_mess_stay'], $target_message
-                );
-
-                parent::restoreFleet($fleet_row, false);
-                parent::removeFleet($fleet_row['fleet_id']);
-            }
-        } else {
-
-            if ($fleet_row['fleet_end_time'] <= time()) {
-
-                $message = sprintf(
-                    $this->langs['sys_tran_mess_user'], '', FleetsLib::targetLink($fleet_row, ''), FormatLib::prettyNumber($fleet_row['fleet_resource_metal']), $this->langs['Metal'], FormatLib::prettyNumber($fleet_row['fleet_resource_crystal']), $this->langs['Crystal'], FormatLib::prettyNumber($fleet_row['fleet_resource_deuterium']), $this->langs['Deuterium']
-                );
-
-                FunctionsLib::sendMessage(
-                    $fleet_row['fleet_owner'], '', $fleet_row['fleet_end_time'], 5, $this->langs['sys_mess_qg'], $this->langs['sys_mess_fleetback'], $message
-                );
-
-                parent::restoreFleet($fleet_row, true);
-                parent::removeFleet($fleet_row['fleet_id']);
-            }
+            // message
+            $this->sendReturnMessage($fleet);
         }
+
+        // transfer the ships to the planet
+        parent::restoreFleet($fleet, $start_planet);
+        parent::removeFleet($fleet['fleet_id']);
+    }
+
+    /**
+     * Send a deploymeny message to the fleet owner
+     *
+     * @param array $fleet
+     * @return void
+     */
+    private function sendDeploymentMessage(array $fleet): void
+    {
+        // send message
+        Functions::sendMessage(
+            $fleet['fleet_owner'],
+            '',
+            $fleet['fleet_start_time'],
+            5,
+            $this->langs->line('mi_fleet_command'),
+            $this->langs->line('dep_report_title'),
+            StringsHelper::parseReplacements($this->langs->line('dep_report_deployed'), [
+                $fleet['planet_start_name'],
+                Fleets::startLink($fleet, ''),
+                $fleet['planet_end_name'],
+                Fleets::targetLink($fleet, ''),
+                Format::prettyNumber($fleet['fleet_resource_metal']),
+                Format::prettyNumber($fleet['fleet_resource_crystal']),
+                Format::prettyNumber($fleet['fleet_resource_deuterium']),
+            ])
+        );
+    }
+
+    /**
+     * Send a message informing that the fleet is back
+     *
+     * @param array $fleet
+     * @return void
+     */
+    private function sendReturnMessage(array $fleet): void
+    {
+        $text = $this->langs->line('dep_report_back');
+        $replacements = [
+            $fleet['planet_end_name'],
+            Fleets::targetLink($fleet, ''),
+            $fleet['planet_start_name'],
+            Fleets::startLink($fleet, ''),
+        ];
+
+        if (Fleets::hasResources($fleet)) {
+            $text = $this->langs->line('dep_report_deployed');
+            $replacements = [
+                $fleet['planet_end_name'],
+                Fleets::targetLink($fleet, ''),
+                $fleet['planet_start_name'],
+                Fleets::startLink($fleet, ''),
+                Format::prettyNumber($fleet['fleet_resource_metal']),
+                Format::prettyNumber($fleet['fleet_resource_crystal']),
+                Format::prettyNumber($fleet['fleet_resource_deuterium']),
+            ];
+        }
+
+        // send message
+        Functions::sendMessage(
+            $fleet['fleet_owner'],
+            '',
+            $fleet['fleet_end_time'],
+            5,
+            $this->langs->line('mi_fleet_command'),
+            $this->langs->line('dep_report_title'),
+            StringsHelper::parseReplacements($text, $replacements)
+        );
     }
 }
 

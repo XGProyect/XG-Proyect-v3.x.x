@@ -1,0 +1,10 @@
+{
+    "require-dev": {
+        "bartlett/php-compatinfo": "^5.3"
+    },
+    "scripts": {
+        "phpcompatinfo": [
+            "vendor/bin/phpcompatinfo analyser:run ./src"
+        ]
+    }
+}

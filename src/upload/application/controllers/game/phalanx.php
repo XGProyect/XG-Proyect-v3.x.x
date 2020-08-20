@@ -2,7 +2,7 @@
 /**
  * Phalanx Controller
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Controller
  * @package  Application
@@ -14,7 +14,7 @@
 namespace application\controllers\game;
 
 use application\core\Controller;
-use application\core\Database;
+use application\core\enumerators\PlanetTypesEnumerator;
 use application\libraries\FleetsLib;
 use application\libraries\FunctionsLib;
 
@@ -33,7 +33,6 @@ class Phalanx extends Controller
 
     const MODULE_ID = 11;
 
-    private $_lang;
     private $_formula;
     private $_current_user;
     private $_current_planet;
@@ -48,26 +47,20 @@ class Phalanx extends Controller
         // check if session is active
         parent::$users->checkSession();
 
+        // load Model
+        parent::loadModel('game/phalanx');
+
+        // load Language
+        parent::loadLang('game/phalanx');
+
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
-        $this->_db = new Database();
-        $this->_lang = parent::$lang;
         $this->_current_user = parent::$users->getUserData();
         $this->_current_planet = parent::$users->getPlanetData();
         $this->_formula = FunctionsLib::loadLibrary('FormulaLib');
 
         $this->build_page();
-    }
-
-    /**
-     * method __destruct
-     * param
-     * return close db connection
-     */
-    public function __destruct()
-    {
-        $this->_db->closeConnection();
     }
 
     /**
@@ -77,7 +70,7 @@ class Phalanx extends Controller
      */
     private function build_page()
     {
-        $parse = $this->_lang;
+        $parse = $this->langs->language;
         /* range */
         $radar_limit_inf = $this->_current_planet['planet_system'] - $this->_formula->phalanxRange($this->_current_planet['building_phalanx']);
         $radar_limit_sup = $this->_current_planet['planet_system'] + $this->_formula->phalanxRange($this->_current_planet['building_phalanx']);
@@ -90,54 +83,35 @@ class Phalanx extends Controller
         $Planet = (int) $_GET['planet'];
         $PlType = (int) $_GET['planettype'];
         /* cheater detection */
-        if ($System < $radar_limit_inf or $System > $radar_limit_sup or $Galaxy != $this->_current_planet['planet_galaxy'] or $PlType != 1 or $this->_current_planet['planet_type'] != 3) {
+        if ($System < $radar_limit_inf or $System > $radar_limit_sup or $Galaxy != $this->_current_planet['planet_galaxy'] or $PlType != PlanetTypesEnumerator::PLANET or $this->_current_planet['planet_type'] != PlanetTypesEnumerator::MOON) {
             FunctionsLib::redirect('game.php?page=galaxy');
         }
 
         $TargetName = '';
 
         /* main page */
-        if ($this->_current_planet['planet_deuterium'] > 10000) {
-            $this->_db->query("UPDATE " . PLANETS . " SET
-            						`planet_deuterium` = `planet_deuterium` - '10000'
-            						WHERE `planet_id` = '" . $this->_current_user['user_current_planet'] . "';");
+        if ($this->_current_planet['planet_deuterium'] >= 10000) {
+            $this->Phalanx_Model->reduceDeuterium($this->_current_user['user_current_planet']);
 
-            $TargetInfo = $this->_db->queryFetch("SELECT `planet_name`, `planet_user_id`
-            												FROM " . PLANETS . "
-            												WHERE `planet_galaxy` = '" . $Galaxy . "' AND
-            														`planet_system` = '" . $System . "' AND
-            														`planet_planet` = '" . $Planet . "' AND
-            														`planet_type` = 1");
+            $target_planet_info = $this->Phalanx_Model->getTargetPlanetIdAndName($Galaxy, $System, $Planet);
 
-            $TargetID = $TargetInfo['planet_user_id'];
-            $TargetName = $TargetInfo['planet_name'];
-            $TargetInfo = $this->_db->queryFetch("SELECT `planet_destroyed`
-            												FROM " . PLANETS . "
-            												WHERE `planet_galaxy` = '" . $Galaxy . "' AND
-            														`planet_system` = '" . $System . "' AND
-            														`planet_planet` = '" . $Planet . "' AND
-            														`planet_type` = 3 ");
+            $TargetID = $target_planet_info['planet_user_id'];
+            $TargetName = $target_planet_info['planet_name'];
+
+            $target_moon = $this->Phalanx_Model->getTargetMoonStatus($Galaxy, $System, $Planet);
+
             //if there isn't a moon,
-            if ($TargetInfo === false) {
+            if ($target_moon === false) {
                 $TargetMoonIsDestroyed = true;
             } else {
-                $TargetMoonIsDestroyed = $TargetInfo['planet_destroyed'] !== 0;
+                $TargetMoonIsDestroyed = (isset($target_moon['planet_destroyed']) && $target_moon['planet_destroyed'] !== 0);
             }
 
-
-            $FleetToTarget = $this->_db->query("SELECT *
-            										FROM " . FLEETS . "
-            										WHERE ( ( `fleet_start_galaxy` = '" . $Galaxy . "' AND
-            													`fleet_start_system` = '" . $System . "' AND
-            													`fleet_start_planet` = '" . $Planet . "' ) OR
-            												( `fleet_end_galaxy` = '" . $Galaxy . "' AND
-            													`fleet_end_system` = '" . $System . "' AND
-            													`fleet_end_planet` = '" . $Planet . "' )
-            											   ) ;");
+            $FleetToTarget = $this->Phalanx_Model->getFleetsToTarget($Galaxy, $System, $Planet);
 
             $Record = 0;
-            $fpage = array();
-            while ($FleetRow = $this->_db->fetchArray($FleetToTarget)) {
+            $fpage = [];
+            foreach ($FleetToTarget as $FleetRow) {
                 $Record++;
 
                 $ArrivetoTargetTime = $FleetRow['fleet_start_time'];
@@ -192,20 +166,31 @@ class Phalanx extends Controller
             }
             ksort($fpage);
             $Fleets = '';
-            foreach ($fpage as $FleetTime => $FleetContent)
+            foreach ($fpage as $FleetTime => $FleetContent) {
                 $Fleets .= $FleetContent . "\n";
+            }
 
             $parse['phl_fleets_table'] = $Fleets;
-            $parse['phl_er_deuter'] = "";
-        } else
-            $parse['phl_er_deuter'] = $this->_lang['px_no_deuterium'];
+            $parse['phl_er_deuter'] = '';
+        } else {
+            $parse['phl_fleets_table'] = '';
+            $parse['phl_er_deuter'] = $this->langs->line('px_no_deuterium');
+        }
 
         $parse['phl_pl_galaxy'] = $Galaxy;
         $parse['phl_pl_system'] = $System;
         $parse['phl_pl_place'] = $Planet;
         $parse['phl_pl_name'] = $TargetName;
 
-        parent::$page->display(parent::$page->parseTemplate(parent::$page->getTemplate('galaxy/phalanx_body'), $parse), false, '', false);
+        parent::$page->display(
+            $this->getTemplate()->set(
+                'galaxy/phalanx_body',
+                $parse
+            ),
+            false,
+            '',
+            false
+        );
     }
 }
 

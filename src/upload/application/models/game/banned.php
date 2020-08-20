@@ -1,8 +1,8 @@
 <?php
 /**
- * Alliance Model
+ * Banned Model
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Model
  * @package  Application
@@ -13,8 +13,10 @@
  */
 namespace application\models\game;
 
+use application\core\Model;
+
 /**
- * Alliance Class
+ * Banned Class
  *
  * @category Classes
  * @package  Application
@@ -23,43 +25,21 @@ namespace application\models\game;
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-class Banned
+class Banned extends Model
 {
-
-    private $db = null;
-
-    /**
-     * __construct()
-     */
-    public function __construct($db)
-    {
-        // use this to make queries
-        $this->db = $db;
-    }
-
-    /**
-     * __destruct
-     * 
-     * @return void
-     */
-    public function __destruct()
-    {
-        $this->db->closeConnection();
-    }
-
     /**
      * Get banned users
-     * 
+     *
      * @return array
      */
     public function getBannedUsers()
     {
         return $this->db->queryFetchAll(
-                "SELECT *
+            "SELECT *
             FROM " . BANNED . "
             ORDER BY `banned_id`;"
         );
     }
 }
 
-/* end of buildings.php */
+/* end of banned.php */

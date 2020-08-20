@@ -2,7 +2,7 @@
 /**
  * Info Controller
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Controller
  * @package  Application
@@ -27,23 +27,15 @@ use application\core\Controller;
  */
 class Info extends Controller
 {
-
-    /**
-     *
-     * @var array Language data
-     */
-    private $_lang;
-
     /**
      * Constructor
-     * 
-     * @return void
      */
     public function __construct()
     {
         parent::__construct();
 
-        $this->_lang = $this->getLang();
+        // load Language
+        parent::loadLang('ajax/info');
 
         // build the page
         $this->buildPage();
@@ -51,13 +43,16 @@ class Info extends Controller
 
     /**
      * Build the page
-     * 
+     *
      * @return void
      */
     private function buildPage()
     {
         parent::$page->display(
-            $this->getTemplate()->set('ajax/info_view', $this->_lang), false, '', false
+            $this->getTemplate()->set('ajax/info_view', $this->langs->language),
+            false,
+            '',
+            false
         );
     }
 }

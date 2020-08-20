@@ -2,7 +2,7 @@
 /**
  * Buildings Model
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Model
  * @package  Application
@@ -12,6 +12,8 @@
  * @version  3.0.4
  */
 namespace application\models\game;
+
+use application\core\Model;
 
 /**
  * Buildings Class
@@ -23,46 +25,21 @@ namespace application\models\game;
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-class Buildings
+class Buildings extends Model
 {
-
-    private $db = null;
-
     /**
-     * __construct()
-     */
-    public function __construct($db)
-    {
-        // use this to make queries
-        $this->db = $db;
-    }
-
-    /**
-     * __destruct
-     * 
+     * Insert a new building queue and deduct resources
+     *
+     * @param array $planet
      * @return void
      */
-    public function __destruct()
-    {
-        $this->db->closeConnection();
-    }
-
-    /**
-     * Insert a new building queue
-     * 
-     * @param type $building_id
-     * @param type $queue
-     * @param type $planet_id
-     * 
-     * @return void
-     */
-    public function updatePlanetBuildingQueue($queue, $building_id, $planet_id)
+    public function updatePlanetBuildingQueue(array $planet): void
     {
         $this->db->query(
-            "UPDATE " . PLANETS . " SET
-                `planet_b_building_id` = '" . $queue . "',
-                `planet_b_building` = '" . $building_id . "'
-            WHERE `planet_id` = '" . $planet_id . "';"
+            "UPDATE `" . PLANETS . "` SET
+                `planet_b_building` = '" . $planet['planet_b_building'] . "',
+                `planet_b_building_id` = '" . $planet['planet_b_building_id'] . "'
+            WHERE `planet_id` = '" . $planet['planet_id'] . "';"
         );
     }
 }

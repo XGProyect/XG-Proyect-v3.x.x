@@ -2,7 +2,7 @@
 /**
  * Movement Controller
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Controller
  * @package  Application
@@ -14,10 +14,16 @@
 namespace application\controllers\game;
 
 use application\core\Controller;
-use application\core\Database;
+use application\core\entities\FleetEntity;
+use application\core\enumerators\MissionsEnumerator as Missions;
+use application\helpers\UrlHelper;
 use application\libraries\FleetsLib;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
+use application\libraries\game\Fleets;
+use application\libraries\premium\Premium;
+use application\libraries\research\Researches;
+use application\libraries\TimingLibrary as Timing;
 
 /**
  * Movement Class
@@ -32,13 +38,44 @@ use application\libraries\FunctionsLib;
 class Movement extends Controller
 {
 
-    const MODULE_ID = 9;
-
-    private $_lang;
-    private $_current_user;
+    /**
+     *
+     * @var int
+     */
+    const MODULE_ID = 8;
 
     /**
-     * __construct()
+     *
+     * @var string
+     */
+    const REDIRECT_TARGET = 'game.php?page=movement';
+
+    /**
+     *
+     * @var array
+     */
+    private $user;
+
+    /**
+     *
+     * @var \Fleets
+     */
+    private $fleets = null;
+
+    /**
+     *
+     * @var \Research
+     */
+    private $research = null;
+
+    /**
+     *
+     * @var \Premium
+     */
+    private $premium = null;
+
+    /**
+     * Constructor
      */
     public function __construct()
     {
@@ -47,216 +84,256 @@ class Movement extends Controller
         // check if session is active
         parent::$users->checkSession();
 
+        // load Model
+        parent::loadModel('game/fleet');
+
+        // load Language
+        parent::loadLang(['game/missions', 'game/ships', 'game/fleet']);
+
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
-        $this->_db = new Database();
-        $this->_lang = parent::$lang;
-        $this->_current_user = parent::$users->getUserData();
+        // set data
+        $this->user = $this->getUserData();
 
-        $this->send_back_fleet();
-        $this->build_page();
+        // init a new fleets object
+        $this->setUpFleets();
+
+        // time to do something
+        $this->runAction();
+
+        // build the page
+        $this->buildPage();
     }
 
     /**
-     * method __destruct
-     * param
-     * return close db connection
+     * Creates a new ships object that will handle all the ships
+     * creation methods and actions
+     *
+     * @return void
      */
-    public function __destruct()
+    private function setUpFleets()
     {
-        $this->_db->closeConnection();
+        $this->fleets = new Fleets(
+            $this->Fleet_Model->getAllFleetsByUserId($this->user['user_id']),
+            $this->user['user_id']
+        );
+
+        $this->research = new Researches(
+            [$this->user],
+            $this->user['user_id']
+        );
+
+        $this->premium = new Premium(
+            [$this->user],
+            $this->user['user_id']
+        );
     }
 
     /**
-     * method build_page
-     * param
-     * return main method, loads everything
+     * Run an action
+     *
+     * @return void
      */
-    private function build_page()
+    private function runAction()
     {
-        #####################################################################################################
-        // SOME DEFAULT VALUES
-        #####################################################################################################
-        //	ELEMENTS
-        $resource = parent::$objects->getObjects();
+        $fleet_action = filter_input(INPUT_GET, 'action');
 
-        // QUERYS
-        $count = $this->_db->queryFetch("SELECT
-															(SELECT COUNT(fleet_owner) AS `actcnt`
-																FROM " . FLEETS . "
-																WHERE `fleet_owner` = '" . $this->_current_user['user_id'] . "') AS max_fleet,
-															(SELECT COUNT(fleet_owner) AS `expedi`
-																FROM " . FLEETS . "
-																WHERE `fleet_owner` = '" . $this->_current_user['user_id'] . "'
-																	AND `fleet_mission` = '15') AS max_expeditions");
-
-        // LANGUAGE
-        $this->_lang['js_path'] = JS_PATH;
-        $parse = $this->_lang;
-
-        $MaxFlyingFleets = $count['max_fleet'];
-        $MaxExpedition = $this->_current_user[$resource[124]];
-
-        if ($MaxExpedition >= 1) {
-            $ExpeditionEnCours = $count['max_expeditions'];
-            $EnvoiMaxExpedition = FleetsLib::getMaxExpeditions($MaxExpedition);
-        } else {
-            $ExpeditionEnCours = 0;
-            $EnvoiMaxExpedition = 0;
+        if (in_array($fleet_action, ['return'])) {
+            $this->{'execFleet' . ucfirst($fleet_action)}();
         }
+    }
 
-        $MaxFlottes = FleetsLib::getMaxFleets($this->_current_user[$resource[108]], $this->_current_user['premium_officier_admiral']);
-        $missiontype = FleetsLib::getMissions();
-        $ShipData = '';
+    /**
+     * Build the page
+     *
+     * @return void
+     */
+    private function buildPage()
+    {
+        /**
+         * Parse the items
+         */
+        $page = [
+            'js_path' => JS_PATH,
+            'fleets' => $this->fleets->getFleetsCount(),
+            'max_fleets' => FleetsLib::getMaxFleets(
+                $this->research->getCurrentResearch()->getResearchComputerTechnology(),
+                $this->premium->getCurrentPremium()->getPremiumOfficierAdmiral()
+            ),
+            'expeditions' => $this->fleets->getExpeditionsCount(),
+            'max_expeditions' => FleetsLib::getMaxExpeditions(
+                $this->research->getCurrentResearch()->getResearchAstrophysics()
+            ),
+            'list_of_movements' => $this->buildMovements(),
+        ];
 
-        $parse['flyingfleets'] = $MaxFlyingFleets;
-        $parse['maxfleets'] = $MaxFlottes;
-        $parse['currentexpeditions'] = $ExpeditionEnCours;
-        $parse['maxexpeditions'] = $EnvoiMaxExpedition;
-        $i = 0;
-        $flying_fleets = '';
+        // display the page
+        parent::$page->display(
+            $this->getTemplate()->set(
+                'game/movements_view',
+                array_merge(
+                    $this->langs->language,
+                    $page
+                )
+            )
+        );
+    }
 
-        if ($count['max_fleet'] <> 0 or $MaxExpedition <> 0) {
+    /**
+     * Build the list of movements
+     *
+     * @return array
+     */
+    private function buildMovements(): array
+    {
+        $list_of_movements[] = [
+            'num' => '-',
+            'fleet_mission' => '-',
+            'title' => '',
+            'fleet_amount' => '-',
+            'fleet_start' => '-',
+            'fleet_start_time' => '-',
+            'fleet_end' => '-',
+            'fleet_end_time' => '-',
+            'fleet_arrival' => '-',
+            'fleet_actions' => '-',
+        ];
 
-            $fq = $this->_db->query("SELECT *
-										FROM " . FLEETS . "
-										WHERE fleet_owner = '" . $this->_current_user['user_id'] . "'");
+        if ($this->fleets->getFleetsCount() > 0) {
+            // reset
+            unset($list_of_movements);
 
-            while ($f = $this->_db->fetchArray($fq)) {
-                $i++;
+            $fleet_count = 0;
 
-                $parse['num'] = $i;
-                $parse['fleet_mission'] = $missiontype[$f['fleet_mission']];
-
-                if (FleetsLib::isFleetReturning($f)) {
-                    $parse['tooltip'] = $this->_lang['fl_returning'];
-                    $parse['title'] = $this->_lang['fl_r'];
-                } else {
-                    $parse['tooltip'] = $this->_lang['fl_onway'];
-                    $parse['title'] = $this->_lang['fl_a'];
-                }
-
-                $fleet = explode(";", $f['fleet_array']);
-                $e = 0;
-                $parse['fleet'] = '';
-
-                foreach ($fleet as $a => $b) {
-                    if ($b != '') {
-                        $e++;
-                        $a = explode(",", $b);
-                        $parse['fleet'] .= $this->_lang['tech'][$a[0]] . ":" . $a[1] . "\n";
-
-                        if ($e > 1) {
-                            $parse['fleet'] .= "\t";
-                        }
-                    }
-                }
-
-                $parse['fleet_amount'] = FormatLib::prettyNumber($f['fleet_amount']);
-                $parse['fleet_start'] = FormatLib::prettyCoords($f['fleet_start_galaxy'], $f['fleet_start_system'], $f['fleet_start_planet']);
-                $parse['fleet_start_time'] = date(FunctionsLib::readConfig('date_format_extended'), $f['fleet_creation']);
-                $parse['fleet_end'] = FormatLib::prettyCoords($f['fleet_end_galaxy'], $f['fleet_end_system'], $f['fleet_end_planet']);
-                $parse['fleet_end_time'] = date(FunctionsLib::readConfig('date_format_extended'), $f['fleet_start_time']);
-                $parse['fleet_arrival'] = date(FunctionsLib::readConfig('date_format_extended'), $f['fleet_end_time']);
-
-                //now we can view the call back button for ships in maintaing position (2)
-                if ($f['fleet_mess'] == 0 or $f['fleet_mess'] == 2) {
-                    $parse['inputs'] = '<form action="game.php?page=movement&action=return" method="post">';
-                    $parse['inputs'] .= '<input name="fleetid" value="' . $f['fleet_id'] . '" type="hidden">';
-                    $parse['inputs'] .= '<input value="' . $this->_lang['fl_send_back'] . '" type="submit" name="send">';
-                    $parse['inputs'] .= '</form>';
-
-                    if ($f['fleet_mission'] == 1) {
-                        $parse['inputs'] .= '<a href="#" onClick="f(\'game.php?page=federationlayer&union=' . $f['fleet_group'] . '&fleet=' . $f['fleet_id'] . '\', \'\')">';
-                        $parse['inputs'] .= '<input value="' . $this->_lang['fl_acs'] . '" type="button">';
-                        $parse['inputs'] .= '</a>';
-                    }
-                } else {
-                    $parse['inputs'] = '&nbsp;-&nbsp;';
-                }
-
-                $flying_fleets .= parent::$page->parseTemplate(parent::$page->getTemplate('movement/fleet_row_fleets'), $parse);
+            foreach ($this->fleets->getFleets() as $fleet) {
+                $list_of_movements[] = [
+                    'num' => ++$fleet_count,
+                    'fleet_mission' => $this->langs->language['type_mission'][$fleet->getFleetMission()],
+                    'title' => $this->buildTitleBlock($fleet->getFleetMess()),
+                    'tooltip' => $this->buildToolTipBlock($fleet->getFleetMess()),
+                    'fleet_amount' => FormatLib::prettyNumber($fleet->getFleetAmount()),
+                    'fleet' => $this->buildShipsBlock($fleet->getFleetArray()),
+                    'fleet_start' => FormatLib::prettyCoords(
+                        $fleet->getFleetStartGalaxy(),
+                        $fleet->getFleetStartSystem(),
+                        $fleet->getFleetStartPlanet()
+                    ),
+                    'fleet_start_time' => Timing::formatExtendedDate($fleet->getFleetCreation()),
+                    'fleet_end' => FormatLib::prettyCoords(
+                        $fleet->getFleetEndGalaxy(),
+                        $fleet->getFleetEndSystem(),
+                        $fleet->getFleetEndPlanet()
+                    ),
+                    'fleet_end_time' => Timing::formatExtendedDate($fleet->getFleetStartTime()),
+                    'fleet_arrival' => Timing::formatExtendedDate($fleet->getFleetEndTime()),
+                    'fleet_actions' => $this->buildActionsBlock($fleet),
+                ];
             }
         }
 
-        if ($i == 0) {
-            $parse['num'] = '-';
-            $parse['fleet_mission'] = '-';
-            $parse['title'] = '';
-            $parse['fleet_amount'] = '-';
-            $parse['fleet_start'] = '-';
-            $parse['fleet_start_time'] = '-';
-            $parse['fleet_end'] = '-';
-            $parse['fleet_end_time'] = '-';
-            $parse['fleet_arrival'] = '-';
-            $parse['inputs'] = '-';
-
-            $flying_fleets .= parent::$page->parseTemplate(parent::$page->getTemplate('movement/fleet_row_fleets'), $parse);
-        }
-
-        $parse['fleetpagerow'] = $flying_fleets;
-        $parse['envoimaxexpedition'] = $EnvoiMaxExpedition;
-        $parse['expeditionencours'] = $ExpeditionEnCours;
-
-        parent::$page->display(parent::$page->parseTemplate(parent::$page->getTemplate('movement/fleet_table'), $parse));
+        return $list_of_movements;
     }
 
     /**
-     * method send_back_fleet
-     * param
-     * returns the fleet to the planet
+     * Build the title block
+     *
+     * @param int $fleet_mess Fleet Mess
+     *
+     * @return array
      */
-    private function send_back_fleet()
+    private function buildTitleBlock(int $fleet_mess): string
     {
-        //echo $_POST['fleetid'];
-        //echo $_GET['action'];
-        //die();
-        if (( isset($_POST['fleetid']) ) && ( is_numeric($_POST['fleetid']) ) && ( isset($_GET['action']) ) && ( $_GET['action'] == 'return' )) {
+        if (FleetsLib::isFleetReturning($fleet_mess)) {
+            return $this->langs->line('fl_r');
+        }
 
+        return $this->langs->line('fl_a');
+    }
 
-            $fleet_id = (int) $_POST['fleetid'];
-            $i = 0;
-            $fleet_row = $this->_db->queryFetch("SELECT *
-														FROM " . FLEETS . "
-														WHERE `fleet_id` = '" . $fleet_id . "';");
+    /**
+     * Build the topltip block
+     *
+     * @param int $fleet_mess Fleet Mess
+     *
+     * @return array
+     */
+    private function buildToolTipBlock(int $fleet_mess): string
+    {
+        if (FleetsLib::isFleetReturning($fleet_mess)) {
+            return $this->langs->line('fl_returning');
+        }
 
-            if ($fleet_row['fleet_owner'] == $this->_current_user['user_id']) {
-                if ($fleet_row['fleet_mess'] == 0 or $fleet_row['fleet_mess'] == 2) {
-                    if ($fleet_row['fleet_group'] > 0) {
-                        $acs = $this->_db->queryFetch("SELECT `acs_fleet_members`
-																FROM `" . ACS_FLEETS . "`
-																WHERE `acs_fleet_id` = '" . $fleet_row['fleet_group'] . "';");
+        return $this->langs->line('fl_onway');
+    }
 
-                        if ($acs['acs_fleet_members'] == $fleet_row['fleet_owner'] && $fleet_row['fleet_mission'] == 1) {
-                            $this->_db->query("DELETE FROM `" . ACS_FLEETS . "`
-													WHERE `acs_fleet_id` ='" . $fleet_row['fleet_group'] . "';");
+    /**
+     * Create the ships tool tip block
+     *
+     * @param string $fleet_array Fleet array
+     *
+     * @return string
+     */
+    private function buildShipsBlock(string $fleet_array): string
+    {
+        $objects = parent::$objects->getObjects();
+        $ships = FleetsLib::getFleetShipsArray($fleet_array);
+        $tooltips = [];
 
-                            $this->_db->query("UPDATE " . FLEETS . " SET
-													`fleet_group` = '0'
-													WHERE `fleet_group` = '" . $fleet_row['fleet_group'] . "';");
-                        }
+        foreach ($ships as $ship => $amount) {
+            $tooltips[] = $this->langs->language[$objects[$ship]] . ' :' . $amount;
+        }
 
-                        if ($fleet_row['fleet_mission'] == 2) {
-                            $this->_db->query("UPDATE " . FLEETS . " SET
-												`fleet_group` = '0'
-												WHERE `fleet_id` = '" . $fleet_id . "';");
-                        }
-                    }
+        return count($tooltips) > 0 ? join("\n", $tooltips) : '';
+    }
 
-                    $CurrentFlyingTime = time() - $fleet_row['fleet_creation'];
-                    $fleetLeght = $fleet_row['fleet_start_time'] - $fleet_row['fleet_creation'];
-                    $ReturnFlyingTime = ( $fleet_row['fleet_end_stay'] != 0 && $CurrentFlyingTime > $fleetLeght ) ? $fleetLeght + time() : $CurrentFlyingTime + time();
+    /**
+     * Build the list of actions block
+     *
+     * @param FleetEntity $fleet
+     *
+     * @return string
+     */
+    private function buildActionsBlock(FleetEntity $fleet): string
+    {
+        $actions = '-';
 
+        if ($fleet->getFleetMess() == 0) {
+            $actions = '<form action="game.php?page=movement&action=return" method="post">';
+            $actions .= '<input type="hidden" name="fleetid" value="' . $fleet->getFleetId() . '">';
+            $actions .= '<input type="submit" name="send" value="' . $this->langs->line('fl_send_back') . '">';
+            $actions .= '</form>';
 
-                    $this->_db->query("UPDATE " . FLEETS . " SET
-											`fleet_start_time` = '" . (time() - 1) . "',
-											`fleet_end_stay` = '0',
-											`fleet_end_time` = '" . ($ReturnFlyingTime + 1) . "',
-											`fleet_target_owner` = '" . $this->_current_user['user_id'] . "',
-											`fleet_mess` = '1'
-											WHERE `fleet_id` = '" . $fleet_id . "';");
-                }
+            if ($fleet->getFleetMission() == Missions::ATTACK) {
+                $content = '<input type="button" value="' . $this->langs->line('fl_acs') . '">';
+                $attributes = 'onClick="f(\'game.php?page=federationlayer&fleet=' . $fleet->getFleetId() . '\', \'\')"';
+
+                $actions .= UrlHelper::setUrl('#', $content, '', $attributes);
+            }
+        }
+
+        return $actions;
+    }
+
+    /**
+     * Execute the fleet return if possible
+     *
+     * @return void
+     */
+    private function execFleetReturn(): void
+    {
+        $fleet_id = filter_input(INPUT_POST, 'fleetid', FILTER_VALIDATE_INT);
+
+        if ($fleet_id) {
+            $fleet = $this->fleets->getOwnFleetById($fleet_id);
+
+            if (!is_null($fleet) && $fleet->getFleetMess() != 1) {
+                $this->Fleet_Model->returnFleet(
+                    $fleet,
+                    $this->user['user_id']
+                );
+
+                FunctionsLib::redirect(self::REDIRECT_TARGET);
             }
         }
     }

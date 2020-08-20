@@ -1,8 +1,11 @@
 <?php
+
+declare (strict_types = 1);
+
 /**
  * Premium Controller
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Controller
  * @package  Application
@@ -14,7 +17,7 @@
 namespace application\controllers\adm;
 
 use application\core\Controller;
-use application\libraries\adm\AdministrationLib;
+use application\libraries\adm\AdministrationLib as Administration;
 use application\libraries\FunctionsLib;
 
 /**
@@ -29,66 +32,116 @@ use application\libraries\FunctionsLib;
  */
 class Premium extends Controller
 {
-
-    private $_lang;
-    private $_current_user;
+    const PREMIUM_SETTINGS = [
+        'premium_url' => FILTER_VALIDATE_URL,
+        'merchant_price' => FILTER_VALIDATE_FLOAT,
+        'merchant_base_min_exchange_rate' => FILTER_VALIDATE_FLOAT,
+        'merchant_base_max_exchange_rate' => FILTER_VALIDATE_FLOAT,
+        'merchant_metal_multiplier' => FILTER_VALIDATE_FLOAT,
+        'merchant_crystal_multiplier' => FILTER_VALIDATE_FLOAT,
+        'merchant_deuterium_multiplier' => FILTER_VALIDATE_FLOAT,
+        'registration_dark_matter' => FILTER_VALIDATE_INT,
+    ];
 
     /**
-     * __construct()
+     * Current user data
+     *
+     * @var array
+     */
+    private $user;
+
+    /**
+     * Contains the alert string
+     *
+     * @var string
+     */
+    private $alert = '';
+
+    /**
+     * Constructor
      */
     public function __construct()
     {
         parent::__construct();
 
         // check if session is active
-        AdministrationLib::checkSession();
+        Administration::checkSession();
 
-        $this->_lang = parent::$lang;
-        $this->_current_user = parent::$users->getUserData();
+        // load Language
+        parent::loadLang(['adm/global', 'adm/premium']);
 
-        // Check if the user is allowed to access
-        if (AdministrationLib::haveAccess($this->_current_user['user_authlevel']) && AdministrationLib::authorization($this->_current_user['user_authlevel'], 'config_game') == 1) {
-            $this->build_page();
-        } else {
-            die(AdministrationLib::noAccessMessage($this->_lang['ge_no_permissions']));
+        // set data
+        $this->user = $this->getUserData();
+
+        // check if the user is allowed to access
+        if (!Administration::authorization(__CLASS__, (int) $this->user['user_authlevel'])) {
+            die(Administration::noAccessMessage($this->langs->line('no_permissions')));
+        }
+
+        // time to do something
+        $this->runAction();
+
+        // build the page
+        $this->buildPage();
+    }
+
+    /**
+     * Run an action
+     *
+     * @return void
+     */
+    private function runAction(): void
+    {
+        $data = filter_input_array(INPUT_POST, self::PREMIUM_SETTINGS);
+
+        if ($data) {
+            $data = array_diff($data, [null, false]);
+
+            foreach ($data as $option => $value) {
+                if ((is_numeric($value) && $value >= 0) or is_string($value)) {
+                    FunctionsLib::updateConfig($option, $value);
+                }
+            }
+
+            $this->alert = Administration::saveMessage('ok', $this->langs->line('pr_all_ok_message'));
         }
     }
 
     /**
-     * method build_page
-     * param
-     * return main method, loads everything
+     * Build the page
+     *
+     * @return void
      */
-    private function build_page()
+    private function buildPage(): void
     {
-        $parse = $this->_lang;
-        $parse['alert'] = '';
-        $error = '';
+        parent::$page->displayAdmin(
+            $this->getTemplate()->set(
+                'adm/premium_view',
+                array_merge(
+                    $this->langs->language,
+                    $this->getPremiumSettings(),
+                    [
+                        'alert' => $this->alert ?? '',
+                    ]
+                )
+            )
+        );
+    }
 
-        if (isset($_POST['save'])) {
-            if (isset($_POST['premium_url']) && !empty($_POST['premium_url'])) {
-                FunctionsLib::updateConfig('premium_url', FunctionsLib::prepUrl($_POST['premium_url']));
-            } else {
-                $error .= $this->_lang['pr_error_url'];
-            }
-
-            if (isset($_POST['trader_darkmatter']) && ( $_POST['trader_darkmatter'] > 0 )) {
-                FunctionsLib::updateConfig('trader_darkmatter', $_POST['trader_darkmatter']);
-            } else {
-                $error .= $this->_lang['pr_error_trader'];
-            }
-
-            if ($error != '') {
-                $parse['alert'] = AdministrationLib::saveMessage('warning', $error);
-            } else {
-                $parse['alert'] = AdministrationLib::saveMessage('ok', $this->_lang['pr_all_ok_message']);
-            }
-        }
-
-        $parse['premium_url'] = FunctionsLib::readConfig('premium_url');
-        $parse['trader_darkmatter'] = FunctionsLib::readConfig('trader_darkmatter');
-
-        parent::$page->display(parent::$page->parseTemplate(parent::$page->getTemplate('adm/premium_view'), $parse));
+    /**
+     * Get premium settings
+     *
+     * @return void
+     */
+    private function getPremiumSettings(): array
+    {
+        return array_filter(
+            FunctionsLib::readConfig('', true),
+            function ($key) {
+                return array_key_exists($key, self::PREMIUM_SETTINGS);
+            },
+            ARRAY_FILTER_USE_KEY
+        );
     }
 }
 

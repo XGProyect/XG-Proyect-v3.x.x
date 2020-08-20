@@ -2,7 +2,7 @@
 /**
  * Planet entity
  *
- * PHP Version 5.5+
+ * PHP Version 7.1+
  *
  * @category Core
  * @package  Application
@@ -13,8 +13,10 @@
  */
 namespace application\core\entities;
 
+use application\core\Entity;
+
 /**
- * Planet Class
+ * PlanetEntity Class
  *
  * @category Entity
  * @package  Core
@@ -23,381 +25,409 @@ namespace application\core\entities;
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-class PlanetEntity
+class PlanetEntity extends Entity
 {
 
     /**
+     * Constructor
      *
-     * @var array
+     * @param array $data Data
+     *
+     * @return void
      */
-    private $_planet = [];
-
-    /**
-     * Init with the current planet data
-     * 
-     * @param array $current_planet Current Planet
-     */
-    public function __construct($current_planet)
+    public function __construct($data)
     {
-        $this->setPlanet($current_planet);
+        parent::__construct($data);
     }
 
     /**
-     * Set the current planet
-     * 
-     * @param array $current_planet Current Planet
-     * @throws Exception
+     * Return the planet id
+     *
+     * @return integer
      */
-    private function setPlanet($current_planet)
+    public function getPlanetId(): int
     {
-        try {
-
-            if (!is_array($planet)) {
-                
-                return  null;
-            }
-
-            $this->_planet = $planet;
-        } catch (Exception $e) {
-
-            die('Caught exception: ' . $e->getMessage() . "\n");
-        }
+        return (int) $this->data['planet_id'];
     }
 
     /**
-     *  Return the planet id
+     * Return the planet name
+     *
+     * @return string
      */
-    public function getPlanetId()
+    public function getPlanetName(): string
     {
-        return $this->_planet['planet_id'];
+        return (string) $this->data['planet_name'];
     }
 
     /**
-     *  Return the planet name
+     * Return the planet user id
+     *
+     * @return integer
      */
-    public function getPlanetName()
+    public function getPlanetUserId(): int
     {
-        return $this->_planet['planet_name'];
+        return (int) $this->data['planet_user_id'];
     }
 
     /**
-     *  Return the planet user id
+     * Return the planet galaxy
+     *
+     * @return integer
      */
-    public function getPlanetUserId()
+    public function getPlanetGalaxy(): int
     {
-        return $this->_planet['planet_user_id'];
+        return (int) $this->data['planet_galaxy'];
     }
 
     /**
-     *  Return the planet galaxy
+     * Return the planet system
+     *
+     * @return integer
      */
-    public function getPlanetGalaxy()
+    public function getPlanetSystem(): int
     {
-        return $this->_planet['planet_galaxy'];
+        return (int) $this->data['planet_system'];
     }
 
     /**
-     *  Return the planet system
+     * Return the planet position
+     *
+     * @return integer
      */
-    public function getPlanetSystem()
+    public function getPlanetPosition(): int
     {
-        return $this->_planet['planet_system'];
+        return (int) $this->data['planet_planet'];
     }
 
     /**
-     *  Return the planet position
+     * Return the planet latest activity
+     *
+     * @return integer
      */
-    public function getPlanetPosition()
+    public function getPlanetLastUpdate(): int
     {
-        return $this->_planet['planet_planet'];
+        return (int) $this->data['planet_last_update'];
     }
 
     /**
-     *  Return the planet latest activity
+     * Return the planet type
+     *
+     * @return integer
      */
-    public function getPlanetLastUpdate()
+    public function getPlanetType(): int
     {
-        return $this->_planet['planet_last_update'];
-    }
-
-    /**
-     *  Return the planet type
-     */
-    public function getPlanetType()
-    {
-        return $this->_planet['planet_type'];
+        return (int) $this->data['planet_type'];
     }
 
     /**
      * Return the planet status
+     *
+     * @return integer
      */
-    public function getPlanetStatus()
+    public function getPlanetDestroyed(): int
     {
-        return $this->_planet['planet_destroyed'];
+        return (int) $this->data['planet_destroyed'];
     }
 
     /**
-     * Return the planet building Queue
+     * Return the planet building queue time
+     *
+     * @return integer
      */
-    public function getPlanetBuildingQueue()
+    public function getPlanetBuildingTime(): int
     {
-        return $this->_planet['planet_b_building'];
+        return (int) $this->data['planet_b_building'];
     }
 
     /**
-     * Return the planet current building ID
+     * Return the planet current building queue
+     *
+     * @return string
      */
-    public function getPlanetCurrentBuildingId()
+    public function getPlanetCurrentBuildingQueue(): string
     {
-        return $this->_planet['planet_b_building_id'];
+        return (string) $this->data['planet_b_building_id'];
     }
 
     /**
      * Return the planet technology queue
+     *
+     * @return integer
      */
-    public function getPlanetTechnologyQueue()
+    public function getPlanetTechnologyQueue(): int
     {
-        return $this->_planet['planet_b_tech'];
+        return (int) $this->data['planet_b_tech'];
     }
 
     /**
      * Return the planet current technology ID
+     *
+     * @return integer
      */
-    public function getPlanetCurrentTechnologyId()
+    public function getPlanetCurrentTechnologyId(): int
     {
-        return $this->_planet['planet_b_tech_id'];
+        return (int) $this->data['planet_b_tech_id'];
     }
 
     /**
      * Return the planet hangar queue
+     *
+     * @return integer
      */
-    public function getPlanetHangarQueue()
+    public function getPlanetHangarQueue(): int
     {
-        return $this->_planet['planet_b_hangar'];
+        return (int) $this->data['planet_b_hangar'];
     }
 
     /**
      * Return the planet current hangar ID
+     *
+     * @return string
      */
-    public function getPlanetCurrentHangarId()
+    public function getPlanetCurrentHangarId(): string
     {
-        return $this->_planet['planet_b_hangar_id'];
+        return (string) $this->data['planet_b_hangar_id'];
     }
 
     /**
      * Return the planet image
+     *
+     * @return string
      */
-    public function getPlanetImage()
+    public function getPlanetImage(): string
     {
-        return $this->_planet['planet_image'];
+        return (string) $this->data['planet_image'];
     }
 
     /**
      * Return the planet diameter
+     *
+     * @return integer
      */
-    public function getPlanetDiameter()
+    public function getPlanetDiameter(): int
     {
-        return $this->_planet['planet_diameter'];
+        return (int) $this->data['planet_diameter'];
     }
 
     /**
      * Return the planet busy fields
+     *
+     * @return integer
      */
-    public function getPlanetAmountOfOcuppiedFields()
+    public function getPlanetAmountOfOcuppiedFields(): int
     {
-        return $this->_planet['planet_field_current'];
+        return (int) $this->data['planet_field_current'];
     }
 
     /**
      * Return the planet maximum amount of fields
+     *
+     * @return integer
      */
-    public function getPlanetMaxAmountOfFields()
+    public function getPlanetMaxAmountOfFields(): int
     {
-        return $this->_planet['planet_field_max'];
+        return (int) $this->data['planet_field_max'];
     }
 
     /**
      * Return the planet minimum temperature
+     *
+     * @return integer
      */
-    public function getPlanetTempMin()
+    public function getPlanetTempMin(): int
     {
-        return $this->_planet['planet_temp_min'];
+        return (int) $this->data['planet_temp_min'];
     }
 
     /**
      * Return the planet maximum temperature
+     *
+     * @return integer
      */
-    public function getPlanetTempMax()
+    public function getPlanetTempMax(): int
     {
-        return $this->_planet['planet_temp_max'];
+        return (int) $this->data['planet_temp_max'];
     }
 
     /**
      * Return the planet current amount of metal
+     *
+     * @return float
      */
-    public function getPlanetAmountOfMetal()
+    public function getPlanetAmountOfMetal(): float
     {
-        return $this->_planet['planet_metal'];
+        return (float) $this->data['planet_metal'];
     }
 
     /**
      * Return the planet current metal production per hour
+     *
+     * @return integer
      */
-    public function getPlanetProductionPerHourMetal()
+    public function getPlanetProductionPerHourMetal(): int
     {
-        return $this->_planet['planet_metal_perhour'];
-    }
-
-    /**
-     * Return the planet metal capacity
-     */
-    public function getPlanetStorageCapacityMetal()
-    {
-        return $this->_planet['planet_metal_max'];
+        return (int) $this->data['planet_metal_perhour'];
     }
 
     /**
      * Return the planet current amount of crystal
+     *
+     * @return float
      */
-    public function getPlanetAmountOfCrystal()
+    public function getPlanetAmountOfCrystal(): float
     {
-        return $this->_planet['planet_crystal'];
+        return (float) $this->data['planet_crystal'];
     }
 
     /**
      * Return the planet current crystal production per hour
+     *
+     * @return integer
      */
-    public function getPlanetProductionPerHourCrystal()
+    public function getPlanetProductionPerHourCrystal(): int
     {
-        return $this->_planet['planet_crystal_perhour'];
-    }
-
-    /**
-     * Return the planet crystal capacity
-     */
-    public function getPlanetStorageCapacityCrystal()
-    {
-        return $this->_planet['planet_crystal_max'];
+        return (int) $this->data['planet_crystal_perhour'];
     }
 
     /**
      * Return the planet current amount of deuterium
+     *
+     * @return float
      */
-    public function getPlanetAmountOfDeuterium()
+    public function getPlanetAmountOfDeuterium(): float
     {
-        return $this->_planet['planet_deuterium'];
+        return (float) $this->data['planet_deuterium'];
     }
 
     /**
      * Return the planet current deuterium production per hour
+     *
+     * @return integer
      */
-    public function getPlanetProductionPerHourDeuterium()
+    public function getPlanetProductionPerHourDeuterium(): int
     {
-        return $this->_planet['planet_deuterium_perhour'];
-    }
-
-    /**
-     * Return the planet deuterium capacity
-     */
-    public function getPlanetStorageCapacityDeuterium()
-    {
-        return $this->_planet['planet_deuterium_max'];
+        return (int) $this->data['planet_deuterium_perhour'];
     }
 
     /**
      * Return the planet energy used
+     *
+     * @return integer
      */
-    public function getPlanetUsedEnergy()
+    public function getPlanetUsedEnergy(): int
     {
-        return $this->_planet['planet_energy_used'];
+        return (int) $this->data['planet_energy_used'];
     }
 
     /**
      * Return the planet max energy
+     *
+     * @return integer
      */
-    public function getPlanetMaxEnergy()
+    public function getPlanetMaxEnergy(): int
     {
-        return $this->_planet['planet_energy_max'];
+        return (int) $this->data['planet_energy_max'];
     }
 
     /**
      * Return the planet production percentage for the metal mine
+     *
+     * @return integer
      */
-    public function getPlanetProductionPercentageMetal()
+    public function getPlanetProductionPercentageMetal(): int
     {
-        return $this->_planet['planet_building_metal_mine_percent'];
+        return (int) $this->data['planet_building_metal_mine_percent'];
     }
 
     /**
      * Return the planet production percentage for crystal mine
+     *
+     * @return integer
      */
-    public function getPlanetProductionPercentageCrystal()
+    public function getPlanetProductionPercentageCrystal(): int
     {
-        return $this->_planet['planet_building_crystal_mine_percent'];
+        return (int) $this->data['planet_building_crystal_mine_percent'];
     }
 
     /**
      * Return the planet production percentage for deuterium sintetizer
+     *
+     * @return integer
      */
-    public function getPlanetProductionPercentageDeuterium()
+    public function getPlanetProductionPercentageDeuterium(): int
     {
-        return $this->_planet['planet_building_deuterium_sintetizer_percent'];
+        return (int) $this->data['planet_building_deuterium_sintetizer_percent'];
     }
 
     /**
      * Return the planet production percentage for the solar plant
+     *
+     * @return integer
      */
-    public function getPlanetProductionPercentageSolarPlant()
+    public function getPlanetProductionPercentageSolarPlant(): int
     {
-        return $this->_planet['planet_building_solar_plant_percent'];
+        return (int) $this->data['planet_building_solar_plant_percent'];
     }
 
     /**
      * Return the planet production percentage for the fusion reactor
+     *
+     * @return integer
      */
-    public function getPlanetProductionPercentageFusion()
+    public function getPlanetProductionPercentageFusion(): int
     {
-        return $this->_planet['planet_building_fusion_reactor_percent'];
+        return (int) $this->data['planet_building_fusion_reactor_percent'];
     }
 
     /**
      * Return the planet production percentage for the solar satellite
+     *
+     * @return integer
      */
-    public function getPlanetProductionPercentageSolarSatellite()
+    public function getPlanetProductionPercentageSolarSatellite(): int
     {
-        return $this->_planet['planet_ship_solar_satellite_percent'];
+        return (int) $this->data['planet_ship_solar_satellite_percent'];
     }
 
     /**
      * Return the planet latest jump time
+     *
+     * @return integer
      */
-    public function getPlanetLatestJumpTime()
+    public function getPlanetLatestJumpTime(): int
     {
-        return $this->_planet['planet_last_jump_time'];
+        return (int) $this->data['planet_last_jump_time'];
     }
 
     /**
      * Return the planet amount of metal debris
+     *
+     * @return integer
      */
-    public function getPlanetDebrisMetal()
+    public function getPlanetDebrisMetal(): int
     {
-        return $this->_planet['planet_debris_metal'];
+        return (int) $this->data['planet_debris_metal'];
     }
 
     /**
      * Return the planet amount of crystal debris
+     *
+     * @return integer
      */
-    public function getPlanetDebrisCrystal()
+    public function getPlanetDebrisCrystal(): int
     {
-        return $this->_planet['planet_debris_crystal'];
+        return (int) $this->data['planet_debris_crystal'];
     }
 
     /**
      * Return the planet invisible start time
+     *
+     * @return integer
      */
-    public function getPlanetInvisibleStartTime()
+    public function getPlanetInvisibleStartTime(): int
     {
-        return $this->_planet['planet_invisible_start_time'];
+        return (int) $this->data['planet_invisible_start_time'];
     }
 }
 
