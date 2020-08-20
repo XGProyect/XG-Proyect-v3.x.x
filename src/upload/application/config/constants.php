@@ -78,7 +78,6 @@ define('APP_PATH', 'application' . DIRECTORY_SEPARATOR);
 define('DATA_PATH', 'data' . DIRECTORY_SEPARATOR);
 define('PUBLIC_PATH', 'public' . DIRECTORY_SEPARATOR);
 define('SYSTEM_PATH', 'system' . DIRECTORY_SEPARATOR);
-define('BASEPATH', XGP_ROOT . SYSTEM_PATH . 'ci3_custom' . DIRECTORY_SEPARATOR); // required by CodeIgniter
 
 /**
  *

@@ -34,13 +34,13 @@ class Announcement extends Model
      */
     public function getAllPlayers(): array
     {
-        return $this->db->query(
+        return $this->db->queryFetchAll(
             "SELECT
                 `user_id`,
                 `user_name`,
                 `user_email`
             FROM `" . USERS . "`;"
-        )->result_array();
+        );
     }
 }
 

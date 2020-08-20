@@ -31,68 +31,36 @@ use application\core\Database;
 abstract class Model
 {
     /**
-     * Undocumented variable
+     * Contains the Database instance
      *
-     * @var [type]
+     * @var Database
      */
     protected $db;
 
+    /**
+     * Constructor
+     */
     public function __construct()
     {
-        $this->db = $this->database(
-            [
-                'hostname' => DB_HOST,
-                'username' => DB_USER,
-                'password' => DB_PASS,
-                'database' => DB_NAME,
-                'dbdriver' => 'mysqli',
-                'dbprefix' => DB_PREFIX,
-                'pconnect' => false,
-                'db_debug' => true,
-                'cache_on' => false,
-                'cachedir' => '',
-                'char_set' => 'utf8',
-                'dbcollat' => 'utf8_general_ci',
-            ],
-            true,
-            false
-        );
+        $this->setNewDb();
     }
 
     /**
-     * Database Loader
-     *
-     * @param    mixed    $params        Database configuration options
-     * @param    bool    $return     Whether to return the database object
-     * @param    bool    $query_builder    Whether to enable Query Builder
-     *                    (overrides the configuration setting)
-     *
-     * @return    object|bool    Database object if $return is set to TRUE,
-     *                    FALSE on failure, CI_Loader instance in any other case
+     * Destructor
      */
-    private function database($params = '', $return = false, $query_builder = null)
+    public function __destruct()
     {
-        // Grab the super object
-        //$CI = &get_instance();
+        $this->db->closeConnection();
+    }
 
-        // Do we even need to load the database class?
-        //if ($return === false && $query_builder === null && isset($CI->db) && is_object($CI->db) && !empty($CI->db->conn_id)) {
-        //    return false;
-        //}
-
-        require_once XGP_ROOT . SYSTEM_PATH . 'ci3_custom' . DIRECTORY_SEPARATOR . 'database' . DIRECTORY_SEPARATOR . 'DB.php';
-
-        if ($return === true) {
-            return DB($params, $query_builder);
-        }
-
-        // Initialize the db variable. Needed to prevent
-        // reference errors with some configurations
-        //$CI->db = '';
-
-        // Load the DB class
-        //$CI->db = &DB($params, $query_builder);
-        return $this;
+    /**
+     * Creates a new Database object
+     *
+     * @return void
+     */
+    private function setNewDb(): void
+    {
+        $this->db = new Database;
     }
 }
 
