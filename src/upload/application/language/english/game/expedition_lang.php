@@ -6,11 +6,11 @@ $lang = [
     'exp_new_ships_1' => 'Our expedition found a planet which was almost destroyed during a certain chain of wars. There are different ships floating around in the orbit. The technicians are trying to repair some of them. Maybe we will also get information about what happened here.<br><br>The following ships are now part of the fleet:<br>%s', // ok
     'exp_new_ships_2' => '',
     'exp_new_ships_3' => '',
-    'exp_new_ships_4' => '',
+    'exp_new_ships_4' => 'We found a deserted pirate station. There are some old ships lying in the hangar. Our technicians are figuring out whether some of them are still useful or not.<br><br>The following ships are now part of the fleet:<br>%s', // ok
     'exp_new_ships_5' => 'Your expedition ran into the shipyards of a colony that was deserted eons ago. In the shipyards hangar they discover some ships that could be salvaged. The technicians are trying to get some of them to fly again.<br><br>The following ships are now part of the fleet:<br>%s', // ok
 
     // found resources
-    'exp_new_resources_1' => '',
+    'exp_new_resources_1' => 'On an isolated planetoid we found some easily accessible resources fields and harvested some successfully.<br><br>%s %s have been captured.', // ok
     'exp_new_resources_2' => 'Your expedition discovered a small asteroid from which some resources could be harvested.<br><br>%s %s have been captured.', // ok
     'exp_new_resources_3' => 'Your expedition found an ancient, fully loaded but deserted freighter convoy. Some of the resources could be rescued.<br><br>%s %s have been captured.', // ok
 
@@ -51,7 +51,7 @@ $lang = [
 
     // exploration status
     'exp_status_fresh_1' => 'Entry from the communications officers logbook: It seems that this part of the universe has not been explored yet.', // ok
-    'exp_status_fresh_2' => 'Entry from the communications officers logbook: It feels great to be the first ones traveling through an unexplored sector.',
+    'exp_status_fresh_2' => 'Entry from the communications officers logbook: It feels great to be the first ones traveling through an unexplored sector.', // ok
 
     // old lines
     'exp_blackholl_1' => 'The fleet was sucked into a black hole is partially destroyed.',
