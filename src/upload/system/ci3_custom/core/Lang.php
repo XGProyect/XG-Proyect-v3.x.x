@@ -114,7 +114,7 @@ class CI_Lang
         }
 
         // Load the base file, so any others found can override it
-        $basepath = BASEPATH . 'language/' . $idiom . '/' . $langfile;
+        $basepath = XGP_ROOT . APP_PATH . 'language/' . $idiom . '/' . $langfile;
         if (($found = file_exists($basepath)) === true) {
             include $basepath;
         }

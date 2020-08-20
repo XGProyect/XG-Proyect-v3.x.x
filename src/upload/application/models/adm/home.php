@@ -13,6 +13,7 @@
  */
 namespace application\models\adm;
 
+use application\core\Database;
 use application\core\Model;
 
 /**
@@ -34,7 +35,7 @@ class Home extends Model
      */
     public function getDbVersion(): string
     {
-        return $this->db->serverInfo();
+        return $this->db->version();
     }
 
     /**
@@ -44,12 +45,12 @@ class Home extends Model
      */
     public function getDbSize(): array
     {
-        return $this->db->queryFetch(
+        return $this->db->query(
             "SELECT
                 SUM(data_length + index_length) AS 'db_size'
             FROM information_schema.TABLES
-            WHERE table_schema = '" . $this->db->escapeValue(DB_NAME) . "';"
-        );
+            WHERE table_schema = " . $this->db->escape(DB_NAME) . ";"
+        )->row_array();
     }
 
     /**
@@ -59,7 +60,7 @@ class Home extends Model
      */
     public function getUsersStats(): array
     {
-        return $this->db->queryFetch(
+        return $this->db->query(
             "SELECT
                 (
                     SELECT
@@ -113,8 +114,8 @@ class Home extends Model
                     FROM
                         `" . ALLIANCE_STATISTICS . "` s
                 ) AS `average_alliance_points`"
-        );
+        )->row_array();
     }
 }
 
-/* end of login.php */
+/* end of home.php */
