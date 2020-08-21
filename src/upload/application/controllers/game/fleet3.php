@@ -420,12 +420,7 @@ class Fleet3 extends Controller
                 unset($possible_missions[array_search(Missions::ACS, $possible_missions)]);
             }
 
-            $is_buddy = $this->Fleet_Model->getBuddies(
-                $this->_user['user_id'],
-                $selected_planet['planet_user_id']
-            ) >= 1;
-
-            if (($selected_planet['user_ally_id'] != $this->_user['user_ally_id']) && !$is_buddy) {
+            if (!$this->isFriendly($selected_planet)) {
                 unset($possible_missions[array_search(Missions::STAY, $possible_missions)]);
             }
         }
@@ -561,6 +556,31 @@ class Fleet3 extends Controller
     private function getSessionShips()
     {
         return unserialize(base64_decode(str_rot13($_SESSION['fleet_data']['fleetarray'])));
+    }
+
+    /**
+     * Check if it is a friendly target
+     *
+     * @param array $target_planet
+     * @return boolean
+     */
+    private function isFriendly(array $target_planet): bool
+    {
+        $is_buddy = $this->Fleet_Model->getBuddies(
+            $this->_user['user_id'],
+            $target_planet['planet_user_id']
+        ) >= 1;
+
+        if (!$is_buddy
+            && (
+                ($target_planet['user_ally_id'] == 0 && $this->_user['user_ally_id'] == 0)
+                or ($target_planet['user_ally_id'] != $this->_user['user_ally_id'])
+            )
+        ) {
+            return false;
+        }
+
+        return true;
     }
 }
 

@@ -636,13 +636,23 @@ class GalaxyLib extends XGPCore
      */
     private function isFriendly(): bool
     {
-        if (($this->row_data['user_id'] == $this->current_user['user_id']) or !isset($this->row_data['buddys'])) {
+        $is_buddy = false;
+
+        if (isset($this->row_data['buddys'])) {
+            $friends = explode(',', $this->row_data['buddys']);
+            $is_buddy = in_array($this->row_data['user_id'], $friends);
+        }
+
+        if (!$is_buddy
+            && (
+                ($this->row_data['user_ally_id'] == 0 && $this->current_user['user_ally_id'] == 0)
+                or ($this->row_data['user_ally_id'] != $this->current_user['user_ally_id'])
+            )
+        ) {
             return false;
         }
 
-        $friends = explode(',', $this->row_data['buddys']);
-
-        return (in_array($this->row_data['user_id'], $friends) or $this->row_data['user_ally_id'] == $this->current_user['user_ally_id']);
+        return true;
     }
 
     /**
