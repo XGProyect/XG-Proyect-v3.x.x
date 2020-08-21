@@ -34,6 +34,9 @@ $lang = [
     'migrate' => 'Migrate',
     'repair' => 'Repair / Optimize tables',
     'reset' => 'Reset universe',
+
+    // other
+    'tools_manual_update_confirm' => 'Are you sure you want to rebuild the highscores?',
 ];
 
 /* end of menu_lang.php */
