@@ -33,6 +33,7 @@ $lang = [
 
     // delay
     'exp_delay_1' => '',
+    'exp_delay_2' => 'Your navigator made a grave error in his computations that caused the expeditions jump to be miscalculated. Not only did the fleet miss the target completely, but the return trip will take a lot more time than originally planned.', // ok
 
     // advancement
     'exp_faster_1' => 'Your expeditions doesn\'t report any anomalies in the explored sector. But the fleet ran into somo solar wind while returning. This resulted in the return trip being expedited. Your expedition returns home a bit earlier.', // ok

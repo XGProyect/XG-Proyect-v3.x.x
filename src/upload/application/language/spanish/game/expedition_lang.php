@@ -33,6 +33,7 @@ $lang = [
 
     // delay
     'exp_delay_1' => 'Tu expedición entro en un sector lleno de tormentas de partículas. Esto provocó que los depósitos de energía se sobrecargaran y la mayoría de los sistemas principales de las naves se averiaron. Tus mecánicos fueron capaces de evitar lo peor pero la flota va a volver con un gran retraso.', // ok
+    'exp_delay_2' => '',
 
     // advancement
     'exp_faster_1' => '',
