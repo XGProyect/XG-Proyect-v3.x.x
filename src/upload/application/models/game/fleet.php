@@ -170,12 +170,15 @@ class Fleet extends Model
     {
         return $this->db->queryFetch(
             "SELECT
-                `planet_user_id`
-            FROM `" . PLANETS . "`
-            WHERE `planet_galaxy` = '" . $g . "'
-                AND `planet_system` = '" . $s . "'
-                AND `planet_planet` = '" . $p . "'
-                AND `planet_type` = '" . $pt . "';"
+                p.`planet_user_id`,
+                u.`user_ally_id`
+            FROM `" . PLANETS . "` AS p
+            INNER JOIN `" . USERS . "` AS u
+                ON u.`user_id` = p.`planet_user_id`
+            WHERE p.`planet_galaxy` = '" . $g . "'
+                AND p.`planet_system` = '" . $s . "'
+                AND p.`planet_planet` = '" . $p . "'
+                AND p.`planet_type` = '" . $pt . "';"
         ) ?? [];
     }
 
@@ -187,7 +190,7 @@ class Fleet extends Model
      * @param int $p    Planet
      * @param int $pt   Planet Type
      *
-     * @return type
+     * @return array
      */
     public function getTargetDataByCoords(int $g, int $s, int $p, int $pt): array
     {

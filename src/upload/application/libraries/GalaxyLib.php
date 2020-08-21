@@ -172,7 +172,7 @@ class GalaxyLib extends XGPCore
             $action['spy'] = $this->spyLink(self::PLANET_TYPE);
 
             // HOLD POSITION ONLY IF IS A FRIEND
-            if ($this->isFriend($this->row_data['buddys'], $this->row_data['user_id'])) {
+            if ($this->isFriendly($this->row_data['buddys'], $this->row_data['user_id'])) {
                 $action['hold_position'] = $this->holdPositionLink(self::PLANET_TYPE);
             }
         }
@@ -630,14 +630,13 @@ class GalaxyLib extends XGPCore
     ######################################
 
     /**
-     * isFriend
+     * Check if it is a friendly (buddy or alliance)
      *
-     * @param array $friends_array   Friends list
-     * @param int   $current_user_id User ID
-     *
+     * @param array $friends_array
+     * @param integer $current_user_id
      * @return boolean
      */
-    private function isFriend($friends_array, $current_user_id)
+    private function isFriendly(array $friends_array, int $current_user_id): bool
     {
         if ($current_user_id == $this->current_user['user_id']) {
             return false;
@@ -645,7 +644,7 @@ class GalaxyLib extends XGPCore
 
         $friends = explode(',', $friends_array);
 
-        return (in_array($current_user_id, $friends));
+        return (in_array($current_user_id, $friends) or $this->row_data['user_ally_id'] == $this->current_user['user_ally_id']);
     }
 
     /**

@@ -419,6 +419,15 @@ class Fleet3 extends Controller
             if (!$acs && in_array(Missions::ACS, $possible_missions)) {
                 unset($possible_missions[array_search(Missions::ACS, $possible_missions)]);
             }
+
+            $is_buddy = $this->Fleet_Model->getBuddies(
+                $this->_user['user_id'],
+                $selected_planet['planet_user_id']
+            ) >= 1;
+
+            if (($selected_planet['user_ally_id'] != $this->_user['user_ally_id']) && !$is_buddy) {
+                unset($possible_missions[array_search(Missions::STAY, $possible_missions)]);
+            }
         }
 
         if (count($ships) > 0) {
