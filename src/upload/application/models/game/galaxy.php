@@ -35,9 +35,10 @@ class Galaxy extends Model
      *
      * @param integer $galaxy
      * @param integer $system
+     * @param integer $user_id
      * @return array
      */
-    public function getGalaxyDataByGalaxyAndSystem(int $galaxy, int $system): array
+    public function getGalaxyDataByGalaxyAndSystem(int $galaxy, int $system, int $user_id): array
     {
         return $this->db->queryFetchAll(
             "SELECT
@@ -47,9 +48,9 @@ class Galaxy extends Model
                     FROM `" . BUDDY . "` AS b
                     WHERE
                     (
-                        b.`buddy_receiver` = u.`user_id`
+                        b.`buddy_receiver` = " . $user_id . "
                         OR
-                        b.`buddy_sender` = u.`user_id`
+                        b.`buddy_sender` = " . $user_id . "
                     )
                 ) AS buddys,
                 p.`planet_debris_metal` AS `metal`,

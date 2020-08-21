@@ -162,7 +162,7 @@ class Galaxy extends Controller
             die(FunctionsLib::message($this->langs->line('gl_no_missiles'), "game.php?page=galaxy&mode=0", 2));
         }
 
-        $this->galaxy = $this->Galaxy_Model->getGalaxyDataByGalaxyAndSystem($this->_galaxy, $this->_system);
+        $this->galaxy = $this->Galaxy_Model->getGalaxyDataByGalaxyAndSystem($this->_galaxy, $this->_system, $this->user['user_id']);
 
         $parse['selected_galaxy'] = $this->_galaxy;
         $parse['selected_system'] = $this->_system;
