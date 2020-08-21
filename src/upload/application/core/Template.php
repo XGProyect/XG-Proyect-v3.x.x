@@ -14,6 +14,7 @@
 namespace application\core;
 
 use CI_Parser;
+use Exception;
 
 /**
  * XGPCore Class
@@ -49,17 +50,21 @@ class Template
      *
      * @return string
      */
-    public function get($template)
+    public function get(string $template_name)
     {
-        $route = XGP_ROOT . TEMPLATE_DIR . strtr($template, ['/' => DIRECTORY_SEPARATOR]) . '.php';
-        $template = @file_get_contents($route);
+        try {
+            $route = XGP_ROOT . TEMPLATE_DIR . strtr($template_name, ['/' => DIRECTORY_SEPARATOR]) . '.php';
+            $template = @file_get_contents($route);
 
-        if ($template) { // We got something
-            return $template; // Return
-        } else {
-            // Throw Exception
-            die('Template not found or empty: <strong>' . $template_name . '</strong><br />
-                Location: <strong>' . $route . '</strong>');
+            if ($template) { // We got something
+                return $template; // Return
+            } else {
+                // Throw Exception
+                throw new Exception('<p>Template not found or empty: <strong>' . $template_name . '</strong><br />
+                    Location: <strong>' . $route . '</strong></p>');
+            }
+        } catch (Exception $e) {
+            die($e->getMessage());
         }
     }
 
