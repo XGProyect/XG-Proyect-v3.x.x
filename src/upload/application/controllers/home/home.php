@@ -63,7 +63,7 @@ class Home extends Controller
         if ($login_data) {
             $login = $this->Home_Model->getUserWithProvidedCredentials($login_data['login']);
 
-            if (password_verify($login_data['pass'], $login['user_password'])) {
+            if (isset($login) && password_verify($login_data['pass'], $login['user_password'])) {
                 if (isset($login['banned_longer']) && $login['banned_longer'] <= time()) {
                     $this->Home_Model->removeBan($login['user_name']);
                 }
