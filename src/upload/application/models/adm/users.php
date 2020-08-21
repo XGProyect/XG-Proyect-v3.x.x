@@ -466,7 +466,8 @@ class Users extends Model
         $query_string = "UPDATE `" . PLANETS . "` SET ";
 
         // remove unneeded field
-        unset($planet_data['send_data']);
+        unset($planet_data['send_data'], $planet_data['planet_b_building_id'], $planet_data['planet_b_tech_id'], $planet_data['planet_b_hangar_id']);
+        $string_type = ['planet_name', 'planet_image'];
 
         // build middle
         foreach ($planet_data as $field => $value) {
@@ -485,7 +486,11 @@ class Users extends Model
 
                 case '':
                 default:
-                    $query_string .= "`{$this->db->escapeValue($field)}` = '" . $this->db->escapeValue($value) . "',";
+                    if (in_array($field, $string_type)) {
+                        $query_string .= "`{$this->db->escapeValue($field)}` = '" . $this->db->escapeValue($value) . "',";
+                    } else {
+                        $query_string .= "`{$this->db->escapeValue($field)}` = '" . (int) $value . "',";
+                    }
                     break;
             }
         }
