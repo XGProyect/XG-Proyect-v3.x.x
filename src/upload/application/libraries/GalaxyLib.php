@@ -632,11 +632,11 @@ class GalaxyLib extends XGPCore
     /**
      * Check if it is a friendly (buddy or alliance)
      *
-     * @param array $friends_array
+     * @param array|null $friends_array
      * @param integer $current_user_id
      * @return boolean
      */
-    private function isFriendly(array $friends_array, int $current_user_id): bool
+    private function isFriendly(?array $friends_array, int $current_user_id): bool
     {
         if ($current_user_id == $this->current_user['user_id']) {
             return false;
