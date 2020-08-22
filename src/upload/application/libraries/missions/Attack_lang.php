@@ -15,13 +15,6 @@ use Lang;
 
 /**
  * Attack_lang Class
- *
- * @category Classes
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
  */
 class Attack_lang implements Lang
 {

@@ -16,13 +16,6 @@ use application\libraries\FunctionsLib;
 
 /**
  * Statistics_library Class
- *
- * @category Classes
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
  */
 class Statistics_library extends Model
 {

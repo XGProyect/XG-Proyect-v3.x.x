@@ -19,13 +19,6 @@ use application\libraries\game\ResourceMarket;
 
 /**
  * Trader Class
- *
- * @category Classes
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
  */
 class Trader extends Controller
 {
