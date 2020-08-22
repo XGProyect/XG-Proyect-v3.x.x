@@ -14,6 +14,7 @@
 namespace application\models\libraries;
 
 use application\core\Model;
+use application\libraries\FunctionsLib;
 
 /**
  * Statistics_library Class
@@ -84,23 +85,27 @@ class Statistics_library extends Model
     public function getAllUserStatsData()
     {
         return $this->db->queryFetchAll(
-            "SELECT `user_statistic_user_id`,
-            `user_statistic_technology_rank`,
-            `user_statistic_technology_points`,
-            `user_statistic_buildings_rank`,
-            `user_statistic_buildings_points`,
-            `user_statistic_defenses_rank`,
-            `user_statistic_defenses_points`,
-            `user_statistic_ships_rank`,
-            `user_statistic_ships_points`,
-            `user_statistic_total_rank`,
-            (user_statistic_buildings_points
-                + user_statistic_defenses_points
-                + user_statistic_ships_points
-                + user_statistic_technology_points
-            ) AS total_points
-            FROM " . USERS_STATISTICS . "
-            ORDER BY `user_statistic_user_id` ASC;"
+            "SELECT
+                us.`user_statistic_user_id`,
+                us.`user_statistic_technology_rank`,
+                us.`user_statistic_technology_points`,
+                us.`user_statistic_buildings_rank`,
+                us.`user_statistic_buildings_points`,
+                us.`user_statistic_defenses_rank`,
+                us.`user_statistic_defenses_points`,
+                us.`user_statistic_ships_rank`,
+                us.`user_statistic_ships_points`,
+                us.`user_statistic_total_rank`,
+                (
+                    us.`user_statistic_buildings_points`
+                    + us.`user_statistic_defenses_points`
+                    + us.`user_statistic_ships_points`
+                    + us.`user_statistic_technology_points`
+                ) AS total_points
+            FROM " . USERS_STATISTICS . " us
+            INNER JOIN " . USERS . " AS u
+                ON us.`user_statistic_user_id` = u.`user_id` AND u.`user_authlevel` <= " . FunctionsLib::readConfig('stat_admin_level') . "
+            ORDER BY us.`user_statistic_user_id` ASC;"
         );
     }
 
@@ -124,9 +129,10 @@ class Statistics_library extends Model
             SUM(us.user_statistic_technology_points) AS technology_points,
             SUM(us.user_statistic_total_points) AS total_points
             FROM " . ALLIANCE . " AS a
-            LEFT JOIN " . USERS . " AS u ON a.`alliance_id` = u.`user_ally_id`
-            LEFT JOIN " . USERS_STATISTICS . " AS us ON us.`user_statistic_user_id` = u.`user_id`
-            LEFT JOIN " . ALLIANCE_STATISTICS . " AS ass ON ass.`alliance_statistic_alliance_id` = a.`alliance_id`
+            INNER JOIN " . USERS . " AS u
+                ON a.`alliance_id` = u.`user_ally_id` AND u.`user_authlevel` <= " . FunctionsLib::readConfig('stat_admin_level') . "
+                INNER JOIN " . USERS_STATISTICS . " AS us ON us.`user_statistic_user_id` = u.`user_id`
+                INNER JOIN " . ALLIANCE_STATISTICS . " AS ass ON ass.`alliance_statistic_alliance_id` = a.`alliance_id`
             GROUP BY alliance_id"
         );
     }
