@@ -359,11 +359,9 @@ class Fleet3 extends Controller
             ],
             PlanetTypes::DEBRIS => [
                 'own' => [
-                    Missions::DEPLOY,
                     Missions::RECYCLE,
                 ],
                 'other' => [
-                    Missions::DEPLOY,
                     Missions::RECYCLE,
                 ],
             ],
@@ -409,6 +407,10 @@ class Fleet3 extends Controller
             if ($selected_planet['planet_user_id'] == $this->_user['user_id']) {
                 $action_type = 'own';
             }
+
+            if (!$this->isFriendly($selected_planet)) {
+                unset($possible_missions[array_search(Missions::STAY, $possible_missions)]);
+            }
         }
 
         if ($_SESSION['fleet_data']['target']['planet'] == (MAX_PLANET_IN_SYSTEM + 1)) {
@@ -418,10 +420,6 @@ class Fleet3 extends Controller
 
             if (!$acs && in_array(Missions::ACS, $possible_missions)) {
                 unset($possible_missions[array_search(Missions::ACS, $possible_missions)]);
-            }
-
-            if (!$this->isFriendly($selected_planet)) {
-                unset($possible_missions[array_search(Missions::STAY, $possible_missions)]);
             }
         }
 
@@ -487,7 +485,7 @@ class Fleet3 extends Controller
         // remove values that din't pass the validation
         $data = array_diff($data, [null, false]);
 
-        if (is_null($data) or count($data) != 8) {
+        if (is_null($data) or count($data) != 8 or $this->isCurrentPlanet($data)) {
             FunctionsLib::redirect(self::REDIRECT_TARGET);
         }
 
@@ -596,7 +594,8 @@ class Fleet3 extends Controller
     {
         return ($this->_planet['planet_galaxy'] == $target['galaxy']
             && $this->_planet['planet_system'] == $target['system']
-            && $this->_planet['planet_planet'] == $target['planet']);
+            && $this->_planet['planet_planet'] == $target['planet']
+            && $this->_planet['planet_type'] == $target['planettype']);
     }
 }
 
