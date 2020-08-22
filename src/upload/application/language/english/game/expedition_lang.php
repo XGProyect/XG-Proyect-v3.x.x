@@ -13,6 +13,7 @@ $lang = [
     'exp_new_resources_1' => 'On an isolated planetoid we found some easily accessible resources fields and harvested some successfully.<br><br>%s %s have been captured.', // ok
     'exp_new_resources_2' => 'Your expedition discovered a small asteroid from which some resources could be harvested.<br><br>%s %s have been captured.', // ok
     'exp_new_resources_3' => 'Your expedition found an ancient, fully loaded but deserted freighter convoy. Some of the resources could be rescued.<br><br>%s %s have been captured.', // ok
+    'exp_new_resources_4' => 'On a tiny moon with its own atmosphere your expedition found some huge raw resources storage. The crew on the ground is trying to lift and load that natural treasure.<br><br>%s %s have been captured.', // ok
 
     // found primitive enemy
     'exp_primitive_enemy_1' => 'Some primitive barbarians are attacking us with spaceships that can\'t even be named as such. If the fire gets serious we will be forced to fire back.', // ok
