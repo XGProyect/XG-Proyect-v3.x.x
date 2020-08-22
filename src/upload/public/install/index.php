@@ -2,8 +2,6 @@
 /**
  * Install File
  *
- * PHP Version 7.1+
- *
  * @category Install File
  * @package  N/A
  * @author   XG Proyect Team

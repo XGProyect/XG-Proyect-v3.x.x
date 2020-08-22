@@ -2,8 +2,6 @@
 /**
  * Home Controller
  *
- * PHP Version 7.1+
- *
  * @category Controller
  * @package  Application
  * @author   XG Proyect Team
@@ -18,13 +16,6 @@ use application\libraries\FunctionsLib as Functions;
 
 /**
  * Home Class
- *
- * @category Classes
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
  */
 class Home extends Controller
 {
@@ -63,7 +54,7 @@ class Home extends Controller
         if ($login_data) {
             $login = $this->Home_Model->getUserWithProvidedCredentials($login_data['login']);
 
-            if (password_verify($login_data['pass'], $login['user_password'])) {
+            if (isset($login) && password_verify($login_data['pass'], $login['user_password'])) {
                 if (isset($login['banned_longer']) && $login['banned_longer'] <= time()) {
                     $this->Home_Model->removeBan($login['user_name']);
                 }

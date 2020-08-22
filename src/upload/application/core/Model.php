@@ -5,8 +5,6 @@ declare (strict_types = 1);
 /**
  * Model
  *
- * PHP Version 7.0+
- *
  * @category Core
  * @package  Application
  * @author   XG Proyect Team
@@ -20,13 +18,6 @@ use application\core\Database;
 
 /**
  * Model Class
- *
- * @category Classes
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
  */
 abstract class Model
 {

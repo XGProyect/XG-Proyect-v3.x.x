@@ -12,7 +12,8 @@ $lang = [
     // found resources
     'exp_new_resources_1' => 'En un planetoide abondonado han sido encontradas algunas zonas de recursos fácilmente accesibles y se han recolectado allí algunos recursos satisfactoriamente.<br><br>Se ha capturado %s de %s.', // ok
     'exp_new_resources_2' => 'Tu expedición descubrió un pequeño asteroide en el cual se pueden reciclar algunos recursos.<br><br>Se ha capturado %s de %s.', // ok
-    'exp_new_resources_3' => '', // ok
+    'exp_new_resources_3' => '',
+    'exp_new_resources_4' => '',
 
     // found primitive enemy
     'exp_primitive_enemy_1' => 'Algunos bárbaros primitivos están atacándonos con naves espaciales que no deberían ser llamadas como tal. Si nos disparan en serio, nos veremos forzados a devolver el fuego.', // ok
@@ -33,6 +34,7 @@ $lang = [
 
     // delay
     'exp_delay_1' => 'Tu expedición entro en un sector lleno de tormentas de partículas. Esto provocó que los depósitos de energía se sobrecargaran y la mayoría de los sistemas principales de las naves se averiaron. Tus mecánicos fueron capaces de evitar lo peor pero la flota va a volver con un gran retraso.', // ok
+    'exp_delay_2' => '',
 
     // advancement
     'exp_faster_1' => '',

@@ -5,8 +5,6 @@ declare (strict_types = 1);
 /**
  * Strings Helper
  *
- * PHP Version 7.1+
- *
  * @category Helper
  * @package  Application
  * @author   XG Proyect Team
@@ -20,13 +18,6 @@ use Exception;
 
 /**
  * StringsHelper Class
- *
- * @category Classes
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
  */
 abstract class StringsHelper
 {

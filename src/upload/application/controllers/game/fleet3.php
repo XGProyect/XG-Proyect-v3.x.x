@@ -2,8 +2,6 @@
 /**
  * Fleet3 Controller
  *
- * PHP Version 7.1+
- *
  * @category Controller
  * @package  Application
  * @author   XG Proyect Team
@@ -24,13 +22,6 @@ use application\libraries\research\Researches;
 
 /**
  * Fleet3 Class
- *
- * @category Classes
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
  */
 class Fleet3 extends Controller
 {
@@ -346,7 +337,6 @@ class Fleet3 extends Controller
                 'own' => [
                     Missions::TRANSPORT,
                     Missions::DEPLOY,
-                    Missions::STAY,
                 ],
                 'other' => [
                     Missions::ATTACK,
@@ -359,11 +349,9 @@ class Fleet3 extends Controller
             ],
             PlanetTypes::DEBRIS => [
                 'own' => [
-                    Missions::DEPLOY,
                     Missions::RECYCLE,
                 ],
                 'other' => [
-                    Missions::DEPLOY,
                     Missions::RECYCLE,
                 ],
             ],
@@ -371,7 +359,6 @@ class Fleet3 extends Controller
                 'own' => [
                     Missions::TRANSPORT,
                     Missions::DEPLOY,
-                    Missions::STAY,
                 ],
                 'other' => [
                     Missions::ATTACK,
@@ -418,6 +405,14 @@ class Fleet3 extends Controller
 
             if (!$acs && in_array(Missions::ACS, $possible_missions)) {
                 unset($possible_missions[array_search(Missions::ACS, $possible_missions)]);
+            }
+
+            if ($selected_planet && !$this->isFriendly($selected_planet) && in_array(Missions::STAY, $possible_missions)) {
+                unset($possible_missions[array_search(Missions::STAY, $possible_missions)]);
+            }
+
+            if ($ocuppied && in_array(Missions::COLONIZE, $possible_missions)) {
+                unset($possible_missions[array_search(Missions::COLONIZE, $possible_missions)]);
             }
         }
 
@@ -480,7 +475,10 @@ class Fleet3 extends Controller
             'acs_target' => FILTER_SANITIZE_STRING,
         ]);
 
-        if (is_null($data)) {
+        // remove values that din't pass the validation
+        $data = array_diff($data, [null, false]);
+
+        if (is_null($data) or count($data) != 8 or $this->isCurrentPlanet($data)) {
             FunctionsLib::redirect(self::REDIRECT_TARGET);
         }
 
@@ -552,6 +550,45 @@ class Fleet3 extends Controller
     private function getSessionShips()
     {
         return unserialize(base64_decode(str_rot13($_SESSION['fleet_data']['fleetarray'])));
+    }
+
+    /**
+     * Check if it is a friendly target
+     *
+     * @param array $target_planet
+     * @return boolean
+     */
+    private function isFriendly(array $target_planet): bool
+    {
+        $is_buddy = $this->Fleet_Model->getBuddies(
+            $this->_user['user_id'],
+            $target_planet['planet_user_id']
+        ) >= 1;
+
+        if (!$is_buddy
+            && (
+                ($target_planet['user_ally_id'] == 0 && $this->_user['user_ally_id'] == 0)
+                or ($target_planet['user_ally_id'] != $this->_user['user_ally_id'])
+            )
+        ) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Check if it is the current planet
+     *
+     * @param array $target
+     * @return boolean
+     */
+    private function isCurrentPlanet(array $target): bool
+    {
+        return ($this->_planet['planet_galaxy'] == $target['galaxy']
+            && $this->_planet['planet_system'] == $target['system']
+            && $this->_planet['planet_planet'] == $target['planet']
+            && $this->_planet['planet_type'] == $target['planettype']);
     }
 }
 

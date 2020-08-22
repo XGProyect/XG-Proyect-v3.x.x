@@ -2,8 +2,6 @@
 /**
  * Galaxy Library
  *
- * PHP Version 7.1+
- *
  * @category Library
  * @package  Application
  * @author   XG Proyect Team
@@ -172,7 +170,7 @@ class GalaxyLib extends XGPCore
             $action['spy'] = $this->spyLink(self::PLANET_TYPE);
 
             // HOLD POSITION ONLY IF IS A FRIEND
-            if ($this->isFriend($this->row_data['buddys'], $this->row_data['user_id'])) {
+            if ($this->isFriendly()) {
                 $action['hold_position'] = $this->holdPositionLink(self::PLANET_TYPE);
             }
         }
@@ -254,9 +252,9 @@ class GalaxyLib extends XGPCore
     private function moonBlock()
     {
         $action['spy'] = '';
+        $action['attack'] = '';
         $action['transport'] = '';
         $action['deploy'] = '';
-        $action['attack'] = '';
         $action['hold_position'] = '';
         $action['destroy'] = '';
 
@@ -265,9 +263,13 @@ class GalaxyLib extends XGPCore
 
         // ONLY IF IS NOT THE CURRENT USER
         if ($this->row_data['user_id'] != $this->current_user['user_id']) {
-            $action['attack'] = $this->attackLink(self::MOON_TYPE);
             $action['spy'] = $this->spyLink(self::MOON_TYPE);
-            $action['hold_position'] = $this->holdPositionLink(self::MOON_TYPE);
+            $action['attack'] = $this->attackLink(self::MOON_TYPE);
+
+            // HOLD POSITION ONLY IF IS A FRIEND
+            if ($this->isFriendly()) {
+                $action['hold_position'] = $this->holdPositionLink(self::MOON_TYPE);
+            }
 
             // DESTROY
             if ($this->currentplanet[$this->resource[214]] > 0) {
@@ -630,22 +632,29 @@ class GalaxyLib extends XGPCore
     ######################################
 
     /**
-     * isFriend
-     *
-     * @param array $friends_array   Friends list
-     * @param int   $current_user_id User ID
+     * Check if it is a friendly (buddy or alliance)
      *
      * @return boolean
      */
-    private function isFriend($friends_array, $current_user_id)
+    private function isFriendly(): bool
     {
-        if ($current_user_id == $this->current_user['user_id']) {
+        $is_buddy = false;
+
+        if (isset($this->row_data['buddys'])) {
+            $friends = explode(',', $this->row_data['buddys']);
+            $is_buddy = in_array($this->row_data['user_id'], $friends);
+        }
+
+        if (!$is_buddy
+            && (
+                ($this->row_data['user_ally_id'] == 0 && $this->current_user['user_ally_id'] == 0)
+                or ($this->row_data['user_ally_id'] != $this->current_user['user_ally_id'])
+            )
+        ) {
             return false;
         }
 
-        $friends = explode(',', $friends_array);
-
-        return (in_array($current_user_id, $friends));
+        return true;
     }
 
     /**

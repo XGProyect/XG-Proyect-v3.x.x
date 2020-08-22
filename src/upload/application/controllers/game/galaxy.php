@@ -2,8 +2,6 @@
 /**
  * Galaxy Controller
  *
- * PHP Version 7.1+
- *
  * @category Controller
  * @package  Application
  * @author   XG Proyect Team
@@ -20,13 +18,6 @@ use application\libraries\FunctionsLib;
 
 /**
  * Galaxy Class
- *
- * @category Classes
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
  */
 class Galaxy extends Controller
 {
@@ -162,7 +153,7 @@ class Galaxy extends Controller
             die(FunctionsLib::message($this->langs->line('gl_no_missiles'), "game.php?page=galaxy&mode=0", 2));
         }
 
-        $this->galaxy = $this->Galaxy_Model->getGalaxyDataByGalaxyAndSystem($this->_galaxy, $this->_system);
+        $this->galaxy = $this->Galaxy_Model->getGalaxyDataByGalaxyAndSystem($this->_galaxy, $this->_system, $this->user['user_id']);
 
         $parse['selected_galaxy'] = $this->_galaxy;
         $parse['selected_system'] = $this->_system;

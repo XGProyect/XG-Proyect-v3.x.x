@@ -2,8 +2,6 @@
 /**
  * Buildings
  *
- * PHP Version 7.1+
- *
  * @category Library
  * @package  Application
  * @author   XG Proyect Team
@@ -15,13 +13,6 @@ namespace application\libraries\buildings;
 
 /**
  * QueueElements Class
- *
- * @category Classes
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
  */
 final class QueueElements
 {

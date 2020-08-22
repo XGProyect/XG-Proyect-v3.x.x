@@ -2,8 +2,6 @@
 /**
  * Users Controller
  *
- * PHP Version 7.1+
- *
  * @category Controller
  * @package  Application
  * @author   XG Proyect Team
@@ -24,13 +22,6 @@ use application\libraries\users\Shortcuts;
 
 /**
  * Users Class
- *
- * @category Classes
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
  */
 class Users extends Controller
 {
@@ -46,7 +37,7 @@ class Users extends Controller
     private $_stats;
 
     /**
-     * __construct()
+     * Constructor
      */
     public function __construct()
     {
@@ -891,7 +882,13 @@ class Users extends Controller
             foreach ($current_queue as $key => $queues) {
                 $queue = explode(',', $queues);
 
-                $queue_list .= "<option value=\"{$queue[0]}\">" . $this->langs->language['tech'][$queue[0]] . " (" . $queue[1] . "^) (" . date("i:s", $queue[2]) . ") (" . date('i:s', $queue[3] - time()) . ") [" . $queue[4] . "] </option>";
+                if ($queue[3] <= time()) {
+                    $ready = 'OK';
+                } else {
+                    $ready = date('i:s', $queue[3] - time());
+                }
+
+                $queue_list .= "<option value=\"{$queue[0]}\">" . $this->langs->language['tech'][$queue[0]] . " (" . $queue[1] . "^) (" . date("i:s", $queue[2]) . ") (" . $ready . ") [" . $queue[4] . "] </option>";
             }
 
             return $queue_list;

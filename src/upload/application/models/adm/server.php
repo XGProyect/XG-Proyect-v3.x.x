@@ -5,8 +5,6 @@ declare (strict_types = 1);
 /**
  * Server Model
  *
- * PHP Version 7.1+
- *
  * @category Model
  * @package  Application
  * @author   XG Proyect Team
@@ -21,13 +19,6 @@ use application\libraries\FunctionsLib as Functions;
 
 /**
  * Server Class
- *
- * @category Classes
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
  */
 class Server extends Model
 {

@@ -5,8 +5,6 @@ declare (strict_types = 1);
 /**
  * Register Model
  *
- * PHP Version 7.1+
- *
  * @category Model
  * @package  Application
  * @author   XG Proyect Team
@@ -23,13 +21,6 @@ use application\libraries\Users_library;
 
 /**
  * Register Class
- *
- * @category Classes
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
  */
 class Register extends Model
 {
@@ -71,7 +62,7 @@ class Register extends Model
      */
     public function checkIfPlanetExists(int $galaxy, int $system, int $planet): bool
     {
-        return ($this->db->queryFetch(
+        $planet = $this->db->queryFetch(
             "SELECT
                 `planet_id`
             FROM `" . PLANETS . "`
@@ -79,7 +70,9 @@ class Register extends Model
                 AND `planet_system` = '" . $system . "'
                 AND `planet_planet` = '" . $planet . "'
             LIMIT 1;"
-        )['planet_id'] > 0);
+        );
+
+        return isset($planet['planet_id']);
     }
 
     /**

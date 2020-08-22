@@ -19,7 +19,7 @@
         <input type="hidden" name="consumption{ship_id}" value="{consumption}" />
         <input type="hidden" name="speed{ship_id}" value="{speed}" />
         <input type="hidden" name="capacity{ship_id}" value="{capacity}" />
-        <input type="hidden" name="ship{ship_id}" value="{ship}" />    
+        <input type="hidden" name="ship{ship_id}" value="{ship}" />
     {/fleet_block}
     <input type="hidden" name="speedfactor" value="{speedfactor}" />
     <input type="hidden" name="thisgalaxy" value="{galaxy}" />
@@ -36,9 +36,9 @@
             <tr height="20">
                 <th width="50%">{fl_destiny}</th>
                 <th>
-                    <input name="galaxy" size="3" maxlength="2" onChange="shortInfo()" onKeyUp="shortInfo()" value="{galaxy_end}" />
-                    <input name="system" size="3" maxlength="3" onChange="shortInfo()" onKeyUp="shortInfo()" value="{system_end}" />
-                    <input name="planet" size="3" maxlength="2" onChange="shortInfo()" onKeyUp="shortInfo()" value="{planet_end}" />
+                    <input name="galaxy" type="number" style="width: 37px" min="1" maxlength="2" onChange="shortInfo()" onKeyUp="shortInfo()" value="{galaxy_end}" />
+                    <input name="system" type="number" style="width: 40px" min="1" maxlength="3" onChange="shortInfo()" onKeyUp="shortInfo()" value="{system_end}" />
+                    <input name="planet" type="number" style="width: 37px" min="1" maxlength="2" onChange="shortInfo()" onKeyUp="shortInfo()" value="{planet_end}" />
                     <select name="planettype" onChange="shortInfo()" onKeyUp="shortInfo()">
                         {planet_types}
                         <option value="{value}"{selected}>{title}</option>

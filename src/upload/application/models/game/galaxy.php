@@ -5,8 +5,6 @@ declare (strict_types = 1);
 /**
  * Galaxy Model
  *
- * PHP Version 7.1+
- *
  * @category Model
  * @package  Application
  * @author   XG Proyect Team
@@ -20,13 +18,6 @@ use application\core\Model;
 
 /**
  * Galaxy Class
- *
- * @category Classes
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
  */
 class Galaxy extends Model
 {
@@ -35,9 +26,10 @@ class Galaxy extends Model
      *
      * @param integer $galaxy
      * @param integer $system
+     * @param integer $user_id
      * @return array
      */
-    public function getGalaxyDataByGalaxyAndSystem(int $galaxy, int $system): array
+    public function getGalaxyDataByGalaxyAndSystem(int $galaxy, int $system, int $user_id): array
     {
         return $this->db->queryFetchAll(
             "SELECT
@@ -47,9 +39,9 @@ class Galaxy extends Model
                     FROM `" . BUDDY . "` AS b
                     WHERE
                     (
-                        b.`buddy_receiver` = u.`user_id`
+                        b.`buddy_receiver` = " . $user_id . "
                         OR
-                        b.`buddy_sender` = u.`user_id`
+                        b.`buddy_sender` = " . $user_id . "
                     )
                 ) AS buddys,
                 p.`planet_debris_metal` AS `metal`,

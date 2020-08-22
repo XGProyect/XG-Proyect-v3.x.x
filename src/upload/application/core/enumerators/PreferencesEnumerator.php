@@ -1,11 +1,9 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types = 1);
 
 /**
  * Preferences Enumerator
- *
- * PHP Version 7.1+
  *
  * @category Library
  * @package  Application
@@ -33,12 +31,12 @@ abstract class PreferencesEnumerator
         'coordinates' => 1,
         'alphabet' => 2,
         'size' => 3,
-        'used_fields' => 4
+        'used_fields' => 4,
     ];
 
     const sequence = [
         'up' => 0,
-        'down' => 1
+        'down' => 1,
     ];
 }
 

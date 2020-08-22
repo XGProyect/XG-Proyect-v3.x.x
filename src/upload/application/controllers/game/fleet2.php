@@ -2,8 +2,6 @@
 /**
  * Fleet2 Controller
  *
- * PHP Version 7.1+
- *
  * @category Controller
  * @package  Application
  * @author   XG Proyect Team
@@ -24,13 +22,6 @@ use application\libraries\users\Shortcuts;
 
 /**
  * Fleet2 Class
- *
- * @category Classes
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
  */
 class Fleet2 extends Controller
 {
@@ -158,11 +149,8 @@ class Fleet2 extends Controller
         $selected_fleet = filter_input_array(INPUT_POST);
 
         if ($ships != null) {
-
             foreach ($ships as $ship_name => $ship_amount) {
-
                 if ($ship_amount != 0) {
-
                     $ship_id = array_search($ship_name, $objects);
 
                     if (!isset($selected_fleet['ship' . $ship_id])
@@ -174,7 +162,6 @@ class Fleet2 extends Controller
                     $amount_to_set = $selected_fleet['ship' . $ship_id];
 
                     if ($amount_to_set > $ship_amount) {
-
                         $amount_to_set = $ship_amount;
                     }
 
@@ -219,12 +206,14 @@ class Fleet2 extends Controller
 
         $list_of_options = [];
 
-        foreach ($planet_type as $label => $value) {
-            $list_of_options[] = [
-                'value' => $value,
-                'selected' => ($value == $data['planet_type']) ? 'selected' : '',
-                'title' => $this->langs->line($label),
-            ];
+        if ($data) {
+            foreach ($planet_type as $label => $value) {
+                $list_of_options[] = [
+                    'value' => $value,
+                    'selected' => ($value == $data['planet_type']) ? 'selected' : '',
+                    'title' => $this->langs->line($label),
+                ];
+            }
         }
 
         return $list_of_options;
@@ -335,9 +324,7 @@ class Fleet2 extends Controller
         $acs_fleets = [];
 
         if ($current_acs) {
-
             foreach ($current_acs as $acs) {
-
                 $acs_fleets[] = [
                     'galaxy' => $acs['acs_galaxy'],
                     'system' => $acs['acs_system'],
@@ -380,7 +367,6 @@ class Fleet2 extends Controller
         ]);
 
         if (is_null($data) or count($this->_fleet_data['speed_all']) <= 0) {
-
             FunctionsLib::redirect('game.php?page=fleet1');
         }
 

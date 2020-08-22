@@ -2,8 +2,6 @@
 /**
  * Buildings Controller
  *
- * PHP Version 7.1+
- *
  * @category Controller
  * @package  Application
  * @author   XG Proyect Team
@@ -26,13 +24,6 @@ use Exception;
 
 /**
  * Buildings Class
- *
- * @category Classes
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
  */
 class Buildings extends Controller
 {

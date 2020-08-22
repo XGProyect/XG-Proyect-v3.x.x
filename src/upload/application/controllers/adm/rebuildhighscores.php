@@ -5,8 +5,6 @@ declare (strict_types = 1);
 /**
  * Rebuild Highscores Controller
  *
- * PHP Version 7.1+
- *
  * @category Controller
  * @package  Application
  * @author   XG Proyect Team
@@ -24,13 +22,6 @@ use application\libraries\Statistics_library as Statistics;
 
 /**
  * RebuildHighscores Class
- *
- * @category Classes
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
  */
 class RebuildHighscores extends Controller
 {

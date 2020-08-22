@@ -1,11 +1,9 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types = 1);
 
 /**
  * Preferences
- *
- * PHP Version 7.1+
  *
  * @category Library
  * @package  Application
@@ -35,13 +33,13 @@ class Preferences
      * @var array
      */
     private $preferences = [];
-    
+
     /**
      *
      * @var int
      */
     private $current_user_id = 0;
-    
+
     /**
      * Constructor
      *
@@ -49,14 +47,14 @@ class Preferences
      * @param integer $current_user_id
      * @return void
      */
-    public function __construct(array $preferences, int  $current_user_id)
+    public function __construct(array $preferences, int $current_user_id)
     {
         if (is_array($preferences)) {
             $this->setUp($preferences);
             $this->setUserId($current_user_id);
         }
     }
-    
+
     /**
      * Get all the preferences
      *
@@ -65,16 +63,16 @@ class Preferences
     public function getPreferences(): array
     {
         $list_of_preferences = [];
-        
+
         foreach ($this->preferences as $preference) {
             if (($preference instanceof PreferenceEntity)) {
                 $list_of_preferences[] = $preference;
             }
         }
-        
+
         return $list_of_preferences;
     }
-    
+
     /**
      * Return current preference data
      *
@@ -84,7 +82,7 @@ class Preferences
     {
         return $this->preferences[0];
     }
-    
+
     /**
      * Check if is the preference owner
      *
@@ -124,7 +122,7 @@ class Preferences
     {
         return (($this->getCurrentPreference()->getPreferenceVacationMode() + ONE_DAY * 2) < time());
     }
-    
+
     /**
      * Set up the list of preferences
      *
@@ -138,7 +136,7 @@ class Preferences
             $this->preferences[] = $this->createNewPreferencesEntity($preference);
         }
     }
-    
+
     /**
      * Set the user id
      *
@@ -150,7 +148,7 @@ class Preferences
     {
         $this->current_user_id = $user_id;
     }
-    
+
     /**
      * Get the user id
      *
@@ -160,7 +158,7 @@ class Preferences
     {
         return $this->current_user_id;
     }
-    
+
     /**
      * Create a new instance of PreferencesEntity
      *

@@ -2,8 +2,6 @@
 /**
  * Statistics_library Library
  *
- * PHP Version 7.1+
- *
  * @category Library
  * @package  Application
  * @author   XG Proyect Team
@@ -17,13 +15,6 @@ use application\core\XGPCore;
 
 /**
  * Statistics_library Class
- *
- * @category Classes
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
  */
 class Statistics_library extends XGPCore
 {
@@ -32,7 +23,7 @@ class Statistics_library extends XGPCore
 
     /**
      * Constructor
-     * 
+     *
      * @return void
      */
     public function __construct()
@@ -61,7 +52,7 @@ class Statistics_library extends XGPCore
 
             case '':
             default:
-                $current_level = ( $level - 1 < 0 ) ? 0 : $level - 1;
+                $current_level = ($level - 1 < 0) ? 0 : $level - 1;
 
                 break;
         }
@@ -76,11 +67,11 @@ class Statistics_library extends XGPCore
 
     /**
      * Rebuild the user points for the current planet and specific structure type.
-     * 
+     *
      * @param int    $user_id   The user ID
      * @param int    $planet_id The planet ID
      * @param string $what      The structure type (buildings|defenses|research|ships)
-     * 
+     *
      * @return boolean
      */
     public function rebuildPoints($user_id, $planet_id, $what)
@@ -222,7 +213,7 @@ class Statistics_library extends XGPCore
 
                 foreach ($value as $user_id => $data) {
 
-                    $tech['rank'][$user_id] = $rank['tech'] ++;
+                    $tech['rank'][$user_id] = $rank['tech']++;
                 }
             }
         }
@@ -234,7 +225,7 @@ class Statistics_library extends XGPCore
 
                 foreach ($value as $user_id => $data) {
 
-                    $build['rank'][$user_id] = $rank['buil'] ++;
+                    $build['rank'][$user_id] = $rank['buil']++;
                 }
             }
         }
@@ -246,7 +237,7 @@ class Statistics_library extends XGPCore
 
                 foreach ($value as $user_id => $data) {
 
-                    $defs['rank'][$user_id] = $rank['defe'] ++;
+                    $defs['rank'][$user_id] = $rank['defe']++;
                 }
             }
         }
@@ -258,7 +249,7 @@ class Statistics_library extends XGPCore
 
                 foreach ($value as $user_id => $data) {
 
-                    $ships['rank'][$user_id] = $rank['ship'] ++;
+                    $ships['rank'][$user_id] = $rank['ship']++;
                 }
             }
         }
@@ -301,7 +292,7 @@ class Statistics_library extends XGPCore
                                 ' . $tech['rank'][$user_id] . ',
                                 ' . $total['points'][$user_id] . ',
                                 ' . $total['old_rank'][$user_id] . ',
-                                ' . $rank['tota'] ++ . ',
+                                ' . $rank['tota']++ . ',
                                 ' . $this->time . '),';
                 }
             }
@@ -389,7 +380,7 @@ class Statistics_library extends XGPCore
 
                 foreach ($value as $alliance_id => $data) {
 
-                    $tech['rank'][$alliance_id] = $rank['tech'] ++;
+                    $tech['rank'][$alliance_id] = $rank['tech']++;
                 }
             }
         }
@@ -401,7 +392,7 @@ class Statistics_library extends XGPCore
 
                 foreach ($value as $alliance_id => $data) {
 
-                    $build['rank'][$alliance_id] = $rank['buil'] ++;
+                    $build['rank'][$alliance_id] = $rank['buil']++;
                 }
             }
         }
@@ -413,7 +404,7 @@ class Statistics_library extends XGPCore
 
                 foreach ($value as $alliance_id => $data) {
 
-                    $defs['rank'][$alliance_id] = $rank['defe'] ++;
+                    $defs['rank'][$alliance_id] = $rank['defe']++;
                 }
             }
         }
@@ -425,7 +416,7 @@ class Statistics_library extends XGPCore
 
                 foreach ($value as $alliance_id => $data) {
 
-                    $ships['rank'][$alliance_id] = $rank['ship'] ++;
+                    $ships['rank'][$alliance_id] = $rank['ship']++;
                 }
             }
         }
@@ -477,7 +468,7 @@ class Statistics_library extends XGPCore
                                 ' . $tech['rank'][$alliance_id] . ',
                                 ' . $total['points'][$alliance_id] . ',
                                 ' . $total['old_rank'][$alliance_id] . ',
-                                ' . $rank['tota'] ++ . ',
+                                ' . $rank['tota']++ . ',
                                 ' . $this->time . '),';
                 }
             }
