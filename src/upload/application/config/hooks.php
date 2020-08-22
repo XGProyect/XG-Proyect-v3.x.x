@@ -2,8 +2,6 @@
 /**
  * Hooks
  *
- * PHP Version 7.1+
- *
  * @category Config
  * @package  Application
  * @author   XG Proyect Team

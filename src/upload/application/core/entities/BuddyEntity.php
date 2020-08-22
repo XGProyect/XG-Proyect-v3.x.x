@@ -2,8 +2,6 @@
 /**
  * Buddy entity
  *
- * PHP Version 7.1+
- *
  * @category Core
  * @package  Application
  * @author   XG Proyect Team

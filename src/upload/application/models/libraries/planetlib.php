@@ -5,8 +5,6 @@ declare (strict_types = 1);
 /**
  * PlanetLib Model
  *
- * PHP Version 7.1+
- *
  * @category Model
  * @package  Application
  * @author   XG Proyect Team

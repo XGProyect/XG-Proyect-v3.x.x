@@ -1,16 +1,16 @@
 <?php
 
+declare (strict_types = 1);
+
 /**
  * Common File
- *
- * PHP Version 7.1+
  *
  * @category Core
  * @package  Application
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
- * @version  3.1.0
+ * @since    3.1.0
  */
 
 namespace application\core;
@@ -28,6 +28,9 @@ use Exception;
 require_once XGP_ROOT . 'application' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'constants.php';
 require_once XGP_ROOT . CORE_PATH . 'AutoLoader.php';
 
+/**
+ * Common class
+ */
 class Common
 {
     private const APPLICATIONS = [
@@ -80,9 +83,9 @@ class Common
 
         // specific pages load or executions
         if (isset(self::APPLICATIONS[$application])) {
-            foreach (self::APPLICATIONS[$application] as $methods) {
-                if (!empty($methods)) {
-                    $this->$methods();
+            foreach (self::APPLICATIONS[$application] as $method) {
+                if (!empty($method)) {
+                    $this->$method();
                 }
             }
         }

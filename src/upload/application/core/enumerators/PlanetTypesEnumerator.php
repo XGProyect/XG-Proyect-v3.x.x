@@ -2,8 +2,6 @@
 /**
  * Planet Types enumerator
  *
- * PHP Version 7.1+
- *
  * @category Library
  * @package  Application
  * @author   XG Proyect Team

@@ -2,8 +2,6 @@
 /**
  * Installation Controller
  *
- * PHP Version 7.1+
- *
  * @category Controllers
  * @package  Application
  * @author   XG Proyect Team

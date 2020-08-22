@@ -5,8 +5,6 @@ declare (strict_types = 1);
 /**
  * Arrays Helper
  *
- * PHP Version 7.1+
- *
  * @category Helper
  * @package  Application
  * @author   XG Proyect Team

@@ -2,8 +2,6 @@
 /**
  * Index File
  *
- * PHP Version 7.1+
- *
  * @category Root File
  * @package  N/A
  * @author   XG Proyect Team

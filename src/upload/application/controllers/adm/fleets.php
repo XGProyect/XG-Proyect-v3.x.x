@@ -5,8 +5,6 @@ declare (strict_types = 1);
 /**
  * Fleets Controller
  *
- * PHP Version 7.1+
- *
  * @category Controller
  * @package  Application
  * @author   XG Proyect Team

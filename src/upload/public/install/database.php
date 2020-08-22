@@ -2,8 +2,6 @@
 /**
  * Database Schema File
  *
- * PHP Version 7.1+
- *
  * @category Data
  * @package  N/A
  * @author   XG Proyect Team

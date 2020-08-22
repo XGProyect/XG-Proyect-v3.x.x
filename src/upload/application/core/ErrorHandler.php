@@ -1,15 +1,16 @@
 <?php
+
+declare (strict_types = 1);
+
 /**
  * Error Handler
- *
- * PHP Version 7.1+
  *
  * @category Core
  * @package  Application
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
- * @version  3.1.0
+ * @since    3.1.0
  */
 namespace application\core;
 
@@ -17,13 +18,6 @@ use \application\libraries\DebugLib as Debug;
 
 /**
  * Error Handler Class
- *
- * @category Classes
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
  */
 final class ErrorHandler
 {
@@ -41,7 +35,7 @@ final class ErrorHandler
     {
         // report all errors
         error_reporting(E_ALL);
-        ini_set('display_errors', 0);
+        ini_set('display_errors', '0');
 
         $this->createNewDebugObject();
 

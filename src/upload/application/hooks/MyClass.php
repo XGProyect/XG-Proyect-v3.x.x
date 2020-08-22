@@ -6,8 +6,6 @@
  * controllers should go in their own folder. The idea of using hooks is to extend
  * certain functionality. Like a banner? or an alert to certain users...
  *
- * PHP Version 7.1+
- *
  * @category Config
  * @package  Application
  * @author   XG Proyect Team
@@ -21,8 +19,6 @@ use application\core\XGPCore;
 
 /**
  * My Class Hook
- *
- * PHP Version 7.1+
  *
  * @category Config
  * @package  Application

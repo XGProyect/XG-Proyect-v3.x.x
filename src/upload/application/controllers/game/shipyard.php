@@ -2,8 +2,6 @@
 /**
  * Shipyard Controller
  *
- * PHP Version 7.1+
- *
  * @category Controller
  * @package  Application
  * @author   XG Proyect Team

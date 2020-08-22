@@ -5,8 +5,6 @@ declare (strict_types = 1);
 /**
  * Model
  *
- * PHP Version 7.0+
- *
  * @category Core
  * @package  Application
  * @author   XG Proyect Team
