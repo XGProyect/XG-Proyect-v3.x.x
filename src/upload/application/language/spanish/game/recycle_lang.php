@@ -1,8 +1,8 @@
 <?php
 $lang = [
-    'rec_report_title' => 'Reporte de recolección de escombros en %s',
-    'rec_report_from' => 'Flota',
-    'rec_result' => 'Tu flota llego a las coordenadas indicadas y recolecto %s unidades de %s y %s unidades de %s.',
+    'rec_report_title' => 'Informe desde el campo de escombros en %s.', // ok
+    'rec_report_from' => 'Flota', // ok
+    'rec_result' => 'Tus Reciclador (%s naves) tienen una capacidad de carga total de %s. En el lugar de destino %s hay %s de metal y %s de cristal flotando por ahí. Recolectas %s de metal y %s de cristal.', // ok
 ];
 
 /* end of recycle_lang.php */
