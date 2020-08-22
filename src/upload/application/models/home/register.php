@@ -71,7 +71,7 @@ class Register extends Model
      */
     public function checkIfPlanetExists(int $galaxy, int $system, int $planet): bool
     {
-        return ($this->db->queryFetch(
+        $planet = $this->db->queryFetch(
             "SELECT
                 `planet_id`
             FROM `" . PLANETS . "`
@@ -79,7 +79,9 @@ class Register extends Model
                 AND `planet_system` = '" . $system . "'
                 AND `planet_planet` = '" . $planet . "'
             LIMIT 1;"
-        )['planet_id'] > 0);
+        );
+
+        return isset($planet['planet_id']);
     }
 
     /**
