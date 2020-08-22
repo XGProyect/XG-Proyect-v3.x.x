@@ -253,7 +253,7 @@ class FormatLib
     }
 
     /**
-     * Format the coordinates providing a link
+     * Return the coords in format [g:s:p] and links them to the galaxy
      *
      * @param int $galaxy
      * @param int $system
@@ -264,8 +264,21 @@ class FormatLib
     {
         return UrlHelper::setUrl(
             'game.php?page=galaxy&mode=3&galaxy=' . $galaxy . '&system=' . $system,
-            "[$galaxy:$system:$planet]"
+            self::formatCoords($galaxy, $system, $planet)
         );
+    }
+
+    /**
+     * Return the coords in format [g:s:p]
+     *
+     * @param integer $galaxy
+     * @param integer $system
+     * @param integer $planet
+     * @return string
+     */
+    public static function formatCoords(int $galaxy, int $system, int $planet): string
+    {
+        return sprintf('[%d:%d:%d]', $galaxy, $system, $planet);
     }
 
     /**

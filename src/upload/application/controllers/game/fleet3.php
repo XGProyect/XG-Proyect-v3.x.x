@@ -484,7 +484,10 @@ class Fleet3 extends Controller
             'acs_target' => FILTER_SANITIZE_STRING,
         ]);
 
-        if (is_null($data)) {
+        // remove values that din't pass the validation
+        $data = array_diff($data, [null, false]);
+
+        if (is_null($data) or count($data) != 8) {
             FunctionsLib::redirect(self::REDIRECT_TARGET);
         }
 
@@ -581,6 +584,19 @@ class Fleet3 extends Controller
         }
 
         return true;
+    }
+
+    /**
+     * Check if it is the current planet
+     *
+     * @param array $target
+     * @return boolean
+     */
+    private function isCurrentPlanet(array $target): bool
+    {
+        return ($this->_planet['planet_galaxy'] == $target['galaxy']
+            && $this->_planet['planet_system'] == $target['system']
+            && $this->_planet['planet_planet'] == $target['planet']);
     }
 }
 
