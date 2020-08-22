@@ -254,9 +254,9 @@ class GalaxyLib extends XGPCore
     private function moonBlock()
     {
         $action['spy'] = '';
+        $action['attack'] = '';
         $action['transport'] = '';
         $action['deploy'] = '';
-        $action['attack'] = '';
         $action['hold_position'] = '';
         $action['destroy'] = '';
 
@@ -265,9 +265,13 @@ class GalaxyLib extends XGPCore
 
         // ONLY IF IS NOT THE CURRENT USER
         if ($this->row_data['user_id'] != $this->current_user['user_id']) {
-            $action['attack'] = $this->attackLink(self::MOON_TYPE);
             $action['spy'] = $this->spyLink(self::MOON_TYPE);
-            $action['hold_position'] = $this->holdPositionLink(self::MOON_TYPE);
+            $action['attack'] = $this->attackLink(self::MOON_TYPE);
+
+            // HOLD POSITION ONLY IF IS A FRIEND
+            if ($this->isFriendly()) {
+                $action['hold_position'] = $this->holdPositionLink(self::MOON_TYPE);
+            }
 
             // DESTROY
             if ($this->currentplanet[$this->resource[214]] > 0) {

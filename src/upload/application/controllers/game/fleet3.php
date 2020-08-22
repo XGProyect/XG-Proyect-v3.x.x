@@ -346,7 +346,6 @@ class Fleet3 extends Controller
                 'own' => [
                     Missions::TRANSPORT,
                     Missions::DEPLOY,
-                    Missions::STAY,
                 ],
                 'other' => [
                     Missions::ATTACK,
@@ -369,7 +368,6 @@ class Fleet3 extends Controller
                 'own' => [
                     Missions::TRANSPORT,
                     Missions::DEPLOY,
-                    Missions::STAY,
                 ],
                 'other' => [
                     Missions::ATTACK,
@@ -407,10 +405,6 @@ class Fleet3 extends Controller
             if ($selected_planet['planet_user_id'] == $this->_user['user_id']) {
                 $action_type = 'own';
             }
-
-            if (!$this->isFriendly($selected_planet)) {
-                unset($possible_missions[array_search(Missions::STAY, $possible_missions)]);
-            }
         }
 
         if ($_SESSION['fleet_data']['target']['planet'] == (MAX_PLANET_IN_SYSTEM + 1)) {
@@ -420,6 +414,14 @@ class Fleet3 extends Controller
 
             if (!$acs && in_array(Missions::ACS, $possible_missions)) {
                 unset($possible_missions[array_search(Missions::ACS, $possible_missions)]);
+            }
+
+            if ($selected_planet && !$this->isFriendly($selected_planet) && in_array(Missions::STAY, $possible_missions)) {
+                unset($possible_missions[array_search(Missions::STAY, $possible_missions)]);
+            }
+
+            if ($ocuppied && in_array(Missions::COLONIZE, $possible_missions)) {
+                unset($possible_missions[array_search(Missions::COLONIZE, $possible_missions)]);
             }
         }
 
