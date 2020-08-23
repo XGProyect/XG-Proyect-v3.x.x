@@ -140,13 +140,19 @@ class DebugLib
             extract($this->logs[0]);
         }
 
+        $string_code = 'DB Exception';
+
+        if ($type != 'db') {
+            $string_code = ErrorTypes::PHP_ERRORS[$code];
+        }
+
         if (DEBUG_MODE or (in_array($_SERVER['HTTP_HOST'], ['127.0.0.1', 'localhost']) !== false)) {
             echo '<div style="background-color:blue;color:white;position:absolute;width:100%;z-index:999999;text-align:center;bottom:0">
                     <h2 style="color:white; font-weight:normal">' . $description . '</h2>';
 
             if ($type != 'db') {
                 echo '<h3>in ' . $file . ' on line ' . $line . '</h3>
-                        <span>Error code: ' . ErrorTypes::PHP_ERRORS[$code] . '</span>';
+                        <span>Error code: ' . $string_code . '</span>';
             }
 
             echo '<br><br>
@@ -155,7 +161,7 @@ class DebugLib
             $user_ip = $_SERVER['REMOTE_ADDR'];
 
             // format log
-            $log = '|' . $user_ip . '|' . $type . '|' . ErrorTypes::PHP_ERRORS[$code] . '|' . $description . '|' . $this->whereCalled() . '|';
+            $log = '|' . $user_ip . '|' . $type . '|' . $string_code . '|' . $description . '|' . $this->whereCalled() . '|';
 
             if (defined('LOG_ERRORS') && LOG_ERRORS != '') {
                 // log the error
@@ -166,7 +172,7 @@ class DebugLib
             if (defined('ERROR_LOGS_MAIL') && ERROR_LOGS_MAIL != '') {
                 FunctionsLib::sendEmail(
                     ERROR_LOGS_MAIL,
-                    '[DEBUG][' . ErrorTypes::PHP_ERRORS[$code] . ']',
+                    '[DEBUG][' . $string_code . ']',
                     $log,
                     [
                         'mail' => ERROR_LOGS_MAIL,
