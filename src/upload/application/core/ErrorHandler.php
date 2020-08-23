@@ -62,7 +62,7 @@ final class ErrorHandler
      * @param string $line
      * @return boolean
      */
-    final public function errorHandler(int $code, string $description, string $file, string $line): bool
+    final public function errorHandler(int $code, string $description, string $file, int $line): bool
     {
         $displayErrors = strtolower(ini_get("display_errors"));
 
