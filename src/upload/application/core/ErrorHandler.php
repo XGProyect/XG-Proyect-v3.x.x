@@ -70,7 +70,12 @@ final class ErrorHandler
             return false;
         }
 
-        $this->debug->error($code, $description, $file, $line, 'php');
+        if ($code === E_ERROR) {
+            $this->debug->error($code, $description, $file, $line, 'php');
+        } else {
+            $this->debug->log($code, $description, $file, $line, 'php');
+            $this->debug->error();
+        }
 
         return true;
     }
