@@ -166,7 +166,7 @@ class DebugLib
             if (defined('ERROR_LOGS_MAIL') && ERROR_LOGS_MAIL != '') {
                 FunctionsLib::sendEmail(
                     ERROR_LOGS_MAIL,
-                    '[DEBUG][' . $code . ']',
+                    '[DEBUG][' . ErrorTypes::PHP_ERRORS[$code] . ']',
                     $log,
                     [
                         'mail' => ERROR_LOGS_MAIL,
