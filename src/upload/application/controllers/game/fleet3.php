@@ -543,13 +543,17 @@ class Fleet3 extends Controller
     }
 
     /**
-     * Get session set ships
+     * Get the ships that were set in the session
      *
      * @return array
      */
-    private function getSessionShips()
+    private function getSessionShips(): array
     {
-        return unserialize(base64_decode(str_rot13($_SESSION['fleet_data']['fleetarray'])));
+        if (isset($_SESSION['fleet_data']['fleetarray'])) {
+            return unserialize(base64_decode(str_rot13($_SESSION['fleet_data']['fleetarray'])));
+        }
+
+        FunctionsLib::redirect(self::REDIRECT_TARGET);
     }
 
     /**
