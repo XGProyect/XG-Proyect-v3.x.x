@@ -122,8 +122,8 @@ class Errors extends Controller
                         'error_code' => $error_columns[3],
                         'error_message' => $error_columns[4],
                         'error_trace' => $error_columns[5],
-                        'error_datetime' => $error_columns[6],
-                        'alert_type' => ($error_columns[3] == 1 ? 'danger' : 'warning'),
+                        'error_datetime' => $error_columns[7],
+                        'alert_type' => ($error_columns[3] == 'E_ERROR' ? 'danger' : 'warning'),
                     ];
                 }
             }

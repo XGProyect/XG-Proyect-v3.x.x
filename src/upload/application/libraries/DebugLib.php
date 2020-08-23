@@ -161,7 +161,7 @@ class DebugLib
             $user_ip = $_SERVER['REMOTE_ADDR'];
 
             // format log
-            $log = '|' . $user_ip . '|' . $type . '|' . $string_code . '|' . $description . '|' . $this->whereCalled() . '|';
+            $log = '|' . $user_ip . '|' . $type . '|' . $string_code . '|' . $description . '|' . $this->whereCalled() . '|' . SYSTEM_VERSION . '|';
 
             if (defined('LOG_ERRORS') && LOG_ERRORS != '') {
                 // log the error
