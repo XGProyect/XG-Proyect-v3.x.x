@@ -8,6 +8,7 @@ $lang = [
     'exp_new_ships_3' => 'Nuestra expedición se encontró con un antiguo hangar automático. Algunas de las naves se encuentran todavía en la fase de producción y nuestros técnicos están tratando de reactivar los generadores de energía.<br><br>Las siguientes naves son ahora parte de la flota:<br>%s', // ok
     'exp_new_ships_4' => 'Encontramos una estación pirata desierta. En el hangar hay estacionadas algunas naves antiguas. Nuestros técnicos están mirando si algunas de ellas son aún útiles.<br><br>Las siguientes naves son ahora parte de la flota:<br>%s', // ok
     'exp_new_ships_5' => '',
+    'exo_new_ships_6' => '',
 
     // found resources
     'exp_new_resources_1' => 'En un planetoide abondonado han sido encontradas algunas zonas de recursos fácilmente accesibles y se han recolectado allí algunos recursos satisfactoriamente.<br><br>Se ha capturado %s de %s.', // ok
@@ -38,6 +39,9 @@ $lang = [
 
     // advancement
     'exp_faster_1' => '',
+
+    // found object
+    'exp_found_object_1' => '',
 
     // found nothing
     'exp_nothing_1' => 'Tu expedición hizo magníficas fotos de una super nova. No se obtuvo nada de la expedición pero al menos hay muchas posibilidades de ganar el concurso "Mejor Foto del Universo" este año.', // ok
