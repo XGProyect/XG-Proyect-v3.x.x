@@ -173,9 +173,13 @@ class Statistics_library extends XGPCore
         // GET ALL DATA FROM THE USERS TO UPDATE
         $all_stats_data = $this->Statistics_library_Model->getAllUserStatsData();
 
+        // ANY USER ?
+        if (empty($all_stats_data) or count($all_stats_data) == 0) {
+            return;
+        }
+
         // BUILD ALL THE ARRAYS
         foreach ($all_stats_data as $CurUser) {
-
             $tech['old_rank'][$CurUser['user_statistic_user_id']] = $CurUser['user_statistic_technology_rank'];
             $tech['points'][$CurUser['user_statistic_user_id']] = $CurUser['user_statistic_technology_points'];
 
@@ -208,11 +212,8 @@ class Statistics_library extends XGPCore
 
         // TECH
         foreach ($tech as $key => $value) {
-
             if ($key == 'points') {
-
                 foreach ($value as $user_id => $data) {
-
                     $tech['rank'][$user_id] = $rank['tech']++;
                 }
             }
@@ -220,11 +221,8 @@ class Statistics_library extends XGPCore
 
         // BUILDINGS
         foreach ($build as $key => $value) {
-
             if ($key == 'points') {
-
                 foreach ($value as $user_id => $data) {
-
                     $build['rank'][$user_id] = $rank['buil']++;
                 }
             }
@@ -232,11 +230,8 @@ class Statistics_library extends XGPCore
 
         // DEFENSES
         foreach ($defs as $key => $value) {
-
             if ($key == 'points') {
-
                 foreach ($value as $user_id => $data) {
-
                     $defs['rank'][$user_id] = $rank['defe']++;
                 }
             }
@@ -244,11 +239,8 @@ class Statistics_library extends XGPCore
 
         // SHIPS
         foreach ($ships as $key => $value) {
-
             if ($key == 'points') {
-
                 foreach ($value as $user_id => $data) {
-
                     $ships['rank'][$user_id] = $rank['ship']++;
                 }
             }
@@ -276,11 +268,8 @@ class Statistics_library extends XGPCore
         // TOTAL POINTS
         // UPDATE QUERY DYNAMIC BLOCK
         foreach ($total as $key => $value) {
-
             if ($key == 'points') {
-
                 foreach ($value as $user_id => $data) {
-
                     $values .= '(' . $user_id . ',
                                 ' . $build['old_rank'][$user_id] . ',
                                 ' . $build['rank'][$user_id] . ',
@@ -336,13 +325,11 @@ class Statistics_library extends XGPCore
 
         // ANY ALLIANCE ?
         if (empty($all_stats_data) or count($all_stats_data) == 0) {
-
             return;
         }
 
         // BUILD ALL THE ARRAYS
         foreach ($all_stats_data as $CurAlliance) {
-
             $tech['old_rank'][$CurAlliance['alliance_id']] = $CurAlliance['alliance_statistic_technology_rank'];
             $tech['points'][$CurAlliance['alliance_id']] = $CurAlliance['technology_points'];
 
@@ -375,11 +362,8 @@ class Statistics_library extends XGPCore
 
         // TECH
         foreach ($tech as $key => $value) {
-
             if ($key == 'points') {
-
                 foreach ($value as $alliance_id => $data) {
-
                     $tech['rank'][$alliance_id] = $rank['tech']++;
                 }
             }
@@ -387,11 +371,8 @@ class Statistics_library extends XGPCore
 
         // BUILDINGS
         foreach ($build as $key => $value) {
-
             if ($key == 'points') {
-
                 foreach ($value as $alliance_id => $data) {
-
                     $build['rank'][$alliance_id] = $rank['buil']++;
                 }
             }
@@ -399,11 +380,8 @@ class Statistics_library extends XGPCore
 
         // DEFENSES
         foreach ($defs as $key => $value) {
-
             if ($key == 'points') {
-
                 foreach ($value as $alliance_id => $data) {
-
                     $defs['rank'][$alliance_id] = $rank['defe']++;
                 }
             }
@@ -411,11 +389,8 @@ class Statistics_library extends XGPCore
 
         // SHIPS
         foreach ($ships as $key => $value) {
-
             if ($key == 'points') {
-
                 foreach ($value as $alliance_id => $data) {
-
                     $ships['rank'][$alliance_id] = $rank['ship']++;
                 }
             }
@@ -448,11 +423,8 @@ class Statistics_library extends XGPCore
         // TOTAL POINTS
         // UPDATE QUERY DYNAMIC BLOCK
         foreach ($total as $key => $value) {
-
             if ($key == 'points') {
-
                 foreach ($value as $alliance_id => $data) {
-
                     $values .= '(' . $alliance_id . ',
                                 ' . $build['points'][$alliance_id] . ',
                                 ' . $build['old_rank'][$alliance_id] . ',

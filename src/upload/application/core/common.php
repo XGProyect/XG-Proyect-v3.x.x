@@ -62,13 +62,6 @@ class Common
     private $hooks = null;
 
     /**
-     * Constructor
-     */
-    public function __construct()
-    {
-    }
-
-    /**
      * Start the system
      *
      * @param string $application

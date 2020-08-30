@@ -8,6 +8,7 @@ $lang = [
     'exp_new_ships_3' => 'Nuestra expedición se encontró con un antiguo hangar automático. Algunas de las naves se encuentran todavía en la fase de producción y nuestros técnicos están tratando de reactivar los generadores de energía.<br><br>Las siguientes naves son ahora parte de la flota:<br>%s', // ok
     'exp_new_ships_4' => 'Encontramos una estación pirata desierta. En el hangar hay estacionadas algunas naves antiguas. Nuestros técnicos están mirando si algunas de ellas son aún útiles.<br><br>Las siguientes naves son ahora parte de la flota:<br>%s', // ok
     'exp_new_ships_5' => '',
+    'exo_new_ships_6' => '',
 
     // found resources
     'exp_new_resources_1' => 'En un planetoide abondonado han sido encontradas algunas zonas de recursos fácilmente accesibles y se han recolectado allí algunos recursos satisfactoriamente.<br><br>Se ha capturado %s de %s.', // ok
@@ -39,6 +40,9 @@ $lang = [
     // advancement
     'exp_faster_1' => '',
 
+    // found object
+    'exp_found_object_1' => '',
+
     // found nothing
     'exp_nothing_1' => 'Tu expedición hizo magníficas fotos de una super nova. No se obtuvo nada de la expedición pero al menos hay muchas posibilidades de ganar el concurso "Mejor Foto del Universo" este año.', // ok
     'exp_nothing_2' => 'Un ser de pura energía se aseguró que todos los miembros de la expedición solo miraran el hipnotizante patrón de los monitores. Cuando la mayoría de ellos se despejaron de nuevo, la expedición debía ser interrumpida ya que quedaba poco deuterio.', // ok
@@ -59,7 +63,6 @@ $lang = [
     'exp_blackholl_1' => 'La flota fue arrastrada hacia un agujero negro, esta parcialmente destruida.',
     'exp_blackholl_2' => 'La flota fue arrastrada hacia un agujero negro, y fue completamente destruida!',
     'exp_found_goods' => 'La flota ha descubierto una nave no tripulada! <br> Tus exploradores han recuperado %s de %s, %s de %s, %s de %s y %s de %s.',
-    'exp_found_ships' => 'Tus exploradores han encontrado una flota abandonada, la dominaron y vienen de regreso. <br> Escuadron:',
     'exp_back_home' => 'Tu expedición regresó al hangar.',
 ];
 

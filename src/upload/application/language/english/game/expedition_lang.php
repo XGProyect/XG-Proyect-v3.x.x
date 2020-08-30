@@ -8,6 +8,7 @@ $lang = [
     'exp_new_ships_3' => '',
     'exp_new_ships_4' => 'We found a deserted pirate station. There are some old ships lying in the hangar. Our technicians are figuring out whether some of them are still useful or not.<br><br>The following ships are now part of the fleet:<br>%s', // ok
     'exp_new_ships_5' => 'Your expedition ran into the shipyards of a colony that was deserted eons ago. In the shipyards hangar they discover some ships that could be salvaged. The technicians are trying to get some of them to fly again.<br><br>The following ships are now part of the fleet:<br>%s', // ok
+    'exo_new_ships_6' => 'We found an enormous spaceship graveyard. Some of the technicians from the expedition fleet were able to get some of the ships to work again.<br><br>The following ships are now part of the fleet:<br>%s', // ok
 
     // found resources
     'exp_new_resources_1' => 'On an isolated planetoid we found some easily accessible resources fields and harvested some successfully.<br><br>%s %s have been captured.', // ok
@@ -18,8 +19,8 @@ $lang = [
     // found primitive enemy
     'exp_primitive_enemy_1' => 'Some primitive barbarians are attacking us with spaceships that can\'t even be named as such. If the fire gets serious we will be forced to fire back.', // ok
     'exp_primitive_enemy_2' => '',
-    'exp_primitive_enemy_3' => 'We caught some radio transmissions from some drunk pirates. Seems like we will be under attack soon.',
-    'exp_primitive_enemy_4' => '',
+    'exp_primitive_enemy_3' => 'We caught some radio transmissions from some drunk pirates. Seems like we will be under attack soon.', // ok
+    'exp_primitive_enemy_4' => 'We needed to fight some pirates which were, fortunately, only a few.', // ok
     'exp_primitive_enemy_5' => 'Some really desperate space pirates tried to capture our expedition fleet.', // ok
 
     // found advanced enemy
@@ -38,6 +39,9 @@ $lang = [
 
     // advancement
     'exp_faster_1' => 'Your expeditions doesn\'t report any anomalies in the explored sector. But the fleet ran into somo solar wind while returning. This resulted in the return trip being expedited. Your expedition returns home a bit earlier.', // ok
+
+    // found object
+    'exp_found_object_1' => 'A fleeing fleet left an item behind, in order to distract us in aid of their escape.<br><br>%s has been added to the inventory.', // ok
 
     // found nothing
     'exp_nothing_1' => '',
@@ -59,7 +63,6 @@ $lang = [
     'exp_blackholl_1' => 'The fleet was sucked into a black hole is partially destroyed.',
     'exp_blackholl_2' => 'The fleet was sucked into a black hole, and was completely destroyed!',
     'exp_found_goods' => 'The fleet has discovered an unmanned spacecraft! <br> His scouts have recovered %s de %s, %s de %s, %s de %s y %s de %s.',
-    'exp_found_ships' => 'Your expedition ran into the shipyards of a colony that was deserted eons ago. In the shipyards hangar they discover some ships that could be salvaged. The technicians are trying to get some of them to fly again.<br><br>The following ships are now part of the fleet:',
     'exp_back_home' => 'Your expedition returned to the hangar.',
 ];
 

@@ -11,26 +11,26 @@
  */
 namespace application\libraries;
 
+use application\core\enumerators\ErrorTypesEnumerator as ErrorTypes;
+
 /**
  * DebugLib Class
  */
 class DebugLib
 {
     /**
-     * Array of executed queries
+     * Contains an array of executed queries
      *
      * @var array
      */
     private $queries = [];
 
     /**
-     * __construct
+     * Contains an array of errors
      *
-     * @return void
+     * @var array
      */
-    public function __construct()
-    {
-    }
+    private $logs = [];
 
     /**
      * dump
@@ -105,6 +105,26 @@ class DebugLib
     }
 
     /**
+     * Save errors
+     *
+     * @param integer $code
+     * @param string $description
+     * @param string $file
+     * @param integer $line
+     * @return void
+     */
+    public function log(int $code, string $description, string $file = '', int $line = 0, string $type = 'db'): void
+    {
+        $this->logs[] = [
+            'code' => $code,
+            'description' => $description,
+            'file' => $file,
+            'line' => $line,
+            'type' => $type,
+        ];
+    }
+
+    /**
      * Take different actions like displaying the error, logging the error and sending an email
      *
      * @param integer $code
@@ -114,27 +134,34 @@ class DebugLib
      * @param string $type
      * @return void
      */
-    public function error(int $code, string $description, string $file = '', int $line = 0, string $type = 'db'): void
+    public function error(int $code = 0, string $description = '', string $file = '', int $line = 0, string $type = 'db'): void
     {
+        if (count($this->logs) > 0) {
+            extract($this->logs[0]);
+        }
+
+        $string_code = 'DB Exception';
+
+        if ($type != 'db') {
+            $string_code = ErrorTypes::PHP_ERRORS[$code];
+        }
+
         if (DEBUG_MODE or (in_array($_SERVER['HTTP_HOST'], ['127.0.0.1', 'localhost']) !== false)) {
             echo '<div style="background-color:blue;color:white;position:absolute;width:100%;z-index:999999;text-align:center;bottom:0">
-                    <h2 style="color:red; font-weight:normal">' . $description . '</h2>';
+                    <h2 style="color:white; font-weight:normal">' . $description . '</h2>';
 
             if ($type != 'db') {
                 echo '<h3>in ' . $file . ' on line ' . $line . '</h3>
-                        <span>Error code: ' . $code . '</span>';
+                        <span>Error code: ' . $string_code . '</span>';
             }
 
-            echo '<hr>
-                    <h3>Trace (<a href="' . XGP_ROOT . 'admin.php?page=settings">Debug Log</a>):</h3>
-                    <div>' . $this->whereCalled() . '</div>
-                    <br>
+            echo '<br><br>
                 </div>';
         } else {
             $user_ip = $_SERVER['REMOTE_ADDR'];
 
             // format log
-            $log = '|' . $user_ip . '|' . $type . '|' . $code . '|' . $description . '|' . $this->whereCalled() . '|';
+            $log = '|' . $user_ip . '|' . $type . '|' . $string_code . '|' . $description . '|' . $this->whereCalled() . '|' . SYSTEM_VERSION . '|';
 
             if (defined('LOG_ERRORS') && LOG_ERRORS != '') {
                 // log the error
@@ -145,7 +172,7 @@ class DebugLib
             if (defined('ERROR_LOGS_MAIL') && ERROR_LOGS_MAIL != '') {
                 FunctionsLib::sendEmail(
                     ERROR_LOGS_MAIL,
-                    '[DEBUG][' . $code . ']',
+                    '[DEBUG][' . $string_code . ']',
                     $log,
                     [
                         'mail' => ERROR_LOGS_MAIL,
