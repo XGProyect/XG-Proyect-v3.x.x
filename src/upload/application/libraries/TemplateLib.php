@@ -418,7 +418,7 @@ class TemplateLib
         // Update config language to the new setted value
         if (isset($_POST['language'])) {
             FunctionsLib::setCurrentLanguage($_POST['language']);
-            FunctionsLib::redirect(XGP_ROOT . 'install/');
+            FunctionsLib::redirect(SYSTEM_ROOT . DIRECTORY_SEPARATOR);
         }
 
         $current_page = isset($_GET['page']) ? $_GET['page'] : null;
