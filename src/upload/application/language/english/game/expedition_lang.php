@@ -20,7 +20,7 @@ $lang = [
     'exp_primitive_enemy_1' => 'Some primitive barbarians are attacking us with spaceships that can\'t even be named as such. If the fire gets serious we will be forced to fire back.', // ok
     'exp_primitive_enemy_2' => '',
     'exp_primitive_enemy_3' => 'We caught some radio transmissions from some drunk pirates. Seems like we will be under attack soon.', // ok
-    'exp_primitive_enemy_4' => '',
+    'exp_primitive_enemy_4' => 'We needed to fight some pirates which were, fortunately, only a few.', // ok
     'exp_primitive_enemy_5' => 'Some really desperate space pirates tried to capture our expedition fleet.', // ok
 
     // found advanced enemy
@@ -63,7 +63,6 @@ $lang = [
     'exp_blackholl_1' => 'The fleet was sucked into a black hole is partially destroyed.',
     'exp_blackholl_2' => 'The fleet was sucked into a black hole, and was completely destroyed!',
     'exp_found_goods' => 'The fleet has discovered an unmanned spacecraft! <br> His scouts have recovered %s de %s, %s de %s, %s de %s y %s de %s.',
-    'exp_found_ships' => 'Your expedition ran into the shipyards of a colony that was deserted eons ago. In the shipyards hangar they discover some ships that could be salvaged. The technicians are trying to get some of them to fly again.<br><br>The following ships are now part of the fleet:',
     'exp_back_home' => 'Your expedition returned to the hangar.',
 ];
 
