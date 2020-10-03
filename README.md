@@ -15,7 +15,7 @@ Live Server: Coming soon!
 Require PHP >= 7.3+  
 Require MySQLi >= 5.5+  
 
-![Free](https://www.gnu.org/graphics/agplv3-155x51.png)
+![General Public License v3](https://www.gnu.org/graphics/gplv3-with-text-136x68.png)
 
 ## How to get XG Proyect?
 
