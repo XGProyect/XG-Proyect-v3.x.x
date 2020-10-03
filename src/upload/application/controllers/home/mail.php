@@ -165,7 +165,8 @@ class Mail extends Controller
             [
                 'mail' => Functions::readConfig('admin_email'),
                 'name' => $this->game_name,
-            ]
+            ],
+            'html'
         );
     }
 }
