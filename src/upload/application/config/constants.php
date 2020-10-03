@@ -59,13 +59,13 @@ define(
 );
 
 // SYSTEM ROOT, IGNORING PUBLIC
-define('SYSTEM_ROOT', PROTOCOL . strtr(BASE_PATH, ['public' => '', 'public/' => '']));
+define('SYSTEM_ROOT', PROTOCOL . strtr(BASE_PATH, ['public' => '', 'public/' => '']) .'/');
 
 // GAME URL
 define('GAMEURL', PROTOCOL . $_SERVER['HTTP_HOST'] . '/');
 
 // ADMIN PATHS
-define('ADM_URL', PROTOCOL . strtr(BASE_PATH, ['public' => '', 'public/' => '']));
+define('ADM_URL', PROTOCOL . strtr(BASE_PATH, ['public' => '', 'public/' => '']) .'/');
 
 /**
  *
