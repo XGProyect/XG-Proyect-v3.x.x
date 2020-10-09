@@ -30,6 +30,10 @@ If applicable, add screenshots to help explain your problem.
  - OS: [e.g. iOS8.1]
  - Browser [e.g. stock browser, safari]
  - Version [e.g. 22]
+ 
+ **Server (please complete the following information):**
+ - PHP Version: [e.g. PHP 7.3.10]
+ - MySQL Version: [e.g. MySQL 5.6]
 
 **Additional context**
 Add any other context about the problem here.
