@@ -16,7 +16,7 @@
                 <label>{ins_user_title}</label>
                 <input type="text" name="user" placeholder="{ins_ex_tag} root" value="{v_user}">
                 <label>{ins_password_title}</label>
-                <input type="password" name="password" value="" autocomplete="off">
+                <input type="text" name="password" value="" autocomplete="off">
                 <label>{ins_db_title}</label>
                 <input type="text" name="db" placeholder="{ins_ex_tag} xgproyect" value="{v_db}">
                 <label>{ins_prefix_title}</label>
