@@ -222,7 +222,7 @@ class Installation extends Controller
                                 'v_host' => '',
                                 'v_user' => '',
                                 'v_db' => '',
-                                'v_prefix' => '',
+                                'v_prefix' => 'xgp_',
                             ],
                             $this->langs->language
                         )
