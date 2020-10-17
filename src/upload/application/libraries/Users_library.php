@@ -11,8 +11,11 @@
  */
 namespace application\libraries;
 
+use application\core\enumerators\AllianceRanksEnumerator as AllianceRanks;
+use application\core\enumerators\SwitchIntEnumerator as SwitchInt;
 use application\core\Language;
 use application\core\Template;
+use application\libraries\alliance\Ranks;
 use application\libraries\FunctionsLib as Functions;
 use application\libraries\TimingLibrary as Timing;
 
@@ -122,12 +125,12 @@ class Users_library
             $alliance = $this->Users_Model->getAllianceDataByAllianceId($user_data['user_ally_id']);
 
             if ($alliance['ally_members'] > 1 && (isset($alliance['alliance_ranks']) && !is_null($alliance['alliance_ranks']))) {
-                $ranks = unserialize($alliance['alliance_ranks']);
+                $ranks = new Ranks($alliance['alliance_ranks']);
                 $userRank = null;
 
                 // search for an user that has permission to receive the alliance.
-                foreach ($ranks as $id => $rank) {
-                    if ($rank['rechtehand'] == 1) {
+                foreach ($ranks->getAllRanksAsArray() as $id => $rank) {
+                    if (isset($rank['rights'][AllianceRanks::right_hand]) && $rank['rights'][AllianceRanks::right_hand] == SwitchInt::on) {
                         $userRank = $id;
                         break;
                     }
