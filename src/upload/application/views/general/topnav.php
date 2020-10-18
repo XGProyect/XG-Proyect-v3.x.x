@@ -61,12 +61,22 @@
                         </tr>
 		    </table>
 		<script>
-		var planet_resources = {'metal': [{value_metal}, {value_metal_perhour}], 'crystal': [{value_crystal}, {value_crystal_perhour}], 'deuterium': [{value_deuterium}, {value_deuterium_perhour}]};
+		var planet_resources = {'metal': [{value_metal}, {value_metal_max}, {value_metal_perhour}], 'crystal': [{value_crystal}, {value_crystal_max}, {value_crystal_perhour}], 'deuterium': [{value_deuterium}, {value_deuterium_max}, {value_deuterium_perhour}]};
 		var dateRes = Date.now();
 		function updateResources(){
 			Object.entries(planet_resources).forEach(([res, values]) => {
 				var element = document.getElementById('value_'+res);
-				element.innerHTML = Math.floor(values[0] + ((Date.now() - dateRes) / 1000) * (values[1] / 3600)).toLocaleString();
+				var amount = Math.floor(values[0] + ((Date.now() - dateRes) / 1000) * (values[2] / 3600));
+				if (values[1] > 0 && amount >= values[1]) {
+					if (values[0] >= values[1]) {
+						amount = values[0];
+					} else {
+						amount = values[1];
+					}
+					element.innerHTML = '<font color="#ff0000">' + amount.toLocaleString() + '</font>';
+				} else {
+					element.innerHTML = amount.toLocaleString();
+				}
 			});
 			setTimeout(updateResources, 1000);
 		}

@@ -553,6 +553,9 @@ class TemplateLib
         foreach (['metal', 'crystal', 'deuterium'] as $resource)  {
             $parse["value_{$resource}"] = $this->current_planet["planet_{$resource}"];
             $parse["value_{$resource}_perhour"] = $this->current_planet["planet_{$resource}_perhour"];
+            $store = "building_{$resource}_store";
+            if ($resource == 'deuterium') { $store = "building_{$resource}_tank"; }
+            $parse["value_{$resource}_max"] = Production::maxStorable($this->current_planet[$store]);
         }
 
         // RESOURCES FORMAT
