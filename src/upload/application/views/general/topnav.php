@@ -51,15 +51,28 @@
 
                         </tr>
                         <tr class='header'>
-                            <td align="center" class='header' width="90"><font >{re_metal}</font></td>
-                            <td align="center" class='header' width="90"><font >{re_crystal}</font></td>
-                            <td align="center" class='header' width="90"><font >{re_deuterium}</font></td>
+                            <td id="value_metal" align="center" class='header' width="90"><font >{re_metal}</font></td>
+                            <td id="value_crystal" align="center" class='header' width="90"><font >{re_crystal}</font></td>
+                            <td id="value_deuterium" align="center" class='header' width="90"><font >{re_deuterium}</font></td>
                             <td align="center" class='header' width="90"><font color="#FFFFFF">{re_darkmatter}</font></DIV></td>
 
                             <td align="center" class='header' width="90">{re_energy}</td>
 
                         </tr>
-                    </table></td>
+		    </table>
+		<script>
+		var planet_resources = {'metal': [{value_metal}, {value_metal_perhour}], 'crystal': [{value_crystal}, {value_crystal_perhour}], 'deuterium': [{value_deuterium}, {value_deuterium_perhour}]};
+		var dateRes = Date.now();
+		function updateResources(){
+			Object.entries(planet_resources).forEach(([res, values]) => {
+				var element = document.getElementById('value_'+res);
+				element.innerHTML = Math.floor(values[0] + ((Date.now() - dateRes) / 1000) * (values[1] / 3600)).toLocaleString();
+			});
+			setTimeout(updateResources, 1000);
+		}
+		setTimeout(updateResources, 1000);
+		</script>
+		</td>
                 <td class='header'>
                     <table class='header' align=left>
                         <tr class='header'>

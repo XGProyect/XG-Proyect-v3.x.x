@@ -549,6 +549,12 @@ class TemplateLib
             );
         }
 
+        // ADD RESOURCE VALUES
+        foreach (['metal', 'crystal', 'deuterium'] as $resource)  {
+            $parse["value_{$resource}"] = $this->current_planet["planet_{$resource}"];
+            $parse["value_{$resource}_perhour"] = $this->current_planet["planet_{$resource}_perhour"];
+        }
+
         // RESOURCES FORMAT
         $metal = FormatLib::prettyNumber($this->current_planet['planet_metal']);
         $crystal = FormatLib::prettyNumber($this->current_planet['planet_crystal']);
