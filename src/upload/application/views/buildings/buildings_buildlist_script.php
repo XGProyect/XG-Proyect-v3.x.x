@@ -10,16 +10,16 @@ function t() {
 	s           = ss - aa;
 	m           = 0;
 	h           = 0;
-	gurl        = "game.php?page={call_program}&planet=" + pl;
+	rurl        = "game.php?page={call_program}&planet=" + pl;
 	if ( (ss + 3) < aa ) {
-		blc.innerHTML = "{bd_finished}<br>" + "<a href=" + gurl + ">{bd_continue}</a>";
+		blc.innerHTML = "{bd_finished}<br>" + "<a href=" + rurl + ">{bd_continue}</a>";
 		if ((ss + 6) >= aa) {
-			window.setTimeout('document.location.href="' + gurl + '";', 3500);
+			window.setTimeout('document.location.href="' + rurl + '";', 3500);
 		}
 	} else {
 		if ( s <= 0 ) {
-			blc.innerHTML = "{bd_finished}<br>" + "<a href=" + gurl + ">{bd_continue}</a>";
-			window.setTimeout('document.location.href="' + gurl + '";', 1100);
+			blc.innerHTML = "{bd_finished}<br>" + "<a href=" + rurl + ">{bd_continue}</a>";
+			window.setTimeout('document.location.href="' + rurl + '";', 1100);
 			return;
 		} else {
 			if ( s > 59) {
