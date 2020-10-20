@@ -159,7 +159,7 @@ class Overview extends Controller
                     $building_block .= "\n	t();\n";
                     $building_block .= "\n</script>\n";
                 } else {
-                    $building_block = '' . $this->langs->language[$building] . ' (' . $level . ')';
+                    $building_block = '' . $this->langs->language[$this->getObjects()->getObjects($building)] . ' (' . $level . ')';
                     $building_block .= '<br><font color="#7f7f7f">(' . FormatLib::prettyTime($time_to_end) . ')</font>';
                 }
             }
