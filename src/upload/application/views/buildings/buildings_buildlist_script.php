@@ -10,20 +10,17 @@ function t() {
 	s           = ss - aa;
 	m           = 0;
 	h           = 0;
+	gurl        = "game.php?page={call_program}&planet=" + pl;
 	if ( (ss + 3) < aa ) {
-		blc.innerHTML = "{bd_finished}<br>" + "<a href=game.php?page={call_program}&planet=" + pl + ">{bd_continue}</a>";
+		blc.innerHTML = "{bd_finished}<br>" + "<a href=" + gurl + ">{bd_continue}</a>";
 		if ((ss + 6) >= aa) {
-			window.setTimeout('document.location.href="game.php?page={call_program}&planet=' + pl + '";', 3500);
+			window.setTimeout('document.location.href="' + gurl + '";', 3500);
 		}
 	} else {
-		if ( s < 0 ) {
-			if (1) {
-				blc.innerHTML = "{bd_finished}<br>" + "<a href=game.php?page={call_program}&planet=" + pl + ">{bd_continue}</a>";
-				window.setTimeout('document.location.href="game.php?page={call_program}&planet=' + pl + '";', 1000);
-			} else {
-				timeout = 0;
-				blc.innerHTML = "{bd_finished}<br>" + "<a href=game.php?page={call_program}&planet=" + pl + ">{bd_continue}</a>";
-			}
+		if ( s <= 0 ) {
+			blc.innerHTML = "{bd_finished}<br>" + "<a href=" + gurl + ">{bd_continue}</a>";
+			window.setTimeout('document.location.href="' + gurl + '";', 1100);
+			return;
 		} else {
 			if ( s > 59) {
 				m = Math.floor( s / 60);
@@ -39,11 +36,7 @@ function t() {
 			if ( m < 10 ) {
 				m = "0" + m;
 			}
-			if (1) {
-				blc.innerHTML = h + ":" + m + ":" + s + "<br><a href=game.php?page={current_page}&r={call_program}&listid=" + pk + "&cmd=" + pm + "&planet=" + pl + ">{bd_cancel}</a>";
-			} else {
-				blc.innerHTML = h + ":" + m + ":" + s + "<br><a href=game.php?page={current_page}&r={call_program}&listid=" + pk + "&cmd=" + pm + "&planet=" + pl + ">{bd_cancel}</a>";
-			}
+			blc.innerHTML = h + ":" + m + ":" + s + "<br><a href=game.php?page={current_page}&r={call_program}&listid=" + pk + "&cmd=" + pm + "&planet=" + pl + ">{bd_cancel}</a>";
 		}
 		pp = pp - 1;
 		if (timeout == 1) {
