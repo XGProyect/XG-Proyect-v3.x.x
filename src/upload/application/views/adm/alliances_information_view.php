@@ -35,10 +35,6 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>{al_alliance_information_owner_range}</td>
-                            <td><input type="text" name="alliance_owner_range" value="{alliance_owner_range}"></td>
-                        </tr>
-                        <tr>
                             <td>{al_alliance_information_web}</td>
                             <td><input type="text" name="alliance_web" value="{alliance_web}"></td>
                         </tr>

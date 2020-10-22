@@ -148,7 +148,6 @@ class Alliances extends Model
                 u.`user_ally_register_time`,
                 u.`user_ally_rank_id`,
                 a.`alliance_owner`,
-                a.`alliance_owner_range`,
                 a.`alliance_ranks`
             FROM `" . USERS . "` AS u
             LEFT JOIN `" . ALLIANCE . "` AS a ON a.`alliance_id` = u.`user_ally_id`
@@ -202,7 +201,6 @@ class Alliances extends Model
                 `alliance_name` = '" . $this->db->escapeValue($alliance_data['alliance_name']) . "',
                 `alliance_tag` = '" . $this->db->escapeValue($alliance_data['alliance_tag']) . "',
                 `alliance_owner` = '" . $alliance_data['alliance_owner'] . "',
-                `alliance_owner_range` = '" . $this->db->escapeValue($alliance_data['alliance_owner_range']) . "',
                 `alliance_web` = '" . $this->db->escapeValue($alliance_data['alliance_web']) . "',
                 `alliance_image` = '" . $this->db->escapeValue($alliance_data['alliance_image']) . "',
                 `alliance_description` = '" . $this->db->escapeValue($alliance_data['alliance_description']) . "',

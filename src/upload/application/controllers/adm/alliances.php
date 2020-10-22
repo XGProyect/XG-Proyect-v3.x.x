@@ -257,14 +257,10 @@ class Alliances extends Controller
                 $member['ally_request_text'] = ($member['user_ally_request_text']) ? $this->langs->line('ally_request_text') : '-';
                 $member['alliance_register_time'] = date(FunctionsLib::readConfig('date_format_extended'), $member['user_ally_register_time']);
 
-                if ($member['user_id'] == $member['alliance_owner']) {
-                    $member['ally_rank'] = $member['alliance_owner_range'];
+                if (isset($member['user_ally_rank_id'])) {
+                    $member['ally_rank'] = $this->ranks->getUserRankById($member['user_ally_rank_id'])['rank'];
                 } else {
-                    if (isset($member['user_ally_rank_id'])) {
-                        $member['ally_rank'] = $this->ranks->getUserRankById($member['user_ally_rank_id'])['rank'];
-                    } else {
-                        $member['ally_rank'] = $this->langs->line('al_rank_not_defined');
-                    }
+                    $member['ally_rank'] = $this->langs->line('al_rank_not_defined');
                 }
 
                 $members .= $this->getTemplate()->set('adm/alliances_members_row_view', $member);
@@ -295,7 +291,6 @@ class Alliances extends Controller
         $alliance_tag_orig = isset($_POST['alliance_tag_orig']) ? $_POST['alliance_tag_orig'] : '';
         $alliance_owner = isset($_POST['alliance_owner']) ? $_POST['alliance_owner'] : '';
         $alliance_owner_orig = isset($_POST['alliance_owner_orig']) ? $_POST['alliance_owner_orig'] : '';
-        $alliance_owner_range = isset($_POST['alliance_owner_range']) ? $_POST['alliance_owner_range'] : '';
         $alliance_web = isset($_POST['alliance_web']) ? $_POST['alliance_web'] : '';
         $alliance_image = isset($_POST['alliance_image']) ? $_POST['alliance_image'] : '';
         $alliance_description = isset($_POST['alliance_description']) ? $_POST['alliance_description'] : '';
@@ -333,7 +328,6 @@ class Alliances extends Controller
                 'alliance_name' => $alliance_name,
                 'alliance_tag' => $alliance_tag,
                 'alliance_owner' => $alliance_owner,
-                'alliance_owner_range' => $alliance_owner_range,
                 'alliance_web' => $alliance_web,
                 'alliance_image' => $alliance_image,
                 'alliance_description' => $alliance_description,

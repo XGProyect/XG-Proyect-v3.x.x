@@ -244,7 +244,6 @@ class Maker extends Model
                 `alliance_name` = '" . $alliance_name . "',
                 `alliance_tag` = '" . $alliance_tag . "' ,
                 `alliance_owner` = '" . (int) $user_id . "',
-                `alliance_owner_range` = 'Founder',
                 `alliance_register_time` = '" . time() . "',
                 `alliance_ranks` = '" . $rights_string . "'"
             );
