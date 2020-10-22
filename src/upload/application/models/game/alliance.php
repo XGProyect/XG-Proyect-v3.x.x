@@ -63,7 +63,6 @@ class Alliance extends Model
                 `alliance_name` = '" . $alliance_name . "',
                 `alliance_tag` = '" . $alliance_tag . "' ,
                 `alliance_owner` = '" . (int) $user_id . "',
-                `alliance_owner_range` = '" . $founder_rank . "',
                 `alliance_register_time` = '" . time() . "',
                 `alliance_ranks` = '" . strtr($rights_string, ['Founder' => $founder_rank, 'Newcomer' => $newcomer_rank]) . "'"
             );
@@ -265,7 +264,6 @@ class Alliance extends Model
     {
         $this->db->query(
             "UPDATE `" . ALLIANCE . "` SET
-                `alliance_owner_range` = '" . $alliance_data['alliance_owner_range'] . "',
                 `alliance_image` = '" . $alliance_data['alliance_image'] . "',
                 `alliance_web` = '" . $alliance_data['alliance_web'] . "',
                 `alliance_request_notallow` = '" . $alliance_data['alliance_request_notallow'] . "'

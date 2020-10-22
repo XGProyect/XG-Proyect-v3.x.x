@@ -122,7 +122,7 @@ class Alliances
 
         return ($rank != null
             && $ranks->getAllRanksAsArray() != null
-            && $ranks->getUserRankById($this->getUserRankId())['rights'][$rank] == SwitchIntEnumerator::on);
+            && $ranks->getRankById($this->getUserRankId())['rights'][$rank] == SwitchIntEnumerator::on);
     }
 
     /**

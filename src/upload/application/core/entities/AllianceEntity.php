@@ -149,16 +149,6 @@ class AllianceEntity extends Entity
     }
 
     /**
-     * Return the alliance owner range
-     *
-     * @return string
-     */
-    public function getAllianceOwnerRange()
-    {
-        return $this->data['alliance_owner_range'];
-    }
-
-    /**
      * Return the alliance ranks
      *
      * @return string

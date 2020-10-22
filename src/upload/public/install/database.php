@@ -42,7 +42,6 @@ $tables['alliance'] = "CREATE TABLE `" . ALLIANCE . "` (
 `alliance_image` varchar(255) DEFAULT NULL,
 `alliance_request` text,
 `alliance_request_notallow` tinyint(4) NOT NULL DEFAULT '0',
-`alliance_owner_range` varchar(32) DEFAULT NULL,
 `alliance_ranks` text,
 PRIMARY KEY (`alliance_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;";

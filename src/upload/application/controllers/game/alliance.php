@@ -1,13 +1,11 @@
 <?php
 /**
- * Alliance Controller
+ * alliance.php
  *
- * @category Controller
- * @package  Application
  * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
+ * @license  https://www.xgproyect.org XG Proyect
+ * @link     https://www.xgproyect.org
+ * @since    3.2.0
  */
 namespace application\controllers\game;
 
@@ -32,6 +30,16 @@ class Alliance extends Controller
      * @var int
      */
     const MODULE_ID = 13;
+
+    /**
+     * Default alliance ranks
+     *
+     * @var array
+     */
+    const DEFAULT_RANKS = [
+        'founder' => 0,
+        'newcomer' => 1,
+    ];
 
     /**
      * Contains a BBCodeLib object
@@ -664,6 +672,7 @@ class Alliance extends Controller
             'text' => FILTER_SANITIZE_STRING,
             'options' => FILTER_SANITIZE_STRING,
             'owner_range' => FILTER_SANITIZE_STRIPPED,
+            'newcomer_range' => FILTER_SANITIZE_STRIPPED,
             'web' => FILTER_VALIDATE_URL,
             'image' => FILTER_VALIDATE_URL,
             'request_notallow' => [
@@ -681,6 +690,29 @@ class Alliance extends Controller
                     'alliance_image' => ($post['image'] ? StringsHelper::escapeString($post['image']) : ''),
                     'alliance_request_notallow' => $post['request_notallow'],
                 ]
+            );
+
+            $ranks = $this->alliance->getCurrentAllianceRankObject();
+
+            // edit owner rank name
+            if (isset($post['owner_range'])) {
+                $ranks->editRankNameById(
+                    self::DEFAULT_RANKS['founder'],
+                    $post['owner_range']
+                );
+            }
+
+            // edit newcomer rank name
+            if (isset($post['newcomer_range'])) {
+                $ranks->editRankNameById(
+                    self::DEFAULT_RANKS['newcomer'],
+                    $post['newcomer_range']
+                );
+            }
+
+            $this->Alliance_Model->updateAllianceRanks(
+                $this->getAllianceId(),
+                $ranks->getAllRanksAsJsonString()
             );
 
             FunctionsLib::redirect('game.php?page=alliance&mode=admin&edit=ally');
@@ -713,6 +745,8 @@ class Alliance extends Controller
             3 => $this->alliance->getCurrentAlliance()->getAllianceRequest(),
         ];
 
+        $ranks = $this->alliance->getCurrentAllianceRankObject();
+
         return $this->getTemplate()->set(
             'alliance/alliance_admin',
             array_merge(
@@ -727,7 +761,8 @@ class Alliance extends Controller
                     'alliance_image' => $this->alliance->getCurrentAlliance()->getAllianceImage(),
                     'alliance_request_notallow_0' => $this->alliance->getCurrentAlliance()->getAllianceRequestNotAllow() == SwitchInt::off ? 'selected' : '',
                     'alliance_request_notallow_1' => $this->alliance->getCurrentAlliance()->getAllianceRequestNotAllow() == SwitchInt::on ? 'selected' : '',
-                    'alliance_owner_range' => $this->alliance->getCurrentAlliance()->getAllianceOwnerRange(),
+                    'alliance_owner_range' => $ranks->getRankById(self::DEFAULT_RANKS['founder'])['rank'],
+                    'alliance_newcomer_range' => $ranks->getRankById(self::DEFAULT_RANKS['newcomer'])['rank'],
                 ]
             )
         );
@@ -771,7 +806,7 @@ class Alliance extends Controller
             && $id != $this->alliance->getCurrentAlliance()->getAllianceOwner()) {
             $ranks = $this->alliance->getCurrentAllianceRankObject();
 
-            if ($ranks->getUserRankById($new_rank) != null or $new_rank == 0) {
+            if ($ranks->getRankById($new_rank) != null or $new_rank == 0) {
                 $this->Alliance_Model->updateUserRank($id, $new_rank);
             }
         }
@@ -1136,8 +1171,8 @@ class Alliance extends Controller
 
         if (isset($users)) {
             foreach ($users as $user) {
-                $rank_name = $ranksObject->getUserRankById($user['user_ally_rank_id'])['rank'];
-                $rights = $ranksObject->getUserRankById($user['user_ally_rank_id'])['rights'];
+                $rank_name = $ranksObject->getRankById($user['user_ally_rank_id'])['rank'];
+                $rights = $ranksObject->getRankById($user['user_ally_rank_id'])['rights'];
 
                 if (isset($rights[AllianceRanks::right_hand]) && $rights[AllianceRanks::right_hand] == SwitchInt::on) {
                     $list_of_members[] = [
@@ -1408,27 +1443,17 @@ class Alliance extends Controller
      */
     private function getUserRank($member_id, $member_rank_id)
     {
-        if ($this->alliance->getCurrentAlliance()->getAllianceOwner() == $member_id) {
-            $owner_rank = $this->alliance->getCurrentAlliance()->getAllianceOwnerRange();
-
-            if (empty($owner_rank)) {
-                return $this->langs->line('al_founder_rank_text');
-            }
-
-            return $owner_rank;
-        }
-
-        if ($member_rank_id == 0) {
-            return $this->langs->line('al_new_member_rank_text');
-        }
-
         $ranks = $this->alliance->getCurrentAllianceRankObject();
 
-        if (!isset($ranks->getUserRankById($member_rank_id)['rank'])) {
-            return $this->langs->line('al_new_member_rank_text');
+        if (!isset($ranks->getRankById($member_rank_id)['rank'])) {
+            if ($this->alliance->getCurrentAlliance()->getAllianceOwner() == $member_id) {
+                return $this->langs->line('al_founder_rank_text');
+            } else {
+                return $this->langs->line('al_new_member_rank_text');
+            }
         }
 
-        return $ranks->getUserRankById($member_rank_id)['rank'];
+        return $ranks->getRankById($member_rank_id)['rank'];
     }
 
     /**
@@ -1449,18 +1474,17 @@ class Alliance extends Controller
         }
 
         $ranks = $this->alliance->getCurrentAllianceRankObject();
-
-        $options = '<option onclick="document.edit_user_rank.submit();" value="0">' . $this->langs->line('al_new_member_rank_text') . '</option>';
+        $options = '';
 
         if (is_array($ranks->getAllRanksAsArray())) {
             foreach ($ranks->getAllRanksAsArray() as $id => $rank) {
                 $selected = '';
 
-                if ($member_rank_id - 1 == $id) {
+                if ($member_rank_id == $id) {
                     $selected = ' selected=selected';
                 }
 
-                $options .= '<option onclick="document.edit_user_rank.submit();" value="' . ($id + 1) . '"' . $selected . '>' . $rank['rank'] . '</option>';
+                $options .= '<option onclick="document.edit_user_rank.submit();" value="' . $id . '"' . $selected . '>' . $rank['rank'] . '</option>';
             }
         }
 
@@ -1515,5 +1539,3 @@ class Alliance extends Controller
         return $kick_user . $change_rank;
     }
 }
-
-/* end of alliance.php */

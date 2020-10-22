@@ -152,6 +152,32 @@ class Ranks
     }
 
     /**
+     * Edit rank name
+     *
+     * @param integer $rank_id
+     * @param string $name
+     * @return array
+     */
+    public function editRankNameById(int $rank_id, string $name): array
+    {
+        try {
+            if (!isset($this->getRanks()[$this->validateRankId($rank_id)])) {
+                throw new Exception('Rank ID doesn\'t exists');
+            }
+
+            if (!is_string($name)) {
+                throw new Exception('Rank name is not a string.');
+            }
+
+            $this->_ranks[$rank_id]['rank'] = $name;
+
+            return $this->getRanks();
+        } catch (Exception $e) {
+            die('Caught exception: ' . $e->getMessage() . "\n");
+        }
+    }
+
+    /**
      *
      * @param RanksTypes $rank
      * @param SwitchTypes $value
@@ -199,20 +225,6 @@ class Ranks
     public function getRankById($rank_id)
     {
         return isset($this->_ranks[$rank_id]) ? $this->_ranks[$rank_id] : 0;
-    }
-
-    /**
-     * Get the user rank by ID, it automatically decrements 1
-     *
-     * @param int $rank_id Rank ID
-     *
-     * @return array
-     *
-     * @todo this method shouldn't be here, this is a task for the Alliance library, when we refactor the admin alliances page we need to remove this
-     */
-    public function getUserRankById($rank_id)
-    {
-        return $this->getRankById($this->validateRankId($rank_id - 1));
     }
 
     /**

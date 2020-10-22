@@ -258,7 +258,7 @@ class Alliances extends Controller
                 $member['alliance_register_time'] = date(FunctionsLib::readConfig('date_format_extended'), $member['user_ally_register_time']);
 
                 if (isset($member['user_ally_rank_id'])) {
-                    $member['ally_rank'] = $this->ranks->getUserRankById($member['user_ally_rank_id'])['rank'];
+                    $member['ally_rank'] = $this->ranks->getRankById($member['user_ally_rank_id'])['rank'];
                 } else {
                     $member['ally_rank'] = $this->langs->line('al_rank_not_defined');
                 }
