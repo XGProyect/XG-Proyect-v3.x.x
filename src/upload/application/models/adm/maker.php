@@ -237,13 +237,16 @@ class Maker extends Model
 
             $this->db->beginTransaction();
 
+            $rights_string = '[{"rank":"Founder","rights":{"1":1,"2":1,"3":1,"4":1,"5":1,"6":1,"7":1,"8":1,"9":1}},{"rank":"Newcomer","rights":{"1":0,"2":0,"3":0,"4":0,"5":0,"6":0,"7":0,"8":0,"9":0}}]';
+
             $this->db->query(
                 "INSERT INTO `" . ALLIANCE . "` SET
-                    `alliance_name` = '" . $this->db->escapeValue($alliance_name) . "',
-                    `alliance_tag` = '" . $this->db->escapeValue($alliance_tag) . "' ,
-                    `alliance_owner` = '" . $alliance_founder . "',
-                    `alliance_owner_range` = '" . $rank . "',
-                    `alliance_register_time` = '" . $time . "'"
+                `alliance_name` = '" . $alliance_name . "',
+                `alliance_tag` = '" . $alliance_tag . "' ,
+                `alliance_owner` = '" . (int) $user_id . "',
+                `alliance_owner_range` = 'Founder',
+                `alliance_register_time` = '" . time() . "',
+                `alliance_ranks` = '" . $rights_string . "'"
             );
 
             $new_alliance_id = $this->db->insertId();

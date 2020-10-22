@@ -1,39 +1,50 @@
 <br />
 <div id="content">
     <a href="game.php?page=alliance&mode=admin&edit=ally">{al_back}</a>
-    <table width="519"><tr><td class="c" colspan="11">{al_configura_ranks}</td></tr>
+
+    <table width="519"><tr><td class="c" colspan="11">{al_configure_ranks}</td></tr>
         <form action="game.php?page=alliance&mode=admin&edit=rights" method="POST">
             <tr>
-                <th></th>
-                <th>{al_rank_name}</th>
-                <th><img src="{dpath}img/r1.png"></th>
-                <th><img src="{dpath}img/r2.png"></th>
+                <th colspan="2"><span style="color: #6f9fc8;">{al_rank_name_title}</span></th>
+                <th style="color: #6f9fc8;" colspan="2">{al_rank_applications_title}</th>
+                <th style="color: #6f9fc8;" colspan="4">{al_rank_member_title}</th>
+                <th style="color: #6f9fc8;" colspan="3">{al_rank_alliance_title}</th>
+            </tr>
+            <tr>
+                <th colspan="2"></th>
                 <th><img src="{dpath}img/r3.png"></th>
-                <th><img src="{dpath}img/r4.png"></th>
                 <th><img src="{dpath}img/r5.png"></th>
-                <th><img src="{dpath}img/r6.png"></th>
+                <th><img src="{dpath}img/r4.png"></th>
+                <th><img src="{dpath}img/r2.png"></th>
                 <th><img src="{dpath}img/r7.png"></th>
                 <th><img src="{dpath}img/r8.png"></th>
+                <th><img src="{dpath}img/r1.png"></th>
+                <th><img src="{dpath}img/r6.png"></th>
                 <th><img src="{dpath}img/r9.png"></th>
             </tr>
             {list_of_ranks}
             <tr>
-                <th><a href="game.php?page=alliance&mode=admin&edit=rights&d={rank_id}"><img src="{dpath}alliance/abort.gif" border="0"></a></th>
+                <th>{rank_delete}</th>
                 <th>{rank_name}</th>
                 <input type="hidden" name="id[]" value="{rank_id}">
+                <th><input type="checkbox" name="u{rank_id}r3" {checked_r3}{edit_check}></th>
+                <th><input type="checkbox" name="u{rank_id}r5" {checked_r5}{edit_check}></th>
+                <th><input type="checkbox" name="u{rank_id}r4" {checked_r4}{edit_check}></th>
+                <th><input type="checkbox" name="u{rank_id}r2" {checked_r2}{edit_check}></th>
+                <th><input type="checkbox" name="u{rank_id}r7" {checked_r7}{edit_check}></th>
+                <th><input type="checkbox" name="u{rank_id}r8" {checked_r8}{edit_check}></th>
                 <th>{r1}</th>
-                <th><input type="checkbox" name="u{rank_id}r2" {checked_r2}></th>
-                <th><input type="checkbox" name="u{rank_id}r3" {checked_r3}></th>
-                <th><input type="checkbox" name="u{rank_id}r4" {checked_r4}></th>
-                <th><input type="checkbox" name="u{rank_id}r5" {checked_r5}></th>
-                <th><input type="checkbox" name="u{rank_id}r6" {checked_r6}></th>
-                <th><input type="checkbox" name="u{rank_id}r7" {checked_r7}></th>
-                <th><input type="checkbox" name="u{rank_id}r8" {checked_r8}></th>
-                <th><input type="checkbox" name="u{rank_id}r9" {checked_r9}></th>
+                <th><input type="checkbox" name="u{rank_id}r6" {checked_r6}{edit_check}></th>
+                <th><input type="checkbox" name="u{rank_id}r9" {checked_r9}{edit_check}></th>
             </tr>
             {/list_of_ranks}
             <tr>
-                <th colspan="11"><input type="submit" value="{al_save}"></th>
+                <th colspan="11"><span style="float:rigth!important;"><input type="submit" value="{al_save}"></span></th>
+            </tr>
+            <tr>
+                <th colspan="11" style="text-align:left;">
+                    {al_rank_warning}
+                </th>
             </tr>
         </form>
     </table>
@@ -91,7 +102,7 @@
             </tr>
             <tr>
                 <th><img src="{dpath}img/r9.png"></th>
-                <th>{al_legend_right_hand}</th>
+                <th><a title="{al_legend_right_hand_detail}">{al_legend_right_hand}</a></th>
             </tr>
         </table>
     </form>

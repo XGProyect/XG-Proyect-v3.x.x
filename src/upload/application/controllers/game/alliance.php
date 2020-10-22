@@ -384,7 +384,8 @@ class Alliance extends Controller
                 $alliance_name,
                 $alliance_tag,
                 $this->user['user_id'],
-                $this->langs->line('al_alliance_founder_rank')
+                $this->langs->line('al_founder_rank_text'),
+                $this->langs->line('al_new_member_rank_text')
             );
 
             $message = str_replace(['%s', '%d'], [$alliance_name, $alliance_tag], $this->langs->line('al_created'));
@@ -1016,17 +1017,25 @@ class Alliance extends Controller
 
         if (is_array($ranks->getAllRanksAsArray())) {
             foreach ($ranks->getAllRanksAsArray() as $rank_id => $details) {
-                $r1 = '<b>-</b>';
+                $delete = '<a href="game.php?page=alliance&mode=admin&edit=rights&d=' . $rank_id . '"><img src="' . DPATH . 'alliance/abort.gif" border="0"></a>';
+                $disabled = '';
+                if ($rank_id == 0 or $rank_id == 1) {
+                    $delete = '';
+                    $disabled = ' disabled="disabled"';
+                }
+
+                $right_hand = '<b>-</b>';
 
                 if ($this->alliance->isOwner()) {
-                    $r1 = '<input type="checkbox" name="u' . $rank_id . 'r1"' . (($details['rights'][AllianceRanks::delete] == SwitchInt::on) ? ' checked="checked"' : '') . '>';
+                    $right_hand = '<input type="checkbox" name="u' . $rank_id . 'r1"' . (($details['rights'][AllianceRanks::delete] == SwitchInt::on) ? ' checked="checked"' : '') . $disabled . '>';
                 }
 
                 $list_of_ranks[] = [
                     'dpath' => DPATH,
                     'rank_id' => $rank_id,
+                    'rank_delete' => $delete,
                     'rank_name' => $details['rank'],
-                    'r1' => $r1,
+                    'r1' => $right_hand,
                     'checked_r2' => (($details['rights'][AllianceRanks::kick] == SwitchInt::on) ? ' checked="checked"' : ''),
                     'checked_r3' => (($details['rights'][AllianceRanks::applications] == SwitchInt::on) ? ' checked="checked"' : ''),
                     'checked_r4' => (($details['rights'][AllianceRanks::view_member_list] == SwitchInt::on) ? ' checked="checked"' : ''),
@@ -1035,6 +1044,7 @@ class Alliance extends Controller
                     'checked_r7' => (($details['rights'][AllianceRanks::online_status] == SwitchInt::on) ? ' checked="checked"' : ''),
                     'checked_r8' => (($details['rights'][AllianceRanks::send_circular] == SwitchInt::on) ? ' checked="checked"' : ''),
                     'checked_r9' => (($details['rights'][AllianceRanks::right_hand] == SwitchInt::on) ? ' checked="checked"' : ''),
+                    'edit_check' => $disabled,
                 ];
             }
         }
@@ -1413,6 +1423,10 @@ class Alliance extends Controller
         }
 
         $ranks = $this->alliance->getCurrentAllianceRankObject();
+
+        if (!isset($ranks->getUserRankById($member_rank_id)['rank'])) {
+            return $this->langs->line('al_new_member_rank_text');
+        }
 
         return $ranks->getUserRankById($member_rank_id)['rank'];
     }

@@ -47,21 +47,25 @@ class Alliance extends Model
      * @param string $alliance_tag  Alliance Tag
      * @param int $user_id          User ID
      * @param string $founder_rank  Founder Rank
+     * @param string $newcomer_rank  New member Rank
      *
      * @return void
      */
-    public function createNewAlliance($alliance_name, $alliance_tag, $user_id, $founder_rank)
+    public function createNewAlliance($alliance_name, $alliance_tag, $user_id, $founder_rank, $newcomer_rank)
     {
         try {
             $this->db->beginTransaction();
 
+            $rights_string = '[{"rank":"Founder","rights":{"1":1,"2":1,"3":1,"4":1,"5":1,"6":1,"7":1,"8":1,"9":1}},{"rank":"Newcomer","rights":{"1":0,"2":0,"3":0,"4":0,"5":0,"6":0,"7":0,"8":0,"9":0}}]';
+
             $this->db->query(
-                "INSERT INTO " . ALLIANCE . " SET
-                `alliance_name`='" . $alliance_name . "',
-                `alliance_tag`='" . $alliance_tag . "' ,
-                `alliance_owner`='" . (int) $user_id . "',
+                "INSERT INTO `" . ALLIANCE . "` SET
+                `alliance_name` = '" . $alliance_name . "',
+                `alliance_tag` = '" . $alliance_tag . "' ,
+                `alliance_owner` = '" . (int) $user_id . "',
                 `alliance_owner_range` = '" . $founder_rank . "',
-                `alliance_register_time`='" . time() . "'"
+                `alliance_register_time` = '" . time() . "',
+                `alliance_ranks` = '" . strtr($rights_string, ['Founder' => $founder_rank, 'Newcomer' => $newcomer_rank]) . "'"
             );
 
             $new_ally_id = $this->db->insertId();

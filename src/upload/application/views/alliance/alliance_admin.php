@@ -77,6 +77,10 @@
                 <th><input type="text" name="owner_range" value="{alliance_owner_range}" size=30></th>
             </tr>
             <tr>
+                <th>{al_manage_newcomer_rank}</th>
+                <th><input type="text" name="newcomer_range" value="{alliance_newcomer_range}" size=30></th>
+            </tr>
+            <tr>
                 <th colspan="2"><input type="submit" name="options" value="{al_save}"></th>
             </tr>
         </table>
