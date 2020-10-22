@@ -270,7 +270,7 @@
 	</div>
 	<div id="footer">
 	    <div id="footerContent">
-            <p id="copyright">Powered by <a href="http://xgproyect.org/" target="_blank" title="XG Proyect {version}">XG Proyect</a> © 2008 - {year}.</p>
+            <p id="copyright">Powered by <a href="https://xgproyect.org/" target="_blank" title="XG Proyect {version}">XG Proyect</a> © 2008 - {year}.</p>
         </div>
 	</div>
 
