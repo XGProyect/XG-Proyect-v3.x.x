@@ -1,6 +1,6 @@
 {
     "require-dev": {
-        "bartlett/php-compatinfo": "^5.3"
+        "bartlett/php-compatinfo": "^5.4"
     },
     "scripts": {
         "phpcompatinfo": [
