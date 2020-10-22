@@ -7,7 +7,7 @@
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
- * @version  3.1.0
+ * @version  3.2.0
  */
 ###########################################################################
 #
@@ -21,7 +21,7 @@
  *
  */
 // GAME FILES VERSION
-define('SYSTEM_VERSION', '3.1.0');
+define('SYSTEM_VERSION', '3.2.0');
 
 // HOOKS
 define('HOOKS_ENABLED', false);
