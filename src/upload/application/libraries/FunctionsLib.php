@@ -85,25 +85,6 @@ abstract class FunctionsLib extends XGPCore
     }
 
     /**
-     * formatText
-     *
-     * @param string $text Text
-     *
-     * @return string
-     *
-     * @deprecated since version v3.1.0, will be removed on v3.2.0 - use StringsHelper::escapeString
-     */
-    public static function formatText($text)
-    {
-        $db = new Database();
-        $text = $db->escapeValue($text);
-        $text = trim(nl2br(strip_tags($text, '<br>')));
-        $text = preg_replace('|[\r][\n]|', '\\r\\n', $text);
-
-        return $text;
-    }
-
-    /**
      * chronoApplet
      *
      * @param string  $type  Type

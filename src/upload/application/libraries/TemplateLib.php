@@ -348,50 +348,6 @@ class TemplateLib
     }
 
     /**
-     * parseTemplate
-     *
-     * @param string $template Template
-     * @param array $array     Values to parse
-     *
-     * @return void
-     *
-     * @deprecated since version v3.0.2, will be removed on v3.2.0
-     */
-    public function parseTemplate($template, $array)
-    {
-        return preg_replace_callback(
-            '#\{([a-z0-9\-_]*?)\}#Ssi',
-            function ($matches) use ($array) {
-                return ((isset($array[$matches[1]])) ? $array[$matches[1]] : '');
-            },
-            $template
-        );
-    }
-
-    /**
-     * getTemplate
-     *
-     * @param string $template_name Template name
-     *
-     * @return string
-     *
-     * @deprecated since version v3.0.2, will be removed on v3.2.0
-     */
-    public function getTemplate($template_name)
-    {
-        $route = XGP_ROOT . TEMPLATE_DIR . $template_name . '.php';
-        $template = @file_get_contents($route);
-
-        if ($template) { // We got something
-            return $template; // Return
-        } else {
-            // Throw Exception
-            die('Template not found or empty: <strong>' . $template_name . '</strong><br />
-    Location: <strong>' . $route . '</strong>');
-        }
-    }
-
-    /**
      * installHeader
      *
      * @return string
