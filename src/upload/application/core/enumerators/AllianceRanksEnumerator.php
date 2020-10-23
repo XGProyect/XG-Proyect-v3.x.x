@@ -24,16 +24,13 @@ namespace application\core\enumerators;
 abstract class AllianceRanksEnumerator
 {
 
-    const delete = 1;
-    const kick = 2;
-    const applications = 3;
-    const view_member_list = 4;
-    const application_management = 5;
-    const administration = 6;
-    const online_status = 7;
-    const send_circular = 8;
-    const right_hand = 9;
-
+    const DELETE = 1;
+    const KICK = 2;
+    const APPLICATIONS = 3;
+    const VIEW_MEMBER_LIST = 4;
+    const APPLICATION_MANAGEMENT = 5;
+    const ADMINISTRATION = 6;
+    const ONLINE_STATUS = 7;
+    const SEND_CIRCULAR = 8;
+    const RIGHT_HAND = 9;
 }
-
-/* end of AllianceRanksEnumerator.php */

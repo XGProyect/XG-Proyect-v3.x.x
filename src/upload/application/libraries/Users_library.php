@@ -24,7 +24,6 @@ use application\libraries\TimingLibrary as Timing;
  */
 class Users_library
 {
-
     private $user_data;
     private $planet_data;
     private $Users_Model;
@@ -130,7 +129,7 @@ class Users_library
 
                 // search for an user that has permission to receive the alliance.
                 foreach ($ranks->getAllRanksAsArray() as $id => $rank) {
-                    if (isset($rank['rights'][AllianceRanks::right_hand]) && $rank['rights'][AllianceRanks::right_hand] == SwitchInt::on) {
+                    if (isset($rank['rights'][AllianceRanks::RIGHT_HAND]) && $rank['rights'][AllianceRanks::RIGHT_HAND] == SwitchInt::on) {
                         $userRank = $id;
                         break;
                     }

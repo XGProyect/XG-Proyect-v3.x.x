@@ -454,7 +454,7 @@ class Alliance extends Controller
      */
     private function getMemberslistSection()
     {
-        if (!$this->alliance->hasAccess(AllianceRanks::view_member_list)) {
+        if (!$this->alliance->hasAccess(AllianceRanks::VIEW_MEMBER_LIST)) {
             FunctionsLib::redirect('game.php?page=alliance');
         }
 
@@ -486,7 +486,7 @@ class Alliance extends Controller
                 'user_system' => $member['user_system'],
                 'coords' => FormatLib::prettyCoords($member['user_galaxy'], $member['user_system'], $member['user_planet']),
                 'user_ally_register_time' => Timing::formatExtendedDate($member['user_ally_register_time']),
-                'online_time' => $this->alliance->hasAccess(AllianceRanks::online_status) ? Timing::setOnlineStatus($member['user_onlinetime']) : '-',
+                'online_time' => $this->alliance->hasAccess(AllianceRanks::ONLINE_STATUS) ? Timing::setOnlineStatus($member['user_onlinetime']) : '-',
             ];
         }
 
@@ -510,7 +510,7 @@ class Alliance extends Controller
      */
     private function getCircularSection()
     {
-        if (!$this->alliance->hasAccess(AllianceRanks::send_circular)) {
+        if (!$this->alliance->hasAccess(AllianceRanks::SEND_CIRCULAR)) {
             FunctionsLib::redirect('game.php?page=alliance');
         }
 
@@ -632,13 +632,13 @@ class Alliance extends Controller
         $edit = filter_input(INPUT_GET, 'edit');
 
         $admin_sections = [
-            'ally' => AllianceRanks::administration,
-            'exit' => AllianceRanks::delete,
-            'members' => AllianceRanks::administration,
-            'name' => AllianceRanks::administration,
-            'requests' => AllianceRanks::application_management,
-            'rights' => AllianceRanks::right_hand,
-            'tag' => AllianceRanks::administration,
+            'ally' => AllianceRanks::ADMINISTRATION,
+            'exit' => AllianceRanks::DELETE,
+            'members' => AllianceRanks::ADMINISTRATION,
+            'name' => AllianceRanks::ADMINISTRATION,
+            'requests' => AllianceRanks::APPLICATION_MANAGEMENT,
+            'rights' => AllianceRanks::RIGHT_HAND,
+            'tag' => AllianceRanks::ADMINISTRATION,
             'transfer' => '',
         ];
 
@@ -793,7 +793,7 @@ class Alliance extends Controller
         $new_rank = filter_input(INPUT_POST, 'newrang', FILTER_VALIDATE_INT, ['options' => ['default' => 0]]);
 
         if (isset($kick)
-            && $this->alliance->hasAccess(AllianceRanks::kick)
+            && $this->alliance->hasAccess(AllianceRanks::KICK)
             && $kick != $this->alliance->getCurrentAlliance()->getAllianceOwner()) {
             $this->Alliance_Model->exitAlliance(
                 $this->getAllianceId(),
@@ -1018,15 +1018,15 @@ class Alliance extends Controller
                 $ranks->editRankById(
                     $id,
                     [
-                        AllianceRanks::delete => (isset($post['u' . $id . 'r1']) && $this->alliance->isOwner()) ? SwitchInt::on : SwitchInt::off,
-                        AllianceRanks::kick => isset($post['u' . $id . 'r2']) ? SwitchInt::on : SwitchInt::off,
-                        AllianceRanks::applications => isset($post['u' . $id . 'r3']) ? SwitchInt::on : SwitchInt::off,
-                        AllianceRanks::view_member_list => isset($post['u' . $id . 'r4']) ? SwitchInt::on : SwitchInt::off,
-                        AllianceRanks::application_management => isset($post['u' . $id . 'r5']) ? SwitchInt::on : SwitchInt::off,
-                        AllianceRanks::administration => isset($post['u' . $id . 'r6']) ? SwitchInt::on : SwitchInt::off,
-                        AllianceRanks::online_status => isset($post['u' . $id . 'r7']) ? SwitchInt::on : SwitchInt::off,
-                        AllianceRanks::send_circular => isset($post['u' . $id . 'r8']) ? SwitchInt::on : SwitchInt::off,
-                        AllianceRanks::right_hand => isset($post['u' . $id . 'r9']) ? SwitchInt::on : SwitchInt::off,
+                        AllianceRanks::DELETE => (isset($post['u' . $id . 'r1']) && $this->alliance->isOwner()) ? SwitchInt::on : SwitchInt::off,
+                        AllianceRanks::KICK => isset($post['u' . $id . 'r2']) ? SwitchInt::on : SwitchInt::off,
+                        AllianceRanks::APPLICATIONS => isset($post['u' . $id . 'r3']) ? SwitchInt::on : SwitchInt::off,
+                        AllianceRanks::VIEW_MEMBER_LIST => isset($post['u' . $id . 'r4']) ? SwitchInt::on : SwitchInt::off,
+                        AllianceRanks::APPLICATION_MANAGEMENT => isset($post['u' . $id . 'r5']) ? SwitchInt::on : SwitchInt::off,
+                        AllianceRanks::ADMINISTRATION => isset($post['u' . $id . 'r6']) ? SwitchInt::on : SwitchInt::off,
+                        AllianceRanks::ONLINE_STATUS => isset($post['u' . $id . 'r7']) ? SwitchInt::on : SwitchInt::off,
+                        AllianceRanks::SEND_CIRCULAR => isset($post['u' . $id . 'r8']) ? SwitchInt::on : SwitchInt::off,
+                        AllianceRanks::RIGHT_HAND => isset($post['u' . $id . 'r9']) ? SwitchInt::on : SwitchInt::off,
                     ]
                 );
             }
@@ -1062,7 +1062,7 @@ class Alliance extends Controller
                 $right_hand = '<b>-</b>';
 
                 if ($this->alliance->isOwner()) {
-                    $right_hand = '<input type="checkbox" name="u' . $rank_id . 'r1"' . (($details['rights'][AllianceRanks::delete] == SwitchInt::on) ? ' checked="checked"' : '') . $disabled . '>';
+                    $right_hand = '<input type="checkbox" name="u' . $rank_id . 'r1"' . (($details['rights'][AllianceRanks::DELETE] == SwitchInt::on) ? ' checked="checked"' : '') . $disabled . '>';
                 }
 
                 $list_of_ranks[] = [
@@ -1071,14 +1071,14 @@ class Alliance extends Controller
                     'rank_delete' => $delete,
                     'rank_name' => $details['rank'],
                     'r1' => $right_hand,
-                    'checked_r2' => (($details['rights'][AllianceRanks::kick] == SwitchInt::on) ? ' checked="checked"' : ''),
-                    'checked_r3' => (($details['rights'][AllianceRanks::applications] == SwitchInt::on) ? ' checked="checked"' : ''),
-                    'checked_r4' => (($details['rights'][AllianceRanks::view_member_list] == SwitchInt::on) ? ' checked="checked"' : ''),
-                    'checked_r5' => (($details['rights'][AllianceRanks::application_management] == SwitchInt::on) ? ' checked="checked"' : ''),
-                    'checked_r6' => (($details['rights'][AllianceRanks::administration] == SwitchInt::on) ? ' checked="checked"' : ''),
-                    'checked_r7' => (($details['rights'][AllianceRanks::online_status] == SwitchInt::on) ? ' checked="checked"' : ''),
-                    'checked_r8' => (($details['rights'][AllianceRanks::send_circular] == SwitchInt::on) ? ' checked="checked"' : ''),
-                    'checked_r9' => (($details['rights'][AllianceRanks::right_hand] == SwitchInt::on) ? ' checked="checked"' : ''),
+                    'checked_r2' => (($details['rights'][AllianceRanks::KICK] == SwitchInt::on) ? ' checked="checked"' : ''),
+                    'checked_r3' => (($details['rights'][AllianceRanks::APPLICATIONS] == SwitchInt::on) ? ' checked="checked"' : ''),
+                    'checked_r4' => (($details['rights'][AllianceRanks::VIEW_MEMBER_LIST] == SwitchInt::on) ? ' checked="checked"' : ''),
+                    'checked_r5' => (($details['rights'][AllianceRanks::APPLICATION_MANAGEMENT] == SwitchInt::on) ? ' checked="checked"' : ''),
+                    'checked_r6' => (($details['rights'][AllianceRanks::ADMINISTRATION] == SwitchInt::on) ? ' checked="checked"' : ''),
+                    'checked_r7' => (($details['rights'][AllianceRanks::ONLINE_STATUS] == SwitchInt::on) ? ' checked="checked"' : ''),
+                    'checked_r8' => (($details['rights'][AllianceRanks::SEND_CIRCULAR] == SwitchInt::on) ? ' checked="checked"' : ''),
+                    'checked_r9' => (($details['rights'][AllianceRanks::RIGHT_HAND] == SwitchInt::on) ? ' checked="checked"' : ''),
                     'edit_check' => $disabled,
                 ];
             }
@@ -1174,7 +1174,7 @@ class Alliance extends Controller
                 $rank_name = $ranksObject->getRankById($user['user_ally_rank_id'])['rank'];
                 $rights = $ranksObject->getRankById($user['user_ally_rank_id'])['rights'];
 
-                if (isset($rights[AllianceRanks::right_hand]) && $rights[AllianceRanks::right_hand] == SwitchInt::on) {
+                if (isset($rights[AllianceRanks::RIGHT_HAND]) && $rights[AllianceRanks::RIGHT_HAND] == SwitchInt::on) {
                     $list_of_members[] = [
                         'user_id' => $user['user_id'],
                         'user_name' => $user['user_name'],
@@ -1273,7 +1273,7 @@ class Alliance extends Controller
     {
         $list_of_members = '';
 
-        if ($this->alliance->hasAccess(AllianceRanks::view_member_list)) {
+        if ($this->alliance->hasAccess(AllianceRanks::VIEW_MEMBER_LIST)) {
             $list_of_members = ' (' . UrlHelper::setUrl('game.php?page=alliance&mode=memberslist', $this->langs->line('al_user_list')) . ')';
         }
 
@@ -1293,7 +1293,7 @@ class Alliance extends Controller
         $rank = $this->getUserRank($this->user['user_id'], $this->user['user_ally_rank_id']);
         $admin_area = '';
 
-        if ($this->alliance->hasAccess(AllianceRanks::administration)) {
+        if ($this->alliance->hasAccess(AllianceRanks::ADMINISTRATION)) {
             $admin_area = ' (' . UrlHelper::setUrl('game.php?page=alliance&mode=admin&edit=ally', $this->langs->line('al_manage_alliance')) . ')';
         }
 
@@ -1315,7 +1315,7 @@ class Alliance extends Controller
             $this->alliance->getCurrentAlliance()->getAllianceId()
         )['total_requests'];
 
-        if ($this->alliance->hasAccess(AllianceRanks::application_management) && $count != 0) {
+        if ($this->alliance->hasAccess(AllianceRanks::APPLICATION_MANAGEMENT) && $count != 0) {
             $requests = UrlHelper::setUrl(
                 'game.php?page=alliance&mode=admin&edit=requests',
                 $count . ' ' . $this->langs->line('al_new_requests')
@@ -1335,7 +1335,7 @@ class Alliance extends Controller
      */
     private function buildCircularBlock()
     {
-        if ($this->alliance->hasAccess(AllianceRanks::send_circular)) {
+        if ($this->alliance->hasAccess(AllianceRanks::SEND_CIRCULAR)) {
             return [
                 'detail_title' => $this->langs->line('al_circular_message'),
                 'detail_content' => UrlHelper::setUrl('game.php?page=alliance&mode=circular', $this->langs->line('al_send_circular_message')),
@@ -1519,14 +1519,14 @@ class Alliance extends Controller
             return '-';
         }
 
-        if ($this->alliance->hasAccess(AllianceRanks::kick)) {
+        if ($this->alliance->hasAccess(AllianceRanks::KICK)) {
             $action = 'game.php?page=alliance&mode=admin&edit=members&kick=' . $member_id;
             $content = FunctionsLib::setImage(DPATH . 'alliance/abort.gif');
             $attributes = 'onclick="javascript:return confirm(\'' . strtr($this->langs->line('al_confirm_remove_member'), ['%s' => $member_name]) . '\');"';
             $kick_user = UrlHelper::setUrl($action, $content, '', $attributes);
         }
 
-        if ($this->alliance->hasAccess(AllianceRanks::administration)) {
+        if ($this->alliance->hasAccess(AllianceRanks::ADMINISTRATION)) {
             $action = 'game.php?page=alliance&mode=admin&edit=members&rank=' . $member_id;
             $content = FunctionsLib::setImage(DPATH . 'alliance/key.gif');
             $change_rank = UrlHelper::setUrl($action, $content);

@@ -213,15 +213,15 @@ class Alliances extends Controller
         if (is_array($alliance_ranks)) {
             foreach ($alliance_ranks as $rank_id => $details) {
                 $rank_data['name'] = $details['rank'];
-                $rank_data['delete'] = (($details['rights'][AllianceRanks::delete] == SwitchInt::on) ? ' checked="checked"' : '');
-                $rank_data['kick'] = (($details['rights'][AllianceRanks::kick] == SwitchInt::on) ? ' checked="checked"' : '');
-                $rank_data['bewerbungen'] = (($details['rights'][AllianceRanks::applications] == SwitchInt::on) ? ' checked="checked"' : '');
-                $rank_data['memberlist'] = (($details['rights'][AllianceRanks::view_member_list] == SwitchInt::on) ? ' checked="checked"' : '');
-                $rank_data['bewerbungenbearbeiten'] = (($details['rights'][AllianceRanks::application_management] == SwitchInt::on) ? ' checked="checked"' : '');
-                $rank_data['administrieren'] = (($details['rights'][AllianceRanks::administration] == SwitchInt::on) ? ' checked="checked"' : '');
-                $rank_data['onlinestatus'] = (($details['rights'][AllianceRanks::online_status] == SwitchInt::on) ? ' checked="checked"' : '');
-                $rank_data['mails'] = (($details['rights'][AllianceRanks::send_circular] == SwitchInt::on) ? ' checked="checked"' : '');
-                $rank_data['rechtehand'] = (($details['rights'][AllianceRanks::right_hand] == SwitchInt::on) ? ' checked="checked"' : '');
+                $rank_data['delete'] = (($details['rights'][AllianceRanks::DELETE] == SwitchInt::on) ? ' checked="checked"' : '');
+                $rank_data['kick'] = (($details['rights'][AllianceRanks::KICK] == SwitchInt::on) ? ' checked="checked"' : '');
+                $rank_data['bewerbungen'] = (($details['rights'][AllianceRanks::APPLICATIONS] == SwitchInt::on) ? ' checked="checked"' : '');
+                $rank_data['memberlist'] = (($details['rights'][AllianceRanks::VIEW_MEMBER_LIST] == SwitchInt::on) ? ' checked="checked"' : '');
+                $rank_data['bewerbungenbearbeiten'] = (($details['rights'][AllianceRanks::APPLICATION_MANAGEMENT] == SwitchInt::on) ? ' checked="checked"' : '');
+                $rank_data['administrieren'] = (($details['rights'][AllianceRanks::ADMINISTRATION] == SwitchInt::on) ? ' checked="checked"' : '');
+                $rank_data['onlinestatus'] = (($details['rights'][AllianceRanks::ONLINE_STATUS] == SwitchInt::on) ? ' checked="checked"' : '');
+                $rank_data['mails'] = (($details['rights'][AllianceRanks::SEND_CIRCULAR] == SwitchInt::on) ? ' checked="checked"' : '');
+                $rank_data['rechtehand'] = (($details['rights'][AllianceRanks::RIGHT_HAND] == SwitchInt::on) ? ' checked="checked"' : '');
                 $rank_data['i'] = $i++;
 
                 $rank_row .= $this->getTemplate()->set("adm/alliances_ranks_row_view", $rank_data);
@@ -374,15 +374,15 @@ class Alliances extends Controller
                 $this->ranks->editRankById(
                     $id,
                     [
-                        AllianceRanks::delete => isset($_POST['u' . $id . 'r1']) ? SwitchInt::on : SwitchInt::off,
-                        AllianceRanks::kick => isset($_POST['u' . $id . 'r2']) ? SwitchInt::on : SwitchInt::off,
-                        AllianceRanks::applications => isset($_POST['u' . $id . 'r3']) ? SwitchInt::on : SwitchInt::off,
-                        AllianceRanks::view_member_list => isset($_POST['u' . $id . 'r4']) ? SwitchInt::on : SwitchInt::off,
-                        AllianceRanks::application_management => isset($_POST['u' . $id . 'r5']) ? SwitchInt::on : SwitchInt::off,
-                        AllianceRanks::administration => isset($_POST['u' . $id . 'r6']) ? SwitchInt::on : SwitchInt::off,
-                        AllianceRanks::online_status => isset($_POST['u' . $id . 'r7']) ? SwitchInt::on : SwitchInt::off,
-                        AllianceRanks::send_circular => isset($_POST['u' . $id . 'r8']) ? SwitchInt::on : SwitchInt::off,
-                        AllianceRanks::right_hand => isset($_POST['u' . $id . 'r9']) ? SwitchInt::on : SwitchInt::off,
+                        AllianceRanks::DELETE => isset($_POST['u' . $id . 'r1']) ? SwitchInt::on : SwitchInt::off,
+                        AllianceRanks::KICK => isset($_POST['u' . $id . 'r2']) ? SwitchInt::on : SwitchInt::off,
+                        AllianceRanks::APPLICATIONS => isset($_POST['u' . $id . 'r3']) ? SwitchInt::on : SwitchInt::off,
+                        AllianceRanks::VIEW_MEMBER_LIST => isset($_POST['u' . $id . 'r4']) ? SwitchInt::on : SwitchInt::off,
+                        AllianceRanks::APPLICATION_MANAGEMENT => isset($_POST['u' . $id . 'r5']) ? SwitchInt::on : SwitchInt::off,
+                        AllianceRanks::ADMINISTRATION => isset($_POST['u' . $id . 'r6']) ? SwitchInt::on : SwitchInt::off,
+                        AllianceRanks::ONLINE_STATUS => isset($_POST['u' . $id . 'r7']) ? SwitchInt::on : SwitchInt::off,
+                        AllianceRanks::SEND_CIRCULAR => isset($_POST['u' . $id . 'r8']) ? SwitchInt::on : SwitchInt::off,
+                        AllianceRanks::RIGHT_HAND => isset($_POST['u' . $id . 'r9']) ? SwitchInt::on : SwitchInt::off,
                     ]
                 );
             }

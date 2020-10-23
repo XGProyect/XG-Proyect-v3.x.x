@@ -104,15 +104,15 @@ class Ranks
             $this->_ranks[] = [
                 'rank' => $filtered_name,
                 'rights' => [
-                    AllianceRanks::delete => SwitchInt::off,
-                    AllianceRanks::kick => SwitchInt::off,
-                    AllianceRanks::applications => SwitchInt::off,
-                    AllianceRanks::view_member_list => SwitchInt::off,
-                    AllianceRanks::application_management => SwitchInt::off,
-                    AllianceRanks::administration => SwitchInt::off,
-                    AllianceRanks::online_status => SwitchInt::off,
-                    AllianceRanks::send_circular => SwitchInt::off,
-                    AllianceRanks::right_hand => SwitchInt::off,
+                    AllianceRanks::DELETE => SwitchInt::off,
+                    AllianceRanks::KICK => SwitchInt::off,
+                    AllianceRanks::APPLICATIONS => SwitchInt::off,
+                    AllianceRanks::VIEW_MEMBER_LIST => SwitchInt::off,
+                    AllianceRanks::APPLICATION_MANAGEMENT => SwitchInt::off,
+                    AllianceRanks::ADMINISTRATION => SwitchInt::off,
+                    AllianceRanks::ONLINE_STATUS => SwitchInt::off,
+                    AllianceRanks::SEND_CIRCULAR => SwitchInt::off,
+                    AllianceRanks::RIGHT_HAND => SwitchInt::off,
                 ],
             ];
 
