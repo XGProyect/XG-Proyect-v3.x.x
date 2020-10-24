@@ -172,6 +172,18 @@ class FormatLib
     }
 
     /**
+     * Create a new span HTML element
+     *
+     * @param string $content
+     * @param string|null $class
+     * @return string
+     */
+    public static function spanElement(string $content, ?string $class = ''): string
+    {
+        return '<span class="' . $class . '">' . $content . '</font>';
+    }
+
+    /**
      * prettyNumber
      *
      * @param int     $n     Number

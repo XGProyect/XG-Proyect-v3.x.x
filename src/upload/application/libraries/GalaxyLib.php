@@ -36,6 +36,7 @@ class GalaxyLib extends XGPCore
     private $pricelist;
     private $formula;
     private $noob;
+    private $status = [];
     private $template;
 
     /**
@@ -94,6 +95,8 @@ class GalaxyLib extends XGPCore
         // SOME DATA THAT WE ARE GOING TO REQUIRE FOR EACH COLUMN
         $this->row_data = $row_data;
         $this->planet = $planet;
+
+        $this->userStatuses();
 
         // BLOCK TEMPLATES
         $block['planet'] = 'galaxy/galaxy_planet_block';
@@ -346,36 +349,37 @@ class GalaxyLib extends XGPCore
     {
         $MyGameLevel = $this->current_user['user_statistic_total_points'];
         $HeGameLevel = $this->row_data['user_statistic_total_points'];
-        $status['vacation'] = '';
+
         $status['banned'] = '';
+        $status['vacation'] = '';
         $status['inactive'] = '';
         $status['noob_protection'] = '';
 
-        if ($this->row_data['preference_vacation_mode'] > 0) {
-            $status['vacation'] = '<span class="vacation">' . $this->langs->line('gl_v') . '</span>';
+        if ($this->row_data['user_banned']) {
+            $status['banned'] = UrlHelper::setUrl(
+                'game.php?page=banned',
+                $this->status['b']
+            );
         }
 
-        if ($this->row_data['user_banned']) {
-            $status['banned'] = '<span class="banned">' . UrlHelper::setUrl(
-                'game.php?page=banned',
-                $this->langs->line('gl_b')
-            ) . '</span>';
+        if ($this->row_data['preference_vacation_mode'] > 0) {
+            $status['vacation'] = $this->status['v'];
         }
 
         if ($this->row_data['user_onlinetime'] < (time() - 60 * 60 * 24 * 7) && $this->row_data['user_onlinetime'] > (time() - 60 * 60 * 24 * 28)) {
-            $status['inactive'] = '<span class="inactive">' . $this->langs->line('gl_i') . '</span>';
+            $status['inactive'] = $this->status['i'];
         }
 
         if ($this->row_data['user_onlinetime'] < (time() - 60 * 60 * 24 * 28)) {
-            $status['inactive'] .= '<span class="longinactive">' . $this->langs->line('gl_I') . '</span>';
+            $status['inactive'] .= $this->status['I'];
         }
 
         if ($this->noob->isWeak($MyGameLevel, $HeGameLevel)) {
-            $status['noob_protection'] = '<span class="noob">' . $this->langs->line('gl_w') . '</span>';
+            $status['noob_protection'] = $this->status['w'];
         }
 
         if ($this->noob->isStrong($MyGameLevel, $HeGameLevel)) {
-            $status['noob_protection'] = '<span class="strong">' . $this->langs->line('gl_s') . '</span>';
+            $status['noob_protection'] = $this->status['s'];
         }
 
         // POP UP BLOCK DATA
@@ -406,16 +410,21 @@ class GalaxyLib extends XGPCore
             // USER STATUS AND NAME
             $parse['status'] = $this->row_data['user_name'];
 
+            $statuses = [];
             foreach ($status as $to_parse) {
                 if ($to_parse != '') {
-                    $parse['status'] .= '<font color="white">(</font>' . $to_parse . '<font color="white">)</font>';
+                    $statuses[] = $to_parse;
                 }
+            }
+
+            if (!empty($statuses)) {
+                $parse['status'] .= '<font color="white"> (</font>' . join(' ', $statuses) . '<font color="white">)</font>';
             }
         } else {
             $parse['status'] = $this->row_data['user_name'];
 
             if ($status['vacation'] != '') {
-                $parse['status'] .= '<font color="white">(</font>' . $status['vacation'] . '<font color="white">)</font>';
+                $parse['status'] .= '<font color="white"> (</font>' . $status['vacation'] . '<font color="white">)</font>';
             }
         }
 
@@ -698,6 +707,26 @@ class GalaxyLib extends XGPCore
         $maxsystem = ($maxsystem > MAX_SYSTEM_IN_GALAXY) ? MAX_SYSTEM_IN_GALAXY : $maxsystem;
 
         return (($this->system <= $maxsystem) && ($this->system >= $minsystem));
+    }
+
+    /**
+     * Build the user statuses
+     *
+     * @return void
+     */
+    private function userStatuses()
+    {
+        $this->status = [
+            'a' => FormatLib::spanElement($this->langs->line('gl_a'), 'status_abbr_admin'),
+            's' => FormatLib::spanElement($this->langs->line('gl_s'), 'status_abbr_strong'),
+            'n' => FormatLib::spanElement($this->langs->line('gl_w'), 'status_abbr_noob'),
+            'o' => FormatLib::spanElement($this->langs->line('gl_o'), 'status_abbr_outlaw'),
+            'v' => FormatLib::spanElement($this->langs->line('gl_v'), 'status_abbr_vacation'),
+            'b' => FormatLib::spanElement($this->langs->line('gl_b'), 'status_abbr_banned'),
+            'i' => FormatLib::spanElement($this->langs->line('gl_i'), 'status_abbr_inactive'),
+            'I' => FormatLib::spanElement($this->langs->line('gl_I'), 'status_abbr_longinactive'),
+            'hp' => FormatLib::spanElement($this->langs->line('gl_hp'), 'status_abbr_honorableTarget'),
+        ];
     }
 }
 
