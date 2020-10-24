@@ -65,7 +65,10 @@ class Expedition extends Missions
 
             foreach ($ships as $id => $count) {
                 $current_fleet[$id] = $count;
-                $fleet_capacity += $this->pricelist[$id]['capacity'] * $count;
+                $fleet_capacity += FleetsLib::getMaxStorage(
+                    $this->pricelist[$id]['capacity'],
+                    $fleet_row['research_hyperspace_technology']
+                ) * $count;
                 $fleet_points += ($count * $ships_points[$id]);
             }
 

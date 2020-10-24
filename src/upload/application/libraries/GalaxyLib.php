@@ -1,35 +1,26 @@
 <?php
 /**
- * Galaxy Library
+ * GalaxyLib.php
  *
- * @category Library
- * @package  Application
  * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
+ * @license  https://www.xgproyect.org XG Proyect
+ * @link     https://www.xgproyect.org
+ * @since    3.2.0
  */
 namespace application\libraries;
 
 use application\core\enumerators\MissionsEnumerator as Missions;
 use application\core\enumerators\PlanetTypesEnumerator;
+use application\core\enumerators\ShipsEnumerator as Ships;
 use application\core\Template;
 use application\core\XGPCore;
 use application\helpers\UrlHelper;
 
 /**
- * GalaxyLib Class
- *
- * @category Classes
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
+ * GalaxyLib class
  */
 class GalaxyLib extends XGPCore
 {
-
     const PLANET_TYPE = 1;
     const DEBRIS_TYPE = 2;
     const MOON_TYPE = 3;
@@ -315,8 +306,13 @@ class GalaxyLib extends XGPCore
     private function debrisBlock()
     {
         if ($this->row_data['metal'] + $this->row_data['crystal'] >= DEBRIS_MIN_VISIBLE_SIZE) {
+            $recyclers_storage = FleetsLib::getMaxStorage(
+                $this->pricelist[Ships::ship_recycler]['capacity'],
+                $this->current_user['research_hyperspace_technology']
+            );
+
             $recyclers_needed = ceil(
-                ($this->row_data['metal'] + $this->row_data['crystal']) / $this->pricelist[209]['capacity']
+                ($this->row_data['metal'] + $this->row_data['crystal']) / $recyclers_storage
             );
 
             if ($recyclers_needed < $this->currentplanet['ship_recycler']) {

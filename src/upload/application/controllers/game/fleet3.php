@@ -179,7 +179,10 @@ class Fleet3 extends Controller
                         'ship_id' => $ship_id,
                         'consumption' => FleetsLib::shipConsumption($ship_id, $this->_user),
                         'speed' => FleetsLib::fleetMaxSpeed('', $ship_id, $this->_user),
-                        'capacity' => $price[$ship_id]['capacity'] ?? 0,
+                        'capacity' => FleetsLib::getMaxStorage(
+                            $price[$ship_id]['capacity'],
+                            $this->_research->getCurrentResearch()->getResearchHyperspaceTechnology()
+                        ),
                         'ship' => $amount_to_set,
                     ];
                 }

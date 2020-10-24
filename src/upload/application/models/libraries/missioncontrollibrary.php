@@ -30,7 +30,8 @@ class MissionControlLibrary extends Model
             "SELECT
                 f.*,
                 sp.`planet_name` AS `planet_start_name`,
-                ep.`planet_name` AS `planet_end_name`
+                ep.`planet_name` AS `planet_end_name`,
+                sr.`research_hyperspace_technology`
             FROM `" . FLEETS . "` f
             LEFT JOIN `" . PLANETS . "` sp
                 ON (sp.`planet_galaxy` = f.`fleet_start_galaxy` AND
@@ -38,6 +39,8 @@ class MissionControlLibrary extends Model
                     sp.`planet_planet` = f.`fleet_start_planet` AND
                     sp.`planet_type` = f.`fleet_start_type`
             )
+            LEFT JOIN `" . RESEARCH . "` sr
+                ON sr.`research_user_id` = f.`fleet_owner`
             LEFT JOIN `" . PLANETS . "` ep
                 ON (ep.`planet_galaxy` = f.`fleet_end_galaxy` AND
                     ep.`planet_system` = f.`fleet_end_system` AND
@@ -63,7 +66,8 @@ class MissionControlLibrary extends Model
             "SELECT
                 f.*,
                 sp.`planet_name` AS `planet_start_name`,
-                ep.`planet_name` AS `planet_end_name`
+                ep.`planet_name` AS `planet_end_name`,
+                sr.`research_hyperspace_technology`
             FROM `" . FLEETS . "` f
             LEFT JOIN `" . PLANETS . "` sp
                 ON (sp.`planet_galaxy` = f.`fleet_start_galaxy` AND
@@ -71,6 +75,8 @@ class MissionControlLibrary extends Model
                     sp.`planet_planet` = f.`fleet_start_planet` AND
                     sp.`planet_type` = f.`fleet_start_type`
             )
+            LEFT JOIN `" . RESEARCH . "` sr
+                ON sr.`research_user_id` = f.`fleet_owner`
             LEFT JOIN `" . PLANETS . "` ep
                 ON (ep.`planet_galaxy` = f.`fleet_end_galaxy` AND
                     ep.`planet_system` = f.`fleet_end_system` AND

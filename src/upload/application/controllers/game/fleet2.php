@@ -18,6 +18,7 @@ use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
 use application\libraries\OfficiersLib;
 use application\libraries\premium\Premium;
+use application\libraries\research\Researches;
 use application\libraries\users\Shortcuts;
 
 /**
@@ -39,6 +40,12 @@ class Fleet2 extends Controller
      * @var array
      */
     private $_planet;
+
+    /**
+     *
+     * @var \Research
+     */
+    private $_research = null;
 
     /**
      *
@@ -95,6 +102,11 @@ class Fleet2 extends Controller
      */
     private function setUpFleets()
     {
+        $this->_research = new Researches(
+            [$this->_user],
+            $this->_user['user_id']
+        );
+
         $this->_premium = new Premium(
             [$this->_user],
             $this->_user['user_id']
@@ -174,7 +186,10 @@ class Fleet2 extends Controller
                         'ship_id' => $ship_id,
                         'consumption' => FleetsLib::shipConsumption($ship_id, $this->_user),
                         'speed' => FleetsLib::fleetMaxSpeed('', $ship_id, $this->_user),
-                        'capacity' => $price[$ship_id]['capacity'] ?? 0,
+                        'capacity' => FleetsLib::getMaxStorage(
+                            $price[$ship_id]['capacity'],
+                            $this->_research->getCurrentResearch()->getResearchHyperspaceTechnology()
+                        ),
                         'ship' => $amount_to_set,
                     ];
                 }

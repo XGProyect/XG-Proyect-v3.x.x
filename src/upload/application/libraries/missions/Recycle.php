@@ -142,10 +142,15 @@ class Recycle extends Missions
 
         // CALCULATE STORAGE FOR EACH KIND OF SHIP
         foreach ($ships as $id => $amount) {
+            $ship_storage = FleetsLib::getMaxStorage(
+                $this->pricelist[$id]['capacity'],
+                $fleet_row['research_hyperspace_technology']
+            );
+
             if ($id == 209) {
-                $recycle_capacity += $this->pricelist[$id]['capacity'] * $amount;
+                $recycle_capacity += $ship_storage * $amount;
             } else {
-                $other_capacity += $this->pricelist[$id]['capacity'] * $amount;
+                $other_capacity += $ship_storage * $amount;
             }
         }
 

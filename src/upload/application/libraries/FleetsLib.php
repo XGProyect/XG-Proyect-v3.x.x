@@ -360,7 +360,8 @@ class FleetsLib extends XGPCore
         $pop_up .= "<table width=200>";
 
         $espionage_tech = OfficiersLib::getMaxEspionage(
-            $current_user['research_espionage_technology'], $current_user['premium_officier_technocrat']
+            $current_user['research_espionage_technology'],
+            $current_user['premium_officier_technocrat']
         );
 
         if ($espionage_tech < 2 && $fleet_row['fleet_owner'] != $current_user['user_id']) {
@@ -616,6 +617,18 @@ class FleetsLib extends XGPCore
     public static function isFleetReturning($fleet_mess)
     {
         return ($fleet_mess == 1);
+    }
+
+    /**
+     * Get max ship storage
+     *
+     * @param integer $ship_storage
+     * @param integer $hyperspace_tech_level
+     * @return integer
+     */
+    public static function getMaxStorage(int $ship_storage, int $hyperspace_tech_level): int
+    {
+        return ($ship_storage + ($ship_storage * 0.05 * $hyperspace_tech_level));
     }
 
     /**

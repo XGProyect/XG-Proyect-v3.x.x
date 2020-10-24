@@ -35,11 +35,17 @@ use Ship;
  */
 class Attack extends Missions
 {
-
     const SHIP_MIN_ID = 202;
     const SHIP_MAX_ID = 215;
     const DEFENSE_MIN_ID = 401;
     const DEFENSE_MAX_ID = 408;
+
+    /**
+     * Contains each player hyperspace technology level
+     *
+     * @var array
+     */
+    private $hyperspace_technology = [];
 
     /**
      * Constructor
@@ -283,6 +289,8 @@ class Attack extends Missions
         $idPlayer = $fleet_row['fleet_owner'];
         $fleet = new Fleet($fleet_row['fleet_id']);
 
+        $this->setHyperspaceTechLevel($idPlayer, $fleet_row['research_hyperspace_technology']);
+
         foreach ($serializedTypes as $id => $count) {
             if ($id != 0 && $count != 0) {
                 $fleet->addShipType($this->getShipType($id, $count));
@@ -293,13 +301,17 @@ class Attack extends Missions
 
         $player = new Player($idPlayer, array($fleet));
         $player->setTech(
-            $player_info['research_weapons_technology'], $player_info['research_shielding_technology'], $player_info['research_armour_technology']
+            $player_info['research_weapons_technology'],
+            $player_info['research_shielding_technology'],
+            $player_info['research_armour_technology']
         );
 
         $player->setName($player_info['user_name']);
 
         $player->setCoords(
-            $fleet_row['fleet_start_galaxy'], $fleet_row['fleet_start_system'], $fleet_row['fleet_start_planet']
+            $fleet_row['fleet_start_galaxy'],
+            $fleet_row['fleet_start_system'],
+            $fleet_row['fleet_start_planet']
         );
 
         $playerGroup->addPlayer($player);
@@ -338,6 +350,7 @@ class Attack extends Missions
                         $player_info = $target_user;
                     } else {
                         $player_info = $this->Missions_Model->getTechnologiesByUserId($idPlayer);
+                        $this->setHyperspaceTechLevel($idPlayer, $player_info['research_hyperspace_technology']);
                     }
 
                     if (isset($target_user['planet_id']) && $target_user['planet_id'] == $idPlayer) {
@@ -479,7 +492,7 @@ class Attack extends Missions
     }
 
     /**
-     * getCapacity
+     * Get cargo capacity for each ship
      *
      * @param PlayerGroup $players Players
      *
@@ -492,7 +505,10 @@ class Attack extends Missions
         foreach ($players->getIterator() as $idPlayer => $player) {
             foreach ($player->getIterator() as $idFleet => $fleet) {
                 foreach ($fleet->getIterator() as $idShipType => $shipType) {
-                    $capacity += $shipType->getCount() * $this->pricelist[$idShipType]['capacity'];
+                    $capacity += $shipType->getCount() * FleetsLib::getMaxStorage(
+                        $this->pricelist[$idShipType]['capacity'],
+                        $this->hyperspace_technology[$idPlayer]
+                    );
                 }
             }
         }
@@ -755,6 +771,18 @@ class Attack extends Missions
             '',
             $style . ' ' . $js
         );
+    }
+
+    /**
+     * Set hyperspace technology level
+     *
+     * @param integer $user_id
+     * @param integer $level
+     * @return void
+     */
+    private function setHyperspaceTechLevel(int $user_id, int $level): void
+    {
+        $this->hyperspace_technology[$user_id] = $level;
     }
 }
 

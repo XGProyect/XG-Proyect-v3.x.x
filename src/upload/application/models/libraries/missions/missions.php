@@ -212,17 +212,21 @@ class Missions extends Model
     /**
      * Get all fleets by ACS fleet ID
      *
-     * @param type $fleet_group_id
+     * @param int $fleet_group_id
      *
      * @return array
      */
-    public function getAllAcsFleetsByGroupId($fleet_group_id)
+    public function getAllAcsFleetsByGroupId(int $fleet_group_id)
     {
         if ((int) $fleet_group_id > 0) {
             return $this->db->queryFetchAll(
-                "SELECT *
-                FROM `" . FLEETS . "`
-                WHERE `fleet_group` = '" . $fleet_group_id . "';"
+                "SELECT
+                    f.*,
+                    r.`research_hyperspace_technology`
+                FROM `" . FLEETS . "` f
+                LEFT JOIN `" . RESEARCH . "` r
+                    ON r.`research_user_id` = f.`fleet_owner`
+                WHERE f.`fleet_group` = '" . $fleet_group_id . "';"
             );
         }
 
@@ -869,7 +873,7 @@ class Missions extends Model
                     `planet_name` AS target_name,
                     `planet_debris_metal`,
                     `planet_debris_crystal`
-                FROM " . PLANETS . "
+                FROM `" . PLANETS . "`
                 WHERE `planet_galaxy` = '" . $data['coords']['galaxy'] . "' AND
                     `planet_system` = '" . $data['coords']['system'] . "' AND
                     `planet_planet` = '" . $data['coords']['planet'] . "' AND

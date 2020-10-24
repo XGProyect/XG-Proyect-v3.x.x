@@ -40,6 +40,18 @@ class Destroy extends Missions
     const DEFENSE_MIN_ID = 401;
     const DEFENSE_MAX_ID = 408;
 
+    /**
+     * Contains each player hyperspace technology level
+     *
+     * @var array
+     */
+    private $hyperspace_technology = [];
+
+    /**
+     * Contains current destruction data
+     *
+     * @var array
+     */
     private $_destruction = [
         'flag' => false,
         'destroyed' => 'none',
@@ -318,8 +330,9 @@ class Destroy extends Missions
         $idPlayer = $fleet_row['fleet_owner'];
         $fleet = new Fleet($fleet_row['fleet_id']);
 
-        foreach ($serializedTypes as $id => $count) {
+        $this->setHyperspaceTechLevel($idPlayer, $fleet_row['research_hyperspace_technology']);
 
+        foreach ($serializedTypes as $id => $count) {
             if ($id != 0 && $count != 0) {
                 $fleet->addShipType($this->getShipType($id, $count));
             }
@@ -329,13 +342,17 @@ class Destroy extends Missions
 
         $player = new Player($idPlayer, array($fleet));
         $player->setTech(
-            $player_info['research_weapons_technology'], $player_info['research_shielding_technology'], $player_info['research_armour_technology']
+            $player_info['research_weapons_technology'],
+            $player_info['research_shielding_technology'],
+            $player_info['research_armour_technology']
         );
 
         $player->setName($player_info['user_name']);
 
         $player->setCoords(
-            $fleet_row['fleet_start_galaxy'], $fleet_row['fleet_start_system'], $fleet_row['fleet_start_planet']
+            $fleet_row['fleet_start_galaxy'],
+            $fleet_row['fleet_start_system'],
+            $fleet_row['fleet_start_planet']
         );
 
         $playerGroup->addPlayer($player);
@@ -356,9 +373,7 @@ class Destroy extends Missions
         $playerGroup = new PlayerGroup();
 
         if (!is_null($result)) {
-
             foreach ($result as $fleet_row) {
-
                 //making the current fleet object
                 $serializedTypes = FleetsLib::getFleetShipsArray($fleet_row['fleet_array']);
                 $idPlayer = $fleet_row['fleet_owner'];
@@ -373,30 +388,30 @@ class Destroy extends Missions
 
                 //making the player object and add it to playerGroup object
                 if (!$playerGroup->existPlayer($idPlayer)) {
-
                     if ($target_user !== false && $target_user['user_id'] == $idPlayer) {
-
                         $player_info = $target_user;
                     } else {
-
                         $player_info = $this->Missions_Model->getTechnologiesByUserId($idPlayer);
+                        $this->setHyperspaceTechLevel($idPlayer, $player_info['research_hyperspace_technology']);
                     }
 
                     if ($target_user['planet_id'] == $idPlayer) {
-
                         $fleetSouther = new Fleet();
                         $player = new Player($idPlayer, [$fleetSouther]);
                     } else {
-
                         $player = new Player($idPlayer, [$fleet]);
                     }
 
                     $player->setTech(
-                        $player_info['research_weapons_technology'], $player_info['research_shielding_technology'], $player_info['research_armour_technology']
+                        $player_info['research_weapons_technology'],
+                        $player_info['research_shielding_technology'],
+                        $player_info['research_armour_technology']
                     );
 
                     $player->setCoords(
-                        $fleet_row['fleet_start_galaxy'], $fleet_row['fleet_start_system'], $fleet_row['fleet_start_planet']
+                        $fleet_row['fleet_start_galaxy'],
+                        $fleet_row['fleet_start_system'],
+                        $fleet_row['fleet_start_planet']
                     );
 
                     $player->setName($player_info['user_name']);
@@ -535,7 +550,7 @@ class Destroy extends Missions
     }
 
     /**
-     * getCapacity
+     * Get cargo capacity for each ship
      *
      * @param PlayerGroup $players Players
      *
@@ -546,12 +561,12 @@ class Destroy extends Missions
         $capacity = 0;
 
         foreach ($players->getIterator() as $idPlayer => $player) {
-
             foreach ($player->getIterator() as $idFleet => $fleet) {
-
                 foreach ($fleet->getIterator() as $idShipType => $shipType) {
-
-                    $capacity += $shipType->getCount() * $this->pricelist[$idShipType]['capacity'];
+                    $capacity += $shipType->getCount() * FleetsLib::getMaxStorage(
+                        $this->pricelist[$idShipType]['capacity'],
+                        $this->hyperspace_technology[$idPlayer]
+                    );
                 }
             }
         }
@@ -875,6 +890,18 @@ class Destroy extends Missions
         $raport[] = sprintf($this->langs->line('des_moon_ds_chances'), $this->_destruction['moon_chance'], $this->_destruction['ds_chance']);
 
         return join("<br/>", $raport);
+    }
+
+    /**
+     * Set hyperspace technology level
+     *
+     * @param integer $user_id
+     * @param integer $level
+     * @return void
+     */
+    private function setHyperspaceTechLevel(int $user_id, int $level): void
+    {
+        $this->hyperspace_technology[$user_id] = $level;
     }
 }
 

@@ -447,7 +447,10 @@ class Fleet4 extends Controller
 
                 $total_ships += $amount;
 
-                $this->_fleet_storage += $price[$ship_id]['capacity'] * $amount;
+                $this->_fleet_storage += FleetsLib::getMaxStorage(
+                    $price[$ship_id]['capacity'],
+                    $this->_research->getCurrentResearch()->getResearchHyperspaceTechnology()
+                ) * $amount;
                 $this->_fleet_ships[$objects[$ship_id]] = $amount;
             }
 
