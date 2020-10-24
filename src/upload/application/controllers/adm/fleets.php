@@ -213,9 +213,9 @@ class Fleets extends Controller
     {
         return [
             'beginning' => Format::prettyCoords(
-                $fleet['fleet_start_galaxy'],
-                $fleet['fleet_start_system'],
-                $fleet['fleet_start_planet']
+                (int) $fleet['fleet_start_galaxy'],
+                (int) $fleet['fleet_start_system'],
+                (int) $fleet['fleet_start_planet']
             ),
         ];
     }
@@ -241,9 +241,9 @@ class Fleets extends Controller
     {
         return [
             'objective' => Format::prettyCoords(
-                $fleet['fleet_end_galaxy'],
-                $fleet['fleet_end_system'],
-                $fleet['fleet_end_planet']
+                (int) $fleet['fleet_end_galaxy'],
+                (int) $fleet['fleet_end_system'],
+                (int) $fleet['fleet_end_planet']
             ),
         ];
     }
