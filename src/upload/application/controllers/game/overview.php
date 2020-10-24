@@ -111,7 +111,7 @@ class Overview extends Controller
         $parse['galaxy_galaxy'] = $this->_current_planet['planet_galaxy'];
         $parse['galaxy_system'] = $this->_current_planet['planet_system'];
         $parse['galaxy_planet'] = $this->_current_planet['planet_planet'];
-        $parse['user_rank'] = $this->get_user_rank();
+        $parse['user_rank'] = $this->getUserRank();
 
         // DISPLAY THE RESULT PAGE
         parent::$page->display(
@@ -225,7 +225,6 @@ class Overview extends Controller
             $id = $fleets['fleet_id'];
 
             if ($fleets['fleet_owner'] == $this->_current_user['user_id']) {
-
                 $record++;
 
                 $label = 'fs';
@@ -238,7 +237,6 @@ class Overview extends Controller
                 $fleet_row[$end_block_id] = !isset($fleet_row[$end_block_id]) ? '' : $fleet_row[$end_block_id];
 
                 if ($start_time > time()) {
-
                     $fleet_row[$start_block_id] = FleetsLib::flyingFleetsTable($fleets, 0, true, $label, $record, $this->_current_user);
                 }
 
@@ -246,7 +244,6 @@ class Overview extends Controller
                     $label = 'ft';
 
                     if ($stay_time > time()) {
-
                         $fleet_row[$stay_block_id] = FleetsLib::flyingFleetsTable($fleets, 1, true, $label, $record, $this->_current_user);
                     }
 
@@ -268,9 +265,7 @@ class Overview extends Controller
             #
             ######################################
             if ($fleets['fleet_owner'] != $this->_current_user['user_id']) {
-
                 if ($fleets['fleet_mission'] == 2) {
-
                     $record++;
                     $start_time = ($fleet_status > 0) ? '' : $fleets['fleet_start_time'];
 
@@ -278,9 +273,13 @@ class Overview extends Controller
                     $fleet_row[$start_block_id] = !isset($fleet_row[$start_block_id]) ? '' : $fleet_row[$start_block_id];
 
                     if ($start_time > time()) {
-
                         $fleet_row[$start_block_id] = FleetsLib::flyingFleetsTable(
-                            $fleets, 0, false, 'ofs', $record, $this->_current_user
+                            $fleets,
+                            0,
+                            false,
+                            'ofs',
+                            $record,
+                            $this->_current_user
                         );
                     }
                 }
@@ -421,11 +420,11 @@ class Overview extends Controller
     }
 
     /**
-     * method get_user_rank
+     * method getUserRank
      * param
      * return the current user rank
      */
-    private function get_user_rank()
+    private function getUserRank()
     {
         $user_rank = '-';
         $total_rank = $this->_current_user['user_statistic_total_rank'] == '' ? $this->_current_planet['stats_users'] : $this->_current_user['user_statistic_total_rank'];
