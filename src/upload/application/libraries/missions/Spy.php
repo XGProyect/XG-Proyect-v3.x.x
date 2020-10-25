@@ -107,7 +107,7 @@ class Spy extends Missions
                         FunctionsLib::sendMessage(
                             $fleet_row['fleet_owner'],
                             '',
-                            $fleet['fleet_start_time'],
+                            $fleet_row['fleet_start_time'],
                             0,
                             $this->langs->line('mi_fleet_command'),
                             sprintf($this->langs->line('spy_result_destroyed_title'), FormatLib::prettyCoords($fleet_row['fleet_end_galaxy'], $fleet_row['fleet_end_system'], $fleet_row['fleet_end_planet'])),
