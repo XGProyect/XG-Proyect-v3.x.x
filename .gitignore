@@ -7,6 +7,7 @@ src/upload/application/logs/*.txt
 #
 # tests
 #
+src/upload/tests/.phpunit.result.cache
 src/upload/tests/build/
 src/upload/tests/_reports/
 

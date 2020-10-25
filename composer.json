@@ -18,8 +18,8 @@
         "phpcompatinfo": [
             "vendor/bin/phpcompatinfo analyser:run ./src"
         ],
-        "test": [
-            "vendor/bin/phpunit tests --verbose --config src/upload/tests/phpunit.xml --testsuite xgp_application"
+        "tests": [
+            "vendor/bin/phpunit --verbose --config src/upload/tests/phpunit.xml --testsuite xgp_application"
         ]
     }
 }
