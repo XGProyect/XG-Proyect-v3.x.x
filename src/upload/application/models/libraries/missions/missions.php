@@ -296,7 +296,8 @@ class Missions extends Model
                 "SELECT u.user_name,
                     r.research_weapons_technology,
                     r.research_shielding_technology,
-                    r.research_armour_technology
+                    r.research_armour_technology,
+                    r.research_hyperspace_technology
                 FROM " . USERS . " AS u
                     INNER JOIN `" . RESEARCH . "` AS r
                         ON r.research_user_id = u.user_id
