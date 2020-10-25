@@ -11,6 +11,8 @@
  */
 namespace application\libraries;
 
+use application\core\enumerators\DefensesEnumerator as Defenses;
+use application\core\enumerators\MissionsEnumerator as Missions;
 use application\core\Language;
 use application\core\Template;
 use application\core\XGPCore;
@@ -459,12 +461,14 @@ class FleetsLib extends XGPCore
 
         $FleetStatus = [0 => 'flight', 1 => 'holding', 2 => 'return'];
         $MissionType = $fleet_row['fleet_mission'];
-        $FleetContent = self::fleetShipsPopup(
-            $fleet_row,
-            $lang->line('ev_fleet'),
-            $FleetPrefix . $FleetStyle[$MissionType],
-            $current_user
-        );
+        if ($MissionType != Missions::MISSILE) {
+            $FleetContent = self::fleetShipsPopup(
+                $fleet_row,
+                $lang->line('ev_fleet'),
+                $FleetPrefix . $FleetStyle[$MissionType],
+                $current_user
+            );
+        }
 
         $StartType = $fleet_row['fleet_start_type'];
         $TargetType = $fleet_row['fleet_end_type'];
@@ -479,7 +483,7 @@ class FleetsLib extends XGPCore
             $StartID .= $fleet_row['start_planet_name'] . " ";
             $StartID .= FleetsLib::startLink($fleet_row, $FleetPrefix . $FleetStyle[$MissionType]);
 
-            if ($MissionType != 15) {
+            if ($MissionType != Missions::EXPEDITION) {
                 switch ($TargetType) {
                     case 1:
                         $TargetID = $lang->line('ev_the_planet');
@@ -509,7 +513,7 @@ class FleetsLib extends XGPCore
             $StartID .= $fleet_row['start_planet_name'] . " ";
             $StartID .= FleetsLib::startLink($fleet_row, $FleetPrefix . $FleetStyle[$MissionType]);
 
-            if ($MissionType != 15) {
+            if ($MissionType != Missions::EXPEDITION) {
                 switch ($TargetType) {
                     case 1:
                         $TargetID = $lang->line('ev_from_planet');
@@ -532,9 +536,9 @@ class FleetsLib extends XGPCore
             $TargetID .= FleetsLib::targetLink($fleet_row, $FleetPrefix . $FleetStyle[$MissionType]);
         }
 
-        if ($MissionType == 10) {
+        if ($MissionType == Missions::MISSILE) {
             $EventString = $lang->line('ev_missile_attack') .
-            " ( " . FleetsLib::getFleetShipsArray($fleet_row['fleet_array'])[503] . " ) ";
+            " ( " . FleetsLib::getFleetShipsArray($fleet_row['fleet_array'])[Defenses::defense_interplanetary_missile] . " ) ";
             $Time = $fleet_row['fleet_start_time'];
             $Rest = $Time - time();
 
@@ -588,7 +592,9 @@ class FleetsLib extends XGPCore
             }
 
             $EventString .= self::fleetResourcesPopup(
-                $fleet_row, $lang->language['type_mission'][$MissionType], $FleetPrefix . $FleetStyle[$MissionType]
+                $fleet_row,
+                $lang->language['type_mission'][$MissionType],
+                $FleetPrefix . $FleetStyle[$MissionType]
             );
         }
 
