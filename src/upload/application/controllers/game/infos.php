@@ -241,16 +241,16 @@ class Infos extends Controller
      */
     private function storage_table($template)
     {
-        $CurrentBuildtLvl = $this->_current_planet[$this->_resource[$this->_element_id]];
-        $BuildStartLvl = max(1, $CurrentBuildtLvl - 2);
+        $current_built_lvl = $this->_current_planet[$this->_resource[$this->_element_id]];
+        $BuildStartLvl = max(1, $current_built_lvl - 2);
         $Table = "";
         $ProdFirst = 0;
-        $ActualProd = ProductionLib::maxStorable($CurrentBuildtLvl);
+        $ActualProd = ProductionLib::maxStorable($current_built_lvl);
 
         for ($BuildLevel = $BuildStartLvl; $BuildLevel < $BuildStartLvl + 15; ++$BuildLevel) {
             $Prod = ProductionLib::maxStorable($BuildLevel);
 
-            $bloc['build_lvl'] = ($CurrentBuildtLvl == $BuildLevel) ? "<font color=\"#ff0000\">" . $BuildLevel . "</font>" : $BuildLevel;
+            $bloc['build_lvl'] = ($current_built_lvl == $BuildLevel) ? "<font color=\"#ff0000\">" . $BuildLevel . "</font>" : $BuildLevel;
             $bloc['build_prod'] = FormatLib::prettyNumber($Prod);
             $bloc['build_prod_diff'] = FormatLib::colorNumber(FormatLib::prettyNumber(($Prod - $ActualProd)));
 
@@ -271,12 +271,12 @@ class Infos extends Controller
      */
     private function astrophysics_table($template)
     {
-        $CurrentBuildtLvl = $this->_current_user[$this->_resource[$this->_element_id]];
-        $BuildStartLvl = max(1, $CurrentBuildtLvl - 2);
+        $current_built_lvl = $this->_current_user[$this->_resource[$this->_element_id]];
+        $BuildStartLvl = max(1, $current_built_lvl - 2);
         $Table = "";
 
         for ($BuildLevel = $BuildStartLvl; $BuildLevel < $BuildStartLvl + 15; ++$BuildLevel) {
-            $bloc['tech_lvl'] = ($CurrentBuildtLvl == $BuildLevel) ? "<font color=\"#ff0000\">" . $BuildLevel . "</font>" : $BuildLevel;
+            $bloc['tech_lvl'] = ($current_built_lvl == $BuildLevel) ? "<font color=\"#ff0000\">" . $BuildLevel . "</font>" : $BuildLevel;
             $bloc['tech_colonies'] = FormatLib::prettyNumber(FleetsLib::getMaxColonies($BuildLevel));
             $bloc['tech_expeditions'] = FormatLib::prettyNumber(FleetsLib::getMaxExpeditions($BuildLevel));
 
@@ -434,9 +434,9 @@ class Infos extends Controller
 
     private function phalanxRange($Template)
     {
-        $CurrentBuildtLvl = $this->_current_planet[$this->_resource[$this->_element_id]];
-        $BuildLevel = ($CurrentBuildtLvl > 0) ? $CurrentBuildtLvl : 1;
-        $BuildStartLvl = $CurrentBuildtLvl - 2;
+        $current_built_lvl = $this->_current_planet[$this->_resource[$this->_element_id]];
+        $BuildLevel = ($current_built_lvl > 0) ? $current_built_lvl : 1;
+        $BuildStartLvl = $current_built_lvl - 2;
 
         if ($BuildStartLvl < 1) {
             $BuildStartLvl = 1;
@@ -445,7 +445,7 @@ class Infos extends Controller
         $Table = '';
 
         for ($BuildLevel = $BuildStartLvl; $BuildLevel < $BuildStartLvl + 15; $BuildLevel++) {
-            $bloc['build_lvl'] = ($CurrentBuildtLvl == $BuildLevel) ? "<font color=\"#ff0000\">" . $BuildLevel . "</font>" : $BuildLevel;
+            $bloc['build_lvl'] = ($current_built_lvl == $BuildLevel) ? "<font color=\"#ff0000\">" . $BuildLevel . "</font>" : $BuildLevel;
             $bloc['build_range'] = ($BuildLevel * $BuildLevel) - 1;
 
             $Table .= $this->getTemplate()->set($Template, $bloc);
@@ -458,8 +458,8 @@ class Infos extends Controller
     {
         $BuildLevelFactor = $this->_current_planet['planet_' . $this->_resource[$this->_element_id] . '_percent'];
         $BuildTemp = $this->_current_planet['planet_temp_max'];
-        $CurrentBuildtLvl = $this->_current_planet[$this->_resource[$this->_element_id]];
-        $BuildLevel = ($CurrentBuildtLvl > 0) ? $CurrentBuildtLvl : 1;
+        $current_built_lvl = $this->_current_planet[$this->_resource[$this->_element_id]];
+        $BuildLevel = ($current_built_lvl > 0) ? $current_built_lvl : 1;
         $BuildEnergy = $this->_current_user['research_energy_technology'];
         $game_resource_multiplier = FunctionsLib::readConfig('resource_multiplier');
 
@@ -492,12 +492,12 @@ class Infos extends Controller
             $ActualNeed = floor($Prod[3]);
         }
 
-        $BuildStartLvl = $CurrentBuildtLvl - 2;
+        $BuildStartLvl = $current_built_lvl - 2;
         if ($BuildStartLvl < 1) {
             $BuildStartLvl = 1;
         }
 
-        $Table = "";
+        $Table = '';
         $ProdFirst = 0;
 
         for ($BuildLevel = $BuildStartLvl; $BuildLevel < $BuildStartLvl + 15; $BuildLevel++) {
@@ -518,36 +518,62 @@ class Infos extends Controller
                 $Prod[4] = ProductionLib::productionAmount($energy_prod, 1, 0, true);
             }
 
-            $bloc['build_lvl'] = ($CurrentBuildtLvl == $BuildLevel) ? "<font color=\"#ff0000\">" . $BuildLevel . "</font>" : $BuildLevel;
+            $bloc['build_lvl'] = ($current_built_lvl == $BuildLevel) ? FormatLib::colorRed($BuildLevel) : $BuildLevel;
 
             if ($ProdFirst > 0) {
                 if ($this->_element_id != 12) {
-                    $bloc['build_gain'] = "<font color=\"lime\">(" . FormatLib::prettyNumber(floor($Prod[$this->_element_id] - $ProdFirst)) . ")</font>";
+                    $level_diff = FormatLib::prettyNumber(floor($Prod[$this->_element_id] - $ProdFirst));
                 } else {
-                    $bloc['build_gain'] = "<font color=\"lime\">(" . FormatLib::prettyNumber(floor($Prod[4] - $ProdFirst)) . ")</font>";
+                    $level_diff = FormatLib::prettyNumber(floor($Prod[4] - $ProdFirst));
                 }
             } else {
-                $bloc['build_gain'] = "";
+                $level_diff = 0;
+
+                if ($current_built_lvl == 0) {
+                    $level_diff = $Prod[3];
+
+                    if ($this->_element_id >= 4) {
+                        $level_diff = $Prod[4];
+                    }
+                }
             }
 
             if ($this->_element_id != 12) {
+                $prod_diff = floor($Prod[$this->_element_id] - $ActualProd);
+
+                if ($current_built_lvl == 0) {
+                    $prod_diff = $Prod[3];
+
+                    if ($this->_element_id >= 4) {
+                        $prod_diff = $Prod[4];
+                    }
+                }
+
                 $bloc['build_prod'] = FormatLib::prettyNumber(floor($Prod[$this->_element_id]));
-                $bloc['build_prod_diff'] = FormatLib::colorNumber(FormatLib::prettyNumber(floor($Prod[$this->_element_id] - $ActualProd)));
+                $bloc['build_prod_diff'] = FormatLib::colorNumber(FormatLib::prettyNumber($prod_diff));
+                $bloc['build_level_diff'] = FormatLib::colorGreen($level_diff);
                 $bloc['build_need'] = FormatLib::colorNumber(FormatLib::prettyNumber(floor($Prod[4])));
                 $bloc['build_need_diff'] = FormatLib::colorNumber(FormatLib::prettyNumber(floor($Prod[4] - $ActualNeed)));
             } else {
-                $bloc['build_prod'] = FormatLib::prettyNumber(floor($Prod[4]));
-                $bloc['build_prod_diff'] = FormatLib::colorNumber(FormatLib::prettyNumber(floor($Prod[4] - $ActualProd)));
-                $bloc['build_need'] = FormatLib::colorNumber(FormatLib::prettyNumber(floor($Prod[3])));
-                $bloc['build_need_diff'] = FormatLib::colorNumber(FormatLib::prettyNumber(floor($Prod[3] - $ActualNeed)));
-            }
-            if ($ProdFirst == 0) {
-                if ($this->_element_id != 12) {
-                    $ProdFirst = floor($Prod[$this->_element_id]);
-                } else {
-                    $ProdFirst = floor($Prod[4]);
+                $prod_diff = floor($Prod[4] - $ActualProd);
+                $need_diff = floor($Prod[3] - $ActualNeed);
+
+                if ($current_built_lvl == 0) {
+                    $prod_diff = $Prod[4];
+                    $need_diff = $Prod[3];
                 }
 
+                $bloc['build_prod'] = FormatLib::prettyNumber(floor($Prod[4]));
+                $bloc['build_prod_diff'] = FormatLib::colorNumber(FormatLib::prettyNumber($prod_diff));
+                $bloc['build_level_diff'] = FormatLib::colorGreen($level_diff);
+                $bloc['build_need'] = FormatLib::colorNumber(FormatLib::prettyNumber(floor($Prod[3])));
+                $bloc['build_need_diff'] = FormatLib::colorNumber(FormatLib::prettyNumber($need_diff));
+            }
+
+            if ($this->_element_id != 12) {
+                $ProdFirst = floor($Prod[$this->_element_id]);
+            } else {
+                $ProdFirst = floor($Prod[4]);
             }
 
             $Table .= $this->getTemplate()->set($Template, $bloc);
