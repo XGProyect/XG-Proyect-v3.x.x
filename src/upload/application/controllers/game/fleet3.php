@@ -592,10 +592,15 @@ class Fleet3 extends Controller
      */
     private function isCurrentPlanet(array $target): bool
     {
-        return ($this->_planet['planet_galaxy'] == $target['galaxy']
-            && $this->_planet['planet_system'] == $target['system']
-            && $this->_planet['planet_planet'] == $target['planet']
-            && $this->_planet['planet_type'] == $target['planettype']);
+        return FunctionsLib::isCurrentPlanet(
+            $this->_planet,
+            [
+                'planet_galaxy' => $target['galaxy'],
+                'planet_system' => $target['system'],
+                'planet_planet' => $target['planet'],
+                'planet_type' => $target['planettype'],
+            ]
+        );
     }
 }
 

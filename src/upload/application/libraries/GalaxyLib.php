@@ -29,7 +29,7 @@ class GalaxyLib extends XGPCore
 
     private $langs;
     private $current_user;
-    private $currentplanet;
+    private $current_planet;
     private $row_data;
     private $galaxy;
     private $system;
@@ -63,7 +63,7 @@ class GalaxyLib extends XGPCore
 
         $this->langs = $langs;
         $this->current_user = $user;
-        $this->currentplanet = $planet;
+        $this->current_planet = $planet;
         $this->galaxy = $galaxy;
         $this->system = $system;
         $this->resource = parent::$objects->getObjects();
@@ -207,6 +207,20 @@ class GalaxyLib extends XGPCore
             }
         }
 
+        $this->row_data['planet_type'] = self::PLANET_TYPE;
+        if (FunctionsLib::isCurrentPlanet($this->current_planet, $this->row_data)) {
+            $parse['links'] = $this->langs->line('gl_no_action');
+        }
+
+        if ($this->row_data['user_authlevel'] >= UserRanks::GO
+            && $this->row_data['user_id'] != $this->current_user['user_id']) {
+            $parse['links'] = $this->transportLink(self::PLANET_TYPE);
+        }
+
+        if ($this->row_data['preference_vacation_mode'] > 0) {
+            $parse['links'] = $this->langs->line('gl_player_vacation_mode');
+        }
+
         return $parse;
     }
 
@@ -252,6 +266,10 @@ class GalaxyLib extends XGPCore
      */
     private function moonBlock()
     {
+        if ($this->row_data['destroyed_moon'] != 0 or $this->row_data['id_luna'] == 0) {
+            return '';
+        }
+
         $action['spy'] = '';
         $action['attack'] = '';
         $action['transport'] = '';
@@ -273,7 +291,7 @@ class GalaxyLib extends XGPCore
             }
 
             // DESTROY
-            if ($this->currentplanet[$this->resource[214]] > 0) {
+            if ($this->current_planet[$this->resource[214]] > 0) {
                 $action['destroy'] = $this->destroyLink(self::MOON_TYPE);
             }
         }
@@ -284,28 +302,37 @@ class GalaxyLib extends XGPCore
         }
 
         // CHECK MOON STATUS AND COMPLETE DATA IF REQUIRED
-        if ($this->row_data['destroyed_moon'] == 0 && $this->row_data['id_luna'] != 0) {
-            $parse = $this->langs->language;
-            $parse['name_moon'] = $this->row_data['name_moon'];
-            $parse['galaxy'] = $this->galaxy;
-            $parse['system'] = $this->system;
-            $parse['planet'] = $this->planet;
-            $parse['image'] = strtr(DPATH, ['\\' => '/']) . 'planets/small/s_mond.jpg';
-            $parse['planet_diameter'] = FormatLib::prettyNumber($this->row_data['planet_diameter']);
-            $parse['links'] = '';
+        $parse = $this->langs->language;
+        $parse['name_moon'] = $this->row_data['name_moon'];
+        $parse['galaxy'] = $this->galaxy;
+        $parse['system'] = $this->system;
+        $parse['planet'] = $this->planet;
+        $parse['image'] = strtr(DPATH, ['\\' => '/']) . 'planets/small/s_mond.jpg';
+        $parse['planet_diameter'] = FormatLib::prettyNumber($this->row_data['planet_diameter']);
+        $parse['links'] = '';
 
-            // LOOP THRU ACTIONS
-            foreach ($action as $to_parse) {
-                // SKIP EMPTY ACTIONS
-                if ($to_parse != '') {
-                    $parse['links'] .= $to_parse . '<br>';
-                }
+        // LOOP THRU ACTIONS
+        foreach ($action as $to_parse) {
+            // SKIP EMPTY ACTIONS
+            if ($to_parse != '') {
+                $parse['links'] .= $to_parse . '<br>';
             }
-
-            return $parse;
+        }
+        $this->row_data['planet_type'] = self::MOON_TYPE;
+        if (FunctionsLib::isCurrentPlanet($this->current_planet, $this->row_data)) {
+            $parse['links'] = $this->langs->line('gl_no_action');
         }
 
-        return '';
+        if ($this->row_data['user_authlevel'] >= UserRanks::GO
+            && $this->row_data['user_id'] != $this->current_user['user_id']) {
+            $parse['links'] = $this->transportLink(self::PLANET_TYPE);
+        }
+
+        if ($this->row_data['preference_vacation_mode'] > 0) {
+            $parse['links'] = $this->langs->line('gl_player_vacation_mode');
+        }
+
+        return $parse;
     }
 
     /**
@@ -325,10 +352,10 @@ class GalaxyLib extends XGPCore
                 ($this->row_data['metal'] + $this->row_data['crystal']) / $recyclers_storage
             );
 
-            if ($recyclers_needed < $this->currentplanet['ship_recycler']) {
+            if ($recyclers_needed < $this->current_planet['ship_recycler']) {
                 $recyclers_sended = $recyclers_needed;
-            } elseif ($recyclers_needed >= $this->currentplanet['ship_recycler']) {
-                $recyclers_sended = $this->currentplanet['ship_recycler'];
+            } elseif ($recyclers_needed >= $this->current_planet['ship_recycler']) {
+                $recyclers_sended = $this->current_planet['ship_recycler'];
             }
 
             $parse = $this->langs->language;
@@ -723,9 +750,9 @@ class GalaxyLib extends XGPCore
      */
     private function isMissileActive()
     {
-        if (($this->currentplanet['defense_interplanetary_missile'] != 0)
+        if (($this->current_planet['defense_interplanetary_missile'] != 0)
             && ($this->row_data['user_id'] != $this->current_user['user_id'])
-            && ($this->row_data['planet_galaxy'] == $this->currentplanet['planet_galaxy'])) {
+            && ($this->row_data['planet_galaxy'] == $this->current_planet['planet_galaxy'])) {
             return $this->isInRange($this->formula->missileRange($this->current_user['research_impulse_drive']));
         }
     }
@@ -737,11 +764,11 @@ class GalaxyLib extends XGPCore
      */
     private function isPhalanxActive()
     {
-        if (($this->currentplanet['building_phalanx'] != 0)
+        if (($this->current_planet['building_phalanx'] != 0)
             && ($this->row_data['user_id'] != $this->current_user['user_id'])
-            && ($this->row_data['planet_galaxy'] == $this->currentplanet['planet_galaxy'])
-            && ($this->currentplanet['planet_type']) == PlanetTypesEnumerator::MOON) {
-            return $this->isInRange($this->formula->phalanxRange($this->currentplanet['building_phalanx']));
+            && ($this->row_data['planet_galaxy'] == $this->current_planet['planet_galaxy'])
+            && ($this->current_planet['planet_type']) == PlanetTypesEnumerator::MOON) {
+            return $this->isInRange($this->formula->phalanxRange($this->current_planet['building_phalanx']));
         }
     }
 
@@ -754,8 +781,8 @@ class GalaxyLib extends XGPCore
      */
     private function isInRange($range)
     {
-        $minsystem = $this->currentplanet['planet_system'] - $range;
-        $maxsystem = $this->currentplanet['planet_system'] + $range;
+        $minsystem = $this->current_planet['planet_system'] - $range;
+        $maxsystem = $this->current_planet['planet_system'] + $range;
 
         $minsystem = ($minsystem < 1) ? 1 : $minsystem;
         $maxsystem = ($maxsystem > MAX_SYSTEM_IN_GALAXY) ? MAX_SYSTEM_IN_GALAXY : $maxsystem;

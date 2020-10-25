@@ -79,6 +79,8 @@ $lang = [
     'gl_ship' => 'nave',
     'gl_ships' => 's',
     'gl_to' => 'a',
+    'gl_no_action' => 'No hay acciones disponibles.',
+    'gl_player_vacation_mode' => 'Jugador en modo vacaciones',
     // lines below will be probably moved to a new controller that handles missiles launch
     'gl_silo_level' => 'Debes tener al menos silo al nivel 4',
     'gl_impulse_drive_required' => 'Debes investigar el Motor de Impulso.',
