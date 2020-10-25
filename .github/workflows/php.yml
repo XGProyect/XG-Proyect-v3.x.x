@@ -1,0 +1,42 @@
+name: PHP Tests
+
+on:
+  push:
+    branches: [ test-ci, xgp-3.2 ]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Validate composer.json and composer.lock
+      run: composer validate
+
+    - name: Install dependencies
+      run: composer install --prefer-dist --no-progress --no-suggest
+
+      # Not fully working at the moment, ignore errors
+    - name: Run phpunit
+      run: composer test
+      continue-on-error: true
+
+    - name: Run phplint
+      uses: overtrue/phplint@2.1.0
+      with:
+        path: src/upload/
+        options: --exclude=*.log
+  min-version:
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Validate composer.json and composer.lock
+      run: composer validate
+
+    - name: Install dependencies
+      run: composer install --prefer-dist --no-progress --no-suggest
+
+    - name: Run phpcompatinfo
+      run: composer run-script phpcompatinfo
