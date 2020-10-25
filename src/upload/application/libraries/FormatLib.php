@@ -180,7 +180,7 @@ class FormatLib
      */
     public static function spanElement(string $content, ?string $class = ''): string
     {
-        return '<span class="' . $class . '">' . $content . '</font>';
+        return '<span class="' . $class . '">' . $content . '</span>';
     }
 
     /**

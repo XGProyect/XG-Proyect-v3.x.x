@@ -1,6 +1,6 @@
 <?php
 $lang = [
-    'gl_no_access_vm_on' => '¡No puedes utilizar la vista de galaxia mientras estás de vacaciones o tu cuenta no está validada!',
+    'gl_no_access_vm_on' => '¡No puedes utilizar la vista de galaxia mientras estés de vacaciones!',
     'gl_legend' => 'Leyenda',
     'gl_administrator' => 'Administrador',
     'gl_strong_player' => 'Jugador fuerte',

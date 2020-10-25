@@ -1,6 +1,6 @@
 <?php
 $lang = [
-    'gl_no_access_vm_on' => 'You cannot use the galaxy view whilst in vacation mode or when your account has not been validated!',
+    'gl_no_access_vm_on' => 'You cannot use the galaxy view whilst in vacation mode!',
     'gl_legend' => 'Legend',
     'gl_administrator' => 'Administrator',
     'gl_strong_player' => 'Stronger Player',

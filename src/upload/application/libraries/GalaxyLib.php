@@ -12,8 +12,10 @@ namespace application\libraries;
 use application\core\enumerators\MissionsEnumerator as Missions;
 use application\core\enumerators\PlanetTypesEnumerator;
 use application\core\enumerators\ShipsEnumerator as Ships;
+use application\core\enumerators\UserRanksEnumerator as UserRanks;
 use application\core\Template;
 use application\core\XGPCore;
+use application\helpers\StringsHelper;
 use application\helpers\UrlHelper;
 
 /**
@@ -36,8 +38,14 @@ class GalaxyLib extends XGPCore
     private $pricelist;
     private $formula;
     private $noob;
-    private $status = [];
     private $template;
+
+    /**
+     * Indicates if we should display the popup or not
+     *
+     * @var boolean
+     */
+    private $no_popup = false;
 
     /**
      * __construct
@@ -96,8 +104,6 @@ class GalaxyLib extends XGPCore
         $this->row_data = $row_data;
         $this->planet = $planet;
 
-        $this->userStatuses();
-
         // BLOCK TEMPLATES
         $block['planet'] = 'galaxy/galaxy_planet_block';
         $block['moon'] = 'galaxy/galaxy_moon_block';
@@ -122,11 +128,12 @@ class GalaxyLib extends XGPCore
         if ($row_data['planet_destroyed'] == 0) { // IF THE PLANET ON THIS POSITION IS ACTIVE
             // PRE CREATED BLOCK TO PREVENT REDUNDANCY
             $moon_block = $this->moonBlock();
+            $user_block = $this->usernameBlock();
 
             // PARSE DATA
             $row['planet'] = $this->template->set($block['planet'], $this->planetBlock());
             $row['moon'] = $moon_block != '' ? $this->template->set($block['moon'], $moon_block) : '';
-            $row['username'] = $this->template->set($block['username'], $this->usernameBlock());
+            $row['username'] = $this->no_popup ? $user_block['status'] : $this->template->set($block['username'], $user_block);
             $row['alliance'] = $this->template->set($block['alliance'], $this->allyBlock());
             $row['actions'] = $this->actionsBlock();
         }
@@ -347,88 +354,113 @@ class GalaxyLib extends XGPCore
      */
     private function usernameBlock()
     {
-        $MyGameLevel = $this->current_user['user_statistic_total_points'];
-        $HeGameLevel = $this->row_data['user_statistic_total_points'];
+        $this->no_popup = false;
 
-        $status['banned'] = '';
-        $status['vacation'] = '';
-        $status['inactive'] = '';
-        $status['noob_protection'] = '';
+        if ($this->row_data['user_id'] == $this->current_user['user_id']) {
+            $this->no_popup = true;
+
+            return [
+                'status' => $this->row_data['user_name'],
+            ];
+        }
+
+        $current_user_points = $this->current_user['user_statistic_total_points'];
+        $row_user_points = $this->row_data['user_statistic_total_points'];
+
+        $statuses = [];
+
+        if ($this->row_data['user_authlevel'] >= UserRanks::GO) {
+            $this->no_popup = true;
+
+            $statuses['admin'] = [
+                'class' => $this->getUserStatusClass('a'),
+                'shortcut' => $this->langs->line('gl_a'),
+            ];
+        }
 
         if ($this->row_data['user_banned']) {
-            $status['banned'] = UrlHelper::setUrl(
-                'game.php?page=banned',
-                $this->status['b']
-            );
+            $statuses['banned'] = [
+                'class' => $this->getUserStatusClass('b'),
+                'shortcut' => $this->langs->line('gl_b'),
+            ];
         }
 
         if ($this->row_data['preference_vacation_mode'] > 0) {
-            $status['vacation'] = $this->status['v'];
+            $statuses['vacation'] = [
+                'class' => $this->getUserStatusClass('v'),
+                'shortcut' => $this->langs->line('gl_v'),
+            ];
         }
 
-        if ($this->row_data['user_onlinetime'] < (time() - 60 * 60 * 24 * 7) && $this->row_data['user_onlinetime'] > (time() - 60 * 60 * 24 * 28)) {
-            $status['inactive'] = $this->status['i'];
+        if ($this->row_data['user_onlinetime'] < (time() - ONE_WEEK)) {
+            $statuses['inactive'] = [
+                'class' => $this->getUserStatusClass('i'),
+                'shortcut' => $this->langs->line('gl_i'),
+            ];
         }
 
-        if ($this->row_data['user_onlinetime'] < (time() - 60 * 60 * 24 * 28)) {
-            $status['inactive'] .= $this->status['I'];
+        if ($this->row_data['user_onlinetime'] < (time() - ONE_DAY * 28)) {
+            $statuses['inactive'] = [
+                'class' => $this->getUserStatusClass('I'),
+                'shortcut' => $this->langs->line('gl_I'),
+            ];
         }
 
-        if ($this->noob->isWeak($MyGameLevel, $HeGameLevel)) {
-            $status['noob_protection'] = $this->status['w'];
-        }
-
-        if ($this->noob->isStrong($MyGameLevel, $HeGameLevel)) {
-            $status['noob_protection'] = $this->status['s'];
-        }
-
-        // POP UP BLOCK DATA
-        $parse = $this->langs->language;
-        $parse['actions'] = '';
-        $parse['username'] = $this->row_data['user_name'];
-        $parse['current_rank'] = $this->row_data['user_statistic_total_rank'];
-        $parse['start'] = (floor($this->row_data['user_statistic_total_rank'] / 100) * 100) + 1;
-
-        if (!$this->noob->isRankVisible($this->row_data['user_authlevel'])) {
-            $parse['current_rank'] = '-';
-            $parse['start'] = 0;
-        }
-
-        if ($this->row_data['user_id'] != $this->current_user['user_id']) {
-            $parse['actions'] = "<td>";
-            $parse['actions'] .= str_replace('"', '', UrlHelper::setUrl(
-                'game.php?page=chat&playerId=' . $this->row_data['user_id'],
-                $this->langs->line('write_message')
-            ));
-            $parse['actions'] .= "</td></tr><tr><td>";
-            $parse['actions'] .= str_replace('"', '', UrlHelper::setUrl(
-                "game.php?page=buddies&mode=2&u=" . $this->row_data['user_id'],
-                $this->langs->line('gl_buddy_request')
-            ));
-            $parse['actions'] .= "</td></tr><tr>";
-
-            // USER STATUS AND NAME
-            $parse['status'] = $this->row_data['user_name'];
-
-            $statuses = [];
-            foreach ($status as $to_parse) {
-                if ($to_parse != '') {
-                    $statuses[] = $to_parse;
-                }
+        if (!isset($statuses['admin']) && !isset($statuses['banned'])) {
+            if ($this->noob->isWeak($current_user_points, $row_user_points)) {
+                $statuses['protection'] = [
+                    'class' => $this->getUserStatusClass('w'),
+                    'shortcut' => $this->langs->line('gl_w'),
+                ];
             }
 
-            if (!empty($statuses)) {
-                $parse['status'] .= '<font color="white"> (</font>' . join(' ', $statuses) . '<font color="white">)</font>';
-            }
-        } else {
-            $parse['status'] = $this->row_data['user_name'];
-
-            if ($status['vacation'] != '') {
-                $parse['status'] .= '<font color="white"> (</font>' . $status['vacation'] . '<font color="white">)</font>';
+            if ($this->noob->isStrong($current_user_points, $row_user_points)) {
+                $statuses['protection'] = [
+                    'class' => $this->getUserStatusClass('s'),
+                    'shortcut' => $this->langs->line('gl_s'),
+                ];
             }
         }
 
-        return $parse;
+        $user_name = '';
+        $user_status = [];
+        foreach ($statuses as $status => $details) {
+            if (empty($user_name)) {
+                $user_name = FormatLib::spanElement($this->row_data['user_name'], $details['class']);
+            }
+
+            $user_status[] = FormatLib::spanElement($details['shortcut'], $details['class']);
+        }
+
+        if (count($user_status) > 0) {
+            $formated_username = StringsHelper::parseReplacements(
+                '%s (%s)',
+                [$user_name, join(' ', $user_status)]
+            );
+        }
+
+        $actions = "<td>";
+        $actions .= str_replace('"', '', UrlHelper::setUrl(
+            'game.php?page=chat&playerId=' . $this->row_data['user_id'],
+            $this->langs->line('write_message')
+        ));
+        $actions .= "</td></tr><tr><td>";
+        $actions .= str_replace('"', '', UrlHelper::setUrl(
+            "game.php?page=buddies&mode=2&u=" . $this->row_data['user_id'],
+            $this->langs->line('gl_buddy_request')
+        ));
+        $actions .= "</td></tr><tr>";
+
+        return array_merge(
+            [
+                'status' => $formated_username ?? $this->row_data['user_name'],
+                'username' => $this->row_data['user_name'],
+                'current_rank' => $this->row_data['user_statistic_total_rank'],
+                'start' => (floor($this->row_data['user_statistic_total_rank'] / 100) * 100) + 1,
+                'actions' => $actions,
+            ],
+            $this->langs->language
+        );
     }
 
     /**
@@ -485,33 +517,55 @@ class GalaxyLib extends XGPCore
      *
      * @return string
      */
-    private function actionsBlock()
+    private function actionsBlock(): string
     {
-        $links = '';
+        if ($this->row_data['user_id'] == $this->current_user['user_id']) {
+            return '';
+        }
 
-        if ($this->row_data['user_id'] != $this->current_user['user_id']) {
-            $image = FunctionsLib::setImage(DPATH . 'img/e.gif', $this->langs->line('gl_spy'));
-            $attributes = "onclick=\"javascript:doit(6, " . $this->galaxy . ", " . $this->system . ", " .
-            $this->planet . ", 1, " . $this->current_user['preference_spy_probes'] . ");\"";
-            $links .= UrlHelper::setUrl('', $image, '', $attributes) . '&nbsp;';
+        $links = [];
+        $actions = [
+            'spy' => [
+                'image' => FunctionsLib::setImage(DPATH . 'img/e.gif', $this->langs->line('gl_spy')),
+                'attributes' => "onclick=\"javascript:doit(6, " . $this->galaxy . ", " . $this->system . ", " . $this->planet . ", 1, " . $this->current_user['preference_spy_probes'] . ");\"",
+            ],
+            'write' => [
+                'image' => FunctionsLib::setImage(DPATH . 'img/m.gif', $this->langs->line('write_message')),
+                'url' => 'game.php?page=chat&playerId=' . $this->row_data['user_id'],
+            ],
+            'buddy' => [
+                'image' => FunctionsLib::setImage(DPATH . 'img/b.gif', $this->langs->line('gl_buddy_request')),
+                'url' => 'game.php?page=buddies&mode=2&u=' . $this->row_data['user_id'],
+            ],
+            'missile' => [
+                'image' => FunctionsLib::setImage(DPATH . 'img/r.gif', $this->langs->line('gl_missile_attack')),
+                'url' => 'game.php?page=galaxy&mode=2&galaxy=' . $this->galaxy . '&system=' . $this->system . '&planet=' . $this->planet . '&current=' . $this->current_user['user_current_planet'],
+            ],
+        ];
 
-            $image = FunctionsLib::setImage(DPATH . 'img/m.gif', $this->langs->line('write_message'));
-            $url = 'game.php?page=chat&playerId=' . $this->row_data['user_id'];
-            $links .= UrlHelper::setUrl($url, $image) . '&nbsp;';
+        $available_actions = ['spy', 'write', 'buddy'];
 
-            $image = FunctionsLib::setImage(DPATH . 'img/b.gif', $this->langs->line('gl_buddy_request'));
-            $url = "game.php?page=buddies&mode=2&u=" . $this->row_data['user_id'];
-            $links .= UrlHelper::setUrl($url, $image) . '&nbsp;';
+        if ($this->isMissileActive()) {
+            array_push($available_actions, 'missile');
+        }
 
-            if ($this->isMissileActive()) {
-                $image = FunctionsLib::setImage(DPATH . 'img/r.gif', $this->langs->line('gl_missile_attack'));
-                $url = 'game.php?page=galaxy&mode=2&galaxy=' . $this->galaxy . '&system=' . $this->system .
-                '&planet=' . $this->planet . '&current=' . $this->current_user['user_current_planet'];
-                $links .= UrlHelper::setUrl($url, $image) . '&nbsp;';
+        if ($this->row_data['user_authlevel'] >= UserRanks::GO) {
+            $available_actions = ['write'];
+        }
+
+        if ($this->row_data['preference_vacation_mode'] > 0) {
+            $available_actions = ['write', 'buddy'];
+        }
+
+        foreach ($available_actions as $action) {
+            if (isset($actions[$action]['url'])) {
+                $links[] = UrlHelper::setUrl($actions[$action]['url'], $actions[$action]['image']);
+            } else {
+                $links[] = UrlHelper::setUrl('', $actions[$action]['image'], '', $actions[$action]['attributes']);
             }
         }
 
-        return $links;
+        return join('&nbsp;', $links);
     }
     ######################################
     #
@@ -710,23 +764,23 @@ class GalaxyLib extends XGPCore
     }
 
     /**
-     * Build the user statuses
+     * Get the css class for each user status
      *
      * @return void
      */
-    private function userStatuses()
+    private function getUserStatusClass(string $status)
     {
-        $this->status = [
-            'a' => FormatLib::spanElement($this->langs->line('gl_a'), 'status_abbr_admin'),
-            's' => FormatLib::spanElement($this->langs->line('gl_s'), 'status_abbr_strong'),
-            'n' => FormatLib::spanElement($this->langs->line('gl_w'), 'status_abbr_noob'),
-            'o' => FormatLib::spanElement($this->langs->line('gl_o'), 'status_abbr_outlaw'),
-            'v' => FormatLib::spanElement($this->langs->line('gl_v'), 'status_abbr_vacation'),
-            'b' => FormatLib::spanElement($this->langs->line('gl_b'), 'status_abbr_banned'),
-            'i' => FormatLib::spanElement($this->langs->line('gl_i'), 'status_abbr_inactive'),
-            'I' => FormatLib::spanElement($this->langs->line('gl_I'), 'status_abbr_longinactive'),
-            'hp' => FormatLib::spanElement($this->langs->line('gl_hp'), 'status_abbr_honorableTarget'),
-        ];
+        return [
+            'a' => 'status_abbr_admin',
+            's' => 'status_abbr_strong',
+            'n' => 'status_abbr_noob',
+            'o' => 'status_abbr_outlaw',
+            'v' => 'status_abbr_vacation',
+            'b' => 'status_abbr_banned',
+            'i' => 'status_abbr_inactive',
+            'I' => 'status_abbr_longinactive',
+            'hp' => 'status_abbr_honorableTarget',
+        ][$status];
     }
 }
 
