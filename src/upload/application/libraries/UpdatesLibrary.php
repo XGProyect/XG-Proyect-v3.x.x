@@ -455,7 +455,7 @@ class UpdatesLibrary extends XGPCore
         $MaxCristalStorage = $current_planet['planet_crystal_max'];
         $MaxDeuteriumStorage = $current_planet['planet_deuterium_max'];
 
-        $Caps = array();
+        $Caps = [];
         $BuildTemp = $current_planet['planet_temp_max'];
         $sub_query = '';
         $parse['production_level'] = 100;
