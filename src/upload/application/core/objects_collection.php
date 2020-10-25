@@ -237,8 +237,8 @@ $ProdGrid = [
         'formule' => [
             'metal' => 'return   "0";',
             'crystal' => 'return   "0";',
-            'deuterium' => 'return  ((10 * $BuildLevel * pow((1.1), $BuildLevel)) * (-0.002 * $BuildTemp + 1.28))  * (0.1 * $BuildLevelFactor);',
-            'energy' => 'return - (20 * $BuildLevel * pow((1.1), $BuildLevel)) * (0.1 * $BuildLevelFactor);'],
+            'deuterium' => 'return  ((10 * $BuildLevel * pow((1.1), $BuildLevel)) * (1.44 - 0.004 * $BuildTemp))  * (0.1 * $BuildLevelFactor);',
+            'energy' => 'return - floor(20 * $BuildLevel * pow((1.1), $BuildLevel)) * (0.1 * $BuildLevelFactor);'],
     ],
     4 => ['metal' => 50, 'crystal' => 20, 'deuterium' => 0, 'energy' => 0, 'factor' => 3 / 2,
         'formule' => [
