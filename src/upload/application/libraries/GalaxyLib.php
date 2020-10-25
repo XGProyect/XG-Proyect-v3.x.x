@@ -800,7 +800,7 @@ class GalaxyLib extends XGPCore
         return [
             'a' => 'status_abbr_admin',
             's' => 'status_abbr_strong',
-            'n' => 'status_abbr_noob',
+            'w' => 'status_abbr_noob',
             'o' => 'status_abbr_outlaw',
             'v' => 'status_abbr_vacation',
             'b' => 'status_abbr_banned',
