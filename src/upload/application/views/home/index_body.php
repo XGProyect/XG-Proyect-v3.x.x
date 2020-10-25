@@ -199,11 +199,11 @@
         <div id="uni_selection" style="display: none;">
                                     <script type="text/javascript">
                         <!--
-                            //select_uni('{base_path}'.replace('http://', '').replace('https://', '').slice(0, -1), '','');
+                            select_uni('{base_path}'.replace('http://', '').replace('https://', '').slice(0, -1), '{hm_universe_name}','');
                         //-->
                         </script>
 
-            <div id="row-0" class="server-row " title="" onclick="select_uni('','{hm_universe_name}');" onmouseover="highlightRow(&#39;row-0&#39;);this.style.cursor=&#39;pointer&#39;" onmouseout="unHighlightRow(&#39;row-0&#39;);">
+            <div id="row-0" class="server-row " title="" onclick="select_uni('{base_path}','{hm_universe_name}');" onmouseover="highlightRow(&#39;row-0&#39;);this.style.cursor=&#39;pointer&#39;" onmouseout="unHighlightRow(&#39;row-0&#39;);">
                 <span class="uni_span ">{hm_universe_name}</span>
             </div>
                     </div>
