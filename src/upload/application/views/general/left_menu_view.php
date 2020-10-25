@@ -1,4 +1,4 @@
-<div id='leftmenu'>
+<div id="leftmenu">
     <script language="JavaScript">
         function f(target_url, win_name) {
             var new_win = window.open(target_url, win_name, 'resizable=yes,scrollbars=yes,menubar=no,toolbar=no,width=550,height=280,top=0,left=0');
@@ -6,10 +6,10 @@
         }
     </script>
     <center>
-        <div id='menu'>
+        <div id="menu">
             <p style="width:110px;">
             <NOBR>
-                {servername} {changelog}
+                {lm_players} <strong>{user_name}</strong>
             </NOBR>
             </p>
             <table width="110" cellspacing="0" cellpadding="0">
@@ -34,10 +34,22 @@
                 {admin_link}
                 <tr>
                     <td>
-                        <div align="center">
-                            <font color="#FFFFFF">
-                            <a href="#" title="Powered by XG Proyect {version} &copy; 2008 - {year} GNU General Public License">&copy; 2008 - {year}</a>
-                            </font>
+                        <img src="{dpath}menu/info-help.jpg" width="110" height="19">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div style="text-align:center">
+                            {servername} ({changelog})
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div style="text-align:center">
+                            <span style="color:#FFFFFF">
+                                <a href="#" title="Powered by XG Proyect {version} &copy; 2008 - {year} GNU General Public License">&copy; 2008 - {year}</a>
+                            </span>
                         </div>
                     </td>
                 </tr>

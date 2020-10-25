@@ -1,5 +1,6 @@
 <?php
 $lang = [
+    'lm_players' => 'Jugadores:',
     'lm_overview' => 'Resumen',
     'lm_galaxy' => 'Galaxia',
     'lm_empire' => 'Imperio',

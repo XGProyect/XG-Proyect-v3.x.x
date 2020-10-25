@@ -15,6 +15,7 @@ use application\core\Database;
 use application\core\enumerators\PlanetTypesEnumerator;
 use application\core\Language;
 use application\core\Template;
+use application\helpers\UrlHelper;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
 use application\libraries\OfficiersLib;
@@ -574,7 +575,6 @@ class TemplateLib
         $tota_rank = $this->current_user['user_statistic_total_rank'] == '' ?
         $this->current_planet['stats_users'] : $this->current_user['user_statistic_total_rank'];
         $pages = [
-            ['changelog', SYSTEM_VERSION, '', 'FFF', '', '0', '0'],
             ['overview', $lang->line('lm_overview'), '', 'FFF', '', '1', '1'],
             ['empire', $lang->line('lm_empire'), '', 'FFF', '', '1', '2'],
             ['resources', $lang->line('lm_resources'), '', 'FFF', '', '1', '3'],
@@ -666,15 +666,18 @@ class TemplateLib
 
         // PARSE THE MENU AND OTHER DATA
         $parse['dpath'] = DPATH;
-        $parse['version'] = SYSTEM_VERSION;
-        $parse['servername'] = FunctionsLib::readConfig('game_name');
-        $parse['year'] = $this->current_year;
+        $parse['lm_players'] = $lang->line('lm_players');
+        $parse['user_name'] = UrlHelper::setUrl('game.php?page=preferences', $this->current_user['user_name']);
         $parse['menu_block1'] = $menu_block1;
         $parse['menu_block2'] = $menu_block2;
         $parse['menu_block3'] = $menu_block3;
         $parse['admin_link'] = (($this->current_user['user_authlevel'] > 0) ?
             "<tr><td><div align=\"center\"><a href=\"admin.php\" target=\"_blank\">
             <font color=\"lime\">" . $lang->line('lm_administration') . "</font></a></div></td></tr>" : "");
+        $parse['servername'] = FunctionsLib::readConfig('game_name');
+        $parse['changelog'] = UrlHelper::setUrl('game.php?page=changelog', SYSTEM_VERSION);
+        $parse['version'] = SYSTEM_VERSION;
+        $parse['year'] = $this->current_year;
 
         return $this->template->set(
             'general/left_menu_view',
