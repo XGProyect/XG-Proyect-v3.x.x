@@ -144,9 +144,9 @@ class Transport extends Missions
                 $this->langs->line('tra_incoming_title'),
                 StringsHelper::parseReplacements($this->langs->line('tra_incoming_delivery'), [
                     $trading_planets['start_user_name'],
-                    $start_name,
+                    $trading_planets['start_name'],
                     Fleets::startLink($fleet, ''),
-                    $target_name,
+                    $trading_planets['target_name'],
                     Fleets::targetLink($fleet, ''),
                     Format::prettyNumber($fleet['fleet_resource_metal']),
                     Format::prettyNumber($fleet['fleet_resource_crystal']),
