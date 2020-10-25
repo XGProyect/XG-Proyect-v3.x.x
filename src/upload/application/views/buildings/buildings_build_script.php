@@ -8,7 +8,7 @@ function t(){
 	s  = ss - Math.round( (n.getTime() - v.getTime()) / 1000.);
 	m  = 0;
 	h  = 0;
-	if ( s < 0 ) {
+	if ( s <= 0 ) {
 		brp.innerHTML = '{bd_ready}<br><a href=game.php?page={call_program}>{bd_continue}</a>';
 		window.setTimeout('document.location.href="game.php?page={call_program}";', 1000);
 	} else {
