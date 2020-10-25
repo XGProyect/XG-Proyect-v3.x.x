@@ -1,10 +1,9 @@
 <?php
-declare(strict_types = 1);
+declare (strict_types = 1);
 
-use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\Constraint\IsType as PHPUnit_IsType;
 use application\libraries\buildings\Queue;
 use application\libraries\buildings\QueueElements;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers Queue
@@ -304,11 +303,11 @@ class QueueTest extends TestCase
 
         $this->assertEquals(
             $object->getElementFromQueueAsArray(1), [
-            'building' => 2,
-            'build_level' => 5,
-            'build_time' => 90,
-            'build_end_time' => $current_time,
-            'build_mode' => 'destroy',
+                'building' => 2,
+                'build_level' => 5,
+                'build_time' => 90,
+                'build_end_time' => $current_time,
+                'build_mode' => 'destroy',
             ]
         );
     }
@@ -332,8 +331,8 @@ class QueueTest extends TestCase
         $object->addElementToQueue($queue_elements);
 
         // Remove the following lines when you implement this test.
-        $this->assertInternalType(
-            PHPUnit_IsType::TYPE_STRING, $object->returnQueueAsString()
+        $this->assertIsString(
+            $object->returnQueueAsString()
         );
 
         $this->assertEquals(
@@ -360,20 +359,20 @@ class QueueTest extends TestCase
         $object->addElementToQueue($queue_elements);
 
         // Remove the following lines when you implement this test.
-        $this->assertInternalType(
-            PHPUnit_IsType::TYPE_ARRAY, $object->returnQueueAsArray()
+        $this->assertIsArray(
+            $object->returnQueueAsArray()
         );
 
         $this->assertEquals(
             $object->returnQueueAsArray(), [
-            0 =>
-            [
-                'building' => 1,
-                'build_level' => 1,
-                'build_time' => 20,
-                'build_end_time' => $current_time,
-                'build_mode' => 'build'
-            ]
+                0 =>
+                [
+                    'building' => 1,
+                    'build_level' => 1,
+                    'build_time' => 20,
+                    'build_end_time' => $current_time,
+                    'build_mode' => 'build',
+                ],
             ]
         );
     }
@@ -417,8 +416,8 @@ class QueueTest extends TestCase
         $object->addElementToQueue($queue_elements);
 
         // Remove the following lines when you implement this test.
-        $this->assertInternalType(
-            PHPUnit_IsType::TYPE_ARRAY, $object->returnQueueAsArray()
+        $this->assertIsArray(
+            $object->returnQueueAsArray()
         );
 
         $this->assertEquals(
