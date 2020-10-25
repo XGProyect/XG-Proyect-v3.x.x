@@ -145,6 +145,7 @@
 
 			    <div class="black-border">
                                 <select class="js_uniUrl" id="serverLogin" name="uni">
+                                    <option value="0">{hm_universe_name}</option>
                                 </select>
                             </div>
 			</div>
@@ -189,7 +190,7 @@
         <table cellspacing="0" cellpadding="0" onclick="switch_uni_selection()" onmouseover="this.style.cursor=&#39;pointer&#39;" class="server_table" style="cursor: pointer;">
         <tbody><tr>
             <td id="uni_select_box" class="select" style="height:19px;overflow:hidden;">
-                <span id="uni_name" class=""></span>
+                <span id="uni_name" class="">{hm_universe_name}</span>
             </td>
             <td style="width:18px; background: url('{img_path}dropdownmenu_arrow.png') no-repeat scroll 0 0 #8D9AA7;"></td>
         </tr>
@@ -198,12 +199,12 @@
         <div id="uni_selection" style="display: none;">
                                     <script type="text/javascript">
                         <!--
-                            select_uni('{base_path}'.replace('http://', '').replace('https://', '').slice(0, -1), '','');
+                            //select_uni('{base_path}'.replace('http://', '').replace('https://', '').slice(0, -1), '','');
                         //-->
                         </script>
 
-            <div id="row-0" class="server-row " title="" onclick="select_uni(,);" onmouseover="highlightRow(&#39;row-0&#39;);this.style.cursor=&#39;pointer&#39;" onmouseout="unHighlightRow(&#39;row-0&#39;);">
-                <span class="uni_span "></span>
+            <div id="row-0" class="server-row " title="" onclick="select_uni('','{hm_universe_name}');" onmouseover="highlightRow(&#39;row-0&#39;);this.style.cursor=&#39;pointer&#39;" onmouseout="unHighlightRow(&#39;row-0&#39;);">
+                <span class="uni_span ">{hm_universe_name}</span>
             </div>
                     </div>
     </div>

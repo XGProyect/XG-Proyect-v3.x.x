@@ -24,6 +24,7 @@ $lang = [
     'hm_login_button' => 'Entrar',
     'hm_close_button' => 'Cerrar',
     'hm_universe' => 'Universo:',
+    'hm_universe_name' => 'Universo 1',
     'hm_username' => 'Nombre de usuario:',
     'hm_username_mail' => 'Dirección de E-Mail:',
     'hm_password' => 'Contraseña:',
