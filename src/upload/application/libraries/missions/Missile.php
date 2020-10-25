@@ -93,7 +93,7 @@ class Missile extends Missions
                         $attack -= $destroyed * $defense;
 
                         if ($destroyed != 0) {
-                            $message .= $this->langs->line($this->resource[$n]) . " (-" . $destroyed . ")<br>";
+                            $message .= $target_data[$this->resource[$n]] . ' ' . $this->langs->line($this->resource[$n]) . " (-" . $destroyed . ")<br>";
                             $destroyed_query .= "`" . $this->resource[$n] . "` = `" .
                             $this->resource[$n] . "` - " . $destroyed . ",";
                         }
@@ -123,13 +123,24 @@ class Missile extends Missions
                     $fleet_row['fleet_end_planet']
                 ),
             ];
-            $message_vorlage = str_replace($search, $replace, $this->langs->line('mis_result'));
 
             if (empty($message) or $message == '') {
                 $message = $this->langs->line('mis_planet_without_defenses');
             }
 
-            // send message to the enemy
+            // send messages
+            // attacker
+            FunctionsLib::sendMessage(
+                $fleet_row['fleet_owner'],
+                '',
+                $fleet_row['fleet_end_time'],
+                5,
+                $this->langs->line('mi_fleet_command'),
+                $this->langs->line('mis_attack'),
+                str_replace($search, $replace, $this->langs->line('mis_result_own')) . $message
+            );
+
+            // enemy
             FunctionsLib::sendMessage(
                 $target_data['planet_user_id'],
                 '',
@@ -137,7 +148,7 @@ class Missile extends Missions
                 5,
                 $this->langs->line('mi_fleet_command'),
                 $this->langs->line('mis_attack'),
-                $message_vorlage . $message
+                str_replace($search, $replace, $this->langs->line('mis_result')) . $message
             );
 
             parent::removeFleet($fleet_row['fleet_id']);
