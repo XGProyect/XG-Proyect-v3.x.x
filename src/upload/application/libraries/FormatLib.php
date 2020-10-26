@@ -111,7 +111,7 @@ class FormatLib
      */
     public static function colorNumber($n, $s = '')
     {
-        if ($n > 0) {
+        if ($n >= 0) {
             if ($s != '') {
                 $s = self::colorGreen($s);
             } else {
