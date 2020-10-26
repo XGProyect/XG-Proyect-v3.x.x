@@ -107,7 +107,7 @@ class Home extends Controller
             'game_logo' => Functions::readConfig('game_logo'),
             'extra_js_error' => $this->getErrors(),
             'img_path' => IMG_PATH . 'home/',
-            'base_path' => SYSTEM_ROOT,
+            'base_path' => BASE_PATH,
             'user_name' => isset($_GET['character']) ? $_GET['character'] : '',
             'user_email' => isset($_GET['email']) ? $_GET['email'] : '',
             'forum_url' => Functions::readConfig('forum_url'),
