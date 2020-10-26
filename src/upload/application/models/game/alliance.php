@@ -121,10 +121,11 @@ class Alliance extends Model
     public function createNewUserRequest($alliance_id, $text, $user_id)
     {
         $this->db->query(
-            "UPDATE " . USERS . " SET
+            "UPDATE `" . USERS . "` SET
             `user_ally_request` = '" . (int) $alliance_id . "' ,
             `user_ally_request_text` = '" . $text . "',
             `user_ally_register_time` = '" . time() . "'
+            `user_ally_rank_id` = '1'
             WHERE `user_id`='" . (int) $user_id . "'"
         );
     }
@@ -450,7 +451,7 @@ class Alliance extends Model
     {
         $this->db->query(
             "UPDATE `" . USERS . "` AS u1, `" . ALLIANCE . "` AS a, `" . USERS . "` AS u2 SET
-                u1.`user_ally_rank_id` = '0',
+                u1.`user_ally_rank_id` = '1',
                 a.`alliance_owner` = '" . (int) $new_leader . "',
                 u2.`user_ally_rank_id` = '0'
             WHERE u1.`user_id` = " . $current_user_id . " AND
