@@ -59,13 +59,22 @@ class Missile extends Missions
                 ],
             ]);
 
+            $message = '';
+            $single = '';
+            if ($fleet_row['fleet_amount'] == 1) {
+                $single = '_single';
+            }
+
             if ($target_data['defense_anti-ballistic_missile'] >= $fleet_row['fleet_amount']) {
                 $message = $this->langs->line('mis_all_destroyed') . '<br>';
                 $amount = $fleet_row['fleet_amount'];
             } else {
+                $destroyed_query = '';
+                $result = [];
                 $amount = 0;
 
                 if ($target_data['defense_anti-ballistic_missile'] > 0) {
+                    $result[502] = $target_data['defense_anti-ballistic_missile'];
                     $message = $target_data['defense_anti-ballistic_missile'] .
                     $this->langs->line('mis_some_destroyed') . " <br>";
                 }
@@ -74,8 +83,6 @@ class Missile extends Missions
                     ($fleet_row['fleet_amount'] - $target_data['defense_anti-ballistic_missile']) * ($this->combat_caps[503]['attack'] * (1 + ($attacker_data['research_weapons_technology'] / 10)))
                 );
                 $attack_order = $this->setAttackOrder($fleet_row['fleet_target_obj']);
-                $destroyed_query = '';
-                $message = '';
 
                 // PROCESS THE MISSILE ATTACK
                 for ($t = 0; $t < count($attack_order); $t++) {
@@ -93,9 +100,8 @@ class Missile extends Missions
                         $attack -= $destroyed * $defense;
 
                         if ($destroyed != 0) {
-                            $message .= $target_data[$this->resource[$n]] . ' ' . $this->langs->line($this->resource[$n]) . " (-" . $destroyed . ")<br>";
-                            $destroyed_query .= "`" . $this->resource[$n] . "` = `" .
-                            $this->resource[$n] . "` - " . $destroyed . ",";
+                            $result[$n] = $destroyed;
+                            $destroyed_query .= "`" . $this->resource[$n] . "` = `" . $this->resource[$n] . "` - " . $destroyed . ",";
                         }
                     }
                 }
@@ -124,7 +130,17 @@ class Missile extends Missions
                 ),
             ];
 
-            if (empty($message) or $message == '') {
+            if (isset($result) && count($result) > 0) {
+                foreach (parent::$objects->getObjectsList('defense') as $defense_id) {
+                    $message .= FormatLib::prettyNumber($target_data[$this->resource[$defense_id]]) . ' ' . $this->langs->line($this->resource[$defense_id]);
+                    if (isset($result[$defense_id])) {
+                        $message .= ' (-' . FormatLib::prettyNumber($result[$defense_id]) . ')';
+                    }
+                    $message .= '<br>';
+                }
+            }
+
+            if (empty($message)) {
                 $message = $this->langs->line('mis_planet_without_defenses');
             }
 
@@ -137,7 +153,7 @@ class Missile extends Missions
                 5,
                 $this->langs->line('mi_fleet_command'),
                 $this->langs->line('mis_attack'),
-                str_replace($search, $replace, $this->langs->line('mis_result_own')) . $message
+                str_replace($search, $replace, $this->langs->line('mis_result_own' . $single)) . $message
             );
 
             // enemy
@@ -148,7 +164,7 @@ class Missile extends Missions
                 5,
                 $this->langs->line('mi_fleet_command'),
                 $this->langs->line('mis_attack'),
-                str_replace($search, $replace, $this->langs->line('mis_result')) . $message
+                str_replace($search, $replace, $this->langs->line('mis_result' . $single)) . $message
             );
 
             parent::removeFleet($fleet_row['fleet_id']);
