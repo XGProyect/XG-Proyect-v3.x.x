@@ -22,6 +22,7 @@ $lang = [
     'exp_primitive_enemy_3' => 'Capturamos algunos mensajes de radio de algunos piratas borrachos. Pareciera como si nos quisieran atacar.', // ok
     'exp_primitive_enemy_4' => 'Tuvimos que luchar contra algunos piratas que por suerte no eran muchos.', // ok
     'exp_primitive_enemy_5' => '',
+    'exp_primitive_enemy_6' => '',
 
     // found advanced enemy
     'exp_advanced_enemy_1' => '¡Algunas naves de apariencia exótica atacaron la expedición sin previo aviso!', // ok
@@ -36,9 +37,11 @@ $lang = [
     // delay
     'exp_delay_1' => 'Tu expedición entro en un sector lleno de tormentas de partículas. Esto provocó que los depósitos de energía se sobrecargaran y la mayoría de los sistemas principales de las naves se averiaron. Tus mecánicos fueron capaces de evitar lo peor pero la flota va a volver con un gran retraso.', // ok
     'exp_delay_2' => '',
+    'exp_delay_3' => '',
 
     // advancement
     'exp_faster_1' => '',
+    'exp_faster_2' => '',
 
     // found object
     'exp_found_object_1' => '',
@@ -50,10 +53,12 @@ $lang = [
     'exp_nothing_4' => '',
     'exp_nothing_5' => '',
     'exp_nothing_6' => '',
+    'exp_nothing_7' => '',
+    'exp_nothing_8' => 'Probablemente la celebración del cumpleaños del capitán no debió hacerse en ese planeta desierto. Una fiebre terrible y desconocida causó que la gran mayoría de la tripulación de la expedición tuviera que estar en la enfermería durante el resto de la expedición. Debido a la escasez de personal la expedición fracasó.', // ok
 
-    // blackhole
-    'exp_blackhole_1' => '',
-    'exp_blackhole_2' => '',
+    // lost ships
+    'exp_lost_1' => '',
+    'exp_lost_2' => '',
 
     // exploration status
     'exp_status_fresh_1' => 'Registro en el diario de navegación del oficial de comunicación: Parece como si esta parte del universo no hubiera sido explorada hasta ahora.', // ok

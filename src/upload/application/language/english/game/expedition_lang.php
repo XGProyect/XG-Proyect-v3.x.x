@@ -22,6 +22,7 @@ $lang = [
     'exp_primitive_enemy_3' => 'We caught some radio transmissions from some drunk pirates. Seems like we will be under attack soon.', // ok
     'exp_primitive_enemy_4' => 'We needed to fight some pirates which were, fortunately, only a few.', // ok
     'exp_primitive_enemy_5' => 'Some really desperate space pirates tried to capture our expedition fleet.', // ok
+    'exp_primitive_enemy_6' => 'The expedition reports tough battles against undefined pirate ships.', // ok
 
     // found advanced enemy
     'exp_advanced_enemy_1' => '',
@@ -36,24 +37,28 @@ $lang = [
     // delay
     'exp_delay_1' => '',
     'exp_delay_2' => 'Your navigator made a grave error in his computations that caused the expeditions jump to be miscalculated. Not only did the fleet miss the target completely, but the return trip will take a lot more time than originally planned.', // ok
+    'exp_delay_3' => 'The new navigation module is still buggy. The expeditions jump not only lead them in the wrong direction, but it used all the Deuterium fuel. Fortunately the fleets jump got them close to the departure moon. A bit disappointed the expedition now returns without impulse power. The return trip will take longer than expected.', // ok
 
     // advancement
     'exp_faster_1' => 'Your expeditions doesn\'t report any anomalies in the explored sector. But the fleet ran into somo solar wind while returning. This resulted in the return trip being expedited. Your expedition returns home a bit earlier.', // ok
+    'exp_faster_2' => 'An unexpected back coupling in the energy spools of the engines hastened the expeditions return, it returns home earlier than expected. First reports tell they do not have anything thrilling to account for.', // ok
 
     // found object
     'exp_found_object_1' => 'A fleeing fleet left an item behind, in order to distract us in aid of their escape.<br><br>%s has been added to the inventory.', // ok
 
     // found nothing
     'exp_nothing_1' => '',
-    'exp_nothing_2' => '',
+    'exp_nothing_2' => 'A living being made out of pure energy came aboard and induced all the expedition members into some strange trance, causing them to only gazed at the hypnotizing patterns on the computer screens. When most of them finally snapped out of the hypnotic-like state, the expedition mission needed to be aborted as they had way too little Deuterium.', // ok
     'exp_nothing_3' => '',
     'exp_nothing_4' => 'The expedition\'s flagship collided with a foreign ship when it jumped into the fleet without any warning. The foreign ship exploded and the damage to the flagship was substantial. The expedition cannot continue in these conditions, and so the fleet will begin to make its way back once the needed repairs have been carried out.', // ok
     'exp_nothing_5' => 'Besides some quaint, small pets from a unknown marsh planet, this expedition brings nothing thrilling back from the trip.', // ok
     'exp_nothing_6' => 'Our expedition team came across a strange colony that had been abandoned eons ago. After landing, our crew started to suffer from a high fever caused by an alien virus. It has been learned that this virus wiped out the entire civilization on the planet. Our expedition team is heading home to treat the sickened crew members. Unfortunately we had to abort the mission and we come home empty handed.', // ok
+    'exp_nothing_7' => 'A strange computer virus attacked the navigation system shortly after parting our home system. This caused the expedition fleet to fly in circles. Needless to say that the expedition wasn\'t really successful.', // ok
+    'exp_nothing_8' => '',
 
-    // blackhole
-    'exp_blackhole_1' => '',
-    'exp_blackhole_2' => '',
+    // lost ships
+    'exp_lost_1' => 'The only thing left from the expedition was the following radio transmission: Zzzrrt Oh no! Krrrzzzzt That zrrrtrzt looks krgzzzz like ... AHH! Krzzzzzzzztzzzz...<br><br><br><br><br><br>Transmission terminated', // ok
+    'exp_lost_2' => '',
 
     // exploration status
     'exp_status_fresh_1' => 'Entry from the communications officers logbook: It seems that this part of the universe has not been explored yet.', // ok
