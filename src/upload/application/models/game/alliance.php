@@ -124,7 +124,7 @@ class Alliance extends Model
             "UPDATE `" . USERS . "` SET
             `user_ally_request` = '" . (int) $alliance_id . "' ,
             `user_ally_request_text` = '" . $text . "',
-            `user_ally_register_time` = '" . time() . "'
+            `user_ally_register_time` = '" . time() . "',
             `user_ally_rank_id` = '1'
             WHERE `user_id`='" . (int) $user_id . "'"
         );
