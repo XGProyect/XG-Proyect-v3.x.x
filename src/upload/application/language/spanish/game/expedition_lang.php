@@ -38,6 +38,7 @@ $lang = [
     'exp_delay_1' => 'Tu expedición entro en un sector lleno de tormentas de partículas. Esto provocó que los depósitos de energía se sobrecargaran y la mayoría de los sistemas principales de las naves se averiaron. Tus mecánicos fueron capaces de evitar lo peor pero la flota va a volver con un gran retraso.', // ok
     'exp_delay_2' => '',
     'exp_delay_3' => '',
+    'exp_delay_4' => '',
 
     // advancement
     'exp_faster_1' => '',
@@ -45,6 +46,7 @@ $lang = [
 
     // found object
     'exp_found_object_1' => '',
+    'exp_found_object_2' => '',
 
     // found nothing
     'exp_nothing_1' => 'Tu expedición hizo magníficas fotos de una super nova. No se obtuvo nada de la expedición pero al menos hay muchas posibilidades de ganar el concurso "Mejor Foto del Universo" este año.', // ok
@@ -55,6 +57,7 @@ $lang = [
     'exp_nothing_6' => '',
     'exp_nothing_7' => '',
     'exp_nothing_8' => 'Probablemente la celebración del cumpleaños del capitán no debió hacerse en ese planeta desierto. Una fiebre terrible y desconocida causó que la gran mayoría de la tripulación de la expedición tuviera que estar en la enfermería durante el resto de la expedición. Debido a la escasez de personal la expedición fracasó.', // ok
+    'exp_nothing_9' => '',
 
     // lost ships
     'exp_lost_1' => '',

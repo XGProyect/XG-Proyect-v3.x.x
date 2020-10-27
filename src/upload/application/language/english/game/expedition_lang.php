@@ -31,13 +31,14 @@ $lang = [
     'exp_trader' => '',
 
     // found dark matter
-    'exp_dm_1' => '',
+    'exp_dm_1' => 'The expedition followed some odd signals to an asteroid. In the asteroids core a small amount of Dark Matter was found. The asteroid was taken and the explorers are attempting to extract the Dark Matter.<br><br>Dark Matter %s have been captured.', // ok
     'exp_dm_2' => 'Our expedition took over a ghost ship which was transporting a small amount of Dark Matter. We didn\'t find any hints of what happened to the original crew of the ship, but our technicians where able to rescue the Dark Matter.<br><br>Dark Matter %s have been captured.', // ok
 
     // delay
     'exp_delay_1' => '',
     'exp_delay_2' => 'Your navigator made a grave error in his computations that caused the expeditions jump to be miscalculated. Not only did the fleet miss the target completely, but the return trip will take a lot more time than originally planned.', // ok
     'exp_delay_3' => 'The new navigation module is still buggy. The expeditions jump not only lead them in the wrong direction, but it used all the Deuterium fuel. Fortunately the fleets jump got them close to the departure moon. A bit disappointed the expedition now returns without impulse power. The return trip will take longer than expected.', // ok
+    'exp_delay_4' => 'For unknown reasons the expeditions jump went totally wrong. It nearly landed in the heart of a sun. Fortunately it landed in a known system, but the jump back is going to take longer than thought.', // ok
 
     // advancement
     'exp_faster_1' => 'Your expeditions doesn\'t report any anomalies in the explored sector. But the fleet ran into somo solar wind while returning. This resulted in the return trip being expedited. Your expedition returns home a bit earlier.', // ok
@@ -45,6 +46,7 @@ $lang = [
 
     // found object
     'exp_found_object_1' => 'A fleeing fleet left an item behind, in order to distract us in aid of their escape.<br><br>%s has been added to the inventory.', // ok
+    'exp_found_object_2' => 'Our fleet has found a valuable artefact.<br><br>%s has been added to the inventory.<br><br>%s has been added to the inventory.', // ok
 
     // found nothing
     'exp_nothing_1' => '',
@@ -55,6 +57,7 @@ $lang = [
     'exp_nothing_6' => 'Our expedition team came across a strange colony that had been abandoned eons ago. After landing, our crew started to suffer from a high fever caused by an alien virus. It has been learned that this virus wiped out the entire civilization on the planet. Our expedition team is heading home to treat the sickened crew members. Unfortunately we had to abort the mission and we come home empty handed.', // ok
     'exp_nothing_7' => 'A strange computer virus attacked the navigation system shortly after parting our home system. This caused the expedition fleet to fly in circles. Needless to say that the expedition wasn\'t really successful.', // ok
     'exp_nothing_8' => '',
+    'exp_nothing_9' => 'A failure in the flagships reactor core nearly destroys the entire expedition fleet. Fortunately the technicians were more than competent and could avoid the worst. The repairs took quite some time and forced the expedition to return without having accomplished its goal.', // ok
 
     // lost ships
     'exp_lost_1' => 'The only thing left from the expedition was the following radio transmission: Zzzrrt Oh no! Krrrzzzzt That zrrrtrzt looks krgzzzz like ... AHH! Krzzzzzzzztzzzz...<br><br><br><br><br><br>Transmission terminated', // ok
