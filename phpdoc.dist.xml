@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <phpdocumentor>
-    <title><![CDATA[XGP Proyect v3.1.0]]></title>
+    <title><![CDATA[XGP Proyect v3.2.0]]></title>
     <encoding>utf-8</encoding>
     <parser>
         <target>docs</target>

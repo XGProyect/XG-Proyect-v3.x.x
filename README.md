@@ -10,7 +10,7 @@ XG Proyect
 
 **X**treme **G**amez **Proyect**o  
 Support: https://www.xgproyect.org/  
-Live Server: Coming soon!  
+Live Server: https://www.xgproyect.net/  
 
 Require PHP >= 7.3+  
 Require MySQLi >= 5.5+  
