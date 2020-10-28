@@ -28,11 +28,12 @@ $lang = [
     'exp_advanced_enemy_1' => '',
 
     // found trader
-    'exp_trader' => '',
+    'exp_trader' => 'You expedition fleed made contact with a friendly alien race. They announced that they would send a representative with goods to trade to your.', // ok
 
     // found dark matter
     'exp_dm_1' => 'The expedition followed some odd signals to an asteroid. In the asteroids core a small amount of Dark Matter was found. The asteroid was taken and the explorers are attempting to extract the Dark Matter.<br><br>Dark Matter %s have been captured.', // ok
     'exp_dm_2' => 'Our expedition took over a ghost ship which was transporting a small amount of Dark Matter. We didn\'t find any hints of what happened to the original crew of the ship, but our technicians where able to rescue the Dark Matter.<br><br>Dark Matter %s have been captured.', // ok
+    'exp_dm_5' => 'The expedition was able to capture and store some Dark Matter.<br><br>Dark Matter %s have been captured.', // ok
 
     // delay
     'exp_delay_1' => '',
@@ -58,6 +59,8 @@ $lang = [
     'exp_nothing_7' => 'A strange computer virus attacked the navigation system shortly after parting our home system. This caused the expedition fleet to fly in circles. Needless to say that the expedition wasn\'t really successful.', // ok
     'exp_nothing_8' => '',
     'exp_nothing_9' => 'A failure in the flagships reactor core nearly destroys the entire expedition fleet. Fortunately the technicians were more than competent and could avoid the worst. The repairs took quite some time and forced the expedition to return without having accomplished its goal.', // ok
+    'exp_nothing_10' => 'Despite the first, very promising scans of this sector, we unfortunately returned empty handed.', // ok
+    'exp_nothing_15' => 'Your expedition fleet followed odd signals for some time. At the end they noticed that those signals where being sent from an old probe which was sent out generations ago to greet foreign species. The probe was saved and some museums of your home planet already voiced their interest.', // ok
 
     // lost ships
     'exp_lost_1' => 'The only thing left from the expedition was the following radio transmission: Zzzrrt Oh no! Krrrzzzzt That zrrrtrzt looks krgzzzz like ... AHH! Krzzzzzzzztzzzz...<br><br><br><br><br><br>Transmission terminated', // ok
