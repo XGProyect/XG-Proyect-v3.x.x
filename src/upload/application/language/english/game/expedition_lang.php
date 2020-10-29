@@ -38,7 +38,7 @@ $lang = [
     'exp_dm_5' => 'The expedition was able to capture and store some Dark Matter.<br><br>Dark Matter %s have been captured.', // ok
 
     // delay
-    'exp_delay_1' => '',
+    'exp_delay_1' => 'Your expedition went into a sector full of particle storms. This set the energy stores to overload and most of the ships main systems crashed. Your mechanics where able to avoid the worst, but the expedition is going to return with a big delay.', // ok
     'exp_delay_2' => 'Your navigator made a grave error in his computations that caused the expeditions jump to be miscalculated. Not only did the fleet miss the target completely, but the return trip will take a lot more time than originally planned.', // ok
     'exp_delay_3' => 'The new navigation module is still buggy. The expeditions jump not only lead them in the wrong direction, but it used all the Deuterium fuel. Fortunately the fleets jump got them close to the departure planets moon. A bit disappointed the expedition now returns without impulse power. The return trip will take longer than expected.', // ok
     'exp_delay_4' => 'For unknown reasons the expeditions jump went totally wrong. It nearly landed in the heart of a sun. Fortunately it landed in a known system, but the jump back is going to take longer than thought.', // ok
