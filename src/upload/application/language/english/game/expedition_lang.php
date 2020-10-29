@@ -4,7 +4,7 @@ $lang = [
 
     // found new ships
     'exp_new_ships_1' => 'Our expedition found a planet which was almost destroyed during a certain chain of wars. There are different ships floating around in the orbit. The technicians are trying to repair some of them. Maybe we will also get information about what happened here.<br><br>The following ships are now part of the fleet:<br>%s', // ok
-    'exp_new_ships_2' => '',
+    'exp_new_ships_2' => 'We came across the remains of a previous expedition! Our technicians will try to get some of the ships to work again.<br><br>The following ships are now part of the fleet:<br>%s', // ok
     'exp_new_ships_3' => '',
     'exp_new_ships_4' => 'We found a deserted pirate station. There are some old ships lying in the hangar. Our technicians are figuring out whether some of them are still useful or not.<br><br>The following ships are now part of the fleet:<br>%s', // ok
     'exp_new_ships_5' => 'Your expedition ran into the shipyards of a colony that was deserted eons ago. In the shipyards hangar they discover some ships that could be salvaged. The technicians are trying to get some of them to fly again.<br><br>The following ships are now part of the fleet:<br>%s', // ok
@@ -29,11 +29,12 @@ $lang = [
     'exp_advanced_enemy_1' => 'Some exotic looking ships attacked the expedition fleet without warning!', // ok
 
     // found trader
-    'exp_trader' => 'You expedition fleed made contact with a friendly alien race. They announced that they would send a representative with goods to trade to your.', // ok
+    'exp_trader' => 'Your expedition fleet made contact with a friendly alien race. They announced that they would send a representative with goods to trade to your worlds.', // ok
 
     // found dark matter
     'exp_dm_1' => 'The expedition followed some odd signals to an asteroid. In the asteroids core a small amount of Dark Matter was found. The asteroid was taken and the explorers are attempting to extract the Dark Matter.<br><br>Dark Matter %s have been captured.', // ok
     'exp_dm_2' => 'Our expedition took over a ghost ship which was transporting a small amount of Dark Matter. We didn\'t find any hints of what happened to the original crew of the ship, but our technicians where able to rescue the Dark Matter.<br><br>Dark Matter %s have been captured.', // ok
+    'exp_dm_3' => 'We found the remains of an alien ship. We found a little container with some Dark Matter on a shelf in the Cargo hold!.<br><br>Dark Matter %s have been captured.', // ok
     'exp_dm_5' => 'The expedition was able to capture and store some Dark Matter.<br><br>Dark Matter %s have been captured.', // ok
 
     // delay
@@ -61,6 +62,7 @@ $lang = [
     'exp_nothing_8' => '',
     'exp_nothing_9' => 'A failure in the flagships reactor core nearly destroys the entire expedition fleet. Fortunately the technicians were more than competent and could avoid the worst. The repairs took quite some time and forced the expedition to return without having accomplished its goal.', // ok
     'exp_nothing_10' => 'Despite the first, very promising scans of this sector, we unfortunately returned empty handed.', // ok
+    'exp_nothing_13' => 'Due to a failure in the central computers of the flagship, the expedition mission had to be aborted. Unfortunately as a result of the computer malfunction, the fleet returns home empty handed.', // ok
     'exp_nothing_15' => 'Your expedition fleet followed odd signals for some time. At the end they noticed that those signals where being sent from an old probe which was sent out generations ago to greet foreign species. The probe was saved and some museums of your home planet already voiced their interest.', // ok
 
     // lost ships
