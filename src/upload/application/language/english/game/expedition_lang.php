@@ -23,9 +23,10 @@ $lang = [
     'exp_primitive_enemy_4' => 'We needed to fight some pirates which were, fortunately, only a few.', // ok
     'exp_primitive_enemy_5' => 'Some really desperate space pirates tried to capture our expedition fleet.', // ok
     'exp_primitive_enemy_6' => 'The expedition reports tough battles against undefined pirate ships.', // ok
+    'exp_primitive_enemy_8' => 'We ran straight into an ambush set by some Star Buccaneers! A fight couldn\'t be avoided.', // ok
 
     // found advanced enemy
-    'exp_advanced_enemy_1' => '',
+    'exp_advanced_enemy_1' => 'Some exotic looking ships attacked the expedition fleet without warning!', // ok
 
     // found trader
     'exp_trader' => 'You expedition fleed made contact with a friendly alien race. They announced that they would send a representative with goods to trade to your.', // ok
@@ -38,7 +39,7 @@ $lang = [
     // delay
     'exp_delay_1' => '',
     'exp_delay_2' => 'Your navigator made a grave error in his computations that caused the expeditions jump to be miscalculated. Not only did the fleet miss the target completely, but the return trip will take a lot more time than originally planned.', // ok
-    'exp_delay_3' => 'The new navigation module is still buggy. The expeditions jump not only lead them in the wrong direction, but it used all the Deuterium fuel. Fortunately the fleets jump got them close to the departure moon. A bit disappointed the expedition now returns without impulse power. The return trip will take longer than expected.', // ok
+    'exp_delay_3' => 'The new navigation module is still buggy. The expeditions jump not only lead them in the wrong direction, but it used all the Deuterium fuel. Fortunately the fleets jump got them close to the departure planets moon. A bit disappointed the expedition now returns without impulse power. The return trip will take longer than expected.', // ok
     'exp_delay_4' => 'For unknown reasons the expeditions jump went totally wrong. It nearly landed in the heart of a sun. Fortunately it landed in a known system, but the jump back is going to take longer than thought.', // ok
 
     // advancement
@@ -52,7 +53,7 @@ $lang = [
     // found nothing
     'exp_nothing_1' => '',
     'exp_nothing_2' => 'A living being made out of pure energy came aboard and induced all the expedition members into some strange trance, causing them to only gazed at the hypnotizing patterns on the computer screens. When most of them finally snapped out of the hypnotic-like state, the expedition mission needed to be aborted as they had way too little Deuterium.', // ok
-    'exp_nothing_3' => '',
+    'exp_nothing_3' => 'Well, now we know that those red, class 5 anomalies do not only have chaotic effects on the ships navigation systems but also generate massive hallucination on the crew. The expedition didn\'t bring anything back.', // ok
     'exp_nothing_4' => 'The expedition\'s flagship collided with a foreign ship when it jumped into the fleet without any warning. The foreign ship exploded and the damage to the flagship was substantial. The expedition cannot continue in these conditions, and so the fleet will begin to make its way back once the needed repairs have been carried out.', // ok
     'exp_nothing_5' => 'Besides some quaint, small pets from a unknown marsh planet, this expedition brings nothing thrilling back from the trip.', // ok
     'exp_nothing_6' => 'Our expedition team came across a strange colony that had been abandoned eons ago. After landing, our crew started to suffer from a high fever caused by an alien virus. It has been learned that this virus wiped out the entire civilization on the planet. Our expedition team is heading home to treat the sickened crew members. Unfortunately we had to abort the mission and we come home empty handed.', // ok

@@ -8,7 +8,8 @@ $lang = [
     'exp_new_ships_3' => 'Nuestra expedición se encontró con un antiguo hangar automático. Algunas de las naves se encuentran todavía en la fase de producción y nuestros técnicos están tratando de reactivar los generadores de energía.<br><br>Las siguientes naves son ahora parte de la flota:<br>%s', // ok
     'exp_new_ships_4' => 'Encontramos una estación pirata desierta. En el hangar hay estacionadas algunas naves antiguas. Nuestros técnicos están mirando si algunas de ellas son aún útiles.<br><br>Las siguientes naves son ahora parte de la flota:<br>%s', // ok
     'exp_new_ships_5' => '',
-    'exo_new_ships_6' => '',
+    'exp_new_ships_6' => '',
+    'exp_new_ships_7' => '',
 
     // found resources
     'exp_new_resources_1' => 'En un planetoide abondonado han sido encontradas algunas zonas de recursos fácilmente accesibles y se han recolectado allí algunos recursos satisfactoriamente.<br><br>Se ha capturado %s de %s.', // ok
@@ -23,9 +24,12 @@ $lang = [
     'exp_primitive_enemy_4' => 'Tuvimos que luchar contra algunos piratas que por suerte no eran muchos.', // ok
     'exp_primitive_enemy_5' => '',
     'exp_primitive_enemy_6' => '',
+    'exp_primitive_enemy_7' => '',
+    'exp_primitive_enemy_8' => '',
 
     // found advanced enemy
     'exp_advanced_enemy_1' => '¡Algunas naves de apariencia exótica atacaron la expedición sin previo aviso!', // ok
+    'exp_advanced_enemy_2' => '',
 
     // found trader
     'exp_trader' => 'Tu flota en expedición tuvo un corto contacto con una raza de aliens un poco vergonzosa. Estos anunciaron que van a enviar a un representante con bienes de comercio a tus mundos.', // ok
@@ -33,6 +37,8 @@ $lang = [
     // found dark matter
     'exp_dm_1' => 'La expedición siguió algunas señales fuera de lo común y descrubrió un asteroide. En el núcle del asteroide se encontraba una pequeña cantidad de Materia Oscura. El asteroide fue transportado a bordo y los exploradores intentan extrar la Materia Oscura.<br><br>Se ha capturado %s de %s.', // ok
     'exp_dm_2' => '',
+    'exp_dm_3' => '',
+    'exp_dm_4' => '',
     'exp_dm_5' => '',
 
     // delay
@@ -60,6 +66,10 @@ $lang = [
     'exp_nothing_8' => 'Probablemente la celebración del cumpleaños del capitán no debió hacerse en ese planeta desierto. Una fiebre terrible y desconocida causó que la gran mayoría de la tripulación de la expedición tuviera que estar en la enfermería durante el resto de la expedición. Debido a la escasez de personal la expedición fracasó.', // ok
     'exp_nothing_9' => '',
     'exp_nothing_10' => '',
+    'exp_nothing_11' => '',
+    'exp_nothing_12' => '',
+    'exp_nothing_13' => '',
+    'exp_nothing_14' => '',
     'exp_nothing_15' => '',
 
     // lost ships
