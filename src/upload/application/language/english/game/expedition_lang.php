@@ -5,7 +5,7 @@ $lang = [
     // found new ships
     'exp_new_ships_1' => 'Our expedition found a planet which was almost destroyed during a certain chain of wars. There are different ships floating around in the orbit. The technicians are trying to repair some of them. Maybe we will also get information about what happened here.<br><br>The following ships are now part of the fleet:<br>%s', // ok
     'exp_new_ships_2' => 'We came across the remains of a previous expedition! Our technicians will try to get some of the ships to work again.<br><br>The following ships are now part of the fleet:<br>%s', // ok
-    'exp_new_ships_3' => '',
+    'exp_new_ships_3' => 'Our expedition ran into an old automatic shipyard. Some of the ships are still in the production phase and our technicians are currently trying to reactivate the yards energy generators.<br><br>The following ships are now part of the fleet:<br>%s', // ok
     'exp_new_ships_4' => 'We found a deserted pirate station. There are some old ships lying in the hangar. Our technicians are figuring out whether some of them are still useful or not.<br><br>The following ships are now part of the fleet:<br>%s', // ok
     'exp_new_ships_5' => 'Your expedition ran into the shipyards of a colony that was deserted eons ago. In the shipyards hangar they discover some ships that could be salvaged. The technicians are trying to get some of them to fly again.<br><br>The following ships are now part of the fleet:<br>%s', // ok
     'exo_new_ships_6' => 'We found an enormous spaceship graveyard. Some of the technicians from the expedition fleet were able to get some of the ships to work again.<br><br>The following ships are now part of the fleet:<br>%s', // ok
@@ -18,7 +18,7 @@ $lang = [
 
     // found primitive enemy
     'exp_primitive_enemy_1' => 'Some primitive barbarians are attacking us with spaceships that can\'t even be named as such. If the fire gets serious we will be forced to fire back.', // ok
-    'exp_primitive_enemy_2' => '',
+    'exp_primitive_enemy_2' => 'That emergency signal that the expedition team followed was in reality an ambush set up by some Star Buccaneers. A fight could not be avoided.', // ok
     'exp_primitive_enemy_3' => 'We caught some radio transmissions from some drunk pirates. Seems like we will be under attack soon.', // ok
     'exp_primitive_enemy_4' => 'We needed to fight some pirates which were, fortunately, only a few.', // ok
     'exp_primitive_enemy_5' => 'Some really desperate space pirates tried to capture our expedition fleet.', // ok
@@ -52,7 +52,7 @@ $lang = [
     'exp_found_object_2' => 'Our fleet has found a valuable artefact.<br><br>%s has been added to the inventory.<br><br>%s has been added to the inventory.', // ok
 
     // found nothing
-    'exp_nothing_1' => '',
+    'exp_nothing_1' => 'Your expedition took gorgeous pictures of a super nova. Nothing new could be obtained from the expedition, but at least there is good chance to win that "Best Picture Of The Universe" competition in next months issue of OGame magazine.', // ok
     'exp_nothing_2' => 'A living being made out of pure energy came aboard and induced all the expedition members into some strange trance, causing them to only gazed at the hypnotizing patterns on the computer screens. When most of them finally snapped out of the hypnotic-like state, the expedition mission needed to be aborted as they had way too little Deuterium.', // ok
     'exp_nothing_3' => 'Well, now we know that those red, class 5 anomalies do not only have chaotic effects on the ships navigation systems but also generate massive hallucination on the crew. The expedition didn\'t bring anything back.', // ok
     'exp_nothing_4' => 'The expedition\'s flagship collided with a foreign ship when it jumped into the fleet without any warning. The foreign ship exploded and the damage to the flagship was substantial. The expedition cannot continue in these conditions, and so the fleet will begin to make its way back once the needed repairs have been carried out.', // ok
@@ -64,6 +64,7 @@ $lang = [
     'exp_nothing_10' => 'Despite the first, very promising scans of this sector, we unfortunately returned empty handed.', // ok
     'exp_nothing_13' => 'Due to a failure in the central computers of the flagship, the expedition mission had to be aborted. Unfortunately as a result of the computer malfunction, the fleet returns home empty handed.', // ok
     'exp_nothing_15' => 'Your expedition fleet followed odd signals for some time. At the end they noticed that those signals where being sent from an old probe which was sent out generations ago to greet foreign species. The probe was saved and some museums of your home planet already voiced their interest.', // ok
+    'exp_nothing_16' => 'The new and daring commander successfully traveled through an unstable wormhole to shorten the flight back! However, the expedition itself didn\'t bring anything new.', // ok
 
     // lost ships
     'exp_lost_1' => 'The only thing left from the expedition was the following radio transmission: Zzzrrt Oh no! Krrrzzzzt That zrrrtrzt looks krgzzzz like ... AHH! Krzzzzzzzztzzzz...<br><br><br><br><br><br>Transmission terminated', // ok
