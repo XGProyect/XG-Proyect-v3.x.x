@@ -83,7 +83,7 @@ class Register extends Controller
                     $url = 'index.php';
                 }
 
-                FunctionsLib::redirect($url);
+                FunctionsLib::redirect(SYSTEM_ROOT . $url);
             } else {
                 // start user creation
                 $this->calculateNewPlanetPosition();
