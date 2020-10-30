@@ -84,6 +84,7 @@ class Home extends Controller
                 'home/index_body',
                 array_merge(
                     $this->langs->language,
+                    $this->getErrors(),
                     $this->getPageData()
                 )
             ),
@@ -121,7 +122,7 @@ class Home extends Controller
      *
      * @return string
      */
-    private function getErrors(): string
+    private function getErrors(): array
     {
         $errors = filter_input(INPUT_GET, 'error', FILTER_VALIDATE_INT, [
             'options' => [
@@ -149,7 +150,10 @@ class Home extends Controller
                 break;
         }
 
-        return '$.validationEngine.buildPrompt("' . $div_id . '", "' . $message . '", "error");';
+        return [
+            'div_id' => $div_id,
+            'message' => $message,
+        ];
     }
 }
 

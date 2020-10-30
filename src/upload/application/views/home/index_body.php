@@ -116,7 +116,7 @@
     $(document).ready(function() {
         $(".zebra tr:odd").addClass("alt");
         $.validationEngineLanguage.newLang()
-        {extra_js_error}
+        $.validationEngine.buildPrompt("{div_id}", "{message}", "error");
                     });
     // ]]>
 
