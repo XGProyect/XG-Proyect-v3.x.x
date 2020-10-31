@@ -18,7 +18,9 @@ use application\core\XGPCore;
  */
 class Statistics_library extends XGPCore
 {
-
+    /**
+     * @var mixed
+     */
     private $time;
 
     /**
@@ -84,28 +86,21 @@ class Statistics_library extends XGPCore
         $objects = parent::$objects->getObjects();
 
         if ($what == 'research') {
-
             $objectsToUpdate = $this->Statistics_library_Model->getResearchToUpdate($user_id);
         } else {
-
             $objectsToUpdate = $this->Statistics_library_Model->getPlanetElementToUpdate($what, $planet_id);
         }
 
         if (!is_null($objects)) {
-
             foreach ($objects as $id => $object) {
-
                 if (isset($objectsToUpdate[$object])) {
-
                     $price = parent::$objects->getPrice($id);
                     $total = $price['metal'] + $price['crystal'] + $price['deuterium'];
                     $level = $objectsToUpdate[$object];
 
                     if ($price['factor'] > 1) {
-
                         $s = (pow($price['factor'], $level) - 1) / ($price['factor'] - 1);
                     } else {
-
                         $s = $price['factor'] * $level;
                     }
 
@@ -114,7 +109,6 @@ class Statistics_library extends XGPCore
             }
 
             if ($points >= 0) {
-
                 $what = strtr($what, ['research' => 'technology']);
 
                 $this->Statistics_library_Model->updatePoints($what, $points, $user_id);

@@ -25,7 +25,6 @@ use application\helpers\UrlHelper;
  */
 class BBCodeLib
 {
-
     /**
      * bbCode function.
      *
@@ -58,9 +57,11 @@ class BBCodeLib
 
         foreach ($bbcodes as $bbcode => $html) {
             $string = preg_replace_callback(
-                $bbcode, function ($matches) use ($html) {
+                $bbcode,
+                function ($matches) use ($html) {
                     return $this->getBbCode($matches, $html);
-                }, $string
+                },
+                $string
             );
         }
 
@@ -78,7 +79,6 @@ class BBCodeLib
     private function getBbCode($matches, $replace)
     {
         if (isset($matches[1])) {
-
             $replacements = [
                 '\1' => isset($matches[1]) ? $matches[1] : '',
                 '\2' => isset($matches[2]) ? $matches[2] : '',
@@ -86,7 +86,6 @@ class BBCodeLib
 
             return eval('return ' . strtr($replace, $replacements) . ';');
         } else {
-
             return eval('return ' . $replace . ';');
         }
     }
@@ -124,9 +123,7 @@ class BBCodeLib
         $out = null;
 
         foreach ($tmp as $list) {
-
             if (strlen(str_replace('', '', $list)) > 0) {
-
                 $out .= '<li>' . trim($list) . '</li>';
             }
         }
@@ -199,7 +196,6 @@ class BBCodeLib
         ];
 
         if (in_array(strstr($url, ':', true), $exclude) == false) {
-
             return UrlHelper::setUrl($url, $title, $title);
         }
     }
@@ -227,7 +223,6 @@ class BBCodeLib
     private function setImage($img)
     {
         if ((substr($img, 0, 7) != 'http://') && (substr($img, 0, 8) != 'https://')) {
-
             $img = XGP_ROOT . IMG_PATH . $img;
         }
         return '<img src="' . $img . '" alt="' . $img . '" title="' . $img . '" />';

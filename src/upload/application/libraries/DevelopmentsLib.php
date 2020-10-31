@@ -132,10 +132,8 @@ class DevelopmentsLib extends XGPCore
      *
      * @return boolean
      */
-    public static function isDevelopmentPayable(
-        $current_user, $current_planet, $element, $incremental = true, $destroy = false
-    ) {
-
+    public static function isDevelopmentPayable($current_user, $current_planet, $element, $incremental = true, $destroy = false)
+    {
         $return = true;
         $costs = self::developmentPrice($current_user, $current_planet, $element, $incremental, $destroy);
 
@@ -159,9 +157,8 @@ class DevelopmentsLib extends XGPCore
      *
      * @return string
      */
-    public static function formatedDevelopmentPrice(
-        $current_user, $current_planet, $element, $lang, $userfactor = true, $level = false
-    ) {
+    public static function formatedDevelopmentPrice($current_user, $current_planet, $element, $lang, $userfactor = true, $level = false)
+    {
         $resource = parent::$objects->getObjects();
         $pricelist = parent::$objects->getPrice();
 
@@ -222,9 +219,8 @@ class DevelopmentsLib extends XGPCore
      *
      * @return int
      */
-    public static function developmentTime(
-        $current_user, $current_planet, $element, $level = false, $total_lab_level = 0
-    ) {
+    public static function developmentTime($current_user, $current_planet, $element, $level = false, $total_lab_level = 0)
+    {
         $resource = parent::$objects->getObjects();
         $pricelist = parent::$objects->getPrice();
         $reslist = parent::$objects->getObjectsList();

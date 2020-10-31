@@ -22,10 +22,19 @@ use application\libraries\TimingLibrary as Timing;
 /**
  * Users Class
  */
-class Users_library
+class UsersLibrary
 {
+    /**
+     * @var mixed
+     */
     private $user_data;
+    /**
+     * @var mixed
+     */
     private $planet_data;
+    /**
+     * @var mixed
+     */
     private $Users_Model;
 
     /**
@@ -35,7 +44,7 @@ class Users_library
      */
     public function __construct()
     {
-        $this->Users_Model = Functions::modelLoader('libraries/users_library');
+        $this->Users_Model = Functions::modelLoader('libraries/UsersLibrary');
 
         if ($this->isSessionSet()) {
             // Get user data and check it

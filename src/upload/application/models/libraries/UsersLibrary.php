@@ -1,6 +1,6 @@
 <?php
 /**
- * Users_library Model
+ * UsersLibrary Model
  *
  * @category Model
  * @package  Application
@@ -15,9 +15,9 @@ use application\core\Model;
 use application\libraries\FunctionsLib as Functions;
 
 /**
- * Users_library Class
+ * UsersLibrary Class
  */
-class Users_library extends Model
+class UsersLibrary extends Model
 {
     /**
      * Get alliance ID
@@ -29,7 +29,7 @@ class Users_library extends Model
     public function getAllyIdByUserId($user_id)
     {
         return $this->db->queryFetch(
-            "SELECT `user_ally_id` FROM " . USERS . " WHERE `user_id` = '" . $user_id . "';"
+            "SELECT `user_ally_id` FROM `" . USERS . "` WHERE `user_id` = '" . $user_id . "';"
         );
     }
 
@@ -47,7 +47,7 @@ class Users_library extends Model
                 (SELECT COUNT(user_id) AS `ally_members`
                     FROM `" . USERS . "`
                     WHERE `user_ally_id` = '" . $alliance_id . "') AS `ally_members`
-            FROM " . ALLIANCE . " AS a
+            FROM `" . ALLIANCE . "` AS a
             WHERE a.`alliance_id` = '" . $alliance_id . "';"
         );
     }

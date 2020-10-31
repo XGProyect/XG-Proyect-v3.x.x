@@ -20,12 +20,11 @@ use application\libraries\FunctionsLib;
  */
 class Chat extends Controller
 {
-
     const MODULE_ID = 18;
 
     /**
      *
-     * @var type \Users_library
+     * @var \UsersLibrary
      */
     private $_user;
 

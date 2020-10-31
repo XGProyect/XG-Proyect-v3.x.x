@@ -514,7 +514,8 @@ abstract class FunctionsLib extends XGPCore
             [
                 'goto' => $goto,
                 'title' => $title,
-                'message_box_row' => self::getTemplate()->set('alliance/alliance_message_box_row_' . ($two_lines ? 'two' : 'one'),
+                'message_box_row' => self::getTemplate()->set(
+                    'alliance/alliance_message_box_row_' . ($two_lines ? 'two' : 'one'),
                     [
                         'message' => $message,
                         'button' => $button,

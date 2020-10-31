@@ -26,12 +26,11 @@ use application\libraries\TimingLibrary as Timing;
  */
 class Preferences extends Controller
 {
-
     const MODULE_ID = 21;
 
     /**
      *
-     * @var type \Users_library
+     * @var \UsersLibrary
      */
     private $user;
 

@@ -20,12 +20,11 @@ use application\libraries\FunctionsLib;
  */
 class Combatreport extends Controller
 {
-
     const MODULE_ID = 23;
 
     /**
      *
-     * @var type \Users_library
+     * @var \UsersLibrary
      */
     private $user;
 

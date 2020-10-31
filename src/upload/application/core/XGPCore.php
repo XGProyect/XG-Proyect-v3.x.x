@@ -12,7 +12,7 @@
 namespace application\core;
 
 use application\libraries\TemplateLib;
-use application\libraries\Users_library;
+use application\libraries\UsersLibrary;
 use CI_Lang;
 use Exception;
 
@@ -21,9 +21,21 @@ use Exception;
  */
 abstract class XGPCore
 {
+    /**
+     * @var mixed
+     */
     protected static $lang;
+    /**
+     * @var mixed
+     */
     protected static $users;
+    /**
+     * @var mixed
+     */
     protected static $objects;
+    /**
+     * @var mixed
+     */
     protected static $page;
 
     /**
@@ -45,7 +57,7 @@ abstract class XGPCore
      */
     private function setUsersClass()
     {
-        self::$users = new Users_library();
+        self::$users = new UsersLibrary();
     }
 
     /**

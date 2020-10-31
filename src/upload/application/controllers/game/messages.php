@@ -24,9 +24,11 @@ use application\libraries\OfficiersLib;
  */
 class Messages extends Controller
 {
-
     const MODULE_ID = 18;
 
+    /**
+     * @var array
+     */
     private $message_type = [
         MessagesEnumerator::ESPIO => ['type_name' => 'espioopen'],
         MessagesEnumerator::COMBAT => ['type_name' => 'combatopen'],
@@ -38,7 +40,7 @@ class Messages extends Controller
 
     /**
      *
-     * @var type \Users_library
+     * @var \UsersLibrary
      */
     private $user;
 

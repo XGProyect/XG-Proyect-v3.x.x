@@ -29,7 +29,9 @@ use application\libraries\Statistics_library;
  */
 class UpdatesLibrary extends XGPCore
 {
-
+    /**
+     * @var mixed
+     */
     private $Update_Model;
 
     /**
@@ -492,15 +494,18 @@ class UpdatesLibrary extends XGPCore
 
             // PRODUCTION
             $Caps['planet_metal_perhour'] += Production::currentProduction(
-                Production::productionAmount($metal_prod, $geologe_boost, $game_resource_multiplier), $post_percent
+                Production::productionAmount($metal_prod, $geologe_boost, $game_resource_multiplier),
+                $post_percent
             );
 
             $Caps['planet_crystal_perhour'] += Production::currentProduction(
-                Production::productionAmount($crystal_prod, $geologe_boost, $game_resource_multiplier), $post_percent
+                Production::productionAmount($crystal_prod, $geologe_boost, $game_resource_multiplier),
+                $post_percent
             );
 
             $Caps['planet_deuterium_perhour'] += Production::currentProduction(
-                Production::productionAmount($deuterium_prod, $geologe_boost, $game_resource_multiplier), $post_percent
+                Production::productionAmount($deuterium_prod, $geologe_boost, $game_resource_multiplier),
+                $post_percent
             );
 
             if ($ProdID >= 4) {
@@ -709,13 +714,12 @@ class UpdatesLibrary extends XGPCore
                     $Item = explode(',', $Array);
 
                     if (isset($Item[0]) && $Item[0] != 0) {
-
                         $AcumTime = Developments::developmentTime(
                             $current_user,
                             $current_planet,
                             $Item[0]
                         );
-                        $BuildArray[$Node] = array($Item[0], $Item[1], $AcumTime);
+                        $BuildArray[$Node] = [$Item[0], $Item[1], $AcumTime];
                     }
                 }
             }

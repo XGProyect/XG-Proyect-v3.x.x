@@ -40,8 +40,8 @@ class FleetsLib extends XGPCore
     /**
      * Determine ship consumption
      *
-     * @param int $ship
-     * @param array $user
+     * @param  int   $ship
+     * @param  array $user
      * @return void
      */
     public static function shipConsumption($ship, $user)
@@ -65,19 +65,15 @@ class FleetsLib extends XGPCore
      *
      * @return int
      */
-    public static function targetDistance(
-        $orig_galaxy, $dest_galaxy, $orig_system, $dest_system, $orig_planet, $dest_planet
-    ) {
+    public static function targetDistance($orig_galaxy, $dest_galaxy, $orig_system, $dest_system, $orig_planet, $dest_planet)
+    {
         $distance = 5;
 
         if (($orig_galaxy - $dest_galaxy) != 0) {
-
             $distance = abs($orig_galaxy - $dest_galaxy) * 20000;
         } elseif (($orig_system - $dest_system) != 0) {
-
             $distance = abs($orig_system - $dest_system) * 5 * 19 + 2700;
         } elseif (($orig_planet - $dest_planet) != 0) {
-
             $distance = abs($orig_planet - $dest_planet) * 5 + 1000;
         }
 
@@ -121,7 +117,6 @@ class FleetsLib extends XGPCore
 
         if (!empty($fleet_array) && !is_null($fleet_array)) {
             foreach ($fleet_array as $ship => $count) {
-
                 /**
                  * Special condition for Small cargo
                  */
@@ -171,7 +166,6 @@ class FleetsLib extends XGPCore
         }
 
         if ($fleet != 0) {
-
             $ship_speed = isset($speed_all[$ship]) ? $speed_all[$ship] : 0;
             $speed_all = $ship_speed;
         }
@@ -190,16 +184,13 @@ class FleetsLib extends XGPCore
      *
      * @return int
      */
-    public static function fleetConsumption(
-        $fleet_array, $speed_factor, $mission_duration, $mission_distance, $user
-    ) {
+    public static function fleetConsumption($fleet_array, $speed_factor, $mission_duration, $mission_distance, $user)
+    {
         $consumption = 0;
         $basic_consumption = 0;
 
         foreach ($fleet_array as $ship => $count) {
-
             if ($ship > 0) {
-
                 $ship_speed = self::fleetMaxSpeed("", $ship, $user);
                 $ship_consumption = self::shipConsumption($ship, $user);
                 $spd = 35000 / ($mission_duration * $speed_factor - 10) * sqrt($mission_distance * 10 / $ship_speed);
@@ -252,8 +243,8 @@ class FleetsLib extends XGPCore
     /**
      * startLink
      *
-     * @param array $fleet_row   Fleet row
-     * @param string $fleet_type Fleet type
+     * @param array  $fleet_row
+     * @param string $fleet_type
      *
      * @return string
      */
@@ -274,15 +265,17 @@ class FleetsLib extends XGPCore
     /**
      * targetLink
      *
-     * @param array $fleet_row   Fleet row
-     * @param string $fleet_type Fleet type
+     * @param array  $fleet_row
+     * @param string $fleet_type
      *
      * @return string
      */
     public static function targetLink($fleet_row, $fleet_type)
     {
         $coords = FormatLib::prettyCoords(
-            $fleet_row['fleet_end_galaxy'], $fleet_row['fleet_end_system'], $fleet_row['fleet_end_planet']
+            $fleet_row['fleet_end_galaxy'],
+            $fleet_row['fleet_end_system'],
+            $fleet_row['fleet_end_planet']
         );
 
         $link = "game.php?page=galaxy&mode=3&galaxy=" .
@@ -354,7 +347,6 @@ class FleetsLib extends XGPCore
         );
 
         if ($espionage_tech < 2 && $fleet_row['fleet_owner'] != $current_user['user_id']) {
-
             $pop_up .= "<tr><td width=50% align=left><font color=white>" .
             $lang->line('ev_no_fleet_data') . "<font></td></tr>";
         } elseif ($espionage_tech >= 2 && $espionage_tech < 4 && $fleet_row['fleet_owner'] != $current_user['user_id']) {
@@ -515,7 +507,6 @@ class FleetsLib extends XGPCore
                         break;
                 }
             } else {
-
                 $TargetID = $lang->line('ev_from_position');
             }
 

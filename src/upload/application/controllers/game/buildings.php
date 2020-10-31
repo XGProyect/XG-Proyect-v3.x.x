@@ -27,18 +27,17 @@ use Exception;
  */
 class Buildings extends Controller
 {
-
     const MODULE_ID = 3;
 
     /**
      *
-     * @var type \Users_library
+     * @var \UsersLibrary
      */
     private $_user;
 
     /**
      *
-     * @var type \Users_library
+     * @var \UsersLibrary
      */
     private $_planet;
 
