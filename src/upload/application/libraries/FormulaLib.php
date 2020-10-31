@@ -1,29 +1,19 @@
 <?php
 /**
- * Formula Library
+ * FormulaLib.php
  *
- * @category Library
- * @package  Application
  * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
+ * @license  https://www.xgproyect.org XG Proyect
+ * @link     https://www.xgproyect.org
+ * @version  3.2.0
  */
 namespace application\libraries;
 
 /**
  * FormulaLib Class
- *
- * @category Classes
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
  */
 class FormulaLib
 {
-
     /**
      * phalanxRange
      *
@@ -238,6 +228,13 @@ class FormulaLib
     {
         return round(sqrt($planet_diameter) / 2);
     }
-}
 
-/* end of FormulaLib.php */
+    /**
+     * Get the Ion Technology Bonus
+     * @param float $ion_technology_level
+     */
+    public function getIonTechnologyBonus(int $ion_technology_level): float
+    {
+        return $ion_technology_level * 0.04;
+    }
+}

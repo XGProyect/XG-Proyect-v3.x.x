@@ -1,17 +1,18 @@
 <?php
 /**
- * Infos Controller
+ * infos.php
  *
- * @category Controller
- * @package  Application
  * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
+ * @license  https://www.xgproyect.org XG Proyect
+ * @link     https://www.xgproyect.org
+ * @version  3.2.0
  */
 namespace application\controllers\game;
 
 use application\core\Controller;
+use application\core\enumerators\ResearchEnumerator as Research;
+use application\helpers\StringsHelper;
+use application\helpers\UrlHelper;
 use application\libraries\DevelopmentsLib;
 use application\libraries\FleetsLib;
 use application\libraries\FormatLib;
@@ -24,19 +25,46 @@ use application\libraries\ProductionLib;
  */
 class Infos extends Controller
 {
-
     const MODULE_ID = 24;
 
+    /**
+     * Contains the formula library
+     *
+     * @var \FormulaLib
+     */
+    private $formula;
+
+    /**
+     * @var mixed
+     */
     private $_current_user;
+    /**
+     * @var mixed
+     */
     private $_current_planet;
+    /**
+     * @var mixed
+     */
     private $_element_id;
+    /**
+     * @var mixed
+     */
     private $_resource;
+    /**
+     * @var mixed
+     */
     private $_pricelist;
+    /**
+     * @var mixed
+     */
     private $_combat_caps;
+    /**
+     * @var mixed
+     */
     private $_prod_grid;
 
     /**
-     * __construct()
+     * Constructor
      */
     public function __construct()
     {
@@ -54,6 +82,7 @@ class Infos extends Controller
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
+        $this->formula = FunctionsLib::loadLibrary('FormulaLib');
         $this->_resource = parent::$objects->getObjects();
         $this->_pricelist = parent::$objects->getPrice();
         $this->_combat_caps = parent::$objects->getCombatSpecs();
@@ -62,15 +91,16 @@ class Infos extends Controller
         $this->_current_planet = parent::$users->getPlanetData();
         $this->_element_id = isset($_GET['gid']) ? (int) $_GET['gid'] : null;
 
-        $this->build_page();
+        // build the page
+        $this->buildPage();
     }
 
     /**
-     * method build_page
-     * param
-     * return main method, loads everything
+     * Build the page
+     *
+     * @return void
      */
-    private function build_page()
+    private function buildPage()
     {
         if (!array_key_exists($this->_element_id, $this->_resource)) {
             FunctionsLib::redirect('game.php?page=techtree');
@@ -99,7 +129,7 @@ class Infos extends Controller
             $PageTPL = 'infos/info_officiers_general';
         }
 
-        //S�lo hay destroy en <200
+        // only destroy on < 200 and not some moon buildings
         if ($this->_element_id < 200 && $this->_element_id != 33 && $this->_element_id != 41) {
             $DestroyTPL = 'infos/info_buildings_destroy';
         }
@@ -114,7 +144,6 @@ class Infos extends Controller
             $TableTPL = 'infos/info_production_simple_body';
         } elseif ($this->_element_id >= 22 && $this->_element_id <= 24) {
             $PageTPL = 'infos/info_buildings_table';
-            $DestroyTPL = 'infos/info_buildings_destroy';
             $TableHeadTPL = 'infos/info_storage_header';
             $TableTPL = 'infos/info_storage_table';
         } elseif ($this->_element_id == 12) {
@@ -132,7 +161,6 @@ class Infos extends Controller
             }
         } elseif ($this->_element_id == 124) {
             $PageTPL = 'infos/info_buildings_table';
-            $DestroyTPL = 'infos/info_buildings_destroy';
             $TableHeadTPL = 'infos/info_astrophysics_header';
             $TableTPL = 'infos/info_astrophysics_table';
             $TableFooterTPL = 'infos/info_astrophysics_footer';
@@ -183,7 +211,7 @@ class Infos extends Controller
             } elseif ($this->_element_id == 42) {
                 $parse['table_data'] = $this->phalanxRange($TableTPL);
             } else {
-                $parse['table_data'] = $this->ShowProductionTable($TableTPL);
+                $parse['table_data'] = $this->showProductionTable($TableTPL);
             }
         }
 
@@ -214,23 +242,9 @@ class Infos extends Controller
         }
 
         if ($DestroyTPL != '') {
-            if (isset($this->_current_planet[$this->_resource[$this->_element_id]]) && $this->_current_planet[$this->_resource[$this->_element_id]] > 0) {
-                $NeededRessources = DevelopmentsLib::developmentPrice($this->_current_user, $this->_current_planet, $this->_element_id, true, true);
-                $DestroyTime = DevelopmentsLib::developmentTime($this->_current_user, $this->_current_planet, $this->_element_id) / 2;
-                $DestroyTime = $DestroyTime < 1 ? 1 : $DestroyTime;
-                $parse['destroyurl'] = "game.php?page=" . DevelopmentsLib::setBuildingPage($this->_element_id) . "&cmd=destroy&building=" . $this->_element_id;
-                $parse['levelvalue'] = $this->_current_planet[$this->_resource[$this->_element_id]];
-                $parse['metal'] = $this->langs->line('metal');
-                $parse['crysta'] = $this->langs->line('crystal');
-                $parse['deuterium'] = $this->langs->line('deuterium');
-                $parse['nfo_metal'] = FormatLib::prettyNumber($NeededRessources['metal']);
-                $parse['nfo_crystal'] = FormatLib::prettyNumber($NeededRessources['crystal']);
-                $parse['nfo_deuterium'] = FormatLib::prettyNumber($NeededRessources['deuterium']);
-                $parse['destroytime'] = FormatLib::prettyTime($DestroyTime);
-
-                $page .= $this->getTemplate()->set($DestroyTPL, $parse);
-            }
+            $page .= $this->buildTearDownBlock();
         }
+
         parent::$page->display($page);
     }
 
@@ -286,6 +300,10 @@ class Infos extends Controller
         return $Table;
     }
 
+    /**
+     * @param $CurMoon
+     * @return mixed
+     */
     private function GetNextJumpWaitTime($CurMoon)
     {
         $JumpGateLevel = $CurMoon[$this->_resource[43]];
@@ -318,13 +336,11 @@ class Infos extends Controller
     private function doFleetJump()
     {
         if ($_POST) {
-
             $RestString = $this->GetNextJumpWaitTime($this->_current_planet);
             $NextJumpTime = $RestString['value'];
             $JumpTime = time();
 
             if ($NextJumpTime == 0) {
-
                 $TargetPlanet = isset($_POST['jmpto']) ? $_POST['jmpto'] : '';
 
                 if (!is_int($TargetPlanet)) {
@@ -338,8 +354,7 @@ class Infos extends Controller
                     $NextDestTime = $RestString['value'];
 
                     if ($NextDestTime == 0) {
-
-                        $ShipArray = array();
+                        $ShipArray = [];
                         $SubQueryOri = '';
                         $SubQueryDes = '';
 
@@ -393,6 +408,9 @@ class Infos extends Controller
         return $RetMessage;
     }
 
+    /**
+     * @return mixed
+     */
     private function BuildFleetListRows()
     {
         $RowsTPL = 'infos/info_gate_rows';
@@ -414,6 +432,9 @@ class Infos extends Controller
         return $Result;
     }
 
+    /**
+     * @return mixed
+     */
     private function BuildJumpableMoonCombo()
     {
         $MoonList = $this->Infos_Model->getListOfMoons($this->_current_user['user_id']);
@@ -432,6 +453,10 @@ class Infos extends Controller
         return $Combo;
     }
 
+    /**
+     * @param $Template
+     * @return mixed
+     */
     private function phalanxRange($Template)
     {
         $current_built_lvl = $this->_current_planet[$this->_resource[$this->_element_id]];
@@ -454,7 +479,11 @@ class Infos extends Controller
         return $Table;
     }
 
-    private function ShowProductionTable($Template)
+    /**
+     * @param $Template
+     * @return mixed
+     */
+    private function showProductionTable($Template)
     {
         $BuildLevelFactor = $this->_current_planet['planet_' . $this->_resource[$this->_element_id] . '_percent'];
         $BuildTemp = $this->_current_planet['planet_temp_max'];
@@ -582,6 +611,9 @@ class Infos extends Controller
         return $Table;
     }
 
+    /**
+     * @return mixed
+     */
     private function ShowRapidFireTo()
     {
         $ResultString = "";
@@ -589,11 +621,13 @@ class Infos extends Controller
             if (isset($this->_combat_caps[$this->_element_id]['sd'][$Type]) && $this->_combat_caps[$this->_element_id]['sd'][$Type] > 1) {
                 $ResultString .= $this->langs->line('in_rf_again') . " " . $this->langs->language[$this->_resource[$Type]] . " <font color=\"#00ff00\">" . $this->_combat_caps[$this->_element_id]['sd'][$Type] . "</font><br>";
             }
-
         }
         return $ResultString;
     }
 
+    /**
+     * @return mixed
+     */
     private function ShowRapidFireFrom()
     {
         $ResultString = "";
@@ -601,15 +635,71 @@ class Infos extends Controller
             if (isset($this->_combat_caps[$Type]['sd'][$this->_element_id]) && $this->_combat_caps[$Type]['sd'][$this->_element_id] > 1) {
                 $ResultString .= $this->langs->line('in_rf_from') . " " . $this->langs->language[$this->_resource[$Type]] . " <font color=\"#ff0000\">" . $this->_combat_caps[$Type]['sd'][$this->_element_id] . "</font><br>";
             }
-
         }
         return $ResultString;
     }
 
+    /**
+     * @param $current_planet
+     */
     private function planet_link($current_planet)
     {
         return "<a href=\"game.php?page=galaxy&mode=3&galaxy=" . $current_planet['planet_galaxy'] . "&system=" . $current_planet['planet_system'] . "\">[" . $current_planet['planet_galaxy'] . ":" . $current_planet['planet_system'] . ":" . $current_planet['planet_planet'] . "]</a>";
     }
-}
 
-/* end of infos.php */
+    /**
+     * Build the tear down block
+     *
+     * @return string
+     */
+    private function buildTearDownBlock(): string
+    {
+        $page = '';
+
+        if (isset($this->_current_planet[$this->_resource[$this->_element_id]]) && $this->_current_planet[$this->_resource[$this->_element_id]] > 0) {
+            // calculate bonus
+            $tech_bonus = '';
+            $ion_tech_percentage = $this->formula->getIonTechnologyBonus(
+                $this->_current_user[$this->_resource[Research::research_ionic_technology]]
+            ) * 100;
+
+            if ($ion_tech_percentage > 0) {
+                $tech_bonus = StringsHelper::parseReplacements(
+                    $this->langs->line('in_ion_tech_bonus'),
+                    [FormatLib::colorGreen('-' . $ion_tech_percentage . '%')]
+                );
+            }
+
+            // resources and time
+            $tear_down_resources = DevelopmentsLib::developmentPrice($this->_current_user, $this->_current_planet, $this->_element_id, true, true);
+            $tear_down_time = DevelopmentsLib::destroyTime(
+                DevelopmentsLib::developmentTime($this->_current_user, $this->_current_planet, $this->_element_id)
+            );
+
+            $tear_down_url = 'game.php?page=' . DevelopmentsLib::setBuildingPage($this->_element_id) . '&cmd=destroy&building=' . $this->_element_id;
+
+            $page .= $this->getTemplate()->set(
+                'infos/info_buildings_destroy',
+                array_merge(
+                    $this->langs->language,
+                    [
+                        'tear_down_url' => UrlHelper::setUrl(
+                            $tear_down_url,
+                            StringsHelper::parseReplacements(
+                                $this->langs->line('in_destroy'),
+                                [$this->langs->language[$this->_resource[$this->_element_id]]]
+                            )
+                        ),
+                        'ion_tech_bonus' => $tech_bonus,
+                        'nfo_metal' => FormatLib::prettyNumber($tear_down_resources['metal']),
+                        'nfo_crystal' => FormatLib::prettyNumber($tear_down_resources['crystal']),
+                        'nfo_deuterium' => FormatLib::prettyNumber($tear_down_resources['deuterium']),
+                        'destroytime' => FormatLib::prettyTime($tear_down_time),
+                    ]
+                )
+            );
+        }
+
+        return $page;
+    }
+}

@@ -1,28 +1,20 @@
 <?php
 /**
- * Developments Library
+ * DevelopmentsLib.php
  *
- * @category Library
- * @package  Application
  * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
+ * @license  https://www.xgproyect.org XG Proyect
+ * @link     https://www.xgproyect.org
+ * @version  3.2.0
  */
 namespace application\libraries;
 
+use application\core\enumerators\ResearchEnumerator as Research;
 use application\core\Template;
 use application\core\XGPCore;
 
 /**
  * DevelopmentsLib Class
- *
- * @category Classes
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
  */
 class DevelopmentsLib extends XGPCore
 {
@@ -113,7 +105,7 @@ class DevelopmentsLib extends XGPCore
                 }
 
                 if ($destroy == true) {
-                    $cost[$res_type] = floor($cost[$res_type] / 4);
+                    $cost[$res_type] = self::destroyPrice($res_type, $cost, $current_user[$resource[Research::research_ionic_technology]]);
                 }
             }
         }
@@ -281,6 +273,18 @@ class DevelopmentsLib extends XGPCore
     }
 
     /**
+     * Get the amount of resources needed to destroy a building
+     *
+     * @param string $resource
+     * @param array $amount
+     * @param int $ion_technology
+     */
+    public static function destroyPrice(string $resource, array $amount, int $ion_technology): int
+    {
+        return max(floor(($amount[$resource] / 4) - ($amount[$resource] * ($ion_technology * 0.04))), 0);
+    }
+
+    /**
      * formatedDevelopmentTime
      *
      * @param int $time Time
@@ -422,5 +426,3 @@ class DevelopmentsLib extends XGPCore
         return ($current_planet['planet_field_current'] < self::maxFields($current_planet));
     }
 }
-
-/* end of DevelopmentsLib.php */
