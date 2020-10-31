@@ -7,7 +7,7 @@
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
- * @version  3.1.0
+ * @version  3.3.0
  */
 namespace App\controllers\game;
 
