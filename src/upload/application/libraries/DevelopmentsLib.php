@@ -281,7 +281,9 @@ class DevelopmentsLib extends XGPCore
      */
     public static function destroyPrice(string $resource, array $amount, int $ion_technology): int
     {
-        return max(floor(($amount[$resource] / 4) - ($amount[$resource] * ($ion_technology * 0.04))), 0);
+        $tear_down_price = $amount[$resource] / 4;
+
+        return max(floor($tear_down_price - ($tear_down_price * ($ion_technology * 0.04))), 0);
     }
 
     /**
