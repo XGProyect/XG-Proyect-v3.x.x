@@ -1,6 +1,6 @@
 <?php
 /**
- * FormulaLib.php
+ * Formulas.php
  *
  * @author   XG Proyect Team
  * @license  https://www.xgproyect.org XG Proyect
@@ -9,10 +9,13 @@
  */
 namespace application\libraries;
 
+use application\core\enumerators\BuildingsEnumerator as Buildings;
+use application\libraries\FunctionsLib;
+
 /**
- * FormulaLib Class
+ * Formulas Class
  */
-class FormulaLib
+abstract class Formulas
 {
     /**
      * phalanxRange
@@ -21,7 +24,7 @@ class FormulaLib
      *
      * return int
      */
-    public function phalanxRange($phalanx_level)
+    public static function phalanxRange($phalanx_level)
     {
         $range = 0;
 
@@ -41,7 +44,7 @@ class FormulaLib
      *
      * return int
      */
-    public function missileRange($impulse_drive_level)
+    public static function missileRange($impulse_drive_level)
     {
         if ($impulse_drive_level > 0) {
             return ($impulse_drive_level * 5) - 1;
@@ -58,7 +61,7 @@ class FormulaLib
      *
      * @return void
      */
-    public function getPlanetSize($position, $main = false)
+    public static function getPlanetSize($position, $main = false)
     {
         // THIS DIAMETERS ARE CALCULATED TO RETURN THE CORRECT AMOUNT OF FIELDS, IT SHOULD WORK AS OGAME.
         $min = [
@@ -76,7 +79,7 @@ class FormulaLib
         $diameter = mt_rand($min[$position - 1], $max[$position - 1]);
         $diameter *= PLANETSIZE_MULTIPLER;
 
-        $fields = $this->calculatePlanetFields($diameter);
+        $fields = self::calculatePlanetFields($diameter);
 
         if ($main) {
             $diameter = '12800';
@@ -96,7 +99,7 @@ class FormulaLib
      *
      * @return int
      */
-    public function calculatePlanetFields($diameter)
+    public static function calculatePlanetFields($diameter)
     {
         return (int) pow(($diameter / 1000), 2);
     }
@@ -109,7 +112,7 @@ class FormulaLib
      *
      * @return string
      */
-    public function setPlanetImage($system, $position)
+    public static function setPlanetImage($system, $position)
     {
         // Formula based on original game values
         // How many images do we have for each planet type
@@ -174,7 +177,7 @@ class FormulaLib
      *
      * @return array
      */
-    public function setPlanetTemp($position)
+    public static function setPlanetTemp($position)
     {
         // Based on original game values
         $temp_avilable = [
@@ -211,7 +214,7 @@ class FormulaLib
      *
      * @return int
      */
-    public function getMoonDestructionChance(int $planet_diameter, int $death_stars): int
+    public static function getMoonDestructionChance(int $planet_diameter, int $death_stars): int
     {
         $prob = (100 - sqrt($planet_diameter)) * sqrt($death_stars);
 
@@ -224,7 +227,7 @@ class FormulaLib
      * @param int $planet_diameter
      * @return type
      */
-    public function getDeathStarsDestructionChance(int $planet_diameter)
+    public static function getDeathStarsDestructionChance(int $planet_diameter)
     {
         return round(sqrt($planet_diameter) / 2);
     }
@@ -233,8 +236,38 @@ class FormulaLib
      * Get the Ion Technology Bonus
      * @param float $ion_technology_level
      */
-    public function getIonTechnologyBonus(int $ion_technology_level): float
+    public static function getIonTechnologyBonus(int $ion_technology_level): float
     {
         return $ion_technology_level * 0.04;
+    }
+
+    /**
+     * Get the building time
+     *
+     * @param int $metal_cost
+     * @param int $cystal_cost
+     * @param int $level
+     * @param int $robotics_factory
+     * @param int $nanite_factory
+     */
+    public static function getBuildingTime(int $metal_cost, int $cystal_cost, int $building, int $level, int $robotics_factory, int $nanite_factory): float
+    {
+        $resources_needed = $metal_cost + $cystal_cost;
+        $reduction = max(4 - ($level + 1) / 2, 1);
+        $robotics = 1 + $robotics_factory;
+        $nanite = pow(2, $nanite_factory);
+        $universe_speed = FunctionsLib::readConfig('game_speed') / 2500;
+        $without_reduction = [
+            Buildings::BUILDING_NANO_FACTORY,
+            Buildings::BUILDING_MONDBASIS,
+            Buildings::BUILDING_PHALANX,
+            Buildings::BUILDING_JUMP_GATE,
+        ];
+
+        if (in_array($building, $without_reduction)) {
+            $reduction = 1;
+        }
+
+        return ($resources_needed / (2500 * $reduction * $robotics * $nanite * $universe_speed) * 3600);
     }
 }

@@ -16,6 +16,7 @@ use application\helpers\UrlHelper;
 use application\libraries\DevelopmentsLib;
 use application\libraries\FleetsLib;
 use application\libraries\FormatLib;
+use application\libraries\Formulas;
 use application\libraries\FunctionsLib;
 use application\libraries\OfficiersLib;
 use application\libraries\ProductionLib;
@@ -26,13 +27,6 @@ use application\libraries\ProductionLib;
 class Infos extends Controller
 {
     const MODULE_ID = 24;
-
-    /**
-     * Contains the formula library
-     *
-     * @var \FormulaLib
-     */
-    private $formula;
 
     /**
      * @var mixed
@@ -82,7 +76,6 @@ class Infos extends Controller
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
-        $this->formula = FunctionsLib::loadLibrary('FormulaLib');
         $this->_resource = parent::$objects->getObjects();
         $this->_pricelist = parent::$objects->getPrice();
         $this->_combat_caps = parent::$objects->getCombatSpecs();
@@ -659,7 +652,7 @@ class Infos extends Controller
         if (isset($this->_current_planet[$this->_resource[$this->_element_id]]) && $this->_current_planet[$this->_resource[$this->_element_id]] > 0) {
             // calculate bonus
             $tech_bonus = '';
-            $ion_tech_percentage = $this->formula->getIonTechnologyBonus(
+            $ion_tech_percentage = Formulas::getIonTechnologyBonus(
                 $this->_current_user[$this->_resource[Research::research_ionic_technology]]
             ) * 100;
 

@@ -26,7 +26,6 @@ use application\helpers\UrlHelper;
  */
 class FormatLib
 {
-
     /**
      * prettyTime
      *
@@ -314,7 +313,7 @@ class FormatLib
      */
     public static function prettyBytes($bytes, $precision = 2, $bitwise = false)
     {
-        $units = array('Bytes', 'KB', 'MB', 'GB', 'TB');
+        $units = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
 
         $bytes = max($bytes, 0);
         $pow = floor(($bytes ? log($bytes) : 0) / log(1024));

@@ -14,6 +14,7 @@ namespace application\controllers\game;
 use application\core\Controller;
 use application\libraries\FleetsLib;
 use application\libraries\FormatLib;
+use application\libraries\Formulas;
 use application\libraries\FunctionsLib;
 
 /**
@@ -54,10 +55,21 @@ class Galaxy extends Controller
      */
     private $planet_count = 0;
 
+    /**
+     * @var mixed
+     */
     private $_galaxy;
+    /**
+     * @var mixed
+     */
     private $_system;
-    private $_formula;
+    /**
+     * @var mixed
+     */
     private $_noob;
+    /**
+     * @var mixed
+     */
     private $_galaxyLib;
 
     /**
@@ -87,7 +99,6 @@ class Galaxy extends Controller
         $this->_resource = parent::$objects->getObjects();
         $this->_pricelist = parent::$objects->getPrice();
         $this->_reslist = parent::$objects->getObjectsList();
-        $this->_formula = FunctionsLib::loadLibrary('FormulaLib');
         $this->_noob = FunctionsLib::loadLibrary('NoobsProtectionLib');
         $this->_galaxyLib = FunctionsLib::loadLibrary('GalaxyLib');
 
@@ -334,7 +345,7 @@ class Galaxy extends Controller
 
         $current_missiles = $this->planet['defense_interplanetary_missile'];
         $tempvar1 = abs($system - $this->planet['planet_system']);
-        $tempvar2 = $this->_formula->missileRange($this->user['research_impulse_drive']);
+        $tempvar2 = Formulas::missileRange($this->user['research_impulse_drive']);
 
         $target_user = $this->Galaxy_Model->getTargetUserDataByCoords($galaxy, $system, $planet);
 
@@ -405,7 +416,7 @@ class Galaxy extends Controller
 
         $flight_time = round(((30 + (60 * $tempvar1)) * 2500) / FunctionsLib::readConfig('fleet_speed'));
 
-        $DefenseLabel = array(
+        $DefenseLabel = [
             0 => $this->langs->line('gl_all_defenses'),
             1 => $this->langs->line('defense_rocket_launcher'),
             2 => $this->langs->line('defense_light_laser'),
@@ -415,7 +426,7 @@ class Galaxy extends Controller
             6 => $this->langs->line('defense_plasma_turret'),
             7 => $this->langs->line('defense_small_shield_dome'),
             8 => $this->langs->line('defense_large_shield_dome'),
-        );
+        ];
 
         $this->Fleet_Model->insertNewMissilesMission([
             'fleet_owner' => $this->user['user_id'],
@@ -494,7 +505,7 @@ class Galaxy extends Controller
             }
         }
 
-        $errors_types = array(
+        $errors_types = [
             600 => $this->langs->line('gl_success'),
             601 => $this->langs->line('gl_error'),
             602 => $this->langs->line('gl_no_moon'),
@@ -508,7 +519,7 @@ class Galaxy extends Controller
             614 => $this->langs->line('gl_no_planet'),
             615 => $this->langs->line('gl_not_enough_storage'),
             616 => $this->langs->line('gl_multi_alarm'),
-        );
+        ];
 
         if ($PartialFleet == true) {
             if ($PartialCount < 1) {

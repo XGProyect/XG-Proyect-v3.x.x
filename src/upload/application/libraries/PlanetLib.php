@@ -14,7 +14,7 @@ namespace application\libraries;
 use application\core\enumerators\PlanetTypesEnumerator;
 use application\core\Language;
 use application\core\XGPCore;
-use application\libraries\FormulaLib;
+use application\libraries\Formulas;
 use application\libraries\FunctionsLib;
 
 /**
@@ -29,13 +29,6 @@ use application\libraries\FunctionsLib;
  */
 class PlanetLib extends XGPCore
 {
-
-    /**
-     *
-     * @var FormulaLib
-     */
-    private $formula;
-
     /**
      *
      * @var array
@@ -56,8 +49,6 @@ class PlanetLib extends XGPCore
 
         // load Language
         $this->loadLanguage();
-
-        $this->formula = new FormulaLib();
     }
 
     /**
@@ -77,8 +68,8 @@ class PlanetLib extends XGPCore
         $planet_exist = $this->Planetlib_Model->checkPlanetExists($galaxy, $system, $position);
 
         if (!$planet_exist) {
-            $planet = $this->formula->getPlanetSize($position, $main);
-            $temp = $this->formula->setPlanetTemp($position);
+            $planet = Formulas::getPlanetSize($position, $main);
+            $temp = Formulas::setPlanetTemp($position);
             $name = ($name == '') ? $this->langs->line('colony') : $name;
 
             if ($main == true) {
@@ -94,7 +85,7 @@ class PlanetLib extends XGPCore
                     'planet_planet' => $position,
                     'planet_last_update' => time(),
                     'planet_type' => PlanetTypesEnumerator::PLANET,
-                    'planet_image' => $this->formula->setPlanetImage($system, $position),
+                    'planet_image' => Formulas::setPlanetImage($system, $position),
                     'planet_diameter' => $planet['planet_diameter'],
                     'planet_field_max' => $planet['planet_field_max'],
                     'planet_temp_min' => $temp['min'],
@@ -139,7 +130,7 @@ class PlanetLib extends XGPCore
         if ($MoonPlanet['id_moon'] == '' && $MoonPlanet['planet_id'] != 0) {
             $SizeMin = 2000 + ($chance * 100);
             $SizeMax = 6000 + ($chance * 200);
-            $temp = $this->formula->setPlanetTemp($position);
+            $temp = Formulas::setPlanetTemp($position);
             $size = $chance == 0 ? $size : mt_rand($SizeMin, $SizeMax);
             $size = $size == 0 ? mt_rand(2000, 6000) : $size;
             $max_fields = $max_fields == 0 ? 1 : $max_fields;

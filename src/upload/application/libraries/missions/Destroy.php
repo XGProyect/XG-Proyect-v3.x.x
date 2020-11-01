@@ -16,6 +16,7 @@ use application\helpers\UrlHelper;
 use application\libraries\combatreport\Report;
 use application\libraries\FleetsLib;
 use application\libraries\FormatLib;
+use application\libraries\Formulas;
 use application\libraries\FunctionsLib;
 use application\libraries\missions\Attack_lang;
 use application\libraries\missions\Missions;
@@ -60,12 +61,6 @@ class Destroy extends Missions
     ];
 
     /**
-     *
-     * @var /FormulaLib
-     */
-    private $_formula;
-
-    /**
      * Constructor
      */
     public function __construct()
@@ -74,8 +69,6 @@ class Destroy extends Missions
 
         // load Language
         parent::loadLang(['game/missions', 'game/destroy', 'game/defenses', 'game/ships']);
-
-        $this->_formula = FunctionsLib::loadLibrary('FormulaLib');
     }
 
     /**
@@ -169,7 +162,7 @@ class Destroy extends Missions
             }
 
             if (!$defenders->existPlayer($target_userID)) {
-                $player = new Player($target_userID, array($homeFleet));
+                $player = new Player($target_userID, [$homeFleet]);
 
                 $player->setTech(
                     $targetUser['research_weapons_technology'], $targetUser['research_shielding_technology'], $targetUser['research_armour_technology']
@@ -189,7 +182,7 @@ class Destroy extends Missions
             //------------------------------ battle -----------------------------------
             $battle = new Battle($attackers, $defenders);
             $startBattle = DebugManager::runDebugged(
-                array($battle, 'startBattle'), $errorHandler, $exceptionHandler
+                [$battle, 'startBattle'], $errorHandler, $exceptionHandler
             );
 
             $startBattle();
@@ -210,7 +203,6 @@ class Destroy extends Missions
             $this->createNewReportAndSendIt($fleet_row, $report, $target_planet['planet_name']);
 
             if ($this->_destruction['destroyed'] == 'moon') {
-
                 $this->Missions_Model->updateFleetsStatusToMakeThemReturn([
                     'coords' => [
                         'galaxy' => $fleet_row['fleet_end_galaxy'],
@@ -222,7 +214,6 @@ class Destroy extends Missions
                 ]);
 
                 if ($targetUser['user_current_planet'] == $target_planet['planet_id']) {
-
                     $this->Missions_Model->updateUserCurrentPlanetByCoordsAndUserId([
                         'coords' => [
                             'galaxy' => $fleet_row['fleet_end_galaxy'],
@@ -235,7 +226,6 @@ class Destroy extends Missions
             }
 
         } elseif ($fleet_row['fleet_mess'] == 1 && $fleet_row['fleet_end_time'] <= time()) {
-
             $message = sprintf(
                 $this->langs->line('mi_fleet_back_with_resources'),
                 $fleet_row['planet_end_name'],
@@ -274,11 +264,10 @@ class Destroy extends Missions
     {
         $rf = isset($this->combat_caps[$id]['sd']) ? $this->combat_caps[$id]['sd'] : 0;
         $shield = $this->combat_caps[$id]['shield'];
-        $cost = array($this->pricelist[$id]['metal'], $this->pricelist[$id]['crystal']);
+        $cost = [$this->pricelist[$id]['metal'], $this->pricelist[$id]['crystal']];
         $power = $this->combat_caps[$id]['attack'];
 
         if ($id >= self::SHIP_MIN_ID && $id <= self::SHIP_MAX_ID) {
-
             return new Ship($id, $count, $rf, $shield, $cost, $power);
         }
 
@@ -298,7 +287,6 @@ class Destroy extends Missions
         list($metal, $crystal) = $report->getDebris();
 
         if (($metal + $crystal) > 0) {
-
             $this->Missions_Model->updatePlanetDebrisByCoords(
                 [
                     'time' => time(),
@@ -340,7 +328,7 @@ class Destroy extends Missions
 
         $player_info = $this->Missions_Model->getTechnologiesByUserId($idPlayer);
 
-        $player = new Player($idPlayer, array($fleet));
+        $player = new Player($idPlayer, [$fleet]);
         $player->setTech(
             $player_info['research_weapons_technology'],
             $player_info['research_shielding_technology'],
@@ -380,7 +368,6 @@ class Destroy extends Missions
                 $fleet = new Fleet($fleet_row['fleet_id']);
 
                 foreach ($serializedTypes as $id => $count) {
-
                     if ($id != 0 && $count != 0) {
                         $fleet->addShipType($this->getShipType($id, $count));
                     }
@@ -419,11 +406,9 @@ class Destroy extends Missions
                     $playerGroup->addPlayer($player);
 
                     if ($target_user['planet_id'] == $idPlayer) {
-
                         $playerGroup->getPlayer($idPlayer)->addFleet($fleet);
                     }
                 } else {
-
                     $playerGroup->getPlayer($idPlayer)->addFleet($fleet);
                 }
             }
@@ -443,7 +428,6 @@ class Destroy extends Missions
     private function updateMoon($target_data, $death_stars)
     {
         if ($this->_destruction['flag']) {
-
             return null;
         }
 
@@ -451,28 +435,25 @@ class Destroy extends Missions
 
         $result = false;
 
-        $moon_chance = $this->_formula->getMoonDestructionChance($target_data['planet_diameter'], $death_stars);
-        $ds_chance = $this->_formula->getDeathStarsDestructionChance($target_data['planet_diameter']);
+        $moon_chance = Formulas::getMoonDestructionChance($target_data['planet_diameter'], $death_stars);
+        $ds_chance = Formulas::getDeathStarsDestructionChance($target_data['planet_diameter']);
 
         $this->_destruction['moon_chance'] = $moon_chance;
 
         $random_chance = mt_rand(0, 100);
 
         if ($random_chance <= $moon_chance) {
-
             $result = true;
 
             $this->_destruction['destroyed'] = 'moon';
         }
 
         if (!$result) {
-
             $random_chance = mt_rand(0, 100);
 
             $this->_destruction['ds_chance'] = $ds_chance;
 
             if ($random_chance <= $ds_chance) {
-
                 $this->_destruction['destroyed'] = 'ds';
             }
         }
@@ -505,15 +486,11 @@ class Destroy extends Missions
         ]);
 
         foreach ($idAtts as $id) {
-
             if ($report->attackerHasWin()) {
-
                 $style = 'green';
             } elseif ($report->isAdraw()) {
-
                 $style = 'orange';
             } else {
-
                 $style = 'red';
             }
 
@@ -527,15 +504,11 @@ class Destroy extends Missions
         }
 
         foreach ($idDefs as $id) {
-
             if ($report->attackerHasWin()) {
-
                 $style = 'red';
             } elseif ($report->isAdraw()) {
-
                 $style = 'orange';
             } else {
-
                 $style = 'green';
             }
 
@@ -586,34 +559,29 @@ class Destroy extends Missions
     private function updateAttackers($playerGroupBeforeBattle, $playerGroupAfterBattle, $target_planet)
     {
         $fleetArray = '';
-        $emptyFleets = array();
+        $emptyFleets = [];
         $capacity = $this->getCapacity($playerGroupAfterBattle);
-        $steal = array(
+        $steal = [
             'metal' => 0,
             'crystal' => 0,
             'deuterium' => 0,
-        );
+        ];
 
         foreach ($playerGroupBeforeBattle->getIterator() as $idPlayer => $player) {
-
             $existPlayer = $playerGroupAfterBattle->existPlayer($idPlayer);
             $Xplayer = null;
 
             if ($existPlayer) {
-
                 $Xplayer = $playerGroupAfterBattle->getPlayer($idPlayer);
             }
 
             foreach ($player->getIterator() as $idFleet => $fleet) {
-
                 $existFleet = $existPlayer && $Xplayer->existFleet($idFleet);
                 $Xfleet = null;
 
                 if ($existFleet) {
-
                     $Xfleet = $Xplayer->getFleet($idFleet);
                 } else {
-
                     $emptyFleets[] = $idFleet;
                 }
 
@@ -622,12 +590,10 @@ class Destroy extends Missions
                 $fleetArray = [];
 
                 foreach ($fleet as $idShipType => $fighters) {
-
                     $existShipType = $existFleet && $Xfleet->existShipType($idShipType);
                     $amount = 0;
 
                     if ($existShipType) {
-
                         $XshipType = $Xfleet->getShipType($idShipType);
                         $amount = $XshipType->getCount();
                         $fleetCapacity += $amount * $this->pricelist[$idShipType]['capacity'];
@@ -637,15 +603,13 @@ class Destroy extends Missions
                 }
 
                 if ($existFleet) {
-
-                    $fleetSteal = array(
+                    $fleetSteal = [
                         'metal' => 0,
                         'crystal' => 0,
                         'deuterium' => 0,
-                    );
+                    ];
 
                     if ($playerGroupAfterBattle->battleResult == BATTLE_WIN) {
-
                         $corrispectiveMetal = $target_planet['planet_metal'] * $fleetCapacity / $capacity;
                         $corrispectiveCrystal = $target_planet['planet_crystal'] * $fleetCapacity / $capacity;
                         $corrispectiveDeuterium = $target_planet['planet_deuterium'] * $fleetCapacity / $capacity;
@@ -662,10 +626,8 @@ class Destroy extends Missions
                     }
 
                     if ($this->_destruction['destroyed'] == 'ds') {
-
                         $emptyFleets[] = $idFleet;
                     } else {
-
                         $this->Missions_Model->updateReturningFleetData([
                             'ships' => FleetsLib::setFleetShipsArray($fleetArray),
                             'amount' => $totalCount,
@@ -685,7 +647,6 @@ class Destroy extends Missions
         $id_string = join(',', $emptyFleets);
 
         if (!empty($id_string)) {
-
             $this->Missions_Model->deleteMultipleFleetsByIds($id_string);
         }
 
@@ -706,36 +667,29 @@ class Destroy extends Missions
     {
         $Xplayer = $Xfleet = $XshipType = null;
         $fleetArray = '';
-        $emptyFleets = array();
+        $emptyFleets = [];
 
         foreach ($playerGroupBeforeBattle->getIterator() as $idPlayer => $player) {
-
             $existPlayer = $playerGroupAfterBattle->existPlayer($idPlayer);
 
             if ($existPlayer) {
-
                 $Xplayer = $playerGroupAfterBattle->getPlayer($idPlayer);
             }
 
             foreach ($player->getIterator() as $idFleet => $fleet) {
-
                 $existFleet = $existPlayer && $Xplayer->existFleet($idFleet);
 
                 if ($existFleet) {
-
                     $Xfleet = $Xplayer->getFleet($idFleet);
                 } else {
-
                     $emptyFleets[] = $idFleet;
                 }
 
                 foreach ($fleet as $idShipType => $fighters) {
-
                     $existShipType = $existFleet && $Xfleet->existShipType($idShipType);
                     $amount = 0;
 
                     if ($existShipType) {
-
                         $XshipType = $Xfleet->getShipType($idShipType);
                         $amount = $XshipType->getCount();
                     }
@@ -784,11 +738,11 @@ class Destroy extends Missions
          * 5. Now fill the rest with crystal
          */
         // Stolen resources
-        $steal = array(
+        $steal = [
             'metal' => 0,
             'crystal' => 0,
             'deuterium' => 0,
-        );
+        ];
 
         // Max resources that can be take
         $metal /= 2;

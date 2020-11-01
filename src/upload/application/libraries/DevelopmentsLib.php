@@ -12,6 +12,11 @@ namespace application\libraries;
 use application\core\enumerators\ResearchEnumerator as Research;
 use application\core\Template;
 use application\core\XGPCore;
+use application\libraries\DevelopmentsLib;
+use application\libraries\FormatLib;
+use application\libraries\Formulas;
+use application\libraries\FunctionsLib;
+use application\libraries\OfficiersLib;
 
 /**
  * DevelopmentsLib Class
@@ -225,8 +230,7 @@ class DevelopmentsLib extends XGPCore
         if (in_array($element, $reslist['build'])) {
             $cost_metal = floor($pricelist[$element]['metal'] * pow($pricelist[$element]['factor'], $level));
             $cost_crystal = floor($pricelist[$element]['crystal'] * pow($pricelist[$element]['factor'], $level));
-            $time = (($cost_crystal + $cost_metal) / FunctionsLib::readConfig('game_speed')) * (1 / ($current_planet[$resource['14']] + 1)) * pow(0.5, $current_planet[$resource['15']]);
-            $time = floor(($time * 60 * 60));
+            $time = Formulas::getBuildingTime($cost_metal, $cost_crystal, $element, $level, $current_planet[$resource['14']], $current_planet[$resource['15']]);
         } elseif (in_array($element, $reslist['tech'])) {
             $cost_metal = floor($pricelist[$element]['metal'] * pow($pricelist[$element]['factor'], $level));
             $cost_crystal = floor($pricelist[$element]['crystal'] * pow($pricelist[$element]['factor'], $level));
@@ -240,16 +244,16 @@ class DevelopmentsLib extends XGPCore
 
             $time = (($cost_metal + $cost_crystal) / FunctionsLib::readConfig('game_speed')) / (($lablevel + 1) * 2);
             $time = floor(
-                ($time * 60 * 60) * (1 - ((OfficiersLib::isOfficierActive(
+                ($time * 3600) * (1 - ((OfficiersLib::isOfficierActive(
                     $current_user['premium_officier_technocrat']
                 )) ? TECHNOCRATE_SPEED : 0))
             );
         } elseif (in_array($element, $reslist['defense'])) {
             $time = (($pricelist[$element]['metal'] + $pricelist[$element]['crystal']) / FunctionsLib::readConfig('game_speed')) * (1 / ($current_planet[$resource['21']] + 1)) * pow(1 / 2, $current_planet[$resource['15']]);
-            $time = floor(($time * 60 * 60));
+            $time = floor(($time * 3600));
         } elseif (in_array($element, $reslist['fleet'])) {
             $time = (($pricelist[$element]['metal'] + $pricelist[$element]['crystal']) / FunctionsLib::readConfig('game_speed')) * (1 / ($current_planet[$resource['21']] + 1)) * pow(1 / 2, $current_planet[$resource['15']]);
-            $time = floor(($time * 60 * 60));
+            $time = floor(($time * 3600));
         }
 
         if ($time < 1) {

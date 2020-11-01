@@ -14,6 +14,7 @@ namespace application\controllers\game;
 use application\core\Controller;
 use application\core\enumerators\PlanetTypesEnumerator;
 use application\libraries\FleetsLib;
+use application\libraries\Formulas;
 use application\libraries\FunctionsLib;
 
 /**
@@ -21,11 +22,15 @@ use application\libraries\FunctionsLib;
  */
 class Phalanx extends Controller
 {
-
     const MODULE_ID = 11;
 
-    private $_formula;
+    /**
+     * @var mixed
+     */
     private $_current_user;
+    /**
+     * @var mixed
+     */
     private $_current_planet;
 
     /**
@@ -49,7 +54,6 @@ class Phalanx extends Controller
 
         $this->_current_user = parent::$users->getUserData();
         $this->_current_planet = parent::$users->getPlanetData();
-        $this->_formula = FunctionsLib::loadLibrary('FormulaLib');
 
         $this->build_page();
     }
@@ -63,8 +67,8 @@ class Phalanx extends Controller
     {
         $parse = $this->langs->language;
         /* range */
-        $radar_limit_inf = $this->_current_planet['planet_system'] - $this->_formula->phalanxRange($this->_current_planet['building_phalanx']);
-        $radar_limit_sup = $this->_current_planet['planet_system'] + $this->_formula->phalanxRange($this->_current_planet['building_phalanx']);
+        $radar_limit_inf = $this->_current_planet['planet_system'] - Formulas::phalanxRange($this->_current_planet['building_phalanx']);
+        $radar_limit_sup = $this->_current_planet['planet_system'] + Formulas::phalanxRange($this->_current_planet['building_phalanx']);
         $radar_limit_inf = max($radar_limit_inf, 1);
         $radar_limit_sup = min($radar_limit_sup, MAX_SYSTEM_IN_GALAXY);
 
