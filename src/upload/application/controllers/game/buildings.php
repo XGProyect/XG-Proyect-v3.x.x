@@ -12,6 +12,7 @@
 namespace application\controllers\game;
 
 use application\core\Controller;
+use application\core\enumerators\BuildingsEnumerator;
 use application\helpers\UrlHelper;
 use application\libraries\buildings\Building;
 use application\libraries\DevelopmentsLib as Developments;
@@ -741,7 +742,16 @@ class Buildings extends Controller
                     } else {
                         $BuildLevel = $ActualLevel - 1 - $InArray;
                         $this->_planet[$resource[$building]] -= $InArray;
-                        $BuildTime = Formulas::getTearDownTime(Developments::developmentTime($this->_user, $this->_planet, $building));
+                        $price = Developments::developmentPrice($this->_user, $this->_planet, $building, true, $AddMode);
+                        $BuildTime = Formulas::getTearDownTime(
+                            $price['metal'],
+                            $price['crystal'],
+                            $building,
+                            $this->_planet[$resource[BuildingsEnumerator::BUILDING_ROBOT_FACTORY]],
+                            $this->_planet[$resource[BuildingsEnumerator::BUILDING_NANO_FACTORY]],
+                            $this->_planet[$resource[$building]]
+                        );
+
                         $this->_planet[$resource[$building]] += $InArray;
                     }
                 } else {
@@ -751,7 +761,15 @@ class Buildings extends Controller
                         $BuildTime = Developments::developmentTime($this->_user, $this->_planet, $building);
                     } else {
                         $BuildLevel = $ActualLevel - 1;
-                        $BuildTime = Formulas::getTearDownTime(Developments::developmentTime($this->_user, $this->_planet, $building));
+                        $price = Developments::developmentPrice($this->_user, $this->_planet, $building, true, $AddMode);
+                        $BuildTime = Formulas::getTearDownTime(
+                            $price['metal'],
+                            $price['crystal'],
+                            $building,
+                            $this->_planet[$resource[BuildingsEnumerator::BUILDING_ROBOT_FACTORY]],
+                            $this->_planet[$resource[BuildingsEnumerator::BUILDING_NANO_FACTORY]],
+                            $this->_planet[$resource[$building]]
+                        );
                     }
                 }
 

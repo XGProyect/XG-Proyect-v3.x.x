@@ -272,9 +272,9 @@ abstract class Formulas
      * @param integer $time
      * @return integer
      */
-    public static function getTearDownTime(int $time): int
+    public static function getTearDownTime(int $metal_cost, int $cystal_cost, int $building, int $robotics_factory, int $nanite_factory, int $level): float
     {
-        $tear_down_time = $time / 4;
+        $tear_down_time = self::getDevelopmentTime($metal_cost, $cystal_cost, $building, $robotics_factory, $nanite_factory, $level - 2);
 
         return ($tear_down_time < 1 ? 1 : $tear_down_time);
     }

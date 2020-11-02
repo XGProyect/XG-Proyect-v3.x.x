@@ -238,7 +238,13 @@ class DevelopmentsLib extends XGPCore
                 )) ? TECHNOCRATE_SPEED : 0))
             );
         } elseif (in_array($element, $reslist['defense']) or in_array($element, $reslist['fleet'])) {
-            $time = Formulas::getShipyardProductionTime($cost_metal, $cost_crystal, $element, $current_planet[$resource['21']], $current_planet[$resource['15']]);
+            $time = Formulas::getShipyardProductionTime(
+                $pricelist[$element]['metal'],
+                $pricelist[$element]['crystal'],
+                $element,
+                $current_planet[$resource['21']],
+                $current_planet[$resource['15']]
+            );
         }
 
         return ($time < 1 ? 1 : $time);

@@ -10,6 +10,7 @@
 namespace application\controllers\game;
 
 use application\core\Controller;
+use application\core\enumerators\BuildingsEnumerator as Buildings;
 use application\core\enumerators\ResearchEnumerator as Research;
 use application\helpers\StringsHelper;
 use application\helpers\UrlHelper;
@@ -666,7 +667,12 @@ class Infos extends Controller
             // resources and time
             $tear_down_resources = DevelopmentsLib::developmentPrice($this->_current_user, $this->_current_planet, $this->_element_id, true, true);
             $tear_down_time = Formulas::getTearDownTime(
-                DevelopmentsLib::developmentTime($this->_current_user, $this->_current_planet, $this->_element_id)
+                $tear_down_resources['metal'],
+                $tear_down_resources['crystal'],
+                $this->_element_id,
+                $this->_current_planet[$this->_resource[Buildings::BUILDING_ROBOT_FACTORY]],
+                $this->_current_planet[$this->_resource[Buildings::BUILDING_NANO_FACTORY]],
+                $this->_current_planet[$this->_resource[$this->_element_id]]
             );
 
             $tear_down_url = 'game.php?page=' . DevelopmentsLib::setBuildingPage($this->_element_id) . '&cmd=destroy&building=' . $this->_element_id;
