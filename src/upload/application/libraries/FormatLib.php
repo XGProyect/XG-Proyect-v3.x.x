@@ -29,56 +29,47 @@ class FormatLib
     /**
      * prettyTime
      *
-     * @param int $seconds Seconds
+     * @param int $inputSeconds
      *
      * @return string
      */
-    public static function prettyTime($seconds)
+    public static function prettyTime($inputSeconds)
     {
-        $day = floor($seconds / (24 * 3600));
-        $hs = floor($seconds / 3600 % 24);
-        $ms = floor($seconds / 60 % 60);
-        $sr = floor($seconds / 1 % 60);
+        $secondsInAMinute = 60;
+        $secondsInAnHour = 60 * $secondsInAMinute;
+        $secondsInADay = 24 * $secondsInAnHour;
 
-        if ($hs < 10) {
-            $hh = "0" . $hs;
-        } else {
-            $hh = $hs;
+        // Extract days
+        $days = floor($inputSeconds / $secondsInADay);
+
+        // Extract hours
+        $hourSeconds = $inputSeconds % $secondsInADay;
+        $hours = floor($hourSeconds / $secondsInAnHour);
+
+        // Extract minutes
+        $minuteSeconds = $hourSeconds % $secondsInAnHour;
+        $minutes = floor($minuteSeconds / $secondsInAMinute);
+
+        // Extract the remaining seconds
+        $remainingSeconds = $minuteSeconds % $secondsInAMinute;
+        $seconds = ceil($remainingSeconds);
+
+        // Format and return
+        $timeParts = [];
+        $sections = [
+            'd' => (int) $days,
+            'h' => (int) $hours,
+            'm' => (int) $minutes,
+            's' => (int) $seconds,
+        ];
+
+        foreach ($sections as $name => $value) {
+            if ($value > 0) {
+                $timeParts[] = $value . $name;
+            }
         }
 
-        if ($ms < 10) {
-            $mm = "0" . $ms;
-        } else {
-            $mm = $ms;
-        }
-
-        if ($sr < 10) {
-            $ss = "0" . $sr;
-        } else {
-            $ss = $sr;
-        }
-
-        $time = '';
-
-        if ($day != 0) {
-            $time .= $day . 'd ';
-        }
-
-        if ($hs != 0) {
-            $time .= $hh . 'h ';
-        } else {
-            $time .= '00h ';
-        }
-
-        if ($ms != 0) {
-            $time .= $mm . 'm ';
-        } else {
-            $time .= '00m ';
-        }
-
-        $time .= $ss . 's';
-
-        return $time;
+        return implode(' ', $timeParts);
     }
 
     /**
