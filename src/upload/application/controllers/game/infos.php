@@ -665,7 +665,7 @@ class Infos extends Controller
 
             // resources and time
             $tear_down_resources = DevelopmentsLib::developmentPrice($this->_current_user, $this->_current_planet, $this->_element_id, true, true);
-            $tear_down_time = DevelopmentsLib::destroyTime(
+            $tear_down_time = Formulas::getTearDownTime(
                 DevelopmentsLib::developmentTime($this->_current_user, $this->_current_planet, $this->_element_id)
             );
 

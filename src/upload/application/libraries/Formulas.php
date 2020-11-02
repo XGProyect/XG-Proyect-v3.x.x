@@ -242,20 +242,91 @@ abstract class Formulas
     }
 
     /**
-     * Get the building time
+     * Get the cost to tear down
      *
-     * @param int $metal_cost
-     * @param int $cystal_cost
+     * @param int $price
+     * @param float $factor
      * @param int $level
-     * @param int $robotics_factory
-     * @param int $nanite_factory
+     * @param int $ion_technology_level
      */
-    public static function getBuildingTime(int $metal_cost, int $cystal_cost, int $building, int $level, int $robotics_factory, int $nanite_factory): float
+    public static function getTearDownCost(int $price, float $factor, int $level, int $ion_technology_level): int
+    {
+        return max(floor(self::getDevelopmentCost($price, $factor, ($level - 2)) * (1 - self::getIonTechnologyBonus($ion_technology_level))), 0);
+    }
+
+    /**
+     * Get the cost to develop something
+     *
+     * @param int $price
+     * @param float $factor
+     * @param int $level
+     */
+    public static function getDevelopmentCost(int $price, float $factor, int $level): float
+    {
+        return round($price * pow($factor, $level));
+    }
+
+    /**
+     * Check if the building is for destroy and calculate
+     *
+     * @param integer $time
+     * @return integer
+     */
+    public static function getTearDownTime(int $time): int
+    {
+        $tear_down_time = $time / 4;
+
+        return ($tear_down_time < 1 ? 1 : $tear_down_time);
+    }
+
+    /**
+     * Get the time to produce ships and defenses
+     *
+     * @param integer $metal_cost
+     * @param integer $cystal_cost
+     * @param integer $ship_defense
+     * @param integer $shipyard_level
+     * @param integer $nanite_factory_level
+     * @return float
+     */
+    public static function getShipyardProductionTime(int $metal_cost, int $cystal_cost, int $ship_defense, int $shipyard_level, int $nanite_factory_level): float
+    {
+        return self::getDevelopmentTime($metal_cost, $cystal_cost, $ship_defense, $shipyard_level, $nanite_factory_level);
+    }
+
+    /**
+     * Get the time to build
+     *
+     * @param integer $metal_cost
+     * @param integer $cystal_cost
+     * @param integer $building
+     * @param integer $robotics_factory
+     * @param integer $nanite_factory
+     * @param integer $level
+     * @return float
+     */
+    public static function getBuildingTime(int $metal_cost, int $cystal_cost, int $building, int $robotics_factory, int $nanite_factory, int $level): float
+    {
+        return self::getDevelopmentTime($metal_cost, $cystal_cost, $building, $robotics_factory, $nanite_factory, $level);
+    }
+
+    /**
+     * Get the time to develop something
+     *
+     * @param integer $metal_cost
+     * @param integer $cystal_cost
+     * @param integer $object
+     * @param integer $first_boost
+     * @param integer $second_boost
+     * @param integer $level
+     * @return float
+     */
+    private static function getDevelopmentTime(int $metal_cost, int $cystal_cost, int $object, int $first_boost, int $second_boost, int $level = 0): float
     {
         $resources_needed = $metal_cost + $cystal_cost;
         $reduction = max(4 - ($level + 1) / 2, 1);
-        $robotics = 1 + $robotics_factory;
-        $nanite = pow(2, $nanite_factory);
+        $robotics = 1 + $first_boost;
+        $nanite = pow(2, $second_boost);
         $universe_speed = FunctionsLib::readConfig('game_speed') / 2500;
         $without_reduction = [
             Buildings::BUILDING_NANO_FACTORY,
@@ -264,7 +335,7 @@ abstract class Formulas
             Buildings::BUILDING_JUMP_GATE,
         ];
 
-        if (in_array($building, $without_reduction)) {
+        if (in_array($object, $without_reduction)) {
             $reduction = 1;
         }
 

@@ -16,6 +16,7 @@ use application\helpers\UrlHelper;
 use application\libraries\buildings\Building;
 use application\libraries\DevelopmentsLib as Developments;
 use application\libraries\FormatLib;
+use application\libraries\Formulas;
 use application\libraries\FunctionsLib;
 use application\libraries\OfficiersLib;
 use application\libraries\TimingLibrary as Timing;
@@ -740,7 +741,7 @@ class Buildings extends Controller
                     } else {
                         $BuildLevel = $ActualLevel - 1 - $InArray;
                         $this->_planet[$resource[$building]] -= $InArray;
-                        $BuildTime = Developments::destroyTime(Developments::developmentTime($this->_user, $this->_planet, $building));
+                        $BuildTime = Formulas::getTearDownTime(Developments::developmentTime($this->_user, $this->_planet, $building));
                         $this->_planet[$resource[$building]] += $InArray;
                     }
                 } else {
@@ -750,7 +751,7 @@ class Buildings extends Controller
                         $BuildTime = Developments::developmentTime($this->_user, $this->_planet, $building);
                     } else {
                         $BuildLevel = $ActualLevel - 1;
-                        $BuildTime = Developments::destroyTime(Developments::developmentTime($this->_user, $this->_planet, $building));
+                        $BuildTime = Formulas::getTearDownTime(Developments::developmentTime($this->_user, $this->_planet, $building));
                     }
                 }
 

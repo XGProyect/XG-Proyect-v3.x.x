@@ -96,21 +96,18 @@ class DevelopmentsLib extends XGPCore
         foreach ($array as $res_type) {
             if (isset($pricelist[$element][$res_type])) {
                 if ($incremental) {
-                    if ($element == 124) {
-                        $cost[$res_type] = round(
-                            ($pricelist[$element][$res_type] * pow($pricelist[$element]['factor'], $level)) / 100
-                        ) * 100;
-                    } else {
-                        $cost[$res_type] = floor(
-                            $pricelist[$element][$res_type] * pow($pricelist[$element]['factor'], $level)
-                        );
-                    }
+                    $cost[$res_type] = Formulas::getDevelopmentCost($pricelist[$element][$res_type], $pricelist[$element]['factor'], $level);
                 } else {
                     $cost[$res_type] = floor($pricelist[$element][$res_type]);
                 }
 
                 if ($destroy == true) {
-                    $cost[$res_type] = self::destroyPrice($res_type, $cost, $current_user[$resource[Research::research_ionic_technology]]);
+                    $cost[$res_type] = Formulas::getTearDownCost(
+                        $pricelist[$element][$res_type],
+                        $pricelist[$element]['factor'],
+                        $level,
+                        $current_user[$resource[Research::research_ionic_technology]]
+                    );
                 }
             }
         }
@@ -177,15 +174,7 @@ class DevelopmentsLib extends XGPCore
                 $text .= $ResTitle . ": ";
 
                 if ($userfactor) {
-                    if ($element == 124) {
-                        $cost = round(
-                            ($pricelist[$element][$res_type] * pow($pricelist[$element]['factor'], $level)) / 100
-                        ) * 100;
-                    } else {
-                        $cost = floor(
-                            $pricelist[$element][$res_type] * pow($pricelist[$element]['factor'], $level)
-                        );
-                    }
+                    $cost = Formulas::getDevelopmentCost($pricelist[$element][$res_type], $pricelist[$element]['factor'], $level);
                 } else {
                     $cost = floor($pricelist[$element][$res_type]);
                 }
@@ -228,12 +217,12 @@ class DevelopmentsLib extends XGPCore
         }
 
         if (in_array($element, $reslist['build'])) {
-            $cost_metal = floor($pricelist[$element]['metal'] * pow($pricelist[$element]['factor'], $level));
-            $cost_crystal = floor($pricelist[$element]['crystal'] * pow($pricelist[$element]['factor'], $level));
-            $time = Formulas::getBuildingTime($cost_metal, $cost_crystal, $element, $level, $current_planet[$resource['14']], $current_planet[$resource['15']]);
+            $cost_metal = Formulas::getDevelopmentCost($pricelist[$element]['metal'], $pricelist[$element]['factor'], $level);
+            $cost_crystal = Formulas::getDevelopmentCost($pricelist[$element]['crystal'], $pricelist[$element]['factor'], $level);
+            $time = Formulas::getBuildingTime($cost_metal, $cost_crystal, $element, $current_planet[$resource['14']], $current_planet[$resource['15']], $level);
         } elseif (in_array($element, $reslist['tech'])) {
-            $cost_metal = floor($pricelist[$element]['metal'] * pow($pricelist[$element]['factor'], $level));
-            $cost_crystal = floor($pricelist[$element]['crystal'] * pow($pricelist[$element]['factor'], $level));
+            $cost_metal = Formulas::getDevelopmentCost($pricelist[$element]['metal'], $pricelist[$element]['factor'], $level);
+            $cost_crystal = Formulas::getDevelopmentCost($pricelist[$element]['crystal'], $pricelist[$element]['factor'], $level);
             $intergal_lab = $current_user[$resource[123]];
 
             if ($intergal_lab < 1) {
@@ -248,46 +237,11 @@ class DevelopmentsLib extends XGPCore
                     $current_user['premium_officier_technocrat']
                 )) ? TECHNOCRATE_SPEED : 0))
             );
-        } elseif (in_array($element, $reslist['defense'])) {
-            $time = (($pricelist[$element]['metal'] + $pricelist[$element]['crystal']) / FunctionsLib::readConfig('game_speed')) * (1 / ($current_planet[$resource['21']] + 1)) * pow(1 / 2, $current_planet[$resource['15']]);
-            $time = floor(($time * 3600));
-        } elseif (in_array($element, $reslist['fleet'])) {
-            $time = (($pricelist[$element]['metal'] + $pricelist[$element]['crystal']) / FunctionsLib::readConfig('game_speed')) * (1 / ($current_planet[$resource['21']] + 1)) * pow(1 / 2, $current_planet[$resource['15']]);
-            $time = floor(($time * 3600));
+        } elseif (in_array($element, $reslist['defense']) or in_array($element, $reslist['fleet'])) {
+            $time = Formulas::getShipyardProductionTime($cost_metal, $cost_crystal, $element, $current_planet[$resource['21']], $current_planet[$resource['15']]);
         }
 
-        if ($time < 1) {
-            $time = 1;
-        }
-
-        return $time;
-    }
-
-    /**
-     * Check if the building is for destroy and calculate
-     *
-     * @param integer $time
-     * @return integer
-     */
-    public static function destroyTime(int $time): int
-    {
-        $destroy_time = $time / 2;
-
-        return ($destroy_time < 1 ? 1 : $destroy_time);
-    }
-
-    /**
-     * Get the amount of resources needed to destroy a building
-     *
-     * @param string $resource
-     * @param array $amount
-     * @param int $ion_technology
-     */
-    public static function destroyPrice(string $resource, array $amount, int $ion_technology): int
-    {
-        $tear_down_price = $amount[$resource] / 4;
-
-        return max(floor($tear_down_price - ($tear_down_price * ($ion_technology * 0.04))), 0);
+        return ($time < 1 ? 1 : $time);
     }
 
     /**

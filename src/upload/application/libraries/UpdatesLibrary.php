@@ -18,6 +18,7 @@ use application\core\XGPCore;
 use application\helpers\UrlHelper;
 use application\libraries\DevelopmentsLib as Developments;
 use application\libraries\FormatLib as Format;
+use application\libraries\Formulas;
 use application\libraries\FunctionsLib as Functions;
 use application\libraries\MissionControlLibrary;
 use application\libraries\OfficiersLib as Officiers;
@@ -310,7 +311,7 @@ class UpdatesLibrary extends XGPCore
                             $previous_time = $element_data[2];
                             $element_data[2] = Developments::developmentTime($current_user, $current_planet, $element_data[0]);
                             if ($for_destroy) {
-                                $element_data[2] = Developments::destroyTime($element_data[2]);
+                                $element_data[2] = Formulas::getTearDownTime($element_data[2]);
                             }
 
                             if ($prevData == 0) {
