@@ -666,9 +666,7 @@ class Infos extends Controller
 
             // resources and time
             $tear_down_resources = DevelopmentsLib::developmentPrice($this->_current_user, $this->_current_planet, $this->_element_id, true, true);
-            $tear_down_time = Formulas::getTearDownTime(
-                $tear_down_resources['metal'],
-                $tear_down_resources['crystal'],
+            $tear_down_time = DevelopmentsLib::tearDownTime(
                 $this->_element_id,
                 $this->_current_planet[$this->_resource[Buildings::BUILDING_ROBOT_FACTORY]],
                 $this->_current_planet[$this->_resource[Buildings::BUILDING_NANO_FACTORY]],

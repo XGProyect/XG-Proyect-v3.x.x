@@ -17,7 +17,6 @@ use application\helpers\UrlHelper;
 use application\libraries\buildings\Building;
 use application\libraries\DevelopmentsLib as Developments;
 use application\libraries\FormatLib;
-use application\libraries\Formulas;
 use application\libraries\FunctionsLib;
 use application\libraries\OfficiersLib;
 use application\libraries\TimingLibrary as Timing;
@@ -742,10 +741,7 @@ class Buildings extends Controller
                     } else {
                         $BuildLevel = $ActualLevel - 1 - $InArray;
                         $this->_planet[$resource[$building]] -= $InArray;
-                        $price = Developments::developmentPrice($this->_user, $this->_planet, $building, true, $AddMode);
-                        $BuildTime = Formulas::getTearDownTime(
-                            $price['metal'],
-                            $price['crystal'],
+                        $BuildTime = Developments::tearDownTime(
                             $building,
                             $this->_planet[$resource[BuildingsEnumerator::BUILDING_ROBOT_FACTORY]],
                             $this->_planet[$resource[BuildingsEnumerator::BUILDING_NANO_FACTORY]],
@@ -761,10 +757,7 @@ class Buildings extends Controller
                         $BuildTime = Developments::developmentTime($this->_user, $this->_planet, $building);
                     } else {
                         $BuildLevel = $ActualLevel - 1;
-                        $price = Developments::developmentPrice($this->_user, $this->_planet, $building, true, $AddMode);
-                        $BuildTime = Formulas::getTearDownTime(
-                            $price['metal'],
-                            $price['crystal'],
+                        $BuildTime = Developments::tearDownTime(
                             $building,
                             $this->_planet[$resource[BuildingsEnumerator::BUILDING_ROBOT_FACTORY]],
                             $this->_planet[$resource[BuildingsEnumerator::BUILDING_NANO_FACTORY]],

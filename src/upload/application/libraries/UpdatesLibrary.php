@@ -18,7 +18,6 @@ use application\core\XGPCore;
 use application\helpers\UrlHelper;
 use application\libraries\DevelopmentsLib as Developments;
 use application\libraries\FormatLib as Format;
-use application\libraries\Formulas;
 use application\libraries\FunctionsLib as Functions;
 use application\libraries\MissionControlLibrary;
 use application\libraries\OfficiersLib as Officiers;
@@ -311,9 +310,7 @@ class UpdatesLibrary extends XGPCore
                             $previous_time = $element_data[2];
                             $element_data[2] = Developments::developmentTime($current_user, $current_planet, $element_data[0]);
                             if ($for_destroy) {
-                                $element_data[2] = Formulas::getTearDownTime(
-                                    $price['metal'],
-                                    $price['crystal'],
+                                $element_data[2] = DevelopmentsLib::tearDownTime(
                                     $element_data[0],
                                     $current_planet[$resource[Buildings::BUILDING_ROBOT_FACTORY]],
                                     $current_planet[$resource[Buildings::BUILDING_NANO_FACTORY]],

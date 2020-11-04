@@ -248,6 +248,25 @@ class DevelopmentsLib extends XGPCore
     }
 
     /**
+     * Calculate tear down time
+     *
+     * @param integer $building
+     * @param integer $robotics_factory
+     * @param integer $nanite_factory
+     * @param integer $level
+     * @return float
+     */
+    public static function tearDownTime(int $building, int $robotics_factory, int $nanite_factory, int $level): float
+    {
+        $pricelist = parent::$objects->getPrice();
+
+        $metal_cost = Formulas::getTearDownBaseCost($pricelist[$building]['metal'], $pricelist[$building]['factor'], $level);
+        $crystal_cost = Formulas::getTearDownBaseCost($pricelist[$building]['crystal'], $pricelist[$building]['factor'], $level);
+
+        return Formulas::getTearDownTime($metal_cost, $crystal_cost, $building, $robotics_factory, $nanite_factory, $level);
+    }
+
+    /**
      * formatedDevelopmentTime
      *
      * @param int $time Time
