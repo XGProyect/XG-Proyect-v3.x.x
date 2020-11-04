@@ -213,13 +213,14 @@ class DevelopmentsLib extends XGPCore
             $level = (isset($current_planet[$resource[$element]])) ? $current_planet[$resource[$element]] : $current_user[$resource[$element]];
         }
 
+        $cost_metal = Formulas::getDevelopmentCost($pricelist[$element]['metal'], $pricelist[$element]['factor'], $level);
+        $cost_crystal = Formulas::getDevelopmentCost($pricelist[$element]['crystal'], $pricelist[$element]['factor'], $level);
+
         if (in_array($element, $reslist['build'])) {
-            $cost_metal = Formulas::getDevelopmentCost($pricelist[$element]['metal'], $pricelist[$element]['factor'], $level);
-            $cost_crystal = Formulas::getDevelopmentCost($pricelist[$element]['crystal'], $pricelist[$element]['factor'], $level);
             $time = Formulas::getBuildingTime($cost_metal, $cost_crystal, $element, $current_planet[$resource['14']], $current_planet[$resource['15']], $level);
-        } elseif (in_array($element, $reslist['tech'])) {
-            $cost_metal = Formulas::getDevelopmentCost($pricelist[$element]['metal'], $pricelist[$element]['factor'], $level);
-            $cost_crystal = Formulas::getDevelopmentCost($pricelist[$element]['crystal'], $pricelist[$element]['factor'], $level);
+        }
+
+        if (in_array($element, $reslist['tech'])) {
             $intergal_lab = $current_user[$resource[Research::research_intergalactic_research_network]];
 
             if ($intergal_lab < 1) {
@@ -230,13 +231,15 @@ class DevelopmentsLib extends XGPCore
 
             $time = Formulas::getResearchTime($cost_metal, $cost_crystal, $lablevel, $current_user[$resource[Research::research_astrophysics]]);
             $time = floor($time * (1 - ((OfficiersLib::isOfficierActive($current_user['premium_officier_technocrat'])) ? TECHNOCRATE_SPEED : 0)));
-        } elseif (in_array($element, $reslist['defense']) or in_array($element, $reslist['fleet'])) {
+        }
+
+        if (in_array($element, $reslist['defense']) or in_array($element, $reslist['fleet'])) {
             $time = Formulas::getShipyardProductionTime(
-                $pricelist[$element]['metal'],
-                $pricelist[$element]['crystal'],
+                $cost_metal,
+                $cost_crystal,
                 $element,
-                $current_planet[$resource['21']],
-                $current_planet[$resource['15']]
+                $current_planet[$resource[Buildings::BUILDING_HANGAR]],
+                $current_planet[$resource[Buildings::BUILDING_NANO_FACTORY]]
             );
         }
 

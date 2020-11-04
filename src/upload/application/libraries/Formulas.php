@@ -303,7 +303,7 @@ abstract class Formulas
      */
     public static function getShipyardProductionTime(int $metal_cost, int $cystal_cost, int $ship_defense, int $shipyard_level, int $nanite_factory_level): float
     {
-        return self::getDevelopmentTime($metal_cost, $cystal_cost, $ship_defense, $shipyard_level, $nanite_factory_level);
+        return self::getDevelopmentTime($metal_cost, $cystal_cost, $ship_defense, $shipyard_level, $nanite_factory_level, 0, false);
     }
 
     /**
@@ -335,7 +335,7 @@ abstract class Formulas
     {
         $universe_speed = FunctionsLib::readConfig('game_speed') / 2500;
 
-        return 3600 * ($metal_cost + $cystal_cost) / ($universe_speed * 1000 * (1 + $total_lab_level) * (1 + $expedition_level));
+        return ($metal_cost + $cystal_cost) / ($universe_speed * 1000 * (1 + $total_lab_level) * (1 + $expedition_level)) * 3600;
     }
 
     /**
@@ -347,9 +347,10 @@ abstract class Formulas
      * @param integer $first_boost
      * @param integer $second_boost
      * @param integer $level
+     * @param boolean $reduce
      * @return float
      */
-    private static function getDevelopmentTime(int $metal_cost, int $cystal_cost, int $object, int $first_boost, int $second_boost, int $level = 0): float
+    private static function getDevelopmentTime(int $metal_cost, int $cystal_cost, int $object, int $first_boost, int $second_boost, int $level = 0, bool $reduce = true): float
     {
         $resources_needed = $metal_cost + $cystal_cost;
         $reduction = max(4 - ($level + 1) / 2, 1);
@@ -363,10 +364,10 @@ abstract class Formulas
             Buildings::BUILDING_JUMP_GATE,
         ];
 
-        if (in_array($object, $without_reduction)) {
+        if (in_array($object, $without_reduction) or $reduce == false) {
             $reduction = 1;
         }
 
-        return ($resources_needed / (2500 * $reduction * $robotics * $nanite * $universe_speed) * 3600);
+        return $resources_needed / (2500 * $reduction * $robotics * $nanite * $universe_speed) * 3600;
     }
 }
