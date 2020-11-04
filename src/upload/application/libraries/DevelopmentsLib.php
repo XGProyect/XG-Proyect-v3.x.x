@@ -9,13 +9,13 @@
  */
 namespace application\libraries;
 
+use application\core\enumerators\BuildingsEnumerator as Buildings;
 use application\core\enumerators\ResearchEnumerator as Research;
 use application\core\Template;
 use application\core\XGPCore;
 use application\libraries\DevelopmentsLib;
 use application\libraries\FormatLib;
 use application\libraries\Formulas;
-use application\libraries\FunctionsLib;
 use application\libraries\OfficiersLib;
 
 /**
@@ -220,20 +220,16 @@ class DevelopmentsLib extends XGPCore
         } elseif (in_array($element, $reslist['tech'])) {
             $cost_metal = Formulas::getDevelopmentCost($pricelist[$element]['metal'], $pricelist[$element]['factor'], $level);
             $cost_crystal = Formulas::getDevelopmentCost($pricelist[$element]['crystal'], $pricelist[$element]['factor'], $level);
-            $intergal_lab = $current_user[$resource[123]];
+            $intergal_lab = $current_user[$resource[Research::research_intergalactic_research_network]];
 
             if ($intergal_lab < 1) {
-                $lablevel = $current_planet[$resource['31']];
+                $lablevel = $current_planet[$resource[Buildings::BUILDING_LABORATORY]];
             } else {
                 $lablevel = $total_lab_level;
             }
 
-            $time = (($cost_metal + $cost_crystal) / FunctionsLib::readConfig('game_speed')) / (($lablevel + 1) * 2);
-            $time = floor(
-                ($time * 3600) * (1 - ((OfficiersLib::isOfficierActive(
-                    $current_user['premium_officier_technocrat']
-                )) ? TECHNOCRATE_SPEED : 0))
-            );
+            $time = Formulas::getResearchTime($cost_metal, $cost_crystal, $lablevel, $current_user[$resource[Research::research_astrophysics]]);
+            $time = floor($time * (1 - ((OfficiersLib::isOfficierActive($current_user['premium_officier_technocrat'])) ? TECHNOCRATE_SPEED : 0)));
         } elseif (in_array($element, $reslist['defense']) or in_array($element, $reslist['fleet'])) {
             $time = Formulas::getShipyardProductionTime(
                 $pricelist[$element]['metal'],

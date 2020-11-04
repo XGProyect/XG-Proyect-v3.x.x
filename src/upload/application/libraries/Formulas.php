@@ -323,6 +323,22 @@ abstract class Formulas
     }
 
     /**
+     * Get research time
+     *
+     * @param integer $metal_cost
+     * @param integer $cystal_cost
+     * @param integer $total_lab_level
+     * @param integer $expedition_level
+     * @return float
+     */
+    public static function getResearchTime(int $metal_cost, int $cystal_cost, int $total_lab_level, int $expedition_level): float
+    {
+        $universe_speed = FunctionsLib::readConfig('game_speed') / 2500;
+
+        return 3600 * ($metal_cost + $cystal_cost) / ($universe_speed * 1000 * (1 + $total_lab_level) * (1 + $expedition_level));
+    }
+
+    /**
      * Get the time to develop something
      *
      * @param integer $metal_cost

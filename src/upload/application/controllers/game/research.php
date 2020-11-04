@@ -22,14 +22,31 @@ use application\libraries\FunctionsLib;
  */
 class Research extends Controller
 {
-
     const MODULE_ID = 6;
 
+    /**
+     * @var mixed
+     */
     private $_current_user;
+    /**
+     * @var mixed
+     */
     private $_current_planet;
+    /**
+     * @var mixed
+     */
     private $_resource;
+    /**
+     * @var mixed
+     */
     private $_reslist;
+    /**
+     * @var mixed
+     */
     private $_is_working;
+    /**
+     * @var mixed
+     */
     private $_lab_level;
 
     /**
@@ -156,14 +173,11 @@ class Research extends Controller
             $technology = (int) $_GET['tech'];
 
             if (in_array($technology, $this->_reslist['tech'])) {
-
                 $update_data = false;
 
                 if (is_array($this->_is_working['working_on'])) {
-
                     $working_planet = $this->_is_working['working_on'];
                 } else {
-
                     $working_planet = $this->_current_planet;
                 }
 
@@ -190,7 +204,6 @@ class Research extends Controller
                     case 'search':
 
                         if (DevelopmentsLib::isDevelopmentAllowed($this->_current_user, $working_planet, $technology) && DevelopmentsLib::isDevelopmentPayable($this->_current_user, $working_planet, $technology) && !parent::$users->isOnVacations($this->_current_user)) {
-
                             $costs = DevelopmentsLib::developmentPrice(
                                 $this->_current_user, $working_planet, $technology
                             );
@@ -250,7 +263,6 @@ class Research extends Controller
                 $queue = explode(';', $current_queue);
 
                 for ($i = 0; $i < MAX_BUILDING_QUEUE_SIZE; $i++) {
-
                     if (isset($queue[$i])) {
                         $element_data = explode(",", $queue[$i]);
                         $element_id = $element_data[0];

@@ -1,13 +1,11 @@
 <?php
 /**
- * Format Library
+ * FormatLib.php
  *
- * @category Library
- * @package  Application
  * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
+ * @license  https://www.xgproyect.org XG Proyect
+ * @link     https://www.xgproyect.org
+ * @version  3.2.0
  */
 namespace application\libraries;
 
@@ -15,48 +13,47 @@ use application\core\enumerators\ImportanceEnumerator as Importance;
 use application\helpers\UrlHelper;
 
 /**
- * FormatLib Class
- *
- * @category Classes
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
+ * FormatLib class
  */
 class FormatLib
 {
     /**
-     * prettyTime
+     * Convert or format a time in seconds to its string representation. Ex.: weeks, days, hours, minutes, seconds
      *
-     * @param int $inputSeconds
+     * @param int $input_seconds
      *
      * @return string
      */
-    public static function prettyTime($inputSeconds)
+    public static function prettyTime(int $input_seconds): string
     {
-        $secondsInAMinute = 60;
-        $secondsInAnHour = 60 * $secondsInAMinute;
-        $secondsInADay = 24 * $secondsInAnHour;
+        $sec_min = 60;
+        $sec_hour = 60 * $sec_min;
+        $sec_day = 24 * $sec_hour;
+        $sec_week = 7 * $sec_day;
+
+        // Extract weeks
+        $weeks = floor($input_seconds / $sec_week);
 
         // Extract days
-        $days = floor($inputSeconds / $secondsInADay);
+        $daysSeconds = $input_seconds % $sec_week;
+        $days = floor($daysSeconds / $sec_day);
 
         // Extract hours
-        $hourSeconds = $inputSeconds % $secondsInADay;
-        $hours = floor($hourSeconds / $secondsInAnHour);
+        $hourSeconds = $input_seconds % $sec_day;
+        $hours = floor($hourSeconds / $sec_hour);
 
         // Extract minutes
-        $minuteSeconds = $hourSeconds % $secondsInAnHour;
-        $minutes = floor($minuteSeconds / $secondsInAMinute);
+        $minuteSeconds = $hourSeconds % $sec_hour;
+        $minutes = floor($minuteSeconds / $sec_min);
 
         // Extract the remaining seconds
-        $remainingSeconds = $minuteSeconds % $secondsInAMinute;
+        $remainingSeconds = $minuteSeconds % $sec_min;
         $seconds = ceil($remainingSeconds);
 
         // Format and return
         $timeParts = [];
         $sections = [
+            'w' => (int) $weeks,
             'd' => (int) $days,
             'h' => (int) $hours,
             'm' => (int) $minutes,
@@ -513,5 +510,3 @@ class FormatLib
         ];
     }
 }
-
-/* end of FormatLib.php */
