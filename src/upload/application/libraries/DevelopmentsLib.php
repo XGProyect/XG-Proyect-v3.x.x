@@ -72,17 +72,16 @@ class DevelopmentsLib extends XGPCore
     }
 
     /**
-     * developmentPrice
+     * Get the development price
      *
-     * @param array   $current_user   Current user
-     * @param array   $current_planet Current planet
-     * @param string  $element        Element
-     * @param boolean $incremental    Incremental
-     * @param boolean $destroy        Destroy
-     *
-     * @return int
+     * @param array $current_user
+     * @param array $current_planet
+     * @param integer $element
+     * @param boolean $incremental
+     * @param boolean $destroy
+     * @return void
      */
-    public static function developmentPrice($current_user, $current_planet, $element, $incremental = true, $destroy = false)
+    public static function developmentPrice(array $current_user, array $current_planet, int $element, $incremental = true, $destroy = false)
     {
         $resource = parent::$objects->getObjects();
         $pricelist = parent::$objects->getPrice();
@@ -91,19 +90,17 @@ class DevelopmentsLib extends XGPCore
             $level = (isset($current_planet[$resource[$element]])) ? $current_planet[$resource[$element]] : $current_user[$resource[$element]];
         }
 
-        $array = ['metal', 'crystal', 'deuterium', 'energy_max'];
-
-        foreach ($array as $res_type) {
-            if (isset($pricelist[$element][$res_type])) {
+        foreach (['metal', 'crystal', 'deuterium', 'energy_max'] as $type) {
+            if (isset($pricelist[$element][$type])) {
                 if ($incremental) {
-                    $cost[$res_type] = Formulas::getDevelopmentCost($pricelist[$element][$res_type], $pricelist[$element]['factor'], $level);
+                    $cost[$type] = Formulas::getDevelopmentCost($pricelist[$element][$type], $pricelist[$element]['factor'], $level);
                 } else {
-                    $cost[$res_type] = floor($pricelist[$element][$res_type]);
+                    $cost[$type] = floor($pricelist[$element][$type]);
                 }
 
                 if ($destroy == true) {
-                    $cost[$res_type] = Formulas::getTearDownCost(
-                        $pricelist[$element][$res_type],
+                    $cost[$type] = Formulas::getTearDownCost(
+                        $pricelist[$element][$type],
                         $pricelist[$element]['factor'],
                         $level,
                         $current_user[$resource[Research::research_ionic_technology]]
