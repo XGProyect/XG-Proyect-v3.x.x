@@ -1,19 +1,18 @@
 <?php
 /**
- * Template Library
+ * Page.php
  *
- * @category Library
- * @package  Application
  * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
+ * @license  https://www.xgproyect.org XG Proyect
+ * @link     https://www.xgproyect.org
+ * @version  3.2.0
  */
 namespace application\libraries;
 
 use application\core\Database;
 use application\core\enumerators\PlanetTypesEnumerator;
 use application\core\Language;
+use application\core\Objects;
 use application\core\Template;
 use application\helpers\UrlHelper;
 use application\libraries\FormatLib;
@@ -23,15 +22,39 @@ use application\libraries\ProductionLib as Production;
 use application\libraries\TimingLibrary as Timing;
 
 /**
- * TemplateLib Class
+ * Page Class
  */
-class TemplateLib
+class Page
 {
+    /**
+     * @var array
+     */
     private $current_user;
+
+    /**
+     * @var array
+     */
     private $current_planet;
-    private $langs;
+
+    /**
+     * @var int
+     */
     private $current_year;
+
+    /**
+     * @var \Template
+     */
     private $template;
+
+    /**
+     * @var \Language
+     */
+    private $langs;
+
+    /**
+     * @var \Objects
+     */
+    private $objects;
 
     /**
      * Constructor
@@ -46,6 +69,7 @@ class TemplateLib
 
         $this->setTemplate();
         $this->setLanguage();
+        $this->setObjects();
     }
 
     /**
@@ -66,6 +90,16 @@ class TemplateLib
     private function setLanguage(): void
     {
         $this->langs = new Language;
+    }
+
+    /**
+     * Set objects object
+     *
+     * @return void
+     */
+    private function setObjects(): void
+    {
+        $this->objects = new Objects();
     }
 
     /**
@@ -216,7 +250,7 @@ class TemplateLib
         $current_page = isset($_GET['page']) ? $_GET['page'] : null;
         $items = '';
         $flag = '';
-        $pages = array(
+        $pages = [
             ['server', '2'],
             ['modules', '2'],
             ['planets', '2'],
@@ -242,7 +276,7 @@ class TemplateLib
             ['migrate', '5'],
             ['repair', '6'],
             ['reset', '6'],
-        );
+        ];
         $active_block = 1;
 
         // BUILD THE MENU
@@ -382,9 +416,9 @@ class TemplateLib
         $items = '';
 
         $pages = [
-            0 => array('installation', $langs['ins_overview'], 'overview'),
-            1 => array('installation', $langs['ins_license'], 'license'),
-            2 => array('installation', $langs['ins_install'], 'step1'),
+            0 => ['installation', $langs['ins_overview'], 'overview'],
+            1 => ['installation', $langs['ins_license'], 'license'],
+            2 => ['installation', $langs['ins_install'], 'step1'],
         ];
 
         // BUILD THE MENU
@@ -476,7 +510,6 @@ class TemplateLib
     {
         $lang = $this->langs->loadLang(['game/global', 'game/navigation'], true);
 
-        $parse = $lang->language;
         $parse['dpath'] = DPATH;
         $parse['image'] = $this->current_planet['planet_image'];
         $parse['planetlist'] = $this->buildPlanetList();
@@ -515,13 +548,6 @@ class TemplateLib
             $this->current_planet['planet_energy_max'] + $this->current_planet['planet_energy_used']
         ) . "/" . FormatLib::prettyNumber($this->current_planet['planet_energy_max']);
 
-        // OFFICERS AVAILABILITY
-        $commander = OfficiersLib::isOfficierActive($this->current_user['premium_officier_commander']) ? '' : '_un';
-        $admiral = OfficiersLib::isOfficierActive($this->current_user['premium_officier_admiral']) ? '' : '_un';
-        $engineer = OfficiersLib::isOfficierActive($this->current_user['premium_officier_engineer']) ? '' : '_un';
-        $geologist = OfficiersLib::isOfficierActive($this->current_user['premium_officier_geologist']) ? '' : '_un';
-        $technocrat = OfficiersLib::isOfficierActive($this->current_user['premium_officier_technocrat']) ? '' : '_un';
-
         // METAL
         if ($this->current_planet['planet_metal'] >= Production::maxStorable($this->current_planet['building_metal_store'])) {
             $metal = FormatLib::colorRed($metal);
@@ -547,15 +573,14 @@ class TemplateLib
         $parse['re_deuterium'] = $deuterium;
         $parse['re_darkmatter'] = $darkmatter;
         $parse['re_energy'] = $energy;
-        $parse['img_commander'] = $commander;
-        $parse['img_admiral'] = $admiral;
-        $parse['img_engineer'] = $engineer;
-        $parse['img_geologist'] = $geologist;
-        $parse['img_technocrat'] = $technocrat;
 
         return $this->template->set(
             'general/topnav',
-            $parse
+            array_merge(
+                $lang->language,
+                $parse,
+                $this->buildOfficersBlock()
+            )
         );
     }
 
@@ -708,6 +733,24 @@ class TemplateLib
     }
 
     /**
+     * Build the officers block for the game topnav
+     *
+     * @return array
+     */
+    private function buildOfficersBlock(): array
+    {
+        $objects = $this->objects->getObjects();
+        $officers = $this->objects->getObjectsList('officier');
+        $list_of_officiers = [];
+
+        foreach ($officers as $officer) {
+            $list_of_officiers['img_' . $objects[$officer]] = OfficiersLib::isOfficierActive($this->current_user[$objects[$officer]]) ? '' : '_un';
+        }
+
+        return $list_of_officiers;
+    }
+
+    /**
      * Build the list of planet
      *
      * @return void
@@ -789,5 +832,3 @@ class TemplateLib
         return $db->query($planets);
     }
 }
-
-/* end of TemplateLib.php */

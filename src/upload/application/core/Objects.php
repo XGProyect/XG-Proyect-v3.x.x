@@ -1,40 +1,63 @@
 <?php
 /**
- * Objects
+ * Objects.php
  *
- * @category Core
- * @package  Application
  * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
+ * @license  https://www.xgproyect.org XG Proyect
+ * @link     https://www.xgproyect.org
+ * @version  3.2.0
  */
 namespace application\core;
 
 /**
  * Objects Class
- *
- * @category Classes
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
  */
 class Objects
 {
-
+    /**
+     * Contains an array with resources
+     *
+     * @var array
+     */
     private $objects;
+
+    /**
+     * Contains an array with requirements
+     *
+     * @var array
+     */
     private $relations;
+
+    /**
+     * Contains an array with the price list
+     *
+     * @var array
+     */
     private $price;
+
+    /**
+     * Contains an array with the combat specs
+     *
+     * @var array
+     */
     private $combat_specs;
+
+    /**
+     * Contains an array with the production formulas
+     *
+     * @var array
+     */
     private $production;
+
+    /**
+     * Contains an array with the set of objects by type and related IDs
+     *
+     * @var array
+     */
     private $objects_list;
 
     /**
-     * __construct
-     *
-     * @return void
+     * Constructor
      */
     public function __construct()
     {
@@ -156,5 +179,3 @@ class Objects
         }
     }
 }
-
-/* end of Objects.php */
