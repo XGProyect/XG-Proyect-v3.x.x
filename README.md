@@ -35,8 +35,20 @@ On the other hand, it's a pleasure to see people using XG Proyect.
 
 The following are tools or frameworks that we use to do our coding experience better!
 
-![Codeigniter](https://codeigniter.com/assets/images/ci-logo.png) **Codeigniter**
+<p>
+    <a href="https://codeigniter.com/" rel="nofollow">
+        <img src="https://codeigniter.com/assets/images/ci-logo.png" alt="CodeIgniter" width="75px">
+    </a>
+    <a href="https://getcomposer.org/" rel="nofollow">
+        <img src="https://getcomposer.org/img/logo-composer-transparent2.png" alt="Composer" width="75px">
+    </a>
+    <a href="https://www.phpdoc.org/" rel="nofollow">
+        <img src="https://avatars0.githubusercontent.com/u/1239567?s=400&v=4" alt="PHPDocumentor" width="75px">
+    </a>
+    <a href="https://github.com/llaville/php-compat-info" rel="nofollow">
+        <img src="https://avatars2.githubusercontent.com/u/364342?s=460&v=4" alt="PHP CompatInfo" width="75px">
+    </a>
+</p>
 
-![PHPDocumentor](https://www.phpdoc.org/bundles/phpdocumentorwebsite/images/logo-icon.png) **PHP Documentor**
-
-[**PHP CompatInfo**](https://php5.laurent-laville.org/compatinfo/)
+## License
+The XG Proyect is open-sourced software licensed under the GPL-3.0 License.
