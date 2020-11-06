@@ -1,7 +1,7 @@
 <?php
 $lang = [
-    'ch_version' => 'Version',
-    'ch_description' => 'Description',
+    'ch_version' => 'Versiyon',
+    'ch_description' => 'Açıklama',
 ];
 
 /* end of changelog_lang.php */

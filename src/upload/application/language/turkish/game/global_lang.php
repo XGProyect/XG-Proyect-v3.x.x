@@ -2,44 +2,44 @@
 $lang = [
     // resources
     'metal' => 'Metal',
-    'crystal' => 'Crystal',
+    'crystal' => 'Kristal',
     'deuterium' => 'Deuterium',
-    'dark_matter' => 'Dark Matter',
-    'energy' => 'Energy',
+    'dark_matter' => 'Karanlık Madde',
+    'energy' => 'Enerji',
 
     // types of planets or galaxy objects
     'planet_type' => [
-        1 => 'Planet',
-        2 => 'Debris',
-        3 => 'Moon',
+        1 => 'Gezegen',
+        2 => 'Harabe Alanı',
+        3 => 'Ay',
     ],
 
     // shortcuts
-    'dark_matter_short' => 'DM',
+    'dark_matter_short' => 'KM',
     'planet_type_short' => [
-        1 => '(P)',
-        2 => '(D)',
-        3 => '(M)',
+        1 => '(G)',
+        2 => '(HA)',
+        3 => '(A)',
     ],
 
     // galaxy objects
-    'planet' => 'Planet',
-    'colony' => 'Colony',
-    'moon' => 'Moon',
+    'planet' => 'Gezegen',
+    'colony' => 'Sömürge',
+    'moon' => 'Ay',
 
     // other
-    'write_message' => 'Write Message',
-    'homeworld' => 'Homeworld',
-    'module_not_accesible' => 'Page could not be found.',
-    'level' => 'Level ',
+    'write_message' => 'Mesaj Yaz',
+    'homeworld' => 'Ana Gezegen',
+    'module_not_accesible' => 'Sayfa bulunamadı.',
+    'level' => 'Kademe ',
 
     // banning
-    'bg_account_banned_message' => 'YOUR ACCOUNT HAS BEEN SUSPENDED',
-    'bg_account_banned_expire' => 'Expiration:',
+    'bg_account_banned_message' => 'HESABINIZ ASKIYA ALINDI',
+    'bg_account_banned_expire' => 'Bitiş Tarihi:',
 
     // online status
     'online' => 'Online',
-    'minutes' => '15 min',
+    'minutes' => '15 dk',
     'offline' => 'Offline',
 ];
 

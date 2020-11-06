@@ -1,14 +1,14 @@
 <?php
 $lang = [
-    'pm_subject' => 'Subject',
-    'pm_no_text' => 'Message missing',
-    'pm_msg_sended' => 'Message sent',
-    'pm_no_subject' => 'No subject',
-    'pm_to' => 'To',
-    'pm_send_message' => 'Send message',
-    'pm_message' => 'Message',
-    'pm_chars' => 'characters',
-    'pm_send' => 'Send',
+    'pm_subject' => 'Konu',
+    'pm_no_text' => 'Mesaj eksik',
+    'pm_msg_sended' => 'Mesajı gönderildi',
+    'pm_no_subject' => 'Konu yok',
+    'pm_to' => 'Alıcı',
+    'pm_send_message' => 'Mesaj gönder',
+    'pm_message' => 'Mesaj',
+    'pm_chars' => 'karakter',
+    'pm_send' => 'Gönder',
 ];
 
 /* end of chat_lang.php */

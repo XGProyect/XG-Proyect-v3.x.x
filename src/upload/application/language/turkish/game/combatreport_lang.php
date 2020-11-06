@@ -1,23 +1,23 @@
 <?php
 $lang = [
-    'cr_type' => 'Type',
-    'cr_total' => 'Total',
-    'cr_technologies' => 'Weapons: %d%% Shields: %d%% Armour: %d%%', // ok
-    'cr_destroyed' => 'Destroyed!',
-    'cr_no_access' => 'The requested report doesn\'t exists',
+    'cr_type' => 'Tip',
+    'cr_total' => 'Toplam',
+    'cr_technologies' => 'Silahlar: %d%% Kalkanlar: %d%% Zırh: %d%%', // ok
+    'cr_destroyed' => 'Yok Edildi!',
+    'cr_no_access' => 'İstenen rapor mevcut değil',
     'cr_attacker_lostunits' => 'The attacker has lost a total of %s units.',
     'cr_defender_lostunits' => 'The defender has lost a total of %s units.',
-    'cr_fleet_attack_1' => 'The Attacker fires a total of %s shots at the Defender with a total strength of %s.', // ok
-    'cr_fleet_attack_2' => 'The defender\'s shields absorb %s points of damage.', // ok
-    'cr_fleet_defs_1' => 'The Defender fires a total of %s shots at the Attacker with a total strength of %s.', // ok
-    'cr_fleet_defs_2' => 'The attacker\'s shields absorb %s points of damage.', // ok
-    'cr_debris_units' => 'At these space coordinates now float %s metal and %s crystal.',
-    'cr_moonproba' => 'The chance for a moon to arise from the debris is %s %%',
-    'cr_attacker_won' => 'The attacker has won the battle',
-    'cr_defender_won' => 'The defender has won the battle',
-    'cr_both_won' => 'The battle ended in a draw',
-    'cr_stealed_ressources' => 'Total loot: %s metal, %s crystal and %s deuterium.', // ok
-    'cr_moonbuilt' => 'The huge amount of metal and crystal are merging and form a lunar satellite in orbit the planet %s [%d:%d:%d]!',
+    'cr_fleet_attack_1' => 'Saldiran oyuncu, toplam %s kere %s oranındaki toplam güçle Savunan oyuncuya saldırır.', // ok
+    'cr_fleet_attack_2' => ' Savunan oyuncunun kalkanları %s hasar puanı absorbe ediyor.', // ok
+    'cr_fleet_defs_1' => 'Savunan oyuncu, toplam %s kere %s oranındaki toplam güçle Saldiran oyuncuya saldırır.', // ok
+    'cr_fleet_defs_2' => ' Saldıran oyuncunun kalkanları %s hasar puanı absorbe ediyor.', // ok
+    'cr_debris_units' => 'Bu uzay kordinatlarında bulunan  %s metal ve %s kristal.',
+    'cr_moonproba' => 'Bir Ayın ortaya çıkma şansı %s %%',
+    'cr_attacker_won' => 'Savaşı saldıran taraf kazandı',
+    'cr_defender_won' => 'Savaşı savunan taraf kazandı',
+    'cr_both_won' => 'Savaşı kazanan olmadı filolar geldikleri gezegene geri dönüyorlar',
+    'cr_stealed_ressources' => 'Toplam ganimet: %s metal, %s kristal ve %s deuterium.', // ok
+    'cr_moonbuilt' => 'Büyük miktarda metal ve kristal birleşiyor ve gezegenin yörüngesinde bir ay uydusu oluşturuyor %s [%d:%d:%d]!',
 ];
 
 /* end of combatreport_lang.php */

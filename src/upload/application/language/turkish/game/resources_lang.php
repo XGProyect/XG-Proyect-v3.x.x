@@ -1,14 +1,14 @@
 <?php
 $lang = [
-    'rs_production_on_planet' => 'Resource settings - %s',
-    'rs_basic_income' => 'Basic Income',
-    'rs_lvl' => 'Level',
-    'rs_amount' => 'Number: ',
-    'rs_storage_capacity' => 'Storage capacity',
-    'rs_sum' => 'Total per hour:',
-    'rs_daily' => 'Total per day:',
-    'rs_weekly' => 'Total per week:',
-    'rs_calculate' => 'Recalculate',
+    'rs_production_on_planet' => 'Üretim faktörü - %s',
+    'rs_basic_income' => 'Ana gelir',
+    'rs_lvl' => 'Kademe',
+    'rs_amount' => 'Adet: ',
+    'rs_storage_capacity' => 'Depo kapasitesi',
+    'rs_sum' => 'Saatlik toplam:',
+    'rs_daily' => 'Günlük toplam:',
+    'rs_weekly' => 'Haftalık toplam:',
+    'rs_calculate' => 'Tekrar Hesapla',
 ];
 
 /* end of resources_lang.php */

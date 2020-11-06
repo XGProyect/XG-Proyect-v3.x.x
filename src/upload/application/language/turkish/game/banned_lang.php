@@ -1,13 +1,13 @@
 <?php
 $lang = [
-    'bn_no_players_banned' => 'No banned players',
-    'bn_exists_players_banned' => 'Exists %s player/s banned/s',
-    'bn_players_banned_list' => 'List of banned players',
-    'bn_player' => 'Player',
-    'bn_reason' => 'Reason',
-    'bn_from' => 'From',
-    'bn_until' => 'Until',
-    'bn_by' => 'By',
+    'bn_no_players_banned' => 'Cezalı oyuncu bulunmamaktadır',
+    'bn_exists_players_banned' => '%s oyuncu(lar) cezalı(lar)',
+    'bn_players_banned_list' => 'Cezalı oyuncuların listesi',
+    'bn_player' => 'Oyuncu',
+    'bn_reason' => 'Sebep',
+    'bn_from' => 'Başlangıç',
+    'bn_until' => 'Bitiş',
+    'bn_by' => 'Yönetici',
 ];
 
 /* end of banned_lang.php */
