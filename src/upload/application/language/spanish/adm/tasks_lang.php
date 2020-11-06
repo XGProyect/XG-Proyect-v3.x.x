@@ -13,5 +13,3 @@ $lang = [
     'ta_buildstats_title' => 'Regenerar estadísticas',
     'ta_backup_title' => 'Configura y ejecuta la tarea de resguardo de datos',
 ];
-
-/* end of tasks_lang.php */

@@ -317,6 +317,10 @@ class Maker extends Model
         }
     }
 
+    /**
+     * @param int $planet_id
+     * @return mixed
+     */
     public function checkMoon(int $planet_id): array
     {
         return $this->db->queryFetch(
@@ -376,5 +380,3 @@ class Maker extends Model
         $creator->setNewMoon($galaxy, $system, $planet, $owner, $moon_name, 0, $size, $max_fields, $mintemp, $maxtemp);
     }
 }
-
-/* end of maker.php */

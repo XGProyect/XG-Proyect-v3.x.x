@@ -20,7 +20,6 @@ use application\libraries\FunctionsLib;
  */
 class Techtree extends Controller
 {
-
     const MODULE_ID = 10;
 
     /**
@@ -148,14 +147,12 @@ class Techtree extends Controller
         }
 
         foreach ($this->_requirements[$object] as $requirement => $level) {
-
             $color = 'Red';
 
             if ((isset($this->_user[$this->_resource[$requirement]])
                 && $this->_user[$this->_resource[$requirement]] >= $level)
                 or (isset($this->_planet[$this->_resource[$requirement]])
                     && $this->_planet[$this->_resource[$requirement]] >= $level)) {
-
                 $color = 'Green';
             }
 
@@ -170,5 +167,3 @@ class Techtree extends Controller
         return $list_of_requirements;
     }
 }
-
-/* end of techtree.php */

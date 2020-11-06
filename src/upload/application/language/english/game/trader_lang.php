@@ -48,5 +48,3 @@ $lang = [
 
     // traderImportExport
 ];
-
-/* end of trader_lang.php */

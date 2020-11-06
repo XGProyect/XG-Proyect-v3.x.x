@@ -23,13 +23,37 @@ use application\libraries\FunctionsLib;
  */
 class Alliances extends Controller
 {
+    /**
+     * @var mixed
+     */
     private $_edit;
+    /**
+     * @var mixed
+     */
     private $_planet;
+    /**
+     * @var mixed
+     */
     private $_moon;
+    /**
+     * @var mixed
+     */
     private $_id;
+    /**
+     * @var mixed
+     */
     private $_alert_info;
+    /**
+     * @var mixed
+     */
     private $_alert_type;
+    /**
+     * @var mixed
+     */
     private $_user_query;
+    /**
+     * @var mixed
+     */
     private $_current_user;
 
     /**
@@ -491,5 +515,3 @@ class Alliances extends Controller
         return false;
     }
 }
-
-/* end of alliances.php */

@@ -25,7 +25,6 @@ use Exception;
  */
 class Entity
 {
-
     /**
      *
      * @var array
@@ -66,4 +65,3 @@ class Entity
         }
     }
 }
-/* end of Entity.php */

@@ -238,4 +238,3 @@ class Common
         new UpdatesLibrary;
     }
 }
-/* end of common.php */

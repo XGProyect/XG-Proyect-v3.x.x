@@ -25,7 +25,6 @@ use Exception;
  */
 class ShipsEntity
 {
-
     /**
      *
      * @var array
@@ -56,15 +55,12 @@ class ShipsEntity
     private function setShips($ships)
     {
         try {
-
             if (!is_array($ships)) {
-
                 return null;
             }
 
             $this->_ships = $ships;
         } catch (Exception $e) {
-
             die('Caught exception: ' . $e->getMessage() . "\n");
         }
     }
@@ -229,5 +225,3 @@ class ShipsEntity
         return $this->_ships['ship_battlecruiser'];
     }
 }
-
-/* end of ShipsEntity.php */

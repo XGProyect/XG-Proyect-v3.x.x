@@ -4,5 +4,3 @@ $lang = [
     'rec_report_from' => 'Fleet', // ok
     'rec_result' => 'Your Recycler (%s ships) have a total stowage capacity of %s. At the target %s, %s Metal and %s Crystal are floating in space. You have harvested %s Metal and %s Crystal.', // ok
 ];
-
-/* end of recycle_lang.php */

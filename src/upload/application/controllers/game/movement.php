@@ -28,7 +28,6 @@ use application\libraries\TimingLibrary as Timing;
  */
 class Movement extends Controller
 {
-
     /**
      *
      * @var int
@@ -329,5 +328,3 @@ class Movement extends Controller
         }
     }
 }
-
-/* end of movement.php */

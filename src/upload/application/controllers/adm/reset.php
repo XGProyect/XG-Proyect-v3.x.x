@@ -201,5 +201,3 @@ class Reset extends Controller
         );
     }
 }
-
-/* end of reset.php */

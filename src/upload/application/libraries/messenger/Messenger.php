@@ -25,7 +25,6 @@ use application\core\XGPCore;
  */
 final class Messenger extends XGPCore
 {
-
     /**
      * Constructor
      */
@@ -47,5 +46,3 @@ final class Messenger extends XGPCore
         $this->Messenger_Model->insertMessage($options);
     }
 }
-
-/* end of Messenger.php */

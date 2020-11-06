@@ -38,5 +38,3 @@ abstract class ShipsEnumerator
     const ship_deathstar = 214;
     const ship_battlecruiser = 215;
 }
-
-/* end of ShipsEnumerator.php */

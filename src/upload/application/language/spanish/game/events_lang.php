@@ -27,5 +27,3 @@ $lang = [
     'ev_comming_back' => ' vuelve ',
     'ev_fleet' => ' flotas',
 ];
-
-/* end of events_lang.php */

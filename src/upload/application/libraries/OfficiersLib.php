@@ -23,7 +23,6 @@ namespace application\libraries;
  */
 class OfficiersLib
 {
-
     /**
      * isOfficierActive
      *
@@ -62,5 +61,3 @@ class OfficiersLib
         return 1 + $computer_tech + (1 * (self::isOfficierActive($amiral_level) ? AMIRAL : 0));
     }
 }
-
-/* end of OfficiersLib.php */

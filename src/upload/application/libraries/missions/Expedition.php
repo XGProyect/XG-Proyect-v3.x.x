@@ -20,7 +20,6 @@ use application\libraries\FunctionsLib;
  */
 class Expedition extends Missions
 {
-
     /**
      * The amount of hazard for an expedition
      *
@@ -341,5 +340,3 @@ class Expedition extends Missions
         );
     }
 }
-
-/* end of expedition.php */

@@ -204,5 +204,3 @@ class Transport extends Missions
         );
     }
 }
-
-/* end of transport.php */

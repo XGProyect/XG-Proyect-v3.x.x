@@ -71,5 +71,3 @@ abstract class AdminPagesEnumerator
         'reset',
     ];
 }
-
-/* end of AdminPagesEnumerator.php */

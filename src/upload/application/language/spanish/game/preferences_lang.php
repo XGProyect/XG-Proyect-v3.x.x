@@ -47,5 +47,3 @@ $lang = [
     'pr_error_email_in_use' => '¡Este correo electrónico ya está en uso!',
     'pr_delete_mode_active' => 'Esta cuenta será eliminada el %s',
 ];
-
-/* end of preferences_lang.php */

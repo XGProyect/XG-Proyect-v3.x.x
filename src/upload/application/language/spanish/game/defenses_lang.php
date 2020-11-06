@@ -13,5 +13,3 @@ $lang = [
     'defense_anti-ballistic_missile' => 'Misiles antibalísticos',
     'defense_interplanetary_missile' => 'Misil interplanetario',
 ];
-
-/* end of defenses_lang.php */

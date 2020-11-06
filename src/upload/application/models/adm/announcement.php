@@ -34,5 +34,3 @@ class Announcement extends Model
         );
     }
 }
-
-/* end of announcement.php */

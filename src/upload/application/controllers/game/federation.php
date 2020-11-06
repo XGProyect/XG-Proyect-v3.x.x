@@ -22,7 +22,6 @@ use application\libraries\game\Fleets;
  */
 class Federation extends Controller
 {
-
     /**
      *
      * @var int
@@ -368,11 +367,8 @@ class Federation extends Controller
         );
 
         if (count($buddies) > 0) {
-
             foreach ($buddies as $buddy) {
-
                 if ($buddy['user_id'] != $this->_user['user_id']) {
-
                     $list_of_buddies[] = [
                         'value' => $buddy['user_id'],
                         'title' => $buddy['user_name'],
@@ -411,5 +407,3 @@ class Federation extends Controller
         return $list_of_members;
     }
 }
-
-/* end of federation.php */

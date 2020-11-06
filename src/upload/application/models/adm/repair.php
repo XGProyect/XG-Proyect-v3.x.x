@@ -72,5 +72,3 @@ class Repair extends Model
         $this->db->query('REPAIR TABLE ' . $table);
     }
 }
-
-/* end of repair.php */

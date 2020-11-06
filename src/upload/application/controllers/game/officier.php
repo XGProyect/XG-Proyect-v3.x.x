@@ -226,6 +226,8 @@ class Officier extends Controller
      * Get the officier time left
      *
      * @param int $item_id
+     *
+     * @return string
      */
     private function getOfficierTimeLeft(int $item_id): string
     {

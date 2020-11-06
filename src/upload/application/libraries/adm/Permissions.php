@@ -243,5 +243,3 @@ class Permissions
         return $this->permissions;
     }
 }
-
-/* end of permissions.php */

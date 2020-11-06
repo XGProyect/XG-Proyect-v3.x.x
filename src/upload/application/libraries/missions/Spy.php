@@ -353,5 +353,3 @@ class Spy extends Missions
         );
     }
 }
-
-/* end of spy.php */

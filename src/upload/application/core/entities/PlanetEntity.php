@@ -25,7 +25,6 @@ use application\core\Entity;
  */
 class PlanetEntity extends Entity
 {
-
     /**
      * Constructor
      *
@@ -428,5 +427,3 @@ class PlanetEntity extends Entity
         return (int) $this->data['planet_invisible_start_time'];
     }
 }
-
-/* end of PlanetEntity.php */

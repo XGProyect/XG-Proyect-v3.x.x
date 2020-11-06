@@ -42,5 +42,3 @@ class Messenger extends Model
         );
     }
 }
-
-/* end of messenger.php */

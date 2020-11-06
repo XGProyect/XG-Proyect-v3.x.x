@@ -82,5 +82,3 @@ $lang = [
     'exp_found_goods' => 'The fleet has discovered an unmanned spacecraft! <br> His scouts have recovered %s de %s, %s de %s, %s de %s y %s de %s.',
     'exp_back_home' => 'Your expedition returned to the hangar.',
 ];
-
-/* end of expedition_lang.php */

@@ -47,5 +47,3 @@ class Media extends Controller
         );
     }
 }
-
-/* end of media.php */

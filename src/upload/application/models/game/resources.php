@@ -38,5 +38,3 @@ class Resources extends Model
         );
     }
 }
-
-/* end of resources.php */

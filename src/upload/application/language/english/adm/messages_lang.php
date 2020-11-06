@@ -30,5 +30,3 @@ $lang = [
         5 => 'Other messages',
     ],
 ];
-
-/* end of messages_lang.php */

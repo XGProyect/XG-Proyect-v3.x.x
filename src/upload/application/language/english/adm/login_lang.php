@@ -6,5 +6,3 @@ $lang = [
     'lg_login' => 'Login',
     'lg_error_wrong_data' => 'The email address or password are invalid.',
 ];
-
-/* end of login_lang.php */

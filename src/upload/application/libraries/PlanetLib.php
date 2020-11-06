@@ -173,5 +173,3 @@ class PlanetLib extends XGPCore
         $this->langs = $lang;
     }
 }
-
-/* end of PlanetLib.php */

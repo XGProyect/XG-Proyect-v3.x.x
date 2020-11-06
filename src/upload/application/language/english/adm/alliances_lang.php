@@ -63,5 +63,3 @@ $lang = [
     'al_rank_not_defined' => 'N/A',
     'al_cant_delete_last_one' => 'You can\'t delete the last member of the alliance',
 ];
-
-/* end of alliances_lang.php */

@@ -134,5 +134,3 @@ class Combatreport extends Controller
         return $content;
     }
 }
-
-/* end of combatreport.php */

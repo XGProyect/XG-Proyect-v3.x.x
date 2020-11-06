@@ -35,5 +35,3 @@ if (file_exists($file_name)) {
 
     new $class_name();
 }
-
-/* end of index.php */

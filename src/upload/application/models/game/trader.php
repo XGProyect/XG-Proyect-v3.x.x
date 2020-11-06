@@ -39,5 +39,3 @@ class Trader extends Model
         );
     }
 }
-
-/* end of trader.php */

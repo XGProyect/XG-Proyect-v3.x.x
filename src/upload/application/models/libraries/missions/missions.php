@@ -1011,5 +1011,3 @@ class Missions extends Model
         }
     }
 }
-
-/* end of missions.php */

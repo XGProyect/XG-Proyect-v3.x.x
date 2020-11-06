@@ -6,5 +6,3 @@ $lang = [
     'tra_incoming_title' => 'Entrega de recursos por flota ajena', // ok
     'tra_incoming_delivery' => 'Una flota de %s (%s %s) entrega recursos a %s %s : <br>Metal:%s Cristal:%s Deuterio:%s <br>Hasta ahora tenías: Metal:%s Cristal:%s Deuterio:%s<br>Ahora tienes: Metal:%s Cristal:%s Deuterio:%s', // ok
 ];
-
-/* end of transport_lang.php */

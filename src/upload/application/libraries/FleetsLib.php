@@ -672,5 +672,3 @@ class FleetsLib extends XGPCore
         return $lang->loadLang($required_lang, true);
     }
 }
-
-/* end of FleetsLib.php */

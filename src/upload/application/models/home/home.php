@@ -72,5 +72,3 @@ class Home extends Model
         );
     }
 }
-
-/* end of home.php */

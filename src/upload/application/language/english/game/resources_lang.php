@@ -10,5 +10,3 @@ $lang = [
     'rs_weekly' => 'Total per week:',
     'rs_calculate' => 'Recalculate',
 ];
-
-/* end of resources_lang.php */

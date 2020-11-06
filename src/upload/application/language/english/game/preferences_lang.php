@@ -47,5 +47,3 @@ $lang = [
     'pr_error_email_in_use' => 'Ingame email already in use!',
     'pr_delete_mode_active' => 'This account will be deleted on %s',
 ];
-
-/* end of preferences_lang.php */

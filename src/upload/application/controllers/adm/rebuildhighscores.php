@@ -105,7 +105,6 @@ class RebuildHighscores extends Controller
      */
     private function getStatisticsResult(): array
     {
-
         return [
             'memory_p' => strtr('%i / %m', [
                 '%i' => Format::prettyBytes($this->result['memory_peak'][0]),
@@ -126,5 +125,3 @@ class RebuildHighscores extends Controller
         ];
     }
 }
-
-/* end of rebuildhighscores.php */

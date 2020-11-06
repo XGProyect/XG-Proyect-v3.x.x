@@ -27,5 +27,3 @@ abstract class ImportanceEnumerator
     const normal = 1;
     const important = 2;
 }
-
-/* end of ImportanceEnumerator.php */

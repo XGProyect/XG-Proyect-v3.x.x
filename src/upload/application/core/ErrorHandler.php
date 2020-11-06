@@ -93,5 +93,3 @@ final class ErrorHandler
         }
     }
 }
-
-/* end of ErrorHandler.php */

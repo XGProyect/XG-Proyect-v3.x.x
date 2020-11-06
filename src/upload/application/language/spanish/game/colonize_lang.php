@@ -7,5 +7,3 @@ $lang = [
     'col_report_from' => 'Colonización',
     'col_report_title' => 'Reporte de colonización',
 ];
-
-/* end of colonize_lang.php */

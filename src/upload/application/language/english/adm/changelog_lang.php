@@ -21,5 +21,3 @@ $lang = [
     'ch_action_edit_done' => 'Entry successfully edited!',
     'ch_action_delete_done' => 'Entry successfully deleted!',
 ];
-
-/* end of changelog_lang.php */

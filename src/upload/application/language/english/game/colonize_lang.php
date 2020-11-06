@@ -7,5 +7,3 @@ $lang = [
     'col_report_from' => 'Settlers', // ok
     'col_report_title' => 'Settlement Report', // ok
 ];
-
-/* end of colonize_lang.php */

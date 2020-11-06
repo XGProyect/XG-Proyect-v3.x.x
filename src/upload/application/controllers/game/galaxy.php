@@ -668,5 +668,3 @@ class Galaxy extends Controller
         die($ResultMessage);
     }
 }
-
-/* end of galaxy.php */

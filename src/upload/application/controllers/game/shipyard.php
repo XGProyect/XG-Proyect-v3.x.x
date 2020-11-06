@@ -807,5 +807,3 @@ class Shipyard extends Controller
         return $array_queue;
     }
 }
-
-/* end of shipyard.php */

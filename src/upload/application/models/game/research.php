@@ -85,5 +85,3 @@ class Research extends Model
         )['total_level'];
     }
 }
-
-/* end of research.php */

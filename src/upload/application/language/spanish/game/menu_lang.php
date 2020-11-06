@@ -26,5 +26,3 @@ $lang = [
     'lm_logout' => 'Salir',
     'lm_administration' => 'Administración',
 ];
-
-/* end of menu_lang.php */

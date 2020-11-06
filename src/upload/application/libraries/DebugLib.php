@@ -236,5 +236,3 @@ class DebugLib
         @fclose($fp);
     }
 }
-
-/* end of DebugLib.php */

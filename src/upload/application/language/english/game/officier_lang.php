@@ -38,5 +38,3 @@ $lang = [
         ],
     ],
 ];
-
-/* end of officier_lang.php */

@@ -15,5 +15,3 @@ $lang = [
     'aj_info_credits' => 'Credits',
     'aj_info_images' => 'Pictures',
 ];
-
-/* end of info_lang.php */

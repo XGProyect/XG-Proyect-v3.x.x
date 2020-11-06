@@ -25,7 +25,6 @@ use application\libraries\buildings\QueueElements;
  */
 final class Queue
 {
-
     const QUEUE_SEPARATOR = ';';
     const ITEM_SEPARATOR = ',';
 
@@ -185,7 +184,6 @@ final class Queue
      */
     public function countQueueElements()
     {
-
         if (isset($this->queue)) {
             if (!is_array($this->queue)) {
                 $this->breakDownCurrentQueue();
@@ -197,5 +195,3 @@ final class Queue
         return 0;
     }
 }
-
-/* end of Queue.php */

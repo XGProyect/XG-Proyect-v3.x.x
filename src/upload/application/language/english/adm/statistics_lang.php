@@ -9,5 +9,3 @@ $lang = [
     'cs_save_changes' => 'Save changes',
     'cs_all_ok_message' => 'Changes saved successfully!',
 ];
-
-/* end of statistics_lang.php */

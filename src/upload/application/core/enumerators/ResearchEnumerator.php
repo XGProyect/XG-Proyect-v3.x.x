@@ -40,5 +40,3 @@ abstract class ResearchEnumerator
     const research_astrophysics = 124;
     const research_graviton_technology = 199;
 }
-
-/* end of ResearchEnumerator.php */

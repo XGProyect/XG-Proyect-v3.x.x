@@ -105,5 +105,3 @@ class PremiumEntity extends Entity
         return $this->data['premium_officier_technocrat'];
     }
 }
-
-/* end of PremiumEntity.php */

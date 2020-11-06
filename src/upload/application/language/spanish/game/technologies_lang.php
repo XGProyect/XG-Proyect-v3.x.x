@@ -18,5 +18,3 @@ $lang = [
     'research_astrophysics' => 'Astrofísica',
     'research_graviton_technology' => 'Tecnología de gravitón',
 ];
-
-/* end of technologies_lang.php */

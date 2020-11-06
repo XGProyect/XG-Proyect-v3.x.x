@@ -37,5 +37,3 @@ class Shipyard extends Model
         );
     }
 }
-
-/* end of shipyard.php */

@@ -27,7 +27,6 @@ use JsonException;
  */
 class Shortcuts
 {
-
     /**
      * Contains the shortcuts
      *
@@ -226,5 +225,3 @@ class Shortcuts
         return $shortcut_id;
     }
 }
-
-/* end of Shortcuts.php */

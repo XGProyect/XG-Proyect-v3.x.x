@@ -136,5 +136,3 @@ $lang = [
     'al_leave_alliance' => 'Abandonar la alianza',
     'al_confirm_remove_member' => '¿Estás seguro que deseas expulsar a %s?',
 ];
-
-/* end of alliance_lang.php */

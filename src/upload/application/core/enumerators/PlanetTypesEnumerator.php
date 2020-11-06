@@ -27,5 +27,3 @@ abstract class PlanetTypesEnumerator
     const DEBRIS = 2;
     const MOON = 3;
 }
-
-/* end of PlanetTypesEnumerator.php */

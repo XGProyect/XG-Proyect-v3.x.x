@@ -25,7 +25,6 @@ use application\core\Entity;
  */
 class BuddyEntity extends Entity
 {
-
     /**
      * Constructor
      *
@@ -88,5 +87,3 @@ class BuddyEntity extends Entity
         return $this->data['buddy_request_text'];
     }
 }
-
-/* end of BuddyEntity.php */

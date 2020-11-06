@@ -114,7 +114,6 @@ class Fleetshortcuts extends Controller
             FILTER_CALLBACK,
             [
                 'options' => function ($value) {
-
                     if (in_array($value, ['add', 'edit', 'delete', 'a'])) {
                         return $value;
                     }
@@ -319,7 +318,6 @@ class Fleetshortcuts extends Controller
 
         if (is_array($data)) {
             if (!empty($data['name']) && $data['galaxy'] && $data['system'] && $data['planet'] && $data['type']) {
-
                 $mode = $this->_clean_data['mode'];
                 $action = $this->_clean_data['action'];
 
@@ -334,7 +332,6 @@ class Fleetshortcuts extends Controller
                         $this->_shortcuts->deleteById($action);
                     }
                 } else {
-
                     $this->_shortcuts->addNew(
                         $data['name'], $data['galaxy'], $data['system'], $data['planet'], $data['type']
                     );
@@ -349,5 +346,3 @@ class Fleetshortcuts extends Controller
         }
     }
 }
-
-/* end of fleetshortcuts.php */

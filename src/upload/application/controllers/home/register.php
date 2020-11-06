@@ -275,5 +275,3 @@ class Register extends Controller
         }
     }
 }
-
-/* end of register.php */

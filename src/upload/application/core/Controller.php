@@ -165,5 +165,3 @@ abstract class Controller extends XGPCore
         return $this->template;
     }
 }
-
-/* end of Controller.php */

@@ -486,5 +486,3 @@ class Reset extends Model
         return new PlanetLib();
     }
 }
-
-/* end of reset.php */

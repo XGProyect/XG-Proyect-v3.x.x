@@ -168,5 +168,3 @@ class Tasks extends Controller
         return '';
     }
 }
-
-/* end of tasks.php */

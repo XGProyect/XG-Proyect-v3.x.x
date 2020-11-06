@@ -48,5 +48,3 @@ class Acs extends Missions
         }
     }
 }
-
-/* end of acs.php */

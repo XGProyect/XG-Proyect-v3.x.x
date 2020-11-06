@@ -9,5 +9,3 @@ $lang = [
     'ur_all_ok_message' => '¡Cambios guardados con éxito!',
     'ur_save_parameters' => 'Guardar cambios',
 ];
-
-/* end of registration_lang.php */

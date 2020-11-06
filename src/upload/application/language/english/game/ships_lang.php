@@ -16,5 +16,3 @@ $lang = [
     'ship_deathstar' => 'Deathstar',
     'ship_battlecruiser' => 'Battlecruiser',
 ];
-
-/* end of ships_lang.php */

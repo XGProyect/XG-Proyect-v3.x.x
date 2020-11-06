@@ -25,7 +25,6 @@ use application\core\Entity;
  */
 class AcsFleetEntity extends Entity
 {
-
     /**
      * Constructor
      *
@@ -108,4 +107,3 @@ class AcsFleetEntity extends Entity
         return $this->data['acs_planet_type'];
     }
 }
-/* end of AcsFleetEntity.php */

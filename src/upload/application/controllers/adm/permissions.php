@@ -207,5 +207,3 @@ class Permissions extends Controller
         ];
     }
 }
-
-/* end of permissions.php */

@@ -623,5 +623,3 @@ $queries[] = "INSERT INTO " . DB_NAME . ".`" . PREFERENCES . "`(
                     `db_deaktjava`
                 FROM `{prefix}users`;";
 $queries[] = "TRUNCATE " . DB_NAME . ".`" . SESSIONS . "`;";
-
-/* end of migrate_common.php */

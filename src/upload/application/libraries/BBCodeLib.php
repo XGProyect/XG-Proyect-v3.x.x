@@ -281,5 +281,3 @@ class BBCodeLib
         return '<span style="font-size:' . $size . 'px">' . $title . '</span>';
     }
 }
-
-/* end of BBCodeLib.php */

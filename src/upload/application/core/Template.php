@@ -19,7 +19,6 @@ use Exception;
  */
 class Template
 {
-
     /**
      *
      * @var CI_Parser CodeIgniter Parser Class
@@ -95,5 +94,3 @@ class Template
         $this->parserObject = new CI_Parser();
     }
 }
-
-/* end of Controller.php */

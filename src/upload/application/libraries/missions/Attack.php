@@ -151,7 +151,7 @@ class Attack extends Missions
             }
 
             if (!$defenders->existPlayer($target_userID)) {
-                $player = new Player($target_userID, array($homeFleet));
+                $player = new Player($target_userID, [$homeFleet]);
 
                 $player->setTech(
                     $targetUser['research_weapons_technology'],
@@ -174,7 +174,7 @@ class Attack extends Missions
             //-------------------------------------------------------------------------
             //------------------------------ battle -----------------------------------
             $battle = new Battle($attackers, $defenders);
-            $startBattle = DebugManager::runDebugged(array($battle, 'startBattle'), $errorHandler, $exceptionHandler);
+            $startBattle = DebugManager::runDebugged([$battle, 'startBattle'], $errorHandler, $exceptionHandler);
 
             $startBattle();
             //-------------------------------------------------------------------------
@@ -237,7 +237,7 @@ class Attack extends Missions
     {
         $rf = isset($this->combat_caps[$id]['sd']) ? $this->combat_caps[$id]['sd'] : 0;
         $shield = $this->combat_caps[$id]['shield'];
-        $cost = array($this->pricelist[$id]['metal'], $this->pricelist[$id]['crystal']);
+        $cost = [$this->pricelist[$id]['metal'], $this->pricelist[$id]['crystal']];
         $power = $this->combat_caps[$id]['attack'];
 
         if ($id >= self::SHIP_MIN_ID && $id <= self::SHIP_MAX_ID) {
@@ -299,7 +299,7 @@ class Attack extends Missions
 
         $player_info = $this->Missions_Model->getTechnologiesByUserId($idPlayer);
 
-        $player = new Player($idPlayer, array($fleet));
+        $player = new Player($idPlayer, [$fleet]);
         $player->setTech(
             $player_info['research_weapons_technology'],
             $player_info['research_shielding_technology'],
@@ -528,13 +528,13 @@ class Attack extends Missions
     private function updateAttackers($playerGroupBeforeBattle, $playerGroupAfterBattle, $target_planet)
     {
         $fleetArray = '';
-        $emptyFleets = array();
+        $emptyFleets = [];
         $capacity = $this->getCapacity($playerGroupAfterBattle);
-        $steal = array(
+        $steal = [
             'metal' => 0,
             'crystal' => 0,
             'deuterium' => 0,
-        );
+        ];
 
         foreach ($playerGroupBeforeBattle->getIterator() as $idPlayer => $player) {
             $existPlayer = $playerGroupAfterBattle->existPlayer($idPlayer);
@@ -572,11 +572,11 @@ class Attack extends Missions
                 }
 
                 if ($existFleet) {
-                    $fleetSteal = array(
+                    $fleetSteal = [
                         'metal' => 0,
                         'crystal' => 0,
                         'deuterium' => 0,
-                    );
+                    ];
 
                     if ($playerGroupAfterBattle->battleResult == BATTLE_WIN) {
                         $corrispectiveMetal = $target_planet['planet_metal'] * $fleetCapacity / $capacity;
@@ -633,7 +633,7 @@ class Attack extends Missions
     {
         $Xplayer = $Xfleet = $XshipType = null;
         $fleetArray = '';
-        $emptyFleets = array();
+        $emptyFleets = [];
 
         foreach ($playerGroupBeforeBattle->getIterator() as $idPlayer => $player) {
             $existPlayer = $playerGroupAfterBattle->existPlayer($idPlayer);
@@ -704,11 +704,11 @@ class Attack extends Missions
          * 5. Now fill the rest with crystal
          */
         // Stolen resources
-        $steal = array(
+        $steal = [
             'metal' => 0,
             'crystal' => 0,
             'deuterium' => 0,
-        );
+        ];
 
         // Max resources that can be take
         $metal /= 2;
@@ -785,5 +785,3 @@ class Attack extends Missions
         $this->hyperspace_technology[$user_id] = $level;
     }
 }
-
-/* end of Attack.php */

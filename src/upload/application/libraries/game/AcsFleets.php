@@ -48,7 +48,6 @@ class AcsFleets
     public function __construct($acs, $current_user_id)
     {
         if (is_array($acs)) {
-
             $this->setUp($acs);
             $this->setUserId($current_user_id);
         }
@@ -64,9 +63,7 @@ class AcsFleets
         $list_of_acs = [];
 
         foreach ($this->_acs as $acs) {
-
             if (($acs instanceof AcsFleetEntity)) {
-
                 $list_of_acs[] = $acs;
             }
         }
@@ -94,7 +91,6 @@ class AcsFleets
     private function setUp($acsFleets)
     {
         foreach ($acsFleets as $acs) {
-
             $data = $this->createNewAcsFleetEntity($acs);
 
             $this->_acs[] = $data;
@@ -131,5 +127,3 @@ class AcsFleets
         return new AcsFleetEntity($fleet);
     }
 }
-
-/* end of AcsFleets.php */

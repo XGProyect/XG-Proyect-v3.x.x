@@ -30,5 +30,3 @@ $lang = [
         'research_graviton_technology' => 'A través del disparo de partículas concentradas de gravitón se genera un campo gravitacional artificial con suficiente potencia y poder de atracción para destruir no solo naves, sino lunas enteras.',
     ],
 ];
-
-/* end of research_lang.php */

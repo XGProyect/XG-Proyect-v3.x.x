@@ -135,5 +135,3 @@ class Modules extends Controller
         return $modules_list;
     }
 }
-
-/* end of modules.php */

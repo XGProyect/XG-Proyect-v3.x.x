@@ -217,5 +217,3 @@ class UpdatesLibrary extends Model
         }
     }
 }
-
-/* end of update.php */

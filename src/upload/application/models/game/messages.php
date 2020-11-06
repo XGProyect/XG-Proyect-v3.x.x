@@ -343,5 +343,3 @@ class Messages extends Model
         return null;
     }
 }
-
-/* end of messages.php */

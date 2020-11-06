@@ -22,10 +22,25 @@ use application\libraries\PlanetLib;
  */
 class Installation extends Controller
 {
+    /**
+     * @var mixed
+     */
     private $host;
+    /**
+     * @var mixed
+     */
     private $name;
+    /**
+     * @var mixed
+     */
     private $user;
+    /**
+     * @var mixed
+     */
     private $password;
+    /**
+     * @var mixed
+     */
     private $prefix;
 
     /**
@@ -593,5 +608,3 @@ class Installation extends Controller
         );
     }
 }
-
-/* end of installation.php */

@@ -213,5 +213,3 @@ class Register extends Model
         );
     }
 }
-
-/* end of register.php */

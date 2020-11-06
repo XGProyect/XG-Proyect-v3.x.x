@@ -18,7 +18,6 @@ use application\core\Database;
  */
 class Options extends XGPCore
 {
-
     /**
      *
      * @var Options
@@ -118,5 +117,3 @@ class Options extends XGPCore
         return false;
     }
 }
-
-/* end of Options.php */

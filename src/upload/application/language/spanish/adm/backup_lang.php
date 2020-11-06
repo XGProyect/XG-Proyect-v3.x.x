@@ -9,5 +9,3 @@ $lang = [
     'bku_now' => 'Realizar un resguardo ahora',
     'bku_save' => 'Guardar cambios',
 ];
-
-/* end of backup_lang.php */

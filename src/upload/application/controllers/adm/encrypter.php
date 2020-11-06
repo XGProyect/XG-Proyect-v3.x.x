@@ -108,5 +108,3 @@ class Encrypter extends Controller
         );
     }
 }
-
-/* end of encrypter.php */

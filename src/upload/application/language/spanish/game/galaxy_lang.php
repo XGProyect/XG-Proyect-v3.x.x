@@ -93,5 +93,3 @@ $lang = [
     'gl_add_missile_number' => 'Ingresar el número de misiles que deseas enviar',
     'gl_missiles_sended' => ' misiles interplanetarios se enviaron. objetivo principal: ',
 ];
-
-/* end of galaxy_lang.php */

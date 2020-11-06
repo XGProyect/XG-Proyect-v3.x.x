@@ -10,5 +10,3 @@ $lang = [
     'up_no_version_file' => 'The update file doesn\'t exists, please verify that the "install" directory exists.',
     'up_success' => 'Update completed!',
 ];
-
-/* end of update_lang.php */

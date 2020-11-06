@@ -254,5 +254,3 @@ class Backup extends Controller
         return '';
     }
 }
-
-/* end of backup.php */

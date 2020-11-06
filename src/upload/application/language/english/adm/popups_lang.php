@@ -5,5 +5,3 @@ $lang = [
     'ready_to_leave_cancel' => 'Cancel',
     'ready_to_leave_logout' => 'Logout',
 ];
-
-/* end of global_lang.php */

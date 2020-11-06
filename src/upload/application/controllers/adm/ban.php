@@ -20,8 +20,17 @@ use application\libraries\FunctionsLib;
  */
 class Ban extends Controller
 {
+    /**
+     * @var mixed
+     */
     private $_current_user;
+    /**
+     * @var int
+     */
     private $_users_count = 0;
+    /**
+     * @var int
+     */
     private $_banned_count = 0;
 
     /**
@@ -248,5 +257,3 @@ class Ban extends Controller
         return $banned_list; // return builded list
     }
 }
-
-/* end of ban.php */

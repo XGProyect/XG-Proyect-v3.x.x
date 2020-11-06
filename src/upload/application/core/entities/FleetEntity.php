@@ -25,7 +25,6 @@ use application\core\Entity;
  */
 class FleetEntity extends Entity
 {
-
     /**
      * Constructor
      *
@@ -288,5 +287,3 @@ class FleetEntity extends Entity
         return $this->data['fleet_creation'];
     }
 }
-
-/* end of FleetEntity.php */

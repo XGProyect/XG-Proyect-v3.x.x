@@ -73,5 +73,3 @@ $lang = [
     'ins_delete_install' => '&iexcl;Ahora debes borrar la carpeta <i>install</i> asi evitaras problemas graves de seguridad!',
     'ins_end' => 'Finalizar',
 ];
-
-/* end of installation_lang.php */

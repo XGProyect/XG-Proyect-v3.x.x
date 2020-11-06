@@ -11,5 +11,3 @@ $lang = [
     'em_ships' => 'Fleet',
     'em_defenses' => 'Defenses',
 ];
-
-/* end of empire_lang.php */

@@ -47,5 +47,3 @@ if (file_exists($file_name)) {
 } else {
     FunctionsLib::redirect(XGP_ROOT . 'admin.php');
 }
-
-/* end of admin.php */

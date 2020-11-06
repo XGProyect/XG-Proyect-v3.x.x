@@ -29,5 +29,3 @@ abstract class OfficiersEnumerator
     const PREMIUM_OFFICIER_GEOLOGIST = 604;
     const PREMIUM_OFFICIER_TECHNOCRAT = 605;
 }
-
-/* end of OfficiersEnumerator.php */

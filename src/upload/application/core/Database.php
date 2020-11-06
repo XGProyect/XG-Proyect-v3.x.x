@@ -484,7 +484,7 @@ class Database
     {
         // GET ALL THE TABLES
         if ($tables == '*') {
-            $tables = array();
+            $tables = [];
             $result = $this->query('SHOW TABLES');
 
             while ($row = $this->fetchRow($result)) {
@@ -573,5 +573,3 @@ class Database
         return strtr($query, ['{xgp_prefix}' => $this->db_data['prefix']]);
     }
 }
-
-/* end of Database.php */

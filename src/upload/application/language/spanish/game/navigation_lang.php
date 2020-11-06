@@ -16,5 +16,3 @@ $lang = [
     'tn_vacation_mode_active' => 'Modo vacaciones activo',
     'tn_delete_mode' => 'Tu cuenta se encuentra en modo borrar. La misma será borrada el ',
 ];
-
-/* end of navigation_lang.php */

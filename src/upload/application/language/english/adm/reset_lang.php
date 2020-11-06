@@ -32,5 +32,3 @@ $lang = [
     're_reset_excess' => 'Options successfully resetted',
     're_reset_go' => 'Reset',
 ];
-
-/* end of reset_lang.php */

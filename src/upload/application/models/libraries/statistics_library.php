@@ -140,5 +140,3 @@ class Statistics_library extends Model
         $this->db->query($query);
     }
 }
-
-/* end of statistics_library.php */

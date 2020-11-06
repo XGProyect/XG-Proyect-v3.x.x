@@ -634,5 +634,3 @@ class Fleet extends Model
         )['user_id'] ?? 0;
     }
 }
-
-/* end of fleet.php */

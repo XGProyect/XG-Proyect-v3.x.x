@@ -24,7 +24,9 @@ namespace application\libraries;
  */
 class SecurePageLib
 {
-
+    /**
+     * @var mixed
+     */
     private static $instance = null;
 
     /**
@@ -35,11 +37,11 @@ class SecurePageLib
     public function __construct()
     {
         //apply controller to all
-        $_GET = array_map(array($this, 'validate'), $_GET);
-        $_POST = array_map(array($this, 'validate'), $_POST);
-        $_REQUEST = array_map(array($this, 'validate'), $_REQUEST);
-        $_SERVER = array_map(array($this, 'validate'), $_SERVER);
-        $_COOKIE = array_map(array($this, 'validate'), $_COOKIE);
+        $_GET = array_map([$this, 'validate'], $_GET);
+        $_POST = array_map([$this, 'validate'], $_POST);
+        $_REQUEST = array_map([$this, 'validate'], $_REQUEST);
+        $_SERVER = array_map([$this, 'validate'], $_SERVER);
+        $_COOKIE = array_map([$this, 'validate'], $_COOKIE);
     }
 
     /**
@@ -84,5 +86,3 @@ class SecurePageLib
         }
     }
 }
-
-/* end of SecurePageLib.php */

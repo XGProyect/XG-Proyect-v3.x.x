@@ -25,15 +25,45 @@ use application\libraries\users\Shortcuts;
  */
 class Users extends Controller
 {
+    /**
+     * @var string
+     */
     private $_edit = '';
+    /**
+     * @var int
+     */
     private $_planet = 0;
+    /**
+     * @var int
+     */
     private $_moon = 0;
+    /**
+     * @var int
+     */
     private $_id = 0;
+    /**
+     * @var int
+     */
     private $_authlevel = 0;
+    /**
+     * @var mixed
+     */
     private $_alert_info;
+    /**
+     * @var mixed
+     */
     private $_alert_type;
+    /**
+     * @var mixed
+     */
     private $_user_query;
+    /**
+     * @var array
+     */
     private $_current_user = [];
+    /**
+     * @var mixed
+     */
     private $_stats;
 
     /**
@@ -338,7 +368,7 @@ class Users extends Controller
     {
         $parse = $this->langs->language;
         $parse += (array) $this->_user_query;
-        $parse['research'] = str_replace(array('%s', '%d'), array($this->_user_query['user_name'], $this->_id), $this->langs->line('us_user_research'));
+        $parse['research'] = str_replace(['%s', '%d'], [$this->_user_query['user_name'], $this->_id], $this->langs->line('us_user_research'));
         $parse['technologies_list'] = $this->researchTable();
         $parse['alert_info'] = ($this->_alert_type != '') ? Administration::saveMessage($this->_alert_type, $this->_alert_info) : '';
 
@@ -794,13 +824,13 @@ class Users extends Controller
     private function planetSortCombo()
     {
         $sort = '';
-        $sort_types = array(
+        $sort_types = [
             0 => $this->langs->line('us_user_preference_planet_sort_op1'),
             1 => $this->langs->line('us_user_preference_planet_sort_op2'),
             2 => $this->langs->line('us_user_preference_planet_sort_op3'),
             3 => $this->langs->line('us_user_preference_planet_sort_op4'),
             4 => $this->langs->line('us_user_preference_planet_sort_op5'),
-        );
+        ];
 
         foreach ($sort_types as $id => $name) {
             $sort .= "<option value =\"{$id}\"" . (($this->_user_query['preference_planet_sort'] == $id) ? " selected" : "") . ">{$name}</option>";
@@ -817,10 +847,10 @@ class Users extends Controller
     private function planetOrderCombo()
     {
         $order = '';
-        $order_types = array(
+        $order_types = [
             0 => $this->langs->line('us_user_preference_planet_sort_sequence_op1'),
             1 => $this->langs->line('us_user_preference_planet_sort_sequence_op2'),
-        );
+        ];
 
         foreach ($order_types as $id => $name) {
             $order .= "<option value =\"{$id}\"" . (($this->_user_query['preference_planet_sort_sequence'] == $id) ? " selected" : "") . ">{$name}</option>";
@@ -837,12 +867,12 @@ class Users extends Controller
     private function premiumCombo($expire_date)
     {
         $premium = '';
-        $premium_types = array(
+        $premium_types = [
             0 => '-',
             1 => $this->langs->line('us_user_premium_deactivate'),
             2 => $this->langs->line('us_user_premium_activate_one_week'),
             3 => $this->langs->line('us_user_premium_activate_three_month'),
-        );
+        ];
 
         foreach ($premium_types as $id => $name) {
             $premium .= "<option value=\"{$id}\">{$name}</option>";
@@ -859,7 +889,7 @@ class Users extends Controller
     private function buildPercentCombo($current_value)
     {
         $percent = '';
-        $percent_values = array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+        $percent_values = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
         foreach ($percent_values as $id => $number) {
             $percent .= "<option value=\"{$id}\"  " . ($current_value == $number ? ' selected' : '') . ">" . ($number * 10) . "</option>";
@@ -903,7 +933,7 @@ class Users extends Controller
     private function buildImageCombo($current_image)
     {
         $images_dir = opendir(XGP_ROOT . DEFAULT_SKINPATH . 'planets');
-        $exceptions = array('.', '..', '.htaccess', 'index.html', '.DS_Store', 'small');
+        $exceptions = ['.', '..', '.htaccess', 'index.html', '.DS_Store', 'small'];
         $images_options = '';
 
         while (($image_dir = readdir($images_dir)) !== false) {
@@ -1116,10 +1146,10 @@ class Users extends Controller
      */
     private function editBuildings($planets_data, $type = 1): array
     {
-        $exclude_buildings = array('building_mondbasis', 'building_phalanx', 'building_jump_gate');
+        $exclude_buildings = ['building_mondbasis', 'building_phalanx', 'building_jump_gate'];
 
         if ($type == 3) {
-            $exclude_buildings = array('building_metal_mine', 'building_crystal_mine', 'building_deuterium_sintetizer', 'building_solar_plant', 'building_fusion_reactor', 'building_nano_factory', 'building_laboratory', 'building_terraformer', 'building_ally_deposit', 'building_missile_silo');
+            $exclude_buildings = ['building_metal_mine', 'building_crystal_mine', 'building_deuterium_sintetizer', 'building_solar_plant', 'building_fusion_reactor', 'building_nano_factory', 'building_laboratory', 'building_terraformer', 'building_ally_deposit', 'building_missile_silo'];
         }
 
         $prepare_table = [];
@@ -1179,10 +1209,10 @@ class Users extends Controller
      */
     private function editDefenses($planets_data, $type = 1): array
     {
-        $exclude_buildings = array('');
+        $exclude_buildings = [''];
 
         if ($type == 3) {
-            $exclude_buildings = array('defense_anti-ballistic_missile', 'defense_interplanetary_missile');
+            $exclude_buildings = ['defense_anti-ballistic_missile', 'defense_interplanetary_missile'];
         }
 
         $prepare_table = [];
@@ -1304,5 +1334,3 @@ class Users extends Controller
         return $this->langs->line('us_user_preference_vacations_until') . date(Functions::readConfig('date_format_extended'), $this->_user_query['preference_vacation_mode']);
     }
 }
-
-/* end of users.php */

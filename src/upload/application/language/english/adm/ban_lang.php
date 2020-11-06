@@ -30,5 +30,3 @@ $lang = [
     'bn_lift_ban_success' => '"%s" ban was removed.',
     'bn_all_fields_required' => 'All fields are required',
 ];
-
-/* end of ban_lang.php */

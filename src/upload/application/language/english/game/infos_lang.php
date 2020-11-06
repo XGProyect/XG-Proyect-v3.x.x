@@ -98,5 +98,3 @@ $lang = [
         'research_graviton_technology' => 'The graviton is an elementary particle that mediates the force of gravity in the framework of quantum field theory. The graviton must be massless (because the gravitational force has unlimited range) and must have a spin of 2 (because gravity is a second-rank tensor field). Graviton Technology is only used for one thing, for the construction of the fearsome DeathStar. <br><br>Out of all of the technologies to research, this one carries the most risk of detection during the phase of preparation.',
     ],
 ];
-
-/* end of infos_lang.php */

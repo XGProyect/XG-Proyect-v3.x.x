@@ -25,7 +25,6 @@ use application\core\Entity;
  */
 class UserEntity extends Entity
 {
-
     /**
      * Constructor
      *
@@ -268,5 +267,3 @@ class UserEntity extends Entity
         return (int) $this->data['user_banned'];
     }
 }
-
-/* end of UserEntity.php */

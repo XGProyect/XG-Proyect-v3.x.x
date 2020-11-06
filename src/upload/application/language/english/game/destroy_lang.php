@@ -9,5 +9,3 @@ $lang = [
     'des_result_both' => 'Your deathstar aim its alternating graviton pshock cannon at the satellite. At first, light quakes incresingly build up on the surface of the moon. The moon begins to deform and is torn apart. Gigantic chunks of rubble come flying towards your fleet. It is too late to evade them. Your entire fleet is obliterated in a hail of rubble.', // ok
     'des_moon_ds_chances' => 'Moon destruction chance: %d %%, DS destruction chance:%d %%', // ok
 ];
-
-/* end of destroy_lang.php */

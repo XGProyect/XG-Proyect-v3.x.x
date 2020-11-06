@@ -12,5 +12,3 @@ $lang = [
     'np_all_ok_message' => 'Changes saved successfully!',
     'np_save_parameters' => 'Save changes',
 ];
-
-/* end of planets_lang.php */
