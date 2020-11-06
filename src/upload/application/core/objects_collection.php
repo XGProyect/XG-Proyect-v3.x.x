@@ -1,13 +1,11 @@
 <?php
 /**
- * Objects Collection
+ * objects_collection.php
  *
- * @category Core
- * @package  Application
  * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
+ * @license  https://www.xgproyect.org XG Proyect
+ * @link     https://www.xgproyect.org
+ * @version  3.2.0
  */
 $resource = [
     1 => "building_metal_mine",
@@ -276,5 +274,3 @@ $reslist['fleet'] = [202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213,
 $reslist['defense'] = [401, 402, 403, 404, 405, 406, 407, 408, 502, 503];
 $reslist['officier'] = [601, 602, 603, 604, 605];
 $reslist['prod'] = [1, 2, 3, 4, 12, 212];
-
-/* end of objects_collection.php */
