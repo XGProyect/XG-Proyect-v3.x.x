@@ -5,6 +5,8 @@
     </a>
     <br>
     <strong>X</strong>treme <strong>G</strong>amez <strong>Proyect</strong>o
+    <br>
+    <strong>Open-source OGame Clon</strong>
 </p> 
 
 About
