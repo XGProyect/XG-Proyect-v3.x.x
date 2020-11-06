@@ -579,7 +579,7 @@ class Page
             array_merge(
                 $lang->language,
                 $parse,
-                $this->buildOfficersBlock()
+                $this->buildOfficersBlock($lang)
             )
         );
     }
@@ -735,16 +735,25 @@ class Page
     /**
      * Build the officers block for the game topnav
      *
+     * @param array $lang
      * @return array
      */
-    private function buildOfficersBlock(): array
+    private function buildOfficersBlock(\CI_Lang $lang): array
     {
         $objects = $this->objects->getObjects();
         $officers = $this->objects->getObjectsList('officier');
         $list_of_officiers = [];
 
         foreach ($officers as $officer) {
-            $list_of_officiers['img_' . $objects[$officer]] = OfficiersLib::isOfficierActive($this->current_user[$objects[$officer]]) ? '' : '_un';
+            $inactive = '_un';
+            $details = $lang->language['tn_add_' . $objects[$officer]];
+
+            if (OfficiersLib::isOfficierActive($this->current_user[$objects[$officer]])) {
+                $inactive = '';
+            }
+
+            $list_of_officiers['img_' . $objects[$officer]] = $inactive;
+            $list_of_officiers['add_' . $objects[$officer]] = $details;
         }
 
         return $list_of_officiers;

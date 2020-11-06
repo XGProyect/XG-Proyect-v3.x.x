@@ -1,18 +1,18 @@
 <?php
 $lang = [
-    'tn_commander' => 'Commander',
-    'tn_admiral' => 'Admiral',
-    'tn_engineer' => 'Engineer',
-    'tn_geologist' => 'Geologist',
-    'tn_technocrat' => 'Technocrat',
-    'tn_add_admiral' => '+2 max. fleet slots',
-    'tn_add_engineer' => 'Minimizes losses in half defenses,<br/>+10% energy production',
-    'tn_add_geologist' => '+10% mine production',
-    'tn_add_technocrat' => '+2 Espionage level,<br/>25% Less time for research',
-    'tn_get_now' => 'Get now!',
+    'tn_hire_commander' => 'Hire Commander',
+    'tn_hire_admiral' => 'Hire Admiral',
+    'tn_hire_engineer' => 'Hire Engineer',
+    'tn_hire_geologist' => 'Hire Geologist',
+    'tn_hire_technocrat' => 'Hire Technocrat',
+    'tn_add_premium_officier_commander' => '+40 favourites, building queue, empire view, shortcuts, transport scanner, advertisement free* (*excludes: game related references)',
+    'tn_add_premium_officier_admiral' => 'Max. fleet slots +2, Max. expeditions +1, Improved fleet escape rate',
+    'tn_add_premium_officier_engineer' => 'Halves losses to defences, +10% energy production',
+    'tn_add_premium_officier_geologist' => '+10% mine production',
+    'tn_add_premium_officier_technocrat' => '+2 espionage levels, 25% less research time',
+    'tn_time_remaining_one' => '%d day remaining',
+    'tn_time_remaining_many' => 'Still active for more than %d days',
     'tn_vacation_mode' => 'Vacation mode active until ',
     'tn_vacation_mode_active' => 'Vacation mode active',
     'tn_delete_mode' => 'Your account was set for deletion. Deletion date: ',
 ];
-
-/* end of navigation_lang.php */
