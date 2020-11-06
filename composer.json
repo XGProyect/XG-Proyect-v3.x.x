@@ -32,6 +32,8 @@
             "src/upload/"
         ]
     },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "scripts": {
         "phpcompatinfo": [
             "vendor/bin/phpcompatinfo analyser:run ./src"
