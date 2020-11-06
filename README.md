@@ -32,7 +32,7 @@ Point you browser to your localhost and follow the step by step instructions pro
 ### Composer
 
 ```
-composer create-project xg-proyect/xg-proyect-v3.x.x:latest xgp
+composer require xgproyect/xg-proyect-v3.x.x
 ```
 
 ## Who is using XG Proyect?
