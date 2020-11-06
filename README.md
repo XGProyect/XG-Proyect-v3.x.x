@@ -3,25 +3,35 @@
     <a href="https://www.xgproyect.org/" target="_blank">
         <img align="center" img src="https://xgproyect.org/wp-content/uploads/2019/10/xgp-new-logo-black.png" width="250px" title="XG Proyect" alt="xgp-logo">
     </a>
+    <br>
+    <strong>X</strong>treme <strong>G</strong>amez <strong>Proyect</strong>o
 </p> 
 
-XG Proyect
+About
 ====
 
-**X**treme **G**amez **Proyect**o  
-Support: https://www.xgproyect.org/  
+XG Proyect (XGP) is a web browser game based on the famous OGame. Our goal is to offer a package that is as similar as possible to the original.
+
+Official Website: https://www.xgproyect.org/  
 Live Server: https://www.xgproyect.net/  
 
-Require PHP >= 7.3+  
-Require MySQLi >= 5.5+  
+## Requirements
 
-![Free](https://www.gnu.org/graphics/agplv3-155x51.png)
+PHP 7.3 or greater  
+MySQLi 5.5 or greater  
 
 ## How to get XG Proyect?
 
+### Manually
 Download and install XG Proyect is easy. Go to the releases section and get the latest stable release.  
 Then unzip the upload dir in your localhost, rename that folder to wathever you want.  
 Point you browser to your localhost and follow the step by step instructions provided by the installation software.
+
+### Composer
+
+```
+composer create-project xg-proyect/xg-proyect-v3.x.x:latest xgp
+```
 
 ## Who is using XG Proyect?
 
