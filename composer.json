@@ -1,6 +1,6 @@
 {
     "name": "xg-proyect/xg-proyect-v3.x.x",
-    "description": "XG Proyect Open-source OGame Clon",
+    "description": "XGP Open-source OGame Clon",
     "keywords": [
         "ogame",
         "clon"
@@ -32,6 +32,8 @@
             "src/upload/"
         ]
     },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "scripts": {
         "phpcompatinfo": [
             "vendor/bin/phpcompatinfo analyser:run ./src"
