@@ -2,12 +2,17 @@
     <tbody>
         <tr>
             <td class="c" align="center">
-                <a href="{destroyurl}">{in_destroy} {name} {level} {levelvalue} ?</a>
+                {tear_down_url}
             </td>
-        </tr><tr>
-            <th>{in_needed}: {metal}: <b>{nfo_metal}</b> {crystal}: <b>{nfo_crystal}</b> {deuterium}: <b>{nfo_deuterium}</b></th>
-        </tr><tr>
-            <th><br>{in_dest_durati}: {destroytime}<br></th>
+        </tr>
+        <tr>
+            <th>{in_needed}</th>
+        </tr>
+        <tr>
+            <th>{ion_tech_bonus}</th>
+        </tr>
+        <tr>
+            <th>{metal}: <b>{nfo_metal}</b><br>{crystal}: <b>{nfo_crystal}</b><br>{deuterium}: <b>{nfo_deuterium}</b><br>{in_dest_durati}: {destroytime}<br></th>
         </tr>
     </tbody>
 </table>

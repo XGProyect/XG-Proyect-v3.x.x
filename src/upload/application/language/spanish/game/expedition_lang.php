@@ -46,6 +46,7 @@ $lang = [
     'exp_delay_2' => '',
     'exp_delay_3' => '',
     'exp_delay_4' => '',
+    'exp_delay_5' => '',
 
     // advancement
     'exp_faster_1' => '',

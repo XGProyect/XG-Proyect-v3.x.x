@@ -1,13 +1,11 @@
 <?php
 /**
- * Research Controller
+ * research.php
  *
- * @category Controller
- * @package  Application
  * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
+ * @license  https://www.xgproyect.org XG Proyect
+ * @link     https://www.xgproyect.org
+ * @version  3.2.0
  */
 namespace application\controllers\game;
 
@@ -22,14 +20,31 @@ use application\libraries\FunctionsLib;
  */
 class Research extends Controller
 {
-
     const MODULE_ID = 6;
 
+    /**
+     * @var mixed
+     */
     private $_current_user;
+    /**
+     * @var mixed
+     */
     private $_current_planet;
+    /**
+     * @var mixed
+     */
     private $_resource;
+    /**
+     * @var mixed
+     */
     private $_reslist;
+    /**
+     * @var mixed
+     */
     private $_is_working;
+    /**
+     * @var mixed
+     */
     private $_lab_level;
 
     /**
@@ -59,24 +74,24 @@ class Research extends Controller
         if ($this->_current_planet[$this->_resource[31]] == 0) {
             FunctionsLib::message($this->langs->line('re_lab_required'), '', '', true);
         } else {
-            $this->set_labs_amount();
-            $this->handle_technologie_build();
-            $this->build_page();
+            $this->setLabsAmount();
+            $this->handleTechnologieBuild();
+            $this->buildPage();
         }
     }
 
     /**
-     * method build_page
+     * method buildPage
      * param
      * return main method, loads everything
      */
-    private function build_page()
+    private function buildPage()
     {
         $parse = $this->langs->language;
         $technology_list = '';
 
         // time to do something
-        $this->do_command();
+        $this->doCommand();
 
         // build the page
         foreach ($this->_reslist['tech'] as $tech) {
@@ -93,7 +108,7 @@ class Research extends Controller
 
                 if (!$this->_is_working['is_working']) {
                     if (DevelopmentsLib::isDevelopmentPayable($this->_current_user, $this->_current_planet, $tech) && !parent::$users->isOnVacations($this->_current_user)) {
-                        if (!$this->is_laboratory_in_queue()) {
+                        if (!$this->isLaboratoryInQueue()) {
                             $action_link = FormatLib::colorRed($this->langs->line('re_research'));
                         } else {
                             $action_link = UrlHelper::setUrl('game.php?page=research&cmd=search&tech=' . $tech, FormatLib::colorGreen($this->langs->line('re_research')));
@@ -132,7 +147,7 @@ class Research extends Controller
             }
         }
 
-        $parse['noresearch'] = (!$this->is_laboratory_in_queue() ? $this->langs->line('re_building_lab') : '');
+        $parse['noresearch'] = (!$this->isLaboratoryInQueue() ? $this->langs->line('re_building_lab') : '');
         $parse['technolist'] = $technology_list;
 
         parent::$page->display(
@@ -144,11 +159,11 @@ class Research extends Controller
     }
 
     /**
-     * method do_command
+     * method doCommand
      * param
      * return void
      */
-    private function do_command()
+    private function doCommand()
     {
         $cmd = isset($_GET['cmd']) ? $_GET['cmd'] : null;
 
@@ -156,14 +171,11 @@ class Research extends Controller
             $technology = (int) $_GET['tech'];
 
             if (in_array($technology, $this->_reslist['tech'])) {
-
                 $update_data = false;
 
                 if (is_array($this->_is_working['working_on'])) {
-
                     $working_planet = $this->_is_working['working_on'];
                 } else {
-
                     $working_planet = $this->_current_planet;
                 }
 
@@ -188,11 +200,11 @@ class Research extends Controller
 
                     // start a research
                     case 'search':
-
                         if (DevelopmentsLib::isDevelopmentAllowed($this->_current_user, $working_planet, $technology) && DevelopmentsLib::isDevelopmentPayable($this->_current_user, $working_planet, $technology) && !parent::$users->isOnVacations($this->_current_user)) {
-
                             $costs = DevelopmentsLib::developmentPrice(
-                                $this->_current_user, $working_planet, $technology
+                                $this->_current_user,
+                                $working_planet,
+                                $technology
                             );
 
                             $working_planet['planet_metal'] -= $costs['metal'];
@@ -200,7 +212,11 @@ class Research extends Controller
                             $working_planet['planet_deuterium'] -= $costs['deuterium'];
                             $working_planet['planet_b_tech_id'] = $technology;
                             $working_planet['planet_b_tech'] = time() + DevelopmentsLib::developmentTime(
-                                $this->_current_user, $working_planet, $technology, false, $this->_lab_level
+                                $this->_current_user,
+                                $working_planet,
+                                $technology,
+                                false,
+                                $this->_lab_level
                             );
 
                             $this->_current_user['research_current_research'] = $working_planet['planet_id'];
@@ -233,11 +249,11 @@ class Research extends Controller
     }
 
     /**
-     * method is_laboratory_in_queue
+     * method isLaboratoryInQueue
      * param
      * return true if all clear, false if is anything in the queue
      */
-    private function is_laboratory_in_queue()
+    private function isLaboratoryInQueue()
     {
         $return = true;
         $current_building = '';
@@ -250,7 +266,6 @@ class Research extends Controller
                 $queue = explode(';', $current_queue);
 
                 for ($i = 0; $i < MAX_BUILDING_QUEUE_SIZE; $i++) {
-
                     if (isset($queue[$i])) {
                         $element_data = explode(",", $queue[$i]);
                         $element_id = $element_data[0];
@@ -273,11 +288,11 @@ class Research extends Controller
     }
 
     /**
-     * method handle_technologie_build
+     * method handleTechnologieBuild
      * param
      * return return the planet where it's been working on and the status
      */
-    private function handle_technologie_build()
+    private function handleTechnologieBuild()
     {
         $this->_is_working['working_on'] = '';
         $this->_is_working['is_working'] = false;
@@ -312,15 +327,13 @@ class Research extends Controller
     }
 
     /**
-     * method set_labs_amount
+     * method setLabsAmount
      * param
      * return (void)
      */
-    private function set_labs_amount()
+    private function setLabsAmount()
     {
         $labs_limit = $this->_current_user[$this->_resource[123]] + 1;
         $this->_lab_level = $this->Research_Model->getAllLabsLevel($this->_current_user['user_id'], $labs_limit);
     }
 }
-
-/* end of research.php */

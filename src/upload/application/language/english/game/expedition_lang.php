@@ -42,6 +42,7 @@ $lang = [
     'exp_delay_2' => 'Your navigator made a grave error in his computations that caused the expeditions jump to be miscalculated. Not only did the fleet miss the target completely, but the return trip will take a lot more time than originally planned.', // ok
     'exp_delay_3' => 'The new navigation module is still buggy. The expeditions jump not only lead them in the wrong direction, but it used all the Deuterium fuel. Fortunately the fleets jump got them close to the departure planets moon. A bit disappointed the expedition now returns without impulse power. The return trip will take longer than expected.', // ok
     'exp_delay_4' => 'For unknown reasons the expeditions jump went totally wrong. It nearly landed in the heart of a sun. Fortunately it landed in a known system, but the jump back is going to take longer than thought.', // ok
+    'exp_delay_5' => 'The solar wind of a red giant ruined the expeditions jump and it will take quite some time to calculate the return jump. There was nothing besides the emptiness of space between the stars in that sector. The fleet will return later than expected.', // ok
 
     // advancement
     'exp_faster_1' => 'Your expeditions doesn\'t report any anomalies in the explored sector. But the fleet ran into somo solar wind while returning. This resulted in the return trip being expedited. Your expedition returns home a bit earlier.', // ok
@@ -62,6 +63,7 @@ $lang = [
     'exp_nothing_8' => '',
     'exp_nothing_9' => 'A failure in the flagships reactor core nearly destroys the entire expedition fleet. Fortunately the technicians were more than competent and could avoid the worst. The repairs took quite some time and forced the expedition to return without having accomplished its goal.', // ok
     'exp_nothing_10' => 'Despite the first, very promising scans of this sector, we unfortunately returned empty handed.', // ok
+    'exp_nothing_11' => 'Your expedition has learnt about the extensive emptiness of space. There was not even one small asteroid or radiation or particle that could have made this expedition interesting.', // ok
     'exp_nothing_13' => 'Due to a failure in the central computers of the flagship, the expedition mission had to be aborted. Unfortunately as a result of the computer malfunction, the fleet returns home empty handed.', // ok
     'exp_nothing_15' => 'Your expedition fleet followed odd signals for some time. At the end they noticed that those signals where being sent from an old probe which was sent out generations ago to greet foreign species. The probe was saved and some museums of your home planet already voiced their interest.', // ok
     'exp_nothing_16' => 'The new and daring commander successfully traveled through an unstable wormhole to shorten the flight back! However, the expedition itself didn\'t bring anything new.', // ok

@@ -11,7 +11,7 @@
  */
 namespace application\core;
 
-use application\libraries\TemplateLib;
+use application\libraries\Page;
 use application\libraries\UsersLibrary;
 use CI_Lang;
 use Exception;
@@ -77,7 +77,7 @@ abstract class XGPCore
      */
     private function setTemplateClass()
     {
-        self::$page = new TemplateLib(self::$users);
+        self::$page = new Page(self::$users);
     }
 
     /**

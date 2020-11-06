@@ -17,6 +17,10 @@ use application\core\Template;
 use application\core\XGPCore;
 use application\helpers\StringsHelper;
 use application\helpers\UrlHelper;
+use application\libraries\FleetsLib;
+use application\libraries\FormatLib;
+use application\libraries\Formulas;
+use application\libraries\FunctionsLib;
 
 /**
  * GalaxyLib class
@@ -27,17 +31,49 @@ class GalaxyLib extends XGPCore
     const DEBRIS_TYPE = 2;
     const MOON_TYPE = 3;
 
+    /**
+     * @var mixed
+     */
     private $langs;
+    /**
+     * @var mixed
+     */
     private $current_user;
+    /**
+     * @var mixed
+     */
     private $current_planet;
+    /**
+     * @var mixed
+     */
     private $row_data;
+    /**
+     * @var mixed
+     */
     private $galaxy;
+    /**
+     * @var mixed
+     */
     private $system;
+    /**
+     * @var mixed
+     */
     private $planet;
+    /**
+     * @var mixed
+     */
     private $resource;
+    /**
+     * @var mixed
+     */
     private $pricelist;
-    private $formula;
+    /**
+     * @var mixed
+     */
     private $noob;
+    /**
+     * @var mixed
+     */
     private $template;
 
     /**
@@ -68,7 +104,6 @@ class GalaxyLib extends XGPCore
         $this->system = $system;
         $this->resource = parent::$objects->getObjects();
         $this->pricelist = parent::$objects->getPrice();
-        $this->formula = FunctionsLib::loadLibrary('FormulaLib');
         $this->noob = FunctionsLib::loadLibrary('NoobsProtectionLib');
 
         $this->setTemplate();
@@ -753,7 +788,7 @@ class GalaxyLib extends XGPCore
         if (($this->current_planet['defense_interplanetary_missile'] != 0)
             && ($this->row_data['user_id'] != $this->current_user['user_id'])
             && ($this->row_data['planet_galaxy'] == $this->current_planet['planet_galaxy'])) {
-            return $this->isInRange($this->formula->missileRange($this->current_user['research_impulse_drive']));
+            return $this->isInRange(Formulas::missileRange($this->current_user['research_impulse_drive']));
         }
     }
 
@@ -768,7 +803,7 @@ class GalaxyLib extends XGPCore
             && ($this->row_data['user_id'] != $this->current_user['user_id'])
             && ($this->row_data['planet_galaxy'] == $this->current_planet['planet_galaxy'])
             && ($this->current_planet['planet_type']) == PlanetTypesEnumerator::MOON) {
-            return $this->isInRange($this->formula->phalanxRange($this->current_planet['building_phalanx']));
+            return $this->isInRange(Formulas::phalanxRange($this->current_planet['building_phalanx']));
         }
     }
 

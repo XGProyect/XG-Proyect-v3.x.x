@@ -87,9 +87,6 @@ class Trader extends Controller
         // load Language
         parent::loadLang(['game/global', 'game/trader']);
 
-        // loda library
-        $this->formula = Functions::loadLibrary('FormulaLib');
-
         // Check module access
         Functions::moduleMessage(Functions::isModuleAccesible(self::MODULE_ID));
 

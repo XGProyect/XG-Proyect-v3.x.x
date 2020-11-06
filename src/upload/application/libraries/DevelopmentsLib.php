@@ -1,28 +1,25 @@
 <?php
 /**
- * Developments Library
+ * DevelopmentsLib.php
  *
- * @category Library
- * @package  Application
  * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
+ * @license  https://www.xgproyect.org XG Proyect
+ * @link     https://www.xgproyect.org
+ * @version  3.2.0
  */
 namespace application\libraries;
 
+use application\core\enumerators\BuildingsEnumerator as Buildings;
+use application\core\enumerators\ResearchEnumerator as Research;
 use application\core\Template;
 use application\core\XGPCore;
+use application\libraries\DevelopmentsLib;
+use application\libraries\FormatLib;
+use application\libraries\Formulas;
+use application\libraries\OfficiersLib;
 
 /**
  * DevelopmentsLib Class
- *
- * @category Classes
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
  */
 class DevelopmentsLib extends XGPCore
 {
@@ -75,17 +72,16 @@ class DevelopmentsLib extends XGPCore
     }
 
     /**
-     * developmentPrice
+     * Get the development price
      *
-     * @param array   $current_user   Current user
-     * @param array   $current_planet Current planet
-     * @param string  $element        Element
-     * @param boolean $incremental    Incremental
-     * @param boolean $destroy        Destroy
-     *
-     * @return int
+     * @param array $current_user
+     * @param array $current_planet
+     * @param integer $element
+     * @param boolean $incremental
+     * @param boolean $destroy
+     * @return void
      */
-    public static function developmentPrice($current_user, $current_planet, $element, $incremental = true, $destroy = false)
+    public static function developmentPrice(array $current_user, array $current_planet, int $element, $incremental = true, $destroy = false)
     {
         $resource = parent::$objects->getObjects();
         $pricelist = parent::$objects->getPrice();
@@ -94,26 +90,21 @@ class DevelopmentsLib extends XGPCore
             $level = (isset($current_planet[$resource[$element]])) ? $current_planet[$resource[$element]] : $current_user[$resource[$element]];
         }
 
-        $array = ['metal', 'crystal', 'deuterium', 'energy_max'];
-
-        foreach ($array as $res_type) {
-            if (isset($pricelist[$element][$res_type])) {
+        foreach (['metal', 'crystal', 'deuterium', 'energy_max'] as $type) {
+            if (isset($pricelist[$element][$type])) {
                 if ($incremental) {
-                    if ($element == 124) {
-                        $cost[$res_type] = round(
-                            ($pricelist[$element][$res_type] * pow($pricelist[$element]['factor'], $level)) / 100
-                        ) * 100;
-                    } else {
-                        $cost[$res_type] = floor(
-                            $pricelist[$element][$res_type] * pow($pricelist[$element]['factor'], $level)
-                        );
-                    }
+                    $cost[$type] = Formulas::getDevelopmentCost($pricelist[$element][$type], $pricelist[$element]['factor'], $level);
                 } else {
-                    $cost[$res_type] = floor($pricelist[$element][$res_type]);
+                    $cost[$type] = floor($pricelist[$element][$type]);
                 }
 
                 if ($destroy == true) {
-                    $cost[$res_type] = floor($cost[$res_type] / 4);
+                    $cost[$type] = Formulas::getTearDownCost(
+                        $pricelist[$element][$type],
+                        $pricelist[$element]['factor'],
+                        $level,
+                        $current_user[$resource[Research::research_ionic_technology]]
+                    );
                 }
             }
         }
@@ -180,15 +171,7 @@ class DevelopmentsLib extends XGPCore
                 $text .= $ResTitle . ": ";
 
                 if ($userfactor) {
-                    if ($element == 124) {
-                        $cost = round(
-                            ($pricelist[$element][$res_type] * pow($pricelist[$element]['factor'], $level)) / 100
-                        ) * 100;
-                    } else {
-                        $cost = floor(
-                            $pricelist[$element][$res_type] * pow($pricelist[$element]['factor'], $level)
-                        );
-                    }
+                    $cost = Formulas::getDevelopmentCost($pricelist[$element][$res_type], $pricelist[$element]['factor'], $level);
                 } else {
                     $cost = floor($pricelist[$element][$res_type]);
                 }
@@ -230,54 +213,56 @@ class DevelopmentsLib extends XGPCore
             $level = (isset($current_planet[$resource[$element]])) ? $current_planet[$resource[$element]] : $current_user[$resource[$element]];
         }
 
+        $cost_metal = Formulas::getDevelopmentCost($pricelist[$element]['metal'], $pricelist[$element]['factor'], $level);
+        $cost_crystal = Formulas::getDevelopmentCost($pricelist[$element]['crystal'], $pricelist[$element]['factor'], $level);
+
         if (in_array($element, $reslist['build'])) {
-            $cost_metal = floor($pricelist[$element]['metal'] * pow($pricelist[$element]['factor'], $level));
-            $cost_crystal = floor($pricelist[$element]['crystal'] * pow($pricelist[$element]['factor'], $level));
-            $time = (($cost_crystal + $cost_metal) / FunctionsLib::readConfig('game_speed')) * (1 / ($current_planet[$resource['14']] + 1)) * pow(0.5, $current_planet[$resource['15']]);
-            $time = floor(($time * 60 * 60));
-        } elseif (in_array($element, $reslist['tech'])) {
-            $cost_metal = floor($pricelist[$element]['metal'] * pow($pricelist[$element]['factor'], $level));
-            $cost_crystal = floor($pricelist[$element]['crystal'] * pow($pricelist[$element]['factor'], $level));
-            $intergal_lab = $current_user[$resource[123]];
+            $time = Formulas::getBuildingTime($cost_metal, $cost_crystal, $element, $current_planet[$resource['14']], $current_planet[$resource['15']], $level);
+        }
+
+        if (in_array($element, $reslist['tech'])) {
+            $intergal_lab = $current_user[$resource[Research::research_intergalactic_research_network]];
 
             if ($intergal_lab < 1) {
-                $lablevel = $current_planet[$resource['31']];
+                $lablevel = $current_planet[$resource[Buildings::BUILDING_LABORATORY]];
             } else {
                 $lablevel = $total_lab_level;
             }
 
-            $time = (($cost_metal + $cost_crystal) / FunctionsLib::readConfig('game_speed')) / (($lablevel + 1) * 2);
-            $time = floor(
-                ($time * 60 * 60) * (1 - ((OfficiersLib::isOfficierActive(
-                    $current_user['premium_officier_technocrat']
-                )) ? TECHNOCRATE_SPEED : 0))
+            $time = Formulas::getResearchTime($cost_metal, $cost_crystal, $lablevel, $current_user[$resource[Research::research_astrophysics]]);
+            $time = floor($time * (1 - ((OfficiersLib::isOfficierActive($current_user['premium_officier_technocrat'])) ? TECHNOCRATE_SPEED : 0)));
+        }
+
+        if (in_array($element, $reslist['defense']) or in_array($element, $reslist['fleet'])) {
+            $time = Formulas::getShipyardProductionTime(
+                $cost_metal,
+                $cost_crystal,
+                $element,
+                $current_planet[$resource[Buildings::BUILDING_HANGAR]],
+                $current_planet[$resource[Buildings::BUILDING_NANO_FACTORY]]
             );
-        } elseif (in_array($element, $reslist['defense'])) {
-            $time = (($pricelist[$element]['metal'] + $pricelist[$element]['crystal']) / FunctionsLib::readConfig('game_speed')) * (1 / ($current_planet[$resource['21']] + 1)) * pow(1 / 2, $current_planet[$resource['15']]);
-            $time = floor(($time * 60 * 60));
-        } elseif (in_array($element, $reslist['fleet'])) {
-            $time = (($pricelist[$element]['metal'] + $pricelist[$element]['crystal']) / FunctionsLib::readConfig('game_speed')) * (1 / ($current_planet[$resource['21']] + 1)) * pow(1 / 2, $current_planet[$resource['15']]);
-            $time = floor(($time * 60 * 60));
         }
 
-        if ($time < 1) {
-            $time = 1;
-        }
-
-        return $time;
+        return ($time < 1 ? 1 : $time);
     }
 
     /**
-     * Check if the building is for destroy and calculate
+     * Calculate tear down time
      *
-     * @param integer $time
-     * @return integer
+     * @param integer $building
+     * @param integer $robotics_factory
+     * @param integer $nanite_factory
+     * @param integer $level
+     * @return float
      */
-    public static function destroyTime(int $time): int
+    public static function tearDownTime(int $building, int $robotics_factory, int $nanite_factory, int $level): float
     {
-        $destroy_time = $time / 2;
+        $pricelist = parent::$objects->getPrice();
 
-        return ($destroy_time < 1 ? 1 : $destroy_time);
+        $metal_cost = Formulas::getTearDownBaseCost($pricelist[$building]['metal'], $pricelist[$building]['factor'], $level);
+        $crystal_cost = Formulas::getTearDownBaseCost($pricelist[$building]['crystal'], $pricelist[$building]['factor'], $level);
+
+        return Formulas::getTearDownTime($metal_cost, $crystal_cost, $building, $robotics_factory, $nanite_factory, $level);
     }
 
     /**
@@ -422,5 +407,3 @@ class DevelopmentsLib extends XGPCore
         return ($current_planet['planet_field_current'] < self::maxFields($current_planet));
     }
 }
-
-/* end of DevelopmentsLib.php */

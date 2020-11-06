@@ -11,7 +11,7 @@
  */
 namespace application\libraries;
 
-use application\core\enumerators\BuildingsEnumerator;
+use application\core\enumerators\BuildingsEnumerator as Buildings;
 use application\core\enumerators\PlanetTypesEnumerator;
 use application\core\Language;
 use application\core\XGPCore;
@@ -200,7 +200,7 @@ class UpdatesLibrary extends XGPCore
                 $current = (int) $current_planet['planet_field_current'];
                 $max = (int) $current_planet['planet_field_max'];
 
-                if ($element == BuildingsEnumerator::BUILDING_MONDBASIS) {
+                if ($element == Buildings::BUILDING_MONDBASIS) {
                     $current += 1;
                     $max += FIELDS_BY_MOONBASIS_LEVEL;
                     $current_planet[$resource[$element]]++;
@@ -310,7 +310,12 @@ class UpdatesLibrary extends XGPCore
                             $previous_time = $element_data[2];
                             $element_data[2] = Developments::developmentTime($current_user, $current_planet, $element_data[0]);
                             if ($for_destroy) {
-                                $element_data[2] = Developments::destroyTime($element_data[2]);
+                                $element_data[2] = DevelopmentsLib::tearDownTime(
+                                    $element_data[0],
+                                    $current_planet[$resource[Buildings::BUILDING_ROBOT_FACTORY]],
+                                    $current_planet[$resource[Buildings::BUILDING_NANO_FACTORY]],
+                                    $current_planet[$resource[$element_data[0]]]
+                                );
                             }
 
                             if ($prevData == 0) {

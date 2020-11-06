@@ -16,6 +16,7 @@ use application\core\enumerators\DefensesEnumerator as Defenses;
 use application\core\enumerators\ShipsEnumerator as Ships;
 use application\libraries\DevelopmentsLib;
 use application\libraries\FormatLib;
+use application\libraries\Formulas;
 use application\libraries\FunctionsLib;
 use Exception;
 
@@ -30,13 +31,6 @@ class Shipyard extends Controller
      * @var int
      */
     const MODULE_ID = 7;
-
-    /**
-     * Contains a FormulaLib object
-     *
-     * @var \FormulaLib
-     */
-    private $formula;
 
     /**
      * Count variable that we'll use to build the missile queue
@@ -105,9 +99,6 @@ class Shipyard extends Controller
 
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
-
-        // load library
-        $this->formula = FunctionsLib::loadLibrary('FormulaLib');
 
         $this->user = $this->getUserData();
         $this->planet = $this->getPlanetData();
@@ -283,7 +274,7 @@ class Shipyard extends Controller
         if ($item_id == Defenses::defense_interplanetary_missile) {
             return strtr(
                 $this->langs->language['descriptions'][$this->getObjects()->getObjects($item_id)],
-                ['%s' => $this->formula->missileRange($this->user['research_impulse_drive'])]
+                ['%s' => Formulas::missileRange($this->user['research_impulse_drive'])]
             );
         }
 
