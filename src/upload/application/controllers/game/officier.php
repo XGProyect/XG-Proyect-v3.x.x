@@ -1,18 +1,8 @@
-<?php
-/**
- * Officier Controller
- *
- * @category Controller
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
- */
-namespace application\controllers\game;
+<?php namespace application\controllers\game;
 
 use application\core\Controller;
 use application\core\Enumerators\OfficiersEnumerator as OE;
+use application\helpers\StringsHelper;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
 use application\libraries\OfficiersLib;
@@ -20,7 +10,7 @@ use application\libraries\TimingLibrary as Timing;
 use DPATH;
 
 /**
- * Officier Class
+ * Officier class
  */
 class Officier extends Controller
 {
@@ -187,7 +177,10 @@ class Officier extends Controller
     private function setOfficierStatusWithFormat(int $item_id): string
     {
         if (OfficiersLib::isOfficierActive($this->user[$this->getObjects()->getObjects($item_id)])) {
-            return FormatLib::customColor($this->langs->line('of_active') . ' ' . Timing::formatShortDate($this->user[$this->getObjects()->getObjects($item_id)]), 'lime');
+            return FormatLib::customColor(
+                $this->getOfficierTimeLeft($item_id),
+                'lime'
+            );
         }
 
         return FormatLib::colorRed($this->langs->line('of_inactive'));
@@ -228,6 +221,27 @@ class Officier extends Controller
     {
         return $this->getObjects()->getPrice($officier, $type);
     }
-}
 
-/* end of officier.php */
+    /**
+     * Get the officier time left
+     *
+     * @param int $item_id
+     */
+    private function getOfficierTimeLeft(int $item_id): string
+    {
+        $expiration = $this->user[$this->getObjects()->getObjects($item_id)];
+        $lang_line = 'of_time_remaining_many';
+
+        if (Timing::getDaysLeft($expiration) <= 1) {
+            $lang_line = 'of_time_remaining_one';
+        }
+
+        return StringsHelper::parseReplacements(
+            $this->langs->language[$lang_line],
+            [strtr(
+                FormatLib::prettyTimeAgo(Timing::formatShortDate($expiration)),
+                $this->langs->language['timing']
+            )]
+        );
+    }
+}

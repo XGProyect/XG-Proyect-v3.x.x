@@ -41,6 +41,21 @@ $lang = [
     'online' => 'Online',
     'minutes' => '15 min',
     'offline' => 'Offline',
-];
 
-/* end of global_lang.php */
+    'timing' => [
+        'year' => 'year',
+        'years' => 'years',
+        'month' => 'month',
+        'month' => 'months',
+        'week' => 'week',
+        'week' => 'weeks',
+        'day' => 'day',
+        'days' => 'days',
+        'hour' => 'hour',
+        'hours' => 'hours',
+        'minute' => 'minute',
+        'minutes' => 'minutes',
+        'second' => 'second',
+        'seconds' => 'seconds',
+    ],
+];

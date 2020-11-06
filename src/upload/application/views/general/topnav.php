@@ -127,7 +127,7 @@
                                 <a href="game.php?page=officier" accesskey="o">
                                     <img style="border:0;" src="{dpath}premium/geologe_ikon{img_premium_officier_geologist}.gif" width="32"
                                         height="32" alt="{tn_geologist}"
-                                        onmouseover="return overlib('<table width=150px><tr><td class=c>{tn_hire_geologist}</td></tr><tr><th style=text-align:left>{add_premium_officier_geologist}</th></tr></table>', CENTER, WIDTH, 150, OFFSETY, 20);"
+                                        onmouseover="return overlib('<table width=200px><tr><td class=c>{tn_hire_geologist}</td></tr><tr><th style=text-align:left>{add_premium_officier_geologist}</th></tr></table>', CENTER, WIDTH, 200, OFFSETY, 20);"
                                         onmouseout="return nd();">
                                 </a>
                             </td>

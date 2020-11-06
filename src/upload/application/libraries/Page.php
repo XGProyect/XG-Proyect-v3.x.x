@@ -14,6 +14,7 @@ use application\core\enumerators\PlanetTypesEnumerator;
 use application\core\Language;
 use application\core\Objects;
 use application\core\Template;
+use application\helpers\StringsHelper;
 use application\helpers\UrlHelper;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
@@ -747,9 +748,23 @@ class Page
         foreach ($officers as $officer) {
             $inactive = '_un';
             $details = $lang->language['tn_add_' . $objects[$officer]];
+            $expiration = $this->current_user[$objects[$officer]];
 
-            if (OfficiersLib::isOfficierActive($this->current_user[$objects[$officer]])) {
+            if (OfficiersLib::isOfficierActive($expiration)) {
                 $inactive = '';
+                $lang_line = 'tn_time_remaining_many';
+
+                if (Timing::getDaysLeft($expiration) <= 1) {
+                    $lang_line = 'tn_time_remaining_one';
+                }
+
+                $details = StringsHelper::parseReplacements(
+                    $lang->language[$lang_line],
+                    [strtr(
+                        FormatLib::prettyTimeAgo(Timing::formatShortDate($expiration)),
+                        $lang->language['timing']
+                    )]
+                );
             }
 
             $list_of_officiers['img_' . $objects[$officer]] = $inactive;

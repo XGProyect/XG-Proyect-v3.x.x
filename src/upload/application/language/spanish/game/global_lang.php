@@ -41,6 +41,21 @@ $lang = [
     'online' => 'Conectado',
     'minutes' => '15 min',
     'offline' => 'Desconectado',
-];
 
-/* end of global_lang.php */
+    'timing' => [
+        'year' => 'año',
+        'years' => 'años',
+        'month' => 'mes',
+        'month' => 'meses',
+        'week' => 'semana',
+        'week' => 'semanas',
+        'day' => 'día',
+        'days' => 'días',
+        'hour' => 'hora',
+        'hours' => 'horas',
+        'minute' => 'minuto',
+        'minutes' => 'minutos',
+        'second' => 'segundo',
+        'seconds' => 'segundos',
+    ],
+];
