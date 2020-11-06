@@ -1,6 +1,6 @@
 <?php
 $lang = [
-    'of_title' => 'Officers',
+    'of_title' => 'Subayların',
     'of_recruit' => 'Satın Al',
     'of_active' => 'kadar etkin',
     'of_inactive' => 'Pasif',
@@ -8,33 +8,34 @@ $lang = [
     'of_darkmatter_description_short' => 'Karanlık madde sayesinde subay ve commander sahibi olunabilir ayrıca tüccar teklifleri, gezegen taşımaları ve eşyalar da ödenebilir. ',
     'of_get_darkmatter' => 'Karanlık madde temin et',
     'of_months' => '3 ay için',
-    'of_week' => '1 hafta için',
-    'of_only' => 'gereken: ',
+    'of_week' => '1 Way için',
+    'of_time_remaining_one' => '%s gün kaldı',
+    'of_time_remaining_many' => '%s gün daha aktif',
     'officiers' => [
         601 => [
             'name' => 'Commander',
             'description' => 'Commander statüsünün avantajlari kendini savaslar sirasinda oldukca hissettirir. Basitlestirilmis emir komutasi sayesinde bircok yapi islemi cok daha hizli gerceklesir. Ayni zamanda imparatorluk menüsü sayesinde tüm gezegenler bir bakista kontrol edilebilir. Commander sayesinde rakiplere göre kücük ama cok önemli avantajlar elde edilir.',
-            'benefits' => 'İnşa Listesi, İmparatorluk Menüsü, Geliştirilmiş galaksi görünümü, Mesaj Filitresi, Kısayollar, Reklamsız Oyun',
+            'benefits' => '+40 Favori, İnşa Listesi, İmparatorluk Menüsü, Nakliye Tarayıcısı, Reklamsız Oyun',
         ],
         602 => [
-            'name' => 'Admiral',
+            'name' => 'Amiral',
             'description' => 'Filo Amirali savaş tecrübesi olan bir asker ve strateji uzmanıdır. En zor savaşlarda bile kontrolü elinde tutmasını bilir ve altındaki amirallerle koordineli hareket eder. Akıllı bir İmparator savaş durumlarında onun desteğine sonuna kadar güvenebilir ve savaşta daha fazla uzay filosu kullanabilir. Ekstradan bir keşif boşluğu kazandırır ve bir saldırıdan sonra ilk önce hangi kaynakların alınacağına dair filolara talimatlar verebilir.',
-            'benefits' => 'Maks. Filo sayısı +2',
+            'benefits' => 'Maks. Filo sayısı +2, Mak. keşifler +1, Geliştirilmiş filo firar oranı',
         ],
         603 => [
-            'name' => 'Engineer',
+            'name' => 'Mühendis',
             'description' => 'Mühendis, enerji yönetimi konusunda uzmandır. Barış zamanları, mühendis imparatorluktaki bütün kolonilerin enerjilerini artırır. Saldırı alma durumunda ise, savunma toplarının enerjilerini ayarlayarak aşırı yüklenmelerini engeller, bu sayede savaş sırasında kaybedilen defans ünitesi sayısını azaltır.',
-            'benefits' => 'Savunma sistemlerindeki kaybı ikiye düşürür,<br/>+10% enerji üretimi',
+            'benefits' => 'Savunma sistemlerindeki kaybı ikiye düşürür, +10% enerji üretimi',
         ],
         604 => [
-            'name' => 'Geologist',
+            'name' => 'Jeolog',
             'description' => 'Jeolog, uzay maden bilimi ve kristalografi konusunda uzmanlaşmıştır. Takımına metalurji ve kimya konusunda yardım etti gibi, gezegenler arası iletişim ile bütün imparatorluk içinde ham madde kullanımını ve saflaştırılmasını en uygun hale getirir.',
             'benefits' => '+10% Maden geliri',
         ],
         605 => [
-            'name' => 'Technocrat',
+            'name' => 'Teknokrat',
             'description' => 'Teknokratlar Loncasi zeki bilim adamlarindan olusur, Onlari her teknolojik gelisimin onculeri olarak bulabilirsiniz. Hic bir normal insanoglu onlarin kodlarini kiramaya tesebbus bile edemez, ve varliklari butun imparatorluk bilim adamlari ve arastirmacilari icin bir esin kaynagidir.',
-            'benefits' => '+2 Casusluk seviyesi,<br/>25% daha kısa bir araştırma süresi',
+            'benefits' => '+2 Casusluk seviyesi, 25% daha kısa bir araştırma süresi',
         ],
     ],
 ];

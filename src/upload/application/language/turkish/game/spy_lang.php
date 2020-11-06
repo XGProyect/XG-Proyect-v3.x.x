@@ -10,8 +10,8 @@ $lang = [
     'spy_activity_title' => '%s %s gezegeninde casusluk eylemi', // ok
     'spy_activity_from' => 'Bölge denetleme', // ok
     'spy_activity_enemy_seen' => '%s %s (%s) gezegeninden yabancı bir filo, %s %s gezegeninin yakınında görüldü.<br>Casusluğu engelleme şansı: %s%%', // ok
-    'spy_result_destroyed_title' => 'Saldıran filo ile bağlantı kurulamıyor.<br>%s',
-    'spy_result_destroyed' => '(Bunun nedeni ilk rauntta vurulmuş olmasıdır)',
+    'spy_result_destroyed_title' => 'Saldırı filosuyla irtibat kesildi.<br>%s',
+    'spy_result_destroyed' => '(Bunun anlamı ilk raundda yok edilmiş olmasıdır.)',
 ];
 
 /* end of spy_lang.php */
