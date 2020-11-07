@@ -1,10 +1,10 @@
 <?php
 $lang = [
-    'lg_welcome_back' => 'Welcome Back!',
-    'lg_enter_email_address' => 'Enter Email Address...',
-    'lg_password' => 'Password',
-    'lg_login' => 'Login',
-    'lg_error_wrong_data' => 'The email address or password are invalid.',
+    'lg_welcome_back' => 'Tekrar hoşgeldiniz!',
+    'lg_enter_email_address' => 'E-posta adresini gir...',
+    'lg_password' => 'Şifre',
+    'lg_login' => 'Oturum aç',
+    'lg_error_wrong_data' => 'E-posta adresi veya şifre geçersiz.',
 ];
 
 /* end of login_lang.php */

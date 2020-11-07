@@ -1,13 +1,13 @@
 <?php
 $lang = [
-    'le_edit' => 'Languages edition',
-    'le_notice' => 'Here you can modify the languages files, HTML is allowed. Use with caution.',
-    'le_file' => 'Select language file',
-    'le_warning' => 'Making a wrong change in any language file may cause your server to stop working, modify it only if you know what you are doing.',
-    'le_sure' => 'Are you sure you want to continue?',
-    'le_save_changes' => 'Save changes',
-    'le_all_ok_message' => 'Changes saved successfully!',
-    'le_all_error_reading' => 'Couldn\'t read the language file, verify its permissions!',
+    'le_edit' => 'Diller sürümü',
+    'le_notice' => 'Burada dil dosyalarını değiştirebilirsiniz, HTML\'ye izin verilir. Dikkatle kullanın.',
+    'le_file' => 'Dil dosyasını seçin',
+    'le_warning' => 'Herhangi bir dil dosyasında yanlış bir değişiklik yapmak, sunucunuzun çalışmamasına neden olabilir, yalnızca ne yaptığınızı biliyorsanız değiştirin.',
+    'le_sure' => 'Devam etmek istediğine emin misin?',
+    'le_save_changes' => 'Değişiklikleri Kaydet',
+    'le_all_ok_message' => 'Değişimler başarıyla kaydedildi!',
+    'le_all_error_reading' => 'Dil dosyası okunamadı, izinlerini doğrulayın!',
 ];
 
 /* end of languages_lang.php */

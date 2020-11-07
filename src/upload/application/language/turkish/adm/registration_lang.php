@@ -1,13 +1,13 @@
 <?php
 $lang = [
-    'ur_title' => 'User registration settings',
-    'ur_sub_title' => 'You can manage new player settings from here.',
-    'ur_general' => 'General',
-    'ur_open_close' => 'Are new accounts allowed?',
-    'ur_welcome_message' => 'Send welcome message',
-    'ur_welcome_email' => 'Send welcome email',
-    'ur_all_ok_message' => 'Changes saved successfully!',
-    'ur_save_parameters' => 'Save changes',
+    'ur_title' => 'Kullanıcı kayıt ayarları',
+    'ur_sub_title' => 'Yeni oyuncu ayarlarını buradan yönetebilirsiniz.',
+    'ur_general' => 'Genel',
+    'ur_open_close' => 'Yeni hesaplara izin var mı?',
+    'ur_welcome_message' => 'Hoşgeldin mesajı gönder',
+    'ur_welcome_email' => 'Hoşgeldin e-postası gönder',
+    'ur_all_ok_message' => 'Değişiklikleri başarıyla kaydedildi!',
+    'ur_save_parameters' => 'Değişiklikleri Kaydet',
 ];
 
 /* end of registration_lang.php */

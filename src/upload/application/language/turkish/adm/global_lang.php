@@ -1,17 +1,17 @@
 <?php
 $lang = [
-    'no_permissions' => 'You need special permissions to see this page',
+    'no_permissions' => 'Bu sayfayı görmek için özel izinlere ihtiyacınız var',
     'user_level' => [
-        0 => 'Player',
+        0 => 'Oyuncu',
         1 => 'Operator (GO)',
         2 => 'Super Operator (SGo)',
         3 => 'Administrator (GA)',
     ],
-    'gn_error_title' => 'Alert!',
-    'gn_warning_title' => 'Warning!',
-    'gn_ok_title' => 'Ok!',
-    'ge_yes' => 'YES',
-    'ge_no' => 'NO',
+    'gn_error_title' => 'Uyarı!',
+    'gn_warning_title' => 'Hata!',
+    'gn_ok_title' => 'Tamam!',
+    'ge_yes' => 'EVET',
+    'ge_no' => 'HAYIR',
 ];
 
 /* end of global_lang.php */

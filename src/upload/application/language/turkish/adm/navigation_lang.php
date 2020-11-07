@@ -1,9 +1,9 @@
 <?php
 $lang = [
-    'nv_search_for' => 'Search for...',
-    'nv_alert_center' => 'Alerts Center',
-    'nv_new_download' => 'There\'s a new version available!',
-    'nv_logout' => 'Logout',
+    'nv_search_for' => 'Aramak...',
+    'nv_alert_center' => 'Uyarı Merkezi',
+    'nv_new_download' => 'Yeni bir sürüm mevcut!',
+    'nv_logout' => 'Çıkış',
 ];
 
 /* end of navigation_lang.php */

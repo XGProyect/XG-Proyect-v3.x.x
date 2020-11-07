@@ -1,13 +1,13 @@
 <?php
 $lang = [
-    'sb_title' => 'Rebuild Highscores',
-    'sb_sub_title' => 'Here you will be able to rebuild the server highscores.',
-    'sb_stats_updated' => 'Summary',
-    'sb_top_memory' => 'Peak memory consumed',
-    'sb_start_memory' => 'Memory consumed at the start',
-    'sb_final_memory' => 'Memory consumed at the end',
-    'sb_stats_update' => 'Highscores rebuilt in %t seconds',
-    'sb_rebuild' => 'Rebuild',
+    'sb_title' => 'Sıralamayı Yenile',
+    'sb_sub_title' => 'Burada sunucu puanını tekrardan yenileye bileceksiniz.',
+    'sb_stats_updated' => 'Özet',
+    'sb_top_memory' => 'Tüketilen en yüksek bellek',
+    'sb_start_memory' => 'Başlangıçta tüketilen bellek',
+    'sb_final_memory' => 'Sonunda tüketilen bellek',
+    'sb_stats_update' => 'Yüksek skorlar %t saniyede yeniden oluşturuldu',
+    'sb_rebuild' => 'Yenile',
 ];
 
 /* end of rebuildhighscores_lang.php */

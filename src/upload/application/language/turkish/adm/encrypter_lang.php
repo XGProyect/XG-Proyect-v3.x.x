@@ -1,11 +1,11 @@
 <?php
 $lang = [
-    'et_title' => 'Password encrypter (Bcrypt)',
-    'et_sub_title' => 'Here you can quickly encrypt a password using the default encryption system provided by XGP.',
-    'et_general' => 'General',
-    'et_pass' => 'Password',
-    'et_result' => 'Result',
-    'et_encript' => 'Encrypt',
+    'et_title' => 'Parola şifreleme (Bcrypt)',
+    'et_sub_title' => 'Burada, XGP tarafından sağlanan varsayılan şifreleme sistemini kullanarak bir parolayı hızlı bir şekilde şifreleyebilirsiniz.',
+    'et_general' => 'Genel',
+    'et_pass' => 'Şifre',
+    'et_result' => 'Sonuç',
+    'et_encript' => 'Şifreleme',
 ];
 
 /* end of encrypter_lang.php */
