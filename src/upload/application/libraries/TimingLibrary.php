@@ -100,6 +100,6 @@ abstract class TimingLibrary
      */
     public static function formatHoursMinutesLeft(int $time): string
     {
-        return date('h:m', $time - time());
+        return date('h:i', $time - time());
     }
 }
