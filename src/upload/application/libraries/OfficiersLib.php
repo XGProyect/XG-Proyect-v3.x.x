@@ -1,25 +1,11 @@
-<?php
-/**
- * Officiers Library
- *
- * @category Library
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
- */
-namespace application\libraries;
+<?php namespace application\libraries;
+
+use application\helpers\StringsHelper;
+use application\libraries\FormatLib as Format;
+use application\libraries\TimingLibrary as Timing;
 
 /**
  * OfficiersLib Class
- *
- * @category Classes
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
  */
 class OfficiersLib
 {
@@ -59,5 +45,36 @@ class OfficiersLib
     public static function getMaxComputer($computer_tech, $amiral_level)
     {
         return 1 + $computer_tech + (1 * (self::isOfficierActive($amiral_level) ? AMIRAL : 0));
+    }
+
+    /**
+     * Get the officer time left as string
+     *
+     * @param int $expiration
+     * @param array $lang
+     * @return string
+     */
+    public static function getOfficierTimeLeft(int $expiration, array $lang): string
+    {
+        $lang_line = 'of_time_remaining_many';
+        $time_left = strtr(
+            Format::prettyTimeAgo(Timing::formatShortDate($expiration)),
+            $lang['timing']
+        );
+
+        if (Timing::getDaysLeft($expiration) <= 1) {
+            $lang_line = 'of_time_remaining_less';
+            $time_left = Timing::formatHoursMinutesLeft($expiration);
+        }
+
+        if (Timing::getDaysLeft($expiration) > 1 && Timing::getDaysLeft($expiration) < 2) {
+            $lang_line = 'of_time_remaining_one';
+            $time_left = '';
+        }
+
+        return StringsHelper::parseReplacements(
+            $lang[$lang_line],
+            [$time_left]
+        );
     }
 }

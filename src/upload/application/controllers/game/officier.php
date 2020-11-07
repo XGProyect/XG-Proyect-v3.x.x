@@ -2,11 +2,9 @@
 
 use application\core\Controller;
 use application\core\Enumerators\OfficiersEnumerator as OE;
-use application\helpers\StringsHelper;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
 use application\libraries\OfficiersLib;
-use application\libraries\TimingLibrary as Timing;
 use DPATH;
 
 /**
@@ -178,7 +176,10 @@ class Officier extends Controller
     {
         if (OfficiersLib::isOfficierActive($this->user[$this->getObjects()->getObjects($item_id)])) {
             return FormatLib::customColor(
-                $this->getOfficierTimeLeft($item_id),
+                OfficiersLib::getOfficierTimeLeft(
+                    $this->user[$this->getObjects()->getObjects($item_id)],
+                    $this->langs->language
+                ),
                 'lime'
             );
         }
@@ -220,30 +221,5 @@ class Officier extends Controller
     private function getOfficierImage(int $officier, string $type): string
     {
         return $this->getObjects()->getPrice($officier, $type);
-    }
-
-    /**
-     * Get the officier time left
-     *
-     * @param int $item_id
-     *
-     * @return string
-     */
-    private function getOfficierTimeLeft(int $item_id): string
-    {
-        $expiration = $this->user[$this->getObjects()->getObjects($item_id)];
-        $lang_line = 'of_time_remaining_many';
-
-        if (Timing::getDaysLeft($expiration) <= 1) {
-            $lang_line = 'of_time_remaining_one';
-        }
-
-        return StringsHelper::parseReplacements(
-            $this->langs->language[$lang_line],
-            [strtr(
-                FormatLib::prettyTimeAgo(Timing::formatShortDate($expiration)),
-                $this->langs->language['timing']
-            )]
-        );
     }
 }

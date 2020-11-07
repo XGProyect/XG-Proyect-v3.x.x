@@ -14,7 +14,6 @@ use application\core\enumerators\PlanetTypesEnumerator;
 use application\core\Language;
 use application\core\Objects;
 use application\core\Template;
-use application\helpers\StringsHelper;
 use application\helpers\UrlHelper;
 use application\libraries\FormatLib;
 use application\libraries\FunctionsLib;
@@ -509,7 +508,7 @@ class Page
      */
     private function gameNavbar()
     {
-        $lang = $this->langs->loadLang(['game/global', 'game/navigation'], true);
+        $lang = $this->langs->loadLang(['game/global', 'game/navigation', 'game/officier'], true);
 
         $parse['dpath'] = DPATH;
         $parse['image'] = $this->current_planet['planet_image'];
@@ -747,24 +746,12 @@ class Page
 
         foreach ($officers as $officer) {
             $inactive = '_un';
-            $details = $lang->language['tn_add_' . $objects[$officer]];
+            $details = $lang->language['of_add_' . $objects[$officer]];
             $expiration = $this->current_user[$objects[$officer]];
 
             if (OfficiersLib::isOfficierActive($expiration)) {
                 $inactive = '';
-                $lang_line = 'tn_time_remaining_many';
-
-                if (Timing::getDaysLeft($expiration) <= 1) {
-                    $lang_line = 'tn_time_remaining_one';
-                }
-
-                $details = StringsHelper::parseReplacements(
-                    $lang->language[$lang_line],
-                    [strtr(
-                        FormatLib::prettyTimeAgo(Timing::formatShortDate($expiration)),
-                        $lang->language['timing']
-                    )]
-                );
+                $details = OfficiersLib::getOfficierTimeLeft($expiration, $lang->language);
             }
 
             $list_of_officiers['img_' . $objects[$officer]] = $inactive;

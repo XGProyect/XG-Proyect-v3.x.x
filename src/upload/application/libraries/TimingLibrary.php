@@ -91,4 +91,15 @@ abstract class TimingLibrary
     {
         return (($time - time()) / 24 / 3600);
     }
+
+    /**
+     * Get the amount of hours and minutes left
+     *
+     * @param int $time
+     * @return string
+     */
+    public static function formatHoursMinutesLeft(int $time): string
+    {
+        return date('h:m', $time - time());
+    }
 }
