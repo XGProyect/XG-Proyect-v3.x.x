@@ -1,8 +1,8 @@
 <?php
 $lang = [
-    'dep_report_title' => 'Fleet deployment', // ok
-    'dep_report_deployed' => 'One of your fleets from %s %s has reached %s %s. The fleet is delivering %s Metal, %s Crystal and %s Deuterium.', // ok
-    'dep_report_back' => 'One of your fleets from %s %s has reached %s %s. The fleet isn\'t delivering goods.', // ok
+    'dep_report_title' => 'Filo konuşlandırma', // ok
+    'dep_report_deployed' => '%s %s gezegenindeki filolarından biri %s %s. gezegenine ulaştı. Filonun nakliyesi: %s Metal, %s Kristal ve %s Deuterium.', // ok
+    'dep_report_back' => '%s %s gezegenindeki filolarından biri %s %s. gezegenine ulaştı. Filo yük aktarmıyor.', // ok
 ];
 
 /* end of deploy_lang.php */

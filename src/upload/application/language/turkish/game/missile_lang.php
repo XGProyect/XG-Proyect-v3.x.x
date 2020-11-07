@@ -1,6 +1,6 @@
 <?php
 $lang = [
-    'mis_attack' => 'Missile Attack', // ok
+    'mis_attack' => 'Roket Saldırısı', // ok
     'mis_all_destroyed' => 'All Attacking rockets have been destroyed by anty-ballistic missiles.',
     'mis_planet_without_defenses' => 'Planet without defenses',
     'mis_some_destroyed' => ' Attacking rocket(s) was/were destroyed by enemy anty-ballistic missiles.', // ok
