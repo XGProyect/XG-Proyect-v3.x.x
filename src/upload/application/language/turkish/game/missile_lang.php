@@ -1,13 +1,13 @@
 <?php
 $lang = [
     'mis_attack' => 'Roket Saldırısı', // ok
-    'mis_all_destroyed' => 'All Attacking rockets have been destroyed by anty-ballistic missiles.',
-    'mis_planet_without_defenses' => 'Planet without defenses',
-    'mis_some_destroyed' => ' Attacking rocket(s) was/were destroyed by enemy anty-ballistic missiles.', // ok
-    'mis_result_own_single' => 'A rocket from your planet %2% smashed into the planet %3%!<br>', // ok
-    'mis_result_own' => '%1% rockets from your planet %2% smashed into the planet %3%!<br>', // ok
-    'mis_result_single' => 'A rocket from planet %2% smashed into your planet %3%!<br>',
-    'mis_result' => '%1% rockets from planet %2% smashed into your planet %3%!<br>',
+    'mis_all_destroyed' => 'Saldıran tüm roketler anti-balistik füzeler tarafından imha edildi.',
+    'mis_planet_without_defenses' => 'Savunmasız gezegen',
+    'mis_some_destroyed' => ' Saldırı füzesi(-leri) düşmanın anti balistik füzeleriyle yok edildi.', // ok
+    'mis_result_own_single' => '%2% gezegeninden atılan bir roket %3% gezegenine düştü!<br>', // ok
+    'mis_result_own' => '%2% gezegeninden atılan %1% roket %3% gezegenine düştü!<br>', // ok
+    'mis_result_single' => '%2% gezegeninden atılan bir roket %3% gezegenine düştü!<br>',
+    'mis_result' => '%2% gezegeninden atılan %1% roket %3% gezegenine düştü!<br>',
 ];
 
 /* end of missile_lang.php */
