@@ -777,5 +777,3 @@ class UpdatesLibrary extends XGPCore
         return $Builded;
     }
 }
-
-/* end of UpdatesLibrary.php */

@@ -10,5 +10,3 @@ $lang = [
     'pm_chars' => 'characters',
     'pm_send' => 'Send',
 ];
-
-/* end of chat_lang.php */

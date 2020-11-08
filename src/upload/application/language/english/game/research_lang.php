@@ -30,5 +30,3 @@ $lang = [
         'research_graviton_technology' => 'Firing a concentrated charge of graviton particles can create an artificial gravity field, which can destroy ships or even moons.',
     ],
 ];
-
-/* end of research_lang.php */

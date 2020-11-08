@@ -50,5 +50,3 @@ $lang = [
     Entonces, podremos atacar jugadores con más de 2 puntos.',
     'se_all_ok_message' => '¡Cambios guardados con éxito!',
 ];
-
-/* end of server_lang.php */

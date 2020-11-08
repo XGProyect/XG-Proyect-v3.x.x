@@ -20,8 +20,17 @@ use application\libraries\UpdatesLibrary;
  */
 class Missions extends XGPCore
 {
+    /**
+     * @var mixed
+     */
     protected $resource;
+    /**
+     * @var mixed
+     */
     protected $pricelist;
+    /**
+     * @var mixed
+     */
     protected $combat_caps;
 
     /**
@@ -211,5 +220,3 @@ class Missions extends XGPCore
         return ($fleet['fleet_end_time'] <= time());
     }
 }
-
-/* end of missions.php */

@@ -29,5 +29,3 @@ $lang = [
     'mg_confirm_action' => 'ok',
     'mg_send_message' => 'Send message',
 ];
-
-/* end of messages_lang.php */

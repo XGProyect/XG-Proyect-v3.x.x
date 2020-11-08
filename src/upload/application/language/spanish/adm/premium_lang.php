@@ -16,5 +16,3 @@ $lang = [
     'pr_save_changes' => 'Guardar cambios',
     'pr_all_ok_message' => '¡Cambios guardados con éxito!',
 ];
-
-/* end of premium_lang.php */

@@ -229,5 +229,3 @@ class AdministrationLib extends XGPCore
         }
     }
 }
-
-/* end of AdministrationLib.php */

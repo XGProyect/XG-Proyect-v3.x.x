@@ -23,10 +23,6 @@ namespace application\libraries\enumerators;
  */
 abstract class ReportStatusEnumerator
 {
-
     const fleetDestroyed = 1;
     const fleetNotDestroyed = 0;
-
 }
-
-/* end of ReportStatusEnumerator.php */

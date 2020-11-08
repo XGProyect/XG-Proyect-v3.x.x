@@ -19,5 +19,3 @@ $lang = [
     'rp_principal_planet_cant_abanone' => 'You are not able to delete your main planet!',
     'rp_wrong_pass' => 'Incorrect password, enter it again.',
 ];
-
-/* end of renameplanet_lang.php */

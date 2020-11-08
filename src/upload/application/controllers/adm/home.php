@@ -194,5 +194,3 @@ class Home extends Controller
         return (count(glob($logs_path . '*.txt')) > 0);
     }
 }
-
-/* end of home.php */

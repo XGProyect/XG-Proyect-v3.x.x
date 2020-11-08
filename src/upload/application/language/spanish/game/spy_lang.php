@@ -13,5 +13,3 @@ $lang = [
     'spy_result_destroyed_title' => 'El contacto con la flota atacante se ha perdido.<br>%s', // ok
     'spy_result_destroyed' => '(Lo que significa que se destruyó en la primera ronda.)', // ok
 ];
-
-/* end of spy_lang.php */

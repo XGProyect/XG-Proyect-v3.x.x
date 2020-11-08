@@ -483,5 +483,3 @@ class Preferences extends Controller
         }
     }
 }
-
-/* end of preferences.php */

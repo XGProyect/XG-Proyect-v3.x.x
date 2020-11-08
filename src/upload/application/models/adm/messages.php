@@ -118,5 +118,3 @@ class Messages extends Model
         return '';
     }
 }
-
-/* end of messages.php */

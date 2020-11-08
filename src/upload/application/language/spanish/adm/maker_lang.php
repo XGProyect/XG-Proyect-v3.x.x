@@ -51,5 +51,3 @@ $lang = [
     'mk_user_invalid_password' => 'La clave ingresada no es válida. Debe tener 4 caracteres como mínimo.<br>',
     'mk_user_added' => 'Usuario agregado con la clave: %s',
 ];
-
-/* end of maker_lang.php */

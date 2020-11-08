@@ -190,5 +190,3 @@ class Galaxy extends Model
         );
     }
 }
-
-/* end of galaxy.php */

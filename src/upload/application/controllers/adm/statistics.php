@@ -178,5 +178,3 @@ class Statistics extends Controller
         ];
     }
 }
-
-/* end of statistics.php */

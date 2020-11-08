@@ -16,5 +16,3 @@ $lang = [
     'pr_save_changes' => 'Save changes',
     'pr_all_ok_message' => 'Changes saved successfully!',
 ];
-
-/* end of premium_lang.php */

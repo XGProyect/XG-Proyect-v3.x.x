@@ -34,5 +34,3 @@ abstract class DefensesEnumerator
     const defense_anti_ballistic_missile = 502;
     const defense_interplanetary_missile = 503;
 }
-
-/* end of DefensesEnumerator.php */

@@ -143,5 +143,3 @@ class Registration extends Controller
         return $settings;
     }
 }
-
-/* end of registration.php */

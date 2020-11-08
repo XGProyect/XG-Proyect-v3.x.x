@@ -18,5 +18,3 @@ $lang = [
     'nt_edit_note' => 'Edit note',
     'nt_delete_market_notes' => 'Delete marked notes',
 ];
-
-/* end of notes_lang.php */

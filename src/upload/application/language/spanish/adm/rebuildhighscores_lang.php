@@ -9,5 +9,3 @@ $lang = [
     'sb_stats_update' => 'Clasificación regenerada en: %t segundos',
     'sb_rebuild' => 'Regenerar',
 ];
-
-/* end of rebuildhighscores_lang.php */

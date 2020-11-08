@@ -19,5 +19,3 @@ $lang = [
     'cr_stealed_ressources' => 'Total loot: %s metal, %s crystal and %s deuterium.', // ok
     'cr_moonbuilt' => 'The huge amount of metal and crystal are merging and form a lunar satellite in orbit the planet %s [%d:%d:%d]!',
 ];
-
-/* end of combatreport_lang.php */

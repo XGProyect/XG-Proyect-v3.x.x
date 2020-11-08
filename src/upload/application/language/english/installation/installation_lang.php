@@ -73,5 +73,3 @@ $lang = [
     'ins_delete_install' => 'You must delete the <i>install</i> directory to prevent security risks!',
     'ins_end' => 'Finalize',
 ];
-
-/* end of installation_lang.php */

@@ -13,5 +13,3 @@ $lang = [
     'ma_mail_text_part4' => '&iexcl;Disfrut&aacute; del juego!',
     'ma_mail_text_part5' => 'Atentamente,<br/>El equipo de %s.-',
 ];
-
-/* end of mail_lang.php */

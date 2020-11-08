@@ -25,7 +25,6 @@ use application\core\Entity;
  */
 class BuildingsEntity extends Entity
 {
-
     /**
      * Constructor
      *
@@ -238,5 +237,3 @@ class BuildingsEntity extends Entity
         return (int) $this->data['building_jump_gate'];
     }
 }
-
-/* end of BuildingsEntity.php */

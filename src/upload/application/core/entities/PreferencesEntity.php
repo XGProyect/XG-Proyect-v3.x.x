@@ -28,7 +28,6 @@ use application\core\Entity;
  */
 class PreferencesEntity extends Entity
 {
-
     /**
      * Constructor
      *
@@ -121,5 +120,3 @@ class PreferencesEntity extends Entity
         return (int) $this->data['preference_delete_mode'];
     }
 }
-
-/* end of PreferencesEntity.php */

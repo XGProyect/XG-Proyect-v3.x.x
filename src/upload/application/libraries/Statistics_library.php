@@ -470,5 +470,3 @@ class Statistics_library extends XGPCore
         unset($all_stats_data, $build, $defs, $ships, $tech, $rank, $update_query, $values);
     }
 }
-
-/* end of Statistics_library.php */

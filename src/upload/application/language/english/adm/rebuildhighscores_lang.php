@@ -9,5 +9,3 @@ $lang = [
     'sb_stats_update' => 'Highscores rebuilt in %t seconds',
     'sb_rebuild' => 'Rebuild',
 ];
-
-/* end of rebuildhighscores_lang.php */

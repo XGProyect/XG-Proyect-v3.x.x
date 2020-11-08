@@ -38,5 +38,3 @@ $lang = [
     'bd_building_queue_not_enough_resources_from' => 'Mensaje del sistema',
     'bd_building_queue_not_enough_resources_subject' => 'Producción cancelada',
 ];
-
-/* end of buildings_lang.php */

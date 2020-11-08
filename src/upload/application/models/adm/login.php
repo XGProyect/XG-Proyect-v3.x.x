@@ -44,5 +44,3 @@ class Login extends Model
         return [];
     }
 }
-
-/* end of login.php */

@@ -87,5 +87,3 @@ $lang = [
     'exp_found_goods' => 'La flota ha descubierto una nave no tripulada! <br> Tus exploradores han recuperado %s de %s, %s de %s, %s de %s y %s de %s.',
     'exp_back_home' => 'Tu expedición regresó al hangar.',
 ];
-
-/* end of expedition_lang.php */

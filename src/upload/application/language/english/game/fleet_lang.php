@@ -105,5 +105,3 @@ $lang = [
     'fl_search_user_btn' => 'Search',
     'fl_save_all' => 'Ok',
 ];
-
-/* end of fleet_lang.php */

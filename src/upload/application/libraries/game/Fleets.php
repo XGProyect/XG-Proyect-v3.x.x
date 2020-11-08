@@ -246,5 +246,3 @@ class Fleets
         return new FleetEntity($fleet);
     }
 }
-
-/* end of fleets.php */

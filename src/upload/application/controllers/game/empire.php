@@ -251,5 +251,3 @@ class Empire extends Controller
         );
     }
 }
-
-/* end of empire.php */

@@ -23,9 +23,17 @@ namespace application\core;
  */
 class Hooks
 {
-
+    /**
+     * @var mixed
+     */
     public $_enabled = false;
-    public $_hooks = array();
+    /**
+     * @var array
+     */
+    public $_hooks = [];
+    /**
+     * @var mixed
+     */
     public $_in_progress = false;
 
     /**
@@ -156,5 +164,3 @@ class Hooks
         return true;
     }
 }
-
-/* end of Hooks.php */

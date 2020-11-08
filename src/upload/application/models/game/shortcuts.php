@@ -35,5 +35,3 @@ class Shortcuts extends Model
         );
     }
 }
-
-/* end of shortcuts.php */

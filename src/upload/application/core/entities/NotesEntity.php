@@ -95,5 +95,3 @@ class NotesEntity extends Entity
         return $this->data['note_text'];
     }
 }
-
-/* end of NotesEntity.php */

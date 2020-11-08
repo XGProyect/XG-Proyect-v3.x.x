@@ -138,7 +138,6 @@ class Buddies extends Controller
             }
 
             $this->{$action}();
-
             FunctionsLib::redirect('game.php?page=buddies');
         } catch (Exception $e) {
             die('Caught exception: ' . $e->getMessage() . "\n");
@@ -477,5 +476,3 @@ class Buddies extends Controller
         return (count($array) > 0);
     }
 }
-
-/* end of buddy.php */

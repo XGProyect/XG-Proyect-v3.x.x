@@ -43,5 +43,3 @@ $lang = [
     'hm_media' => 'Media',
     'hm_forum' => 'Board',
 ];
-
-/* end of home_lang.php */

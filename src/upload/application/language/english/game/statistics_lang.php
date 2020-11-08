@@ -18,5 +18,3 @@ $lang = [
     'st_actions' => 'Actions',
     'st_ally_request' => 'Send request to this alliance',
 ];
-
-/* end of statistics_lang.php */

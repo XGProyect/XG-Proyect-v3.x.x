@@ -21,10 +21,15 @@ use application\libraries\TimingLibrary as Timing;
  */
 class Statistics extends Controller
 {
-
     const MODULE_ID = 16;
 
+    /**
+     * @var mixed
+     */
     private $_current_user;
+    /**
+     * @var mixed
+     */
     private $_current_planet;
 
     /**
@@ -267,5 +272,3 @@ class Statistics extends Controller
         return $return;
     }
 }
-
-/* end of statistics.php */

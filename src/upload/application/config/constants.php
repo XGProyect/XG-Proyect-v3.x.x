@@ -274,5 +274,3 @@ if (extension_loaded('iconv')) {
 } else {
     define('ICONV_ENABLED', false);
 }
-
-/* end of constants.php */

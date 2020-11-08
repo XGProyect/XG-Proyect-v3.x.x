@@ -144,5 +144,3 @@ class Stay extends Missions
         FunctionsLib::sendMessage($owner, '', $time, 5, $this->langs->line('mi_fleet_command'), $status_message, $message);
     }
 }
-
-/* end of stay.php */

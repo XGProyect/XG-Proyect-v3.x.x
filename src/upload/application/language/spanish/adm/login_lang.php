@@ -6,5 +6,3 @@ $lang = [
     'lg_login' => 'Ingresar',
     'lg_error_wrong_data' => 'El correo electrónico o la contraseña son incorrectos',
 ];
-
-/* end of login_lang.php */

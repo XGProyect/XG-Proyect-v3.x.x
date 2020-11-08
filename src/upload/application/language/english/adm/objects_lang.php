@@ -61,5 +61,3 @@ $lang = [
         503 => 'Interplanetary Missiles',
     ],
 ];
-
-/* end of objects_lang.php */

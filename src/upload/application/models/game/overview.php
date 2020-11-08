@@ -101,5 +101,3 @@ class Overview extends Model
         return null;
     }
 }
-
-/* end of overview.php */

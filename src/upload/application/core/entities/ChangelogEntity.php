@@ -28,7 +28,6 @@ use application\core\Entity;
  */
 class ChangelogEntity extends Entity
 {
-
     /**
      * Constructor
      *
@@ -91,5 +90,3 @@ class ChangelogEntity extends Entity
         return (string) $this->data['changelog_description'];
     }
 }
-
-/* end of ChangelogEntity.php */

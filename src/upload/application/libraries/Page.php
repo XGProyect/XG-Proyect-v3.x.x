@@ -508,7 +508,7 @@ class Page
      */
     private function gameNavbar()
     {
-        $lang = $this->langs->loadLang(['game/global', 'game/navigation'], true);
+        $lang = $this->langs->loadLang(['game/global', 'game/navigation', 'game/officier'], true);
 
         $parse['dpath'] = DPATH;
         $parse['image'] = $this->current_planet['planet_image'];
@@ -746,10 +746,12 @@ class Page
 
         foreach ($officers as $officer) {
             $inactive = '_un';
-            $details = $lang->language['tn_add_' . $objects[$officer]];
+            $details = $lang->language['of_add_' . $objects[$officer]];
+            $expiration = $this->current_user[$objects[$officer]];
 
-            if (OfficiersLib::isOfficierActive($this->current_user[$objects[$officer]])) {
+            if (OfficiersLib::isOfficierActive($expiration)) {
                 $inactive = '';
+                $details = OfficiersLib::getOfficierTimeLeft($expiration, $lang->language);
             }
 
             $list_of_officiers['img_' . $objects[$officer]] = $inactive;

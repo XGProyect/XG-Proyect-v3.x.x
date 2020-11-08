@@ -6,5 +6,3 @@ $lang = [
     'pr_general' => 'Permissions list',
     'pr_all_ok_message' => 'Changes saved successfully!',
 ];
-
-/* end of permissions_lang.php */

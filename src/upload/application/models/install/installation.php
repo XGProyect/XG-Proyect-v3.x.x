@@ -120,5 +120,3 @@ class Installation extends Model
         return $this->db->escapeValue($var);
     }
 }
-
-/* end of installation.php */

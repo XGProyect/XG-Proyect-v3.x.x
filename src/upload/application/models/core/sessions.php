@@ -117,5 +117,3 @@ class Sessions extends Model
         return ($this->db->affectedRows() > 0);
     }
 }
-
-/* end of sessions.php */

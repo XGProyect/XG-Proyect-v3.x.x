@@ -1,15 +1,4 @@
-<?php
-/**
- * Timing Library
- *
- * @category Library
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
- */
-namespace application\libraries;
+<?php namespace application\libraries;
 
 use application\core\Language;
 
@@ -91,6 +80,26 @@ abstract class TimingLibrary
 
         return strtr("%s d", ["%s" => $days]);
     }
-}
 
-/* end of Timing_library.php */
+    /**
+     * Get the amount of days left
+     *
+     * @param int $time
+     * @return float
+     */
+    public static function getDaysLeft(int $time): float
+    {
+        return (($time - time()) / 24 / 3600);
+    }
+
+    /**
+     * Get the amount of hours and minutes left
+     *
+     * @param int $time
+     * @return string
+     */
+    public static function formatHoursMinutesLeft(int $time): string
+    {
+        return date('h:i', $time - time());
+    }
+}

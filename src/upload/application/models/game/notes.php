@@ -115,5 +115,3 @@ class Notes extends Model
         );
     }
 }
-
-/* end of notes.php */

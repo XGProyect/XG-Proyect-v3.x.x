@@ -28,5 +28,3 @@ abstract class UserRanksEnumerator
     const SGO = 2;
     const ADMIN = 3;
 }
-
-/* end of UserRanksEnumerator.php */

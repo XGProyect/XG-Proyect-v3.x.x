@@ -77,5 +77,3 @@ class Language
         }
     }
 }
-
-/* end of Language.php */

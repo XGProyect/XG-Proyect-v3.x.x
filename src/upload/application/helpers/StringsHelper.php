@@ -82,5 +82,3 @@ abstract class StringsHelper
         );
     }
 }
-
-/* end of StringsHelper.php */

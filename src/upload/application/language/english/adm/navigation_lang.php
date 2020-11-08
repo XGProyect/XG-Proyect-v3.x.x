@@ -5,5 +5,3 @@ $lang = [
     'nv_new_download' => 'There\'s a new version available!',
     'nv_logout' => 'Logout',
 ];
-
-/* end of navigation_lang.php */

@@ -103,7 +103,7 @@
                                 <a href="game.php?page=officier" accesskey="o">
                                     <img style="border:0;" src="{dpath}premium/commander_ikon{img_premium_officier_commander}.gif" width="32"
                                         height="32" alt="{tn_commander}"
-                                        onmouseover="return overlib('<table width=390px><tr><td class=c>{tn_hire_commander}</td></tr><tr><th style=text-align:left>{add_premium_officier_commander}</th></tr></table>', CENTER, WIDTH, 390, OFFSETY, 20);"
+                                        onmouseover="return overlib('<table width=390px><tr><td class=c>{of_hire_commander}</td></tr><tr><th style=text-align:left>{add_premium_officier_commander}</th></tr></table>');"
                                         onmouseout="return nd();">
                                 </a>
                             </td>
@@ -111,7 +111,7 @@
                                 <a href="game.php?page=officier" accesskey="o">
                                     <img style="border:0;" src="{dpath}premium/admiral_ikon{img_premium_officier_admiral}.gif" width="32"
                                         height="32" alt="{tn_admiral}"
-                                        onmouseover="return overlib('<table width=400px><tr><td class=c>{tn_hire_admiral}</td></tr><tr><th style=text-align:left>{add_premium_officier_admiral}</th></tr></table>', CENTER, WIDTH, 400, OFFSETY, 20);"
+                                        onmouseover="return overlib('<table width=400px><tr><td class=c>{of_hire_admiral}</td></tr><tr><th style=text-align:left>{add_premium_officier_admiral}</th></tr></table>');"
                                         onmouseout="return nd();">
                                 </a>
                             </td>
@@ -119,7 +119,7 @@
                                 <a href="game.php?page=officier" accesskey="o">
                                     <img style="border:0;" src="{dpath}premium/ingenieur_ikon{img_premium_officier_engineer}.gif" width="32"
                                         height="32" alt="{tn_engineer}"
-                                        onmouseover="return overlib('<table width=310px><tr><td class=c>{tn_hire_admiral}</td></tr><tr><th style=text-align:left>{add_premium_officier_engineer}</th></tr></table>', CENTER, WIDTH, 310, OFFSETY, 20);"
+                                        onmouseover="return overlib('<table width=310px><tr><td class=c>{of_hire_admiral}</td></tr><tr><th style=text-align:left>{add_premium_officier_engineer}</th></tr></table>');"
                                         onmouseout="return nd();">
                                 </a>
                             </td>
@@ -127,7 +127,7 @@
                                 <a href="game.php?page=officier" accesskey="o">
                                     <img style="border:0;" src="{dpath}premium/geologe_ikon{img_premium_officier_geologist}.gif" width="32"
                                         height="32" alt="{tn_geologist}"
-                                        onmouseover="return overlib('<table width=150px><tr><td class=c>{tn_hire_geologist}</td></tr><tr><th style=text-align:left>{add_premium_officier_geologist}</th></tr></table>', CENTER, WIDTH, 150, OFFSETY, 20);"
+                                        onmouseover="return overlib('<table width=200px><tr><td class=c>{of_hire_geologist}</td></tr><tr><th style=text-align:left>{add_premium_officier_geologist}</th></tr></table>');"
                                         onmouseout="return nd();">
                                 </a>
                             </td>
@@ -135,7 +135,7 @@
                                 <a href="game.php?page=officier" accesskey="o">
                                     <img style="border:0;" src="{dpath}premium/technokrat_ikon{img_premium_officier_technocrat}.gif" width="32"
                                         height="32" alt="{tn_technocrat}"
-                                        onmouseover="return overlib('<table width=275px><tr><td class=c>{tn_hire_technocrat}</td></tr><tr><th style=text-align:left>{add_premium_officier_technocrat}</th></tr></table>', CENTER, WIDTH, 275, OFFSETY, 20);"
+                                        onmouseover="return overlib('<table width=275px><tr><td class=c>{of_hire_technocrat}</td></tr><tr><th style=text-align:left>{add_premium_officier_technocrat}</th></tr></table>');"
                                         onmouseout="return nd();">
                                 </a>
                             </td>

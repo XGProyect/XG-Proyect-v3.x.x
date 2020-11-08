@@ -38,5 +38,3 @@ $lang = [
         'defense_interplanetary_missile' => 'Interplanetary Missiles destroy enemy defences. Your interplanetary missiles have got a coverage of %s systems.',
     ],
 ];
-
-/* end of shipyard_lang.php */

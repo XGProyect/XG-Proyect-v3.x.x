@@ -23,7 +23,6 @@ namespace application\libraries;
  */
 class ProductionLib
 {
-
     /**
      * maxStorable
      *
@@ -93,5 +92,3 @@ class ProductionLib
         return ($resource * 0.01 * $max_production);
     }
 }
-
-/* end of ProductionLib.php */

@@ -41,7 +41,6 @@ class Ships
     public function __construct($planet_data)
     {
         if (is_array($planet_data)) {
-
             $this->setUp($planet_data);
         }
     }
@@ -56,9 +55,7 @@ class Ships
         $list_of_ships = [];
 
         foreach ($this->_ships as $ship) {
-
             if (($ship instanceof ShipsEntity)) {
-
                 $list_of_ships[] = $ship;
             }
         }
@@ -86,7 +83,6 @@ class Ships
     private function setUp($ships)
     {
         foreach ($ships as $ship) {
-
             $this->_ships[] = $this->createNewShipsEntity($ship);
         }
     }
@@ -103,5 +99,3 @@ class Ships
         return new ShipsEntity($ships);
     }
 }
-
-/* end of Ships.php */

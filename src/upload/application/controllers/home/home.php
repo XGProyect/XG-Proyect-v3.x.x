@@ -156,5 +156,3 @@ class Home extends Controller
         ];
     }
 }
-
-/* end of home.php */

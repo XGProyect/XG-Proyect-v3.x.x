@@ -134,5 +134,3 @@ class Deploy extends Missions
         );
     }
 }
-
-/* end of deploy.php */

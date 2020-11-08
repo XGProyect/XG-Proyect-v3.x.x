@@ -229,5 +229,3 @@ class Report
         return new ReportEntity($report);
     }
 }
-
-/* end of Report.php */

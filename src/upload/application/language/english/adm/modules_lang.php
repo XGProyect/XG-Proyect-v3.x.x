@@ -32,5 +32,3 @@ $lang = [
     ],
     'mdl_all_ok_message' => 'Features saved successfully!',
 ];
-
-/* end of modules_lang.php */

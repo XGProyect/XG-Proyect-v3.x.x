@@ -188,5 +188,3 @@ class Phalanx extends Controller
         );
     }
 }
-
-/* end of phalanx.php */

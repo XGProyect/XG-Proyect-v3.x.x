@@ -58,5 +58,3 @@ class NoobsProtectionLib extends Model
         );
     }
 }
-
-/* end of noobsprotectionlib.php */

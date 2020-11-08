@@ -33,4 +33,3 @@ $hook['before_page'] = [
  */
 
 // INSERT HOOKS BEFORE THIS LINE
-/* end of hooks.php */

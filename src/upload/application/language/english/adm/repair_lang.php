@@ -18,5 +18,3 @@ $lang = [
     'db_no' => 'No',
     'db_table_result' => 'Result',
 ];
-
-/* end of repair_lang.php */

@@ -482,5 +482,3 @@ class Messages extends Controller
         FunctionsLib::redirect('game.php?' . strtr($_SERVER['QUERY_STRING'], ['&amp;' => '&']));
     }
 }
-
-/* end of messages.php */

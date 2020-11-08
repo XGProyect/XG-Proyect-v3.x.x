@@ -23,7 +23,6 @@ namespace application\core;
  */
 class Sessions extends XGPCore
 {
-
     /**
      *
      * @var boolean
@@ -95,5 +94,3 @@ class Sessions extends XGPCore
         $this->alive = false;
     }
 }
-
-/* end of Sessions.php */

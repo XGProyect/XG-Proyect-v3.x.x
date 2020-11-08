@@ -81,5 +81,3 @@ class Options extends Model
         );
     }
 }
-
-/* end of options.php */

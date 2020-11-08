@@ -37,5 +37,3 @@ $lang = [
     // other
     'tools_manual_update_confirm' => '¿Estás seguro que deseas regenerar la clasificación?',
 ];
-
-/* end of menu_lang.php */

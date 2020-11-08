@@ -35,5 +35,3 @@ class Combatreport extends Model
         );
     }
 }
-
-/* end of combatreport.php */

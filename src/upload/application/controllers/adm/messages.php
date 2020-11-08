@@ -233,5 +233,3 @@ class Messages extends Controller
         ];
     }
 }
-
-/* end of messages.php */

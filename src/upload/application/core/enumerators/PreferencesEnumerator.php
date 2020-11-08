@@ -39,5 +39,3 @@ abstract class PreferencesEnumerator
         'down' => 1,
     ];
 }
-
-/* end of PreferencesEnumerator.php */

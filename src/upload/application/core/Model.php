@@ -54,5 +54,3 @@ abstract class Model
         $this->db = new Database;
     }
 }
-
-/* end of Model.php */

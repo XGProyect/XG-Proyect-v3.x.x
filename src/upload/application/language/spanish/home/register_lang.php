@@ -28,5 +28,3 @@ $lang = [
     Para ver todas las naves, estructuras defensivas, edificios e investigaciones que podrás desarrollar puedes echar un vistazo al árbol tecnológico en "Tecnología" en el menu de la izquierda.<br/>
     Ahora puede comentar la conquista del universo... ¡Buena suerte!',
 ];
-
-/* end of register_lang.php */

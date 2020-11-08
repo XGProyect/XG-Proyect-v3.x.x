@@ -39,5 +39,3 @@ class Officier extends Model
         }
     }
 }
-
-/* end of officier.php */

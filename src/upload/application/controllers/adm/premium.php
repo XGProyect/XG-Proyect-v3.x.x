@@ -135,5 +135,3 @@ class Premium extends Controller
         );
     }
 }
-
-/* end of premium.php */

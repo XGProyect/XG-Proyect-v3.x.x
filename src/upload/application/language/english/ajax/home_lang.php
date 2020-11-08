@@ -5,5 +5,3 @@ $lang = [
     'aj_home_rules' => 'Rules',
     'aj_home_trailer' => 'Trailer',
 ];
-
-/* end of home_lang.php */

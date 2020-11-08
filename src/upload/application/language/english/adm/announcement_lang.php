@@ -18,5 +18,3 @@ $lang = [
     'an_email_failed' => 'Failed!',
     'al_color' => 'Pick a color',
 ];
-
-/* end of announcement_lang.php */

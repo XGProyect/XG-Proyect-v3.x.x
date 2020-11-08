@@ -56,5 +56,3 @@ class Server extends Model
         }
     }
 }
-
-/* end of announcement.php */

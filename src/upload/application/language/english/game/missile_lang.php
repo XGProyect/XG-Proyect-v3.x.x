@@ -9,5 +9,3 @@ $lang = [
     'mis_result_single' => 'A rocket from planet %2% smashed into your planet %3%!<br>',
     'mis_result' => '%1% rockets from planet %2% smashed into your planet %3%!<br>',
 ];
-
-/* end of missile_lang.php */

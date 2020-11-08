@@ -171,5 +171,3 @@ class Preferences
         return new PreferencesEntity($preference);
     }
 }
-
-/* end of Preferences.php */

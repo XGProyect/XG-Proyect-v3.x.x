@@ -170,5 +170,3 @@ class Mail extends Controller
         );
     }
 }
-
-/* end of mail.php */

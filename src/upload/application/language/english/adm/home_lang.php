@@ -29,5 +29,3 @@ $lang = [
     'hm_extensions' => 'Libraries / Extensions',
     'hm_principal_contributors' => 'Special thanks to',
 ];
-
-/* end of home_lang.php */

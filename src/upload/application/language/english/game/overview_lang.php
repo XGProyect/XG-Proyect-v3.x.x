@@ -18,5 +18,3 @@ $lang = [
     'ov_points' => 'Points',
     'ov_fields' => 'Fields',
 ];
-
-/* end of overview_lang.php */

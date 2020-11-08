@@ -120,5 +120,3 @@ class Login extends Controller
         return '';
     }
 }
-
-/* end of login.php */

@@ -378,5 +378,3 @@ class UsersLibrary extends Model
         );
     }
 }
-
-/* end of users.php */

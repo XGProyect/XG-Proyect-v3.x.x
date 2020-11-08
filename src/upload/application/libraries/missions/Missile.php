@@ -195,5 +195,3 @@ class Missile extends Missions
         return $objectives[$primary_objective];
     }
 }
-
-/* end of missile.php */

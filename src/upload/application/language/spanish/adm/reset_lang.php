@@ -32,5 +32,3 @@ $lang = [
     're_reset_excess' => 'Opciones reiniciadas con éxito',
     're_reset_go' => 'Reiniciar',
 ];
-
-/* end of reset_lang.php */

@@ -143,5 +143,3 @@ class Notes
         return new NotesEntity($note);
     }
 }
-
-/* end of notes.php */

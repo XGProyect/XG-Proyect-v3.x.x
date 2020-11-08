@@ -9,5 +9,3 @@ $lang = [
     'ur_all_ok_message' => 'Changes saved successfully!',
     'ur_save_parameters' => 'Save changes',
 ];
-
-/* end of registration_lang.php */

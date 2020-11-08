@@ -148,5 +148,3 @@ class Errors extends Controller
         return glob($logs_path . '*.txt');
     }
 }
-
-/* end of errors.php */

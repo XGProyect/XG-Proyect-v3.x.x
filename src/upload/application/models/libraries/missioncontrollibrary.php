@@ -90,5 +90,3 @@ class MissionControlLibrary extends Model
         );
     }
 }
-
-/* end of MissionControlLibrary.php */

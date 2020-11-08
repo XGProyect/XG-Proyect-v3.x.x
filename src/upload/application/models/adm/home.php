@@ -107,5 +107,3 @@ class Home extends Model
         );
     }
 }
-
-/* end of login.php */

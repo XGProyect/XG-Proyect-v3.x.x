@@ -20,7 +20,6 @@ use application\libraries\FunctionsLib as Functions;
  */
 class TraderLayer extends Controller
 {
-
     const MODULE_ID = 5;
 
     /**
@@ -335,5 +334,3 @@ class TraderLayer extends Controller
         return $list_of_resources;
     }
 }
-
-/* end of traderlayer.php */

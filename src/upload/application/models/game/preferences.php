@@ -189,5 +189,3 @@ class Preferences extends Model
         }
     }
 }
-
-/* end of preferences.php */

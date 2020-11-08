@@ -13,5 +13,3 @@ $lang = [
     'ge_yes' => 'SI',
     'ge_no' => 'NO',
 ];
-
-/* end of global_lang.php */

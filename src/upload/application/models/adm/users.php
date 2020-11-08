@@ -662,5 +662,3 @@ class Users extends Model
         );
     }
 }
-
-/* end of users.php */

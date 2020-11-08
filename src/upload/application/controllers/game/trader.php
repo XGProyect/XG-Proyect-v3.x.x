@@ -315,5 +315,3 @@ class Trader extends Controller
         return [];
     }
 }
-
-/* end of trader.php */

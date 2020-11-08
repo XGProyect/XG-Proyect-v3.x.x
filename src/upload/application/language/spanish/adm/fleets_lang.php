@@ -38,5 +38,3 @@ $lang = [
         15 => 'Expedición',
     ],
 ];
-
-/* end of fleets_lang.php */
