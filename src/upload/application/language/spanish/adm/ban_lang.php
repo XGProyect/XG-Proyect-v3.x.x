@@ -30,5 +30,3 @@ $lang = [
     'bn_lift_ban_success' => 'Suspensión del usuario "%s" removida.',
     'bn_all_fields_required' => 'Debes completar todos los campos',
 ];
-
-/* end of ban_lang.php */

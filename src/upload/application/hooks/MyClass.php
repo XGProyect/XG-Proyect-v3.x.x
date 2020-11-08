@@ -29,7 +29,6 @@ use application\core\XGPCore;
  */
 class MyClass extends XGPCore
 {
-
     public function __construct()
     {
         parent::__construct();
@@ -46,7 +45,7 @@ class MyClass extends XGPCore
      * @param array $params
      * @return void
      */
-    public function myMethod(array $params = array()): void
+    public function myMethod(array $params = []): void
     {
         $query = $this->db->queryFetch(
             "SELECT `user_name` FROM `" . USERS . "` u WHERE u.`user_id` = '1'"
@@ -63,5 +62,3 @@ class MyClass extends XGPCore
         echo '</div>';
     }
 }
-
-/* end of MyClass.php */

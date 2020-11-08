@@ -448,5 +448,3 @@ class Maker extends Controller
         return $new_pass;
     }
 }
-
-/* end of maker.php */

@@ -4,5 +4,3 @@ $lang = [
     'px_scan_position' => 'Scan position',
     'px_fleet_movement' => 'Current Fleet Movement',
 ];
-
-/* end of phalanx_lang.php */

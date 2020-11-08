@@ -61,5 +61,3 @@ abstract class ArraysHelper
         return null;
     }
 }
-
-/* end of ArraysHelper.php */

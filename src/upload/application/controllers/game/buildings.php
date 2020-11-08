@@ -868,5 +868,3 @@ class Buildings extends Controller
         return $RetValue;
     }
 }
-
-/* end of buildings.php */

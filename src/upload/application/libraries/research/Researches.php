@@ -48,7 +48,6 @@ class Researches
     public function __construct(array $research, int $current_user_id)
     {
         if (is_array($research)) {
-
             $this->setUp($research);
             $this->setUserId($current_user_id);
         }
@@ -64,9 +63,7 @@ class Researches
         $list_of_research = [];
 
         foreach ($this->_research as $research) {
-
             if (($research instanceof ResearchEntity)) {
-
                 $list_of_research[] = $research;
             }
         }
@@ -94,7 +91,6 @@ class Researches
     private function setUp($researches)
     {
         foreach ($researches as $research) {
-
             $this->_research[] = $this->createNewResearchEntity($research);
         }
     }
@@ -129,5 +125,3 @@ class Researches
         return new ResearchEntity($research);
     }
 }
-
-/* end of Researches.php */

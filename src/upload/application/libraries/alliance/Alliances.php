@@ -199,5 +199,3 @@ class Alliances
         return new AllianceEntity($alliance);
     }
 }
-
-/* end of Alliance.php */

@@ -375,5 +375,3 @@ class Changelog extends Controller
         return null;
     }
 }
-
-/* end of changelog.php */

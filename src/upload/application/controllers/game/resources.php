@@ -23,13 +23,27 @@ use application\libraries\ProductionLib;
  */
 class Resources extends Controller
 {
-
     const MODULE_ID = 4;
 
+    /**
+     * @var mixed
+     */
     private $_resource;
+    /**
+     * @var mixed
+     */
     private $_prod_grid;
+    /**
+     * @var mixed
+     */
     private $_reslist;
+    /**
+     * @var mixed
+     */
     private $_current_user;
+    /**
+     * @var mixed
+     */
     private $_current_planet;
 
     /**
@@ -139,7 +153,7 @@ class Resources extends Controller
                 $deuterium = ProductionLib::currentProduction($deuterium, $post_percent);
                 $energy = ProductionLib::currentProduction($energy, $post_percent);
                 $Field = 'planet_' . $this->_resource[$ProdID] . '_percent';
-                $CurrRow = array();
+                $CurrRow = [];
                 $CurrRow['name'] = $this->_resource[$ProdID];
                 $CurrRow['percent'] = $this->_current_planet[$Field];
                 $CurrRow['option'] = $this->build_options($CurrRow['percent']);
@@ -195,7 +209,7 @@ class Resources extends Controller
         $parse['daily_deuterium'] = FormatLib::colorNumber(FormatLib::prettyNumber($parse['daily_deuterium']));
         $parse['weekly_deuterium'] = FormatLib::colorNumber(FormatLib::prettyNumber($parse['weekly_deuterium']));
 
-        $ValidList['percent'] = array(0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100);
+        $ValidList['percent'] = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
         $SubQry = '';
 
         if ($_POST && !parent::$users->isOnVacations($this->_current_user)) {
@@ -313,5 +327,3 @@ class Resources extends Controller
         return $prod_level;
     }
 }
-
-/* end of resources.php */

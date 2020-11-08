@@ -175,5 +175,3 @@ class Ban extends Model
         );
     }
 }
-
-/* end of ban.php */

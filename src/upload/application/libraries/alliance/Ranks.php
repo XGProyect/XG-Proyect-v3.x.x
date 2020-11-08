@@ -29,7 +29,6 @@ use JsonException;
  */
 class Ranks
 {
-
     /**
      * Contains the ranks
      *
@@ -247,5 +246,3 @@ class Ranks
         return $rank_id;
     }
 }
-
-/* end of Ranks.php */

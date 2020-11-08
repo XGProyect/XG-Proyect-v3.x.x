@@ -42,5 +42,3 @@ abstract class BuildingsEnumerator
     const BUILDING_JUMP_GATE = 43;
     const BUILDING_MISSILE_SILO = 44;
 }
-
-/* end of BuildingsEnumerator.php */

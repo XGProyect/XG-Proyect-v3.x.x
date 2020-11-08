@@ -74,5 +74,3 @@ abstract class UrlHelper
         return (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' or $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
     }
 }
-
-/* end of UrlHelper.php */

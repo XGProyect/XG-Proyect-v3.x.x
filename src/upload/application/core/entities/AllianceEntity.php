@@ -25,7 +25,6 @@ use application\core\Entity;
  */
 class AllianceEntity extends Entity
 {
-
     /**
      * Constructor
      *
@@ -168,5 +167,3 @@ class AllianceEntity extends Entity
         return $this->data['alliance_members'];
     }
 }
-
-/* end of AllianceEntity.php */

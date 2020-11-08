@@ -68,5 +68,3 @@ if (!$system->getHooks()->call_hook('new_page')) {
 
 // any other case
 FunctionsLib::redirect('game.php?page=overview');
-
-/* end of game.php */

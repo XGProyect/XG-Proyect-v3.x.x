@@ -105,5 +105,3 @@ class Infos extends Model
         );
     }
 }
-
-/* end of infos.php */

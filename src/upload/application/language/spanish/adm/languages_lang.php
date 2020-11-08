@@ -9,5 +9,3 @@ $lang = [
     'le_all_ok_message' => '¡Cambios guardados con éxito!',
     'le_all_error_reading' => '¡No se pudo leer el archivo de idioma. Verifique los permisos!',
 ];
-
-/* end of languages_lang.php */

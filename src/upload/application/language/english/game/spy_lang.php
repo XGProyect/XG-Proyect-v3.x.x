@@ -13,5 +13,3 @@ $lang = [
     'spy_result_destroyed_title' => 'Contact was lost with the attacking fleet.<br>%s',
     'spy_result_destroyed' => '(The fleet was destroyed in the first round)',
 ];
-
-/* end of spy_lang.php */

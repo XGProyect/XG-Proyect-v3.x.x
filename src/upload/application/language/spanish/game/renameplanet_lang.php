@@ -19,5 +19,3 @@ $lang = [
     'rp_principal_planet_cant_abanone' => 'El planeta principal no puede ser abandonado.',
     'rp_wrong_pass' => 'Contraseña incorrecta, vuelve a ingresarla.',
 ];
-
-/* end of renameplanet_lang.php */

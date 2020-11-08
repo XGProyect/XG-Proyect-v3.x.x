@@ -32,5 +32,3 @@ class Banned extends Model
         );
     }
 }
-
-/* end of banned.php */

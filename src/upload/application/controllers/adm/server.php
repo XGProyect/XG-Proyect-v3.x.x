@@ -27,7 +27,6 @@ use DateTimeZone;
  */
 class Server extends Controller
 {
-
     /**
      * Current user data
      *
@@ -345,5 +344,3 @@ class Server extends Controller
         return $options;
     }
 }
-
-/* end of server.php */

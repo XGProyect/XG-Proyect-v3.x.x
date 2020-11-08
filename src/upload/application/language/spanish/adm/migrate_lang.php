@@ -27,5 +27,3 @@ $lang = [
     'mi_alert_type_3_content_2' => 'Los plugins no serán importados.-',
     'mi_alert_type_3_content_3' => 'Las configuraciones no serán importadas.-',
 ];
-
-/* end of migrate_lang.php */

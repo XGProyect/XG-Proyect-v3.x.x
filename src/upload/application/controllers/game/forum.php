@@ -19,7 +19,6 @@ use application\libraries\FunctionsLib;
  */
 class Forum extends Controller
 {
-
     /**
      * @var int Module ID
      */
@@ -52,5 +51,3 @@ class Forum extends Controller
         FunctionsLib::redirect(FunctionsLib::readConfig('forum_url'));
     }
 }
-
-/* end of forum.php */

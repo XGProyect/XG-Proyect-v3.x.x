@@ -32,5 +32,3 @@ $lang = [
     ],
     'mdl_all_ok_message' => '¡Características guardadas con éxito!',
 ];
-
-/* end of modules_lang.php */

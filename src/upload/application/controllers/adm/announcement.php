@@ -27,7 +27,6 @@ use JS_PATH;
  */
 class Announcement extends Controller
 {
-
     /**
      * Current user data
      *
@@ -266,5 +265,3 @@ class Announcement extends Controller
         ];
     }
 }
-
-/* end of announcement.php */

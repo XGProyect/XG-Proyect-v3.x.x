@@ -151,5 +151,3 @@ class NoobsProtectionLib extends XGPCore
         return ($user_auth_level <= $this->allowed_level);
     }
 }
-
-/* end of NoobsProtectionLib.php */

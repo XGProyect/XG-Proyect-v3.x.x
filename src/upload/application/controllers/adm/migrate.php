@@ -27,14 +27,41 @@ class Migrate extends Controller
      */
     private $user;
 
+    /**
+     * @var mixed
+     */
     private $dbObject;
+    /**
+     * @var mixed
+     */
     private $host;
+    /**
+     * @var mixed
+     */
     private $dbuser;
+    /**
+     * @var mixed
+     */
     private $password;
+    /**
+     * @var mixed
+     */
     private $name;
+    /**
+     * @var mixed
+     */
     private $prefix;
+    /**
+     * @var mixed
+     */
     private $version;
+    /**
+     * @var mixed
+     */
     private $demo;
+    /**
+     * @var array
+     */
     private $output = [];
 
     /**
@@ -311,5 +338,3 @@ class Migrate extends Controller
         unset($password);
     }
 }
-
-/* end of migrate.php */

@@ -561,5 +561,3 @@ abstract class FunctionsLib extends XGPCore
             && $current['planet_type'] == $target['planet_type']);
     }
 }
-
-/* end of FunctionsLib.php */

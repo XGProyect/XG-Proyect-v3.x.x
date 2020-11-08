@@ -160,5 +160,3 @@ class Chat extends Controller
         );
     }
 }
-
-/* end of chat.php */

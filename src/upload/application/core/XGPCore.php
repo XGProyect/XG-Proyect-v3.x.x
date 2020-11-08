@@ -148,5 +148,3 @@ abstract class XGPCore
         }
     }
 }
-
-/* end of XGPCore.php */

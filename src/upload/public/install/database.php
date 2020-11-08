@@ -446,5 +446,3 @@ $tables['user_statistics'] = "CREATE TABLE `" . USERS_STATISTICS . "` (
 `user_statistic_update_time` int(11) NOT NULL DEFAULT '0',
 PRIMARY KEY (`user_statistic_user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
-
-/* end of database.php */

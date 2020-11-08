@@ -31,5 +31,3 @@ if (isset($_GET['content'])) {
         new $class_name();
     }
 }
-
-/* end of ajax.php */

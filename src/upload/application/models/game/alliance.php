@@ -534,5 +534,3 @@ class Alliance extends Model
         return $sort;
     }
 }
-
-/* end of alliance.php */

@@ -124,5 +124,3 @@ class Banned extends Controller
         return $this->langs->line('bn_no_players_banned');
     }
 }
-
-/* end of banned.php */

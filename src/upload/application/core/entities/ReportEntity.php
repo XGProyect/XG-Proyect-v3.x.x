@@ -25,7 +25,6 @@ use application\core\Entity;
  */
 class ReportEntity extends Entity
 {
-
     /**
      * Constructor
      *
@@ -88,5 +87,3 @@ class ReportEntity extends Entity
         return $this->data['report_time'];
     }
 }
-
-/* end of ReportEntity.php */

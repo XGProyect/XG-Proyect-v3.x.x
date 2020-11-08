@@ -38,5 +38,3 @@ $lang = [
         'defense_interplanetary_missile' => 'Los misiles interplanetarios destruyen los sistemas de defensa del enemigo. Tus misiles interplanetarios tienen actualmente un alcance de %s sistemas.',
     ],
 ];
-
-/* end of shipyard_lang.php */

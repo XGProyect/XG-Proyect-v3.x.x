@@ -242,5 +242,3 @@ class Alliances extends Model
         );
     }
 }
-
-/* end of alliances.php */

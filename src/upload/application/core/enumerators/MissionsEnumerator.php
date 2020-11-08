@@ -35,5 +35,3 @@ abstract class MissionsEnumerator
     const MISSILE = 10;
     const EXPEDITION = 15;
 }
-
-/* end of MissionsEnumerator.php */

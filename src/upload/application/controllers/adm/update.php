@@ -27,9 +27,21 @@ class Update extends Controller
      */
     private $user;
 
+    /**
+     * @var mixed
+     */
     private $system_version;
+    /**
+     * @var mixed
+     */
     private $db_version;
+    /**
+     * @var mixed
+     */
     private $demo;
+    /**
+     * @var array
+     */
     private $output = [];
 
     /**
@@ -199,5 +211,3 @@ class Update extends Controller
         }
     }
 }
-
-/* end of update.php */

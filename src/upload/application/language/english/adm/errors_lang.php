@@ -11,5 +11,3 @@ $lang = [
     'er_track' => 'Line / Class / File',
     'er_errors' => '%s error/s',
 ];
-
-/* end of errors_lang.php */

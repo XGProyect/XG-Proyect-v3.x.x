@@ -16,7 +16,6 @@ namespace application\libraries\buildings;
  */
 final class QueueElements
 {
-
     /**
      *
      * @var int
@@ -47,5 +46,3 @@ final class QueueElements
      */
     public $build_mode = '';
 }
-
-/* end of QueueElements.php */

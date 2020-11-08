@@ -99,5 +99,3 @@ class Empire extends Model
         return [];
     }
 }
-
-/* end of imperium.php */

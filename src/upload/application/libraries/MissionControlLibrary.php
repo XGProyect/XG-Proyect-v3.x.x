@@ -16,7 +16,6 @@ namespace application\libraries;
  */
 class MissionControlLibrary
 {
-
     /**
      * Contains the model MissionControlLibrary
      *
@@ -99,5 +98,3 @@ class MissionControlLibrary
         }
     }
 }
-
-/* end of MissionControlLibrary.php */

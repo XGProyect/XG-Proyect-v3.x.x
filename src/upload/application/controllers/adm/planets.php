@@ -130,5 +130,3 @@ class Planets extends Controller
         );
     }
 }
-
-/* end of planets.php */

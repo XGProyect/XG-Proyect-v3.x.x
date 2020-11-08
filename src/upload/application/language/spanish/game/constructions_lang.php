@@ -20,5 +20,3 @@ $lang = [
     'building_jump_gate' => 'Salto cuántico',
     'building_missile_silo' => 'Silo',
 ];
-
-/* end of constructions_lang.php */

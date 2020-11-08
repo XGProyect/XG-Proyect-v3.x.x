@@ -31,7 +31,6 @@ use SimpleXMLElement;
  */
 class Xml
 {
-
     /**
      *
      * @var Xml
@@ -117,7 +116,7 @@ class Xml
      */
     public function getConfigs()
     {
-        $config = array();
+        $config = [];
         $x = $this->config->children();
 
         foreach ($x as $xmlObject) {
@@ -167,5 +166,3 @@ class Xml
         return self::$instance;
     }
 }
-
-/* end of Xml.php */

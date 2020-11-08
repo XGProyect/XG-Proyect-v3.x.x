@@ -56,5 +56,3 @@ class Mail extends Model
         );
     }
 }
-
-/* end of mail.php */

@@ -200,5 +200,3 @@ class Languages extends Controller
         return ['language_files' => $lang_options];
     }
 }
-
-/* end of languages.php */

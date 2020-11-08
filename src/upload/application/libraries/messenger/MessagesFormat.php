@@ -26,5 +26,3 @@ abstract class MessagesFormat
     const SIMPLE = 0;
     const HTML = 1;
 }
-
-/* end of MessagesFormat.php */

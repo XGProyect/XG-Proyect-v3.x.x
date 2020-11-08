@@ -281,5 +281,3 @@ class Fleets extends Controller
         return ['fleet_id' => $fleet['fleet_id']];
     }
 }
-
-/* end of fleets.php */

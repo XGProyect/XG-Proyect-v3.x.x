@@ -28,5 +28,3 @@ class Backup extends Model
         return $this->db->backupDb();
     }
 }
-
-/* end of backup.php */

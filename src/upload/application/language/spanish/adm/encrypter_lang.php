@@ -7,5 +7,3 @@ $lang = [
     'et_result' => 'Resultado',
     'et_encript' => 'Encriptar',
 ];
-
-/* end of encrypter_lang.php */

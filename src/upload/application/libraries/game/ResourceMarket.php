@@ -353,5 +353,3 @@ class ResourceMarket
         return new BuildingsEntity($planet);
     }
 }
-
-/* end of ResourceMarket.php */

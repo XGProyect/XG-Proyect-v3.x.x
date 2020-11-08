@@ -147,5 +147,3 @@ class Changelog extends Model
         );
     }
 }
-
-/* end of changelog.php */

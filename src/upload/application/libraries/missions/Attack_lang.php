@@ -18,8 +18,13 @@ use Lang;
  */
 class Attack_lang implements Lang
 {
-
+    /**
+     * @var mixed
+     */
     private $lang;
+    /**
+     * @var mixed
+     */
     private $objects;
 
     /**
@@ -219,5 +224,3 @@ class Attack_lang implements Lang
         return sprintf($this->lang->line('cr_moonbuilt'), $name, $galaxy, $system, $planet);
     }
 }
-
-/* end of Attack_lang.php */

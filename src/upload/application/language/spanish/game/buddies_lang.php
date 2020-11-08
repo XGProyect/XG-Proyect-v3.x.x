@@ -30,5 +30,3 @@ $lang = [
     'bu_to_accept_title' => 'Nueva solicitud de amistad',
     'bu_to_accept_text' => 'El jugador %u te ha enviado una solicitud de amistad.',
 ];
-
-/* end of buddies_lang.php */

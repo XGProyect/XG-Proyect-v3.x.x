@@ -131,5 +131,3 @@ class Phalanx extends Model
         );
     }
 }
-
-/* end of phalanx.php */

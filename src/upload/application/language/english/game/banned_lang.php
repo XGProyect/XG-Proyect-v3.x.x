@@ -9,5 +9,3 @@ $lang = [
     'bn_until' => 'Until',
     'bn_by' => 'By',
 ];
-
-/* end of banned_lang.php */

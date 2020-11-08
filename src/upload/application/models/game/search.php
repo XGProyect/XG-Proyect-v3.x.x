@@ -116,5 +116,3 @@ class Search extends Model
         return [];
     }
 }
-
-/* end of search.php */

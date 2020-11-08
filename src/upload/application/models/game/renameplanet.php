@@ -116,5 +116,3 @@ class Renameplanet extends Model
         );
     }
 }
-
-/* end of renameplanet.php */

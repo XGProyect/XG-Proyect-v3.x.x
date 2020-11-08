@@ -180,5 +180,3 @@ class Buddy
         return new BuddyEntity($buddy);
     }
 }
-
-/* end of Buddy.php */

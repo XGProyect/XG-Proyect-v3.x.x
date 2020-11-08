@@ -98,5 +98,3 @@ $lang = [
         'research_graviton_technology' => 'Un gravitón es una partícula elemental responsable de los efectos de la gravedad. Es su propia antipartícula, tiene masa cero y carece de carga, también posee un giro de 2. A través del disparo de partículas concentradas de gravitón se genera un campo gravitacional artificial con suficiente potencia y poder de atracción para destruir no solo naves, sino lunas enteras. Para poder producir la cantidad necesaria de partículas de gravitón, el planeta tiene que ser capaz de generar una inmensa cantidad de energía. Requisitos: Laboratorio de investigación (nivel 12)',
     ],
 ];
-
-/* end of infos_lang.php */

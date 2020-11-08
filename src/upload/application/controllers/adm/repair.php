@@ -21,6 +21,9 @@ use application\libraries\FunctionsLib;
  */
 class Repair extends Controller
 {
+    /**
+     * @var mixed
+     */
     private $current_user;
 
     /**
@@ -128,5 +131,3 @@ class Repair extends Controller
         );
     }
 }
-
-/* end of repair.php */

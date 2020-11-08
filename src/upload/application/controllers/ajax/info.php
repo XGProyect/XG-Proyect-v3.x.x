@@ -47,5 +47,3 @@ class Info extends Controller
         );
     }
 }
-
-/* end of info.php */

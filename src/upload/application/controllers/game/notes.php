@@ -24,7 +24,6 @@ use application\libraries\users\Notes as Note;
  */
 class Notes extends Controller
 {
-
     /**
      *
      * @var int
@@ -336,5 +335,3 @@ class Notes extends Controller
         );
     }
 }
-
-/* end of notes.php */

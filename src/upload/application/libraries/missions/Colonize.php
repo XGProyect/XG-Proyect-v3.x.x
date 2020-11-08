@@ -204,5 +204,3 @@ class Colonize extends Missions
         }
     }
 }
-
-/* end of colonize.php */

@@ -28,7 +28,6 @@ use application\libraries\OfficiersLib;
  */
 class Building
 {
-
     /**
      *
      * @var string $_queue Queue
@@ -316,5 +315,3 @@ class Building
         }
     }
 }
-
-/* end of Buildings.php */

@@ -90,5 +90,3 @@ class Statistics extends Model
         );
     }
 }
-
-/* end of statistics.php */

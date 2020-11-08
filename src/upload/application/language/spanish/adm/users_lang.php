@@ -260,5 +260,3 @@ $lang = [
         503 => 'Misil interplanetario',
     ],
 ];
-
-/* end of users_lang.php */

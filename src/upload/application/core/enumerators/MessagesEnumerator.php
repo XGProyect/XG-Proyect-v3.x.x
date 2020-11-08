@@ -30,5 +30,3 @@ abstract class MessagesEnumerator
     const USER = 4;
     const GENERAL = 5;
 }
-
-/* end of MessagesEnumerator.php */

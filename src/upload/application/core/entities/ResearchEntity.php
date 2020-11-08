@@ -25,7 +25,6 @@ use application\core\Entity;
  */
 class ResearchEntity extends Entity
 {
-
     /**
      * Constructor
      *
@@ -228,5 +227,3 @@ class ResearchEntity extends Entity
         return $this->data['research_graviton_technology'];
     }
 }
-
-/* end of ResearchEntity.php */

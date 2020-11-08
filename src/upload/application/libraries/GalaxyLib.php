@@ -845,5 +845,3 @@ class GalaxyLib extends XGPCore
         ][$status];
     }
 }
-
-/* end of GalaxyLib.php */

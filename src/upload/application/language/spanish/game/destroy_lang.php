@@ -9,5 +9,3 @@ $lang = [
     'des_result_both' => 'Tu estrella de la muerte apunta su cañón pshock de gravitón alterno al satélite. Al principio, los temblores de luz se acumulan cada vez más en la superficie de la luna. La luna comienza a deformarse y se desgarra. Gigantescos trozos de escombros llegan volando hacia tu flota. Es demasiado tarde para evadirlos. Toda tu flota queda arrasada por una lluvia de escombros.',
     'des_moon_ds_chances' => 'La probabilidad de destruir la luna es de: %d %%, La probabilidad de que sean destruidas las estrellas de la muerte es de: %d %%',
 ];
-
-/* end of destroy_lang.php */

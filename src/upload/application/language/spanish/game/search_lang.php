@@ -24,5 +24,3 @@ $lang = [
     'sh_tip_write' => 'Escribir mensaje',
     'sh_tip_buddy_request' => 'Enviar solicitud de amigo',
 ];
-
-/* end of search_lang.php */

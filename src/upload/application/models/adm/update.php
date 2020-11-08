@@ -28,5 +28,3 @@ class Update extends Model
         return $this->db->query($query);
     }
 }
-
-/* end of update.php */

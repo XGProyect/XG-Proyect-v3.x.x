@@ -173,7 +173,6 @@ class Recycle extends Missions
 
                     if ($target_planet['planet_debris_metal'] >
                         ($recycle_capacity - $recycled_resources['crystal'])) {
-
                         $recycled_resources['metal'] = $recycle_capacity - $recycled_resources['crystal'];
                     } else {
                         $recycled_resources['metal'] = $target_planet['planet_debris_metal'];
@@ -211,5 +210,3 @@ class Recycle extends Missions
         );
     }
 }
-
-/* end of recycle.php */

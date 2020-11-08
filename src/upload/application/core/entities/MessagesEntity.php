@@ -25,7 +25,6 @@ use application\core\Entity;
  */
 class MessagesEntity extends Entity
 {
-
     /**
      * Constructor
      *
@@ -128,4 +127,3 @@ class MessagesEntity extends Entity
         return $this->data['message_read'];
     }
 }
-/* end of MessagesEntity.php */

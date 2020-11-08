@@ -125,5 +125,3 @@ class Premium
         return new PremiumEntity($premium);
     }
 }
-
-/* end of Premium.php */

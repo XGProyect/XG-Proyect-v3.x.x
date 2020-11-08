@@ -20,7 +20,6 @@ use application\libraries\TimingLibrary as Timing;
  */
 class Changelog extends Controller
 {
-
     const MODULE_ID = 0;
 
     /**
@@ -75,5 +74,3 @@ class Changelog extends Controller
         );
     }
 }
-
-/* end of changelog.php */

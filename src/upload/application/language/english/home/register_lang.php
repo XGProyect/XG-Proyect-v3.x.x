@@ -35,5 +35,3 @@ $lang = [
     <br/><br/>
     This message will be deleted in 24 hours.',
 ];
-
-/* end of register_lang.php */

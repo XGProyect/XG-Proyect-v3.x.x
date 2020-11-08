@@ -201,5 +201,3 @@ class Buddies extends Model
         ) ?? [];
     }
 }
-
-/* end of buddies.php */

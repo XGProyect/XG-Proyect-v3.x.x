@@ -34,5 +34,3 @@ class Buildings extends Model
         );
     }
 }
-
-/* end of buildings.php */

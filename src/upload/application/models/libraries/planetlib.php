@@ -144,5 +144,3 @@ class PlanetLib extends Model
         );
     }
 }
-
-/* end of planetlib.php */

@@ -324,5 +324,3 @@ class UsersLibrary
         }
     }
 }
-
-/* end of Users.php */

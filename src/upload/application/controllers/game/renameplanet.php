@@ -19,10 +19,15 @@ use application\libraries\FunctionsLib;
  */
 class Renameplanet extends Controller
 {
-
     const MODULE_ID = 1;
 
+    /**
+     * @var mixed
+     */
     private $_current_user;
+    /**
+     * @var mixed
+     */
     private $_current_planet;
 
     /**
@@ -169,5 +174,3 @@ class Renameplanet extends Controller
         }
     }
 }
-
-/* end of renameplanet.php */

@@ -25,7 +25,6 @@ use application\libraries\FunctionsLib;
  */
 class Search extends Controller
 {
-
     const MODULE_ID = 17;
 
     /**
@@ -276,5 +275,3 @@ class Search extends Controller
         return '';
     }
 }
-
-/* end of search.php */

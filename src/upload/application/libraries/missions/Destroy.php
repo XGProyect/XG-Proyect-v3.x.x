@@ -858,5 +858,3 @@ class Destroy extends Missions
         $this->hyperspace_technology[$user_id] = $level;
     }
 }
-
-/* end of Destroy.php */

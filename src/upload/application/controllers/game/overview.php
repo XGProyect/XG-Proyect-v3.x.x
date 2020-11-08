@@ -26,11 +26,19 @@ use application\libraries\UpdatesLibrary;
  */
 class Overview extends Controller
 {
-
     const MODULE_ID = 1;
 
+    /**
+     * @var mixed
+     */
     private $_current_user;
+    /**
+     * @var mixed
+     */
     private $_current_planet;
+    /**
+     * @var mixed
+     */
     private $_noob;
 
     /**
@@ -436,5 +444,3 @@ class Overview extends Controller
         return $user_rank;
     }
 }
-
-/* end of overview.php */
