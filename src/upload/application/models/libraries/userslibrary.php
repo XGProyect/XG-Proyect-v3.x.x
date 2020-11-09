@@ -1,15 +1,4 @@
-<?php
-/**
- * UsersLibrary Model
- *
- * @category Model
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.2.0
- */
-namespace application\models\libraries;
+<?php namespace application\models\libraries;
 
 use application\core\Model;
 use application\libraries\FunctionsLib as Functions;
