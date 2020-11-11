@@ -5,7 +5,8 @@
             <td class="header" style="width:5;">
                 <table class="header">
                     <tr class="header">
-                        <td class="header"><img src="{dpath}planets/small/s_{image}.jpg" height="50" width="50">
+                        <td class="header">
+                            <img src="{dpath}planets/small/s_{image}.jpg" height="50" width="50">
                         </td>
                         <td class="header">
                             <table class="header">
@@ -23,19 +24,15 @@
                         <td width="85" class="header">
                             <img src="{dpath}resources/metal.gif" width="42" height="22">
                         </td>
-
                         <td width="85" class="header">
                             <img src="{dpath}resources/crystal.gif" width="42" height="22">
                         </td>
-
                         <td width="85" class="header">
                             <img src="{dpath}resources/deuterium.gif" width="42" height="22">
                         </td>
-
                         <td width="85" class="header">
                             <img src="{dpath}resources/darkmatter.jpg" width="42" height="22" title="Dark Matter">
                         </td>
-
                         <td width="85" class="header">
                             <img src="{dpath}resources/energy.gif" width="42" height="22">
                         </td>
