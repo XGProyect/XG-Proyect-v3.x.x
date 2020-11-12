@@ -110,6 +110,8 @@ class Infos extends Controller
         $parse['name'] = $this->langs->language[$this->_resource[$this->_element_id]];
         $parse['image'] = $this->_element_id;
         $parse['description'] = $this->langs->language['info'][$this->_resource[$this->_element_id]];
+        $parse['table_head'] = '';
+        $parse['table_data'] = '';
 
         if ($this->_element_id < 13 or ($this->_element_id == 43 && $this->_current_planet[$this->_resource[43]] > 0)) {
             $PageTPL = 'infos/info_buildings_table';
