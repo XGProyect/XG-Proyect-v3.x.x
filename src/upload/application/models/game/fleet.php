@@ -452,7 +452,8 @@ class Fleet extends Model
             if ($fleet->getFleetGroup() > 0) {
                 $acs = $this->getAcsOwner($fleet->getFleetGroup());
 
-                if ($acs['acs_owner'] == $fleet->getFleetOwner()
+                if (!empty($acs['acs_owner'])
+                    && $acs['acs_owner'] == $fleet->getFleetOwner()
                     && $fleet->getFleetMission() == Missions::ATTACK) {
                     $this->removeAcs($fleet->getFleetGroup());
                 }
