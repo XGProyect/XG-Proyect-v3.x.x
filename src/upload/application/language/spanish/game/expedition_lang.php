@@ -72,6 +72,7 @@ $lang = [
     'exp_nothing_13' => '',
     'exp_nothing_14' => '',
     'exp_nothing_15' => '',
+    'exp_nothing_16' => '',
 
     // lost ships
     'exp_lost_1' => '',
