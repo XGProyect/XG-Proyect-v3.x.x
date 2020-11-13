@@ -267,7 +267,14 @@ $tables['options_insert'] = "INSERT INTO `" . OPTIONS . "` (`option_name`, `opti
 ('merchant_metal_multiplier', '3'),
 ('merchant_crystal_multiplier', '2'),
 ('merchant_deuterium_multiplier', '1'),
-('registration_dark_matter', '0');";
+('registration_dark_matter', '0'),
+('mailing_protocol', 'mail'),
+('mailing_smtp_host', ''),
+('mailing_smtp_user', ''),
+('mailing_smtp_pass', ''),
+('mailing_smtp_port', '25'),
+('mailing_smtp_timeout', '5'),
+('mailing_smtp_crypto', '');";
 
 $tables['planets'] = "CREATE TABLE `" . PLANETS . "` (
 `planet_id` bigint(11) NOT NULL AUTO_INCREMENT,

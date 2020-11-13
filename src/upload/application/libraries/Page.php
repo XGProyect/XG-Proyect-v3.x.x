@@ -252,6 +252,7 @@ class Page
         $flag = '';
         $pages = [
             ['server', '2'],
+            ['mailing', '2'],
             ['modules', '2'],
             ['planets', '2'],
             ['registration', '2'],
