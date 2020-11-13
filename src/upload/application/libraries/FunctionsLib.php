@@ -328,6 +328,18 @@ abstract class FunctionsLib extends XGPCore
 
             $mail = new CI_Email();
 
+            // mailing settings
+            $mail->protocol = self::readConfig('mailing_protocol');
+
+            if (self::readConfig('mailing_protocol') === 'smtp') {
+                $mail->smtp_host = self::readConfig('mailing_smtp_host');
+                $mail->smtp_user = self::readConfig('mailing_smtp_user');
+                $mail->smtp_pass = self::readConfig('mailing_smtp_pass');
+                $mail->smtp_port = self::readConfig('mailing_smtp_port');
+                $mail->smtp_timeout = self::readConfig('mailing_smtp_timeout');
+                $mail->smtp_crypto = self::readConfig('mailing_smtp_crypto');
+            }
+
             if ($format === 'text' or $format === 'html') {
                 $mail->set_mailtype($format);
             }
