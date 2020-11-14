@@ -1,20 +1,8 @@
 <?php declare (strict_types = 1);
 
-/**
- * Common File
- *
- * @category Core
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @since    3.1.0
- */
-
 namespace App\core;
 
 use App\core\ErrorHandler;
-use App\core\Hooks;
 use App\core\Sessions;
 use App\libraries\FunctionsLib;
 use App\libraries\SecurePageLib;
@@ -32,9 +20,9 @@ require_once XGP_ROOT . CORE_PATH . 'AutoLoader.php';
 class Common
 {
     private const APPLICATIONS = [
-        'home' => ['setSystemTimezone', 'setSession', 'setHooks', 'setUpdates'],
-        'admin' => ['setSystemTimezone', 'setSecure', 'setSession', 'setHooks'],
-        'game' => ['setSystemTimezone', 'setSecure', 'setSession', 'setHooks', 'setUpdates'],
+        'home' => ['setSystemTimezone', 'setSession', 'setUpdates'],
+        'admin' => ['setSystemTimezone', 'setSecure', 'setSession'],
+        'game' => ['setSystemTimezone', 'setSecure', 'setSession', 'setUpdates'],
         'install' => [],
     ];
 
@@ -51,13 +39,6 @@ class Common
      * @var Sessions
      */
     private $sessions = null;
-
-    /**
-     * Contains the Hooks object
-     *
-     * @var Hooks
-     */
-    private $hooks = null;
 
     /**
      * Start the system
@@ -90,16 +71,6 @@ class Common
     public function getSession(): Sessions
     {
         return $this->sessions;
-    }
-
-    /**
-     * Get hooks
-     *
-     * @return Hooks
-     */
-    public function getHooks(): Hooks
-    {
-        return $this->hooks;
     }
 
     /**
@@ -191,19 +162,6 @@ class Common
     private function setSession(): void
     {
         $this->sessions = new Sessions;
-    }
-
-    /**
-     * Return a new Hooks objects
-     *
-     * @return Hooks
-     */
-    private function setHooks(): void
-    {
-        $this->hooks = new Hooks;
-
-        // Before load stuff
-        $this->hooks->call_hook('before_loads');
     }
 
     /**

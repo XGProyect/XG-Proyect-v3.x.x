@@ -23,9 +23,6 @@
 // GAME FILES VERSION
 define('SYSTEM_VERSION', '3.2.0');
 
-// HOOKS
-define('HOOKS_ENABLED', false);
-
 // DEBUG MODE
 define('DEBUG_MODE', false);
 
@@ -86,7 +83,6 @@ define('SYSTEM_PATH', 'system' . DIRECTORY_SEPARATOR);
 define('CONFIGS_PATH', APP_PATH . 'config' . DIRECTORY_SEPARATOR);
 define('CONTROLLERS_PATH', APP_PATH . 'controllers' . DIRECTORY_SEPARATOR);
 define('CORE_PATH', APP_PATH . 'core' . DIRECTORY_SEPARATOR);
-define('HOOKS_PATH', APP_PATH . 'hooks' . DIRECTORY_SEPARATOR);
 define('LANG_PATH', APP_PATH . 'language' . DIRECTORY_SEPARATOR);
 define('HELPERS_PATH', APP_PATH . 'helpers' . DIRECTORY_SEPARATOR);
 define('LIB_PATH', APP_PATH . 'libraries' . DIRECTORY_SEPARATOR);

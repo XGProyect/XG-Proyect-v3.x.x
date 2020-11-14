@@ -19,8 +19,6 @@ require XGP_ROOT . 'app' . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 
 $system = new Common;
 $system->bootUp('game');
 
-$system->getHooks()->call_hook('before_page');
-
 $page = filter_input(INPUT_GET, 'page');
 
 if (is_null($page)) {
@@ -59,11 +57,6 @@ if (isset($page)) {
 
         new $class_name();
     }
-}
-
-// call hooks
-if (!$system->getHooks()->call_hook('new_page')) {
-    FunctionsLib::redirect('game.php?page=overview');
 }
 
 // any other case
