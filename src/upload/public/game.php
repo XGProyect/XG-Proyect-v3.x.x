@@ -9,12 +9,12 @@
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-use application\core\common;
-use application\libraries\FunctionsLib;
+use App\core\common;
+use App\libraries\FunctionsLib;
 
 define('XGP_ROOT', realpath(dirname(__DIR__)) . DIRECTORY_SEPARATOR);
 
-require XGP_ROOT . 'application' . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'common.php';
+require XGP_ROOT . 'app' . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'common.php';
 
 $system = new Common;
 $system->bootUp('game');
@@ -55,7 +55,7 @@ if (isset($page)) {
     if (file_exists($file_name)) {
         include $file_name;
 
-        $class_name = 'application\controllers\game\\' . ucfirst($page);
+        $class_name = 'App\controllers\game\\' . ucfirst($page);
 
         new $class_name();
     }

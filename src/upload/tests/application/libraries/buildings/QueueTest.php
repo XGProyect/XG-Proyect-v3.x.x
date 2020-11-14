@@ -1,8 +1,8 @@
 <?php
 declare (strict_types = 1);
 
-use application\libraries\buildings\Queue;
-use application\libraries\buildings\QueueElements;
+use App\libraries\buildings\Queue;
+use App\libraries\buildings\QueueElements;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -10,9 +10,8 @@ use PHPUnit\Framework\TestCase;
  */
 class QueueTest extends TestCase
 {
-
     /**
-     * @covers application\libraries\buildings\Queue::addElementToQueue
+     * @covers App\libraries\buildings\Queue::addElementToQueue
      */
     public function testAddOneElementToQueue(): void
     {
@@ -34,7 +33,7 @@ class QueueTest extends TestCase
     }
 
     /**
-     * @covers application\libraries\buildings\Queue::addElementToQueue
+     * @covers App\libraries\buildings\Queue::addElementToQueue
      */
     public function testAddManyElementToQueue(): void
     {
@@ -80,7 +79,7 @@ class QueueTest extends TestCase
     }
 
     /**
-     * @covers application\libraries\buildings\Queue::removeElementFromQueue
+     * @covers App\libraries\buildings\Queue::removeElementFromQueue
      */
     public function testRemoveElementFromQueueWithOneElement(): void
     {
@@ -104,7 +103,7 @@ class QueueTest extends TestCase
     }
 
     /**
-     * @covers application\libraries\buildings\Queue::removeElementFromQueue
+     * @covers App\libraries\buildings\Queue::removeElementFromQueue
      */
     public function testRemoveLastElementFromQueueWithTwoElement(): void
     {
@@ -139,7 +138,7 @@ class QueueTest extends TestCase
     }
 
     /**
-     * @covers application\libraries\buildings\Queue::removeElementFromQueue
+     * @covers App\libraries\buildings\Queue::removeElementFromQueue
      */
     public function testRemoveFirstElementFromQueueWithTwoElement(): void
     {
@@ -174,7 +173,7 @@ class QueueTest extends TestCase
     }
 
     /**
-     * @covers application\libraries\buildings\Queue::removeElementFromQueue
+     * @covers App\libraries\buildings\Queue::removeElementFromQueue
      */
     public function testRemoveMiddleElementFromQueueWithThreeElement(): void
     {
@@ -219,7 +218,7 @@ class QueueTest extends TestCase
     }
 
     /**
-     * @covers application\libraries\buildings\Queue::removeElementFromQueue
+     * @covers App\libraries\buildings\Queue::removeElementFromQueue
      */
     public function testRemoveElementFromQueueInvalidParameters(): void
     {
@@ -264,7 +263,7 @@ class QueueTest extends TestCase
     }
 
     /**
-     * @covers application\libraries\buildings\Queue::getElementFromQueueAsArray
+     * @covers App\libraries\buildings\Queue::getElementFromQueueAsArray
      */
     public function testGetElementFromQueueAsArray(): void
     {
@@ -313,7 +312,7 @@ class QueueTest extends TestCase
     }
 
     /**
-     * @covers application\libraries\buildings\Queue::returnQueueAsString
+     * @covers App\libraries\buildings\Queue::returnQueueAsString
      */
     public function testReturnQueueAsString(): void
     {
@@ -341,7 +340,7 @@ class QueueTest extends TestCase
     }
 
     /**
-     * @covers application\libraries\buildings\Queue::returnQueueAsArray
+     * @covers App\libraries\buildings\Queue::returnQueueAsArray
      */
     public function testReturnQueueAsArray(): void
     {
@@ -378,7 +377,7 @@ class QueueTest extends TestCase
     }
 
     /**
-     * @covers application\libraries\buildings\Queue::countQueueElements
+     * @covers App\libraries\buildings\Queue::countQueueElements
      */
     public function testCountQueueElements(): void
     {
