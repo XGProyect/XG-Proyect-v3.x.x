@@ -11,13 +11,13 @@
  */
 namespace App\controllers\home;
 
-use App\core\Controller;
+use App\core\BaseController;
 use App\libraries\FunctionsLib as Functions;
 
 /**
  * Home Class
  */
-class Home extends Controller
+class Home extends BaseController
 {
     /**
      * Constructor

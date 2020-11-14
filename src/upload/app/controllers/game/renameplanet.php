@@ -11,13 +11,13 @@
  */
 namespace App\controllers\game;
 
-use App\core\Controller;
+use App\core\BaseController;
 use App\libraries\FunctionsLib;
 
 /**
  * Renameplanet Class
  */
-class Renameplanet extends Controller
+class Renameplanet extends BaseController
 {
     const MODULE_ID = 1;
 

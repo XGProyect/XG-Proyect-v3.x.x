@@ -11,7 +11,7 @@
  */
 namespace App\controllers\game;
 
-use App\core\Controller;
+use App\core\BaseController;
 use App\libraries\FleetsLib;
 use App\libraries\FormatLib;
 use App\libraries\Formulas;
@@ -20,7 +20,7 @@ use App\libraries\FunctionsLib;
 /**
  * Galaxy Class
  */
-class Galaxy extends Controller
+class Galaxy extends BaseController
 {
     /**
      * The module ID

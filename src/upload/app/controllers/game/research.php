@@ -9,7 +9,7 @@
  */
 namespace App\controllers\game;
 
-use App\core\Controller;
+use App\core\BaseController;
 use App\helpers\UrlHelper;
 use App\libraries\DevelopmentsLib;
 use App\libraries\FormatLib;
@@ -18,7 +18,7 @@ use App\libraries\FunctionsLib;
 /**
  * Research Class
  */
-class Research extends Controller
+class Research extends BaseController
 {
     const MODULE_ID = 6;
 

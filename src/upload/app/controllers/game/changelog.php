@@ -11,14 +11,14 @@
  */
 namespace App\controllers\game;
 
-use App\core\Controller;
+use App\core\BaseController;
 use App\libraries\FunctionsLib;
 use App\libraries\TimingLibrary as Timing;
 
 /**
  * Change log Class
  */
-class Changelog extends Controller
+class Changelog extends BaseController
 {
     const MODULE_ID = 0;
 

@@ -11,13 +11,13 @@
  */
 namespace App\controllers\adm;
 
-use App\core\Controller;
+use App\core\BaseController;
 use App\libraries\adm\AdministrationLib as Administration;
 
 /**
  * Reset Class
  */
-class Reset extends Controller
+class Reset extends BaseController
 {
     /**
      * Contains the alert string

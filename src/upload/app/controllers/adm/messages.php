@@ -12,7 +12,7 @@
  */
 namespace App\controllers\adm;
 
-use App\core\Controller;
+use App\core\BaseController;
 use App\core\enumerators\MessagesEnumerator;
 use App\libraries\adm\AdministrationLib as Administration;
 use App\libraries\TimingLibrary as Timing;
@@ -20,7 +20,7 @@ use App\libraries\TimingLibrary as Timing;
 /**
  * Messages Class
  */
-class Messages extends Controller
+class Messages extends BaseController
 {
     /**
      * Contains the alert string

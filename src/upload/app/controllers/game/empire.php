@@ -12,7 +12,7 @@
  */
 namespace App\controllers\game;
 
-use App\core\Controller;
+use App\core\BaseController;
 use App\helpers\UrlHelper;
 use App\libraries\DevelopmentsLib;
 use App\libraries\FormatLib;
@@ -22,7 +22,7 @@ use Exception;
 /**
  * Empire Class
  */
-class Empire extends Controller
+class Empire extends BaseController
 {
     /**
      * The module ID

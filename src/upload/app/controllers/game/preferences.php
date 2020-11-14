@@ -12,7 +12,7 @@
  */
 namespace App\controllers\game;
 
-use App\core\Controller;
+use App\core\BaseController;
 use App\core\enumerators\PreferencesEnumerator as PrefEnum;
 use App\libraries\FormatLib as Format;
 use App\libraries\FunctionsLib as Functions;
@@ -22,7 +22,7 @@ use App\libraries\TimingLibrary as Timing;
 /**
  * Preferences Class
  */
-class Preferences extends Controller
+class Preferences extends BaseController
 {
     const MODULE_ID = 21;
 

@@ -12,14 +12,14 @@
  */
 namespace App\controllers\adm;
 
-use App\core\Controller;
+use App\core\BaseController;
 use App\libraries\adm\AdministrationLib as Administration;
 use App\libraries\FunctionsLib as Functions;
 
 /**
  * Planets Class
  */
-class Planets extends Controller
+class Planets extends BaseController
 {
     const PLANET_SETTINGS = [
         'initial_fields' => FILTER_VALIDATE_INT,

@@ -11,7 +11,7 @@
  */
 namespace App\controllers\game;
 
-use App\core\Controller;
+use App\core\BaseController;
 use App\core\entities\FleetEntity;
 use App\core\enumerators\MissionsEnumerator as Missions;
 use App\helpers\UrlHelper;
@@ -26,7 +26,7 @@ use App\libraries\TimingLibrary as Timing;
 /**
  * Movement Class
  */
-class Movement extends Controller
+class Movement extends BaseController
 {
     /**
      *

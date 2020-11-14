@@ -2,14 +2,14 @@
 
 namespace App\controllers\adm;
 
-use App\core\Controller;
+use App\core\BaseController;
 use App\libraries\adm\AdministrationLib as Administration;
 use App\libraries\FunctionsLib;
 
 /**
  * Mailing Class
  */
-class Mailing extends Controller
+class Mailing extends BaseController
 {
     const MAILING_SETTINGS = [
         'mailing_protocol' => FILTER_SANITIZE_STRING,

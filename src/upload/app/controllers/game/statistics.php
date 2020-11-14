@@ -11,7 +11,7 @@
  */
 namespace App\controllers\game;
 
-use App\core\Controller;
+use App\core\BaseController;
 use App\libraries\FormatLib;
 use App\libraries\FunctionsLib;
 use App\libraries\TimingLibrary as Timing;
@@ -19,7 +19,7 @@ use App\libraries\TimingLibrary as Timing;
 /**
  * Statistics Class
  */
-class Statistics extends Controller
+class Statistics extends BaseController
 {
     const MODULE_ID = 16;
 

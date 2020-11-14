@@ -11,14 +11,14 @@
  */
 namespace App\controllers\game;
 
-use App\core\Controller;
+use App\core\BaseController;
 use App\libraries\FunctionsLib;
 use App\libraries\users\Shortcuts;
 
 /**
  * Fleetshortcuts Class
  */
-class Fleetshortcuts extends Controller
+class Fleetshortcuts extends BaseController
 {
     /**
      *

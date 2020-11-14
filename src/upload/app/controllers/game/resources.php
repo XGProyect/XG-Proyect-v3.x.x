@@ -11,7 +11,7 @@
  */
 namespace App\controllers\game;
 
-use App\core\Controller;
+use App\core\BaseController;
 use App\core\enumerators\PlanetTypesEnumerator;
 use App\libraries\FormatLib;
 use App\libraries\FunctionsLib;
@@ -21,7 +21,7 @@ use App\libraries\ProductionLib;
 /**
  * Resources Class
  */
-class Resources extends Controller
+class Resources extends BaseController
 {
     const MODULE_ID = 4;
 

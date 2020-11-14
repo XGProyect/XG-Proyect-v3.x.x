@@ -11,7 +11,7 @@
  */
 namespace App\controllers\game;
 
-use App\core\Controller;
+use App\core\BaseController;
 use App\core\enumerators\DefensesEnumerator as Defenses;
 use App\core\enumerators\ShipsEnumerator as Ships;
 use App\libraries\DevelopmentsLib;
@@ -23,7 +23,7 @@ use Exception;
 /**
  * Shipyard Class
  */
-class Shipyard extends Controller
+class Shipyard extends BaseController
 {
     /**
      * The module ID

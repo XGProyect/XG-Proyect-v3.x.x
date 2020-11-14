@@ -21,7 +21,7 @@ use App\libraries\FunctionsLib;
 /**
  * Controller Class
  */
-abstract class Controller extends XGPCore
+abstract class BaseController extends XGPCore
 {
     /**
      * Contains the current user data

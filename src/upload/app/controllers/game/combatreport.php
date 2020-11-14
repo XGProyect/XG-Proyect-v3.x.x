@@ -11,14 +11,14 @@
  */
 namespace App\controllers\game;
 
-use App\core\Controller;
+use App\core\BaseController;
 use App\libraries\combatreport\Report;
 use App\libraries\FunctionsLib;
 
 /**
  * Combatreport Class
  */
-class Combatreport extends Controller
+class Combatreport extends BaseController
 {
     const MODULE_ID = 23;
 

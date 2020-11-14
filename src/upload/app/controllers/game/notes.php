@@ -11,7 +11,7 @@
  */
 namespace App\controllers\game;
 
-use App\core\Controller;
+use App\core\BaseController;
 use App\core\entities\NotesEntity;
 use App\core\enumerators\ImportanceEnumerator as Importance;
 use App\libraries\FormatLib;
@@ -22,7 +22,7 @@ use App\libraries\users\Notes as Note;
 /**
  * Notes Class
  */
-class Notes extends Controller
+class Notes extends BaseController
 {
     /**
      *

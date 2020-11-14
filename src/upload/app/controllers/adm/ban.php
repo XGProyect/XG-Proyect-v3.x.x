@@ -11,14 +11,14 @@
  */
 namespace App\controllers\adm;
 
-use App\core\Controller;
+use App\core\BaseController;
 use App\libraries\adm\AdministrationLib as Administration;
 use App\libraries\FunctionsLib;
 
 /**
  * Ban Class
  */
-class Ban extends Controller
+class Ban extends BaseController
 {
     /**
      * @var int

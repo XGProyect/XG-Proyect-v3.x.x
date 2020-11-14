@@ -12,13 +12,13 @@
  */
 namespace App\controllers\home;
 
-use App\core\Controller;
+use App\core\BaseController;
 use App\libraries\FunctionsLib as Functions;
 
 /**
  * Mail Class
  */
-class Mail extends Controller
+class Mail extends BaseController
 {
     /**
      * Contains the game name

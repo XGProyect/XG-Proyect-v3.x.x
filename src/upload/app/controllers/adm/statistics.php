@@ -12,7 +12,7 @@
  */
 namespace App\controllers\adm;
 
-use App\core\Controller;
+use App\core\BaseController;
 use App\core\enumerators\UserRanksEnumerator as UserRanks;
 use App\libraries\adm\AdministrationLib as Administration;
 use App\libraries\FunctionsLib;
@@ -20,7 +20,7 @@ use App\libraries\FunctionsLib;
 /**
  * Statistics Class
  */
-class Statistics extends Controller
+class Statistics extends BaseController
 {
     const STATISTICS_SETTINGS = [
         'stat_points' => [

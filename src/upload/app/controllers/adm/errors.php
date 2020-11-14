@@ -12,13 +12,13 @@
  */
 namespace App\controllers\adm;
 
-use App\core\Controller;
+use App\core\BaseController;
 use App\libraries\adm\AdministrationLib as Administration;
 
 /**
  * Errors Class
  */
-class Errors extends Controller
+class Errors extends BaseController
 {
     /**
      * Constructor

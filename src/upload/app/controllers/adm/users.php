@@ -11,7 +11,7 @@
  */
 namespace App\controllers\adm;
 
-use App\core\Controller;
+use App\core\BaseController;
 use App\core\enumerators\PlanetTypesEnumerator;
 use App\core\enumerators\UserRanksEnumerator as UserRanks;
 use App\libraries\adm\AdministrationLib as Administration;
@@ -23,7 +23,7 @@ use App\libraries\users\Shortcuts;
 /**
  * Users Class
  */
-class Users extends Controller
+class Users extends BaseController
 {
     /**
      * @var string

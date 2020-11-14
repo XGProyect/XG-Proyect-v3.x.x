@@ -11,7 +11,7 @@
  */
 namespace App\controllers\game;
 
-use App\core\Controller;
+use App\core\BaseController;
 use App\core\enumerators\PlanetTypesEnumerator as PlanetTypes;
 use App\libraries\FleetsLib;
 use App\libraries\FormatLib;
@@ -24,7 +24,7 @@ use App\libraries\users\Shortcuts;
 /**
  * Fleet2 Class
  */
-class Fleet2 extends Controller
+class Fleet2 extends BaseController
 {
     const MODULE_ID = 8;
 

@@ -11,7 +11,7 @@
  */
 namespace App\controllers\game;
 
-use App\core\Controller;
+use App\core\BaseController;
 use App\core\enumerators\PlanetTypesEnumerator;
 use App\helpers\UrlHelper;
 use App\libraries\DevelopmentsLib;
@@ -24,7 +24,7 @@ use App\libraries\UpdatesLibrary;
 /**
  * Overview Class
  */
-class Overview extends Controller
+class Overview extends BaseController
 {
     const MODULE_ID = 1;
 

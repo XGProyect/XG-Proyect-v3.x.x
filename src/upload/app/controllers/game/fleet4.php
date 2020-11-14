@@ -11,7 +11,7 @@
  */
 namespace App\controllers\game;
 
-use App\core\Controller;
+use App\core\BaseController;
 use App\core\enumerators\MissionsEnumerator as Missions;
 use App\core\enumerators\PlanetTypesEnumerator as PlanetTypes;
 use App\core\enumerators\ShipsEnumerator as Ships;
@@ -25,7 +25,7 @@ use App\libraries\research\Researches;
 /**
  * Fleet4 Class
  */
-class Fleet4 extends Controller
+class Fleet4 extends BaseController
 {
     /**
      *

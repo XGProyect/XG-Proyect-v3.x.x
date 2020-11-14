@@ -11,14 +11,14 @@
  */
 namespace App\controllers\adm;
 
-use App\core\Controller;
+use App\core\BaseController;
 use App\core\Database;
 use App\libraries\adm\AdministrationLib as Administration;
 
 /**
  * Migrate Class
  */
-class Migrate extends Controller
+class Migrate extends BaseController
 {
     /**
      * @var mixed

@@ -11,7 +11,7 @@
  */
 namespace App\controllers\install;
 
-use App\core\Controller;
+use App\core\BaseController;
 use App\core\Database;
 use App\helpers\StringsHelper;
 use App\libraries\FunctionsLib as Functions;
@@ -20,7 +20,7 @@ use App\libraries\PlanetLib;
 /**
  * Installation Class
  */
-class Installation extends Controller
+class Installation extends BaseController
 {
     /**
      * @var mixed

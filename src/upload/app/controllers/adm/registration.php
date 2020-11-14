@@ -12,14 +12,14 @@
  */
 namespace App\controllers\adm;
 
-use App\core\Controller;
+use App\core\BaseController;
 use App\libraries\adm\AdministrationLib as Administration;
 use App\libraries\FunctionsLib;
 
 /**
  * Registration Class
  */
-class Registration extends Controller
+class Registration extends BaseController
 {
     const REGISTRATION_SETTINGS = [
         'reg_enable' => FILTER_SANITIZE_STRING,

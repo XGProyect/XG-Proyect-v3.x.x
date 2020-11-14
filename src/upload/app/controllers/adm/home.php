@@ -12,7 +12,7 @@
  */
 namespace App\controllers\adm;
 
-use App\core\Controller;
+use App\core\BaseController;
 use App\libraries\adm\AdministrationLib as Administration;
 use App\libraries\FormatLib as Format;
 use App\libraries\FunctionsLib;
@@ -21,7 +21,7 @@ use JsonException;
 /**
  * Home Class
  */
-class Home extends Controller
+class Home extends BaseController
 {
     /**
      * Constructor

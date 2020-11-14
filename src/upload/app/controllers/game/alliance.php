@@ -9,7 +9,7 @@
  */
 namespace App\controllers\game;
 
-use App\core\Controller;
+use App\core\BaseController;
 use App\core\enumerators\AllianceRanksEnumerator as AllianceRanks;
 use App\core\enumerators\SwitchIntEnumerator as SwitchInt;
 use App\helpers\StringsHelper;
@@ -22,7 +22,7 @@ use App\libraries\TimingLibrary as Timing;
 /**
  * Alliance Class
  */
-class Alliance extends Controller
+class Alliance extends BaseController
 {
     /**
      * The module ID

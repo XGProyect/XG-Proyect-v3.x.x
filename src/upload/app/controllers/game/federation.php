@@ -11,7 +11,7 @@
  */
 namespace App\controllers\game;
 
-use App\core\Controller;
+use App\core\BaseController;
 use App\libraries\FormatLib;
 use App\libraries\FunctionsLib;
 use App\libraries\game\AcsFleets;
@@ -20,7 +20,7 @@ use App\libraries\game\Fleets;
 /**
  * Federation Class
  */
-class Federation extends Controller
+class Federation extends BaseController
 {
     /**
      *

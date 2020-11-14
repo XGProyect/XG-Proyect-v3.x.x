@@ -1,6 +1,6 @@
 <?php namespace App\controllers\game;
 
-use App\core\Controller;
+use App\core\BaseController;
 use App\core\Enumerators\OfficiersEnumerator as OE;
 use App\libraries\FormatLib;
 use App\libraries\FunctionsLib;
@@ -10,7 +10,7 @@ use DPATH;
 /**
  * Officier class
  */
-class Officier extends Controller
+class Officier extends BaseController
 {
     /**
      * The module ID

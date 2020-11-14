@@ -12,7 +12,7 @@
  */
 namespace App\controllers\adm;
 
-use App\core\Controller;
+use App\core\BaseController;
 use App\libraries\adm\AdministrationLib as Administration;
 use App\libraries\FormatLib as Format;
 use App\libraries\FunctionsLib as Functions;
@@ -21,7 +21,7 @@ use App\libraries\Statistics_library as Statistics;
 /**
  * RebuildHighscores Class
  */
-class RebuildHighscores extends Controller
+class RebuildHighscores extends BaseController
 {
     /**
      * Contains the statistics result

@@ -12,14 +12,14 @@
  */
 namespace App\controllers\adm;
 
-use App\core\Controller;
+use App\core\BaseController;
 use App\libraries\adm\AdministrationLib as Administration;
 use App\libraries\FunctionsLib;
 
 /**
  * Premium Class
  */
-class Premium extends Controller
+class Premium extends BaseController
 {
     const PREMIUM_SETTINGS = [
         'premium_url' => FILTER_VALIDATE_URL,

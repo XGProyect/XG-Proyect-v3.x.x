@@ -11,7 +11,7 @@
  */
 namespace App\controllers\game;
 
-use App\core\Controller;
+use App\core\BaseController;
 use App\core\enumerators\PlanetTypesEnumerator;
 use App\libraries\FleetsLib;
 use App\libraries\Formulas;
@@ -20,7 +20,7 @@ use App\libraries\FunctionsLib;
 /**
  * Phalanx Class
  */
-class Phalanx extends Controller
+class Phalanx extends BaseController
 {
     const MODULE_ID = 11;
 

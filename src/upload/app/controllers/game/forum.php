@@ -11,13 +11,13 @@
  */
 namespace App\controllers\game;
 
-use App\core\Controller;
+use App\core\BaseController;
 use App\libraries\FunctionsLib;
 
 /**
  * Forum Class
  */
-class Forum extends Controller
+class Forum extends BaseController
 {
     /**
      * @var int Module ID

@@ -11,7 +11,7 @@
  */
 namespace App\controllers\game;
 
-use App\core\Controller;
+use App\core\BaseController;
 use App\core\enumerators\ShipsEnumerator as Ships;
 use App\helpers\UrlHelper;
 use App\libraries\FleetsLib;
@@ -24,7 +24,7 @@ use App\libraries\research\Researches;
 /**
  * Fleet1 Class
  */
-class Fleet1 extends Controller
+class Fleet1 extends BaseController
 {
     const MODULE_ID = 8;
 

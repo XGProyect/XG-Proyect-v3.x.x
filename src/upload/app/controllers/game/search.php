@@ -12,7 +12,7 @@
  */
 namespace App\controllers\game;
 
-use App\core\Controller;
+use App\core\BaseController;
 use App\core\enumerators\SwitchIntEnumerator as SwitchInt;
 use App\helpers\UrlHelper;
 use App\libraries\FormatLib;
@@ -21,7 +21,7 @@ use App\libraries\FunctionsLib;
 /**
  * Search Class
  */
-class Search extends Controller
+class Search extends BaseController
 {
     const MODULE_ID = 17;
 

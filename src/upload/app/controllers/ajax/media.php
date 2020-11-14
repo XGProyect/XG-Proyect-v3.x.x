@@ -11,12 +11,12 @@
  */
 namespace App\controllers\ajax;
 
-use App\core\Controller;
+use App\core\BaseController;
 
 /**
  * Media Class
  */
-class Media extends Controller
+class Media extends BaseController
 {
     /**
      * Constructor

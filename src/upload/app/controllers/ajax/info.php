@@ -11,12 +11,12 @@
  */
 namespace App\controllers\ajax;
 
-use App\core\Controller;
+use App\core\BaseController;
 
 /**
  * Info Class
  */
-class Info extends Controller
+class Info extends BaseController
 {
     /**
      * Constructor

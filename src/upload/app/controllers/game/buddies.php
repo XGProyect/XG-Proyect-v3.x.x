@@ -11,7 +11,7 @@
  */
 namespace App\controllers\game;
 
-use App\core\Controller;
+use App\core\BaseController;
 use App\core\entities\BuddyEntity;
 use App\libraries\buddies\Buddy;
 use App\libraries\enumerators\BuddiesStatusEnumerator as BuddiesStatus;
@@ -22,7 +22,7 @@ use Exception;
 /**
  * Buddies Class
  */
-class Buddies extends Controller
+class Buddies extends BaseController
 {
     /**
      * The module ID

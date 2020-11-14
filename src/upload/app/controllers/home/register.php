@@ -11,13 +11,13 @@
  */
 namespace App\controllers\home;
 
-use App\core\Controller;
+use App\core\BaseController;
 use App\libraries\FunctionsLib;
 
 /**
  * Register Class
  */
-class Register extends Controller
+class Register extends BaseController
 {
     /**
      * Current user data

@@ -12,7 +12,7 @@
  */
 namespace App\controllers\adm;
 
-use App\core\Controller;
+use App\core\BaseController;
 use App\helpers\UrlHelper;
 use App\libraries\adm\AdministrationLib as Administration;
 use App\libraries\FormatLib as Format;
@@ -23,7 +23,7 @@ use DateTimeZone;
 /**
  * Server Class
  */
-class Server extends Controller
+class Server extends BaseController
 {
     /**
      * Contains the alert string

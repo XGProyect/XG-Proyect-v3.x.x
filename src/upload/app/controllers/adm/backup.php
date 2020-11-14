@@ -12,7 +12,7 @@
  */
 namespace App\controllers\adm;
 
-use App\core\Controller;
+use App\core\BaseController;
 use App\libraries\adm\AdministrationLib as Administration;
 use App\libraries\FormatLib as Format;
 use App\libraries\FunctionsLib as Functions;
@@ -21,7 +21,7 @@ use App\libraries\TimingLibrary as Timing;
 /**
  * Backup Class
  */
-class Backup extends Controller
+class Backup extends BaseController
 {
     const BACKUP_SETTINGS = [
         'auto_backup' => FILTER_SANITIZE_STRING,

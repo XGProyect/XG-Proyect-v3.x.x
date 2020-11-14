@@ -12,7 +12,7 @@
  */
 namespace App\controllers\adm;
 
-use App\core\Controller;
+use App\core\BaseController;
 use App\core\enumerators\UserRanksEnumerator as UserRanks;
 use App\libraries\adm\AdministrationLib as Administration;
 use App\libraries\adm\Permissions as Per;
@@ -21,7 +21,7 @@ use App\libraries\FunctionsLib as Functions;
 /**
  * Permissions Class
  */
-class Permissions extends Controller
+class Permissions extends BaseController
 {
     /**
      * Contains the alert string

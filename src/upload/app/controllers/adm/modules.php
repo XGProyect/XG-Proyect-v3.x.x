@@ -12,14 +12,14 @@
  */
 namespace App\controllers\adm;
 
-use App\core\Controller;
+use App\core\BaseController;
 use App\libraries\adm\AdministrationLib as Administration;
 use App\libraries\FunctionsLib;
 
 /**
  * Modules Class
  */
-class Modules extends Controller
+class Modules extends BaseController
 {
     /**
      * Contains the alert string

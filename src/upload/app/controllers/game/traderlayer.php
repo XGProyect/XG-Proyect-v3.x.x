@@ -11,14 +11,14 @@
  */
 namespace App\controllers\game;
 
-use App\core\Controller;
+use App\core\BaseController;
 use App\libraries\FormatLib as Format;
 use App\libraries\FunctionsLib as Functions;
 
 /**
  * TraderLayer Class
  */
-class TraderLayer extends Controller
+class TraderLayer extends BaseController
 {
     const MODULE_ID = 5;
 

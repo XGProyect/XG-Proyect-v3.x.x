@@ -9,7 +9,7 @@
  */
 namespace App\controllers\game;
 
-use App\core\Controller;
+use App\core\BaseController;
 use App\core\enumerators\BuildingsEnumerator as Buildings;
 use App\core\enumerators\ResearchEnumerator as Research;
 use App\helpers\StringsHelper;
@@ -25,7 +25,7 @@ use App\libraries\ProductionLib;
 /**
  * Infos Class
  */
-class Infos extends Controller
+class Infos extends BaseController
 {
     const MODULE_ID = 24;
 

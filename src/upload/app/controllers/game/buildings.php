@@ -11,7 +11,7 @@
  */
 namespace App\controllers\game;
 
-use App\core\Controller;
+use App\core\BaseController;
 use App\core\enumerators\BuildingsEnumerator;
 use App\helpers\UrlHelper;
 use App\libraries\buildings\Building;
@@ -26,7 +26,7 @@ use Exception;
 /**
  * Buildings Class
  */
-class Buildings extends Controller
+class Buildings extends BaseController
 {
     const MODULE_ID = 3;
 

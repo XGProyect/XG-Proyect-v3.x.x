@@ -11,7 +11,7 @@
  */
 namespace App\controllers\game;
 
-use App\core\Controller;
+use App\core\BaseController;
 use App\core\enumerators\MessagesEnumerator;
 use App\core\enumerators\SwitchIntEnumerator as SwitchInt;
 use App\helpers\ArraysHelper;
@@ -22,7 +22,7 @@ use App\libraries\OfficiersLib;
 /**
  * Messages Class
  */
-class Messages extends Controller
+class Messages extends BaseController
 {
     const MODULE_ID = 18;
 

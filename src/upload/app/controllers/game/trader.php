@@ -12,7 +12,7 @@
 
 namespace App\controllers\game;
 
-use App\core\Controller;
+use App\core\BaseController;
 use App\libraries\FormatLib as Format;
 use App\libraries\FunctionsLib as Functions;
 use App\libraries\game\ResourceMarket;
@@ -20,7 +20,7 @@ use App\libraries\game\ResourceMarket;
 /**
  * Trader Class
  */
-class Trader extends Controller
+class Trader extends BaseController
 {
     /**
      * The module ID

@@ -11,7 +11,7 @@
  */
 namespace App\controllers\adm;
 
-use App\core\Controller;
+use App\core\BaseController;
 use App\core\enumerators\AllianceRanksEnumerator as AllianceRanks;
 use App\core\enumerators\SwitchIntEnumerator as SwitchInt;
 use App\libraries\adm\AdministrationLib as Administration;
@@ -21,7 +21,7 @@ use App\libraries\FunctionsLib;
 /**
  * Alliances Class
  */
-class Alliances extends Controller
+class Alliances extends BaseController
 {
     /**
      * @var mixed

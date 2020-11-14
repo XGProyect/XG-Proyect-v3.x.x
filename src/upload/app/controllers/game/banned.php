@@ -11,7 +11,7 @@
  */
 namespace App\controllers\game;
 
-use App\core\Controller;
+use App\core\BaseController;
 use App\helpers\UrlHelper;
 use App\libraries\FunctionsLib;
 use App\libraries\TimingLibrary as Timing;
@@ -19,7 +19,7 @@ use App\libraries\TimingLibrary as Timing;
 /**
  * Banned Class
  */
-class Banned extends Controller
+class Banned extends BaseController
 {
     /**
      * The module ID

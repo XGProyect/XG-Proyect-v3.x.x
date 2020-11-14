@@ -11,14 +11,14 @@
  */
 namespace App\controllers\game;
 
-use App\core\Controller;
+use App\core\BaseController;
 use App\libraries\FormatLib;
 use App\libraries\FunctionsLib;
 
 /**
  * Chat Class
  */
-class Chat extends Controller
+class Chat extends BaseController
 {
     const MODULE_ID = 18;
 
