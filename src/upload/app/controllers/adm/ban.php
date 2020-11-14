@@ -50,15 +50,16 @@ class Ban extends Controller
             die(Administration::noAccessMessage($this->langs->line('no_permissions')));
         }
 
+        // build the page
         $this->buildPage();
     }
 
     /**
-     * method buildPage
-     * param
-     * return main method, loads everything
+     * Build the page
+     *
+     * @return void
      */
-    private function buildPage()
+    private function buildPage(): void
     {
         switch ((isset($_GET['mode']) ? $_GET['mode'] : '')) {
             case 'ban':
