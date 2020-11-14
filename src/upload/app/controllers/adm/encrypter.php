@@ -22,13 +22,6 @@ use App\libraries\FunctionsLib as Functions;
 class Encrypter extends Controller
 {
     /**
-     * Current user data
-     *
-     * @var array
-     */
-    private $user;
-
-    /**
      * Contains the unencrypted password
      *
      * @var string
@@ -54,9 +47,6 @@ class Encrypter extends Controller
 
         // load Language
         parent::loadLang(['adm/global', 'adm/encrypter']);
-
-        // set data
-        $this->user = $this->getUserData();
 
         // check if the user is allowed to access
         if (!Administration::authorization(__CLASS__, (int) $this->user['user_authlevel'])) {

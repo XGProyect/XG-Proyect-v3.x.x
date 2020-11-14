@@ -34,7 +34,7 @@ class Ban extends Controller
     private $_banned_count = 0;
 
     /**
-     * __construct()
+     * Constructor
      */
     public function __construct()
     {

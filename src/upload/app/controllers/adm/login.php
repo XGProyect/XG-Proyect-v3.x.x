@@ -83,7 +83,7 @@ class Login extends Controller
      *
      * @return void
      */
-    private function buildPage()
+    private function buildPage(): void
     {
         parent::$page->displayAdmin(
             $this->getTemplate()->set(

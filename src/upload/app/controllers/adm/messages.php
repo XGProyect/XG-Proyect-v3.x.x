@@ -23,13 +23,6 @@ use App\libraries\TimingLibrary as Timing;
 class Messages extends Controller
 {
     /**
-     * Current user data
-     *
-     * @var array
-     */
-    private $user;
-
-    /**
      * Contains the alert string
      *
      * @var string
@@ -58,9 +51,6 @@ class Messages extends Controller
 
         // load Language
         parent::loadLang(['adm/global', 'adm/messages']);
-
-        // set data
-        $this->user = $this->getUserData();
 
         // check if the user is allowed to access
         if (!Administration::authorization(__CLASS__, (int) $this->user['user_authlevel'])) {

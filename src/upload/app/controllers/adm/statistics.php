@@ -38,13 +38,6 @@ class Statistics extends Controller
     ];
 
     /**
-     * Current user data
-     *
-     * @var array
-     */
-    private $user;
-
-    /**
      * Contains the alert string
      *
      * @var string
@@ -70,9 +63,6 @@ class Statistics extends Controller
 
         // load Language
         parent::loadLang(['adm/global', 'adm/statistics']);
-
-        // set data
-        $this->user = $this->getUserData();
 
         // check if the user is allowed to access
         if (!Administration::authorization(__CLASS__, (int) $this->user['user_authlevel'])) {

@@ -20,13 +20,6 @@ use App\libraries\adm\AdministrationLib as Administration;
 class Reset extends Controller
 {
     /**
-     * Current user data
-     *
-     * @var array
-     */
-    private $user;
-
-    /**
      * Contains the alert string
      *
      * @var string
@@ -48,9 +41,6 @@ class Reset extends Controller
 
         // load Language
         parent::loadLang(['adm/global', 'adm/reset']);
-
-        // set data
-        $this->user = $this->getUserData();
 
         // check if the user is allowed to access
         if (!Administration::authorization(__CLASS__, (int) $this->user['user_authlevel'])) {

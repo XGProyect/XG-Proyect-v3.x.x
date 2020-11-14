@@ -26,13 +26,6 @@ use DateTimeZone;
 class Server extends Controller
 {
     /**
-     * Current user data
-     *
-     * @var array
-     */
-    private $user;
-
-    /**
      * Contains the alert string
      *
      * @var string
@@ -61,9 +54,6 @@ class Server extends Controller
 
         // load Language
         parent::loadLang(['adm/global', 'adm/server']);
-
-        // set data
-        $this->user = $this->getUserData();
 
         // check if the user is allowed to access
         if (!Administration::authorization(__CLASS__, (int) $this->user['user_authlevel'])) {

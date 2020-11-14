@@ -26,13 +26,6 @@ use JS_PATH;
 class Announcement extends Controller
 {
     /**
-     * Current user data
-     *
-     * @var array
-     */
-    private $user;
-
-    /**
      * Contains the alert array
      *
      * @var array
@@ -54,9 +47,6 @@ class Announcement extends Controller
 
         // load Language
         parent::loadLang(['adm/global', 'adm/announcement']);
-
-        // set data
-        $this->user = $this->getUserData();
 
         // check if the user is allowed to access
         if (!Administration::authorization(__CLASS__, (int) $this->user['user_authlevel'])) {

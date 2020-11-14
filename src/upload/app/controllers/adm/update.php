@@ -21,13 +21,6 @@ use App\libraries\FunctionsLib as Functions;
 class Update extends Controller
 {
     /**
-     * Current user data
-     *
-     * @var array
-     */
-    private $user;
-
-    /**
      * @var mixed
      */
     private $system_version;
@@ -60,9 +53,6 @@ class Update extends Controller
         // load Language
         parent::loadLang(['adm/global', 'adm/update']);
 
-        // set data
-        $this->user = $this->getUserData();
-
         // check if the user is allowed to access
         if (!Administration::authorization(__CLASS__, (int) $this->user['user_authlevel'])) {
             die(Administration::noAccessMessage($this->langs->line('no_permissions')));
@@ -77,7 +67,7 @@ class Update extends Controller
      *
      * @return void
      */
-    private function buildPage()
+    private function buildPage(): void
     {
         $parse = $this->langs->language;
         $continue = true;

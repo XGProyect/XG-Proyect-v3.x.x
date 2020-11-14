@@ -30,13 +30,6 @@ class Planets extends Controller
     ];
 
     /**
-     * Current user data
-     *
-     * @var array
-     */
-    private $user;
-
-    /**
      * Contains the alert string
      *
      * @var string
@@ -55,9 +48,6 @@ class Planets extends Controller
 
         // load Language
         parent::loadLang(['adm/global', 'adm/planets']);
-
-        // set data
-        $this->user = $this->getUserData();
 
         // check if the user is allowed to access
         if (!Administration::authorization(__CLASS__, (int) $this->user['user_authlevel'])) {

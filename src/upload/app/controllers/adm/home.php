@@ -24,13 +24,6 @@ use JsonException;
 class Home extends Controller
 {
     /**
-     * Current user data
-     *
-     * @var array
-     */
-    private $user;
-
-    /**
      * Constructor
      */
     public function __construct()
@@ -45,9 +38,6 @@ class Home extends Controller
 
         // load Language
         parent::loadLang(['adm/global', 'adm/home']);
-
-        // set data
-        $this->user = $this->getUserData();
 
         // check if the user is allowed to access
         if (!Administration::haveAccess($this->user['user_authlevel'])) {

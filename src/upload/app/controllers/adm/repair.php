@@ -22,14 +22,7 @@ use App\libraries\FunctionsLib;
 class Repair extends Controller
 {
     /**
-     * @var mixed
-     */
-    private $current_user;
-
-    /**
-     * __construct
-     *
-     * @return void
+     * Constructor
      */
     public function __construct()
     {
@@ -44,22 +37,21 @@ class Repair extends Controller
         // load Language
         parent::loadLang(['adm/global', 'adm/repair']);
 
-        $this->current_user = parent::$users->getUserData();
-
         // check if the user is allowed to access
-        if (!Administration::authorization(__CLASS__, (int) $this->current_user['user_authlevel'])) {
+        if (!Administration::authorization(__CLASS__, (int) $this->user['user_authlevel'])) {
             die(Administration::noAccessMessage($this->langs->line('no_permissions')));
         }
 
+        // build the page
         $this->buildPage();
     }
 
     /**
-     * buildPage
+     * Build the page
      *
      * @return void
      */
-    private function buildPage()
+    private function buildPage(): void
     {
         $parse = $this->langs->language;
         $parse['alert'] = '';

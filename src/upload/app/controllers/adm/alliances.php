@@ -51,10 +51,6 @@ class Alliances extends Controller
      * @var mixed
      */
     private $_user_query;
-    /**
-     * @var mixed
-     */
-    private $_current_user;
 
     /**
      * Contains the alliance ranks
@@ -79,14 +75,13 @@ class Alliances extends Controller
         // load Language
         parent::loadLang(['adm/global', 'adm/alliances']);
 
-        $this->_current_user = parent::$users->getUserData();
-
         // check if the user is allowed to access
-        if (!Administration::authorization(__CLASS__, (int) $this->_current_user['user_authlevel'])) {
+        if (!Administration::authorization(__CLASS__, (int) $this->user['user_authlevel'])) {
             die(Administration::noAccessMessage($this->langs->line('no_permissions')));
         }
 
-        $this->buidPage();
+        // build the page
+        $this->buildPage();
     }
 
     ######################################
@@ -96,11 +91,11 @@ class Alliances extends Controller
     ######################################
 
     /**
-     * method buidPage
-     * param
-     * return main method, loads everything
+     * Build the page
+     *
+     * @return void
      */
-    private function buidPage()
+    private function buildPage(): void
     {
         $parse = $this->langs->language;
         $parse['alert'] = '';

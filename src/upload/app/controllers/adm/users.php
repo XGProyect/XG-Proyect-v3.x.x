@@ -58,10 +58,6 @@ class Users extends Controller
      */
     private $_user_query;
     /**
-     * @var array
-     */
-    private $_current_user = [];
-    /**
      * @var mixed
      */
     private $_stats;
@@ -83,11 +79,10 @@ class Users extends Controller
         parent::loadLang(['adm/global', 'adm/users']);
 
         // set data
-        $this->_current_user = $this->getUserData();
         $this->_stats = new Statistics_library();
 
         // check if the user is allowed to access
-        if (!Administration::authorization(__CLASS__, (int) $this->_current_user['user_authlevel'])) {
+        if (!Administration::authorization(__CLASS__, (int) $this->user['user_authlevel'])) {
             die(Administration::noAccessMessage($this->langs->line('no_permissions')));
         }
 
@@ -97,6 +92,7 @@ class Users extends Controller
         // build the page
         $this->buildPage();
     }
+
     ######################################
     #
     # main methods
@@ -104,11 +100,11 @@ class Users extends Controller
     ######################################
 
     /**
-     * method build_page
-     * param
-     * return main method, loads everything
+     * Build the page
+     *
+     * @return void
      */
-    private function buildPage()
+    private function buildPage(): void
     {
         $parse = $this->langs->language;
         $user = isset($_GET['user']) ? trim($_GET['user']) : null;
@@ -152,7 +148,7 @@ class Users extends Controller
         $parse['type'] = ($type != '') ? $type : 'info';
         $parse['user'] = ($user != '') ? $user : '';
         $parse['status'] = ($user != '') ? '' : ' disabled';
-        $parse['status_box'] = ($user != '' && $this->_id != $this->_current_user['user_id']) ? '' : ' disabled';
+        $parse['status_box'] = ($user != '' && $this->_id != $this->user['user_id']) ? '' : ' disabled';
         $parse['tag'] = ($user != '') ? 'a' : 'button';
         $parse['user_rank'] = $this->langs->language['user_level'][$this->_authlevel];
         $parse['content'] = ($user != '' && $type != '') ? $this->getData($type) : '';
@@ -563,7 +559,7 @@ class Users extends Controller
                 'id' => $this->_id,
             ]);
 
-            if ($this->_current_user['user_id'] != $this->_id) {
+            if ($this->user['user_id'] != $this->_id) {
                 $this->Users_Model->deleteSessionByUserId($this->_id);
             }
 
