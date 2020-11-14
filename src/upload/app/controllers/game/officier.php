@@ -20,13 +20,6 @@ class Officier extends Controller
     const MODULE_ID = 15;
 
     /**
-     * Current user data
-     *
-     * @var array
-     */
-    private $user;
-
-    /**
      * Constructor
      */
     public function __construct()
@@ -44,9 +37,6 @@ class Officier extends Controller
 
         // load Language
         parent::loadLang(['game/global', 'game/officier']);
-
-        // set data
-        $this->user = $this->getUserData();
 
         // time to do something
         $this->runAction();

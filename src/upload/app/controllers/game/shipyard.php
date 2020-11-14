@@ -54,20 +54,6 @@ class Shipyard extends Controller
     ];
 
     /**
-     * User data
-     *
-     * @var array
-     */
-    private $user;
-
-    /**
-     * Planet data
-     *
-     * @var array
-     */
-    private $planet;
-
-    /**
      * List of currently available buildings
      *
      * @var array
@@ -99,9 +85,6 @@ class Shipyard extends Controller
 
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
-
-        $this->user = $this->getUserData();
-        $this->planet = $this->getPlanetData();
 
         // init a new building object with the current building queue
         $this->setUpShipyard();

@@ -38,12 +38,6 @@ class Notes extends Controller
 
     /**
      *
-     * @var array
-     */
-    private $user;
-
-    /**
-     *
      * @var \Notes
      */
     private $notes = null;
@@ -66,9 +60,6 @@ class Notes extends Controller
 
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
-
-        // set data
-        $this->user = $this->getUserData();
 
         // time to do something
         $this->runAction();

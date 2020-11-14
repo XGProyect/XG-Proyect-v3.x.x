@@ -42,12 +42,6 @@ class Movement extends Controller
 
     /**
      *
-     * @var array
-     */
-    private $user;
-
-    /**
-     *
      * @var \Fleets
      */
     private $fleets = null;
@@ -82,9 +76,6 @@ class Movement extends Controller
 
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
-
-        // set data
-        $this->user = $this->getUserData();
 
         // init a new fleets object
         $this->setUpFleets();

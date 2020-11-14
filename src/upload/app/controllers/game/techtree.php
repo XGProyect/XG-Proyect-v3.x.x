@@ -24,18 +24,6 @@ class Techtree extends Controller
 
     /**
      *
-     * @var array
-     */
-    private $_user;
-
-    /**
-     *
-     * @var array
-     */
-    private $_planet;
-
-    /**
-     *
      * @var \Objects
      */
     private $_resource;
@@ -61,12 +49,6 @@ class Techtree extends Controller
 
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
-
-        // set data
-        $this->_user = $this->getUserData();
-
-        // set planet data
-        $this->_planet = $this->getPlanetData();
 
         // requirements
         $this->_resource = parent::$objects->getObjects();
@@ -149,10 +131,10 @@ class Techtree extends Controller
         foreach ($this->_requirements[$object] as $requirement => $level) {
             $color = 'Red';
 
-            if ((isset($this->_user[$this->_resource[$requirement]])
-                && $this->_user[$this->_resource[$requirement]] >= $level)
-                or (isset($this->_planet[$this->_resource[$requirement]])
-                    && $this->_planet[$this->_resource[$requirement]] >= $level)) {
+            if ((isset($this->user[$this->_resource[$requirement]])
+                && $this->user[$this->_resource[$requirement]] >= $level)
+                or (isset($this->planet[$this->_resource[$requirement]])
+                    && $this->planet[$this->_resource[$requirement]] >= $level)) {
                 $color = 'Green';
             }
 

@@ -41,18 +41,6 @@ class Fleet4 extends Controller
 
     /**
      *
-     * @var array
-     */
-    private $_user;
-
-    /**
-     *
-     * @var array
-     */
-    private $_planet;
-
-    /**
-     *
      * @var \Fleets
      */
     private $_fleets = null;
@@ -153,10 +141,6 @@ class Fleet4 extends Controller
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
-        // set data
-        $this->_user = $this->getUserData();
-        $this->_planet = $this->getPlanetData();
-
         // init a new fleets object
         $this->setUpFleets();
 
@@ -173,18 +157,18 @@ class Fleet4 extends Controller
     private function setUpFleets()
     {
         $this->_fleets = new Fleets(
-            $this->Fleet_Model->getAllFleetsByUserId($this->_user['user_id']),
-            $this->_user['user_id']
+            $this->Fleet_Model->getAllFleetsByUserId($this->user['user_id']),
+            $this->user['user_id']
         );
 
         $this->_research = new Researches(
-            [$this->_user],
-            $this->_user['user_id']
+            [$this->user],
+            $this->user['user_id']
         );
 
         $this->_premium = new Premium(
-            [$this->_user],
-            $this->_user['user_id']
+            [$this->user],
+            $this->user['user_id']
         );
     }
 
@@ -229,15 +213,15 @@ class Fleet4 extends Controller
             ],
             'resource1' => [
                 'filter' => FILTER_VALIDATE_INT,
-                'options' => ['min_range' => 0, 'max_range' => $this->_planet['planet_metal']],
+                'options' => ['min_range' => 0, 'max_range' => $this->planet['planet_metal']],
             ],
             'resource2' => [
                 'filter' => FILTER_VALIDATE_INT,
-                'options' => ['min_range' => 0, 'max_range' => $this->_planet['planet_crystal']],
+                'options' => ['min_range' => 0, 'max_range' => $this->planet['planet_crystal']],
             ],
             'resource3' => [
                 'filter' => FILTER_VALIDATE_INT,
-                'options' => ['min_range' => 0, 'max_range' => $this->_planet['planet_deuterium']],
+                'options' => ['min_range' => 0, 'max_range' => $this->planet['planet_deuterium']],
             ],
             'expeditiontime' => [
                 'filter' => FILTER_VALIDATE_INT,
@@ -279,7 +263,7 @@ class Fleet4 extends Controller
             $this->_target_data = $target;
 
             // validate owner
-            if ($target['planet_user_id'] == $this->_user['user_id']) {
+            if ($target['planet_user_id'] == $this->user['user_id']) {
                 $this->_own_planet = true;
             }
 
@@ -292,10 +276,10 @@ class Fleet4 extends Controller
         }
 
         // set coords data
-        $this->_fleet_data['fleet_start_galaxy'] = $this->_planet['planet_galaxy'];
-        $this->_fleet_data['fleet_start_system'] = $this->_planet['planet_system'];
-        $this->_fleet_data['fleet_start_planet'] = $this->_planet['planet_planet'];
-        $this->_fleet_data['fleet_start_type'] = $this->_planet['planet_type'];
+        $this->_fleet_data['fleet_start_galaxy'] = $this->planet['planet_galaxy'];
+        $this->_fleet_data['fleet_start_system'] = $this->planet['planet_system'];
+        $this->_fleet_data['fleet_start_planet'] = $this->planet['planet_planet'];
+        $this->_fleet_data['fleet_start_type'] = $this->planet['planet_type'];
         $this->_fleet_data['fleet_end_galaxy'] = $target_data['galaxy'];
         $this->_fleet_data['fleet_end_system'] = $target_data['system'];
         $this->_fleet_data['fleet_end_planet'] = $target_data['planet'];
@@ -337,7 +321,7 @@ class Fleet4 extends Controller
 
         if (FunctionsLib::readConfig('adm_attack') != 0
             && $this->_target_data['user_authlevel'] >= 1
-            && $this->_user['user_authlevel'] == 0) {
+            && $this->user['user_authlevel'] == 0) {
             $this->showMessage(
                 $this->langs->line('fl_admins_cannot_be_attacked')
             );
@@ -353,12 +337,12 @@ class Fleet4 extends Controller
      */
     private function validateOwnVacations()
     {
-        if (parent::$users->isOnVacations($this->_user)) {
+        if (parent::$users->isOnVacations($this->user)) {
             $this->showMessage($this->langs->line('fl_vacation_mode_active'));
         }
 
         // set owner
-        $this->_fleet_data['fleet_owner'] = $this->_user['user_id'];
+        $this->_fleet_data['fleet_owner'] = $this->user['user_id'];
 
         return true;
     }
@@ -426,7 +410,7 @@ class Fleet4 extends Controller
         $fleet = $this->getSessionShips();
 
         // planet ships
-        $planet_ships = $this->Fleet_Model->getShipsByPlanetId($this->_planet['planet_id']);
+        $planet_ships = $this->Fleet_Model->getShipsByPlanetId($this->planet['planet_id']);
 
         // objects
         $objects = parent::$objects->getObjects();
@@ -500,10 +484,10 @@ class Fleet4 extends Controller
 
         if ($data['mission'] == Missions::STAY) {
             $is_buddy = $this->Fleet_Model->getBuddies(
-                $this->_planet['planet_user_id'], $this->_target_data['planet_user_id']
+                $this->planet['planet_user_id'], $this->_target_data['planet_user_id']
             ) >= 1;
 
-            if ($this->_target_data['user_ally_id'] != $this->_user['user_ally_id'] && !$is_buddy) {
+            if ($this->_target_data['user_ally_id'] != $this->user['user_ally_id'] && !$is_buddy) {
                 $this->showMessage(
                     FormatLib::colorRed($this->langs->line('fl_stay_not_on_enemy'))
                 );
@@ -588,7 +572,7 @@ class Fleet4 extends Controller
             $noob = FunctionsLib::loadLibrary('NoobsProtectionLib');
 
             $points = $noob->returnPoints(
-                $this->_user['user_id'],
+                $this->user['user_id'],
                 $this->_target_data['user_id']
             );
 
@@ -692,9 +676,9 @@ class Fleet4 extends Controller
             $storage_needed += $transport_deuterium;
         }
 
-        $stock_metal = $this->_planet['planet_metal'];
-        $stock_crystal = $this->_planet['planet_crystal'];
-        $stock_deuterium = $this->_planet['planet_deuterium'];
+        $stock_metal = $this->planet['planet_metal'];
+        $stock_crystal = $this->planet['planet_crystal'];
+        $stock_deuterium = $this->planet['planet_deuterium'];
         $stock_deuterium -= $consumption;
 
         $stock_valid = false;
@@ -845,7 +829,7 @@ class Fleet4 extends Controller
         // create the new fleet and
         // remove from the planet the ships and resources
         $this->Fleet_Model->insertNewFleet(
-            $this->_fleet_data, $this->_planet, $this->_fleet_ships
+            $this->_fleet_data, $this->planet, $this->_fleet_ships
         );
     }
 }

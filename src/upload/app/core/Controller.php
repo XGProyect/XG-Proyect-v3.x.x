@@ -28,14 +28,14 @@ abstract class Controller extends XGPCore
      *
      * @var array
      */
-    private $current_user = [];
+    protected $user = [];
 
     /**
      * Contains the current planet data
      *
      * @var array
      */
-    private $current_planet = [];
+    protected $planet = [];
 
     /**
      * Contains the whole set of objects by request
@@ -72,7 +72,7 @@ abstract class Controller extends XGPCore
      */
     private function setUserData(): void
     {
-        $this->current_user = parent::$users->getUserData();
+        $this->user = parent::$users->getUserData();
     }
 
     /**
@@ -82,7 +82,7 @@ abstract class Controller extends XGPCore
      */
     private function setPlanetData(): void
     {
-        $this->current_planet = parent::$users->getPlanetData();
+        $this->planet = parent::$users->getPlanetData();
     }
 
     /**

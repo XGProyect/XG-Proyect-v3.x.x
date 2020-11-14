@@ -32,14 +32,6 @@ class Infos extends Controller
     /**
      * @var mixed
      */
-    private $_current_user;
-    /**
-     * @var mixed
-     */
-    private $_current_planet;
-    /**
-     * @var mixed
-     */
     private $_element_id;
     /**
      * @var mixed
@@ -81,8 +73,6 @@ class Infos extends Controller
         $this->_pricelist = parent::$objects->getPrice();
         $this->_combat_caps = parent::$objects->getCombatSpecs();
         $this->_prod_grid = parent::$objects->getProduction();
-        $this->_current_user = parent::$users->getUserData();
-        $this->_current_planet = parent::$users->getPlanetData();
         $this->_element_id = isset($_GET['gid']) ? (int) $_GET['gid'] : null;
 
         // build the page
@@ -113,7 +103,7 @@ class Infos extends Controller
         $parse['table_head'] = '';
         $parse['table_data'] = '';
 
-        if ($this->_element_id < 13 or ($this->_element_id == 43 && $this->_current_planet[$this->_resource[43]] > 0)) {
+        if ($this->_element_id < 13 or ($this->_element_id == 43 && $this->planet[$this->_resource[43]] > 0)) {
             $PageTPL = 'infos/info_buildings_table';
         } elseif ($this->_element_id < 200) {
             $PageTPL = 'infos/info_buildings_general';
@@ -219,9 +209,9 @@ class Infos extends Controller
         $page = $this->getTemplate()->set($PageTPL, $parse);
 
         if ($GateTPL != '') {
-            if ($this->_current_planet[$this->_resource[$this->_element_id]] > 0) {
-                $RestString = $this->GetNextJumpWaitTime($this->_current_planet);
-                $parse['gate_start_link'] = $this->planet_link($this->_current_planet);
+            if ($this->planet[$this->_resource[$this->_element_id]] > 0) {
+                $RestString = $this->GetNextJumpWaitTime($this->planet);
+                $parse['gate_start_link'] = $this->planet_link($this->planet);
                 if ($RestString['value'] != 0) {
                     $parse['gate_time_script'] = FunctionsLib::chronoApplet("Gate", "1", $RestString['value'], true);
                     $parse['gate_wait_time'] = "<div id=\"bxx" . "Gate" . "1" . "\"></div>";
@@ -231,8 +221,8 @@ class Infos extends Controller
                     $parse['gate_wait_time'] = "";
                     $parse['gate_script_go'] = "";
                 }
-                $parse['gate_dest_moons'] = $this->BuildJumpableMoonCombo($this->_current_user, $this->_current_planet);
-                $parse['gate_fleet_rows'] = $this->BuildFleetListRows($this->_current_planet);
+                $parse['gate_dest_moons'] = $this->BuildJumpableMoonCombo($this->user, $this->planet);
+                $parse['gate_fleet_rows'] = $this->BuildFleetListRows($this->planet);
                 $page .= $this->getTemplate()->set($GateTPL, $parse);
             }
         }
@@ -251,7 +241,7 @@ class Infos extends Controller
      */
     private function storage_table($template)
     {
-        $current_built_lvl = $this->_current_planet[$this->_resource[$this->_element_id]];
+        $current_built_lvl = $this->planet[$this->_resource[$this->_element_id]];
         $BuildStartLvl = max(1, $current_built_lvl - 2);
         $Table = "";
         $ProdFirst = 0;
@@ -281,7 +271,7 @@ class Infos extends Controller
      */
     private function astrophysics_table($template)
     {
-        $current_built_lvl = $this->_current_user[$this->_resource[$this->_element_id]];
+        $current_built_lvl = $this->user[$this->_resource[$this->_element_id]];
         $BuildStartLvl = max(1, $current_built_lvl - 2);
         $Table = "";
 
@@ -332,7 +322,7 @@ class Infos extends Controller
     private function doFleetJump()
     {
         if ($_POST) {
-            $RestString = $this->GetNextJumpWaitTime($this->_current_planet);
+            $RestString = $this->GetNextJumpWaitTime($this->planet);
             $NextJumpTime = $RestString['value'];
             $JumpTime = time();
 
@@ -359,8 +349,8 @@ class Infos extends Controller
                             $gemi_kontrol = isset($_POST[$ShipLabel]) ? $_POST[$ShipLabel] : null;
 
                             if (is_numeric($gemi_kontrol)) {
-                                if ($gemi_kontrol > $this->_current_planet[$this->_resource[$Ship]]) {
-                                    $ShipArray[$Ship] = $this->_current_planet[$this->_resource[$Ship]];
+                                if ($gemi_kontrol > $this->planet[$this->_resource[$Ship]]) {
+                                    $ShipArray[$Ship] = $this->planet[$this->_resource[$Ship]];
                                 } else {
                                     $ShipArray[$Ship] = $gemi_kontrol;
                                 }
@@ -376,14 +366,14 @@ class Infos extends Controller
                                 $SubQueryOri,
                                 $SubQueryDes,
                                 $JumpTime,
-                                $this->_current_planet['planet_id'],
+                                $this->planet['planet_id'],
                                 $TargetGate['planet_id'],
-                                $this->_current_user['user_id']
+                                $this->user['user_id']
                             );
 
-                            $this->_current_planet['planet_last_jump_time'] = $JumpTime;
+                            $this->planet['planet_last_jump_time'] = $JumpTime;
 
-                            $RestString = $this->GetNextJumpWaitTime($this->_current_planet);
+                            $RestString = $this->GetNextJumpWaitTime($this->planet);
                             $RetMessage = $this->langs->line('in_jump_gate_done') . $RestString['string'];
                         } else {
                             $RetMessage = $this->langs->line('in_jump_gate_error_data');
@@ -414,11 +404,11 @@ class Infos extends Controller
         $Result = "";
         for ($Ship = 200; $Ship < 250; $Ship++) {
             if (isset($this->_resource[$Ship]) && $this->_resource[$Ship] != '') {
-                if ($this->_current_planet[$this->_resource[$Ship]] > 0) {
+                if ($this->planet[$this->_resource[$Ship]] > 0) {
                     $bloc['idx'] = $CurrIdx;
                     $bloc['fleet_id'] = $Ship;
                     $bloc['fleet_name'] = $this->langs->language[$this->_resource[$Ship]];
-                    $bloc['fleet_max'] = FormatLib::prettyNumber($this->_current_planet[$this->_resource[$Ship]]);
+                    $bloc['fleet_max'] = FormatLib::prettyNumber($this->planet[$this->_resource[$Ship]]);
                     $bloc['gate_ship_dispo'] = $this->langs->line('in_jump_gate_available');
                     $Result .= $this->getTemplate()->set($RowsTPL, $bloc);
                     $CurrIdx++;
@@ -433,12 +423,12 @@ class Infos extends Controller
      */
     private function BuildJumpableMoonCombo()
     {
-        $MoonList = $this->Infos_Model->getListOfMoons($this->_current_user['user_id']);
+        $MoonList = $this->Infos_Model->getListOfMoons($this->user['user_id']);
 
         $Combo = "";
 
         foreach ($MoonList as $CurMoon) {
-            if ($CurMoon['planet_id'] != $this->_current_planet['planet_id']) {
+            if ($CurMoon['planet_id'] != $this->planet['planet_id']) {
                 $RestString = $this->GetNextJumpWaitTime($CurMoon);
                 if ($CurMoon[$this->_resource[43]] >= 1) {
                     $Combo .= "<option value=\"" . $CurMoon['planet_id'] . "\">[" . $CurMoon['planet_galaxy'] . ":" . $CurMoon['planet_system'] . ":" . $CurMoon['planet_planet'] . "] " . $CurMoon['planet_name'] . $RestString['string'] . "</option>\n";
@@ -455,7 +445,7 @@ class Infos extends Controller
      */
     private function phalanxRange($Template)
     {
-        $current_built_lvl = $this->_current_planet[$this->_resource[$this->_element_id]];
+        $current_built_lvl = $this->planet[$this->_resource[$this->_element_id]];
         $BuildLevel = ($current_built_lvl > 0) ? $current_built_lvl : 1;
         $BuildStartLvl = $current_built_lvl - 2;
 
@@ -481,16 +471,16 @@ class Infos extends Controller
      */
     private function showProductionTable($Template)
     {
-        $BuildLevelFactor = $this->_current_planet['planet_' . $this->_resource[$this->_element_id] . '_percent'];
-        $BuildTemp = $this->_current_planet['planet_temp_max'];
-        $current_built_lvl = $this->_current_planet[$this->_resource[$this->_element_id]];
+        $BuildLevelFactor = $this->planet['planet_' . $this->_resource[$this->_element_id] . '_percent'];
+        $BuildTemp = $this->planet['planet_temp_max'];
+        $current_built_lvl = $this->planet[$this->_resource[$this->_element_id]];
         $BuildLevel = ($current_built_lvl > 0) ? $current_built_lvl : 1;
-        $BuildEnergy = $this->_current_user['research_energy_technology'];
+        $BuildEnergy = $this->user['research_energy_technology'];
         $game_resource_multiplier = FunctionsLib::readConfig('resource_multiplier');
 
         // BOOST
-        $geologe_boost = 1 + (1 * (OfficiersLib::isOfficierActive($this->_current_user['premium_officier_geologist']) ? GEOLOGUE : 0));
-        $engineer_boost = 1 + (1 * (OfficiersLib::isOfficierActive($this->_current_user['premium_officier_engineer']) ? ENGINEER_ENERGY : 0));
+        $geologe_boost = 1 + (1 * (OfficiersLib::isOfficierActive($this->user['premium_officier_geologist']) ? GEOLOGUE : 0));
+        $engineer_boost = 1 + (1 * (OfficiersLib::isOfficierActive($this->user['premium_officier_engineer']) ? ENGINEER_ENERGY : 0));
 
         // PRODUCTION FORMULAS
         $metal_prod = eval($this->_prod_grid[$this->_element_id]['formule']['metal']);
@@ -652,11 +642,11 @@ class Infos extends Controller
     {
         $page = '';
 
-        if (isset($this->_current_planet[$this->_resource[$this->_element_id]]) && $this->_current_planet[$this->_resource[$this->_element_id]] > 0) {
+        if (isset($this->planet[$this->_resource[$this->_element_id]]) && $this->planet[$this->_resource[$this->_element_id]] > 0) {
             // calculate bonus
             $tech_bonus = '';
             $ion_tech_percentage = Formulas::getIonTechnologyBonus(
-                $this->_current_user[$this->_resource[Research::research_ionic_technology]]
+                $this->user[$this->_resource[Research::research_ionic_technology]]
             ) * 100;
 
             if ($ion_tech_percentage > 0) {
@@ -667,12 +657,12 @@ class Infos extends Controller
             }
 
             // resources and time
-            $tear_down_resources = DevelopmentsLib::developmentPrice($this->_current_user, $this->_current_planet, $this->_element_id, true, true);
+            $tear_down_resources = DevelopmentsLib::developmentPrice($this->user, $this->planet, $this->_element_id, true, true);
             $tear_down_time = DevelopmentsLib::tearDownTime(
                 $this->_element_id,
-                $this->_current_planet[$this->_resource[Buildings::BUILDING_ROBOT_FACTORY]],
-                $this->_current_planet[$this->_resource[Buildings::BUILDING_NANO_FACTORY]],
-                $this->_current_planet[$this->_resource[$this->_element_id]]
+                $this->planet[$this->_resource[Buildings::BUILDING_ROBOT_FACTORY]],
+                $this->planet[$this->_resource[Buildings::BUILDING_NANO_FACTORY]],
+                $this->planet[$this->_resource[$this->_element_id]]
             );
 
             $tear_down_url = 'game.php?page=' . DevelopmentsLib::setBuildingPage($this->_element_id) . '&cmd=destroy&building=' . $this->_element_id;

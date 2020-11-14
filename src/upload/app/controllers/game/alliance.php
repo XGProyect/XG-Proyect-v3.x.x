@@ -49,13 +49,6 @@ class Alliance extends Controller
     private $bbcode = null;
 
     /**
-     * Current user data
-     *
-     * @var array
-     */
-    private $user;
-
-    /**
      * Contains an Alliance object
      *
      * @var \Alliance
@@ -83,9 +76,6 @@ class Alliance extends Controller
 
         // load Library
         $this->bbcode = FunctionsLib::loadLibrary('BBCodeLib');
-
-        // set data
-        $this->user = $this->getUserData();
 
         // init a new buddy object
         $this->setUpAlliances();

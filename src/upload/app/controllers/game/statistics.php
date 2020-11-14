@@ -24,16 +24,7 @@ class Statistics extends Controller
     const MODULE_ID = 16;
 
     /**
-     * @var mixed
-     */
-    private $_current_user;
-    /**
-     * @var mixed
-     */
-    private $_current_planet;
-
-    /**
-     * __construct()
+     * Constructor
      */
     public function __construct()
     {
@@ -51,18 +42,15 @@ class Statistics extends Controller
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
-        $this->_current_user = parent::$users->getUserData();
-        $this->_current_planet = parent::$users->getPlanetData();
-
-        $this->build_page();
+        $this->buildPage();
     }
 
     /**
-     * method build_page
-     * param
-     * return the statistics page
+     * Build the page
+     *
+     * @return void
      */
-    private function build_page()
+    private function buildPage()
     {
         $parse = $this->langs->language;
         $who = (isset($_POST['who'])) ? $_POST['who'] : ((isset($_GET['who'])) ? $_GET['who'] : 1);
@@ -119,7 +107,7 @@ class Statistics extends Controller
                 $start++;
             }
         } else {
-            $parse['range'] = $this->build_range_list($this->_current_planet['stats_users'], $range);
+            $parse['range'] = $this->build_range_list($this->planet['stats_users'], $range);
             $parse['stat_header'] = $this->getTemplate()->set(
                 'stat/stat_playertable_header',
                 $parse
@@ -137,20 +125,20 @@ class Statistics extends Controller
                 $parse['player_rank'] = $start;
                 $ranking = $StatRow['user_statistic_' . $OldRank] - $StatRow['user_statistic_' . $Rank];
 
-                if ($StatRow['user_id'] == $this->_current_user['user_id']) {
+                if ($StatRow['user_id'] == $this->user['user_id']) {
                     $parse['player_name'] = "<font color=\"lime\">" . $StatRow['user_name'] . "</font>";
                 } else {
                     $parse['player_name'] = $StatRow['user_name'];
                 }
 
-                if ($StatRow['user_id'] != $this->_current_user['user_id']) {
+                if ($StatRow['user_id'] != $this->user['user_id']) {
                     $parse['player_mes'] = '<a href="game.php?page=chat&playerId=' . $StatRow['user_id'] . '"><img src="' . DPATH . 'img/m.gif" border="0" title="' . $this->langs->line('write_message') . '" /></a>';
                 } else {
                     $parse['player_mes'] = "";
                 }
 
                 if ($StatRow['alliance_name'] != '') {
-                    if ($StatRow['alliance_name'] == $this->_current_user['alliance_name']) {
+                    if ($StatRow['alliance_name'] == $this->user['alliance_name']) {
                         $parse['player_alliance'] = '<a href="game.php?page=alliance&mode=ainfo&allyid=' . $StatRow['user_ally_id'] . '"><font color="#33CCFF">[' . $StatRow['alliance_name'] . ']</font></a>';
                     } else {
                         $parse['player_alliance'] = '<a href="game.php?page=alliance&mode=ainfo&allyid=' . $StatRow['user_ally_id'] . '">[' . $StatRow['alliance_name'] . ']</a>';

@@ -30,18 +30,6 @@ class Fleet1 extends Controller
 
     /**
      *
-     * @var array
-     */
-    private $_user;
-
-    /**
-     *
-     * @var array
-     */
-    private $_planet;
-
-    /**
-     *
      * @var \Fleets
      */
     private $_fleets = null;
@@ -83,10 +71,6 @@ class Fleet1 extends Controller
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
-        // set data
-        $this->_user = $this->getUserData();
-        $this->_planet = $this->getPlanetData();
-
         // init a new fleets object
         $this->setUpFleets();
 
@@ -103,18 +87,18 @@ class Fleet1 extends Controller
     private function setUpFleets()
     {
         $this->_fleets = new Fleets(
-            $this->Fleet_Model->getAllFleetsByUserId($this->_user['user_id']),
-            $this->_user['user_id']
+            $this->Fleet_Model->getAllFleetsByUserId($this->user['user_id']),
+            $this->user['user_id']
         );
 
         $this->_research = new Researches(
-            [$this->_user],
-            $this->_user['user_id']
+            [$this->user],
+            $this->user['user_id']
         );
 
         $this->_premium = new Premium(
-            [$this->_user],
-            $this->_user['user_id']
+            [$this->user],
+            $this->user['user_id']
         );
     }
 
@@ -183,7 +167,7 @@ class Fleet1 extends Controller
         $objects = parent::$objects->getObjects();
         $price = parent::$objects->getPrice();
 
-        $ships = $this->Fleet_Model->getShipsByPlanetId($this->_planet['planet_id']);
+        $ships = $this->Fleet_Model->getShipsByPlanetId($this->planet['planet_id']);
 
         $list_of_ships = [];
 
@@ -201,8 +185,8 @@ class Fleet1 extends Controller
                         'ships_input' => $this->buildShipsInput($ship_id) ?? '-',
                         'ship_id' => $ship_id,
                         'max_ships' => $ship_amount,
-                        'consumption' => FleetsLib::shipConsumption($ship_id, $this->_user),
-                        'speed' => FleetsLib::fleetMaxSpeed('', $ship_id, $this->_user),
+                        'consumption' => FleetsLib::shipConsumption($ship_id, $this->user),
+                        'speed' => FleetsLib::fleetMaxSpeed('', $ship_id, $this->user),
                         'capacity' => FleetsLib::getMaxStorage(
                             $price[$ship_id]['capacity'],
                             $this->_research->getCurrentResearch()->getResearchHyperspaceTechnology()
@@ -225,7 +209,7 @@ class Fleet1 extends Controller
      */
     private function buildShipName($ship_name, $ship_id)
     {
-        $title = $this->langs->line('fl_speed_title') . FleetsLib::fleetMaxSpeed('', $ship_id, $this->_user);
+        $title = $this->langs->line('fl_speed_title') . FleetsLib::fleetMaxSpeed('', $ship_id, $this->user);
 
         return UrlHelper::setUrl('', $this->langs->line($ship_name), $title);
     }
@@ -362,10 +346,10 @@ class Fleet1 extends Controller
         $_SESSION['fleet_data'] = [];
 
         return [
-            'galaxy' => $data['galaxy'] ?? $this->_planet['planet_galaxy'],
-            'system' => $data['system'] ?? $this->_planet['planet_system'],
-            'planet' => $data['planet'] ?? $this->_planet['planet_planet'],
-            'planettype' => $data['planettype'] ?? $this->_planet['planet_type'],
+            'galaxy' => $data['galaxy'] ?? $this->planet['planet_galaxy'],
+            'system' => $data['system'] ?? $this->planet['planet_system'],
+            'planet' => $data['planet'] ?? $this->planet['planet_planet'],
+            'planettype' => $data['planettype'] ?? $this->planet['planet_type'],
             'target_mission' => $data['target_mission'] ?? 0,
         ];
     }

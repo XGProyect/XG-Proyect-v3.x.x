@@ -23,20 +23,6 @@ class TraderLayer extends Controller
     const MODULE_ID = 5;
 
     /**
-     * Current user data
-     *
-     * @var array
-     */
-    private $user;
-
-    /**
-     * Current planet data
-     *
-     * @var array
-     */
-    private $planet;
-
-    /**
      * Constructor
      */
     public function __construct()
@@ -54,12 +40,6 @@ class TraderLayer extends Controller
 
         // Check module access
         Functions::moduleMessage(Functions::isModuleAccesible(self::MODULE_ID));
-
-        // set user data
-        $this->user = $this->getUserData();
-
-        // set planet data
-        $this->planet = $this->getPlanetData();
 
         // init a new buddy object
         //$this->setUpTrader();

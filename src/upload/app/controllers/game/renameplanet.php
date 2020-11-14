@@ -22,16 +22,7 @@ class Renameplanet extends Controller
     const MODULE_ID = 1;
 
     /**
-     * @var mixed
-     */
-    private $_current_user;
-    /**
-     * @var mixed
-     */
-    private $_current_planet;
-
-    /**
-     * __construct()
+     * Constructor
      */
     public function __construct()
     {
@@ -49,25 +40,23 @@ class Renameplanet extends Controller
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
-        $this->_current_user = parent::$users->getUserData();
-        $this->_current_planet = parent::$users->getPlanetData();
-
-        $this->build_page();
+        // build the page
+        $this->buildPage();
     }
 
     /**
-     * method build_page
-     * param
-     * return main method, loads everything
+     * Build the page
+     *
+     * @return void
      */
-    private function build_page()
+    private function buildPage(): void
     {
         $parse = $this->langs->language;
-        $parse['planet_name'] = $this->_current_planet['planet_name'];
-        $parse['planet_id'] = $this->_current_planet['planet_id'];
-        $parse['galaxy_galaxy'] = $this->_current_planet['planet_galaxy'];
-        $parse['galaxy_system'] = $this->_current_planet['planet_system'];
-        $parse['galaxy_planet'] = $this->_current_planet['planet_planet'];
+        $parse['planet_name'] = $this->planet['planet_name'];
+        $parse['planet_id'] = $this->planet['planet_id'];
+        $parse['galaxy_galaxy'] = $this->planet['planet_galaxy'];
+        $parse['galaxy_system'] = $this->planet['planet_system'];
+        $parse['galaxy_planet'] = $this->planet['planet_planet'];
 
         // DEFAULT VIEW
         $current_view = 'renameplanet/renameplanet_view';
@@ -88,7 +77,7 @@ class Renameplanet extends Controller
                 break;
         } // switch
 
-        if (isset($_POST['kolonieloeschen']) && (int) $_POST['kolonieloeschen'] == 1 && (int) $_POST['deleteid'] == $this->_current_user['user_current_planet']) {
+        if (isset($_POST['kolonieloeschen']) && (int) $_POST['kolonieloeschen'] == 1 && (int) $_POST['deleteid'] == $this->user['user_current_planet']) {
             $this->delete_planet();
         }
 
@@ -115,7 +104,7 @@ class Renameplanet extends Controller
         }
 
         if ($new_name != '') {
-            $this->Renameplanet_Model->updatePlanetName($new_name, $this->_current_user['user_current_planet']);
+            $this->Renameplanet_Model->updatePlanetName($new_name, $this->user['user_current_planet']);
             FunctionsLib::message($this->langs->line('rp_planet_name_changed'), "game.php?page=renameplanet", 2);
         }
     }
@@ -130,17 +119,17 @@ class Renameplanet extends Controller
         $own_fleet = 0;
         $enemy_fleet = 0;
         $fleets_incoming = $this->Renameplanet_Model->getFleets(
-            $this->_current_user['user_id'],
-            $this->_current_planet['planet_galaxy'],
-            $this->_current_planet['planet_system'],
-            $this->_current_planet['planet_planet']
+            $this->user['user_id'],
+            $this->planet['planet_galaxy'],
+            $this->planet['planet_system'],
+            $this->planet['planet_planet']
         );
 
         foreach ($fleets_incoming as $fleet) {
             $own_fleet = $fleet['fleet_owner'];
             $enemy_fleet = $fleet['fleet_target_owner'];
 
-            if ($fleet['fleet_target_owner'] == $this->_current_user['user_id']) {
+            if ($fleet['fleet_target_owner'] == $this->user['user_id']) {
                 $end_type = $fleet['fleet_end_type'];
             }
 
@@ -152,21 +141,21 @@ class Renameplanet extends Controller
         } elseif ((($enemy_fleet > 0) && ($mess < 1)) && $end_type != 2) {
             FunctionsLib::message($this->langs->line('rp_abandon_planet_not_possible'), 'game.php?page=renameplanet');
         } else {
-            if (password_verify($_POST['pw'], $this->_current_user['user_password']) && $this->_current_user['user_home_planet_id'] != $this->_current_user['user_current_planet']) {
-                if ($this->_current_planet['moon_id'] != 0) {
+            if (password_verify($_POST['pw'], $this->user['user_password']) && $this->user['user_home_planet_id'] != $this->user['user_current_planet']) {
+                if ($this->planet['moon_id'] != 0) {
                     $this->Renameplanet_Model->deleteMoonAndPlanet(
-                        $this->_current_user['user_id'],
-                        $this->_current_user['user_current_planet'],
-                        $this->_current_planet['planet_galaxy'],
-                        $this->_current_planet['planet_system'],
-                        $this->_current_planet['planet_planet']
+                        $this->user['user_id'],
+                        $this->user['user_current_planet'],
+                        $this->planet['planet_galaxy'],
+                        $this->planet['planet_system'],
+                        $this->planet['planet_planet']
                     );
                 } else {
-                    $this->Renameplanet_Model->deletePlanet($this->_current_user['user_id'], $this->_current_user['user_current_planet']);
+                    $this->Renameplanet_Model->deletePlanet($this->user['user_id'], $this->user['user_current_planet']);
                 }
 
                 FunctionsLib::message($this->langs->line('rp_planet_abandoned'), 'game.php?page=overview');
-            } elseif ($this->_current_user['user_home_planet_id'] == $this->_current_user['user_current_planet']) {
+            } elseif ($this->user['user_home_planet_id'] == $this->user['user_current_planet']) {
                 FunctionsLib::message($this->langs->line('rp_principal_planet_cant_abanone'), 'game.php?page=renameplanet');
             } else {
                 FunctionsLib::message($this->langs->line('rp_wrong_pass'), 'game.php?page=renameplanet');

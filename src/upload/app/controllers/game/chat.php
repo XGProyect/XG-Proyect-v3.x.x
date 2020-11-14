@@ -23,12 +23,6 @@ class Chat extends Controller
     const MODULE_ID = 18;
 
     /**
-     *
-     * @var \UsersLibrary
-     */
-    private $_user;
-
-    /**
      * Receiver home planet data
      *
      * @var array
@@ -60,9 +54,6 @@ class Chat extends Controller
 
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
-
-        // set data
-        $this->_user = $this->getUserData();
 
         // time to do something
         $this->runAction();
@@ -117,11 +108,11 @@ class Chat extends Controller
 
                 FunctionsLib::sendMessage(
                     $write_to,
-                    $this->_user['user_id'],
+                    $this->user['user_id'],
                     '',
                     4,
-                    $this->_user['user_name'] . ' ' . FormatLib::prettyCoords(
-                        $this->_user['user_galaxy'], $this->_user['user_system'], $this->_user['user_planet']
+                    $this->user['user_name'] . ' ' . FormatLib::prettyCoords(
+                        $this->user['user_galaxy'], $this->user['user_system'], $this->user['user_planet']
                     ),
                     $message_sent['subject'],
                     $message_sent['text']

@@ -32,12 +32,6 @@ class Empire extends Controller
     const MODULE_ID = 2;
 
     /**
-     *
-     * @var array
-     */
-    private $user;
-
-    /**
      * Constructor
      */
     public function __construct()
@@ -55,9 +49,6 @@ class Empire extends Controller
 
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
-
-        // set data
-        $this->user = $this->getUserData();
 
         // build the page
         $this->buildPage();

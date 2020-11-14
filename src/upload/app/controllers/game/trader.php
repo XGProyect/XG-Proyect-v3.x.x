@@ -44,20 +44,6 @@ class Trader extends Controller
     const PERCENTAGES = [10, 50, 100];
 
     /**
-     * Current user data
-     *
-     * @var array
-     */
-    private $user;
-
-    /**
-     * Current planet data
-     *
-     * @var array
-     */
-    private $planet;
-
-    /**
      * ResourceMarket object
      *
      * @var \ResourceMarket
@@ -89,12 +75,6 @@ class Trader extends Controller
 
         // Check module access
         Functions::moduleMessage(Functions::isModuleAccesible(self::MODULE_ID));
-
-        // set user data
-        $this->user = $this->getUserData();
-
-        // set planet data
-        $this->planet = $this->getPlanetData();
 
         // init a new trader object
         $this->setUpTrader();

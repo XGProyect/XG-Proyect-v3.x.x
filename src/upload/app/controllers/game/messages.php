@@ -39,13 +39,7 @@ class Messages extends Controller
     ];
 
     /**
-     *
-     * @var \UsersLibrary
-     */
-    private $user;
-
-    /**
-     * __construct()
+     * Constructor
      */
     public function __construct()
     {
@@ -62,9 +56,6 @@ class Messages extends Controller
 
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
-
-        // set data
-        $this->user = $this->getUserData();
 
         // time to do something
         $this->runAction();

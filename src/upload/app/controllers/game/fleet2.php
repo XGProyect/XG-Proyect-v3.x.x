@@ -30,18 +30,6 @@ class Fleet2 extends Controller
 
     /**
      *
-     * @var array
-     */
-    private $_user;
-
-    /**
-     *
-     * @var array
-     */
-    private $_planet;
-
-    /**
-     *
      * @var \Research
      */
     private $_research = null;
@@ -82,10 +70,6 @@ class Fleet2 extends Controller
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
-        // set data
-        $this->_user = $this->getUserData();
-        $this->_planet = $this->getPlanetData();
-
         // init a new fleets object
         $this->setUpFleets();
 
@@ -102,13 +86,13 @@ class Fleet2 extends Controller
     private function setUpFleets()
     {
         $this->_research = new Researches(
-            [$this->_user],
-            $this->_user['user_id']
+            [$this->user],
+            $this->user['user_id']
         );
 
         $this->_premium = new Premium(
-            [$this->_user],
-            $this->_user['user_id']
+            [$this->user],
+            $this->user['user_id']
         );
     }
 
@@ -154,7 +138,7 @@ class Fleet2 extends Controller
         $objects = parent::$objects->getObjects();
         $price = parent::$objects->getPrice();
 
-        $ships = $this->Fleet_Model->getShipsByPlanetId($this->_planet['planet_id']);
+        $ships = $this->Fleet_Model->getShipsByPlanetId($this->planet['planet_id']);
 
         $list_of_ships = [];
         $selected_fleet = filter_input_array(INPUT_POST);
@@ -178,12 +162,12 @@ class Fleet2 extends Controller
                     $this->_fleet_data['fleet_array'][$ship_id] = $amount_to_set;
                     $this->_fleet_data['fleet_list'] .= $ship_id . ',' . $amount_to_set . ';';
                     $this->_fleet_data['amount'] += $amount_to_set;
-                    $this->_fleet_data['speed_all'][$ship_id] = FleetsLib::fleetMaxSpeed('', $ship_id, $this->_user);
+                    $this->_fleet_data['speed_all'][$ship_id] = FleetsLib::fleetMaxSpeed('', $ship_id, $this->user);
 
                     $list_of_ships[] = [
                         'ship_id' => $ship_id,
-                        'consumption' => FleetsLib::shipConsumption($ship_id, $this->_user),
-                        'speed' => FleetsLib::fleetMaxSpeed('', $ship_id, $this->_user),
+                        'consumption' => FleetsLib::shipConsumption($ship_id, $this->user),
+                        'speed' => FleetsLib::fleetMaxSpeed('', $ship_id, $this->user),
                         'capacity' => FleetsLib::getMaxStorage(
                             $price[$ship_id]['capacity'],
                             $this->_research->getCurrentResearch()->getResearchHyperspaceTechnology()
@@ -244,7 +228,7 @@ class Fleet2 extends Controller
         }
 
         $shortcuts = new Shortcuts(
-            $this->_user['user_fleet_shortcuts']
+            $this->user['user_fleet_shortcuts']
         );
 
         $shortcuts_list = $shortcuts->getAllAsArray();
@@ -293,7 +277,7 @@ class Fleet2 extends Controller
      */
     private function buildColoniesBlock()
     {
-        $planets = $this->Fleet_Model->getAllPlanetsByUserId($this->_user['user_id']);
+        $planets = $this->Fleet_Model->getAllPlanetsByUserId($this->user['user_id']);
         $list_of_planets = [];
 
         if ($planets) {
@@ -331,7 +315,7 @@ class Fleet2 extends Controller
      */
     private function buildAcsBlock()
     {
-        $current_acs = $this->Fleet_Model->getOngoingAcs($this->_user['user_id']);
+        $current_acs = $this->Fleet_Model->getOngoingAcs($this->user['user_id']);
         $acs_fleets = [];
 
         if ($current_acs) {
@@ -389,13 +373,13 @@ class Fleet2 extends Controller
 
         return [
             'speedfactor' => FunctionsLib::fleetSpeedFactor(),
-            'galaxy' => $this->_planet['planet_galaxy'],
-            'system' => $this->_planet['planet_system'],
-            'planet' => $this->_planet['planet_planet'],
-            'planet_type' => $this->_planet['planet_type'],
-            'galaxy_end' => $data['galaxy'] ?? $this->_planet['planet_galaxy'],
-            'system_end' => $data['system'] ?? $this->_planet['planet_system'],
-            'planet_end' => $data['planet'] ?? $this->_planet['planet_planet'],
+            'galaxy' => $this->planet['planet_galaxy'],
+            'system' => $this->planet['planet_system'],
+            'planet' => $this->planet['planet_planet'],
+            'planet_type' => $this->planet['planet_type'],
+            'galaxy_end' => $data['galaxy'] ?? $this->planet['planet_galaxy'],
+            'system_end' => $data['system'] ?? $this->planet['planet_system'],
+            'planet_end' => $data['planet'] ?? $this->planet['planet_planet'],
             'target_mission' => $data['target_mission'] ?? 0,
         ];
     }

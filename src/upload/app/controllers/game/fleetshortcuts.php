@@ -34,12 +34,6 @@ class Fleetshortcuts extends Controller
 
     /**
      *
-     * @var array
-     */
-    private $_user;
-
-    /**
-     *
      * @var \Shortcuts
      */
     private $_shortcuts = null;
@@ -75,9 +69,6 @@ class Fleetshortcuts extends Controller
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
-        // set data
-        $this->_user = $this->getUserData();
-
         // init a new shortcut object
         $this->setUpShortcuts();
 
@@ -97,7 +88,7 @@ class Fleetshortcuts extends Controller
     private function setUpShortcuts()
     {
         $this->_shortcuts = new Shortcuts(
-            $this->_user['user_fleet_shortcuts']
+            $this->user['user_fleet_shortcuts']
         );
     }
 
@@ -338,7 +329,7 @@ class Fleetshortcuts extends Controller
                 }
 
                 $this->Shortcuts_Model->updateShortcuts(
-                    $this->_user['user_id'], $this->_shortcuts->getAllAsJsonString()
+                    $this->user['user_id'], $this->_shortcuts->getAllAsJsonString()
                 );
             }
 

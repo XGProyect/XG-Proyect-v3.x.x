@@ -32,13 +32,6 @@ class Buddies extends Controller
     const MODULE_ID = 20;
 
     /**
-     * Current user data
-     *
-     * @var array
-     */
-    private $user;
-
-    /**
      * Contains a Buddy object
      *
      * @var \Buddy
@@ -63,9 +56,6 @@ class Buddies extends Controller
 
         // load Language
         parent::loadLang('game/buddies');
-
-        // set data
-        $this->user = $this->getUserData();
 
         // init a new buddy object
         $this->setUpBudies();

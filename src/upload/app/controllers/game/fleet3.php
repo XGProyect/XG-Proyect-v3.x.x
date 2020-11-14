@@ -39,18 +39,6 @@ class Fleet3 extends Controller
 
     /**
      *
-     * @var array
-     */
-    private $_user;
-
-    /**
-     *
-     * @var array
-     */
-    private $_planet;
-
-    /**
-     *
      * @var \Fleets
      */
     private $_research = null;
@@ -86,10 +74,6 @@ class Fleet3 extends Controller
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
-        // set data
-        $this->_user = $this->getUserData();
-        $this->_planet = $this->getPlanetData();
-
         // init a new fleets object
         $this->setUpFleets();
 
@@ -106,8 +90,8 @@ class Fleet3 extends Controller
     private function setUpFleets()
     {
         $this->_research = new Researches(
-            [$this->_user],
-            $this->_user['user_id']
+            [$this->user],
+            $this->user['user_id']
         );
     }
 
@@ -154,7 +138,7 @@ class Fleet3 extends Controller
         $objects = parent::$objects->getObjects();
         $price = parent::$objects->getPrice();
 
-        $ships = $this->Fleet_Model->getShipsByPlanetId($this->_planet['planet_id']);
+        $ships = $this->Fleet_Model->getShipsByPlanetId($this->planet['planet_id']);
 
         $list_of_ships = [];
         $selected_fleet = $this->getSessionShips();
@@ -177,8 +161,8 @@ class Fleet3 extends Controller
 
                     $list_of_ships[] = [
                         'ship_id' => $ship_id,
-                        'consumption' => FleetsLib::shipConsumption($ship_id, $this->_user),
-                        'speed' => FleetsLib::fleetMaxSpeed('', $ship_id, $this->_user),
+                        'consumption' => FleetsLib::shipConsumption($ship_id, $this->user),
+                        'speed' => FleetsLib::fleetMaxSpeed('', $ship_id, $this->user),
                         'capacity' => FleetsLib::getMaxStorage(
                             $price[$ship_id]['capacity'],
                             $this->_research->getCurrentResearch()->getResearchHyperspaceTechnology()
@@ -200,10 +184,10 @@ class Fleet3 extends Controller
     private function buildTitleBlock()
     {
         return FormatLib::prettyCoords(
-            $this->_planet['planet_galaxy'],
-            $this->_planet['planet_system'],
-            $this->_planet['planet_planet']
-        ) . ' - ' . $this->langs->language['planet_type'][$this->_planet['planet_type']];
+            $this->planet['planet_galaxy'],
+            $this->planet['planet_system'],
+            $this->planet['planet_planet']
+        ) . ' - ' . $this->langs->language['planet_type'][$this->planet['planet_type']];
     }
 
     /**
@@ -396,7 +380,7 @@ class Fleet3 extends Controller
         if ($selected_planet) {
             $ocuppied = true;
 
-            if ($selected_planet['planet_user_id'] == $this->_user['user_id']) {
+            if ($selected_planet['planet_user_id'] == $this->user['user_id']) {
                 $action_type = 'own';
             }
         }
@@ -488,17 +472,17 @@ class Fleet3 extends Controller
         $this->_current_mission = $data['target_mission'];
 
         $distance = FleetsLib::targetDistance(
-            $this->_planet['planet_galaxy'],
+            $this->planet['planet_galaxy'],
             $data['galaxy'],
-            $this->_planet['planet_system'],
+            $this->planet['planet_system'],
             $data['system'],
-            $this->_planet['planet_planet'],
+            $this->planet['planet_planet'],
             $data['planet']
         );
 
         $fleet = $this->getSessionShips();
         $Speed_factor = FunctionsLib::fleetSpeedFactor();
-        $fleet_speed = FleetsLib::fleetMaxSpeed($fleet, 0, $this->_user);
+        $fleet_speed = FleetsLib::fleetMaxSpeed($fleet, 0, $this->user);
 
         $consumption = FleetsLib::fleetConsumption(
             $fleet,
@@ -510,7 +494,7 @@ class Fleet3 extends Controller
                 $Speed_factor
             ),
             $distance,
-            $this->_user
+            $this->user
         );
 
         // attach speed and target data
@@ -529,17 +513,17 @@ class Fleet3 extends Controller
         ];
 
         return [
-            'this_metal' => floor($this->_planet['planet_metal']),
-            'this_crystal' => floor($this->_planet['planet_crystal']),
-            'this_deuterium' => floor($this->_planet['planet_deuterium']),
-            'this_galaxy' => $this->_planet['planet_galaxy'],
-            'this_system' => $this->_planet['planet_system'],
-            'this_planet' => $this->_planet['planet_planet'],
-            'this_planet_type' => $this->_planet['planet_type'],
-            'galaxy_end' => $data['galaxy'] ?? $this->_planet['planet_galaxy'],
-            'system_end' => $data['system'] ?? $this->_planet['planet_system'],
-            'planet_end' => $data['planet'] ?? $this->_planet['planet_planet'],
-            'planet_type_end' => $data['planettype'] ?? $this->_planet['planet_type'],
+            'this_metal' => floor($this->planet['planet_metal']),
+            'this_crystal' => floor($this->planet['planet_crystal']),
+            'this_deuterium' => floor($this->planet['planet_deuterium']),
+            'this_galaxy' => $this->planet['planet_galaxy'],
+            'this_system' => $this->planet['planet_system'],
+            'this_planet' => $this->planet['planet_planet'],
+            'this_planet_type' => $this->planet['planet_type'],
+            'galaxy_end' => $data['galaxy'] ?? $this->planet['planet_galaxy'],
+            'system_end' => $data['system'] ?? $this->planet['planet_system'],
+            'planet_end' => $data['planet'] ?? $this->planet['planet_planet'],
+            'planet_type_end' => $data['planettype'] ?? $this->planet['planet_type'],
             'speed' => $data['speed'] ?? 10,
             'speedfactor' => FunctionsLib::fleetSpeedFactor(),
         ];
@@ -568,14 +552,14 @@ class Fleet3 extends Controller
     private function isFriendly(array $target_planet): bool
     {
         $is_buddy = $this->Fleet_Model->getBuddies(
-            $this->_user['user_id'],
+            $this->user['user_id'],
             $target_planet['planet_user_id']
         ) >= 1;
 
         if (!$is_buddy
             && (
-                ($target_planet['user_ally_id'] == 0 && $this->_user['user_ally_id'] == 0)
-                or ($target_planet['user_ally_id'] != $this->_user['user_ally_id'])
+                ($target_planet['user_ally_id'] == 0 && $this->user['user_ally_id'] == 0)
+                or ($target_planet['user_ally_id'] != $this->user['user_ally_id'])
             )
         ) {
             return false;
@@ -593,7 +577,7 @@ class Fleet3 extends Controller
     private function isCurrentPlanet(array $target): bool
     {
         return FunctionsLib::isCurrentPlanet(
-            $this->_planet,
+            $this->planet,
             [
                 'planet_galaxy' => $target['galaxy'],
                 'planet_system' => $target['system'],

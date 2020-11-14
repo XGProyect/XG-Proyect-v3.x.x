@@ -36,12 +36,6 @@ class Federation extends Controller
 
     /**
      *
-     * @var array
-     */
-    private $_user;
-
-    /**
-     *
      * @var \Fleets
      */
     private $_fleets = null;
@@ -90,9 +84,6 @@ class Federation extends Controller
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
-        // set data
-        $this->_user = $this->getUserData();
-
         // init a new fleets object
         $this->setUpFleets();
 
@@ -112,8 +103,8 @@ class Federation extends Controller
     private function setUpFleets()
     {
         $this->_fleets = new Fleets(
-            $this->Fleet_Model->getAllFleetsByUserId($this->_user['user_id']),
-            $this->_user['user_id']
+            $this->Fleet_Model->getAllFleetsByUserId($this->user['user_id']),
+            $this->user['user_id']
         );
     }
 
@@ -199,19 +190,19 @@ class Federation extends Controller
                 );
 
                 if ($acs['acs_members'] < 5
-                    && $member != $this->_user['user_id']) {
+                    && $member != $this->user['user_id']) {
                     $this->Fleet_Model->insertNewAcsMember(
                         $member,
                         $own_fleet->getFleetGroup()
                     );
 
-                    $invite_message = $this->langs->line('fl_player') . $this->_user['user_name'] . $this->langs->line('fl_acs_invitation_message');
+                    $invite_message = $this->langs->line('fl_player') . $this->user['user_name'] . $this->langs->line('fl_acs_invitation_message');
                     FunctionsLib::sendMessage(
                         $member,
-                        $this->_user['user_id'],
+                        $this->user['user_id'],
                         '',
                         5,
-                        $this->_user['user_name'],
+                        $this->user['user_name'],
                         $this->langs->line('fl_acs_invitation_title'),
                         $invite_message
                     );
@@ -240,7 +231,7 @@ class Federation extends Controller
                 );
 
                 if ($acs['acs_members'] >= 1
-                    && $member != $this->_user['user_id']) {
+                    && $member != $this->user['user_id']) {
                     $this->Fleet_Model->removeAcsMember(
                         $member,
                         $own_fleet->getFleetGroup()
@@ -263,7 +254,7 @@ class Federation extends Controller
             $fleet_id = filter_input(INPUT_GET, 'fleet', FILTER_VALIDATE_INT);
 
             $user_id = $this->Fleet_Model->getUserIdByName($user_name, $fleet_id);
-            if ($user_id > 0 && $user_id != $this->_user['user_id']) {
+            if ($user_id > 0 && $user_id != $this->user['user_id']) {
                 $this->addAcsMember($user_id);
 
                 $this->_message = FormatLib::customColor(
@@ -301,7 +292,7 @@ class Federation extends Controller
                 $this->Fleet_Model->updateAcsName(
                     $acs_name,
                     $acs['acs_id'],
-                    $this->_user['user_id']
+                    $this->user['user_id']
                 );
             }
         }
@@ -332,7 +323,7 @@ class Federation extends Controller
 
                 $this->_group = new AcsFleets(
                     [$this->Fleet_Model->getAcsDataByGroupId($group_id)],
-                    $this->_user['user_id']
+                    $this->user['user_id']
                 );
 
                 $this->_acs_code = $this->_group->getFirstAcs()->getAcsFleetName();
@@ -362,13 +353,13 @@ class Federation extends Controller
         $list_of_buddies = [];
 
         $buddies = $this->Buddies_Model->getBuddiesDetailsForAcsById(
-            $this->_user['user_id'],
+            $this->user['user_id'],
             $this->_group->getFirstAcs()->getAcsFleetId()
         );
 
         if (count($buddies) > 0) {
             foreach ($buddies as $buddy) {
-                if ($buddy['user_id'] != $this->_user['user_id']) {
+                if ($buddy['user_id'] != $this->user['user_id']) {
                     $list_of_buddies[] = [
                         'value' => $buddy['user_id'],
                         'title' => $buddy['user_name'],

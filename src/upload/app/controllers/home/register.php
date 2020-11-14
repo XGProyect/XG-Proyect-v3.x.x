@@ -65,11 +65,11 @@ class Register extends Controller
     }
 
     /**
-     * method build_page
-     * param
-     * return main method, loads everything
+     * Build the page
+     *
+     * @return void
      */
-    private function buildPage()
+    private function buildPage(): void
     {
         if ($_POST) {
             $user_name = $_POST['character'];

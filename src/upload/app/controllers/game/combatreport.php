@@ -24,12 +24,6 @@ class Combatreport extends Controller
 
     /**
      *
-     * @var \UsersLibrary
-     */
-    private $user;
-
-    /**
-     *
      * @var \Report
      */
     private $report = null;
@@ -52,9 +46,6 @@ class Combatreport extends Controller
 
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
-
-        // set data
-        $this->user = $this->getUserData();
 
         // init a new report object
         $this->setUpReport();

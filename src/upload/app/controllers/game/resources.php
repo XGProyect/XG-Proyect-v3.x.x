@@ -37,17 +37,9 @@ class Resources extends Controller
      * @var mixed
      */
     private $_reslist;
-    /**
-     * @var mixed
-     */
-    private $_current_user;
-    /**
-     * @var mixed
-     */
-    private $_current_planet;
 
     /**
-     * __construct()
+     * Constructor
      */
     public function __construct()
     {
@@ -68,18 +60,16 @@ class Resources extends Controller
         $this->_resource = parent::$objects->getObjects();
         $this->_prod_grid = parent::$objects->getProduction();
         $this->_reslist = parent::$objects->getObjectsList();
-        $this->_current_user = parent::$users->getUserData();
-        $this->_current_planet = parent::$users->getPlanetData();
 
-        $this->build_page();
+        $this->buildPage();
     }
 
     /**
-     * method build_page
-     * param
-     * return main method, loads everything
+     * Build the page
+     *
+     * @return void
      */
-    private function build_page()
+    private function buildPage()
     {
         $parse = $this->langs->language;
 
@@ -89,37 +79,37 @@ class Resources extends Controller
         $game_energy_basic_income = FunctionsLib::readConfig('energy_basic_income');
         $game_resource_multiplier = FunctionsLib::readConfig('resource_multiplier');
 
-        if ($this->_current_user['preference_vacation_mode'] > 0 or $this->_current_planet['planet_type'] == PlanetTypesEnumerator::MOON) {
+        if ($this->user['preference_vacation_mode'] > 0 or $this->planet['planet_type'] == PlanetTypesEnumerator::MOON) {
             $game_metal_basic_income = 0;
             $game_crystal_basic_income = 0;
             $game_deuterium_basic_income = 0;
         }
 
-        $this->_current_planet['planet_metal_max'] = ProductionLib::maxStorable($this->_current_planet[$this->_resource[22]]);
-        $this->_current_planet['planet_crystal_max'] = ProductionLib::maxStorable($this->_current_planet[$this->_resource[23]]);
-        $this->_current_planet['planet_deuterium_max'] = ProductionLib::maxStorable($this->_current_planet[$this->_resource[24]]);
+        $this->planet['planet_metal_max'] = ProductionLib::maxStorable($this->planet[$this->_resource[22]]);
+        $this->planet['planet_crystal_max'] = ProductionLib::maxStorable($this->planet[$this->_resource[23]]);
+        $this->planet['planet_deuterium_max'] = ProductionLib::maxStorable($this->planet[$this->_resource[24]]);
 
         $parse['production_level'] = 100;
-        $post_percent = ProductionLib::maxProduction($this->_current_planet['planet_energy_max'], $this->_current_planet['planet_energy_used']);
+        $post_percent = ProductionLib::maxProduction($this->planet['planet_energy_max'], $this->planet['planet_energy_used']);
 
         $parse['resource_row'] = '';
-        $this->_current_planet['planet_metal_perhour'] = 0;
-        $this->_current_planet['planet_crystal_perhour'] = 0;
-        $this->_current_planet['planet_deuterium_perhour'] = 0;
-        $this->_current_planet['planet_energy_max'] = 0;
-        $this->_current_planet['planet_energy_used'] = 0;
+        $this->planet['planet_metal_perhour'] = 0;
+        $this->planet['planet_crystal_perhour'] = 0;
+        $this->planet['planet_deuterium_perhour'] = 0;
+        $this->planet['planet_energy_max'] = 0;
+        $this->planet['planet_energy_used'] = 0;
 
-        $BuildTemp = $this->_current_planet['planet_temp_max'];
+        $BuildTemp = $this->planet['planet_temp_max'];
 
         foreach ($this->_reslist['prod'] as $ProdID) {
-            if ($this->_current_planet[$this->_resource[$ProdID]] > 0 && isset($this->_prod_grid[$ProdID])) {
-                $BuildLevelFactor = $this->_current_planet['planet_' . $this->_resource[$ProdID] . '_percent'];
-                $BuildLevel = $this->_current_planet[$this->_resource[$ProdID]];
-                $BuildEnergy = $this->_current_user['research_energy_technology'];
+            if ($this->planet[$this->_resource[$ProdID]] > 0 && isset($this->_prod_grid[$ProdID])) {
+                $BuildLevelFactor = $this->planet['planet_' . $this->_resource[$ProdID] . '_percent'];
+                $BuildLevel = $this->planet[$this->_resource[$ProdID]];
+                $BuildEnergy = $this->user['research_energy_technology'];
 
                 // BOOST
-                $geologe_boost = 1 + (1 * (OfficiersLib::isOfficierActive($this->_current_user['premium_officier_geologist']) ? GEOLOGUE : 0));
-                $engineer_boost = 1 + (1 * (OfficiersLib::isOfficierActive($this->_current_user['premium_officier_engineer']) ? ENGINEER_ENERGY : 0));
+                $geologe_boost = 1 + (1 * (OfficiersLib::isOfficierActive($this->user['premium_officier_geologist']) ? GEOLOGUE : 0));
+                $engineer_boost = 1 + (1 * (OfficiersLib::isOfficierActive($this->user['premium_officier_engineer']) ? ENGINEER_ENERGY : 0));
 
                 // PRODUCTION FORMULAS
                 $metal_prod = eval($this->_prod_grid[$ProdID]['formule']['metal']);
@@ -139,14 +129,14 @@ class Resources extends Controller
                 }
 
                 if ($energy > 0) {
-                    $this->_current_planet['planet_energy_max'] += $energy;
+                    $this->planet['planet_energy_max'] += $energy;
                 } else {
-                    $this->_current_planet['planet_energy_used'] += $energy;
+                    $this->planet['planet_energy_used'] += $energy;
                 }
 
-                $this->_current_planet['planet_metal_perhour'] += $metal;
-                $this->_current_planet['planet_crystal_perhour'] += $crystal;
-                $this->_current_planet['planet_deuterium_perhour'] += $deuterium;
+                $this->planet['planet_metal_perhour'] += $metal;
+                $this->planet['planet_crystal_perhour'] += $crystal;
+                $this->planet['planet_deuterium_perhour'] += $deuterium;
 
                 $metal = ProductionLib::currentProduction($metal, $post_percent);
                 $crystal = ProductionLib::currentProduction($crystal, $post_percent);
@@ -155,11 +145,11 @@ class Resources extends Controller
                 $Field = 'planet_' . $this->_resource[$ProdID] . '_percent';
                 $CurrRow = [];
                 $CurrRow['name'] = $this->_resource[$ProdID];
-                $CurrRow['percent'] = $this->_current_planet[$Field];
+                $CurrRow['percent'] = $this->planet[$Field];
                 $CurrRow['option'] = $this->build_options($CurrRow['percent']);
                 $CurrRow['type'] = $this->langs->language[$this->_resource[$ProdID]];
                 $CurrRow['level'] = ($ProdID > 200) ? $this->langs->line('rs_amount') : $this->langs->line('level');
-                $CurrRow['level_type'] = $this->_current_planet[$this->_resource[$ProdID]];
+                $CurrRow['level_type'] = $this->planet[$this->_resource[$ProdID]];
                 $CurrRow['metal_type'] = FormatLib::prettyNumber($metal);
                 $CurrRow['crystal_type'] = FormatLib::prettyNumber($crystal);
                 $CurrRow['deuterium_type'] = FormatLib::prettyNumber($deuterium);
@@ -175,30 +165,30 @@ class Resources extends Controller
             }
         }
 
-        $parse['Production_of_resources_in_the_planet'] = str_replace('%s', $this->_current_planet['planet_name'], $this->langs->line('rs_production_on_planet'));
+        $parse['Production_of_resources_in_the_planet'] = str_replace('%s', $this->planet['planet_name'], $this->langs->line('rs_production_on_planet'));
 
-        $parse['production_level'] = $this->prod_level($this->_current_planet['planet_energy_used'], $this->_current_planet['planet_energy_max']);
+        $parse['production_level'] = $this->prod_level($this->planet['planet_energy_used'], $this->planet['planet_energy_max']);
         $parse['metal_basic_income'] = $game_metal_basic_income;
         $parse['crystal_basic_income'] = $game_crystal_basic_income;
         $parse['deuterium_basic_income'] = $game_deuterium_basic_income;
         $parse['energy_basic_income'] = $game_energy_basic_income;
-        $parse['planet_metal_max'] = $this->resource_color($this->_current_planet['planet_metal'], $this->_current_planet['planet_metal_max']);
-        $parse['planet_crystal_max'] = $this->resource_color($this->_current_planet['planet_crystal'], $this->_current_planet['planet_crystal_max']);
-        $parse['planet_deuterium_max'] = $this->resource_color($this->_current_planet['planet_deuterium'], $this->_current_planet['planet_deuterium_max']);
+        $parse['planet_metal_max'] = $this->resource_color($this->planet['planet_metal'], $this->planet['planet_metal_max']);
+        $parse['planet_crystal_max'] = $this->resource_color($this->planet['planet_crystal'], $this->planet['planet_crystal_max']);
+        $parse['planet_deuterium_max'] = $this->resource_color($this->planet['planet_deuterium'], $this->planet['planet_deuterium_max']);
 
-        $parse['metal_total'] = FormatLib::colorNumber(FormatLib::prettyNumber(floor((($this->_current_planet['planet_metal_perhour'] * 0.01 * $parse['production_level']) + $parse['metal_basic_income']))));
-        $parse['crystal_total'] = FormatLib::colorNumber(FormatLib::prettyNumber(floor((($this->_current_planet['planet_crystal_perhour'] * 0.01 * $parse['production_level']) + $parse['crystal_basic_income']))));
-        $parse['deuterium_total'] = FormatLib::colorNumber(FormatLib::prettyNumber(floor((($this->_current_planet['planet_deuterium_perhour'] * 0.01 * $parse['production_level']) + $parse['deuterium_basic_income']))));
-        $parse['energy_total'] = FormatLib::colorNumber(FormatLib::prettyNumber(floor(($this->_current_planet['planet_energy_max'] + $parse['energy_basic_income']) + $this->_current_planet['planet_energy_used'])));
+        $parse['metal_total'] = FormatLib::colorNumber(FormatLib::prettyNumber(floor((($this->planet['planet_metal_perhour'] * 0.01 * $parse['production_level']) + $parse['metal_basic_income']))));
+        $parse['crystal_total'] = FormatLib::colorNumber(FormatLib::prettyNumber(floor((($this->planet['planet_crystal_perhour'] * 0.01 * $parse['production_level']) + $parse['crystal_basic_income']))));
+        $parse['deuterium_total'] = FormatLib::colorNumber(FormatLib::prettyNumber(floor((($this->planet['planet_deuterium_perhour'] * 0.01 * $parse['production_level']) + $parse['deuterium_basic_income']))));
+        $parse['energy_total'] = FormatLib::colorNumber(FormatLib::prettyNumber(floor(($this->planet['planet_energy_max'] + $parse['energy_basic_income']) + $this->planet['planet_energy_used'])));
 
-        $parse['daily_metal'] = $this->calculate_daily($this->_current_planet['planet_metal_perhour'], $parse['production_level'], $parse['metal_basic_income']);
-        $parse['weekly_metal'] = $this->calculate_weekly($this->_current_planet['planet_metal_perhour'], $parse['production_level'], $parse['metal_basic_income']);
+        $parse['daily_metal'] = $this->calculate_daily($this->planet['planet_metal_perhour'], $parse['production_level'], $parse['metal_basic_income']);
+        $parse['weekly_metal'] = $this->calculate_weekly($this->planet['planet_metal_perhour'], $parse['production_level'], $parse['metal_basic_income']);
 
-        $parse['daily_crystal'] = $this->calculate_daily($this->_current_planet['planet_crystal_perhour'], $parse['production_level'], $parse['crystal_basic_income']);
-        $parse['weekly_crystal'] = $this->calculate_weekly($this->_current_planet['planet_crystal_perhour'], $parse['production_level'], $parse['crystal_basic_income']);
+        $parse['daily_crystal'] = $this->calculate_daily($this->planet['planet_crystal_perhour'], $parse['production_level'], $parse['crystal_basic_income']);
+        $parse['weekly_crystal'] = $this->calculate_weekly($this->planet['planet_crystal_perhour'], $parse['production_level'], $parse['crystal_basic_income']);
 
-        $parse['daily_deuterium'] = $this->calculate_daily($this->_current_planet['planet_deuterium_perhour'], $parse['production_level'], $parse['deuterium_basic_income']);
-        $parse['weekly_deuterium'] = $this->calculate_weekly($this->_current_planet['planet_deuterium_perhour'], $parse['production_level'], $parse['deuterium_basic_income']);
+        $parse['daily_deuterium'] = $this->calculate_daily($this->planet['planet_deuterium_perhour'], $parse['production_level'], $parse['deuterium_basic_income']);
+        $parse['weekly_deuterium'] = $this->calculate_weekly($this->planet['planet_deuterium_perhour'], $parse['production_level'], $parse['deuterium_basic_income']);
 
         $parse['daily_metal'] = FormatLib::colorNumber(FormatLib::prettyNumber($parse['daily_metal']));
         $parse['weekly_metal'] = FormatLib::colorNumber(FormatLib::prettyNumber($parse['weekly_metal']));
@@ -212,21 +202,21 @@ class Resources extends Controller
         $ValidList['percent'] = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
         $SubQry = '';
 
-        if ($_POST && !parent::$users->isOnVacations($this->_current_user)) {
+        if ($_POST && !parent::$users->isOnVacations($this->user)) {
             foreach ($_POST as $Field => $Value) {
                 $FieldName = 'planet_' . $Field . '_percent';
-                if (isset($this->_current_planet[$FieldName])) {
+                if (isset($this->planet[$FieldName])) {
                     if (!in_array($Value, $ValidList['percent'])) {
                         FunctionsLib::redirect('game.php?page=resourceSettings');
                     }
 
                     $Value = $Value / 10;
-                    $this->_current_planet[$FieldName] = $Value;
+                    $this->planet[$FieldName] = $Value;
                     $SubQry .= ", `" . $FieldName . "` = '" . $Value . "'";
                 }
             }
 
-            $this->Resources_Model->updateCurrentPlanet($this->_current_planet, $SubQry);
+            $this->Resources_Model->updateCurrentPlanet($this->planet, $SubQry);
 
             FunctionsLib::redirect('game.php?page=resourceSettings');
         }

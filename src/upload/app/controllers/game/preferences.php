@@ -27,12 +27,6 @@ class Preferences extends Controller
     const MODULE_ID = 21;
 
     /**
-     *
-     * @var \UsersLibrary
-     */
-    private $user;
-
-    /**
      * Reference to Preferences library
      *
      * @var \Preferences
@@ -78,9 +72,6 @@ class Preferences extends Controller
 
         // Check module access
         Functions::moduleMessage(Functions::isModuleAccesible(self::MODULE_ID));
-
-        // set data
-        $this->user = $this->getUserData();
 
         // init a new preferences object
         $this->setUpPreferences();

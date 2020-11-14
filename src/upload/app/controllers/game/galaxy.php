@@ -30,18 +30,6 @@ class Galaxy extends Controller
     const MODULE_ID = 11;
 
     /**
-     *
-     * @var array
-     */
-    private $user;
-
-    /**
-     *
-     * @var array
-     */
-    private $planet;
-
-    /**
      * Contains the galaxy data
      *
      * @var array
@@ -91,10 +79,6 @@ class Galaxy extends Controller
 
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
-
-        // set data
-        $this->user = $this->getUserData();
-        $this->planet = $this->getPlanetData();
 
         $this->_resource = parent::$objects->getObjects();
         $this->_pricelist = parent::$objects->getPrice();

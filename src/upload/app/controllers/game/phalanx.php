@@ -25,16 +25,7 @@ class Phalanx extends Controller
     const MODULE_ID = 11;
 
     /**
-     * @var mixed
-     */
-    private $_current_user;
-    /**
-     * @var mixed
-     */
-    private $_current_planet;
-
-    /**
-     * __construct()
+     * Constructor
      */
     public function __construct()
     {
@@ -52,23 +43,21 @@ class Phalanx extends Controller
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
 
-        $this->_current_user = parent::$users->getUserData();
-        $this->_current_planet = parent::$users->getPlanetData();
-
-        $this->build_page();
+        // build the page
+        $this->buildPage();
     }
 
     /**
-     * method build_page
-     * param
-     * return main method, loads everything
+     * Build the page
+     *
+     * @return void
      */
-    private function build_page()
+    private function buildPage(): void
     {
         $parse = $this->langs->language;
         /* range */
-        $radar_limit_inf = $this->_current_planet['planet_system'] - Formulas::phalanxRange($this->_current_planet['building_phalanx']);
-        $radar_limit_sup = $this->_current_planet['planet_system'] + Formulas::phalanxRange($this->_current_planet['building_phalanx']);
+        $radar_limit_inf = $this->planet['planet_system'] - Formulas::phalanxRange($this->planet['building_phalanx']);
+        $radar_limit_sup = $this->planet['planet_system'] + Formulas::phalanxRange($this->planet['building_phalanx']);
         $radar_limit_inf = max($radar_limit_inf, 1);
         $radar_limit_sup = min($radar_limit_sup, MAX_SYSTEM_IN_GALAXY);
 
@@ -78,15 +67,15 @@ class Phalanx extends Controller
         $Planet = (int) $_GET['planet'];
         $PlType = (int) $_GET['planettype'];
         /* cheater detection */
-        if ($System < $radar_limit_inf or $System > $radar_limit_sup or $Galaxy != $this->_current_planet['planet_galaxy'] or $PlType != PlanetTypesEnumerator::PLANET or $this->_current_planet['planet_type'] != PlanetTypesEnumerator::MOON) {
+        if ($System < $radar_limit_inf or $System > $radar_limit_sup or $Galaxy != $this->planet['planet_galaxy'] or $PlType != PlanetTypesEnumerator::PLANET or $this->planet['planet_type'] != PlanetTypesEnumerator::MOON) {
             FunctionsLib::redirect('game.php?page=galaxy');
         }
 
         $TargetName = '';
 
         /* main page */
-        if ($this->_current_planet['planet_deuterium'] >= 10000) {
-            $this->Phalanx_Model->reduceDeuterium($this->_current_user['user_current_planet']);
+        if ($this->planet['planet_deuterium'] >= 10000) {
+            $this->Phalanx_Model->reduceDeuterium($this->user['user_current_planet']);
 
             $target_planet_info = $this->Phalanx_Model->getTargetPlanetIdAndName($Galaxy, $System, $Planet);
 
@@ -134,13 +123,13 @@ class Phalanx extends Controller
                     if ($isStartedfromThis && ($FleetRow['fleet_start_type'] == 1 || ($FleetRow['fleet_start_type'] == 3 && $TargetMoonIsDestroyed))) {
                         if ($Mission != 4) {
                             $Label = "fs";
-                            $fpage[$ArrivetoTargetTime] .= "\n" . FleetsLib::flyingFleetsTable($FleetRow, 0, $myFleet, $Label, $Record, $this->_current_user);
+                            $fpage[$ArrivetoTargetTime] .= "\n" . FleetsLib::flyingFleetsTable($FleetRow, 0, $myFleet, $Label, $Record, $this->user);
                         }
                     }
                     //scanning of destination fleet planet
                     elseif (!$isStartedfromThis && ($FleetRow['fleet_end_type'] == 1 || ($FleetRow['fleet_end_type'] == 3 && $TargetMoonIsDestroyed))) {
                         $Label = "fs";
-                        $fpage[$ArrivetoTargetTime] .= "\n" . FleetsLib::flyingFleetsTable($FleetRow, 0, $myFleet, $Label, $Record, $this->_current_user);
+                        $fpage[$ArrivetoTargetTime] .= "\n" . FleetsLib::flyingFleetsTable($FleetRow, 0, $myFleet, $Label, $Record, $this->user);
                     }
                 }
                 /* 2)the stay fleet table event
@@ -148,7 +137,7 @@ class Phalanx extends Controller
                  */
                 if ($EndStayTime > time() && $Mission == 5 && ($FleetRow['fleet_end_type'] == 1 || ($FleetRow['fleet_end_type'] == 3 && $TargetMoonIsDestroyed)) && $isTheTarget) {
                     $Label = "ft";
-                    $fpage[$EndStayTime] .= "\n" . FleetsLib::flyingFleetsTable($FleetRow, 1, $myFleet, $Label, $Record, $this->_current_user);
+                    $fpage[$EndStayTime] .= "\n" . FleetsLib::flyingFleetsTable($FleetRow, 1, $myFleet, $Label, $Record, $this->user);
                 }
                 /* 3)the return fleet table event
                  * you can see the return fleet if this is the started planet(or destroyed moon)
@@ -156,7 +145,7 @@ class Phalanx extends Controller
                  */
                 if ($ReturnTime > time() && $Mission != 4 && $Mission != 10 && $isStartedfromThis && ($FleetRow['fleet_start_type'] == 1 || ($FleetRow['fleet_start_type'] == 3 && $TargetMoonIsDestroyed))) {
                     $Label = "fe";
-                    $fpage[$ReturnTime] .= "\n" . FleetsLib::flyingFleetsTable($FleetRow, 2, $myFleet, $Label, $Record, $this->_current_user);
+                    $fpage[$ReturnTime] .= "\n" . FleetsLib::flyingFleetsTable($FleetRow, 2, $myFleet, $Label, $Record, $this->user);
                 }
             }
             ksort($fpage);
