@@ -24,7 +24,7 @@
         </tr>
         <tr>
             <th>{ov_diameter}</th>
-            <th colspan="3">{planet_diameter} {ov_distance_unit} (<a title="{Developed_fields}">{planet_field_current}</a> / <a title="{max_eveloped_fields}">{planet_field_max}</a> {ov_fields})</th>
+            <th colspan="3">{planet_diameter} {ov_distance_unit} ({planet_field_current} / {planet_field_max} {ov_fields})</th>
         </tr>
         <tr>
             <th>{ov_temperature}</th>
