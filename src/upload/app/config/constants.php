@@ -74,6 +74,7 @@ define('ADM_URL', PROTOCOL . strtr(BASE_PATH, ['public' => '', 'public/' => ''])
  */
 define('APP_PATH', 'app' . DIRECTORY_SEPARATOR);
 define('DATA_PATH', 'writable' . DIRECTORY_SEPARATOR);
+define('LOGS_PATH', DATA_PATH . 'logs' . DIRECTORY_SEPARATOR);
 define('PUBLIC_PATH', 'public' . DIRECTORY_SEPARATOR);
 define('SYSTEM_PATH', 'system' . DIRECTORY_SEPARATOR);
 
@@ -89,7 +90,6 @@ define('HOOKS_PATH', APP_PATH . 'hooks' . DIRECTORY_SEPARATOR);
 define('LANG_PATH', APP_PATH . 'language' . DIRECTORY_SEPARATOR);
 define('HELPERS_PATH', APP_PATH . 'helpers' . DIRECTORY_SEPARATOR);
 define('LIB_PATH', APP_PATH . 'libraries' . DIRECTORY_SEPARATOR);
-define('LOGS_PATH', APP_PATH . 'logs' . DIRECTORY_SEPARATOR);
 define('MODELS_PATH', APP_PATH . 'models' . DIRECTORY_SEPARATOR);
 define('VENDOR_PATH', APP_PATH . 'ThirdParty' . DIRECTORY_SEPARATOR);
 define('TEMPLATE_DIR', APP_PATH . 'views' . DIRECTORY_SEPARATOR);
