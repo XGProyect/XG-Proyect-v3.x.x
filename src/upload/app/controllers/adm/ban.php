@@ -21,10 +21,6 @@ use App\libraries\FunctionsLib;
 class Ban extends Controller
 {
     /**
-     * @var mixed
-     */
-    private $_current_user;
-    /**
      * @var int
      */
     private $_users_count = 0;
@@ -49,10 +45,8 @@ class Ban extends Controller
         // load Language
         parent::loadLang(['adm/global', 'adm/ban']);
 
-        $this->_current_user = parent::$users->getUserData();
-
         // check if the user is allowed to access
-        if (!Administration::authorization(__CLASS__, (int) $this->_current_user['user_authlevel'])) {
+        if (!Administration::authorization(__CLASS__, (int) $this->user['user_authlevel'])) {
             die(Administration::noAccessMessage($this->langs->line('no_permissions')));
         }
 
@@ -147,8 +141,8 @@ class Ban extends Controller
                     $reas = (string) $_POST['text'];
                     $days = (int) $_POST['days'];
                     $hour = (int) $_POST['hour'];
-                    $admin_name = $this->_current_user['user_name'];
-                    $admin_mail = $this->_current_user['user_email'];
+                    $admin_name = $this->user['user_name'];
+                    $admin_mail = $this->user['user_email'];
                     $current_time = time();
                     $ban_time = $days * 86400;
                     $ban_time += $hour * 3600;
@@ -201,12 +195,12 @@ class Ban extends Controller
         $where_banned = '';
         $users_list = '';
 
-        if ($this->_current_user['user_authlevel'] != 3) {
-            $where_authlevel = "WHERE `user_authlevel` < '" . ($this->_current_user['user_authlevel']) . "'";
+        if ($this->user['user_authlevel'] != 3) {
+            $where_authlevel = "WHERE `user_authlevel` < '" . ($this->user['user_authlevel']) . "'";
         }
 
         if (isset($_GET['view']) && ($_GET['view'] == 'user_banned')) {
-            if ($this->_current_user['user_authlevel'] == 3) {
+            if ($this->user['user_authlevel'] == 3) {
                 $where_banned = "WHERE `user_banned` <> '0'";
             } else {
                 $where_banned = "AND `user_banned` <> '1'";

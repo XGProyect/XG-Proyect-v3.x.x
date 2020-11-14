@@ -130,7 +130,7 @@ abstract class Controller extends XGPCore
      */
     protected function getUserData(): array
     {
-        return $this->current_user;
+        return $this->user;
     }
 
     /**
@@ -140,7 +140,7 @@ abstract class Controller extends XGPCore
      */
     protected function getPlanetData(): array
     {
-        return $this->current_planet;
+        return $this->planet;
     }
 
     /**
