@@ -35,7 +35,7 @@ class Login extends Controller
         parent::loadModel('adm/login');
 
         // load Language
-        parent::loadLang('adm/login');
+        parent::loadLang(['adm/login']);
 
         // time to do something
         $this->runAction();

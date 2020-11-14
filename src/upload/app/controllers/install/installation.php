@@ -56,7 +56,7 @@ class Installation extends Controller
         parent::loadModel('install/installation');
 
         // load Language
-        parent::loadLang('installation/installation');
+        parent::loadLang(['installation/installation']);
 
         // build the page
         $this->buildPage();

@@ -55,7 +55,7 @@ class Buddies extends Controller
         parent::loadModel('game/buddies');
 
         // load Language
-        parent::loadLang('game/buddies');
+        parent::loadLang(['game/buddies']);
 
         // init a new buddy object
         $this->setUpBudies();

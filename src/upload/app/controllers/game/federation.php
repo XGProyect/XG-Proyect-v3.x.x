@@ -79,7 +79,7 @@ class Federation extends Controller
         parent::loadModel('game/buddies');
 
         // load Language
-        parent::loadLang('game/fleet');
+        parent::loadLang(['game/fleet']);
 
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));

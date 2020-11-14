@@ -52,7 +52,7 @@ class Messages extends Controller
         parent::loadModel('game/messages');
 
         // load Language
-        parent::loadLang('game/messages');
+        parent::loadLang(['game/messages']);
 
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));

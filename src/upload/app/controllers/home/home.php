@@ -30,7 +30,7 @@ class Home extends Controller
         parent::loadModel('home/home');
 
         // load Language
-        parent::loadLang('home/home');
+        parent::loadLang(['home/home']);
 
         // time to do something
         $this->runAction();

@@ -26,7 +26,7 @@ class Info extends Controller
         parent::__construct();
 
         // load Language
-        parent::loadLang('ajax/info');
+        parent::loadLang(['ajax/info']);
 
         // build the page
         $this->buildPage();

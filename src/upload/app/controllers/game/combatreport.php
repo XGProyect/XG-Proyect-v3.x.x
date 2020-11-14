@@ -42,7 +42,7 @@ class Combatreport extends Controller
         parent::loadModel('game/combatreport');
 
         // load Language
-        parent::loadLang('game/combatreport');
+        parent::loadLang(['game/combatreport']);
 
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));

@@ -26,7 +26,7 @@ class Media extends Controller
         parent::__construct();
 
         // load Language
-        parent::loadLang('ajax/media');
+        parent::loadLang(['ajax/media']);
 
         // build the page
         $this->buildPage();

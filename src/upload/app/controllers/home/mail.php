@@ -45,7 +45,7 @@ class Mail extends Controller
         parent::loadModel('home/mail');
 
         // load Language
-        parent::loadLang('home/mail');
+        parent::loadLang(['home/mail']);
 
         // init some recurrent data
         $this->setUpData();

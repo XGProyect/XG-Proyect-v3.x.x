@@ -35,7 +35,7 @@ class Renameplanet extends Controller
         parent::loadModel('game/renameplanet');
 
         // load Language
-        parent::loadLang('game/renameplanet');
+        parent::loadLang(['game/renameplanet']);
 
         // Check module access
         FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));

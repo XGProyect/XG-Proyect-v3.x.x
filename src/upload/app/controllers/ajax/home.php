@@ -26,7 +26,7 @@ class Home extends Controller
         parent::__construct();
 
         // load Language
-        parent::loadLang('ajax/home');
+        parent::loadLang(['ajax/home']);
 
         // build the page
         $this->buildPage();

@@ -51,7 +51,7 @@ class Register extends Controller
         parent::loadModel('home/register');
 
         // load Language
-        parent::loadLang('home/register');
+        parent::loadLang(['home/register']);
 
         if (FunctionsLib::readConfig('reg_enable') != 1) {
             die(FunctionsLib::message($this->langs->line('re_disabled'), 'index.php', '5', false, false));

@@ -68,7 +68,7 @@ class Preferences extends Controller
         parent::loadModel('game/preferences');
 
         // load Language
-        parent::loadLang('game/preferences');
+        parent::loadLang(['game/preferences']);
 
         // Check module access
         Functions::moduleMessage(Functions::isModuleAccesible(self::MODULE_ID));
