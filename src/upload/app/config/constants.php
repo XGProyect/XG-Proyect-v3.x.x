@@ -73,7 +73,7 @@ define('ADM_URL', PROTOCOL . strtr(BASE_PATH, ['public' => '', 'public/' => ''])
  *
  */
 define('APP_PATH', 'app' . DIRECTORY_SEPARATOR);
-define('DATA_PATH', 'data' . DIRECTORY_SEPARATOR);
+define('DATA_PATH', 'writable' . DIRECTORY_SEPARATOR);
 define('PUBLIC_PATH', 'public' . DIRECTORY_SEPARATOR);
 define('SYSTEM_PATH', 'system' . DIRECTORY_SEPARATOR);
 
