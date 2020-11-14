@@ -2,7 +2,13 @@
 # application
 #
 src/upload/application/config/config.php
-src/upload/application/logs/*.txt
+
+#
+# writable
+#
+src/upload/writable/backups/*.sql
+src/upload/writable/cache/*.html
+/src/upload/writable/logs/*.txt
 
 #
 # tests
