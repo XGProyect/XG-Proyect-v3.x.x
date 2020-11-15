@@ -27,5 +27,5 @@ if (file_exists($file_name)) {
 
     $class_name = 'App\controllers\install\\' . ucfirst($page);
 
-    new $class_name();
+    (new $class_name)->index();
 }
