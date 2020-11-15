@@ -12,7 +12,7 @@
 namespace App\controllers\home;
 
 use App\core\BaseController;
-use App\libraries\FunctionsLib as Functions;
+use App\libraries\Functions;
 
 /**
  * Home Class
@@ -31,7 +31,15 @@ class Home extends BaseController
 
         // load Language
         parent::loadLang(['home/home']);
+    }
 
+    /**
+     * Users land here
+     *
+     * @return void
+     */
+    public function index(): void
+    {
         // time to do something
         $this->runAction();
 

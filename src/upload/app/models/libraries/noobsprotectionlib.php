@@ -13,7 +13,7 @@
 namespace App\models\libraries;
 
 use App\core\Model;
-use App\libraries\FunctionsLib as Functions;
+use App\libraries\Functions;
 
 /**
  * NoobsProtectionLib Class

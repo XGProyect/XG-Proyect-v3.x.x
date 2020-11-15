@@ -17,7 +17,7 @@ use App\helpers\UrlHelper;
 use App\libraries\buildings\Building;
 use App\libraries\DevelopmentsLib as Developments;
 use App\libraries\FormatLib;
-use App\libraries\FunctionsLib;
+use App\libraries\Functions;
 use App\libraries\OfficiersLib;
 use App\libraries\TimingLibrary as Timing;
 use App\libraries\UpdatesLibrary;
@@ -66,11 +66,19 @@ class Buildings extends BaseController
         // load Language
         parent::loadLang(['game/global', 'game/buildings', 'game/constructions']);
 
-        // Check module access
-        FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
-
         // init a new building object with the current building queue
         $this->setUpBuildings();
+    }
+
+    /**
+     * Users land here
+     *
+     * @return void
+     */
+    public function index(): void
+    {
+        // Check module access
+        Functions::moduleMessage(Functions::isModuleAccesible(self::MODULE_ID));
 
         // time to do something
         $this->runAction();
@@ -614,7 +622,7 @@ class Buildings extends BaseController
                 $QueueArray = explode(";", $CurrentQueue);
                 $ActualCount = count($QueueArray);
                 if ($ActualCount < 2) {
-                    FunctionsLib::redirect('game.php?page=' . $this->getCurrentPage());
+                    Functions::redirect('game.php?page=' . $this->getCurrentPage());
                 }
 
                 //  finding the buildings time
@@ -667,7 +675,7 @@ class Buildings extends BaseController
 
         if ($AddMode) {
             if (($this->planet['planet_field_current'] >= ($max_fields - $queue['lenght']))) {
-                FunctionsLib::redirect('game.php?page=' . $this->getCurrentPage());
+                Functions::redirect('game.php?page=' . $this->getCurrentPage());
             }
         }
 

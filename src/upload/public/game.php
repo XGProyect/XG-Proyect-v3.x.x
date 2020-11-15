@@ -10,7 +10,7 @@
  * @version  3.1.0
  */
 use App\core\common;
-use App\libraries\FunctionsLib;
+use App\libraries\Functions;
 
 define('XGP_ROOT', realpath(dirname(__DIR__)) . DIRECTORY_SEPARATOR);
 
@@ -22,7 +22,7 @@ $system->bootUp('game');
 $page = filter_input(INPUT_GET, 'page');
 
 if (is_null($page)) {
-    FunctionsLib::redirect('game.php?page=overview');
+    Functions::redirect('game.php?page=overview');
 }
 
 // kind of a mapping
@@ -46,7 +46,7 @@ if (isset($page)) {
     // logout
     if ($page == 'logout') {
         $system->getSession()->delete();
-        FunctionsLib::redirect(SYSTEM_ROOT);
+        Functions::redirect(SYSTEM_ROOT);
     }
 
     // other pages
@@ -55,9 +55,9 @@ if (isset($page)) {
 
         $class_name = 'App\controllers\game\\' . ucfirst($page);
 
-        new $class_name();
+        (new $class_name)->index();
     }
 }
 
 // any other case
-FunctionsLib::redirect('game.php?page=overview');
+Functions::redirect('game.php?page=overview');

@@ -16,7 +16,7 @@ use App\helpers\StringsHelper;
 use App\helpers\UrlHelper;
 use App\libraries\alliance\Alliances;
 use App\libraries\FormatLib;
-use App\libraries\FunctionsLib;
+use App\libraries\Functions;
 use App\libraries\TimingLibrary as Timing;
 
 /**
@@ -66,7 +66,7 @@ class Alliance extends BaseController
         parent::$users->checkSession();
 
         // Check module access
-        FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
+        Functions::moduleMessage(Functions::isModuleAccesible(self::MODULE_ID));
 
         // load Model
         parent::loadModel('game/alliance');
@@ -75,11 +75,19 @@ class Alliance extends BaseController
         parent::loadLang(['game/alliance']);
 
         // load Library
-        $this->bbcode = FunctionsLib::loadLibrary('BBCodeLib');
+        $this->bbcode = Functions::loadLibrary('BBCodeLib');
 
         // init a new buddy object
         $this->setUpAlliances();
+    }
 
+    /**
+     * Users land here
+     *
+     * @return void
+     */
+    public function index(): void
+    {
         // build the page
         $this->buildPage();
     }
@@ -191,7 +199,7 @@ class Alliance extends BaseController
     private function buildPage()
     {
         if (!$this->isPageAllowed()) {
-            FunctionsLib::redirect('game.php?page=alliance');
+            Functions::redirect('game.php?page=alliance');
         }
 
         parent::$page->display(
@@ -363,19 +371,19 @@ class Alliance extends BaseController
             $alliance_name = $action['aname'];
 
             if (strlen($alliance_tag) < 3 or strlen($alliance_tag) > 8) {
-                FunctionsLib::message($this->langs->line('al_tag_required'), 'game.php?page=alliance&mode=make', 3);
+                Functions::message($this->langs->line('al_tag_required'), 'game.php?page=alliance&mode=make', 3);
             }
 
             if ($this->allianceTagExists($alliance_tag)) {
-                FunctionsLib::message(strtr($this->langs->line('al_tag_already_exists'), ['%s' => $alliance_tag]), 'game.php?page=alliance&mode=make', 3);
+                Functions::message(strtr($this->langs->line('al_tag_already_exists'), ['%s' => $alliance_tag]), 'game.php?page=alliance&mode=make', 3);
             }
 
             if (strlen($alliance_name) < 3 or strlen($alliance_name) > 30) {
-                FunctionsLib::message($this->langs->line('al_name_required'), 'game.php?page=alliance&mode=make', 3);
+                Functions::message($this->langs->line('al_name_required'), 'game.php?page=alliance&mode=make', 3);
             }
 
             if ($this->allianceNameExists($alliance_name)) {
-                FunctionsLib::message(strtr($this->langs->line('al_name_already_exists'), ['%s' => $alliance_name]), 'game.php?page=alliance&mode=make', 3);
+                Functions::message(strtr($this->langs->line('al_name_already_exists'), ['%s' => $alliance_name]), 'game.php?page=alliance&mode=make', 3);
             }
 
             $this->Alliance_Model->createNewAlliance(
@@ -387,7 +395,7 @@ class Alliance extends BaseController
             );
 
             $message = str_replace(['%s', '%d'], [$alliance_name, $alliance_tag], $this->langs->line('al_created'));
-            return FunctionsLib::messageBox(
+            return Functions::messageBox(
                 $message,
                 $message . "<br/><br/>",
                 'game.php?page=alliance',
@@ -406,7 +414,7 @@ class Alliance extends BaseController
     private function getApplySection()
     {
         if (!$this->alliance->getCurrentAlliance()->getAllianceRequestNotAllow()) {
-            FunctionsLib::message($this->langs->line('al_alliance_closed'), 'game.php?page=alliance', 3);
+            Functions::message($this->langs->line('al_alliance_closed'), 'game.php?page=alliance', 3);
         }
 
         $request = filter_input_array(INPUT_POST);
@@ -419,7 +427,7 @@ class Alliance extends BaseController
                     $this->user['user_id']
                 );
 
-                FunctionsLib::message($this->langs->line('al_request_confirmation_message'), 'game.php?page=alliance', 3);
+                Functions::message($this->langs->line('al_request_confirmation_message'), 'game.php?page=alliance', 3);
             }
         }
 
@@ -445,7 +453,7 @@ class Alliance extends BaseController
     private function getMemberslistSection()
     {
         if (!$this->alliance->hasAccess(AllianceRanks::VIEW_MEMBER_LIST)) {
-            FunctionsLib::redirect('game.php?page=alliance');
+            Functions::redirect('game.php?page=alliance');
         }
 
         $sort_by_field = filter_input(INPUT_GET, 'sort1');
@@ -501,7 +509,7 @@ class Alliance extends BaseController
     private function getCircularSection()
     {
         if (!$this->alliance->hasAccess(AllianceRanks::SEND_CIRCULAR)) {
-            FunctionsLib::redirect('game.php?page=alliance');
+            Functions::redirect('game.php?page=alliance');
         }
 
         if ((bool) filter_input(INPUT_GET, 'sendmail', FILTER_VALIDATE_INT)) {
@@ -525,7 +533,7 @@ class Alliance extends BaseController
 
             if (count($members) > 0) {
                 foreach ($members as $member) {
-                    FunctionsLib::sendMessage(
+                    Functions::sendMessage(
                         $member['user_id'],
                         $this->user['user_id'],
                         '',
@@ -539,7 +547,7 @@ class Alliance extends BaseController
                 }
             }
 
-            return FunctionsLib::messageBox(
+            return Functions::messageBox(
                 $this->langs->line('al_circular_sended'),
                 join("<br/>", $members_list),
                 'game.php?page=alliance',
@@ -581,7 +589,7 @@ class Alliance extends BaseController
     private function getExitSection()
     {
         if ($this->alliance->isOwner()) {
-            FunctionsLib::message($this->langs->line('al_founder_cant_leave_alliance'), 'game.php?page=alliance', 3);
+            Functions::message($this->langs->line('al_founder_cant_leave_alliance'), 'game.php?page=alliance', 3);
         }
 
         if ((bool) filter_input(INPUT_GET, 'yes', FILTER_VALIDATE_INT)) {
@@ -590,7 +598,7 @@ class Alliance extends BaseController
                 $this->user['user_id']
             );
 
-            return FunctionsLib::messageBox(
+            return Functions::messageBox(
                 strtr($this->langs->line('al_leave_sucess'), ['%s' => $this->alliance->getCurrentAlliance()->getAllianceName()]),
                 '<br>',
                 'game.php?page=alliance',
@@ -598,7 +606,7 @@ class Alliance extends BaseController
             );
         }
 
-        return FunctionsLib::messageBox(
+        return Functions::messageBox(
             strtr($this->langs->line('al_do_you_really_want_to_go_out'), ['%s' => $this->alliance->getCurrentAlliance()->getAllianceName()]),
             '<br/>',
             'game.php?page=alliance&mode=exit&yes=1',
@@ -636,7 +644,7 @@ class Alliance extends BaseController
             return $this->{'getAdmin' . ucfirst($edit) . 'Section'}();
         }
 
-        FunctionsLib::redirect('game.php?page=alliance');
+        Functions::redirect('game.php?page=alliance');
     }
 
     /**
@@ -705,7 +713,7 @@ class Alliance extends BaseController
                 $ranks->getAllRanksAsJsonString()
             );
 
-            FunctionsLib::redirect('game.php?page=alliance&mode=admin&edit=ally');
+            Functions::redirect('game.php?page=alliance&mode=admin&edit=ally');
         }
 
         if (isset($post['t'])) {
@@ -720,7 +728,7 @@ class Alliance extends BaseController
                 StringsHelper::escapeString($post['text'])
             );
 
-            FunctionsLib::redirect('game.php?page=alliance&mode=admin&edit=ally&t=' . $t);
+            Functions::redirect('game.php?page=alliance&mode=admin&edit=ally&t=' . $t);
         }
 
         $request_type = [
@@ -767,7 +775,7 @@ class Alliance extends BaseController
     {
         $this->Alliance_Model->deleteAlliance($this->getAllianceId());
 
-        FunctionsLib::redirect('game.php?page=alliance');
+        Functions::redirect('game.php?page=alliance');
     }
 
     /**
@@ -858,11 +866,11 @@ class Alliance extends BaseController
 
         if (isset($name)) {
             if (strlen($name) < 3 or strlen($name) > 30) {
-                FunctionsLib::message($this->langs->line('al_name_required'), 'game.php?page=alliance&mode=admin&edit=name', 3);
+                Functions::message($this->langs->line('al_name_required'), 'game.php?page=alliance&mode=admin&edit=name', 3);
             }
 
             if ($this->allianceNameExists($name)) {
-                FunctionsLib::message(strtr($this->langs->line('al_name_already_exists'), ['%s' => $name]), 'game.php?page=alliance&mode=admin&edit=name', 3);
+                Functions::message(strtr($this->langs->line('al_name_already_exists'), ['%s' => $name]), 'game.php?page=alliance&mode=admin&edit=name', 3);
             }
 
             $this->Alliance_Model->updateAllianceName(
@@ -870,7 +878,7 @@ class Alliance extends BaseController
                 $name
             );
 
-            FunctionsLib::redirect('game.php?page=alliance&mode=admin&edit=ally');
+            Functions::redirect('game.php?page=alliance&mode=admin&edit=ally');
         }
 
         return $this->getTemplate()->set(
@@ -903,7 +911,7 @@ class Alliance extends BaseController
         if (isset($accept) && $show != 0) {
             $this->Alliance_Model->addUserToAlliance($show, $this->getAllianceId());
 
-            FunctionsLib::sendMessage(
+            Functions::sendMessage(
                 $show,
                 $this->user['user_id'],
                 '',
@@ -913,13 +921,13 @@ class Alliance extends BaseController
                 $this->langs->line('al_hi_the_alliance') . $this->alliance->getCurrentAlliance()->getAllianceName() . $this->langs->line('al_has_accepted') . $text
             );
 
-            FunctionsLib::redirect('game.php?page=alliance&mode=admin&edit=requests');
+            Functions::redirect('game.php?page=alliance&mode=admin&edit=requests');
         }
 
         if (isset($cancel) && $show != 0) {
             $this->Alliance_Model->removeUserFromAlliance($show);
 
-            FunctionsLib::sendMessage(
+            Functions::sendMessage(
                 $show,
                 $this->user['user_id'],
                 '',
@@ -929,7 +937,7 @@ class Alliance extends BaseController
                 $this->langs->line('al_hi_the_alliance') . $this->alliance->getCurrentAlliance()->getAllianceName() . $this->langs->line('al_has_declined') . $text
             );
 
-            FunctionsLib::redirect('game.php?page=alliance&mode=admin&edit=requests');
+            Functions::redirect('game.php?page=alliance&mode=admin&edit=requests');
         }
 
         $requests = $this->Alliance_Model->getAllianceRequests($this->getAllianceId());
@@ -1097,11 +1105,11 @@ class Alliance extends BaseController
 
         if (isset($tag)) {
             if (strlen($tag) < 3 or strlen($tag) > 8) {
-                FunctionsLib::message($this->langs->line('al_tag_required'), 'game.php?page=alliance&mode=admin&edit=tag', 3);
+                Functions::message($this->langs->line('al_tag_required'), 'game.php?page=alliance&mode=admin&edit=tag', 3);
             }
 
             if ($this->allianceTagExists($tag)) {
-                FunctionsLib::message(strtr($this->langs->line('al_tag_already_exists'), ['%s' => $tag]), 'game.php?page=alliance&mode=admin&edit=tag', 3);
+                Functions::message(strtr($this->langs->line('al_tag_already_exists'), ['%s' => $tag]), 'game.php?page=alliance&mode=admin&edit=tag', 3);
             }
 
             $this->Alliance_Model->updateAllianceTag(
@@ -1109,7 +1117,7 @@ class Alliance extends BaseController
                 $tag
             );
 
-            FunctionsLib::redirect('game.php?page=alliance&mode=admin&edit=ally');
+            Functions::redirect('game.php?page=alliance&mode=admin&edit=ally');
         }
 
         return $this->getTemplate()->set(
@@ -1143,7 +1151,7 @@ class Alliance extends BaseController
                 $new_leader
             );
 
-            FunctionsLib::redirect('game.php?page=alliance');
+            Functions::redirect('game.php?page=alliance');
         }
 
         $ranksObject = $this->alliance->getCurrentAllianceRankObject();
@@ -1222,7 +1230,7 @@ class Alliance extends BaseController
         $image = $this->alliance->getCurrentAlliance()->getAllianceImage();
 
         if (!empty($image)) {
-            return '<tr><th colspan="2">' . FunctionsLib::setImage($image, $image) . '</td></tr>';
+            return '<tr><th colspan="2">' . Functions::setImage($image, $image) . '</td></tr>';
         }
 
         return '';
@@ -1511,14 +1519,14 @@ class Alliance extends BaseController
 
         if ($this->alliance->hasAccess(AllianceRanks::KICK)) {
             $action = 'game.php?page=alliance&mode=admin&edit=members&kick=' . $member_id;
-            $content = FunctionsLib::setImage(DPATH . 'alliance/abort.gif');
+            $content = Functions::setImage(DPATH . 'alliance/abort.gif');
             $attributes = 'onclick="javascript:return confirm(\'' . strtr($this->langs->line('al_confirm_remove_member'), ['%s' => $member_name]) . '\');"';
             $kick_user = UrlHelper::setUrl($action, $content, '', $attributes);
         }
 
         if ($this->alliance->hasAccess(AllianceRanks::ADMINISTRATION)) {
             $action = 'game.php?page=alliance&mode=admin&edit=members&rank=' . $member_id;
-            $content = FunctionsLib::setImage(DPATH . 'alliance/key.gif');
+            $content = Functions::setImage(DPATH . 'alliance/key.gif');
             $change_rank = UrlHelper::setUrl($action, $content);
         }
 

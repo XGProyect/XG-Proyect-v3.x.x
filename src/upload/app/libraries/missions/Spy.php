@@ -15,7 +15,7 @@ use App\core\enumerators\MissionsEnumerator;
 use App\helpers\StringsHelper;
 use App\libraries\FleetsLib;
 use App\libraries\FormatLib;
-use App\libraries\FunctionsLib;
+use App\libraries\Functions;
 use App\libraries\missions\Missions;
 use App\libraries\OfficiersLib;
 
@@ -104,7 +104,7 @@ class Spy extends Missions
                     $SpyerChances = mt_rand(0, 100);
 
                     if ($TargetChances >= $SpyerChances) {
-                        FunctionsLib::sendMessage(
+                        Functions::sendMessage(
                             $fleet_row['fleet_owner'],
                             '',
                             $fleet_row['fleet_start_time'],
@@ -166,7 +166,7 @@ class Spy extends Missions
                         $SpyMessage = $TargetTechnos . "<br />" . $AttackLink . $MessageEnd;
                     }
 
-                    FunctionsLib::sendMessage(
+                    Functions::sendMessage(
                         $fleet_row['fleet_owner'],
                         '',
                         $fleet_row['fleet_start_time'],
@@ -325,7 +325,7 @@ class Spy extends Missions
      */
     private function sendReportToTarget(array $fleet, array $user, array $target, int $chances): void
     {
-        FunctionsLib::sendMessage(
+        Functions::sendMessage(
             $target['planet_user_id'],
             '',
             $fleet['fleet_start_time'],

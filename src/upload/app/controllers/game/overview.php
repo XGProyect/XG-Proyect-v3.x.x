@@ -17,7 +17,7 @@ use App\helpers\UrlHelper;
 use App\libraries\DevelopmentsLib;
 use App\libraries\FleetsLib;
 use App\libraries\FormatLib;
-use App\libraries\FunctionsLib;
+use App\libraries\Functions;
 use App\libraries\TimingLibrary as Timing;
 use App\libraries\UpdatesLibrary;
 
@@ -49,10 +49,18 @@ class Overview extends BaseController
         // load Language
         parent::loadLang(['game/global', 'game/overview', 'game/buildings', 'game/constructions']);
 
-        // Check module access
-        FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
+        $this->_noob = Functions::loadLibrary('NoobsProtectionLib');
+    }
 
-        $this->_noob = FunctionsLib::loadLibrary('NoobsProtectionLib');
+    /**
+     * Users land here
+     *
+     * @return void
+     */
+    public function index(): void
+    {
+        // Check module access
+        Functions::moduleMessage(Functions::isModuleAccesible(self::MODULE_ID));
 
         // build the page
         $this->buildPage();
@@ -348,7 +356,7 @@ class Overview extends BaseController
             $image = DPATH . 'planets/' . $this->planet['moon_image'] . '.jpg';
             $attributes = 'height="50" width="50"';
 
-            $return['moon_img'] = UrlHelper::setUrl($url, FunctionsLib::setImage($image, $moon_name, $attributes), $moon_name);
+            $return['moon_img'] = UrlHelper::setUrl($url, Functions::setImage($image, $moon_name, $attributes), $moon_name);
             $return['moon'] = $moon_name;
         }
 
@@ -374,7 +382,7 @@ class Overview extends BaseController
                 $attributes = 'height="50" width="50"';
 
                 $planet_block .= '<th>' . $user_planet['planet_name'] . '<br>';
-                $planet_block .= UrlHelper::setUrl($url, FunctionsLib::setImage($image, $user_planet['planet_name'], $user_planet['planet_name'], $attributes));
+                $planet_block .= UrlHelper::setUrl($url, Functions::setImage($image, $user_planet['planet_name'], $user_planet['planet_name'], $attributes));
                 $planet_block .= '<center>';
                 $planet_block .= $this->getCurrentWork($user_planet, false);
                 $planet_block .= '</center></th>';

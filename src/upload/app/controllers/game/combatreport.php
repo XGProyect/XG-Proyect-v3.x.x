@@ -13,7 +13,7 @@ namespace App\controllers\game;
 
 use App\core\BaseController;
 use App\libraries\combatreport\Report;
-use App\libraries\FunctionsLib;
+use App\libraries\Functions;
 
 /**
  * Combatreport Class
@@ -44,11 +44,19 @@ class Combatreport extends BaseController
         // load Language
         parent::loadLang(['game/combatreport']);
 
-        // Check module access
-        FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
-
         // init a new report object
         $this->setUpReport();
+    }
+
+    /**
+     * Users land here
+     *
+     * @return void
+     */
+    public function index(): void
+    {
+        // Check module access
+        Functions::moduleMessage(Functions::isModuleAccesible(self::MODULE_ID));
 
         // time to do something
         $this->runAction();
@@ -80,7 +88,7 @@ class Combatreport extends BaseController
         $owners = $this->report->getFirstReportOwnersAsArray();
 
         if (!isset($owners) or !in_array($this->user['user_id'], $owners)) {
-            FunctionsLib::message($this->langs->line('cr_no_access'), '', 0, false, false, false);
+            Functions::message($this->langs->line('cr_no_access'), '', 0, false, false, false);
         }
     }
 

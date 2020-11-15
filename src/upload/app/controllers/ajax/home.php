@@ -27,7 +27,15 @@ class Home extends BaseController
 
         // load Language
         parent::loadLang(['ajax/home']);
+    }
 
+    /**
+     * Users land here
+     *
+     * @return void
+     */
+    public function index(): void
+    {
         // build the page
         $this->buildPage();
     }

@@ -16,7 +16,7 @@ use App\core\enumerators\SwitchIntEnumerator as SwitchInt;
 use App\core\Language;
 use App\core\Template;
 use App\libraries\alliance\Ranks;
-use App\libraries\FunctionsLib as Functions;
+use App\libraries\Functions;
 use App\libraries\TimingLibrary as Timing;
 
 /**

@@ -13,7 +13,7 @@ namespace App\controllers\game;
 
 use App\core\BaseController;
 use App\libraries\FormatLib;
-use App\libraries\FunctionsLib;
+use App\libraries\Functions;
 
 /**
  * Chat Class
@@ -51,9 +51,17 @@ class Chat extends BaseController
 
         // load Language
         parent::loadLang(['game/chat']);
+    }
 
+    /**
+     * Users land here
+     *
+     * @return void
+     */
+    public function index(): void
+    {
         // Check module access
-        FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
+        Functions::moduleMessage(Functions::isModuleAccesible(self::MODULE_ID));
 
         // time to do something
         $this->runAction();
@@ -76,7 +84,7 @@ class Chat extends BaseController
             $this->_receiver_data = $this->Messages_Model->getHomePlanet($write_to);
 
             if (!$this->_receiver_data) {
-                FunctionsLib::redirect('game.php?page=messages');
+                Functions::redirect('game.php?page=messages');
             }
         }
 
@@ -106,7 +114,7 @@ class Chat extends BaseController
                 $this->_message_data['subject'] = '';
                 $this->_message_data['text'] = '';
 
-                FunctionsLib::sendMessage(
+                Functions::sendMessage(
                     $write_to,
                     $this->user['user_id'],
                     '',

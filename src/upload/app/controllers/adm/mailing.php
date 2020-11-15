@@ -4,7 +4,7 @@ namespace App\controllers\adm;
 
 use App\core\BaseController;
 use App\libraries\adm\AdministrationLib as Administration;
-use App\libraries\FunctionsLib;
+use App\libraries\Functions;
 
 /**
  * Mailing Class
@@ -40,7 +40,15 @@ class Mailing extends BaseController
 
         // load Language
         parent::loadLang(['adm/global', 'adm/mailing']);
+    }
 
+    /**
+     * Users land here
+     *
+     * @return void
+     */
+    public function index(): void
+    {
         // check if the user is allowed to access
         if (!Administration::authorization(__CLASS__, (int) $this->user['user_authlevel'])) {
             die(Administration::noAccessMessage($this->langs->line('no_permissions')));
@@ -65,7 +73,7 @@ class Mailing extends BaseController
         if ($data) {
             foreach ($data as $option => $value) {
                 if ((is_numeric($value) && $value >= 0) or is_string($value) && ($value !== false && $value !== null)) {
-                    FunctionsLib::updateConfig($option, $value);
+                    Functions::updateConfig($option, $value);
                 }
             }
 
@@ -104,7 +112,7 @@ class Mailing extends BaseController
     private function getMailingSettings(): array
     {
         return array_filter(
-            FunctionsLib::readConfig('', true),
+            Functions::readConfig('', true),
             function ($key) {
                 return array_key_exists($key, self::MAILING_SETTINGS);
             },
@@ -124,7 +132,7 @@ class Mailing extends BaseController
         foreach (['mail', 'sendmail', 'smtp'] as $option) {
             $options[] = [
                 'value' => $option,
-                'selected' => ($option == FunctionsLib::readConfig('mailing_protocol') ? ' selected' : ''),
+                'selected' => ($option == Functions::readConfig('mailing_protocol') ? ' selected' : ''),
                 'option' => $option,
             ];
         }
@@ -144,7 +152,7 @@ class Mailing extends BaseController
         foreach (['', 'tls', 'ssl'] as $option) {
             $options[] = [
                 'value' => $option,
-                'selected' => ($option == FunctionsLib::readConfig('mailing_smtp_crypto') ? ' selected' : ''),
+                'selected' => ($option == Functions::readConfig('mailing_smtp_crypto') ? ' selected' : ''),
                 'option' => strtoupper($option),
             ];
         }

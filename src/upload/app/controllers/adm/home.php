@@ -15,7 +15,7 @@ namespace App\controllers\adm;
 use App\core\BaseController;
 use App\libraries\adm\AdministrationLib as Administration;
 use App\libraries\FormatLib as Format;
-use App\libraries\FunctionsLib;
+use App\libraries\Functions;
 use JsonException;
 
 /**
@@ -38,10 +38,18 @@ class Home extends BaseController
 
         // load Language
         parent::loadLang(['adm/global', 'adm/home']);
+    }
 
+    /**
+     * Users land here
+     *
+     * @return void
+     */
+    public function index(): void
+    {
         // check if the user is allowed to access
-        if (!Administration::haveAccess($this->user['user_authlevel'])) {
-            Administration::noAccessMessage($this->langs->line('no_permissions'));
+        if (!Administration::authorization(__CLASS__, (int) $this->user['user_authlevel'])) {
+            die(Administration::noAccessMessage($this->langs->line('no_permissions')));
         }
 
         // build the page
@@ -103,7 +111,7 @@ class Home extends BaseController
                 $alert[] = $this->langs->line('hm_install_file_detected');
             }
 
-            if (FunctionsLib::readConfig('version') != SYSTEM_VERSION) {
+            if (Functions::readConfig('version') != SYSTEM_VERSION) {
                 $alert[] = $this->langs->line('hm_update_required');
             }
         }
@@ -152,7 +160,7 @@ class Home extends BaseController
                 );
 
                 if ($file_data) {
-                    $system_v = FunctionsLib::readConfig('version');
+                    $system_v = Functions::readConfig('version');
                     $last_v = @json_decode(
                         $file_data,
                         false,

@@ -17,7 +17,7 @@ use App\libraries\combatreport\Report;
 use App\libraries\FleetsLib;
 use App\libraries\FormatLib;
 use App\libraries\Formulas;
-use App\libraries\FunctionsLib;
+use App\libraries\Functions;
 use App\libraries\missions\Attack_lang;
 use App\libraries\missions\Missions;
 use App\libraries\UpdatesLibrary;
@@ -224,7 +224,6 @@ class Destroy extends Missions
                     ]);
                 }
             }
-
         } elseif ($fleet_row['fleet_mess'] == 1 && $fleet_row['fleet_end_time'] <= time()) {
             $message = sprintf(
                 $this->langs->line('mi_fleet_back_with_resources'),
@@ -237,7 +236,7 @@ class Destroy extends Missions
                 FormatLib::prettyNumber($fleet_row['fleet_resource_deuterium'])
             );
 
-            FunctionsLib::sendMessage(
+            Functions::sendMessage(
                 $fleet_row['fleet_owner'],
                 '',
                 $fleet_row['fleet_end_time'],
@@ -498,7 +497,7 @@ class Destroy extends Missions
                 $style, $rid, $fleet_row['fleet_end_galaxy'], $fleet_row['fleet_end_system'], $fleet_row['fleet_end_planet']
             );
 
-            FunctionsLib::sendMessage(
+            Functions::sendMessage(
                 $id, '', $fleet_row['fleet_start_time'], 1, $this->langs->line('mi_fleet_command'), $raport, ''
             );
         }
@@ -516,7 +515,7 @@ class Destroy extends Missions
                 $style, $rid, $fleet_row['fleet_end_galaxy'], $fleet_row['fleet_end_system'], $fleet_row['fleet_end_planet']
             );
 
-            FunctionsLib::sendMessage(
+            Functions::sendMessage(
                 $id, '', $fleet_row['fleet_start_time'], 1, $this->langs->line('mi_fleet_command'), $raport, ''
             );
         }

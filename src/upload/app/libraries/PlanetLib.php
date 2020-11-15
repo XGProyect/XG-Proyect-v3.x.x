@@ -15,7 +15,7 @@ use App\core\enumerators\PlanetTypesEnumerator;
 use App\core\Language;
 use App\core\XGPCore;
 use App\libraries\Formulas;
-use App\libraries\FunctionsLib;
+use App\libraries\Functions;
 
 /**
  * PlanetLib Class
@@ -91,11 +91,11 @@ class PlanetLib extends XGPCore
                     'planet_temp_min' => $temp['min'],
                     'planet_temp_max' => $temp['max'],
                     'planet_metal' => BUILD_METAL,
-                    'planet_metal_perhour' => FunctionsLib::readConfig('metal_basic_income'),
+                    'planet_metal_perhour' => Functions::readConfig('metal_basic_income'),
                     'planet_crystal' => BUILD_CRISTAL,
-                    'planet_crystal_perhour' => FunctionsLib::readConfig('crystal_basic_income'),
+                    'planet_crystal_perhour' => Functions::readConfig('crystal_basic_income'),
                     'planet_deuterium' => BUILD_DEUTERIUM,
-                    'planet_deuterium_perhour' => FunctionsLib::readConfig('deuterium_basic_income'),
+                    'planet_deuterium_perhour' => Functions::readConfig('deuterium_basic_income'),
                     'planet_b_building_id' => '0',
                     'planet_b_hangar_id' => '',
                 ]

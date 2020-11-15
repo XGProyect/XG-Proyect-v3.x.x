@@ -3,7 +3,7 @@
 use App\core\BaseController;
 use App\core\Enumerators\OfficiersEnumerator as OE;
 use App\libraries\FormatLib;
-use App\libraries\FunctionsLib;
+use App\libraries\Functions;
 use App\libraries\OfficiersLib;
 use DPATH;
 
@@ -29,14 +29,22 @@ class Officier extends BaseController
         // check if session is active
         parent::$users->checkSession();
 
-        // Check module access
-        FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
-
         // load Model
         parent::loadModel('game/officier');
 
         // load Language
         parent::loadLang(['game/global', 'game/officier']);
+    }
+
+    /**
+     * Users land here
+     *
+     * @return void
+     */
+    public function index(): void
+    {
+        // Check module access
+        Functions::moduleMessage(Functions::isModuleAccesible(self::MODULE_ID));
 
         // time to do something
         $this->runAction();
@@ -81,7 +89,7 @@ class Officier extends BaseController
 
                 $this->Officier_Model->setPremium($this->user['user_id'], $price, $officier, $time_to_add);
 
-                FunctionsLib::redirect('game.php?page=officier');
+                Functions::redirect('game.php?page=officier');
             }
         }
     }
@@ -98,7 +106,7 @@ class Officier extends BaseController
          */
         $page = [];
         $page['dpath'] = DPATH;
-        $page['premium_pay_url'] = FunctionsLib::readConfig('premium_url') != '' ? FunctionsLib::readConfig('premium_url') : 'game.php?page=officier';
+        $page['premium_pay_url'] = Functions::readConfig('premium_url') != '' ? Functions::readConfig('premium_url') : 'game.php?page=officier';
         $page['officier_list'] = $this->buildOfficiersList();
 
         // display the page

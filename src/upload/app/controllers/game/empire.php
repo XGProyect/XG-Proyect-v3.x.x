@@ -16,7 +16,7 @@ use App\core\BaseController;
 use App\helpers\UrlHelper;
 use App\libraries\DevelopmentsLib;
 use App\libraries\FormatLib;
-use App\libraries\FunctionsLib;
+use App\libraries\Functions;
 use Exception;
 
 /**
@@ -46,9 +46,17 @@ class Empire extends BaseController
 
         // load Language
         parent::loadLang(['game/global', 'game/constructions', 'game/defenses', 'game/technologies', 'game/ships', 'game/empire']);
+    }
 
+    /**
+     * Users land here
+     *
+     * @return void
+     */
+    public function index(): void
+    {
         // Check module access
-        FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
+        Functions::moduleMessage(Functions::isModuleAccesible(self::MODULE_ID));
 
         // build the page
         $this->buildPage();
@@ -196,7 +204,7 @@ class Empire extends BaseController
             'planet_type' => $planet['planet_type'],
             'planet_current_amount' => FormatLib::prettyNumber($planet['planet_' . $resource]),
             'planet_production' => (
-                FormatLib::prettyNumber($planet['planet_' . $resource . '_perhour'] + FunctionsLib::readConfig($resource . '_basic_income'))
+                FormatLib::prettyNumber($planet['planet_' . $resource . '_perhour'] + Functions::readConfig($resource . '_basic_income'))
             ),
         ];
     }

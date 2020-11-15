@@ -12,6 +12,7 @@
 namespace App\libraries;
 
 use App\core\enumerators\ErrorTypesEnumerator as ErrorTypes;
+use App\libraries\Functions;
 
 /**
  * DebugLib Class
@@ -170,7 +171,7 @@ class DebugLib
 
             // notify administrator
             if (defined('ERROR_LOGS_MAIL') && ERROR_LOGS_MAIL != '') {
-                FunctionsLib::sendEmail(
+                Functions::sendEmail(
                     ERROR_LOGS_MAIL,
                     '[DEBUG][' . $string_code . ']',
                     $log,

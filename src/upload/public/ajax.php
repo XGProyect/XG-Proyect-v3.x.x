@@ -28,6 +28,6 @@ if (isset($_GET['content'])) {
 
         $class_name = 'App\controllers\ajax\\' . ucfirst($_GET['content']);
 
-        new $class_name();
+        (new $class_name())->index();
     }
 }

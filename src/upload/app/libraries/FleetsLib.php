@@ -19,7 +19,7 @@ use App\core\XGPCore;
 use App\helpers\UrlHelper;
 use App\libraries\FleetsLib;
 use App\libraries\FormatLib;
-use App\libraries\FunctionsLib;
+use App\libraries\Functions;
 use App\libraries\OfficiersLib;
 use App\libraries\TimingLibrary as Timing;
 use CI_Lang;
@@ -397,7 +397,7 @@ class FleetsLib extends XGPCore
     public static function enemyLink($fleet_row)
     {
         $url = 'game.php?page=chat&playerId=' . $fleet_row['fleet_owner'];
-        $image = FunctionsLib::setImage(DPATH . '/img/m.gif');
+        $image = Functions::setImage(DPATH . '/img/m.gif');
         $link = $fleet_row['start_planet_user'] . ' ' . UrlHelper::setUrl($url, $image);
 
         return $link;
@@ -579,10 +579,10 @@ class FleetsLib extends XGPCore
         $bloc['fleet_status'] = $FleetStatus[$Status];
         $bloc['fleet_prefix'] = $FleetPrefix;
         $bloc['fleet_style'] = $FleetStyle[$MissionType];
-        $bloc['fleet_javai'] = FunctionsLib::chronoApplet($Label, $Record, $Rest, true);
+        $bloc['fleet_javai'] = Functions::chronoApplet($Label, $Record, $Rest, true);
         $bloc['fleet_order'] = $Label . $Record;
         $bloc['fleet_descr'] = $EventString;
-        $bloc['fleet_javas'] = FunctionsLib::chronoApplet($Label, $Record, $Rest, false);
+        $bloc['fleet_javas'] = Functions::chronoApplet($Label, $Record, $Rest, false);
         $bloc['fleet_time'] = Timing::formatExtendedDate($Time);
 
         return self::getTemplate()->set(

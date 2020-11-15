@@ -13,7 +13,7 @@ namespace App\libraries\missions;
 
 use App\libraries\FleetsLib;
 use App\libraries\FormatLib;
-use App\libraries\FunctionsLib;
+use App\libraries\Functions;
 
 /**
  * Recycle Class
@@ -205,7 +205,7 @@ class Recycle extends Missions
      */
     private function recycleMessage($owner, $message, $time, $status_message)
     {
-        FunctionsLib::sendMessage(
+        Functions::sendMessage(
             $owner, '', $time, 5, $this->langs->line('rec_report_from'), $status_message, $message
         );
     }

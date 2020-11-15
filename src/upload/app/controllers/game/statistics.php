@@ -13,7 +13,7 @@ namespace App\controllers\game;
 
 use App\core\BaseController;
 use App\libraries\FormatLib;
-use App\libraries\FunctionsLib;
+use App\libraries\Functions;
 use App\libraries\TimingLibrary as Timing;
 
 /**
@@ -38,10 +38,19 @@ class Statistics extends BaseController
 
         // load Language
         parent::loadLang(['game/global', 'game/statistics']);
+    }
 
+    /**
+     * Users land here
+     *
+     * @return void
+     */
+    public function index(): void
+    {
         // Check module access
-        FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
+        Functions::moduleMessage(Functions::isModuleAccesible(self::MODULE_ID));
 
+        // build the page
         $this->buildPage();
     }
 
@@ -86,7 +95,7 @@ class Statistics extends BaseController
 
             $start++;
 
-            $parse['stat_date'] = Timing::formatExtendedDate(FunctionsLib::readConfig('stat_last_update'));
+            $parse['stat_date'] = Timing::formatExtendedDate(Functions::readConfig('stat_last_update'));
             $parse['stat_values'] = "";
 
             foreach ($query as $StatRow) {
@@ -117,7 +126,7 @@ class Statistics extends BaseController
             $query = $this->Statistics_Model->getUsers($Order, $start);
 
             $start++;
-            $parse['stat_date'] = Timing::formatExtendedDate(FunctionsLib::readConfig('stat_last_update'));
+            $parse['stat_date'] = Timing::formatExtendedDate(Functions::readConfig('stat_last_update'));
             $parse['stat_values'] = "";
             $previusId = 0;
 

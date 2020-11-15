@@ -16,7 +16,7 @@ use App\core\enumerators\SwitchIntEnumerator as SwitchInt;
 use App\core\enumerators\UserRanksEnumerator;
 use App\core\Template;
 use App\core\XGPCore;
-use App\libraries\FunctionsLib;
+use App\libraries\Functions;
 
 /**
  * Controller Class
@@ -115,9 +115,9 @@ abstract class BaseController extends XGPCore
         if (!defined('IN_INSTALL') && !defined('IN_ADMIN')) {
             $user_level = isset($this->current_user['user_authlevel']) ?? 0;
 
-            if (FunctionsLib::readConfig('game_enable') == SwitchInt::off
+            if (Functions::readConfig('game_enable') == SwitchInt::off
                 && $user_level < UserRanksEnumerator::ADMIN) {
-                FunctionsLib::message(FunctionsLib::readConfig('close_reason'), '', '', false, false);
+                Functions::message(Functions::readConfig('close_reason'), '', '', false, false);
                 die();
             }
         }

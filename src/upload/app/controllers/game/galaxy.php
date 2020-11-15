@@ -15,7 +15,7 @@ use App\core\BaseController;
 use App\libraries\FleetsLib;
 use App\libraries\FormatLib;
 use App\libraries\Formulas;
-use App\libraries\FunctionsLib;
+use App\libraries\Functions;
 
 /**
  * Galaxy Class
@@ -77,21 +77,29 @@ class Galaxy extends BaseController
         // load Language
         parent::loadLang(['game/global', 'game/defenses', 'game/missions', 'game/galaxy']);
 
-        // Check module access
-        FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
-
         $this->_resource = parent::$objects->getObjects();
         $this->_pricelist = parent::$objects->getPrice();
         $this->_reslist = parent::$objects->getObjectsList();
-        $this->_noob = FunctionsLib::loadLibrary('NoobsProtectionLib');
-        $this->_galaxyLib = FunctionsLib::loadLibrary('GalaxyLib');
+        $this->_noob = Functions::loadLibrary('NoobsProtectionLib');
+        $this->_galaxyLib = Functions::loadLibrary('GalaxyLib');
 
         if ($this->user['preference_vacation_mode'] > 0) {
-            FunctionsLib::message($this->langs->line('gl_no_access_vm_on'), '', '');
+            Functions::message($this->langs->line('gl_no_access_vm_on'), '', '');
         }
 
         // init a new galaxy object
         //$this->setUpPreferences();
+    }
+
+    /**
+     * Users land here
+     *
+     * @return void
+     */
+    public function index(): void
+    {
+        // Check module access
+        Functions::moduleMessage(Functions::isModuleAccesible(self::MODULE_ID));
 
         // time to do something
         $this->runAction();
@@ -145,7 +153,7 @@ class Galaxy extends BaseController
         $planet = $setted_position['planet'];
 
         if ($mode == 2 && $this->planet['defense_interplanetary_missile'] < 1) {
-            die(FunctionsLib::message($this->langs->line('gl_no_missiles'), "game.php?page=galaxy&mode=0", 2));
+            die(Functions::message($this->langs->line('gl_no_missiles'), "game.php?page=galaxy&mode=0", 2));
         }
 
         $this->galaxy = $this->Galaxy_Model->getGalaxyDataByGalaxyAndSystem($this->_galaxy, $this->_system, $this->user['user_id']);
@@ -395,10 +403,10 @@ class Galaxy extends BaseController
         }
 
         if ($errors != 0) {
-            FunctionsLib::message($error, "game.php?page=galaxy&mode=0&galaxy=" . $galaxy . "&system=" . $system, 3);
+            Functions::message($error, "game.php?page=galaxy&mode=0&galaxy=" . $galaxy . "&system=" . $system, 3);
         }
 
-        $flight_time = round(((30 + (60 * $tempvar1)) * 2500) / FunctionsLib::readConfig('fleet_speed'));
+        $flight_time = round(((30 + (60 * $tempvar1)) * 2500) / Functions::readConfig('fleet_speed'));
 
         $DefenseLabel = [
             0 => $this->langs->line('gl_all_defenses'),
@@ -429,7 +437,7 @@ class Galaxy extends BaseController
             'user_current_planet' => $this->user['user_current_planet'],
         ]);
 
-        FunctionsLib::message("<b>" . $missiles_amount . "</b>" . $this->langs->line('gl_missiles_sended') . $DefenseLabel[$target], "game.php?page=overview", 3);
+        Functions::message("<b>" . $missiles_amount . "</b>" . $this->langs->line('gl_missiles_sended') . $DefenseLabel[$target], "game.php?page=overview", 3);
     }
 
     /**
@@ -579,7 +587,7 @@ class Galaxy extends BaseController
         $Distance = FleetsLib::targetDistance($this->planet['planet_galaxy'], $_POST['galaxy'], $this->planet['planet_system'], $_POST['system'], $this->planet['planet_planet'], $_POST['planet']);
         $speedall = FleetsLib::fleetMaxSpeed($FleetArray, 0, $this->user);
         $SpeedAllMin = min($speedall);
-        $Duration = FleetsLib::missionDuration(10, $SpeedAllMin, $Distance, FunctionsLib::fleetSpeedFactor());
+        $Duration = FleetsLib::missionDuration(10, $SpeedAllMin, $Distance, Functions::fleetSpeedFactor());
 
         $fleet['fly_time'] = $Duration;
         $fleet['start_time'] = $Duration + time();
@@ -589,7 +597,7 @@ class Galaxy extends BaseController
         $FleetDBArray = [];
         $fleet_sub_query = [];
         $consumption = 0;
-        $SpeedFactor = FunctionsLib::fleetSpeedFactor();
+        $SpeedFactor = Functions::fleetSpeedFactor();
 
         foreach ($FleetArray as $Ship => $Count) {
             if ($Ship != '') {
@@ -609,7 +617,7 @@ class Galaxy extends BaseController
             die("613 ");
         }
 
-        if (FunctionsLib::readConfig('adm_attack') == 1 && $target_user['user_authlevel'] > 0) {
+        if (Functions::readConfig('adm_attack') == 1 && $target_user['user_authlevel'] > 0) {
             die("601 ");
         }
 

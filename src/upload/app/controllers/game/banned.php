@@ -13,7 +13,7 @@ namespace App\controllers\game;
 
 use App\core\BaseController;
 use App\helpers\UrlHelper;
-use App\libraries\FunctionsLib;
+use App\libraries\Functions;
 use App\libraries\TimingLibrary as Timing;
 
 /**
@@ -45,14 +45,22 @@ class Banned extends BaseController
         // check if session is active
         parent::$users->checkSession();
 
-        // Check module access
-        FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
-
         // load Model
         parent::loadModel('game/banned');
 
         // load Language
         parent::loadLang(['game/banned']);
+    }
+
+    /**
+     * Users land here
+     *
+     * @return void
+     */
+    public function index(): void
+    {
+        // Check module access
+        Functions::moduleMessage(Functions::isModuleAccesible(self::MODULE_ID));
 
         // build the page
         $this->buildPage();

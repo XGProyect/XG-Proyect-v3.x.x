@@ -17,7 +17,7 @@ use App\core\enumerators\PlanetTypesEnumerator as PlanetTypes;
 use App\core\enumerators\ShipsEnumerator as Ships;
 use App\libraries\FleetsLib;
 use App\libraries\FormatLib;
-use App\libraries\FunctionsLib;
+use App\libraries\Functions;
 use App\libraries\game\Fleets;
 use App\libraries\premium\Premium;
 use App\libraries\research\Researches;
@@ -138,11 +138,19 @@ class Fleet4 extends BaseController
         // load Language
         parent::loadLang(['game/fleet']);
 
-        // Check module access
-        FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
-
         // init a new fleets object
         $this->setUpFleets();
+    }
+
+    /**
+     * Users land here
+     *
+     * @return void
+     */
+    public function index(): void
+    {
+        // Check module access
+        Functions::moduleMessage(Functions::isModuleAccesible(self::MODULE_ID));
 
         // build the page
         $this->buildPage();
@@ -191,7 +199,7 @@ class Fleet4 extends BaseController
             $this->sendFleet();
         }
 
-        FunctionsLib::redirect(self::REDIRECT_TARGET);
+        Functions::redirect(self::REDIRECT_TARGET);
     }
 
     /**
@@ -234,7 +242,7 @@ class Fleet4 extends BaseController
         ]);
 
         if (is_null($data)) {
-            FunctionsLib::redirect('game.php?page=fleet1');
+            Functions::redirect('game.php?page=fleet1');
         }
 
         $this->_clean_input_data = $data;
@@ -268,7 +276,7 @@ class Fleet4 extends BaseController
             }
 
             if ($target['planet_destroyed'] != 0) {
-                FunctionsLib::redirect(self::REDIRECT_TARGET);
+                Functions::redirect(self::REDIRECT_TARGET);
             }
 
             // set target owner
@@ -319,7 +327,7 @@ class Fleet4 extends BaseController
             return true;
         }
 
-        if (FunctionsLib::readConfig('adm_attack') != 0
+        if (Functions::readConfig('adm_attack') != 0
             && $this->_target_data['user_authlevel'] >= 1
             && $this->user['user_authlevel'] == 0) {
             $this->showMessage(
@@ -569,7 +577,7 @@ class Fleet4 extends BaseController
         }
 
         if (!parent::$users->isInactive($this->_target_data)) {
-            $noob = FunctionsLib::loadLibrary('NoobsProtectionLib');
+            $noob = Functions::loadLibrary('NoobsProtectionLib');
 
             $points = $noob->returnPoints(
                 $this->user['user_id'],
@@ -725,7 +733,7 @@ class Fleet4 extends BaseController
             $fleet_data['speed'],
             $fleet_data['fleet_speed'],
             $fleet_data['distance'],
-            FunctionsLib::fleetSpeedFactor()
+            Functions::fleetSpeedFactor()
         ));
 
         $base_time = time();
@@ -811,7 +819,7 @@ class Fleet4 extends BaseController
      */
     private function showMessage($message)
     {
-        FunctionsLib::message(
+        Functions::message(
             $message,
             self::REDIRECT_TARGET,
             3

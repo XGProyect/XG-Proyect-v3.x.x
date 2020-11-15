@@ -15,7 +15,7 @@ namespace App\libraries\missions;
 use App\helpers\StringsHelper;
 use App\libraries\FleetsLib as Fleets;
 use App\libraries\FormatLib as Format;
-use App\libraries\FunctionsLib as Functions;
+use App\libraries\Functions;
 use App\libraries\missions\Missions;
 
 /**

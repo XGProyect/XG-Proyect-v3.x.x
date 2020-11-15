@@ -16,7 +16,7 @@ use App\core\enumerators\AllianceRanksEnumerator as AllianceRanks;
 use App\core\enumerators\SwitchIntEnumerator as SwitchInt;
 use App\libraries\adm\AdministrationLib as Administration;
 use App\libraries\alliance\Ranks;
-use App\libraries\FunctionsLib;
+use App\libraries\Functions;
 
 /**
  * Alliances Class
@@ -74,7 +74,15 @@ class Alliances extends BaseController
 
         // load Language
         parent::loadLang(['adm/global', 'adm/alliances']);
+    }
 
+    /**
+     * Users land here
+     *
+     * @return void
+     */
+    public function index(): void
+    {
         // check if the user is allowed to access
         if (!Administration::authorization(__CLASS__, (int) $this->user['user_authlevel'])) {
             die(Administration::noAccessMessage($this->langs->line('no_permissions')));
@@ -83,12 +91,6 @@ class Alliances extends BaseController
         // build the page
         $this->buildPage();
     }
-
-    ######################################
-    #
-    # main methods
-    #
-    ######################################
 
     /**
      * Build the page
@@ -203,7 +205,7 @@ class Alliances extends BaseController
         $parse = $this->langs->language;
         $parse += (array) $this->_alliance_query;
         $parse['al_alliance_information'] = str_replace('%s', $this->_alliance_query['alliance_name'], $this->langs->line('al_alliance_information'));
-        $parse['alliance_register_time'] = ($this->_alliance_query['alliance_register_time'] == 0) ? '-' : date(FunctionsLib::readConfig('date_format_extended'), $this->_alliance_query['alliance_register_time']);
+        $parse['alliance_register_time'] = ($this->_alliance_query['alliance_register_time'] == 0) ? '-' : date(Functions::readConfig('date_format_extended'), $this->_alliance_query['alliance_register_time']);
         $parse['alliance_owner_picker'] = $this->buildUsersCombo($this->_alliance_query['alliance_owner']);
         $parse['sel1'] = $this->_alliance_query['alliance_request_notallow'] == 1 ? 'selected' : '';
         $parse['sel0'] = $this->_alliance_query['alliance_request_notallow'] == 0 ? 'selected' : '';
@@ -274,7 +276,7 @@ class Alliances extends BaseController
             foreach ($all_members as $member) {
                 $member['alliance_request'] = ($member['user_ally_request']) ? $this->langs->line('al_request_yes') : $this->langs->line('al_request_no');
                 $member['ally_request_text'] = ($member['user_ally_request_text']) ? $this->langs->line('ally_request_text') : '-';
-                $member['alliance_register_time'] = date(FunctionsLib::readConfig('date_format_extended'), $member['user_ally_register_time']);
+                $member['alliance_register_time'] = date(Functions::readConfig('date_format_extended'), $member['user_ally_register_time']);
 
                 if (isset($member['user_ally_rank_id'])) {
                     $member['ally_rank'] = $this->ranks->getRankById($member['user_ally_rank_id'])['rank'];
@@ -430,7 +432,7 @@ class Alliances extends BaseController
             $this->_alert_type = 'ok';
         }
 
-        FunctionsLib::redirect('admin.php?' . $_SERVER['QUERY_STRING']);
+        Functions::redirect('admin.php?' . $_SERVER['QUERY_STRING']);
     }
 
     /**

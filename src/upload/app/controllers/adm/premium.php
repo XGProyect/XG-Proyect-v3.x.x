@@ -14,7 +14,7 @@ namespace App\controllers\adm;
 
 use App\core\BaseController;
 use App\libraries\adm\AdministrationLib as Administration;
-use App\libraries\FunctionsLib;
+use App\libraries\Functions;
 
 /**
  * Premium Class
@@ -51,7 +51,15 @@ class Premium extends BaseController
 
         // load Language
         parent::loadLang(['adm/global', 'adm/premium']);
+    }
 
+    /**
+     * Users land here
+     *
+     * @return void
+     */
+    public function index(): void
+    {
         // check if the user is allowed to access
         if (!Administration::authorization(__CLASS__, (int) $this->user['user_authlevel'])) {
             die(Administration::noAccessMessage($this->langs->line('no_permissions')));
@@ -78,7 +86,7 @@ class Premium extends BaseController
 
             foreach ($data as $option => $value) {
                 if ((is_numeric($value) && $value >= 0) or is_string($value)) {
-                    FunctionsLib::updateConfig($option, $value);
+                    Functions::updateConfig($option, $value);
                 }
             }
 
@@ -115,7 +123,7 @@ class Premium extends BaseController
     private function getPremiumSettings(): array
     {
         return array_filter(
-            FunctionsLib::readConfig('', true),
+            Functions::readConfig('', true),
             function ($key) {
                 return array_key_exists($key, self::PREMIUM_SETTINGS);
             },

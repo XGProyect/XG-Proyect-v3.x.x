@@ -24,9 +24,9 @@ use App\libraries\messenger\Messenger;
 use CI_Email;
 
 /**
- * FunctionsLib Class
+ * Functions Class
  */
-abstract class FunctionsLib extends XGPCore
+abstract class Functions extends XGPCore
 {
     /**
      * Return a new instance of Template
@@ -170,7 +170,7 @@ abstract class FunctionsLib extends XGPCore
      */
     public static function fleetSpeedFactor()
     {
-        return FunctionsLib::readConfig('fleet_speed') / 2500;
+        return self::readConfig('fleet_speed') / 2500;
     }
 
     /**

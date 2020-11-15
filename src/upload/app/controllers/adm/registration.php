@@ -14,7 +14,7 @@ namespace App\controllers\adm;
 
 use App\core\BaseController;
 use App\libraries\adm\AdministrationLib as Administration;
-use App\libraries\FunctionsLib;
+use App\libraries\Functions;
 
 /**
  * Registration Class
@@ -46,7 +46,15 @@ class Registration extends BaseController
 
         // load Language
         parent::loadLang(['adm/global', 'adm/registration']);
+    }
 
+    /**
+     * Users land here
+     *
+     * @return void
+     */
+    public function index(): void
+    {
         // check if the user is allowed to access
         if (!Administration::authorization(__CLASS__, (int) $this->user['user_authlevel'])) {
             die(Administration::noAccessMessage($this->langs->line('no_permissions')));
@@ -70,7 +78,7 @@ class Registration extends BaseController
 
         if ($data) {
             foreach ($data as $option => $value) {
-                FunctionsLib::updateConfig($option, ($value == 'on' ? 1 : 0));
+                Functions::updateConfig($option, ($value == 'on' ? 1 : 0));
             }
 
             $this->alert = Administration::saveMessage('ok', $this->langs->line('ur_all_ok_message'));
@@ -107,7 +115,7 @@ class Registration extends BaseController
     {
         return $this->setChecked(
             array_filter(
-                FunctionsLib::readConfig('', true),
+                Functions::readConfig('', true),
                 function ($key) {
                     return array_key_exists($key, self::REGISTRATION_SETTINGS);
                 },

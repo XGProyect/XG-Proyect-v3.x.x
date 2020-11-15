@@ -15,7 +15,7 @@ use App\core\BaseController;
 use App\core\enumerators\PlanetTypesEnumerator;
 use App\libraries\FleetsLib;
 use App\libraries\Formulas;
-use App\libraries\FunctionsLib;
+use App\libraries\Functions;
 
 /**
  * Phalanx Class
@@ -39,9 +39,17 @@ class Phalanx extends BaseController
 
         // load Language
         parent::loadLang(['game/phalanx']);
+    }
 
+    /**
+     * Users land here
+     *
+     * @return void
+     */
+    public function index(): void
+    {
         // Check module access
-        FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
+        Functions::moduleMessage(Functions::isModuleAccesible(self::MODULE_ID));
 
         // build the page
         $this->buildPage();
@@ -68,7 +76,7 @@ class Phalanx extends BaseController
         $PlType = (int) $_GET['planettype'];
         /* cheater detection */
         if ($System < $radar_limit_inf or $System > $radar_limit_sup or $Galaxy != $this->planet['planet_galaxy'] or $PlType != PlanetTypesEnumerator::PLANET or $this->planet['planet_type'] != PlanetTypesEnumerator::MOON) {
-            FunctionsLib::redirect('game.php?page=galaxy');
+            Functions::redirect('game.php?page=galaxy');
         }
 
         $TargetName = '';

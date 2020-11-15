@@ -41,7 +41,15 @@ class Reset extends BaseController
 
         // load Language
         parent::loadLang(['adm/global', 'adm/reset']);
+    }
 
+    /**
+     * Users land here
+     *
+     * @return void
+     */
+    public function index(): void
+    {
         // check if the user is allowed to access
         if (!Administration::authorization(__CLASS__, (int) $this->user['user_authlevel'])) {
             die(Administration::noAccessMessage($this->langs->line('no_permissions')));

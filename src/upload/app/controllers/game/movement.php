@@ -17,7 +17,7 @@ use App\core\enumerators\MissionsEnumerator as Missions;
 use App\helpers\UrlHelper;
 use App\libraries\FleetsLib;
 use App\libraries\FormatLib;
-use App\libraries\FunctionsLib;
+use App\libraries\Functions;
 use App\libraries\game\Fleets;
 use App\libraries\premium\Premium;
 use App\libraries\research\Researches;
@@ -74,11 +74,19 @@ class Movement extends BaseController
         // load Language
         parent::loadLang(['game/missions', 'game/ships', 'game/fleet']);
 
-        // Check module access
-        FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
-
         // init a new fleets object
         $this->setUpFleets();
+    }
+
+    /**
+     * Users land here
+     *
+     * @return void
+     */
+    public function index(): void
+    {
+        // Check module access
+        Functions::moduleMessage(Functions::isModuleAccesible(self::MODULE_ID));
 
         // time to do something
         $this->runAction();
@@ -314,7 +322,7 @@ class Movement extends BaseController
                     $this->user['user_id']
                 );
 
-                FunctionsLib::redirect(self::REDIRECT_TARGET);
+                Functions::redirect(self::REDIRECT_TARGET);
             }
         }
     }

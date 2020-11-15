@@ -1,6 +1,7 @@
 <?php namespace App\libraries;
 
 use App\core\Language;
+use App\libraries\Functions;
 
 /**
  * Timing Library Class
@@ -48,7 +49,7 @@ abstract class TimingLibrary
             $time = strtotime($time);
         }
 
-        return date(FunctionsLib::readConfig('date_format_extended'), $time);
+        return date(Functions::readConfig('date_format_extended'), $time);
     }
 
     /**
@@ -64,7 +65,7 @@ abstract class TimingLibrary
             $time = strtotime($time);
         }
 
-        return date(FunctionsLib::readConfig('date_format'), $time);
+        return date(Functions::readConfig('date_format'), $time);
     }
 
     /**

@@ -12,7 +12,7 @@
 namespace App\libraries\missions;
 
 use App\libraries\FleetsLib;
-use App\libraries\FunctionsLib;
+use App\libraries\Functions;
 use App\libraries\PlanetLib;
 use App\libraries\Statistics_library;
 
@@ -169,7 +169,7 @@ class Colonize extends Missions
      */
     private function colonize_message($owner, $message, $time)
     {
-        FunctionsLib::sendMessage($owner, '', $time, 5, $this->langs->line('col_report_from'), $this->langs->line('col_report_title'), $message);
+        Functions::sendMessage($owner, '', $time, 5, $this->langs->line('col_report_from'), $this->langs->line('col_report_title'), $message);
     }
 
     /**

@@ -15,7 +15,7 @@ use App\core\BaseController;
 use App\core\entities\NotesEntity;
 use App\core\enumerators\ImportanceEnumerator as Importance;
 use App\libraries\FormatLib;
-use App\libraries\FunctionsLib;
+use App\libraries\Functions;
 use App\libraries\TimingLibrary as Timing;
 use App\libraries\users\Notes as Note;
 
@@ -58,14 +58,22 @@ class Notes extends BaseController
         // load Language
         parent::loadLang(['game/notes']);
 
+        // init a new notes object
+        $this->setUpNotes();
+    }
+
+    /**
+     * Users land here
+     *
+     * @return void
+     */
+    public function index(): void
+    {
         // Check module access
-        FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
+        Functions::moduleMessage(Functions::isModuleAccesible(self::MODULE_ID));
 
         // time to do something
         $this->runAction();
-
-        // init a new notes object
-        $this->setUpNotes();
 
         // build the page
         $this->buildPage();

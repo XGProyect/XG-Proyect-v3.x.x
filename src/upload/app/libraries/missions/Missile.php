@@ -12,7 +12,7 @@
 namespace App\libraries\missions;
 
 use App\libraries\FormatLib;
-use App\libraries\FunctionsLib;
+use App\libraries\Functions;
 
 /**
  * Missile Class
@@ -146,7 +146,7 @@ class Missile extends Missions
 
             // send messages
             // attacker
-            FunctionsLib::sendMessage(
+            Functions::sendMessage(
                 $fleet_row['fleet_owner'],
                 '',
                 $fleet_row['fleet_end_time'],
@@ -157,7 +157,7 @@ class Missile extends Missions
             );
 
             // enemy
-            FunctionsLib::sendMessage(
+            Functions::sendMessage(
                 $target_data['planet_user_id'],
                 '',
                 $fleet_row['fleet_end_time'],

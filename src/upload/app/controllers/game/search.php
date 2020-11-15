@@ -16,7 +16,7 @@ use App\core\BaseController;
 use App\core\enumerators\SwitchIntEnumerator as SwitchInt;
 use App\helpers\UrlHelper;
 use App\libraries\FormatLib;
-use App\libraries\FunctionsLib;
+use App\libraries\Functions;
 
 /**
  * Search Class
@@ -69,10 +69,18 @@ class Search extends BaseController
         parent::loadLang(['game/search']);
 
         // load library
-        $this->noob = FunctionsLib::loadLibrary('NoobsProtectionLib');
+        $this->noob = Functions::loadLibrary('NoobsProtectionLib');
+    }
 
+    /**
+     * Users land here
+     *
+     * @return void
+     */
+    public function index(): void
+    {
         // Check module access
-        FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
+        Functions::moduleMessage(Functions::isModuleAccesible(self::MODULE_ID));
 
         // time to do something
         $this->runAction();
@@ -239,13 +247,13 @@ class Search extends BaseController
     {
         $chatLink = UrlHelper::setUrl(
             'game.php?page=chat&playerId=' . $user_id,
-            FunctionsLib::setImage(DPATH . '/img/m.gif', $this->langs->line('sh_tip_write')),
+            Functions::setImage(DPATH . '/img/m.gif', $this->langs->line('sh_tip_write')),
             $this->langs->line('sh_tip_apply')
         );
 
         $buddyLink = UrlHelper::setUrl(
             '#',
-            FunctionsLib::setImage(DPATH . '/img/b.gif', $this->langs->line('sh_tip_buddy_request')),
+            Functions::setImage(DPATH . '/img/b.gif', $this->langs->line('sh_tip_buddy_request')),
             $this->langs->line('sh_tip_apply'),
             'onClick="f(\'game.php?page=buddies&mode=2&u=' . $user_id . '\', \'' . $this->langs->line('sh_tip_buddy_request') . '\')"'
         );
@@ -265,7 +273,7 @@ class Search extends BaseController
         if ($alliance_requests == SwitchInt::on) {
             return UrlHelper::setUrl(
                 'game.php?page=alliance&mode=apply&allyid=' . $alliance_id,
-                FunctionsLib::setImage(DPATH . '/img/m.gif', $this->langs->line('sh_tip_apply')),
+                Functions::setImage(DPATH . '/img/m.gif', $this->langs->line('sh_tip_apply')),
                 $this->langs->line('sh_tip_apply')
             );
         }

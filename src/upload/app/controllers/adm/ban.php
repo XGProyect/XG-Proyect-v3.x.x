@@ -13,7 +13,7 @@ namespace App\controllers\adm;
 
 use App\core\BaseController;
 use App\libraries\adm\AdministrationLib as Administration;
-use App\libraries\FunctionsLib;
+use App\libraries\Functions;
 
 /**
  * Ban Class
@@ -44,7 +44,15 @@ class Ban extends BaseController
 
         // load Language
         parent::loadLang(['adm/global', 'adm/ban']);
+    }
 
+    /**
+     * Users land here
+     *
+     * @return void
+     */
+    public function index(): void
+    {
         // check if the user is allowed to access
         if (!Administration::authorization(__CLASS__, (int) $this->user['user_authlevel'])) {
             die(Administration::noAccessMessage($this->langs->line('no_permissions')));
@@ -129,7 +137,7 @@ class Ban extends BaseController
             $banned_user = $this->Ban_Model->getBannedUserData($ban_name);
 
             if ($banned_user) {
-                $parse['banned_until'] = $this->langs->line('bn_banned_until') . ' (' . date(FunctionsLib::readConfig('date_format_extended'), $banned_user['banned_longer']) . ')';
+                $parse['banned_until'] = $this->langs->line('bn_banned_until') . ' (' . date(Functions::readConfig('date_format_extended'), $banned_user['banned_longer']) . ')';
                 $parse['reason'] = $banned_user['banned_theme'];
                 $parse['changedate'] = '<div style="float:left">' . $this->langs->line('bn_change_date') . '</div><div style="float:right">' . Administration::showPopUp($this->langs->line('bn_edit_ban_help')) . '</div>';
                 $parse['vacation'] = $banned_user['preference_vacation_mode'] ? 'checked="checked"' : '';
@@ -178,7 +186,7 @@ class Ban extends BaseController
                 }
             }
         } else {
-            FunctionsLib::redirect('admin.php?page=ban');
+            Functions::redirect('admin.php?page=ban');
         }
 
         return $this->getTemplate()->set("adm/ban_result_view", $parse);

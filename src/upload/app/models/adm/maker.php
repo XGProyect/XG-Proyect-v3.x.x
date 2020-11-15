@@ -12,7 +12,7 @@
 namespace App\models\adm;
 
 use App\core\Model;
-use App\libraries\FunctionsLib as Functions;
+use App\libraries\Functions;
 use App\libraries\PlanetLib;
 
 /**

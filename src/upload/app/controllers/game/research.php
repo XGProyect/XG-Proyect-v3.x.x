@@ -13,7 +13,7 @@ use App\core\BaseController;
 use App\helpers\UrlHelper;
 use App\libraries\DevelopmentsLib;
 use App\libraries\FormatLib;
-use App\libraries\FunctionsLib;
+use App\libraries\Functions;
 
 /**
  * Research Class
@@ -58,7 +58,7 @@ class Research extends BaseController
         parent::$users->checkSession();
 
         // Check module access
-        FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
+        Functions::moduleMessage(Functions::isModuleAccesible(self::MODULE_ID));
 
         // load Model
         parent::loadModel('game/research');
@@ -69,13 +69,26 @@ class Research extends BaseController
         $this->_resource = parent::$objects->getObjects();
         $this->_reslist = parent::$objects->getObjectsList();
 
+        $this->setLabsAmount();
+        $this->handleTechnologieBuild();
+    }
+
+    /**
+     * Users land here
+     *
+     * @return void
+     */
+    public function index(): void
+    {
+        // Check module access
+        Functions::moduleMessage(Functions::isModuleAccesible(self::MODULE_ID));
+
         if ($this->planet[$this->_resource[31]] == 0) {
-            FunctionsLib::message($this->langs->line('re_lab_required'), '', '', true);
-        } else {
-            $this->setLabsAmount();
-            $this->handleTechnologieBuild();
-            $this->buildPage();
+            Functions::message($this->langs->line('re_lab_required'), '', '', true);
         }
+
+        // build the page
+        $this->buildPage();
     }
 
     /**
@@ -242,7 +255,7 @@ class Research extends BaseController
                 }
             }
 
-            FunctionsLib::redirect('game.php?page=research');
+            Functions::redirect('game.php?page=research');
         }
     }
 

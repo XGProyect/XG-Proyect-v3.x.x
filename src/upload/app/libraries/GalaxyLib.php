@@ -20,7 +20,7 @@ use App\helpers\UrlHelper;
 use App\libraries\FleetsLib;
 use App\libraries\FormatLib;
 use App\libraries\Formulas;
-use App\libraries\FunctionsLib;
+use App\libraries\Functions;
 
 /**
  * GalaxyLib class
@@ -104,7 +104,7 @@ class GalaxyLib extends XGPCore
         $this->system = $system;
         $this->resource = parent::$objects->getObjects();
         $this->pricelist = parent::$objects->getPrice();
-        $this->noob = FunctionsLib::loadLibrary('NoobsProtectionLib');
+        $this->noob = Functions::loadLibrary('NoobsProtectionLib');
 
         $this->setTemplate();
     }
@@ -243,7 +243,7 @@ class GalaxyLib extends XGPCore
         }
 
         $this->row_data['planet_type'] = self::PLANET_TYPE;
-        if (FunctionsLib::isCurrentPlanet($this->current_planet, $this->row_data)) {
+        if (Functions::isCurrentPlanet($this->current_planet, $this->row_data)) {
             $parse['links'] = $this->langs->line('gl_no_action');
         }
 
@@ -354,7 +354,7 @@ class GalaxyLib extends XGPCore
             }
         }
         $this->row_data['planet_type'] = self::MOON_TYPE;
-        if (FunctionsLib::isCurrentPlanet($this->current_planet, $this->row_data)) {
+        if (Functions::isCurrentPlanet($this->current_planet, $this->row_data)) {
             $parse['links'] = $this->langs->line('gl_no_action');
         }
 
@@ -588,19 +588,19 @@ class GalaxyLib extends XGPCore
         $links = [];
         $actions = [
             'spy' => [
-                'image' => FunctionsLib::setImage(DPATH . 'img/e.gif', $this->langs->line('gl_spy')),
+                'image' => Functions::setImage(DPATH . 'img/e.gif', $this->langs->line('gl_spy')),
                 'attributes' => "onclick=\"javascript:doit(6, " . $this->galaxy . ", " . $this->system . ", " . $this->planet . ", 1, " . $this->current_user['preference_spy_probes'] . ");\"",
             ],
             'write' => [
-                'image' => FunctionsLib::setImage(DPATH . 'img/m.gif', $this->langs->line('write_message')),
+                'image' => Functions::setImage(DPATH . 'img/m.gif', $this->langs->line('write_message')),
                 'url' => 'game.php?page=chat&playerId=' . $this->row_data['user_id'],
             ],
             'buddy' => [
-                'image' => FunctionsLib::setImage(DPATH . 'img/b.gif', $this->langs->line('gl_buddy_request')),
+                'image' => Functions::setImage(DPATH . 'img/b.gif', $this->langs->line('gl_buddy_request')),
                 'url' => 'game.php?page=buddies&mode=2&u=' . $this->row_data['user_id'],
             ],
             'missile' => [
-                'image' => FunctionsLib::setImage(DPATH . 'img/r.gif', $this->langs->line('gl_missile_attack')),
+                'image' => Functions::setImage(DPATH . 'img/r.gif', $this->langs->line('gl_missile_attack')),
                 'url' => 'game.php?page=galaxy&mode=2&galaxy=' . $this->galaxy . '&system=' . $this->system . '&planet=' . $this->planet . '&current=' . $this->current_user['user_current_planet'],
             ],
         ];

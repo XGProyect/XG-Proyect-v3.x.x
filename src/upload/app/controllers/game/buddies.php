@@ -15,7 +15,7 @@ use App\core\BaseController;
 use App\core\entities\BuddyEntity;
 use App\libraries\buddies\Buddy;
 use App\libraries\enumerators\BuddiesStatusEnumerator as BuddiesStatus;
-use App\libraries\FunctionsLib;
+use App\libraries\Functions;
 use App\libraries\TimingLibrary as Timing;
 use Exception;
 
@@ -48,9 +48,6 @@ class Buddies extends BaseController
         // check if session is active
         parent::$users->checkSession();
 
-        // Check module access
-        FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
-
         // load Model
         parent::loadModel('game/buddies');
 
@@ -59,6 +56,17 @@ class Buddies extends BaseController
 
         // init a new buddy object
         $this->setUpBudies();
+    }
+
+    /**
+     * Users land here
+     *
+     * @return void
+     */
+    public function index(): void
+    {
+        // Check module access
+        Functions::moduleMessage(Functions::isModuleAccesible(self::MODULE_ID));
 
         // time to do something
         $this->runAction();
@@ -128,7 +136,7 @@ class Buddies extends BaseController
             }
 
             $this->{$action}();
-            FunctionsLib::redirect('game.php?page=buddies');
+            Functions::redirect('game.php?page=buddies');
         } catch (Exception $e) {
             die('Caught exception: ' . $e->getMessage() . "\n");
         }
@@ -199,7 +207,7 @@ class Buddies extends BaseController
         }
 
         if (!is_null($buddy) && $buddy->getBuddyId() != 0) {
-            FunctionsLib::message($this->langs->line('bu_request_exists'), 'game.php?page=buddies', 3, true);
+            Functions::message($this->langs->line('bu_request_exists'), 'game.php?page=buddies', 3, true);
         }
 
         $this->sendMessage($user, 4);
@@ -240,7 +248,7 @@ class Buddies extends BaseController
             ],
         ];
 
-        FunctionsLib::sendMessage(
+        Functions::sendMessage(
             $to,
             $this->user['user_id'],
             '',
@@ -265,13 +273,13 @@ class Buddies extends BaseController
         $user = filter_input(INPUT_GET, 'u', FILTER_VALIDATE_INT);
 
         if ($user == $this->user['user_id']) {
-            FunctionsLib::message($this->langs->line('bu_cannot_request_yourself'), 'game.php?page=buddies', 2, true);
+            Functions::message($this->langs->line('bu_cannot_request_yourself'), 'game.php?page=buddies', 2, true);
         }
 
         $user = $this->Buddies_Model->checkIfBuddyExists($user);
 
         if (!$user) {
-            FunctionsLib::redirect('game.php?page=buddies');
+            Functions::redirect('game.php?page=buddies');
         }
 
         parent::$page->display(

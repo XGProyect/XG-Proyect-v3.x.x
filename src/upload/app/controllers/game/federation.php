@@ -13,7 +13,7 @@ namespace App\controllers\game;
 
 use App\core\BaseController;
 use App\libraries\FormatLib;
-use App\libraries\FunctionsLib;
+use App\libraries\Functions;
 use App\libraries\game\AcsFleets;
 use App\libraries\game\Fleets;
 
@@ -81,11 +81,19 @@ class Federation extends BaseController
         // load Language
         parent::loadLang(['game/fleet']);
 
-        // Check module access
-        FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
-
         // init a new fleets object
         $this->setUpFleets();
+    }
+
+    /**
+     * Users land here
+     *
+     * @return void
+     */
+    public function index(): void
+    {
+        // Check module access
+        Functions::moduleMessage(Functions::isModuleAccesible(self::MODULE_ID));
 
         // time to do something
         $this->runAction();
@@ -197,7 +205,7 @@ class Federation extends BaseController
                     );
 
                     $invite_message = $this->langs->line('fl_player') . $this->user['user_name'] . $this->langs->line('fl_acs_invitation_message');
-                    FunctionsLib::sendMessage(
+                    Functions::sendMessage(
                         $member,
                         $this->user['user_id'],
                         '',
@@ -329,7 +337,7 @@ class Federation extends BaseController
                 $this->_acs_code = $this->_group->getFirstAcs()->getAcsFleetName();
             }
         } else {
-            FunctionsLib::redirect(self::REDIRECT_TARGET);
+            Functions::redirect(self::REDIRECT_TARGET);
         }
     }
 

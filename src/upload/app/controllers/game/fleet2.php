@@ -15,7 +15,7 @@ use App\core\BaseController;
 use App\core\enumerators\PlanetTypesEnumerator as PlanetTypes;
 use App\libraries\FleetsLib;
 use App\libraries\FormatLib;
-use App\libraries\FunctionsLib;
+use App\libraries\Functions;
 use App\libraries\OfficiersLib;
 use App\libraries\premium\Premium;
 use App\libraries\research\Researches;
@@ -67,11 +67,19 @@ class Fleet2 extends BaseController
         // load Language
         parent::loadLang(['game/global', 'game/fleet']);
 
-        // Check module access
-        FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
-
         // init a new fleets object
         $this->setUpFleets();
+    }
+
+    /**
+     * Users land here
+     *
+     * @return void
+     */
+    public function index(): void
+    {
+        // Check module access
+        Functions::moduleMessage(Functions::isModuleAccesible(self::MODULE_ID));
 
         // build the page
         $this->buildPage();
@@ -362,7 +370,7 @@ class Fleet2 extends BaseController
         ]);
 
         if (is_null($data) or count($this->_fleet_data['speed_all']) <= 0) {
-            FunctionsLib::redirect('game.php?page=fleet1');
+            Functions::redirect('game.php?page=fleet1');
         }
 
         // attach fleet data
@@ -372,7 +380,7 @@ class Fleet2 extends BaseController
         ];
 
         return [
-            'speedfactor' => FunctionsLib::fleetSpeedFactor(),
+            'speedfactor' => Functions::fleetSpeedFactor(),
             'galaxy' => $this->planet['planet_galaxy'],
             'system' => $this->planet['planet_system'],
             'planet' => $this->planet['planet_planet'],

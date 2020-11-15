@@ -15,7 +15,7 @@ namespace App\controllers\game;
 use App\core\BaseController;
 use App\core\enumerators\PreferencesEnumerator as PrefEnum;
 use App\libraries\FormatLib as Format;
-use App\libraries\FunctionsLib as Functions;
+use App\libraries\Functions;
 use App\libraries\game\Preferences as Pref;
 use App\libraries\TimingLibrary as Timing;
 
@@ -70,11 +70,19 @@ class Preferences extends BaseController
         // load Language
         parent::loadLang(['game/preferences']);
 
-        // Check module access
-        Functions::moduleMessage(Functions::isModuleAccesible(self::MODULE_ID));
-
         // init a new preferences object
         $this->setUpPreferences();
+    }
+
+    /**
+     * Users land here
+     *
+     * @return void
+     */
+    public function index(): void
+    {
+        // Check module access
+        Functions::moduleMessage(Functions::isModuleAccesible(self::MODULE_ID));
 
         // time to do something
         $this->runAction();

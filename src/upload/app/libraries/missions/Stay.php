@@ -12,7 +12,7 @@
 namespace App\libraries\missions;
 
 use App\libraries\FleetsLib;
-use App\libraries\FunctionsLib;
+use App\libraries\Functions;
 
 /**
  * Stay Class
@@ -141,6 +141,6 @@ class Stay extends Missions
      */
     private function stayMessage($owner, $message, $time, $status_message)
     {
-        FunctionsLib::sendMessage($owner, '', $time, 5, $this->langs->line('mi_fleet_command'), $status_message, $message);
+        Functions::sendMessage($owner, '', $time, 5, $this->langs->line('mi_fleet_command'), $status_message, $message);
     }
 }

@@ -27,7 +27,15 @@ class Media extends BaseController
 
         // load Language
         parent::loadLang(['ajax/media']);
+    }
 
+    /**
+     * Users land here
+     *
+     * @return void
+     */
+    public function index(): void
+    {
         // build the page
         $this->buildPage();
     }

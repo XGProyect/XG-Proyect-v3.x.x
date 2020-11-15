@@ -16,7 +16,7 @@ use App\core\enumerators\PlanetTypesEnumerator;
 use App\core\enumerators\UserRanksEnumerator as UserRanks;
 use App\libraries\adm\AdministrationLib as Administration;
 use App\libraries\FormatLib as Format;
-use App\libraries\FunctionsLib as Functions;
+use App\libraries\Functions;
 use App\libraries\Statistics_library;
 use App\libraries\users\Shortcuts;
 
@@ -80,14 +80,19 @@ class Users extends BaseController
 
         // set data
         $this->_stats = new Statistics_library();
+    }
 
+    /**
+     * Users land here
+     *
+     * @return void
+     */
+    public function index(): void
+    {
         // check if the user is allowed to access
         if (!Administration::authorization(__CLASS__, (int) $this->user['user_authlevel'])) {
             die(Administration::noAccessMessage($this->langs->line('no_permissions')));
         }
-
-        // time to do something
-        //$this->runAction();
 
         // build the page
         $this->buildPage();

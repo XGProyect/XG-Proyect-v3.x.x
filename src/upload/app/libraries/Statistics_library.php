@@ -12,6 +12,7 @@
 namespace App\libraries;
 
 use App\core\XGPCore;
+use App\libraries\Functions;
 
 /**
  * Statistics_library Class
@@ -62,7 +63,7 @@ class Statistics_library extends XGPCore
         $element = parent::$objects->getPrice($element);
         $resources_total = $element['metal'] + $element['crystal'] + $element['deuterium'];
         $level_mult = pow($element['factor'], $current_level);
-        $points = ($resources_total * $level_mult) / FunctionsLib::readConfig('stat_points');
+        $points = ($resources_total * $level_mult) / Functions::readConfig('stat_points');
 
         return $points;
     }

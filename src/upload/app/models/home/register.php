@@ -13,7 +13,7 @@
 namespace App\models\home;
 
 use App\core\Model;
-use App\libraries\FunctionsLib as Functions;
+use App\libraries\Functions;
 use App\libraries\PlanetLib;
 use App\libraries\UsersLibrary;
 

@@ -27,7 +27,15 @@ class Info extends BaseController
 
         // load Language
         parent::loadLang(['ajax/info']);
+    }
 
+    /**
+     * Users land here
+     *
+     * @return void
+     */
+    public function index(): void
+    {
         // build the page
         $this->buildPage();
     }

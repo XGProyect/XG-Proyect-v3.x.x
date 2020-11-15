@@ -18,7 +18,7 @@ use App\libraries\DevelopmentsLib;
 use App\libraries\FleetsLib;
 use App\libraries\FormatLib;
 use App\libraries\Formulas;
-use App\libraries\FunctionsLib;
+use App\libraries\Functions;
 use App\libraries\OfficiersLib;
 use App\libraries\ProductionLib;
 
@@ -66,14 +66,22 @@ class Infos extends BaseController
         // load Language
         parent::loadLang(['game/global', 'game/infos', 'game/constructions', 'game/defenses', 'game/ships', 'game/technologies']);
 
-        // Check module access
-        FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
-
         $this->_resource = parent::$objects->getObjects();
         $this->_pricelist = parent::$objects->getPrice();
         $this->_combat_caps = parent::$objects->getCombatSpecs();
         $this->_prod_grid = parent::$objects->getProduction();
         $this->_element_id = isset($_GET['gid']) ? (int) $_GET['gid'] : null;
+    }
+
+    /**
+     * Users land here
+     *
+     * @return void
+     */
+    public function index(): void
+    {
+        // Check module access
+        Functions::moduleMessage(Functions::isModuleAccesible(self::MODULE_ID));
 
         // build the page
         $this->buildPage();
@@ -87,7 +95,7 @@ class Infos extends BaseController
     private function buildPage()
     {
         if (!array_key_exists($this->_element_id, $this->_resource)) {
-            FunctionsLib::redirect('game.php?page=techtree');
+            Functions::redirect('game.php?page=techtree');
         }
 
         $GateTPL = '';
@@ -143,7 +151,7 @@ class Infos extends BaseController
             $GateTPL = 'infos/info_gate_table';
 
             if ($_POST) {
-                FunctionsLib::message($this->doFleetJump(), "game.php?page=infos&gid=43", 2);
+                Functions::message($this->doFleetJump(), "game.php?page=infos&gid=43", 2);
             }
         } elseif ($this->_element_id == 124) {
             $PageTPL = 'infos/info_buildings_table';
@@ -213,9 +221,9 @@ class Infos extends BaseController
                 $RestString = $this->GetNextJumpWaitTime($this->planet);
                 $parse['gate_start_link'] = $this->planet_link($this->planet);
                 if ($RestString['value'] != 0) {
-                    $parse['gate_time_script'] = FunctionsLib::chronoApplet("Gate", "1", $RestString['value'], true);
+                    $parse['gate_time_script'] = Functions::chronoApplet("Gate", "1", $RestString['value'], true);
                     $parse['gate_wait_time'] = "<div id=\"bxx" . "Gate" . "1" . "\"></div>";
-                    $parse['gate_script_go'] = FunctionsLib::chronoApplet("Gate", "1", $RestString['value'], false);
+                    $parse['gate_script_go'] = Functions::chronoApplet("Gate", "1", $RestString['value'], false);
                 } else {
                     $parse['gate_time_script'] = "";
                     $parse['gate_wait_time'] = "";
@@ -476,7 +484,7 @@ class Infos extends BaseController
         $current_built_lvl = $this->planet[$this->_resource[$this->_element_id]];
         $BuildLevel = ($current_built_lvl > 0) ? $current_built_lvl : 1;
         $BuildEnergy = $this->user['research_energy_technology'];
-        $game_resource_multiplier = FunctionsLib::readConfig('resource_multiplier');
+        $game_resource_multiplier = Functions::readConfig('resource_multiplier');
 
         // BOOST
         $geologe_boost = 1 + (1 * (OfficiersLib::isOfficierActive($this->user['premium_officier_geologist']) ? GEOLOGUE : 0));

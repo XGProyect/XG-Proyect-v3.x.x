@@ -16,7 +16,7 @@ use App\core\Objects;
 use App\core\Template;
 use App\helpers\UrlHelper;
 use App\libraries\FormatLib;
-use App\libraries\FunctionsLib;
+use App\libraries\Functions;
 use App\libraries\OfficiersLib;
 use App\libraries\ProductionLib as Production;
 use App\libraries\TimingLibrary as Timing;
@@ -409,8 +409,8 @@ class Page
     {
         // Update config language to the new setted value
         if (isset($_POST['language'])) {
-            FunctionsLib::setCurrentLanguage($_POST['language']);
-            FunctionsLib::redirect(SYSTEM_ROOT . DIRECTORY_SEPARATOR);
+            Functions::setCurrentLanguage($_POST['language']);
+            Functions::redirect(SYSTEM_ROOT . DIRECTORY_SEPARATOR);
         }
 
         $current_page = isset($_GET['page']) ? $_GET['page'] : null;
@@ -438,7 +438,7 @@ class Page
         // PARSE THE MENU AND OTHER DATA
         $parse = $langs;
         $parse['menu_items'] = $items;
-        $parse['language_select'] = FunctionsLib::getLanguages(FunctionsLib::getCurrentLanguage());
+        $parse['language_select'] = Functions::getLanguages(Functions::getCurrentLanguage());
 
         return $this->template->set(
             'install/topnav_view',
@@ -489,7 +489,7 @@ class Page
      */
     private function gameHeader($metatags = '')
     {
-        $parse['game_title'] = FunctionsLib::readConfig('game_name');
+        $parse['game_title'] = Functions::readConfig('game_name');
         $parse['version'] = SYSTEM_VERSION;
         $parse['css_path'] = CSS_PATH;
         $parse['skin_path'] = DPATH;
@@ -597,7 +597,7 @@ class Page
         $menu_block1 = '';
         $menu_block2 = '';
         $menu_block3 = '';
-        $modules_array = explode(';', FunctionsLib::readConfig('modules'));
+        $modules_array = explode(';', Functions::readConfig('modules'));
         $tota_rank = $this->current_user['user_statistic_total_rank'] == '' ?
         $this->current_planet['stats_users'] : $this->current_user['user_statistic_total_rank'];
         $pages = [
@@ -700,7 +700,7 @@ class Page
         $parse['admin_link'] = (($this->current_user['user_authlevel'] > 0) ?
             "<tr><td><div align=\"center\"><a href=\"admin.php\" target=\"_blank\">
             <font color=\"lime\">" . $lang->line('lm_administration') . "</font></a></div></td></tr>" : "");
-        $parse['servername'] = FunctionsLib::readConfig('game_name');
+        $parse['servername'] = Functions::readConfig('game_name');
         $parse['changelog'] = UrlHelper::setUrl('game.php?page=changelog', SYSTEM_VERSION);
         $parse['version'] = SYSTEM_VERSION;
         $parse['year'] = $this->current_year;

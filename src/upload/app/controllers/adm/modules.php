@@ -14,7 +14,7 @@ namespace App\controllers\adm;
 
 use App\core\BaseController;
 use App\libraries\adm\AdministrationLib as Administration;
-use App\libraries\FunctionsLib;
+use App\libraries\Functions;
 
 /**
  * Modules Class
@@ -40,7 +40,15 @@ class Modules extends BaseController
 
         // load Language
         parent::loadLang(['adm/global', 'adm/modules']);
+    }
 
+    /**
+     * Users land here
+     *
+     * @return void
+     */
+    public function index(): void
+    {
         // check if the user is allowed to access
         if (!Administration::authorization(__CLASS__, (int) $this->user['user_authlevel'])) {
             die(Administration::noAccessMessage($this->langs->line('no_permissions')));
@@ -63,13 +71,13 @@ class Modules extends BaseController
         $modules = filter_input_array(INPUT_POST);
 
         if ($modules) {
-            $modules_count = count(explode(';', FunctionsLib::readConfig('modules')));
+            $modules_count = count(explode(';', Functions::readConfig('modules')));
 
             for ($i = 0; $i < $modules_count; $i++) {
                 $modules_set[] = (isset($modules["status{$i}"]) ? 1 : 0);
             }
 
-            FunctionsLib::updateConfig('modules', join(';', $modules_set));
+            Functions::updateConfig('modules', join(';', $modules_set));
 
             $this->alert = Administration::saveMessage('ok', $this->langs->line('mdl_all_ok_message'));
         }
@@ -105,7 +113,7 @@ class Modules extends BaseController
     {
         $modules_list = [];
 
-        $modules = explode(';', FunctionsLib::readConfig('modules'));
+        $modules = explode(';', Functions::readConfig('modules'));
 
         if ($modules) {
             foreach ($modules as $module => $status) {

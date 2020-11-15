@@ -13,7 +13,7 @@ namespace App\controllers\game;
 
 use App\core\BaseController;
 use App\libraries\FormatLib as Format;
-use App\libraries\FunctionsLib as Functions;
+use App\libraries\Functions;
 
 /**
  * TraderLayer Class
@@ -38,14 +38,19 @@ class TraderLayer extends BaseController
         // load Language
         parent::loadLang(['game/global', 'game/trader']);
 
+        // build the page
+        $this->buildPage();
+    }
+
+    /**
+     * Users land here
+     *
+     * @return void
+     */
+    public function index(): void
+    {
         // Check module access
         Functions::moduleMessage(Functions::isModuleAccesible(self::MODULE_ID));
-
-        // init a new buddy object
-        //$this->setUpTrader();
-
-        // time to do something
-        //$this->runAction();
 
         // build the page
         $this->buildPage();
@@ -79,7 +84,7 @@ class TraderLayer extends BaseController
 
     if ($this->current_user['premium_dark_matter'] < $this->tr_dark_matter) {
 
-    FunctionsLib::message(
+    Functions::message(
     str_replace(
     '%s', $this->tr_dark_matter, $this->langs['tr_darkmatter_needed']
     ), '', '', true
@@ -94,7 +99,7 @@ class TraderLayer extends BaseController
 
     case 'metal':
     if ($_POST['cristal'] < 0 or $_POST['deut'] < 0) {
-    FunctionsLib::message($this->langs['tr_only_positive_numbers'], "game.php?page=traderOverview", 1);
+    Functions::message($this->langs['tr_only_positive_numbers'], "game.php?page=traderOverview", 1);
     } else {
     $necessaire = (($_POST['cristal'] * 2) + ($_POST['deut'] * 4));
     $amout = array(
@@ -107,7 +112,7 @@ class TraderLayer extends BaseController
 
     if (is_string($storage)) {
 
-    die(FunctionsLib::message($storage, 'game.php?page=traderOverview', '2'));
+    die(Functions::message($storage, 'game.php?page=traderOverview', '2'));
     }
 
     if ($this->current_planet['planet_metal'] > $necessaire) {
@@ -127,7 +132,7 @@ class TraderLayer extends BaseController
     $this->discountDarkMatter(); // REDUCE DARKMATTER
     } else {
 
-    FunctionsLib::message($this->langs['tr_not_enought_metal'], "game.php?page=traderOverview", 1);
+    Functions::message($this->langs['tr_not_enought_metal'], "game.php?page=traderOverview", 1);
     }
     }
     break;
@@ -135,7 +140,7 @@ class TraderLayer extends BaseController
     case 'cristal':
     if ($_POST['metal'] < 0 or $_POST['deut'] < 0) {
 
-    FunctionsLib::message($this->langs['tr_only_positive_numbers'], "game.php?page=traderOverview", 1);
+    Functions::message($this->langs['tr_only_positive_numbers'], "game.php?page=traderOverview", 1);
     } else {
 
     $necessaire = ((abs($_POST['metal']) * 0.5) + (abs($_POST['deut']) * 2));
@@ -149,7 +154,7 @@ class TraderLayer extends BaseController
 
     if (is_string($storage)) {
 
-    die(FunctionsLib::message($storage, 'game.php?page=traderOverview', '2'));
+    die(Functions::message($storage, 'game.php?page=traderOverview', '2'));
     }
 
     if ($this->current_planet['planet_crystal'] > $necessaire) {
@@ -169,7 +174,7 @@ class TraderLayer extends BaseController
     $this->discountDarkMatter(); // REDUCE DARKMATTER
     } else {
 
-    FunctionsLib::message($this->langs['tr_not_enought_crystal'], "game.php?page=traderOverview", 1);
+    Functions::message($this->langs['tr_not_enought_crystal'], "game.php?page=traderOverview", 1);
     }
     }
     break;
@@ -177,7 +182,7 @@ class TraderLayer extends BaseController
     case 'deuterium':
     if ($_POST['cristal'] < 0 or $_POST['metal'] < 0) {
 
-    FunctionsLib::message($this->langs['tr_only_positive_numbers'], "game.php?page=traderOverview", 1);
+    Functions::message($this->langs['tr_only_positive_numbers'], "game.php?page=traderOverview", 1);
     } else {
 
     $necessaire = ((abs($_POST['metal']) * 0.25) + (abs($_POST['cristal']) * 0.5));
@@ -191,7 +196,7 @@ class TraderLayer extends BaseController
 
     if (is_string($storage)) {
 
-    die(FunctionsLib::message($storage, 'game.php?page=traderOverview', '2'));
+    die(Functions::message($storage, 'game.php?page=traderOverview', '2'));
     }
 
     if ($this->current_planet['planet_deuterium'] > $necessaire) {
@@ -211,13 +216,13 @@ class TraderLayer extends BaseController
     $this->discountDarkMatter(); // REDUCE DARKMATTER
     } else {
 
-    FunctionsLib::message($this->langs['tr_not_enought_deuterium'], "game.php?page=traderOverview", 1);
+    Functions::message($this->langs['tr_not_enought_deuterium'], "game.php?page=traderOverview", 1);
     }
     }
     break;
     }
 
-    FunctionsLib::message($this->langs['tr_exchange_done'], "game.php?page=traderOverview", 1);
+    Functions::message($this->langs['tr_exchange_done'], "game.php?page=traderOverview", 1);
     } else {
 
     $template = 'trader/trader_main';

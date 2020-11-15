@@ -12,20 +12,13 @@
 namespace App\controllers\home;
 
 use App\core\BaseController;
-use App\libraries\FunctionsLib;
+use App\libraries\Functions;
 
 /**
  * Register Class
  */
 class Register extends BaseController
 {
-    /**
-     * Current user data
-     *
-     * @var array
-     */
-    private $user;
-
     /**
      * Contains the set of coords for an available position
      *
@@ -52,13 +45,18 @@ class Register extends BaseController
 
         // load Language
         parent::loadLang(['home/register']);
+    }
 
-        if (FunctionsLib::readConfig('reg_enable') != 1) {
-            die(FunctionsLib::message($this->langs->line('re_disabled'), 'index.php', '5', false, false));
+    /**
+     * Users land here
+     *
+     * @return void
+     */
+    public function index(): void
+    {
+        if (Functions::readConfig('reg_enable') != 1) {
+            die(Functions::message($this->langs->line('re_disabled'), 'index.php', '5', false, false));
         }
-
-        // set data
-        $this->user = parent::$users;
 
         // build the page
         $this->buildPage();
@@ -83,13 +81,13 @@ class Register extends BaseController
                     $url = 'index.php';
                 }
 
-                FunctionsLib::redirect(SYSTEM_ROOT . $url);
+                Functions::redirect(SYSTEM_ROOT . $url);
             } else {
                 // start user creation
                 $this->calculateNewPlanetPosition();
 
                 $this->Register_Model->createNewUser(
-                    $this->user,
+                    parent::$users,
                     [
                         'new_user_name' => $user_name,
                         'new_user_email' => $user_email,
@@ -101,8 +99,8 @@ class Register extends BaseController
                 $new_user = $this->Register_Model->getNewUserData();
 
                 // Send Welcome Message to the user if the feature is enabled
-                if (FunctionsLib::readConfig('reg_welcome_message')) {
-                    FunctionsLib::sendMessage(
+                if (Functions::readConfig('reg_welcome_message')) {
+                    Functions::sendMessage(
                         $new_user['user_id'],
                         0,
                         '',
@@ -114,20 +112,20 @@ class Register extends BaseController
                 }
 
                 // Send Welcome Email to the user if the feature is enabled
-                if (FunctionsLib::readConfig('reg_welcome_email')) {
+                if (Functions::readConfig('reg_welcome_email')) {
                     $this->sendPassEmail($new_user['user_email'], $new_user['user_name'], $user_password);
                 }
 
                 // User login
                 if (parent::$users->userLogin($new_user['user_id'], $new_user['user_hashed_password'])) {
                     // Redirect to game
-                    FunctionsLib::redirect(SYSTEM_ROOT . 'game.php?page=overview');
+                    Functions::redirect(SYSTEM_ROOT . 'game.php?page=overview');
                 }
             }
         }
 
         // If login fails
-        FunctionsLib::redirect('index.php');
+        Functions::redirect('index.php');
     }
 
     /**
@@ -140,7 +138,7 @@ class Register extends BaseController
      */
     private function sendPassEmail(string $email_address, string $user_name, string $password): void
     {
-        $game_name = FunctionsLib::readConfig('game_name');
+        $game_name = Functions::readConfig('game_name');
 
         $parse = $this->langs->language;
         $parse['user_name'] = $user_name;
@@ -154,12 +152,12 @@ class Register extends BaseController
             $parse
         );
 
-        FunctionsLib::sendEmail(
+        Functions::sendEmail(
             $email_address,
-            $this->langs->line('re_mail_register_at') . FunctionsLib::readConfig('game_name'),
+            $this->langs->line('re_mail_register_at') . Functions::readConfig('game_name'),
             $email,
             [
-                'mail' => FunctionsLib::readConfig('admin_email'),
+                'mail' => Functions::readConfig('admin_email'),
                 'name' => $game_name,
             ],
             'html'
@@ -175,7 +173,7 @@ class Register extends BaseController
     {
         $errors = 0;
 
-        if (!FunctionsLib::validEmail($_POST['email'])) {
+        if (!Functions::validEmail($_POST['email'])) {
             $errors++;
         }
 
@@ -215,9 +213,9 @@ class Register extends BaseController
      */
     private function calculateNewPlanetPosition(): void
     {
-        $last_galaxy = FunctionsLib::readConfig('lastsettedgalaxypos');
-        $last_system = FunctionsLib::readConfig('lastsettedsystempos');
-        $last_planet = FunctionsLib::readConfig('lastsettedplanetpos');
+        $last_galaxy = Functions::readConfig('lastsettedgalaxypos');
+        $last_system = Functions::readConfig('lastsettedsystempos');
+        $last_planet = Functions::readConfig('lastsettedplanetpos');
 
         while (true) {
             for ($galaxy = $last_galaxy; $galaxy <= MAX_GALAXY_IN_WORLD; $galaxy++) {
@@ -259,9 +257,9 @@ class Register extends BaseController
             }
 
             if (!$this->Register_Model->checkIfPlanetExists($galaxy, $system, $planet)) {
-                FunctionsLib::updateConfig('lastsettedgalaxypos', $last_galaxy);
-                FunctionsLib::updateConfig('lastsettedsystempos', $last_system);
-                FunctionsLib::updateConfig('lastsettedplanetpos', $last_planet);
+                Functions::updateConfig('lastsettedgalaxypos', $last_galaxy);
+                Functions::updateConfig('lastsettedsystempos', $last_system);
+                Functions::updateConfig('lastsettedplanetpos', $last_planet);
 
                 $this->available_coords = [
                     'galaxy' => $galaxy,

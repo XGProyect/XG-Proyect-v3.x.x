@@ -15,7 +15,7 @@ namespace App\controllers\adm;
 use App\core\BaseController;
 use App\core\enumerators\UserRanksEnumerator as UserRanks;
 use App\libraries\adm\AdministrationLib as Administration;
-use App\libraries\FunctionsLib;
+use App\libraries\Functions;
 
 /**
  * Statistics Class
@@ -63,7 +63,15 @@ class Statistics extends BaseController
 
         // load Language
         parent::loadLang(['adm/global', 'adm/statistics']);
+    }
 
+    /**
+     * Users land here
+     *
+     * @return void
+     */
+    public function index(): void
+    {
         // check if the user is allowed to access
         if (!Administration::authorization(__CLASS__, (int) $this->user['user_authlevel'])) {
             die(Administration::noAccessMessage($this->langs->line('no_permissions')));
@@ -89,7 +97,7 @@ class Statistics extends BaseController
             $data = array_diff($data, [null, false]);
 
             foreach ($data as $option => $value) {
-                FunctionsLib::updateConfig($option, $value);
+                Functions::updateConfig($option, $value);
             }
 
             $this->alert = Administration::saveMessage('ok', $this->langs->line('cs_all_ok_message'));
@@ -126,7 +134,7 @@ class Statistics extends BaseController
     private function getStatisticsSettings(): array
     {
         return array_filter(
-            FunctionsLib::readConfig('', true),
+            Functions::readConfig('', true),
             function ($value, $key) {
                 if ($key == 'stat_admin_level') {
                     $this->user_level = $value;

@@ -17,7 +17,7 @@ use App\core\enumerators\PlanetTypesEnumerator as PlanetTypes;
 use App\core\enumerators\ShipsEnumerator as Ships;
 use App\libraries\FleetsLib;
 use App\libraries\FormatLib;
-use App\libraries\FunctionsLib;
+use App\libraries\Functions;
 use App\libraries\research\Researches;
 
 /**
@@ -71,11 +71,19 @@ class Fleet3 extends BaseController
         // load Language
         parent::loadLang(['game/global', 'game/missions', 'game/fleet']);
 
-        // Check module access
-        FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
-
         // init a new fleets object
         $this->setUpFleets();
+    }
+
+    /**
+     * Users land here
+     *
+     * @return void
+     */
+    public function index(): void
+    {
+        // Check module access
+        Functions::moduleMessage(Functions::isModuleAccesible(self::MODULE_ID));
 
         // build the page
         $this->buildPage();
@@ -421,7 +429,7 @@ class Fleet3 extends BaseController
         sort($missions_set);
 
         if (count($missions_set) <= 0) {
-            FunctionsLib::redirect(self::REDIRECT_TARGET);
+            Functions::redirect(self::REDIRECT_TARGET);
         }
 
         $this->_allowed_missions = $missions_set;
@@ -466,7 +474,7 @@ class Fleet3 extends BaseController
         $data = array_diff($data, [null, false]);
 
         if (is_null($data) or count($data) != 8 or $this->isCurrentPlanet($data)) {
-            FunctionsLib::redirect(self::REDIRECT_TARGET);
+            Functions::redirect(self::REDIRECT_TARGET);
         }
 
         $this->_current_mission = $data['target_mission'];
@@ -481,7 +489,7 @@ class Fleet3 extends BaseController
         );
 
         $fleet = $this->getSessionShips();
-        $Speed_factor = FunctionsLib::fleetSpeedFactor();
+        $Speed_factor = Functions::fleetSpeedFactor();
         $fleet_speed = FleetsLib::fleetMaxSpeed($fleet, 0, $this->user);
 
         $consumption = FleetsLib::fleetConsumption(
@@ -525,7 +533,7 @@ class Fleet3 extends BaseController
             'planet_end' => $data['planet'] ?? $this->planet['planet_planet'],
             'planet_type_end' => $data['planettype'] ?? $this->planet['planet_type'],
             'speed' => $data['speed'] ?? 10,
-            'speedfactor' => FunctionsLib::fleetSpeedFactor(),
+            'speedfactor' => Functions::fleetSpeedFactor(),
         ];
     }
 
@@ -540,7 +548,7 @@ class Fleet3 extends BaseController
             return unserialize(base64_decode(str_rot13($_SESSION['fleet_data']['fleetarray'])));
         }
 
-        FunctionsLib::redirect(self::REDIRECT_TARGET);
+        Functions::redirect(self::REDIRECT_TARGET);
     }
 
     /**
@@ -576,7 +584,7 @@ class Fleet3 extends BaseController
      */
     private function isCurrentPlanet(array $target): bool
     {
-        return FunctionsLib::isCurrentPlanet(
+        return Functions::isCurrentPlanet(
             $this->planet,
             [
                 'planet_galaxy' => $target['galaxy'],

@@ -10,7 +10,7 @@
 namespace App\libraries;
 
 use App\core\enumerators\BuildingsEnumerator as Buildings;
-use App\libraries\FunctionsLib;
+use App\libraries\Functions;
 
 /**
  * Formulas Class
@@ -83,7 +83,7 @@ abstract class Formulas
 
         if ($main) {
             $diameter = '12800';
-            $fields = FunctionsLib::readConfig('initial_fields');
+            $fields = Functions::readConfig('initial_fields');
         }
 
         $return['planet_diameter'] = $diameter;
@@ -333,7 +333,7 @@ abstract class Formulas
      */
     public static function getResearchTime(int $metal_cost, int $cystal_cost, int $total_lab_level, int $expedition_level): float
     {
-        $universe_speed = FunctionsLib::readConfig('game_speed') / 2500;
+        $universe_speed = Functions::readConfig('game_speed') / 2500;
 
         return ($metal_cost + $cystal_cost) / ($universe_speed * 1000 * (1 + $total_lab_level) * (1 + $expedition_level)) * 3600;
     }
@@ -356,7 +356,7 @@ abstract class Formulas
         $reduction = max(4 - ($level + 1) / 2, 1);
         $robotics = 1 + $first_boost;
         $nanite = pow(2, $second_boost);
-        $universe_speed = FunctionsLib::readConfig('game_speed') / 2500;
+        $universe_speed = Functions::readConfig('game_speed') / 2500;
         $without_reduction = [
             Buildings::BUILDING_NANO_FACTORY,
             Buildings::BUILDING_MONDBASIS,

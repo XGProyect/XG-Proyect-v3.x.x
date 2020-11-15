@@ -13,7 +13,7 @@ namespace App\libraries\missions;
 
 use App\libraries\FleetsLib;
 use App\libraries\FormatLib;
-use App\libraries\FunctionsLib;
+use App\libraries\Functions;
 
 /**
  * Expedition Class
@@ -329,7 +329,7 @@ class Expedition extends Missions
      */
     private function expeditionMessage($owner, $message, $time)
     {
-        FunctionsLib::sendMessage(
+        Functions::sendMessage(
             $owner,
             '',
             $time,

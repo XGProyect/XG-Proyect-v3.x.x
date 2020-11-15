@@ -14,7 +14,7 @@ namespace App\libraries\adm;
 use App\core\enumerators\AdminPagesEnumerator as AdminPages;
 use App\core\enumerators\UserRanksEnumerator as UserRanks;
 use App\helpers\ArraysHelper;
-use App\libraries\FunctionsLib as Functions;
+use App\libraries\Functions;
 use JsonException;
 
 /**

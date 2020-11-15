@@ -11,7 +11,7 @@
  */
 use App\core\common;
 use App\libraries\adm\AdministrationLib;
-use App\libraries\FunctionsLib;
+use App\libraries\Functions;
 
 define('IN_ADMIN', true);
 define('XGP_ROOT', realpath(dirname(__DIR__)) . DIRECTORY_SEPARATOR);
@@ -35,7 +35,7 @@ $file_name = XGP_ROOT . ADMIN_PATH . $page . '.php';
 // logout
 if ($page == 'logout') {
     AdministrationLib::closeSession();
-    FunctionsLib::redirect(SYSTEM_ROOT . 'admin.php?page=login');
+    Functions::redirect(SYSTEM_ROOT . 'admin.php?page=login');
 }
 
 if (file_exists($file_name)) {
@@ -43,7 +43,7 @@ if (file_exists($file_name)) {
 
     $class_name = 'App\controllers\adm\\' . ucfirst($page);
 
-    new $class_name();
+    (new $class_name)->index();
 } else {
-    FunctionsLib::redirect(XGP_ROOT . 'admin.php');
+    Functions::redirect(XGP_ROOT . 'admin.php');
 }

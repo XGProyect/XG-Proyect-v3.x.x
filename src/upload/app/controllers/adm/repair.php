@@ -14,7 +14,7 @@ namespace App\controllers\adm;
 use App\core\BaseController;
 use App\libraries\adm\AdministrationLib as Administration;
 use App\libraries\FormatLib;
-use App\libraries\FunctionsLib;
+use App\libraries\Functions;
 
 /**
  * Repair Class
@@ -36,7 +36,15 @@ class Repair extends BaseController
 
         // load Language
         parent::loadLang(['adm/global', 'adm/repair']);
+    }
 
+    /**
+     * Users land here
+     *
+     * @return void
+     */
+    public function index(): void
+    {
         // check if the user is allowed to access
         if (!Administration::authorization(__CLASS__, (int) $this->user['user_authlevel'])) {
             die(Administration::noAccessMessage($this->langs->line('no_permissions')));
@@ -111,7 +119,7 @@ class Repair extends BaseController
 
                 $parse['results'] = $result_rows;
             } else {
-                FunctionsLib::redirect('admin.php?page=repair');
+                Functions::redirect('admin.php?page=repair');
             }
         }
 

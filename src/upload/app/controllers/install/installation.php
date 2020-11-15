@@ -14,7 +14,7 @@ namespace App\controllers\install;
 use App\core\BaseController;
 use App\core\Database;
 use App\helpers\StringsHelper;
-use App\libraries\FunctionsLib as Functions;
+use App\libraries\Functions;
 use App\libraries\PlanetLib;
 
 /**
@@ -57,7 +57,15 @@ class Installation extends BaseController
 
         // load Language
         parent::loadLang(['installation/installation']);
+    }
 
+    /**
+     * Users land here
+     *
+     * @return void
+     */
+    public function index(): void
+    {
         // build the page
         $this->buildPage();
     }

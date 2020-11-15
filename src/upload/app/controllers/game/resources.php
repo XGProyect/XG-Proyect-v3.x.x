@@ -14,7 +14,7 @@ namespace App\controllers\game;
 use App\core\BaseController;
 use App\core\enumerators\PlanetTypesEnumerator;
 use App\libraries\FormatLib;
-use App\libraries\FunctionsLib;
+use App\libraries\Functions;
 use App\libraries\OfficiersLib;
 use App\libraries\ProductionLib;
 
@@ -54,13 +54,22 @@ class Resources extends BaseController
         // check if session is active
         parent::$users->checkSession();
 
-        // Check module access
-        FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
-
         $this->_resource = parent::$objects->getObjects();
         $this->_prod_grid = parent::$objects->getProduction();
         $this->_reslist = parent::$objects->getObjectsList();
+    }
 
+    /**
+     * Users land here
+     *
+     * @return void
+     */
+    public function index(): void
+    {
+        // Check module access
+        Functions::moduleMessage(Functions::isModuleAccesible(self::MODULE_ID));
+
+        // build the page
         $this->buildPage();
     }
 
@@ -73,11 +82,11 @@ class Resources extends BaseController
     {
         $parse = $this->langs->language;
 
-        $game_metal_basic_income = FunctionsLib::readConfig('metal_basic_income');
-        $game_crystal_basic_income = FunctionsLib::readConfig('crystal_basic_income');
-        $game_deuterium_basic_income = FunctionsLib::readConfig('deuterium_basic_income');
-        $game_energy_basic_income = FunctionsLib::readConfig('energy_basic_income');
-        $game_resource_multiplier = FunctionsLib::readConfig('resource_multiplier');
+        $game_metal_basic_income = Functions::readConfig('metal_basic_income');
+        $game_crystal_basic_income = Functions::readConfig('crystal_basic_income');
+        $game_deuterium_basic_income = Functions::readConfig('deuterium_basic_income');
+        $game_energy_basic_income = Functions::readConfig('energy_basic_income');
+        $game_resource_multiplier = Functions::readConfig('resource_multiplier');
 
         if ($this->user['preference_vacation_mode'] > 0 or $this->planet['planet_type'] == PlanetTypesEnumerator::MOON) {
             $game_metal_basic_income = 0;
@@ -207,7 +216,7 @@ class Resources extends BaseController
                 $FieldName = 'planet_' . $Field . '_percent';
                 if (isset($this->planet[$FieldName])) {
                     if (!in_array($Value, $ValidList['percent'])) {
-                        FunctionsLib::redirect('game.php?page=resourceSettings');
+                        Functions::redirect('game.php?page=resourceSettings');
                     }
 
                     $Value = $Value / 10;
@@ -218,7 +227,7 @@ class Resources extends BaseController
 
             $this->Resources_Model->updateCurrentPlanet($this->planet, $SubQry);
 
-            FunctionsLib::redirect('game.php?page=resourceSettings');
+            Functions::redirect('game.php?page=resourceSettings');
         }
 
         parent::$page->display(

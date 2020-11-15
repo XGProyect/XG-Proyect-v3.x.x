@@ -4,7 +4,7 @@ namespace App\core;
 
 use App\core\ErrorHandler;
 use App\core\Sessions;
-use App\libraries\FunctionsLib;
+use App\libraries\Functions;
 use App\libraries\SecurePageLib;
 use App\libraries\UpdatesLibrary;
 use AutoLoader;
@@ -121,7 +121,7 @@ class Common
             $this->initLanguage();
 
             if (!$this->is_installed && !defined('IN_INSTALL')) {
-                FunctionsLib::redirect(SYSTEM_ROOT . 'install/');
+                Functions::redirect(SYSTEM_ROOT . 'install/');
             }
         } catch (Exception $e) {
             die('Error #0001' . $e->getMessage());
@@ -141,7 +141,7 @@ class Common
             $set = true;
         }
 
-        define('DEFAULT_LANG', FunctionsLib::getCurrentLanguage($set));
+        define('DEFAULT_LANG', Functions::getCurrentLanguage($set));
     }
 
     /**
@@ -151,7 +151,7 @@ class Common
      */
     private function setSystemTimezone(): void
     {
-        date_default_timezone_set(FunctionsLib::readConfig('date_time_zone'));
+        date_default_timezone_set(Functions::readConfig('date_time_zone'));
     }
 
     /**
@@ -187,8 +187,8 @@ class Common
      */
     private function setUpdates(): void
     {
-        define('SHIP_DEBRIS_FACTOR', FunctionsLib::readConfig('fleet_cdr') / 100);
-        define('DEFENSE_DEBRIS_FACTOR', FunctionsLib::readConfig('defs_cdr') / 100);
+        define('SHIP_DEBRIS_FACTOR', Functions::readConfig('fleet_cdr') / 100);
+        define('DEFENSE_DEBRIS_FACTOR', Functions::readConfig('defs_cdr') / 100);
 
         // Several updates
         new UpdatesLibrary;

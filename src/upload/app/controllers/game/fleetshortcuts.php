@@ -12,7 +12,7 @@
 namespace App\controllers\game;
 
 use App\core\BaseController;
-use App\libraries\FunctionsLib;
+use App\libraries\Functions;
 use App\libraries\users\Shortcuts;
 
 /**
@@ -66,11 +66,19 @@ class Fleetshortcuts extends BaseController
         // load Language
         parent::loadLang(['game/global', 'game/fleet']);
 
-        // Check module access
-        FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
-
         // init a new shortcut object
         $this->setUpShortcuts();
+    }
+
+    /**
+     * Users land here
+     *
+     * @return void
+     */
+    public function index(): void
+    {
+        // Check module access
+        Functions::moduleMessage(Functions::isModuleAccesible(self::MODULE_ID));
 
         // time to do something
         $this->runAction();
@@ -245,7 +253,7 @@ class Fleetshortcuts extends BaseController
         $shortcut_id = $this->_clean_data['action'];
 
         if ($shortcut_id === false) {
-            FunctionsLib::redirect(self::REDIRECT_TARGET);
+            Functions::redirect(self::REDIRECT_TARGET);
         }
 
         $shortcut = $this->_shortcuts->getById($shortcut_id);
@@ -333,7 +341,7 @@ class Fleetshortcuts extends BaseController
                 );
             }
 
-            FunctionsLib::redirect(self::REDIRECT_TARGET);
+            Functions::redirect(self::REDIRECT_TARGET);
         }
     }
 }

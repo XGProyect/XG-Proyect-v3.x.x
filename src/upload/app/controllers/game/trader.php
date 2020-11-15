@@ -14,7 +14,7 @@ namespace App\controllers\game;
 
 use App\core\BaseController;
 use App\libraries\FormatLib as Format;
-use App\libraries\FunctionsLib as Functions;
+use App\libraries\Functions;
 use App\libraries\game\ResourceMarket;
 
 /**
@@ -73,11 +73,19 @@ class Trader extends BaseController
         // load Language
         parent::loadLang(['game/global', 'game/trader']);
 
-        // Check module access
-        Functions::moduleMessage(Functions::isModuleAccesible(self::MODULE_ID));
-
         // init a new trader object
         $this->setUpTrader();
+    }
+
+    /**
+     * Users land here
+     *
+     * @return void
+     */
+    public function index(): void
+    {
+        // Check module access
+        Functions::moduleMessage(Functions::isModuleAccesible(self::MODULE_ID));
 
         // time to do something
         $this->runAction();

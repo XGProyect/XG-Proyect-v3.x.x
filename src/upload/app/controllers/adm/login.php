@@ -14,7 +14,7 @@ namespace App\controllers\adm;
 
 use App\core\BaseController;
 use App\libraries\adm\AdministrationLib as Administration;
-use App\libraries\FunctionsLib;
+use App\libraries\Functions;
 
 /**
  * Login Class
@@ -36,7 +36,15 @@ class Login extends BaseController
 
         // load Language
         parent::loadLang(['adm/login']);
+    }
 
+    /**
+     * Users land here
+     *
+     * @return void
+     */
+    public function index(): void
+    {
         // time to do something
         $this->runAction();
 
@@ -69,12 +77,12 @@ class Login extends BaseController
                     }
 
                     // Redirect to panel home
-                    FunctionsLib::redirect(SYSTEM_ROOT . 'admin.php?page=' . $redirect);
+                    Functions::redirect(SYSTEM_ROOT . 'admin.php?page=' . $redirect);
                 }
             }
 
             // If login fails
-            FunctionsLib::redirect(SYSTEM_ROOT . 'admin.php?page=login&error=1');
+            Functions::redirect(SYSTEM_ROOT . 'admin.php?page=login&error=1');
         }
     }
 

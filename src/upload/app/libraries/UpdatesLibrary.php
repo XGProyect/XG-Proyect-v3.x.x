@@ -18,7 +18,7 @@ use App\core\XGPCore;
 use App\helpers\UrlHelper;
 use App\libraries\DevelopmentsLib as Developments;
 use App\libraries\FormatLib as Format;
-use App\libraries\FunctionsLib as Functions;
+use App\libraries\Functions;
 use App\libraries\MissionControlLibrary;
 use App\libraries\OfficiersLib as Officiers;
 use App\libraries\ProductionLib as Production;

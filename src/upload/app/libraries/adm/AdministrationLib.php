@@ -15,7 +15,7 @@ use App\core\Language;
 use App\core\Template;
 use App\core\XGPCore;
 use App\libraries\adm\Permissions;
-use App\libraries\FunctionsLib;
+use App\libraries\Functions;
 
 /**
  * AdministrationLib Class
@@ -86,7 +86,7 @@ class AdministrationLib extends XGPCore
     public static function authorization(string $module, int $user_level)
     {
         $cleaned_module_name = strtolower(substr(strrchr($module, "\\"), 1));
-        $permissions = new Permissions(FunctionsLib::readConfig('admin_permissions'));
+        $permissions = new Permissions(Functions::readConfig('admin_permissions'));
 
         return $permissions->isAccessAllowed($cleaned_module_name, $user_level);
     }
@@ -168,7 +168,7 @@ class AdministrationLib extends XGPCore
 
             // admin login
             $_SESSION['admin_id'] = $admin_id;
-            $_SESSION['admin_password'] = FunctionsLib::hash($password . '-' . SECRETWORD);
+            $_SESSION['admin_password'] = Functions::hash($password . '-' . SECRETWORD);
 
             return true;
         } else {
@@ -187,7 +187,7 @@ class AdministrationLib extends XGPCore
             $page = filter_input(INPUT_GET, 'page', FILTER_SANITIZE_STRING);
 
             if ($page != 'login') {
-                FunctionsLib::redirect(SYSTEM_ROOT . 'admin.php?page=login&redirect=' . $page);
+                Functions::redirect(SYSTEM_ROOT . 'admin.php?page=login&redirect=' . $page);
             }
         }
     }
@@ -220,11 +220,11 @@ class AdministrationLib extends XGPCore
      */
     public static function updateRequired()
     {
-        if (SYSTEM_VERSION != FunctionsLib::readConfig('version')) {
+        if (SYSTEM_VERSION != Functions::readConfig('version')) {
             $exclude_pages = ['', 'home', 'update', 'logout'];
 
             if (isset($_GET['page']) && !in_array($_GET['page'], $exclude_pages)) {
-                FunctionsLib::redirect(XGP_ROOT . 'admin.php?page=update');
+                Functions::redirect(XGP_ROOT . 'admin.php?page=update');
             }
         }
     }

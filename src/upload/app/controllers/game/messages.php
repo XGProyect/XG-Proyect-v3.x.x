@@ -16,7 +16,7 @@ use App\core\enumerators\MessagesEnumerator;
 use App\core\enumerators\SwitchIntEnumerator as SwitchInt;
 use App\helpers\ArraysHelper;
 use App\helpers\UrlHelper;
-use App\libraries\FunctionsLib;
+use App\libraries\Functions;
 use App\libraries\OfficiersLib;
 
 /**
@@ -53,9 +53,17 @@ class Messages extends BaseController
 
         // load Language
         parent::loadLang(['game/messages']);
+    }
 
+    /**
+     * Users land here
+     *
+     * @return void
+     */
+    public function index(): void
+    {
         // Check module access
-        FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
+        Functions::moduleMessage(Functions::isModuleAccesible(self::MODULE_ID));
 
         // time to do something
         $this->runAction();
@@ -198,7 +206,7 @@ class Messages extends BaseController
                 $messages_list[] = [
                     'message_id' => $message['message_id'],
                     'message_time' => date(
-                        strtr(FunctionsLib::readConfig('date_format_extended'), ['.Y' => '']),
+                        strtr(Functions::readConfig('date_format_extended'), ['.Y' => '']),
                         $message['message_time']
                     ),
                     'message_from' => $message['message_from'],
@@ -223,7 +231,7 @@ class Messages extends BaseController
         if ($from > 0) {
             return UrlHelper::setUrl(
                 'game.php?page=chat&playerId=' . $from,
-                FunctionsLib::setImage(DPATH . '/img/m.gif', $this->langs->line('mg_send_message')),
+                Functions::setImage(DPATH . '/img/m.gif', $this->langs->line('mg_send_message')),
                 $this->langs->line('mg_send_message')
             );
         }
@@ -470,6 +478,6 @@ class Messages extends BaseController
                 break;
         }
 
-        FunctionsLib::redirect('game.php?' . strtr($_SERVER['QUERY_STRING'], ['&amp;' => '&']));
+        Functions::redirect('game.php?' . strtr($_SERVER['QUERY_STRING'], ['&amp;' => '&']));
     }
 }

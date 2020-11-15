@@ -17,7 +17,7 @@ use App\core\enumerators\ShipsEnumerator as Ships;
 use App\libraries\DevelopmentsLib;
 use App\libraries\FormatLib;
 use App\libraries\Formulas;
-use App\libraries\FunctionsLib;
+use App\libraries\Functions;
 use Exception;
 
 /**
@@ -83,11 +83,19 @@ class Shipyard extends BaseController
         // load Language
         parent::loadLang(['game/global', 'game/shipyard', 'game/defenses', 'game/ships']);
 
-        // Check module access
-        FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
-
         // init a new building object with the current building queue
         $this->setUpShipyard();
+    }
+
+    /**
+     * Users land here
+     *
+     * @return void
+     */
+    public function index(): void
+    {
+        // Check module access
+        Functions::moduleMessage(Functions::isModuleAccesible(self::MODULE_ID));
 
         // time to do something
         $this->runAction();
@@ -165,7 +173,7 @@ class Shipyard extends BaseController
                 );
             }
 
-            FunctionsLib::redirect('game.php?page=' . $this->getCurrentPage());
+            Functions::redirect('game.php?page=' . $this->getCurrentPage());
         }
     }
 
@@ -509,7 +517,7 @@ class Shipyard extends BaseController
     private function showShipyardRequiredMessage()
     {
         if ($this->planet[$this->getObjects()->getObjects(21)] == 0) {
-            FunctionsLib::message($this->langs->line('sy_shipyard_required'), '', '', true);
+            Functions::message($this->langs->line('sy_shipyard_required'), '', '', true);
         }
     }
 

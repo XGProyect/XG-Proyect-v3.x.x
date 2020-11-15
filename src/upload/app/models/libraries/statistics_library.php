@@ -12,7 +12,7 @@
 namespace App\models\libraries;
 
 use App\core\Model;
-use App\libraries\FunctionsLib;
+use App\libraries\Functions;
 
 /**
  * Statistics_library Class
@@ -95,7 +95,7 @@ class Statistics_library extends Model
                 ) AS total_points
             FROM " . USERS_STATISTICS . " us
             INNER JOIN " . USERS . " AS u
-                ON us.`user_statistic_user_id` = u.`user_id` AND u.`user_authlevel` <= " . FunctionsLib::readConfig('stat_admin_level') . "
+                ON us.`user_statistic_user_id` = u.`user_id` AND u.`user_authlevel` <= " . Functions::readConfig('stat_admin_level') . "
             ORDER BY us.`user_statistic_user_id` ASC;"
         );
     }
@@ -121,7 +121,7 @@ class Statistics_library extends Model
             SUM(us.user_statistic_total_points) AS total_points
             FROM " . ALLIANCE . " AS a
             INNER JOIN " . USERS . " AS u
-                ON a.`alliance_id` = u.`user_ally_id` AND u.`user_authlevel` <= " . FunctionsLib::readConfig('stat_admin_level') . "
+                ON a.`alliance_id` = u.`user_ally_id` AND u.`user_authlevel` <= " . Functions::readConfig('stat_admin_level') . "
                 INNER JOIN " . USERS_STATISTICS . " AS us ON us.`user_statistic_user_id` = u.`user_id`
                 INNER JOIN " . ALLIANCE_STATISTICS . " AS ass ON ass.`alliance_statistic_alliance_id` = a.`alliance_id`
             GROUP BY alliance_id"

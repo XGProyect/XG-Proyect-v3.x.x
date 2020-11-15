@@ -12,7 +12,7 @@
 namespace App\controllers\game;
 
 use App\core\BaseController;
-use App\libraries\FunctionsLib;
+use App\libraries\Functions;
 use App\libraries\TimingLibrary as Timing;
 
 /**
@@ -37,9 +37,17 @@ class Changelog extends BaseController
 
         // load Language
         parent::loadLang(['game/changelog']);
+    }
 
+    /**
+     * Users land here
+     *
+     * @return void
+     */
+    public function index(): void
+    {
         // Check module access
-        FunctionsLib::moduleMessage(FunctionsLib::isModuleAccesible(self::MODULE_ID));
+        Functions::moduleMessage(Functions::isModuleAccesible(self::MODULE_ID));
 
         // build the page
         $this->buildPage();
