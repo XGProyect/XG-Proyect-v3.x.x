@@ -78,7 +78,7 @@
                         </td>
                         <td style="margin: 0 auto;" width="35" class="header">
                             <a href="game.php?page=officier" accesskey="o">
-                                <img style="border:0;" src="{dpath}premium/ingenieur_ikon{img_premium_officier_engineer}.gif" width="32" height="32" alt="{tn_engineer}" onmouseover="return overlib('<table width=310px><tr><td class=c>{of_hire_admiral}</td></tr><tr><th style=text-align:left>{add_premium_officier_engineer}</th></tr></table>');" onmouseout="return nd();">
+                                <img style="border:0;" src="{dpath}premium/ingenieur_ikon{img_premium_officier_engineer}.gif" width="32" height="32" alt="{tn_engineer}" onmouseover="return overlib('<table width=310px><tr><td class=c>{of_hire_engineer}</td></tr><tr><th style=text-align:left>{add_premium_officier_engineer}</th></tr></table>');" onmouseout="return nd();">
                             </a>
                         </td>
                         <td style="margin: 0 auto;" width="35" class="header">
