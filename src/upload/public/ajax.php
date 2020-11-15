@@ -10,12 +10,12 @@
  * @version  3.1.0
  */
 
-use Application\core\Common;
+use App\core\Common;
 
 define('IN_LOGIN', true);
 define('XGP_ROOT', realpath(dirname(__DIR__)) . DIRECTORY_SEPARATOR);
 
-require XGP_ROOT . 'application' . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'common.php';
+require XGP_ROOT . 'app' . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'common.php';
 
 $system = new Common;
 $system->bootUp('home');
@@ -26,10 +26,8 @@ if (isset($_GET['content'])) {
     if (file_exists($file_name)) {
         include $file_name;
 
-        $class_name = 'application\controllers\ajax\\' . ucfirst($_GET['content']);
+        $class_name = 'App\controllers\ajax\\' . ucfirst($_GET['content']);
 
-        new $class_name();
+        (new $class_name())->index();
     }
 }
-
-/* end of ajax.php */

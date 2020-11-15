@@ -1,0 +1,36 @@
+.status_abbr_admin {
+    color: #f48406;
+}
+
+.status_abbr_strong {
+    color: #f00;
+}
+
+.status_abbr_noob {
+    color: lime;
+}
+
+.status_abbr_outlaw {
+    color: #f3f;
+}
+
+.status_abbr_vacation {
+    color: aqua;
+}
+
+.status_abbr_banned {
+    color: #fff;
+    text-decoration: line-through;
+}
+
+.status_abbr_inactive {
+    color: #6e6e6e;
+}
+
+.status_abbr_longinactive {
+    color: #4f4f4f;
+}
+
+.status_abbr_honorableTarget {
+    color: #ff6;
+}

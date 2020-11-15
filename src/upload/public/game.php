@@ -9,22 +9,20 @@
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-use application\core\common;
-use application\libraries\FunctionsLib;
+use App\core\common;
+use App\libraries\Functions;
 
 define('XGP_ROOT', realpath(dirname(__DIR__)) . DIRECTORY_SEPARATOR);
 
-require XGP_ROOT . 'application' . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'common.php';
+require XGP_ROOT . 'app' . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'common.php';
 
 $system = new Common;
 $system->bootUp('game');
 
-$system->getHooks()->call_hook('before_page');
-
 $page = filter_input(INPUT_GET, 'page');
 
 if (is_null($page)) {
-    FunctionsLib::redirect('game.php?page=overview');
+    Functions::redirect('game.php?page=overview');
 }
 
 // kind of a mapping
@@ -48,25 +46,18 @@ if (isset($page)) {
     // logout
     if ($page == 'logout') {
         $system->getSession()->delete();
-        FunctionsLib::redirect(SYSTEM_ROOT);
+        Functions::redirect(SYSTEM_ROOT);
     }
 
     // other pages
     if (file_exists($file_name)) {
         include $file_name;
 
-        $class_name = 'application\controllers\game\\' . ucfirst($page);
+        $class_name = 'App\controllers\game\\' . ucfirst($page);
 
-        new $class_name();
+        (new $class_name)->index();
     }
 }
 
-// call hooks
-if (!$system->getHooks()->call_hook('new_page')) {
-    FunctionsLib::redirect('game.php?page=overview');
-}
-
 // any other case
-FunctionsLib::redirect('game.php?page=overview');
-
-/* end of game.php */
+Functions::redirect('game.php?page=overview');

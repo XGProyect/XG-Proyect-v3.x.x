@@ -1,19 +1,17 @@
 <?php
-declare(strict_types = 1);
+declare (strict_types = 1);
 
+use App\libraries\buildings\Queue;
+use App\libraries\buildings\QueueElements;
 use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\Constraint\IsType as PHPUnit_IsType;
-use application\libraries\buildings\Queue;
-use application\libraries\buildings\QueueElements;
 
 /**
  * @covers Queue
  */
 class QueueTest extends TestCase
 {
-
     /**
-     * @covers application\libraries\buildings\Queue::addElementToQueue
+     * @covers App\libraries\buildings\Queue::addElementToQueue
      */
     public function testAddOneElementToQueue(): void
     {
@@ -35,7 +33,7 @@ class QueueTest extends TestCase
     }
 
     /**
-     * @covers application\libraries\buildings\Queue::addElementToQueue
+     * @covers App\libraries\buildings\Queue::addElementToQueue
      */
     public function testAddManyElementToQueue(): void
     {
@@ -81,7 +79,7 @@ class QueueTest extends TestCase
     }
 
     /**
-     * @covers application\libraries\buildings\Queue::removeElementFromQueue
+     * @covers App\libraries\buildings\Queue::removeElementFromQueue
      */
     public function testRemoveElementFromQueueWithOneElement(): void
     {
@@ -105,7 +103,7 @@ class QueueTest extends TestCase
     }
 
     /**
-     * @covers application\libraries\buildings\Queue::removeElementFromQueue
+     * @covers App\libraries\buildings\Queue::removeElementFromQueue
      */
     public function testRemoveLastElementFromQueueWithTwoElement(): void
     {
@@ -140,7 +138,7 @@ class QueueTest extends TestCase
     }
 
     /**
-     * @covers application\libraries\buildings\Queue::removeElementFromQueue
+     * @covers App\libraries\buildings\Queue::removeElementFromQueue
      */
     public function testRemoveFirstElementFromQueueWithTwoElement(): void
     {
@@ -175,7 +173,7 @@ class QueueTest extends TestCase
     }
 
     /**
-     * @covers application\libraries\buildings\Queue::removeElementFromQueue
+     * @covers App\libraries\buildings\Queue::removeElementFromQueue
      */
     public function testRemoveMiddleElementFromQueueWithThreeElement(): void
     {
@@ -220,7 +218,7 @@ class QueueTest extends TestCase
     }
 
     /**
-     * @covers application\libraries\buildings\Queue::removeElementFromQueue
+     * @covers App\libraries\buildings\Queue::removeElementFromQueue
      */
     public function testRemoveElementFromQueueInvalidParameters(): void
     {
@@ -265,7 +263,7 @@ class QueueTest extends TestCase
     }
 
     /**
-     * @covers application\libraries\buildings\Queue::getElementFromQueueAsArray
+     * @covers App\libraries\buildings\Queue::getElementFromQueueAsArray
      */
     public function testGetElementFromQueueAsArray(): void
     {
@@ -304,17 +302,17 @@ class QueueTest extends TestCase
 
         $this->assertEquals(
             $object->getElementFromQueueAsArray(1), [
-            'building' => 2,
-            'build_level' => 5,
-            'build_time' => 90,
-            'build_end_time' => $current_time,
-            'build_mode' => 'destroy',
+                'building' => 2,
+                'build_level' => 5,
+                'build_time' => 90,
+                'build_end_time' => $current_time,
+                'build_mode' => 'destroy',
             ]
         );
     }
 
     /**
-     * @covers application\libraries\buildings\Queue::returnQueueAsString
+     * @covers App\libraries\buildings\Queue::returnQueueAsString
      */
     public function testReturnQueueAsString(): void
     {
@@ -332,8 +330,8 @@ class QueueTest extends TestCase
         $object->addElementToQueue($queue_elements);
 
         // Remove the following lines when you implement this test.
-        $this->assertInternalType(
-            PHPUnit_IsType::TYPE_STRING, $object->returnQueueAsString()
+        $this->assertIsString(
+            $object->returnQueueAsString()
         );
 
         $this->assertEquals(
@@ -342,7 +340,7 @@ class QueueTest extends TestCase
     }
 
     /**
-     * @covers application\libraries\buildings\Queue::returnQueueAsArray
+     * @covers App\libraries\buildings\Queue::returnQueueAsArray
      */
     public function testReturnQueueAsArray(): void
     {
@@ -360,26 +358,26 @@ class QueueTest extends TestCase
         $object->addElementToQueue($queue_elements);
 
         // Remove the following lines when you implement this test.
-        $this->assertInternalType(
-            PHPUnit_IsType::TYPE_ARRAY, $object->returnQueueAsArray()
+        $this->assertIsArray(
+            $object->returnQueueAsArray()
         );
 
         $this->assertEquals(
             $object->returnQueueAsArray(), [
-            0 =>
-            [
-                'building' => 1,
-                'build_level' => 1,
-                'build_time' => 20,
-                'build_end_time' => $current_time,
-                'build_mode' => 'build'
-            ]
+                0 =>
+                [
+                    'building' => 1,
+                    'build_level' => 1,
+                    'build_time' => 20,
+                    'build_end_time' => $current_time,
+                    'build_mode' => 'build',
+                ],
             ]
         );
     }
 
     /**
-     * @covers application\libraries\buildings\Queue::countQueueElements
+     * @covers App\libraries\buildings\Queue::countQueueElements
      */
     public function testCountQueueElements(): void
     {
@@ -417,8 +415,8 @@ class QueueTest extends TestCase
         $object->addElementToQueue($queue_elements);
 
         // Remove the following lines when you implement this test.
-        $this->assertInternalType(
-            PHPUnit_IsType::TYPE_ARRAY, $object->returnQueueAsArray()
+        $this->assertIsArray(
+            $object->returnQueueAsArray()
         );
 
         $this->assertEquals(

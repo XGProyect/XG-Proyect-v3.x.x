@@ -4,9 +4,9 @@ function setUniID(id) {
 
 function setUniUrl(url)
 {
-    jQuery("#getPassword").attr("href", "http://"+url+"/game/reg/mail.php");
-    jQuery("#pwLost").attr("href","http://"+url+"/game/reg/mail.php");
-    jQuery("#loginForm").attr("action", "http://"+url+"/game/reg/login2.php");
+    jQuery("#getPassword").attr("href", "//"+url+"/game/reg/mail.php");
+    jQuery("#pwLost").attr("href","//"+url+"/game/reg/mail.php");
+    jQuery("#loginForm").attr("action", "//"+url+"/game/reg/login2.php");
 }
 
 function changeAction(type,formular)
@@ -15,15 +15,15 @@ function changeAction(type,formular)
 
     if(type == "login")
     {
-        document.forms[formular].action = "http://"+uniUrl+"/game/reg/login2.php";
+        document.forms[formular].action = "//"+uniUrl+"/game/reg/login2.php";
     }
     else if(type == "getpw")
     {
-        document.forms[formular].action = "http://"+uniUrl+"/index.php?page=mail";
+        document.forms[formular].action = "//"+uniUrl+"/index.php?page=mail";
     }
     else if(type == "register")
     {
-        document.forms[formular].action = "http://"+uniUrl+"/index.php?page=register";
+        document.forms[formular].action = "//"+uniUrl+"/index.php?page=register";
 
     }
 }

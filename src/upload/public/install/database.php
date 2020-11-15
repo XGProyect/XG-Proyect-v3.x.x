@@ -42,7 +42,6 @@ $tables['alliance'] = "CREATE TABLE `" . ALLIANCE . "` (
 `alliance_image` varchar(255) DEFAULT NULL,
 `alliance_request` text,
 `alliance_request_notallow` tinyint(4) NOT NULL DEFAULT '0',
-`alliance_owner_range` varchar(32) DEFAULT NULL,
 `alliance_ranks` text,
 PRIMARY KEY (`alliance_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;";
@@ -268,7 +267,14 @@ $tables['options_insert'] = "INSERT INTO `" . OPTIONS . "` (`option_name`, `opti
 ('merchant_metal_multiplier', '3'),
 ('merchant_crystal_multiplier', '2'),
 ('merchant_deuterium_multiplier', '1'),
-('registration_dark_matter', '0');";
+('registration_dark_matter', '0'),
+('mailing_protocol', 'mail'),
+('mailing_smtp_host', ''),
+('mailing_smtp_user', ''),
+('mailing_smtp_pass', ''),
+('mailing_smtp_port', '25'),
+('mailing_smtp_timeout', '5'),
+('mailing_smtp_crypto', '');";
 
 $tables['planets'] = "CREATE TABLE `" . PLANETS . "` (
 `planet_id` bigint(11) NOT NULL AUTO_INCREMENT,
@@ -447,5 +453,3 @@ $tables['user_statistics'] = "CREATE TABLE `" . USERS_STATISTICS . "` (
 `user_statistic_update_time` int(11) NOT NULL DEFAULT '0',
 PRIMARY KEY (`user_statistic_user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
-
-/* end of database.php */
