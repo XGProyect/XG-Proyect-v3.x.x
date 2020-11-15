@@ -1,15 +1,4 @@
-<?php
-/**
- * Installation Controller
- *
- * @category Controllers
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
- */
-namespace App\controllers\install;
+<?php namespace App\controllers\install;
 
 use App\core\BaseController;
 use App\core\Database;
@@ -25,23 +14,23 @@ class Installation extends BaseController
     /**
      * @var mixed
      */
-    private $host;
+    private $db_host;
     /**
      * @var mixed
      */
-    private $name;
+    private $db_name;
     /**
      * @var mixed
      */
-    private $user;
+    private $db_user;
     /**
      * @var mixed
      */
-    private $password;
+    private $db_password;
     /**
      * @var mixed
      */
-    private $prefix;
+    private $db_prefix;
 
     /**
      * Constructor
@@ -115,11 +104,11 @@ class Installation extends BaseController
 
         switch ((isset($_POST['page']) ? $_POST['page'] : '')) {
             case 'step1':
-                $this->host = isset($_POST['host']) ? $_POST['host'] : null;
-                $this->user = isset($_POST['user']) ? $_POST['user'] : null;
-                $this->password = isset($_POST['password']) ? $_POST['password'] : null;
-                $this->name = isset($_POST['db']) ? $_POST['db'] : null;
-                $this->prefix = isset($_POST['prefix']) ? $_POST['prefix'] : null;
+                $this->db_host = isset($_POST['host']) ? $_POST['host'] : null;
+                $this->db_user = isset($_POST['user']) ? $_POST['user'] : null;
+                $this->db_password = isset($_POST['password']) ? $_POST['password'] : null;
+                $this->db_name = isset($_POST['db']) ? $_POST['db'] : null;
+                $this->db_prefix = isset($_POST['prefix']) ? $_POST['prefix'] : null;
 
                 if (!$this->validateDbData()) {
                     $alerts = $this->langs->line('ins_empty_fields_error');
@@ -146,10 +135,10 @@ class Installation extends BaseController
                 }
 
                 $parse['alert'] = $this->saveMessage($alerts, 'warning');
-                $parse['v_host'] = $this->host;
-                $parse['v_db'] = $this->name;
-                $parse['v_user'] = $this->user;
-                $parse['v_prefix'] = $this->prefix;
+                $parse['v_host'] = $this->db_host;
+                $parse['v_db'] = $this->db_name;
+                $parse['v_user'] = $this->db_user;
+                $parse['v_prefix'] = $this->db_prefix;
 
                 $current_page = $this->getTemplate()->set(
                     'install/in_database_view', $parse
@@ -413,7 +402,7 @@ class Installation extends BaseController
      */
     private function tryConnection()
     {
-        return $this->Installation_Model->tryConnection($this->host, $this->user, $this->password);
+        return $this->Installation_Model->tryConnection($this->db_host, $this->db_user, $this->db_password);
     }
 
     /**
@@ -423,7 +412,7 @@ class Installation extends BaseController
      */
     private function tryDatabase()
     {
-        return $this->Installation_Model->tryDatabase($this->name);
+        return $this->Installation_Model->tryDatabase($this->db_name);
     }
 
     /**
@@ -440,11 +429,11 @@ class Installation extends BaseController
         }
 
         $data = "<?php\n";
-        $data .= "defined('DB_HOST') ? null : define('DB_HOST', '" . $this->host . "');\n";
-        $data .= "defined('DB_USER') ? null : define('DB_USER', '" . $this->user . "');\n";
-        $data .= "defined('DB_PASS') ? null : define('DB_PASS', '" . $this->password . "');\n";
-        $data .= "defined('DB_NAME') ? null : define('DB_NAME', '" . $this->name . "');\n";
-        $data .= "defined('DB_PREFIX') ? null : define('DB_PREFIX', '" . $this->prefix . "');\n";
+        $data .= "defined('DB_HOST') ? null : define('DB_HOST', '" . $this->db_host . "');\n";
+        $data .= "defined('DB_USER') ? null : define('DB_USER', '" . $this->db_user . "');\n";
+        $data .= "defined('DB_PASS') ? null : define('DB_PASS', '" . $this->db_password . "');\n";
+        $data .= "defined('DB_NAME') ? null : define('DB_NAME', '" . $this->db_name . "');\n";
+        $data .= "defined('DB_PREFIX') ? null : define('DB_PREFIX', '" . $this->db_prefix . "');\n";
         $data .= "defined('SECRETWORD') ? null : define('SECRETWORD', 'xgp-" . StringsHelper::randomString(16) . "');\n";
         $data .= "?>";
 
@@ -557,7 +546,7 @@ class Installation extends BaseController
      */
     private function validateDbData()
     {
-        return (!empty($this->host) && !empty($this->name) && !empty($this->user) && !empty($this->prefix));
+        return (!empty($this->db_host) && !empty($this->db_name) && !empty($this->db_user) && !empty($this->db_prefix));
     }
 
     /**
