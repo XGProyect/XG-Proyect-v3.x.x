@@ -73,10 +73,9 @@ class ProductionLib
     public static function productionAmount($production, $boost, $mult = 0, $is_energy = false)
     {
         if ($is_energy) {
-            return floor($production * $boost);
-        } else {
-            return floor($production * $mult * $boost);
+            return ceil($production * $boost);
         }
+        return floor($production * $mult * $boost);
     }
 
     /**
