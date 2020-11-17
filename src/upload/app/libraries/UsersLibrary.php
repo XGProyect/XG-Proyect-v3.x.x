@@ -244,6 +244,10 @@ class UsersLibrary
         }
 
         if ($user_row['user_banned'] > 0) {
+            // Store new session data
+            // before destroying Database object
+            session_write_close();
+
             $core = new Language();
             $ci_lang = $core->loadLang('game/global', true);
 
