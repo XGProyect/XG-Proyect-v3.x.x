@@ -243,7 +243,11 @@ class UsersLibrary
             Functions::redirect(SYSTEM_ROOT);
         }
 
-        if ($user_row['user_banned'] > 0) {
+        if ($user_row['user_banned'] > 0 && !defined('IN_LOGIN')) {
+            // Store new session data
+            // before destroying Database object
+            session_write_close();
+
             $core = new Language();
             $ci_lang = $core->loadLang('game/global', true);
 
