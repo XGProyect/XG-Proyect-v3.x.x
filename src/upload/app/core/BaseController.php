@@ -75,6 +75,54 @@ abstract class BaseController
     }
 
     /**
+     * Will be removed
+     *
+     * @deprecated since 3.2.0 will be removed on 4.0.0
+     *
+     * @return array
+     */
+    protected function getUserData(): array
+    {
+        return $this->user;
+    }
+
+    /**
+     * Will be removed
+     *
+     * @deprecated since 3.2.0 will be removed on 4.0.0
+     *
+     * @return array
+     */
+    protected function getPlanetData(): array
+    {
+        return $this->planet;
+    }
+
+    /**
+     * Will be removed
+     *
+     * @deprecated since 3.2.0 will be removed on 4.0.0
+     *
+     * @return array
+     */
+    protected function getTemplate(): array
+    {
+        return $this->template;
+    }
+
+    /**
+     * Will be removed
+     *
+     * @deprecated since 3.2.0 will be removed on 4.0.0
+     *
+     * @return array
+     */
+    protected function getObjects(): array
+    {
+        return $this->objects;
+    }
+
+    /**
      * Check if the server is open
      *
      * @return void
