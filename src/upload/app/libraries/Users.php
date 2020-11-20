@@ -1,12 +1,26 @@
-<?php namespace App\libraries;
+<?php
+/**
+ * XG Proyect
+ *
+ * Open-source OGame Clon
+ *
+ * This content is released under the GPL-3.0 License
+ *
+ * Copyright (c) 2008-2020 XG Proyect
+ *
+ * @package    XG Proyect
+ * @author     XG Proyect Team
+ * @copyright  2008-2020 XG Proyect
+ * @license    https://www.gnu.org/licenses/gpl-3.0.en.html GPL-3.0 License
+ * @link       https://github.com/XGProyect/
+ * @since      Version 3.0.0
+ */
+namespace App\libraries;
 
 use App\core\enumerators\AllianceRanksEnumerator as AllianceRanks;
 use App\core\enumerators\SwitchIntEnumerator as SwitchInt;
-use App\core\Language;
-use App\core\Template;
 use App\libraries\alliance\Ranks;
 use App\libraries\Functions;
-use App\libraries\TimingLibrary as Timing;
 
 /**
  * Users Class
@@ -230,21 +244,6 @@ class Users
 
         if (!password_verify(($user_row['user_password'] . "-" . SECRETWORD), $_SESSION['user_password']) && !defined('IN_LOGIN')) {
             Functions::redirect(SYSTEM_ROOT);
-        }
-
-        if ($user_row['user_banned'] > 0 && !defined('IN_LOGIN')) {
-            // Store new session data
-            // before destroying Database object
-            session_write_close();
-
-            $core = new Language();
-            $ci_lang = $core->loadLang('game/global', true);
-
-            $parse = $ci_lang->language;
-            $parse['banned_until'] = Timing::formatExtendedDate($user_row['user_banned']);
-
-            $template = new Template();
-            die($template->set('home/banned_message', $parse));
         }
     }
 
