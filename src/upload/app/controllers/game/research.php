@@ -119,7 +119,7 @@ class Research extends BaseController
                 $RowParse['search_time'] = DevelopmentsLib::formatedDevelopmentTime($SearchTime, $this->langs->line('re_time'));
 
                 if (!$this->_is_working['is_working']) {
-                    if (DevelopmentsLib::isDevelopmentPayable($this->user, $this->planet, $tech) && !parent::$users->isOnVacations($this->user)) {
+                    if (DevelopmentsLib::isDevelopmentPayable($this->user, $this->planet, $tech) && !$this->userLibrary->isOnVacations($this->user)) {
                         if (!$this->isLaboratoryInQueue()) {
                             $action_link = FormatLib::colorRed($this->langs->line('re_research'));
                         } else {
@@ -212,7 +212,7 @@ class Research extends BaseController
 
                     // start a research
                     case 'search':
-                        if (DevelopmentsLib::isDevelopmentAllowed($this->user, $working_planet, $technology) && DevelopmentsLib::isDevelopmentPayable($this->user, $working_planet, $technology) && !parent::$users->isOnVacations($this->user)) {
+                        if (DevelopmentsLib::isDevelopmentAllowed($this->user, $working_planet, $technology) && DevelopmentsLib::isDevelopmentPayable($this->user, $working_planet, $technology) && !$this->userLibrary->isOnVacations($this->user)) {
                             $costs = DevelopmentsLib::developmentPrice(
                                 $this->user,
                                 $working_planet,

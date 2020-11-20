@@ -514,7 +514,7 @@ class Installation extends BaseController
         $adm_pass = Functions::hash($_POST['adm_pass']);
 
         // create user and its planet
-        parent::$users->createUserWithOptions(
+        $this->userLibrary->createUserWithOptions(
             [
                 'user_name' => $adm_name,
                 'user_password' => $adm_pass,

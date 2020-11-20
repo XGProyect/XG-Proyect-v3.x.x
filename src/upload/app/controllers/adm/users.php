@@ -145,7 +145,7 @@ class Users extends BaseController
 
         // physical delete
         if (isset($_GET['mode']) && $_GET['mode'] == 'delete' && $this->_user_query['user_authlevel'] != 3) {
-            parent::$users->deleteUser($this->_user_query['user_id']);
+            $this->userLibrary->deleteUser($this->_user_query['user_id']);
 
             $parse['alert'] = Administration::saveMessage('ok', $this->langs->line('us_user_deleted'));
         }

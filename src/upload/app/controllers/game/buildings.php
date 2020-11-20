@@ -333,7 +333,7 @@ class Buildings extends BaseController
 
         // validations
         $is_development_payable = Developments::isDevelopmentPayable($this->user, $this->planet, $building_id, true, false);
-        $is_on_vacations = parent::$users->isOnVacations($this->user);
+        $is_on_vacations = $this->userLibrary->isOnVacations($this->user);
         $have_fields = Developments::areFieldsAvailable($this->planet);
         $is_queue_full = $this->_building->isQueueFull();
         $queue_element = $this->_building->getCountElementsOnQueue();
@@ -704,7 +704,7 @@ class Buildings extends BaseController
 
         if ($QueueID != false && Developments::isDevelopmentAllowed($this->user, $this->planet, $building)) {
             if ($QueueID <= 1) {
-                if (Developments::isDevelopmentPayable($this->user, $this->planet, $building, true, !$AddMode) && !parent::$users->isOnVacations($this->user)) {
+                if (Developments::isDevelopmentPayable($this->user, $this->planet, $building, true, !$AddMode) && !$this->userLibrary->isOnVacations($this->user)) {
                     $continue = true;
                 }
             } else {

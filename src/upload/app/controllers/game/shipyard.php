@@ -349,7 +349,7 @@ class Shipyard extends BaseController
      */
     private function getItemInsertBlock($item_id)
     {
-        if (!$this->building_in_progress && !parent::$users->isOnVacations($this->user)
+        if (!$this->building_in_progress && !$this->userLibrary->isOnVacations($this->user)
         ) {
             if ($this->isShieldDomeAvailable($item_id)) {
                 return FormatLib::colorRed($this->langs->line('sy_protection_shield_only_one'));
@@ -387,7 +387,7 @@ class Shipyard extends BaseController
      */
     private function getBuildItemsButton()
     {
-        if (!$this->building_in_progress && !parent::$users->isOnVacations($this->user)) {
+        if (!$this->building_in_progress && !$this->userLibrary->isOnVacations($this->user)) {
             return $this->template->set(
                 'shipyard/shipyard_build_button',
                 $this->langs->language

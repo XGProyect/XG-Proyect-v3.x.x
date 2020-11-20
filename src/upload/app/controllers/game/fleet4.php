@@ -346,7 +346,7 @@ class Fleet4 extends BaseController
      */
     private function validateOwnVacations()
     {
-        if (parent::$users->isOnVacations($this->user)) {
+        if ($this->userLibrary->isOnVacations($this->user)) {
             $this->showMessage($this->langs->line('fl_vacation_mode_active'));
         }
 
@@ -370,7 +370,7 @@ class Fleet4 extends BaseController
         }
 
         if (isset($this->_target_data)
-            && parent::$users->isOnVacations($this->_target_data)
+            && $this->userLibrary->isOnVacations($this->_target_data)
             && $this->_clean_input_data['mission'] != Missions::RECYCLE) {
             $this->showMessage($this->langs->line('fl_in_vacation_player'));
         }
@@ -578,7 +578,7 @@ class Fleet4 extends BaseController
             return true;
         }
 
-        if (!parent::$users->isInactive($this->_target_data)) {
+        if (!$this->userLibrary->isInactive($this->_target_data)) {
             $noob = Functions::loadLibrary('NoobsProtectionLib');
 
             $points = $noob->returnPoints(

@@ -212,7 +212,7 @@ class Resources extends BaseController
         $ValidList['percent'] = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
         $SubQry = '';
 
-        if ($_POST && !parent::$users->isOnVacations($this->user)) {
+        if ($_POST && !$this->userLibrary->isOnVacations($this->user)) {
             foreach ($_POST as $Field => $Value) {
                 $FieldName = 'planet_' . $Field . '_percent';
                 if (isset($this->planet[$FieldName])) {
