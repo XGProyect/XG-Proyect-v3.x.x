@@ -1,27 +1,20 @@
 <?php declare (strict_types = 1);
 
-/**
- * Controller
- *
- * @category Core
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
- */
 namespace App\core;
 
 use App\core\enumerators\SwitchIntEnumerator as SwitchInt;
 use App\core\enumerators\UserRanksEnumerator;
+use App\core\Objects;
 use App\core\Template;
-use App\core\XGPCore;
 use App\libraries\Functions;
+use App\libraries\Page;
+use App\libraries\UsersLibrary;
+use CI_Lang;
 
 /**
  * Controller Class
  */
-abstract class BaseController extends XGPCore
+abstract class BaseController
 {
     /**
      * Contains the current user data
@@ -40,69 +33,38 @@ abstract class BaseController extends XGPCore
     /**
      * Contains the whole set of objects by request
      *
-     * @var array
+     * @var Objects
      */
-    private $objects_list = [];
+    protected $objects;
 
     /**
+     * Contains the Page object
      *
-     * @var \Template
+     * @var Page
      */
-    private $template = null;
+    protected $page = null;
+
+    /**
+     * Contains the Template object
+     *
+     * @var Template
+     */
+    protected $template = null;
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        parent::__construct();
+        $user = new UsersLibrary;
+        $this->user = $user->getUserData();
+        $this->planet = $user->getPlanetData();
 
-        $this->setUserData();
-        $this->setPlanetData();
-        $this->setObjects();
-        $this->setTemplate();
+        $this->objects = new Objects;
+        $this->page = new Page($user);
+        $this->template = new Template;
 
         $this->isServerOpen();
-    }
-
-    /**
-     * Set the user Data
-     *
-     * @return void
-     */
-    private function setUserData(): void
-    {
-        $this->user = parent::$users->getUserData();
-    }
-
-    /**
-     * Set the planet Data
-     *
-     * @return void
-     */
-    private function setPlanetData(): void
-    {
-        $this->planet = parent::$users->getPlanetData();
-    }
-
-    /**
-     * Set objects data
-     *
-     * @return void
-     */
-    private function setObjects(): void
-    {
-        $this->objects_list = parent::$objects;
-    }
-
-    /**
-     * Set template data
-     *
-     * @return void
-     */
-    private function setTemplate(): void
-    {
-        $this->template = new Template();
     }
 
     /**
@@ -113,7 +75,7 @@ abstract class BaseController extends XGPCore
     private function isServerOpen(): void
     {
         if (!defined('IN_INSTALL') && !defined('IN_ADMIN')) {
-            $user_level = isset($this->current_user['user_authlevel']) ?? 0;
+            $user_level = isset($this->user['user_authlevel']) ?? 0;
 
             if (Functions::readConfig('game_enable') == SwitchInt::off
                 && $user_level < UserRanksEnumerator::ADMIN) {
@@ -124,42 +86,70 @@ abstract class BaseController extends XGPCore
     }
 
     /**
-     * Return the user data
+     * Load the provided model, support a dir path
      *
-     * @return array
+     * @param string $class Mandatory field, if not will throw an exception
+     *
+     * @return void
+     *
+     * @throws \Exception
      */
-    protected function getUserData(): array
+    public function loadModel($class)
     {
-        return $this->user;
+        try {
+            // some validations
+            if ((string) $class && $class != '' && !is_null($class)) {
+                $class_route = strtolower(substr($class, 0, strrpos($class, '/')));
+                $class_name = ucfirst(strtolower(substr($class, strrpos($class, '/') + 1, strlen($class))));
+                $model_file = XGP_ROOT . MODELS_PATH . strtolower($class) . '.php';
+
+                // check if the file exists
+                if (file_exists($model_file)) {
+                    require_once $model_file;
+
+                    $class_route = strtr(MODELS_PATH . $class_route . DIRECTORY_SEPARATOR . $class_name, ['/' => '\\']);
+                    $this->{$class_name . '_Model'} = new $class_route();
+                    return;
+                }
+            }
+
+            // not found
+            throw new Exception('Model not defined');
+        } catch (Exception $e) {
+            die('Fatal error: ' . $e->getMessage());
+        }
     }
 
     /**
-     * Return the planet data
+     * Load a language file using CI Library
      *
-     * @return array
+     * @param string|array $language_file
+     * @return void
      */
-    protected function getPlanetData(): array
+    public function loadLang($language_file): void
     {
-        return $this->planet;
-    }
+        try {
+            // require langugage library
+            $ci_lang_path = XGP_ROOT . SYSTEM_PATH . 'ci3_custom' . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'Lang.php';
 
-    /**
-     * Return the objects data
-     *
-     * @return \Objects
-     */
-    protected function getObjects(): Objects
-    {
-        return $this->objects_list;
-    }
+            if (!file_exists($ci_lang_path)) {
+                // not found
+                throw new Exception('Language file "' . $language_file . '" not defined');
+                return;
+            }
 
-    /**
-     * Returns the template
-     *
-     * @return \Template
-     */
-    protected function getTemplate(): Template
-    {
-        return $this->template;
+            // required by the library
+            if (!defined('BASEPATH')) {
+                define('BASEPATH', XGP_ROOT . APP_PATH);
+            }
+
+            // use CI library
+            require_once $ci_lang_path;
+
+            $this->langs = new CI_Lang;
+            $this->langs->load($language_file, DEFAULT_LANG);
+        } catch (Exception $e) {
+            die('Fatal error: ' . $e->getMessage());
+        }
     }
 }
