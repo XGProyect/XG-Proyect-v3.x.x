@@ -239,7 +239,7 @@ class Infos extends BaseController
             $page .= $this->buildTearDownBlock();
         }
 
-        parent::$page->display($page);
+        $this->page->display($page);
     }
 
     /**

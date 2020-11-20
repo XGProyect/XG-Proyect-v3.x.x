@@ -162,7 +162,7 @@ class TraderResources extends BaseController
      */
     private function buildPage(): void
     {
-        parent::$page->display(
+        $this->page->display(
             $this->template->set(
                 'game/trader_overview_view',
                 array_merge(

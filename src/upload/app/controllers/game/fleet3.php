@@ -124,7 +124,7 @@ class Fleet3 extends BaseController
         ];
 
         // display the page
-        parent::$page->display(
+        $this->page->display(
             $this->template->set(
                 'fleet/fleet3_view',
                 array_merge(

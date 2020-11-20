@@ -158,7 +158,7 @@ class Movement extends BaseController
         ];
 
         // display the page
-        parent::$page->display(
+        $this->page->display(
             $this->template->set(
                 'game/movements_view',
                 array_merge(

@@ -47,7 +47,7 @@ class Media extends BaseController
      */
     private function buildPage()
     {
-        parent::$page->display(
+        $this->page->display(
             $this->template->set('ajax/media_view', $this->langs->language),
             false,
             '',

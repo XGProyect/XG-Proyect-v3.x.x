@@ -47,7 +47,7 @@ class Home extends BaseController
      */
     private function buildPage()
     {
-        parent::$page->display(
+        $this->page->display(
             $this->template->set('ajax/home_view', $this->langs->language),
             false,
             '',

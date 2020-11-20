@@ -69,7 +69,7 @@ class Empire extends BaseController
      */
     private function buildPage()
     {
-        parent::$page->display(
+        $this->page->display(
             $this->template->set(
                 'game/empire_view',
                 array_merge(

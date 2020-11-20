@@ -139,7 +139,7 @@ class Fleet1 extends BaseController
         ];
 
         // display the page
-        parent::$page->display(
+        $this->page->display(
             $this->template->set(
                 'fleet/fleet1_view',
                 array_merge(

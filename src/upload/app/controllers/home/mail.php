@@ -100,7 +100,7 @@ class Mail extends BaseController
      */
     private function buildPage(): void
     {
-        parent::$page->display(
+        $this->page->display(
             $this->template->set(
                 'home/mail_view',
                 array_merge(

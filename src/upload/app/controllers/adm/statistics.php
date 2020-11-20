@@ -111,7 +111,7 @@ class Statistics extends BaseController
      */
     private function buildPage(): void
     {
-        parent::$page->displayAdmin(
+        $this->page->displayAdmin(
             $this->template->set(
                 'adm/statistics_view',
                 array_merge(

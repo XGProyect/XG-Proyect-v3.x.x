@@ -87,7 +87,7 @@ class Installation extends BaseController
         }
 
         if (!$continue) {
-            parent::$page->displayInstall(
+            $this->page->displayInstall(
                 $this->template->set(
                     'install/in_welcome_view',
                     array_merge(
@@ -307,7 +307,7 @@ class Installation extends BaseController
             }
         }
 
-        parent::$page->displayInstall($current_page, $this->langs->language);
+        $this->page->displayInstall($current_page, $this->langs->language);
     }
 
     /**

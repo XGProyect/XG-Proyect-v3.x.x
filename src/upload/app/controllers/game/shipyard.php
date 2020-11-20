@@ -194,7 +194,7 @@ class Shipyard extends BaseController
         $page['building_list'] = $this->buildItemsQueue();
 
         // display the page
-        parent::$page->display(
+        $this->page->display(
             $this->template->set('shipyard/shipyard_table', $page)
         );
     }

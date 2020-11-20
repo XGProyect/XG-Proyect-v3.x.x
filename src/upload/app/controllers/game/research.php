@@ -161,7 +161,7 @@ class Research extends BaseController
         $parse['noresearch'] = (!$this->isLaboratoryInQueue() ? $this->langs->line('re_building_lab') : '');
         $parse['technolist'] = $technology_list;
 
-        parent::$page->display(
+        $this->page->display(
             $this->template->set(
                 'buildings/buildings_research',
                 $parse

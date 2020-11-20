@@ -123,7 +123,7 @@ class Repair extends BaseController
             }
         }
 
-        parent::$page->displayAdmin(
+        $this->page->displayAdmin(
             $this->template->set(
                 'adm/repair_view',
                 $parse

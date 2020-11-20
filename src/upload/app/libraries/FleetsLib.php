@@ -302,7 +302,7 @@ class FleetsLib extends XGPCore
             $popup['fleet_resource_crystal'] = FormatLib::prettyNumber($fleet_row['fleet_resource_crystal']);
             $popup['fleet_resource_deuterium'] = FormatLib::prettyNumber($fleet_row['fleet_resource_deuterium']);
 
-            $resources_popup = parent::$page->jsReady(
+            $resources_popup = $this->page->jsReady(
                 self::getTemplate()->set(
                     'general/fleet_resources_popup_view',
                     array_merge($popup, self::loadLanguage(['game/global'])->language)

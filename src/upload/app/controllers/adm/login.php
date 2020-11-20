@@ -93,7 +93,7 @@ class Login extends BaseController
      */
     private function buildPage(): void
     {
-        parent::$page->displayAdmin(
+        $this->page->displayAdmin(
             $this->template->set(
                 'adm/login_view',
                 array_merge(

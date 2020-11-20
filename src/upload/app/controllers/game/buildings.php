@@ -171,7 +171,7 @@ class Buildings extends BaseController
         $page['list_of_buildings'] = $this->buildListOfBuildings();
 
         // display the page
-        parent::$page->display(
+        $this->page->display(
             $this->template->set(
                 'buildings/buildings_builds',
                 array_merge($page, $this->buildQueueBlock())

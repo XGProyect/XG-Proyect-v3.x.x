@@ -202,7 +202,7 @@ class Alliance extends BaseController
             Functions::redirect('game.php?page=alliance');
         }
 
-        parent::$page->display(
+        $this->page->display(
             $this->{'get' . ucfirst($this->getCurrentSection()) . 'Section'}()
         );
     }

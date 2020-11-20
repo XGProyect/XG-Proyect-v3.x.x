@@ -110,7 +110,7 @@ class Officier extends BaseController
         $page['officier_list'] = $this->buildOfficiersList();
 
         // display the page
-        parent::$page->display(
+        $this->page->display(
             $this->template->set('game/officier_view', array_merge($page, $this->langs->language))
         );
     }

@@ -178,7 +178,7 @@ class Galaxy extends BaseController
             array_merge($parse, $this->langs->language)
         ) : ' ';
 
-        parent::$page->display(
+        $this->page->display(
             $this->template->set(
                 'game/galaxy_view',
                 array_merge(

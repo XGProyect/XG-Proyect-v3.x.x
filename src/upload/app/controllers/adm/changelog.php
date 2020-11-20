@@ -87,7 +87,7 @@ class Changelog extends BaseController
      */
     private function buildPage(): void
     {
-        parent::$page->displayAdmin(
+        $this->page->displayAdmin(
             $this->template->set(
                 'adm/changelog_view',
                 array_merge(
@@ -150,7 +150,7 @@ class Changelog extends BaseController
     {
         $this->saveAction();
 
-        parent::$page->displayAdmin(
+        $this->page->displayAdmin(
             $this->template->set(
                 'adm/changelog_form_view',
                 array_merge(
@@ -170,7 +170,7 @@ class Changelog extends BaseController
     {
         $this->saveAction();
 
-        parent::$page->displayAdmin(
+        $this->page->displayAdmin(
             $this->template->set(
                 'adm/changelog_form_view',
                 $this->getActionData('edit', $changelog_id)

@@ -166,7 +166,7 @@ class Statistics extends BaseController
             }
         }
 
-        parent::$page->display(
+        $this->page->display(
             $this->template->set(
                 'stat/stat_body',
                 $parse

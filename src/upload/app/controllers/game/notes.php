@@ -151,7 +151,7 @@ class Notes extends BaseController
         $page = $this->getCurrentPage();
 
         // display the page
-        parent::$page->display(
+        $this->page->display(
             $this->template->set(
                 $page['template'],
                 array_merge(

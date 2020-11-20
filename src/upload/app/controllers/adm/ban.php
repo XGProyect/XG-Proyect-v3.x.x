@@ -82,7 +82,7 @@ class Ban extends BaseController
                 break;
         }
 
-        parent::$page->displayAdmin($view);
+        $this->page->displayAdmin($view);
     }
 
     /**

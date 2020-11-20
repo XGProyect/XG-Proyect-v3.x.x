@@ -63,7 +63,7 @@ class TraderLayer extends BaseController
      */
     private function buildPage(): void
     {
-        parent::$page->display(
+        $this->page->display(
             $this->template->set(
                 'game/trader_layer_view',
                 array_merge(
@@ -260,7 +260,7 @@ class TraderLayer extends BaseController
     }
     }
 
-    parent::$page->display($this->template->set($template, $parse));*/
+    $this->page->display($this->template->set($template, $parse));*/
     //}
 
     /**

@@ -282,7 +282,7 @@ class Buddies extends BaseController
             Functions::redirect('game.php?page=buddies');
         }
 
-        parent::$page->display(
+        $this->page->display(
             $this->template->set(
                 'game/buddies_request',
                 array_merge(
@@ -310,7 +310,7 @@ class Buddies extends BaseController
         $page['list_of_buddies'] = $this->buildListOfBuddies();
 
         // display the page
-        parent::$page->display(
+        $this->page->display(
             $this->template->set(
                 'game/buddies_view',
                 array_merge($page, $this->langs->language)

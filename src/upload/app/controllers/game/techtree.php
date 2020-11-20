@@ -87,7 +87,7 @@ class Techtree extends BaseController
         ];
 
         // display the page
-        parent::$page->display(
+        $this->page->display(
             $this->template->set(
                 'game/techtree_view',
                 array_merge(

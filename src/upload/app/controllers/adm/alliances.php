@@ -128,7 +128,7 @@ class Alliances extends BaseController
         $parse['tag'] = ($alliance != '') ? 'a' : 'button';
         $parse['content'] = ($alliance != '' && $type != '') ? $this->getData($type) : '';
 
-        parent::$page->displayAdmin(
+        $this->page->displayAdmin(
             $this->template->set('adm/alliances_view', $parse)
         );
     }

@@ -169,7 +169,7 @@ class Fleetshortcuts extends BaseController
         ];
 
         // display the page
-        parent::$page->display(
+        $this->page->display(
             $this->template->set(
                 'shortcuts/shortcuts_view',
                 array_merge(
@@ -295,7 +295,7 @@ class Fleetshortcuts extends BaseController
     private function buildEdit(array $page): void
     {
         // display the page
-        parent::$page->display(
+        $this->page->display(
             $this->template->set(
                 'shortcuts/shortcuts_edit_view',
                 array_merge(

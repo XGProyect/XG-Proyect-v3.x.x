@@ -107,7 +107,7 @@ class Messages extends BaseController
      */
     private function buildPage(): void
     {
-        parent::$page->display(
+        $this->page->display(
             $this->{'get' . ucfirst($this->getCurrentSection()) . 'Section'}()
         );
     }

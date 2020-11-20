@@ -158,7 +158,7 @@ class Users extends BaseController
         $parse['user_rank'] = $this->langs->language['user_level'][$this->_authlevel];
         $parse['content'] = ($user != '' && $type != '') ? $this->getData($type) : '';
 
-        parent::$page->displayAdmin(
+        $this->page->displayAdmin(
             $this->template->set('adm/users_view', $parse)
         );
     }

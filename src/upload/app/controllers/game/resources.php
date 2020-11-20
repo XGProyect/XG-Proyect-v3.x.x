@@ -230,7 +230,7 @@ class Resources extends BaseController
             Functions::redirect('game.php?page=resourceSettings');
         }
 
-        parent::$page->display(
+        $this->page->display(
             $this->template->set(
                 'resources/resources',
                 $parse

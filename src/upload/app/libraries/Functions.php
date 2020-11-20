@@ -198,7 +198,7 @@ abstract class Functions extends XGPCore
             $parse['middle2'] = '</div>';
         }
 
-        parent::$page->display(
+        $this->page->display(
             self::getTemplate()->set('general/message_body', $parse),
             $topnav,
             (($dest != "") ? "<meta http-equiv=\"refresh\" content=\"$time;URL=$dest\">" : ""),

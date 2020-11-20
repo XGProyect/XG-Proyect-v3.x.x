@@ -60,7 +60,7 @@ class AdministrationLib extends XGPCore
      */
     public static function noAccessMessage($mes = '')
     {
-        parent::$page->displayAdmin(
+        $this->page->displayAdmin(
             self::saveMessage('error', $mes, false)
         );
     }
