@@ -1,13 +1,19 @@
 <?php
 /**
- * Updates Library
+ * XG Proyect
  *
- * @category Library
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
+ * Open-source OGame Clon
+ *
+ * This content is released under the GPL-3.0 License
+ *
+ * Copyright (c) 2008-2020 XG Proyect
+ *
+ * @package    XG Proyect
+ * @author     Lucas Kovács
+ * @copyright  2008-2020 XG Proyect
+ * @license    https://www.gnu.org/licenses/gpl-3.0.en.html GPL-3.0 License
+ * @link       https://github.com/XGProyect/
+ * @since      Version 3.0.0
  */
 namespace App\libraries;
 
@@ -22,7 +28,8 @@ use App\libraries\Functions;
 use App\libraries\MissionControlLibrary;
 use App\libraries\OfficiersLib as Officiers;
 use App\libraries\ProductionLib as Production;
-use App\libraries\Statistics_library;
+use App\libraries\StatisticsLibrary;
+use App\libraries\Users;
 
 /**
  * UpdatesLibrary Class
@@ -30,21 +37,21 @@ use App\libraries\Statistics_library;
 class UpdatesLibrary extends XGPCore
 {
     /**
-     * @var mixed
+     * Contains the model
+     *
+     * @var UpdatesLibrary
      */
-    private $Update_Model;
+    private $updatesModel;
 
     /**
-     * __construct
-     *
-     * @return void
+     * Constructor
      */
     public function __construct()
     {
         parent::__construct();
 
         // load Model
-        $this->Update_Model = Functions::modelLoader('libraries/UpdatesLibrary');
+        $this->updatesModel = Functions::modelLoader('libraries/UpdatesLibrary');
 
         // Other stuff
         $this->cleanUp();
@@ -73,20 +80,22 @@ class UpdatesLibrary extends XGPCore
             $del_deleted = time() - ONE_WEEK;
 
             // USERS TO DELETE
-            $ChooseToDelete = $this->Update_Model->deleteUsersByDeletedAndInactive($del_deleted, $del_inactive);
+            $ChooseToDelete = $this->updatesModel->deleteUsersByDeletedAndInactive($del_deleted, $del_inactive);
+
+            $users = new Users;
 
             if ($ChooseToDelete) {
                 foreach ($ChooseToDelete as $delete) {
-                    parent::$users->deleteUser($delete['user_id']);
+                    $users->deleteUser($delete['user_id']);
                 }
             }
 
             // Misc deletions
-            $this->Update_Model->deleteMessages($del_before);
-            $this->Update_Model->deleteReports($del_before);
-            $this->Update_Model->deleteSessions(date('Y-m-d H:i:s', $del_planets));
-            $this->Update_Model->deleteDestroyedPlanets($del_planets);
-            $this->Update_Model->deleteExpiredAcs();
+            $this->updatesModel->deleteMessages($del_before);
+            $this->updatesModel->deleteReports($del_before);
+            $this->updatesModel->deleteSessions(date('Y-m-d H:i:s', $del_planets));
+            $this->updatesModel->deleteDestroyedPlanets($del_planets);
+            $this->updatesModel->deleteExpiredAcs();
 
             Functions::updateConfig('last_cleanup', time());
         }
@@ -106,7 +115,7 @@ class UpdatesLibrary extends XGPCore
 
         // CHECK TIME
         if ((time() >= ($last_backup + (3600 * $update_interval))) && ($auto_backup == 1)) {
-            $this->Update_Model->generateBackUp(); // MAKE BACKUP
+            $this->updatesModel->generateBackUp(); // MAKE BACKUP
 
             Functions::updateConfig('last_backup', time());
         }
@@ -160,7 +169,7 @@ class UpdatesLibrary extends XGPCore
         $update_interval = Functions::readConfig('stat_update_time');
 
         if ((time() >= ($stat_last_update + (60 * $update_interval)))) {
-            $result = new Statistics_library();
+            $result = new StatisticsLibrary;
 
             Functions::updateConfig('stat_last_update', $result->makeStats()['stats_time']);
         }
@@ -220,7 +229,7 @@ class UpdatesLibrary extends XGPCore
                 $current_planet['planet_b_building_id'] = $new_queue;
                 $current_planet['planet_field_current'] = $current;
                 $current_planet['planet_field_max'] = $max;
-                $current_planet['building_points'] = Statistics_library::calculatePoints(
+                $current_planet['building_points'] = StatisticsLibrary::calculatePoints(
                     $element,
                     $current_planet[$resource[$element]]
                 );
@@ -647,10 +656,10 @@ class UpdatesLibrary extends XGPCore
                         // POINTS
                         switch ($element) {
                             case (($element >= 202) && ($element <= 215)):
-                                $ship_points += Statistics_library::calculatePoints($element, $count) * $count;
+                                $ship_points += StatisticsLibrary::calculatePoints($element, $count) * $count;
                                 break;
                             case (($element >= 401) && ($element <= 503)):
-                                $defense_points += Statistics_library::calculatePoints($element, $count) * $count;
+                                $defense_points += StatisticsLibrary::calculatePoints($element, $count) * $count;
                                 break;
                             default:
                                 break;
@@ -665,7 +674,7 @@ class UpdatesLibrary extends XGPCore
 
             // RESEARCH UPDATE
             if ($current_planet['planet_b_tech'] <= time() && $current_planet['planet_b_tech_id'] != 0) {
-                $current_user['research_points'] = Statistics_library::calculatePoints(
+                $current_user['research_points'] = StatisticsLibrary::calculatePoints(
                     $current_planet['planet_b_tech_id'],
                     $current_user[$resource[$current_planet['planet_b_tech_id']]],
                     'tech'

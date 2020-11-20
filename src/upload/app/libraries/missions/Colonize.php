@@ -14,7 +14,7 @@ namespace App\libraries\missions;
 use App\libraries\FleetsLib;
 use App\libraries\Functions;
 use App\libraries\PlanetLib;
-use App\libraries\Statistics_library;
+use App\libraries\StatisticsLibrary;
 
 /**
  * Colonize Class
@@ -41,7 +41,7 @@ class Colonize extends Missions
     public function colonizeMission($fleet_row)
     {
         if ($fleet_row['fleet_mess'] == 0) {
-            $colonization_check = $this->Missions_Model->getPlanetAndUserCountsCounts([
+            $colonization_check = $this->missionsModel->getPlanetAndUserCountsCounts([
                 'user_id' => $fleet_row['fleet_owner'],
                 'coords' => [
                     'galaxy' => $fleet_row['fleet_end_galaxy'],
@@ -63,20 +63,20 @@ class Colonize extends Missions
 
             if ($colonization_check['galaxy_count'] == 0) {
                 if ($planet_count >= $max_colonies) {
-                    $this->colonize_message($fleet_row['fleet_owner'], $message[1], $fleet_row['fleet_start_time']);
+                    $this->colonizeMessage($fleet_row['fleet_owner'], $message[1], $fleet_row['fleet_start_time']);
 
                     parent::returnFleet($fleet_row['fleet_id']);
                 } elseif (!$this->positionAllowed($fleet_row['fleet_end_planet'], $colonization_check['astro_level'])) {
-                    $this->colonize_message($fleet_row['fleet_owner'], $message[4], $fleet_row['fleet_start_time']);
+                    $this->colonizeMessage($fleet_row['fleet_owner'], $message[4], $fleet_row['fleet_start_time']);
 
                     parent::returnFleet($fleet_row['fleet_id']);
                 } else {
-                    if ($this->start_creation($fleet_row)) {
-                        $this->colonize_message($fleet_row['fleet_owner'], $message[2], $fleet_row['fleet_start_time']);
+                    if ($this->startCreation($fleet_row)) {
+                        $this->colonizeMessage($fleet_row['fleet_owner'], $message[2], $fleet_row['fleet_start_time']);
 
                         if ($fleet_row['fleet_amount'] == 1) {
-                            $this->Missions_Model->updateColonizationStatistics([
-                                'points' => Statistics_library::calculatePoints(208, 1),
+                            $this->missionsModel->updateColonizationStatistics([
+                                'points' => StatisticsLibrary::calculatePoints(208, 1),
                                 'coords' => [
                                     'galaxy' => $fleet_row['fleet_start_galaxy'],
                                     'system' => $fleet_row['fleet_start_system'],
@@ -89,9 +89,9 @@ class Colonize extends Missions
                         } else {
                             parent::storeResources($fleet_row);
 
-                            $this->Missions_Model->updateColonizatonReturningFleet([
-                                'ships' => $this->build_new_fleet($fleet_row['fleet_array']),
-                                'points' => Statistics_library::calculatePoints(208, 1),
+                            $this->missionsModel->updateColonizatonReturningFleet([
+                                'ships' => $this->buildNewFleet($fleet_row['fleet_array']),
+                                'points' => StatisticsLibrary::calculatePoints(208, 1),
                                 'fleet_id' => $fleet_row['fleet_id'],
                                 'coords' => [
                                     'galaxy' => $fleet_row['fleet_start_galaxy'],
@@ -102,13 +102,13 @@ class Colonize extends Missions
                             ]);
                         }
                     } else {
-                        $this->colonize_message($fleet_row['fleet_owner'], $message[3], $fleet_row['fleet_end_time']);
+                        $this->colonizeMessage($fleet_row['fleet_owner'], $message[3], $fleet_row['fleet_end_time']);
 
                         parent::returnFleet($fleet_row['fleet_id']);
                     }
                 }
             } else {
-                $this->colonize_message($fleet_row['fleet_owner'], $message[3], $fleet_row['fleet_end_time']);
+                $this->colonizeMessage($fleet_row['fleet_owner'], $message[3], $fleet_row['fleet_end_time']);
 
                 parent::returnFleet($fleet_row['fleet_id']);
             }
@@ -126,7 +126,7 @@ class Colonize extends Missions
      * @param array $fleet_row
      * @return void
      */
-    private function start_creation($fleet_row)
+    private function startCreation($fleet_row)
     {
         $creator = new PlanetLib();
 
@@ -139,7 +139,7 @@ class Colonize extends Missions
      * @param array $fleet_array
      * @return void
      */
-    private function build_new_fleet($fleet_array)
+    private function buildNewFleet($fleet_array)
     {
         $current_fleet = FleetsLib::getFleetShipsArray($fleet_array);
         $new_fleet = [];
@@ -167,7 +167,7 @@ class Colonize extends Missions
      * @param int $time
      * @return void
      */
-    private function colonize_message($owner, $message, $time)
+    private function colonizeMessage($owner, $message, $time)
     {
         Functions::sendMessage($owner, '', $time, 5, $this->langs->line('col_report_from'), $this->langs->line('col_report_title'), $message);
     }

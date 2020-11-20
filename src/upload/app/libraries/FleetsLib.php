@@ -21,7 +21,9 @@ use App\libraries\FleetsLib;
 use App\libraries\FormatLib;
 use App\libraries\Functions;
 use App\libraries\OfficiersLib;
+use App\libraries\Page;
 use App\libraries\TimingLibrary as Timing;
+use App\libraries\Users;
 use CI_Lang;
 
 /**
@@ -302,7 +304,7 @@ class FleetsLib extends XGPCore
             $popup['fleet_resource_crystal'] = FormatLib::prettyNumber($fleet_row['fleet_resource_crystal']);
             $popup['fleet_resource_deuterium'] = FormatLib::prettyNumber($fleet_row['fleet_resource_deuterium']);
 
-            $resources_popup = $this->page->jsReady(
+            $resources_popup = (new Page(new Users))->jsReady(
                 self::getTemplate()->set(
                     'general/fleet_resources_popup_view',
                     array_merge($popup, self::loadLanguage(['game/global'])->language)

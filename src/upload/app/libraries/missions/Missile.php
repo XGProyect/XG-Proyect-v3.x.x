@@ -41,7 +41,7 @@ class Missile extends Missions
     {
         // do mission
         if (parent::canStartMission($fleet_row)) {
-            $attacker_data = $this->Missions_Model->getMissileAttackerDataByCoords([
+            $attacker_data = $this->missionsModel->getMissileAttackerDataByCoords([
                 'coords' => [
                     'galaxy' => $fleet_row['fleet_start_galaxy'],
                     'system' => $fleet_row['fleet_start_system'],
@@ -50,7 +50,7 @@ class Missile extends Missions
                 ],
             ]);
 
-            $target_data = $this->Missions_Model->getMissileTargetDataByCoords([
+            $target_data = $this->missionsModel->getMissileTargetDataByCoords([
                 'coords' => [
                     'galaxy' => $fleet_row['fleet_end_galaxy'],
                     'system' => $fleet_row['fleet_end_system'],
@@ -107,7 +107,7 @@ class Missile extends Missions
                 }
 
                 if ($destroyed_query != '') {
-                    $this->Missions_Model->updatePlanetDefenses([
+                    $this->missionsModel->updatePlanetDefenses([
                         'destroyed_query' => $destroyed_query,
                         'amount' => $amount,
                         'planet_id' => $target_data['planet_id'],

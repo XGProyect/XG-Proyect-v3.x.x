@@ -1,13 +1,19 @@
 <?php
 /**
- * Users Controller
+ * XG Proyect
  *
- * @category Controller
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
+ * Open-source OGame Clon
+ *
+ * This content is released under the GPL-3.0 License
+ *
+ * Copyright (c) 2008-2020 XG Proyect
+ *
+ * @package    XG Proyect
+ * @author     Lucas Kovács
+ * @copyright  2008-2020 XG Proyect
+ * @license    https://www.gnu.org/licenses/gpl-3.0.en.html GPL-3.0 License
+ * @link       https://github.com/XGProyect/
+ * @since      Version 3.0.0
  */
 namespace App\controllers\adm;
 
@@ -17,7 +23,6 @@ use App\core\enumerators\UserRanksEnumerator as UserRanks;
 use App\libraries\adm\AdministrationLib as Administration;
 use App\libraries\FormatLib as Format;
 use App\libraries\Functions;
-use App\libraries\Statistics_library;
 use App\libraries\users\Shortcuts;
 
 /**
@@ -79,7 +84,7 @@ class Users extends BaseController
         parent::loadLang(['adm/global', 'adm/users']);
 
         // set data
-        $this->_stats = new Statistics_library();
+        $this->_stats = new StatisticsLibrary;
     }
 
     /**

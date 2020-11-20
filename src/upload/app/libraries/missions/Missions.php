@@ -1,18 +1,25 @@
 <?php
 /**
- * Missions Library
+ * XG Proyect
  *
- * @category Library
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
+ * Open-source OGame Clon
+ *
+ * This content is released under the GPL-3.0 License
+ *
+ * Copyright (c) 2008-2020 XG Proyect
+ *
+ * @package    XG Proyect
+ * @author     Lucas Kovács
+ * @copyright  2008-2020 XG Proyect
+ * @license    https://www.gnu.org/licenses/gpl-3.0.en.html GPL-3.0 License
+ * @link       https://github.com/XGProyect/
+ * @since      Version 3.0.0
  */
 namespace App\libraries\missions;
 
 use App\core\XGPCore;
 use App\libraries\FleetsLib;
+use App\libraries\Functions;
 use App\libraries\UpdatesLibrary;
 
 /**
@@ -20,6 +27,13 @@ use App\libraries\UpdatesLibrary;
  */
 class Missions extends XGPCore
 {
+    /**
+     * Contains the model
+     *
+     * @var Missions
+     */
+    protected $missionsModel;
+
     /**
      * @var mixed
      */
@@ -41,7 +55,7 @@ class Missions extends XGPCore
         parent::__construct();
 
         // load model
-        parent::loadModel('libraries/missions/missions');
+        $this->missionsModel = Functions::modelLoader('libraries/missions/missions');
 
         $this->resource = parent::$objects->getObjects();
         $this->pricelist = parent::$objects->getPrice();
@@ -57,7 +71,7 @@ class Missions extends XGPCore
      */
     protected function removeFleet($fleet_id)
     {
-        $this->Missions_Model->deleteFleetById($fleet_id);
+        $this->missionsModel->deleteFleetById($fleet_id);
     }
 
     /**
@@ -69,7 +83,7 @@ class Missions extends XGPCore
      */
     protected function returnFleet($fleet_id)
     {
-        $this->Missions_Model->updateFleetStatusToReturnById($fleet_id);
+        $this->missionsModel->updateFleetStatusToReturnById($fleet_id);
     }
 
     /**
@@ -125,7 +139,7 @@ class Missions extends XGPCore
             ],
         ];
 
-        $this->Missions_Model->updatePlanetsShipsByCoords($update_array);
+        $this->missionsModel->updatePlanetsShipsByCoords($update_array);
     }
 
     /**
@@ -166,7 +180,7 @@ class Missions extends XGPCore
             ],
         ];
 
-        $this->Missions_Model->updatePlanetResourcesByCoords($update_array);
+        $this->missionsModel->updatePlanetResourcesByCoords($update_array);
     }
 
     /**
@@ -181,7 +195,7 @@ class Missions extends XGPCore
      */
     protected function makeUpdate($galaxy, $system, $planet, $type)
     {
-        $target_planet = $this->Missions_Model->getAllPlanetDataByCoords([
+        $target_planet = $this->missionsModel->getAllPlanetDataByCoords([
             'coords' => [
                 'galaxy' => $galaxy,
                 'system' => $system,
@@ -190,7 +204,7 @@ class Missions extends XGPCore
             ],
         ]);
 
-        $target_user = $this->Missions_Model->getAllUserDataByUserId(
+        $target_user = $this->missionsModel->getAllUserDataByUserId(
             $target_planet['planet_user_id']
         );
 

@@ -1,27 +1,29 @@
 <?php
 /**
- * Sessions
+ * XG Proyect
  *
- * @category Core
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
+ * Open-source OGame Clon
+ *
+ * This content is released under the GPL-3.0 License
+ *
+ * Copyright (c) 2008-2020 XG Proyect
+ *
+ * @package    XG Proyect
+ * @author     Lucas Kovács
+ * @copyright  2008-2020 XG Proyect
+ * @license    https://www.gnu.org/licenses/gpl-3.0.en.html GPL-3.0 License
+ * @link       https://github.com/XGProyect/
+ * @since      Version 3.0.0
  */
+
 namespace App\core;
 
+use App\libraries\Functions;
+
 /**
- * Sessions Class
- *
- * @category Classes
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
+ * Sessions class
  */
-class Sessions extends XGPCore
+class Sessions
 {
     /**
      *
@@ -30,24 +32,29 @@ class Sessions extends XGPCore
     private $alive = true;
 
     /**
-     * __construct
+     * Contains the model
+     *
+     * @var Sessions
+     */
+    private $sessionsModel;
+
+    /**
+     * Constructor
      *
      * @return void
      */
     public function __construct()
     {
-        parent::__construct();
-
         // load model
-        parent::loadModel('core/sessions');
+        $this->sessionsModel = Functions::modelLoader('core/sessions');
 
         session_set_save_handler(
-            [ & $this->Sessions_Model, 'openConnection'],
-            [ & $this->Sessions_Model, 'closeConnection'],
-            [ & $this->Sessions_Model, 'getSessionDataById'],
-            [ & $this->Sessions_Model, 'insertNewSessionData'],
-            [ & $this->Sessions_Model, 'deleteSessionDataById'],
-            [ & $this->Sessions_Model, 'cleanSessionData']
+            [ & $this->sessionsModel, 'openConnection'],
+            [ & $this->sessionsModel, 'closeConnection'],
+            [ & $this->sessionsModel, 'getSessionDataById'],
+            [ & $this->sessionsModel, 'insertNewSessionData'],
+            [ & $this->sessionsModel, 'deleteSessionDataById'],
+            [ & $this->sessionsModel, 'cleanSessionData']
         );
 
         if (session_id() == '') {

@@ -1,13 +1,19 @@
 <?php
 /**
- * Functions Library
+ * XG Proyect
  *
- * @category Library
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
+ * Open-source OGame Clon
+ *
+ * This content is released under the GPL-3.0 License
+ *
+ * Copyright (c) 2008-2020 XG Proyect
+ *
+ * @package    XG Proyect
+ * @author     Lucas Kovács
+ * @copyright  2008-2020 XG Proyect
+ * @license    https://www.gnu.org/licenses/gpl-3.0.en.html GPL-3.0 License
+ * @link       https://github.com/XGProyect/
+ * @since      Version 3.0.0
  */
 namespace App\libraries;
 
@@ -16,17 +22,18 @@ use App\core\enumerators\MessagesEnumerator;
 use App\core\Language;
 use App\core\Options;
 use App\core\Template;
-use App\core\XGPCore;
 use App\helpers\StringsHelper;
 use App\libraries\messenger\MessagesFormat;
 use App\libraries\messenger\MessagesOptions;
 use App\libraries\messenger\Messenger;
+use App\libraries\Page;
+use App\libraries\Users;
 use CI_Email;
 
 /**
  * Functions Class
  */
-abstract class Functions extends XGPCore
+abstract class Functions
 {
     /**
      * Return a new instance of Template
@@ -198,7 +205,7 @@ abstract class Functions extends XGPCore
             $parse['middle2'] = '</div>';
         }
 
-        $this->page->display(
+        (new Page(new Users))->display(
             self::getTemplate()->set('general/message_body', $parse),
             $topnav,
             (($dest != "") ? "<meta http-equiv=\"refresh\" content=\"$time;URL=$dest\">" : ""),

@@ -20,6 +20,13 @@ use App\core\XGPCore;
 class NoobsProtectionLib extends XGPCore
 {
     /**
+     * Contains the model
+     *
+     * @var Noobsprotectionlib
+     */
+    protected $noobsprotectionlibModel;
+
+    /**
      * Protection on/off
      *
      * @var bool
@@ -53,7 +60,7 @@ class NoobsProtectionLib extends XGPCore
     public function __construct()
     {
         // load model
-        parent::loadModel('libraries/noobsprotectionlib');
+        $this->noobsprotectionlibModel = Functions::modelLoader('libraries/noobsprotectionlib');
 
         // set configs
         $this->setAllSettings();
@@ -66,7 +73,7 @@ class NoobsProtectionLib extends XGPCore
      */
     public function setAllSettings(): void
     {
-        $configs = $this->Noobsprotectionlib_Model->readAllConfigs();
+        $configs = $this->noobsprotectionlibModel->readAllConfigs();
 
         $this->protection = (bool) $configs['noobprotection'];
         $this->protectiontime = (int) $configs['noobprotectiontime'];
@@ -135,7 +142,7 @@ class NoobsProtectionLib extends XGPCore
      */
     public function returnPoints(int $current_user_id, int $other_user_id): array
     {
-        return $this->Noobsprotectionlib_Model->returnBothPartiesPoints($current_user_id, $other_user_id);
+        return $this->noobsprotectionlibModel->returnBothPartiesPoints($current_user_id, $other_user_id);
     }
 
     /**

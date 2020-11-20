@@ -156,7 +156,7 @@ class Expedition extends Missions
                     $fleet_row['fleet_end_stay']
                 );
 
-                $this->Missions_Model->updateFleetArrayById([
+                $this->missionsModel->updateFleetArrayById([
                     'ships' => FleetsLib::setFleetShipsArray($new_ships),
                     'fleet_id' => $fleet_row['fleet_id'],
                 ]);
@@ -213,7 +213,7 @@ class Expedition extends Missions
             $found_darkmatter = ($fleet_capacity > 10000) ? intval(3 * log($fleet_capacity / 10000) * 100) : 0;
             $found_darkmatter = mt_rand($found_darkmatter / 2, $found_darkmatter);
 
-            $this->Missions_Model->updateFleetResourcesById([
+            $this->missionsModel->updateFleetResourcesById([
                 'found' => [
                     'metal' => $found_metal,
                     'crystal' => $found_crystal,
@@ -280,7 +280,7 @@ class Expedition extends Missions
             }
         }
 
-        $this->Missions_Model->updateFleetArrayById([
+        $this->missionsModel->updateFleetArrayById([
             'ships' => FleetsLib::setFleetShipsArray($new_ships),
             'fleet_id' => $fleet_row['fleet_id'],
         ]);
