@@ -596,5 +596,3 @@ class Fleet3 extends BaseController
         );
     }
 }
-
-/* end of fleet3.php */

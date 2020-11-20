@@ -395,5 +395,3 @@ class Fleet2 extends BaseController
         ];
     }
 }
-
-/* end of fleet2.php */
