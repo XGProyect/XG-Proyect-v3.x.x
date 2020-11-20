@@ -14,6 +14,7 @@ namespace App\controllers\game;
 use App\core\BaseController;
 use App\libraries\FormatLib;
 use App\libraries\Functions;
+use App\libraries\Users;
 
 /**
  * Chat Class
@@ -44,7 +45,7 @@ class Chat extends BaseController
         parent::__construct();
 
         // check if session is active
-        parent::$users->checkSession();
+        Users::checkSession();
 
         // load Model
         parent::loadModel('game/messages');
@@ -120,7 +121,9 @@ class Chat extends BaseController
                     '',
                     4,
                     $this->user['user_name'] . ' ' . FormatLib::prettyCoords(
-                        $this->user['user_galaxy'], $this->user['user_system'], $this->user['user_planet']
+                        $this->user['user_galaxy'],
+                        $this->user['user_system'],
+                        $this->user['user_planet']
                     ),
                     $message_sent['subject'],
                     $message_sent['text']
@@ -144,7 +147,9 @@ class Chat extends BaseController
                     [
                         'id' => $this->_receiver_data['user_id'],
                         'to' => $this->_receiver_data['user_name'] . ' ' . FormatLib::prettyCoords(
-                            $this->_receiver_data['planet_galaxy'], $this->_receiver_data['planet_system'], $this->_receiver_data['planet_planet']
+                            $this->_receiver_data['planet_galaxy'],
+                            $this->_receiver_data['planet_system'],
+                            $this->_receiver_data['planet_planet']
                         ),
                         'subject' => ((!isset($this->_message_data['subject'])) ? $this->langs->line('pm_no_subject') : $this->_message_data['subject']),
                         'text' => ((!isset($this->_message_data['text'])) ? '' : $this->_message_data['text']),

@@ -14,6 +14,7 @@ namespace App\controllers\game;
 use App\core\BaseController;
 use App\libraries\combatreport\Report;
 use App\libraries\Functions;
+use App\libraries\Users;
 
 /**
  * Combatreport Class
@@ -36,7 +37,7 @@ class Combatreport extends BaseController
         parent::__construct();
 
         // check if session is active
-        parent::$users->checkSession();
+        Users::checkSession();
 
         // load Model
         parent::loadModel('game/combatreport');

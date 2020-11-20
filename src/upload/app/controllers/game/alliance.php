@@ -18,6 +18,7 @@ use App\libraries\alliance\Alliances;
 use App\libraries\FormatLib;
 use App\libraries\Functions;
 use App\libraries\TimingLibrary as Timing;
+use App\libraries\Users;
 
 /**
  * Alliance Class
@@ -63,7 +64,7 @@ class Alliance extends BaseController
         parent::__construct();
 
         // check if session is active
-        parent::$users->checkSession();
+        Users::checkSession();
 
         // Check module access
         Functions::moduleMessage(Functions::isModuleAccesible(self::MODULE_ID));

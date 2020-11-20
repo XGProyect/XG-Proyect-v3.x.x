@@ -20,6 +20,7 @@ use App\libraries\FormatLib;
 use App\libraries\Functions;
 use App\libraries\TimingLibrary as Timing;
 use App\libraries\UpdatesLibrary;
+use App\libraries\Users;
 
 /**
  * Overview Class
@@ -41,7 +42,7 @@ class Overview extends BaseController
         parent::__construct();
 
         // check if session is active
-        parent::$users->checkSession();
+        Users::checkSession();
 
         // load Model
         parent::loadModel('game/overview');

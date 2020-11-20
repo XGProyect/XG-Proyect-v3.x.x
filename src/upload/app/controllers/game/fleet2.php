@@ -19,6 +19,7 @@ use App\libraries\Functions;
 use App\libraries\OfficiersLib;
 use App\libraries\premium\Premium;
 use App\libraries\research\Researches;
+use App\libraries\Users;
 use App\libraries\users\Shortcuts;
 
 /**
@@ -59,7 +60,7 @@ class Fleet2 extends BaseController
         parent::__construct();
 
         // check if session is active
-        parent::$users->checkSession();
+        Users::checkSession();
 
         // load Model
         parent::loadModel('game/fleet');
@@ -247,7 +248,9 @@ class Fleet2 extends BaseController
             foreach ($shortcuts_list as $shortcut) {
                 if ($shortcut != '') {
                     $description = $shortcut['name'] . ' ' . FormatLib::prettyCoords(
-                        $shortcut['g'], $shortcut['s'], $shortcut['p']
+                        $shortcut['g'],
+                        $shortcut['s'],
+                        $shortcut['p']
                     ) . ' ' . $this->langs->language['planet_type_short'][$shortcut['pt']];
 
                     $list_of_shortcuts[] = [

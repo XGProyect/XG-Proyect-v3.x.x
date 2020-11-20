@@ -1,15 +1,4 @@
-<?php
-/**
- * Users Library
- *
- * @category Library
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
-namespace App\libraries;
+<?php namespace App\libraries;
 
 use App\core\enumerators\AllianceRanksEnumerator as AllianceRanks;
 use App\core\enumerators\SwitchIntEnumerator as SwitchInt;
@@ -22,7 +11,7 @@ use App\libraries\TimingLibrary as Timing;
 /**
  * Users Class
  */
-class UsersLibrary
+class Users
 {
     /**
      * @var mixed
@@ -46,7 +35,7 @@ class UsersLibrary
     {
         $this->Users_Model = Functions::modelLoader('libraries/UsersLibrary');
 
-        if ($this->isSessionSet()) {
+        if (self::isSessionSet()) {
             // Get user data and check it
             $this->setUserData();
 
@@ -111,9 +100,9 @@ class UsersLibrary
      *
      * @return void
      */
-    public function checkSession()
+    public static function checkSession()
     {
-        if (!$this->isSessionSet()) {
+        if (!self::isSessionSet()) {
             Functions::redirect(SYSTEM_ROOT);
         }
     }
@@ -195,7 +184,7 @@ class UsersLibrary
      *
      * @return boolean
      */
-    private function isSessionSet()
+    private static function isSessionSet()
     {
         return !(!isset($_SESSION['user_id']) or !isset($_SESSION['user_password']));
     }

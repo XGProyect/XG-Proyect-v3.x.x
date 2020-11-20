@@ -17,6 +17,7 @@ use App\libraries\FormatLib;
 use App\libraries\Functions;
 use App\libraries\OfficiersLib;
 use App\libraries\ProductionLib;
+use App\libraries\Users;
 
 /**
  * Resources Class
@@ -52,7 +53,7 @@ class Resources extends BaseController
         parent::loadLang(['game/global', 'game/constructions', 'game/ships', 'game/resources']);
 
         // check if session is active
-        parent::$users->checkSession();
+        Users::checkSession();
 
         $this->_resource = parent::$objects->getObjects();
         $this->_prod_grid = parent::$objects->getProduction();

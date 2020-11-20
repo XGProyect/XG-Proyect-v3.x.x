@@ -8,7 +8,7 @@ use App\core\Objects;
 use App\core\Template;
 use App\libraries\Functions;
 use App\libraries\Page;
-use App\libraries\UsersLibrary;
+use App\libraries\Users;
 use CI_Lang;
 
 /**
@@ -16,6 +16,13 @@ use CI_Lang;
  */
 abstract class BaseController
 {
+    /**
+     * Contains the User object
+     *
+     * @var User
+     */
+    protected $userLibrary = null;
+
     /**
      * Contains the current user data
      *
@@ -56,12 +63,12 @@ abstract class BaseController
      */
     public function __construct()
     {
-        $user = new UsersLibrary;
-        $this->user = $user->getUserData();
-        $this->planet = $user->getPlanetData();
+        $this->userLibrary = new Users;
+        $this->user = $this->userLibrary->getUserData();
+        $this->planet = $this->userLibrary->getPlanetData();
 
         $this->objects = new Objects;
-        $this->page = new Page($user);
+        $this->page = new Page($this->userLibrary);
         $this->template = new Template;
 
         $this->isServerOpen();

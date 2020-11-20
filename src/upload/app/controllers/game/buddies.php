@@ -17,6 +17,7 @@ use App\libraries\buddies\Buddy;
 use App\libraries\enumerators\BuddiesStatusEnumerator as BuddiesStatus;
 use App\libraries\Functions;
 use App\libraries\TimingLibrary as Timing;
+use App\libraries\Users;
 use Exception;
 
 /**
@@ -46,7 +47,7 @@ class Buddies extends BaseController
         parent::__construct();
 
         // check if session is active
-        parent::$users->checkSession();
+        Users::checkSession();
 
         // load Model
         parent::loadModel('game/buddies');

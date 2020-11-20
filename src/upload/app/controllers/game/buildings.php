@@ -21,6 +21,7 @@ use App\libraries\Functions;
 use App\libraries\OfficiersLib;
 use App\libraries\TimingLibrary as Timing;
 use App\libraries\UpdatesLibrary;
+use App\libraries\Users;
 use Exception;
 
 /**
@@ -58,7 +59,7 @@ class Buildings extends BaseController
         parent::__construct();
 
         // check if session is active
-        parent::$users->checkSession();
+        Users::checkSession();
 
         // load Model
         parent::loadModel('game/buildings');

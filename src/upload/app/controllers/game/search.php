@@ -17,6 +17,7 @@ use App\core\enumerators\SwitchIntEnumerator as SwitchInt;
 use App\helpers\UrlHelper;
 use App\libraries\FormatLib;
 use App\libraries\Functions;
+use App\libraries\Users;
 
 /**
  * Search Class
@@ -60,7 +61,7 @@ class Search extends BaseController
         parent::__construct();
 
         // check if session is active
-        parent::$users->checkSession();
+        Users::checkSession();
 
         // load Model
         parent::loadModel('game/search');

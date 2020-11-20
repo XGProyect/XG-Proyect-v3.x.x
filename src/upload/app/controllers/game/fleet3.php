@@ -19,6 +19,7 @@ use App\libraries\FleetsLib;
 use App\libraries\FormatLib;
 use App\libraries\Functions;
 use App\libraries\research\Researches;
+use App\libraries\Users;
 
 /**
  * Fleet3 Class
@@ -63,7 +64,7 @@ class Fleet3 extends BaseController
         parent::__construct();
 
         // check if session is active
-        parent::$users->checkSession();
+        Users::checkSession();
 
         // load Model
         parent::loadModel('game/fleet');

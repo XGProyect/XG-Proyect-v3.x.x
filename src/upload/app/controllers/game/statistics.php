@@ -15,6 +15,7 @@ use App\core\BaseController;
 use App\libraries\FormatLib;
 use App\libraries\Functions;
 use App\libraries\TimingLibrary as Timing;
+use App\libraries\Users;
 
 /**
  * Statistics Class
@@ -31,7 +32,7 @@ class Statistics extends BaseController
         parent::__construct();
 
         // check if session is active
-        parent::$users->checkSession();
+        Users::checkSession();
 
         // load Model
         parent::loadModel('game/statistics');

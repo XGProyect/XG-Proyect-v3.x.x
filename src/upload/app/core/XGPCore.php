@@ -12,7 +12,7 @@
 namespace App\core;
 
 use App\libraries\Page;
-use App\libraries\UsersLibrary;
+use App\libraries\Users;
 use CI_Lang;
 use Exception;
 
@@ -57,7 +57,7 @@ abstract class XGPCore
      */
     private function setUsersClass()
     {
-        self::$users = new UsersLibrary();
+        self::$users = new Users;
     }
 
     /**

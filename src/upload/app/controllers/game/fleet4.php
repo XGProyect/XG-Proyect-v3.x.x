@@ -21,6 +21,7 @@ use App\libraries\Functions;
 use App\libraries\game\Fleets;
 use App\libraries\premium\Premium;
 use App\libraries\research\Researches;
+use App\libraries\Users;
 
 /**
  * Fleet4 Class
@@ -130,7 +131,7 @@ class Fleet4 extends BaseController
         parent::__construct();
 
         // check if session is active
-        parent::$users->checkSession();
+        Users::checkSession();
 
         // load Model
         parent::loadModel('game/fleet');
@@ -492,7 +493,8 @@ class Fleet4 extends BaseController
 
         if ($data['mission'] == Missions::STAY) {
             $is_buddy = $this->Fleet_Model->getBuddies(
-                $this->planet['planet_user_id'], $this->_target_data['planet_user_id']
+                $this->planet['planet_user_id'],
+                $this->_target_data['planet_user_id']
             ) >= 1;
 
             if ($this->_target_data['user_ally_id'] != $this->user['user_ally_id'] && !$is_buddy) {
@@ -837,9 +839,9 @@ class Fleet4 extends BaseController
         // create the new fleet and
         // remove from the planet the ships and resources
         $this->Fleet_Model->insertNewFleet(
-            $this->_fleet_data, $this->planet, $this->_fleet_ships
+            $this->_fleet_data,
+            $this->planet,
+            $this->_fleet_ships
         );
     }
 }
-
-/* end of fleet4.php */

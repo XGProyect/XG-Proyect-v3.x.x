@@ -15,6 +15,7 @@ use App\core\BaseController;
 use App\helpers\UrlHelper;
 use App\libraries\Functions;
 use App\libraries\TimingLibrary as Timing;
+use App\libraries\Users;
 
 /**
  * Banned Class
@@ -43,7 +44,7 @@ class Banned extends BaseController
         parent::__construct();
 
         // check if session is active
-        parent::$users->checkSession();
+        Users::checkSession();
 
         // load Model
         parent::loadModel('game/banned');

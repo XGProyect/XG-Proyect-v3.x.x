@@ -18,6 +18,7 @@ use App\helpers\ArraysHelper;
 use App\helpers\UrlHelper;
 use App\libraries\Functions;
 use App\libraries\OfficiersLib;
+use App\libraries\Users;
 
 /**
  * Messages Class
@@ -46,7 +47,7 @@ class Messages extends BaseController
         parent::__construct();
 
         // check if session is active
-        parent::$users->checkSession();
+        Users::checkSession();
 
         // load Model
         parent::loadModel('game/messages');

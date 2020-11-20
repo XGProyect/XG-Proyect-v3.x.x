@@ -15,7 +15,7 @@ namespace App\models\home;
 use App\core\Model;
 use App\libraries\Functions;
 use App\libraries\PlanetLib;
-use App\libraries\UsersLibrary;
+use App\libraries\Users;
 
 /**
  * Register Class
@@ -76,12 +76,12 @@ class Register extends Model
     /**
      * Register a new user
      *
-     * @param UsersLibrary $user
+     * @param Users $user
      * @param array $new_user_data
      * @param array $coords
      * @return void
      */
-    public function createNewUser(UsersLibrary $user, array $new_user_data, array $coords): void
+    public function createNewUser(Users $user, array $new_user_data, array $coords): void
     {
         try {
             $this->db->beginTransaction();

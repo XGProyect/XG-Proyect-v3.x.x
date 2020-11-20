@@ -21,6 +21,7 @@ use App\libraries\Formulas;
 use App\libraries\Functions;
 use App\libraries\OfficiersLib;
 use App\libraries\ProductionLib;
+use App\libraries\Users;
 
 /**
  * Infos Class
@@ -58,7 +59,7 @@ class Infos extends BaseController
         parent::__construct();
 
         // check if session is active
-        parent::$users->checkSession();
+        Users::checkSession();
 
         // load Model
         parent::loadModel('game/infos');

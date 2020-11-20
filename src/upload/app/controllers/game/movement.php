@@ -22,6 +22,7 @@ use App\libraries\game\Fleets;
 use App\libraries\premium\Premium;
 use App\libraries\research\Researches;
 use App\libraries\TimingLibrary as Timing;
+use App\libraries\Users;
 
 /**
  * Movement Class
@@ -66,7 +67,7 @@ class Movement extends BaseController
         parent::__construct();
 
         // check if session is active
-        parent::$users->checkSession();
+        Users::checkSession();
 
         // load Model
         parent::loadModel('game/fleet');

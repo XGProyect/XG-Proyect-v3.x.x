@@ -14,6 +14,7 @@ namespace App\controllers\game;
 use App\core\BaseController;
 use App\libraries\FormatLib as Format;
 use App\libraries\Functions;
+use App\libraries\Users;
 
 /**
  * TraderLayer Class
@@ -30,7 +31,7 @@ class TraderLayer extends BaseController
         parent::__construct();
 
         // check if session is active
-        parent::$users->checkSession();
+        Users::checkSession();
 
         // load Model
         parent::loadModel('game/trader');

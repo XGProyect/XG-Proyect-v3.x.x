@@ -14,6 +14,7 @@ namespace App\controllers\game;
 use App\core\BaseController;
 use App\libraries\FormatLib;
 use App\libraries\Functions;
+use App\libraries\Users;
 
 /**
  * Techtree Class
@@ -42,7 +43,7 @@ class Techtree extends BaseController
         parent::__construct();
 
         // check if session is active
-        parent::$users->checkSession();
+        Users::checkSession();
 
         // load Language
         parent::loadLang(['game/global', 'game/constructions', 'game/defenses', 'game/ships', 'game/technologies']);

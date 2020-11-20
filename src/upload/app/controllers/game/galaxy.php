@@ -16,6 +16,7 @@ use App\libraries\FleetsLib;
 use App\libraries\FormatLib;
 use App\libraries\Formulas;
 use App\libraries\Functions;
+use App\libraries\Users;
 
 /**
  * Galaxy Class
@@ -68,7 +69,7 @@ class Galaxy extends BaseController
         parent::__construct();
 
         // check if session is active
-        parent::$users->checkSession();
+        Users::checkSession();
 
         // load Model
         parent::loadModel('game/fleet');

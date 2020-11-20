@@ -13,6 +13,7 @@ namespace App\controllers\game;
 
 use App\core\BaseController;
 use App\libraries\Functions;
+use App\libraries\Users;
 
 /**
  * Renameplanet Class
@@ -29,7 +30,7 @@ class Renameplanet extends BaseController
         parent::__construct();
 
         // check if session is active
-        parent::$users->checkSession();
+        Users::checkSession();
 
         // load Model
         parent::loadModel('game/renameplanet');
@@ -72,16 +73,11 @@ class Renameplanet extends BaseController
         // CHANGE THE ACTION
         switch ((isset($_POST['action']) ? $_POST['action'] : null)) {
             case $this->langs->line('rp_planet_rename_action'):
-
                 $this->rename_planet($_POST['newname']);
-
                 break;
-
             case $this->langs->line('rp_abandon_planet'):
-
                 // DELETE VIEW
                 $current_view = 'renameplanet/renameplanet_delete_view';
-
                 break;
         } // switch
 

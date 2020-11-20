@@ -141,7 +141,8 @@ class Installation extends BaseController
                 $parse['v_prefix'] = $this->db_prefix;
 
                 $current_page = $this->template->set(
-                    'install/in_database_view', $parse
+                    'install/in_database_view',
+                    $parse
                 );
 
                 break;

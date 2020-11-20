@@ -20,6 +20,7 @@ use App\libraries\Functions;
 use App\libraries\game\Fleets;
 use App\libraries\premium\Premium;
 use App\libraries\research\Researches;
+use App\libraries\Users;
 
 /**
  * Fleet1 Class
@@ -60,7 +61,7 @@ class Fleet1 extends BaseController
         parent::__construct();
 
         // check if session is active
-        parent::$users->checkSession();
+        Users::checkSession();
 
         // load Model
         parent::loadModel('game/fleet');
