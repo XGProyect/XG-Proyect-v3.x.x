@@ -9,7 +9,7 @@
  * Copyright (c) 2008-2020 XG Proyect
  *
  * @package    XG Proyect
- * @author     Lucas Kovács
+ * @author     XG Proyect Team
  * @copyright  2008-2020 XG Proyect
  * @license    https://www.gnu.org/licenses/gpl-3.0.en.html GPL-3.0 License
  * @link       https://github.com/XGProyect/
@@ -75,7 +75,7 @@ abstract class Functions
      *
      * @return boolean
      */
-    public static function modelLoader($model = '')
+    public static function model($model = '')
     {
         if (!empty($model)) {
             // Require file

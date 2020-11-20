@@ -9,7 +9,7 @@
  * Copyright (c) 2008-2020 XG Proyect
  *
  * @package    XG Proyect
- * @author     Lucas Kovács
+ * @author     XG Proyect Team
  * @copyright  2008-2020 XG Proyect
  * @license    https://www.gnu.org/licenses/gpl-3.0.en.html GPL-3.0 License
  * @link       https://github.com/XGProyect/
@@ -48,7 +48,7 @@ class StatisticsLibrary extends XGPCore
         parent::__construct();
 
         // load model
-        $this->statisticsLibraryModel = Functions::modelLoader('libraries/Statistics_library');
+        $this->statisticsLibraryModel = Functions::model('libraries/Statistics_library');
     }
 
     /**

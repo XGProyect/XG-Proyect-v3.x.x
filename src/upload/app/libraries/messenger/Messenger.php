@@ -9,7 +9,7 @@
  * Copyright (c) 2008-2020 XG Proyect
  *
  * @package    XG Proyect
- * @author     Lucas Kovács
+ * @author     XG Proyect Team
  * @copyright  2008-2020 XG Proyect
  * @license    https://www.gnu.org/licenses/gpl-3.0.en.html GPL-3.0 License
  * @link       https://github.com/XGProyect/
@@ -38,7 +38,7 @@ final class Messenger
     public function __construct()
     {
         // load model
-        $this->messengerModel = Functions::modelLoader('libraries/messenger/messenger');
+        $this->messengerModel = Functions::model('libraries/messenger/messenger');
     }
 
     /**

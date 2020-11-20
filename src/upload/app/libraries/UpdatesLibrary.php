@@ -9,7 +9,7 @@
  * Copyright (c) 2008-2020 XG Proyect
  *
  * @package    XG Proyect
- * @author     Lucas Kovács
+ * @author     XG Proyect Team
  * @copyright  2008-2020 XG Proyect
  * @license    https://www.gnu.org/licenses/gpl-3.0.en.html GPL-3.0 License
  * @link       https://github.com/XGProyect/
@@ -51,7 +51,7 @@ class UpdatesLibrary extends XGPCore
         parent::__construct();
 
         // load Model
-        $this->updatesModel = Functions::modelLoader('libraries/UpdatesLibrary');
+        $this->updatesModel = Functions::model('libraries/UpdatesLibrary');
 
         // Other stuff
         $this->cleanUp();
@@ -185,7 +185,7 @@ class UpdatesLibrary extends XGPCore
      */
     private static function checkBuildingQueue(&$current_planet, &$current_user): bool
     {
-        $db = Functions::modelLoader('libraries/UpdatesLibrary');
+        $db = Functions::model('libraries/UpdatesLibrary');
         $resource = parent::$objects->getObjects();
         $ret_value = false;
 
@@ -266,7 +266,7 @@ class UpdatesLibrary extends XGPCore
      */
     public static function setFirstElement(&$current_planet, $current_user): void
     {
-        $db = Functions::modelLoader('libraries/UpdatesLibrary');
+        $db = Functions::model('libraries/UpdatesLibrary');
         $lang = new Language;
         $lang = $lang->loadLang(['game/global', 'game/constructions', 'game/buildings'], true);
         $resource = parent::$objects->getObjects();
@@ -643,7 +643,7 @@ class UpdatesLibrary extends XGPCore
 
         if ($Simul == false) {
             // new DB Object
-            $db = Functions::modelLoader('libraries/UpdatesLibrary');
+            $db = Functions::model('libraries/UpdatesLibrary');
 
             // SHIPS AND DEFENSES UPDATE
             $builded = self::updateHangarQueue($current_user, $current_planet, $ProductionTime);

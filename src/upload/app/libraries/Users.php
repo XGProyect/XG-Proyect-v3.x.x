@@ -33,7 +33,7 @@ class Users
      */
     public function __construct()
     {
-        $this->Users_Model = Functions::modelLoader('libraries/UsersLibrary');
+        $this->Users_Model = Functions::model('libraries/UsersLibrary');
 
         if (self::isSessionSet()) {
             // Get user data and check it

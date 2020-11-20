@@ -60,7 +60,7 @@ class NoobsProtectionLib extends XGPCore
     public function __construct()
     {
         // load model
-        $this->noobsprotectionlibModel = Functions::modelLoader('libraries/noobsprotectionlib');
+        $this->noobsprotectionlibModel = Functions::model('libraries/noobsprotectionlib');
 
         // set configs
         $this->setAllSettings();

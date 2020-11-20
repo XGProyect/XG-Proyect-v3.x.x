@@ -9,13 +9,12 @@
  * Copyright (c) 2008-2020 XG Proyect
  *
  * @package    XG Proyect
- * @author     Lucas Kovács
+ * @author     XG Proyect Team
  * @copyright  2008-2020 XG Proyect
  * @license    https://www.gnu.org/licenses/gpl-3.0.en.html GPL-3.0 License
  * @link       https://github.com/XGProyect/
  * @since      Version 3.0.0
  */
-
 namespace App\core;
 
 use App\libraries\Functions;
@@ -46,7 +45,7 @@ class Sessions
     public function __construct()
     {
         // load model
-        $this->sessionsModel = Functions::modelLoader('core/sessions');
+        $this->sessionsModel = Functions::model('core/sessions');
 
         session_set_save_handler(
             [ & $this->sessionsModel, 'openConnection'],

@@ -27,7 +27,7 @@ class Options
     public function __construct()
     {
         // load model
-        $this->optionsModel = Functions::modelLoader('core/options');
+        $this->optionsModel = Functions::model('core/options');
     }
 
     /**

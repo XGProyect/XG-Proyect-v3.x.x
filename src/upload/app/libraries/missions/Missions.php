@@ -9,7 +9,7 @@
  * Copyright (c) 2008-2020 XG Proyect
  *
  * @package    XG Proyect
- * @author     Lucas Kovács
+ * @author     XG Proyect Team
  * @copyright  2008-2020 XG Proyect
  * @license    https://www.gnu.org/licenses/gpl-3.0.en.html GPL-3.0 License
  * @link       https://github.com/XGProyect/
@@ -55,7 +55,7 @@ class Missions extends XGPCore
         parent::__construct();
 
         // load model
-        $this->missionsModel = Functions::modelLoader('libraries/missions/missions');
+        $this->missionsModel = Functions::model('libraries/missions/missions');
 
         $this->resource = parent::$objects->getObjects();
         $this->pricelist = parent::$objects->getPrice();
