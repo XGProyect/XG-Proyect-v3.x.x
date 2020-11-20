@@ -55,9 +55,9 @@ class Resources extends BaseController
         // check if session is active
         Users::checkSession();
 
-        $this->_resource = parent::$objects->getObjects();
-        $this->_prod_grid = parent::$objects->getProduction();
-        $this->_reslist = parent::$objects->getObjectsList();
+        $this->_resource = $this->objects->getObjects();
+        $this->_prod_grid = $this->objects->getProduction();
+        $this->_reslist = $this->objects->getObjectsList();
     }
 
     /**

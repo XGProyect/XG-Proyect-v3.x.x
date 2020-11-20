@@ -99,7 +99,7 @@ class Buildings extends BaseController
         $this->_building = new Building(
             $this->planet,
             $this->user,
-            $this->getObjects()
+            $this->objects
         );
 
         $this->_allowed_buildings = $this->getAllowedBuildings();
@@ -232,8 +232,8 @@ class Buildings extends BaseController
         $item_to_parse['dpath'] = DPATH;
         $item_to_parse['i'] = $building_id;
         $item_to_parse['nivel'] = $this->getBuildingLevelWithFormat($building_id);
-        $item_to_parse['n'] = $this->langs->language[$this->getObjects()->getObjects()[$building_id]];
-        $item_to_parse['descriptions'] = $this->langs->language['descriptions'][$this->getObjects()->getObjects()[$building_id]];
+        $item_to_parse['n'] = $this->langs->language[$this->objects->getObjects()[$building_id]];
+        $item_to_parse['descriptions'] = $this->langs->language['descriptions'][$this->objects->getObjects()[$building_id]];
         $item_to_parse['price'] = $this->getBuildingPriceWithFormat($building_id);
         $item_to_parse['time'] = $this->getBuildingTimeWithFormat($building_id);
         $item_to_parse['click'] = $this->getActionButton($building_id);
@@ -299,7 +299,7 @@ class Buildings extends BaseController
      */
     private function getBuildingLevel($building_id)
     {
-        return $this->planet[$this->getObjects()->getObjects()[$building_id]];
+        return $this->planet[$this->objects->getObjects()[$building_id]];
     }
 
     /**
@@ -668,7 +668,7 @@ class Buildings extends BaseController
      */
     private function addToQueue($building, $AddMode = true)
     {
-        $resource = $this->getObjects()->getObjects();
+        $resource = $this->objects->getObjects();
         $CurrentQueue = $this->planet['planet_b_building_id'];
         $queue = $this->showQueue();
         $max_fields = Developments::maxFields($this->planet);
@@ -816,7 +816,7 @@ class Buildings extends BaseController
                     $BuildLevel = $BuildArray[1];
                     $BuildMode = $BuildArray[4];
                     $BuildTime = $BuildEndTime - time();
-                    $ElementTitle = $this->langs->language[$this->getObjects()->getObjects()[$building]];
+                    $ElementTitle = $this->langs->language[$this->objects->getObjects()[$building]];
 
                     if (isset($Sprice[$building]) && $Sprice !== false && $BuildLevel > $Sprice[$building]) {
                         $Sprice[$building] = $BuildLevel;

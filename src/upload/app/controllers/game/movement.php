@@ -266,7 +266,7 @@ class Movement extends BaseController
      */
     private function buildShipsBlock(string $fleet_array): string
     {
-        $objects = parent::$objects->getObjects();
+        $objects = $this->objects->getObjects();
         $ships = FleetsLib::getFleetShipsArray($fleet_array);
         $tooltips = [];
 

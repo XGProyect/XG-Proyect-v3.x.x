@@ -67,10 +67,10 @@ class Infos extends BaseController
         // load Language
         parent::loadLang(['game/global', 'game/infos', 'game/constructions', 'game/defenses', 'game/ships', 'game/technologies']);
 
-        $this->_resource = parent::$objects->getObjects();
-        $this->_pricelist = parent::$objects->getPrice();
-        $this->_combat_caps = parent::$objects->getCombatSpecs();
-        $this->_prod_grid = parent::$objects->getProduction();
+        $this->_resource = $this->objects->getObjects();
+        $this->_pricelist = $this->objects->getPrice();
+        $this->_combat_caps = $this->objects->getCombatSpecs();
+        $this->_prod_grid = $this->objects->getProduction();
         $this->_element_id = isset($_GET['gid']) ? (int) $_GET['gid'] : null;
     }
 

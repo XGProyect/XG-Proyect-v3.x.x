@@ -144,8 +144,8 @@ class Fleet3 extends BaseController
      */
     private function buildFleetBlock()
     {
-        $objects = parent::$objects->getObjects();
-        $price = parent::$objects->getPrice();
+        $objects = $this->objects->getObjects();
+        $price = $this->objects->getPrice();
 
         $ships = $this->Fleet_Model->getShipsByPlanetId($this->planet['planet_id']);
 

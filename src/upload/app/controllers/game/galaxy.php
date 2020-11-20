@@ -78,9 +78,9 @@ class Galaxy extends BaseController
         // load Language
         parent::loadLang(['game/global', 'game/defenses', 'game/missions', 'game/galaxy']);
 
-        $this->_resource = parent::$objects->getObjects();
-        $this->_pricelist = parent::$objects->getPrice();
-        $this->_reslist = parent::$objects->getObjectsList();
+        $this->_resource = $this->objects->getObjects();
+        $this->_pricelist = $this->objects->getPrice();
+        $this->_reslist = $this->objects->getObjectsList();
         $this->_noob = Functions::loadLibrary('NoobsProtectionLib');
         $this->_galaxyLib = Functions::loadLibrary('GalaxyLib');
 

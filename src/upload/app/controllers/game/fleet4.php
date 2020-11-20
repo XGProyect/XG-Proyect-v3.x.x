@@ -422,8 +422,8 @@ class Fleet4 extends BaseController
         $planet_ships = $this->Fleet_Model->getShipsByPlanetId($this->planet['planet_id']);
 
         // objects
-        $objects = parent::$objects->getObjects();
-        $price = parent::$objects->getPrice();
+        $objects = $this->objects->getObjects();
+        $price = $this->objects->getPrice();
 
         if ($fleet) {
             $total_ships = 0;

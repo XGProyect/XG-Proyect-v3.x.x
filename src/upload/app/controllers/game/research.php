@@ -67,8 +67,8 @@ class Research extends BaseController
         // load Language
         parent::loadLang(['game/global', 'game/research', 'game/technologies']);
 
-        $this->_resource = parent::$objects->getObjects();
-        $this->_reslist = parent::$objects->getObjectsList();
+        $this->_resource = $this->objects->getObjects();
+        $this->_reslist = $this->objects->getObjectsList();
 
         $this->setLabsAmount();
         $this->handleTechnologieBuild();

@@ -49,10 +49,10 @@ class Techtree extends BaseController
         parent::loadLang(['game/global', 'game/constructions', 'game/defenses', 'game/ships', 'game/technologies']);
 
         // requirements
-        $this->_resource = parent::$objects->getObjects();
+        $this->_resource = $this->objects->getObjects();
 
         // requirements
-        $this->_requirements = parent::$objects->getRelations();
+        $this->_requirements = $this->objects->getRelations();
     }
 
     /**
@@ -107,7 +107,7 @@ class Techtree extends BaseController
      */
     private function buildBlock(string $object_id): array
     {
-        $objects = parent::$objects->getObjectsList($object_id);
+        $objects = $this->objects->getObjectsList($object_id);
         $list_of_objects = [];
 
         foreach ($objects as $object) {
