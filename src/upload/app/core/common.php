@@ -2,11 +2,14 @@
 
 namespace App\core;
 
+use App\core\enumerators\SwitchIntEnumerator as SwitchInt;
+use App\core\enumerators\UserRanksEnumerator as UserRanks;
 use App\core\ErrorHandler;
 use App\core\Sessions;
 use App\libraries\Functions;
 use App\libraries\SecurePageLib;
 use App\libraries\UpdatesLibrary;
+use App\libraries\Users;
 use AutoLoader;
 use Exception;
 
@@ -20,9 +23,9 @@ require_once XGP_ROOT . CORE_PATH . 'AutoLoader.php';
 class Common
 {
     private const APPLICATIONS = [
-        'home' => ['setSystemTimezone', 'setSession', 'setUpdates'],
+        'home' => ['setSystemTimezone', 'setSession', 'setUpdates', 'isServerOpen'],
         'admin' => ['setSystemTimezone', 'setSecure', 'setSession'],
-        'game' => ['setSystemTimezone', 'setSecure', 'setSession', 'setUpdates'],
+        'game' => ['setSystemTimezone', 'setSecure', 'setSession', 'setUpdates', 'isServerOpen'],
         'install' => [],
     ];
 
@@ -192,5 +195,22 @@ class Common
 
         // Several updates
         new UpdatesLibrary;
+    }
+
+    /**
+     * Check if the server is open
+     *
+     * @return void
+     */
+    private function isServerOpen(): void
+    {
+        if (Functions::readConfig('game_enable') == SwitchInt::off) {
+            $user = (new Users)->getUserData();
+            $user_level = $user['user_authlevel'] ?? 0;
+
+            if ($user_level < UserRanks::ADMIN) {
+                die(Functions::message(Functions::readConfig('close_reason'), '', '', false, false));
+            }
+        }
     }
 }

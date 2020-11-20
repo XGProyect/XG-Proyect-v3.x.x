@@ -2,11 +2,8 @@
 
 namespace App\core;
 
-use App\core\enumerators\SwitchIntEnumerator as SwitchInt;
-use App\core\enumerators\UserRanksEnumerator;
 use App\core\Objects;
 use App\core\Template;
-use App\libraries\Functions;
 use App\libraries\Page;
 use App\libraries\Users;
 use CI_Lang;
@@ -70,8 +67,6 @@ abstract class BaseController
         $this->objects = new Objects;
         $this->page = new Page($this->userLibrary);
         $this->template = new Template;
-
-        $this->isServerOpen();
     }
 
     /**
@@ -120,24 +115,6 @@ abstract class BaseController
     protected function getObjects(): array
     {
         return $this->objects;
-    }
-
-    /**
-     * Check if the server is open
-     *
-     * @return void
-     */
-    private function isServerOpen(): void
-    {
-        if (!defined('IN_INSTALL') && !defined('IN_ADMIN')) {
-            $user_level = isset($this->user['user_authlevel']) ?? 0;
-
-            if (Functions::readConfig('game_enable') == SwitchInt::off
-                && $user_level < UserRanksEnumerator::ADMIN) {
-                Functions::message(Functions::readConfig('close_reason'), '', '', false, false);
-                die();
-            }
-        }
     }
 
     /**
