@@ -145,7 +145,7 @@ class Migrate extends BaseController
                     $parse['result'] = print_r($this->output, true);
 
                     parent::$page->displayAdmin(
-                        $this->getTemplate()->set(
+                        $this->template->set(
                             'adm/migrate_result_view',
                             $parse
                         )
@@ -161,7 +161,7 @@ class Migrate extends BaseController
         }
 
         parent::$page->displayAdmin(
-            $this->getTemplate()->set(
+            $this->template->set(
                 'adm/migrate_view',
                 $parse
             )

@@ -230,7 +230,7 @@ class Alliance extends BaseController
      */
     private function getDefaultPublicSection()
     {
-        return $this->getTemplate()->set('alliance/alliance_default_menu_view', $this->langs->language);
+        return $this->template->set('alliance/alliance_default_menu_view', $this->langs->language);
     }
 
     /**
@@ -250,7 +250,7 @@ class Alliance extends BaseController
             $button_text = $this->langs->line('al_continue');
         }
 
-        return $this->getTemplate()->set(
+        return $this->template->set(
             'alliance/alliance_awaiting_view',
             array_merge(
                 [
@@ -284,7 +284,7 @@ class Alliance extends BaseController
             $details[] = $data;
         }
 
-        return $this->getTemplate()->set(
+        return $this->template->set(
             'alliance/alliance_front_page_view',
             array_merge([
                 'image' => $this->buildImageBlock(),
@@ -303,7 +303,7 @@ class Alliance extends BaseController
      */
     private function getAinfoSection()
     {
-        return $this->getTemplate()->set(
+        return $this->template->set(
             'alliance/alliance_ainfo',
             array_merge(
                 $this->langs->language,
@@ -328,7 +328,7 @@ class Alliance extends BaseController
     private function getSearchSection()
     {
         $search_string = filter_input(INPUT_POST, 'searchtext');
-        $search_page = $this->getTemplate()->set(
+        $search_page = $this->template->set(
             'alliance/alliance_search_form_view',
             array_merge(['searchtext' => $search_string], $this->langs->language)
         );
@@ -348,7 +348,7 @@ class Alliance extends BaseController
                 ];
             }
 
-            $search_page .= $this->getTemplate()->set(
+            $search_page .= $this->template->set(
                 'alliance/alliance_search_results_view',
                 array_merge(['list_of_results' => $list_of_results], $this->langs->language)
             );
@@ -402,7 +402,7 @@ class Alliance extends BaseController
                 $this->langs->line('al_continue')
             );
         } else {
-            return $this->getTemplate()->set('alliance/alliance_make_view', $this->langs->language);
+            return $this->template->set('alliance/alliance_make_view', $this->langs->language);
         }
     }
 
@@ -431,7 +431,7 @@ class Alliance extends BaseController
             }
         }
 
-        return $this->getTemplate()->set('alliance/alliance_apply_form_view', array_merge(
+        return $this->template->set('alliance/alliance_apply_form_view', array_merge(
             $this->langs->language,
             [
                 'js_path' => JS_PATH,
@@ -488,7 +488,7 @@ class Alliance extends BaseController
             ];
         }
 
-        return $this->getTemplate()->set(
+        return $this->template->set(
             'alliance/alliance_members_view',
             array_merge(
                 $this->langs->language,
@@ -569,7 +569,7 @@ class Alliance extends BaseController
             }
         }
 
-        return $this->getTemplate()->set(
+        return $this->template->set(
             'alliance/alliance_circular_view',
             array_merge(
                 $this->langs->language,
@@ -745,7 +745,7 @@ class Alliance extends BaseController
 
         $ranks = $this->alliance->getCurrentAllianceRankObject();
 
-        return $this->getTemplate()->set(
+        return $this->template->set(
             'alliance/alliance_admin',
             array_merge(
                 $this->langs->language,
@@ -842,7 +842,7 @@ class Alliance extends BaseController
             ];
         }
 
-        return $this->getTemplate()->set(
+        return $this->template->set(
             'alliance/alliance_admin_members_view',
             array_merge(
                 $this->langs->language,
@@ -881,7 +881,7 @@ class Alliance extends BaseController
             Functions::redirect('game.php?page=alliance&mode=admin&edit=ally');
         }
 
-        return $this->getTemplate()->set(
+        return $this->template->set(
             'alliance/alliance_admin_rename',
             array_merge(
                 $this->langs->language,
@@ -957,7 +957,7 @@ class Alliance extends BaseController
             }
 
             if (isset($show) && isset($list_of_requests[$show])) {
-                $request_form = $this->getTemplate()->set(
+                $request_form = $this->template->set(
                     'alliance/alliance_admin_request_form',
                     array_merge(
                         $this->langs->language,
@@ -972,7 +972,7 @@ class Alliance extends BaseController
             }
         }
 
-        return $this->getTemplate()->set(
+        return $this->template->set(
             'alliance/alliance_admin_request_view',
             array_merge(
                 $this->langs->language,
@@ -1082,7 +1082,7 @@ class Alliance extends BaseController
             }
         }
 
-        return $this->getTemplate()->set(
+        return $this->template->set(
             'alliance/alliance_admin_laws_view',
             array_merge(
                 $this->langs->language,
@@ -1120,7 +1120,7 @@ class Alliance extends BaseController
             Functions::redirect('game.php?page=alliance&mode=admin&edit=ally');
         }
 
-        return $this->getTemplate()->set(
+        return $this->template->set(
             'alliance/alliance_admin_rename',
             array_merge(
                 $this->langs->language,
@@ -1182,7 +1182,7 @@ class Alliance extends BaseController
             }
         }
 
-        return $this->getTemplate()->set(
+        return $this->template->set(
             'alliance/alliance_admin_transfer_view',
             array_merge(
                 $this->langs->language,
@@ -1397,7 +1397,7 @@ class Alliance extends BaseController
     private function buildLeaveBlock()
     {
         if (!$this->alliance->isOwner()) {
-            return $this->getTemplate()->set('alliance/alliance_leave_view', $this->langs->language);
+            return $this->template->set('alliance/alliance_leave_view', $this->langs->language);
         }
 
         return '';
@@ -1486,7 +1486,7 @@ class Alliance extends BaseController
             }
         }
 
-        return $this->getTemplate()->set(
+        return $this->template->set(
             'alliance/alliance_admin_members_edit',
             array_merge(
                 $this->langs->language,

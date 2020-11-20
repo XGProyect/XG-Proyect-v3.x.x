@@ -122,7 +122,7 @@ class Messages extends BaseController
         // set messages as read
         $this->Messages_Model->markAsRead($this->user['user_id']);
 
-        return $this->getTemplate()->set(
+        return $this->template->set(
             'game/messages_default_view',
             array_merge(
                 $this->langs->language,
@@ -172,7 +172,7 @@ class Messages extends BaseController
             $this->Messages_Model->markAsReadByType($this->user['user_id'], $get_messages);
         }
 
-        return $this->getTemplate()->set(
+        return $this->template->set(
             'game/messages_premium_view',
             array_merge(
                 $this->langs->language,

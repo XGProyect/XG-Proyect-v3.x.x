@@ -75,7 +75,7 @@ class Changelog extends BaseController
         }
 
         parent::$page->display(
-            $this->getTemplate()->set('game/changelog_view', array_merge(
+            $this->template->set('game/changelog_view', array_merge(
                 $this->langs->language,
                 ['list_of_changes' => $changes]
             ))

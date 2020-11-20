@@ -147,7 +147,7 @@ class Register extends BaseController
         $parse['re_mail_text_part1'] = str_replace('%s', $game_name, $this->langs->line('re_mail_text_part1'));
         $parse['re_mail_text_part7'] = str_replace('%s', $game_name, $this->langs->line('re_mail_text_part7'));
 
-        $email = $this->getTemplate()->set(
+        $email = $this->template->set(
             'home/welcome_email_template_view',
             $parse
         );

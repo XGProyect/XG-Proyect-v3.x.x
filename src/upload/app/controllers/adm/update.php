@@ -107,7 +107,7 @@ class Update extends BaseController
                     $parse['result'] = print_r($this->output, true);
 
                     parent::$page->displayAdmin(
-                        $this->getTemplate()->set(
+                        $this->template->set(
                             'adm/update_result_view',
                             $parse
                         )
@@ -121,7 +121,7 @@ class Update extends BaseController
         }
 
         parent::$page->displayAdmin(
-            $this->getTemplate()->set(
+            $this->template->set(
                 'adm/update_view',
                 $parse
             )

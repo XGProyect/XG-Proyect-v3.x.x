@@ -142,7 +142,7 @@ class Research extends BaseController
                             $bloc['tech_home'] = $this->planet['planet_id'];
                             $bloc['tech_id'] = $this->planet['planet_b_tech_id'];
                         }
-                        $action_link = $this->getTemplate()->set(
+                        $action_link = $this->template->set(
                             'buildings/buildings_research_script',
                             $bloc
                         );
@@ -151,7 +151,7 @@ class Research extends BaseController
                     }
                 }
                 $RowParse['tech_link'] = $action_link;
-                $technology_list .= $this->getTemplate()->set(
+                $technology_list .= $this->template->set(
                     'buildings/buildings_research_row',
                     $RowParse
                 );
@@ -162,7 +162,7 @@ class Research extends BaseController
         $parse['technolist'] = $technology_list;
 
         parent::$page->display(
-            $this->getTemplate()->set(
+            $this->template->set(
                 'buildings/buildings_research',
                 $parse
             )

@@ -135,7 +135,7 @@ class Search extends BaseController
     private function buildPage(): void
     {
         parent::$page->display(
-            $this->getTemplate()->set(
+            $this->template->set(
                 'game/search_view',
                 array_merge(
                     [
@@ -158,7 +158,7 @@ class Search extends BaseController
         if (count($this->results) > 0) {
             $this->search_terms['error_block'] = '';
 
-            return $this->getTemplate()->set(
+            return $this->template->set(
                 'game/search_' . $this->search_terms['search_type'] . '_results_view',
                 array_merge(
                     $this->langs->language,

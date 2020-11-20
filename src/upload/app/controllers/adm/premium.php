@@ -102,7 +102,7 @@ class Premium extends BaseController
     private function buildPage(): void
     {
         parent::$page->displayAdmin(
-            $this->getTemplate()->set(
+            $this->template->set(
                 'adm/premium_view',
                 array_merge(
                     $this->langs->language,

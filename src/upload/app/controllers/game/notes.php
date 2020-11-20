@@ -152,7 +152,7 @@ class Notes extends BaseController
 
         // display the page
         parent::$page->display(
-            $this->getTemplate()->set(
+            $this->template->set(
                 $page['template'],
                 array_merge(
                     $this->langs->language,

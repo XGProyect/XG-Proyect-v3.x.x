@@ -101,7 +101,7 @@ class Mail extends BaseController
     private function buildPage(): void
     {
         parent::$page->display(
-            $this->getTemplate()->set(
+            $this->template->set(
                 'home/mail_view',
                 array_merge(
                     $this->langs->language,
@@ -152,7 +152,7 @@ class Mail extends BaseController
      */
     private function sendPassEmail(string $email, string $new_password): bool
     {
-        $email_template = $this->getTemplate()->set(
+        $email_template = $this->template->set(
             'home/recover_password_email_template_view',
             array_merge(
                 $this->langs->language,

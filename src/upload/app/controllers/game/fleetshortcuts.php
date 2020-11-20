@@ -170,7 +170,7 @@ class Fleetshortcuts extends BaseController
 
         // display the page
         parent::$page->display(
-            $this->getTemplate()->set(
+            $this->template->set(
                 'shortcuts/shortcuts_view',
                 array_merge(
                     $this->langs->language,
@@ -296,7 +296,7 @@ class Fleetshortcuts extends BaseController
     {
         // display the page
         parent::$page->display(
-            $this->getTemplate()->set(
+            $this->template->set(
                 'shortcuts/shortcuts_edit_view',
                 array_merge(
                     $this->langs->language,

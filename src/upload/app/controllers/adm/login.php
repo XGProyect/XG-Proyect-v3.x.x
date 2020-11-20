@@ -94,7 +94,7 @@ class Login extends BaseController
     private function buildPage(): void
     {
         parent::$page->displayAdmin(
-            $this->getTemplate()->set(
+            $this->template->set(
                 'adm/login_view',
                 array_merge(
                     $this->langs->language,

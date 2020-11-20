@@ -251,7 +251,7 @@ class Server extends BaseController
         $parse['noobprot3'] = $this->game_config['noobprotectionmulti'];
 
         parent::$page->displayAdmin(
-            $this->getTemplate()->set('adm/server_view', $parse)
+            $this->template->set('adm/server_view', $parse)
         );
     }
 

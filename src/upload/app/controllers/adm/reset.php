@@ -187,7 +187,7 @@ class Reset extends BaseController
     private function buildPage(): void
     {
         parent::$page->displayAdmin(
-            $this->getTemplate()->set(
+            $this->template->set(
                 'adm/reset_view',
                 array_merge(
                     $this->langs->language,

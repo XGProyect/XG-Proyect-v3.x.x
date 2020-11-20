@@ -72,7 +72,7 @@ class Maker extends BaseController
     private function buildPage(): void
     {
         parent::$page->displayAdmin(
-            $this->getTemplate()->set(
+            $this->template->set(
                 'adm/maker_view',
                 array_merge(
                     $this->langs->language,

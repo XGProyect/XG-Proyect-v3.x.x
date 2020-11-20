@@ -93,7 +93,7 @@ class Registration extends BaseController
     private function buildPage(): void
     {
         parent::$page->displayAdmin(
-            $this->getTemplate()->set(
+            $this->template->set(
                 'adm/registration_view',
                 array_merge(
                     $this->langs->language,

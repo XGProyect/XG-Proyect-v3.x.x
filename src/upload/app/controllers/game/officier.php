@@ -111,7 +111,7 @@ class Officier extends BaseController
 
         // display the page
         parent::$page->display(
-            $this->getTemplate()->set('game/officier_view', array_merge($page, $this->langs->language))
+            $this->template->set('game/officier_view', array_merge($page, $this->langs->language))
         );
     }
 

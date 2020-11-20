@@ -100,7 +100,7 @@ class Overview extends BaseController
 
         // DISPLAY THE RESULT PAGE
         parent::$page->display(
-            $this->getTemplate()->set(
+            $this->template->set(
                 'overview/overview_body',
                 array_merge($this->langs->language, $data)
             )

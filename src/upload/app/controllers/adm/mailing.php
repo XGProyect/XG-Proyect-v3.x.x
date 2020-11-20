@@ -89,7 +89,7 @@ class Mailing extends BaseController
     private function buildPage(): void
     {
         parent::$page->displayAdmin(
-            $this->getTemplate()->set(
+            $this->template->set(
                 'adm/mailing_view',
                 array_merge(
                     $this->langs->language,

@@ -64,7 +64,7 @@ class TraderLayer extends BaseController
     private function buildPage(): void
     {
         parent::$page->display(
-            $this->getTemplate()->set(
+            $this->template->set(
                 'game/trader_layer_view',
                 array_merge(
                     $this->langs->language,
@@ -260,7 +260,7 @@ class TraderLayer extends BaseController
     }
     }
 
-    parent::$page->display($this->getTemplate()->set($template, $parse));*/
+    parent::$page->display($this->template->set($template, $parse));*/
     //}
 
     /**
@@ -275,7 +275,7 @@ class TraderLayer extends BaseController
 
         if (in_array($mode, ['traderResources', 'traderAuctioneer', 'traderScrap', 'traderImportExport'])) {
             $view_to_get = strtolower(strtr($mode, ['trader' => '']));
-            $template = $this->getTemplate()->set(
+            $template = $this->template->set(
                 'game/trader_' . $view_to_get . '_view',
                 array_merge(
                     $this->langs->language,

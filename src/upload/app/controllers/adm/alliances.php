@@ -129,7 +129,7 @@ class Alliances extends BaseController
         $parse['content'] = ($alliance != '' && $type != '') ? $this->getData($type) : '';
 
         parent::$page->displayAdmin(
-            $this->getTemplate()->set('adm/alliances_view', $parse)
+            $this->template->set('adm/alliances_view', $parse)
         );
     }
 
@@ -211,7 +211,7 @@ class Alliances extends BaseController
         $parse['sel0'] = $this->_alliance_query['alliance_request_notallow'] == 0 ? 'selected' : '';
         $parse['alert_info'] = ($this->_alert_type != '') ? Administration::saveMessage($this->_alert_type, $this->_alert_info) : '';
 
-        return $this->getTemplate()->set("adm/alliances_information_view", $parse);
+        return $this->template->set("adm/alliances_information_view", $parse);
     }
 
     /**
@@ -245,14 +245,14 @@ class Alliances extends BaseController
                 $rank_data['rechtehand'] = (($details['rights'][AllianceRanks::RIGHT_HAND] == SwitchInt::on) ? ' checked="checked"' : '');
                 $rank_data['i'] = $i++;
 
-                $rank_row .= $this->getTemplate()->set("adm/alliances_ranks_row_view", $rank_data);
+                $rank_row .= $this->template->set("adm/alliances_ranks_row_view", $rank_data);
             }
         }
 
         $parse['ranks_table'] = empty($rank_row) ? $this->langs->line('al_no_ranks') : $rank_row;
         $parse['alert_info'] = ($this->_alert_type != '') ? Administration::saveMessage($this->_alert_type, $this->_alert_info) : '';
 
-        return $this->getTemplate()->set("adm/alliances_ranks_view", $parse);
+        return $this->template->set("adm/alliances_ranks_view", $parse);
     }
 
     /**
@@ -284,14 +284,14 @@ class Alliances extends BaseController
                     $member['ally_rank'] = $this->langs->line('al_rank_not_defined');
                 }
 
-                $members .= $this->getTemplate()->set('adm/alliances_members_row_view', $member);
+                $members .= $this->template->set('adm/alliances_members_row_view', $member);
             }
         }
 
         $parse['members_table'] = empty($members) ? '<tr><td colspan="6" class="align_center text-error">' . $this->langs->line('al_no_ranks') . '</td></tr>' : $members;
         $parse['alert_info'] = ($this->_alert_type != '') ? Administration::saveMessage($this->_alert_type, $this->_alert_info) : '';
 
-        return $this->getTemplate()->set("adm/alliances_members_view", $parse);
+        return $this->template->set("adm/alliances_members_view", $parse);
     }
     ######################################
     #

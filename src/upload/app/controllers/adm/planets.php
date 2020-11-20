@@ -97,7 +97,7 @@ class Planets extends BaseController
     private function buildPage(): void
     {
         parent::$page->displayAdmin(
-            $this->getTemplate()->set(
+            $this->template->set(
                 'adm/planets_view',
                 array_merge(
                     $this->langs->language,

@@ -167,7 +167,7 @@ class Resources extends BaseController
                 $CurrRow['crystal_type'] = FormatLib::colorNumber($CurrRow['crystal_type']);
                 $CurrRow['deuterium_type'] = FormatLib::colorNumber($CurrRow['deuterium_type']);
                 $CurrRow['energy_type'] = FormatLib::colorNumber($CurrRow['energy_type']);
-                $parse['resource_row'] .= $this->getTemplate()->set(
+                $parse['resource_row'] .= $this->template->set(
                     'resources/resources_row',
                     $CurrRow
                 );
@@ -231,7 +231,7 @@ class Resources extends BaseController
         }
 
         parent::$page->display(
-            $this->getTemplate()->set(
+            $this->template->set(
                 'resources/resources',
                 $parse
             )

@@ -159,7 +159,7 @@ class Users extends BaseController
         $parse['content'] = ($user != '' && $type != '') ? $this->getData($type) : '';
 
         parent::$page->displayAdmin(
-            $this->getTemplate()->set('adm/users_view', $parse)
+            $this->template->set('adm/users_view', $parse)
         );
     }
 
@@ -337,7 +337,7 @@ class Users extends BaseController
         $parse['user_fleet_shortcuts'] = $this->buildShortcutsCombo($this->_user_query['user_fleet_shortcuts']);
         $parse['alert_info'] = ($this->_alert_type != '') ? Administration::saveMessage($this->_alert_type, $this->_alert_info) : '';
 
-        return $this->getTemplate()->set('adm/users_information_view', $parse);
+        return $this->template->set('adm/users_information_view', $parse);
     }
 
     /**
@@ -357,7 +357,7 @@ class Users extends BaseController
         $parse['preference_delete_mode'] = ($this->_user_query['preference_delete_mode']) ? ' checked="checked" ' : '';
         $parse['alert_info'] = ($this->_alert_type != '') ? Administration::saveMessage($this->_alert_type, $this->_alert_info) : '';
 
-        return $this->getTemplate()->set('adm/users_settings_view', $parse);
+        return $this->template->set('adm/users_settings_view', $parse);
     }
 
     /**
@@ -373,7 +373,7 @@ class Users extends BaseController
         $parse['technologies_list'] = $this->researchTable();
         $parse['alert_info'] = ($this->_alert_type != '') ? Administration::saveMessage($this->_alert_type, $this->_alert_info) : '';
 
-        return $this->getTemplate()->set('adm/users_research_view', $parse);
+        return $this->template->set('adm/users_research_view', $parse);
     }
 
     /**
@@ -389,7 +389,7 @@ class Users extends BaseController
         $parse['premium_list'] = $this->premiumTable();
         $parse['alert_info'] = ($this->_alert_type != '') ? Administration::saveMessage($this->_alert_type, $this->_alert_info) : '';
 
-        return $this->getTemplate()->set('adm/users_premium_view', $parse);
+        return $this->template->set('adm/users_premium_view', $parse);
     }
 
     /**
@@ -439,7 +439,7 @@ class Users extends BaseController
 
         $parse['alert_info'] = ($this->_alert_type != '') ? Administration::saveMessage($this->_alert_type, $this->_alert_info) : '';
 
-        return $this->getTemplate()->set($view, $parse);
+        return $this->template->set($view, $parse);
     }
 
     /**
@@ -489,7 +489,7 @@ class Users extends BaseController
 
         $parse['alert_info'] = ($this->_alert_type != '') ? Administration::saveMessage($this->_alert_type, $this->_alert_info) : '';
 
-        return $this->getTemplate()->set($view, $parse);
+        return $this->template->set($view, $parse);
     }
     ######################################
     #

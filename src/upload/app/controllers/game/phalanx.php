@@ -175,7 +175,7 @@ class Phalanx extends BaseController
         $parse['phl_pl_name'] = $TargetName;
 
         parent::$page->display(
-            $this->getTemplate()->set(
+            $this->template->set(
                 'galaxy/phalanx_body',
                 $parse
             ),
