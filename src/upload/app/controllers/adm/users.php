@@ -23,6 +23,7 @@ use App\core\enumerators\UserRanksEnumerator as UserRanks;
 use App\libraries\adm\AdministrationLib as Administration;
 use App\libraries\FormatLib as Format;
 use App\libraries\Functions;
+use App\libraries\StatisticsLibrary;
 use App\libraries\users\Shortcuts;
 
 /**
