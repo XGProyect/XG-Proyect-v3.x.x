@@ -36,8 +36,7 @@ $queries[] = "INSERT INTO " . DB_NAME . ".`" . ALLIANCE . "`(
                 `alliance_text`,
                 `alliance_image`,
                 `alliance_request`,
-                `alliance_request_notallow`,
-                `alliance_owner_range`)
+                `alliance_request_notallow`)
                 SELECT
                     `id`,
                     `ally_name`,
@@ -49,8 +48,7 @@ $queries[] = "INSERT INTO " . DB_NAME . ".`" . ALLIANCE . "`(
                     `ally_text`,
                     `ally_image`,
                     `ally_request`,
-                    `ally_request_notallow`,
-                    `ally_owner_range`
+                    `ally_request_notallow`
                 FROM `{prefix}alliance`;";
 
 // "banned" table -> "banned" table
@@ -625,5 +623,3 @@ $queries[] = "INSERT INTO " . DB_NAME . ".`" . PREFERENCES . "`(
                     `db_deaktjava`
                 FROM `{prefix}users`;";
 $queries[] = "TRUNCATE " . DB_NAME . ".`" . SESSIONS . "`;";
-
-/* end of migrate_common.php */

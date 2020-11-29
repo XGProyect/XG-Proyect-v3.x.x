@@ -9,12 +9,12 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
-use application\core\common;
+use App\core\common;
 
 define('IN_INSTALL', true);
 define('XGP_ROOT', '../../');
 
-require XGP_ROOT . 'application' . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'common.php';
+require XGP_ROOT . 'app' . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'common.php';
 
 $system = new Common;
 $system->bootUp('install');
@@ -25,9 +25,7 @@ $file_name = XGP_ROOT . INSTALL_PATH . $page . '.php';
 if (file_exists($file_name)) {
     include $file_name;
 
-    $class_name = 'application\controllers\install\\' . ucfirst($page);
+    $class_name = 'App\controllers\install\\' . ucfirst($page);
 
-    new $class_name();
+    (new $class_name)->index();
 }
-
-/* end of index.php */
