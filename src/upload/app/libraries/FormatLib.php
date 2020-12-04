@@ -218,7 +218,7 @@ class FormatLib
      * @param int     $n     Number
      * @param boolean $floor Floor
      *
-     * @return
+     * @return string
      */
     public static function prettyNumber($n, $floor = true)
     {

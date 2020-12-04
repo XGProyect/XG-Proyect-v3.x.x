@@ -178,8 +178,6 @@ class Database
     /**
      * closeConnection
      *
-     * @param
-     *
      * @return boolean
      */
     public function closeConnection()
