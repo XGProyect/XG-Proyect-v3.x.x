@@ -7,7 +7,7 @@ function t() {
 	n           = new Date();
 	ss          = pp;
 	aa          = Math.round( (n.getTime() - v.getTime() ) / 1000. );
-	s           = ss - aa;
+	s           = parseInt(ss - aa);
 	m           = 0;
 	h           = 0;
 	rurl        = "game.php?page={call_program}&planet=" + pl;
