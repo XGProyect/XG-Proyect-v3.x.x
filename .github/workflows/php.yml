@@ -2,7 +2,7 @@ name: PHP Tests
 
 on:
   push:
-    branches: [ test-ci, xgp-3.2 ]
+    branches: '**'
   pull_request:
 
 jobs:
@@ -10,6 +10,12 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v2
+
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '7.4'
+        extensions: gd, mysqli, opcache, zip
 
     - name: Validate composer.json and composer.lock
       run: composer validate
@@ -31,6 +37,12 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v2
+
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '7.4'
+        extensions: gd, mysqli, opcache, zip
 
     - name: Validate composer.json and composer.lock
       run: composer validate
