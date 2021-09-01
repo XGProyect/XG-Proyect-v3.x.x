@@ -180,21 +180,25 @@ class Attack extends Missions
             //-------------------------------------------------------------------------
             //-------------------------- after battle stuff ---------------------------
             $report = $battle->getReport();
+
+            $afterBattleAttackers = $report->getAfterBattleAttackers();
             $steal = $this->updateAttackers(
                 $report->getPresentationAttackersFleetOnRound('START'),
-                $report->getAfterBattleAttackers(),
+                $afterBattleAttackers,
                 $target_planet
             );
 
             $report->setSteal($steal);
 
+            $afterBattleDefenders = $report->getAfterBattleDefenders();
             $this->updateDefenders(
                 $report->getPresentationDefendersFleetOnRound('START'),
-                $report->getAfterBattleDefenders(),
+                $afterBattleDefenders,
                 $target_planet,
                 $steal
             );
 
+            $this->updatePoints($report, $afterBattleAttackers, $afterBattleDefenders);
             $this->updateDebris($fleet_row, $report);
             $this->updateMoon($fleet_row, $report, $target_userID);
             $this->createNewReportAndSendIt($fleet_row, $report, $target_planet['planet_name']);
@@ -245,6 +249,45 @@ class Attack extends Missions
         }
 
         return new Defense($id, $count, $rf, $shield, $cost, $power);
+    }
+
+    /**
+     * updatePoints
+     *
+     * @param array  $fleet_row Fleet row
+     * @param Report $report    Report
+     *
+     * @return void
+     */
+    private function updatePoints($report, $afterBattleAttackers, $afterBattleDefenders)
+    {
+      $attackersBefore = $report->getRound('START')->getAfterBattleAttackers();
+      $attackersLostShipsAndDefence = $report->getPlayersLostShips($attackersBefore, $afterBattleAttackers, true);
+      $this->updateLostShipsAndDefencePoints($attackersLostShipsAndDefence);
+
+      $defendersBefore = $report->getRound('START')->getAfterBattleDefenders();
+      $defendersLostShipsAndDefence = $report->getPlayersLostShips($defendersBefore, $afterBattleDefenders, true);
+      $this->updateLostShipsAndDefencePoints($defendersLostShipsAndDefence);
+    }
+
+    /**
+     * updateLostShipsAndDefencePoints
+     *
+     * @param array  $lostShipsAndDefence PlayerGroup
+     *
+     * @return void
+     */
+    private function updateLostShipsAndDefencePoints($lostShipsAndDefence)
+    {
+      foreach ($lostShipsAndDefence->getIterator() as $player) {
+        foreach ($player->getIterator() as $fleet) {
+          $lostfleet = array();
+          foreach($fleet->getIterator() as $shiptype => $ship) {
+            $lostfleet[$shiptype] = $ship->getCount();
+          }
+          $this->Missions_Model->updateLostShipsAndDefensePoints($player->getId(), $lostfleet);
+        }
+      }
     }
 
     /**
