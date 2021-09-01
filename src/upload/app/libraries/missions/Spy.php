@@ -46,6 +46,8 @@ class Spy extends Missions
     {
         // do mission
         if (parent::canStartMission($fleet_row)) {
+            parent::makeUpdate($fleet_row['fleet_end_galaxy'], $fleet_row['fleet_end_system'], $fleet_row['fleet_end_planet'], $fleet_row['fleet_end_type']);
+
             $current_data = $this->Missions_Model->getSpyUserDataByCords([
                 'coords' => [
                     'galaxy' => $fleet_row['fleet_start_galaxy'],
@@ -67,8 +69,6 @@ class Spy extends Missions
             $CurrentSpyLvl = OfficiersLib::getMaxEspionage($current_data['research_espionage_technology'], $current_data['premium_officier_technocrat']);
             $TargetSpyLvl = OfficiersLib::getMaxEspionage($target_data['research_espionage_technology'], $target_data['premium_officier_technocrat']);
             $fleet = FleetsLib::getFleetShipsArray($fleet_row['fleet_array']);
-
-            parent::makeUpdate($fleet_row['fleet_end_galaxy'], $fleet_row['fleet_end_system'], $fleet_row['fleet_end_planet'], $fleet_row['fleet_end_type']);
 
             foreach ($fleet as $id => $amount) {
                 if ($id == "210") {
