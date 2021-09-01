@@ -359,7 +359,7 @@ class BattleReport
         }
         return $lostShips;
     }
-    private function getPlayersLostShips(PlayerGroup $playersBefore, PlayerGroup $playersAfter)
+    public function getPlayersLostShips(PlayerGroup $playersBefore, PlayerGroup $playersAfter)
     {
         $playersBefore_clone = $playersBefore->cloneMe();
 
