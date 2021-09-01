@@ -433,7 +433,7 @@ class Missions extends Model
                             FROM " . PLANETS . " AS pc2
                             WHERE pc2.`planet_galaxy` = '" . $data['coords']['galaxy'] . "' AND
                                             pc2.`planet_system` = '" . $data['coords']['system'] . "' AND
-                                            pc2.`planet_planet` = '" . $data['coords']['planet'] . " AND
+                                            pc2.`planet_planet` = '" . $data['coords']['planet'] . "' AND
                                             pc2.`planet_type` = 1') AS galaxy_count,
                     (SELECT `research_astrophysics`
                             FROM " . RESEARCH . "
