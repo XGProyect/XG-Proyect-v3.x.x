@@ -49,7 +49,7 @@ The following are tools or frameworks that we use to do our coding experience be
 
 <p>
     <a href="https://codeigniter.com/" rel="nofollow">
-        <img src="https://codeigniter.com/assets/images/ci-logo.png" alt="CodeIgniter" width="75px">
+        <img src="https://codeigniter.com/favicon.ico" alt="CodeIgniter" width="75px">
     </a>
     <a href="https://getcomposer.org/" rel="nofollow">
         <img src="https://getcomposer.org/img/logo-composer-transparent2.png" alt="Composer" width="75px">
