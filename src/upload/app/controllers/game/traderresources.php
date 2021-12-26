@@ -119,10 +119,12 @@ class TraderResources extends BaseController
         $refill = filter_input_array(INPUT_POST);
 
         if ($refill) {
-            if (preg_match_all(
-                '/(' . join('|', self::RESOURCES) . ')-(' . join('|', self::PERCENTAGES) . ')/',
-                key($refill)
-            )) {
+            if (
+                preg_match_all(
+                    '/(' . join('|', self::RESOURCES) . ')-(' . join('|', self::PERCENTAGES) . ')/',
+                    key($refill)
+                )
+            ) {
                 $this->refillResource(...explode('-', key($refill)));
             }
         }
@@ -257,8 +259,10 @@ class TraderResources extends BaseController
         foreach (self::PERCENTAGES as $percentage) {
             $dm_price = $this->trader->{'getPriceToFill' . $percentage . 'Percent'}($resource);
 
-            if (!$this->trader->{'is' . ucfirst($resource) . 'StorageFillable'}($percentage)
-                or $dm_price == 0) {
+            if (
+                !$this->trader->{'is' . ucfirst($resource) . 'StorageFillable'}($percentage)
+                || $dm_price == 0
+            ) {
                 $price = Format::colorRed('-');
                 $button = '';
             } else {

@@ -39,7 +39,7 @@ $page = strtr(
     ]
 );
 
-$file_name = XGP_ROOT . GAME_PATH . $page . '.php';
+$file_name = strtolower(XGP_ROOT . GAME_PATH . $page . '.php');
 
 if (isset($page)) {
     // logout
