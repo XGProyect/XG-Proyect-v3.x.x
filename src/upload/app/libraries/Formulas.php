@@ -318,7 +318,7 @@ abstract class Formulas
      * @param integer $level
      * @return float
      */
-    public static function getBuildingTime(int $metal_cost, int $cystal_cost, int $building, int $robotics_factory, int $nanite_factory, int $level): float
+    public static function getBuildingTime(float $metal_cost, float $cystal_cost, int $building, int $robotics_factory, int $nanite_factory, int $level): float
     {
         return self::getDevelopmentTime($metal_cost, $cystal_cost, $building, $robotics_factory, $nanite_factory, $level);
     }
@@ -351,7 +351,7 @@ abstract class Formulas
      * @param boolean $reduce
      * @return float
      */
-    private static function getDevelopmentTime(int $metal_cost, int $cystal_cost, int $object, int $first_boost, int $second_boost, int $level = 0, bool $reduce = true): float
+    private static function getDevelopmentTime(float $metal_cost, float $cystal_cost, int $object, int $first_boost, int $second_boost, int $level = 0, bool $reduce = true): float
     {
         $resources_needed = $metal_cost + $cystal_cost;
         $reduction = max(4 - ($level + 1) / 2, 1);

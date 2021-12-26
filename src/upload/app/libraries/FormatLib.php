@@ -26,7 +26,7 @@ class FormatLib
      *
      * @return string
      */
-    public static function prettyTime(int $input_seconds): string
+    public static function prettyTime(float $input_seconds): string
     {
         $sec_min = 60;
         $sec_hour = 60 * $sec_min;
