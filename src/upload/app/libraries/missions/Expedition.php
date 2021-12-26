@@ -137,10 +137,12 @@ class Expedition extends Missions
                 $fleet_row['fleet_end_stay']
             );
 
+            $this->missionsModel->updateLostShipsAndDefensePoints($fleet_row['fleet_owner'], $current_fleet);
             parent::removeFleet($fleet_row['fleet_id']);
         } else {
             $this->all_destroyed = true;
             $new_ships = [];
+            $lost_ships = [];
 
             foreach ($current_fleet as $ship => $amount) {
                 if (floor($amount * $lost_amount) != 0) {
@@ -157,6 +159,7 @@ class Expedition extends Missions
                     $fleet_row['fleet_end_stay']
                 );
 
+                $this->missionsModel->updateLostShipsAndDefensePoints($fleet_row['fleet_owner'], $lost_ships);
                 $this->missionsModel->updateFleetArrayById([
                     'ships' => FleetsLib::setFleetShipsArray($new_ships),
                     'fleet_id' => $fleet_row['fleet_id'],
@@ -168,6 +171,7 @@ class Expedition extends Missions
                     $fleet_row['fleet_end_stay']
                 );
 
+                $this->missionsModel->updateLostShipsAndDefensePoints($fleet_row['fleet_owner'], $current_fleet);
                 parent::removeFleet($fleet_row['fleet_id']);
             }
         }

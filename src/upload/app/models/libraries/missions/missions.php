@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Missions Model
  *
@@ -14,6 +15,7 @@ namespace App\models\libraries\missions;
 
 use App\core\Model;
 use App\libraries\FleetsLib;
+use App\libraries\StatisticsLibrary;
 
 /**
  * Missions Class
@@ -354,7 +356,7 @@ class Missions extends Model
     /**
      * Update returning fleet steal resources
      *
-     * @param type $data
+     * @param array $data
      *
      * @return void
      */
@@ -479,6 +481,28 @@ class Missions extends Model
             );
         }
     }
+
+    public function updateLostShipsAndDefensePoints(int $playerId, array $lost): void
+    {
+        $shipPoints = 0;
+        $defensePoints = 0;
+
+        foreach ($lost as $unit => $lostCount) {
+            if ($unit >= 401) {
+                $defensePoints += StatisticsLibrary::calculatePoints($unit, 1) * $lostCount;
+            } else {
+                $shipPoints += StatisticsLibrary::calculatePoints($unit, 1) * $lostCount;
+            }
+        }
+
+        $this->db->query("
+            UPDATE `" . USERS_STATISTICS . "` AS us SET
+                us.`user_statistic_ships_points` = us.`user_statistic_ships_points` - '" . $shipPoints . "' ,
+                us.`user_statistic_defenses_points` = us.`user_statistic_defenses_points` - '" . $defensePoints . "'
+            WHERE us.`user_statistic_user_id` = '" . $playerId . "'
+        ");
+    }
+
     /**
      *
      * COLONIZATION
