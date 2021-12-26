@@ -5,6 +5,7 @@ use App\core\Enumerators\OfficiersEnumerator as OE;
 use App\libraries\FormatLib;
 use App\libraries\Functions;
 use App\libraries\OfficiersLib;
+use App\libraries\Users;
 use DPATH;
 
 /**
@@ -27,7 +28,7 @@ class Officier extends BaseController
         parent::__construct();
 
         // check if session is active
-        parent::$users->checkSession();
+        Users::checkSession();
 
         // load Model
         parent::loadModel('game/officier');
@@ -73,13 +74,13 @@ class Officier extends BaseController
             ],
         ]);
 
-        if (in_array($data['offi'], $this->getObjects()->getObjectsList('officier')) && in_array($data['time'], ['week', 'month'])) {
+        if (in_array($data['offi'], $this->objects->getObjectsList('officier')) && in_array($data['time'], ['week', 'month'])) {
             $time = 'darkmatter_' . $data['time'];
             $set_time = (($time == 'darkmatter_month') ? (ONE_MONTH * 3) : ONE_WEEK);
 
             if ($this->isOfficierAccesible($data['offi'], $time)) {
                 $price = $this->getOfficierPrice($data['offi'], $time);
-                $officier = $this->getObjects()->getObjects($data['offi']);
+                $officier = $this->objects->getObjects($data['offi']);
 
                 if (OfficiersLib::isOfficierActive($this->user[$officier])) {
                     $time_to_add = $this->user[$officier] + $set_time;
@@ -110,8 +111,8 @@ class Officier extends BaseController
         $page['officier_list'] = $this->buildOfficiersList();
 
         // display the page
-        parent::$page->display(
-            $this->getTemplate()->set('game/officier_view', array_merge($page, $this->langs->language))
+        $this->page->display(
+            $this->template->set('game/officier_view', array_merge($page, $this->langs->language))
         );
     }
 
@@ -172,10 +173,10 @@ class Officier extends BaseController
      */
     private function setOfficierStatusWithFormat(int $item_id): string
     {
-        if (OfficiersLib::isOfficierActive($this->user[$this->getObjects()->getObjects($item_id)])) {
+        if (OfficiersLib::isOfficierActive($this->user[$this->objects->getObjects($item_id)])) {
             return FormatLib::customColor(
                 OfficiersLib::getOfficierTimeLeft(
-                    $this->user[$this->getObjects()->getObjects($item_id)],
+                    $this->user[$this->objects->getObjects($item_id)],
                     $this->langs->language
                 ),
                 'lime'
@@ -194,7 +195,7 @@ class Officier extends BaseController
      */
     private function isOfficierAccesible(int $officier, string $time): bool
     {
-        return ($this->getObjects()->getPrice($officier, $time) <= $this->user['premium_dark_matter']);
+        return ($this->objects->getPrice($officier, $time) <= $this->user['premium_dark_matter']);
     }
 
     /**
@@ -206,7 +207,7 @@ class Officier extends BaseController
      */
     private function getOfficierPrice(int $officier, string $time): int
     {
-        return floor($this->getObjects()->getPrice($officier, $time));
+        return floor($this->objects->getPrice($officier, $time));
     }
 
     /**
@@ -218,6 +219,6 @@ class Officier extends BaseController
      */
     private function getOfficierImage(int $officier, string $type): string
     {
-        return $this->getObjects()->getPrice($officier, $type);
+        return $this->objects->getPrice($officier, $type);
     }
 }

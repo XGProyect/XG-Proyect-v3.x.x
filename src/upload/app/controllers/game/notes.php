@@ -17,6 +17,7 @@ use App\core\enumerators\ImportanceEnumerator as Importance;
 use App\libraries\FormatLib;
 use App\libraries\Functions;
 use App\libraries\TimingLibrary as Timing;
+use App\libraries\Users;
 use App\libraries\users\Notes as Note;
 
 /**
@@ -50,7 +51,7 @@ class Notes extends BaseController
         parent::__construct();
 
         // check if session is active
-        parent::$users->checkSession();
+        Users::checkSession();
 
         // load Model
         parent::loadModel('game/notes');
@@ -151,8 +152,8 @@ class Notes extends BaseController
         $page = $this->getCurrentPage();
 
         // display the page
-        parent::$page->display(
-            $this->getTemplate()->set(
+        $this->page->display(
+            $this->template->set(
                 $page['template'],
                 array_merge(
                     $this->langs->language,

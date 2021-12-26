@@ -1,13 +1,13 @@
 <?php
 /**
- * Forum Controller
+ * traderoverview.php
  *
  * @category Controller
  * @package  Application
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
- * @version  3.0.0
+ * @version  3.3.0
  */
 namespace App\controllers\game;
 
@@ -16,14 +16,16 @@ use App\libraries\Functions;
 use App\libraries\Users;
 
 /**
- * Forum Class
+ * TraderOverview Class
  */
-class Forum extends BaseController
+class TraderOverview extends BaseController
 {
     /**
-     * @var int Module ID
+     * The module ID
+     *
+     * @var int
      */
-    const MODULE_ID = 14;
+    const MODULE_ID = 5;
 
     /**
      * Constructor
@@ -34,15 +36,10 @@ class Forum extends BaseController
 
         // check if session is active
         Users::checkSession();
-    }
 
-    /**
-     * Users land here
-     *
-     * @return void
-     */
-    public function index(): void
-    {
+        // load Language
+        parent::loadLang(['game/trader']);
+
         // Check module access
         Functions::moduleMessage(Functions::isModuleAccesible(self::MODULE_ID));
 
@@ -55,8 +52,21 @@ class Forum extends BaseController
      *
      * @return void
      */
-    private function buildPage()
+    private function buildPage(): void
     {
-        Functions::redirect(Functions::readConfig('forum_url'));
+        $this->page->display(
+            $this->template->set(
+                'game/trader_overview_view',
+                array_merge(
+                    $this->langs->language,
+                    [
+                        'status_message' => [],
+                        'error_color' => '',
+                        'error_text' => '',
+                        'current_mode' => '',
+                    ]
+                )
+            )
+        );
     }
 }

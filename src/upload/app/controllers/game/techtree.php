@@ -14,6 +14,7 @@ namespace App\controllers\game;
 use App\core\BaseController;
 use App\libraries\FormatLib;
 use App\libraries\Functions;
+use App\libraries\Users;
 
 /**
  * Techtree Class
@@ -42,16 +43,16 @@ class Techtree extends BaseController
         parent::__construct();
 
         // check if session is active
-        parent::$users->checkSession();
+        Users::checkSession();
 
         // load Language
         parent::loadLang(['game/global', 'game/constructions', 'game/defenses', 'game/ships', 'game/technologies']);
 
         // requirements
-        $this->_resource = parent::$objects->getObjects();
+        $this->_resource = $this->objects->getObjects();
 
         // requirements
-        $this->_requirements = parent::$objects->getRelations();
+        $this->_requirements = $this->objects->getRelations();
     }
 
     /**
@@ -87,8 +88,8 @@ class Techtree extends BaseController
         ];
 
         // display the page
-        parent::$page->display(
-            $this->getTemplate()->set(
+        $this->page->display(
+            $this->template->set(
                 'game/techtree_view',
                 array_merge(
                     $this->langs->language, $page
@@ -106,7 +107,7 @@ class Techtree extends BaseController
      */
     private function buildBlock(string $object_id): array
     {
-        $objects = parent::$objects->getObjectsList($object_id);
+        $objects = $this->objects->getObjectsList($object_id);
         $list_of_objects = [];
 
         foreach ($objects as $object) {

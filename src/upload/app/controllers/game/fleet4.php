@@ -21,6 +21,7 @@ use App\libraries\Functions;
 use App\libraries\game\Fleets;
 use App\libraries\premium\Premium;
 use App\libraries\research\Researches;
+use App\libraries\Users;
 
 /**
  * Fleet4 Class
@@ -130,7 +131,7 @@ class Fleet4 extends BaseController
         parent::__construct();
 
         // check if session is active
-        parent::$users->checkSession();
+        Users::checkSession();
 
         // load Model
         parent::loadModel('game/fleet');
@@ -345,7 +346,7 @@ class Fleet4 extends BaseController
      */
     private function validateOwnVacations()
     {
-        if (parent::$users->isOnVacations($this->user)) {
+        if ($this->userLibrary->isOnVacations($this->user)) {
             $this->showMessage($this->langs->line('fl_vacation_mode_active'));
         }
 
@@ -369,7 +370,7 @@ class Fleet4 extends BaseController
         }
 
         if (isset($this->_target_data)
-            && parent::$users->isOnVacations($this->_target_data)
+            && $this->userLibrary->isOnVacations($this->_target_data)
             && $this->_clean_input_data['mission'] != Missions::RECYCLE) {
             $this->showMessage($this->langs->line('fl_in_vacation_player'));
         }
@@ -421,8 +422,8 @@ class Fleet4 extends BaseController
         $planet_ships = $this->Fleet_Model->getShipsByPlanetId($this->planet['planet_id']);
 
         // objects
-        $objects = parent::$objects->getObjects();
-        $price = parent::$objects->getPrice();
+        $objects = $this->objects->getObjects();
+        $price = $this->objects->getPrice();
 
         if ($fleet) {
             $total_ships = 0;
@@ -492,7 +493,8 @@ class Fleet4 extends BaseController
 
         if ($data['mission'] == Missions::STAY) {
             $is_buddy = $this->Fleet_Model->getBuddies(
-                $this->planet['planet_user_id'], $this->_target_data['planet_user_id']
+                $this->planet['planet_user_id'],
+                $this->_target_data['planet_user_id']
             ) >= 1;
 
             if ($this->_target_data['user_ally_id'] != $this->user['user_ally_id'] && !$is_buddy) {
@@ -576,7 +578,7 @@ class Fleet4 extends BaseController
             return true;
         }
 
-        if (!parent::$users->isInactive($this->_target_data)) {
+        if (!$this->userLibrary->isInactive($this->_target_data)) {
             $noob = Functions::loadLibrary('NoobsProtectionLib');
 
             $points = $noob->returnPoints(
@@ -837,9 +839,9 @@ class Fleet4 extends BaseController
         // create the new fleet and
         // remove from the planet the ships and resources
         $this->Fleet_Model->insertNewFleet(
-            $this->_fleet_data, $this->planet, $this->_fleet_ships
+            $this->_fleet_data,
+            $this->planet,
+            $this->_fleet_ships
         );
     }
 }
-
-/* end of fleet4.php */

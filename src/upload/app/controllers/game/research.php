@@ -14,6 +14,7 @@ use App\helpers\UrlHelper;
 use App\libraries\DevelopmentsLib;
 use App\libraries\FormatLib;
 use App\libraries\Functions;
+use App\libraries\Users;
 
 /**
  * Research Class
@@ -55,7 +56,7 @@ class Research extends BaseController
         parent::__construct();
 
         // check if session is active
-        parent::$users->checkSession();
+        Users::checkSession();
 
         // Check module access
         Functions::moduleMessage(Functions::isModuleAccesible(self::MODULE_ID));
@@ -66,8 +67,8 @@ class Research extends BaseController
         // load Language
         parent::loadLang(['game/global', 'game/research', 'game/technologies']);
 
-        $this->_resource = parent::$objects->getObjects();
-        $this->_reslist = parent::$objects->getObjectsList();
+        $this->_resource = $this->objects->getObjects();
+        $this->_reslist = $this->objects->getObjectsList();
 
         $this->setLabsAmount();
         $this->handleTechnologieBuild();
@@ -118,7 +119,7 @@ class Research extends BaseController
                 $RowParse['search_time'] = DevelopmentsLib::formatedDevelopmentTime($SearchTime, $this->langs->line('re_time'));
 
                 if (!$this->_is_working['is_working']) {
-                    if (DevelopmentsLib::isDevelopmentPayable($this->user, $this->planet, $tech) && !parent::$users->isOnVacations($this->user)) {
+                    if (DevelopmentsLib::isDevelopmentPayable($this->user, $this->planet, $tech) && !$this->userLibrary->isOnVacations($this->user)) {
                         if (!$this->isLaboratoryInQueue()) {
                             $action_link = FormatLib::colorRed($this->langs->line('re_research'));
                         } else {
@@ -142,7 +143,7 @@ class Research extends BaseController
                             $bloc['tech_home'] = $this->planet['planet_id'];
                             $bloc['tech_id'] = $this->planet['planet_b_tech_id'];
                         }
-                        $action_link = $this->getTemplate()->set(
+                        $action_link = $this->template->set(
                             'buildings/buildings_research_script',
                             $bloc
                         );
@@ -151,7 +152,7 @@ class Research extends BaseController
                     }
                 }
                 $RowParse['tech_link'] = $action_link;
-                $technology_list .= $this->getTemplate()->set(
+                $technology_list .= $this->template->set(
                     'buildings/buildings_research_row',
                     $RowParse
                 );
@@ -161,8 +162,8 @@ class Research extends BaseController
         $parse['noresearch'] = (!$this->isLaboratoryInQueue() ? $this->langs->line('re_building_lab') : '');
         $parse['technolist'] = $technology_list;
 
-        parent::$page->display(
-            $this->getTemplate()->set(
+        $this->page->display(
+            $this->template->set(
                 'buildings/buildings_research',
                 $parse
             )
@@ -211,7 +212,7 @@ class Research extends BaseController
 
                     // start a research
                     case 'search':
-                        if (DevelopmentsLib::isDevelopmentAllowed($this->user, $working_planet, $technology) && DevelopmentsLib::isDevelopmentPayable($this->user, $working_planet, $technology) && !parent::$users->isOnVacations($this->user)) {
+                        if (DevelopmentsLib::isDevelopmentAllowed($this->user, $working_planet, $technology) && DevelopmentsLib::isDevelopmentPayable($this->user, $working_planet, $technology) && !$this->userLibrary->isOnVacations($this->user)) {
                             $costs = DevelopmentsLib::developmentPrice(
                                 $this->user,
                                 $working_planet,

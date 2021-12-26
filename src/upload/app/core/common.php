@@ -1,12 +1,33 @@
 <?php declare (strict_types = 1);
-
+/**
+ * XG Proyect
+ *
+ * Open-source OGame Clon
+ *
+ * This content is released under the GPL-3.0 License
+ *
+ * Copyright (c) 2008-2020 XG Proyect
+ *
+ * @package    XG Proyect
+ * @author     XG Proyect Team
+ * @copyright  2008-2020 XG Proyect
+ * @license    https://www.gnu.org/licenses/gpl-3.0.en.html GPL-3.0 License
+ * @link       https://github.com/XGProyect/
+ * @since      3.0.0
+ */
 namespace App\core;
 
+use App\core\enumerators\SwitchIntEnumerator as SwitchInt;
+use App\core\enumerators\UserRanksEnumerator as UserRanks;
 use App\core\ErrorHandler;
+use App\core\Language;
 use App\core\Sessions;
+use App\helpers\StringsHelper;
 use App\libraries\Functions;
 use App\libraries\SecurePageLib;
+use App\libraries\TimingLibrary as Timing;
 use App\libraries\UpdatesLibrary;
+use App\libraries\Users;
 use AutoLoader;
 use Exception;
 
@@ -20,9 +41,9 @@ require_once XGP_ROOT . CORE_PATH . 'AutoLoader.php';
 class Common
 {
     private const APPLICATIONS = [
-        'home' => ['setSystemTimezone', 'setSession', 'setUpdates'],
+        'home' => ['setSystemTimezone', 'setSession', 'setUpdates', 'isServerOpen'],
         'admin' => ['setSystemTimezone', 'setSecure', 'setSession'],
-        'game' => ['setSystemTimezone', 'setSecure', 'setSession', 'setUpdates'],
+        'game' => ['setSystemTimezone', 'setSecure', 'setSession', 'setUpdates', 'isServerOpen', 'checkBanStatus'],
         'install' => [],
     ];
 
@@ -192,5 +213,39 @@ class Common
 
         // Several updates
         new UpdatesLibrary;
+    }
+
+    /**
+     * Check if the server is open
+     *
+     * @return void
+     */
+    private function isServerOpen(): void
+    {
+        if (Functions::readConfig('game_enable') == SwitchInt::off) {
+            $user = (new Users)->getUserData();
+            $user_level = $user['user_authlevel'] ?? 0;
+
+            if ($user_level < UserRanks::ADMIN) {
+                die(Functions::message(Functions::readConfig('close_reason'), '', '', false, false));
+            }
+        }
+    }
+
+    /**
+     * Check if the user is banned
+     *
+     * @return void
+     */
+    private function checkBanStatus(): void
+    {
+        $user = (new Users)->getUserData();
+
+        if ($user['user_banned'] > 0) {
+            die(Functions::message(StringsHelper::parseReplacements(
+                (new Language)->loadLang('game/global', true)->language['bg_banned'],
+                [Timing::formatShortDate($user['user_banned'])]
+            ), '', '', false, false));
+        }
     }
 }

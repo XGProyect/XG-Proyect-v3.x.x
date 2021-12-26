@@ -20,6 +20,7 @@ use App\libraries\FormatLib;
 use App\libraries\Functions;
 use App\libraries\TimingLibrary as Timing;
 use App\libraries\UpdatesLibrary;
+use App\libraries\Users;
 
 /**
  * Overview Class
@@ -41,7 +42,7 @@ class Overview extends BaseController
         parent::__construct();
 
         // check if session is active
-        parent::$users->checkSession();
+        Users::checkSession();
 
         // load Model
         parent::loadModel('game/overview');
@@ -99,8 +100,8 @@ class Overview extends BaseController
         ];
 
         // DISPLAY THE RESULT PAGE
-        parent::$page->display(
-            $this->getTemplate()->set(
+        $this->page->display(
+            $this->template->set(
                 'overview/overview_body',
                 array_merge($this->langs->language, $data)
             )
@@ -134,7 +135,7 @@ class Overview extends BaseController
                 // THE BUILDING BLOCK
                 if ($is_current_planet) {
                     $building_block = DevelopmentsLib::currentBuilding("overview", $this->langs->language, $building);
-                    $building_block .= $this->langs->language[$this->getObjects()->getObjects($building)] . ' (' . $level . ')';
+                    $building_block .= $this->langs->language[$this->objects->getObjects($building)] . ' (' . $level . ')';
                     $building_block .= "<br /><div id=\"blc\" class=\"z\">" . FormatLib::prettyTime($time_to_end) . "</div>";
                     $building_block .= "\n<script language=\"JavaScript\">";
                     $building_block .= "\n	pp = \"" . $time_to_end . "\";\n";
@@ -144,7 +145,7 @@ class Overview extends BaseController
                     $building_block .= "\n	t();\n";
                     $building_block .= "\n</script>\n";
                 } else {
-                    $building_block = '' . $this->langs->language[$this->getObjects()->getObjects($building)] . ' (' . $level . ')';
+                    $building_block = '' . $this->langs->language[$this->objects->getObjects($building)] . ' (' . $level . ')';
                     $building_block .= '<br><font color="#7f7f7f">(' . FormatLib::prettyTime($time_to_end) . ')</font>';
                 }
             }

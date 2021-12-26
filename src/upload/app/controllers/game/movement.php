@@ -22,6 +22,7 @@ use App\libraries\game\Fleets;
 use App\libraries\premium\Premium;
 use App\libraries\research\Researches;
 use App\libraries\TimingLibrary as Timing;
+use App\libraries\Users;
 
 /**
  * Movement Class
@@ -66,7 +67,7 @@ class Movement extends BaseController
         parent::__construct();
 
         // check if session is active
-        parent::$users->checkSession();
+        Users::checkSession();
 
         // load Model
         parent::loadModel('game/fleet');
@@ -158,8 +159,8 @@ class Movement extends BaseController
         ];
 
         // display the page
-        parent::$page->display(
-            $this->getTemplate()->set(
+        $this->page->display(
+            $this->template->set(
                 'game/movements_view',
                 array_merge(
                     $this->langs->language,
@@ -265,7 +266,7 @@ class Movement extends BaseController
      */
     private function buildShipsBlock(string $fleet_array): string
     {
-        $objects = parent::$objects->getObjects();
+        $objects = $this->objects->getObjects();
         $ships = FleetsLib::getFleetShipsArray($fleet_array);
         $tooltips = [];
 

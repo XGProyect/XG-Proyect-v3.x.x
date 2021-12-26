@@ -17,6 +17,7 @@ use App\libraries\buddies\Buddy;
 use App\libraries\enumerators\BuddiesStatusEnumerator as BuddiesStatus;
 use App\libraries\Functions;
 use App\libraries\TimingLibrary as Timing;
+use App\libraries\Users;
 use Exception;
 
 /**
@@ -46,7 +47,7 @@ class Buddies extends BaseController
         parent::__construct();
 
         // check if session is active
-        parent::$users->checkSession();
+        Users::checkSession();
 
         // load Model
         parent::loadModel('game/buddies');
@@ -282,8 +283,8 @@ class Buddies extends BaseController
             Functions::redirect('game.php?page=buddies');
         }
 
-        parent::$page->display(
-            $this->getTemplate()->set(
+        $this->page->display(
+            $this->template->set(
                 'game/buddies_request',
                 array_merge(
                     ['js_path' => JS_PATH],
@@ -310,8 +311,8 @@ class Buddies extends BaseController
         $page['list_of_buddies'] = $this->buildListOfBuddies();
 
         // display the page
-        parent::$page->display(
-            $this->getTemplate()->set(
+        $this->page->display(
+            $this->template->set(
                 'game/buddies_view',
                 array_merge($page, $this->langs->language)
             )

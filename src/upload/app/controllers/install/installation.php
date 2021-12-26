@@ -87,8 +87,8 @@ class Installation extends BaseController
         }
 
         if (!$continue) {
-            parent::$page->displayInstall(
-                $this->getTemplate()->set(
+            $this->page->displayInstall(
+                $this->template->set(
                     'install/in_welcome_view',
                     array_merge(
                         ['alert' => $alert],
@@ -140,8 +140,9 @@ class Installation extends BaseController
                 $parse['v_user'] = $this->db_user;
                 $parse['v_prefix'] = $this->db_prefix;
 
-                $current_page = $this->getTemplate()->set(
-                    'install/in_database_view', $parse
+                $current_page = $this->template->set(
+                    'install/in_database_view',
+                    $parse
                 );
 
                 break;
@@ -152,7 +153,7 @@ class Installation extends BaseController
                 }
 
                 $parse['alert'] = $this->saveMessage($alerts, 'warning');
-                $current_page = $this->getTemplate()->set(
+                $current_page = $this->template->set(
                     'install/in_database_view',
                     $parse
                 );
@@ -170,7 +171,7 @@ class Installation extends BaseController
                 }
 
                 $parse['alert'] = $this->saveMessage($alerts, 'warning');
-                $current_page = $this->getTemplate()->set(
+                $current_page = $this->template->set(
                     'install/in_database_view',
                     $parse
                 );
@@ -193,7 +194,7 @@ class Installation extends BaseController
 
                     $parse['alert'] = $this->saveMessage($error_message, 'warning');
 
-                    $current_page = $this->getTemplate()->set(
+                    $current_page = $this->template->set(
                         'install/in_create_admin_view',
                         $parse
                     );
@@ -208,7 +209,7 @@ class Installation extends BaseController
                     // set the installation language to the game language
                     Functions::updateConfig('lang', Functions::getCurrentLanguage());
 
-                    $current_page = $this->getTemplate()->set(
+                    $current_page = $this->template->set(
                         'install/in_create_admin_done_view',
                         array_merge($parse, $this->langs->language)
                     );
@@ -226,7 +227,7 @@ class Installation extends BaseController
         if ($continue) {
             switch ((isset($_GET['mode']) ? $_GET['mode'] : '')) {
                 case 'step1':
-                    $current_page = $this->getTemplate()->set(
+                    $current_page = $this->template->set(
                         'install/in_database_view',
                         array_merge(
                             [
@@ -247,7 +248,7 @@ class Installation extends BaseController
                     $parse['done_config'] = '';
                     $parse['done_connected'] = $this->langs->line('ins_done_connected');
                     $parse['done_insert'] = '';
-                    $current_page = $this->getTemplate()->set(
+                    $current_page = $this->template->set(
                         'install/in_done_actions_view',
                         $parse
                     );
@@ -259,7 +260,7 @@ class Installation extends BaseController
                     $parse['done_config'] = $this->langs->line('ins_done_config');
                     $parse['done_connected'] = '';
                     $parse['done_insert'] = '';
-                    $current_page = $this->getTemplate()->set(
+                    $current_page = $this->template->set(
                         'install/in_done_actions_view',
                         $parse
                     );
@@ -271,7 +272,7 @@ class Installation extends BaseController
                     $parse['done_config'] = '';
                     $parse['done_connected'] = '';
                     $parse['done_insert'] = $this->langs->line('ins_done_insert');
-                    $current_page = $this->getTemplate()->set(
+                    $current_page = $this->template->set(
                         'install/in_done_actions_view',
                         $parse
                     );
@@ -280,7 +281,7 @@ class Installation extends BaseController
 
                 case 'step5':
                     $parse['step'] = 'step5';
-                    $current_page = $this->getTemplate()->set(
+                    $current_page = $this->template->set(
                         'install/in_create_admin_view',
                         $parse
                     );
@@ -288,7 +289,7 @@ class Installation extends BaseController
                     break;
 
                 case 'license':
-                    $current_page = $this->getTemplate()->set(
+                    $current_page = $this->template->set(
                         'install/in_license_view',
                         $this->langs->language
                     );
@@ -298,7 +299,7 @@ class Installation extends BaseController
                 case '':
                 case 'overview':
                 default:
-                    $current_page = $this->getTemplate()->set(
+                    $current_page = $this->template->set(
                         'install/in_welcome_view',
                         array_merge($parse, $this->langs->language)
                     );
@@ -307,7 +308,7 @@ class Installation extends BaseController
             }
         }
 
-        parent::$page->displayInstall($current_page, $this->langs->language);
+        $this->page->displayInstall($current_page, $this->langs->language);
     }
 
     /**
@@ -513,7 +514,7 @@ class Installation extends BaseController
         $adm_pass = Functions::hash($_POST['adm_pass']);
 
         // create user and its planet
-        parent::$users->createUserWithOptions(
+        $this->userLibrary->createUserWithOptions(
             [
                 'user_name' => $adm_name,
                 'user_password' => $adm_pass,
@@ -599,7 +600,7 @@ class Installation extends BaseController
 
         $parse['message'] = $message;
 
-        return $this->getTemplate()->set(
+        return $this->template->set(
             'install/save_message_view',
             $parse
         );

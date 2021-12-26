@@ -1,14 +1,19 @@
 <?php declare (strict_types = 1);
-
 /**
- * Arrays Helper
+ * XG Proyect
  *
- * @category Helper
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
+ * Open-source OGame Clon
+ *
+ * This content is released under the GPL-3.0 License
+ *
+ * Copyright (c) 2008-2020 XG Proyect
+ *
+ * @package    XG Proyect
+ * @author     XG Proyect Team
+ * @copyright  2008-2020 XG Proyect
+ * @license    https://www.gnu.org/licenses/gpl-3.0.en.html GPL-3.0 License
+ * @link       https://github.com/XGProyect/
+ * @since      3.0.0
  */
 namespace App\helpers;
 

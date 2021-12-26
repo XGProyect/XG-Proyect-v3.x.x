@@ -16,6 +16,7 @@ use App\core\enumerators\PlanetTypesEnumerator;
 use App\libraries\FleetsLib;
 use App\libraries\Formulas;
 use App\libraries\Functions;
+use App\libraries\Users;
 
 /**
  * Phalanx Class
@@ -32,7 +33,7 @@ class Phalanx extends BaseController
         parent::__construct();
 
         // check if session is active
-        parent::$users->checkSession();
+        Users::checkSession();
 
         // load Model
         parent::loadModel('game/phalanx');
@@ -174,8 +175,8 @@ class Phalanx extends BaseController
         $parse['phl_pl_place'] = $Planet;
         $parse['phl_pl_name'] = $TargetName;
 
-        parent::$page->display(
-            $this->getTemplate()->set(
+        $this->page->display(
+            $this->template->set(
                 'galaxy/phalanx_body',
                 $parse
             ),

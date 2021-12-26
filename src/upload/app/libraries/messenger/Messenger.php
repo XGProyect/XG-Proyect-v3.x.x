@@ -1,39 +1,44 @@
 <?php
 /**
- * Functions Library
+ * XG Proyect
  *
- * @category Library
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.4
+ * Open-source OGame Clon
+ *
+ * This content is released under the GPL-3.0 License
+ *
+ * Copyright (c) 2008-2020 XG Proyect
+ *
+ * @package    XG Proyect
+ * @author     XG Proyect Team
+ * @copyright  2008-2020 XG Proyect
+ * @license    https://www.gnu.org/licenses/gpl-3.0.en.html GPL-3.0 License
+ * @link       https://github.com/XGProyect/
+ * @since      3.0.0
  */
+
 namespace App\libraries\messenger;
 
-use App\core\XGPCore;
+use App\libraries\Functions;
 
 /**
- * Messenger Class
- *
- * @category Classes
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.4
+ * Messenger class
  */
-final class Messenger extends XGPCore
+final class Messenger
 {
+    /**
+     * Contains the model
+     *
+     * @var Messenger
+     */
+    private $messengerModel;
+
     /**
      * Constructor
      */
     public function __construct()
     {
-        parent::__construct();
-
         // load model
-        parent::loadModel('libraries/messenger/messenger');
+        $this->messengerModel = Functions::model('libraries/messenger/messenger');
     }
 
     /**
@@ -43,6 +48,6 @@ final class Messenger extends XGPCore
      */
     public function sendMessage(MessagesOptions $options)
     {
-        $this->Messenger_Model->insertMessage($options);
+        $this->messengerModel->insertMessage($options);
     }
 }

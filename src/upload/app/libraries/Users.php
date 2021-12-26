@@ -1,28 +1,31 @@
 <?php
 /**
- * Users Library
+ * XG Proyect
  *
- * @category Library
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
+ * Open-source OGame Clon
+ *
+ * This content is released under the GPL-3.0 License
+ *
+ * Copyright (c) 2008-2020 XG Proyect
+ *
+ * @package    XG Proyect
+ * @author     XG Proyect Team
+ * @copyright  2008-2020 XG Proyect
+ * @license    https://www.gnu.org/licenses/gpl-3.0.en.html GPL-3.0 License
+ * @link       https://github.com/XGProyect/
+ * @since      3.0.0
  */
 namespace App\libraries;
 
 use App\core\enumerators\AllianceRanksEnumerator as AllianceRanks;
 use App\core\enumerators\SwitchIntEnumerator as SwitchInt;
-use App\core\Language;
-use App\core\Template;
 use App\libraries\alliance\Ranks;
 use App\libraries\Functions;
-use App\libraries\TimingLibrary as Timing;
 
 /**
  * Users Class
  */
-class UsersLibrary
+class Users
 {
     /**
      * @var mixed
@@ -44,9 +47,9 @@ class UsersLibrary
      */
     public function __construct()
     {
-        $this->Users_Model = Functions::modelLoader('libraries/UsersLibrary');
+        $this->Users_Model = Functions::model('libraries/UsersLibrary');
 
-        if ($this->isSessionSet()) {
+        if (self::isSessionSet()) {
             // Get user data and check it
             $this->setUserData();
 
@@ -111,9 +114,9 @@ class UsersLibrary
      *
      * @return void
      */
-    public function checkSession()
+    public static function checkSession()
     {
-        if (!$this->isSessionSet()) {
+        if (!self::isSessionSet()) {
             Functions::redirect(SYSTEM_ROOT);
         }
     }
@@ -195,7 +198,7 @@ class UsersLibrary
      *
      * @return boolean
      */
-    private function isSessionSet()
+    private static function isSessionSet()
     {
         return !(!isset($_SESSION['user_id']) or !isset($_SESSION['user_password']));
     }
@@ -241,17 +244,6 @@ class UsersLibrary
 
         if (!password_verify(($user_row['user_password'] . "-" . SECRETWORD), $_SESSION['user_password']) && !defined('IN_LOGIN')) {
             Functions::redirect(SYSTEM_ROOT);
-        }
-
-        if ($user_row['user_banned'] > 0) {
-            $core = new Language();
-            $ci_lang = $core->loadLang('game/global', true);
-
-            $parse = $ci_lang->language;
-            $parse['banned_until'] = Timing::formatExtendedDate($user_row['user_banned']);
-
-            $template = new Template();
-            die($template->set('home/banned_message', $parse));
         }
     }
 

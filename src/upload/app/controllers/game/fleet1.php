@@ -20,6 +20,7 @@ use App\libraries\Functions;
 use App\libraries\game\Fleets;
 use App\libraries\premium\Premium;
 use App\libraries\research\Researches;
+use App\libraries\Users;
 
 /**
  * Fleet1 Class
@@ -60,7 +61,7 @@ class Fleet1 extends BaseController
         parent::__construct();
 
         // check if session is active
-        parent::$users->checkSession();
+        Users::checkSession();
 
         // load Model
         parent::loadModel('game/fleet');
@@ -139,8 +140,8 @@ class Fleet1 extends BaseController
         ];
 
         // display the page
-        parent::$page->display(
-            $this->getTemplate()->set(
+        $this->page->display(
+            $this->template->set(
                 'fleet/fleet1_view',
                 array_merge(
                     $this->langs->language,
@@ -159,7 +160,7 @@ class Fleet1 extends BaseController
     private function buildNoSlotBlock()
     {
         if (!$this->checkAvailableSlot()) {
-            return $this->getTemplate()->set('fleet/fleet1_noslots_row', $this->langs->language);
+            return $this->template->set('fleet/fleet1_noslots_row', $this->langs->language);
         }
 
         return null;
@@ -172,8 +173,8 @@ class Fleet1 extends BaseController
      */
     private function buildListOfShips()
     {
-        $objects = parent::$objects->getObjects();
-        $price = parent::$objects->getPrice();
+        $objects = $this->objects->getObjects();
+        $price = $this->objects->getPrice();
 
         $ships = $this->Fleet_Model->getShipsByPlanetId($this->planet['planet_id']);
 
@@ -275,7 +276,7 @@ class Fleet1 extends BaseController
     {
         if ($this->_ship_count > 0
             && $this->checkAvailableSlot()) {
-            return $this->getTemplate()->set('fleet/fleet1_selector_row', $this->langs->language);
+            return $this->template->set('fleet/fleet1_selector_row', $this->langs->language);
         }
 
         return '';
@@ -289,7 +290,7 @@ class Fleet1 extends BaseController
     private function buildNoShipsBlock()
     {
         if ($this->_ship_count <= 0) {
-            return $this->getTemplate()->set('fleet/fleet1_noships_row', $this->langs->language);
+            return $this->template->set('fleet/fleet1_noships_row', $this->langs->language);
         }
 
         return '';
@@ -304,7 +305,7 @@ class Fleet1 extends BaseController
     {
         if ($this->_ship_count > 0
             && $this->checkAvailableSlot()) {
-            return $this->getTemplate()->set('fleet/fleet1_button', $this->langs->language);
+            return $this->template->set('fleet/fleet1_button', $this->langs->language);
         }
 
         return '';
@@ -362,5 +363,3 @@ class Fleet1 extends BaseController
         ];
     }
 }
-
-/* end of fleet1.php */

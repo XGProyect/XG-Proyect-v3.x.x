@@ -34,8 +34,7 @@ $lang = [
     'level' => 'Nivel ',
 
     // banning
-    'bg_account_banned_message' => 'SU CUENTA HA SIDO SUSPENDIDA',
-    'bg_account_banned_expire' => 'Expiraci&oacute;n:',
+    'bg_banned' => '<br>¡TU CUENTA HA SIDO SUSPENDIDA!<br><br><br>La suspensión a la cuenta será removida el %s<br><br>',
 
     // online status
     'online' => 'Conectado',

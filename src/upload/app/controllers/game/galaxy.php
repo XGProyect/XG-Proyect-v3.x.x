@@ -16,6 +16,7 @@ use App\libraries\FleetsLib;
 use App\libraries\FormatLib;
 use App\libraries\Formulas;
 use App\libraries\Functions;
+use App\libraries\Users;
 
 /**
  * Galaxy Class
@@ -68,7 +69,7 @@ class Galaxy extends BaseController
         parent::__construct();
 
         // check if session is active
-        parent::$users->checkSession();
+        Users::checkSession();
 
         // load Model
         parent::loadModel('game/fleet');
@@ -77,9 +78,9 @@ class Galaxy extends BaseController
         // load Language
         parent::loadLang(['game/global', 'game/defenses', 'game/missions', 'game/galaxy']);
 
-        $this->_resource = parent::$objects->getObjects();
-        $this->_pricelist = parent::$objects->getPrice();
-        $this->_reslist = parent::$objects->getObjectsList();
+        $this->_resource = $this->objects->getObjects();
+        $this->_pricelist = $this->objects->getPrice();
+        $this->_reslist = $this->objects->getObjectsList();
         $this->_noob = Functions::loadLibrary('NoobsProtectionLib');
         $this->_galaxyLib = Functions::loadLibrary('GalaxyLib');
 
@@ -173,13 +174,13 @@ class Galaxy extends BaseController
         $parse['current_planet'] = $this->planet['planet_planet'];
         $parse['coords'] = FormatLib::prettyCoords((int) $this->_galaxy, (int) $this->_system, (int) $planet);
         $parse['planet_type'] = $this->planet['planet_type'];
-        $parse['mip'] = ($mode == 2) ? $this->getTemplate()->set(
+        $parse['mip'] = ($mode == 2) ? $this->template->set(
             'galaxy/galaxy_missile_selector',
             array_merge($parse, $this->langs->language)
         ) : ' ';
 
-        parent::$page->display(
-            $this->getTemplate()->set(
+        $this->page->display(
+            $this->template->set(
                 'game/galaxy_view',
                 array_merge(
                     $this->langs->language,

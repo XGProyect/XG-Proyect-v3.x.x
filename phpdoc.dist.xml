@@ -1,34 +1,27 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<phpdocumentor>
-    <title><![CDATA[XGP Proyect v3.2.0]]></title>
-    <encoding>utf-8</encoding>
-    <parser>
-        <target>docs</target>
-        <encoding>utf-8</encoding>
-        <visibility></visibility>
-    </parser>
-    <markers>
-        <item>TODO</item>
-        <item>FIXME</item>
-    </markers>
-    <files>
-        <directory>src/upload/application</directory>
-        <ignore>*tests*</ignore>
-        <ignore>*views*</ignore>
-        <ignore>*third_party*</ignore>
-        <ignore-hidden>true</ignore-hidden>
-        <ignore-symlinks>true</ignore-symlinks>
-    </files>
-    <transformer>
-        <target>docs</target>
-    </transformer>
-    <logging>
-        <level>error</level>
-    </logging>
-    <transformations>
-        <template name="clean"/>
-    </transformations>
-    <translator>
-        <locale>en</locale>
-    </translator>
+<phpdocumentor configVersion="3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="https://www.phpdoc.org" >
+    <title>XG Proyect</title>
+    <paths>
+        <output>docs</output>
+    </paths>
+    <version number="3.3.0">
+        <api>
+            <source dsn=".">
+                <path>src/upload/app</path>
+            </source>
+            <ignore hidden="true" symlinks="true">
+                <path>src/upload/app/ThirdParty/**/*</path>
+                <path>src/upload/app/views/**/*</path>
+            </ignore>
+            <extensions>
+                <extension>php</extension>
+            </extensions>
+            <default-package-name>XGProyect</default-package-name>
+            <include-source>true</include-source>
+            <markers>
+                <marker>TODO</marker>
+                <marker>FIXME</marker>
+            </markers>
+        </api>
+    </version>
 </phpdocumentor>

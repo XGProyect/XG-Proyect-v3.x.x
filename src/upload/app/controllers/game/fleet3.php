@@ -19,6 +19,7 @@ use App\libraries\FleetsLib;
 use App\libraries\FormatLib;
 use App\libraries\Functions;
 use App\libraries\research\Researches;
+use App\libraries\Users;
 
 /**
  * Fleet3 Class
@@ -63,7 +64,7 @@ class Fleet3 extends BaseController
         parent::__construct();
 
         // check if session is active
-        parent::$users->checkSession();
+        Users::checkSession();
 
         // load Model
         parent::loadModel('game/fleet');
@@ -124,8 +125,8 @@ class Fleet3 extends BaseController
         ];
 
         // display the page
-        parent::$page->display(
-            $this->getTemplate()->set(
+        $this->page->display(
+            $this->template->set(
                 'fleet/fleet3_view',
                 array_merge(
                     $this->langs->language,
@@ -143,8 +144,8 @@ class Fleet3 extends BaseController
      */
     private function buildFleetBlock()
     {
-        $objects = parent::$objects->getObjects();
-        $price = parent::$objects->getPrice();
+        $objects = $this->objects->getObjects();
+        $price = $this->objects->getPrice();
 
         $ships = $this->Fleet_Model->getShipsByPlanetId($this->planet['planet_id']);
 
@@ -259,7 +260,7 @@ class Fleet3 extends BaseController
         }
 
         if (count($options) > 0) {
-            return $this->getTemplate()->set(
+            return $this->template->set(
                 'fleet/fleet3_stay_row',
                 array_merge(
                     $this->langs->language,
@@ -595,5 +596,3 @@ class Fleet3 extends BaseController
         );
     }
 }
-
-/* end of fleet3.php */

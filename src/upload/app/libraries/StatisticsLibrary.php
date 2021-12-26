@@ -1,24 +1,38 @@
 <?php
 /**
- * Statistics_library Library
+ * XG Proyect
  *
- * @category Library
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
+ * Open-source OGame Clon
+ *
+ * This content is released under the GPL-3.0 License
+ *
+ * Copyright (c) 2008-2020 XG Proyect
+ *
+ * @package    XG Proyect
+ * @author     XG Proyect Team
+ * @copyright  2008-2020 XG Proyect
+ * @license    https://www.gnu.org/licenses/gpl-3.0.en.html GPL-3.0 License
+ * @link       https://github.com/XGProyect/
+ * @since      3.0.0
  */
+
 namespace App\libraries;
 
 use App\core\XGPCore;
 use App\libraries\Functions;
 
 /**
- * Statistics_library Class
+ * StatisticsLibrary Class
  */
-class Statistics_library extends XGPCore
+class StatisticsLibrary extends XGPCore
 {
+    /**
+     * Contains the model
+     *
+     * @var Statistics_library
+     */
+    private $statisticsLibraryModel;
+
     /**
      * @var mixed
      */
@@ -33,7 +47,8 @@ class Statistics_library extends XGPCore
     {
         parent::__construct();
 
-        $this->loadModel('libraries/Statistics_library');
+        // load model
+        $this->statisticsLibraryModel = Functions::model('libraries/Statistics_library');
     }
 
     /**
@@ -87,9 +102,9 @@ class Statistics_library extends XGPCore
         $objects = parent::$objects->getObjects();
 
         if ($what == 'research') {
-            $objectsToUpdate = $this->Statistics_library_Model->getResearchToUpdate($user_id);
+            $objectsToUpdate = $this->statisticsLibraryModel->getResearchToUpdate($user_id);
         } else {
-            $objectsToUpdate = $this->Statistics_library_Model->getPlanetElementToUpdate($what, $planet_id);
+            $objectsToUpdate = $this->statisticsLibraryModel->getPlanetElementToUpdate($what, $planet_id);
         }
 
         if (!is_null($objects)) {
@@ -112,7 +127,7 @@ class Statistics_library extends XGPCore
             if ($points >= 0) {
                 $what = strtr($what, ['research' => 'technology']);
 
-                $this->Statistics_library_Model->updatePoints($what, $points, $user_id);
+                $this->statisticsLibraryModel->updatePoints($what, $points, $user_id);
 
                 return true;
             }
@@ -166,7 +181,7 @@ class Statistics_library extends XGPCore
     private function makeUserRank()
     {
         // GET ALL DATA FROM THE USERS TO UPDATE
-        $all_stats_data = $this->Statistics_library_Model->getAllUserStatsData();
+        $all_stats_data = $this->statisticsLibraryModel->getAllUserStatsData();
 
         // ANY USER ?
         if (empty($all_stats_data) or count($all_stats_data) == 0) {
@@ -302,7 +317,7 @@ class Statistics_library extends XGPCore
 								user_statistic_update_time = VALUES(user_statistic_update_time);';
 
         // RUN QUERY
-        $this->Statistics_library_Model->runSingleQuery($update_query);
+        $this->statisticsLibraryModel->runSingleQuery($update_query);
 
         // MEMORY CLEAN UP
         unset($all_stats_data, $build, $defs, $ships, $tech, $rank, $update_query, $values);
@@ -316,7 +331,7 @@ class Statistics_library extends XGPCore
     private function makeAllyRank()
     {
         // GET ALL DATA FROM THE USERS TO UPDATE
-        $all_stats_data = $this->Statistics_library_Model->getAllAllianceStatsData();
+        $all_stats_data = $this->statisticsLibraryModel->getAllAllianceStatsData();
 
         // ANY ALLIANCE ?
         if (empty($all_stats_data) or count($all_stats_data) == 0) {
@@ -465,7 +480,7 @@ class Statistics_library extends XGPCore
                             alliance_statistic_update_time = VALUES(alliance_statistic_update_time);';
 
         // RUN QUERY
-        $this->Statistics_library_Model->runSingleQuery($update_query);
+        $this->statisticsLibraryModel->runSingleQuery($update_query);
 
         // MEMORY CLEAN UP
         unset($all_stats_data, $build, $defs, $ships, $tech, $rank, $update_query, $values);

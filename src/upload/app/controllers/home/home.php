@@ -67,7 +67,7 @@ class Home extends BaseController
                     $this->Home_Model->removeBan($login['user_name']);
                 }
 
-                if (parent::$users->userLogin($login['user_id'], $login['user_password'])) {
+                if ($this->userLibrary->userLogin($login['user_id'], $login['user_password'])) {
                     $this->Home_Model->setUserHomeCurrentPlanet($login['user_id']);
 
                     // redirect to game
@@ -87,8 +87,8 @@ class Home extends BaseController
      */
     private function buildPage(): void
     {
-        parent::$page->display(
-            $this->getTemplate()->set(
+        $this->page->display(
+            $this->template->set(
                 'home/index_body',
                 array_merge(
                     $this->langs->language,

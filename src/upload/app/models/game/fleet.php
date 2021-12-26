@@ -131,8 +131,7 @@ class Fleet extends Model
     /**
      * Get ongoing ACS attacks
      *
-     * @param
-     *
+     * @param int $user_id
      * @return mixed
      */
     public function getOngoingAcs($user_id)

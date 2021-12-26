@@ -87,8 +87,8 @@ class Changelog extends BaseController
      */
     private function buildPage(): void
     {
-        parent::$page->displayAdmin(
-            $this->getTemplate()->set(
+        $this->page->displayAdmin(
+            $this->template->set(
                 'adm/changelog_view',
                 array_merge(
                     $this->langs->language,
@@ -150,8 +150,8 @@ class Changelog extends BaseController
     {
         $this->saveAction();
 
-        parent::$page->displayAdmin(
-            $this->getTemplate()->set(
+        $this->page->displayAdmin(
+            $this->template->set(
                 'adm/changelog_form_view',
                 array_merge(
                     $this->getActionData('add')
@@ -170,8 +170,8 @@ class Changelog extends BaseController
     {
         $this->saveAction();
 
-        parent::$page->displayAdmin(
-            $this->getTemplate()->set(
+        $this->page->displayAdmin(
+            $this->template->set(
                 'adm/changelog_form_view',
                 $this->getActionData('edit', $changelog_id)
             )

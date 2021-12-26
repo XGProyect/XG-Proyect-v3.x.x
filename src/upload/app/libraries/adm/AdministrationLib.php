@@ -1,33 +1,16 @@
-<?php
-/**
- * Administration Library
- *
- * @category Library
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
- */
-namespace App\libraries\adm;
+<?php namespace App\libraries\adm;
 
 use App\core\Language;
 use App\core\Template;
-use App\core\XGPCore;
 use App\libraries\adm\Permissions;
 use App\libraries\Functions;
+use App\libraries\Page;
+use App\libraries\Users;
 
 /**
- * AdministrationLib Class
- *
- * @category Classes
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
+ * AdministrationLib class
  */
-class AdministrationLib extends XGPCore
+class AdministrationLib
 {
     /**
      * Return a new instance of Template
@@ -60,7 +43,7 @@ class AdministrationLib extends XGPCore
      */
     public static function noAccessMessage($mes = '')
     {
-        parent::$page->displayAdmin(
+        (new Page(new Users))->displayAdmin(
             self::saveMessage('error', $mes, false)
         );
     }
@@ -164,7 +147,7 @@ class AdministrationLib extends XGPCore
     {
         if ($admin_id != 0 && !empty($password)) {
             // login as a user
-            parent::$users->userLogin($admin_id, $password);
+            (new Users)->userLogin($admin_id, $password);
 
             // admin login
             $_SESSION['admin_id'] = $admin_id;

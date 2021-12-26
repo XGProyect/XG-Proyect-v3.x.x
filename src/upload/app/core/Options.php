@@ -1,22 +1,12 @@
-<?php
-/**
- * Options
- *
- * @category Core
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
- */
-namespace App\core;
+<?php namespace App\core;
 
 use App\core\Database;
+use App\libraries\Functions;
 
 /**
  * Options Class
  */
-class Options extends XGPCore
+class Options
 {
     /**
      *
@@ -25,14 +15,19 @@ class Options extends XGPCore
     private static $instance = null;
 
     /**
+     * Contains the model
+     *
+     * @var Options
+     */
+    private $sessionsModel;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
-        parent::__construct();
-
         // load model
-        parent::loadModel('core/options');
+        $this->optionsModel = Functions::model('core/options');
     }
 
     /**
@@ -61,9 +56,9 @@ class Options extends XGPCore
     public function getOptions($option = '')
     {
         if ($option == '') {
-            return $this->Options_Model->getAllOptions();
+            return $this->optionsModel->getAllOptions();
         } else {
-            return $this->Options_Model->getOption($option);
+            return $this->optionsModel->getOption($option);
         }
     }
 
@@ -78,7 +73,7 @@ class Options extends XGPCore
     public function writeOptions($option, $value = '')
     {
         if ($option != '') {
-            if ($this->Options_Model->writeOption($option, $value)) {
+            if ($this->optionsModel->writeOption($option, $value)) {
                 return true;
             }
         }
@@ -109,7 +104,7 @@ class Options extends XGPCore
     public function deleteOption($option)
     {
         if ($option != '') {
-            if ($this->Options_Model->deleteOption($option)) {
+            if ($this->optionsModel->deleteOption($option)) {
                 return true;
             }
         }

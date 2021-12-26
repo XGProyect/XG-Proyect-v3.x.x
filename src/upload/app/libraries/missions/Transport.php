@@ -53,7 +53,7 @@ class Transport extends Missions
 
             // transfer the fleet resources to the planet
             parent::storeResources($fleet, false);
-            $this->Missions_Model->updateReturningFleetResources($fleet['fleet_id']);
+            $this->missionsModel->updateReturningFleetResources($fleet['fleet_id']);
         }
 
         // complete mission
@@ -75,7 +75,7 @@ class Transport extends Missions
      */
     private function getTradingPlanetsData(array $fleet): array
     {
-        return $this->Missions_Model->getFriendlyPlanetData([
+        return $this->missionsModel->getFriendlyPlanetData([
             'coords' => [
                 'start' => [
                     'galaxy' => $fleet['fleet_start_galaxy'],

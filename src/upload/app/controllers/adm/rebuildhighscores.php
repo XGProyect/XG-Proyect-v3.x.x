@@ -1,14 +1,19 @@
 <?php declare (strict_types = 1);
-
 /**
- * Rebuild Highscores Controller
+ * XG Proyect
  *
- * @category Controller
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
+ * Open-source OGame Clon
+ *
+ * This content is released under the GPL-3.0 License
+ *
+ * Copyright (c) 2008-2020 XG Proyect
+ *
+ * @package    XG Proyect
+ * @author     XG Proyect Team
+ * @copyright  2008-2020 XG Proyect
+ * @license    https://www.gnu.org/licenses/gpl-3.0.en.html GPL-3.0 License
+ * @link       https://github.com/XGProyect/
+ * @since      3.0.0
  */
 namespace App\controllers\adm;
 
@@ -16,7 +21,7 @@ use App\core\BaseController;
 use App\libraries\adm\AdministrationLib as Administration;
 use App\libraries\FormatLib as Format;
 use App\libraries\Functions;
-use App\libraries\Statistics_library as Statistics;
+use App\libraries\StatisticsLibrary as Statistics;
 
 /**
  * RebuildHighscores Class
@@ -83,8 +88,8 @@ class RebuildHighscores extends BaseController
      */
     private function buildPage(): void
     {
-        parent::$page->displayAdmin(
-            $this->getTemplate()->set(
+        $this->page->displayAdmin(
+            $this->template->set(
                 'adm/rebuildhighscores_view',
                 array_merge(
                     $this->langs->language,

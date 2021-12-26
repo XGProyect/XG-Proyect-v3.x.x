@@ -14,6 +14,7 @@ namespace App\controllers\game;
 use App\core\BaseController;
 use App\libraries\Functions;
 use App\libraries\TimingLibrary as Timing;
+use App\libraries\Users;
 
 /**
  * Change log Class
@@ -30,7 +31,7 @@ class Changelog extends BaseController
         parent::__construct();
 
         // check if session is active
-        parent::$users->checkSession();
+        Users::checkSession();
 
         // load Model
         parent::loadModel('game/changelog');
@@ -74,8 +75,8 @@ class Changelog extends BaseController
             }
         }
 
-        parent::$page->display(
-            $this->getTemplate()->set('game/changelog_view', array_merge(
+        $this->page->display(
+            $this->template->set('game/changelog_view', array_merge(
                 $this->langs->language,
                 ['list_of_changes' => $changes]
             ))

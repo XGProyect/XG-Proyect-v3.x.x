@@ -71,7 +71,7 @@ class Attack extends Missions
         $errorHandler = null;
         $exceptionHandler = null;
 
-        $target_planet = $this->Missions_Model->getAllPlanetDataByCoords([
+        $target_planet = $this->missionsModel->getAllPlanetDataByCoords([
             'coords' => [
                 'galaxy' => $fleet_row['fleet_end_galaxy'],
                 'system' => $fleet_row['fleet_end_system'],
@@ -94,13 +94,13 @@ class Attack extends Missions
             LangManager::getInstance()->setImplementation(new Attack_lang($this->langs, $this->resource));
 
             if ($fleet_row['fleet_group'] > 0) {
-                $this->Missions_Model->deleteAcsFleetById($fleet_row['fleet_group']);
-                $this->Missions_Model->updateAcsFleetStatusByGroupId($fleet_row['fleet_group']);
+                $this->missionsModel->deleteAcsFleetById($fleet_row['fleet_group']);
+                $this->missionsModel->updateAcsFleetStatusByGroupId($fleet_row['fleet_group']);
             } else {
                 parent::returnFleet($fleet_row['fleet_id']);
             }
 
-            $targetUser = $this->Missions_Model->getAllUserDataByUserId($target_planet['planet_user_id']);
+            $targetUser = $this->missionsModel->getAllUserDataByUserId($target_planet['planet_user_id']);
             $target_userID = $targetUser['user_id'];
 
             UpdatesLibrary::updatePlanetResources($targetUser, $target_planet, time());
@@ -111,14 +111,14 @@ class Attack extends Missions
 
             // If we have a ACS attack
             if ($fleet_row['fleet_group'] != 0) {
-                $fleets = $this->Missions_Model->getAllAcsFleetsByGroupId($fleet_row['fleet_group']);
+                $fleets = $this->missionsModel->getAllAcsFleetsByGroupId($fleet_row['fleet_group']);
                 $attackers = $this->getPlayerGroupFromQuery($fleets);
             } else {
                 $attackers = $this->getPlayerGroup($fleet_row);
             }
 
             // defenders fleet sum
-            $def = $this->Missions_Model->getAllFleetsByEndCoordsAndTimes(
+            $def = $this->missionsModel->getAllFleetsByEndCoordsAndTimes(
                 [
                     'coords' => [
                         'galaxy' => $fleet_row['fleet_end_galaxy'],
@@ -259,7 +259,7 @@ class Attack extends Missions
     {
         list($metal, $crystal) = $report->getDebris();
 
-        $this->Missions_Model->updatePlanetDebrisByCoords(
+        $this->missionsModel->updatePlanetDebrisByCoords(
             [
                 'time' => time(),
                 'debris' => [
@@ -297,7 +297,7 @@ class Attack extends Missions
             }
         }
 
-        $player_info = $this->Missions_Model->getTechnologiesByUserId($idPlayer);
+        $player_info = $this->missionsModel->getTechnologiesByUserId($idPlayer);
 
         $player = new Player($idPlayer, [$fleet]);
         $player->setTech(
@@ -349,7 +349,7 @@ class Attack extends Missions
                     if (!empty($target_user) && $target_user['user_id'] == $idPlayer) {
                         $player_info = $target_user;
                     } else {
-                        $player_info = $this->Missions_Model->getTechnologiesByUserId($idPlayer);
+                        $player_info = $this->missionsModel->getTechnologiesByUserId($idPlayer);
                         $this->setHyperspaceTechLevel($idPlayer, $player_info['research_hyperspace_technology']);
                     }
 
@@ -409,7 +409,7 @@ class Attack extends Missions
         $system = $fleet_row['fleet_end_system'];
         $planet = $fleet_row['fleet_end_planet'];
 
-        $moon_exists = $this->Missions_Model->getMoonIdByCoords([
+        $moon_exists = $this->missionsModel->getMoonIdByCoords([
             'coords' => [
                 'galaxy' => $galaxy,
                 'system' => $system,
@@ -446,7 +446,7 @@ class Attack extends Missions
         $rid = md5($report) . time();
         $destroyed = ($report->getLastRoundNumber() == 1) ? 1 : 0;
 
-        $this->Missions_Model->insertReport([
+        $this->missionsModel->insertReport([
             'owners' => $owners,
             'rid' => $rid,
             'content' => addslashes($report),
@@ -464,11 +464,22 @@ class Attack extends Missions
             }
 
             $raport = $this->buildReportLink(
-                $style, $rid, $target_planet_name, $fleet_row['fleet_end_galaxy'], $fleet_row['fleet_end_system'], $fleet_row['fleet_end_planet']
+                $style,
+                $rid,
+                $target_planet_name,
+                $fleet_row['fleet_end_galaxy'],
+                $fleet_row['fleet_end_system'],
+                $fleet_row['fleet_end_planet']
             );
 
             Functions::sendMessage(
-                $id, '', $fleet_row['fleet_start_time'], 1, $this->langs->line('mi_fleet_command'), $raport, ''
+                $id,
+                '',
+                $fleet_row['fleet_start_time'],
+                1,
+                $this->langs->line('mi_fleet_command'),
+                $raport,
+                ''
             );
         }
 
@@ -482,11 +493,22 @@ class Attack extends Missions
             }
 
             $raport = $this->buildReportLink(
-                $style, $rid, $target_planet_name, $fleet_row['fleet_end_galaxy'], $fleet_row['fleet_end_system'], $fleet_row['fleet_end_planet']
+                $style,
+                $rid,
+                $target_planet_name,
+                $fleet_row['fleet_end_galaxy'],
+                $fleet_row['fleet_end_system'],
+                $fleet_row['fleet_end_planet']
             );
 
             Functions::sendMessage(
-                $id, '', $fleet_row['fleet_start_time'], 1, $this->langs->line('mi_fleet_command'), $raport, ''
+                $id,
+                '',
+                $fleet_row['fleet_start_time'],
+                1,
+                $this->langs->line('mi_fleet_command'),
+                $raport,
+                ''
             );
         }
     }
@@ -595,7 +617,7 @@ class Attack extends Missions
                         $steal['deuterium'] += $fleetSteal['deuterium'];
                     }
 
-                    $this->Missions_Model->updateReturningFleetData([
+                    $this->missionsModel->updateReturningFleetData([
                         'ships' => FleetsLib::setFleetShipsArray($fleetArray),
                         'amount' => $totalCount,
                         'stolen' => [
@@ -613,7 +635,7 @@ class Attack extends Missions
         $id_string = join(',', $emptyFleets);
 
         if (!empty($id_string)) {
-            $this->Missions_Model->deleteMultipleFleetsByIds($id_string);
+            $this->missionsModel->deleteMultipleFleetsByIds($id_string);
         }
 
         return $steal;
@@ -666,7 +688,7 @@ class Attack extends Missions
         }
 
         // Updating defenses and ships on planet
-        $this->Missions_Model->updatePlanetLossesById([
+        $this->missionsModel->updatePlanetLossesById([
             'ships' => $fleetArray,
             'stolen' => [
                 'metal' => $steal['metal'],
@@ -680,7 +702,7 @@ class Attack extends Missions
         $id_string = join(",", $emptyFleets);
 
         if (!empty($id_string)) {
-            $this->Missions_Model->deleteMultipleFleetsByIds($id_string);
+            $this->missionsModel->deleteMultipleFleetsByIds($id_string);
         }
     }
 

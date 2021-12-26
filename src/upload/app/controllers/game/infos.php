@@ -21,6 +21,7 @@ use App\libraries\Formulas;
 use App\libraries\Functions;
 use App\libraries\OfficiersLib;
 use App\libraries\ProductionLib;
+use App\libraries\Users;
 
 /**
  * Infos Class
@@ -58,7 +59,7 @@ class Infos extends BaseController
         parent::__construct();
 
         // check if session is active
-        parent::$users->checkSession();
+        Users::checkSession();
 
         // load Model
         parent::loadModel('game/infos');
@@ -66,10 +67,10 @@ class Infos extends BaseController
         // load Language
         parent::loadLang(['game/global', 'game/infos', 'game/constructions', 'game/defenses', 'game/ships', 'game/technologies']);
 
-        $this->_resource = parent::$objects->getObjects();
-        $this->_pricelist = parent::$objects->getPrice();
-        $this->_combat_caps = parent::$objects->getCombatSpecs();
-        $this->_prod_grid = parent::$objects->getProduction();
+        $this->_resource = $this->objects->getObjects();
+        $this->_pricelist = $this->objects->getPrice();
+        $this->_combat_caps = $this->objects->getCombatSpecs();
+        $this->_prod_grid = $this->objects->getProduction();
         $this->_element_id = isset($_GET['gid']) ? (int) $_GET['gid'] : null;
     }
 
@@ -196,7 +197,7 @@ class Infos extends BaseController
         }
 
         if ($TableHeadTPL != '') {
-            $parse['table_head'] = $this->getTemplate()->set($TableHeadTPL, $this->langs->language);
+            $parse['table_head'] = $this->template->set($TableHeadTPL, $this->langs->language);
 
             if ($this->_element_id >= 22 && $this->_element_id <= 24) {
                 $parse['table_data'] = $this->storage_table($TableTPL);
@@ -211,10 +212,10 @@ class Infos extends BaseController
 
         $parse['table_footer'] = '';
         if ($TableFooterTPL != '') {
-            $parse['table_footer'] = $this->getTemplate()->set($TableFooterTPL, $this->langs->language);
+            $parse['table_footer'] = $this->template->set($TableFooterTPL, $this->langs->language);
         }
 
-        $page = $this->getTemplate()->set($PageTPL, $parse);
+        $page = $this->template->set($PageTPL, $parse);
 
         if ($GateTPL != '') {
             if ($this->planet[$this->_resource[$this->_element_id]] > 0) {
@@ -231,7 +232,7 @@ class Infos extends BaseController
                 }
                 $parse['gate_dest_moons'] = $this->BuildJumpableMoonCombo($this->user, $this->planet);
                 $parse['gate_fleet_rows'] = $this->BuildFleetListRows($this->planet);
-                $page .= $this->getTemplate()->set($GateTPL, $parse);
+                $page .= $this->template->set($GateTPL, $parse);
             }
         }
 
@@ -239,7 +240,7 @@ class Infos extends BaseController
             $page .= $this->buildTearDownBlock();
         }
 
-        parent::$page->display($page);
+        $this->page->display($page);
     }
 
     /**
@@ -266,7 +267,7 @@ class Infos extends BaseController
                 $ProdFirst = floor($Prod);
             }
 
-            $Table .= $this->getTemplate()->set($template, $bloc);
+            $Table .= $this->template->set($template, $bloc);
         }
 
         return $Table;
@@ -288,7 +289,7 @@ class Infos extends BaseController
             $bloc['tech_colonies'] = FormatLib::prettyNumber(FleetsLib::getMaxColonies($BuildLevel));
             $bloc['tech_expeditions'] = FormatLib::prettyNumber(FleetsLib::getMaxExpeditions($BuildLevel));
 
-            $Table .= $this->getTemplate()->set($template, $bloc);
+            $Table .= $this->template->set($template, $bloc);
         }
 
         return $Table;
@@ -418,7 +419,7 @@ class Infos extends BaseController
                     $bloc['fleet_name'] = $this->langs->language[$this->_resource[$Ship]];
                     $bloc['fleet_max'] = FormatLib::prettyNumber($this->planet[$this->_resource[$Ship]]);
                     $bloc['gate_ship_dispo'] = $this->langs->line('in_jump_gate_available');
-                    $Result .= $this->getTemplate()->set($RowsTPL, $bloc);
+                    $Result .= $this->template->set($RowsTPL, $bloc);
                     $CurrIdx++;
                 }
             }
@@ -467,7 +468,7 @@ class Infos extends BaseController
             $bloc['build_lvl'] = ($current_built_lvl == $BuildLevel) ? "<font color=\"#ff0000\">" . $BuildLevel . "</font>" : $BuildLevel;
             $bloc['build_range'] = ($BuildLevel * $BuildLevel) - 1;
 
-            $Table .= $this->getTemplate()->set($Template, $bloc);
+            $Table .= $this->template->set($Template, $bloc);
         }
 
         return $Table;
@@ -599,7 +600,7 @@ class Infos extends BaseController
                 $ProdFirst = floor($Prod[4]);
             }
 
-            $Table .= $this->getTemplate()->set($Template, $bloc);
+            $Table .= $this->template->set($Template, $bloc);
         }
 
         return $Table;
@@ -675,7 +676,7 @@ class Infos extends BaseController
 
             $tear_down_url = 'game.php?page=' . DevelopmentsLib::setBuildingPage($this->_element_id) . '&cmd=destroy&building=' . $this->_element_id;
 
-            $page .= $this->getTemplate()->set(
+            $page .= $this->template->set(
                 'infos/info_buildings_destroy',
                 array_merge(
                     $this->langs->language,

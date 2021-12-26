@@ -21,6 +21,7 @@ use App\libraries\Functions;
 use App\libraries\OfficiersLib;
 use App\libraries\TimingLibrary as Timing;
 use App\libraries\UpdatesLibrary;
+use App\libraries\Users;
 use Exception;
 
 /**
@@ -58,7 +59,7 @@ class Buildings extends BaseController
         parent::__construct();
 
         // check if session is active
-        parent::$users->checkSession();
+        Users::checkSession();
 
         // load Model
         parent::loadModel('game/buildings');
@@ -98,7 +99,7 @@ class Buildings extends BaseController
         $this->_building = new Building(
             $this->planet,
             $this->user,
-            $this->getObjects()
+            $this->objects
         );
 
         $this->_allowed_buildings = $this->getAllowedBuildings();
@@ -171,8 +172,8 @@ class Buildings extends BaseController
         $page['list_of_buildings'] = $this->buildListOfBuildings();
 
         // display the page
-        parent::$page->display(
-            $this->getTemplate()->set(
+        $this->page->display(
+            $this->template->set(
                 'buildings/buildings_builds',
                 array_merge($page, $this->buildQueueBlock())
             )
@@ -231,8 +232,8 @@ class Buildings extends BaseController
         $item_to_parse['dpath'] = DPATH;
         $item_to_parse['i'] = $building_id;
         $item_to_parse['nivel'] = $this->getBuildingLevelWithFormat($building_id);
-        $item_to_parse['n'] = $this->langs->language[$this->getObjects()->getObjects()[$building_id]];
-        $item_to_parse['descriptions'] = $this->langs->language['descriptions'][$this->getObjects()->getObjects()[$building_id]];
+        $item_to_parse['n'] = $this->langs->language[$this->objects->getObjects()[$building_id]];
+        $item_to_parse['descriptions'] = $this->langs->language['descriptions'][$this->objects->getObjects()[$building_id]];
         $item_to_parse['price'] = $this->getBuildingPriceWithFormat($building_id);
         $item_to_parse['time'] = $this->getBuildingTimeWithFormat($building_id);
         $item_to_parse['click'] = $this->getActionButton($building_id);
@@ -298,7 +299,7 @@ class Buildings extends BaseController
      */
     private function getBuildingLevel($building_id)
     {
-        return $this->planet[$this->getObjects()->getObjects()[$building_id]];
+        return $this->planet[$this->objects->getObjects()[$building_id]];
     }
 
     /**
@@ -332,7 +333,7 @@ class Buildings extends BaseController
 
         // validations
         $is_development_payable = Developments::isDevelopmentPayable($this->user, $this->planet, $building_id, true, false);
-        $is_on_vacations = parent::$users->isOnVacations($this->user);
+        $is_on_vacations = $this->userLibrary->isOnVacations($this->user);
         $have_fields = Developments::areFieldsAvailable($this->planet);
         $is_queue_full = $this->_building->isQueueFull();
         $queue_element = $this->_building->getCountElementsOnQueue();
@@ -397,7 +398,7 @@ class Buildings extends BaseController
                 'call_program' => $this->getCurrentPage(),
             ];
 
-            return $this->getTemplate()->set(
+            return $this->template->set(
                 'buildings/buildings_build_script',
                 array_merge($block, $this->langs->language)
             );
@@ -667,7 +668,7 @@ class Buildings extends BaseController
      */
     private function addToQueue($building, $AddMode = true)
     {
-        $resource = $this->getObjects()->getObjects();
+        $resource = $this->objects->getObjects();
         $CurrentQueue = $this->planet['planet_b_building_id'];
         $queue = $this->showQueue();
         $max_fields = Developments::maxFields($this->planet);
@@ -703,7 +704,7 @@ class Buildings extends BaseController
 
         if ($QueueID != false && Developments::isDevelopmentAllowed($this->user, $this->planet, $building)) {
             if ($QueueID <= 1) {
-                if (Developments::isDevelopmentPayable($this->user, $this->planet, $building, true, !$AddMode) && !parent::$users->isOnVacations($this->user)) {
+                if (Developments::isDevelopmentPayable($this->user, $this->planet, $building, true, !$AddMode) && !$this->userLibrary->isOnVacations($this->user)) {
                     $continue = true;
                 }
             } else {
@@ -815,7 +816,7 @@ class Buildings extends BaseController
                     $BuildLevel = $BuildArray[1];
                     $BuildMode = $BuildArray[4];
                     $BuildTime = $BuildEndTime - time();
-                    $ElementTitle = $this->langs->language[$this->getObjects()->getObjects()[$building]];
+                    $ElementTitle = $this->langs->language[$this->objects->getObjects()[$building]];
 
                     if (isset($Sprice[$building]) && $Sprice !== false && $BuildLevel > $Sprice[$building]) {
                         $Sprice[$building] = $BuildLevel;

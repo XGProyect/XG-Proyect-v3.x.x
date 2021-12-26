@@ -7,13 +7,14 @@
  * @author   XG Proyect Team
  * @license  http://www.xgproyect.org XG Proyect
  * @link     http://www.xgproyect.org
- * @version  3.1.0
+ * @version  3.3.0
  */
 namespace App\controllers\game;
 
 use App\core\BaseController;
 use App\libraries\FormatLib as Format;
 use App\libraries\Functions;
+use App\libraries\Users;
 
 /**
  * TraderLayer Class
@@ -30,7 +31,7 @@ class TraderLayer extends BaseController
         parent::__construct();
 
         // check if session is active
-        parent::$users->checkSession();
+        Users::checkSession();
 
         // load Model
         parent::loadModel('game/trader');
@@ -63,8 +64,8 @@ class TraderLayer extends BaseController
      */
     private function buildPage(): void
     {
-        parent::$page->display(
-            $this->getTemplate()->set(
+        $this->page->display(
+            $this->template->set(
                 'game/trader_layer_view',
                 array_merge(
                     $this->langs->language,
@@ -260,7 +261,7 @@ class TraderLayer extends BaseController
     }
     }
 
-    parent::$page->display($this->getTemplate()->set($template, $parse));*/
+    $this->page->display($this->template->set($template, $parse));*/
     //}
 
     /**
@@ -275,7 +276,7 @@ class TraderLayer extends BaseController
 
         if (in_array($mode, ['traderResources', 'traderAuctioneer', 'traderScrap', 'traderImportExport'])) {
             $view_to_get = strtolower(strtr($mode, ['trader' => '']));
-            $template = $this->getTemplate()->set(
+            $template = $this->template->set(
                 'game/trader_' . $view_to_get . '_view',
                 array_merge(
                     $this->langs->language,

@@ -18,6 +18,7 @@ use App\libraries\FormatLib as Format;
 use App\libraries\Functions;
 use App\libraries\game\Preferences as Pref;
 use App\libraries\TimingLibrary as Timing;
+use App\libraries\Users;
 
 /**
  * Preferences Class
@@ -62,7 +63,7 @@ class Preferences extends BaseController
         parent::__construct();
 
         // check if session is active
-        parent::$users->checkSession();
+        Users::checkSession();
 
         // load Model
         parent::loadModel('game/preferences');
@@ -176,8 +177,8 @@ class Preferences extends BaseController
      */
     private function buildPage(): void
     {
-        parent::$page->display(
-            $this->getTemplate()->set(
+        $this->page->display(
+            $this->template->set(
                 'game/preferences_view',
                 array_merge(
                     $this->langs->language,

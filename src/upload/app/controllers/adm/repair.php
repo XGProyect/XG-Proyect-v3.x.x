@@ -68,7 +68,7 @@ class Repair extends BaseController
             $tables = $this->Repair_Model->getAllTables();
 
             $parse['display'] = 'block';
-            $parse['head'] = $this->getTemplate()->set('adm/repair_row_head_view', $this->langs->language);
+            $parse['head'] = $this->template->set('adm/repair_row_head_view', $this->langs->language);
             $parse['tables'] = '';
             $parse['np_general'] = '';
             $parse['results'] = '';
@@ -80,7 +80,7 @@ class Repair extends BaseController
                 $row['overhead'] = FormatLib::prettyBytes($row['data_free']);
                 $row['status_style'] = 'text-info';
 
-                $parse['tables'] .= $this->getTemplate()->set(
+                $parse['tables'] .= $this->template->set(
                     'adm/repair_row_view',
                     array_merge(
                         $row,
@@ -90,7 +90,7 @@ class Repair extends BaseController
             }
         } else {
             $parse['display'] = 'none';
-            $parse['head'] = $this->getTemplate()->set('adm/repair_result_head_view', $this->langs->language);
+            $parse['head'] = $this->template->set('adm/repair_result_head_view', $this->langs->language);
             $parse['tables'] = '';
             $parse['np_general'] = '';
 
@@ -102,18 +102,18 @@ class Repair extends BaseController
 
                     $this->Repair_Model->checkTable($table);
                     $parse['result'] = $this->langs->line('db_check_ok');
-                    $result_rows .= $this->getTemplate()->set('adm/repair_result_view', $parse);
+                    $result_rows .= $this->template->set('adm/repair_result_view', $parse);
 
                     if (isset($_POST['Optimize']) && $_POST['Optimize'] == 'yes') {
                         $this->Repair_Model->optimizeTable($table);
                         $parse['result'] = $this->langs->line('db_opt');
-                        $result_rows .= $this->getTemplate()->set('adm/repair_result_view', $parse);
+                        $result_rows .= $this->template->set('adm/repair_result_view', $parse);
                     }
 
                     if (isset($_POST['Repair']) && $_POST['Repair'] == 'yes') {
                         $this->Repair_Model->repairTable($table);
                         $parse['result'] = $this->langs->line('db_rep');
-                        $result_rows .= $this->getTemplate()->set('adm/repair_result_view', $parse);
+                        $result_rows .= $this->template->set('adm/repair_result_view', $parse);
                     }
                 }
 
@@ -123,8 +123,8 @@ class Repair extends BaseController
             }
         }
 
-        parent::$page->displayAdmin(
-            $this->getTemplate()->set(
+        $this->page->displayAdmin(
+            $this->template->set(
                 'adm/repair_view',
                 $parse
             )

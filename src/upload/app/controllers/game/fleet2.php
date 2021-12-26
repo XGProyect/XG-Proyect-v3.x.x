@@ -19,6 +19,7 @@ use App\libraries\Functions;
 use App\libraries\OfficiersLib;
 use App\libraries\premium\Premium;
 use App\libraries\research\Researches;
+use App\libraries\Users;
 use App\libraries\users\Shortcuts;
 
 /**
@@ -59,7 +60,7 @@ class Fleet2 extends BaseController
         parent::__construct();
 
         // check if session is active
-        parent::$users->checkSession();
+        Users::checkSession();
 
         // load Model
         parent::loadModel('game/fleet');
@@ -124,8 +125,8 @@ class Fleet2 extends BaseController
         ];
 
         // display the page
-        parent::$page->display(
-            $this->getTemplate()->set(
+        $this->page->display(
+            $this->template->set(
                 'fleet/fleet2_view',
                 array_merge(
                     $this->langs->language,
@@ -143,8 +144,8 @@ class Fleet2 extends BaseController
      */
     private function buildFleetBlock()
     {
-        $objects = parent::$objects->getObjects();
-        $price = parent::$objects->getPrice();
+        $objects = $this->objects->getObjects();
+        $price = $this->objects->getPrice();
 
         $ships = $this->Fleet_Model->getShipsByPlanetId($this->planet['planet_id']);
 
@@ -247,7 +248,9 @@ class Fleet2 extends BaseController
             foreach ($shortcuts_list as $shortcut) {
                 if ($shortcut != '') {
                     $description = $shortcut['name'] . ' ' . FormatLib::prettyCoords(
-                        $shortcut['g'], $shortcut['s'], $shortcut['p']
+                        $shortcut['g'],
+                        $shortcut['s'],
+                        $shortcut['p']
                     ) . ' ' . $this->langs->language['planet_type_short'][$shortcut['pt']];
 
                     $list_of_shortcuts[] = [
@@ -258,7 +261,7 @@ class Fleet2 extends BaseController
                 }
             }
 
-            $shortcut_row = $this->getTemplate()->set(
+            $shortcut_row = $this->template->set(
                 'fleet/fleet2_shortcuts_row',
                 [
                     'select' => 'shortcuts',
@@ -266,13 +269,13 @@ class Fleet2 extends BaseController
                 ]
             );
         } else {
-            $shortcut_row = $this->getTemplate()->set(
+            $shortcut_row = $this->template->set(
                 'fleet/fleet2_shortcuts_noshortcuts_row',
                 ['shorcut_message' => $this->langs->line('fl_no_shortcuts')]
             );
         }
 
-        return $this->getTemplate()->set(
+        return $this->template->set(
             'fleet/fleet2_shortcuts',
             array_merge($this->langs->language, ['shortcuts_rows' => $shortcut_row])
         );
@@ -301,7 +304,7 @@ class Fleet2 extends BaseController
                 ];
             }
 
-            return $this->getTemplate()->set(
+            return $this->template->set(
                 'fleet/fleet2_shortcuts_row',
                 [
                     'select' => 'colonies',
@@ -310,7 +313,7 @@ class Fleet2 extends BaseController
             );
         }
 
-        return $this->getTemplate()->set(
+        return $this->template->set(
             'fleet/fleet2_shortcuts_noshortcuts_row',
             ['shorcut_message' => $this->langs->line('fl_no_colony')]
         );
@@ -392,5 +395,3 @@ class Fleet2 extends BaseController
         ];
     }
 }
-
-/* end of fleet2.php */

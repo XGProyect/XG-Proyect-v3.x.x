@@ -14,6 +14,7 @@ namespace App\controllers\game;
 use App\core\BaseController;
 use App\libraries\combatreport\Report;
 use App\libraries\Functions;
+use App\libraries\Users;
 
 /**
  * Combatreport Class
@@ -36,7 +37,7 @@ class Combatreport extends BaseController
         parent::__construct();
 
         // check if session is active
-        parent::$users->checkSession();
+        Users::checkSession();
 
         // load Model
         parent::loadModel('game/combatreport');
@@ -99,7 +100,7 @@ class Combatreport extends BaseController
      */
     private function buildPage()
     {
-        parent::$page->display(
+        $this->page->display(
             $this->getReportTemplate(),
             false,
             '',
@@ -123,8 +124,8 @@ class Combatreport extends BaseController
         $content = str_replace($search, $replace, $content);
         }
 
-        $no_fleet = $this->getTemplate()->set('combatreport/combatreport_no_fleet_view', $this->langs->language);
-        $destroyed = $this->getTemplate()->set('combatreport/combatreport_destroyed_view', $this->langs->language);
+        $no_fleet = $this->template->set('combatreport/combatreport_no_fleet_view', $this->langs->language);
+        $destroyed = $this->template->set('combatreport/combatreport_destroyed_view', $this->langs->language);
 
         $search = [$no_fleet];
         $replace = [$destroyed];

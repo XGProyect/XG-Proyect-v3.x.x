@@ -48,7 +48,7 @@ class Spy extends Missions
         if (parent::canStartMission($fleet_row)) {
             parent::makeUpdate($fleet_row['fleet_end_galaxy'], $fleet_row['fleet_end_system'], $fleet_row['fleet_end_planet'], $fleet_row['fleet_end_type']);
 
-            $current_data = $this->Missions_Model->getSpyUserDataByCords([
+            $current_data = $this->missionsModel->getSpyUserDataByCords([
                 'coords' => [
                     'galaxy' => $fleet_row['fleet_start_galaxy'],
                     'system' => $fleet_row['fleet_start_system'],
@@ -57,7 +57,7 @@ class Spy extends Missions
                 ],
             ]);
 
-            $target_data = $this->Missions_Model->getInquiredUserDataByCords([
+            $target_data = $this->missionsModel->getInquiredUserDataByCords([
                 'coords' => [
                     'galaxy' => $fleet_row['fleet_end_galaxy'],
                     'system' => $fleet_row['fleet_end_system'],
@@ -180,7 +180,7 @@ class Spy extends Missions
                     $this->sendReportToTarget($fleet_row, $current_data, $target_data, $TargetChances);
 
                     if ($TargetChances >= $SpyerChances) {
-                        $this->Missions_Model->updateCrystalDebrisByPlanetId([
+                        $this->missionsModel->updateCrystalDebrisByPlanetId([
                             'time' => time(),
                             'crystal' => (0 + $SpyToolDebris),
                             'planet_id' => $target_data['planet_id'],

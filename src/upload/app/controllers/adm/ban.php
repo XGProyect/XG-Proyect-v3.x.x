@@ -82,7 +82,7 @@ class Ban extends BaseController
                 break;
         }
 
-        parent::$page->displayAdmin($view);
+        $this->page->displayAdmin($view);
     }
 
     /**
@@ -111,7 +111,7 @@ class Ban extends BaseController
         $parse['users_amount'] = $this->_users_count;
         $parse['banned_amount'] = $this->_banned_count;
 
-        return $this->getTemplate()->set('adm/ban_view', $parse);
+        return $this->template->set('adm/ban_view', $parse);
     }
 
     /**
@@ -189,7 +189,7 @@ class Ban extends BaseController
             Functions::redirect('admin.php?page=ban');
         }
 
-        return $this->getTemplate()->set("adm/ban_result_view", $parse);
+        return $this->template->set("adm/ban_result_view", $parse);
     }
 
     /**

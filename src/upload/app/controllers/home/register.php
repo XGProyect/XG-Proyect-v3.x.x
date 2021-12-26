@@ -87,7 +87,7 @@ class Register extends BaseController
                 $this->calculateNewPlanetPosition();
 
                 $this->Register_Model->createNewUser(
-                    parent::$users,
+                    $this->userLibrary,
                     [
                         'new_user_name' => $user_name,
                         'new_user_email' => $user_email,
@@ -117,7 +117,7 @@ class Register extends BaseController
                 }
 
                 // User login
-                if (parent::$users->userLogin($new_user['user_id'], $new_user['user_hashed_password'])) {
+                if ($this->userLibrary->userLogin($new_user['user_id'], $new_user['user_hashed_password'])) {
                     // Redirect to game
                     Functions::redirect(SYSTEM_ROOT . 'game.php?page=overview');
                 }
@@ -147,7 +147,7 @@ class Register extends BaseController
         $parse['re_mail_text_part1'] = str_replace('%s', $game_name, $this->langs->line('re_mail_text_part1'));
         $parse['re_mail_text_part7'] = str_replace('%s', $game_name, $this->langs->line('re_mail_text_part7'));
 
-        $email = $this->getTemplate()->set(
+        $email = $this->template->set(
             'home/welcome_email_template_view',
             $parse
         );

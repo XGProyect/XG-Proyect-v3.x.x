@@ -17,6 +17,7 @@ use App\libraries\FormatLib;
 use App\libraries\Functions;
 use App\libraries\OfficiersLib;
 use App\libraries\ProductionLib;
+use App\libraries\Users;
 
 /**
  * Resources Class
@@ -52,11 +53,11 @@ class Resources extends BaseController
         parent::loadLang(['game/global', 'game/constructions', 'game/ships', 'game/resources']);
 
         // check if session is active
-        parent::$users->checkSession();
+        Users::checkSession();
 
-        $this->_resource = parent::$objects->getObjects();
-        $this->_prod_grid = parent::$objects->getProduction();
-        $this->_reslist = parent::$objects->getObjectsList();
+        $this->_resource = $this->objects->getObjects();
+        $this->_prod_grid = $this->objects->getProduction();
+        $this->_reslist = $this->objects->getObjectsList();
     }
 
     /**
@@ -167,7 +168,7 @@ class Resources extends BaseController
                 $CurrRow['crystal_type'] = FormatLib::colorNumber($CurrRow['crystal_type']);
                 $CurrRow['deuterium_type'] = FormatLib::colorNumber($CurrRow['deuterium_type']);
                 $CurrRow['energy_type'] = FormatLib::colorNumber($CurrRow['energy_type']);
-                $parse['resource_row'] .= $this->getTemplate()->set(
+                $parse['resource_row'] .= $this->template->set(
                     'resources/resources_row',
                     $CurrRow
                 );
@@ -211,7 +212,7 @@ class Resources extends BaseController
         $ValidList['percent'] = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
         $SubQry = '';
 
-        if ($_POST && !parent::$users->isOnVacations($this->user)) {
+        if ($_POST && !$this->userLibrary->isOnVacations($this->user)) {
             foreach ($_POST as $Field => $Value) {
                 $FieldName = 'planet_' . $Field . '_percent';
                 if (isset($this->planet[$FieldName])) {
@@ -230,8 +231,8 @@ class Resources extends BaseController
             Functions::redirect('game.php?page=resourceSettings');
         }
 
-        parent::$page->display(
-            $this->getTemplate()->set(
+        $this->page->display(
+            $this->template->set(
                 'resources/resources',
                 $parse
             )

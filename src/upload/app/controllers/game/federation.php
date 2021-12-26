@@ -16,6 +16,7 @@ use App\libraries\FormatLib;
 use App\libraries\Functions;
 use App\libraries\game\AcsFleets;
 use App\libraries\game\Fleets;
+use App\libraries\Users;
 
 /**
  * Federation Class
@@ -72,7 +73,7 @@ class Federation extends BaseController
         parent::__construct();
 
         // check if session is active
-        parent::$users->checkSession();
+        Users::checkSession();
 
         // load Model
         parent::loadModel('game/fleet');
@@ -164,8 +165,8 @@ class Federation extends BaseController
         ];
 
         // display the page
-        parent::$page->display(
-            $this->getTemplate()->set(
+        $this->page->display(
+            $this->template->set(
                 'fleet/fleet_federation_view',
                 array_merge(
                     $this->langs->language,
@@ -266,7 +267,8 @@ class Federation extends BaseController
                 $this->addAcsMember($user_id);
 
                 $this->_message = FormatLib::customColor(
-                    $this->langs->line('fl_player') . ' ' . $user_name . ' ' . $this->langs->line('fl_add_to_attack'), 'lime'
+                    $this->langs->line('fl_player') . ' ' . $user_name . ' ' . $this->langs->line('fl_add_to_attack'),
+                    'lime'
                 );
             } else {
                 $this->_message = FormatLib::colorRed(

@@ -13,6 +13,7 @@ namespace App\controllers\game;
 
 use App\core\BaseController;
 use App\libraries\Functions;
+use App\libraries\Users;
 use App\libraries\users\Shortcuts;
 
 /**
@@ -58,7 +59,7 @@ class Fleetshortcuts extends BaseController
         parent::__construct();
 
         // check if session is active
-        parent::$users->checkSession();
+        Users::checkSession();
 
         // load Model
         parent::loadModel('game/shortcuts');
@@ -169,8 +170,8 @@ class Fleetshortcuts extends BaseController
         ];
 
         // display the page
-        parent::$page->display(
-            $this->getTemplate()->set(
+        $this->page->display(
+            $this->template->set(
                 'shortcuts/shortcuts_view',
                 array_merge(
                     $this->langs->language,
@@ -295,8 +296,8 @@ class Fleetshortcuts extends BaseController
     private function buildEdit(array $page): void
     {
         // display the page
-        parent::$page->display(
-            $this->getTemplate()->set(
+        $this->page->display(
+            $this->template->set(
                 'shortcuts/shortcuts_edit_view',
                 array_merge(
                     $this->langs->language,
@@ -323,7 +324,12 @@ class Fleetshortcuts extends BaseController
                 if (!is_null($action) && !is_null($mode)) {
                     if ($mode == 'edit') {
                         $this->_shortcuts->editById(
-                            $action, $data['name'], $data['galaxy'], $data['system'], $data['planet'], $data['type']
+                            $action,
+                            $data['name'],
+                            $data['galaxy'],
+                            $data['system'],
+                            $data['planet'],
+                            $data['type']
                         );
                     }
 
@@ -332,12 +338,17 @@ class Fleetshortcuts extends BaseController
                     }
                 } else {
                     $this->_shortcuts->addNew(
-                        $data['name'], $data['galaxy'], $data['system'], $data['planet'], $data['type']
+                        $data['name'],
+                        $data['galaxy'],
+                        $data['system'],
+                        $data['planet'],
+                        $data['type']
                     );
                 }
 
                 $this->Shortcuts_Model->updateShortcuts(
-                    $this->user['user_id'], $this->_shortcuts->getAllAsJsonString()
+                    $this->user['user_id'],
+                    $this->_shortcuts->getAllAsJsonString()
                 );
             }
 

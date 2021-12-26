@@ -1,13 +1,19 @@
 <?php
 /**
- * Planet Library
+ * XG Proyect
  *
- * @category Library
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
+ * Open-source OGame Clon
+ *
+ * This content is released under the GPL-3.0 License
+ *
+ * Copyright (c) 2008-2020 XG Proyect
+ *
+ * @package    XG Proyect
+ * @author     XG Proyect Team
+ * @copyright  2008-2020 XG Proyect
+ * @license    https://www.gnu.org/licenses/gpl-3.0.en.html GPL-3.0 License
+ * @link       https://github.com/XGProyect/
+ * @since      3.0.0
  */
 namespace App\libraries;
 
@@ -18,17 +24,17 @@ use App\libraries\Formulas;
 use App\libraries\Functions;
 
 /**
- * PlanetLib Class
- *
- * @category Classes
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
+ * PlanetLib class
  */
 class PlanetLib extends XGPCore
 {
+    /**
+     * Contains the model
+     *
+     * @var Planetlib
+     */
+    protected $planetslibModel;
+
     /**
      *
      * @var array
@@ -45,7 +51,7 @@ class PlanetLib extends XGPCore
         parent::__construct();
 
         // load model
-        parent::loadModel('libraries/planetlib');
+        $this->planetslibModel = Functions::model('libraries/planetlib');
 
         // load Language
         $this->loadLanguage();
@@ -65,7 +71,7 @@ class PlanetLib extends XGPCore
      */
     public function setNewPlanet($galaxy, $system, $position, $owner, $name = '', $main = false)
     {
-        $planet_exist = $this->Planetlib_Model->checkPlanetExists($galaxy, $system, $position);
+        $planet_exist = $this->planetslibModel->checkPlanetExists($galaxy, $system, $position);
 
         if (!$planet_exist) {
             $planet = Formulas::getPlanetSize($position, $main);
@@ -76,7 +82,7 @@ class PlanetLib extends XGPCore
                 $name = $this->langs->line('homeworld');
             }
 
-            $this->Planetlib_Model->createNewPlanet(
+            $this->planetslibModel->createNewPlanet(
                 [
                     'planet_name' => $name,
                     'planet_user_id' => $owner,
@@ -125,7 +131,7 @@ class PlanetLib extends XGPCore
      */
     public function setNewMoon($galaxy, $system, $position, $owner, $name = '', $chance = 0, $size = 0, $max_fields = 1, $min_temp = 0, $max_temp = 0)
     {
-        $MoonPlanet = $this->Planetlib_Model->checkMoonExists($galaxy, $system, $position);
+        $MoonPlanet = $this->planetslibModel->checkMoonExists($galaxy, $system, $position);
 
         if ($MoonPlanet['id_moon'] == '' && $MoonPlanet['planet_id'] != 0) {
             $SizeMin = 2000 + ($chance * 100);
@@ -135,7 +141,7 @@ class PlanetLib extends XGPCore
             $size = $size == 0 ? mt_rand(2000, 6000) : $size;
             $max_fields = $max_fields == 0 ? 1 : $max_fields;
 
-            $this->Planetlib_Model->createNewPlanet(
+            $this->planetslibModel->createNewPlanet(
                 [
                     'planet_name' => $name == '' ? $this->langs->line('moon') : $name,
                     'planet_user_id' => $owner,

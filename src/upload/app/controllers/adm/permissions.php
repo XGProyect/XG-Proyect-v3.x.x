@@ -117,8 +117,8 @@ class Permissions extends BaseController
      */
     private function buildPage(): void
     {
-        parent::$page->displayAdmin(
-            $this->getTemplate()->set(
+        $this->page->displayAdmin(
+            $this->template->set(
                 'adm/permissions_view',
                 array_merge(
                     $this->langs->language,

@@ -65,8 +65,8 @@ class Home extends BaseController
     {
         $server_stats = $this->Home_Model->getUsersStats();
 
-        parent::$page->displayAdmin(
-            $this->getTemplate()->set(
+        $this->page->displayAdmin(
+            $this->template->set(
                 'adm/home_view',
                 array_merge(
                     $this->langs->language,

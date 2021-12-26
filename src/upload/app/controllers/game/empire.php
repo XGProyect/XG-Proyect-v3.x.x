@@ -17,6 +17,7 @@ use App\helpers\UrlHelper;
 use App\libraries\DevelopmentsLib;
 use App\libraries\FormatLib;
 use App\libraries\Functions;
+use App\libraries\Users;
 use Exception;
 
 /**
@@ -39,7 +40,7 @@ class Empire extends BaseController
         parent::__construct();
 
         // check if session is active
-        parent::$users->checkSession();
+        Users::checkSession();
 
         // load Model
         parent::loadModel('game/empire');
@@ -69,8 +70,8 @@ class Empire extends BaseController
      */
     private function buildPage()
     {
-        parent::$page->display(
-            $this->getTemplate()->set(
+        $this->page->display(
+            $this->template->set(
                 'game/empire_view',
                 array_merge(
                     $this->langs->language,
@@ -108,12 +109,12 @@ class Empire extends BaseController
                     $source = $this->user;
                 }
 
-                foreach ($this->getObjects()->getObjectsList($element) as $element_id) {
-                    if (!isset($empire[$element][$this->getObjects()->getObjects($element_id)])) {
-                        $empire[$element][$this->getObjects()->getObjects($element_id)]['value'] = '<th width="75px">' . (string) $this->langs->line($this->getObjects()->getObjects($element_id)) . '</th>';
+                foreach ($this->objects->getObjectsList($element) as $element_id) {
+                    if (!isset($empire[$element][$this->objects->getObjects($element_id)])) {
+                        $empire[$element][$this->objects->getObjects($element_id)]['value'] = '<th width="75px">' . (string) $this->langs->line($this->objects->getObjects($element_id)) . '</th>';
                     }
 
-                    $empire[$element][$this->getObjects()->getObjects($element_id)]['value'] .= '<th width="75px">' . $this->setStructureData($planet, $source, $element, $element_id) . '</th>';
+                    $empire[$element][$this->objects->getObjects($element_id)]['value'] .= '<th width="75px">' . $this->setStructureData($planet, $source, $element, $element_id) . '</th>';
                 }
             }
         }
@@ -244,7 +245,7 @@ class Empire extends BaseController
 
         return UrlHelper::setUrl(
             $url,
-            $source[$this->getObjects()->getObjects($element_id)]
+            $source[$this->objects->getObjects($element_id)]
         );
     }
 }
