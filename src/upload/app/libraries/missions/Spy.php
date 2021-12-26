@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Spy Library
  *
@@ -9,6 +10,7 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
+
 namespace App\libraries\missions;
 
 use App\core\enumerators\MissionsEnumerator;
@@ -213,7 +215,6 @@ class Spy extends Missions
 
         switch ($mode) {
             case 0:
-
                 $String = "<table width=\"440\"><tr><td class=\"c\" colspan=\"5\">";
                 $String .= $report_title;
                 $String .= "</td>";
@@ -230,7 +231,6 @@ class Spy extends Missions
                 break;
 
             case 1:
-
                 $ResFrom[0] = 200;
                 $ResTo[0] = 299;
                 $Loops = 1;
@@ -238,7 +238,6 @@ class Spy extends Missions
                 break;
 
             case 2:
-
                 $ResFrom[0] = 400;
                 $ResTo[0] = 499;
                 $ResFrom[1] = 500;
@@ -248,7 +247,6 @@ class Spy extends Missions
                 break;
 
             case 3:
-
                 $ResFrom[0] = 1;
                 $ResTo[0] = 99;
                 $Loops = 1;
@@ -256,7 +254,6 @@ class Spy extends Missions
                 break;
 
             case 4:
-
                 $ResFrom[0] = 100;
                 $ResTo[0] = 199;
                 $Loops = 1;

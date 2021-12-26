@@ -12,8 +12,6 @@ services:
       - ./src/upload:/var/www/html
     depends_on:
       - db
-    networks:
-      - xgp_network
   db:
     image: mysql:5.7
     ports:
@@ -23,8 +21,6 @@ services:
     environment:
       MYSQL_DATABASE: xgp
       MYSQL_ROOT_PASSWORD: root
-    networks:
-      - xgp_network
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     ports:
@@ -32,9 +28,3 @@ services:
     environment:
         MYSQL_ROOT_PASSWORD: root
         PMA_HOST: db
-    networks:
-        - xgp_network
-
-networks:
-    xgp_network:
-      external: true
