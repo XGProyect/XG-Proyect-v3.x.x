@@ -5,7 +5,7 @@
  *  Copyright (C) 2015  Jstar
  *
  * This file is part of OPBE.
- * 
+ *
  * OPBE is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -34,7 +34,7 @@ class DebugManager
 
     public static function intercept($toIntercept, $newFunction)
     {
-        return function ()use($toIntercept, $newFunction) {
+        return function () use ($toIntercept, $newFunction) {
             $newFunction();
             return call_user_func_array($toIntercept, func_get_args());
         }
@@ -49,16 +49,21 @@ class DebugManager
      */
     public static function runDebugged($func, $errorHandler = null, $exceptionHandler = null)
     {
-        if ($errorHandler == null)
-            $errorHandler = array('DebugManager', 'myErrorHandler');
-        if ($exceptionHandler == null)
-            $exceptionHandler = array('DebugManager', 'save');
-        return function ()use($func, $errorHandler, $exceptionHandler) {
+        if ($errorHandler == null) {
+            $errorHandler = ['DebugManager', 'myErrorHandler'];
+        }
+
+        if ($exceptionHandler == null) {
+            $exceptionHandler = ['DebugManager', 'save'];
+        }
+
+        return function () use ($func, $errorHandler, $exceptionHandler) {
             set_error_handler($errorHandler);
             set_exception_handler($exceptionHandler);
-            $return = call_user_func_array($func, func_get_args($func));
+            $return = call_user_func_array($func, func_get_args());
             restore_exception_handler();
             restore_error_handler();
+
             return $return;
         }
         ;
@@ -133,5 +138,3 @@ function log_comment($comment)
 {
     echo "[log]$comment<br>\n";
 }
-
-?>
