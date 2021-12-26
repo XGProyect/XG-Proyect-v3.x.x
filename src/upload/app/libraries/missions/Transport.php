@@ -56,7 +56,13 @@ class Transport extends Missions
 
             // transfer the fleet resources to the planet
             parent::storeResources($fleet, false);
-            $this->missionsModel->updateReturningFleetResources($fleet['fleet_id']);
+            $this->missionsModel->updateReturningFleetResources((int) $fleet['fleet_id']);
+
+            // we need to remove the resources in case we are continuing with the
+            // canCompleteMission instead of just ending here
+            $fleet['fleet_resource_metal'] = 0;
+            $fleet['fleet_resource_crystal'] = 0;
+            $fleet['fleet_resource_deuterium'] = 0;
         }
 
         // complete mission

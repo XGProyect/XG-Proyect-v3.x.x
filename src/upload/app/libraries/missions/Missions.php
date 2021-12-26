@@ -109,7 +109,7 @@ class Missions extends XGPCore
             $type = $fleet_row['fleet_end_type'];
         }
 
-        self::makeUpdate($galaxy, $system, $planet, $type);
+        $this->makeUpdate($galaxy, $system, $planet, $type);
 
         $ships = FleetsLib::getFleetShipsArray($fleet_row['fleet_array']);
         $ships_fields = '';
@@ -165,7 +165,7 @@ class Missions extends XGPCore
             $type = $fleet_row['fleet_end_type'];
         }
 
-        self::makeUpdate($galaxy, $system, $planet, $type);
+        $this->makeUpdate($galaxy, $system, $planet, $type);
 
         $update_array = [
             'resources' => [

@@ -1014,23 +1014,16 @@ class Missions extends Model
      *
      */
 
-    /**
-     * Update planet target defenses based on the attack result
-     *
-     * @param int $fleet_id Fleet ID
-     *
-     * @return void
-     */
-    public function updateReturningFleetResources($fleet_id = 0)
+    public function updateReturningFleetResources(int $fleedId = 0): void
     {
-        if ((int) $fleet_id > 0) {
+        if ($fleedId > 0) {
             $this->db->query(
                 "UPDATE " . FLEETS . " SET
-                `fleet_resource_metal` = '0' ,
-                `fleet_resource_crystal` = '0' ,
-                `fleet_resource_deuterium` = '0' ,
-                `fleet_mess` = '1'
-                WHERE `fleet_id` = '" . $fleet_id . "'
+                    `fleet_resource_metal` = '0' ,
+                    `fleet_resource_crystal` = '0' ,
+                    `fleet_resource_deuterium` = '0' ,
+                    `fleet_mess` = '1'
+                WHERE `fleet_id` = '" . $fleedId . "'
                 LIMIT 1 ;"
             );
         }
