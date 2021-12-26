@@ -9,6 +9,7 @@
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
+
 namespace App\core\enumerators;
 
 /**
@@ -23,20 +24,20 @@ namespace App\core\enumerators;
  */
 abstract class ResearchEnumerator
 {
-    const research_espionage_technology = 106;
-    const research_computer_technology = 108;
-    const research_weapons_technology = 109;
-    const research_shielding_technology = 110;
-    const research_armour_technology = 111;
-    const research_energy_technology = 113;
-    const research_hyperspace_technology = 114;
-    const research_combustion_drive = 115;
-    const research_impulse_drive = 117;
-    const research_hyperspace_drive = 118;
-    const research_laser_technology = 120;
-    const research_ionic_technology = 121;
-    const research_plasma_technology = 122;
-    const research_intergalactic_research_network = 123;
-    const research_astrophysics = 124;
-    const research_graviton_technology = 199;
+    public const research_espionage_technology = 106;
+    public const research_computer_technology = 108;
+    public const research_weapons_technology = 109;
+    public const research_shielding_technology = 110;
+    public const research_armour_technology = 111;
+    public const research_energy_technology = 113;
+    public const research_hyperspace_technology = 114;
+    public const research_combustion_drive = 115;
+    public const research_impulse_drive = 117;
+    public const research_hyperspace_drive = 118;
+    public const research_laser_technology = 120;
+    public const research_ionic_technology = 121;
+    public const research_plasma_technology = 122;
+    public const research_intergalactic_research_network = 123;
+    public const research_astrophysics = 124;
+    public const research_graviton_technology = 199;
 }

@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     'cs_title' => 'Statistics settings',
     'cs_sub_title' => 'Change here any setting related to the server statistics.',

@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     'pm_subject' => 'Subject',
     'pm_no_text' => 'Message missing',

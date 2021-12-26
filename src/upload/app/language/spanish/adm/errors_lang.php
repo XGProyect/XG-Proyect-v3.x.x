@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     'er_title' => 'Errores del servidor',
     'er_sub_title' => 'Aquí podrás ver un listado de los errores que hayan ocurrido en tu servidor, incluyendo errores en la base datos o errores de PHP.',

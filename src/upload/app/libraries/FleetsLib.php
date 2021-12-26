@@ -9,6 +9,7 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
+
 namespace App\libraries;
 
 use App\core\enumerators\DefensesEnumerator as Defenses;
@@ -304,7 +305,7 @@ class FleetsLib extends XGPCore
             $popup['fleet_resource_crystal'] = FormatLib::prettyNumber($fleet_row['fleet_resource_crystal']);
             $popup['fleet_resource_deuterium'] = FormatLib::prettyNumber($fleet_row['fleet_resource_deuterium']);
 
-            $resources_popup = (new Page(new Users))->jsReady(
+            $resources_popup = (new Page(new Users()))->jsReady(
                 self::getTemplate()->set(
                     'general/fleet_resources_popup_view',
                     array_merge($popup, self::loadLanguage(['game/global'])->language)
@@ -659,7 +660,7 @@ class FleetsLib extends XGPCore
      */
     private static function getTemplate(): Template
     {
-        return new Template;
+        return new Template();
     }
 
     /**
@@ -669,7 +670,7 @@ class FleetsLib extends XGPCore
      */
     private static function loadLanguage(array $required_lang): CI_Lang
     {
-        $lang = new Language;
+        $lang = new Language();
 
         return $lang->loadLang($required_lang, true);
     }

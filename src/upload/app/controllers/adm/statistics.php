@@ -1,4 +1,6 @@
-<?php declare (strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 /**
  * Statistics Controller
@@ -10,6 +12,7 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
+
 namespace App\controllers\adm;
 
 use App\core\BaseController;
@@ -22,7 +25,7 @@ use App\libraries\Functions;
  */
 class Statistics extends BaseController
 {
-    const STATISTICS_SETTINGS = [
+    public const STATISTICS_SETTINGS = [
         'stat_points' => [
             'filter' => FILTER_VALIDATE_INT,
             'options' => ['min_range' => 1],

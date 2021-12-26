@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     'mk_title' => 'Creador',
     'mk_sub_title' => 'Desde aquí podrás crear nuevos jugadores, alianzas, planetas y lunas.',

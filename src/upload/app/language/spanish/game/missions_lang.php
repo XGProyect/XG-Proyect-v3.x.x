@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     // global
     'type_mission' => [

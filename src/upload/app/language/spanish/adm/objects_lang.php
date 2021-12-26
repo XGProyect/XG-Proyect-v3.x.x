@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     'objects' => [
         1 => 'Mina de metal',

@@ -9,6 +9,7 @@
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
+
 namespace App\libraries\buildings;
 
 use App\libraries\buildings\Queue;
@@ -196,7 +197,7 @@ class Building
             return null;
         }
 
-        $queue_elements = new QueueElements;
+        $queue_elements = new QueueElements();
         $queue_elements->building = $this->_building;
         $queue_elements->build_level = $build_level;
         $queue_elements->build_time = $this->calculateBuildTime($build_mode);

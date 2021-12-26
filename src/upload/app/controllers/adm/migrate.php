@@ -9,6 +9,7 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
+
 namespace App\controllers\adm;
 
 use App\core\BaseController;

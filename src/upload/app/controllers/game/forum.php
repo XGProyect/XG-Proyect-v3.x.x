@@ -9,6 +9,7 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
+
 namespace App\controllers\game;
 
 use App\core\BaseController;
@@ -23,7 +24,7 @@ class Forum extends BaseController
     /**
      * @var int Module ID
      */
-    const MODULE_ID = 14;
+    public const MODULE_ID = 14;
 
     /**
      * Constructor

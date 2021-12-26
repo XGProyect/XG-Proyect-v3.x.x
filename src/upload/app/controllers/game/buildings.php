@@ -9,6 +9,7 @@
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
+
 namespace App\controllers\game;
 
 use App\core\BaseController;
@@ -29,7 +30,7 @@ use Exception;
  */
 class Buildings extends BaseController
 {
-    const MODULE_ID = 3;
+    public const MODULE_ID = 3;
 
     /**
      *

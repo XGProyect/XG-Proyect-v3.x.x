@@ -15,6 +15,7 @@
  * @link       https://github.com/XGProyect/
  * @since      3.0.0
  */
+
 namespace App\libraries;
 
 use App\core\Database;
@@ -42,7 +43,7 @@ abstract class Functions
      */
     public static function getTemplate(): Template
     {
-        return new Template;
+        return new Template();
     }
 
     /**
@@ -205,7 +206,7 @@ abstract class Functions
             $parse['middle2'] = '</div>';
         }
 
-        (new Page(new Users))->display(
+        (new Page(new Users()))->display(
             self::getTemplate()->set('general/message_body', $parse),
             $topnav,
             (($dest != "") ? "<meta http-equiv=\"refresh\" content=\"$time;URL=$dest\">" : ""),
@@ -242,7 +243,7 @@ abstract class Functions
     public static function moduleMessage($access_level)
     {
         if ($access_level == 0) {
-            $lang = new Language;
+            $lang = new Language();
             die(self::message($lang->loadLang('game/global', true)->line('module_not_accesible'), '', '', true));
         }
     }

@@ -15,6 +15,7 @@
  * @link       https://github.com/XGProyect/
  * @since      3.0.0
  */
+
 namespace App\libraries;
 
 use App\core\enumerators\BuildingsEnumerator as Buildings;
@@ -82,7 +83,7 @@ class UpdatesLibrary extends XGPCore
             // USERS TO DELETE
             $ChooseToDelete = $this->updatesModel->deleteUsersByDeletedAndInactive($del_deleted, $del_inactive);
 
-            $users = new Users;
+            $users = new Users();
 
             if ($ChooseToDelete) {
                 foreach ($ChooseToDelete as $delete) {
@@ -169,7 +170,7 @@ class UpdatesLibrary extends XGPCore
         $update_interval = Functions::readConfig('stat_update_time');
 
         if ((time() >= ($stat_last_update + (60 * $update_interval)))) {
-            $result = new StatisticsLibrary;
+            $result = new StatisticsLibrary();
 
             Functions::updateConfig('stat_last_update', $result->makeStats()['stats_time']);
         }
@@ -267,7 +268,7 @@ class UpdatesLibrary extends XGPCore
     public static function setFirstElement(&$current_planet, $current_user): void
     {
         $db = Functions::model('libraries/UpdatesLibrary');
-        $lang = new Language;
+        $lang = new Language();
         $lang = $lang->loadLang(['game/global', 'game/constructions', 'game/buildings'], true);
         $resource = parent::$objects->getObjects();
 

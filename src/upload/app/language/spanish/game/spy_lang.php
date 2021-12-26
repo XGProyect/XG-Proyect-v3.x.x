@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     'spy_report_title' => 'Informe de espionaje en %s %s', // ok
     'spy_report_resources' => 'Recursos', // ok

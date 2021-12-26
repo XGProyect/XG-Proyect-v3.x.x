@@ -9,6 +9,7 @@
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
+
 namespace App\core\enumerators;
 
 /**
@@ -23,6 +24,6 @@ namespace App\core\enumerators;
  */
 abstract class SwitchBoolEnumerator
 {
-    const on = true;
-    const off = false;
+    public const on = true;
+    public const off = false;
 }

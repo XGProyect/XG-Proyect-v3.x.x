@@ -9,6 +9,7 @@
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
+
 namespace App\libraries\adm;
 
 use App\core\enumerators\AdminPagesEnumerator as AdminPages;

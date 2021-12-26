@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     'np_title' => 'New planets settings',
     'np_sub_title' => 'The following changes will affect only newly created planets, so we advice setting this up since your server starts.',

@@ -7,6 +7,7 @@
  * @link     https://www.xgproyect.org
  * @version  3.2.0
  */
+
 namespace App\libraries;
 
 use App\core\Database;
@@ -79,7 +80,7 @@ class Page
      */
     private function setTemplate(): void
     {
-        $this->template = new Template;
+        $this->template = new Template();
     }
 
     /**
@@ -89,7 +90,7 @@ class Page
      */
     private function setLanguage(): void
     {
-        $this->langs = new Language;
+        $this->langs = new Language();
     }
 
     /**

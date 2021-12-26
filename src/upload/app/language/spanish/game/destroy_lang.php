@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     'des_report_title' => 'Reporte de Destruccion',
     'des_report_start' => 'Una flota del planeta %s %s se dirige a la luna del planeta %s %s',

@@ -1,4 +1,6 @@
-<?php declare (strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 /**
  * Preferences Controller
@@ -10,6 +12,7 @@
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
+
 namespace App\controllers\game;
 
 use App\core\BaseController;
@@ -25,7 +28,7 @@ use App\libraries\Users;
  */
 class Preferences extends BaseController
 {
-    const MODULE_ID = 21;
+    public const MODULE_ID = 21;
 
     /**
      * Reference to Preferences library

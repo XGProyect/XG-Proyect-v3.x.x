@@ -9,6 +9,7 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.4
  */
+
 namespace App\libraries\messenger;
 
 use App\core\enumerators\MessagesEnumerator;

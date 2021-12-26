@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     'ff_title' => 'Flotas en vuelo',
     'ff_sub_title' => 'Aquí tendras un vistazo general de todos los movimientos de flota que están ocurriendo en el servidor, además puedes realizar diferentes acciones sobre ellas.',

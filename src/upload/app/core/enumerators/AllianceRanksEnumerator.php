@@ -9,6 +9,7 @@
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
+
 namespace App\core\enumerators;
 
 /**
@@ -23,13 +24,13 @@ namespace App\core\enumerators;
  */
 abstract class AllianceRanksEnumerator
 {
-    const DELETE = 1;
-    const KICK = 2;
-    const APPLICATIONS = 3;
-    const VIEW_MEMBER_LIST = 4;
-    const APPLICATION_MANAGEMENT = 5;
-    const ADMINISTRATION = 6;
-    const ONLINE_STATUS = 7;
-    const SEND_CIRCULAR = 8;
-    const RIGHT_HAND = 9;
+    public const DELETE = 1;
+    public const KICK = 2;
+    public const APPLICATIONS = 3;
+    public const VIEW_MEMBER_LIST = 4;
+    public const APPLICATION_MANAGEMENT = 5;
+    public const ADMINISTRATION = 6;
+    public const ONLINE_STATUS = 7;
+    public const SEND_CIRCULAR = 8;
+    public const RIGHT_HAND = 9;
 }

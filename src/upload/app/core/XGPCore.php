@@ -15,6 +15,7 @@
  * @link       https://github.com/XGProyect/
  * @since      3.0.0
  */
+
 namespace App\core;
 
 use CI_Lang;
@@ -81,7 +82,7 @@ abstract class XGPCore
             // use CI library
             require_once $ci_lang_path;
 
-            $this->langs = new CI_Lang;
+            $this->langs = new CI_Lang();
             $this->langs->load($language_file, DEFAULT_LANG);
         } catch (Exception $e) {
             die('Fatal error: ' . $e->getMessage());

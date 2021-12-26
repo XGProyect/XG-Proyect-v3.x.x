@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     'al_description_message' => 'Mensaje de descripcion de la alianza.',
     'al_web_text' => 'Web de la alianza',

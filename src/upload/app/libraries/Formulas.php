@@ -7,6 +7,7 @@
  * @link     https://www.xgproyect.org
  * @version  3.2.0
  */
+
 namespace App\libraries;
 
 use App\core\enumerators\BuildingsEnumerator as Buildings;

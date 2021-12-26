@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     'cr_type' => 'Type',
     'cr_total' => 'Total',

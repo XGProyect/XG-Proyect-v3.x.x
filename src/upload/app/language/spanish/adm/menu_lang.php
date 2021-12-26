@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     // titles
     'general' => 'General',

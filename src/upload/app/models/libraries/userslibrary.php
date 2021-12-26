@@ -1,4 +1,6 @@
-<?php namespace App\models\libraries;
+<?php
+
+namespace App\models\libraries;
 
 use App\core\Model;
 use App\libraries\Functions;

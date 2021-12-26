@@ -9,6 +9,7 @@
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
+
 namespace App\libraries\alliance;
 
 use App\core\enumerators\AllianceRanksEnumerator as AllianceRanks;

@@ -9,6 +9,7 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
+
 namespace App\controllers\game;
 
 use App\core\BaseController;
@@ -30,13 +31,13 @@ class Fleet3 extends BaseController
      *
      * @var int
      */
-    const MODULE_ID = 8;
+    public const MODULE_ID = 8;
 
     /**
      *
      * @var string
      */
-    const REDIRECT_TARGET = 'game.php?page=fleet1';
+    public const REDIRECT_TARGET = 'game.php?page=fleet1';
 
     /**
      *

@@ -9,6 +9,7 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
+
 namespace App\libraries\missions;
 
 use App\helpers\UrlHelper;
@@ -35,10 +36,10 @@ use Ship;
  */
 class Attack extends Missions
 {
-    const SHIP_MIN_ID = 202;
-    const SHIP_MAX_ID = 215;
-    const DEFENSE_MIN_ID = 401;
-    const DEFENSE_MAX_ID = 408;
+    public const SHIP_MIN_ID = 202;
+    public const SHIP_MAX_ID = 215;
+    public const DEFENSE_MIN_ID = 401;
+    public const DEFENSE_MAX_ID = 408;
 
     /**
      * Contains each player hyperspace technology level

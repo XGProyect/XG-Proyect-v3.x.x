@@ -9,6 +9,7 @@
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
+
 namespace App\libraries\buildings;
 
 use App\libraries\buildings\QueueElements;
@@ -25,8 +26,8 @@ use App\libraries\buildings\QueueElements;
  */
 final class Queue
 {
-    const QUEUE_SEPARATOR = ';';
-    const ITEM_SEPARATOR = ',';
+    public const QUEUE_SEPARATOR = ';';
+    public const ITEM_SEPARATOR = ',';
 
     /**
      * @var array $queue Queue in array format

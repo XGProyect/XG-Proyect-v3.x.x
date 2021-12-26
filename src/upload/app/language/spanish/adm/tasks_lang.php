@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     'ta_title' => 'Tareas programadas',
     'ta_sub_title' => 'Desde aquí podrás un vistazo de las tareas que corrieron en tu servidor, y las que correrán pronto.',

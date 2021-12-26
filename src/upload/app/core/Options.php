@@ -1,4 +1,6 @@
-<?php namespace App\core;
+<?php
+
+namespace App\core;
 
 use App\core\Database;
 use App\libraries\Functions;

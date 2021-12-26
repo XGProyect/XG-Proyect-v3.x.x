@@ -7,6 +7,7 @@
  * @link     https://www.xgproyect.org
  * @since    3.2.0
  */
+
 namespace App\libraries;
 
 use App\core\enumerators\MissionsEnumerator as Missions;
@@ -27,9 +28,9 @@ use App\libraries\Functions;
  */
 class GalaxyLib extends XGPCore
 {
-    const PLANET_TYPE = 1;
-    const DEBRIS_TYPE = 2;
-    const MOON_TYPE = 3;
+    public const PLANET_TYPE = 1;
+    public const DEBRIS_TYPE = 2;
+    public const MOON_TYPE = 3;
 
     /**
      * @var mixed

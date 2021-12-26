@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     'construction' => 'Construction',
     'building_metal_mine' => 'Metal Mine',

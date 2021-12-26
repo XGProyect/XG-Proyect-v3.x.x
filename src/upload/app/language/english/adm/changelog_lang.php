@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     'ch_title' => 'Changelog',
     'ch_new_item' => 'Add new entry',

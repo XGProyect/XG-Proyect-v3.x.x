@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     'sb_title' => 'Regenerar clasificación',
     'sb_sub_title' => 'Aquí podrás regenerar la clasificación del servidor.',

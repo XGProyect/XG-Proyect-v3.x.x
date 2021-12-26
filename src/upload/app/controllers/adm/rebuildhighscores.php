@@ -1,4 +1,6 @@
-<?php declare (strict_types = 1);
+<?php
+
+declare(strict_types=1);
 /**
  * XG Proyect
  *
@@ -15,6 +17,7 @@
  * @link       https://github.com/XGProyect/
  * @since      3.0.0
  */
+
 namespace App\controllers\adm;
 
 use App\core\BaseController;

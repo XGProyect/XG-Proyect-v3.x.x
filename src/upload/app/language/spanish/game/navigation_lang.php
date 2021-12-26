@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     'tn_vacation_mode' => 'Modo vacaciones activo hasta el ',
     'tn_vacation_mode_active' => 'Modo vacaciones activo',

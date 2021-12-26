@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     'an_title' => 'Anuncio',
     'an_sub_title' => 'Desde aquí puedes enviar anuncios a todos los jugadores del servidor.',

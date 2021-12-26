@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     'lm_players' => 'Jugadores:',
     'lm_overview' => 'Resumen',

@@ -1,4 +1,6 @@
-<?php namespace App\libraries;
+<?php
+
+namespace App\libraries;
 
 use App\helpers\StringsHelper;
 use App\libraries\FormatLib as Format;

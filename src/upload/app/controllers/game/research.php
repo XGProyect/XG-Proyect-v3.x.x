@@ -7,6 +7,7 @@
  * @link     https://www.xgproyect.org
  * @version  3.2.0
  */
+
 namespace App\controllers\game;
 
 use App\core\BaseController;
@@ -21,7 +22,7 @@ use App\libraries\Users;
  */
 class Research extends BaseController
 {
-    const MODULE_ID = 6;
+    public const MODULE_ID = 6;
 
     /**
      * @var mixed

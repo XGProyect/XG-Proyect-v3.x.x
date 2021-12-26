@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     'st_player' => 'Jugador',
     'st_alliance' => 'Alianza',

@@ -9,6 +9,7 @@
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
+
 namespace App\core\enumerators;
 
 /**
@@ -23,6 +24,6 @@ namespace App\core\enumerators;
  */
 abstract class SwitchIntEnumerator
 {
-    const on = 1;
-    const off = 0;
+    public const on = 1;
+    public const off = 0;
 }

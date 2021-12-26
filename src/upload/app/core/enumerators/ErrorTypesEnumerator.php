@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Error types enumerator
  *
@@ -9,6 +10,7 @@
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
+
 namespace App\core\enumerators;
 
 /**
@@ -16,7 +18,7 @@ namespace App\core\enumerators;
  */
 abstract class ErrorTypesEnumerator
 {
-    const PHP_ERRORS = [
+    public const PHP_ERRORS = [
         E_ERROR => 'E_ERROR',
         E_WARNING => 'E_WARNING',
         E_PARSE => 'E_PARSE',

@@ -1,4 +1,6 @@
-<?php namespace App\libraries;
+<?php
+
+namespace App\libraries;
 
 use App\core\Language;
 use App\libraries\Functions;
@@ -17,7 +19,7 @@ abstract class TimingLibrary
      */
     public static function setOnlineStatus($online_time)
     {
-        $lang = new Language;
+        $lang = new Language();
         $lang = $lang->loadLang('game/global', true);
 
         $color = 'red';

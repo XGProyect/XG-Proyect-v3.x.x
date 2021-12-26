@@ -9,6 +9,7 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
+
 namespace App\controllers\game;
 
 use App\core\BaseController;
@@ -27,7 +28,7 @@ use App\libraries\Users;
  */
 class Overview extends BaseController
 {
-    const MODULE_ID = 1;
+    public const MODULE_ID = 1;
 
     /**
      * @var mixed

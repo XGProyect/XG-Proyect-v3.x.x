@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     'ta_title' => 'Scheduled tasks',
     'ta_sub_title' => 'This section will provide you with a general view of which tasks ran in your server and which will be next.',

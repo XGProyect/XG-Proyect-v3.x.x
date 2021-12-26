@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     'ur_title' => 'Ajustes de registro',
     'ur_sub_title' => 'Desde aquí puedes controlar configuraciones para nuevos jugadores.',

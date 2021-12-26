@@ -9,6 +9,7 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.4
  */
+
 namespace App\core\enumerators;
 
 /**
@@ -23,7 +24,7 @@ namespace App\core\enumerators;
  */
 abstract class ImportanceEnumerator
 {
-    const unimportant = 0;
-    const normal = 1;
-    const important = 2;
+    public const unimportant = 0;
+    public const normal = 1;
+    public const important = 2;
 }

@@ -9,6 +9,7 @@
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
+
 namespace App\controllers\game;
 
 use App\core\BaseController;
@@ -27,7 +28,7 @@ use App\libraries\Users;
  */
 class Fleet1 extends BaseController
 {
-    const MODULE_ID = 8;
+    public const MODULE_ID = 8;
 
     /**
      *

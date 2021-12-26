@@ -1,4 +1,6 @@
-<?php declare (strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 /**
  * Backup Controller
@@ -10,6 +12,7 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
+
 namespace App\controllers\adm;
 
 use App\core\BaseController;
@@ -23,7 +26,7 @@ use App\libraries\TimingLibrary as Timing;
  */
 class Backup extends BaseController
 {
-    const BACKUP_SETTINGS = [
+    public const BACKUP_SETTINGS = [
         'auto_backup' => FILTER_SANITIZE_STRING,
     ];
 

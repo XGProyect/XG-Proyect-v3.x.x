@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     'bu_request_exists' => 'There is already an application to that player!',
     'bu_cannot_request_yourself' => 'You can not ask yourself as a friend',

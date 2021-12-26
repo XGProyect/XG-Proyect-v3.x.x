@@ -1,4 +1,6 @@
-<?php declare (strict_types = 1);
+<?php
+
+declare(strict_types=1);
 /**
  * XG Proyect
  *
@@ -15,6 +17,7 @@
  * @link       https://github.com/XGProyect/
  * @since      3.0.0
  */
+
 namespace App\core;
 
 use App\core\enumerators\SwitchIntEnumerator as SwitchInt;
@@ -114,7 +117,7 @@ class Common
     private function setErrorHandler(): void
     {
         // XGP error handler
-        new ErrorHandler;
+        new ErrorHandler();
     }
 
     /**
@@ -182,7 +185,7 @@ class Common
      */
     private function setSession(): void
     {
-        $this->sessions = new Sessions;
+        $this->sessions = new Sessions();
     }
 
     /**
@@ -212,7 +215,7 @@ class Common
         define('DEFENSE_DEBRIS_FACTOR', Functions::readConfig('defs_cdr') / 100);
 
         // Several updates
-        new UpdatesLibrary;
+        new UpdatesLibrary();
     }
 
     /**
@@ -223,7 +226,7 @@ class Common
     private function isServerOpen(): void
     {
         if (Functions::readConfig('game_enable') == SwitchInt::off) {
-            $user = (new Users)->getUserData();
+            $user = (new Users())->getUserData();
             $user_level = $user['user_authlevel'] ?? 0;
 
             if ($user_level < UserRanks::ADMIN) {
@@ -239,11 +242,11 @@ class Common
      */
     private function checkBanStatus(): void
     {
-        $user = (new Users)->getUserData();
+        $user = (new Users())->getUserData();
 
         if ($user['user_banned'] > 0) {
             die(Functions::message(StringsHelper::parseReplacements(
-                (new Language)->loadLang('game/global', true)->language['bg_banned'],
+                (new Language())->loadLang('game/global', true)->language['bg_banned'],
                 [Timing::formatShortDate($user['user_banned'])]
             ), '', '', false, false));
         }

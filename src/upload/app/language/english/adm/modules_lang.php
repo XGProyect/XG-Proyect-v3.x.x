@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     'mdl_title' => 'Server features',
     'mdl_sub_title' => 'Enable or disable server features. Disabled modules won\'t be usable, even by Administrator (GA).',

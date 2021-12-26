@@ -9,6 +9,7 @@
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
+
 namespace App\models\adm;
 
 use App\core\Model;
@@ -180,7 +181,7 @@ class Maker extends Model
                     `preference_user_id` = '" . $last_user_id . "';"
             );
 
-            $creator = new PlanetLib;
+            $creator = new PlanetLib();
             $creator->setNewPlanet($galaxy, $system, $planet, $last_user_id, '', true);
 
             $last_planet_id = $this->db->insertId();
@@ -298,7 +299,7 @@ class Maker extends Model
         try {
             $this->db->beginTransaction();
 
-            $creator = new PlanetLib;
+            $creator = new PlanetLib();
             $creator->setNewPlanet($galaxy, $system, $planet, $user_id, '', '', false);
 
             $this->db->query(
@@ -376,7 +377,7 @@ class Maker extends Model
      */
     public function createNewMoon(int $galaxy, int $system, int $planet, int $owner, string $moon_name, int $size, int $max_fields, int $mintemp, int $maxtemp): void
     {
-        $creator = new PlanetLib;
+        $creator = new PlanetLib();
         $creator->setNewMoon($galaxy, $system, $planet, $owner, $moon_name, 0, $size, $max_fields, $mintemp, $maxtemp);
     }
 }

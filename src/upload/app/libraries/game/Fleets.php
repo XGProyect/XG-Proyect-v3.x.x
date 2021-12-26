@@ -9,6 +9,7 @@
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
+
 namespace App\libraries\game;
 
 use App\core\entities\FleetEntity;
@@ -100,7 +101,7 @@ class Fleets
      */
     public function getFleetById(int $fleet_id): FleetEntity
     {
-        return $this->_fleets[$this->validateIndex($fleet_id)] ?? new FleetEntity;
+        return $this->_fleets[$this->validateIndex($fleet_id)] ?? new FleetEntity();
     }
 
     /**

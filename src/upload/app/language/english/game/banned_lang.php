@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     'bn_no_players_banned' => 'No banned players',
     'bn_exists_players_banned' => 'Exists %s player/s banned/s',

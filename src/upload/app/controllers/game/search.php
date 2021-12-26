@@ -1,4 +1,6 @@
-<?php declare (strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 /**
  * Search Controller
@@ -10,6 +12,7 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
+
 namespace App\controllers\game;
 
 use App\core\BaseController;
@@ -24,7 +27,7 @@ use App\libraries\Users;
  */
 class Search extends BaseController
 {
-    const MODULE_ID = 17;
+    public const MODULE_ID = 17;
 
     /**
      *

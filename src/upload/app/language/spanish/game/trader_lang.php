@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     // traderOverview
     'tr_resource_market' => 'Mercado de recursos',

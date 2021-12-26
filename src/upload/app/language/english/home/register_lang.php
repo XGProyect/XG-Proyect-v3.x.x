@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     're_disabled' => 'New user registration is not currently available.',
     're_mail_text_part1' => 'Welcome to %s, thanks for joining our game!<br/> In this email you\'ll find all the information that you need to login into your account.',

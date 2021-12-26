@@ -9,6 +9,7 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
+
 namespace App\controllers\game;
 
 use App\core\BaseController;
@@ -21,7 +22,7 @@ use App\libraries\Users;
  */
 class Techtree extends BaseController
 {
-    const MODULE_ID = 10;
+    public const MODULE_ID = 10;
 
     /**
      *
@@ -92,7 +93,8 @@ class Techtree extends BaseController
             $this->template->set(
                 'game/techtree_view',
                 array_merge(
-                    $this->langs->language, $page
+                    $this->langs->language,
+                    $page
                 )
             )
         );
@@ -149,10 +151,11 @@ class Techtree extends BaseController
 
             $list_of_requirements[] = FormatLib::{'color' . $color}(
                 FormatLib::formatLevel(
-                    $this->langs->language[$this->_resource[$requirement]], $this->langs->line('level'), $level
+                    $this->langs->language[$this->_resource[$requirement]],
+                    $this->langs->line('level'),
+                    $level
                 )
             );
-
         }
 
         return $list_of_requirements;

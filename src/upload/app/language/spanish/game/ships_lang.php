@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     'ships' => 'Naves',
     'ship_small_cargo_ship' => 'Nave pequeña de carga',

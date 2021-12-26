@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     'bn_title' => 'Suspensiones',
     'bn_users_list' => 'Usuarios',

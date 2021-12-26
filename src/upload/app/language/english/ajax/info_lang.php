@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     'aj_info_about_title' => 'XG Proyect is a game of intergalactic conquest.',
     'aj_info_about_description' => '<em>XG Proyect</em> is a strategy-game set in space. Thousands of players across the world compete at the same time. In order to play you only need a web browser.',

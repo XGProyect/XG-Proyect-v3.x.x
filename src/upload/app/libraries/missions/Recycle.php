@@ -9,6 +9,7 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
+
 namespace App\libraries\missions;
 
 use App\libraries\FleetsLib;
@@ -103,7 +104,10 @@ class Recycle extends Missions
             );
 
             $this->recycleMessage(
-                $fleet_row['fleet_owner'], $message, $fleet_row['fleet_end_time'], $this->langs->line('mi_fleet_back_title')
+                $fleet_row['fleet_owner'],
+                $message,
+                $fleet_row['fleet_end_time'],
+                $this->langs->line('mi_fleet_back_title')
             );
 
             parent::restoreFleet($fleet_row, true);
@@ -206,7 +210,13 @@ class Recycle extends Missions
     private function recycleMessage($owner, $message, $time, $status_message)
     {
         Functions::sendMessage(
-            $owner, '', $time, 5, $this->langs->line('rec_report_from'), $status_message, $message
+            $owner,
+            '',
+            $time,
+            5,
+            $this->langs->line('rec_report_from'),
+            $status_message,
+            $message
         );
     }
 }

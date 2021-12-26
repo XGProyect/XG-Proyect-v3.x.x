@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     'hm_title' => 'Welcome to XG Proyect',
     'hm_sub_title' => 'Thank you for choosing XG Proyect as your preferred OGame clone. This screen will give you a quick overview of all the various statistics of your server. The links on the left hand side of this screen allow you to control every aspect of your server. Each page will have instructions on how to use the tools.',

@@ -9,6 +9,7 @@
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
+
 namespace App\controllers\game;
 
 use App\core\BaseController;
@@ -21,7 +22,7 @@ use App\libraries\Users;
  */
 class Chat extends BaseController
 {
-    const MODULE_ID = 18;
+    public const MODULE_ID = 18;
 
     /**
      * Receiver home planet data

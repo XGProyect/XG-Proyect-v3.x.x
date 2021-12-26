@@ -1,4 +1,6 @@
-<?php declare (strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 /**
  * Preferences Enumerator
@@ -10,6 +12,7 @@
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
+
 namespace App\core\enumerators;
 
 /**
@@ -24,7 +27,7 @@ namespace App\core\enumerators;
  */
 abstract class PreferencesEnumerator
 {
-    const order = [
+    public const order = [
         'emergence' => 0,
         'coordinates' => 1,
         'alphabet' => 2,
@@ -32,7 +35,7 @@ abstract class PreferencesEnumerator
         'used_fields' => 4,
     ];
 
-    const sequence = [
+    public const sequence = [
         'up' => 0,
         'down' => 1,
     ];

@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     'le_edit' => 'Editar lenguajes',
     'le_notice' => 'Modifica a continuación los archivos de lenguaje, HTML permitido. Usar con cuidado.',

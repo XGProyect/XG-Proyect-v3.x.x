@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     'mi_title' => 'Migrar',
     'mi_sub_title' => 'Aquí podrás migrar los datos de tu base de datos vieja a la nueva, por favor presta atención a las indicaciones y advertencias a continuación.',

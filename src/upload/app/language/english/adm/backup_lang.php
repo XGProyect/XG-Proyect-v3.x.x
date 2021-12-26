@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     'bku_title' => 'Backups',
     'bku_sub_title' => 'Automatic backups will help you protect your data, you never know when things can go wrong.',

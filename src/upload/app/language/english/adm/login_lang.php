@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     'lg_welcome_back' => 'Welcome Back!',
     'lg_enter_email_address' => 'Enter Email Address...',

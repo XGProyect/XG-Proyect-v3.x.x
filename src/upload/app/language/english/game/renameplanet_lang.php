@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     'rp_your_planet' => 'Your planet',
     'rp_coords' => 'Position',

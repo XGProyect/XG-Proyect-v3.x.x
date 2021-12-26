@@ -9,6 +9,7 @@
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
+
 namespace App\controllers\game;
 
 use App\core\BaseController;
@@ -31,7 +32,7 @@ class Shipyard extends BaseController
      *
      * @var int
      */
-    const MODULE_ID = 7;
+    public const MODULE_ID = 7;
 
     /**
      * Count variable that we'll use to build the missile queue

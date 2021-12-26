@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     'exp_report_title' => 'Resultado de la expedición %s', // ok
 

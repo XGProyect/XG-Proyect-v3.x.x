@@ -9,6 +9,7 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
+
 namespace App\controllers\game;
 
 use App\core\BaseController;
@@ -28,7 +29,7 @@ class Galaxy extends BaseController
      *
      * @var int
      */
-    const MODULE_ID = 11;
+    public const MODULE_ID = 11;
 
     /**
      * Contains the galaxy data

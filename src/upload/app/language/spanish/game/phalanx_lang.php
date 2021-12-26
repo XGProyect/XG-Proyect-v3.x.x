@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     'px_no_deuterium' => '¡No tienes deuterio!',
     'px_scan_position' => 'Escanear posición',

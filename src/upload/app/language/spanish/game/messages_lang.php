@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     'mg_title' => 'Mensajes',
     'mg_show_title' => 'Mostrar',

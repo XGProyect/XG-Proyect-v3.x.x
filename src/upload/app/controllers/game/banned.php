@@ -9,6 +9,7 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
+
 namespace App\controllers\game;
 
 use App\core\BaseController;
@@ -27,7 +28,7 @@ class Banned extends BaseController
      *
      * @var int
      */
-    const MODULE_ID = 22;
+    public const MODULE_ID = 22;
 
     /**
      * Count of banned players

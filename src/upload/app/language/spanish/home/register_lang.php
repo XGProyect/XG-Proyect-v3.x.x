@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     're_disabled' => 'En estos momentos el registro a nuevos usuarios se encuentra cerrado.',
     're_mail_text_part1' => '¡Bienvenido a %s, gracias por unirte en nuestro juego!<br/> En este email encontrarás toda la información que necesitarás para acceder a tu cuenta',

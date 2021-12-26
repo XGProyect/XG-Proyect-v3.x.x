@@ -9,6 +9,7 @@
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
+
 namespace App\core\enumerators;
 
 /**
@@ -23,9 +24,9 @@ namespace App\core\enumerators;
  */
 abstract class OfficiersEnumerator
 {
-    const PREMIUM_OFFICIER_COMMANDER = 601;
-    const PREMIUM_OFFICIER_ADMIRAL = 602;
-    const PREMIUM_OFFICIER_ENGINEER = 603;
-    const PREMIUM_OFFICIER_GEOLOGIST = 604;
-    const PREMIUM_OFFICIER_TECHNOCRAT = 605;
+    public const PREMIUM_OFFICIER_COMMANDER = 601;
+    public const PREMIUM_OFFICIER_ADMIRAL = 602;
+    public const PREMIUM_OFFICIER_ENGINEER = 603;
+    public const PREMIUM_OFFICIER_GEOLOGIST = 604;
+    public const PREMIUM_OFFICIER_TECHNOCRAT = 605;
 }

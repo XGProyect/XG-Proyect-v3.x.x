@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     're_lab_required' => 'You need to build a research laboratory on this planet first!',
     're_time' => 'Research time: ',

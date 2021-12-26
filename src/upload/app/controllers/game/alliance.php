@@ -7,6 +7,7 @@
  * @link     https://www.xgproyect.org
  * @since    3.2.0
  */
+
 namespace App\controllers\game;
 
 use App\core\BaseController;
@@ -30,14 +31,14 @@ class Alliance extends BaseController
      *
      * @var int
      */
-    const MODULE_ID = 13;
+    public const MODULE_ID = 13;
 
     /**
      * Default alliance ranks
      *
      * @var array
      */
-    const DEFAULT_RANKS = [
+    public const DEFAULT_RANKS = [
         'founder' => 0,
         'newcomer' => 1,
     ];

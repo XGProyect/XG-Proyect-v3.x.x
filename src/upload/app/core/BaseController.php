@@ -1,4 +1,6 @@
-<?php declare (strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\core;
 
@@ -7,6 +9,7 @@ use App\core\Template;
 use App\libraries\Page;
 use App\libraries\Users;
 use CI_Lang;
+use Exception;
 
 /**
  * Controller Class
@@ -60,13 +63,13 @@ abstract class BaseController
      */
     public function __construct()
     {
-        $this->userLibrary = new Users;
+        $this->userLibrary = new Users();
         $this->user = $this->userLibrary->getUserData();
         $this->planet = $this->userLibrary->getPlanetData();
 
-        $this->objects = new Objects;
+        $this->objects = new Objects();
         $this->page = new Page($this->userLibrary);
-        $this->template = new Template;
+        $this->template = new Template();
     }
 
     /**
@@ -124,7 +127,7 @@ abstract class BaseController
      *
      * @return void
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function loadModel($class)
     {
@@ -178,7 +181,7 @@ abstract class BaseController
             // use CI library
             require_once $ci_lang_path;
 
-            $this->langs = new CI_Lang;
+            $this->langs = new CI_Lang();
             $this->langs->load($language_file, DEFAULT_LANG);
         } catch (Exception $e) {
             die('Fatal error: ' . $e->getMessage());

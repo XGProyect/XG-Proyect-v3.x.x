@@ -7,6 +7,7 @@
  * @link     https://www.xgproyect.org
  * @version  3.2.0
  */
+
 namespace App\libraries;
 
 use App\core\enumerators\ImportanceEnumerator as Importance;
@@ -99,7 +100,7 @@ class FormatLib
      */
     public static function prettyTimeAgo($datetime, $full = false)
     {
-        $now = new DateTime;
+        $now = new DateTime();
         $ago = new DateTime($datetime);
         $diff = $now->diff($ago);
         $diff->w = floor($diff->d / 7);

@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     'nv_search_for' => 'Buscar...',
     'nv_alert_center' => 'Centro de alertas',

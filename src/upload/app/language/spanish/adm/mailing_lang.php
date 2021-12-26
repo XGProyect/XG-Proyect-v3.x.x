@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     'ma_title' => 'Ajustes de e-mail',
     'ma_sub_title' => 'Todo lo que incluya envío de correos puede ser controlado desde aquí. Puedes establecer distintos protocolos, y a su vez ajustarlos aquí.',

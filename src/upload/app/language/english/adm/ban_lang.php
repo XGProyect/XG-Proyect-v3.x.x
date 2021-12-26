@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     'bn_title' => 'Banning',
     'bn_users_list' => 'Users',

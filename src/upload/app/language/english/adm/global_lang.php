@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     'no_permissions' => 'You need special permissions to see this page',
     'user_level' => [

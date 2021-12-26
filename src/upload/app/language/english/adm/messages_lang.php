@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     'mg_title' => 'Messages',
     'mg_sub_title' => 'Here you will be able to find any kind of message that was sent on the server, if it wasn\'t deleted.',

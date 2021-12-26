@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     'se_server_parameters' => 'Ajustes del servidor',
     'se_name' => 'Nombre',

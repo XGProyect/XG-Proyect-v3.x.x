@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     'fl_returning' => 'Returning',
     'fl_onway' => 'On their way',

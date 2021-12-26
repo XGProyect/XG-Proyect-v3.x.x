@@ -26,14 +26,13 @@
  */
 class AutoLoader
 {
-
     /**
      * An array keeping class names as key and their path as the value for classes registered with
      * AutoLoader::registerNamespace().
      *
      * @var array
      */
-    protected static $namespaceClassNames = array();
+    protected static $namespaceClassNames = [];
 
     /**
      * An array keeping class names as key and their path as the value for classes registered with
@@ -41,7 +40,7 @@ class AutoLoader
      *
      * @var array
      */
-    protected static $directoryClassNames = array();
+    protected static $directoryClassNames = [];
 
     /**
      * Store the filename (sans extension) & full path to all ".php" files found for a namespace.
@@ -122,7 +121,7 @@ class AutoLoader
         }
 
         // Nope. Have we registered it as a directory?
-        $psrDirectorySeparators = array('\\', '_');
+        $psrDirectorySeparators = ['\\', '_'];
         foreach ($psrDirectorySeparators as $separator) {
             $separatorOccurrence = strrpos($className, $separator);
             if ($separatorOccurrence !== false) {
@@ -138,4 +137,4 @@ class AutoLoader
 }
 
 // Register our AutoLoad class as the system auto loader.
-spl_autoload_register(array('AutoLoader', 'loadClass'));
+spl_autoload_register(['AutoLoader', 'loadClass']);

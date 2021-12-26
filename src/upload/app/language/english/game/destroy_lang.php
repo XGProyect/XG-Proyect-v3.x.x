@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     'des_report_title' => 'Moon attack', // ok
     'des_report_start' => 'Your fleet from %s %s has arrived on the moon of the planet %s %s.', // ok

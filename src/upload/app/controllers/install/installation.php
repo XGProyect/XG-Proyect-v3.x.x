@@ -1,4 +1,6 @@
-<?php namespace App\controllers\install;
+<?php
+
+namespace App\controllers\install;
 
 use App\core\BaseController;
 use App\core\Database;
@@ -561,7 +563,7 @@ class Installation extends BaseController
         $count = strlen($characters);
         $new_token = '';
         $lenght = 16;
-        srand((double) microtime() * 1000000);
+        srand((float) microtime() * 1000000);
 
         for ($i = 0; $i < $lenght; $i++) {
             $character_boucle = mt_rand(0, $count - 1);

@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     'aj_media_wallpapers' => 'Fondos de pantalla',
     'aj_media_pictures' => 'Imágenes',

@@ -15,6 +15,7 @@
  * @link       https://github.com/XGProyect/
  * @since      3.0.0
  */
+
 namespace App\controllers\adm;
 
 use App\core\BaseController;
@@ -85,7 +86,7 @@ class Users extends BaseController
         parent::loadLang(['adm/global', 'adm/users']);
 
         // set data
-        $this->_stats = new StatisticsLibrary;
+        $this->_stats = new StatisticsLibrary();
     }
 
     /**

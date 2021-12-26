@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     'pr_user_data' => 'User data',
     'pr_players_name' => 'Players Name',

@@ -9,6 +9,7 @@
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
+
 namespace App\controllers\game;
 
 use App\core\BaseController;
@@ -30,7 +31,7 @@ class Buddies extends BaseController
      *
      * @var int
      */
-    const MODULE_ID = 20;
+    public const MODULE_ID = 20;
 
     /**
      * Contains a Buddy object

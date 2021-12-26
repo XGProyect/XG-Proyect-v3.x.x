@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     'ma_send_pwd_title' => 'Enviar contraseña de %s',
     'ma_label' => 'Dirección de e-mail',

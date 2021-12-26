@@ -1,4 +1,6 @@
-<?php declare (strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 /**
  * Error Handler
@@ -10,9 +12,10 @@
  * @link     http://www.xgproyect.org
  * @since    3.1.0
  */
+
 namespace App\core;
 
-use \App\libraries\DebugLib as Debug;
+use App\libraries\DebugLib as Debug;
 
 /**
  * Error Handler Class
@@ -48,7 +51,7 @@ final class ErrorHandler
      */
     private function createNewDebugObject(): void
     {
-        $this->debug = new Debug;
+        $this->debug = new Debug();
     }
 
     /**

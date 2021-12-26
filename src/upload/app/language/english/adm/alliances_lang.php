@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     'al_title' => 'Alliances',
     'al_alliance_placeholder' => 'Name or tag here...',

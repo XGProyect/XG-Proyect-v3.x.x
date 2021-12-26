@@ -1,4 +1,6 @@
-<?php declare (strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\controllers\adm;
 
@@ -11,7 +13,7 @@ use App\libraries\Functions;
  */
 class Mailing extends BaseController
 {
-    const MAILING_SETTINGS = [
+    public const MAILING_SETTINGS = [
         'mailing_protocol' => FILTER_SANITIZE_STRING,
         'mailing_smtp_host' => FILTER_SANITIZE_STRING,
         'mailing_smtp_user' => FILTER_SANITIZE_STRING,

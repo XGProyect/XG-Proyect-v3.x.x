@@ -9,6 +9,7 @@
  * @link     http://www.xgproyect.org
  * @version  3.3.0
  */
+
 namespace App\controllers\game;
 
 use App\core\BaseController;
@@ -21,7 +22,7 @@ use App\libraries\Users;
  */
 class TraderLayer extends BaseController
 {
-    const MODULE_ID = 5;
+    public const MODULE_ID = 5;
 
     /**
      * Constructor

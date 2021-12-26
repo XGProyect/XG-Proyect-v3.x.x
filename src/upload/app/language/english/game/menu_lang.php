@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     'lm_players' => 'Player:',
     'lm_overview' => 'Overview',

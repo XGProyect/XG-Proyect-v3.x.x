@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     'mis_attack' => 'Missile Attack', // ok
     'mis_all_destroyed' => 'All Attacking rockets have been destroyed by anty-ballistic missiles.',

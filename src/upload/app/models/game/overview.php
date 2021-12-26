@@ -9,6 +9,7 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.2
  */
+
 namespace App\models\game;
 
 use App\core\Model;

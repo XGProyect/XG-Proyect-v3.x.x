@@ -9,6 +9,7 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.4
  */
+
 namespace App\libraries\messenger;
 
 /**
@@ -23,6 +24,6 @@ namespace App\libraries\messenger;
  */
 abstract class MessagesFormat
 {
-    const SIMPLE = 0;
-    const HTML = 1;
+    public const SIMPLE = 0;
+    public const HTML = 1;
 }

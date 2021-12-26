@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     'research' => 'Investigación',
     'research_espionage_technology' => 'Tecnología de espionaje',

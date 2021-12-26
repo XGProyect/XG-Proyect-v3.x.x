@@ -28,21 +28,21 @@ class TraderResources extends BaseController
      *
      * @var int
      */
-    const MODULE_ID = 5;
+    public const MODULE_ID = 5;
 
     /**
      * Contains the resources type
      *
      * @var array
      */
-    const RESOURCES = ['metal', 'crystal', 'deuterium'];
+    public const RESOURCES = ['metal', 'crystal', 'deuterium'];
 
     /**
      * Contains the refill percentages
      *
      * @var array
      */
-    const PERCENTAGES = [10, 50, 100];
+    public const PERCENTAGES = [10, 50, 100];
 
     /**
      * ResourceMarket object

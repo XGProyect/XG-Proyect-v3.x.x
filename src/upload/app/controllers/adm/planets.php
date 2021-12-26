@@ -1,4 +1,6 @@
-<?php declare (strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 /**
  * Planets Controller
@@ -10,6 +12,7 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
+
 namespace App\controllers\adm;
 
 use App\core\BaseController;
@@ -21,7 +24,7 @@ use App\libraries\Functions;
  */
 class Planets extends BaseController
 {
-    const PLANET_SETTINGS = [
+    public const PLANET_SETTINGS = [
         'initial_fields' => FILTER_VALIDATE_INT,
         'metal_basic_income' => FILTER_VALIDATE_INT,
         'crystal_basic_income' => FILTER_VALIDATE_INT,

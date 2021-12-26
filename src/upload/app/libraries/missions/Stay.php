@@ -9,6 +9,7 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
+
 namespace App\libraries\missions;
 
 use App\libraries\FleetsLib;
@@ -94,11 +95,17 @@ class Stay extends Missions
         if ($fleet_row['fleet_mess'] == 0) {
             if ($fleet_row['fleet_start_time'] <= time()) {
                 $this->stayMessage(
-                    $start_owner_id, $message[1], $fleet_row['fleet_start_time'], $this->langs->line('stay_report_title')
+                    $start_owner_id,
+                    $message[1],
+                    $fleet_row['fleet_start_time'],
+                    $this->langs->line('stay_report_title')
                 );
 
                 $this->stayMessage(
-                    $target_owner_id, $message[2], $fleet_row['fleet_start_time'], $this->langs->line('stay_report_title')
+                    $target_owner_id,
+                    $message[2],
+                    $fleet_row['fleet_start_time'],
+                    $this->langs->line('stay_report_title')
                 );
 
                 $this->startStay($fleet_row['fleet_id']);
@@ -109,7 +116,10 @@ class Stay extends Missions
             }
         } elseif ($fleet_row['fleet_end_time'] < time()) {
             $this->stayMessage(
-                $start_owner_id, $message[3], $fleet_row['fleet_end_time'], $this->langs->line('mi_fleet_back_title')
+                $start_owner_id,
+                $message[3],
+                $fleet_row['fleet_end_time'],
+                $this->langs->line('mi_fleet_back_title')
             );
 
             parent::restoreFleet($fleet_row, true);

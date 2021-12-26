@@ -9,6 +9,7 @@
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
+
 namespace App\core\enumerators;
 
 /**
@@ -23,7 +24,7 @@ namespace App\core\enumerators;
  */
 abstract class AdminPagesEnumerator
 {
-    const SECTIONS = [
+    public const SECTIONS = [
         'configuration',
         'information',
         'edition',
@@ -31,7 +32,7 @@ abstract class AdminPagesEnumerator
         'maintenance',
     ];
 
-    const CONFIGURATION = [
+    public const CONFIGURATION = [
         'server',
         'modules',
         'planets',
@@ -40,14 +41,14 @@ abstract class AdminPagesEnumerator
         'premium',
     ];
 
-    const INFORMATION = [
+    public const INFORMATION = [
         'tasks',
         'errors',
         'fleets',
         'messages',
     ];
 
-    const EDITION = [
+    public const EDITION = [
         'maker',
         'users',
         'alliances',
@@ -56,7 +57,7 @@ abstract class AdminPagesEnumerator
         'permissions',
     ];
 
-    const TOOLS = [
+    public const TOOLS = [
         'backup',
         'encrypter',
         'announcement',
@@ -66,7 +67,7 @@ abstract class AdminPagesEnumerator
         'migrate',
     ];
 
-    const MAINTENANCE = [
+    public const MAINTENANCE = [
         'repair',
         'reset',
     ];

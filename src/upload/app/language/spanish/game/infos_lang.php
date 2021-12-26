@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     'in_jump_gate_done' => 'El salto cuántico fue realizado, el próximo salto podrá ser realizado en: ',
     'in_jump_gate_error_data' => '¡Error, los datos para el salto son incorrectos!',

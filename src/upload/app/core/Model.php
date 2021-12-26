@@ -1,4 +1,6 @@
-<?php declare (strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 /**
  * Model
@@ -10,6 +12,7 @@
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
+
 namespace App\core;
 
 use App\core\Database;
@@ -49,6 +52,6 @@ abstract class Model
      */
     private function setNewDb(): void
     {
-        $this->db = new Database;
+        $this->db = new Database();
     }
 }

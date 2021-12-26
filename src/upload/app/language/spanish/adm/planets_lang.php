@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     'np_title' => 'Ajustes de nuevos planetas',
     'np_sub_title' => 'Los ajustes a continuación solo afectan a nuevos planetas, es por ello que recomendamos definir estos valores desde el inicio del servidor.',

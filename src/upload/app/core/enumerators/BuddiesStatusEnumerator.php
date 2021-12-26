@@ -9,6 +9,7 @@
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
+
 namespace App\libraries\enumerators;
 
 /**
@@ -23,6 +24,6 @@ namespace App\libraries\enumerators;
  */
 abstract class BuddiesStatusEnumerator
 {
-    const isBuddy = 1;
-    const isNotBuddy = 0;
+    public const isBuddy = 1;
+    public const isNotBuddy = 0;
 }

@@ -7,6 +7,7 @@
  * @link     https://www.xgproyect.org
  * @version  3.2.0
  */
+
 namespace App\controllers\game;
 
 use App\core\BaseController;
@@ -28,7 +29,7 @@ use App\libraries\Users;
  */
 class Infos extends BaseController
 {
-    const MODULE_ID = 24;
+    public const MODULE_ID = 24;
 
     /**
      * @var mixed
@@ -442,7 +443,6 @@ class Infos extends BaseController
                 if ($CurMoon[$this->_resource[43]] >= 1) {
                     $Combo .= "<option value=\"" . $CurMoon['planet_id'] . "\">[" . $CurMoon['planet_galaxy'] . ":" . $CurMoon['planet_system'] . ":" . $CurMoon['planet_planet'] . "] " . $CurMoon['planet_name'] . $RestString['string'] . "</option>\n";
                 }
-
             }
         }
         return $Combo;

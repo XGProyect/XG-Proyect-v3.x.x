@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     'sh_search_universe' => 'Búsqueda en el Universo de XG Proyect',
     'sh_put_in_leyend' => 'Introduce nombre de jugador, planeta o alianza',

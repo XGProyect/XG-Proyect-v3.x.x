@@ -1,4 +1,6 @@
-<?php namespace App\libraries\adm;
+<?php
+
+namespace App\libraries\adm;
 
 use App\core\Language;
 use App\core\Template;
@@ -19,7 +21,7 @@ class AdministrationLib
      */
     public static function getTemplate(): Template
     {
-        return new Template;
+        return new Template();
     }
 
     /**
@@ -43,7 +45,7 @@ class AdministrationLib
      */
     public static function noAccessMessage($mes = '')
     {
-        (new Page(new Users))->displayAdmin(
+        (new Page(new Users()))->displayAdmin(
             self::saveMessage('error', $mes, false)
         );
     }
@@ -84,7 +86,7 @@ class AdministrationLib
      */
     public static function saveMessage($result, $message, $dismissible = true)
     {
-        $lang = new Language;
+        $lang = new Language();
         $lang = $lang->loadLang('adm/global', true);
 
         switch ($result) {
@@ -147,7 +149,7 @@ class AdministrationLib
     {
         if ($admin_id != 0 && !empty($password)) {
             // login as a user
-            (new Users)->userLogin($admin_id, $password);
+            (new Users())->userLogin($admin_id, $password);
 
             // admin login
             $_SESSION['admin_id'] = $admin_id;

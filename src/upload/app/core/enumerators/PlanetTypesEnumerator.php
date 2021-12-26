@@ -9,6 +9,7 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.4
  */
+
 namespace App\core\enumerators;
 
 /**
@@ -23,7 +24,7 @@ namespace App\core\enumerators;
  */
 abstract class PlanetTypesEnumerator
 {
-    const PLANET = 1;
-    const DEBRIS = 2;
-    const MOON = 3;
+    public const PLANET = 1;
+    public const DEBRIS = 2;
+    public const MOON = 3;
 }

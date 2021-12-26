@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     'ev_no_fleet_data' => 'No fleet data',
     'ev_aproaching' => 'They approach ',

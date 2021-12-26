@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     'em_imperium_title' => 'Visión del Imperio',
     'em_planet' => 'Planeta',

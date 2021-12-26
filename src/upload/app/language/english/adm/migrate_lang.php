@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     'mi_title' => 'Migrate',
     'mi_sub_title' => 'From here you will be able to migrate data from your old database to the new one, please pay attention to the warning listed below.',

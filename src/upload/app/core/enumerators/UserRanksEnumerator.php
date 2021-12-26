@@ -9,6 +9,7 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.4
  */
+
 namespace App\core\enumerators;
 
 /**
@@ -23,8 +24,8 @@ namespace App\core\enumerators;
  */
 abstract class UserRanksEnumerator
 {
-    const PLAYER = 0;
-    const GO = 1;
-    const SGO = 2;
-    const ADMIN = 3;
+    public const PLAYER = 0;
+    public const GO = 1;
+    public const SGO = 2;
+    public const ADMIN = 3;
 }

@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     'of_title' => 'Oficiales',
     'of_recruit' => 'Reclutar',

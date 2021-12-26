@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     'pr_title' => 'Permisos',
     'pr_save_all' => 'Guardar permisos',

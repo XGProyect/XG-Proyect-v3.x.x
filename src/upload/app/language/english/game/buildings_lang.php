@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     'bd_dismantle' => 'Dismantle',
     'bd_interrupt' => 'Interrupt',

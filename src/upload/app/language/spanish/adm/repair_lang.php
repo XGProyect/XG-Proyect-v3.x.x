@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     'db_not_opt' => '¡Error!',
     'db_not_check' => '¡Hay errores!',

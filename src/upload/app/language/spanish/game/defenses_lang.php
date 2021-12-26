@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     'defenses' => 'Defensa',
     'missiles' => 'Misiles',

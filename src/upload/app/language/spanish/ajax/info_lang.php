@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     'aj_info_about_title' => 'XG Proyect es un juego de conquista intergaláctica.',
     'aj_info_about_description' => '<em>XG Proyect</em> es un juego de estrategia localizado en el espacio. Miles de jugadores por todo el mundo compiten al mismo tiempo. Para jugar sólo necesitas un navegador web.',

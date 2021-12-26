@@ -9,6 +9,7 @@
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
+
 namespace App\libraries\enumerators;
 
 /**
@@ -23,6 +24,6 @@ namespace App\libraries\enumerators;
  */
 abstract class ReportStatusEnumerator
 {
-    const fleetDestroyed = 1;
-    const fleetNotDestroyed = 0;
+    public const fleetDestroyed = 1;
+    public const fleetNotDestroyed = 0;
 }

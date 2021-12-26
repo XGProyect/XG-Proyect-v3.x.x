@@ -1,4 +1,6 @@
-<?php declare (strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 /**
  * Registration Controller
@@ -10,6 +12,7 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
+
 namespace App\controllers\adm;
 
 use App\core\BaseController;
@@ -21,7 +24,7 @@ use App\libraries\Functions;
  */
 class Registration extends BaseController
 {
-    const REGISTRATION_SETTINGS = [
+    public const REGISTRATION_SETTINGS = [
         'reg_enable' => FILTER_SANITIZE_STRING,
         'reg_welcome_message' => FILTER_SANITIZE_STRING,
         'reg_welcome_email' => FILTER_SANITIZE_STRING,

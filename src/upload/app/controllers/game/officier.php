@@ -1,4 +1,6 @@
-<?php namespace App\controllers\game;
+<?php
+
+namespace App\controllers\game;
 
 use App\core\BaseController;
 use App\core\Enumerators\OfficiersEnumerator as OE;
@@ -18,7 +20,7 @@ class Officier extends BaseController
      *
      * @var int
      */
-    const MODULE_ID = 15;
+    public const MODULE_ID = 15;
 
     /**
      * Constructor

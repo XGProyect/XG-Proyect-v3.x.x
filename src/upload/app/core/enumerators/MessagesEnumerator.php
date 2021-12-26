@@ -9,6 +9,7 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.4
  */
+
 namespace App\core\enumerators;
 
 /**
@@ -23,10 +24,10 @@ namespace App\core\enumerators;
  */
 abstract class MessagesEnumerator
 {
-    const ESPIO = 0;
-    const COMBAT = 1;
-    const EXP = 2;
-    const ALLY = 3;
-    const USER = 4;
-    const GENERAL = 5;
+    public const ESPIO = 0;
+    public const COMBAT = 1;
+    public const EXP = 2;
+    public const ALLY = 3;
+    public const USER = 4;
+    public const GENERAL = 5;
 }

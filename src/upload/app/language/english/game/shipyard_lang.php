@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     'sy_remaining' => 'Remaining',
     'sy_shipyard_required' => 'You need to build a shipyard on this planet first!',

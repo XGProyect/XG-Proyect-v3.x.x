@@ -1,4 +1,6 @@
-<?php declare (strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 /**
  * Premium Controller
@@ -10,6 +12,7 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
+
 namespace App\controllers\adm;
 
 use App\core\BaseController;
@@ -21,7 +24,7 @@ use App\libraries\Functions;
  */
 class Premium extends BaseController
 {
-    const PREMIUM_SETTINGS = [
+    public const PREMIUM_SETTINGS = [
         'premium_url' => FILTER_VALIDATE_URL,
         'merchant_price' => FILTER_VALIDATE_FLOAT,
         'merchant_base_min_exchange_rate' => FILTER_VALIDATE_FLOAT,

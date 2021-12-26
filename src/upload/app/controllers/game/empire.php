@@ -1,4 +1,6 @@
-<?php declare (strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 /**
  * Empire Controller
@@ -10,6 +12,7 @@
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
+
 namespace App\controllers\game;
 
 use App\core\BaseController;
@@ -30,7 +33,7 @@ class Empire extends BaseController
      *
      * @var int
      */
-    const MODULE_ID = 2;
+    public const MODULE_ID = 2;
 
     /**
      * Constructor

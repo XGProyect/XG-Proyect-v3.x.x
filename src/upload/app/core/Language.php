@@ -9,6 +9,7 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
+
 namespace App\core;
 
 use CI_Lang;
@@ -65,12 +66,12 @@ class Language
             require_once $ci_lang_path;
 
             if ($return) {
-                $lang = new CI_Lang;
+                $lang = new CI_Lang();
                 $lang->load($language_file, DEFAULT_LANG);
                 return $lang;
             }
 
-            $this->langs = new CI_Lang;
+            $this->langs = new CI_Lang();
             $this->langs->load($language_file, DEFAULT_LANG);
         } catch (Exception $e) {
             die('Fatal error: ' . $e->getMessage());

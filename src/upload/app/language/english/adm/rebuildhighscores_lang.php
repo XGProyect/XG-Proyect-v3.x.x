@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     'sb_title' => 'Rebuild Highscores',
     'sb_sub_title' => 'Here you will be able to rebuild the server highscores.',

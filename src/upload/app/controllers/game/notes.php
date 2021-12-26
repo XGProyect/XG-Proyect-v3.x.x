@@ -9,6 +9,7 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
+
 namespace App\controllers\game;
 
 use App\core\BaseController;
@@ -29,13 +30,13 @@ class Notes extends BaseController
      *
      * @var int
      */
-    const MODULE_ID = 19;
+    public const MODULE_ID = 19;
 
     /**
      *
      * @var string
      */
-    const REDIRECT_TARGET = 'game.php?page=notes';
+    public const REDIRECT_TARGET = 'game.php?page=notes';
 
     /**
      *

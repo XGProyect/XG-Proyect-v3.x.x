@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     // messages
     'ins_no_server_requirements' => 'Tu servidor/hosting no cumple con los requisitos m&iacute;nimos que requiere XG Proyect para funcionar.<br /><br />Requisitos: <br />- PHP 7.3+<br />- MySQL 5.5+',

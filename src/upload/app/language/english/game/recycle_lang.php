@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     'rec_report_title' => 'Harvesting report from DF on %s', // ok
     'rec_report_from' => 'Fleet', // ok

@@ -1,4 +1,6 @@
-<?php declare (strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 /**
  * Register Model
@@ -10,6 +12,7 @@
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
+
 namespace App\models\home;
 
 use App\core\Model;
@@ -126,7 +129,7 @@ class Register extends Model
      */
     private function createNewPlanet(array $coords, int $new_user_id): void
     {
-        $creator = new PlanetLib;
+        $creator = new PlanetLib();
         $creator->setNewPlanet($coords['galaxy'], $coords['system'], $coords['planet'], $new_user_id, '', true);
     }
 

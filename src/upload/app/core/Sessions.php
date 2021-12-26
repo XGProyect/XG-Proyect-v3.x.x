@@ -15,6 +15,7 @@
  * @link       https://github.com/XGProyect/
  * @since      3.0.0
  */
+
 namespace App\core;
 
 use App\libraries\Functions;

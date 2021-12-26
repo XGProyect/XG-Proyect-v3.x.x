@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     'col_max_colonies' => 'The fleet has arrived at assigned coordinates %s, but, unfortunately, can not colonize, can have no more than %s planets.',
     'col_successful' => 'The fleet has arrived at assigned coordinates %s, found a new planet there and are beginning to develop upon it immediately.', // ok

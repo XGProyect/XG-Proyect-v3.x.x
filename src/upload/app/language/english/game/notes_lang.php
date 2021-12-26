@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     'nt_my_notes' => 'My notes',
     'nt_new_note' => '+ New Note',

@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     'up_title' => 'Update',
     'up_no_update_required' => 'No update required',

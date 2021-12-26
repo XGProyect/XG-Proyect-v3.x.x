@@ -1,4 +1,5 @@
 <?php
+
 $lang = [
     'up_title' => 'Actualizar',
     'up_no_update_required' => 'Ya tienes la última versión',
