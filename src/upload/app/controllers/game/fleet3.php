@@ -94,25 +94,20 @@ class Fleet3 extends BaseController
     /**
      * Creates a new ships object that will handle all the ships
      * creation methods and actions
-     *
-     * @return void
      */
-    private function setUpFleets()
+    private function setUpFleets(): void
     {
         $this->_research = new Researches(
-            [$this->user],
+            [
+                $this->user
+            ],
             $this->user['user_id']
         );
     }
 
-    /**
-     * Build the page
-     *
-     * @return void
-     */
-    private function buildPage()
+    private function buildPage(): void
     {
-        $inputs_data = $this->setInputsData();
+        $inputsData = $this->setInputsData();
 
         /**
          * Parse the items
@@ -132,7 +127,7 @@ class Fleet3 extends BaseController
                 array_merge(
                     $this->langs->language,
                     $page,
-                    $inputs_data
+                    $inputsData
                 )
             )
         );
@@ -158,8 +153,10 @@ class Fleet3 extends BaseController
                 if ($ship_amount != 0) {
                     $ship_id = array_search($ship_name, $objects);
 
-                    if (!isset($selected_fleet[$ship_id])
-                        or $selected_fleet[$ship_id] == 0) {
+                    if (
+                        !isset($selected_fleet[$ship_id]) || 
+                        $selected_fleet[$ship_id] == 0
+                    ) {
                         continue;
                     }
 
@@ -207,12 +204,16 @@ class Fleet3 extends BaseController
      */
     private function buildMissionBlock()
     {
-        $list_of_missions = $this->getAllowedMissions();
-        $mission_selector = [];
+        $missionsList = $this->getAllowedMissions();
+        $missiongSelector = [];
 
-        if (count($list_of_missions)) {
-            foreach ($list_of_missions as $mission) {
-                $mission_selector[] = [
+        if (empty($this->_current_mission)) {
+            $this->_current_mission = $missionsList[0];
+        }
+
+        if (count($missionsList)) {
+            foreach ($missionsList as $mission) {
+                $missiongSelector[] = [
                     'value' => $mission,
                     'mission' => $this->langs->language['type_mission'][$mission],
                     'expedition_message' => $mission == Missions::EXPEDITION ? $this->langs->line('fl_expedition_alert_message') : '',
@@ -222,7 +223,7 @@ class Fleet3 extends BaseController
             }
         }
 
-        return $mission_selector;
+        return $missiongSelector;
     }
 
     /**

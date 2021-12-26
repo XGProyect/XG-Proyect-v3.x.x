@@ -469,6 +469,10 @@ class Fleet4 extends BaseController
         // target data
         $target = $this->_target_data;
 
+        if (empty($data['mission'])) {
+            Functions::redirect('game.php?page=fleet1');
+        }
+
         if ($data['mission'] == Missions::ATTACK) {
             if ($this->_own_planet) {
                 return false;
@@ -485,8 +489,10 @@ class Fleet4 extends BaseController
             }
         }
 
-        if ($data['mission'] == Missions::DEPLOY
-            && !$this->_own_planet) {
+        if (
+            $data['mission'] == Missions::DEPLOY
+            && !$this->_own_planet
+        ) {
             $this->showMessage(
                 FormatLib::colorRed($this->langs->line('fl_deploy_only_your_planets'))
             );
@@ -535,8 +541,10 @@ class Fleet4 extends BaseController
             }
         }
 
-        if ($data['mission'] == Missions::EXPEDITION
-            && !$this->_occupied_planet) {
+        if (
+            $data['mission'] == Missions::EXPEDITION
+            && !$this->_occupied_planet
+        ) {
             $expeditions = $this->_fleets->getExpeditionsCount();
             $max_expeditions = FleetsLib::getMaxExpeditions(
                 $this->_research->getCurrentResearch()->getResearchAstrophysics()
@@ -554,8 +562,10 @@ class Fleet4 extends BaseController
                 );
             }
         } else {
-            if ($data['mission'] != Missions::COLONIZE
-                && !$this->_occupied_planet) {
+            if (
+                $data['mission'] != Missions::COLONIZE
+                && !$this->_occupied_planet
+            ) {
                 return false;
             }
         }
@@ -574,8 +584,10 @@ class Fleet4 extends BaseController
     private function validateNoobProtection()
     {
         // skip if it's our own planet or it's an empty planet
-        if ($this->_own_planet
-            or !$this->_occupied_planet) {
+        if (
+            $this->_own_planet
+            || !$this->_occupied_planet
+        ) {
             return true;
         }
 
