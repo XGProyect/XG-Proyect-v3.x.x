@@ -152,10 +152,10 @@ class Users
                 if (is_numeric($userRank)) {
                     $this->Users_Model->updateAllianceOwner($alliance['alliance_id'], $userRank);
                 } else {
-                    $this->Users_Model->deleteAlliance($alliance['alliance_id']);
+                    $this->Users_Model->deleteAllianceById($alliance['alliance_id']);
                 }
             } else {
-                $this->Users_Model->deleteAlliance($alliance['alliance_id']);
+                $this->Users_Model->deleteAllianceById($alliance['alliance_id']);
             }
         }
 

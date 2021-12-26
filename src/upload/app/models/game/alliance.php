@@ -13,6 +13,7 @@
 namespace App\models\game;
 
 use App\core\Model;
+use Exception;
 
 /**
  * Alliance Class
