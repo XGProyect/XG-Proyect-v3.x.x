@@ -7,6 +7,7 @@ on:
 
 jobs:
   test:
+    name: Run tests and lint
     runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v2
@@ -29,11 +30,12 @@ jobs:
       continue-on-error: true
 
     - name: Run phplint
-      uses: overtrue/phplint@2.1.0
+      uses: overtrue/phplint@4.1.0
       with:
         path: src/upload/
         options: --exclude=*.log
   min-version:
+    name: Check minimum version
     runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v2
