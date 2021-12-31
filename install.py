@@ -7,12 +7,19 @@ import requests
 from dataclasses import dataclass, field
 import os
 import sys
+import re
 from uuid import uuid4
+
+"""
+  XG Proyect Automatic install script
+  code by @duhow <duhowpi.net>
+"""
 
 class Step:
     success = False
     def __init__(self, base_url, **kwargs):
         self.base_url = base_url
+        self.body = {}
         for k in kwargs.keys():
             self.__setattr__(k, kwargs[k])
 
@@ -25,13 +32,15 @@ class Step:
 
     def prepare(self):
         """ Run actions before running """
+        if self.page:
+            self.body["page"] = self.page
         pass
 
     def run(self):
         """ Main action """
-        logging.debug(f"GET {self.url}")
-        r = requests.get(self.url, timeout=10, allow_redirects=True)
-        assert r.status_code == 200
+        logging.debug(f"POST {self.url}")
+        r = requests.post(self.url, data=self.body, timeout=10, allow_redirects=True)
+        assert r.status_code == 200, f"HTTP code {r.status_code}"
         assert "alert" not in r.text
         assert "Warning" not in r.text
         return True
@@ -64,12 +73,13 @@ class CheckInstallAvailable(Step):
 
     def run(self):
         r = requests.get(self.url)
-        assert r.status_code == 200
+        assert r.status_code == 200, f"HTTP code {r.status_code}"
         assert "provide write permission" not in r.text, "Cannot write config.php file. Update config folder permissions."
+        assert "XG Proyect is already installed" not in r.text, "XG Proyect is already installed!"
         assert "alert" not in r.text
         return True
 
-class SetupDatabaseConfig(Step):
+class SetupConnectionData(Step):
     page = "step1"
 
     def prepare(self):
@@ -85,17 +95,20 @@ class SetupDatabaseConfig(Step):
     def run(self):
         logging.debug(f"POST {self.url}")
         r = requests.post(self.url, data=self.body, timeout=10, allow_redirects=True)
-        assert r.status_code == 200
-        assert "Unable to connect to the database" not in r.text, "Cannot connect to database"
+        assert r.status_code == 200, f"HTTP code {r.status_code}"
+        assert "Unable to connect to the database" not in r.text, f"Cannot connect to database {self.mysql}"
         assert "Error writing the config.php file" not in r.text, "Cannot write config.php file. Update config folder permissions."
         assert "alert" not in r.text
         assert "Warning" not in r.text
         return True
 
-class SetupConfig(Step):
+class SetupCheckConnection(Step):
     page = "step2"
 
-class SetupDatabase(Step):
+class SetupConfigFile(Step):
+    page = "step3"
+
+class SetupDatabaseData(Step):
     page = "step4"
 
 class SetupAdminUser(Step):
@@ -112,11 +125,20 @@ class SetupAdminUser(Step):
     def run(self):
         logging.debug(f"POST {self.url}")
         r = requests.post(self.url, data=self.body, timeout=10, allow_redirects=True)
-        assert r.status_code == 200
         assert "Unable to connect to the database" not in r.text
         assert "Error writing the config.php file" not in r.text
+        assert "Database query failed" not in r.text, re.sub(r'<.*?>', '', r.text).strip()
         assert "alert" not in r.text
         assert "Warning" not in r.text
+        assert r.status_code == 200, f"HTTP code {r.status_code}"
+        return True
+
+class CheckWebsite(Step):
+    page = "index"
+
+    def run(self):
+        r = requests.get(self.base_url, allow_redirects=True)
+        assert r.status_code == 200, f"HTTP code {r.status_code}"
         return True
 
 @dataclass
@@ -142,7 +164,8 @@ def main(args):
         args.admin_email
     )
 
-    if not xgp_data.password:
+    # generate default password
+    if xgp_data.password == "":
         logging.warning("Admin password is empty!")
         xgp_data.password = uuid4()
         logging.warning(f"Password set to {xgp_data.password}")
@@ -154,14 +177,18 @@ def main(args):
         args.mysql_database
     )
 
+    # steps to perform install
     steps = [
         CheckInstallAvailable,
-        SetupDatabaseConfig,
-        SetupConfig,
-        SetupDatabase,
-        SetupAdminUser
+        SetupConnectionData,
+        SetupCheckConnection,
+        SetupConfigFile,
+        SetupDatabaseData,
+        SetupAdminUser,
+        CheckWebsite
     ]
 
+    # execute install
     for stepclass in steps:
         step = stepclass(
             xgp_data.url,
@@ -171,6 +198,8 @@ def main(args):
         step.execute()
         if not step.success:
             sys.exit(1)
+
+    logging.info("Success! Ensure to delete INSTALL folder!")
 
 def parser():
     parser = argparse.ArgumentParser(description='XG Proyect Installer')
@@ -197,7 +226,7 @@ def parser():
         "-xe", "--admin-email", default="admin@example.com", help="XG Proyect email"
     )
     parser.add_argument(
-        "-xp", "--admin-password", default="xgproyect", help="XG Proyect password"
+        "-xp", "--admin-password", default="", help="XG Proyect password"
     )
     parser.add_argument(
         "-v", "--debug", action="store_true", help="Show debug messages"
