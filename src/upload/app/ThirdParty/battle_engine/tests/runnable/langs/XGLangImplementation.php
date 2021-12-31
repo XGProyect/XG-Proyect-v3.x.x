@@ -5,7 +5,7 @@ class XGLangImplementation implements Lang
     private $lang;
     public function __construct()
     {
-        require (OPBEPATH . "tests/runnable/langs/XG.php");
+        require(OPBEPATH . "tests/runnable/langs/XG.php");
         $this->lang = $lang;
     }
 
@@ -66,5 +66,3 @@ class XGLangImplementation implements Lang
         return $this->lang['sys_moonbuilt'];
     }
 }
-
-?>

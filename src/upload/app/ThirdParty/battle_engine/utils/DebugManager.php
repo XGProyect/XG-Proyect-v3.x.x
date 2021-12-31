@@ -28,7 +28,6 @@
  */
 class DebugManager
 {
-
     private $errorHandler;
     private $exceptionHandler;
 

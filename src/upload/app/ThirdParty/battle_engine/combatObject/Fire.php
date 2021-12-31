@@ -5,7 +5,7 @@
  *  Copyright (C) 2013  Jstar
  *
  * This file is part of OPBE.
- * 
+ *
  * OPBE is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -28,14 +28,13 @@
  *
  *
  * Fire
- *  
+ *
  * This class rappresent the fire shotted by attackers to defenders or viceversa.
  * Using probabilistic theory, this class will help you in RF(Rapid Fire) calculation with O(1) time and memory functions.
  * Sometime i think that SpeedSim's RF calculation is bugged, so you can choose if return its result or not setting "SPEEDSIM" constant to true/false.
  */
 class Fire
 {
-
     private $attackerShipType;
     private $defenderFleet;
 
@@ -50,7 +49,7 @@ class Fire
 
     /**
      * Fire::__construct()
-     * 
+     *
      * @param ShipType $attackerShipType
      * @param Fleet $defenderFleet
      * @param bool $attacking

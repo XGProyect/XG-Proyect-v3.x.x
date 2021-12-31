@@ -5,7 +5,7 @@
  *  Copyright (C) 2013  Jstar
  *
  * This file is part of OPBE.
- * 
+ *
  * OPBE is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -28,10 +28,9 @@
  */
 abstract class GeometricDistribution
 {
-
     /**
      * GeometricDistribution::getProbabilityFromMean()
-     * 
+     *
      * @param int $m: the mean
      * @return int
      */
@@ -45,7 +44,7 @@ abstract class GeometricDistribution
 
     /**
      * GeometricDistribution::getMeanFromProbability()
-     * 
+     *
      * @param int $p: the probability
      * @return int
      */
@@ -59,7 +58,7 @@ abstract class GeometricDistribution
 
     /**
      * GeometricDistribution::getVarianceFromProbability()
-     * 
+     *
      * @param int $p: the probability
      * @return int
      */
@@ -73,7 +72,7 @@ abstract class GeometricDistribution
 
     /**
      * GeometricDistribution::getStandardDeviationFromProbability()
-     * 
+     *
      * @param int $p: the probability
      * @return int
      */
@@ -82,5 +81,3 @@ abstract class GeometricDistribution
         return sqrt(self::getVarianceFromProbability($p));
     }
 }
-
-?>

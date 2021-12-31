@@ -6,7 +6,6 @@
  */
 class HTMLPurifier_Language
 {
-
     /**
      * ISO 639 language code of language. Prefers shortest possible version
      */
@@ -43,9 +42,11 @@ class HTMLPurifier_Language
     /**
      * Instances of HTMLPurifier_Config and HTMLPurifier_Context
      */
-    protected $config, $context;
+    protected $config;
+    protected $context;
 
-    public function __construct($config, $context) {
+    public function __construct($config, $context)
+    {
         $this->config  = $config;
         $this->context = $context;
     }
@@ -54,8 +55,11 @@ class HTMLPurifier_Language
      * Loads language object with necessary info from factory cache
      * @note This is a lazy loader
      */
-    public function load() {
-        if ($this->_loaded) return;
+    public function load()
+    {
+        if ($this->_loaded) {
+            return;
+        }
         $factory = HTMLPurifier_LanguageFactory::instance();
         $factory->loadLanguage($this->code);
         foreach ($factory->keys as $key) {
@@ -69,9 +73,14 @@ class HTMLPurifier_Language
      * @param $key string identifier of message
      * @return string localised message
      */
-    public function getMessage($key) {
-        if (!$this->_loaded) $this->load();
-        if (!isset($this->messages[$key])) return "[$key]";
+    public function getMessage($key)
+    {
+        if (!$this->_loaded) {
+            $this->load();
+        }
+        if (!isset($this->messages[$key])) {
+            return "[$key]";
+        }
         return $this->messages[$key];
     }
 
@@ -81,16 +90,22 @@ class HTMLPurifier_Language
      *             reporting
      * @return string localised message
      */
-    public function getErrorName($int) {
-        if (!$this->_loaded) $this->load();
-        if (!isset($this->errorNames[$int])) return "[Error: $int]";
+    public function getErrorName($int)
+    {
+        if (!$this->_loaded) {
+            $this->load();
+        }
+        if (!isset($this->errorNames[$int])) {
+            return "[Error: $int]";
+        }
         return $this->errorNames[$int];
     }
 
     /**
      * Converts an array list into a string readable representation
      */
-    public function listify($array) {
+    public function listify($array)
+    {
         $sep      = $this->getMessage('Item separator');
         $sep_last = $this->getMessage('Item separator last');
         $ret = '';
@@ -114,9 +129,14 @@ class HTMLPurifier_Language
      * @todo Implement conditionals? Right now, some messages make
      *     reference to line numbers, but those aren't always available
      */
-    public function formatMessage($key, $args = array()) {
-        if (!$this->_loaded) $this->load();
-        if (!isset($this->messages[$key])) return "[$key]";
+    public function formatMessage($key, $args = array())
+    {
+        if (!$this->_loaded) {
+            $this->load();
+        }
+        if (!isset($this->messages[$key])) {
+            return "[$key]";
+        }
         $raw = $this->messages[$key];
         $subst = array();
         $generator = false;
@@ -124,9 +144,15 @@ class HTMLPurifier_Language
             if (is_object($value)) {
                 if ($value instanceof HTMLPurifier_Token) {
                     // factor this out some time
-                    if (!$generator) $generator = $this->context->get('Generator');
-                    if (isset($value->name)) $subst['$'.$i.'.Name'] = $value->name;
-                    if (isset($value->data)) $subst['$'.$i.'.Data'] = $value->data;
+                    if (!$generator) {
+                        $generator = $this->context->get('Generator');
+                    }
+                    if (isset($value->name)) {
+                        $subst['$'.$i.'.Name'] = $value->name;
+                    }
+                    if (isset($value->data)) {
+                        $subst['$'.$i.'.Data'] = $value->data;
+                    }
                     $subst['$'.$i.'.Compact'] =
                     $subst['$'.$i.'.Serialized'] = $generator->generateFromToken($value);
                     // a more complex algorithm for compact representation
@@ -157,7 +183,6 @@ class HTMLPurifier_Language
         }
         return strtr($raw, $subst);
     }
-
 }
 
 // vim: et sw=4 sts=4

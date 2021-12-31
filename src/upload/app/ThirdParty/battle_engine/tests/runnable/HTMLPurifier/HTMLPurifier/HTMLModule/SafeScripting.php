@@ -6,10 +6,10 @@
  */
 class HTMLPurifier_HTMLModule_SafeScripting extends HTMLPurifier_HTMLModule
 {
-
     public $name = 'SafeScripting';
 
-    public function setup($config) {
+    public function setup($config)
+    {
 
         // These definitions are not intrinsically safe: the attribute transforms
         // are a vital part of ensuring safety.
@@ -29,9 +29,7 @@ class HTMLPurifier_HTMLModule_SafeScripting extends HTMLPurifier_HTMLModule
         );
         $script->attr_transform_pre[] =
         $script->attr_transform_post[] = new HTMLPurifier_AttrTransform_ScriptRequired();
-
     }
-
 }
 
 // vim: et sw=4 sts=4

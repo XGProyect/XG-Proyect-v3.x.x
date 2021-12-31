@@ -4,7 +4,7 @@
  *  Copyright (C) 2013  Jstar
  *
  * This file is part of OPBE.
- * 
+ *
  * OPBE is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -28,14 +28,13 @@
 
 /**
  * Round
- * 
+ *
  * This class rappresent the round in a battle.
  * When it is started, the PlayerGroup objects inside it will be updated.
  * Then, this class offers some methods to retrive informations about the round and the updated players.
  */
 class Round
 {
-
     private $attackers; // PlayerGroup attackers , will be updated when round start
     private $defenders; // PlayerGroup defenders, will be updated when round start
     private $fire_a; // a fire manager that rappresent all fires from attackers to defenders
@@ -51,7 +50,7 @@ class Round
      * Construct a new Round object. No side effects.
      * @param PlayerGroup: the attackers
      * @param PlayerGroup: the defenders
-     * @param int: the round number 
+     * @param int: the round number
      * @return void
      */
 
@@ -75,7 +74,7 @@ class Round
         echo '--- Round ' . $this->number . ' ---<br><br>';
         //---------------------- Generating the fire -------------------------------//
         //note that we don't need to check the order of fire, because we will order when splitting the fire later
-        // here we add to fire manager each fire shotted from an attacker's ShipType to all defenders 
+        // here we add to fire manager each fire shotted from an attacker's ShipType to all defenders
         $defendersMerged = $this->defenders->getEquivalentFleetContent();
         foreach ($this->attackers->getIterator() as $idPlayer => $player) {
             foreach ($player->getIterator() as $idFleet => $fleet) {

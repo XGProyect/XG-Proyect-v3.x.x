@@ -13,16 +13,22 @@ class HTMLPurifier_HTMLModule_Forms extends HTMLPurifier_HTMLModule
         'Inline' => 'Formctrl',
     );
 
-    public function setup($config) {
-        $form = $this->addElement('form', 'Form',
-          'Required: Heading | List | Block | fieldset', 'Common', array(
+    public function setup($config)
+    {
+        $form = $this->addElement(
+            'form',
+            'Form',
+            'Required: Heading | List | Block | fieldset',
+            'Common',
+            array(
             'accept' => 'ContentTypes',
             'accept-charset' => 'Charsets',
             'action*' => 'URI',
             'method' => 'Enum#get,post',
             // really ContentType, but these two are the only ones used today
             'enctype' => 'Enum#application/x-www-form-urlencoded,multipart/form-data',
-        ));
+        )
+        );
         $form->excludes = array('form' => true);
 
         $input = $this->addElement('input', 'Formctrl', 'Empty', 'Common', array(
@@ -82,10 +88,16 @@ class HTMLPurifier_HTMLModule_Forms extends HTMLPurifier_HTMLModule
 
         // For exclusions, ideally we'd specify content sets, not literal elements
         $button->excludes = $this->makeLookup(
-            'form', 'fieldset', // Form
-            'input', 'select', 'textarea', 'label', 'button', // Formctrl
+            'form',
+            'fieldset', // Form
+            'input',
+            'select',
+            'textarea',
+            'label',
+            'button', // Formctrl
             'a', // as per HTML 4.01 spec, this is omitted by modularization
-            'isindex', 'iframe' // legacy items
+            'isindex',
+            'iframe' // legacy items
         );
 
         // Extra exclusion: img usemap="" is not permitted within this element.
@@ -112,7 +124,6 @@ class HTMLPurifier_HTMLModule_Forms extends HTMLPurifier_HTMLModule
 
         // Don't forget an injector for <isindex>. This one's a little complex
         // because it maps to multiple elements.
-
     }
 }
 

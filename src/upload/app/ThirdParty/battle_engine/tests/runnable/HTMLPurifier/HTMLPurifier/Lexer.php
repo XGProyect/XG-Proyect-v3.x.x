@@ -41,7 +41,6 @@
  */
 class HTMLPurifier_Lexer
 {
-
     /**
      * Whether or not this lexer implements line-number/column-number tracking.
      * If it does, set to true.
@@ -65,8 +64,8 @@ class HTMLPurifier_Lexer
      * @param $config Instance of HTMLPurifier_Config
      * @return Concrete lexer.
      */
-    public static function create($config) {
-
+    public static function create($config)
+    {
         if (!($config instanceof HTMLPurifier_Config)) {
             $lexer = $config;
             trigger_error("Passing a prototype to
@@ -84,30 +83,30 @@ class HTMLPurifier_Lexer
         if (is_object($lexer)) {
             $inst = $lexer;
         } else {
+            if (is_null($lexer)) {
+                do {
+                    // auto-detection algorithm
 
-            if (is_null($lexer)) { do {
-                // auto-detection algorithm
+                    if ($needs_tracking) {
+                        $lexer = 'DirectLex';
+                        break;
+                    }
 
-                if ($needs_tracking) {
-                    $lexer = 'DirectLex';
-                    break;
-                }
-
-                if (
+                    if (
                     class_exists('DOMDocument') &&
                     method_exists('DOMDocument', 'loadHTML') &&
                     !extension_loaded('domxml')
                 ) {
-                    // check for DOM support, because while it's part of the
-                    // core, it can be disabled compile time. Also, the PECL
-                    // domxml extension overrides the default DOM, and is evil
-                    // and nasty and we shan't bother to support it
-                    $lexer = 'DOMLex';
-                } else {
-                    $lexer = 'DirectLex';
-                }
-
-            } while(0); } // do..while so we can break
+                        // check for DOM support, because while it's part of the
+                        // core, it can be disabled compile time. Also, the PECL
+                        // domxml extension overrides the default DOM, and is evil
+                        // and nasty and we shan't bother to support it
+                        $lexer = 'DOMLex';
+                    } else {
+                        $lexer = 'DirectLex';
+                    }
+                } while (0);
+            } // do..while so we can break
 
             // instantiate recognized string names
             switch ($lexer) {
@@ -125,7 +124,9 @@ class HTMLPurifier_Lexer
             }
         }
 
-        if (!$inst) throw new HTMLPurifier_Exception('No lexer was instantiated');
+        if (!$inst) {
+            throw new HTMLPurifier_Exception('No lexer was instantiated');
+        }
 
         // once PHP DOM implements native line numbers, or we
         // hack out something using XSLT, remove this stipulation
@@ -134,12 +135,12 @@ class HTMLPurifier_Lexer
         }
 
         return $inst;
-
     }
 
     // -- CONVENIENCE MEMBERS ---------------------------------------------
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->_entity_parser = new HTMLPurifier_EntityParser();
     }
 
@@ -171,16 +172,21 @@ class HTMLPurifier_Lexer
      * @param $string String character data to be parsed.
      * @returns Parsed character data.
      */
-    public function parseData($string) {
+    public function parseData($string)
+    {
 
         // following functions require at least one character
-        if ($string === '') return '';
+        if ($string === '') {
+            return '';
+        }
 
         // subtracts amps that cannot possibly be escaped
         $num_amp = substr_count($string, '&') - substr_count($string, '& ') -
             ($string[strlen($string)-1] === '&' ? 1 : 0);
 
-        if (!$num_amp) return $string; // abort if no entities
+        if (!$num_amp) {
+            return $string;
+        } // abort if no entities
         $num_esc_amp = substr_count($string, '&amp;');
         $string = strtr($string, $this->_special_entity2str);
 
@@ -188,7 +194,9 @@ class HTMLPurifier_Lexer
         $num_amp_2 = substr_count($string, '&') - substr_count($string, '& ') -
             ($string[strlen($string)-1] === '&' ? 1 : 0);
 
-        if ($num_amp_2 <= $num_esc_amp) return $string;
+        if ($num_amp_2 <= $num_esc_amp) {
+            return $string;
+        }
 
         // hmm... now we have some uncommon entities. Use the callback.
         $string = $this->_entity_parser->substituteSpecialEntities($string);
@@ -201,7 +209,8 @@ class HTMLPurifier_Lexer
      * @param $string String HTML.
      * @return HTMLPurifier_Token array representation of HTML.
      */
-    public function tokenizeHTML($string, $config, $context) {
+    public function tokenizeHTML($string, $config, $context)
+    {
         trigger_error('Call to abstract class', E_USER_ERROR);
     }
 
@@ -211,7 +220,8 @@ class HTMLPurifier_Lexer
      * @param $string HTML string to process.
      * @returns HTML with CDATA sections escaped.
      */
-    protected static function escapeCDATA($string) {
+    protected static function escapeCDATA($string)
+    {
         return preg_replace_callback(
             '/<!\[CDATA\[(.+?)\]\]>/s',
             array('HTMLPurifier_Lexer', 'CDATACallback'),
@@ -222,7 +232,8 @@ class HTMLPurifier_Lexer
     /**
      * Special CDATA case that is especially convoluted for <script>
      */
-    protected static function escapeCommentedCDATA($string) {
+    protected static function escapeCommentedCDATA($string)
+    {
         return preg_replace_callback(
             '#<!--//--><!\[CDATA\[//><!--(.+?)//--><!\]\]>#s',
             array('HTMLPurifier_Lexer', 'CDATACallback'),
@@ -233,7 +244,8 @@ class HTMLPurifier_Lexer
     /**
      * Special Internet Explorer conditional comments should be removed.
      */
-    protected static function removeIEConditional($string) {
+    protected static function removeIEConditional($string)
+    {
         return preg_replace(
             '#<!--\[if [^>]+\]>.*?<!\[endif\]-->#si', // probably should generalize for all strings
             '',
@@ -250,7 +262,8 @@ class HTMLPurifier_Lexer
      *                  and 1 the inside of the CDATA section.
      * @returns Escaped internals of the CDATA section.
      */
-    protected static function CDATACallback($matches) {
+    protected static function CDATACallback($matches)
+    {
         // not exactly sure why the character set is needed, but whatever
         return htmlspecialchars($matches[1], ENT_COMPAT, 'UTF-8');
     }
@@ -260,7 +273,8 @@ class HTMLPurifier_Lexer
      * encoding, extracting bits, and other good stuff.
      * @todo Consider making protected
      */
-    public function normalize($html, $config, $context) {
+    public function normalize($html, $config, $context)
+    {
 
         // normalize newlines to \n
         if ($config->get('Core.NormalizeNewlines')) {
@@ -311,7 +325,8 @@ class HTMLPurifier_Lexer
      * Takes a string of HTML (fragment or document) and returns the content
      * @todo Consider making protected
      */
-    public function extractBody($html) {
+    public function extractBody($html)
+    {
         $matches = array();
         $result = preg_match('!<body[^>]*>(.*)</body>!is', $html, $matches);
         if ($result) {
@@ -320,7 +335,6 @@ class HTMLPurifier_Lexer
             return $html;
         }
     }
-
 }
 
 // vim: et sw=4 sts=4

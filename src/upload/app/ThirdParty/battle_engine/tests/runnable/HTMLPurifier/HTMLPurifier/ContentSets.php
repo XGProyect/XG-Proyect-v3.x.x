@@ -5,7 +5,6 @@
  */
 class HTMLPurifier_ContentSets
 {
-
     /**
      * List of content set strings (pipe seperators) indexed by name.
      */
@@ -31,8 +30,11 @@ class HTMLPurifier_ContentSets
      * sets and populates the keys, values and lookup member variables.
      * @param $modules List of HTMLPurifier_HTMLModule
      */
-    public function __construct($modules) {
-        if (!is_array($modules)) $modules = array($modules);
+    public function __construct($modules)
+    {
+        if (!is_array($modules)) {
+            $modules = array($modules);
+        }
         // populate content_sets based on module hints
         // sorry, no way of overloading
         foreach ($modules as $module_i => $module) {
@@ -73,8 +75,11 @@ class HTMLPurifier_ContentSets
      * @param $def HTMLPurifier_ElementDef reference
      * @param $module Module that defined the ElementDef
      */
-    public function generateChildDef(&$def, $module) {
-        if (!empty($def->child)) return; // already done!
+    public function generateChildDef(&$def, $module)
+    {
+        if (!empty($def->child)) {
+            return;
+        } // already done!
         $content_model = $def->content_model;
         if (is_string($content_model)) {
             // Assume that $this->keys is alphanumeric
@@ -89,7 +94,8 @@ class HTMLPurifier_ContentSets
         $def->child = $this->getChildDef($def, $module);
     }
 
-    public function generateChildDefCallback($matches) {
+    public function generateChildDefCallback($matches)
+    {
         return $this->info[$matches[0]];
     }
 
@@ -101,7 +107,8 @@ class HTMLPurifier_ContentSets
      * @param $def HTMLPurifier_ElementDef to have ChildDef extracted
      * @return HTMLPurifier_ChildDef corresponding to ElementDef
      */
-    public function getChildDef($def, $module) {
+    public function getChildDef($def, $module)
+    {
         $value = $def->content_model;
         if (is_object($value)) {
             trigger_error(
@@ -126,7 +133,9 @@ class HTMLPurifier_ContentSets
         if ($module->defines_child_def) { // save a func call
             $return = $module->getChildDef($def);
         }
-        if ($return !== false) return $return;
+        if ($return !== false) {
+            return $return;
+        }
         // error-out
         trigger_error(
             'Could not determine which ChildDef class to instantiate',
@@ -141,7 +150,8 @@ class HTMLPurifier_ContentSets
      * @param $string List of elements
      * @return Lookup array of elements
      */
-    protected function convertToLookup($string) {
+    protected function convertToLookup($string)
+    {
         $array = explode('|', str_replace(' ', '', $string));
         $ret = array();
         foreach ($array as $i => $k) {
@@ -149,7 +159,6 @@ class HTMLPurifier_ContentSets
         }
         return $ret;
     }
-
 }
 
 // vim: et sw=4 sts=4

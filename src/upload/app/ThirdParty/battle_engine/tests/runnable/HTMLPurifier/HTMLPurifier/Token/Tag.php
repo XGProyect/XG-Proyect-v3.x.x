@@ -33,7 +33,8 @@ class HTMLPurifier_Token_Tag extends HTMLPurifier_Token
      * @param $name String name.
      * @param $attr Associative array of attributes.
      */
-    public function __construct($name, $attr = array(), $line = null, $col = null, $armor = array()) {
+    public function __construct($name, $attr = array(), $line = null, $col = null, $armor = array())
+    {
         $this->name = ctype_lower($name) ? $name : strtolower($name);
         foreach ($attr as $key => $value) {
             // normalization only necessary when key is not lowercase

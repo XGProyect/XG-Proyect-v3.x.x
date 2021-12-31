@@ -27,7 +27,6 @@
  */
 abstract class HTMLPurifier_URIFilter
 {
-
     /**
      * Unique identifier of filter
      */
@@ -49,7 +48,10 @@ abstract class HTMLPurifier_URIFilter
      * Performs initialization for the filter.  If the filter returns
      * false, this means that it shouldn't be considered active.
      */
-    public function prepare($config) {return true;}
+    public function prepare($config)
+    {
+        return true;
+    }
 
     /**
      * Filter a URI object
@@ -61,7 +63,6 @@ abstract class HTMLPurifier_URIFilter
      *         all changes are committed directly on the URI object
      */
     abstract public function filter(&$uri, $config, $context);
-
 }
 
 // vim: et sw=4 sts=4

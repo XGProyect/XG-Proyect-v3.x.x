@@ -43,16 +43,17 @@
  */
 class HTMLPurifier_AttrDef_CSS_BackgroundPosition extends HTMLPurifier_AttrDef
 {
-
     protected $length;
     protected $percentage;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->length     = new HTMLPurifier_AttrDef_CSS_Length();
         $this->percentage = new HTMLPurifier_AttrDef_CSS_Percentage();
     }
 
-    public function validate($string, $config, $context) {
+    public function validate($string, $config, $context)
+    {
         $string = $this->parseCDATA($string);
         $bits = explode(' ', $string);
 
@@ -74,7 +75,9 @@ class HTMLPurifier_AttrDef_CSS_BackgroundPosition extends HTMLPurifier_AttrDef
         );
 
         foreach ($bits as $bit) {
-            if ($bit === '') continue;
+            if ($bit === '') {
+                continue;
+            }
 
             // test for keyword
             $lbit = ctype_lower($bit) ? $bit : strtolower($bit);
@@ -104,30 +107,37 @@ class HTMLPurifier_AttrDef_CSS_BackgroundPosition extends HTMLPurifier_AttrDef
                 $measures[] = $r;
                 $i++;
             }
-
         }
 
-        if (!$i) return false; // no valid values were caught
+        if (!$i) {
+            return false;
+        } // no valid values were caught
 
         $ret = array();
 
         // first keyword
-        if     ($keywords['h'])     $ret[] = $keywords['h'];
-        elseif ($keywords['ch']) {
+        if ($keywords['h']) {
+            $ret[] = $keywords['h'];
+        } elseif ($keywords['ch']) {
             $ret[] = $keywords['ch'];
             $keywords['cv'] = false; // prevent re-use: center = center center
+        } elseif (count($measures)) {
+            $ret[] = array_shift($measures);
         }
-        elseif (count($measures))   $ret[] = array_shift($measures);
 
-        if     ($keywords['v'])     $ret[] = $keywords['v'];
-        elseif ($keywords['cv'])    $ret[] = $keywords['cv'];
-        elseif (count($measures))   $ret[] = array_shift($measures);
+        if ($keywords['v']) {
+            $ret[] = $keywords['v'];
+        } elseif ($keywords['cv']) {
+            $ret[] = $keywords['cv'];
+        } elseif (count($measures)) {
+            $ret[] = array_shift($measures);
+        }
 
-        if (empty($ret)) return false;
+        if (empty($ret)) {
+            return false;
+        }
         return implode(' ', $ret);
-
     }
-
 }
 
 // vim: et sw=4 sts=4

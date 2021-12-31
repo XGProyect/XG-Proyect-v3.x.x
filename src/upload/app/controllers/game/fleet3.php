@@ -154,7 +154,7 @@ class Fleet3 extends BaseController
                     $ship_id = array_search($ship_name, $objects);
 
                     if (
-                        !isset($selected_fleet[$ship_id]) || 
+                        !isset($selected_fleet[$ship_id]) ||
                         $selected_fleet[$ship_id] == 0
                     ) {
                         continue;
@@ -567,7 +567,8 @@ class Fleet3 extends BaseController
             $target_planet['planet_user_id']
         ) >= 1;
 
-        if (!$is_buddy
+        if (
+            !$is_buddy
             && (
                 ($target_planet['user_ally_id'] == 0 && $this->user['user_ally_id'] == 0)
                 or ($target_planet['user_ally_id'] != $this->user['user_ally_id'])

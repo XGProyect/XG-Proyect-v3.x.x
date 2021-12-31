@@ -5,7 +5,7 @@
  *  Copyright (C) 2013  Jstar
  *
  * This file is part of OPBE.
- * 
+ *
  * OPBE is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -28,7 +28,6 @@
  */
 class Player extends IterableUtil
 {
-
     private $id;
     protected $array = array();
     private $weapons_tech = 0;
@@ -77,12 +76,15 @@ class Player extends IterableUtil
         foreach ($this->array as $id => $fleet) {
             $fleet->setTech($weapons, $shields, $armour);
         }
-        if (is_numeric($weapons))
+        if (is_numeric($weapons)) {
             $this->weapons_tech = intval($weapons);
-        if (is_numeric($shields))
+        }
+        if (is_numeric($shields)) {
             $this->shields_tech = intval($shields);
-        if (is_numeric($armour))
+        }
+        if (is_numeric($armour)) {
             $this->armour_tech = intval($armour);
+        }
     }
 
     public function setCoords($galaxy = null, $system = null, $planet = null)
@@ -90,12 +92,15 @@ class Player extends IterableUtil
         foreach ($this->array as $id => $fleet) {
             $fleet->setCoords($galaxy, $system, $planet);
         }
-        if (is_numeric($galaxy))
+        if (is_numeric($galaxy)) {
             $this->galaxy = intval($galaxy);
-        if (is_numeric($system))
+        }
+        if (is_numeric($system)) {
             $this->system = intval($system);
-        if (is_numeric($planet))
+        }
+        if (is_numeric($planet)) {
             $this->planet = intval($planet);
+        }
     }
 
     public function getId()
@@ -224,7 +229,7 @@ class Player extends IterableUtil
         return $merged;
     }
 
-    public function addDefense(Fleet $fleetDefender) // da fare: controllare ordine 
+    public function addDefense(Fleet $fleetDefender) // da fare: controllare ordine
     {
         $fleetDefender = $fleetDefender->cloneMe();
         $fleetDefender->setTech($this->weapons_tech, $this->shields_tech, $this->armour_tech);
@@ -258,7 +263,15 @@ class Player extends IterableUtil
     {
         $fleets = array_values($this->array);
         return new Player(
-            $this->id, $fleets, $this->weapons_tech, $this->shields_tech, $this->armour_tech, $this->name, $this->galaxy, $this->system, $this->planet
+            $this->id,
+            $fleets,
+            $this->weapons_tech,
+            $this->shields_tech,
+            $this->armour_tech,
+            $this->name,
+            $this->galaxy,
+            $this->system,
+            $this->planet
         );
     }
 }

@@ -22,14 +22,16 @@ class HTMLPurifier_ChildDef_Custom extends HTMLPurifier_ChildDef
     /**
      * @param $dtd_regex Allowed child pattern from the DTD
      */
-    public function __construct($dtd_regex) {
+    public function __construct($dtd_regex)
+    {
         $this->dtd_regex = $dtd_regex;
         $this->_compileRegex();
     }
     /**
      * Compiles the PCRE regex from a DTD regex ($dtd_regex to $_pcre_regex)
      */
-    protected function _compileRegex() {
+    protected function _compileRegex()
+    {
         $raw = str_replace(' ', '', $this->dtd_regex);
         if ($raw[0] != '(') {
             $raw = "($raw)";
@@ -57,11 +59,14 @@ class HTMLPurifier_ChildDef_Custom extends HTMLPurifier_ChildDef
 
         $this->_pcre_regex = $reg;
     }
-    public function validateChildren($tokens_of_children, $config, $context) {
+    public function validateChildren($tokens_of_children, $config, $context)
+    {
         $list_of_children = '';
         $nesting = 0; // depth into the nest
         foreach ($tokens_of_children as $token) {
-            if (!empty($token->is_whitespace)) continue;
+            if (!empty($token->is_whitespace)) {
+                continue;
+            }
 
             $is_child = ($nesting == 0); // direct
 

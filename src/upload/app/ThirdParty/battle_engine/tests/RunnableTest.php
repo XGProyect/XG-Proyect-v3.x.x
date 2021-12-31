@@ -5,7 +5,7 @@
  *  Copyright (C) 2013  Jstar
  *
  * This file is part of OPBE.
- * 
+ *
  * OPBE is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -27,8 +27,8 @@
  * @link https://github.com/jstar88/opbe
  */
 
-require (dirname(__DIR__) . DIRECTORY_SEPARATOR ."utils".DIRECTORY_SEPARATOR."includer.php");
-require (OPBEPATH . "tests".DIRECTORY_SEPARATOR."runnable".DIRECTORY_SEPARATOR."langs".DIRECTORY_SEPARATOR."XGLangImplementation.php");
+require(dirname(__DIR__) . DIRECTORY_SEPARATOR ."utils".DIRECTORY_SEPARATOR."includer.php");
+require(OPBEPATH . "tests".DIRECTORY_SEPARATOR."runnable".DIRECTORY_SEPARATOR."langs".DIRECTORY_SEPARATOR."XGLangImplementation.php");
 
 class RunnableTest
 {
@@ -36,15 +36,17 @@ class RunnableTest
     private $memory;
     private $report;
 
-    public static $reslist, $pricelist, $requeriments, $resource, $CombatCaps;
+    public static $reslist;
+    public static $pricelist;
+    public static $requeriments;
+    public static $resource;
+    public static $CombatCaps;
     public function __construct($debug = false)
     {
-        if(empty(self::$reslist))
-        {
+        if (empty(self::$reslist)) {
             self::includeVars('XG');
         }
-        if(!LangManager::getInstance()->implementationExist())
-        {
+        if (!LangManager::getInstance()->implementationExist()) {
             LangManager::getInstance()->setImplementation(new XGLangImplementation());
         }
         $attackers = $this->getAttachers();
@@ -53,7 +55,7 @@ class RunnableTest
         $micro1 = microtime();
 
         $engine = new Battle($attackers, $defenders);
-        $startBattle = DebugManager::runDebugged(array($engine,'startBattle'),array('RunnableTest', 'myErrorHandler'), array('RunnableTest', 'save'));
+        $startBattle = DebugManager::runDebugged(array($engine,'startBattle'), array('RunnableTest', 'myErrorHandler'), array('RunnableTest', 'save'));
         $startBattle($debug);
 
         $micro1 = microtime() - $micro1;
@@ -64,8 +66,6 @@ class RunnableTest
         $this->time = round(1000 * $micro1, 2);
         $this->memory = round($memory1 / 1000);
         echo $this;
-
-
     }
     public function getShipType($id, $count)
     {
@@ -73,25 +73,21 @@ class RunnableTest
         $shield = self::$CombatCaps[$id]['shield'];
         $cost = array(self::$pricelist[$id]['metal'], self::$pricelist[$id]['crystal']);
         $power = self::$CombatCaps[$id]['attack'];
-        if (in_array($id, self::$reslist['fleet']))
-        {
+        if (in_array($id, self::$reslist['fleet'])) {
             return new Ship($id, $count, $rf, $shield, $cost, $power);
         }
         return new Defense($id, $count, $rf, $shield, $cost, $power);
     }
     public function getAttachers()
     {
-
     }
     public function getDefenders()
     {
-
     }
     public static function myErrorHandler($errno, $errstr, $errfile, $errline)
     {
         $error = '';
-        switch ($errno)
-        {
+        switch ($errno) {
             case E_USER_ERROR:
                 $error .= "ERROR [$errno] $errstr<br />";
                 break;
@@ -113,7 +109,6 @@ class RunnableTest
         self::save($error);
         /* Don't execute PHP internal error handler */
         return true;
-
     }
     public static function save($other)
     {
@@ -123,8 +118,7 @@ class RunnableTest
         $get = '$_GET =' . var_export($_GET);
         $output = ob_get_clean();
         $path = OPBEPATH.'tests'.DIRECTORY_SEPARATOR.'runnable'.DIRECTORY_SEPARATOR.'errors'.DIRECTORY_SEPARATOR.'internals';
-        if (!file_exists($path))
-        {
+        if (!file_exists($path)) {
             mkdir($path, 0777, true);
         }
         file_put_contents($path.DIRECTORY_SEPARATOR . date('d-m-y__H-i-s') . '.html', $time . PHP_EOL . self::br2nl($other) . PHP_EOL . $post . PHP_EOL . $get . PHP_EOL . self::br2nl($output));
@@ -139,8 +133,7 @@ class RunnableTest
     {
         $micro = $this->time;
         $memory = $this->memory;
-        if(get_class($this) != 'WebTest')
-        {
+        if (get_class($this) != 'WebTest') {
             $this->report->css = '../../../';
         }
         return $this->report . <<< EOT
@@ -149,13 +142,12 @@ Battle calculated in <font color=blue>$micro ms</font>.<br>
 Memory used: <font color=blue>$memory KB</font><br>
 _______________________________________________<br>
 EOT;
-
     }
 
 
     public static function includeVars($name)
     {
-        require (OPBEPATH."tests".DIRECTORY_SEPARATOR."runnable".DIRECTORY_SEPARATOR."vars".DIRECTORY_SEPARATOR."$name.php");
+        require(OPBEPATH."tests".DIRECTORY_SEPARATOR."runnable".DIRECTORY_SEPARATOR."vars".DIRECTORY_SEPARATOR."$name.php");
         RunnableTest::$reslist = $reslist;
         RunnableTest::$pricelist = $pricelist;
         RunnableTest::$requeriments = $requeriments;
@@ -165,15 +157,14 @@ EOT;
     public static function getVarsList()
     {
         $list = array();
-        if ($handle = opendir(OPBEPATH."tests".DIRECTORY_SEPARATOR."runnable".DIRECTORY_SEPARATOR."vars"))
-        {
-            while (false !== ($entry = readdir($handle)))
-                if ($entry != "." && $entry != "..")
+        if ($handle = opendir(OPBEPATH."tests".DIRECTORY_SEPARATOR."runnable".DIRECTORY_SEPARATOR."vars")) {
+            while (false !== ($entry = readdir($handle))) {
+                if ($entry != "." && $entry != "..") {
                     $list[] = basename($entry, ".php");
+                }
+            }
             closedir($handle);
         }
         return $list;
     }
 }
-
-?>

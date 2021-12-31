@@ -10,23 +10,33 @@ class HTMLPurifier_URIFilter_SafeIframe extends HTMLPurifier_URIFilter
 {
     public $name = 'SafeIframe';
     public $always_load = true;
-    protected $regexp = NULL;
+    protected $regexp = null;
     // XXX: The not so good bit about how this is all setup now is we
     // can't check HTML.SafeIframe in the 'prepare' step: we have to
     // defer till the actual filtering.
-    public function prepare($config) {
+    public function prepare($config)
+    {
         $this->regexp = $config->get('URI.SafeIframeRegexp');
         return true;
     }
-    public function filter(&$uri, $config, $context) {
+    public function filter(&$uri, $config, $context)
+    {
         // check if filter not applicable
-        if (!$config->get('HTML.SafeIframe')) return true;
+        if (!$config->get('HTML.SafeIframe')) {
+            return true;
+        }
         // check if the filter should actually trigger
-        if (!$context->get('EmbeddedURI', true)) return true;
+        if (!$context->get('EmbeddedURI', true)) {
+            return true;
+        }
         $token = $context->get('CurrentToken', true);
-        if (!($token && $token->name == 'iframe')) return true;
+        if (!($token && $token->name == 'iframe')) {
+            return true;
+        }
         // check if we actually have some whitelists enabled
-        if ($this->regexp === null) return false;
+        if ($this->regexp === null) {
+            return false;
+        }
         // actually check the whitelists
         return preg_match($this->regexp, $uri->toString());
     }

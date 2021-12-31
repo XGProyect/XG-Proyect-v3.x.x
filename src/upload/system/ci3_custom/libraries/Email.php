@@ -1509,7 +1509,9 @@ class CI_Email
             //       here, but it turned out to be buggy and unreliable. DO NOT
             //       re-add it! -- Narf
             if (ICONV_ENABLED === true) {
-                $output = @iconv_mime_encode('', $str,
+                $output = @iconv_mime_encode(
+                    '',
+                    $str,
                     [
                         'scheme' => 'Q',
                         'line-length' => 76,
@@ -1907,11 +1909,13 @@ class CI_Email
 
         $ssl = ($this->smtp_crypto === 'ssl') ? 'ssl://' : '';
 
-        $this->_smtp_connect = fsockopen($ssl . $this->smtp_host,
+        $this->_smtp_connect = fsockopen(
+            $ssl . $this->smtp_host,
             $this->smtp_port,
             $errno,
             $errstr,
-            $this->smtp_timeout);
+            $this->smtp_timeout
+        );
 
         if (!is_resource($this->_smtp_connect)) {
             $this->_set_error_message('lang:email_smtp_error', $errno . ' ' . $errstr);
@@ -2043,8 +2047,7 @@ class CI_Email
 
         $reply = $this->_get_smtp_data();
 
-        if (strpos($reply, '503') === 0) // Already authenticated
-        {
+        if (strpos($reply, '503') === 0) { // Already authenticated
             return true;
         } elseif (strpos($reply, '334') !== 0) {
             $this->_set_error_message('lang:email_failed_smtp_login', $reply);

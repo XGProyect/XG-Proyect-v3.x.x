@@ -2,7 +2,6 @@
 
 interface Lang
 {
-
     public function getShipName($id);
 
     public function getAttackersAttackingDescr($amount, $damage);

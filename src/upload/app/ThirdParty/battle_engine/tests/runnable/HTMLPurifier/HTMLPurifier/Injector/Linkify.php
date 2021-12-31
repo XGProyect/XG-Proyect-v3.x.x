@@ -5,12 +5,14 @@
  */
 class HTMLPurifier_Injector_Linkify extends HTMLPurifier_Injector
 {
-
     public $name = 'Linkify';
     public $needed = array('a' => array('href'));
 
-    public function handleText(&$token) {
-        if (!$this->allowsElement('a')) return;
+    public function handleText(&$token)
+    {
+        if (!$this->allowsElement('a')) {
+            return;
+        }
 
         if (strpos($token->data, '://') === false) {
             // our really quick heuristic failed, abort
@@ -30,7 +32,9 @@ class HTMLPurifier_Injector_Linkify extends HTMLPurifier_Injector
         // $l = is link
         for ($i = 0, $c = count($bits), $l = false; $i < $c; $i++, $l = !$l) {
             if (!$l) {
-                if ($bits[$i] === '') continue;
+                if ($bits[$i] === '') {
+                    continue;
+                }
                 $token[] = new HTMLPurifier_Token_Text($bits[$i]);
             } else {
                 $token[] = new HTMLPurifier_Token_Start('a', array('href' => $bits[$i]));
@@ -38,9 +42,7 @@ class HTMLPurifier_Injector_Linkify extends HTMLPurifier_Injector
                 $token[] = new HTMLPurifier_Token_End('a');
             }
         }
-
     }
-
 }
 
 // vim: et sw=4 sts=4

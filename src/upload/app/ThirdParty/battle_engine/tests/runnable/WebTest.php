@@ -5,7 +5,7 @@
  *  Copyright (C) 2013  Jstar
  *
  * This file is part of OPBE.
- * 
+ *
  * OPBE is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -26,7 +26,7 @@
  * @version beta(26-10-2013)
  * @link https://github.com/jstar88/opbe
  */
-require (".." . DIRECTORY_SEPARATOR . "RunnableTest.php");
+require(".." . DIRECTORY_SEPARATOR . "RunnableTest.php");
 
 class WebTest extends RunnableTest
 {
@@ -44,25 +44,20 @@ class WebTest extends RunnableTest
         $playerObj = new Player(1);
         $playerObj->setName('bot');
         $playerObj->setTech($tech['weapons'], $tech['shields'], $tech['armour']);
-        foreach ($fleets as $idFleet => $fleet)
-        {
+        foreach ($fleets as $idFleet => $fleet) {
             $fleetObj = new Fleet($idFleet);
-            foreach ($fleet as $id => $count)
-            {
+            foreach ($fleet as $id => $count) {
                 $count = floor($count);
                 $id = floor($id);
-                if ($count > 0 && $id > 0)
-                {
+                if ($count > 0 && $id > 0) {
                     $fleetObj->addShipType($this->getShipType($id, $count));
                 }
             }
-            if (!$fleetObj->isEmpty())
-            {
+            if (!$fleetObj->isEmpty()) {
                 $playerObj->addFleet($fleetObj);
             }
         }
-        if ($playerObj->isEmpty())
-        {
+        if ($playerObj->isEmpty()) {
             die("<meta http-equiv=\"refresh\" content=2;\"WebTest.php\">There should be at least an attacker and defender");
         }
         $playerGroupObj = new PlayerGroup();
@@ -71,44 +66,33 @@ class WebTest extends RunnableTest
     }
 }
 
-if (isset($_GET['vars']))
-{
+if (isset($_GET['vars'])) {
     $selectedVar = $_GET['vars'];
-}
-elseif (isset($_POST['vars']))
-{
+} elseif (isset($_POST['vars'])) {
     $selectedVar = $_POST['vars'];
-}
-else
-{
+} else {
     $selectedVar = 'XG';
 }
 WebTest::includeVars($selectedVar);
-if ($selectedVar == 'XG'){
+if ($selectedVar == 'XG') {
     LangManager::getInstance()->setImplementation(new XGLangImplementation());
-}
-else{
+} else {
     LangManager::getInstance()->setImplementation(new XGLangImplementation());
 }
 
 
-if (isset($_GET['good']))
-{
+if (isset($_GET['good'])) {
     session_start();
-    if (!isset($_SESSION['vote']))
-    {
+    if (!isset($_SESSION['vote'])) {
         $_SESSION['vote'] = true;
         $count = file_get_contents('good.txt');
         $count++;
         file_put_contents('good.txt', $count);
     }
     session_write_close();
-}
-elseif (isset($_GET['bad']))
-{
+} elseif (isset($_GET['bad'])) {
     session_start();
-    if (!isset($_SESSION['vote']))
-    {
+    if (!isset($_SESSION['vote'])) {
         $_SESSION['vote'] = true;
         $count = file_get_contents('bad.txt');
         $count++;
@@ -116,13 +100,10 @@ elseif (isset($_GET['bad']))
     }
     session_write_close();
 }
-if ($_POST)
-{
-    if (isset($_POST['report']))
-    {
+if ($_POST) {
+    if (isset($_POST['report'])) {
         $path = 'errors' . DIRECTORY_SEPARATOR . 'reports';
-        if (!file_exists($path))
-        {
+        if (!file_exists($path)) {
             mkdir($path, 0777, true);
         }
         require_once 'HTMLPurifier' . DIRECTORY_SEPARATOR . 'HTMLPurifier.auto.php';
@@ -135,17 +116,12 @@ if ($_POST)
         $extra = 'WebTest.php';
         echo 'This battle has been reported.';
         die(header("refresh: 2; url= $extra"));
-
     }
     session_start();
-    if (!isset($_SESSION['time']))
-    {
+    if (!isset($_SESSION['time'])) {
         $_SESSION['time'] = time();
-    }
-    else
-    {
-        if (time() - $_SESSION['time'] < 3)
-        {
+    } else {
+        if (time() - $_SESSION['time'] < 3) {
             die('Sorry,to prevent malicious usage you can only execute one simulation each 3 seconds');
         }
         $_SESSION['time'] = time();
@@ -191,9 +167,7 @@ if ($_POST)
     $body->insertBefore($form, $body->firstChild);
 
     echo $dom->saveHTML();
-}
-else
-{
+} else {
     $bad = file_get_contents('bad.txt');
     $good = file_get_contents('good.txt');
     $count = floor(file_get_contents('count.txt'));
@@ -201,8 +175,5 @@ else
     $reslist = WebTest::$reslist;
     $combatCaps = WebTest::$CombatCaps;
     $pricelist = WebTest::$pricelist;
-    require ('WebTestGui.html');
-
+    require('WebTestGui.html');
 }
-
-?>

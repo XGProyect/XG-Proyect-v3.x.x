@@ -3,13 +3,14 @@
 /**
  * Validates ftp (File Transfer Protocol) URIs as defined by generic RFC 1738.
  */
-class HTMLPurifier_URIScheme_ftp extends HTMLPurifier_URIScheme {
-
+class HTMLPurifier_URIScheme_ftp extends HTMLPurifier_URIScheme
+{
     public $default_port = 21;
     public $browsable = true; // usually
     public $hierarchical = true;
 
-    public function doValidate(&$uri, $config, $context) {
+    public function doValidate(&$uri, $config, $context)
+    {
         $uri->query    = null;
 
         // typecode check
@@ -36,7 +37,6 @@ class HTMLPurifier_URIScheme_ftp extends HTMLPurifier_URIScheme {
 
         return true;
     }
-
 }
 
 // vim: et sw=4 sts=4

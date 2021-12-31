@@ -27,16 +27,20 @@
  */
 class HTMLPurifier_StringHashParser
 {
-
     public $default = 'ID';
 
     /**
      * Parses a file that contains a single string-hash.
      */
-    public function parseFile($file) {
-        if (!file_exists($file)) return false;
+    public function parseFile($file)
+    {
+        if (!file_exists($file)) {
+            return false;
+        }
         $fh = fopen($file, 'r');
-        if (!$fh) return false;
+        if (!$fh) {
+            return false;
+        }
         $ret = $this->parseHandle($fh);
         fclose($fh);
         return $ret;
@@ -45,11 +49,16 @@ class HTMLPurifier_StringHashParser
     /**
      * Parses a file that contains multiple string-hashes delimited by '----'
      */
-    public function parseMultiFile($file) {
-        if (!file_exists($file)) return false;
+    public function parseMultiFile($file)
+    {
+        if (!file_exists($file)) {
+            return false;
+        }
         $ret = array();
         $fh = fopen($file, 'r');
-        if (!$fh) return false;
+        if (!$fh) {
+            return false;
+        }
         while (!feof($fh)) {
             $ret[] = $this->parseHandle($fh);
         }
@@ -65,23 +74,32 @@ class HTMLPurifier_StringHashParser
      * @param $fh File handle with pointer at start of valid string-hash
      *            block.
      */
-    protected function parseHandle($fh) {
+    protected function parseHandle($fh)
+    {
         $state   = false;
         $single  = false;
         $ret     = array();
         do {
             $line = fgets($fh);
-            if ($line === false) break;
+            if ($line === false) {
+                break;
+            }
             $line = rtrim($line, "\n\r");
-            if (!$state && $line === '') continue;
-            if ($line === '----') break;
+            if (!$state && $line === '') {
+                continue;
+            }
+            if ($line === '----') {
+                break;
+            }
             if (strncmp('--#', $line, 3) === 0) {
                 // Comment
                 continue;
             } elseif (strncmp('--', $line, 2) === 0) {
                 // Multiline declaration
                 $state = trim($line, '- ');
-                if (!isset($ret[$state])) $ret[$state] = '';
+                if (!isset($ret[$state])) {
+                    $ret[$state] = '';
+                }
                 continue;
             } elseif (!$state) {
                 $single = true;
@@ -104,7 +122,6 @@ class HTMLPurifier_StringHashParser
         } while (!feof($fh));
         return $ret;
     }
-
 }
 
 // vim: et sw=4 sts=4

@@ -5,7 +5,7 @@
  *  Copyright (C) 2013  Jstar
  *
  * This file is part of OPBE.
- * 
+ *
  * OPBE is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -26,12 +26,12 @@
  * @version beta(26-10-2013)
  * @link https://github.com/jstar88/opbe
  */
-require ("../../RunnableTest.php");
+require("../../RunnableTest.php");
 class Shuffle extends RunnableTest
 {
     public function getAttachers()
     {
-        $fleet = new Fleet(1,array(
+        $fleet = new Fleet(1, array(
             $this->getShipType(206, 50),
             $this->getShipType(207, 50),
             $this->getShipType(204, 150)));
@@ -40,7 +40,7 @@ class Shuffle extends RunnableTest
     }
     public function getDefenders()
     {
-        $fleet = new Fleet(2,array(
+        $fleet = new Fleet(2, array(
             $this->getShipType(210, 150),
             $this->getShipType(215, 50),
             $this->getShipType(207, 20)));
@@ -49,5 +49,3 @@ class Shuffle extends RunnableTest
     }
 }
 new Shuffle();
-
-?>

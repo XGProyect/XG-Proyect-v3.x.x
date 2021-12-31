@@ -26,17 +26,17 @@
 
 class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
 {
-
     private $factory;
 
-    public function __construct() {
+    public function __construct()
+    {
         // setup the factory
         parent::__construct();
         $this->factory = new HTMLPurifier_TokenFactory();
     }
 
-    public function tokenizeHTML($html, $config, $context) {
-
+    public function tokenizeHTML($html, $config, $context)
+    {
         $html = $this->normalize($html, $config, $context);
 
         // attempt to armor stray angled brackets that cannot possibly
@@ -67,7 +67,9 @@ class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
             $doc->getElementsByTagName('html')->item(0)-> // <html>
                   getElementsByTagName('body')->item(0)-> //   <body>
                   getElementsByTagName('div')->item(0)    //     <div>
-            , $tokens);
+            ,
+            $tokens
+        );
         return $tokens;
     }
 
@@ -78,8 +80,8 @@ class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
      * @param $tokens   Array-list of already tokenized tokens.
      * @returns Tokens of node appended to previously passed tokens.
      */
-    protected function tokenizeDOM($node, &$tokens) {
-
+    protected function tokenizeDOM($node, &$tokens)
+    {
         $level = 0;
         $nodes = array($level => array($node));
         $closingNodes = array();
@@ -101,7 +103,7 @@ class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
             }
             $level--;
             if ($level && isset($closingNodes[$level])) {
-                while($node = array_pop($closingNodes[$level])) {
+                while ($node = array_pop($closingNodes[$level])) {
                     $this->createEndNode($node, $tokens);
                 }
             }
@@ -116,7 +118,8 @@ class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
      *                    tag you're dealing with.
      * @returns bool if the token needs an endtoken
      */
-    protected function createStartNode($node, &$tokens, $collect) {
+    protected function createStartNode($node, &$tokens, $collect)
+    {
         // intercept non element nodes. WE MUST catch all of them,
         // but we're not getting the character reference nodes because
         // those should have been preprocessed
@@ -173,7 +176,8 @@ class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
         }
     }
 
-    protected function createEndNode($node, &$tokens) {
+    protected function createEndNode($node, &$tokens)
+    {
         $tokens[] = $this->factory->createEnd($node->tagName);
     }
 
@@ -184,11 +188,14 @@ class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
      * @param $attribute_list DOMNamedNodeMap of DOMAttr objects.
      * @returns Associative array of attributes.
      */
-    protected function transformAttrToAssoc($node_map) {
+    protected function transformAttrToAssoc($node_map)
+    {
         // NamedNodeMap is documented very well, so we're using undocumented
         // features, namely, the fact that it implements Iterator and
         // has a ->length attribute
-        if ($node_map->length === 0) return array();
+        if ($node_map->length === 0) {
+            return array();
+        }
         $array = array();
         foreach ($node_map as $attr) {
             $array[$attr->name] = $attr->value;
@@ -199,13 +206,16 @@ class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
     /**
      * An error handler that mutes all errors
      */
-    public function muteErrorHandler($errno, $errstr) {}
+    public function muteErrorHandler($errno, $errstr)
+    {
+    }
 
     /**
      * Callback function for undoing escaping of stray angled brackets
      * in comments
      */
-    public function callbackUndoCommentSubst($matches) {
+    public function callbackUndoCommentSubst($matches)
+    {
         return '<!--' . strtr($matches[1], array('&amp;'=>'&','&lt;'=>'<')) . $matches[2];
     }
 
@@ -213,21 +223,27 @@ class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
      * Callback function that entity-izes ampersands in comments so that
      * callbackUndoCommentSubst doesn't clobber them
      */
-    public function callbackArmorCommentEntities($matches) {
+    public function callbackArmorCommentEntities($matches)
+    {
         return '<!--' . str_replace('&', '&amp;', $matches[1]) . $matches[2];
     }
 
     /**
      * Wraps an HTML fragment in the necessary HTML
      */
-    protected function wrapHTML($html, $config, $context) {
+    protected function wrapHTML($html, $config, $context)
+    {
         $def = $config->getDefinition('HTML');
         $ret = '';
 
         if (!empty($def->doctype->dtdPublic) || !empty($def->doctype->dtdSystem)) {
             $ret .= '<!DOCTYPE html ';
-            if (!empty($def->doctype->dtdPublic)) $ret .= 'PUBLIC "' . $def->doctype->dtdPublic . '" ';
-            if (!empty($def->doctype->dtdSystem)) $ret .= '"' . $def->doctype->dtdSystem . '" ';
+            if (!empty($def->doctype->dtdPublic)) {
+                $ret .= 'PUBLIC "' . $def->doctype->dtdPublic . '" ';
+            }
+            if (!empty($def->doctype->dtdSystem)) {
+                $ret .= '"' . $def->doctype->dtdSystem . '" ';
+            }
             $ret .= '>';
         }
 
@@ -237,7 +253,6 @@ class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
         $ret .= '</head><body><div>'.$html.'</div></body></html>';
         return $ret;
     }
-
 }
 
 // vim: et sw=4 sts=4

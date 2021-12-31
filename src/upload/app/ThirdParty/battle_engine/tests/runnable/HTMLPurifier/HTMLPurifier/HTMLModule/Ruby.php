@@ -6,13 +6,16 @@
  */
 class HTMLPurifier_HTMLModule_Ruby extends HTMLPurifier_HTMLModule
 {
-
     public $name = 'Ruby';
 
-    public function setup($config) {
-        $this->addElement('ruby', 'Inline',
+    public function setup($config)
+    {
+        $this->addElement(
+            'ruby',
+            'Inline',
             'Custom: ((rb, (rt | (rp, rt, rp))) | (rbc, rtc, rtc?))',
-            'Common');
+            'Common'
+        );
         $this->addElement('rbc', false, 'Required: rb', 'Common');
         $this->addElement('rtc', false, 'Required: rt', 'Common');
         $rb = $this->addElement('rb', false, 'Inline', 'Common');
@@ -21,7 +24,6 @@ class HTMLPurifier_HTMLModule_Ruby extends HTMLPurifier_HTMLModule
         $rt->excludes = array('ruby' => true);
         $this->addElement('rp', false, 'Optional: #PCDATA', 'Common');
     }
-
 }
 
 // vim: et sw=4 sts=4

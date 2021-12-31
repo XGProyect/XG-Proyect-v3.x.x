@@ -5,7 +5,7 @@
  *  Copyright (C) 2013  Jstar
  *
  * This file is part of OPBE.
- * 
+ *
  * OPBE is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -28,7 +28,6 @@
  */
 abstract class Events
 {
-
     public static function event_moon($moonProb)
     {
         $SizeMin = MOON_MIN_START_SIZE + ($moonProb * MOON_MIN_FACTOR);
@@ -38,5 +37,3 @@ abstract class Events
         return array('size' => $size, 'fields' => $fields);
     }
 }
-
-?>

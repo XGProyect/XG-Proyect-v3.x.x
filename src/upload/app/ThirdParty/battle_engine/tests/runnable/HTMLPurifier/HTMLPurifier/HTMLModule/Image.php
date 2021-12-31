@@ -7,13 +7,16 @@
  */
 class HTMLPurifier_HTMLModule_Image extends HTMLPurifier_HTMLModule
 {
-
     public $name = 'Image';
 
-    public function setup($config) {
+    public function setup($config)
+    {
         $max = $config->get('HTML.MaxImgLength');
         $img = $this->addElement(
-            'img', 'Inline', 'Empty', 'Common',
+            'img',
+            'Inline',
+            'Empty',
+            'Common',
             array(
                 'alt*' => 'Text',
                 // According to the spec, it's Length, but percents can
@@ -34,7 +37,6 @@ class HTMLPurifier_HTMLModule_Image extends HTMLPurifier_HTMLModule
         $img->attr_transform_post[] =
             new HTMLPurifier_AttrTransform_ImgRequired();
     }
-
 }
 
 // vim: et sw=4 sts=4

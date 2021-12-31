@@ -15,7 +15,8 @@ class HTMLPurifier_StringHash extends ArrayObject
     /**
      * Retrieves a value, and logs the access.
      */
-    public function offsetGet($index) {
+    public function offsetGet($index)
+    {
         $this->accessed[$index] = true;
         return parent::offsetGet($index);
     }
@@ -24,14 +25,16 @@ class HTMLPurifier_StringHash extends ArrayObject
      * Returns a lookup array of all array indexes that have been accessed.
      * @return Array in form array($index => true).
      */
-    public function getAccessed() {
+    public function getAccessed()
+    {
         return $this->accessed;
     }
 
     /**
      * Resets the access array.
      */
-    public function resetAccessed() {
+    public function resetAccessed()
+    {
         $this->accessed = array();
     }
 }

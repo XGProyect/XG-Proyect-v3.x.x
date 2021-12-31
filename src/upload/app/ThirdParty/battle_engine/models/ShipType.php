@@ -5,7 +5,7 @@
  *  Copyright (C) 2015  Jstar
  *
  * This file is part of OPBE.
- * 
+ *
  * OPBE is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -28,7 +28,6 @@
  */
 class ShipType extends Type
 {
-
     private $originalPower;
     private $originalShield;
     private $singleShield;
@@ -49,7 +48,7 @@ class ShipType extends Type
 
     /**
      * ShipType::__construct()
-     * 
+     *
      * @param int $id
      * @param int $count
      * @param array $rf
@@ -91,12 +90,14 @@ class ShipType extends Type
      */
     public function setWeaponsTech($level)
     {
-        if (!is_numeric($level))
+        if (!is_numeric($level)) {
             return;
+        }
         $level = intval($level);
         $diff = $level - $this->weapons_tech;
-        if ($diff < 0)
+        if ($diff < 0) {
             throw new Exception('Trying to decrease tech');
+        }
         $this->weapons_tech = $level;
         $incr = 1 + WEAPONS_TECH_INCREMENT_FACTOR * $diff;
         $this->singlePower *= $incr;
@@ -111,12 +112,14 @@ class ShipType extends Type
      */
     public function setShieldsTech($level)
     {
-        if (!is_numeric($level))
+        if (!is_numeric($level)) {
             return;
+        }
         $level = intval($level);
         $diff = $level - $this->shields_tech;
-        if ($diff < 0)
+        if ($diff < 0) {
             throw new Exception('Trying to decrease tech');
+        }
         $this->shields_tech = $level;
         $incr = 1 + SHIELDS_TECH_INCREMENT_FACTOR * $diff;
         $this->singleShield *= $incr;
@@ -132,12 +135,14 @@ class ShipType extends Type
      */
     public function setArmourTech($level)
     {
-        if (!is_numeric($level))
+        if (!is_numeric($level)) {
             return;
+        }
         $level = intval($level);
         $diff = $level - $this->armour_tech;
-        if ($diff < 0)
+        if ($diff < 0) {
             throw new Exception('Trying to decrease tech');
+        }
         $this->armour_tech = $level;
         $incr = 1 + ARMOUR_TECH_INCREMENT_FACTOR * $diff;
         $this->singleLife *= $incr;
@@ -173,7 +178,7 @@ class ShipType extends Type
     /**
      * ShipType::decrement()
      * Decrement the amount of ships of this type.
-     * @param int $number : the amount of ships to be removed. 
+     * @param int $number : the amount of ships to be removed.
      * @param mixed $remainLife : the life of removed ships, default = full health
      * @param mixed $remainShield : the shield of removed ships, default = full shield
      * @return void
@@ -277,7 +282,7 @@ class ShipType extends Type
 
     /**
      * ShipType::getShield()
-     * Get the shield value of a single ship of this type. 
+     * Get the shield value of a single ship of this type.
      * @return int
      */
     public function getShield()
@@ -300,7 +305,7 @@ class ShipType extends Type
 
     /**
      * ShipType::getHull()
-     * Get the hull value of a single ship of this type. 
+     * Get the hull value of a single ship of this type.
      * @return int
      */
     public function getHull()
@@ -357,10 +362,12 @@ class ShipType extends Type
      */
     public function inflictDamage($damage, $shotsToThisShipType)
     {
-        if ($shotsToThisShipType == 0)
+        if ($shotsToThisShipType == 0) {
             return;
-        if ($shotsToThisShipType < 0)
+        }
+        if ($shotsToThisShipType < 0) {
             throw new Exception("Negative amount of shotsToThisShipType!");
+        }
 
         log_var('Defender single hull', $this->singleLife);
         log_var('Defender count', $this->getCount());
@@ -431,7 +438,7 @@ class ShipType extends Type
 
     /**
      * ShipType::__toString()
-     * 
+     *
      * @return null
      */
     public function __toString()
@@ -453,7 +460,7 @@ class ShipType extends Type
 
     /**
      * ShipType::cloneMe()
-     * 
+     *
      * @return ShipType
      */
     public function cloneMe()
