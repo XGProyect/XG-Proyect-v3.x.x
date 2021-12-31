@@ -64,7 +64,7 @@ class HTMLPurifier_TagTransform_Font extends HTMLPurifier_TagTransform
         if (isset($attr['size'])) {
             // normalize large numbers
             if ($attr['size'] !== '') {
-                if ($attr['size']{0} == '+' || $attr['size']{0} == '-') {
+                if ($attr['size'][0] == '+' || $attr['size'][0] == '-') {
                     $size = (int) $attr['size'];
                     if ($size < -2) $attr['size'] = '-2';
                     if ($size > 4)  $attr['size'] = '+4';
