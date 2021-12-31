@@ -1,4 +1,5 @@
-FROM php:7.3-apache
+ARG PHP_VERSION=7.3
+FROM php:${PHP_VERSION}-apache
 
 # install the PHP extensions we need
 RUN set -ex; \
