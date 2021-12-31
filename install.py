@@ -9,6 +9,7 @@ import os
 import sys
 import re
 from uuid import uuid4
+from time import sleep
 
 """
   XG Proyect Automatic install script
@@ -40,9 +41,9 @@ class Step:
         """ Main action """
         logging.debug(f"POST {self.url}")
         r = requests.post(self.url, data=self.body, timeout=10, allow_redirects=True)
-        assert r.status_code == 200, f"HTTP code {r.status_code}"
-        assert "alert" not in r.text
-        assert "Warning" not in r.text
+        assert "alert" not in r.text, re.sub(r'<.*?>', '', r.text).strip()
+        assert "Warning" not in r.text, re.sub(r'<.*?>', '', r.text).strip()
+        assert r.status_code == 200, f"HTTP code {r.status_code}\n{r.text}"
         return True
 
     def revert(self):
@@ -198,6 +199,7 @@ def main(args):
         step.execute()
         if not step.success:
             sys.exit(1)
+        sleep(1)
 
     logging.info("Success! Ensure to delete INSTALL folder!")
 
