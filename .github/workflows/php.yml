@@ -7,6 +7,7 @@ on:
 
 jobs:
   test:
+    name: Run tests and lint
     runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v2
@@ -29,12 +30,31 @@ jobs:
       continue-on-error: true
 
     - name: Run phplint
-      uses: overtrue/phplint@2.1.0
+      uses: overtrue/phplint@4.1.0
       with:
         path: src/upload/
         options: --exclude=*.log
-  min-version:
+  php-cs-fixer:
+    name: Run PHP-CS-Fixer
     runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v2
+    - uses: docker://oskarstark/php-cs-fixer-ga:3.4.0.1
+      with:
+        args: --diff --dry-run src/
+  min-version:
+    name: Check minimum version
+    runs-on: ubuntu-20.04
+    # disabled, table xgp.functions does not exist
+    if: false
+    services:
+      mysql:
+        image: bitnami/mariadb:10.6.5
+        ports:
+          - 3306:3306
+        env:
+          MARIADB_ROOT_PASSWORD: xgproyect
+          MARIADB_DATABASE: xgp
     steps:
     - uses: actions/checkout@v2
 
@@ -51,4 +71,6 @@ jobs:
       run: composer install --prefer-dist --no-progress --no-suggest
 
     - name: Run phpcompatinfo
+      env:
+        DATABASE_URL: "mysql://root:xgproyect@127.0.0.1:${{ job.services.nginx.ports['3306'] }}/xgp?serverVersion=mariadb-10.6.5"
       run: composer run-script phpcompatinfo
