@@ -3,7 +3,8 @@ services:
   xgproyect-v3:
     build:
       context: .
-      dockerfile: Dockerfile
+      args:
+        PHP_VERSION: 7.3
     container_name: xgproyect-v3
     ports:
       - 127.0.0.1:80:80
