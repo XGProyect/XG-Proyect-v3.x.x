@@ -11,9 +11,13 @@ RUN set -ex; \
 		libjpeg-dev \
 		libpng-dev \
 		libzip-dev \
+		libfreetype6-dev \
 	; \
 	\
-	docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr; \
+	# for PHP <= 7.3
+	(docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr || \
+	# for PHP >= 7.4
+	docker-php-ext-configure gd --with-freetype --with-jpeg); \
 	docker-php-ext-install gd mysqli opcache zip; \
 	\
 # reset apt-mark's "manual" list so that "purge --auto-remove" will remove all build dependencies

@@ -35,6 +35,25 @@ Point you browser to your localhost and follow the step by step instructions pro
 composer create-project xgproyect/xgproyect
 ```
 
+## How to run XG Proyect?
+Easiest way to do it, is using Docker.
+
+```
+docker-compose up
+```
+
+You can also build with different PHP versions:
+```
+docker build -t xgproyect:7.4 --build-arg PHP_VERSION=7.4 .
+```
+
+Or build and run, altogether, specifying a PHP version:
+```
+docker-compose build --build-arg PHP_VERSION=8.0 && docker-compose up -d
+```
+
+Simple change the **PHP version** to any other **version** that you'd like to test.
+
 ## Who is using XG Proyect?
 
 We are happy to deliver this software giving others the possibility to have a good OGame Clon.  
@@ -44,7 +63,6 @@ On the other hand, it's a pleasure to see people using XG Proyect.
 <img align="center" img src="https://xgproyect.org/wp-content/uploads/2019/10/xgp-new-logo-black.png" width="150px" title="XG Proyect" alt="xgp-logo">
 
 ## We support
-
 The following are tools or frameworks that we use to do our coding experience better!
 
 <p>
