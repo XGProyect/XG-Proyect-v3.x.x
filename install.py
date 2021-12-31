@@ -205,28 +205,28 @@ def parser():
     parser = argparse.ArgumentParser(description='XG Proyect Installer')
     parser.add_argument(
         "base_url", nargs="?",
-        default="http://localhost", help="Website location"
+        default=os.getenv("XGPROYECT_URL", "http://localhost"), help="Website location"
     )
     parser.add_argument(
-        "-H", "--mysql-host", default="127.0.0.1:3306", help="MySQL hostname and port"
+        "-H", "--mysql-host", default=os.getenv("MYSQL_HOST", "127.0.0.1:3306"), help="MySQL hostname and port"
     )
     parser.add_argument(
-        "-u", "--mysql-user", default="root", help="MySQL username"
+        "-u", "--mysql-user", default=os.getenv("MYSQL_USER", "root"), help="MySQL username"
     )
     parser.add_argument(
-        "-P", "--mysql-password", default="", help="MySQL password"
+        "-P", "--mysql-password", default=os.getenv("MYSQL_PASSWORD", ""), help="MySQL password"
     )
     parser.add_argument(
-        "-d", "--mysql-database", default="xgp", help="MySQL database"
+        "-d", "--mysql-database", default=os.getenv("MYSQL_DATABASE", "xgp"), help="MySQL database"
     )
     parser.add_argument(
-        "-xu", "--admin-user", default="admin", help="XG Proyect username"
+        "-xu", "--admin-user", default=os.getenv("XGPROYECT_USER", "admin"), help="XG Proyect username"
     )
     parser.add_argument(
-        "-xe", "--admin-email", default="admin@example.com", help="XG Proyect email"
+        "-xe", "--admin-email", default=os.getenv("XGPROYECT_EMAIL", "admin@example.com"), help="XG Proyect email"
     )
     parser.add_argument(
-        "-xp", "--admin-password", default="", help="XG Proyect password"
+        "-xp", "--admin-password", default=os.getenv("XGPROYECT_PASSWORD", ""), help="XG Proyect password"
     )
     parser.add_argument(
         "-v", "--debug", action="store_true", help="Show debug messages"
