@@ -39,7 +39,7 @@ jobs:
     runs-on: ubuntu-20.04
     services:
       mysql:
-        image: bitnami/mariadb:10.6
+        image: bitnami/mariadb:10.6.5
         ports:
           - 3306:3306
         env:
@@ -62,5 +62,5 @@ jobs:
 
     - name: Run phpcompatinfo
       env:
-        DATABASE_URL: "mysql://root:xgproyect@mysql:${{ job.services.nginx.ports['3306'] }}/xgp?serverVersion=mariadb-10.6"
+        DATABASE_URL: "mysql://root:xgproyect@mysql:${{ job.services.nginx.ports['3306'] }}/xgp?serverVersion=mariadb-10.6.5"
       run: composer run-script phpcompatinfo
