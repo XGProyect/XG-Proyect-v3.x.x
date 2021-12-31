@@ -1,0 +1,12 @@
+<?php
+
+$finder = PhpCsFixer\Finder::create()
+    ->in('src')
+;
+
+return PhpCsFixer\Config::create()
+    ->setRules([
+        '@Symfony' => true,
+    ])
+    ->setFinder($finder)
+;

@@ -41,7 +41,7 @@ jobs:
     - uses: actions/checkout@v2
     - uses: docker://oskarstark/php-cs-fixer-ga:3.4.0.1
       with:
-        args: --diff src/
+        args: --diff --dry-run
   min-version:
     name: Check minimum version
     runs-on: ubuntu-20.04
