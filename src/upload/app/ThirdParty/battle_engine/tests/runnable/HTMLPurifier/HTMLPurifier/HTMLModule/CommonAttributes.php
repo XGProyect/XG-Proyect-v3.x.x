@@ -20,7 +20,6 @@ class HTMLPurifier_HTMLModule_CommonAttributes extends HTMLPurifier_HTMLModule
             0 => array('Core', 'I18N')
         )
     );
-
 }
 
 // vim: et sw=4 sts=4

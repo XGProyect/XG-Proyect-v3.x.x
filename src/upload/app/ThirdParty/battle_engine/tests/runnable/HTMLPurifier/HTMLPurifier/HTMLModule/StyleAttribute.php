@@ -6,7 +6,6 @@
  */
 class HTMLPurifier_HTMLModule_StyleAttribute extends HTMLPurifier_HTMLModule
 {
-
     public $name = 'StyleAttribute';
     public $attr_collections = array(
         // The inclusion routine differs from the Abstract Modules but
@@ -15,10 +14,10 @@ class HTMLPurifier_HTMLModule_StyleAttribute extends HTMLPurifier_HTMLModule
         'Core' => array(0 => array('Style'))
     );
 
-    public function setup($config) {
+    public function setup($config)
+    {
         $this->attr_collections['Style']['style'] = new HTMLPurifier_AttrDef_CSS();
     }
-
 }
 
 // vim: et sw=4 sts=4

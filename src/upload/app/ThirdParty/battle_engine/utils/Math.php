@@ -5,7 +5,7 @@
  *  Copyright (C) 2013  Jstar
  *
  * This file is part of OPBE.
- * 
+ *
  * OPBE is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -28,17 +28,16 @@
  */
 abstract class Math
 {
-
     public static function divide(Number $num, Number $denum, $real = false)
     {
         if ($real) {
-            if ($denum->result == 0)
+            if ($denum->result == 0) {
                 throw new Exception('denum is zero');
+            }
             $shots = floor($num->result / $denum->result);
             $rest = Math::rest($num->result, $denum->result);
             return new Number($shots, $rest);
-        }
-        else {
+        } else {
             $shots = $num->result / $denum->result;
             return new Number($shots);
         }
@@ -79,8 +78,9 @@ abstract class Math
         if (!is_callable($callback)) {
             throw new Exception();
         }
-        if (mt_rand(0, 99) < $probability)
+        if (mt_rand(0, 99) < $probability) {
             return call_user_func($callback, $callbackParam);
+        }
         return false;
     }
 
@@ -104,5 +104,3 @@ abstract class Math
       return array_map($func, $matrix);
       } */
 }
-
-?>

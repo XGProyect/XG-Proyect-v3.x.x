@@ -5,7 +5,7 @@
  *  Copyright (C) 2013  Jstar
  *
  * This file is part of OPBE.
- * 
+ *
  * OPBE is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -28,11 +28,10 @@
  */
 class Gauss
 {
-
     /**
      * Random::getNext()
      * Return an random normal number
-     * @return int 
+     * @return int
      */
     public static function getNext()
     {
@@ -120,5 +119,3 @@ class Gauss
  *     echo $s . $id . '(' . $v . ')' . '<br>';
  * }
  */
-
-?>

@@ -7,9 +7,8 @@
  */
 class HTMLPurifier_AttrTransform_Lang extends HTMLPurifier_AttrTransform
 {
-
-    public function transform($attr, $config, $context) {
-
+    public function transform($attr, $config, $context)
+    {
         $lang     = isset($attr['lang']) ? $attr['lang'] : false;
         $xml_lang = isset($attr['xml:lang']) ? $attr['xml:lang'] : false;
 
@@ -20,9 +19,7 @@ class HTMLPurifier_AttrTransform_Lang extends HTMLPurifier_AttrTransform
         }
 
         return $attr;
-
     }
-
 }
 
 // vim: et sw=4 sts=4

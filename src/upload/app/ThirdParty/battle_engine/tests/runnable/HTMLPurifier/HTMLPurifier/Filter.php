@@ -21,7 +21,6 @@
 
 class HTMLPurifier_Filter
 {
-
     /**
      * Name of the filter for identification purposes
      */
@@ -30,17 +29,18 @@ class HTMLPurifier_Filter
     /**
      * Pre-processor function, handles HTML before HTML Purifier
      */
-    public function preFilter($html, $config, $context) {
+    public function preFilter($html, $config, $context)
+    {
         return $html;
     }
 
     /**
      * Post-processor function, handles HTML after HTML Purifier
      */
-    public function postFilter($html, $config, $context) {
+    public function postFilter($html, $config, $context)
+    {
         return $html;
     }
-
 }
 
 // vim: et sw=4 sts=4

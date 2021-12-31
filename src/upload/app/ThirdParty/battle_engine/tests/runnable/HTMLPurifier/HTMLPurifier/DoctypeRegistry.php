@@ -2,7 +2,6 @@
 
 class HTMLPurifier_DoctypeRegistry
 {
-
     /**
      * Hash of doctype names to doctype objects
      */
@@ -23,26 +22,48 @@ class HTMLPurifier_DoctypeRegistry
      * @param $aliases Alias names for doctype
      * @return Editable registered doctype
      */
-    public function register($doctype, $xml = true, $modules = array(),
-        $tidy_modules = array(), $aliases = array(), $dtd_public = null, $dtd_system = null
+    public function register(
+        $doctype,
+        $xml = true,
+        $modules = array(),
+        $tidy_modules = array(),
+        $aliases = array(),
+        $dtd_public = null,
+        $dtd_system = null
     ) {
-        if (!is_array($modules)) $modules = array($modules);
-        if (!is_array($tidy_modules)) $tidy_modules = array($tidy_modules);
-        if (!is_array($aliases)) $aliases = array($aliases);
+        if (!is_array($modules)) {
+            $modules = array($modules);
+        }
+        if (!is_array($tidy_modules)) {
+            $tidy_modules = array($tidy_modules);
+        }
+        if (!is_array($aliases)) {
+            $aliases = array($aliases);
+        }
         if (!is_object($doctype)) {
             $doctype = new HTMLPurifier_Doctype(
-                $doctype, $xml, $modules, $tidy_modules, $aliases, $dtd_public, $dtd_system
+                $doctype,
+                $xml,
+                $modules,
+                $tidy_modules,
+                $aliases,
+                $dtd_public,
+                $dtd_system
             );
         }
         $this->doctypes[$doctype->name] = $doctype;
         $name = $doctype->name;
         // hookup aliases
         foreach ($doctype->aliases as $alias) {
-            if (isset($this->doctypes[$alias])) continue;
+            if (isset($this->doctypes[$alias])) {
+                continue;
+            }
             $this->aliases[$alias] = $name;
         }
         // remove old aliases
-        if (isset($this->aliases[$name])) unset($this->aliases[$name]);
+        if (isset($this->aliases[$name])) {
+            unset($this->aliases[$name]);
+        }
         return $doctype;
     }
 
@@ -53,8 +74,11 @@ class HTMLPurifier_DoctypeRegistry
      * @param $doctype Name of doctype
      * @return Editable doctype object
      */
-    public function get($doctype) {
-        if (isset($this->aliases[$doctype])) $doctype = $this->aliases[$doctype];
+    public function get($doctype)
+    {
+        if (isset($this->aliases[$doctype])) {
+            $doctype = $this->aliases[$doctype];
+        }
         if (!isset($this->doctypes[$doctype])) {
             trigger_error('Doctype ' . htmlspecialchars($doctype) . ' does not exist', E_USER_ERROR);
             $anon = new HTMLPurifier_Doctype($doctype);
@@ -71,19 +95,25 @@ class HTMLPurifier_DoctypeRegistry
      *       Generator whether or not the current document is XML
      *       based or not).
      */
-    public function make($config) {
+    public function make($config)
+    {
         return clone $this->get($this->getDoctypeFromConfig($config));
     }
 
     /**
      * Retrieves the doctype from the configuration object
      */
-    public function getDoctypeFromConfig($config) {
+    public function getDoctypeFromConfig($config)
+    {
         // recommended test
         $doctype = $config->get('HTML.Doctype');
-        if (!empty($doctype)) return $doctype;
+        if (!empty($doctype)) {
+            return $doctype;
+        }
         $doctype = $config->get('HTML.CustomDoctype');
-        if (!empty($doctype)) return $doctype;
+        if (!empty($doctype)) {
+            return $doctype;
+        }
         // backwards-compatibility
         if ($config->get('HTML.XHTML')) {
             $doctype = 'XHTML 1.0';
@@ -97,7 +127,6 @@ class HTMLPurifier_DoctypeRegistry
         }
         return $doctype;
     }
-
 }
 
 // vim: et sw=4 sts=4

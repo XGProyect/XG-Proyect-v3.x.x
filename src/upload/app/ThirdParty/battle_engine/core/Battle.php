@@ -5,7 +5,7 @@
  *  Copyright (C) 2013  Jstar
  *
  * This file is part of OPBE.
- * 
+ *
  * OPBE is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -28,7 +28,6 @@
  */
 class Battle
 {
-
     private $attackers;
     private $defenders;
     private $report;
@@ -36,7 +35,7 @@ class Battle
 
     /**
      * Battle::__construct()
-     * 
+     *
      * @param PlayerGroup $attackers
      * @param PlayerGroup $defenders
      * @return Battle
@@ -51,13 +50,14 @@ class Battle
 
     /**
      * Battle::startBattle()
-     * 
+     *
      * @return null
      */
     public function startBattle($debug = false)
     {
-        if (!$debug)
+        if (!$debug) {
             ob_start();
+        }
         $this->battleStarted = true;
         //only for initial fleets presentation
         log_var('attackers', $this->attackers);
@@ -71,8 +71,9 @@ class Battle
             if ($att_lose || $deff_lose) {
                 $this->checkWhoWon($att_lose, $deff_lose);
                 $this->report->setBattleResult($this->attackers->battleResult, $this->defenders->battleResult);
-                if (!$debug)
+                if (!$debug) {
                     ob_get_clean();
+                }
                 return;
             }
             //initialize the round
@@ -87,8 +88,9 @@ class Battle
         }
         //check status after all rounds
         $this->checkWhoWon($this->attackers->isEmpty(), $this->defenders->isEmpty());
-        if (!$debug)
+        if (!$debug) {
             ob_get_clean();
+        }
         return true;
     }
 
@@ -115,7 +117,7 @@ class Battle
 
     /**
      * Battle::__toString()
-     * 
+     *
      * @return
      */
     public function __toString()

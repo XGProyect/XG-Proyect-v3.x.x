@@ -6,7 +6,6 @@
  */
 abstract class HTMLPurifier_Definition
 {
-
     /**
      * Has setup() been called yet?
      */
@@ -39,12 +38,14 @@ abstract class HTMLPurifier_Definition
      * Setup function that aborts if already setup
      * @param $config HTMLPurifier_Config instance
      */
-    public function setup($config) {
-        if ($this->setup) return;
+    public function setup($config)
+    {
+        if ($this->setup) {
+            return;
+        }
         $this->setup = true;
         $this->doSetup($config);
     }
-
 }
 
 // vim: et sw=4 sts=4

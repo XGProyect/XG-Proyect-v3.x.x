@@ -9,7 +9,6 @@
  */
 class HTMLPurifier_AttrDef_Enum extends HTMLPurifier_AttrDef
 {
-
     /**
      * Lookup table of valid values.
      * @todo Make protected
@@ -27,13 +26,15 @@ class HTMLPurifier_AttrDef_Enum extends HTMLPurifier_AttrDef
      * @param $case_sensitive Bool indicating whether or not case sensitive
      */
     public function __construct(
-        $valid_values = array(), $case_sensitive = false
+        $valid_values = array(),
+        $case_sensitive = false
     ) {
         $this->valid_values = array_flip($valid_values);
         $this->case_sensitive = $case_sensitive;
     }
 
-    public function validate($string, $config, $context) {
+    public function validate($string, $config, $context)
+    {
         $string = trim($string);
         if (!$this->case_sensitive) {
             // we may want to do full case-insensitive libraries
@@ -49,7 +50,8 @@ class HTMLPurifier_AttrDef_Enum extends HTMLPurifier_AttrDef
      *      valid values. Example: "foo,bar,baz". Prepend "s:" to make
      *      case sensitive
      */
-    public function make($string) {
+    public function make($string)
+    {
         if (strlen($string) > 2 && $string[0] == 's' && $string[1] == ':') {
             $string = substr($string, 2);
             $sensitive = true;
@@ -59,7 +61,6 @@ class HTMLPurifier_AttrDef_Enum extends HTMLPurifier_AttrDef
         $values = explode(',', $string);
         return new HTMLPurifier_AttrDef_Enum($values, $sensitive);
     }
-
 }
 
 // vim: et sw=4 sts=4

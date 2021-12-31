@@ -28,7 +28,8 @@ abstract class HTMLPurifier_ChildDef
      * Get lookup of tag names that should not close this element automatically.
      * All other elements will do so.
      */
-    public function getAllowedElements($config) {
+    public function getAllowedElements($config)
+    {
         return $this->elements;
     }
 

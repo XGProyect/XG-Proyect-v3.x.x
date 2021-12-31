@@ -2,9 +2,8 @@
 
 class HTMLPurifier_HTMLModule_Tidy_XHTMLAndHTML4 extends HTMLPurifier_HTMLModule_Tidy
 {
-
-    public function makeFixes() {
-
+    public function makeFixes()
+    {
         $r = array();
 
         // == deprecated tag transforms ===================================
@@ -12,7 +11,7 @@ class HTMLPurifier_HTMLModule_Tidy_XHTMLAndHTML4 extends HTMLPurifier_HTMLModule
         $r['font']   = new HTMLPurifier_TagTransform_Font();
         $r['menu']   = new HTMLPurifier_TagTransform_Simple('ul');
         $r['dir']    = new HTMLPurifier_TagTransform_Simple('ul');
-        $r['center'] = new HTMLPurifier_TagTransform_Simple('div',  'text-align:center;');
+        $r['center'] = new HTMLPurifier_TagTransform_Simple('div', 'text-align:center;');
         $r['u']      = new HTMLPurifier_TagTransform_Simple('span', 'text-decoration:underline;');
         $r['s']      = new HTMLPurifier_TagTransform_Simple('span', 'text-decoration:line-through;');
         $r['strike'] = new HTMLPurifier_TagTransform_Simple('span', 'text-decoration:line-through;');
@@ -63,9 +62,11 @@ class HTMLPurifier_HTMLModule_Tidy_XHTMLAndHTML4 extends HTMLPurifier_HTMLModule
 
         // @align for h1, h2, h3, h4, h5, h6, p, div ----------------------
         // {{{
-            $align_lookup = array();
-            $align_values = array('left', 'right', 'center', 'justify');
-            foreach ($align_values as $v) $align_lookup[$v] = "text-align:$v;";
+        $align_lookup = array();
+        $align_values = array('left', 'right', 'center', 'justify');
+        foreach ($align_values as $v) {
+            $align_lookup[$v] = "text-align:$v;";
+        }
         // }}}
         $r['h1@align'] =
         $r['h2@align'] =
@@ -125,19 +126,19 @@ class HTMLPurifier_HTMLModule_Tidy_XHTMLAndHTML4 extends HTMLPurifier_HTMLModule
 
         // @type for li, ol, ul -------------------------------------------
         // {{{
-            $ul_types = array(
+        $ul_types = array(
                 'disc'   => 'list-style-type:disc;',
                 'square' => 'list-style-type:square;',
                 'circle' => 'list-style-type:circle;'
             );
-            $ol_types = array(
+        $ol_types = array(
                 '1'   => 'list-style-type:decimal;',
                 'i'   => 'list-style-type:lower-roman;',
                 'I'   => 'list-style-type:upper-roman;',
                 'a'   => 'list-style-type:lower-alpha;',
                 'A'   => 'list-style-type:upper-alpha;'
             );
-            $li_types = $ul_types + $ol_types;
+        $li_types = $ul_types + $ol_types;
         // }}}
 
         $r['ul@type'] = new HTMLPurifier_AttrTransform_EnumToCSS('type', $ul_types);
@@ -153,9 +154,7 @@ class HTMLPurifier_HTMLModule_Tidy_XHTMLAndHTML4 extends HTMLPurifier_HTMLModule
         $r['hr@width'] = new HTMLPurifier_AttrTransform_Length('width');
 
         return $r;
-
     }
-
 }
 
 // vim: et sw=4 sts=4

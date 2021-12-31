@@ -5,7 +5,7 @@
  *  Copyright (C) 2013  Jstar
  *
  * This file is part of OPBE.
- * 
+ *
  * OPBE is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -26,12 +26,12 @@
  * @version beta(26-10-2013)
  * @link https://github.com/jstar88/opbe
  */
-require ("../../RunnableTest.php");
+require("../../RunnableTest.php");
 class NoDef extends RunnableTest
 {
     public function getAttachers()
     {
-        $fleet = new Fleet(1,array($this->getShipType(207, 50)));
+        $fleet = new Fleet(1, array($this->getShipType(207, 50)));
         $player = new Player(1, array($fleet));
         return new PlayerGroup(array($player));
     }
@@ -42,5 +42,3 @@ class NoDef extends RunnableTest
     }
 }
 new NoDef();
-
-?>

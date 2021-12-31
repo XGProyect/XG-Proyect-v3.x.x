@@ -48,7 +48,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
  */
 class CI_Lang
 {
-
     /**
      * List of translations
      *
@@ -184,5 +183,4 @@ class CI_Lang
 
         return $value;
     }
-
 }

@@ -5,7 +5,7 @@
  *  Copyright (C) 2013  Jstar
  *
  * This file is part of OPBE.
- * 
+ *
  * OPBE is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -28,7 +28,6 @@
  */
 class Fleet extends IterableUtil
 {
-
     protected $array = array();
     private $count;
     private $id;
@@ -77,12 +76,15 @@ class Fleet extends IterableUtil
             $shipType->setShieldsTech($shields);
             $shipType->setArmourTech($armour);
         }
-        if (is_numeric($weapons))
+        if (is_numeric($weapons)) {
             $this->weapons_tech = intval($weapons);
-        if (is_numeric($shields))
+        }
+        if (is_numeric($shields)) {
             $this->shields_tech = intval($shields);
-        if (is_numeric($armour))
+        }
+        if (is_numeric($armour)) {
             $this->armour_tech = intval($armour);
+        }
     }
 
     public function setCoords($galaxy = null, $system = null, $planet = null)
@@ -166,8 +168,9 @@ class Fleet extends IterableUtil
                 $ps = $shipTypeDefender->inflictDamage($fire->getPower(), $xs->result);
                 log_var('$xs', $xs);
                 $tmp[$idShipTypeDefender] = $xs->rest;
-                if ($ps != null)
+                if ($ps != null) {
                     $physicShots[$idShipTypeDefender][] = $ps;
+                }
             }
             log_var('$tmp', $tmp);
             // assign the last shot to the more likely shitType

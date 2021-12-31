@@ -13,9 +13,8 @@
  */
 class HTMLPurifier_AttrDef_CSS extends HTMLPurifier_AttrDef
 {
-
-    public function validate($css, $config, $context) {
-
+    public function validate($css, $config, $context)
+    {
         $css = $this->parseCDATA($css);
 
         $definition = $config->getCSSDefinition();
@@ -36,8 +35,12 @@ class HTMLPurifier_AttrDef_CSS extends HTMLPurifier_AttrDef
         $context->register('CurrentCSSProperty', $property);
 
         foreach ($declarations as $declaration) {
-            if (!$declaration) continue;
-            if (!strpos($declaration, ':')) continue;
+            if (!$declaration) {
+                continue;
+            }
+            if (!strpos($declaration, ':')) {
+                continue;
+            }
             list($property, $value) = explode(':', $declaration, 2);
             $property = trim($property);
             $value    = trim($value);
@@ -47,23 +50,32 @@ class HTMLPurifier_AttrDef_CSS extends HTMLPurifier_AttrDef
                     $ok = true;
                     break;
                 }
-                if (ctype_lower($property)) break;
+                if (ctype_lower($property)) {
+                    break;
+                }
                 $property = strtolower($property);
                 if (isset($definition->info[$property])) {
                     $ok = true;
                     break;
                 }
-            } while(0);
-            if (!$ok) continue;
+            } while (0);
+            if (!$ok) {
+                continue;
+            }
             // inefficient call, since the validator will do this again
             if (strtolower(trim($value)) !== 'inherit') {
                 // inherit works for everything (but only on the base property)
                 $result = $definition->info[$property]->validate(
-                    $value, $config, $context );
+                    $value,
+                    $config,
+                    $context
+                );
             } else {
                 $result = 'inherit';
             }
-            if ($result === false) continue;
+            if ($result === false) {
+                continue;
+            }
             $propvalues[$property] = $result;
         }
 
@@ -79,9 +91,7 @@ class HTMLPurifier_AttrDef_CSS extends HTMLPurifier_AttrDef
         }
 
         return $new_declarations ? $new_declarations : false;
-
     }
-
 }
 
 // vim: et sw=4 sts=4

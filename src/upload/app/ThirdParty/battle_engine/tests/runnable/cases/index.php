@@ -2,10 +2,8 @@
 
 if ($handle = opendir('.')) {
     $thelist ="";
-    while (false !== ($file = readdir($handle)))
-    {
-        if ($file != "index.php" && $file != "." && $file != ".." && strtolower(substr($file, strrpos($file, '.') + 1)) == 'php')
-        {
+    while (false !== ($file = readdir($handle))) {
+        if ($file != "index.php" && $file != "." && $file != ".." && strtolower(substr($file, strrpos($file, '.') + 1)) == 'php') {
             $thelist .= '<li><a href="'.$file.'">'.$file.'</a></li>';
         }
     }

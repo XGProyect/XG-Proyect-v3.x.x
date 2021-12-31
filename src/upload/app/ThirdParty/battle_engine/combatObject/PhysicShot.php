@@ -5,7 +5,7 @@
  *  Copyright (C) 2015  Jstar
  *
  * This file is part of OPBE.
- * 
+ *
  * OPBE is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -28,7 +28,6 @@
  */
 class PhysicShot
 {
-
     private $shipType;
     private $damage;
     private $count;
@@ -39,7 +38,7 @@ class PhysicShot
 
     /**
      * PhysicShot::__construct()
-     * 
+     *
      * @param ShipType $shipType
      * @param int $damage
      * @param int $count
@@ -49,10 +48,12 @@ class PhysicShot
     {
         log_var('damage', $damage);
         log_var('count', $count);
-        if ($damage < 0)
+        if ($damage < 0) {
             throw new Exception('Negative damage');
-        if ($count < 0)
+        }
+        if ($count < 0) {
             throw new Exception('Negative amount of shots');
+        }
         $this->fighters = $shipType->cloneMe();
         $this->damage = $damage;
         $this->count = $count;
@@ -123,9 +124,9 @@ class PhysicShot
     /**
      * PhysicShot::bounce()
      * If the shield is disabled, then bounced damaged is zero.
-     * If the damage is exactly a multipler of the needed to destroy one shield's cell then bounced damage is zero. 
+     * If the damage is exactly a multipler of the needed to destroy one shield's cell then bounced damage is zero.
      * If damage is more than shield,then bounced damage is zero.
-     * 
+     *
      * @param int $currentCellsCount
      * @param int $cellsDestroyedInOneShot
      * @param float $bouncedDamageForOneShot

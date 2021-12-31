@@ -2,7 +2,6 @@
 
 class LangManager
 {
-
     private $impl;
     private static $instance;
 
@@ -35,5 +34,3 @@ class LangManager
         return !empty($this->impl);
     }
 }
-
-?>

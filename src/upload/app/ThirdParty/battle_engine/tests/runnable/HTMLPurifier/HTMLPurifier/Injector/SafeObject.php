@@ -25,11 +25,13 @@ class HTMLPurifier_Injector_SafeObject extends HTMLPurifier_Injector
         'allowFullScreen' => true, // if omitted, assume to be 'false'
     );
 
-    public function prepare($config, $context) {
+    public function prepare($config, $context)
+    {
         parent::prepare($config, $context);
     }
 
-    public function handleElement(&$token) {
+    public function handleElement(&$token)
+    {
         if ($token->name == 'object') {
             $this->objectStack[] = $token;
             $this->paramStack[] = array();
@@ -76,7 +78,8 @@ class HTMLPurifier_Injector_SafeObject extends HTMLPurifier_Injector
         }
     }
 
-    public function handleEnd(&$token) {
+    public function handleEnd(&$token)
+    {
         // This is the WRONG way of handling the object and param stacks;
         // we should be inserting them directly on the relevant object tokens
         // so that the global stack handling handles it.
@@ -85,7 +88,6 @@ class HTMLPurifier_Injector_SafeObject extends HTMLPurifier_Injector
             array_pop($this->paramStack);
         }
     }
-
 }
 
 // vim: et sw=4 sts=4

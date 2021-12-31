@@ -1,6 +1,6 @@
 <?php
 
-require ("../../RunnableTest.php");
+require("../../RunnableTest.php");
 class Fazi extends RunnableTest
 {
     public function getAttachers()

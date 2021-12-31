@@ -15,13 +15,14 @@ class HTMLPurifier_ChildDef_StrictBlockquote extends HTMLPurifier_ChildDef_Requi
      * @note We don't want MakeWellFormed to auto-close inline elements since
      *       they might be allowed.
      */
-    public function getAllowedElements($config) {
+    public function getAllowedElements($config)
+    {
         $this->init($config);
         return $this->fake_elements;
     }
 
-    public function validateChildren($tokens_of_children, $config, $context) {
-
+    public function validateChildren($tokens_of_children, $config, $context)
+    {
         $this->init($config);
 
         // trick the parent class into thinking it allows more
@@ -29,12 +30,16 @@ class HTMLPurifier_ChildDef_StrictBlockquote extends HTMLPurifier_ChildDef_Requi
         $result = parent::validateChildren($tokens_of_children, $config, $context);
         $this->elements = $this->real_elements;
 
-        if ($result === false) return array();
-        if ($result === true) $result = $tokens_of_children;
+        if ($result === false) {
+            return array();
+        }
+        if ($result === true) {
+            $result = $tokens_of_children;
+        }
 
         $def = $config->getHTMLDefinition();
         $block_wrap_start = new HTMLPurifier_Token_Start($def->info_block_wrapper);
-        $block_wrap_end   = new HTMLPurifier_Token_End(  $def->info_block_wrapper);
+        $block_wrap_end   = new HTMLPurifier_Token_End($def->info_block_wrapper);
         $is_inline = false;
         $depth = 0;
         $ret = array();
@@ -45,13 +50,13 @@ class HTMLPurifier_ChildDef_StrictBlockquote extends HTMLPurifier_ChildDef_Requi
             // ifs are nested for readability
             if (!$is_inline) {
                 if (!$depth) {
-                     if (
+                    if (
                         ($token instanceof HTMLPurifier_Token_Text && !$token->is_whitespace) ||
                         (!$token instanceof HTMLPurifier_Token_Text && !isset($this->elements[$token->name]))
                      ) {
                         $is_inline = true;
                         $ret[] = $block_wrap_start;
-                     }
+                    }
                 }
             } else {
                 if (!$depth) {
@@ -66,14 +71,21 @@ class HTMLPurifier_ChildDef_StrictBlockquote extends HTMLPurifier_ChildDef_Requi
                 }
             }
             $ret[] = $token;
-            if ($token instanceof HTMLPurifier_Token_Start) $depth++;
-            if ($token instanceof HTMLPurifier_Token_End)   $depth--;
+            if ($token instanceof HTMLPurifier_Token_Start) {
+                $depth++;
+            }
+            if ($token instanceof HTMLPurifier_Token_End) {
+                $depth--;
+            }
         }
-        if ($is_inline) $ret[] = $block_wrap_end;
+        if ($is_inline) {
+            $ret[] = $block_wrap_end;
+        }
         return $ret;
     }
 
-    private function init($config) {
+    private function init($config)
+    {
         if (!$this->init) {
             $def = $config->getHTMLDefinition();
             // allow all inline elements

@@ -1,6 +1,6 @@
 <?php
 
-require ("../../RunnableTest.php");
+require("../../RunnableTest.php");
 class Fazi extends RunnableTest
 {
     public function getAttachers()
@@ -9,7 +9,7 @@ class Fazi extends RunnableTest
         $ships[] = $this->getShipType(205, 20);
         $ships[] = $this->getShipType(211, 30);
         $fleet = new Fleet(1, $ships);
-        $player = new Player(1, array($fleet),7,6,6);
+        $player = new Player(1, array($fleet), 7, 6, 6);
         return new PlayerGroup(array($player));
     }
     public function getDefenders()
@@ -21,7 +21,7 @@ class Fazi extends RunnableTest
         $ships[] = $this->getShipType(407, 1);
         $ships[] = $this->getShipType(408, 1);
         $fleet = new Fleet(2, $ships);
-        $player = new Player(2, array($fleet),5,5,5);
+        $player = new Player(2, array($fleet), 5, 5, 5);
         return new PlayerGroup(array($player));
     }
 }

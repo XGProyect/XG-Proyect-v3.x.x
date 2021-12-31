@@ -5,7 +5,7 @@
  *  Copyright (C) 2015  Jstar
  *
  * This file is part of OPBE.
- * 
+ *
  * OPBE is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -28,7 +28,6 @@
  */
 class ShipsCleaner
 {
-
     private $shipType;
     private $lastShipHit;
     private $lastShots;
@@ -37,7 +36,7 @@ class ShipsCleaner
 
     /**
      * ShipsCleaner::__construct()
-     * 
+     *
      * @param mixed $shipType
      * @param int $lastShipHit
      * @param int $lastShot
@@ -45,10 +44,12 @@ class ShipsCleaner
      */
     public function __construct(ShipType $shipType, $lastShipHit, $lastShots)
     {
-        if ($lastShipHit < 0)
+        if ($lastShipHit < 0) {
             throw new Exception('Negative $lastShipHit');
-        if ($lastShots < 0)
+        }
+        if ($lastShots < 0) {
             throw new Exception('Negative $lastShots');
+        }
         $this->fighters = $shipType->cloneMe();
         $this->lastShipHit = $lastShipHit;
         $this->lastShots = $lastShots;

@@ -328,8 +328,7 @@ class BattleReport
     private function getAfterBattlePlayerGroup($players, $playersRepaired)
     {
         foreach ($playersRepaired->getIterator() as $idPlayer => $playerRepaired) {
-            if (!$players->existPlayer($idPlayer)) // player is completely destroyed
-            {
+            if (!$players->existPlayer($idPlayer)) { // player is completely destroyed
                 $players->addPlayer($playerRepaired);
                 continue;
             }

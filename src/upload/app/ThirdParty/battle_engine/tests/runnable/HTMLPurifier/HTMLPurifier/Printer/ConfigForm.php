@@ -5,7 +5,6 @@
  */
 class HTMLPurifier_Printer_ConfigForm extends HTMLPurifier_Printer
 {
-
     /**
      * Printers for specific fields
      */
@@ -34,7 +33,9 @@ class HTMLPurifier_Printer_ConfigForm extends HTMLPurifier_Printer
      * @param $compress Integer max length before compressing a directive name, set to false to turn off
      */
     public function __construct(
-        $name, $doc_url = null, $compress = false
+        $name,
+        $doc_url = null,
+        $compress = false
     ) {
         parent::__construct();
         $this->docURL = $doc_url;
@@ -50,22 +51,29 @@ class HTMLPurifier_Printer_ConfigForm extends HTMLPurifier_Printer
      * @param $cols Integer columns of textarea, null to use default
      * @param $rows Integer rows of textarea, null to use default
      */
-    public function setTextareaDimensions($cols = null, $rows = null) {
-        if ($cols) $this->fields['default']->cols = $cols;
-        if ($rows) $this->fields['default']->rows = $rows;
+    public function setTextareaDimensions($cols = null, $rows = null)
+    {
+        if ($cols) {
+            $this->fields['default']->cols = $cols;
+        }
+        if ($rows) {
+            $this->fields['default']->rows = $rows;
+        }
     }
 
     /**
      * Retrieves styling, in case it is not accessible by webserver
      */
-    public static function getCSS() {
+    public static function getCSS()
+    {
         return file_get_contents(HTMLPURIFIER_PREFIX . '/HTMLPurifier/Printer/ConfigForm.css');
     }
 
     /**
      * Retrieves JavaScript, in case it is not accessible by webserver
      */
-    public static function getJavaScript() {
+    public static function getJavaScript()
+    {
         return file_get_contents(HTMLPURIFIER_PREFIX . '/HTMLPurifier/Printer/ConfigForm.js');
     }
 
@@ -75,7 +83,8 @@ class HTMLPurifier_Printer_ConfigForm extends HTMLPurifier_Printer
      *        where [0] has an HTML namespace and [1] is being rendered.
      * @param $allowed Optional namespace(s) and directives to restrict form to.
      */
-    public function render($config, $allowed = true, $render_controls = true) {
+    public function render($config, $allowed = true, $render_controls = true)
+    {
         if (is_array($config) && isset($config[0])) {
             $gen_config = $config[0];
             $config = $config[1];
@@ -98,22 +107,22 @@ class HTMLPurifier_Printer_ConfigForm extends HTMLPurifier_Printer
         $ret .= $this->start('table', array('class' => 'hp-config'));
         $ret .= $this->start('thead');
         $ret .= $this->start('tr');
-            $ret .= $this->element('th', 'Directive', array('class' => 'hp-directive'));
-            $ret .= $this->element('th', 'Value', array('class' => 'hp-value'));
+        $ret .= $this->element('th', 'Directive', array('class' => 'hp-directive'));
+        $ret .= $this->element('th', 'Value', array('class' => 'hp-value'));
         $ret .= $this->end('tr');
         $ret .= $this->end('thead');
         foreach ($all as $ns => $directives) {
             $ret .= $this->renderNamespace($ns, $directives);
         }
         if ($render_controls) {
-             $ret .= $this->start('tbody');
-             $ret .= $this->start('tr');
-                 $ret .= $this->start('td', array('colspan' => 2, 'class' => 'controls'));
-                     $ret .= $this->elementEmpty('input', array('type' => 'submit', 'value' => 'Submit'));
-                     $ret .= '[<a href="?">Reset</a>]';
-                 $ret .= $this->end('td');
-             $ret .= $this->end('tr');
-             $ret .= $this->end('tbody');
+            $ret .= $this->start('tbody');
+            $ret .= $this->start('tr');
+            $ret .= $this->start('td', array('colspan' => 2, 'class' => 'controls'));
+            $ret .= $this->elementEmpty('input', array('type' => 'submit', 'value' => 'Submit'));
+            $ret .= '[<a href="?">Reset</a>]';
+            $ret .= $this->end('td');
+            $ret .= $this->end('tr');
+            $ret .= $this->end('tbody');
         }
         $ret .= $this->end('table');
         return $ret;
@@ -124,11 +133,12 @@ class HTMLPurifier_Printer_ConfigForm extends HTMLPurifier_Printer
      * @param $ns String namespace name
      * @param $directive Associative array of directives to values
      */
-    protected function renderNamespace($ns, $directives) {
+    protected function renderNamespace($ns, $directives)
+    {
         $ret = '';
         $ret .= $this->start('tbody', array('class' => 'namespace'));
         $ret .= $this->start('tr');
-            $ret .= $this->element('th', $ns, array('colspan' => 2));
+        $ret .= $this->element('th', $ns, array('colspan' => 2));
         $ret .= $this->end('tr');
         $ret .= $this->end('tbody');
         $ret .= $this->start('tbody');
@@ -139,53 +149,57 @@ class HTMLPurifier_Printer_ConfigForm extends HTMLPurifier_Printer
                 $url = str_replace('%s', urlencode("$ns.$directive"), $this->docURL);
                 $ret .= $this->start('a', array('href' => $url));
             }
-                $attr = array('for' => "{$this->name}:$ns.$directive");
+            $attr = array('for' => "{$this->name}:$ns.$directive");
 
-                // crop directive name if it's too long
-                if (!$this->compress || (strlen($directive) < $this->compress)) {
-                    $directive_disp = $directive;
-                } else {
-                    $directive_disp = substr($directive, 0, $this->compress - 2) . '...';
-                    $attr['title'] = $directive;
-                }
+            // crop directive name if it's too long
+            if (!$this->compress || (strlen($directive) < $this->compress)) {
+                $directive_disp = $directive;
+            } else {
+                $directive_disp = substr($directive, 0, $this->compress - 2) . '...';
+                $attr['title'] = $directive;
+            }
 
-                $ret .= $this->element(
-                    'label',
-                    $directive_disp,
+            $ret .= $this->element(
+                'label',
+                $directive_disp,
                     // component printers must create an element with this id
                     $attr
-                );
-            if ($this->docURL) $ret .= $this->end('a');
+            );
+            if ($this->docURL) {
+                $ret .= $this->end('a');
+            }
             $ret .= $this->end('th');
 
             $ret .= $this->start('td');
-                $def = $this->config->def->info["$ns.$directive"];
-                if (is_int($def)) {
-                    $allow_null = $def < 0;
-                    $type = abs($def);
-                } else {
-                    $type = $def->type;
-                    $allow_null = isset($def->allow_null);
-                }
-                if (!isset($this->fields[$type])) $type = 0; // default
-                $type_obj = $this->fields[$type];
-                if ($allow_null) {
-                    $type_obj = new HTMLPurifier_Printer_ConfigForm_NullDecorator($type_obj);
-                }
-                $ret .= $type_obj->render($ns, $directive, $value, $this->name, array($this->genConfig, $this->config));
+            $def = $this->config->def->info["$ns.$directive"];
+            if (is_int($def)) {
+                $allow_null = $def < 0;
+                $type = abs($def);
+            } else {
+                $type = $def->type;
+                $allow_null = isset($def->allow_null);
+            }
+            if (!isset($this->fields[$type])) {
+                $type = 0;
+            } // default
+            $type_obj = $this->fields[$type];
+            if ($allow_null) {
+                $type_obj = new HTMLPurifier_Printer_ConfigForm_NullDecorator($type_obj);
+            }
+            $ret .= $type_obj->render($ns, $directive, $value, $this->name, array($this->genConfig, $this->config));
             $ret .= $this->end('td');
             $ret .= $this->end('tr');
         }
         $ret .= $this->end('tbody');
         return $ret;
     }
-
 }
 
 /**
  * Printer decorator for directives that accept null
  */
-class HTMLPurifier_Printer_ConfigForm_NullDecorator extends HTMLPurifier_Printer {
+class HTMLPurifier_Printer_ConfigForm_NullDecorator extends HTMLPurifier_Printer
+{
     /**
      * Printer being decorated
      */
@@ -193,11 +207,13 @@ class HTMLPurifier_Printer_ConfigForm_NullDecorator extends HTMLPurifier_Printer
     /**
      * @param $obj Printer to decorate
      */
-    public function __construct($obj) {
+    public function __construct($obj)
+    {
         parent::__construct();
         $this->obj = $obj;
     }
-    public function render($ns, $directive, $value, $name, $config) {
+    public function render($ns, $directive, $value, $name, $config)
+    {
         if (is_array($config) && isset($config[0])) {
             $gen_config = $config[0];
             $config = $config[1];
@@ -223,7 +239,9 @@ class HTMLPurifier_Printer_ConfigForm_NullDecorator extends HTMLPurifier_Printer
             // modify inline javascript slightly
             $attr['onclick'] = "toggleWriteability('$name:Yes_$ns.$directive',checked);toggleWriteability('$name:No_$ns.$directive',checked)";
         }
-        if ($value === null) $attr['checked'] = 'checked';
+        if ($value === null) {
+            $attr['checked'] = 'checked';
+        }
         $ret .= $this->elementEmpty('input', $attr);
         $ret .= $this->text(' or ');
         $ret .= $this->elementEmpty('br');
@@ -235,10 +253,12 @@ class HTMLPurifier_Printer_ConfigForm_NullDecorator extends HTMLPurifier_Printer
 /**
  * Swiss-army knife configuration form field printer
  */
-class HTMLPurifier_Printer_ConfigForm_default extends HTMLPurifier_Printer {
+class HTMLPurifier_Printer_ConfigForm_default extends HTMLPurifier_Printer
+{
     public $cols = 18;
     public $rows = 5;
-    public function render($ns, $directive, $value, $name, $config) {
+    public function render($ns, $directive, $value, $name, $config)
+    {
         if (is_array($config) && isset($config[0])) {
             $gen_config = $config[0];
             $config = $config[1];
@@ -262,6 +282,7 @@ class HTMLPurifier_Printer_ConfigForm_default extends HTMLPurifier_Printer {
                     foreach ($array as $val => $b) {
                         $value[] = $val;
                     }
+                    // no break
                 case HTMLPurifier_VarParser::ALIST:
                     $value = implode(PHP_EOL, $value);
                     break;
@@ -284,12 +305,16 @@ class HTMLPurifier_Printer_ConfigForm_default extends HTMLPurifier_Printer {
             'name' => "$name"."[$ns.$directive]",
             'id' => "$name:$ns.$directive"
         );
-        if ($value === null) $attr['disabled'] = 'disabled';
+        if ($value === null) {
+            $attr['disabled'] = 'disabled';
+        }
         if (isset($def->allowed)) {
             $ret .= $this->start('select', $attr);
             foreach ($def->allowed as $val => $b) {
                 $attr = array();
-                if ($value == $val) $attr['selected'] = 'selected';
+                if ($value == $val) {
+                    $attr['selected'] = 'selected';
+                }
                 $ret .= $this->element('option', $val, $attr);
             }
             $ret .= $this->end('select');
@@ -317,8 +342,10 @@ class HTMLPurifier_Printer_ConfigForm_default extends HTMLPurifier_Printer {
 /**
  * Bool form field printer
  */
-class HTMLPurifier_Printer_ConfigForm_bool extends HTMLPurifier_Printer {
-    public function render($ns, $directive, $value, $name, $config) {
+class HTMLPurifier_Printer_ConfigForm_bool extends HTMLPurifier_Printer
+{
+    public function render($ns, $directive, $value, $name, $config)
+    {
         if (is_array($config) && isset($config[0])) {
             $gen_config = $config[0];
             $config = $config[1];
@@ -340,8 +367,12 @@ class HTMLPurifier_Printer_ConfigForm_bool extends HTMLPurifier_Printer {
             'id' => "$name:Yes_$ns.$directive",
             'value' => '1'
         );
-        if ($value === true) $attr['checked'] = 'checked';
-        if ($value === null) $attr['disabled'] = 'disabled';
+        if ($value === true) {
+            $attr['checked'] = 'checked';
+        }
+        if ($value === null) {
+            $attr['disabled'] = 'disabled';
+        }
         $ret .= $this->elementEmpty('input', $attr);
 
         $ret .= $this->start('label', array('for' => "$name:No_$ns.$directive"));
@@ -355,8 +386,12 @@ class HTMLPurifier_Printer_ConfigForm_bool extends HTMLPurifier_Printer {
             'id' => "$name:No_$ns.$directive",
             'value' => '0'
         );
-        if ($value === false) $attr['checked'] = 'checked';
-        if ($value === null) $attr['disabled'] = 'disabled';
+        if ($value === false) {
+            $attr['checked'] = 'checked';
+        }
+        if ($value === null) {
+            $attr['disabled'] = 'disabled';
+        }
         $ret .= $this->elementEmpty('input', $attr);
 
         $ret .= $this->end('div');
