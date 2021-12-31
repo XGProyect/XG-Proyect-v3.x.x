@@ -18,7 +18,7 @@ define('XGP_ROOT', realpath(dirname(__DIR__)) . DIRECTORY_SEPARATOR);
 
 require XGP_ROOT . 'app' . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'common.php';
 
-$system = new Common;
+$system = new Common();
 $system->bootUp('admin');
 
 include_once XGP_ROOT . 'app' . DIRECTORY_SEPARATOR . 'libraries' . DIRECTORY_SEPARATOR . 'adm' . DIRECTORY_SEPARATOR . 'AdministrationLib.php';
@@ -43,7 +43,7 @@ if (file_exists($file_name)) {
 
     $class_name = 'App\controllers\adm\\' . ucfirst($page);
 
-    (new $class_name)->index();
+    (new $class_name())->index();
 } else {
     Functions::redirect(XGP_ROOT . 'admin.php');
 }

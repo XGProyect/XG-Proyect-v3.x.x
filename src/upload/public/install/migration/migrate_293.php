@@ -1,4 +1,5 @@
 <?php
+
 $queries[] = "DELETE FROM `{prefix}config` WHERE `config_name` = 'VERSION'";
 $queries[] = "INSERT INTO `{prefix}config` (`config_name`, `config_value`) VALUES ('VERSION', '" . SYSTEM_VERSION . "');";
 $queries[] = "ALTER TABLE `{prefix}planets` CHANGE `small_protection_shield` `small_protection_shield` TINYINT( 1 ) NOT NULL DEFAULT '0', CHANGE `big_protection_shield` `big_protection_shield` TINYINT( 1 ) NOT NULL DEFAULT '0'";

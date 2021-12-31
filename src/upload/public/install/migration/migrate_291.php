@@ -1,4 +1,5 @@
 <?php
+
 $queries[] = "DELETE FROM `{prefix}config` WHERE `config_name` = 'VERSION'";
 $queries[] = "INSERT INTO `{prefix}config` (`config_name`, `config_value`) VALUES ('VERSION', '" . SYSTEM_VERSION . "');";
 $queries[] = "INSERT INTO `{prefix}config` (`config_name`, `config_value`) VALUES ('moderation', '1,0,0,1;1,1,0,1;');";

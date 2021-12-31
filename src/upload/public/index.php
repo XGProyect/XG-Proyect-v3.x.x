@@ -17,7 +17,7 @@ define('XGP_ROOT', realpath(dirname(__DIR__)) . DIRECTORY_SEPARATOR);
 
 require XGP_ROOT . 'app' . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'common.php';
 
-$system = new Common;
+$system = new Common();
 $system->bootUp('home');
 
 $page = filter_input(INPUT_GET, 'page');
@@ -33,5 +33,5 @@ if (file_exists($file_name)) {
 
     $class_name = 'App\controllers\home\\' . ucfirst($page);
 
-    (new $class_name)->index();
+    (new $class_name())->index();
 }

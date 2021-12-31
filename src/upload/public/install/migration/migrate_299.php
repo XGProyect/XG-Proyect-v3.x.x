@@ -1,4 +1,5 @@
 <?php
+
 $queries[] = "DELETE FROM `{prefix}config` WHERE `config_name` = 'VERSION'";
 $queries[] = "INSERT INTO `{prefix}config` (`config_name`, `config_value`) VALUES ('VERSION', '" . SYSTEM_VERSION . "');";
 $queries[] = "ALTER TABLE {prefix}galaxy ADD `invisible_start_time` int(11) NOT NULL default '0'; ";

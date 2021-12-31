@@ -16,7 +16,7 @@ define('XGP_ROOT', realpath(dirname(__DIR__)) . DIRECTORY_SEPARATOR);
 
 require XGP_ROOT . 'app' . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'common.php';
 
-$system = new Common;
+$system = new Common();
 $system->bootUp('game');
 
 $page = filter_input(INPUT_GET, 'page');
@@ -54,7 +54,7 @@ if (isset($page)) {
 
         $class_name = 'App\controllers\game\\' . ucfirst($page);
 
-        (new $class_name)->index();
+        (new $class_name())->index();
     }
 }
 

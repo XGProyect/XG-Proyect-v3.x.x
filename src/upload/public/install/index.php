@@ -16,7 +16,7 @@ define('XGP_ROOT', '../../');
 
 require XGP_ROOT . 'app' . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'common.php';
 
-$system = new Common;
+$system = new Common();
 $system->bootUp('install');
 
 $page = isset($_GET['page']) ? $_GET['page'] : 'installation';
@@ -27,5 +27,5 @@ if (file_exists($file_name)) {
 
     $class_name = 'App\controllers\install\\' . ucfirst($page);
 
-    (new $class_name)->index();
+    (new $class_name())->index();
 }

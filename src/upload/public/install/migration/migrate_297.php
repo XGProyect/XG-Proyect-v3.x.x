@@ -1,4 +1,5 @@
 <?php
+
 $queries[] = "DELETE FROM `{prefix}config` WHERE `config_name` = 'VERSION'";
 $queries[] = "INSERT INTO `{prefix}config` (`config_name`, `config_value`) VALUES ('VERSION', '" . SYSTEM_VERSION . "');";
 $queries[] = "UPDATE `{prefix}rw` SET `{prefix}rw`.`owners` = CONCAT(id_owner1,\",\",id_owner2)";
