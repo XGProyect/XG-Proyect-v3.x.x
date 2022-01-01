@@ -1,21 +1,21 @@
 #
 # application
 #
-/src/upload/app/config/config.php
+src/app/config/config.php
 
 #
 # writable
 #
-src/upload/writable/backups/*.sql
-src/upload/writable/cache/*.html
-/src/upload/writable/logs/*.txt
+src/writable/backups/*.sql
+src/writable/cache/*.html
+/src/writable/logs/*.txt
 
 #
 # tests
 #
-src/upload/tests/.phpunit.result.cache
-src/upload/tests/build/
-src/upload/tests/_reports/
+src/tests/.phpunit.result.cache
+src/tests/build/
+src/tests/_reports/
 
 #
 # docs

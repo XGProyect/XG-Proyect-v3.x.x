@@ -7,11 +7,11 @@
     <version number="3.3.0">
         <api>
             <source dsn=".">
-                <path>src/upload/app</path>
+                <path>src/app</path>
             </source>
             <ignore hidden="true" symlinks="true">
-                <path>src/upload/app/ThirdParty/**/*</path>
-                <path>src/upload/app/views/**/*</path>
+                <path>src/app/ThirdParty/**/*</path>
+                <path>src/app/views/**/*</path>
             </ignore>
             <extensions>
                 <extension>php</extension>

@@ -10,7 +10,7 @@ services:
       - 127.0.0.1:80:80
       - 127.0.0.1:443:443
     volumes:
-      - ./src/upload:/var/www/html
+      - ./src:/var/www/html
     depends_on:
       - db
   db:

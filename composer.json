@@ -29,7 +29,7 @@
     },
     "autoload": {
         "classmap": [
-            "src/upload/"
+            "src/"
         ]
     },
     "minimum-stability": "dev",
@@ -39,7 +39,7 @@
             "vendor/bin/phpcompatinfo analyser:run ./src"
         ],
         "tests": [
-            "vendor/bin/phpunit --verbose --config src/upload/tests/phpunit.xml --testsuite xgp_application"
+            "vendor/bin/phpunit --verbose --config src/tests/phpunit.xml --testsuite xgp_application"
         ]
     }
 }

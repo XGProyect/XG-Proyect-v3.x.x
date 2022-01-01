@@ -32,7 +32,7 @@ jobs:
     - name: Run phplint
       uses: overtrue/phplint@4.1.0
       with:
-        path: src/upload/
+        path: src/
         options: --exclude=*.log
   php-cs-fixer:
     name: Run PHP-CS-Fixer
