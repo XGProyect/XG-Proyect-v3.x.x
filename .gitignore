@@ -39,3 +39,4 @@ nbproject/
 #
 vendor
 composer.lock
+src/upload/app/config/config.php
