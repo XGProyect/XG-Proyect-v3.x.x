@@ -4,11 +4,11 @@
 src/app/config/config.php
 
 #
-# writable
+# storage
 #
-src/writable/backups/*.sql
-src/writable/cache/*.html
-/src/writable/logs/*.txt
+src/storage/backups/*.sql
+src/storage/cache/*.html
+/src/storage/logs/*.txt
 
 #
 # tests

@@ -70,7 +70,7 @@ define('ADM_URL', PROTOCOL . strtr(BASE_PATH, ['public' => '', 'public/' => ''])
  *
  */
 define('APP_PATH', 'app' . DIRECTORY_SEPARATOR);
-define('DATA_PATH', 'writable' . DIRECTORY_SEPARATOR);
+define('DATA_PATH', 'storage' . DIRECTORY_SEPARATOR);
 define('LOGS_PATH', DATA_PATH . 'logs' . DIRECTORY_SEPARATOR);
 define('PUBLIC_PATH', 'public' . DIRECTORY_SEPARATOR);
 define('SYSTEM_PATH', 'system' . DIRECTORY_SEPARATOR);
@@ -83,6 +83,7 @@ define('SYSTEM_PATH', 'system' . DIRECTORY_SEPARATOR);
 define('CONFIGS_PATH', APP_PATH . 'config' . DIRECTORY_SEPARATOR);
 define('CONTROLLERS_PATH', APP_PATH . 'controllers' . DIRECTORY_SEPARATOR);
 define('CORE_PATH', APP_PATH . 'core' . DIRECTORY_SEPARATOR);
+define('DATABASE_PATH', APP_PATH . 'database' . DIRECTORY_SEPARATOR);
 define('LANG_PATH', APP_PATH . 'language' . DIRECTORY_SEPARATOR);
 define('HELPERS_PATH', APP_PATH . 'helpers' . DIRECTORY_SEPARATOR);
 define('LIB_PATH', APP_PATH . 'libraries' . DIRECTORY_SEPARATOR);
@@ -103,6 +104,14 @@ define('INSTALL_PATH', CONTROLLERS_PATH . 'install' . DIRECTORY_SEPARATOR);
 
 /**
  *
+ * DATABASE DIRECTORY STRUCTURE
+ *
+ */
+define('MIGRATION_PATH', DATABASE_PATH . 'migration' . DIRECTORY_SEPARATOR);
+define('UPDATE_PATH', DATABASE_PATH . 'update' . DIRECTORY_SEPARATOR);
+
+/**
+ *
  * DATA DIRECTORY STRUCTURE
  *
  */
@@ -119,14 +128,6 @@ define('IMG_PATH', PUBLIC_PATH . 'images' . DIRECTORY_SEPARATOR);
 define('PUB_INS_PATH', PUBLIC_PATH . 'install' . DIRECTORY_SEPARATOR);
 define('JS_PATH', PUBLIC_PATH . 'js' . DIRECTORY_SEPARATOR);
 define('UPLOAD_PATH', PUBLIC_PATH . 'upload' . DIRECTORY_SEPARATOR);
-
-/**
- *
- * INSTALL DIRECTORY STRUCTURE
- *
- */
-define('MIGRATION_PATH', PUB_INS_PATH . 'migration' . DIRECTORY_SEPARATOR);
-define('UPDATE_PATH', PUB_INS_PATH . 'update' . DIRECTORY_SEPARATOR);
 
 /**
  *
