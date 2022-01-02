@@ -52,13 +52,12 @@ form.inline p { margin-bottom:0; }
 
 label {
 	background:url("../../images/home/arrow.gif") no-repeat scroll 0 3px transparent;
-	color:#619FC8;
-	display:block;
-	font-weight:normal;
-	height:15px;
-	line-height:15px;
-	margin:3px 0;
-	padding:0 0 0 11px;
+	color: #619fc8;
+    display: block;
+    font-weight: normal;
+    line-height: 15px;
+    margin: 3px 0;
+    padding: 0 0 0 11px;
 }
 
 select {

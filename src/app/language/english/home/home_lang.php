@@ -24,6 +24,7 @@ $lang = [
     'hm_hidden_title' => 'XGProyect - Conquer the universe',
     'hm_login_button' => 'Login',
     'hm_close_button' => 'Close',
+    'hm_distinctions' => 'Distinctions',
     'hm_universe' => 'Universe:',
     'hm_universe_name' => 'Universe 1',
     'hm_username' => 'Username:',
