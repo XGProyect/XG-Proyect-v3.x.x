@@ -84,7 +84,7 @@ abstract class Formulas
 
         if ($main) {
             $diameter = '12800';
-            $fields = Functions::readConfig('initial_fields');
+            $fields = Functions::readConfig('initial_fields') + Functions::readConfig('bonus_fields');
         }
 
         $return['planet_diameter'] = $diameter;

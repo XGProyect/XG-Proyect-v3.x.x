@@ -12,4 +12,5 @@ $lang = [
     'np_energy_production' => 'Producción de energía por hora',
     'np_all_ok_message' => '¡Cambios guardados con éxito!',
     'np_save_parameters' => 'Guardar cambios',
+    'np_bonus_fields' => 'Bonus campos planetarios +',
 ];

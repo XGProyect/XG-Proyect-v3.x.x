@@ -26,6 +26,7 @@ class Planets extends BaseController
 {
     public const PLANET_SETTINGS = [
         'initial_fields' => FILTER_VALIDATE_INT,
+        'bonus_fields' => FILTER_VALIDATE_INT,
         'metal_basic_income' => FILTER_VALIDATE_INT,
         'crystal_basic_income' => FILTER_VALIDATE_INT,
         'deuterium_basic_income' => FILTER_VALIDATE_INT,

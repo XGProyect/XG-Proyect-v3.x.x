@@ -38,6 +38,17 @@
                                                     maxlength="10" value="{initial_fields}">
                                             </td>
                                         </tr>
+                                        <tr>
+                                            <td>
+                                                <span>
+                                                    {np_bonus_fields}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <input class="form-control" type="number" name="bonus_fields"
+                                                    maxlength="10" value="{bonus_fields}">
+                                            </td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>

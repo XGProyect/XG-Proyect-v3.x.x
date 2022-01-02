@@ -12,4 +12,5 @@ $lang = [
     'np_energy_production' => 'Energy production per hour',
     'np_all_ok_message' => 'Changes saved successfully!',
     'np_save_parameters' => 'Save changes',
+    'np_bonus_fields' => 'Start Bonus fields +',
 ];
