@@ -62,16 +62,16 @@ class Login extends BaseController
      */
     private function runAction()
     {
-        $login_data = filter_input_array(INPUT_POST, [
+        $loginData = filter_input_array(INPUT_POST, [
             'inputEmail' => FILTER_VALIDATE_EMAIL,
             'inputPassword' => FILTER_SANITIZE_STRING,
         ]);
 
-        if ($login_data) {
-            $login = $this->Login_Model->getLoginData($login_data['inputEmail']);
+        if (!empty($loginData['inputEmail']) && !empty($loginData['inputPassword'])) {
+            $login = $this->Login_Model->getLoginData($loginData['inputEmail']);
 
             if ($login) {
-                if (password_verify($login_data['inputPassword'], $login['user_password'])
+                if (password_verify($loginData['inputPassword'], $login['user_password'])
                     && Administration::adminLogin($login['user_id'], $login['user_password'])) {
                     $redirect = filter_input(INPUT_GET, 'redirect', FILTER_SANITIZE_STRING) ?? 'home';
 

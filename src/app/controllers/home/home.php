@@ -55,15 +55,15 @@ class Home extends BaseController
      */
     private function runAction(): void
     {
-        $login_data = filter_input_array(INPUT_POST, [
+        $loginData = filter_input_array(INPUT_POST, [
             'login' => FILTER_VALIDATE_EMAIL,
             'pass' => FILTER_SANITIZE_STRING,
         ]);
 
-        if ($login_data) {
-            $login = $this->Home_Model->getUserWithProvidedCredentials($login_data['login']);
+        if (!empty($loginData['login']) && !empty($loginData['pass'])) {
+            $login = $this->Home_Model->getUserWithProvidedCredentials($loginData['login']);
 
-            if (isset($login) && password_verify($login_data['pass'], $login['user_password'])) {
+            if (isset($login) && password_verify($loginData['pass'], $login['user_password'])) {
                 if (isset($login['banned_longer']) && $login['banned_longer'] <= time()) {
                     $this->Home_Model->removeBan($login['user_name']);
                 }
