@@ -268,11 +268,11 @@ $tables['options_insert'] = "INSERT INTO `" . OPTIONS . "` (`option_name`, `opti
 ('merchant_crystal_multiplier', '2'),
 ('merchant_deuterium_multiplier', '1'),
 ('registration_dark_matter', '0'),
-('mailing_protocol', 'mail'),
-('mailing_smtp_host', ''),
+('mailing_protocol', 'smtp'),
+('mailing_smtp_host', 'mailhog'),
 ('mailing_smtp_user', ''),
 ('mailing_smtp_pass', ''),
-('mailing_smtp_port', '25'),
+('mailing_smtp_port', '1025'),
 ('mailing_smtp_timeout', '5'),
 ('mailing_smtp_crypto', '');";
 
