@@ -8,7 +8,7 @@ src/app/config/config.php
 #
 src/storage/backups/*.sql
 src/storage/cache/*.html
-/src/storage/logs/*.txt
+src/storage/logs/*.txt
 
 #
 # tests
