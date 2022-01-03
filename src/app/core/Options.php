@@ -2,42 +2,21 @@
 
 namespace App\core;
 
-use App\core\Database;
 use App\libraries\Functions;
 
-/**
- * Options Class
- */
 class Options
 {
-    /**
-     *
-     * @var Options
-     */
     private static $instance = null;
 
-    /**
-     * Contains the model
-     *
-     * @var Options
-     */
-    private $sessionsModel;
+    private $optionsModel;
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         // load model
         $this->optionsModel = Functions::model('core/options');
     }
 
-    /**
-     * Static function used to istance this class: implements singleton pattern to avoid multiple parsing.
-     *
-     * @return Options
-     */
-    public static function getInstance()
+    public static function getInstance(): Options
     {
         if (self::$instance == null) {
             //make new istance of this class and save it to field for next usage
@@ -49,13 +28,9 @@ class Options
     }
 
     /**
-     * Get the game options, leaving the param $option empty will return all of them
-     *
-     * @param string $option Option
-     *
      * @return mixed
      */
-    public function getOptions($option = '')
+    public function getOptions(string $option = '')
     {
         if ($option == '') {
             return $this->optionsModel->getAllOptions();
@@ -64,15 +39,7 @@ class Options
         }
     }
 
-    /**
-     * Update the option in the database
-     *
-     * @param string $option Option
-     * @param string $value  Value
-     *
-     * @return boolean
-     */
-    public function writeOptions($option, $value = '')
+    public function writeOptions(string $option, string $value = ''): bool
     {
         if ($option != '') {
             if ($this->optionsModel->writeOption($option, $value)) {
@@ -83,27 +50,12 @@ class Options
         return false;
     }
 
-    /**
-     * Insert a new option into database
-     *
-     * @param string $option Option
-     * @param string $value  Value
-     *
-     * @return boolean
-     */
-    public function insertOption($option, $value = '')
+    public function insertOption(string $option, string $value = ''): bool
     {
         return $this->writeOptions($option, $value);
     }
 
-    /**
-     * Delete an option permanently
-     *
-     * @param string $option Option
-     *
-     * @return boolean
-     */
-    public function deleteOption($option)
+    public function deleteOption(string $option): bool
     {
         if ($option != '') {
             if ($this->optionsModel->deleteOption($option)) {
