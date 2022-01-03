@@ -75,7 +75,7 @@
             <h6 class="m-0 font-weight-bold text-primary">{hm_credits}</h6>
         </a>
         <!-- Card Content - Collapse -->
-        <div class="collapse show" id="collapseCredits" style="">
+        <div class="collapse show" id="collapseCredits">
             <div class="card-body text-center">
                 <p>
                     <strong>{hm_proyect_leader}</strong>
@@ -88,11 +88,13 @@
                     <br>
                     <a href="https://github.com/jstar88/opbe" target="_blank">jstar - OPBE</a>
                     <br>
-                    <a href="https://codeigniter.com/" target="_blank">CodeIgniter</a>
+                    <a href="https://codeigniter.com/" target="_blank">CodeIgniter | Lang & Parser</a>
                     <br>
-                    <a href="https://startbootstrap.com/themes/sb-admin-2/" target="_blank">
-                        Start Bootstrap | SB Admin 2
-                    </a>
+                    <a href="https://startbootstrap.com/themes/sb-admin-2/" target="_blank">Start Bootstrap | SB Admin 2</a>
+                    <br>
+                    <a href="https://github.com/PHPMailer/PHPMailer" target="_blank">PHPMailer</a>
+                    <br>
+                    <a href="https://github.com/mailhog/MailHog" target="_blank">MailHog</a>
                     <br><br>
                     <strong>{hm_principal_contributors}</strong>
                     <br>

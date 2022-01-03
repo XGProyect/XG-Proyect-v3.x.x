@@ -29,7 +29,8 @@ use App\libraries\messenger\MessagesOptions;
 use App\libraries\messenger\Messenger;
 use App\libraries\Page;
 use App\libraries\Users;
-use CI_Email;
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
 /**
  * Functions Class
@@ -320,9 +321,9 @@ abstract class Functions
     {
         try {
             // require email library
-            $mail_library_path = XGP_ROOT . SYSTEM_PATH . 'ci3_custom' . DIRECTORY_SEPARATOR . 'libraries' . DIRECTORY_SEPARATOR . 'Email.php';
+            $mailLibPath = XGP_ROOT . SYSTEM_PATH . 'PHPMailer';
 
-            if (!file_exists($mail_library_path) or !function_exists('mail')) {
+            if (!file_exists($mailLibPath) or !function_exists('mail')) {
                 return false;
             }
 
@@ -332,46 +333,63 @@ abstract class Functions
             }
 
             // use CI library
-            require_once $mail_library_path;
+            require_once $mailLibPath. '/src/Exception.php';
+            require_once $mailLibPath. '/src/PHPMailer.php';
+            require_once $mailLibPath. '/src/SMTP.php';
 
-            $mail = new CI_Email();
+            $mail = new PHPMailer();
 
             // mailing settings
             $mail->protocol = self::readConfig('mailing_protocol');
 
             if (self::readConfig('mailing_protocol') === 'smtp') {
-                $mail->smtp_host = self::readConfig('mailing_smtp_host');
-                $mail->smtp_user = self::readConfig('mailing_smtp_user');
-                $mail->smtp_pass = self::readConfig('mailing_smtp_pass');
-                $mail->smtp_port = self::readConfig('mailing_smtp_port');
-                $mail->smtp_timeout = self::readConfig('mailing_smtp_timeout');
-                $mail->smtp_crypto = self::readConfig('mailing_smtp_crypto');
+                $mail->isSMTP();
+                $mail->Host = !empty(self::readConfig('mailing_smtp_host')) ? self::readConfig('mailing_smtp_host') : null;
+                $mail->Port = !empty(self::readConfig('mailing_smtp_port')) ? self::readConfig('mailing_smtp_port') : null;
+                $mail->SMTPSecure = !empty(self::readConfig('mailing_smtp_crypto')) ? self::readConfig('mailing_smtp_crypto') : null;
+                $mail->Timeout = !empty(self::readConfig('mailing_smtp_timeout')) ? self::readConfig('mailing_smtp_timeout') : null;
+
+                if (
+                    !empty(self::readConfig('mailing_smtp_user')) &&
+                    !empty(self::readConfig('mailing_smtp_pass')) 
+                ) {
+                    $mail->SMTPAuth   = true;
+                    $mail->Username   = self::readConfig('mailing_smtp_user');
+                    $mail->Password   = self::readConfig('mailing_smtp_pass'); 
+                }
             }
 
-            if ($format === 'text' or $format === 'html') {
-                $mail->set_mailtype($format);
+            if ($format === 'html') {
+                $mail->isHTML(true);
             }
 
             // from
             if (is_array($from)) {
-                $mail->from($from['mail'], $from['name']);
+                $mail->setFrom($from['mail'], $from['name']);
             }
 
             // to
-            $mail->to($to);
+            if (is_array($to)) {
+                foreach ($to as $address) {
+                    $mail->addAddress($address);
+                }
+            } else {
+                $mail->addAddress($to);
+            }
 
             // headers
             if (is_array($headers)) {
                 foreach ($headers as $header => $value) {
-                    $mail->set_header($header, $value);
+                    $mail->addCustomHeader($header, $value);
                 }
             }
 
             // subject
-            $mail->subject($subject);
+            $mail->Subject = $subject;
 
             // message body
-            $mail->message($body);
+            $mail->Body = $body;
+            $mail->AltBody = strip_tags($body);
 
             // send!
             return $mail->send();
