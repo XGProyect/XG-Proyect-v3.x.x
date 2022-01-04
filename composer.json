@@ -20,7 +20,8 @@
     ],
     "license": "GPL-3.0-only",
     "require": {
-        "php": "^7.3|^8.0"
+        "php": "^7.3|^8.0",
+        "phpmailer/phpmailer": "^6.5"
     },
     "require-dev": {
         "bartlett/php-compatinfo": "^6",
@@ -41,5 +42,8 @@
         "tests": [
             "vendor/bin/phpunit --verbose --config src/tests/phpunit.xml --testsuite xgp_application"
         ]
+    },
+    "config": {
+        "vendor-dir": "src/vendor"
     }
 }

@@ -74,6 +74,7 @@ define('DATA_PATH', 'storage' . DIRECTORY_SEPARATOR);
 define('LOGS_PATH', DATA_PATH . 'logs' . DIRECTORY_SEPARATOR);
 define('PUBLIC_PATH', 'public' . DIRECTORY_SEPARATOR);
 define('SYSTEM_PATH', 'system' . DIRECTORY_SEPARATOR);
+define('VENDOR_PATH', 'vendor' . DIRECTORY_SEPARATOR);
 
 /**
  *
@@ -88,7 +89,7 @@ define('LANG_PATH', APP_PATH . 'language' . DIRECTORY_SEPARATOR);
 define('HELPERS_PATH', APP_PATH . 'helpers' . DIRECTORY_SEPARATOR);
 define('LIB_PATH', APP_PATH . 'libraries' . DIRECTORY_SEPARATOR);
 define('MODELS_PATH', APP_PATH . 'models' . DIRECTORY_SEPARATOR);
-define('VENDOR_PATH', APP_PATH . 'ThirdParty' . DIRECTORY_SEPARATOR);
+define('THIRD_PARTY', APP_PATH . 'ThirdParty' . DIRECTORY_SEPARATOR);
 define('TEMPLATE_DIR', APP_PATH . 'views' . DIRECTORY_SEPARATOR);
 
 /**

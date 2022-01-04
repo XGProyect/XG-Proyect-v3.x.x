@@ -29,8 +29,8 @@ use App\libraries\messenger\MessagesOptions;
 use App\libraries\messenger\Messenger;
 use App\libraries\Page;
 use App\libraries\Users;
-use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\PHPMailer;
 
 /**
  * Functions Class
@@ -321,18 +321,12 @@ abstract class Functions
     {
         try {
             // require email library
-            $mailLibPath = XGP_ROOT . SYSTEM_PATH . 'PHPMailer';
+            $mailLibPath = XGP_ROOT . VENDOR_PATH . 'phpmailer/phpmailer';
 
             if (!file_exists($mailLibPath) or !function_exists('mail')) {
                 return false;
             }
 
-            // required by the library
-            if (!defined('BASEPATH')) {
-                define('BASEPATH', XGP_ROOT . APP_PATH);
-            }
-
-            // use CI library
             require_once $mailLibPath. '/src/Exception.php';
             require_once $mailLibPath. '/src/PHPMailer.php';
             require_once $mailLibPath. '/src/SMTP.php';

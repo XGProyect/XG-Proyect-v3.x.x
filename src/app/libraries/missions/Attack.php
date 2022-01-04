@@ -84,7 +84,7 @@ class Attack extends Missions
 
         if ($fleet_row['fleet_mess'] == 0 && $fleet_row['fleet_start_time'] <= time()) {
             // require several stuff
-            require XGP_ROOT . VENDOR_PATH .
+            require XGP_ROOT . THIRD_PARTY .
                 'battle_engine' . DIRECTORY_SEPARATOR .
                 'utils' . DIRECTORY_SEPARATOR . 'includer.php';
 
