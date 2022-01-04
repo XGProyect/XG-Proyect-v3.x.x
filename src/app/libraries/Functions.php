@@ -345,11 +345,11 @@ abstract class Functions
 
                 if (
                     !empty(self::readConfig('mailing_smtp_user')) &&
-                    !empty(self::readConfig('mailing_smtp_pass')) 
+                    !empty(self::readConfig('mailing_smtp_pass'))
                 ) {
                     $mail->SMTPAuth   = true;
                     $mail->Username   = self::readConfig('mailing_smtp_user');
-                    $mail->Password   = self::readConfig('mailing_smtp_pass'); 
+                    $mail->Password   = self::readConfig('mailing_smtp_pass');
                 }
             }
 
