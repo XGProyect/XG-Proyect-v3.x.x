@@ -38,13 +38,16 @@
     "prefer-stable": true,
     "scripts": {
         "phpcompatinfo": [
-            "vendor/bin/phpcompatinfo analyser:run ./src"
+            "src/vendor/bin/phpcompatinfo analyser:run ./src"
         ],
         "tests": [
-            "vendor/bin/phpunit --verbose --config src/tests/phpunit.xml --testsuite xgp_application"
+            "src/vendor/bin/phpunit --verbose --config src/tests/phpunit.xml --testsuite xgp_application"
         ]
     },
     "config": {
-        "vendor-dir": "src/vendor"
+        "vendor-dir": "src/vendor",
+        "allow-plugins": {
+            "composer/package-versions-deprecated": true
+        }
     }
 }
