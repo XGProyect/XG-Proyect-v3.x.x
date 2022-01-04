@@ -589,7 +589,7 @@ class FleetsLib extends XGPCore
         $bloc['fleet_time'] = Timing::formatExtendedDate($Time);
 
         return self::getTemplate()->set(
-            'overview/overview_fleet_event',
+            'overview.overview_fleet_event',
             $bloc
         );
     }

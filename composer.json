@@ -21,7 +21,8 @@
     "license": "GPL-3.0-only",
     "require": {
         "php": "^7.3|^8.0",
-        "phpmailer/phpmailer": "^6.5"
+        "phpmailer/phpmailer": "^6.5",
+        "eftec/bladeone": "^4.2"
     },
     "require-dev": {
         "bartlett/php-compatinfo": "^6",

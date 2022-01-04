@@ -95,6 +95,8 @@
                     <a href="https://github.com/PHPMailer/PHPMailer" target="_blank">PHPMailer</a>
                     <br>
                     <a href="https://github.com/mailhog/MailHog" target="_blank">MailHog</a>
+                    <br>
+                    <a href="https://github.com/EFTEC/BladeOne" target="_blank">EFTEC/BladeOne</a>
                     <br><br>
                     <strong>{hm_principal_contributors}</strong>
                     <br>

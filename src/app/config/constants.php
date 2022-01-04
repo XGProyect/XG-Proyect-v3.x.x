@@ -90,7 +90,7 @@ define('HELPERS_PATH', APP_PATH . 'helpers' . DIRECTORY_SEPARATOR);
 define('LIB_PATH', APP_PATH . 'libraries' . DIRECTORY_SEPARATOR);
 define('MODELS_PATH', APP_PATH . 'models' . DIRECTORY_SEPARATOR);
 define('THIRD_PARTY', APP_PATH . 'ThirdParty' . DIRECTORY_SEPARATOR);
-define('TEMPLATE_DIR', APP_PATH . 'views' . DIRECTORY_SEPARATOR);
+define('VIEWS_DIR', APP_PATH . 'views' . DIRECTORY_SEPARATOR);
 
 /**
  *

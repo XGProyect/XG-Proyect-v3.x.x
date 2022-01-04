@@ -4,6 +4,11 @@
 src/app/config/config.php
 
 #
+# public
+#
+src/public/compiles/*
+
+#
 # storage
 #
 src/storage/backups/*.sql

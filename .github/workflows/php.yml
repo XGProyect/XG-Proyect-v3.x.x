@@ -33,7 +33,7 @@ jobs:
       uses: overtrue/phplint@4.1.0
       with:
         path: src/
-        options: --exclude=*.log
+        options: --exclude=*.log --exclude=vendor
   php-cs-fixer:
     name: Run PHP-CS-Fixer
     runs-on: ubuntu-20.04
