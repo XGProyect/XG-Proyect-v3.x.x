@@ -25,9 +25,11 @@ MySQLi 5.5 or greater
 ## How to get XG Proyect?
 
 ### Manually
-Download and install XG Proyect is easy. Go to the releases section and get the latest stable release.  
-Then unzip the upload dir in your localhost, rename that folder to wathever you want.  
-Point you browser to your localhost and follow the step by step instructions provided by the installation software.
+Download and install XG Proyect is easy.
+
+- Go to the releases section and get the latest stable release.  
+- Then unzip the upload dir in your localhost, rename that folder to wathever you want.  
+- Point you browser to your localhost and follow the step by step instructions provided by the installation software.
 
 ### Composer
 
