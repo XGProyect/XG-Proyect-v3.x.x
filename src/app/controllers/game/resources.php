@@ -140,7 +140,7 @@ class Resources extends BaseController
                 $crystal_prod = eval($this->_prod_grid[$ProdID]['formule']['crystal']);
                 $deuterium_prod = eval($this->_prod_grid[$ProdID]['formule']['deuterium']);
                 $energy_prod = eval($this->_prod_grid[$ProdID]['formule']['energy']);
-                
+
                 // PRODUCTION
                 $resourcesTotal['metal'] += ProductionLib::productionAmount($metal_prod, $geologe_boost, $game_resource_multiplier);
                 $resourcesTotal['crystal'] += ProductionLib::productionAmount($crystal_prod, $geologe_boost, $game_resource_multiplier);

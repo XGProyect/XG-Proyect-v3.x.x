@@ -158,7 +158,6 @@ class DevelopmentsLib extends XGPCore
             $level = (isset($current_planet[$resource[$element]])) ? $current_planet[$resource[$element]] : $current_user[$resource[$element]];
         }
 
-        $is_buyeable = true;
         $text = $lang->line('require');
         $array = [
             'metal' => $lang->line('metal'),
@@ -182,7 +181,6 @@ class DevelopmentsLib extends XGPCore
                         $cost - $current_planet['planet_' . $res_type]
                     ) . "\">";
                     $text .= "<span class=\"noresources\">" . FormatLib::prettyNumber($cost) . "</span></t></b> ";
-                    $is_buyeable = false;
                 } else {
                     $text .= "<b style=\"color:lime;\">" . FormatLib::prettyNumber($cost) . "</b> ";
                 }
