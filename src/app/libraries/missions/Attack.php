@@ -176,7 +176,11 @@ class Attack extends Missions
             //-------------------------------------------------------------------------
             //------------------------------ battle -----------------------------------
             $battle = new Battle($attackers, $defenders);
-            $startBattle = DebugManager::runDebugged([$battle, 'startBattle'], $errorHandler, $exceptionHandler);
+            $startBattle = DebugManager::runDebugged(
+                [$battle, 'startBattle'],
+                $errorHandler,
+                $exceptionHandler
+            );
 
             $startBattle();
             //-------------------------------------------------------------------------
@@ -293,20 +297,22 @@ class Attack extends Missions
     {
         list($metal, $crystal) = $report->getDebris();
 
-        $this->missionsModel->updatePlanetDebrisByCoords(
-            [
-                'time' => time(),
-                'debris' => [
-                    'metal' => $metal,
-                    'crystal' => $crystal,
-                ],
-                'coords' => [
-                    'galaxy' => $fleet_row['fleet_end_galaxy'],
-                    'system' => $fleet_row['fleet_end_system'],
-                    'planet' => $fleet_row['fleet_end_planet'],
-                ],
-            ]
-        );
+        if (($metal + $crystal) > 0) {
+            $this->missionsModel->updatePlanetDebrisByCoords(
+                [
+                    'time' => time(),
+                    'debris' => [
+                        'metal' => $metal,
+                        'crystal' => $crystal,
+                    ],
+                    'coords' => [
+                        'galaxy' => $fleet_row['fleet_end_galaxy'],
+                        'system' => $fleet_row['fleet_end_system'],
+                        'planet' => $fleet_row['fleet_end_planet'],
+                    ],
+                ]
+            );
+        }
     }
 
     /**
@@ -805,7 +811,7 @@ class Attack extends Missions
     }
 
     /**
-     * buildReportLink
+     * Build the report link
      *
      * @param string $color Color
      * @param string $rid   Report ID

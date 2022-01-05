@@ -33,6 +33,7 @@ class BattleReport
     private $steal;
     private $attackersLostUnits;
     private $defendersLostUnits;
+    private $moonEvent;
 
     public $css = '../../';
 
@@ -211,12 +212,22 @@ class BattleReport
     public function tryMoon()
     {
         $prob = $this->getMoonProb();
-        return Math::tryEvent($prob, 'Events::event_moon', $prob);
+
+        $this->moonEvent = Math::tryEvent($prob, 'Events::event_moon', $prob);
+
+        return $this->moonEvent;
     }
+
+    public function getMoonEvent()
+    {
+        return $this->moonEvent;
+    }
+
     public function getMoonProb()
     {
         return min(floor(array_sum($this->getDebris()) / MOON_UNIT_PROB), MAX_MOON_PROB);
     }
+
     public function getAttackerDebris()
     {
         $sendMetal = 0;

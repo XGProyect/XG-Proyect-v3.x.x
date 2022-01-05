@@ -73,9 +73,11 @@ class Destroy extends Missions
     }
 
     /**
-     * method destroy_mission
-     * param $fleet_row
-     * return the transport result
+     * destroyMission
+     *
+     * @param array $fleet_row Fleet row
+     *
+     * @return void
      */
     public function destroyMission($fleet_row)
     {
@@ -196,21 +198,25 @@ class Destroy extends Missions
             //-------------------------------------------------------------------------
             //-------------------------- after battle stuff ---------------------------
             $report = $battle->getReport();
+
+            $afterBattleAttackers = $report->getAfterBattleAttackers();
             $steal = $this->updateAttackers(
                 $report->getPresentationAttackersFleetOnRound('START'),
-                $report->getAfterBattleAttackers(),
+                $afterBattleAttackers,
                 $target_planet
             );
 
             $report->setSteal($steal);
 
+            $afterBattleDefenders = $report->getAfterBattleDefenders();
             $this->updateDefenders(
                 $report->getPresentationDefendersFleetOnRound('START'),
-                $report->getAfterBattleDefenders(),
+                $afterBattleDefenders,
                 $target_planet,
                 $steal
             );
 
+            $this->updatePoints($report, $afterBattleAttackers, $afterBattleDefenders);
             $this->updateDebris($fleet_row, $report);
             $this->createNewReportAndSendIt($fleet_row, $report, $target_planet['planet_name']);
 
@@ -283,6 +289,34 @@ class Destroy extends Missions
         }
 
         return new Defense($id, $count, $rf, $shield, $cost, $power);
+    }
+
+    private function updatePoints(BattleReport $report, PlayerGroup $afterBattleAttackers, PlayerGroup $afterBattleDefenders): void
+    {
+        $attackersBefore = $report->getRound('START')->getAfterBattleAttackers();
+        $attackersLostShipsAndDefence = $report->getPlayersLostShips($attackersBefore, $afterBattleAttackers, true);
+
+        $this->updateLostShipsAndDefencePoints($attackersLostShipsAndDefence);
+
+        $defendersBefore = $report->getRound('START')->getAfterBattleDefenders();
+        $defendersLostShipsAndDefence = $report->getPlayersLostShips($defendersBefore, $afterBattleDefenders, true);
+
+        $this->updateLostShipsAndDefencePoints($defendersLostShipsAndDefence);
+    }
+
+    private function updateLostShipsAndDefencePoints(PlayerGroup $lostShipsAndDefence)
+    {
+        foreach ($lostShipsAndDefence->getIterator() as $player) {
+            foreach ($player->getIterator() as $fleet) {
+                $lostfleet = [];
+
+                foreach ($fleet->getIterator() as $shiptype => $ship) {
+                    $lostfleet[$shiptype] = $ship->getCount();
+                }
+
+                $this->missionsModel->updateLostShipsAndDefensePoints($player->getId(), $lostfleet);
+            }
+        }
     }
 
     /**
@@ -367,7 +401,7 @@ class Destroy extends Missions
      *
      * @return \PlayerGroup
      */
-    private function getPlayerGroupFromQuery($result, $target_user = false)
+    private function getPlayerGroupFromQuery($result, ?array $target_user = [])
     {
         $playerGroup = new PlayerGroup();
 
@@ -386,14 +420,14 @@ class Destroy extends Missions
 
                 //making the player object and add it to playerGroup object
                 if (!$playerGroup->existPlayer($idPlayer)) {
-                    if ($target_user !== false && $target_user['user_id'] == $idPlayer) {
+                    if (!empty($target_user) && $target_user['user_id'] == $idPlayer) {
                         $player_info = $target_user;
                     } else {
                         $player_info = $this->missionsModel->getTechnologiesByUserId($idPlayer);
                         $this->setHyperspaceTechLevel($idPlayer, $player_info['research_hyperspace_technology']);
                     }
 
-                    if ($target_user['planet_id'] == $idPlayer) {
+                    if (isset($target_user['planet_id']) && $target_user['planet_id'] == $idPlayer) {
                         $fleetSouther = new Fleet();
                         $player = new Player($idPlayer, [$fleetSouther]);
                     } else {
@@ -416,7 +450,7 @@ class Destroy extends Missions
 
                     $playerGroup->addPlayer($player);
 
-                    if ($target_user['planet_id'] == $idPlayer) {
+                    if (isset($target_user['planet_id']) && $target_user['planet_id'] == $idPlayer) {
                         $playerGroup->getPlayer($idPlayer)->addFleet($fleet);
                     }
                 } else {
@@ -473,12 +507,12 @@ class Destroy extends Missions
     /**
      * Create a new report and attach it to a message
      *
-     * @param array  $fleet_row    Fleet Row
-     * @param Report $report       Report
+     * @param array  $fleet_row Fleet Row
+     * @param Report $report    Report
      *
      * @return void
      */
-    private function createNewReportAndSendIt($fleet_row, $report)
+    private function createNewReportAndSendIt($fleet_row, $report, $target_planet_name)
     {
         $idAtts = $report->getAttackersId();
         $idDefs = $report->getDefendersId();
@@ -508,6 +542,7 @@ class Destroy extends Missions
             $raport = $this->buildReportLink(
                 $style,
                 $rid,
+                $target_planet_name,
                 $fleet_row['fleet_end_galaxy'],
                 $fleet_row['fleet_end_system'],
                 $fleet_row['fleet_end_planet']
@@ -536,6 +571,7 @@ class Destroy extends Missions
             $raport = $this->buildReportLink(
                 $style,
                 $rid,
+                $target_planet_name,
                 $fleet_row['fleet_end_galaxy'],
                 $fleet_row['fleet_end_system'],
                 $fleet_row['fleet_end_planet']
@@ -827,7 +863,7 @@ class Destroy extends Missions
      *
      * @return string
      */
-    private function buildReportLink($color, $rid, $g, $s, $p)
+    private function buildReportLink($color, $rid, $target_planet_name, $g, $s, $p)
     {
         $style = 'style="color:' . $color . ';"';
         $js = "OnClick=\'f(\"game.php?page=combatreport&report=" . $rid . "\", \"\");\'";

@@ -9,7 +9,7 @@ $Cdebris = number_format($debris[1],0, ',', '.');
 
 <?php echo $lng->getFloatingDebris($Mdebris,$Cdebris); ?><br />
 <?php echo $lng->getMoonProb( $this->getMoonProb()); ?><br />
-<?php $moon = $this->tryMoon(); ?>
+<?php $moon = $this->getMoonEvent(); ?>
 <?php if ($moon !== false) { echo $lng->getNewMoon('Planet', 1, 1, 1); ?>
 <br />
 <?php } ?>
