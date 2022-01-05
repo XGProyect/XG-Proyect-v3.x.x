@@ -235,11 +235,24 @@ abstract class Formulas
 
     /**
      * Get the Ion Technology Bonus
-     * @param float $ion_technology_level
      */
     public static function getIonTechnologyBonus(int $ion_technology_level): float
     {
         return $ion_technology_level * 0.04;
+    }
+
+    /**
+     * Calculate the plasma technology resource bonus
+     */
+    public static function getPlasmaTechnologyBonus(int $plasmaTechnologyLevel, string $resource): float
+    {
+        $bonus = [
+            'metal' => 0.01, // 1%
+            'crystal' => 0.0066, // 0.66%
+            'deuterium' => 0.0033, // 0.33%
+        ];
+
+        return $plasmaTechnologyLevel * $bonus[$resource];
     }
 
     /**

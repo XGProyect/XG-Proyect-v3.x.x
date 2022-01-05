@@ -14,8 +14,8 @@
         </tr>
         {!! $fleet_list !!}
         <tr>
-            <th>{{$moon_img}}<br>{{$moon}}</th>
-            <th colspan="2"><img src="{{$dpath}}planets/{{$planet_image}}.jpg" height="200" width="200"><br>{{$building}}</th>
+            <th>{!! $moon_img !!}<br>{{$moon}}</th>
+            <th colspan="2"><img src="{{$dpath}}planets/{{$planet_image}}.jpg" height="200" width="200"><br>{!! $building !!}</th>
             <th class="s">
                 <table class="s" align="top" border="0">
                     <tr>{!! $anothers_planets !!}</tr>

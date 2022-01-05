@@ -185,7 +185,7 @@ define('BUILD_DEUTERIUM', 0);
 // OFFICIERS DEFAULT VALUES
 define('AMIRAL', 2);
 define('ENGINEER_DEFENSE', 2);
-define('ENGINEER_ENERGY', 0.5);
+define('ENGINEER_ENERGY', 0.1);
 define('GEOLOGUE', 0.1);
 define('TECHNOCRATE_SPY', 2);
 define('TECHNOCRATE_SPEED', 0.25);

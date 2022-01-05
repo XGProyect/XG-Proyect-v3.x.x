@@ -15,6 +15,7 @@ namespace App\controllers\game;
 use App\core\BaseController;
 use App\core\enumerators\PlanetTypesEnumerator;
 use App\libraries\FormatLib;
+use App\libraries\Formulas;
 use App\libraries\Functions;
 use App\libraries\OfficiersLib;
 use App\libraries\ProductionLib;
@@ -51,7 +52,7 @@ class Resources extends BaseController
         parent::loadModel('game/resources');
 
         // load Language
-        parent::loadLang(['game/global', 'game/constructions', 'game/ships', 'game/resources']);
+        parent::loadLang(['game/global', 'game/constructions', 'game/ships', 'game/resources', 'game/technologies']);
 
         // check if session is active
         Users::checkSession();
@@ -112,8 +113,20 @@ class Resources extends BaseController
 
         $BuildTemp = $this->planet['planet_temp_max'];
 
+        $plasmaBoost = [
+            'metal' => 0,
+            'crystal' => 0,
+            'deuterium' => 0,
+        ];
+
         foreach ($this->_reslist['prod'] as $ProdID) {
             if ($this->planet[$this->_resource[$ProdID]] > 0 && isset($this->_prod_grid[$ProdID])) {
+                $resourcesTotal = [
+                    'metal' => 0,
+                    'crystal' => 0,
+                    'deuterium' => 0,
+                ];
+
                 $BuildLevelFactor = $this->planet['planet_' . $this->_resource[$ProdID] . '_percent'];
                 $BuildLevel = $this->planet[$this->_resource[$ProdID]];
                 $BuildEnergy = $this->user['research_energy_technology'];
@@ -127,11 +140,29 @@ class Resources extends BaseController
                 $crystal_prod = eval($this->_prod_grid[$ProdID]['formule']['crystal']);
                 $deuterium_prod = eval($this->_prod_grid[$ProdID]['formule']['deuterium']);
                 $energy_prod = eval($this->_prod_grid[$ProdID]['formule']['energy']);
+                
+                // PRODUCTION
+                $resourcesTotal['metal'] += ProductionLib::productionAmount($metal_prod, $geologe_boost, $game_resource_multiplier);
+                $resourcesTotal['crystal'] += ProductionLib::productionAmount($crystal_prod, $geologe_boost, $game_resource_multiplier);
+                $resourcesTotal['deuterium'] += ProductionLib::productionAmount($deuterium_prod, $geologe_boost, $game_resource_multiplier);
+
+                // PLASMA BOOST
+                $metalBoost = Formulas::getPlasmaTechnologyBonus($this->user['research_plasma_technology'], 'metal');
+                $crystalBoost = Formulas::getPlasmaTechnologyBonus($this->user['research_plasma_technology'], 'crystal');
+                $deuteriumBoost = Formulas::getPlasmaTechnologyBonus($this->user['research_plasma_technology'], 'deuterium');
 
                 // PRODUCTION
-                $metal = ProductionLib::productionAmount($metal_prod, $geologe_boost, $game_resource_multiplier);
-                $crystal = ProductionLib::productionAmount($crystal_prod, $geologe_boost, $game_resource_multiplier);
-                $deuterium = ProductionLib::productionAmount($deuterium_prod, $geologe_boost, $game_resource_multiplier);
+                $plasmaBoostMetal = ProductionLib::productionAmount($metal_prod, $metalBoost, $game_resource_multiplier);
+                $plasmaBoostCrystal = ProductionLib::productionAmount($crystal_prod, $crystalBoost, $game_resource_multiplier);
+                $plasmaBoostDeuterium = ProductionLib::productionAmount($deuterium_prod, $deuteriumBoost, $game_resource_multiplier);
+
+                $resourcesTotal['metal'] += $plasmaBoostMetal;
+                $resourcesTotal['crystal'] += $plasmaBoostCrystal;
+                $resourcesTotal['deuterium'] += $plasmaBoostDeuterium;
+
+                $plasmaBoost['metal'] += $plasmaBoostMetal;
+                $plasmaBoost['crystal'] += $plasmaBoostCrystal;
+                $plasmaBoost['deuterium'] += $plasmaBoostDeuterium;
 
                 if ($ProdID >= 4) {
                     $energy = ProductionLib::productionAmount($energy_prod, $engineer_boost, 0, true);
@@ -145,13 +176,13 @@ class Resources extends BaseController
                     $this->planet['planet_energy_used'] += $energy;
                 }
 
-                $this->planet['planet_metal_perhour'] += $metal;
-                $this->planet['planet_crystal_perhour'] += $crystal;
-                $this->planet['planet_deuterium_perhour'] += $deuterium;
+                $this->planet['planet_metal_perhour'] += $resourcesTotal['metal'];
+                $this->planet['planet_crystal_perhour'] += $resourcesTotal['crystal'];
+                $this->planet['planet_deuterium_perhour'] += $resourcesTotal['deuterium'];
 
-                $metal = ProductionLib::currentProduction($metal, $post_percent);
-                $crystal = ProductionLib::currentProduction($crystal, $post_percent);
-                $deuterium = ProductionLib::currentProduction($deuterium, $post_percent);
+                $metal = ProductionLib::currentProduction($metal_prod, $post_percent);
+                $crystal = ProductionLib::currentProduction($crystal_prod, $post_percent);
+                $deuterium = ProductionLib::currentProduction($deuterium_prod, $post_percent);
                 $energy = ProductionLib::currentProduction($energy, $post_percent);
                 $Field = 'planet_' . $this->_resource[$ProdID] . '_percent';
                 $CurrRow = [];
@@ -183,6 +214,12 @@ class Resources extends BaseController
         $parse['crystal_basic_income'] = $game_crystal_basic_income;
         $parse['deuterium_basic_income'] = $game_deuterium_basic_income;
         $parse['energy_basic_income'] = $game_energy_basic_income;
+
+        $parse['plasma_level'] = $this->user['research_plasma_technology'];
+        $parse['plasma_metal'] = FormatLib::colorNumber(FormatLib::prettyNumber($plasmaBoost['metal']));
+        $parse['plasma_crystal'] = FormatLib::colorNumber(FormatLib::prettyNumber($plasmaBoost['crystal']));
+        $parse['plasma_deuterium'] = FormatLib::colorNumber(FormatLib::prettyNumber($plasmaBoost['deuterium']));
+
         $parse['planet_metal_max'] = $this->resource_color($this->planet['planet_metal'], $this->planet['planet_metal_max']);
         $parse['planet_crystal_max'] = $this->resource_color($this->planet['planet_crystal'], $this->planet['planet_crystal_max']);
         $parse['planet_deuterium_max'] = $this->resource_color($this->planet['planet_deuterium'], $this->planet['planet_deuterium_max']);

@@ -25,6 +25,7 @@ use App\core\XGPCore;
 use App\helpers\UrlHelper;
 use App\libraries\DevelopmentsLib as Developments;
 use App\libraries\FormatLib as Format;
+use App\libraries\Formulas;
 use App\libraries\Functions;
 use App\libraries\MissionControlLibrary;
 use App\libraries\OfficiersLib as Officiers;
@@ -507,7 +508,12 @@ class UpdatesLibrary extends XGPCore
             $deuterium_prod = eval($ProdGrid[$ProdID]['formule']['deuterium']);
             $energy_prod = eval($ProdGrid[$ProdID]['formule']['energy']);
 
-            // PRODUCTION
+            // PLASMA BOOST
+            $metalBoost = Formulas::getPlasmaTechnologyBonus($current_user['research_plasma_technology'], 'metal');
+            $crystalBoost = Formulas::getPlasmaTechnologyBonus($current_user['research_plasma_technology'], 'crystal');
+            $deuteriumBoost = Formulas::getPlasmaTechnologyBonus($current_user['research_plasma_technology'], 'deuterium');
+
+            // PRODUCTION BOOST WITH OFFICERS
             $Caps['planet_metal_perhour'] += Production::currentProduction(
                 Production::productionAmount($metal_prod, $geologe_boost, $game_resource_multiplier),
                 $post_percent
@@ -520,6 +526,22 @@ class UpdatesLibrary extends XGPCore
 
             $Caps['planet_deuterium_perhour'] += Production::currentProduction(
                 Production::productionAmount($deuterium_prod, $geologe_boost, $game_resource_multiplier),
+                $post_percent
+            );
+
+            // PRODUCTION BOOST WITH PLASMA
+            $Caps['planet_metal_perhour'] += Production::currentProduction(
+                Production::productionAmount($metal_prod, $metalBoost, $game_resource_multiplier),
+                $post_percent
+            );
+
+            $Caps['planet_crystal_perhour'] += Production::currentProduction(
+                Production::productionAmount($crystal_prod, $crystalBoost, $game_resource_multiplier),
+                $post_percent
+            );
+
+            $Caps['planet_deuterium_perhour'] += Production::currentProduction(
+                Production::productionAmount($deuterium_prod, $deuteriumBoost, $game_resource_multiplier),
                 $post_percent
             );
 
@@ -554,9 +576,9 @@ class UpdatesLibrary extends XGPCore
             $current_planet['planet_energy_used'] = 0;
             $current_planet['planet_energy_max'] = 0;
         } else {
-            $current_planet['planet_metal_perhour'] = $Caps['planet_metal_perhour'];
-            $current_planet['planet_crystal_perhour'] = $Caps['planet_crystal_perhour'];
-            $current_planet['planet_deuterium_perhour'] = $Caps['planet_deuterium_perhour'];
+            $current_planet['planet_metal_perhour'] = $Caps['planet_metal_perhour'] + $game_metal_basic_income;
+            $current_planet['planet_crystal_perhour'] = $Caps['planet_crystal_perhour'] + $game_crystal_basic_income;
+            $current_planet['planet_deuterium_perhour'] = $Caps['planet_deuterium_perhour'] + $game_deuterium_basic_income;
             $current_planet['planet_energy_used'] = $Caps['planet_energy_used'];
             $current_planet['planet_energy_max'] = $Caps['planet_energy_max'];
         }
