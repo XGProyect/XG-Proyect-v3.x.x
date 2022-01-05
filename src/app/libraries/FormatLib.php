@@ -141,23 +141,27 @@ class FormatLib
      */
     public static function colorNumber($n, $s = '')
     {
-        if ($n >= 0) {
-            if ($s != '') {
-                $s = self::colorGreen($s);
-            } else {
-                $s = self::colorGreen($n);
-            }
-        } elseif ($n < 0) {
-            if ($s != '') {
-                $s = self::colorRed($s);
-            } else {
-                $s = self::colorRed($n);
-            }
+        if ($n == 0) {
+            $s = self::customColor($n, '#fff');
         } else {
-            if ($s != '') {
-                $s = $s;
+            if ($n >= 0) {
+                if ($s != '') {
+                    $s = self::colorGreen($s);
+                } else {
+                    $s = self::colorGreen($n);
+                }
+            } elseif ($n < 0) {
+                if ($s != '') {
+                    $s = self::colorRed($s);
+                } else {
+                    $s = self::colorRed($n);
+                }
             } else {
-                $s = $n;
+                if ($s != '') {
+                    $s = $s;
+                } else {
+                    $s = $n;
+                }
             }
         }
 
