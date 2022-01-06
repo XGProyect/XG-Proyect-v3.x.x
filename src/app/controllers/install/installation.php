@@ -330,7 +330,7 @@ class Installation extends BaseController
      */
     private function isWritable()
     {
-        $config_dir = XGP_ROOT . 'app/config/';
+        $config_dir = XGP_ROOT . 'config/';
 
         return is_writable($config_dir);
     }
@@ -343,7 +343,7 @@ class Installation extends BaseController
     private function isInstalled()
     {
         // if file not exists
-        $config_file = XGP_ROOT . 'app/config/config.php';
+        $config_file = XGP_ROOT . CONFIGS_PATH . 'config.php';
 
         if (!file_exists($config_file) or filesize($config_file) == 0) {
             return false;
@@ -466,7 +466,7 @@ class Installation extends BaseController
         $tables = [];
 
         // get the database structure
-        require_once XGP_ROOT . APP_PATH . 'database' . DIRECTORY_SEPARATOR . 'database.php';
+        require_once XGP_ROOT . 'database' . DIRECTORY_SEPARATOR . 'database.php';
 
         if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
             $this->Installation_Model->setWindowsSqlMode();

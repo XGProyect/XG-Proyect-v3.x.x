@@ -3,7 +3,7 @@
 namespace App\controllers\game;
 
 use App\core\BaseController;
-use App\core\Enumerators\OfficiersEnumerator as OE;
+use App\core\enumerators\OfficiersEnumerator as OE;
 use App\libraries\FormatLib;
 use App\libraries\Functions;
 use App\libraries\OfficiersLib;

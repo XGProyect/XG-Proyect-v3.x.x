@@ -66,7 +66,7 @@ abstract class XGPCore
     {
         try {
             // require langugage library
-            $ci_lang_path = XGP_ROOT . SYSTEM_PATH . 'ci3_custom' . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'Lang.php';
+            $ci_lang_path = XGP_ROOT . LIB_PATH . 'Ci' . DIRECTORY_SEPARATOR . 'Lang.php';
 
             if (!file_exists($ci_lang_path)) {
                 // not found
@@ -76,7 +76,7 @@ abstract class XGPCore
 
             // required by the library
             if (!defined('BASEPATH')) {
-                define('BASEPATH', XGP_ROOT . APP_PATH);
+                define('BASEPATH', XGP_ROOT . RESOURCES_PATH);
             }
 
             // use CI library

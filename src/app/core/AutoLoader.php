@@ -43,6 +43,18 @@ class AutoLoader
     protected static $directoryClassNames = [];
 
     /**
+     * An array keeping dir names that must be skipped from autoloading
+     *
+     * @var array
+     */
+    protected static $excludes = [];
+
+    public static function registerExcludes($dirName)
+    {
+        static::$excludes[] = $dirName;
+    }
+
+    /**
      * Store the filename (sans extension) & full path to all ".php" files found for a namespace.
      * The parameter should contain the root namespace as the key and the directory as a value.
      *
@@ -54,15 +66,17 @@ class AutoLoader
     {
         $directoryContents = new \DirectoryIterator($dirName);
         foreach ($directoryContents as $file) {
-            if ($file->isDir() && !$file->isLink() && !$file->isDot()) {
-                $newNamespace = $namespace . "_" . $file->getFileName();
-                $newDirName = $dirName . "/" . $file->getFilename();
-                static::registerNamespace($newNamespace, $newDirName);
-            } elseif (substr($file->getFilename(), -4) === '.php') {
-                $className = substr($file->getFilename(), 0, -4);
-                $namespacedClassName = $namespace . "_" . $className;
-                $fileName = realpath($dirName) . "/" . $file->getFilename();
-                static::$namespaceClassNames[$namespacedClassName] = $fileName;
+            if (!in_array($file->getFileName(), self::$excludes)) {
+                if ($file->isDir() && !$file->isLink() && !$file->isDot() && !in_array($file, self::$excludes)) {
+                    $newNamespace = $namespace . "_" . $file->getFileName();
+                    $newDirName = $dirName . "/" . $file->getFilename();
+                    static::registerNamespace($newNamespace, $newDirName);
+                } elseif (substr($file->getFilename(), -4) === '.php') {
+                    $className = substr($file->getFilename(), 0, -4);
+                    $namespacedClassName = $namespace . "_" . $className;
+                    $fileName = realpath($dirName) . "/" . $file->getFilename();
+                    static::$namespaceClassNames[$namespacedClassName] = $fileName;
+                }
             }
         }
     }

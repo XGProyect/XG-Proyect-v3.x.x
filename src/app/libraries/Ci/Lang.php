@@ -113,7 +113,7 @@ class CI_Lang
         }
 
         // Load the base file, so any others found can override it
-        $basepath = BASEPATH . 'language/' . $idiom . '/' . $langfile;
+        $basepath = BASEPATH . 'lang/' . $idiom . '/' . $langfile;
         if (($found = file_exists($basepath)) === true) {
             include $basepath;
         }

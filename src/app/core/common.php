@@ -35,7 +35,7 @@ use AutoLoader;
 use Exception;
 
 // Require some stuff
-require_once XGP_ROOT . 'app' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'constants.php';
+require_once XGP_ROOT . 'config' . DIRECTORY_SEPARATOR . 'constants.php';
 require_once XGP_ROOT . CORE_PATH . 'AutoLoader.php';
 
 /**
@@ -104,9 +104,11 @@ class Common
      */
     private function autoLoad(): void
     {
-        AutoLoader::registerDirectory(XGP_ROOT . CORE_PATH);
-        AutoLoader::registerDirectory(XGP_ROOT . LIB_PATH);
-        AutoLoader::registerDirectory(XGP_ROOT . HELPERS_PATH);
+        AutoLoader::registerExcludes('BattleEngine');
+
+        AutoLoader::registerNamespace('App_core', XGP_ROOT . CORE_PATH);
+        AutoLoader::registerNamespace('App_helpers', XGP_ROOT . HELPERS_PATH);
+        AutoLoader::registerNamespace('App_libraries', XGP_ROOT . LIB_PATH);
     }
 
     /**
@@ -128,7 +130,7 @@ class Common
     private function isServerInstalled(): void
     {
         try {
-            $config_file = XGP_ROOT . 'app' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'config.php';
+            $config_file = XGP_ROOT . CONFIGS_PATH . 'config.php';
 
             if (file_exists($config_file)) {
                 require $config_file;

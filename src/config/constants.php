@@ -70,10 +70,11 @@ define('ADM_URL', PROTOCOL . strtr(BASE_PATH, ['public' => '', 'public/' => ''])
  *
  */
 define('APP_PATH', 'app' . DIRECTORY_SEPARATOR);
-define('DATA_PATH', 'storage' . DIRECTORY_SEPARATOR);
-define('LOGS_PATH', DATA_PATH . 'logs' . DIRECTORY_SEPARATOR);
+define('CONFIGS_PATH', 'config' . DIRECTORY_SEPARATOR);
+define('DATABASE_PATH', 'database' . DIRECTORY_SEPARATOR);
 define('PUBLIC_PATH', 'public' . DIRECTORY_SEPARATOR);
-define('SYSTEM_PATH', 'system' . DIRECTORY_SEPARATOR);
+define('RESOURCES_PATH', 'resources' . DIRECTORY_SEPARATOR);
+define('DATA_PATH', 'storage' . DIRECTORY_SEPARATOR);
 define('VENDOR_PATH', 'vendor' . DIRECTORY_SEPARATOR);
 
 /**
@@ -81,16 +82,11 @@ define('VENDOR_PATH', 'vendor' . DIRECTORY_SEPARATOR);
  * APPLICATION DIRECTORY STRUCTURE
  *
  */
-define('CONFIGS_PATH', APP_PATH . 'config' . DIRECTORY_SEPARATOR);
 define('CONTROLLERS_PATH', APP_PATH . 'controllers' . DIRECTORY_SEPARATOR);
 define('CORE_PATH', APP_PATH . 'core' . DIRECTORY_SEPARATOR);
-define('DATABASE_PATH', APP_PATH . 'database' . DIRECTORY_SEPARATOR);
-define('LANG_PATH', APP_PATH . 'language' . DIRECTORY_SEPARATOR);
 define('HELPERS_PATH', APP_PATH . 'helpers' . DIRECTORY_SEPARATOR);
 define('LIB_PATH', APP_PATH . 'libraries' . DIRECTORY_SEPARATOR);
 define('MODELS_PATH', APP_PATH . 'models' . DIRECTORY_SEPARATOR);
-define('THIRD_PARTY', APP_PATH . 'ThirdParty' . DIRECTORY_SEPARATOR);
-define('VIEWS_DIR', APP_PATH . 'views' . DIRECTORY_SEPARATOR);
 
 /**
  *
@@ -113,10 +109,19 @@ define('UPDATE_PATH', DATABASE_PATH . 'update' . DIRECTORY_SEPARATOR);
 
 /**
  *
- * DATA DIRECTORY STRUCTURE
+ * RESOURCES DIRECTORY STRUCTURE
+ *
+ */
+define('LANG_PATH', RESOURCES_PATH . 'lang' . DIRECTORY_SEPARATOR);
+define('VIEWS_DIR', RESOURCES_PATH . 'views' . DIRECTORY_SEPARATOR);
+
+/**
+ *
+ * STORAGE DIRECTORY STRUCTURE
  *
  */
 define('BACKUP_PATH', DATA_PATH . 'backups' . DIRECTORY_SEPARATOR);
+define('LOGS_PATH', DATA_PATH . 'logs' . DIRECTORY_SEPARATOR);
 
 /**
  *

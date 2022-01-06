@@ -9,10 +9,9 @@
             <source dsn=".">
                 <path>src/app</path>
             </source>
-            <ignore hidden="true" symlinks="true">
-                <path>src/app/ThirdParty/**/*</path>
-                <path>src/app/views/**/*</path>
-            </ignore>
+            <!-- <ignore hidden="true" symlinks="true">
+                <path>src/resources/**/*</path>
+            </ignore> -->
             <extensions>
                 <extension>php</extension>
             </extensions>

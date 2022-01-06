@@ -63,7 +63,7 @@ class Database
      */
     public function __construct()
     {
-        require_once XGP_ROOT . 'app' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'config.php';
+        require_once XGP_ROOT . CONFIGS_PATH . 'config.php';
 
         if (defined('DB_HOST') && defined('DB_USER') && defined('DB_PASS') && defined('DB_NAME') && defined('DB_PREFIX')) {
             $this->db_data = [
