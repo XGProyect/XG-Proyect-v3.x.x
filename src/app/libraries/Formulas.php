@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Formulas.php
  *
@@ -253,6 +254,32 @@ abstract class Formulas
         ];
 
         return $plasmaTechnologyLevel * $bonus[$resource];
+    }
+
+    /**
+     * Calculate bonus officiers Geolgoist resources
+     */
+    public static function getGeologistBonus(int $geologist, string $resource): float
+    {
+        $bonus = [
+            'metal' => 0.1, // 10%
+            'crystal' =>  0.1, // 10%
+            'deuterium' =>  0.1, // 10%
+        ];
+
+        return $geologist * $bonus[$resource];
+    }
+
+    /**
+     * Calculate bonus officiers Engineer Energy
+     */
+    public static function getEngineerBonus(int $engineer, string $resource): float
+    {
+        $bonus = [
+            'energy' => 0.1 // 10%
+        ];
+
+        return $engineer *  $bonus[$resource];
     }
 
     /**

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * FormatLib.php
  *
@@ -11,6 +12,7 @@
 namespace App\libraries;
 
 use App\core\enumerators\ImportanceEnumerator as Importance;
+use App\core\Language;
 use App\helpers\UrlHelper;
 use DateTime;
 
@@ -142,19 +144,19 @@ class FormatLib
     public static function colorNumber($n, $s = '')
     {
         if ($n == 0) {
-            $s = self::customColor($n, '#fff');
+            $s = self::customColor($n, '#f1f1f1');
         } else {
             if ($n >= 0) {
                 if ($s != '') {
-                    $s = self::colorGreen($s);
+                    $s = self::customColor($s, '#99CC00');
                 } else {
-                    $s = self::colorGreen($n);
+                    $s = self::customColor($n, '#99CC00');
                 }
             } elseif ($n < 0) {
                 if ($s != '') {
-                    $s = self::colorRed($s);
+                    $s = self::customColor($s, '#D43635');
                 } else {
-                    $s = self::colorRed($n);
+                    $s = self::customColor($n, '#D43635');
                 }
             } else {
                 if ($s != '') {
@@ -257,6 +259,28 @@ class FormatLib
         } else {
             return self::prettyNumber($number);
         }
+    }
+
+    /**
+     * Get number format for resources page like ogame redesigned
+     */
+    public static function getNumberFormatShort($number)
+    {
+        $lang = new Language();
+        
+        if ($number >= 1000000000) {
+            return number_format(($number / 1000000000), 2, '.', ',') . $lang->loadLang('game/global', true)->line('unit_milliard');
+        }
+
+        if ($number >= 1000000) {
+            return number_format(($number / 1000000), 2, '.', ',') . $lang->loadLang('game/global', true)->line('unit_mega');
+        }
+
+        // if ($number >= 1000) {
+        //     return number_format(($number / 1000), 2, '.', ',') .  $lang->loadLang('game/global', true)->line('unit_kilo');
+        // }
+
+        return number_format($number, 0, '.', '.');
     }
 
     /**

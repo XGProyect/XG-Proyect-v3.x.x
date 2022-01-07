@@ -44,3 +44,4 @@ nbproject/
 #
 vendor
 composer.lock
+src/app/config/config.php

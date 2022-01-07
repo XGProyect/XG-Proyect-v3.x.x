@@ -58,4 +58,8 @@ $lang = [
         'second' => 'segundo',
         'seconds' => 'segundos',
     ],
+
+    'unit_milliard' => 'B',
+    'unit_mega' => 'M',
+    'unit_kilo' => 'K',
 ];

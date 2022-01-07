@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Resources Controller
  *
@@ -119,6 +120,28 @@ class Resources extends BaseController
             'deuterium' => 0,
         ];
 
+        $geologistBoost = [
+            'metal' => 0,
+            'crystal' => 0,
+            'deuterium' => 0,
+        ];
+
+        $engineerBoost['energy'] = 0;
+
+        $parse['dpath'] = DPATH;
+        // Active IMG
+        $parse['premium_geologist'] = OfficiersLib::isOfficierActive($this->user['premium_officier_geologist']) ? '' : '_un';
+        $parse['premium_engineer'] = OfficiersLib::isOfficierActive($this->user['premium_officier_engineer']) ?  '' : '_un';
+
+        // Active Overlib
+        $parse['premium_geologist_tip'] = OfficiersLib::isOfficierActive($this->user['premium_officier_geologist'])
+            ? $this->langs->line('rs_geologist_bonus')
+            : $this->langs->line('rs_hire_geologist');
+
+        $parse['premium_engineer_tip'] = OfficiersLib::isOfficierActive($this->user['premium_officier_engineer'])
+            ? $this->langs->line('rs_engineer_bonus')
+            : $this->langs->line('rs_engineer_hire');
+
         foreach ($this->_reslist['prod'] as $ProdID) {
             if ($this->planet[$this->_resource[$ProdID]] > 0 && isset($this->_prod_grid[$ProdID])) {
                 $resourcesTotal = [
@@ -164,17 +187,40 @@ class Resources extends BaseController
                 $plasmaBoost['crystal'] += $plasmaBoostCrystal;
                 $plasmaBoost['deuterium'] += $plasmaBoostDeuterium;
 
+                // GEOLOGIST BOOST
+                $metalBoost = Formulas::getGeologistBonus(OfficiersLib::isOfficierActive($this->user['premium_officier_geologist']), 'metal');
+                $crystalBoost = Formulas::getGeologistBonus(OfficiersLib::isOfficierActive($this->user['premium_officier_geologist']), 'crystal');
+                $deuteriumBoost = Formulas::getGeologistBonus(OfficiersLib::isOfficierActive($this->user['premium_officier_geologist']), 'deuterium');
+
+                $geologistBoostMetal = ProductionLib::productionAmount($metal_prod, $metalBoost, $game_resource_multiplier);
+                $geologistBoostCrystal = ProductionLib::productionAmount($crystal_prod, $crystalBoost, $game_resource_multiplier);
+                $geologistBoostDeuterium = ProductionLib::productionAmount($deuterium_prod, $deuteriumBoost, $game_resource_multiplier);
+
+                $geologistBoost['metal'] += $geologistBoostMetal;
+                $geologistBoost['crystal'] += $geologistBoostCrystal;
+                $geologistBoost['deuterium'] += $geologistBoostDeuterium;
+
+                // ENGINEER BoOST
+                $energyBoost = Formulas::getEngineerBonus(OfficiersLib::isOfficierActive($this->user['premium_officier_engineer']), 'energy');
+                
+
                 if ($ProdID >= 4) {
                     $energy = ProductionLib::productionAmount($energy_prod, $engineer_boost, 0, true);
+                    $engineerBoostEnergy = ProductionLib::productionAmount($energy_prod, $energyBoost, 0, true);
                 } else {
                     $energy = ProductionLib::productionAmount($energy_prod, 1, 0, true);
+                    $engineerBoostEnergy = 0;
                 }
 
                 if ($energy > 0) {
                     $this->planet['planet_energy_max'] += $energy;
+                    $engineerBoost['energy'] += $engineerBoostEnergy;
                 } else {
                     $this->planet['planet_energy_used'] += $energy;
+                    $engineerBoost['energy'] += 0;
                 }
+
+                
 
                 $this->planet['planet_metal_perhour'] += $resourcesTotal['metal'];
                 $this->planet['planet_crystal_perhour'] += $resourcesTotal['crystal'];
@@ -220,6 +266,26 @@ class Resources extends BaseController
         $parse['plasma_crystal'] = FormatLib::colorNumber(FormatLib::prettyNumber($plasmaBoost['crystal']));
         $parse['plasma_deuterium'] = FormatLib::colorNumber(FormatLib::prettyNumber($plasmaBoost['deuterium']));
 
+        $parse['geologist_metal'] = OfficiersLib::isOfficierActive($this->user['premium_officier_geologist'])
+            ? FormatLib::colorNumber(FormatLib::prettyNumber($geologistBoost['metal']))
+            : FormatLib::customColor(0, 'gray');
+        $parse['geologist_crystal'] = OfficiersLib::isOfficierActive($this->user['premium_officier_geologist'])
+            ? FormatLib::colorNumber(FormatLib::prettyNumber($geologistBoost['crystal']))
+            : FormatLib::customColor(0, 'gray');
+        $parse['geologist_deuterium'] = OfficiersLib::isOfficierActive($this->user['premium_officier_geologist'])
+            ? FormatLib::colorNumber(FormatLib::prettyNumber($geologistBoost['deuterium']))
+            : FormatLib::customColor(0, 'gray');
+        $parse['geologist_energy'] = OfficiersLib::isOfficierActive($this->user['premium_officier_geologist'])
+            ? FormatLib::colorNumber(0)
+            : FormatLib::customColor(0, 'gray');
+        $parse['engineer_energy'] = OfficiersLib::isOfficierActive($this->user['premium_officier_engineer'])
+            ? FormatLib::colorNumber(FormatLib::prettyNumber($engineerBoost['energy']))
+            : FormatLib::customColor(0, 'gray');
+
+        $parse['officers_blocked'] = OfficiersLib::isOfficierActive($this->user['premium_officier_engineer'])
+            ? FormatLib::colorNumber(FormatLib::prettyNumber(0))
+            : FormatLib::customColor(0, 'gray');
+
         $parse['planet_metal_max'] = $this->resource_color($this->planet['planet_metal'], $this->planet['planet_metal_max']);
         $parse['planet_crystal_max'] = $this->resource_color($this->planet['planet_crystal'], $this->planet['planet_crystal_max']);
         $parse['planet_deuterium_max'] = $this->resource_color($this->planet['planet_deuterium'], $this->planet['planet_deuterium_max']);
@@ -238,14 +304,14 @@ class Resources extends BaseController
         $parse['daily_deuterium'] = $this->calculate_daily($this->planet['planet_deuterium_perhour'], $parse['production_level'], $parse['deuterium_basic_income']);
         $parse['weekly_deuterium'] = $this->calculate_weekly($this->planet['planet_deuterium_perhour'], $parse['production_level'], $parse['deuterium_basic_income']);
 
-        $parse['daily_metal'] = FormatLib::colorNumber(FormatLib::prettyNumber($parse['daily_metal']));
-        $parse['weekly_metal'] = FormatLib::colorNumber(FormatLib::prettyNumber($parse['weekly_metal']));
+        $parse['daily_metal'] = FormatLib::colorNumber(FormatLib::getNumberFormatShort($parse['daily_metal']));
+        $parse['weekly_metal'] = FormatLib::colorNumber(FormatLib::getNumberFormatShort($parse['weekly_metal']));
 
-        $parse['daily_crystal'] = FormatLib::colorNumber(FormatLib::prettyNumber($parse['daily_crystal']));
-        $parse['weekly_crystal'] = FormatLib::colorNumber(FormatLib::prettyNumber($parse['weekly_crystal']));
+        $parse['daily_crystal'] = FormatLib::colorNumber(FormatLib::getNumberFormatShort($parse['daily_crystal']));
+        $parse['weekly_crystal'] = FormatLib::colorNumber(FormatLib::getNumberFormatShort($parse['weekly_crystal']));
 
-        $parse['daily_deuterium'] = FormatLib::colorNumber(FormatLib::prettyNumber($parse['daily_deuterium']));
-        $parse['weekly_deuterium'] = FormatLib::colorNumber(FormatLib::prettyNumber($parse['weekly_deuterium']));
+        $parse['daily_deuterium'] = FormatLib::colorNumber(FormatLib::getNumberFormatShort($parse['daily_deuterium']));
+        $parse['weekly_deuterium'] = FormatLib::colorNumber(FormatLib::getNumberFormatShort($parse['weekly_deuterium']));
 
         $ValidList['percent'] = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
         $SubQry = '';
@@ -334,9 +400,10 @@ class Resources extends BaseController
     private function resource_color($current_amount, $max_amount)
     {
         if ($max_amount < $current_amount) {
-            return (FormatLib::colorRed(FormatLib::prettyNumber($max_amount / 1000) . 'k'));
+            // return (FormatLib::customColor(FormatLib::getNumberFormatShort($max_amount, '#D43635')));
+            return FormatLib::customColor(FormatLib::getNumberFormatShort($max_amount), '#D43635');
         } else {
-            return (FormatLib::colorGreen(FormatLib::prettyNumber($max_amount / 1000) . 'k'));
+            return (FormatLib::customColor(FormatLib::getNumberFormatShort($max_amount), '#f1f1f1'));
         }
     }
 

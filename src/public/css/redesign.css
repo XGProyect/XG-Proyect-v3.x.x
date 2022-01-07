@@ -1,36 +1,122 @@
 .status_abbr_admin {
-    color: #f48406;
+  color: #f48406;
 }
 
 .status_abbr_strong {
-    color: #f00;
+  color: #f00;
 }
 
 .status_abbr_noob {
-    color: lime;
+  color: lime;
 }
 
 .status_abbr_outlaw {
-    color: #f3f;
+  color: #f3f;
 }
 
 .status_abbr_vacation {
-    color: aqua;
+  color: aqua;
 }
 
 .status_abbr_banned {
-    color: #fff;
-    text-decoration: line-through;
+  color: #fff;
+  text-decoration: line-through;
 }
 
 .status_abbr_inactive {
-    color: #6e6e6e;
+  color: #6e6e6e;
 }
 
 .status_abbr_longinactive {
-    color: #4f4f4f;
+  color: #4f4f4f;
 }
 
 .status_abbr_honorableTarget {
-    color: #ff6;
+  color: #ff6;
+}
+
+.listOfResourceSettingsPerPlanet th {
+  /* text-align: right; */
+  height: 25px;
+  font-size: 11px;
+}
+
+tr.summary th {
+  border-top: 1px dotted #848484;
+}
+
+
+select[name="building_metal_mine"] option[value="100"],
+select[name="building_metal_mine"] option[value="90"],
+select[name="building_metal_mine"] option[value="80"],
+select[name="building_metal_mine"] option[value="70"],
+select[name="building_crystal_mine"] option[value="100"],
+select[name="building_crystal_mine"] option[value="90"],
+select[name="building_crystal_mine"] option[value="80"],
+select[name="building_crystal_mine"] option[value="70"],
+select[name="building_deuterium_sintetizer"] option[value="100"],
+select[name="building_deuterium_sintetizer"] option[value="90"],
+select[name="building_deuterium_sintetizer"] option[value="80"],
+select[name="building_deuterium_sintetizer"] option[value="70"],
+select[name="building_solar_plant"] option[value="100"],
+select[name="building_solar_plant"] option[value="90"],
+select[name="building_solar_plant"] option[value="80"],
+select[name="building_solar_plant"] option[value="70"],
+select[name="building_fusion_reactor"] option[value="100"],
+select[name="building_fusion_reactor"] option[value="90"],
+select[name="building_fusion_reactor"] option[value="80"],
+select[name="building_fusion_reactor"] option[value="70"],
+select[name="ship_solar_satellite"] option[value="100"],
+select[name="ship_solar_satellite"] option[value="90"],
+select[name="ship_solar_satellite"] option[value="80"],
+select[name="ship_solar_satellite"] option[value="70"] {
+  color: #99cc00 !important;
+}
+
+select[name="building_metal_mine"] option[value="60"],
+select[name="building_metal_mine"] option[value="50"],
+select[name="building_metal_mine"] option[value="40"],
+select[name="building_crystal_mine"] option[value="60"],
+select[name="building_crystal_mine"] option[value="50"],
+select[name="building_crystal_mine"] option[value="40"],
+select[name="building_deuterium_sintetizer"] option[value="60"],
+select[name="building_deuterium_sintetizer"] option[value="50"],
+select[name="building_deuterium_sintetizer"] option[value="40"],
+select[name="building_solar_plant"] option[value="60"],
+select[name="building_solar_plant"] option[value="50"],
+select[name="building_solar_plant"] option[value="40"],
+select[name="building_fusion_reactor"] option[value="60"],
+select[name="building_fusion_reactor"] option[value="50"],
+select[name="building_fusion_reactor"] option[value="40"],
+select[name="ship_solar_satellite"] option[value="60"],
+select[name="ship_solar_satellite"] option[value="50"],
+select[name="ship_solar_satellite"] option[value="40"]  {
+  color: #d29d00 !important;
+}
+
+select[name="building_metal_mine"] option[value="30"],
+select[name="building_metal_mine"] option[value="20"],
+select[name="building_metal_mine"] option[value="10"],
+select[name="building_metal_mine"] option[value="0"],
+select[name="building_crystal_mine"] option[value="30"],
+select[name="building_crystal_mine"] option[value="20"],
+select[name="building_crystal_mine"] option[value="10"],
+select[name="building_crystal_mine"] option[value="0"],
+select[name="building_deuterium_sintetizer"] option[value="30"],
+select[name="building_deuterium_sintetizer"] option[value="20"],
+select[name="building_deuterium_sintetizer"] option[value="10"],
+select[name="building_deuterium_sintetizer"] option[value="0"],
+select[name="building_solar_plant"] option[value="30"],
+select[name="building_solar_plant"] option[value="20"],
+select[name="building_solar_plant"] option[value="10"],
+select[name="building_solar_plant"] option[value="0"],
+select[name="building_fusion_reactor"] option[value="30"],
+select[name="building_fusion_reactor"] option[value="20"],
+select[name="building_fusion_reactor"] option[value="10"],
+select[name="building_fusion_reactor"] option[value="0"],
+select[name="ship_solar_satellite"] option[value="30"],
+select[name="ship_solar_satellite"] option[value="20"],
+select[name="ship_solar_satellite"] option[value="10"],
+select[name="ship_solar_satellite"] option[value="0"]  {
+  color: #d43635 !important;
 }
