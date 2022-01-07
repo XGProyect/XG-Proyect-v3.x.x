@@ -1,16 +1,21 @@
 <br />
 <div id="content">
-    <table width="519">
+    <table width="600px">
         <tbody>
             <tr>
-                <td class="c">{name}</td>
-            </tr><tr>
+                <td class="c">{in_title_head}{name}</td>
+            </tr>
+            <tr>
                 <th>
                     <table>
                         <tbody>
                             <tr>
-                                <td><img src="{dpath}elements/{image}.gif" align="top" border="0" height="120" width="120"></td>
-                                <td>{description}</td>
+                                <td style="vertical-align: top;">
+                                    <img src="{dpath}elements/{image}.gif" style="width: 120px;height: 120px;border: 2px solid #415680;">
+                                </td>
+                                <td style="vertical-align: top;">
+                                    <p style="max-width: 538px;">{description}</p>
+                                </td>
                             </tr>
                         </tbody>
                     </table>

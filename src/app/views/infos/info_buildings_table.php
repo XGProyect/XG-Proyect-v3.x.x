@@ -1,30 +1,34 @@
 <br />
 <div id="content">
-    <table width="519">
+    <table width="600px">
         <tr>
-            <td class="c">{name}</td>
-        </tr><tr>
+            <td class="c">{in_title_head}{name}</td>
+        </tr>
+        <tr>
             <th>
                 <table>
                     <tbody>
                         <tr>
-                            <td><img src="{dpath}elements/{image}.gif" align="top" border="0" height="120" width="120"></td>
-                            <td>{description}</td>
+                            <td style="vertical-align: top;">
+                                <img src="{dpath}elements/{image}.gif" style="width: 120px;height: 120px;border: 2px solid #415680;">
+                            </td>
+                            <td>
+                                <p style="max-width: 538px;">{description}</p>
+                                <table class="general_table">
+                                    <thead>
+                                        {table_head}
+                                    </thead>
+                                    <tbody>
+                                        {table_data}
+                                    </tbody>
+                                    <tfoot>
+                                        {table_footer}
+                                    </tfoot>
+                                </table>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
             </th>
-        </tr><tr>
-            <th>
-        <center>
-            <table border="1">
-                <tbody>
-                    {table_head}
-                    {table_data}
-                    {table_footer}
-                </tbody>
-            </table>
-        </center>
-        </th>
         </tr>
     </table>

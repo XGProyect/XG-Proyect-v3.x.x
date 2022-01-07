@@ -45,7 +45,6 @@ tr.summary th {
   border-top: 1px dotted #848484;
 }
 
-
 select[name="building_metal_mine"] option[value="100"],
 select[name="building_metal_mine"] option[value="90"],
 select[name="building_metal_mine"] option[value="80"],
@@ -90,7 +89,7 @@ select[name="building_fusion_reactor"] option[value="50"],
 select[name="building_fusion_reactor"] option[value="40"],
 select[name="ship_solar_satellite"] option[value="60"],
 select[name="ship_solar_satellite"] option[value="50"],
-select[name="ship_solar_satellite"] option[value="40"]  {
+select[name="ship_solar_satellite"] option[value="40"] {
   color: #d29d00 !important;
 }
 
@@ -117,6 +116,64 @@ select[name="building_fusion_reactor"] option[value="0"],
 select[name="ship_solar_satellite"] option[value="30"],
 select[name="ship_solar_satellite"] option[value="20"],
 select[name="ship_solar_satellite"] option[value="10"],
-select[name="ship_solar_satellite"] option[value="0"]  {
+select[name="ship_solar_satellite"] option[value="0"] {
   color: #d43635 !important;
+}
+
+table .general_table {
+  box-sizing: border-box;
+  width: 100%;
+  border: 1px solid #415680;
+  margin: 10px 0 0;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+table .general_table th {
+  height: 24px;
+}
+
+table .general_table thead tr {
+  background: #344566 !important;
+}
+
+table .general_table thead tr th {
+  background-color: transparent;
+  color: #f1f1f1;
+}
+
+table .general_table thead th {
+  border-bottom: 1px dotted #848484;
+  font-weight: bold;
+}
+
+table .general_table tbody tr th {
+  background-color: transparent;
+  font-weight: 400;
+  border: 0;
+}
+
+table .general_table tbody tr:nth-of-type(even) {
+  background-color: #415680;
+}
+
+table .general_table tbody tr.current {
+  background-color: #2c4f20 !important;
+}
+
+table .general_table th {
+  color: #9c0;
+}
+
+table .general_table.technical thead th {
+  font-weight: bold;
+}
+table .general_table.technical th{
+  color: #fff;
+}
+
+.rapid_fire {
+  margin: 10px 0 0;
+  padding-left: 15px;
+  list-style-type: square;
 }

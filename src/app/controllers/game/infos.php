@@ -1,4 +1,5 @@
 <?php
+
 /**
  * infos.php
  *
@@ -165,22 +166,77 @@ class Infos extends BaseController
             $parse['element_typ'] = $this->langs->language['ships'];
             $parse['rf_info_to'] = $this->ShowRapidFireTo();
             $parse['rf_info_fr'] = $this->ShowRapidFireFrom();
-            $parse['hull_pt'] = FormatLib::prettyNumber($this->_pricelist[$this->_element_id]['metal'] + $this->_pricelist[$this->_element_id]['crystal']);
-            $parse['shield_pt'] = FormatLib::prettyNumber($this->_combat_caps[$this->_element_id]['shield']);
-            $parse['attack_pt'] = FormatLib::prettyNumber($this->_combat_caps[$this->_element_id]['attack']);
-            $parse['capacity_pt'] = FormatLib::prettyNumber($this->_pricelist[$this->_element_id]['capacity']);
-            $parse['base_speed'] = FormatLib::prettyNumber($this->_pricelist[$this->_element_id]['speed']);
-            $parse['base_conso'] = FormatLib::prettyNumber($this->_pricelist[$this->_element_id]['consumption']);
 
-            $parse['upd_speed'] = '';
-            $parse['upd_conso'] = '';
+            // Armour Research
+            $research_armour_basic_value = $this->_pricelist[$this->_element_id]['metal'] + $this->_pricelist[$this->_element_id]['crystal'];
+            $research_armour_level = $this->user['research_armour_technology'];
+            $research_armour_bonus = ($research_armour_basic_value  * 0.1);
+            $parse['armour_basic_value'] = FormatLib::prettyNumber($research_armour_basic_value);
+            $parse['armour_level'] = $research_armour_level;
+            $parse['armour_bonus'] = FormatLib::prettyNumber($research_armour_bonus);
+            $parse['armour_bonus_total'] = FormatLib::prettyNumber($research_armour_bonus *  $research_armour_level);
+            $parse['armour_total'] = FormatLib::prettyNumber($research_armour_basic_value + ($research_armour_bonus *  $research_armour_level));
 
-            if ($this->_element_id == 202) {
-                $parse['upd_speed'] = "<font color=\"yellow\">(" . FormatLib::prettyNumber($this->_pricelist[$this->_element_id]['speed2']) . ")</font>";
-                $parse['upd_conso'] = "<font color=\"yellow\">(" . FormatLib::prettyNumber($this->_pricelist[$this->_element_id]['consumption2']) . ")</font>";
-            } elseif ($this->_element_id == 211) {
-                $parse['upd_speed'] = "<font color=\"yellow\">(" . FormatLib::prettyNumber($this->_pricelist[$this->_element_id]['speed2']) . ")</font>";
-            }
+            // Shield Research
+            $research_shielding_basic_value = $this->_combat_caps[$this->_element_id]['shield'];
+            $research_shielding_tech_level = $this->user['research_shielding_technology'];
+            $research_shielding_bonus = ($research_shielding_basic_value * 0.1);
+            $parse['shielding_basic_value'] = FormatLib::prettyNumber($research_shielding_basic_value);
+            $parse['shielding_tech_level'] = $research_shielding_tech_level;
+            $parse['shielding_bonus'] =  FormatLib::prettyNumber($research_shielding_bonus);
+            $parse['shielding_bonus_total'] = FormatLib::prettyNumber($research_shielding_bonus *  $research_shielding_tech_level);
+            $parse['shielding_total'] = FormatLib::prettyNumber($research_shielding_basic_value + ($research_shielding_bonus *  $research_shielding_tech_level));
+
+            // Weapons Research
+            $weapons_technology_basic_value = $this->_combat_caps[$this->_element_id]['attack'];
+            $weapons_technology_level = $this->user['research_weapons_technology'];
+            $weapons_technology_bonus = ($weapons_technology_basic_value * 0.1);
+            $parse['weapons_technology_basic_value'] = FormatLib::prettyNumber($weapons_technology_basic_value);
+            $parse['weapons_technology_level'] = $weapons_technology_level;
+            $parse['weapons_technology_bonus'] = $weapons_technology_bonus;
+            $parse['weapons_technology_bonus_total'] = ($weapons_technology_bonus *  $weapons_technology_level
+            );
+            $parse['weapons_technology_total'] = FormatLib::prettyNumber(
+                $weapons_technology_basic_value + ($weapons_technology_bonus *  $weapons_technology_level)
+            );
+
+            // SPEED
+            $speed_basic_value = $this->_pricelist[$this->_element_id]['speed'];
+            $speed_research_level = $this->user['research_combustion_drive'];
+            $speed_research_bonus = ($speed_basic_value * 0.1);
+            $parse['speed_basic_value'] = FormatLib::prettyNumber($speed_basic_value);
+            $parse['speed_research_level'] = $speed_research_level;
+            $parse['speed_research_bonus'] = FormatLib::prettyNumber($speed_research_bonus);
+            $parse['speed_research_bonus_total'] = FormatLib::prettyNumber($speed_research_bonus * $speed_research_level);
+            $parse['speed_total'] = FormatLib::prettyNumber(
+                $speed_basic_value + ($speed_research_bonus * $speed_research_level)
+            );
+
+            // CAPACITY
+            $capacity_basic_value = $this->_pricelist[$this->_element_id]['capacity'];
+            $capacity_researc_level = $this->user['research_hyperspace_technology'];
+            $capacity_research_bonus = ($capacity_basic_value * 0.05);
+
+            $parse['capacity_basic_value'] = FormatLib::prettyNumber($capacity_basic_value);
+            $parse['capacity_research_bonus'] = $capacity_research_bonus;
+            $parse['capacity_research_percent'] = (0.05 * 100) * $capacity_researc_level;
+            $parse['capacity_total'] = FormatLib::prettyNumber($capacity_basic_value + $capacity_research_bonus);
+
+            // CONSUMPTION
+            $consumption_basic_value = $this->_pricelist[$this->_element_id]['consumption'];
+            $consumption_bonus = ($speed_basic_value * 0.001); // Viene de esto <globalDeuteriumSaveFactor>100%</globalDeuteriumSaveFactor>
+
+            $parse['consumption_basic_value'] = $consumption_basic_value;
+            $parse['consumption_bonus'] = $consumption_bonus;
+            $parse['consumption_percent'] = (1 * 100); // Esto deberia ser configurado en BASE DE DATOS
+            $parse['consumption_total'] = FormatLib::prettyNumber($consumption_basic_value - $consumption_bonus);
+
+            // if ($this->_element_id == 202) {
+            //     $parse['upd_speed'] = "<font color=\"yellow\">(" . FormatLib::prettyNumber($this->_pricelist[$this->_element_id]['speed2']) . ")</font>";
+            //     $parse['upd_conso'] = "<font color=\"yellow\">(" . FormatLib::prettyNumber($this->_pricelist[$this->_element_id]['consumption2']) . ")</font>";
+            // } elseif ($this->_element_id == 211) {
+            //     $parse['upd_speed'] = "<font color=\"yellow\">(" . FormatLib::prettyNumber($this->_pricelist[$this->_element_id]['speed2']) . ")</font>";
+            // }
         } elseif ($this->_element_id >= 401 && $this->_element_id <= 550) {
             $PageTPL = 'infos/info_buildings_defense';
             $parse['element_typ'] = $this->langs->language['defenses'];
@@ -192,9 +248,37 @@ class Infos extends BaseController
                 $parse['rf_info_fr'] = $this->ShowRapidFireFrom();
             }
 
-            $parse['hull_pt'] = FormatLib::prettyNumber($this->_pricelist[$this->_element_id]['metal'] + $this->_pricelist[$this->_element_id]['crystal']);
-            $parse['shield_pt'] = FormatLib::prettyNumber($this->_combat_caps[$this->_element_id]['shield']);
-            $parse['attack_pt'] = FormatLib::prettyNumber($this->_combat_caps[$this->_element_id]['attack']);
+            // Armour Research
+            $research_armour_basic_value = $this->_pricelist[$this->_element_id]['metal'] + $this->_pricelist[$this->_element_id]['crystal'];
+            $research_armour_level = $this->user['research_armour_technology'];
+            $research_armour_bonus = ($research_armour_basic_value  * 0.1);
+            $parse['armour_basic_value'] = FormatLib::prettyNumber($research_armour_basic_value);
+            $parse['armour_level'] = $research_armour_level;
+            $parse['armour_bonus'] = FormatLib::prettyNumber($research_armour_bonus);
+            $parse['armour_bonus_total'] = FormatLib::prettyNumber($research_armour_bonus *  $research_armour_level);
+            $parse['armour_total'] = FormatLib::prettyNumber($research_armour_basic_value + ($research_armour_bonus *  $research_armour_level));
+            // Shield Research
+            $research_shielding_basic_value = $this->_combat_caps[$this->_element_id]['shield'];
+            $research_shielding_tech_level = $this->user['research_shielding_technology'];
+            $research_shielding_bonus = ($research_shielding_basic_value * 0.1);
+            $parse['shielding_basic_value'] = FormatLib::prettyNumber($research_shielding_basic_value);
+            $parse['shielding_tech_level'] = $research_shielding_tech_level;
+            $parse['shielding_bonus'] =  FormatLib::prettyNumber($research_shielding_bonus);
+            $parse['shielding_bonus_total'] = FormatLib::prettyNumber($research_shielding_bonus *  $research_shielding_tech_level);
+            $parse['shielding_total'] = FormatLib::prettyNumber($research_shielding_basic_value + ($research_shielding_bonus *  $research_shielding_tech_level));
+
+            // Weapons Research
+            $weapons_technology_basic_value = $this->_combat_caps[$this->_element_id]['attack'];
+            $weapons_technology_level = $this->user['research_weapons_technology'];
+            $weapons_technology_bonus = ($weapons_technology_basic_value * 0.1);
+            $parse['weapons_technology_basic_value'] = FormatLib::prettyNumber($weapons_technology_basic_value);
+            $parse['weapons_technology_level'] = $weapons_technology_level;
+            $parse['weapons_technology_bonus'] = $weapons_technology_bonus;
+            $parse['weapons_technology_bonus_total'] = ($weapons_technology_bonus *  $weapons_technology_level
+            );
+            $parse['weapons_technology_total'] = FormatLib::prettyNumber(
+                $weapons_technology_basic_value + ($weapons_technology_bonus *  $weapons_technology_level)
+            );
         }
 
         if ($TableHeadTPL != '') {
@@ -286,9 +370,11 @@ class Infos extends BaseController
         $Table = "";
 
         for ($BuildLevel = $BuildStartLvl; $BuildLevel < $BuildStartLvl + 15; ++$BuildLevel) {
-            $bloc['tech_lvl'] = ($current_built_lvl == $BuildLevel) ? "<font color=\"#ff0000\">" . $BuildLevel . "</font>" : $BuildLevel;
+            $bloc['tech_lvl'] = ($current_built_lvl == $BuildLevel) ? FormatLib::customColor($BuildLevel, '#9c0') : $BuildLevel;
             $bloc['tech_colonies'] = FormatLib::prettyNumber(FleetsLib::getMaxColonies($BuildLevel));
             $bloc['tech_expeditions'] = FormatLib::prettyNumber(FleetsLib::getMaxExpeditions($BuildLevel));
+
+            $bloc['tech_current'] = ($current_built_lvl == $BuildLevel) ? 'current' : '';
 
             $Table .= $this->template->set($template, $bloc);
         }
@@ -487,10 +573,6 @@ class Infos extends BaseController
         $BuildEnergy = $this->user['research_energy_technology'];
         $game_resource_multiplier = Functions::readConfig('resource_multiplier');
 
-        // BOOST
-        $geologe_boost = 1 + (1 * (OfficiersLib::isOfficierActive($this->user['premium_officier_geologist']) ? GEOLOGUE : 0));
-        $engineer_boost = 1 + (1 * (OfficiersLib::isOfficierActive($this->user['premium_officier_engineer']) ? ENGINEER_ENERGY : 0));
-
         // PRODUCTION FORMULAS
         $metal_prod = eval($this->_prod_grid[$this->_element_id]['formule']['metal']);
         $crystal_prod = eval($this->_prod_grid[$this->_element_id]['formule']['crystal']);
@@ -498,12 +580,12 @@ class Infos extends BaseController
         $energy_prod = eval($this->_prod_grid[$this->_element_id]['formule']['energy']);
 
         // PRODUCTION
-        $Prod[1] = ProductionLib::productionAmount($metal_prod, $geologe_boost, $game_resource_multiplier);
-        $Prod[2] = ProductionLib::productionAmount($crystal_prod, $geologe_boost, $game_resource_multiplier);
-        $Prod[3] = ProductionLib::productionAmount($deuterium_prod, $geologe_boost, $game_resource_multiplier);
+        $Prod[1] = ProductionLib::productionAmount($metal_prod, 1, $game_resource_multiplier);
+        $Prod[2] = ProductionLib::productionAmount($crystal_prod, 1, $game_resource_multiplier);
+        $Prod[3] = ProductionLib::productionAmount($deuterium_prod, 1, $game_resource_multiplier);
 
         if ($this->_element_id >= 4) {
-            $Prod[4] = ProductionLib::productionAmount($energy_prod, $engineer_boost, 0, true);
+            $Prod[4] = ProductionLib::productionAmount($energy_prod, 1, 0, true);
             $ActualProd = floor($Prod[4]);
         } else {
             $Prod[4] = ProductionLib::productionAmount($energy_prod, 1, 0, true);
@@ -532,17 +614,18 @@ class Infos extends BaseController
             $energy_prod = eval($this->_prod_grid[$this->_element_id]['formule']['energy']);
 
             // PRODUCTION
-            $Prod[1] = ProductionLib::productionAmount($metal_prod, $geologe_boost, $game_resource_multiplier);
-            $Prod[2] = ProductionLib::productionAmount($crystal_prod, $geologe_boost, $game_resource_multiplier);
-            $Prod[3] = ProductionLib::productionAmount($deuterium_prod, $geologe_boost, $game_resource_multiplier);
+            $Prod[1] = ProductionLib::productionAmount($metal_prod, 1, $game_resource_multiplier);
+            $Prod[2] = ProductionLib::productionAmount($crystal_prod, 1, $game_resource_multiplier);
+            $Prod[3] = ProductionLib::productionAmount($deuterium_prod, 1, $game_resource_multiplier);
 
             if ($this->_element_id >= 4) {
-                $Prod[4] = ProductionLib::productionAmount($energy_prod, $engineer_boost, 0, true);
+                $Prod[4] = ProductionLib::productionAmount($energy_prod, 1, 0, true);
             } else {
                 $Prod[4] = ProductionLib::productionAmount($energy_prod, 1, 0, true);
             }
 
-            $bloc['build_lvl'] = ($current_built_lvl == $BuildLevel) ? FormatLib::colorRed($BuildLevel) : $BuildLevel;
+            $bloc['build_lvl'] = ($current_built_lvl == $BuildLevel) ? FormatLib::customColor($BuildLevel, '#9c0') : $BuildLevel;
+            $bloc['build_class'] = ($current_built_lvl == $BuildLevel) ? 'current' : '';
 
             if ($ProdFirst > 0) {
                 if ($this->_element_id != 12) {
@@ -575,7 +658,7 @@ class Infos extends BaseController
 
                 $bloc['build_prod'] = FormatLib::prettyNumber(floor($Prod[$this->_element_id]));
                 $bloc['build_prod_diff'] = FormatLib::colorNumber(FormatLib::prettyNumber($prod_diff));
-                $bloc['build_level_diff'] = FormatLib::colorGreen($level_diff);
+                $bloc['build_level_diff'] = FormatLib::customColor($level_diff, '#99CC00');
                 $bloc['build_need'] = FormatLib::colorNumber(FormatLib::prettyNumber(floor($Prod[4])));
                 $bloc['build_need_diff'] = FormatLib::colorNumber(FormatLib::prettyNumber(floor($Prod[4] - $ActualNeed)));
             } else {
@@ -589,7 +672,7 @@ class Infos extends BaseController
 
                 $bloc['build_prod'] = FormatLib::prettyNumber(floor($Prod[4]));
                 $bloc['build_prod_diff'] = FormatLib::colorNumber(FormatLib::prettyNumber($prod_diff));
-                $bloc['build_level_diff'] = FormatLib::colorGreen($level_diff);
+                $bloc['build_level_diff'] = FormatLib::customColor($level_diff, '#99CC00');
                 $bloc['build_need'] = FormatLib::colorNumber(FormatLib::prettyNumber(floor($Prod[3])));
                 $bloc['build_need_diff'] = FormatLib::colorNumber(FormatLib::prettyNumber($need_diff));
             }
@@ -611,10 +694,17 @@ class Infos extends BaseController
      */
     private function ShowRapidFireTo()
     {
-        $ResultString = "";
+        $ResultString = '';
         for ($Type = 200; $Type < 500; $Type++) {
             if (isset($this->_combat_caps[$this->_element_id]['sd'][$Type]) && $this->_combat_caps[$this->_element_id]['sd'][$Type] > 1) {
-                $ResultString .= $this->langs->line('in_rf_again') . " " . $this->langs->language[$this->_resource[$Type]] . " <font color=\"#00ff00\">" . $this->_combat_caps[$this->_element_id]['sd'][$Type] . "</font><br>";
+                $ResultString .= '<li>';
+                $ResultString .= $this->langs->line('in_rf_again') . '&nbsp;' . UrlHelper::setUrl(
+                    'game.php?page=infos&gid=' . $Type,
+                    $this->langs->language[$this->_resource[$Type]],
+                    '',
+                    'style="color: #f1f1f1;text-decoration: none;font-weight:400"'
+                ) . ':&nbsp;' . FormatLib::customColor($this->_combat_caps[$this->_element_id]['sd'][$Type], '#9c0');
+                $ResultString .= '</li>';
             }
         }
         return $ResultString;
@@ -625,10 +715,17 @@ class Infos extends BaseController
      */
     private function ShowRapidFireFrom()
     {
-        $ResultString = "";
+        $ResultString = '';
         for ($Type = 200; $Type < 500; $Type++) {
             if (isset($this->_combat_caps[$Type]['sd'][$this->_element_id]) && $this->_combat_caps[$Type]['sd'][$this->_element_id] > 1) {
-                $ResultString .= $this->langs->line('in_rf_from') . " " . $this->langs->language[$this->_resource[$Type]] . " <font color=\"#ff0000\">" . $this->_combat_caps[$Type]['sd'][$this->_element_id] . "</font><br>";
+                $ResultString .= '<li>';
+                $ResultString .= $this->langs->line('in_rf_from') . '&nbsp;' . UrlHelper::setUrl(
+                    'game.php?page=infos&gid=' . $Type,
+                    $this->langs->language[$this->_resource[$Type]],
+                    '',
+                    'style="color: #f1f1f1;text-decoration: none;font-weight:400"'
+                ) . ':&nbsp;' . FormatLib::customColor($this->_combat_caps[$Type]['sd'][$this->_element_id], '#d43635');
+                $ResultString .= '</li>';
             }
         }
         return $ResultString;
