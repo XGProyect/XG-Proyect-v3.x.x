@@ -7,7 +7,7 @@ on:
 
 jobs:
   test:
-    name: Run tests and lint
+    name: Run Unit Testing
     runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v2
@@ -24,10 +24,25 @@ jobs:
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress --no-suggest
 
-      # Not fully working at the moment, ignore errors
     - name: Run phpunit
-      run: composer test
-      continue-on-error: true
+      run: composer phpunit
+  lint:
+    name: Run Lint
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '7.4'
+        extensions: gd, mysqli, opcache, zip
+
+    - name: Validate composer.json and composer.lock
+      run: composer validate
+
+    - name: Install dependencies
+      run: composer install --prefer-dist --no-progress --no-suggest
 
     - name: Run phplint
       uses: overtrue/phplint@4.1.0
@@ -35,7 +50,7 @@ jobs:
         path: src/
         options: --exclude=*.log --exclude=vendor
   php-cs-fixer:
-    name: Run PHP-CS-Fixer
+    name: Run PHP CS Fixer
     runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v2
@@ -45,8 +60,6 @@ jobs:
   min-version:
     name: Check minimum version
     runs-on: ubuntu-20.04
-    # disabled, table xgp.functions does not exist
-    if: false
     services:
       mysql:
         image: bitnami/mariadb:10.6.5
@@ -69,6 +82,11 @@ jobs:
 
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress --no-suggest
+
+    - name: Setup database
+      env:
+        DATABASE_URL: "mysql://root:xgproyect@127.0.0.1:${{ job.services.nginx.ports['3306'] }}/xgp?serverVersion=mariadb-10.6.5"
+      run: cd src/vendor/bartlett/php-compatinfo-db/ && ../../bin/doctrine orm:schema-tool:create && bin/compatinfo-db db:init
 
     - name: Run phpcompatinfo
       env:

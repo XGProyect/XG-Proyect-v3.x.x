@@ -25,8 +25,8 @@
         "eftec/bladeone": "^4.2"
     },
     "require-dev": {
-        "bartlett/php-compatinfo": "^6",
-        "phpunit/phpunit": "^8",
+        "bartlett/php-compatinfo": "^6.1",
+        "phpunit/phpunit": "^9.0",
         "squizlabs/php_codesniffer": "^3.5"
     },
     "autoload": {
@@ -38,9 +38,9 @@
     "prefer-stable": true,
     "scripts": {
         "phpcompatinfo": [
-            "src/vendor/bin/phpcompatinfo analyser:run ./src"
+            "src/vendor/bin/phpcompatinfo --progress analyser:run ./src/app/"
         ],
-        "tests": [
+        "phpunit": [
             "src/vendor/bin/phpunit --verbose --config src/tests/phpunit.xml --testsuite xgp_application"
         ]
     },
