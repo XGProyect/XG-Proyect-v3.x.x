@@ -371,10 +371,10 @@ class Messages extends BaseController
     {
         $address_book_notes_counts = $this->Messages_Model->countAddressBookAndNotes($this->user['user_id'], $this->user['user_ally_id']);
         $current_extra_block_open = filter_input_array(INPUT_POST, [
-            'owncontactsopen' => FILTER_SANITIZE_STRING,
-            'ownallyopen' => FILTER_SANITIZE_STRING,
-            'gameoperatorsopen' => FILTER_SANITIZE_STRING,
-            'noticesopen' => FILTER_SANITIZE_STRING,
+            'owncontactsopen' => FILTER_UNSAFE_RAW,
+            'ownallyopen' => FILTER_UNSAFE_RAW,
+            'gameoperatorsopen' => FILTER_UNSAFE_RAW,
+            'noticesopen' => FILTER_UNSAFE_RAW,
         ]);
 
         $blocks = [

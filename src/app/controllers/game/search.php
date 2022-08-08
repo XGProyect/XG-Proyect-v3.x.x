@@ -101,8 +101,8 @@ class Search extends BaseController
     private function runAction(): void
     {
         $search_query = filter_input_array(INPUT_POST, [
-            'search_type' => FILTER_SANITIZE_STRING,
-            'search_text' => FILTER_SANITIZE_STRING,
+            'search_type' => FILTER_UNSAFE_RAW,
+            'search_text' => FILTER_UNSAFE_RAW,
         ]);
 
         $this->search_terms['error_block'] = $this->langs->line('sh_error_empty');

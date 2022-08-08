@@ -72,7 +72,7 @@ class Officier extends BaseController
                 ],
             ],
             'time' => [
-                'filter' => FILTER_SANITIZE_STRING,
+                'filter' => FILTER_UNSAFE_RAW,
             ],
         ]);
 

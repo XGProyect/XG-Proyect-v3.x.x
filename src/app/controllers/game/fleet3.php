@@ -470,7 +470,7 @@ class Fleet3 extends BaseController
             ],
             'target_mission' => FILTER_VALIDATE_INT,
             'fleet_group' => FILTER_VALIDATE_INT,
-            'acs_target' => FILTER_SANITIZE_STRING,
+            'acs_target' => FILTER_UNSAFE_RAW,
         ]);
 
         // remove values that din't pass the validation

@@ -224,7 +224,7 @@ class FormatLib
     public static function prettyNumber($n, $floor = true)
     {
         if ($floor) {
-            $n = floor($n);
+            $n = floor($n??0.0);
         }
 
         return number_format($n, 0, ",", ".");

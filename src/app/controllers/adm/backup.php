@@ -27,7 +27,7 @@ use App\libraries\TimingLibrary as Timing;
 class Backup extends BaseController
 {
     public const BACKUP_SETTINGS = [
-        'auto_backup' => FILTER_SANITIZE_STRING,
+        'auto_backup' => FILTER_UNSAFE_RAW,
     ];
 
     /**
@@ -76,7 +76,7 @@ class Backup extends BaseController
         $save = filter_input(INPUT_POST, 'save');
         $backup = filter_input(INPUT_POST, 'backup');
         $file_actions = filter_input_array(INPUT_GET, [
-            'action' => FILTER_SANITIZE_STRING,
+            'action' => FILTER_UNSAFE_RAW,
             'file' => [
                 'filter' => FILTER_CALLBACK,
                 'options' => [$this, 'isValidFile'],

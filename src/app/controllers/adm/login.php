@@ -64,7 +64,7 @@ class Login extends BaseController
     {
         $loginData = filter_input_array(INPUT_POST, [
             'inputEmail' => FILTER_VALIDATE_EMAIL,
-            'inputPassword' => FILTER_SANITIZE_STRING,
+            'inputPassword' => FILTER_UNSAFE_RAW,
         ]);
 
         if (!empty($loginData['inputEmail']) && !empty($loginData['inputPassword'])) {
@@ -73,7 +73,7 @@ class Login extends BaseController
             if ($login) {
                 if (password_verify($loginData['inputPassword'], $login['user_password'])
                     && Administration::adminLogin($login['user_id'], $login['user_password'])) {
-                    $redirect = filter_input(INPUT_GET, 'redirect', FILTER_SANITIZE_STRING) ?? 'home';
+                    $redirect = filter_input(INPUT_GET, 'redirect', FILTER_UNSAFE_RAW) ?? 'home';
 
                     if ($redirect == '') {
                         $redirect = 'home';
@@ -103,7 +103,7 @@ class Login extends BaseController
                     $this->langs->language,
                     [
                         'alert' => $this->getAlert(),
-                        'redirect' => filter_input(INPUT_GET, 'redirect', FILTER_SANITIZE_STRING),
+                        'redirect' => filter_input(INPUT_GET, 'redirect', FILTER_UNSAFE_RAW),
                     ]
                 )
             ),
