@@ -1,5 +1,5 @@
 <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
-<div id="header_top">
+<div id="header_top" role="banner">
     <table class="header" style="margin:0 auto">
         <tr class="header">
             <td class="header" style="width:5;">
