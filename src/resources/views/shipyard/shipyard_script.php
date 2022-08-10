@@ -82,7 +82,7 @@ window.onload = t;
 </script>
 <br />
 {sy_remaining}
-<form name="Atr" method="get" action="game.php?page={current_page}">
+<form name="Atr" method="get" action="game.php?page={current_page}" role="form">
 <input type="hidden" name="mode" value="fleet">
 <table width="530">
 <tr>

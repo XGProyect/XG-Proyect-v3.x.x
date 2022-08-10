@@ -1,5 +1,5 @@
 <script src="{js_path}cntchar-min.js" type="text/javascript"></script>
-<form action="game.php?page=notes" method="POST">
+<form action="game.php?page=notes" method="POST" role="form">
     <input type="hidden" name="s" value="{s}">
     {note_id}
     <table width="519">

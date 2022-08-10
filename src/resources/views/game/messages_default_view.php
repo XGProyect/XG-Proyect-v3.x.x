@@ -5,8 +5,8 @@
     }
 </script>
 <br />
-<div id="content">
-    <form action="game.php?page=messages" method="post">
+<div id="content" role="main">
+    <form action="game.php?page=messages" method="post" role="form">
         <table width="519">
             <table>
                 <tr>

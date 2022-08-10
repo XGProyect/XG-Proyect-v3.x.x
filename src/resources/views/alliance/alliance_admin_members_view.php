@@ -1,5 +1,5 @@
 <br />
-<div id="content">
+<div id="content" role="main">
     <table width="600px">
         <tr>
             <td class="c" colspan="9">{al_user_list} ({al_number_of_records}: {total})</td>

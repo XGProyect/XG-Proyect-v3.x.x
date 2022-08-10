@@ -1,5 +1,5 @@
 {gate_time_script}
-<form action="" method="post">
+<form action="" method="post" role="form">
     <table border="0">
         <tr>
             <th>{in_jump_gate_start_moon}</th>

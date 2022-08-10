@@ -1,4 +1,4 @@
-<form action="" method="POST">
+<form action="" method="POST" role="form">
     <table width="519">
         <tr>
             <td class="c" colspan="4">{nt_my_notes}</td>

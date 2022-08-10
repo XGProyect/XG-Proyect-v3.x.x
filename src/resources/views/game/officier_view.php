@@ -1,5 +1,5 @@
 <br />
-<div id="content">
+<div id="content" role="main">
     <table width=600>
         <tr>
             <td colspan="3" class="c">{dark_matter}</td>

@@ -1,5 +1,5 @@
 <br />
-<div id="content">
+<div id="content" role="main">
     <table width="519px">
         <tr>
             <td class="c" colspan="2">{al_your_ally}</td>

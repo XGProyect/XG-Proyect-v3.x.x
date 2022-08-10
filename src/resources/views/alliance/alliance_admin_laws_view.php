@@ -1,9 +1,9 @@
 <br />
-<div id="content">
+<div id="content" role="main">
     <a href="game.php?page=alliance&mode=admin&edit=ally">{al_back}</a>
 
     <table width="519"><tr><td class="c" colspan="11">{al_configure_ranks}</td></tr>
-        <form action="game.php?page=alliance&mode=admin&edit=rights" method="POST">
+        <form action="game.php?page=alliance&mode=admin&edit=rights" method="POST" role="form">
             <tr>
                 <th colspan="2"><span style="color: #6f9fc8;">{al_rank_name_title}</span></th>
                 <th style="color: #6f9fc8;" colspan="2">{al_rank_applications_title}</th>
@@ -49,7 +49,7 @@
         </form>
     </table>
     <br>
-    <form action="game.php?page=alliance&mode=admin&edit=rights" method="POST">
+    <form action="game.php?page=alliance&mode=admin&edit=rights" method="POST" role="form">
         <table width="519">
             <tr>
                 <td class="c" colspan="2">{al_create_new_rank}</td>
@@ -63,7 +63,7 @@
             </tr>
         </table>
     </form>
-    <form action="game.php?page=alliance&mode=admin&edit=rights" method="POST">
+    <form action="game.php?page=alliance&mode=admin&edit=rights" method="POST" role="form">
         <table width="519">
             <tr>
                 <td class=c colspan="2">{al_legend}</td>

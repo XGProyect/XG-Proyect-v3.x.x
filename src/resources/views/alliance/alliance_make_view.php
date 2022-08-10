@@ -1,6 +1,6 @@
 <br />
-<div id="content">
-    <form action="game.php?page=alliance&mode=make" method="POST">
+<div id="content" role="main">
+    <form action="game.php?page=alliance&mode=make" method="POST" role="form">
         <table width="519">
             <tr>
                 <td class="c" colspan="2">{al_make_alliance}</td>

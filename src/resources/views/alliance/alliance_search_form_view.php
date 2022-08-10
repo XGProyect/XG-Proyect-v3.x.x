@@ -1,6 +1,6 @@
 <br />
-<div id="content">
-    <form action="" method="POST">
+<div id="content" role="main">
+    <form action="" method="POST" role="form">
         <table width="519">
             <tr>
                 <td class="c" colspan="2">{al_find_alliances}</td>

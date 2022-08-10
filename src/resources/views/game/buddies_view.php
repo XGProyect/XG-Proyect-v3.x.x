@@ -1,5 +1,5 @@
 <br/>
-<div id="content">
+<div id="content" role="main">
     <table width="520">
         <tr>
             <td class="c" colspan="5">{bu_buddy_list}</td>

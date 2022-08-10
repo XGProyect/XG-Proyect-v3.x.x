@@ -1,7 +1,7 @@
 <br />
-<div id="content">
+<div id="content" role="main">
     {message}
-    <form action="" method="post">
+    <form action="" method="post" role="form">
         <table align="top" width="530">
             {list_of_items}
             <tr>

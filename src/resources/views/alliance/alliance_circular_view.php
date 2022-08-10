@@ -1,7 +1,7 @@
 <script src="{js_path}cntchar-min.js" type="text/javascript"></script>
 <br />
-<div id="content">
-    <form action="game.php?page=alliance&mode=circular&sendmail=1" method="POST">
+<div id="content" role="main">
+    <form action="game.php?page=alliance&mode=circular&sendmail=1" method="POST" role="form">
         <table width="530">
             <tr>
                 <td class="c" colspan="2">{al_circular_send_ciruclar}</td>

@@ -1,6 +1,6 @@
 <script src="{js_path}cntchar-min.js" type="text/javascript"></script>
 <br />
-<div id="content">
+<div id="content" role="main">
     <table width="519px">
         <tr>
             <td class="c" colspan="2">{al_manage_alliance}</td>
@@ -23,7 +23,7 @@
             </th>
         </tr>
     </table>
-    <form action="" method="POST">
+    <form action="" method="POST" role="form">
         <input type="hidden" name="t" value="{t}">
         <table width=519>
             <tr>
@@ -50,7 +50,7 @@
             </tr>
         </table>
     </form>
-    <form action="" method="POST">
+    <form action="" method="POST" role="form">
         <table width=519>
             <tr>
                 <td class="c" colspan="2">{al_manage_options}</td>

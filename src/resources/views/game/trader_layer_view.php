@@ -1,6 +1,6 @@
 <div id="merchant">
     <div style="margin:0px auto;">
-        <form id="TraderForm" action="javascript:void(0);" onsubmit="trySubmit();">
+        <form id="TraderForm" action="javascript:void(0);" onsubmit="trySubmit();" role="form">
             <table id="merchanttable" cellpadding="0" cellspacing="0" width="582px">
                 <thead>
                     <td class="c" colspan="6">

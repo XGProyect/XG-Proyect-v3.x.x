@@ -1,6 +1,6 @@
 <br />
-<div id="content">
-    <form action="" method="post">
+<div id="content" role="main">
+    <form action="" method="post" role="form">
         <table width="569">
             <tbody>
                 <tr>

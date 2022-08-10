@@ -1,5 +1,5 @@
 <br>
-<div id="content">
+<div id="content" role="main">
     <table width="600px">
         <tr>
             <td class="c" colspan="5">{bn_players_banned_list}</td>

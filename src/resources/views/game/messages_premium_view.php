@@ -1,4 +1,4 @@
-<div id="content" style="top: 118px; height: 656px;">
+<div id="content" style="top: 118px; height: 656px;" role="main">
     <center>
         <table class="header">
             <tbody>
@@ -6,7 +6,7 @@
                     <td>
                         <table width="519">
                             <tbody>
-                                <form action="{form_submit}" method="POST">
+                                <form action="{form_submit}" method="POST" role="form">
                                     <tr>
                                         <td colspan="4" class="c">{mg_title}</td>
                                     </tr>
@@ -64,7 +64,7 @@
                                     </tr>
                                     <input type="hidden" name="messages" value="1" />
                                 </form>
-                                <form action="game.php?page=messages" method="POST">
+                                <form action="game.php?page=messages" method="POST" role="form">
                                     <tr height="20"> </tr>
                                     <tr>
                                         <td colspan="4" class="c">{mg_address_book}</td>
@@ -117,7 +117,7 @@
                                         </th>
                                     </tr>
                                 </form>
-                                <form action="game.php?page=messages" method="POST">
+                                <form action="game.php?page=messages" method="POST" role="form">
                                     <tr height="20">
                                     </tr>
                                     <tr>

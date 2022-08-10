@@ -1,5 +1,5 @@
 <br />
-<div id="content">
+<div id="content" role="main">
     <table border="0" cellpadding="0" cellspacing="1" width="750px">
         <tbody>
             <tr height="20px" valign="left">

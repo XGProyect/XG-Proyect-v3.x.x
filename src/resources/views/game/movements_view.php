@@ -1,7 +1,7 @@
 <script language="JavaScript" src="{js_path}flotten-min.js"></script>
 <script language="JavaScript" src="{js_path}ocnt-min.js"></script>
 <br />
-<div id="content">
+<div id="content" role="main">
     <table width="519" border="0" cellpadding="0" cellspacing="1">
         <tr height="20">
             <td colspan="9" class="c">

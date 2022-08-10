@@ -4,7 +4,7 @@
     </tr>
     <tr>
         <td>
-            <form name="refill-resources" method="POST" action="">
+            <form name="refill-resources" method="POST" action="" role="form">
                 <table width="100%">
                     <tr>
                         <td class="c" colspan="2">{tr_merchant1_tab_title}</td>
@@ -52,7 +52,7 @@
                     {/list_of_resources}
                 </table>
             </form>
-            <form name="trade-resources" method="POST" action="">
+            <form name="trade-resources" method="POST" action="" role="form">
                 <table width="100%">
                     <tr>
                         <td class="c" colspan="2">{tr_merchant2_tab_title}</td>

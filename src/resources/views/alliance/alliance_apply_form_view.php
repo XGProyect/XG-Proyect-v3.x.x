@@ -1,7 +1,7 @@
 <script src="{js_path}cntchar-min.js" type="text/javascript"></script>
 <br />
-<div id="content">
-    <form action="game.php?page=alliance&mode=apply&allyid={allyid}" method="POST" id="apply">
+<div id="content" role="main">
+    <form action="game.php?page=alliance&mode=apply&allyid={allyid}" method="POST" id="apply" role="form">
         <table width="519">
             <tr>
                 <td class="c" colspan="2">{write_to_alliance}</td>

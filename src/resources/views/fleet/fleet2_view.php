@@ -14,7 +14,7 @@
         }
     }
 </script>
-<form action="game.php?page=fleet3" method="post" onsubmit='this.submit.disabled = true;'>
+<form action="game.php?page=fleet3" method="post" onsubmit='this.submit.disabled = true;' role="form">
     {fleet_block}
         <input type="hidden" name="consumption{ship_id}" value="{consumption}" />
         <input type="hidden" name="speed{ship_id}" value="{speed}" />
@@ -28,7 +28,7 @@
     <input type="hidden" name="thisplanettype" value="{planet_type}" />
     <input type="hidden" name="target_mission" value="{target_mission}" />
     <br />
-    <div id="content">
+    <div id="content" role="main">
         <table width="519" border="0" cellpadding="0" cellspacing="1">
             <tr height="20">
                 <td colspan="2" class="c">{fl_send_fleet}</td>

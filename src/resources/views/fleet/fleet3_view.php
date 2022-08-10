@@ -4,7 +4,7 @@
         return 1
     }
 </script>
-<form action="game.php?page=fleet4" method="post" onsubmit='this.submit.disabled = true;'>
+<form action="game.php?page=fleet4" method="post" onsubmit='this.submit.disabled = true;' role="form">
     <input type="hidden" name="thisresource1"  value="{this_metal}" />
     <input type="hidden" name="thisresource2"  value="{this_crystal}" />
     <input type="hidden" name="thisresource3"  value="{this_deuterium}" />
@@ -25,7 +25,7 @@
         <input type="hidden" name="ship{ship_id}" value="{ship}" />
     {/fleet_block}
     <br />
-    <div id="content">
+    <div id="content" role="main">
         <table border="0" cellpadding="0" cellspacing="1" width="519">
             <tr align="left" height="20">
                 <td class="c" colspan="2">{title}</td>

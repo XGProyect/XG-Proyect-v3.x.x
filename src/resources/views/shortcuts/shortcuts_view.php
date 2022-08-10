@@ -1,4 +1,4 @@
-<div id="content">
+<div id="content" role="main">
     <table border="0" cellpadding="0" cellspacing="1" width="519">
         <tr height="20">
             <td class="c" colspan="2">

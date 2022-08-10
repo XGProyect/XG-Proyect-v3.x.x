@@ -1,5 +1,5 @@
 <br />
-<div id="content">
+<div id="content" role="main">
     {BuildListScript}
     <table width=530>
         {BuildList}

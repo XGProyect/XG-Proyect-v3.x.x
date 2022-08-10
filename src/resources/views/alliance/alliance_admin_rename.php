@@ -1,7 +1,7 @@
 <br />
-<div id="content">
+<div id="content" role="main">
     <center>
-        <form action="" method="POST">
+        <form action="" method="POST" role="form">
             <table width="519">
                 <tr>
                     <td class="c" colspan="2">{case}</td>

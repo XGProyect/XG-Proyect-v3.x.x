@@ -1,5 +1,5 @@
 <br>
-<div id="content">
+<div id="content" role="main">
     <script  language="JavaScript">
         function galaxy_submit(value) {
             document.getElementById('auto').name = value;
@@ -218,7 +218,7 @@
     <table width="656px">
         <tr>
             <td class="c" colspan="8">
-                <form action="game.php?page=galaxy&mode=1" method="post" id="galaxy_form" style="margin:0">
+                <form action="game.php?page=galaxy&mode=1" method="post" id="galaxy_form" style="margin:0" role="form">
                     <input type="hidden" id="auto" value="dr" >
                     <table width="100%">
                         <tr>

@@ -1,5 +1,5 @@
 <br />
-<div id="content">
+<div id="content" role="main">
     <table border="1" align="center">
         <tr>
             <th>{cr_type}</th>

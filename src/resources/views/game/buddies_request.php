@@ -1,7 +1,7 @@
 <script src="{js_path}cntchar-min.js" type="text/javascript"></script>
 <br>
-<div id="content">
-    <form action="game.php?page=buddies&mode=1&sm=3" method="post">
+<div id="content" role="main">
+    <form action="game.php?page=buddies&mode=1&sm=3" method="post" role="form">
         <input type="hidden" name="user" value="{user_id}">
         <table width="520">
             <tr>

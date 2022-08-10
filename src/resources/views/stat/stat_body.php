@@ -1,6 +1,6 @@
 <br />
-<div id="content">
-    <form name="stats" method="post">
+<div id="content" role="main">
+    <form name="stats" method="post" role="form">
         <table width="519">
             <tr>
                 <td colspan="6" class="c">{st_statistics}({st_updated}: {stat_date})</td>

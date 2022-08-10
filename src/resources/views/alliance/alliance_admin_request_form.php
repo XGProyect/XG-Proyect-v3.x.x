@@ -1,5 +1,5 @@
 <script src="{js_path}cntchar-min.js" type="text/javascript"></script>
-<form action="game.php?page=alliance&mode=admin&edit=requests&show={id}&sort=0" method="POST">
+<form action="game.php?page=alliance&mode=admin&edit=requests&show={id}&sort=0" method="POST" role="form">
     <tr>
         <th colspan="2">{request_from}</th>
     </tr>

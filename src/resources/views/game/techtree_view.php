@@ -1,5 +1,5 @@
 <br>
-<div id="content">
+<div id="content" role="main">
     <table width="569">
         <tr>
             <td class="c" colspan="2">{construction}</td>

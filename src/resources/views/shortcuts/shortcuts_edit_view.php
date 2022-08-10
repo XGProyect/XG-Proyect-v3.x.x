@@ -1,5 +1,5 @@
-<div id="content">
-    <form name="short_panel" method="POST"  action="game.php?page=shortcuts{shortcut_id}">
+<div id="content" role="main">
+    <form name="short_panel" method="POST"  action="game.php?page=shortcuts{shortcut_id}" role="form">
         <table border="0" cellpadding="0" cellspacing="1" width="519">
             <tr height="20">
                 <td colspan="2" class="c">{fl_shortcut_add_title}</td>

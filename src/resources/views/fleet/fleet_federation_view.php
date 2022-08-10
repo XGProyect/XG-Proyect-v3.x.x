@@ -1,4 +1,4 @@
-<form action="" method="POST">
+<form action="" method="POST" role="form">
     <input type="hidden" value="{federation_invited}" name="federation_invited">
     <table width="519" border="0" cellpadding="0" cellspacing="1">
         <tr>

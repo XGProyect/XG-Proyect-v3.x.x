@@ -1,5 +1,5 @@
 <br>
-<div id="content">
+<div id="content" role="main">
     {status_message}
     <table width="519px" style="border: 2px solid {error_color}; text-align: center; background: transparent;">
         <tr style="background: transparent;">

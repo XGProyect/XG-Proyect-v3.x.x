@@ -18,8 +18,8 @@
     }
 </script>
 <br />
-<div id="content">
-    <form id="trader" action="" method="post">
+<div id="content" role="main">
+    <form id="trader" action="" method="post" role="form">
         <input type="hidden" name="ress" value="cristal">
         <table width="569">
             <tr>

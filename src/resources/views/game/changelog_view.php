@@ -1,5 +1,5 @@
 <br>
-<div id="content">
+<div id="content" role="main">
     <table width="668px">
         <tr>
             <td class="c">{ch_version}</td>

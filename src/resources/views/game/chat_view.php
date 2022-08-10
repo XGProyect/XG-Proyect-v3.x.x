@@ -1,6 +1,6 @@
 <script src="{js_path}cntchar-min.js" type="text/javascript"></script>
 <br />
-<div id="content">
+<div id="content" role="main">
     {status_message}
     <table width="519px" style="border: 2px solid {error_color}; text-align: center; background: transparent;">
         <tr style="background:transparent;">
@@ -9,7 +9,7 @@
     </table>
     <br />
     {/status_message}
-    <form action="game.php?page=chat&playerId={id}" method="post">
+    <form action="game.php?page=chat&playerId={id}" method="post" role="form">
         <table width="519px">
             <tr>
                 <td class="c" colspan="2">{pm_send_message}</td>
