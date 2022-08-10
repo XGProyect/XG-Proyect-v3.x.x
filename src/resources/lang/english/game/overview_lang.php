@@ -18,4 +18,5 @@ $lang = [
     'ov_position' => 'Position',
     'ov_points' => 'Points',
     'ov_fields' => 'Fields',
+    'Planet_menu' => 'Manage planet',
 ];
