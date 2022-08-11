@@ -37,19 +37,19 @@ class FormatLib
         $weeks = floor($input_seconds / $sec_week);
 
         // Extract days
-        $daysSeconds = $input_seconds % $sec_week;
+        $daysSeconds = (int)$input_seconds % $sec_week;
         $days = floor($daysSeconds / $sec_day);
 
         // Extract hours
-        $hourSeconds = $input_seconds % $sec_day;
+        $hourSeconds = (int)$input_seconds % $sec_day;
         $hours = floor($hourSeconds / $sec_hour);
 
         // Extract minutes
-        $minuteSeconds = $hourSeconds % $sec_hour;
+        $minuteSeconds = (int)$hourSeconds % $sec_hour;
         $minutes = floor($minuteSeconds / $sec_min);
 
         // Extract the remaining seconds
-        $remainingSeconds = $minuteSeconds % $sec_min;
+        $remainingSeconds = (int)$minuteSeconds % $sec_min;
         $seconds = ceil($remainingSeconds);
 
         // Format and return
