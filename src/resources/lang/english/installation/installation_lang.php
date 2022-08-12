@@ -2,6 +2,7 @@
 
 $lang = [
     // messages
+    'lang_code' => 'en',
     'ins_no_server_requirements' => 'Your server / hosting does not meet the minimum requirements needed to run XG Proyect.<br /><br />Requirements: <br />- PHP 7.3+<br />- MySQL 5.5+',
     'ins_not_writable' => 'You must provide write permission (chmod 777) to the config directory to continue with the installation.',
     'ins_already_installed' => 'XG Proyect is already installed. Select an option: <br /><br /> - <a href="../admin.php?page=update">Update</a> <br /> - <a href="../admin.php?page=migrate">Migrate</a> <br /> - <a href="../">Back to the game</a> <br /><br />In case you do not want to take any action, for safety, we recommend <span style="color:red;text-decoration:underline;">DELETE</span> the install directory.',

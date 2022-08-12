@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{lang_code}">
     <head>
         <meta charset="utf-8">
         <title>XG Proyect | {title}</title>

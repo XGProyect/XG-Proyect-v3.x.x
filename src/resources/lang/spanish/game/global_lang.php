@@ -1,6 +1,7 @@
 <?php
 
 $lang = [
+    'lang_code' => 'es',
     // resources
     'metal' => 'Metal',
     'crystal' => 'Cristal',
