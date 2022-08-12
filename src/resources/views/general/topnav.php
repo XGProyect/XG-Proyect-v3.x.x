@@ -25,7 +25,7 @@
                             <img src="{dpath}resources/metal.gif" width="42" height="22" alt="{metal}"/>
                         </td>
                         <td width="85" class="header">
-                            <img src="{dpath}resources/crystal.gif" width="42" height="22" alt="{cristal}"/>
+                            <img src="{dpath}resources/crystal.gif" width="42" height="22" alt="{crystal}"/>
                         </td>
                         <td width="85" class="header">
                             <img src="{dpath}resources/deuterium.gif" width="42" height="22" alt="{deuterium}"/>
