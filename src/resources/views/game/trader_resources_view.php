@@ -23,7 +23,7 @@
                     {list_of_resources}
                     <tr>
                         <th>
-                            <img border="0" src="{dpath}resources/{resource}.gif" width="42" height="22">
+                            <img border="0" src="{dpath}resources/{resource}.gif" width="42" height="22" alt=""/>
                             <br>
                             {resource_name}
                         </th>
@@ -75,13 +75,13 @@
                             <table width="100%">
                                 <tr>
                                     <th>
-                                        <img border="0" src="public/upload/skins/xgproyect/resources/metal.gif" width="42" height="22">
+                                        <img border="0" src="public/upload/skins/xgproyect/resources/metal.gif" width="42" height="22" alt=""/>
                                     </th>
                                     <th>
-                                        <img border="0" src="public/upload/skins/xgproyect/resources/crystal.gif" width="42" height="22">
+                                        <img border="0" src="public/upload/skins/xgproyect/resources/crystal.gif" width="42" height="22" alt=""/>
                                     </th>
                                     <th>
-                                        <img border="0" src="public/upload/skins/xgproyect/resources/deuterium.gif" width="42" height="22">
+                                        <img border="0" src="public/upload/skins/xgproyect/resources/deuterium.gif" width="42" height="22" alt=""/>
                                     </th>
                                 </tr>
                                 <tr>

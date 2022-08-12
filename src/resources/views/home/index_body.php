@@ -128,7 +128,7 @@
 	<div id="start">
 	    <div id="header">
                 <h1>
-                	<img src="{game_logo}" width="200px">
+                	<img src="{game_logo}" width="200px" alt=""/>
                     <a href="./" title="{hm_hidden_title}">
                         {hm_hidden_title}                    </a>
                 </h1>

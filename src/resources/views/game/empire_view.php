@@ -10,7 +10,7 @@
                 {image}
                 <th width="75px">
                     <a href="game.php?page=overview&cp={planet_id}&re=0">
-                        <img src="{dpath}planets/small/s_{planet_image}.jpg" border="0" width="80px" height="80px">
+                        <img src="{dpath}planets/small/s_{planet_image}.jpg" border="0" width="80px" height="80px" alt=""/>
                     </a>
                 </th>
                 {/image}

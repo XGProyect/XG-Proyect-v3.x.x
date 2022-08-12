@@ -14,11 +14,11 @@
         <tr>
             <th colspan="2">
                 <a href="game.php?page=alliance&mode=admin&edit=tag">
-                    <img src="{dpath}alliance/appwiz.gif" border="0" alt="{al_manage_change_tag}">
+                    <img src="{dpath}alliance/appwiz.gif" border="0" alt="{al_manage_change_tag}"/>
                 </a>
                 &nbsp;
                 <a href="game.php?page=alliance&mode=admin&edit=name">
-                    <img src="{dpath}alliance/appwiz.gif" border="0" alt="{al_manage_change_name}">
+                    <img src="{dpath}alliance/appwiz.gif" border="0" alt="{al_manage_change_name}"/>
                 </a>
             </th>
         </tr>

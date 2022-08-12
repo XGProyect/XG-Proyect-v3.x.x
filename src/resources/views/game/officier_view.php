@@ -6,7 +6,7 @@
         </tr>
         <tr>
             <td class="l">
-                <img src="{dpath}premium/DMaterie.jpg" width="120" height="120">
+                <img src="{dpath}premium/DMaterie.jpg" width="120" height="120" alt=""/>
             </td>
             <td class="l">
                 <strong>{dark_matter}</strong><br>
@@ -15,7 +15,7 @@
                     <table>
                         <tr>
                             <td>
-                                <img src="{dpath}premium/dm_klein_1.jpg" width="32" height="32" style="vertical-align:middle;"></td>
+                                <img src="{dpath}premium/dm_klein_1.jpg" width="32" height="32" style="vertical-align:middle;" alt=""/></td>
                             <td style='background-color:transparent;'>
                                 <strong style="color:skyblue; vertical-align:middle;">{of_darkmatter_description_short}</strong>
                             </td>
@@ -35,7 +35,7 @@
         {officier_list}
         <tr>
             <td class="l" rowspan="2">
-                <img src="{dpath}premium/{img_big}.jpg" width="120" height="120">
+                <img src="{dpath}premium/{img_big}.jpg" width="120" height="120" alt=""/>
             </td>
             <td class="l" rowspan="2">
                 <strong>{name}</strong> (<strong>{status}</strong>)<br>
@@ -44,7 +44,7 @@
                     <table>
                         <tr>
                             <td>
-                                <img src="{dpath}premium/{img_small}.gif" width="32" height="32" style="vertical-align:middle;" alt="{name}">
+                                <img src="{dpath}premium/{img_small}.gif" width="32" height="32" style="vertical-align:middle;" alt="{name}"/>
                             </td>
                             <td style='background-color:transparent;'>
                                 <strong style="color:skyblue; vertical-align:middle;">{benefits}</strong>

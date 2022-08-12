@@ -8,7 +8,7 @@
                 <table>
                     <tbody>
                         <tr>
-                            <td><img src="{dpath}elements/{image}.gif" align="top" border="0" height="120" width="120"></td>
+                            <td><img src="{dpath}elements/{image}.gif" align="top" border="0" height="120" width="120" alt=""/></td>
                             <td>{description}</td>
                         </tr>
                     </tbody>

@@ -19,7 +19,7 @@
         <tr>
             <th>{position}</th>
             <th>{user_name}</th>
-            <th><a href="game.php?page=chat&playerId={user_id}"><img src="{dpath}img/m.gif" border="0" title="{write_message}"></a></th>
+            <th><a href="game.php?page=chat&playerId={user_id}"><img src="{dpath}img/m.gif" border="0" title="{write_message}"/></a></th>
             <th>{user_ally_range}</th>
             <th>{points}</th>
             <th><a href="game.php?page=galaxy&mode=0&galaxy={user_galaxy}&system={user_system}">{coords}</a></th>

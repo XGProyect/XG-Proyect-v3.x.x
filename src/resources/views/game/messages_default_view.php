@@ -60,7 +60,7 @@
                             </tr>
                             {operators_list}
                             <tr>
-                                <th colspan="4">{user_name} <a href="mailto:{user_email}"><img src="{dpath}/img/m.gif" /></a></th>
+                                <th colspan="4">{user_name} <a href="mailto:{user_email}"><img src="{dpath}/img/m.gif" alt=""/></a></th>
                             </tr>
                             {/operators_list}
                         </table>

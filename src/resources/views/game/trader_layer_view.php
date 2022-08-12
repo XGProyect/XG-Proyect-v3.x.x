@@ -18,7 +18,7 @@
                     </tr>
                     <tr class="alt">
                         <td class="cresIcon noCenter">
-                            <img border="0" src="{dpath}resources/metal.gif" width="42" height="22">
+                            <img border="0" src="{dpath}resources/metal.gif" width="42" height="22" alt=""/>
                         </td>
                         <td class="noCenter">
                             {metal}
@@ -40,7 +40,7 @@
                     </tr>
                     <tr class=" toSell">
                         <td class="resIcon noCenter">
-                            <img border="0" src="{dpath}resources/crystal.gif" width="42" height="22">
+                            <img border="0" src="{dpath}resources/crystal.gif" width="42" height="22" alt=""/>
                         </td>
                         <td class="noCenter">
                             {crystal}
@@ -61,7 +61,7 @@
                     </tr>
                     <tr class="alt">
                         <td class="resIcon noCenter">
-                            <img border="0" src="{dpath}resources/deuterium.gif" width="42" height="22">
+                            <img border="0" src="{dpath}resources/deuterium.gif" width="42" height="22" alt=""/>
                         </td>
                         <td class="noCenter">
                             {deuterium}

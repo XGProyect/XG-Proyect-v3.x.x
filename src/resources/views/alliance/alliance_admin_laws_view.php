@@ -12,15 +12,15 @@
             </tr>
             <tr>
                 <th colspan="2"></th>
-                <th><img src="{dpath}img/r3.png"></th>
-                <th><img src="{dpath}img/r5.png"></th>
-                <th><img src="{dpath}img/r4.png"></th>
-                <th><img src="{dpath}img/r2.png"></th>
-                <th><img src="{dpath}img/r7.png"></th>
-                <th><img src="{dpath}img/r8.png"></th>
-                <th><img src="{dpath}img/r1.png"></th>
-                <th><img src="{dpath}img/r6.png"></th>
-                <th><img src="{dpath}img/r9.png"></th>
+                <th><img src="{dpath}img/r3.png" alt=""/></th>
+                <th><img src="{dpath}img/r5.png" alt=""/></th>
+                <th><img src="{dpath}img/r4.png" alt=""/></th>
+                <th><img src="{dpath}img/r2.png" alt=""/></th>
+                <th><img src="{dpath}img/r7.png" alt=""/></th>
+                <th><img src="{dpath}img/r8.png" alt=""/></th>
+                <th><img src="{dpath}img/r1.png" alt=""/></th>
+                <th><img src="{dpath}img/r6.png" alt=""/></th>
+                <th><img src="{dpath}img/r9.png" alt=""/></th>
             </tr>
             {list_of_ranks}
             <tr>
@@ -69,39 +69,39 @@
                 <td class=c colspan="2">{al_legend}</td>
             </tr>
             <tr>
-                <th><img src="{dpath}img/r1.png"></th>
+                <th><img src="{dpath}img/r1.png" alt=""/></th>
                 <th>{al_legend_disolve_alliance}</th>
             </tr>
             <tr>
-                <th><img src="{dpath}img/r2.png"></th>
+                <th><img src="{dpath}img/r2.png" alt=""/></th>
                 <th>{al_legend_kick_users}</th>
             </tr>
             <tr>
-                <th><img src="{dpath}img/r3.png"></th>
+                <th><img src="{dpath}img/r3.png" alt=""/></th>
                 <th>{al_legend_see_requests}</th>
             </tr>
             <tr>
-                <th><img src="{dpath}img/r4.png"></th>
+                <th><img src="{dpath}img/r4.png" alt=""/></th>
                 <th>{al_legend_see_users_list}</th>
             </tr>
             <tr>
-                <th><img src="{dpath}img/r5.png"></th>
+                <th><img src="{dpath}img/r5.png" alt=""/></th>
                 <th>{al_legend_check_requests}</th>
             </tr>
             <tr>
-                <th><img src="{dpath}img/r6.png"></th>
+                <th><img src="{dpath}img/r6.png" alt=""/></th>
                 <th>{al_legend_admin_alliance}</th>
             </tr>
             <tr>
-                <th><img src="{dpath}img/r7.png"></th>
+                <th><img src="{dpath}img/r7.png" alt=""/></th>
                 <th>{al_legend_see_connected_users}</th>
             </tr>
             <tr>
-                <th><img src="{dpath}img/r8.png"></th>
+                <th><img src="{dpath}img/r8.png" alt=""/></th>
                 <th>{al_legend_create_circular}</th>
             </tr>
             <tr>
-                <th><img src="{dpath}img/r9.png"></th>
+                <th><img src="{dpath}img/r9.png" alt=""/></th>
                 <th><a title="{al_legend_right_hand_detail}">{al_legend_right_hand}</a></th>
             </tr>
         </table>
