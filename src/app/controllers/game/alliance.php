@@ -671,8 +671,8 @@ class Alliance extends BaseController
             ],
             'text' => FILTER_UNSAFE_RAW,
             'options' => FILTER_UNSAFE_RAW,
-            'owner_range' => FILTER_SANITIZE_STRIPPED,
-            'newcomer_range' => FILTER_SANITIZE_STRIPPED,
+            'owner_range' => FILTER_UNSAFE_RAW,
+            'newcomer_range' => FILTER_UNSAFE_RAW,
             'web' => FILTER_VALIDATE_URL,
             'image' => FILTER_VALIDATE_URL,
             'request_notallow' => [
@@ -864,7 +864,7 @@ class Alliance extends BaseController
      */
     private function getAdminNameSection()
     {
-        $name = filter_input(INPUT_POST, 'nametag', FILTER_SANITIZE_STRIPPED);
+        $name = filter_input(INPUT_POST, 'nametag', FILTER_UNSAFE_RAW);
 
         if (isset($name)) {
             if (strlen($name) < 3 or strlen($name) > 30) {
@@ -1103,7 +1103,7 @@ class Alliance extends BaseController
      */
     private function getAdminTagSection()
     {
-        $tag = filter_input(INPUT_POST, 'nametag', FILTER_SANITIZE_STRIPPED);
+        $tag = filter_input(INPUT_POST, 'nametag', FILTER_UNSAFE_RAW);
 
         if (isset($tag)) {
             if (strlen($tag) < 3 or strlen($tag) > 8) {
