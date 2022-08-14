@@ -13,7 +13,7 @@
 namespace App\libraries\buddies;
 
 use App\core\entities\BuddyEntity;
-use App\libraries\enumerators\BuddiesStatusEnumerator as BuddiesStatus;
+use App\core\enumerators\BuddiesStatusEnumerator as BuddiesStatus;
 
 /**
  * Buddy Class

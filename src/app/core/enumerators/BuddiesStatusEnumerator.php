@@ -10,7 +10,7 @@
  * @version  3.1.0
  */
 
-namespace App\libraries\enumerators;
+namespace App\core\enumerators;
 
 /**
  * BuddiesStatusEnumerator Class

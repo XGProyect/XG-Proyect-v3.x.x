@@ -15,7 +15,7 @@ namespace App\controllers\game;
 use App\core\BaseController;
 use App\core\entities\BuddyEntity;
 use App\libraries\buddies\Buddy;
-use App\libraries\enumerators\BuddiesStatusEnumerator as BuddiesStatus;
+use App\core\enumerators\BuddiesStatusEnumerator as BuddiesStatus;
 use App\libraries\Functions;
 use App\libraries\TimingLibrary as Timing;
 use App\libraries\Users;
