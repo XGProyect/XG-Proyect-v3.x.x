@@ -17,5 +17,5 @@ $lang = [
     'nt_back' => 'Volver',
     'nt_save' => 'Guardar',
     'nt_edit_note' => 'Editar nota',
-    'nt_delete_market_notes' => 'Elimintar todas las notas marcadas',
+    'nt_delete_market_notes' => 'Eliminar todas las notas marcadas',
 ];

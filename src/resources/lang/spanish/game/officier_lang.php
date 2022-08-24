@@ -19,7 +19,7 @@ $lang = [
     'of_hire_technocrat' => 'Contratar tecnócrata',
     'of_add_premium_officier_commander' => '+40 favoritos, Lista de construcción, Visión de imperio, Accesos rápidos, Visión de recursos en transportes entrantes, Sin publicidad* (*excepto mensajes sobre el juego)',
     'of_add_premium_officier_admiral' => 'Huecos de flota máximos +2, tasa de retirada de flotas mejorada',
-    'of_add_premium_officier_engineer' => 'Minimiza las perdidas de las defensas a la mitad, +10% de producción de energía',
+    'of_add_premium_officier_engineer' => 'Minimiza las pérdidas de las defensas a la mitad, +10% de producción de energía',
     'of_add_premium_officier_geologist' => '+10% producción de mineral',
     'of_add_premium_officier_technocrat' => '+2 al nivel de espionaje, 25% menos de tiempo de investigación',
     'officiers' => [
@@ -40,7 +40,7 @@ $lang = [
         ],
         604 => [
             'name' => 'Geólogo',
-            'description' => 'El geólogo es un experto en astrominerología y astrocristalografía. Apoyado por su equipo de metalúrgicos e ingenieros en química apoya a gobiernos interplanetarias a la explotación de fuentes de recursos y a la optimización del refinamiento de estos recursos.',
+            'description' => 'El geólogo es un experto en astrominerología y astrocristalografía. Apoyado por su equipo de metalúrgicos e ingenieros en química, apoya a gobiernos interplanetarios en la explotación de fuentes de recursos y a la optimización del refinamiento de estos recursos.',
             'benefits' => '+10% de producción de mineral',
         ],
         605 => [

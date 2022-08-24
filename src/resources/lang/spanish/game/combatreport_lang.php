@@ -16,7 +16,7 @@ $lang = [
     'cr_moonproba' => 'La probabilidad de que surja una luna de los escombros es de %s %%',
     'cr_attacker_won' => 'El atacante ha ganado la batalla',
     'cr_defender_won' => 'El defensor ha ganado la batalla',
-    'cr_both_won' => 'La batalla termino en empate',
+    'cr_both_won' => 'La batalla terminó en empate',
     'cr_stealed_ressources' => 'Botín total: %s metal, %s cristal y %s deuterio.', // ok
-    'cr_moonbuilt' => 'Las enormes cantidad de metal y cristal se fusionan y forman un satélite lunar en la orbita del planeta %s [%d:%d:%d]!',
+    'cr_moonbuilt' => 'Las enormes cantidades de metal y cristal se fusionan y forman un satélite lunar en la órbita del planeta %s [%d:%d:%d]!',
 ];

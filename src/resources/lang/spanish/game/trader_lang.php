@@ -8,7 +8,7 @@ $lang = [
     'tr_auctioneer_title' => 'Aquí se ofrecen todos los días objetos por los que puedes pujar con recursos.',
     'tr_scrap_merchant' => 'Chatarrero',
     'tr_scrap_merchant_title' => 'El chatarrero compra naves e instalaciones de defensas usadas.',
-    'tr_import_export' => 'Import / export',
+    'tr_import_export' => 'Importar / exportar',
     'tr_import_export_title' => 'Aquí se venden a diario contenedores que se pueden adquirir por recursos y cuyo contenido es desconocido.',
 
     // traderResources
@@ -38,7 +38,7 @@ $lang = [
     'tr_scrap_phrase_1' => 'En ninguna galaxia conseguirá una oferta mejor.',
     'tr_scrap_phrase_2' => 'Tengo que reducirle el precio por los agujeros de bala.',
     'tr_scrap_phrase_3' => 'Me tendría que estar pagando usted a mí por quedarme con su chatarra.',
-    'tr_scrap_phrase_4' => 'No te puedo nada más por esta basura oxidada.',
+    'tr_scrap_phrase_4' => 'No te puedo dar nada más por esta basura oxidada.',
     'tr_scrap_phrase_5' => 'Mi mujer me va a matar...',
     'tr_scrap_phrase_6' => '¿Acaso quiere llevarme a la ruina?',
     'tr_scrap_phrase_7' => 'Esta oferta es una excepción absolutamente única.',
