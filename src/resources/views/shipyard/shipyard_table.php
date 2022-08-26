@@ -2,7 +2,7 @@
 <div id="content" role="main">
     {message}
     <form action="" method="post" role="form">
-        <table align="top" width="530">
+        <table role="presentation" align="top" width="530">
             {list_of_items}
             <tr>
                 <th class="l">

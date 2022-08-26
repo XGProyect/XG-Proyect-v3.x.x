@@ -1,6 +1,6 @@
 <br />
 <div id="content" role="main">
-    <table width="519">
+    <table role="presentation" width="519">
         <tr>
             <td class="c" colspan="4"><a href="game.php?page=renameplanet" title="{Planet_menu}">{{$ov_planet}} "{{$planet_name}}"</a> ({{$user_name}})</td>
         </tr>
@@ -36,7 +36,7 @@
         </tr>
         <tr>
             <th>{{$ov_points}}</th>
-            <th colspan="3">{{$user_rank}}</td>
+            <th colspan="3">{{$user_rank}}</th>
         </tr>
     </table>
 </div>

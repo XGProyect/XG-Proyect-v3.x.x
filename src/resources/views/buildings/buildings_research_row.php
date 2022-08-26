@@ -9,7 +9,7 @@
         {tech_price}
         {search_time}
     </td>
-    <th class="l">
+    <th role="cell" class="l">
         {tech_link}
     </th>
 </tr>
