@@ -92,7 +92,7 @@ class Statistics extends BaseController
                 $parse
             );
 
-            $start = floor($range / 100 % 100) * 100;
+            $start = floor(intval($range / 100) % 100) * 100;
             $query = $this->Statistics_Model->getAlliances($Order, $start);
 
             $start++;
@@ -124,7 +124,7 @@ class Statistics extends BaseController
                 $parse
             );
 
-            $start = floor($range / 100 % 100) * 100;
+            $start = floor(intval($range / 100) % 100) * 100;
             $query = $this->Statistics_Model->getUsers($Order, $start);
 
             $start++;
