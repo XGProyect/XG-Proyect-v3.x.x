@@ -260,7 +260,7 @@
             </td>
         </tr>
         <tr>
-            <th colspan="8">
+            <th role="cell" colspan="8">
                 <span id="probes">
                     {gl_esp_probe}:
                     <span id="probeValue">{spyprobes}</span>
@@ -282,28 +282,28 @@
             </th>
         </tr>
         <tr>
-            <td class="c" colspan="2">{gl_planet}</td>
-            <td class="c">{gl_name_activity}</td>
-            <td class="c">{gl_moon}</td>
-            <td class="c">{gl_debris}</td>
-            <td class="c">{gl_player_estate}</td>
-            <td class="c">{gl_alliance}</td>
-            <td class="c">{gl_actions}</td>
+            <td role="columnheader" class="c" colspan="2">{gl_planet}</td>
+            <td role="columnheader" class="c">{gl_name_activity}</td>
+            <td role="columnheader" class="c">{gl_moon}</td>
+            <td role="columnheader" class="c">{gl_debris}</td>
+            <td role="columnheader" class="c">{gl_player_estate}</td>
+            <td role="columnheader" class="c">{gl_alliance}</td>
+            <td role="columnheader"class="c">{gl_actions}</td>
         </tr>
         {list_of_positions}
         <tr>
-            <th width="30px">{pos}</th>
-            <th width="30px">{planet}</th>
-            <th width="130px" style="white-space: nowrap;">{planetname}</th>
-            <th width="30px" style="white-space: nowrap;">{moon}</th>
-            <th width="30px" style="white-space: nowrap;">{debris}</th>
-            <th width="150px">{username}</th>
-            <th width="80px">{alliance}</th>
-            <th width="125px" style="white-space: nowrap;">{actions}</th>
+            <th role="cell" width="30px">{pos}</th>
+            <th role="cell" width="30px">{planet}</th>
+            <th role="cell" width="130px" style="white-space: nowrap;">{planetname}</th>
+            <th role="cell" width="30px" style="white-space: nowrap;">{moon}</th>
+            <th role="cell" width="30px" style="white-space: nowrap;">{debris}</th>
+            <th role="cell" width="150px">{username}</th>
+            <th role="cell" width="80px">{alliance}</th>
+            <th role="cell" width="125px" style="white-space: nowrap;">{actions}</th>
         </tr>
         {/list_of_positions}
         <tr id="fleetstatusrow">
-            <th class="c" colspan="8">
+            <th role="cell" class="c" colspan="8">
                 <table style="font-weight: bold" width="100%" id="fleetstatustable">
                     <!-- will be filled with content later on while processing ajax replies -->
                 </table>
