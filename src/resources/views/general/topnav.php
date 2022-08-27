@@ -19,7 +19,7 @@
                 </table>
             </td>
             <td class="header">
-                <table class="header" id="resources" cellspacing="0" cellpadding="0" padding-right="30">
+                <table role="table" class="header" id="resources" cellspacing="0" cellpadding="0" padding-right="30">
                     <tr class="header" style="text-align:center">
                         <td width="85" class="header">
                             <img src="{dpath}resources/metal.gif" width="42" height="22" alt="{metal}"/>

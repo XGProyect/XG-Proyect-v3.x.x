@@ -12,7 +12,7 @@
                 {lm_players} <strong>{user_name}</strong>
             </NOBR>
             </p>
-            <table width="110" cellspacing="0" cellpadding="0">
+            <table role="presentation" width="110" cellspacing="0" cellpadding="0">
                 <tr>
                     <td>
                         <img src="{dpath}menu/ogame-produktion.jpg" width="110" height="40" alt=""/>
