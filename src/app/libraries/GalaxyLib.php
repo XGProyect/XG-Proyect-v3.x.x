@@ -470,14 +470,14 @@ class GalaxyLib extends XGPCore
         }
 
         if (!isset($statuses['admin']) && !isset($statuses['banned'])) {
-            if ($this->noob->isWeak($current_user_points, $row_user_points)) {
+            if ($this->noob->isWeak(intval($current_user_points), intval($row_user_points))) {
                 $statuses['protection'] = [
                     'class' => $this->getUserStatusClass('w'),
                     'shortcut' => $this->langs->line('gl_w'),
                 ];
             }
 
-            if ($this->noob->isStrong($current_user_points, $row_user_points)) {
+            if ($this->noob->isStrong(intval($current_user_points), intval($row_user_points))) {
                 $statuses['protection'] = [
                     'class' => $this->getUserStatusClass('s'),
                     'shortcut' => $this->langs->line('gl_s'),
