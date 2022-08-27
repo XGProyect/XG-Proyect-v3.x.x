@@ -80,7 +80,7 @@ class FormatLib
      */
     public static function prettyTimeHour($seconds)
     {
-        $min = floor($seconds / 60 % 60);
+        $min = floor(intval($seconds / 60) % 60);
         $time = '';
 
         if ($min != 0) {
