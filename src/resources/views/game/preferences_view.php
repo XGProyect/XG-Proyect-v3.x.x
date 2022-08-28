@@ -1,7 +1,7 @@
 <br>
 <div id="content" role="main">
     {status_message}
-    <table width="519px" style="border: 2px solid {error_color}; text-align: center; background: transparent;">
+    <table role="presentation" width="519px" style="border: 2px solid {error_color}; text-align: center; background: transparent;">
         <tr style="background: transparent;">
             <td style="background: transparent;">
                 <span style="color: {error_color}; font-weight: bold">{error_text}</span>
@@ -11,10 +11,10 @@
     <br />
     {/status_message}
     <form action="game.php?page=preferences" method="post" role="form">
-        <table width="519px">
+        <table role="presentation" width="519px">
             <tbody>
                 <tr>
-                    <td class="c" colspan="2">{pr_user_data}</td>
+                    <td role="heading" aria-level="2" class="c" colspan="2">{pr_user_data}</td>
                 </tr>
                 <tr>
                     <th colspan="2">{pr_players_name}</th>
@@ -41,7 +41,7 @@
                     </th>
                 </tr>
                 <tr>
-                    <th colspan="2">{pr_players_password}</th>
+                    <th role="heading" aria-level="2" colspan="2">{pr_players_password}</th>
                 </tr>
                 <tr>
                     <th>{pr_player_current_password}:</th>
@@ -56,7 +56,7 @@
                     </th>
                 </tr>
                 <tr>
-                    <th colspan="2">{pr_players_email}</th>
+                    <th role="heading" aria-level="2" colspan="2">{pr_players_email}</th>
                 </tr>
                 <tr>
                     <th>{pr_your_player_email}:</th>
@@ -80,7 +80,7 @@
                     </th>
                 </tr>
                 <tr {hide_vacation_invalid}>
-                    <td class="c" colspan="2">{pr_general}</td>
+                    <td role="heading" aria-level="2" class="c" colspan="2">{pr_general}</td>
                 </tr>
                 <tr {hide_vacation_invalid}>
                     <th colspan="2">{pr_spy_probes}</th>
@@ -97,10 +97,10 @@
                     </th>
                 </tr>
                 <tr {hide_vacation_invalid}>
-                    <td class="c" colspan="2">{pr_display}</td>
+                    <td role="heading" aria-level="2" class="c" colspan="2">{pr_display}</td>
                 </tr>
                 <tr {hide_vacation_invalid}>
-                    <th colspan="2">{pr_your_planets}</th>
+                    <th role="heading" aria-level="3" colspan="2">{pr_your_planets}</th>
                 </tr>
                 <tr {hide_vacation_invalid}>
                     <th>{pr_sort_planets_by}:</th>
@@ -128,10 +128,10 @@
                     </th>
                 </tr>
                 <tr>
-                    <td class="c" colspan="2">{pr_extended}</td>
+                    <td role="heading" aria-level="2" class="c" colspan="2">{pr_extended}</td>
                 </tr>
                 <tr>
-                    <th colspan="2">{pr_vacation_mode}</th>
+                    <th role="heading" aria-level="3" colspan="2">{pr_vacation_mode}</th>
                 </tr>
                 <tr>
                     <th colspan="2" style="text-align: justify; font-weight: normal;">
@@ -146,7 +146,7 @@
                     </th>
                 </tr>
                 <tr>
-                    <th colspan="2">{pr_your_account}</th>
+                    <th role="heading" aria-level="3" colspan="2">{pr_your_account}</th>
                 </tr>
                 <tr>
                     <th>{pr_delete_account}</th>
