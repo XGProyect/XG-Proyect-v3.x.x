@@ -610,14 +610,14 @@ class Fleet4 extends BaseController
                 Missions::ATTACK, Missions::ACS, Missions::STAY, Missions::SPY, Missions::DESTROY,
             ];
 
-            if ($noob->isWeak($user_points, $target_points)
+            if ($noob->isWeak(intval($user_points), intval($target_points))
                 && in_array($this->_clean_input_data['mission'], $disallow_weak)) {
                 $this->showMessage(
                     FormatLib::customColor($this->langs->line('fl_week_player'), 'lime')
                 );
             }
 
-            if ($noob->isStrong($user_points, $target_points)
+            if ($noob->isStrong(intval($user_points), intval($target_points))
                 && in_array($this->_clean_input_data['mission'], $disallow_strong)) {
                 $this->showMessage(
                     FormatLib::colorRed($this->langs->line('fl_strong_player'))
