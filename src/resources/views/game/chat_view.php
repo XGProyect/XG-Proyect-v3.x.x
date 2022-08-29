@@ -19,15 +19,15 @@
                 <th>{to}</th>
             </tr>
             <tr>
-                <th>{pm_subject}</th>
-                <th><input type="text" name="subject" size="40" maxlength="40" value="{subject}" /></th>
+                <th scope="row">{pm_subject}</th>
+                <th role="cell"><input type="text" name="subject" size="40" maxlength="40" value="{subject}" /></th>
             </tr>
             <tr>
-                <th>{pm_message} (<span id="cntChars">0</span> / 5000 {pm_chars})</th>
-                <th><textarea name="text" cols="40" rows="10" size="100" onkeyup="javascript:cntchar(5000)">{text}</textarea></th>
+                <th scope="row">{pm_message} (<span id="cntChars">0</span> / 5000 {pm_chars})</th>
+                <th role="cell"><textarea name="text" cols="40" rows="10" size="100" onkeyup="javascript:cntchar(5000)">{text}</textarea></th>
             </tr>
             <tr>
-                <th colspan="2"><input type="submit" value="{pm_send}" /></th>
+                <th role="cell" colspan="2"><input type="submit" value="{pm_send}" /></th>
             </tr>
         </table>
     </form>

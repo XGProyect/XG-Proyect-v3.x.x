@@ -28,16 +28,16 @@
             </tr>
             {list_of_ships}
             <tr height="20px">
-                <th>
+                <th scope="row">
                     {ship_name}
                 </th>
-                <th>
+                <th role="cell">
                     {ship_amount}
                 </th>
-                <th>
+                <th role="cell">
                     {max_ships_link}
                 </th>
-                <th>
+                <th role="cell">
                     {ships_input}
                     <input type="hidden" name="maxship{ship_id}" value="{max_ships}" />
                     <input type="hidden" name="consumption{ship_id}" value="{consumption}" />

@@ -17,13 +17,13 @@
                                     </tr>
                                     {message_type_list}
                                     <tr>
-                                        <th>
+                                        <th scope="row">
                                             <input type="checkbox" name="{message_type}" {checked}>
                                         </th>
-                                        <th colspan="2">
+                                        <th role="cell" colspan="2">
                                             <a href="?page=messages&dsp=1&{message_type}={checked_status}">{message_type_name}</a>
                                         </th>
-                                        <th>{message_amount} / {message_unread}</th>
+                                        <th role="cell">{message_amount} / {message_unread}</th>
                                     </tr>
                                     {/message_type_list}
                                     {messages}
@@ -35,13 +35,13 @@
                                     </tr>
                                     {messages_list}
                                     <tr>
-                                        <th>
+                                        <th role="cell">
                                             <input type="hidden" name="showmes{message_id}" />
                                             <input type="checkbox" name="delmes{message_id}" />
                                         </th>
-                                        <th>{message_time}</th>
-                                        <th>{message_from} {message_reply}</th>
-                                        <th>{message_subject}</th>
+                                        <th role="cell">{message_time}</th>
+                                        <th role="cell">{message_from} {message_reply}</th>
+                                        <th role="cell">{message_subject}</th>
                                     </tr>
                                     <tr>
                                         <td class="b"> </td>
@@ -50,7 +50,7 @@
                                     {/messages_list}
                                     {/messages}
                                     <tr>
-                                        <th colspan="4">
+                                        <th role="cell" colspan="4">
                                             {delete_options}
                                             <select name="deletemessages">
                                                 <option value="deletemarked">{mg_delete_marked}</option>
@@ -70,48 +70,48 @@
                                         <td colspan="4" class="c">{mg_address_book}</td>
                                     </tr>
                                     <tr>
-                                        <th>{mg_show_title}</th>
-                                        <th colspan="2">{mg_type_title}</th>
-                                        <th>{mg_amount_title}</th>
+                                        <th role="cell">{mg_show_title}</th>
+                                        <th role="cell" colspan="2">{mg_type_title}</th>
+                                        <th role="cell">{mg_amount_title}</th>
                                     </tr>
                                     <tr>
-                                        <th><input type="checkbox" name="owncontactsopen" {owncontactsopen}></th>
-                                        <th colspan="2">{mg_friends_list} </th>
-                                        <th>{buddys_count}</th>
+                                        <th role="cell"><input type="checkbox" name="owncontactsopen" {owncontactsopen}></th>
+                                        <th role="cell" colspan="2">{mg_friends_list} </th>
+                                        <th role="cell">{buddys_count}</th>
                                     </tr>
                                     {buddy_list}
                                     <tr>
-                                        <th colspan="4">
+                                        <th role="cell" colspan="4">
                                             {user_name} <a href="game.php?page=chat&playerId={user_id}"><img src="{dpath}/img/m.gif" alt=""/></a>
                                         </th>
                                     </tr>
                                     {/buddy_list}
                                     <tr>
-                                        <th><input type="checkbox" name="ownallyopen" {ownallyopen}></th>
-                                        <th colspan="2">{mg_alliance}</th>
-                                        <th>{alliance_count}</th>
+                                        <th role="cell"><input type="checkbox" name="ownallyopen" {ownallyopen}></th>
+                                        <th role="cell" colspan="2">{mg_alliance}</th>
+                                        <th role="cell">{alliance_count}</th>
                                     </tr>
                                     {members_list}
                                     <tr>
-                                        <th colspan="4">
+                                        <th role="cell" colspan="4">
                                             {user_name} <a href="game.php?page=chat&playerId={user_id}"><img src="{dpath}/img/m.gif" alt=""/></a>
                                         </th>
                                     </tr>
                                     {/members_list}
                                     <tr>
-                                        <th><input type="checkbox" name="gameoperatorsopen" {gameoperatorsopen}></th>
-                                        <th colspan="2">{mg_operators}</th>
-                                        <th>{operators_count}</th>
+                                        <th role="cell"><input type="checkbox" name="gameoperatorsopen" {gameoperatorsopen}></th>
+                                        <th role="cell" colspan="2">{mg_operators}</th>
+                                        <th role="cell">{operators_count}</th>
                                     </tr>
                                     {operators_list}
                                     <tr>
-                                        <th colspan="4">{user_name} <a href="mailto:{user_email}"><img
+                                        <th role="cell" colspan="4">{user_name} <a href="mailto:{user_email}"><img
                                                     src="{dpath}/img/m.gif" alt=""/></a></th>
                                     </tr>
                                     {/operators_list}
 
                                     <tr>
-                                        <th colspan="4">
+                                        <th role="cell" colspan="4">
                                             <input type="hidden" name="addressbook" value="1">
                                             <input type="submit" value="{mg_confirm_action}">
                                         </th>
@@ -124,16 +124,16 @@
                                         <td colspan="4" class="c">{mg_notes}</td>
                                     </tr>
                                     <tr>
-                                        <th colspan="2">{mg_show_title}</th>
-                                        <th colspan="2">{mg_amount_title}</th>
+                                        <th role="cell" colspan="2">{mg_show_title}</th>
+                                        <th role="cell" colspan="2">{mg_amount_title}</th>
                                     </tr>
                                     <tr>
-                                        <th colspan="2"><input type="checkbox" name="noticesopen" {noticesopen}></th>
-                                        <th colspan="2">{notes_count}</th>
+                                        <th role="cell" colspan="2"><input type="checkbox" name="noticesopen" {noticesopen}></th>
+                                        <th role="cell" colspan="2">{notes_count}</th>
                                     </tr>
                                     {notes_list}
                                     <tr>
-                                        <th colspan="4">
+                                        <th role="cell" colspan="4">
                                             <a href="#" onclick="f('game.php?page=notes&a=2&n={note_id}', 'Notes')">
                                                 <font color="{note_color}">{note_title}</font>
                                             </a>
@@ -141,7 +141,7 @@
                                     </tr>
                                     {/notes_list}
                                     <tr>
-                                        <th colspan="4">
+                                        <th role="cell" colspan="4">
                                             <input type="hidden" name="notices" value="1">
                                             <input type="submit" value="{mg_confirm_action}">
                                         </th>

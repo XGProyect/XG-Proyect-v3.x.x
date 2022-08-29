@@ -6,7 +6,7 @@
         </tr>
         {list_of_constructions}
         <tr>
-            <th class="l" width="40%">
+            <th scope="row" class="l" width="40%">
                 <table width="100%">
                     <tr>
                         <td style="background-color: transparent;" align="left"><a href="game.php?page=infos&gid={tt_info}">{tt_name}</a></td>
@@ -14,7 +14,7 @@
                     </tr>
                 </table>
             </th>
-            <th class="l" width="60%">
+            <th role="cell" class="l" width="60%">
                 <table width="100%">
                     <tr>
                         <td style="background-color: transparent;" align="left">{requirements}</td>
@@ -28,7 +28,7 @@
         </tr>
         {list_of_research}
         <tr>
-            <th class="l" width="40%">
+            <th scope="row" class="l" width="40%">
                 <table width="100%">
                     <tr>
                         <td style="background-color: transparent;" align="left"><a href="game.php?page=infos&gid={tt_info}">{tt_name}</a></td>
@@ -36,7 +36,7 @@
                     </tr>
                 </table>
             </th>
-            <th class="l" width="60%">
+            <th role="cell" class="l" width="60%">
                 <table width="100%">
                     <tr>
                         <td style="background-color: transparent;" align="left">{requirements}</td>
@@ -50,7 +50,7 @@
         </tr>
         {list_of_ships}
         <tr>
-            <th class="l" width="40%">
+            <th scope="row" class="l" width="40%">
                 <table width="100%">
                     <tr>
                         <td style="background-color: transparent;" align="left"><a href="game.php?page=infos&gid={tt_info}">{tt_name}</a></td>
@@ -58,7 +58,7 @@
                     </tr>
                 </table>
             </th>
-            <th class="l" width="60%">
+            <th role="cell" class="l" width="60%">
                 <table width="100%">
                     <tr>
                         <td style="background-color: transparent;" align="left">{requirements}</td>
@@ -72,7 +72,7 @@
         </tr>
         {list_of_defenses}
         <tr>
-            <th class="l" width="40%">
+            <th scope="row" class="l" width="40%">
                 <table width="100%">
                     <tr>
                         <td style="background-color: transparent;" align="left"><a href="game.php?page=infos&gid={tt_info}">{tt_name}</a></td>
@@ -80,7 +80,7 @@
                     </tr>
                 </table>
             </th>
-            <th class="l" width="60%">
+            <th role="cell" class="l" width="60%">
                 <table width="100%">
                     <tr>
                         <td style="background-color: transparent;" align="left">{requirements}</td>
@@ -94,7 +94,7 @@
         </tr>
         {list_of_missiles}
         <tr>
-            <th class="l" width="40%">
+            <th scope="row" class="l" width="40%">
                 <table width="100%">
                     <tr>
                         <td style="background-color: transparent;" align="left"><a href="game.php?page=infos&gid={tt_info}">{tt_name}</a></td>
@@ -102,7 +102,7 @@
                     </tr>
                 </table>
             </th>
-            <th class="l" width="60%">
+            <th role="cell" class="l" width="60%">
                 <table width="100%">
                     <tr>
                         <td style="background-color: transparent;" align="left">{requirements}</td>

@@ -22,13 +22,13 @@
                             </tr>
                             {message_list}
                             <tr>
-                                <th>
+                                <th role="cell">
                                     <input type="hidden" name="showmes{message_id}" />
                                     <input type="checkbox" name="delmes{message_id}" />
                                 </th>
-                                <th>{message_time}</th>
-                                <th>{message_from} {message_reply}</th>
-                                <th>{message_subject}</th>
+                                <th role="cell">{message_time}</th>
+                                <th role="cell">{message_from} {message_reply}</th>
+                                <th role="cell">{message_subject}</th>
                             </tr>
                             <tr>
                                 <td class="b"></td>
@@ -36,12 +36,12 @@
                             </tr>
                             {/message_list}
                             <tr>
-                                <th colspan="4">
+                                <th role="cell" colspan="4">
                                     &nbsp;
                                 </th>
                             </tr>
                             <tr>
-                                <th colspan="4">
+                                <th role="cell" colspan="4">
                                     <select id="deletemessages" name="deletemessages">
                                         <option value="deletemarked">{mg_delete_marked}</option>
                                         <option value="deleteunmarked">{mg_delete_unmarked}</option>
@@ -60,7 +60,7 @@
                             </tr>
                             {operators_list}
                             <tr>
-                                <th colspan="4">{user_name} <a href="mailto:{user_email}"><img src="{dpath}/img/m.gif" alt=""/></a></th>
+                                <th role="cell" colspan="4">{user_name} <a href="mailto:{user_email}"><img src="{dpath}/img/m.gif" alt=""/></a></th>
                             </tr>
                             {/operators_list}
                         </table>

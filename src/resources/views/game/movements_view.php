@@ -25,30 +25,30 @@
         </tr>
         {list_of_movements}
         <tr height="20px">
-            <th>{num}</th>
-            <th>
+            <th scope="row">{num}</th>
+            <th role="cell">
                 <a>{fleet_mission}</a>
                 <a title="{tooltip}">{title}</a>
             </th>
-            <th>
+            <th role="cell">
                 <a title="{fleet}">{fleet_amount}</a>
             </th>
-            <th>
+            <th role="cell">
                 {fleet_start}
             </th>
-            <th>
+            <th role="cell">
                 {fleet_start_time}
             </th>
-            <th>
+            <th role="cell">
                 {fleet_end}
             </th>
-            <th>
+            <th role="cell">
                 {fleet_end_time}
             </th>
-            <th>
+            <th role="cell">
                 {fleet_arrival}
             </th>
-            <th style="vertical-align: middle">
+            <th role="cell" style="vertical-align: middle">
                 {fleet_actions}
             </th>
         </tr>

@@ -7,8 +7,8 @@
         {image}
         {details}
         <tr>
-            <th>{detail_title}</th>
-            <th>{detail_content}</th>
+            <th scope="row">{detail_title}</th>
+            <th role="cell">{detail_content}</th>
         </tr>
         {/details}
         {description}
@@ -16,7 +16,7 @@
             <td class="c" colspan="2">{al_inside_section}</th>
         </tr>
         <tr>
-            <th colspan="2" height="100px">{text}</th>
+            <th role="cell" colspan="2" height="100px">{text}</th>
         </tr>
     </table>
     {leave}
