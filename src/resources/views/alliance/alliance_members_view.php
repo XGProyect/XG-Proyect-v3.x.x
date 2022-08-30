@@ -18,7 +18,7 @@
         <tr>
             <th scope="row">{position}</th>
             <th role="cell">{user_name}</th>
-            <th role="cell"><a href="game.php?page=chat&playerId={user_id}"><img src="{dpath}img/m.gif" border="0" title="{write_message}"/></a></th>
+            <th role="cell"><a href="game.php?page=chat&playerId={user_id}"><img src="{dpath}img/m.gif" border="0" title="{write_message}" alt="{write_message}"/></a></th>
             <th role="cell">{user_ally_range}</th>
             <th role="cell">{points}</th>
             <th role="cell"><a href="game.php?page=galaxy&mode=3&galaxy={user_galaxy}&system={user_system}">{coords}</a></th>

@@ -74,7 +74,7 @@ class Alliance extends BaseController
         parent::loadModel('game/alliance');
 
         // load Language
-        parent::loadLang(['game/alliance']);
+        parent::loadLang(['game/alliance', 'game/global']);
 
         // load Library
         $this->bbcode = Functions::loadLibrary('BBCodeLib');
