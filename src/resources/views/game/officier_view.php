@@ -1,6 +1,6 @@
 <br />
 <div id="content" role="main">
-    <table width=600>
+    <table role="presentation" width="600">
         <tr>
             <td colspan="3" class="c">{dark_matter}</td>
         </tr>
@@ -9,10 +9,10 @@
                 <img src="{dpath}premium/DMaterie.jpg" width="120" height="120" alt=""/>
             </td>
             <td class="l">
-                <strong>{dark_matter}</strong><br>
+                <strong role="heading" aria-level="2">{dark_matter}</strong><br/>
                 {of_darkmatter_description}
                 <div style="margin:4px 4px;">
-                    <table>
+                    <table role="presentation">
                         <tr>
                             <td>
                                 <img src="{dpath}premium/dm_klein_1.jpg" width="32" height="32" style="vertical-align:middle;" alt=""/></td>
@@ -37,11 +37,11 @@
             <td class="l" rowspan="2">
                 <img src="{dpath}premium/{img_big}.jpg" width="120" height="120" alt=""/>
             </td>
-            <td class="l" rowspan="2">
+            <td role="heading" aria-level="2" class="l" rowspan="2">
                 <strong>{name}</strong> (<strong>{status}</strong>)<br>
                 {description}
                 <div style="margin:4px 4px;">
-                    <table>
+                    <table role="presentation">
                         <tr>
                             <td>
                                 <img src="{dpath}premium/{img_small}.gif" width="32" height="32" style="vertical-align:middle;" alt="{name}"/>
@@ -58,7 +58,7 @@
                     <strong>
                             {of_week}<br>
                             <span style="color:lime">{week_price}</span>
-                            <br>{dark_matter}
+                            <br/>{dark_matter}
                     </strong>
                 </a>
             </td>
@@ -69,7 +69,7 @@
                     <strong>
                         {of_months}<br>
                         <span style="color:lime">{month_price}</span>
-                        <br>{dark_matter}
+                        <br/>{dark_matter}
                     </strong>
                 </a>
             </td>
