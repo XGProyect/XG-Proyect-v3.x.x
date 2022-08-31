@@ -1,4 +1,4 @@
 <tr>
-    <td class="c">{level}</td>
-    <td class="c">{in_range}</td>
+    <td role="columnheader" class="c">{level}</td>
+    <td role="columnheader" class="c">{in_range}</td>
 </tr>

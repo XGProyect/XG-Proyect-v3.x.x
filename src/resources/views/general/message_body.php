@@ -1,6 +1,6 @@
-<br>
+<br/>
 {middle1}
-<table width="519">
+<table role="presentation" width="519">
     <tr>
         <th class="errormessage">{mes}</th>
     </tr>

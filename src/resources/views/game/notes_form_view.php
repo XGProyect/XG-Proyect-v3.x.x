@@ -7,14 +7,14 @@
             <td class="c" colspan="2">{title}</td>
         </tr>
         <tr>
-            <th>{nt_your_subject}:</th>
-            <th>
+            <th scope="row">{nt_your_subject}:</th>
+            <th role="cell">
                 <input type="text" name="title" size="30" maxlength="30" value="{subject}">
             </th>
         </tr>
         <tr>
-            <th>{nt_priority}:</th>
-            <th>
+            <th scope="row">{nt_priority}:</th>
+            <th role="cell">
                 <select name="u">
                     <option value="2" {selected_2}>{nt_important}</option>
                     <option value="1" {selected_1}>{nt_normal}</option>
@@ -23,7 +23,7 @@
             </th>
         </tr>
         <tr>
-            <th>{nt_your_message}:</th>
+            <th scope="row">{nt_your_message}:</th>
             <td>
                 <textarea name="text" cols="60" rows="10" onkeyup="javascript:cntchar(5000)">{text}</textarea>
                 (<span id="cntChars">0</span> / 5000 {nt_characters})

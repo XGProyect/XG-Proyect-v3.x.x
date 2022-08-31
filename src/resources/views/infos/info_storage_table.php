@@ -1,5 +1,5 @@
 <tr>
-    <th>{build_lvl}</th>
-    <th>{build_prod}</th>
-    <th>{build_prod_diff}</th>
+    <th scope="row">{build_lvl}</th>
+    <th role="cell">{build_prod}</th>
+    <th role="cell">{build_prod_diff}</th>
 </tr>

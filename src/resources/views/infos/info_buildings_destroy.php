@@ -1,4 +1,4 @@
-<table width="519">
+<table role="presentation" width="519">
     <tbody>
         <tr>
             <td class="c" align="center">

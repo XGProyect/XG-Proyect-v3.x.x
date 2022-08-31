@@ -1,5 +1,5 @@
 <tr>
-    <th>{tech_lvl}</th>
-    <th>{tech_colonies}</th>
-    <th>{tech_expeditions}</th>
+    <th scope="row">{tech_lvl}</th>
+    <th role="cell">{tech_colonies}</th>
+    <th role="cell">{tech_expeditions}</th>
 </tr>

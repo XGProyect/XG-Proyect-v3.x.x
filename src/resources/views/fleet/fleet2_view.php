@@ -34,8 +34,8 @@
                 <td colspan="2" class="c">{fl_send_fleet}</td>
             </tr>
             <tr height="20">
-                <th width="50%">{fl_destiny}</th>
-                <th>
+                <th scope="row" width="50%">{fl_destiny}</th>
+                <th role="cell">
                     <input name="galaxy" type="number" style="width: 37px" min="1" maxlength="2" onChange="shortInfo()" onKeyUp="shortInfo()" value="{galaxy_end}" />
                     <input name="system" type="number" style="width: 40px" min="1" maxlength="3" onChange="shortInfo()" onKeyUp="shortInfo()" value="{system_end}" />
                     <input name="planet" type="number" style="width: 37px" min="1" maxlength="2" onChange="shortInfo()" onKeyUp="shortInfo()" value="{planet_end}" />
@@ -49,8 +49,8 @@
                 </th>
             </tr>
             <tr height="20">
-                <th>{fl_fleet_speed}</th>
-                <th>
+                <th scope="row">{fl_fleet_speed}</th>
+                <th role="cell">
                     <select name="speed" onChange="shortInfo()" onKeyUp="shortInfo()">
                         <option value="10">100</option>
                         <option value="9">90</option>
@@ -66,24 +66,24 @@
                 </th>
             </tr>
             <tr height="20">
-                <th>{fl_distance}</th>
-                <th><div id="distance">-</div></th>
+                <th scope="row">{fl_distance}</th>
+                <th role="cell"><div id="distance">-</div></th>
             </tr>
             <tr height="20">
-                <th>{fl_flying_time}</th>
-                <th><div id="duration">-</div></th>
+                <th scope="row">{fl_flying_time}</th>
+                <th role="cell"><div id="duration">-</div></th>
             </tr>
             <tr height="20">
-                <th>{fl_fuel_consumption}</th>
-                <th><div id="consumption">-</div></th>
+                <th scope="row">{fl_fuel_consumption}</th>
+                <th role="cell"><div id="consumption">-</div></th>
             </tr>
             <tr height="20">
-                <th>{fl_max_speed}</th>
-                <th><div id="maxspeed">-</div></th>
+                <th scope="row">{fl_max_speed}</th>
+                <th role="cell"><div id="maxspeed">-</div></th>
             </tr>
             <tr height="20">
-                <th>{fl_cargo_capacity}</th>
-                <th><div id="storage">-</div></th>
+                <th scope="row">{fl_cargo_capacity}</th>
+                <th role="cell"><div id="storage">-</div></th>
             </tr>
             {shortcuts}
             <tr height="20">
@@ -96,7 +96,7 @@
             </tr>
             {acs}
                 <tr height="20">
-                    <th colspan="2">
+                    <th role="cell" colspan="2">
                         <a href="javascript:setTarget({galaxy},{system},{planet},{planet_type}); shortInfo(); setACS({id}); setACS_target('g{galaxy}s{system}p{planet}t{planet_type}');">
                             ({name})
                         </a>
@@ -104,7 +104,7 @@
                 </tr>
             {/acs}
             <tr height="20">
-                <th colspan="2"><input type="submit" name="submit" value="{fl_continue}" /></th>
+                <th role="cell" colspan="2"><input type="submit" name="submit" value="{fl_continue}" /></th>
             </tr>
         </table>
     </div>

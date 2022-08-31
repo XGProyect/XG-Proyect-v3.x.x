@@ -9,7 +9,7 @@
             </th>
         </tr>
         <tr>
-            <td class="c">&nbsp;</td>
+            <td role="columnheader" class="c">&nbsp;</td>
             <td role="columnheader" class="c">{nt_col_subject}</td>
             <td role="columnheader" class="c">{nt_col_date}</td>
         </tr>

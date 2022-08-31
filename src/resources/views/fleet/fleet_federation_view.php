@@ -1,6 +1,6 @@
 <form action="" method="POST" role="form">
     <input type="hidden" value="{federation_invited}" name="federation_invited">
-    <table width="519" border="0" cellpadding="0" cellspacing="1">
+    <table role="presentation" width="519" border="0" cellpadding="0" cellspacing="1">
         <tr>
             <td class="c" colspan="3">{fl_fleet_union}</td>
         </tr>
