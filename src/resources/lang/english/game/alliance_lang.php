@@ -1,6 +1,7 @@
 <?php
 
 $lang = [
+    'rank_delete' => 'Delete rank',
     'al_description_message' => 'Alliance description message',
     'al_web_text' => 'Alliance web site',
     'al_request' => 'Application',
