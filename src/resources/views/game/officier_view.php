@@ -2,14 +2,14 @@
 <div id="content" role="main">
     <table role="presentation" width="600">
         <tr>
-            <td colspan="3" class="c">{dark_matter}</td>
+            <td role="heading" aria-level="2" colspan="3" class="c">{dark_matter}</td>
         </tr>
         <tr>
             <td class="l">
                 <img src="{dpath}premium/DMaterie.jpg" width="120" height="120" alt=""/>
             </td>
             <td class="l">
-                <strong role="heading" aria-level="2">{dark_matter}</strong><br/>
+                <strong>{dark_matter}</strong><br/>
                 {of_darkmatter_description}
                 <div style="margin:4px 4px;">
                     <table role="presentation">
@@ -30,15 +30,15 @@
             </td>
         </tr>
         <tr>
-            <td colspan="3" class="c">{of_title}</td>
+            <td role="heading" aria-level="2" colspan="3" class="c">{of_title}</td>
         </tr>
         {officier_list}
         <tr>
             <td class="l" rowspan="2">
                 <img src="{dpath}premium/{img_big}.jpg" width="120" height="120" alt=""/>
             </td>
-            <td role="heading" aria-level="2" class="l" rowspan="2">
-                <strong>{name}</strong> (<strong>{status}</strong>)<br>
+            <td class="l" rowspan="2">
+                <strong role="heading" aria-level="3">{name}</strong> (<strong>{status}</strong>)<br/>
                 {description}
                 <div style="margin:4px 4px;">
                     <table role="presentation">
