@@ -7,11 +7,11 @@
                 <td class="c" colspan="2">{write_to_alliance}</td>
             </tr>
             <tr>
-                <th>{al_message} (<span id="cntChars">0</span> / 6000 {al_characters})</th>
-                <th><textarea name="text" id="text" cols="40" rows="10" onkeyup="javascript:cntchar(6000)">{text_apply}</textarea></th>
+                <th scope="row">{al_message} (<span id="cntChars">0</span> / 6000 {al_characters})</th>
+                <th role="cell"><textarea name="text" id="text" cols="40" rows="10" onkeyup="javascript:cntchar(6000)">{text_apply}</textarea></th>
             </tr>
             <tr>
-                <th colspan="2">
+                <th role="cell" colspan="2">
                     <input type="submit" name="send" value="{al_applyform_send}"/> <input type="reset" name="reload" value="{al_applyform_reload}" onclick="cntInitChars();"/>
                 </th>
             </tr>

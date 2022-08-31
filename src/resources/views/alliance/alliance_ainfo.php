@@ -6,21 +6,21 @@
         </tr>
         {image}
         <tr>
-            <th>{al_ally_info_tag}</th>
-            <th>{tag}</th>
+            <th scope="row">{al_ally_info_tag}</th>
+            <th role="cell">{tag}</th>
         </tr>
         <tr>
-            <th>{al_ally_info_name}</th>
-            <th>{name}</th>
+            <th scope="row">{al_ally_info_name}</th>
+            <th role="cell">{name}</th>
         </tr>
         <tr>
-            <th>{al_ally_info_members}</th>
-            <th>{members}</th>
+            <th scope="row">{al_ally_info_members}</th>
+            <th role="cell">{members}</th>
         </tr>
         {description}
         <tr>
-            <th>{al_web_text}</th>
-            <th>{web}</th>
+            <th scope="row">{al_web_text}</th>
+            <th role="cell">{web}</th>
         </tr>
         {requests}
     </table>

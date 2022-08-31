@@ -17,15 +17,15 @@
         </tr>
         {list_of_members}
         <tr>
-            <th>{position}</th>
-            <th>{user_name}</th>
-            <th><a href="game.php?page=chat&playerId={user_id}"><img src="{dpath}img/m.gif" border="0" title="{write_message}"/></a></th>
-            <th>{user_ally_range}</th>
-            <th>{points}</th>
-            <th><a href="game.php?page=galaxy&mode=0&galaxy={user_galaxy}&system={user_system}">{coords}</a></th>
-            <th>{user_ally_register_time}</th>
-            <th>{online_time}</th>
-            <th>{actions}</th>
+            <th scope="row">{position}</th>
+            <th role="cell">{user_name}</th>
+            <th role="cell"><a href="game.php?page=chat&playerId={user_id}"><img src="{dpath}img/m.gif" border="0" title="{write_message}"/></a></th>
+            <th role="cell">{user_ally_range}</th>
+            <th role="cell">{points}</th>
+            <th role="cell"><a href="game.php?page=galaxy&mode=0&galaxy={user_galaxy}&system={user_system}">{coords}</a></th>
+            <th role="cell">{user_ally_register_time}</th>
+            <th role="cell">{online_time}</th>
+            <th role="cell">{actions}</th>
         </tr>
         {/list_of_members}
         <tr>

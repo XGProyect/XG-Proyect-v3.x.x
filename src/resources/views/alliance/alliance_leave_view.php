@@ -1,6 +1,6 @@
-<table width="519">
+<table width="519" role="presentation">
     <tr>
-        <td class="c">{al_leave_alliance}</td>
+        <td role="heading" aria-level="2" class="c">{al_leave_alliance}</td>
     </tr>
     <tr>
         <th>
