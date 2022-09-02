@@ -391,10 +391,10 @@ class Galaxy extends BaseController
         }
 
         if ($target_user['user_onlinetime'] >= (time() - 60 * 60 * 24 * 7)) {
-            if ($this->_noob->isWeak($MyGameLevel, $HeGameLevel)) {
+            if ($this->_noob->isWeak(intval($MyGameLevel), intval($HeGameLevel))) {
                 $error .= $this->langs->line('fl_week_player') . '<br>';
                 $errors++;
-            } elseif ($this->_noob->isStrong($MyGameLevel, $HeGameLevel)) {
+            } elseif ($this->_noob->isStrong(intval($MyGameLevel), intval($HeGameLevel))) {
                 $error .= $this->langs->line('fl_strong_player') . '<br>';
                 $errors++;
             }
@@ -569,11 +569,11 @@ class Galaxy extends BaseController
         }
 
         if ($target_user['user_onlinetime'] >= (time() - 60 * 60 * 24 * 7)) {
-            if ($this->_noob->isWeak($CurrentPoints, $TargetPoints) && $target_user['user_id'] != '' && $order == 6) {
+            if ($this->_noob->isWeak(intval($CurrentPoints), intval($TargetPoints)) && $target_user['user_id'] != '' && $order == 6) {
                 die("603 ");
             }
 
-            if ($this->_noob->isStrong($CurrentPoints, $TargetPoints) && $target_user['user_id'] != '' && $order == 6) {
+            if ($this->_noob->isStrong(intval($CurrentPoints), intval($TargetPoints)) && $target_user['user_id'] != '' && $order == 6) {
                 die("604 ");
             }
         }
