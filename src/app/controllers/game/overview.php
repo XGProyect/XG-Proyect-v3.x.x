@@ -169,12 +169,12 @@ class Overview extends BaseController
             $new_message = '<tr>';
 
             if ($this->user['new_message'] == 1) {
-                $new_message .= '<th colspan="4">' . UrlHelper::setUrl('game.php?page=messages', $this->langs->line('ov_have_new_message'), $this->langs->line('ov_have_new_message')) . '</th>';
+                $new_message .= '<th role="cell" colspan="4">' . UrlHelper::setUrl('game.php?page=messages', $this->langs->line('ov_have_new_message'), $this->langs->line('ov_have_new_message')) . '</th>';
             }
 
             if ($this->user['new_message'] > 1) {
                 $link_text = str_replace('%m', FormatLib::prettyNumber($this->user['new_message']), $this->langs->line('ov_have_new_messages'));
-                $new_message .= '<th colspan="4">' . UrlHelper::setUrl('game.php?page=messages', $link_text, $link_text) . '</th>';
+                $new_message .= '<th role="cell" colspan="4">' . UrlHelper::setUrl('game.php?page=messages', $link_text, $link_text) . '</th>';
             }
 
             $new_message .= '</tr>';
@@ -417,7 +417,7 @@ class Overview extends BaseController
         $total_rank = $this->user['user_statistic_total_rank'] == '' ? $this->planet['stats_users'] : $this->user['user_statistic_total_rank'];
 
         if ($this->_noob->isRankVisible($this->user['user_authlevel'])) {
-            $user_rank = FormatLib::prettyNumber($this->user['user_statistic_total_points']) . " (" . $this->langs->line('ov_place') . ' ' . UrlHelper::setUrl('game.php?page=statistics&range=' . $total_rank, $total_rank, $total_rank) . ' ' . $this->langs->line('ov_of') . ' ' . $this->planet['stats_users'] . ")";
+            $user_rank = FormatLib::prettyNumber($this->user['user_statistic_total_points']) . " (" . $this->langs->line('ov_place') . ' ' . $total_rank . ' ' . $this->langs->line('ov_of') . ' ' . $this->planet['stats_users'] . ")";
         }
 
         return $user_rank;

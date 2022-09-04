@@ -240,8 +240,8 @@
 						</div>
 					</div>
 					<div id="submitWrap">
-						<input class="validate[required]" type="checkbox" id="agb" name="agb">
-                        <label>
+						<input class="validate[required]" type="checkbox" id="agb" name="agb"/>
+                        <label for="agb">
                             <span>{hm_accept} <a class="" target="_blank" href="index.php?page=terms" title="{hm_terms}">{hm_terms}</a> {hm_and} <a class="" target="_blank" href="index.php?page=policy" title="{hm_policy}">{hm_policy}</a></span>
 						</label>
                         <div onclick="if($.validationEngine.submitValidation(&#39;subscribeForm&#39;)) {document.forms[&#39;subscribeForm&#39;].submit();}">
@@ -255,7 +255,7 @@
 					<ul id="tabs">
 						<li><a id="tab1" href="ajax.php?content=home" class="current">{hm_home}</a></li>
                         <li><a id="tab2" href="ajax.php?content=info">{hm_about}</a></li>
-                        <li><a id="tab3" href="ajax.php?content=media">{hm_media}</a></li>
+                        <!--<li><a id="tab3" href="ajax.php?content=media">{hm_media}</a></li>-->
 					</ul>
                                             <a id="tab4" href="{forum_url}" target="_blank">{hm_forum}</a>
                                         					<br class="clearfloat">
