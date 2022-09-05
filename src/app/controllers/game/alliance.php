@@ -982,7 +982,7 @@ class Alliance extends BaseController
                     'request_form' => $request_form,
                     'pending_message' => strtr($this->langs->line('al_no_request_pending'), ['%n' => $amount_of_requests]),
                     'list_of_requests' => $list_of_requests,
-                    'no_requests' => $amount_of_requests <= 0 ? '<tr><th colspan="2">' . $this->langs->line('al_no_requests') . '</th></tr>' : '',
+                    'no_requests' => $amount_of_requests <= 0 ? '<tr><th role="cell" colspan="2">' . $this->langs->line('al_no_requests') . '</th></tr>' : '',
                 ]
             )
         );
@@ -1216,7 +1216,7 @@ class Alliance extends BaseController
                 $this->langs->line('al_click_to_send_request')
             );
 
-            return '<tr><th>' . $this->langs->line('al_request') . '</th><th>' . $url . '</th></tr>';
+            return '<tr><th scope="row">' . $this->langs->line('al_request') . '</th><th role="cell">' . $url . '</th></tr>';
         }
 
         return '';
@@ -1232,7 +1232,7 @@ class Alliance extends BaseController
         $image = $this->alliance->getCurrentAlliance()->getAllianceImage();
 
         if (!empty($image)) {
-            return '<tr><th colspan="2">' . Functions::setImage($image, $image) . '</td></tr>';
+            return '<tr><th role="cell" colspan="2">' . Functions::setImage($image, $image) . '</th></tr>';
         }
 
         return '';
@@ -1357,7 +1357,7 @@ class Alliance extends BaseController
             $description = nl2br($this->bbcode->bbCode($alliance_description)) . '</th></tr>';
         }
 
-        return '<tr><th colspan="2" height="100px">' . $description . '</th></tr>';
+        return '<tr><th role="cell" colspan="2" height="100px">' . $description . '</th></tr>';
     }
 
     /**
