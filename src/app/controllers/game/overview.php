@@ -298,7 +298,7 @@ class Overview extends BaseController
             if ($fleets['fleet_owner'] != $this->user['user_id']) {
                 $acs_member = false;
 
-                if (in_array($this->user['user_id'], explode(',', $fleets['acs_members']))) {
+                if (in_array($this->user['user_id'], explode(',', $fleets['acs_members'] ?? ''))) {
                     $acs_member = true;
                 }
 

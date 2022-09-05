@@ -5,10 +5,10 @@
             <tr>
                 <td class="c" colspan="2">{in_title_head} {element_typ}</td>
             </tr><tr>
-                <th>{in_name}</th>
-                <th>{name}</th>
+                <th scope="row">{in_name}</th>
+                <th role="cell">{name}</th>
             </tr><tr>
-                <th colspan="2">
+                <th role="cell" colspan="2">
                     <table>
                         <tbody>
                             <tr>
@@ -19,14 +19,14 @@
                     </table>
                 </th>
             </tr><tr>
-                <th>{in_struct_pt}</th>
-                <th>{hull_pt}</th>
+                <th scope="row">{in_struct_pt}</th>
+                <th role="cell">{hull_pt}</th>
             </tr><tr>
-                <th>{in_shield_pt}</th>
-                <th>{shield_pt}</th>
+                <th scope="row">{in_shield_pt}</th>
+                <th role="cell">{shield_pt}</th>
             </tr><tr>
-                <th>{in_attack_pt}</th>
-                <th>{attack_pt}</th>
+                <th scope="row">{in_attack_pt}</th>
+                <th role="cell">{attack_pt}</th>
             </tr>
         </tbody>
     </table>
