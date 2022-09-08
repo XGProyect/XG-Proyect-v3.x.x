@@ -15,8 +15,8 @@
                 <td class="c" colspan="2">{pm_send_message}</td>
             </tr>
             <tr>
-                <th>{pm_to}</th>
-                <th>{to}</th>
+                <th scope="row">{pm_to}</th>
+                <th role="cell">{to}</th>
             </tr>
             <tr>
                 <th scope="row">{pm_subject}</th>
