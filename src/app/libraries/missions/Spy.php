@@ -102,7 +102,7 @@ class Spy extends Missions
                         $TargetForce = 100;
                     }
 
-                    $TargetChances = mt_rand(0, $TargetForce);
+                    $TargetChances = mt_rand(0, intval($TargetForce));
                     $SpyerChances = mt_rand(0, 100);
 
                     if ($TargetChances >= $SpyerChances) {
