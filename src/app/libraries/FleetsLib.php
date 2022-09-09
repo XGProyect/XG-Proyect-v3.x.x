@@ -351,34 +351,34 @@ class FleetsLib extends XGPCore
 
         if ($espionage_tech < 2 && $fleet_row['fleet_owner'] != $current_user['user_id']) {
             $pop_up .= "<tr><td width=50% align=left><font color=white>" .
-            $lang->line('ev_no_fleet_data') . "<font></td></tr>";
+            $lang->line('ev_no_fleet_data') . "</font></td></tr>";
         } elseif ($espionage_tech >= 2 && $espionage_tech < 4 && $fleet_row['fleet_owner'] != $current_user['user_id']) {
             $pop_up .= "<tr><td width=50% align=left><font color=white>" .
             $lang->line('ev_aproaching') . $fleet_row['fleet_amount'] .
-            $lang->line('ev_ships') . "<font></td></tr>";
+            $lang->line('ev_ships') . "</font></td></tr>";
         } else {
             if ($fleet_row['fleet_owner'] != $current_user['user_id']) {
                 $pop_up .= "<tr><td width=100% align=left><font color=white>" .
                 $lang->line('ev_aproaching') . $fleet_row['fleet_amount'] . $lang->line('ev_ships') .
-                    ":<font></td></tr>";
+                    ":</font></td></tr>";
             }
 
             foreach ($ships as $ship => $amount) {
                 if ($fleet_row['fleet_owner'] == $current_user['user_id']) {
                     $pop_up .= "<tr><td width=50% align=left><font color=white>" .
                     $lang->language[$objects[$ship]] .
-                    ":<font></td><td width=50% align=right><font color=white>" .
-                    FormatLib::prettyNumber($amount) . "<font></td></tr>";
+                    ":</font></td><td width=50% align=right><font color=white>" .
+                    FormatLib::prettyNumber($amount) . "</font></td></tr>";
                 } elseif ($fleet_row['fleet_owner'] != $current_user['user_id']) {
                     if ($espionage_tech >= 4 && $espionage_tech < 8) {
                         $pop_up .= "<tr><td width=50% align=left><font color=white>" .
                         $lang->language[$objects[$ship]] .
-                            "<font></td></tr>";
+                            "</font></td></tr>";
                     } elseif ($espionage_tech >= 8) {
                         $pop_up .= "<tr><td width=50% align=left><font color=white>" .
                         $lang->language[$objects[$ship]] .
-                        ":<font></td><td width=50% align=right><font color=white>" .
-                        FormatLib::prettyNumber($amount) . "<font></td></tr>";
+                        ":</font></td><td width=50% align=right><font color=white>" .
+                        FormatLib::prettyNumber($amount) . "</font></td></tr>";
                     }
                 }
             }
