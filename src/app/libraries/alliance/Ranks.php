@@ -224,7 +224,7 @@ class Ranks
      */
     public function getRankById($rank_id)
     {
-        return isset($this->_ranks[$rank_id]) ? $this->_ranks[$rank_id] : 0;
+        return isset($this->_ranks[$rank_id]) ? $this->_ranks[$rank_id] : $this->_ranks[1];
     }
 
     /**
