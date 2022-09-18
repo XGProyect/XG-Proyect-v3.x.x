@@ -26,13 +26,13 @@
                 <tr {hide_nickname_change}>
                     <th>{pr_new_player_name}:</th>
                     <th>
-                        <input type="text" name="new_user_name" size="20" minlength="3" maxlength="20">
+                        <input type="text" name="new_user_name" size="20" minlength="3" maxlength="20" autocomplete="off"/>
                     </th>
                 </tr>
                 <tr {hide_nickname_change}>
                     <th>{pr_enter_password_confirmation}:</th>
                     <th>
-                        <input type="password" name="confirmation_user_password" size="20" minlength="8" autocomplete="off">
+                        <input type="password" name="confirmation_user_password" size="20" minlength="8" autocomplete="off"/>
                     </th>
                 </tr>
                 <tr>
@@ -46,13 +46,13 @@
                 <tr>
                     <th>{pr_player_current_password}:</th>
                     <th>
-                        <input type="password" name="current_user_password" size="20" minlength="8" autocomplete="off">
+                        <input type="password" name="current_user_password" size="20" minlength="8" autocomplete="off"/>
                     </th>
                 </tr>
                 <tr>
                     <th>{pr_new_player_password}:</th>
                     <th>
-                        <input type="password" name="new_user_password" size="20" minlength="8" autocomplete="off">
+                        <input type="password" name="new_user_password" size="20" minlength="8" autocomplete="off"/>
                     </th>
                 </tr>
                 <tr>
@@ -65,18 +65,18 @@
                 <tr>
                     <th>{pr_new_player_email}:</th>
                     <th>
-                        <input type="email" name="new_user_email" size="20" minlength="4" maxlength="64">
+                        <input type="email" name="new_user_email" size="20" minlength="4" maxlength="64"/>
                     </th>
                 </tr>
                 <tr>
                     <th>{pr_enter_password_confirmation}:</th>
                     <th>
-                        <input type="password" name="confirmation_email_password" size="20" minlength="8" autocomplete="off">
+                        <input type="password" name="confirmation_email_password" size="20" minlength="8" autocomplete="off"/>
                     </th>
                 </tr>
                 <tr>
                     <th colspan="2">
-                        <input type="submit" name="apply_settings" value="{pr_use_settings}">
+                        <input type="submit" name="apply_settings" value="{pr_use_settings}"/>
                     </th>
                 </tr>
                 <tr {hide_vacation_invalid}>
@@ -88,12 +88,12 @@
                 <tr {hide_vacation_invalid}>
                     <th>{pr_number_espionage_probes}:</th>
                     <th>
-                        <input type="number" name="preference_spy_probes" value="{preference_spy_probes}" size="3" minlength="1" min="1" max="99" pattern="[0-9]*">
+                        <input type="number" name="preference_spy_probes" value="{preference_spy_probes}" size="3" minlength="1" min="1" max="99" pattern="[0-9]*"/>
                     </th>
                 </tr>
                 <tr {hide_vacation_invalid}>
                     <th colspan="2">
-                        <input type="submit" name="apply_settings" value="{pr_use_settings}">
+                        <input type="submit" name="apply_settings" value="{pr_use_settings}"/>
                     </th>
                 </tr>
                 <tr {hide_vacation_invalid}>
@@ -124,7 +124,7 @@
                 </tr>
                 <tr {hide_vacation_invalid}>
                     <th colspan="2">
-                        <input type="submit" name="apply_settings" value="{pr_use_settings}">
+                        <input type="submit" name="apply_settings" value="{pr_use_settings}"/>
                     </th>
                 </tr>
                 <tr>
@@ -141,8 +141,8 @@
                 </tr>
                 <tr {disabled}>
                     <th colspan="2">
-                        <input type="submit" onclick="javascript:return confirm('{pr_activate_alert}');" name="preference_vacation_mode" value="{pr_activate}" {hide_vacation_invalid}>
-                        <input type="submit" name="preference_vacation_mode" value="{pr_deactivate}" {hide_no_vacation}>
+                        <input type="submit" onclick="javascript:return confirm('{pr_activate_alert}');" name="preference_vacation_mode" value="{pr_activate}" {hide_vacation_invalid}/>
+                        <input type="submit" name="preference_vacation_mode" value="{pr_deactivate}" {hide_no_vacation}/>
                     </th>
                 </tr>
                 <tr>
@@ -151,7 +151,7 @@
                 <tr>
                     <th>{pr_delete_account}</th>
                     <th>
-                        <input type="checkbox" name="preference_delete_mode"{preference_delete_mode}>
+                        <input type="checkbox" name="preference_delete_mode"{preference_delete_mode}/>
                     </th>
                 </tr>
                 <tr {hide_delete}>
@@ -161,7 +161,7 @@
                 </tr>
                 <tr>
                     <th colspan="2">
-                        <input type="submit" name="apply_settings" value="{pr_use_settings}">
+                        <input type="submit" name="apply_settings" value="{pr_use_settings}"/>
                     </th>
                 </tr>
             </tbody>
