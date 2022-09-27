@@ -615,7 +615,7 @@ class FleetsLib extends XGPCore
      */
     public static function getMaxStorage(int $ship_storage, int $hyperspace_tech_level): int
     {
-        return ($ship_storage + ($ship_storage * 0.05 * $hyperspace_tech_level));
+        return intval($ship_storage + ($ship_storage * 0.05 * $hyperspace_tech_level));
     }
 
     /**
