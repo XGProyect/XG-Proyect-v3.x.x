@@ -25,7 +25,7 @@
  * @version beta(26-10-2013)
  * @link https://github.com/jstar88/opbe
  */
-if (!defined('OPBEPATH')){
+if (!defined('OPBEPATH')) {
     define('OPBEPATH', dirname(__DIR__) . DIRECTORY_SEPARATOR);
     require(OPBEPATH . 'utils' . DIRECTORY_SEPARATOR . 'GeometricDistribution.php');
     require(OPBEPATH . 'utils' . DIRECTORY_SEPARATOR . 'Gauss.php');
