@@ -46,7 +46,7 @@ class IterableUtil implements Iterator
     {
         return key($this->array);
     }
-    
+
     #[ReturnTypeWillChange]
     public function next()
     {
