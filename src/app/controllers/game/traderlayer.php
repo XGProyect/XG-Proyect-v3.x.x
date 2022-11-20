@@ -272,7 +272,7 @@ class TraderLayer extends BaseController
      */
     private function getMode(): array
     {
-        $mode = filter_input(INPUT_GET, 'mode', FILTER_SANITIZE_STRING);
+        $mode = filter_input(INPUT_GET, 'mode', FILTER_UNSAFE_RAW);
         $template = '';
 
         if (in_array($mode, ['traderResources', 'traderAuctioneer', 'traderScrap', 'traderImportExport'])) {

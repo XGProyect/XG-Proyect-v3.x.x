@@ -517,7 +517,7 @@ class Alliance extends BaseController
         if ((bool) filter_input(INPUT_GET, 'sendmail', FILTER_VALIDATE_INT)) {
             $post = filter_input_array(INPUT_POST, [
                 'r' => FILTER_SANITIZE_NUMBER_INT,
-                'text' => FILTER_SANITIZE_STRING,
+                'text' => FILTER_UNSAFE_RAW,
             ]);
 
             $members_list = [];
@@ -669,10 +669,10 @@ class Alliance extends BaseController
                 'filter' => FILTER_SANITIZE_NUMBER_INT,
                 'options' => ['default' => 1, 'min_range' => 1, 'max_range' => 3],
             ],
-            'text' => FILTER_SANITIZE_STRING,
-            'options' => FILTER_SANITIZE_STRING,
-            'owner_range' => FILTER_SANITIZE_STRIPPED,
-            'newcomer_range' => FILTER_SANITIZE_STRIPPED,
+            'text' => FILTER_UNSAFE_RAW,
+            'options' => FILTER_UNSAFE_RAW,
+            'owner_range' => FILTER_UNSAFE_RAW,
+            'newcomer_range' => FILTER_UNSAFE_RAW,
             'web' => FILTER_VALIDATE_URL,
             'image' => FILTER_VALIDATE_URL,
             'request_notallow' => [
@@ -864,7 +864,7 @@ class Alliance extends BaseController
      */
     private function getAdminNameSection()
     {
-        $name = filter_input(INPUT_POST, 'nametag', FILTER_SANITIZE_STRIPPED);
+        $name = filter_input(INPUT_POST, 'nametag', FILTER_UNSAFE_RAW);
 
         if (isset($name)) {
             if (strlen($name) < 3 or strlen($name) > 30) {
@@ -1103,7 +1103,7 @@ class Alliance extends BaseController
      */
     private function getAdminTagSection()
     {
-        $tag = filter_input(INPUT_POST, 'nametag', FILTER_SANITIZE_STRIPPED);
+        $tag = filter_input(INPUT_POST, 'nametag', FILTER_UNSAFE_RAW);
 
         if (isset($tag)) {
             if (strlen($tag) < 3 or strlen($tag) > 8) {

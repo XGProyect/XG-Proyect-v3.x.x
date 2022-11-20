@@ -101,7 +101,7 @@ class Fleets
      */
     public function getFleetById(int $fleet_id): FleetEntity
     {
-        return $this->_fleets[$this->validateIndex($fleet_id)] ?? new FleetEntity();
+        return $this->_fleets[$this->validateIndex($fleet_id)] ?? new FleetEntity(array());
     }
 
     /**

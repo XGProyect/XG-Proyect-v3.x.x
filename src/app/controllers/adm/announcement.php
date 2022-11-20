@@ -81,15 +81,15 @@ class Announcement extends BaseController
         $action = filter_input_array(
             INPUT_POST,
             [
-                'subject' => FILTER_SANITIZE_STRING,
+                'subject' => FILTER_UNSAFE_RAW,
                 'color-picker' => [
                     'filter' => FILTER_CALLBACK,
                     'options' => [$this, 'isValidColor'],
                 ],
-                'message' => FILTER_SANITIZE_STRING,
-                'mail' => FILTER_SANITIZE_STRING,
+                'message' => FILTER_UNSAFE_RAW,
+                'mail' => FILTER_UNSAFE_RAW,
                 'text' => [
-                    'filter' => FILTER_SANITIZE_STRING,
+                    'filter' => FILTER_UNSAFE_RAW,
                     'options' => ['min_range' => 1, 'max_range' => 5000],
                 ],
             ],

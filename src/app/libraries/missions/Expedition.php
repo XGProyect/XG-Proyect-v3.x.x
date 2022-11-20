@@ -216,7 +216,7 @@ class Expedition extends Missions
             $found_crystal = intval($found_resources / 4);
             $found_deuterium = intval($found_resources / 6);
             $found_darkmatter = ($fleet_capacity > 10000) ? intval(3 * log($fleet_capacity / 10000) * 100) : 0;
-            $found_darkmatter = mt_rand($found_darkmatter / 2, $found_darkmatter);
+            $found_darkmatter = mt_rand(intval($found_darkmatter / 2), $found_darkmatter);
 
             $this->missionsModel->updateFleetResourcesById([
                 'found' => [

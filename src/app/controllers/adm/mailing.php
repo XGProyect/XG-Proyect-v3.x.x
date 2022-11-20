@@ -14,13 +14,13 @@ use App\libraries\Functions;
 class Mailing extends BaseController
 {
     public const MAILING_SETTINGS = [
-        'mailing_protocol' => FILTER_SANITIZE_STRING,
-        'mailing_smtp_host' => FILTER_SANITIZE_STRING,
-        'mailing_smtp_user' => FILTER_SANITIZE_STRING,
-        'mailing_smtp_pass' => FILTER_SANITIZE_STRING,
+        'mailing_protocol' => FILTER_UNSAFE_RAW,
+        'mailing_smtp_host' => FILTER_UNSAFE_RAW,
+        'mailing_smtp_user' => FILTER_UNSAFE_RAW,
+        'mailing_smtp_pass' => FILTER_UNSAFE_RAW,
         'mailing_smtp_port' => FILTER_VALIDATE_INT,
         'mailing_smtp_timeout' => FILTER_VALIDATE_INT,
-        'mailing_smtp_crypto' => FILTER_SANITIZE_STRING,
+        'mailing_smtp_crypto' => FILTER_UNSAFE_RAW,
     ];
 
     /**

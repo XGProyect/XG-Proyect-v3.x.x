@@ -37,19 +37,19 @@ class FormatLib
         $weeks = floor($input_seconds / $sec_week);
 
         // Extract days
-        $daysSeconds = $input_seconds % $sec_week;
+        $daysSeconds = (int)$input_seconds % $sec_week;
         $days = floor($daysSeconds / $sec_day);
 
         // Extract hours
-        $hourSeconds = $input_seconds % $sec_day;
+        $hourSeconds = (int)$input_seconds % $sec_day;
         $hours = floor($hourSeconds / $sec_hour);
 
         // Extract minutes
-        $minuteSeconds = $hourSeconds % $sec_hour;
+        $minuteSeconds = (int)$hourSeconds % $sec_hour;
         $minutes = floor($minuteSeconds / $sec_min);
 
         // Extract the remaining seconds
-        $remainingSeconds = $minuteSeconds % $sec_min;
+        $remainingSeconds = (int)$minuteSeconds % $sec_min;
         $seconds = ceil($remainingSeconds);
 
         // Format and return
@@ -80,7 +80,7 @@ class FormatLib
      */
     public static function prettyTimeHour($seconds)
     {
-        $min = floor($seconds / 60 % 60);
+        $min = floor(intval($seconds / 60) % 60);
         $time = '';
 
         if ($min != 0) {
@@ -224,7 +224,7 @@ class FormatLib
     public static function prettyNumber($n, $floor = true)
     {
         if ($floor) {
-            $n = floor($n);
+            $n = floor($n??0.0);
         }
 
         return number_format($n, 0, ",", ".");

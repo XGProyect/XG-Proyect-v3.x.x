@@ -77,7 +77,7 @@ class Gauss
             }
             $i++;
             if ($i > 10) {
-                return mt_rand($min, $max);
+                return mt_rand(intval($min), intval($max));
             }
         }
     }

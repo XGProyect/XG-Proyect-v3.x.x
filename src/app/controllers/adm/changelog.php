@@ -257,7 +257,7 @@ class Changelog extends BaseController
                 ],
             ],
             'text' => [
-                'filter' => FILTER_SANITIZE_STRING,
+                'filter' => FILTER_UNSAFE_RAW,
             ], // changelog description
         ]);
 

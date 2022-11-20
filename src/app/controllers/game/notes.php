@@ -98,11 +98,11 @@ class Notes extends BaseController
                 'options' => ['min_range' => Importance::unimportant, 'max_range' => Importance::important],
             ],
             'title' => [
-                'filter' => FILTER_SANITIZE_STRING,
+                'filter' => FILTER_UNSAFE_RAW,
                 'options' => ['min_range' => 1, 'max_range' => 32],
             ],
             'text' => [
-                'filter' => FILTER_SANITIZE_STRING,
+                'filter' => FILTER_UNSAFE_RAW,
                 'options' => ['min_range' => 1, 'max_range' => 5000],
             ],
             'n' => FILTER_SANITIZE_NUMBER_INT,

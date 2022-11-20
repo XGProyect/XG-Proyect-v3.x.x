@@ -125,7 +125,7 @@ class Fleetshortcuts extends BaseController
         );
 
         $data = filter_input_array(INPUT_POST, [
-            'name' => FILTER_SANITIZE_STRING,
+            'name' => FILTER_UNSAFE_RAW,
             'galaxy' => [
                 'filter' => FILTER_VALIDATE_INT,
                 'options' => ['min_range' => 1, 'max_range' => MAX_GALAXY_IN_WORLD],

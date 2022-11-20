@@ -125,12 +125,12 @@ class Preferences extends BaseController
         }
 
         $preferences = filter_input_array(INPUT_POST, [
-            'new_user_name' => FILTER_SANITIZE_STRING,
-            'confirmation_user_password' => FILTER_SANITIZE_STRING,
-            'current_user_password' => FILTER_SANITIZE_STRING,
-            'new_user_password' => FILTER_SANITIZE_STRING,
+            'new_user_name' => FILTER_UNSAFE_RAW,
+            'confirmation_user_password' => FILTER_UNSAFE_RAW,
+            'current_user_password' => FILTER_UNSAFE_RAW,
+            'new_user_password' => FILTER_UNSAFE_RAW,
             'new_user_email' => FILTER_VALIDATE_EMAIL,
-            'confirmation_email_password' => FILTER_SANITIZE_STRING,
+            'confirmation_email_password' => FILTER_UNSAFE_RAW,
             'preference_spy_probes' => [
                 'filter' => FILTER_VALIDATE_INT,
                 'options' => ['default' => 1, 'min_range' => 1, 'max_range' => 99],
@@ -143,7 +143,7 @@ class Preferences extends BaseController
                 'filter' => FILTER_VALIDATE_INT,
                 'options' => ['default' => 0, 'min_range' => 0, 'max_range' => (count(PrefEnum::sequence) - 1)],
             ],
-            'preference_delete_mode' => FILTER_SANITIZE_STRING,
+            'preference_delete_mode' => FILTER_UNSAFE_RAW,
         ]);
 
         if ($preferences) {

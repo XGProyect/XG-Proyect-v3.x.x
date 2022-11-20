@@ -54,7 +54,7 @@ class BBCodeLib
             '/\[size=(.*?)\](.*?)\[\/size\]/is' => '$this->setFontSize(\'\\1\',\'\\2\')',
         ];
 
-        $string = stripslashes($string);
+        $string = stripslashes($string??'');
 
         foreach ($bbcodes as $bbcode => $html) {
             $string = preg_replace_callback(

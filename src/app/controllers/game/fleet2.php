@@ -163,14 +163,14 @@ class Fleet2 extends BaseController
                         continue;
                     }
 
-                    $amount_to_set = $selected_fleet['ship' . $ship_id];
+                    $amount_to_set = intval($selected_fleet['ship' . $ship_id]);
 
                     if ($amount_to_set > $ship_amount) {
                         $amount_to_set = $ship_amount;
                     }
 
                     $this->_fleet_data['fleet_array'][$ship_id] = $amount_to_set;
-                    $this->_fleet_data['fleet_list'] .= $ship_id . ',' . $amount_to_set . ';';
+                    $this->_fleet_data['fleet_list'] .= $ship_id . ',' . strval($amount_to_set) . ';';
                     $this->_fleet_data['amount'] += $amount_to_set;
                     $this->_fleet_data['speed_all'][$ship_id] = FleetsLib::fleetMaxSpeed('', $ship_id, $this->user);
 

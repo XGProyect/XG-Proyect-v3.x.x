@@ -25,9 +25,9 @@ use App\libraries\Functions;
 class Registration extends BaseController
 {
     public const REGISTRATION_SETTINGS = [
-        'reg_enable' => FILTER_SANITIZE_STRING,
-        'reg_welcome_message' => FILTER_SANITIZE_STRING,
-        'reg_welcome_email' => FILTER_SANITIZE_STRING,
+        'reg_enable' => FILTER_UNSAFE_RAW,
+        'reg_welcome_message' => FILTER_UNSAFE_RAW,
+        'reg_welcome_email' => FILTER_UNSAFE_RAW,
     ];
 
     /**

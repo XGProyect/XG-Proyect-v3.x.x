@@ -244,6 +244,7 @@ class Common
      */
     private function checkBanStatus(): void
     {
+        Users::checkSession();
         $user = (new Users())->getUserData();
 
         if ($user['user_banned'] > 0) {

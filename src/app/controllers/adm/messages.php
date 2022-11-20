@@ -84,7 +84,7 @@ class Messages extends BaseController
     {
         $action = filter_input_array(INPUT_POST);
         $single_delete = filter_input_array(INPUT_GET, [
-            'action' => FILTER_SANITIZE_STRING,
+            'action' => FILTER_UNSAFE_RAW,
             'messageId' => [
                 'filter' => FILTER_VALIDATE_INT,
                 'options' => ['min_range' => 0],

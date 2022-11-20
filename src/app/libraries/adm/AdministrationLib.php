@@ -169,7 +169,7 @@ class AdministrationLib
     public static function checkSession()
     {
         if (!self::isSessionSet()) {
-            $page = filter_input(INPUT_GET, 'page', FILTER_SANITIZE_STRING);
+            $page = filter_input(INPUT_GET, 'page', FILTER_UNSAFE_RAW);
 
             if ($page != 'login') {
                 Functions::redirect(SYSTEM_ROOT . 'admin.php?page=login&redirect=' . $page);

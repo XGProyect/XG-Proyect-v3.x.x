@@ -57,7 +57,7 @@ class Home extends BaseController
     {
         $loginData = filter_input_array(INPUT_POST, [
             'login' => FILTER_VALIDATE_EMAIL,
-            'pass' => FILTER_SANITIZE_STRING,
+            'pass' => FILTER_UNSAFE_RAW,
         ]);
 
         if (!empty($loginData['login']) && !empty($loginData['pass'])) {
