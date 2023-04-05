@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Overview Controller
  *
@@ -36,6 +37,11 @@ class Overview extends BaseController
     private $_noob;
 
     /**
+     * @var mixed
+     */
+    private $overviewModel;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -46,7 +52,7 @@ class Overview extends BaseController
         Users::checkSession();
 
         // load Model
-        parent::loadModel('game/overview');
+        $this->overviewModel = Functions::model('game/overview');
 
         // load Language
         parent::loadLang(['game/global', 'game/overview', 'game/buildings', 'game/constructions']);
@@ -62,7 +68,13 @@ class Overview extends BaseController
     public function index(): void
     {
         // Check module access
-        Functions::moduleMessage(Functions::isModuleAccesible(self::MODULE_ID));
+        $module_access_level = Functions::isModuleAccesible(self::MODULE_ID);
+
+        if (is_array($module_access_level)) {
+            $module_access_level = 0;
+        }
+
+        Functions::moduleMessage($module_access_level);
 
         // build the page
         $this->buildPage();
@@ -194,7 +206,7 @@ class Overview extends BaseController
         $fleet_row = [];
         $record = 0;
 
-        $own_fleets = $this->Overview_Model->getOwnFleets($this->user['user_id']);
+        $own_fleets = $this->overviewModel->getOwnFleets($this->user['user_id']);
 
         foreach ($own_fleets as $fleets) {
             ######################################
@@ -374,7 +386,7 @@ class Overview extends BaseController
     {
         $colony = 1;
 
-        $planets_query = $this->Overview_Model->getPlanets($this->user['user_id']);
+        $planets_query = $this->overviewModel->getPlanets($this->user['user_id']);
         $planet_block = '<tr>';
 
         foreach ($planets_query as $user_planet) {

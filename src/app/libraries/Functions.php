@@ -1,4 +1,5 @@
 <?php
+
 /**
  * XG Proyect
  *
@@ -222,7 +223,7 @@ abstract class Functions
      *
      * @return array
      */
-    public static function isModuleAccesible($module_id = 0)
+    public static function isModuleAccesible(int $module_id = 0): array|string|null
     {
         $modules_array = self::readConfig('modules');
         $modules_array = explode(';', $modules_array);
@@ -230,7 +231,7 @@ abstract class Functions
         if ($module_id == 0) {
             return $modules_array;
         } else {
-            return $modules_array[$module_id];
+            return $modules_array[$module_id] ?? null;
         }
     }
 
@@ -241,8 +242,12 @@ abstract class Functions
      *
      * @return void
      */
-    public static function moduleMessage($access_level)
+    public static function moduleMessage(int|string|array $access_level): void
     {
+        if (is_array($access_level)) {
+            $access_level = 0;
+        }
+
         if ($access_level == 0) {
             $lang = new Language();
             die(self::message($lang->loadLang('game/global', true)->line('module_not_accesible'), '', '', true));
@@ -327,9 +332,9 @@ abstract class Functions
                 return false;
             }
 
-            require_once $mailLibPath. '/src/Exception.php';
-            require_once $mailLibPath. '/src/PHPMailer.php';
-            require_once $mailLibPath. '/src/SMTP.php';
+            require_once $mailLibPath . '/src/Exception.php';
+            require_once $mailLibPath . '/src/PHPMailer.php';
+            require_once $mailLibPath . '/src/SMTP.php';
 
             $mail = new PHPMailer();
 
