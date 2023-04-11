@@ -1,20 +1,11 @@
 <?php
-/**
- * Game File
- *
- * @category Root File
- * @package  N/A
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
-use App\Core\common;
+
+use App\Core\Common;
 use App\Libraries\Functions;
 
 define('XGP_ROOT', realpath(dirname(__DIR__)) . DIRECTORY_SEPARATOR);
 
-require XGP_ROOT . 'app' . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'common.php';
+require XGP_ROOT . 'app' . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'Common.php';
 
 $system = new Common();
 $system->bootUp('game');

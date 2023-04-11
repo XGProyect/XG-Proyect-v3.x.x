@@ -1,20 +1,11 @@
 <?php
-/**
- * Install File
- *
- * @category Install File
- * @package  N/A
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
- */
-use App\Core\common;
+
+use App\Core\Common;
 
 define('IN_INSTALL', true);
 define('XGP_ROOT', '../../');
 
-require XGP_ROOT . 'app' . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'common.php';
+require XGP_ROOT . 'app' . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'Common.php';
 
 $system = new Common();
 $system->bootUp('install');
