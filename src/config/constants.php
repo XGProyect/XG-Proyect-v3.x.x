@@ -1,14 +1,5 @@
 <?php
-/**
- * Constants
- *
- * @category Core
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.2.0
- */
+
 ###########################################################################
 #
 # Constants should not be changed, unless you know what you are doing!
