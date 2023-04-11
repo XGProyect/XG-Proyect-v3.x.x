@@ -6,24 +6,24 @@
         <td>&nbsp;</td>
     </tr>
     <tr>
-        <td>{ma_mail_text_part1}</td>
+        <td>{{ $ma_mail_text_part1 }}</td>
     </tr>
     <tr>
-        <td>{ma_mail_text_part2}: <strong>{user_pass}</strong></td>
+        <td>{{ $ma_mail_text_part2 }}: <strong>{{ $user_pass }}</strong></td>
     </tr>
     <tr>
-        <td>{ma_mail_text_part3}: <a href="{game_url}" target="_blank">{game_url}</a></td>
-    </tr>
-    <tr>
-        <td>&nbsp;</td>
-    </tr>
-    <tr>
-        <td>{ma_mail_text_part4}</td>
+        <td>{{ $ma_mail_text_part3 }}: <a href="{{ $game_url }}" target="_blank">{{ $game_url }}</a></td>
     </tr>
     <tr>
         <td>&nbsp;</td>
     </tr>
     <tr>
-        <td>{ma_mail_text_part5}</td>
+        <td>{{ $ma_mail_text_part4 }}</td>
+    </tr>
+    <tr>
+        <td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td>{{ $ma_mail_text_part5 }}</td>
     </tr>
 </table>
