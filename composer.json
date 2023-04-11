@@ -27,7 +27,8 @@
     "require-dev": {
         "bartlett/php-compatinfo": "^6.1",
         "phpunit/phpunit": "^9.0",
-        "squizlabs/php_codesniffer": "^3.5"
+        "squizlabs/php_codesniffer": "^3.5",
+        "friendsofphp/php-cs-fixer": "^3.16"
     },
     "autoload": {
         "classmap": [
