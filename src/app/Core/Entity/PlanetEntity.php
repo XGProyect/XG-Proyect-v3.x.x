@@ -1,38 +1,11 @@
 <?php
-/**
- * Planet entity
- *
- * @category Core
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
 
-namespace App\core\entities;
+namespace App\Core\Entity;
 
-use App\core\Entity;
+use App\Core\Entity;
 
-/**
- * PlanetEntity Class
- *
- * @category Entity
- * @package  Core
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
 class PlanetEntity extends Entity
 {
-    /**
-     * Constructor
-     *
-     * @param array $data Data
-     *
-     * @return void
-     */
     public function __construct($data)
     {
         parent::__construct($data);

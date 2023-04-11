@@ -1,22 +1,9 @@
 <?php
-/**
- * Media Controller
- *
- * @category Controller
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
- */
 
-namespace App\controllers\ajax;
+namespace App\Controllers\Ajax;
 
-use App\core\BaseController;
+use App\Core\BaseController;
 
-/**
- * Media Class
- */
 class Media extends BaseController
 {
     public function __construct()

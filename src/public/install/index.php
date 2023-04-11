@@ -9,7 +9,7 @@
  * @link     http://www.xgproyect.org
  * @version  3.0.0
  */
-use App\core\common;
+use App\Core\common;
 
 define('IN_INSTALL', true);
 define('XGP_ROOT', '../../');
@@ -25,7 +25,7 @@ $file_name = XGP_ROOT . INSTALL_PATH . $page . '.php';
 if (file_exists($file_name)) {
     include $file_name;
 
-    $class_name = 'App\controllers\install\\' . ucfirst($page);
+    $class_name = 'App\Controllers\Install\\' . ucfirst($page);
 
     (new $class_name())->index();
 }

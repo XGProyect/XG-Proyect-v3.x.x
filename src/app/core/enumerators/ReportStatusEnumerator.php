@@ -1,27 +1,9 @@
 <?php
-/**
- * Report Status Enumerator
- *
- * @category Library
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
 
-namespace App\libraries\enumerators;
+declare(strict_types=1);
 
-/**
- * Report Status Enumerator
- *
- * @category Enumerator
- * @package  Core
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
+namespace App\Libraries\enumerators;
+
 abstract class ReportStatusEnumerator
 {
     public const fleetDestroyed = 1;

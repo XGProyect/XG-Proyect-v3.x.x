@@ -1,20 +1,20 @@
 <?php
 
-namespace App\libraries;
+namespace App\Libraries;
 
-use App\core\enumerators\DefensesEnumerator as Defenses;
-use App\core\enumerators\MissionsEnumerator as Missions;
-use App\core\Language;
-use App\core\Template;
-use App\core\XGPCore;
-use App\helpers\UrlHelper;
-use App\libraries\FormatLib;
-use App\libraries\Functions;
-use App\libraries\OfficiersLib;
-use App\libraries\Page;
-use App\libraries\TimingLibrary as Timing;
-use App\libraries\Users;
-use CI_Lang;
+use App\Core\Enumerators\DefensesEnumerator as Defenses;
+use App\Core\Enumerators\MissionsEnumerator as Missions;
+use App\Core\Language;
+use App\Core\Template;
+use App\Core\XGPCore;
+use App\Helpers\UrlHelper;
+use App\Libraries\FormatLib;
+use App\Libraries\Functions;
+use App\Libraries\OfficiersLib;
+use App\Libraries\Page;
+use App\Libraries\TimingLibrary as Timing;
+use App\Libraries\Users;
+use CiLang;
 
 class FleetsLib extends XGPCore
 {
@@ -646,7 +646,7 @@ class FleetsLib extends XGPCore
      *
      * @return void
      */
-    private static function loadLanguage(array $required_lang): CI_Lang
+    private static function loadLanguage(array $required_lang): CiLang
     {
         $lang = new Language();
 

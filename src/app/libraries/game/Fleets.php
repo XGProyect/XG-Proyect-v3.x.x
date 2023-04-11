@@ -1,70 +1,18 @@
 <?php
-/**
- * Fleets
- *
- * @category Library
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
 
-namespace App\libraries\game;
+namespace App\Libraries\Game;
 
-use App\core\entities\FleetEntity;
-use App\core\enumerators\MissionsEnumerator as Missions;
+use App\Core\Entity\FleetEntity;
+use App\Core\Enumerators\MissionsEnumerator as Missions;
 
-/**
- * Fleets Class
- *
- * @category Classes
- * @package  fleets
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
 class Fleets
 {
-    /**
-     *
-     * @var array
-     */
-    private $_fleets = [];
+    private array $_fleets = [];
+    private int $_current_user_id = 0;
+    private int $_fleet_count = 0;
+    private int $_expedition_count = 0;
+    private array $_fleets_index = [];
 
-    /**
-     *
-     * @var int
-     */
-    private $_current_user_id = 0;
-
-    /**
-     *
-     * @var int
-     */
-    private $_fleet_count = 0;
-
-    /**
-     *
-     * @var int
-     */
-    private $_expedition_count = 0;
-
-    /**
-     *
-     * @var array
-     */
-    private $_fleets_index = [];
-
-    /**
-     * Constructor
-     *
-     * @param array $fleets          Fleets
-     * @param int   $current_user_id Current User ID
-     *
-     * @return void
-     */
     public function __construct($fleets, $current_user_id)
     {
         if (is_array($fleets)) {

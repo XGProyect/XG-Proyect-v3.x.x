@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\controllers\adm;
+namespace App\Controllers\Adm;
 
-use App\core\BaseController;
-use App\libraries\adm\AdministrationLib as Administration;
-use App\libraries\Functions;
+use App\Core\BaseController;
+use App\Libraries\Adm\AdministrationLib as Administration;
+use App\Libraries\Functions;
 use DateTime;
 use Exception;
 

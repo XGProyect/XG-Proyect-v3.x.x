@@ -1,31 +1,18 @@
 <?php
-/**
- * Fleet2 Controller
- *
- * @category Controller
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
- */
 
-namespace App\controllers\game;
+namespace App\Controllers\Game;
 
-use App\core\BaseController;
-use App\core\enumerators\PlanetTypesEnumerator as PlanetTypes;
-use App\libraries\FleetsLib;
-use App\libraries\FormatLib;
-use App\libraries\Functions;
-use App\libraries\OfficiersLib;
-use App\libraries\premium\Premium;
-use App\libraries\research\Researches;
-use App\libraries\Users;
-use App\libraries\users\Shortcuts;
+use App\Core\BaseController;
+use App\Core\Enumerators\PlanetTypesEnumerator as PlanetTypes;
+use App\Libraries\FleetsLib;
+use App\Libraries\FormatLib;
+use App\Libraries\Functions;
+use App\Libraries\OfficiersLib;
+use App\Libraries\Premium\Premium;
+use App\Libraries\Research\Researches;
+use App\Libraries\Users;
+use App\Libraries\Users\Shortcuts;
 
-/**
- * Fleet2 Class
- */
 class Fleet2 extends BaseController
 {
     public const MODULE_ID = 8;

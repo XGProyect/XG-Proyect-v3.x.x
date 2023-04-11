@@ -2,25 +2,11 @@
 
 declare(strict_types=1);
 
-/**
- * Errors Controller
- *
- * @category Controller
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
- */
+namespace App\Controllers\Adm;
 
-namespace App\controllers\adm;
+use App\Core\BaseController;
+use App\Libraries\Adm\AdministrationLib as Administration;
 
-use App\core\BaseController;
-use App\libraries\adm\AdministrationLib as Administration;
-
-/**
- * Errors Class
- */
 class Errors extends BaseController
 {
     public function __construct()

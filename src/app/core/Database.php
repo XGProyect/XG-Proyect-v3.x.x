@@ -1,56 +1,16 @@
 <?php
-/**
- * Database
- *
- * @category Core
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
- */
 
-namespace App\core;
+namespace App\Core;
 
-use App\libraries\DebugLib;
+use App\Libraries\DebugLib;
 use mysqli;
 
-/**
- * Database Class
- *
- * @category Classes
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
- */
 class Database
 {
-    /**
-     *
-     * @var string
-     */
-    private $last_query;
-
-    /**
-     *
-     * @var mysqli
-     */
-    private $connection;
-
-    /**
-     *
-     * @var DebugLib
-     */
-    private $debug;
-
-    /**
-     * DB Data
-     *
-     * @var array
-     */
-    private $db_data = [
+    private string $last_query;
+    private mysqli $connection;
+    private DebugLib $debug;
+    private array $db_data = [
         'host' => '',
         'user' => '',
         'pass' => '',

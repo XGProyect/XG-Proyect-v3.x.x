@@ -1,27 +1,9 @@
 <?php
-/**
- * Research enumerator
- *
- * @category Library
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
 
-namespace App\core\enumerators;
+declare(strict_types=1);
 
-/**
- * ResearchEnumerator Class
- *
- * @category Enumerator
- * @package  Core
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
+namespace App\Core\Enumerators;
+
 abstract class ResearchEnumerator
 {
     public const research_espionage_technology = 106;

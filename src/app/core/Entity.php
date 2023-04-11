@@ -1,44 +1,13 @@
 <?php
-/**
- * Entity
- *
- * @category Core
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
 
-namespace App\core;
+namespace App\Core;
 
 use Exception;
 
-/**
- * Entity Class
- *
- * @category Entity
- * @package  Core
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
 class Entity
 {
-    /**
-     *
-     * @var array
-     */
-    protected $data = [];
+    protected array $data = [];
 
-    /**
-     * Init with the db data
-     *
-     * @param array $data data
-     *
-     * @return void
-     */
     public function __construct($data)
     {
         $this->setData($data);

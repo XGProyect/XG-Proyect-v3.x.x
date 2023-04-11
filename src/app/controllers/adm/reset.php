@@ -1,23 +1,10 @@
 <?php
-/**
- * Reset Controller
- *
- * @category Controller
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
- */
 
-namespace App\controllers\adm;
+namespace App\Controllers\Adm;
 
-use App\core\BaseController;
-use App\libraries\adm\AdministrationLib as Administration;
+use App\Core\BaseController;
+use App\Libraries\Adm\AdministrationLib as Administration;
 
-/**
- * Reset Class
- */
 class Reset extends BaseController
 {
     private string $alert = '';

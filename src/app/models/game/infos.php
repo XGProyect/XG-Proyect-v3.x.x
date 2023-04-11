@@ -2,32 +2,12 @@
 
 declare(strict_types=1);
 
-/**
- * Infos Model
- *
- * @category Model
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
+namespace App\Models\Game;
 
-namespace App\models\game;
+use App\Core\Model;
 
-use App\core\Model;
-
-/**
- * Infos Class
- */
 class Infos extends Model
 {
-    /**
-     * Get the target planet to jump
-     *
-     * @param integer $target_planet_id
-     * @return array
-     */
     public function getTargetGate(int $target_planet_id): array
     {
         return $this->db->queryFetch(
@@ -42,17 +22,6 @@ class Infos extends Model
         );
     }
 
-    /**
-     * Do jump - Move ships from one planet to another
-     *
-     * @param string $sub_query_origin
-     * @param string $sub_query_destiny
-     * @param integer $jump_time
-     * @param integer $current_planet_id
-     * @param integer $target_planet_id
-     * @param integer $user_id
-     * @return void
-     */
     public function doJump(string $sub_query_origin, string $sub_query_destiny, int $jump_time, int $current_planet_id, int $target_planet_id, int $user_id): void
     {
         try {

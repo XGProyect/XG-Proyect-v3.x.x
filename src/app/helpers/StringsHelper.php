@@ -1,30 +1,11 @@
 <?php
 
 declare(strict_types=1);
-/**
- * XG Proyect
- *
- * Open-source OGame Clon
- *
- * This content is released under the GPL-3.0 License
- *
- * Copyright (c) 2008-2020 XG Proyect
- *
- * @package    XG Proyect
- * @author     XG Proyect Team
- * @copyright  2008-2020 XG Proyect
- * @license    https://www.gnu.org/licenses/gpl-3.0.en.html GPL-3.0 License
- * @link       https://github.com/XGProyect/
- * @since      3.0.0
- */
 
-namespace App\helpers;
+namespace App\Helpers;
 
 use Exception;
 
-/**
- * StringsHelper Class
- */
 abstract class StringsHelper
 {
     /**

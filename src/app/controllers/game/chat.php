@@ -10,12 +10,12 @@
  * @version  3.1.0
  */
 
-namespace App\controllers\game;
+namespace App\Controllers\Game;
 
-use App\core\BaseController;
-use App\libraries\FormatLib;
-use App\libraries\Functions;
-use App\libraries\Users;
+use App\Core\BaseController;
+use App\Libraries\FormatLib;
+use App\Libraries\Functions;
+use App\Libraries\Users;
 
 /**
  * Chat Class

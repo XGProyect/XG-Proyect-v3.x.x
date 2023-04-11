@@ -1,51 +1,14 @@
 <?php
-/**
- * Premium
- *
- * @category Library
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
 
-namespace App\libraries\premium;
+namespace App\Libraries\Premium;
 
-use App\core\entities\PremiumEntity;
+use App\Core\Entity\PremiumEntity;
 
-/**
- * Premium Class
- *
- * @category Classes
- * @package  premium
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
 class Premium
 {
-    /**
-     *
-     * @var array
-     */
-    private $premium = [];
+    private array $premium = [];
+    private int $current_user_id = 0;
 
-    /**
-     *
-     * @var int
-     */
-    private $current_user_id = 0;
-
-    /**
-     * Constructor
-     *
-     * @param array $premium         Premium
-     * @param int   $current_user_id Current User ID
-     *
-     * @return void
-     */
     public function __construct($premium, $current_user_id)
     {
         if (is_array($premium)) {

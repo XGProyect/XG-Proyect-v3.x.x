@@ -1,11 +1,11 @@
 <?php
 
-namespace App\controllers\adm;
+namespace App\Controllers\Adm;
 
-use App\core\BaseController;
-use App\libraries\adm\AdministrationLib as Administration;
-use App\libraries\FormatLib;
-use App\libraries\Functions;
+use App\Core\BaseController;
+use App\Libraries\Adm\AdministrationLib as Administration;
+use App\Libraries\FormatLib;
+use App\Libraries\Functions;
 
 class Repair extends BaseController
 {

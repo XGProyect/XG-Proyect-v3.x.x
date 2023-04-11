@@ -1,17 +1,14 @@
 <?php
 
-namespace App\libraries\adm;
+namespace App\Libraries\Adm;
 
-use App\core\Language;
-use App\core\Template;
-use App\libraries\adm\Permissions;
-use App\libraries\Functions;
-use App\libraries\Page;
-use App\libraries\Users;
+use App\Core\Language;
+use App\Core\Template;
+use App\Libraries\Adm\Permissions;
+use App\Libraries\Functions;
+use App\Libraries\Page;
+use App\Libraries\Users;
 
-/**
- * AdministrationLib class
- */
 class AdministrationLib
 {
     /**

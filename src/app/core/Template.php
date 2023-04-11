@@ -1,28 +1,15 @@
 <?php
-/**
- * Template
- *
- * @category Core
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
 
-namespace App\core;
+namespace App\Core;
 
-use CI_Parser;
+use CiParser;
 use eftec\bladeone\BladeOne;
 use Exception;
 
-/**
- * XGPCore Class
- */
 class Template
 {
     /**
-     * @var CI_Parser CodeIgniter Parser Class
+     * @var CiParser CodeIgniter Parser Class
      *
      * @deprecated 4.0.0
      */
@@ -80,7 +67,7 @@ class Template
     private function createNewParser(): void
     {
         // require email library
-        $parser_library_path = XGP_ROOT . LIB_PATH . 'Ci' . DIRECTORY_SEPARATOR . 'Parser.php';
+        $parser_library_path = XGP_ROOT . LIB_PATH . 'Ci' . DIRECTORY_SEPARATOR . 'CiParser.php';
 
         if (!file_exists($parser_library_path)) {
             return;
@@ -94,7 +81,7 @@ class Template
         // use CI library
         require_once $parser_library_path;
 
-        $this->ciParser = new CI_Parser();
+        $this->ciParser = new CiParser();
     }
 
     private function createNewBladeParser(): void

@@ -1,27 +1,9 @@
 <?php
-/**
- * Importance enumerator
- *
- * @category Library
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.4
- */
 
-namespace App\core\enumerators;
+declare(strict_types=1);
 
-/**
- * ImportanceEnumerator Class
- *
- * @category Enumerator
- * @package  Core
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
+namespace App\Core\Enumerators;
+
 abstract class ImportanceEnumerator
 {
     public const unimportant = 0;

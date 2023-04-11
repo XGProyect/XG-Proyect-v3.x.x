@@ -2,15 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\controllers\adm;
+namespace App\Controllers\Adm;
 
-use App\core\BaseController;
-use App\core\enumerators\MessagesEnumerator;
-use App\core\enumerators\UserRanksEnumerator as UserRanks;
-use App\libraries\adm\AdministrationLib as Administration;
-use App\libraries\FormatLib as Format;
-use App\libraries\Functions;
-use JS_PATH;
+use App\Core\BaseController;
+use App\Core\Enumerators\MessagesEnumerator;
+use App\Core\Enumerators\UserRanksEnumerator as UserRanks;
+use App\Libraries\Adm\AdministrationLib as Administration;
+use App\Libraries\FormatLib as Format;
+use App\Libraries\Functions;
 
 class Announcement extends BaseController
 {

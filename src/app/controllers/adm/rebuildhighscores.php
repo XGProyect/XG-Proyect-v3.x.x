@@ -1,42 +1,18 @@
 <?php
 
 declare(strict_types=1);
-/**
- * XG Proyect
- *
- * Open-source OGame Clon
- *
- * This content is released under the GPL-3.0 License
- *
- * Copyright (c) 2008-2020 XG Proyect
- *
- * @package    XG Proyect
- * @author     XG Proyect Team
- * @copyright  2008-2020 XG Proyect
- * @license    https://www.gnu.org/licenses/gpl-3.0.en.html GPL-3.0 License
- * @link       https://github.com/XGProyect/
- * @since      3.0.0
- */
 
-namespace App\controllers\adm;
+namespace App\Controllers\Adm;
 
-use App\core\BaseController;
-use App\libraries\adm\AdministrationLib as Administration;
-use App\libraries\FormatLib as Format;
-use App\libraries\Functions;
-use App\libraries\StatisticsLibrary as Statistics;
+use App\Core\BaseController;
+use App\Libraries\Adm\AdministrationLib as Administration;
+use App\Libraries\FormatLib as Format;
+use App\Libraries\Functions;
+use App\Libraries\StatisticsLibrary as Statistics;
 
-/**
- * RebuildHighscores Class
- */
 class RebuildHighscores extends BaseController
 {
-    /**
-     * Contains the statistics result
-     *
-     * @var array
-     */
-    private $result = [];
+    private array $result = [];
 
     public function __construct()
     {

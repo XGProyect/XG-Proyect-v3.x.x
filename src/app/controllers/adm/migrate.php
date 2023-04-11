@@ -1,62 +1,22 @@
 <?php
-/**
- * Migrate Controller
- *
- * @category Controller
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
- */
 
-namespace App\controllers\adm;
+namespace App\Controllers\Adm;
 
-use App\core\BaseController;
-use App\core\Database;
-use App\libraries\adm\AdministrationLib as Administration;
+use App\Core\BaseController;
+use App\Core\Database;
+use App\Libraries\Adm\AdministrationLib as Administration;
 
-/**
- * Migrate Class
- */
 class Migrate extends BaseController
 {
-    /**
-     * @var mixed
-     */
     private $dbObject;
-    /**
-     * @var mixed
-     */
     private $host;
-    /**
-     * @var mixed
-     */
     private $dbuser;
-    /**
-     * @var mixed
-     */
     private $password;
-    /**
-     * @var mixed
-     */
     private $name;
-    /**
-     * @var mixed
-     */
     private $prefix;
-    /**
-     * @var mixed
-     */
     private $version;
-    /**
-     * @var mixed
-     */
     private $demo;
-    /**
-     * @var array
-     */
-    private $output = [];
+    private array $output = [];
 
     public function __construct()
     {

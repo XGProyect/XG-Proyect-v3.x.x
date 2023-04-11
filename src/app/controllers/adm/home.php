@@ -2,28 +2,14 @@
 
 declare(strict_types=1);
 
-/**
- * Home Controller
- *
- * @category Controller
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
- */
+namespace App\Controllers\Adm;
 
-namespace App\controllers\adm;
-
-use App\core\BaseController;
-use App\libraries\adm\AdministrationLib as Administration;
-use App\libraries\FormatLib as Format;
-use App\libraries\Functions;
+use App\Core\BaseController;
+use App\Libraries\Adm\AdministrationLib as Administration;
+use App\Libraries\FormatLib as Format;
+use App\Libraries\Functions;
 use JsonException;
 
-/**
- * Home Class
- */
 class Home extends BaseController
 {
     protected $homeModel;

@@ -1,52 +1,15 @@
 <?php
-/**
- * Buddy
- *
- * @category Library
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
 
-namespace App\libraries\buddies;
+namespace App\Libraries\Buddies;
 
-use App\core\entities\BuddyEntity;
-use App\core\enumerators\BuddiesStatusEnumerator as BuddiesStatus;
+use App\Core\Entity\BuddyEntity;
+use App\Core\Enumerators\BuddiesStatusEnumerator as BuddiesStatus;
 
-/**
- * Buddy Class
- *
- * @category Classes
- * @package  buddy
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
 class Buddy
 {
-    /**
-     *
-     * @var array
-     */
-    private $_buddies = [];
+    private array $_buddies = [];
+    private int $_current_user_id = 0;
 
-    /**
-     *
-     * @var int
-     */
-    private $_current_user_id = 0;
-
-    /**
-     * Constructor
-     *
-     * @param array $buddies         Buddies
-     * @param int   $current_user_id Current User ID
-     *
-     * @return void
-     */
     public function __construct($buddies, $current_user_id)
     {
         if (is_array($buddies)) {

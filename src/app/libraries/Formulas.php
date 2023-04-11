@@ -1,21 +1,10 @@
 <?php
-/**
- * Formulas.php
- *
- * @author   XG Proyect Team
- * @license  https://www.xgproyect.org XG Proyect
- * @link     https://www.xgproyect.org
- * @version  3.2.0
- */
 
-namespace App\libraries;
+namespace App\Libraries;
 
-use App\core\enumerators\BuildingsEnumerator as Buildings;
-use App\libraries\Functions;
+use App\Core\Enumerators\BuildingsEnumerator as Buildings;
+use App\Libraries\Functions;
 
-/**
- * Formulas Class
- */
 abstract class Formulas
 {
     /**

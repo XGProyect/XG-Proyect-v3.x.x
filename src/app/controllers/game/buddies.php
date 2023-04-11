@@ -1,14 +1,14 @@
 <?php
 
-namespace App\controllers\game;
+namespace App\Controllers\Game;
 
-use App\core\BaseController;
-use App\core\entities\BuddyEntity;
-use App\core\enumerators\BuddiesStatusEnumerator as BuddiesStatus;
-use App\libraries\buddies\Buddy;
-use App\libraries\Functions;
-use App\libraries\TimingLibrary as Timing;
-use App\libraries\Users;
+use App\Core\BaseController;
+use App\Core\Entity\BuddyEntity;
+use App\Core\Enumerators\BuddiesStatusEnumerator as BuddiesStatus;
+use App\Libraries\Buddies\Buddy;
+use App\Libraries\Functions;
+use App\Libraries\TimingLibrary as Timing;
+use App\Libraries\Users;
 use Exception;
 
 class Buddies extends BaseController

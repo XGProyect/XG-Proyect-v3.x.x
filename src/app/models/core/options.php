@@ -2,24 +2,10 @@
 
 declare(strict_types=1);
 
-/**
- * Options Model
- *
- * @category Model
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
+namespace App\Models\Core;
 
-namespace App\models\core;
+use App\Core\Model;
 
-use App\core\Model;
-
-/**
- * Options Class
- */
 class Options extends Model
 {
     /**

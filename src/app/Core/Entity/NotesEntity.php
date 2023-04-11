@@ -1,36 +1,11 @@
 <?php
-/**
- * Notes entity
- *
- * @category Core
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
 
-namespace App\core\entities;
+namespace App\Core\Entity;
 
-use App\core\Entity;
+use App\Core\Entity;
 
-/**
- * NotesEntity Class
- *
- * @category Entity
- * @package  Core
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
 class NotesEntity extends Entity
 {
-    /**
-     * Constructor
-     *
-     * @param array $data
-     */
     public function __construct($data)
     {
         parent::__construct($data);

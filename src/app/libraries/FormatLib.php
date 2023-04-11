@@ -1,22 +1,11 @@
 <?php
-/**
- * FormatLib.php
- *
- * @author   XG Proyect Team
- * @license  https://www.xgproyect.org XG Proyect
- * @link     https://www.xgproyect.org
- * @version  3.2.0
- */
 
-namespace App\libraries;
+namespace App\Libraries;
 
-use App\core\enumerators\ImportanceEnumerator as Importance;
-use App\helpers\UrlHelper;
+use App\Core\Enumerators\ImportanceEnumerator as Importance;
+use App\Helpers\UrlHelper;
 use DateTime;
 
-/**
- * FormatLib class
- */
 class FormatLib
 {
     /**

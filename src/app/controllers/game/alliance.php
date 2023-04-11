@@ -1,61 +1,30 @@
 <?php
-/**
- * alliance.php
- *
- * @author   XG Proyect Team
- * @license  https://www.xgproyect.org XG Proyect
- * @link     https://www.xgproyect.org
- * @since    3.2.0
- */
 
-namespace App\controllers\game;
+namespace App\Controllers\Game;
 
-use App\core\BaseController;
-use App\core\enumerators\AllianceRanksEnumerator as AllianceRanks;
-use App\core\enumerators\SwitchIntEnumerator as SwitchInt;
-use App\helpers\StringsHelper;
-use App\helpers\UrlHelper;
-use App\libraries\alliance\Alliances;
-use App\libraries\FormatLib;
-use App\libraries\Functions;
-use App\libraries\TimingLibrary as Timing;
-use App\libraries\Users;
+use App\Core\BaseController;
+use App\Core\Enumerators\AllianceRanksEnumerator as AllianceRanks;
+use App\Core\Enumerators\SwitchIntEnumerator as SwitchInt;
+use App\Helpers\StringsHelper;
+use App\Helpers\UrlHelper;
+use App\Libraries\Alliance\Alliances;
+use App\Libraries\BBCodeLib;
+use App\Libraries\FormatLib;
+use App\Libraries\Functions;
+use App\Libraries\TimingLibrary as Timing;
+use App\Libraries\Users;
 
-/**
- * Alliance Class
- */
 class Alliance extends BaseController
 {
-    /**
-     * The module ID
-     *
-     * @var int
-     */
     public const MODULE_ID = 13;
 
-    /**
-     * Default alliance ranks
-     *
-     * @var array
-     */
     public const DEFAULT_RANKS = [
         'founder' => 0,
         'newcomer' => 1,
     ];
 
-    /**
-     * Contains a BBCodeLib object
-     *
-     * @var \BBCodeLib
-     */
-    private $bbcode = null;
-
-    /**
-     * Contains an Alliance object
-     *
-     * @var \Alliance
-     */
-    private $alliance = null;
+    private ?BBCodeLib $bbcode = null;
+    private ?Alliances $alliance = null;
     protected $allianceModel;
 
     public function __construct()

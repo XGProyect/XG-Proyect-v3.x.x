@@ -1,32 +1,21 @@
 <?php
-/**
- * infos.php
- *
- * @author   XG Proyect Team
- * @license  https://www.xgproyect.org XG Proyect
- * @link     https://www.xgproyect.org
- * @version  3.2.0
- */
 
-namespace App\controllers\game;
+namespace App\Controllers\Game;
 
-use App\core\BaseController;
-use App\core\enumerators\BuildingsEnumerator as Buildings;
-use App\core\enumerators\ResearchEnumerator as Research;
-use App\helpers\StringsHelper;
-use App\helpers\UrlHelper;
-use App\libraries\DevelopmentsLib;
-use App\libraries\FleetsLib;
-use App\libraries\FormatLib;
-use App\libraries\Formulas;
-use App\libraries\Functions;
-use App\libraries\OfficiersLib;
-use App\libraries\ProductionLib;
-use App\libraries\Users;
+use App\Core\BaseController;
+use App\Core\Enumerators\BuildingsEnumerator as Buildings;
+use App\Core\Enumerators\ResearchEnumerator as Research;
+use App\Helpers\StringsHelper;
+use App\Helpers\UrlHelper;
+use App\Libraries\DevelopmentsLib;
+use App\Libraries\FleetsLib;
+use App\Libraries\FormatLib;
+use App\Libraries\Formulas;
+use App\Libraries\Functions;
+use App\Libraries\OfficiersLib;
+use App\Libraries\ProductionLib;
+use App\Libraries\Users;
 
-/**
- * Infos Class
- */
 class Infos extends BaseController
 {
     public const MODULE_ID = 24;
@@ -36,7 +25,7 @@ class Infos extends BaseController
     private $_pricelist;
     private $_combat_caps;
     private $_prod_grid;
-    protected $infosModel
+    protected $infosModel;
 
     public function __construct()
     {

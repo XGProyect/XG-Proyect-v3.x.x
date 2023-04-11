@@ -1,14 +1,11 @@
 <?php
 
-namespace App\libraries;
+namespace App\Libraries;
 
-use App\helpers\StringsHelper;
-use App\libraries\FormatLib as Format;
-use App\libraries\TimingLibrary as Timing;
+use App\Helpers\StringsHelper;
+use App\Libraries\FormatLib as Format;
+use App\Libraries\TimingLibrary as Timing;
 
-/**
- * OfficiersLib Class
- */
 class OfficiersLib
 {
     /**

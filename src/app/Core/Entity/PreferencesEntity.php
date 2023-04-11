@@ -2,40 +2,12 @@
 
 declare(strict_types=1);
 
-/**
- * Preferences entity
- *
- * @category Core
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
+namespace App\Core\Entity;
 
-namespace App\core\entities;
+use App\Core\Entity;
 
-use App\core\Entity;
-
-/**
- * PreferencesEntity Class
- *
- * @category Entity
- * @package  Core
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
 class PreferencesEntity extends Entity
 {
-    /**
-     * Constructor
-     *
-     * @param array $data Data
-     *
-     * @return void
-     */
     public function __construct($data)
     {
         parent::__construct($data);

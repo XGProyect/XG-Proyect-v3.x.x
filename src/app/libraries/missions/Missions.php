@@ -1,31 +1,12 @@
 <?php
-/**
- * XG Proyect
- *
- * Open-source OGame Clon
- *
- * This content is released under the GPL-3.0 License
- *
- * Copyright (c) 2008-2020 XG Proyect
- *
- * @package    XG Proyect
- * @author     XG Proyect Team
- * @copyright  2008-2020 XG Proyect
- * @license    https://www.gnu.org/licenses/gpl-3.0.en.html GPL-3.0 License
- * @link       https://github.com/XGProyect/
- * @since      3.0.0
- */
 
-namespace App\libraries\missions;
+namespace App\Libraries\Missions;
 
-use App\core\XGPCore;
-use App\libraries\FleetsLib;
-use App\libraries\Functions;
-use App\libraries\UpdatesLibrary;
+use App\Core\XGPCore;
+use App\Libraries\FleetsLib;
+use App\Libraries\Functions;
+use App\Libraries\UpdatesLibrary;
 
-/**
- * Missions Class
- */
 class Missions extends XGPCore
 {
     /**

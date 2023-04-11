@@ -1,11 +1,11 @@
 <?php
 
-namespace App\controllers\game;
+namespace App\Controllers\Game;
 
-use App\core\BaseController;
-use App\libraries\Functions;
-use App\libraries\Users;
-use App\libraries\users\Shortcuts;
+use App\Core\BaseController;
+use App\Libraries\Functions;
+use App\Libraries\Users;
+use App\Libraries\Users\Shortcuts;
 
 class Fleetshortcuts extends BaseController
 {

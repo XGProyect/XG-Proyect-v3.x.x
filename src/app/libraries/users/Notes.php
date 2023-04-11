@@ -1,8 +1,8 @@
 <?php
 
-namespace App\libraries\users;
+namespace App\Libraries\Users;
 
-use App\core\entities\NotesEntity;
+use App\Core\Entity\NotesEntity;
 
 class Notes
 {

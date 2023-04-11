@@ -10,7 +10,7 @@
  * @version  3.1.0
  */
 
-use App\core\Common;
+use App\Core\Common;
 
 define('IN_LOGIN', true);
 define('XGP_ROOT', realpath(dirname(__DIR__)) . DIRECTORY_SEPARATOR);
@@ -26,7 +26,7 @@ if (isset($_GET['content'])) {
     if (file_exists($file_name)) {
         include $file_name;
 
-        $class_name = 'App\controllers\ajax\\' . ucfirst($_GET['content']);
+        $class_name = 'App\Controllers\Ajax\\' . ucfirst($_GET['content']);
 
         (new $class_name())->index();
     }

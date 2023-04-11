@@ -1,29 +1,10 @@
 <?php
-/**
- * XG Proyect
- *
- * Open-source OGame Clon
- *
- * This content is released under the GPL-3.0 License
- *
- * Copyright (c) 2008-2020 XG Proyect
- *
- * @package    XG Proyect
- * @author     XG Proyect Team
- * @copyright  2008-2020 XG Proyect
- * @license    https://www.gnu.org/licenses/gpl-3.0.en.html GPL-3.0 License
- * @link       https://github.com/XGProyect/
- * @since      3.0.0
- */
 
-namespace App\core;
+namespace App\Core;
 
-use CI_Lang;
+use CiLang;
 use Exception;
 
-/**
- * XGPCore Class
- */
 abstract class XGPCore
 {
     /**
@@ -82,7 +63,7 @@ abstract class XGPCore
             // use CI library
             require_once $ci_lang_path;
 
-            $this->langs = new CI_Lang();
+            $this->langs = new CiLang();
             $this->langs->load($language_file, DEFAULT_LANG);
         } catch (Exception $e) {
             die('Fatal error: ' . $e->getMessage());

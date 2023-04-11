@@ -2,34 +2,12 @@
 
 declare(strict_types=1);
 
-/**
- * Galaxy Model
- *
- * @category Model
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
+namespace App\Models\Game;
 
-namespace App\models\game;
+use App\Core\Model;
 
-use App\core\Model;
-
-/**
- * Galaxy Class
- */
 class Galaxy extends Model
 {
-    /**
-     * Get galaxy data by galaxy and system
-     *
-     * @param integer $galaxy
-     * @param integer $system
-     * @param integer $user_id
-     * @return array
-     */
     public function getGalaxyDataByGalaxyAndSystem(int $galaxy, int $system, int $user_id): array
     {
         return $this->db->queryFetchAll(
@@ -120,12 +98,6 @@ class Galaxy extends Model
         );
     }
 
-    /**
-     * Get amount of fleets that the user has
-     *
-     * @param integer $user_id
-     * @return array
-     */
     public function countAmountFleetsByUserId(int $user_id): int
     {
         return (int) $this->db->queryFetch(
@@ -136,15 +108,6 @@ class Galaxy extends Model
         )['total_fleets'];
     }
 
-    /**
-     * Get target user data by coords
-     *
-     * @param integer $galaxy
-     * @param integer $system
-     * @param integer $planet
-     * @param integer $planet_type
-     * @return array|null
-     */
     public function getTargetUserDataByCoords(int $galaxy, int $system, int $planet, int $planet_type = 1): ?array
     {
         return $this->db->queryFetch(
@@ -168,14 +131,6 @@ class Galaxy extends Model
         );
     }
 
-    /**
-     * Get planet debris by coordinates
-     *
-     * @param integer $galaxy
-     * @param integer $system
-     * @param integer $planet
-     * @return array|null
-     */
     public function getPlanetDebrisByCoords(int $galaxy, int $system, int $planet): ?array
     {
         return $this->db->queryFetch(

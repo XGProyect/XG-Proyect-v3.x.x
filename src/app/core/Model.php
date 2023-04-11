@@ -2,32 +2,13 @@
 
 declare(strict_types=1);
 
-/**
- * Model
- *
- * @category Core
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
+namespace App\Core;
 
-namespace App\core;
+use App\Core\Database;
 
-use App\core\Database;
-
-/**
- * Model Class
- */
 abstract class Model
 {
-    /**
-     * Contains the Database instance
-     *
-     * @var Database
-     */
-    protected $db;
+    protected Database $db;
 
     public function __construct()
     {

@@ -9,9 +9,9 @@
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-use App\core\common;
-use App\libraries\adm\AdministrationLib;
-use App\libraries\Functions;
+use App\Core\common;
+use App\Libraries\Adm\AdministrationLib;
+use App\Libraries\Functions;
 
 define('IN_ADMIN', true);
 define('XGP_ROOT', realpath(dirname(__DIR__)) . DIRECTORY_SEPARATOR);
@@ -41,7 +41,7 @@ if ($page == 'logout') {
 if (file_exists($file_name)) {
     include $file_name;
 
-    $class_name = 'App\controllers\adm\\' . ucfirst($page);
+    $class_name = 'App\Controllers\Adm\\' . ucfirst($page);
 
     (new $class_name())->index();
 } else {

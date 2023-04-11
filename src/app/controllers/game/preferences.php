@@ -2,35 +2,21 @@
 
 declare(strict_types=1);
 
-/**
- * Preferences Controller
- *
- * @category Controller
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
+namespace App\Controllers\Game;
 
-namespace App\controllers\game;
+use App\Core\BaseController;
+use App\Core\Enumerators\PreferencesEnumerator as PrefEnum;
+use App\Libraries\FormatLib as Format;
+use App\Libraries\Functions;
+use App\Libraries\Game\Preferences as Pref;
+use App\Libraries\TimingLibrary as Timing;
+use App\Libraries\Users;
 
-use App\core\BaseController;
-use App\core\enumerators\PreferencesEnumerator as PrefEnum;
-use App\libraries\FormatLib as Format;
-use App\libraries\Functions;
-use App\libraries\game\Preferences as Pref;
-use App\libraries\TimingLibrary as Timing;
-use App\libraries\Users;
-
-/**
- * Preferences Class
- */
 class Preferences extends BaseController
 {
     public const MODULE_ID = 21;
 
-    private ?Preferences $preferences = null;
+    private ?Pref $preferences = null;
     private array $fields_to_update = [];
     private string $error = '';
     private bool $post = false;

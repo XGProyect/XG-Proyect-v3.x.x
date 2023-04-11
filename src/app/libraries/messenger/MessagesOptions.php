@@ -1,30 +1,10 @@
 <?php
-/**
- * Messenger Library
- *
- * @category Library
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.4
- */
 
-namespace App\libraries\messenger;
+namespace App\Libraries\Messenger;
 
-use App\core\enumerators\MessagesEnumerator;
-use App\helpers\StringsHelper;
+use App\Core\Enumerators\MessagesEnumerator;
+use App\Helpers\StringsHelper;
 
-/**
- * MessagesOptions Class
- *
- * @category Class
- * @package  Libraries
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.4
- */
 final class MessagesOptions
 {
     /**

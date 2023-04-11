@@ -1,8 +1,8 @@
 <?php
 
-namespace App\core;
+namespace App\Core;
 
-use App\libraries\Functions;
+use App\Libraries\Functions;
 
 class Options
 {

@@ -1,22 +1,18 @@
 <?php
 
-namespace App\libraries;
+namespace App\Libraries;
 
-use App\libraries\Functions;
+use App\Libraries\Functions;
+use App\Models\Libraries\MissionControlLib as MissionControlLibModel;
 
-class MissionControlLibrary
+class MissionControlLib
 {
-    private ?MissionControlLibrary $missionControlLibraryModel = null;
+    private ?MissionControlLibModel $missionControlLibModel = null;
 
-    /**
-     * __construct
-     *
-     * @return void
-     */
     public function __construct()
     {
         // load the required model
-        $this->missionControlLibraryModel = Functions::model('libraries/MissionControlLibrary');
+        $this->missionControlLibModel = Functions::model('libraries/MissionControlLib');
     }
 
     /**
@@ -27,7 +23,7 @@ class MissionControlLibrary
     public function arrivingFleets()
     {
         $this->processMissions(
-            $this->missionControlLibraryModel->getArrivingFleets()
+            $this->missionControlLibModel->getArrivingFleets()
         );
     }
 
@@ -39,7 +35,7 @@ class MissionControlLibrary
     public function returningFleets()
     {
         $this->processMissions(
-            $this->missionControlLibraryModel->getReturningFleets()
+            $this->missionControlLibModel->getReturningFleets()
         );
     }
 
@@ -76,7 +72,7 @@ class MissionControlLibrary
         foreach ($all_fleets as $fleet) {
             $name = $missions[$fleet['fleet_mission']];
             $mission_name = $name . 'Mission';
-            $class_name = '\App\libraries\missions\\' . $name;
+            $class_name = '\App\Libraries\Missions\\' . $name;
 
             $mission = new $class_name();
             $mission->$mission_name($fleet);

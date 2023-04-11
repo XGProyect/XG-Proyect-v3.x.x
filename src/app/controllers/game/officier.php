@@ -1,20 +1,19 @@
 <?php
 
-namespace App\controllers\game;
+namespace App\Controllers\Game;
 
-use App\core\BaseController;
-use App\core\enumerators\OfficiersEnumerator as OE;
-use App\libraries\FormatLib;
-use App\libraries\Functions;
-use App\libraries\OfficiersLib;
-use App\libraries\Users;
-use DPATH;
+use App\Core\BaseController;
+use App\Core\Enumerators\OfficiersEnumerator as OE;
+use App\Libraries\FormatLib;
+use App\Libraries\Functions;
+use App\Libraries\OfficiersLib;
+use App\Libraries\Users;
 
 class Officier extends BaseController
 {
     public const MODULE_ID = 15;
 
-    protected $notesModel;
+    protected $officierModel;
 
     public function __construct()
     {

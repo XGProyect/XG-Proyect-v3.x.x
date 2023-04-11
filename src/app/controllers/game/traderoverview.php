@@ -1,10 +1,10 @@
 <?php
 
-namespace App\controllers\game;
+namespace App\Controllers\Game;
 
-use App\core\BaseController;
-use App\libraries\Functions;
-use App\libraries\Users;
+use App\Core\BaseController;
+use App\Libraries\Functions;
+use App\Libraries\Users;
 
 class TraderOverview extends BaseController
 {

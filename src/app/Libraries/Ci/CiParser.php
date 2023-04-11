@@ -46,7 +46,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
  * @author		EllisLab Dev Team
  * @link		https://codeigniter.com/user_guide/libraries/parser.html
  */
-class CI_Parser
+class CiParser
 {
     /**
      * Left delimiter character for pseudo vars

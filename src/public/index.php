@@ -10,7 +10,7 @@
  * @version  3.1.0
  */
 
-use App\core\Common;
+use App\Core\Common;
 
 define('IN_LOGIN', true);
 define('XGP_ROOT', realpath(dirname(__DIR__)) . DIRECTORY_SEPARATOR);
@@ -31,7 +31,7 @@ $file_name = XGP_ROOT . HOME_PATH . $page . '.php';
 if (file_exists($file_name)) {
     include $file_name;
 
-    $class_name = 'App\controllers\home\\' . ucfirst($page);
+    $class_name = 'App\Controllers\Home\\' . ucfirst($page);
 
     (new $class_name())->index();
 }

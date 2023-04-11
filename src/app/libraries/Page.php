@@ -1,24 +1,25 @@
 <?php
 
-namespace App\libraries;
+namespace App\Libraries;
 
-use App\core\Database;
-use App\core\enumerators\PlanetTypesEnumerator;
-use App\core\Language;
-use App\core\Objects;
-use App\core\Template;
-use App\helpers\UrlHelper;
-use App\libraries\FormatLib;
-use App\libraries\Functions;
-use App\libraries\OfficiersLib;
-use App\libraries\ProductionLib as Production;
-use App\libraries\TimingLibrary as Timing;
+use App\Core\Database;
+use App\Core\Enumerators\PlanetTypesEnumerator;
+use App\Core\Language;
+use App\Core\Objects;
+use App\Core\Template;
+use App\Helpers\UrlHelper;
+use App\Libraries\FormatLib;
+use App\Libraries\Functions;
+use App\Libraries\OfficiersLib;
+use App\Libraries\ProductionLib as Production;
+use App\Libraries\TimingLibrary as Timing;
+use CiLang;
 
 class Page
 {
-    private array $current_user;
-    private array $current_planet;
-    private array $current_year;
+    private ?array $current_user;
+    private ?array $current_planet;
+    private string $current_year;
     private Template $template;
     private Language $langs;
     private Objects $objects;
@@ -701,7 +702,7 @@ class Page
      * @param array $lang
      * @return array
      */
-    private function buildOfficersBlock(\CI_Lang $lang): array
+    private function buildOfficersBlock(CiLang $lang): array
     {
         $objects = $this->objects->getObjects();
         $officers = $this->objects->getObjectsList('officier');

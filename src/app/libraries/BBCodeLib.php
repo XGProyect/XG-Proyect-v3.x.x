@@ -1,29 +1,9 @@
 <?php
-/**
- * BBCode Library
- *
- * @category Library
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
- */
 
-namespace App\libraries;
+namespace App\Libraries;
 
-use App\helpers\UrlHelper;
+use App\Helpers\UrlHelper;
 
-/**
- * BBCodeLib Class
- *
- * @category Classes
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
- */
 class BBCodeLib
 {
     /**

@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\controllers\adm;
+namespace App\Controllers\Adm;
 
-use App\core\BaseController;
-use App\core\enumerators\MessagesEnumerator;
-use App\libraries\adm\AdministrationLib as Administration;
-use App\libraries\TimingLibrary as Timing;
+use App\Core\BaseController;
+use App\Core\Enumerators\MessagesEnumerator;
+use App\Libraries\Adm\AdministrationLib as Administration;
+use App\Libraries\TimingLibrary as Timing;
 
 class Messages extends BaseController
 {

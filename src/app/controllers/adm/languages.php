@@ -2,35 +2,15 @@
 
 declare(strict_types=1);
 
-/**
- * Languages Controller
- *
- * @category Controller
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
+namespace App\Controllers\Adm;
 
-namespace App\controllers\adm;
+use App\Core\BaseController;
+use App\Libraries\Adm\AdministrationLib as Administration;
 
-use App\core\BaseController;
-use App\libraries\adm\AdministrationLib as Administration;
-
-/**
- * Languages Class
- */
 class Languages extends BaseController
 {
     private string $alert = '';
-
-    /**
-     * Contains the current file
-     *
-     * @var string
-     */
-    private $current_file = '';
+    private string $current_file = '';
 
     public function __construct()
     {
@@ -57,11 +37,6 @@ class Languages extends BaseController
         $this->buildPage();
     }
 
-    /**
-     * Run an action
-     *
-     * @return void
-     */
     private function runAction(): void
     {
         $action = filter_input_array(INPUT_POST);
@@ -77,23 +52,11 @@ class Languages extends BaseController
         }
     }
 
-    /**
-     * Set the file that we are going to modify
-     *
-     * @param string $file
-     * @return void
-     */
     private function doFileAction(string $file): void
     {
         $this->current_file = $file;
     }
 
-    /**
-     * Save the file contents
-     *
-     * @param string $file_data
-     * @return void
-     */
     private function doSaveAction(string $file_data): void
     {
         // get the file
@@ -129,13 +92,14 @@ class Languages extends BaseController
         );
     }
 
-    /**
-     * Get the language file contents
-     *
-     * @return array
-     */
     private function getContents(): array
     {
+        if (empty($this->current_file)) {
+            return [
+                'contents' => $contents ?? '',
+            ];
+        }
+
         $file = XGP_ROOT . LANG_PATH . DIRECTORY_SEPARATOR . $this->current_file;
 
         // open the file
@@ -159,11 +123,6 @@ class Languages extends BaseController
         ];
     }
 
-    /**
-     * Get the list of language files
-     *
-     * @return void
-     */
     private function getFiles(): array
     {
         chdir(XGP_ROOT . LANG_PATH);

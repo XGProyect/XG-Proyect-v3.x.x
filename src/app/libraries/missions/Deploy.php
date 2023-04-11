@@ -2,28 +2,14 @@
 
 declare(strict_types=1);
 
-/**
- * Deploy Library
- *
- * @category Library
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
- */
+namespace App\Libraries\Missions;
 
-namespace App\libraries\missions;
+use App\Helpers\StringsHelper;
+use App\Libraries\FleetsLib as Fleets;
+use App\Libraries\FormatLib as Format;
+use App\Libraries\Functions;
+use App\Libraries\Missions\Missions;
 
-use App\helpers\StringsHelper;
-use App\libraries\FleetsLib as Fleets;
-use App\libraries\FormatLib as Format;
-use App\libraries\Functions;
-use App\libraries\missions\Missions;
-
-/**
- * Deploy Class
- */
 class Deploy extends Missions
 {
     public function __construct()

@@ -1,29 +1,11 @@
 <?php
-/**
- * Announcement Model
- *
- * @category Model
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
 
-namespace App\models\adm;
+namespace App\Models\Adm;
 
-use App\core\Model;
+use App\Core\Model;
 
-/**
- * Announcement Class
- */
 class Announcement extends Model
 {
-    /**
-     * Get all server users
-     *
-     * @return array
-     */
     public function getAllPlayers(): array
     {
         return $this->db->queryFetchAll(

@@ -1,40 +1,21 @@
 <?php
-/**
- * XG Proyect
- *
- * Open-source OGame Clon
- *
- * This content is released under the GPL-3.0 License
- *
- * Copyright (c) 2008-2020 XG Proyect
- *
- * @package    XG Proyect
- * @author     XG Proyect Team
- * @copyright  2008-2020 XG Proyect
- * @license    https://www.gnu.org/licenses/gpl-3.0.en.html GPL-3.0 License
- * @link       https://github.com/XGProyect/
- * @since      3.0.0
- */
 
-namespace App\libraries;
+namespace App\Libraries;
 
-use App\core\Database;
-use App\core\enumerators\MessagesEnumerator;
-use App\core\Language;
-use App\core\Options;
-use App\core\Template;
-use App\helpers\StringsHelper;
-use App\libraries\messenger\MessagesFormat;
-use App\libraries\messenger\MessagesOptions;
-use App\libraries\messenger\Messenger;
-use App\libraries\Page;
-use App\libraries\Users;
+use App\Core\Database;
+use App\Core\Enumerators\MessagesEnumerator;
+use App\Core\Language;
+use App\Core\Options;
+use App\Core\Template;
+use App\Helpers\StringsHelper;
+use App\Libraries\Messenger\MessagesFormat;
+use App\Libraries\Messenger\MessagesOptions;
+use App\Libraries\Messenger\Messenger;
+use App\Libraries\Page;
+use App\Libraries\Users;
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
 
-/**
- * Functions Class
- */
 abstract class Functions
 {
     /**
@@ -60,7 +41,7 @@ abstract class Functions
             // Require file
             require_once XGP_ROOT . LIB_PATH . $library . '.php';
 
-            $class_name = 'App\libraries\\' . $library;
+            $class_name = 'App\Libraries\\' . $library;
 
             // Create new $library object
             return new $class_name();

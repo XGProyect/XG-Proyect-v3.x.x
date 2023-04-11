@@ -1,32 +1,12 @@
 <?php
-/**
- * Building
- *
- * @category Library
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
 
-namespace App\libraries\buildings;
+namespace App\Libraries\Buildings;
 
-use App\libraries\buildings\Queue;
-use App\libraries\buildings\QueueElements;
-use App\libraries\DevelopmentsLib;
-use App\libraries\OfficiersLib;
+use App\Libraries\Buildings\Queue;
+use App\Libraries\Buildings\QueueElements;
+use App\Libraries\DevelopmentsLib;
+use App\Libraries\OfficiersLib;
 
-/**
- * Buildings Class
- *
- * @category Classes
- * @package  building
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
 class Building
 {
     /**

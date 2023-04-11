@@ -2,25 +2,11 @@
 
 declare(strict_types=1);
 
-/**
- * NoobsProtectionLib Model
- *
- * @category Model
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
+namespace App\Models\Libraries;
 
-namespace App\models\libraries;
+use App\Core\Model;
+use App\Libraries\Functions;
 
-use App\core\Model;
-use App\libraries\Functions;
-
-/**
- * NoobsProtectionLib Class
- */
 class NoobsProtectionLib extends Model
 {
     /**

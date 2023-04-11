@@ -1,18 +1,8 @@
 <?php
-/**
- * Login Model
- *
- * @category Model
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
 
-namespace App\models\adm;
+namespace App\Models\Adm;
 
-use App\core\Model;
+use App\Core\Model;
 
 class Login extends Model
 {

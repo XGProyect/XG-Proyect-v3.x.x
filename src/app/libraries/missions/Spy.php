@@ -1,29 +1,15 @@
 <?php
 
-/**
- * Spy Library
- *
- * @category Library
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
- */
+namespace App\Libraries\Missions;
 
-namespace App\libraries\missions;
+use App\Core\Enumerators\MissionsEnumerator;
+use App\Helpers\StringsHelper;
+use App\Libraries\FleetsLib;
+use App\Libraries\FormatLib;
+use App\Libraries\Functions;
+use App\Libraries\Missions\Missions;
+use App\Libraries\OfficiersLib;
 
-use App\core\enumerators\MissionsEnumerator;
-use App\helpers\StringsHelper;
-use App\libraries\FleetsLib;
-use App\libraries\FormatLib;
-use App\libraries\Functions;
-use App\libraries\missions\Missions;
-use App\libraries\OfficiersLib;
-
-/**
- * Spy Class
- */
 class Spy extends Missions
 {
     public function __construct()

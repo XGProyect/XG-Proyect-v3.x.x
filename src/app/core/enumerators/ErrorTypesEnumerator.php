@@ -1,21 +1,9 @@
 <?php
 
-/**
- * Error types enumerator
- *
- * @category Library
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
+declare(strict_types=1);
 
-namespace App\core\enumerators;
+namespace App\Core\Enumerators;
 
-/**
- * ErrorTypesEnumerator class
- */
 abstract class ErrorTypesEnumerator
 {
     public const PHP_ERRORS = [

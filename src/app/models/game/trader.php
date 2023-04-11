@@ -1,34 +1,11 @@
 <?php
-/**
- * Trader Model
- *
- * @category Model
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
 
-namespace App\models\game;
+namespace App\Models\Game;
 
-use App\core\Model;
+use App\Core\Model;
 
-/**
- * Trader Class
- */
 class Trader extends Model
 {
-    /**
-     * Refill planet storage and discount the needed dark matter
-     *
-     * @param integer $dark_matter
-     * @param string $resource
-     * @param float $amount
-     * @param integer $user_id
-     * @param integer $planet_id
-     * @return void
-     */
     public function refillStorage(int $dark_matter, string $resource, float $amount, int $user_id, int $planet_id): void
     {
         $this->db->query(

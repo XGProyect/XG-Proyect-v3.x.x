@@ -1,33 +1,20 @@
 <?php
-/**
- * Buildings Controller
- *
- * @category Controller
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
 
-namespace App\controllers\game;
+namespace App\Controllers\Game;
 
-use App\core\BaseController;
-use App\core\enumerators\BuildingsEnumerator;
-use App\helpers\UrlHelper;
-use App\libraries\buildings\Building;
-use App\libraries\DevelopmentsLib as Developments;
-use App\libraries\FormatLib;
-use App\libraries\Functions;
-use App\libraries\OfficiersLib;
-use App\libraries\TimingLibrary as Timing;
-use App\libraries\UpdatesLibrary;
-use App\libraries\Users;
+use App\Core\BaseController;
+use App\Core\Enumerators\BuildingsEnumerator;
+use App\Helpers\UrlHelper;
+use App\Libraries\Buildings\Building;
+use App\Libraries\DevelopmentsLib as Developments;
+use App\Libraries\FormatLib;
+use App\Libraries\Functions;
+use App\Libraries\OfficiersLib;
+use App\Libraries\TimingLibrary as Timing;
+use App\Libraries\UpdatesLibrary;
+use App\Libraries\Users;
 use Exception;
 
-/**
- * Buildings Class
- */
 class Buildings extends BaseController
 {
     public const MODULE_ID = 3;

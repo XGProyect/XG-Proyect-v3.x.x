@@ -1,25 +1,12 @@
 <?php
-/**
- * Colonize Library
- *
- * @category Library
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
- */
 
-namespace App\libraries\missions;
+namespace App\Libraries\Missions;
 
-use App\libraries\FleetsLib;
-use App\libraries\Functions;
-use App\libraries\PlanetLib;
-use App\libraries\StatisticsLibrary;
+use App\Libraries\FleetsLib;
+use App\Libraries\Functions;
+use App\Libraries\PlanetLib;
+use App\Libraries\StatisticsLibrary;
 
-/**
- * Colonize Class
- */
 class Colonize extends Missions
 {
     public function __construct()

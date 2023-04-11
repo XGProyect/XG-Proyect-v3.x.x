@@ -1,22 +1,9 @@
 <?php
-/**
- * Changelog Model
- *
- * @category Model
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.4
- */
 
-namespace App\models\game;
+namespace App\Models\Game;
 
-use App\core\Model;
+use App\Core\Model;
 
-/**
- * Changelog Class
- */
 class Changelog extends Model
 {
     /**

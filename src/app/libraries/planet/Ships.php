@@ -1,44 +1,13 @@
 <?php
-/**
- * Ships
- *
- * @category Library
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
 
-namespace App\libraries\planet;
+namespace App\Libraries\Planet;
 
-use App\core\entities\ShipsEntity;
+use App\Core\Entity\ShipsEntity;
 
-/**
- * Ships Class
- *
- * @category Classes
- * @package  alliance
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
 class Ships
 {
-    /**
-     *
-     * @var array
-     */
-    private $_ships = [];
+    private array $_ships = [];
 
-    /**
-     * Constructor
-     *
-     * @param array $planet_data Planet Data
-     *
-     * @return void
-     */
     public function __construct($planet_data)
     {
         if (is_array($planet_data)) {

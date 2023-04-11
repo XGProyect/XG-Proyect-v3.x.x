@@ -2,21 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\core;
+namespace App\Core;
 
-use App\libraries\DebugLib as Debug;
+use App\Libraries\DebugLib as Debug;
 
-/**
- * Error Handler Class
- */
 final class ErrorHandler
 {
-    /**
-     * Contains a DebugLib object
-     *
-     * @var \DebugLib
-     */
-    private $debug;
+    private Debug $debug;
 
     public function __construct()
     {

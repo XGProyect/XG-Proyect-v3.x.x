@@ -1,52 +1,15 @@
 <?php
-/**
- * Report
- *
- * @category Library
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
 
-namespace App\libraries\combatreport;
+namespace App\Libraries\Combatreport;
 
-use App\core\entities\ReportEntity;
-use App\libraries\enumerators\ReportStatusEnumerator as ReportStatus;
+use App\Core\Entity\ReportEntity;
+use App\Libraries\enumerators\ReportStatusEnumerator as ReportStatus;
 
-/**
- * Report Class
- *
- * @category Classes
- * @package  combatreport
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
 class Report
 {
-    /**
-     *
-     * @var array
-     */
-    private $_reports = [];
+    private array $_reports = [];
+    private int $_current_user_id = 0;
 
-    /**
-     *
-     * @var int
-     */
-    private $_current_user_id = 0;
-
-    /**
-     * Constructor
-     *
-     * @param array $reports         Reports
-     * @param int   $current_user_id Current User ID
-     *
-     * @return void
-     */
     public function __construct($reports, $current_user_id)
     {
         if (is_array($reports)) {

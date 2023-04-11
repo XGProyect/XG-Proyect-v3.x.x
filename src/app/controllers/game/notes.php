@@ -1,21 +1,21 @@
 <?php
 
-namespace App\controllers\game;
+namespace App\Controllers\Game;
 
-use App\core\BaseController;
-use App\core\entities\NotesEntity;
-use App\core\enumerators\ImportanceEnumerator as Importance;
-use App\libraries\FormatLib;
-use App\libraries\Functions;
-use App\libraries\TimingLibrary as Timing;
-use App\libraries\Users;
-use App\libraries\users\Notes as Note;
+use App\Core\BaseController;
+use App\Core\Entity\NotesEntity;
+use App\Core\Enumerators\ImportanceEnumerator as Importance;
+use App\Libraries\FormatLib;
+use App\Libraries\Functions;
+use App\Libraries\TimingLibrary as Timing;
+use App\Libraries\Users;
+use App\Libraries\Users\Notes as Note;
 
 class Notes extends BaseController
 {
     public const MODULE_ID = 19;
     public const REDIRECT_TARGET = 'game.php?page=notes';
-    private ?Notes $notes = null;
+    private ?Note $notes = null;
     protected $notesModel;
 
     public function __construct()

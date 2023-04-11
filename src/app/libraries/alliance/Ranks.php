@@ -1,51 +1,17 @@
 <?php
-/**
- * Ranks
- *
- * @category Library
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
 
-namespace App\libraries\alliance;
+namespace App\Libraries\Alliance;
 
-use App\core\enumerators\AllianceRanksEnumerator as AllianceRanks;
-use App\core\enumerators\SwitchIntEnumerator as SwitchInt;
-use App\helpers\StringsHelper;
+use App\Core\Enumerators\AllianceRanksEnumerator as AllianceRanks;
+use App\Core\Enumerators\SwitchIntEnumerator as SwitchInt;
+use App\Helpers\StringsHelper;
 use Exception;
 use JsonException;
 
-/**
- * Ranks Class
- *
- * @category Classes
- * @package  alliance
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
 class Ranks
 {
-    /**
-     * Contains the ranks
-     *
-     * @var array
-     */
-    private $_ranks = [];
+    private array $_ranks = [];
 
-    /**
-     * Constructor
-     *
-     * @param string $alliance_ranks List of ranks as a JSON string
-     *
-     * @return void
-     *
-     * @throws Exception
-     */
     public function __construct($alliance_ranks)
     {
         try {

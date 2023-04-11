@@ -1,28 +1,9 @@
 <?php
-/**
- * XG Proyect
- *
- * Open-source OGame Clon
- *
- * This content is released under the GPL-3.0 License
- *
- * Copyright (c) 2008-2020 XG Proyect
- *
- * @package    XG Proyect
- * @author     XG Proyect Team
- * @copyright  2008-2020 XG Proyect
- * @license    https://www.gnu.org/licenses/gpl-3.0.en.html GPL-3.0 License
- * @link       https://github.com/XGProyect/
- * @since      3.0.0
- */
 
-namespace App\libraries\messenger;
+namespace App\Libraries\Messenger;
 
-use App\libraries\Functions;
+use App\Libraries\Functions;
 
-/**
- * Messenger class
- */
 final class Messenger
 {
     /**
@@ -41,7 +22,7 @@ final class Messenger
     /**
      * Send a message with the provided options
      *
-     * @param \App\libraries\MessagesOptions $options
+     * @param \App\Libraries\MessagesOptions $options
      */
     public function sendMessage(MessagesOptions $options)
     {

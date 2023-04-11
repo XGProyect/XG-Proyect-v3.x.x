@@ -1,24 +1,28 @@
 <?php
 
-namespace App\controllers\game;
+namespace App\Controllers\Game;
 
-use App\core\BaseController;
-use App\libraries\FleetsLib;
-use App\libraries\FormatLib;
-use App\libraries\Formulas;
-use App\libraries\Functions;
-use App\libraries\Users;
+use App\Core\BaseController;
+use App\Libraries\FleetsLib;
+use App\Libraries\FormatLib;
+use App\Libraries\Formulas;
+use App\Libraries\Functions;
+use App\Libraries\Users;
 
 class Galaxy extends BaseController
 {
     public const MODULE_ID = 11;
     private array $galaxy = [];
     private int $planet_count = 0;
+    private $_resource;
+    private $_pricelist;
+    private $_reslist;
     private $_galaxy;
     private $_system;
     private $noob;
     private $_galaxyLib;
     protected $galaxyModel;
+    protected $fleetModel;
 
     public function __construct()
     {

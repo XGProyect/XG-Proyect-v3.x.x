@@ -1,31 +1,11 @@
 <?php
-/**
- * Alliance
- *
- * @category Library
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
 
-namespace App\libraries\alliance;
+namespace App\Libraries\Alliance;
 
-use App\core\entities\AllianceEntity;
-use App\core\enumerators\SwitchIntEnumerator;
-use App\libraries\alliance\Ranks;
+use App\Core\Entity\AllianceEntity;
+use App\Core\Enumerators\SwitchIntEnumerator;
+use App\Libraries\Alliance\Ranks;
 
-/**
- * Alliance Class
- *
- * @category Classes
- * @package  alliance
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
 class Alliances
 {
     /**
@@ -46,15 +26,6 @@ class Alliances
      */
     private $_current_user_rank_id = 0;
 
-    /**
-     * Constructor
-     *
-     * @param array $alliances            Alliances
-     * @param int   $current_user_id      Current User ID
-     * @param int   $current_user_rank_id Current User Rank Id
-     *
-     * @return void
-     */
     public function __construct($alliances, $current_user_id, $current_user_rank_id = 0)
     {
         if (is_array($alliances)) {

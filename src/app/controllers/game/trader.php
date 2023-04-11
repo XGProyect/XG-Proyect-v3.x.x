@@ -1,12 +1,12 @@
 <?php
 
-namespace App\controllers\game;
+namespace App\Controllers\Game;
 
-use App\core\BaseController;
-use App\libraries\FormatLib as Format;
-use App\libraries\Functions;
-use App\libraries\game\ResourceMarket;
-use App\libraries\Users;
+use App\Core\BaseController;
+use App\Libraries\FormatLib as Format;
+use App\Libraries\Functions;
+use App\Libraries\Game\ResourceMarket;
+use App\Libraries\Users;
 
 class TraderResources extends BaseController
 {

@@ -1,27 +1,17 @@
 <?php
-/**
- * Destroy Library
- *
- * @category Library
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
- */
 
-namespace App\libraries\missions;
+namespace App\Libraries\Missions;
 
-use App\core\enumerators\ShipsEnumerator as Ships;
-use App\helpers\UrlHelper;
-use App\libraries\combatreport\Report;
-use App\libraries\FleetsLib;
-use App\libraries\FormatLib;
-use App\libraries\Formulas;
-use App\libraries\Functions;
-use App\libraries\missions\Attack_lang;
-use App\libraries\missions\Missions;
-use App\libraries\UpdatesLibrary;
+use App\Core\Enumerators\ShipsEnumerator as Ships;
+use App\Helpers\UrlHelper;
+use App\Libraries\Combatreport\Report;
+use App\Libraries\FleetsLib;
+use App\Libraries\FormatLib;
+use App\Libraries\Formulas;
+use App\Libraries\Functions;
+use App\Libraries\Missions\Attack_lang;
+use App\Libraries\Missions\Missions;
+use App\Libraries\UpdatesLibrary;
 use Battle;
 use DebugManager;
 use Defense;
@@ -32,9 +22,6 @@ use Player;
 use PlayerGroup;
 use Ship;
 
-/**
- * Destroy Class
- */
 class Destroy extends Missions
 {
     public const SHIP_MIN_ID = 202;

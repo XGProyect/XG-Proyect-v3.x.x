@@ -1,13 +1,13 @@
 <?php
 
-namespace App\libraries;
+namespace App\Libraries;
 
-use App\core\enumerators\PlanetTypesEnumerator;
-use App\core\Language;
-use App\core\XGPCore;
-use App\libraries\Formulas;
-use App\libraries\Functions;
-use App\models\libraries\PlanetLib as PlanetLibModel;
+use App\Core\Enumerators\PlanetTypesEnumerator;
+use App\Core\Language;
+use App\Core\XGPCore;
+use App\Libraries\Formulas;
+use App\Libraries\Functions;
+use App\Models\Libraries\PlanetLib as PlanetLibModel;
 
 class PlanetLib extends XGPCore
 {

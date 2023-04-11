@@ -1,36 +1,20 @@
 <?php
 
 declare(strict_types=1);
-/**
- * XG Proyect
- *
- * Open-source OGame Clon
- *
- * This content is released under the GPL-3.0 License
- *
- * Copyright (c) 2008-2020 XG Proyect
- *
- * @package    XG Proyect
- * @author     XG Proyect Team
- * @copyright  2008-2020 XG Proyect
- * @license    https://www.gnu.org/licenses/gpl-3.0.en.html GPL-3.0 License
- * @link       https://github.com/XGProyect/
- * @since      3.0.0
- */
 
-namespace App\core;
+namespace App\Core;
 
-use App\core\enumerators\SwitchIntEnumerator as SwitchInt;
-use App\core\enumerators\UserRanksEnumerator as UserRanks;
-use App\core\ErrorHandler;
-use App\core\Language;
-use App\core\Sessions;
-use App\helpers\StringsHelper;
-use App\libraries\Functions;
-use App\libraries\SecurePageLib;
-use App\libraries\TimingLibrary as Timing;
-use App\libraries\UpdatesLibrary;
-use App\libraries\Users;
+use App\Core\Enumerators\SwitchIntEnumerator as SwitchInt;
+use App\Core\Enumerators\UserRanksEnumerator as UserRanks;
+use App\Core\ErrorHandler;
+use App\Core\Language;
+use App\Core\Sessions;
+use App\Helpers\StringsHelper;
+use App\Libraries\Functions;
+use App\Libraries\SecurePageLib;
+use App\Libraries\TimingLibrary as Timing;
+use App\Libraries\UpdatesLibrary;
+use App\Libraries\Users;
 use AutoLoader;
 use Exception;
 
@@ -38,9 +22,6 @@ use Exception;
 require_once XGP_ROOT . 'config' . DIRECTORY_SEPARATOR . 'constants.php';
 require_once XGP_ROOT . CORE_PATH . 'AutoLoader.php';
 
-/**
- * Common class
- */
 class Common
 {
     private const APPLICATIONS = [
@@ -49,20 +30,8 @@ class Common
         'game' => ['setSystemTimezone', 'setSecure', 'setSession', 'setUpdates', 'isServerOpen', 'checkBanStatus'],
         'install' => [],
     ];
-
-    /**
-     * Contains the value that indicated if the game is installed or not
-     *
-     * @var boolean
-     */
-    private $is_installed = false;
-
-    /**
-     * Contains the Session object
-     *
-     * @var Sessions
-     */
-    private $sessions = null;
+    private bool $is_installed = false;
+    private ?Sessions $sessions = null;
 
     /**
      * Start the system
@@ -106,9 +75,9 @@ class Common
     {
         AutoLoader::registerExcludes('BattleEngine');
 
-        AutoLoader::registerNamespace('App_core', XGP_ROOT . CORE_PATH);
-        AutoLoader::registerNamespace('App_helpers', XGP_ROOT . HELPERS_PATH);
-        AutoLoader::registerNamespace('App_libraries', XGP_ROOT . LIB_PATH);
+        AutoLoader::registerNamespace('App_Core', XGP_ROOT . CORE_PATH);
+        AutoLoader::registerNamespace('App_Helpers', XGP_ROOT . HELPERS_PATH);
+        AutoLoader::registerNamespace('App_Libraries', XGP_ROOT . LIB_PATH);
     }
 
     /**

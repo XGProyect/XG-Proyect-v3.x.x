@@ -1,11 +1,11 @@
 <?php
 
-namespace App\models\libraries;
+namespace App\Models\Libraries;
 
-use App\core\Model;
-use App\libraries\Functions;
+use App\Core\Model;
+use App\Libraries\Functions;
 
-class Statistics_library extends Model
+class StatisticsLibrary extends Model
 {
     /**
      *

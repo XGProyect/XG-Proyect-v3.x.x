@@ -1,41 +1,16 @@
 <?php
-/**
- * Update Controller
- *
- * @category Controller
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
- */
 
-namespace App\controllers\adm;
+namespace App\Controllers\Adm;
 
-use App\core\BaseController;
-use App\libraries\adm\AdministrationLib as Administration;
-use App\libraries\Functions;
+use App\Core\BaseController;
+use App\Libraries\Adm\AdministrationLib as Administration;
+use App\Libraries\Functions;
 
-/**
- * Update Class
- */
 class Update extends BaseController
 {
-    /**
-     * @var mixed
-     */
     private $system_version;
-    /**
-     * @var mixed
-     */
     private $db_version;
-    /**
-     * @var mixed
-     */
     private $demo;
-    /**
-     * @var array
-     */
     private $output = [];
 
     protected $updateModel;

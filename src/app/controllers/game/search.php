@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace App\controllers\game;
+namespace App\Controllers\Game;
 
-use App\core\BaseController;
-use App\core\enumerators\SwitchIntEnumerator as SwitchInt;
-use App\helpers\UrlHelper;
-use App\libraries\FormatLib;
-use App\libraries\Functions;
-use App\libraries\NoobsProtectionLib;
-use App\libraries\Users;
+use App\Core\BaseController;
+use App\Core\Enumerators\SwitchIntEnumerator as SwitchInt;
+use App\Helpers\UrlHelper;
+use App\Libraries\FormatLib;
+use App\Libraries\Functions;
+use App\Libraries\NoobsProtectionLib;
+use App\Libraries\Users;
 
 class Search extends BaseController
 {

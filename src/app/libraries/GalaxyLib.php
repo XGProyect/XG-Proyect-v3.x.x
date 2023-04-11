@@ -1,31 +1,20 @@
 <?php
-/**
- * GalaxyLib.php
- *
- * @author   XG Proyect Team
- * @license  https://www.xgproyect.org XG Proyect
- * @link     https://www.xgproyect.org
- * @since    3.2.0
- */
 
-namespace App\libraries;
+namespace App\Libraries;
 
-use App\core\enumerators\MissionsEnumerator as Missions;
-use App\core\enumerators\PlanetTypesEnumerator;
-use App\core\enumerators\ShipsEnumerator as Ships;
-use App\core\enumerators\UserRanksEnumerator as UserRanks;
-use App\core\Template;
-use App\core\XGPCore;
-use App\helpers\StringsHelper;
-use App\helpers\UrlHelper;
-use App\libraries\FleetsLib;
-use App\libraries\FormatLib;
-use App\libraries\Formulas;
-use App\libraries\Functions;
+use App\Core\Enumerators\MissionsEnumerator as Missions;
+use App\Core\Enumerators\PlanetTypesEnumerator;
+use App\Core\Enumerators\ShipsEnumerator as Ships;
+use App\Core\Enumerators\UserRanksEnumerator as UserRanks;
+use App\Core\Template;
+use App\Core\XGPCore;
+use App\Helpers\StringsHelper;
+use App\Helpers\UrlHelper;
+use App\Libraries\FleetsLib;
+use App\Libraries\FormatLib;
+use App\Libraries\Formulas;
+use App\Libraries\Functions;
 
-/**
- * GalaxyLib class
- */
 class GalaxyLib extends XGPCore
 {
     public const PLANET_TYPE = 1;

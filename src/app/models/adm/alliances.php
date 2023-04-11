@@ -1,29 +1,11 @@
 <?php
-/**
- * Alliances Model
- *
- * @category Model
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
 
-namespace App\models\adm;
+namespace App\Models\Adm;
 
-use App\core\Model;
+use App\Core\Model;
 
-/**
- * Alliances Class
- */
 class Alliances extends Model
 {
-    /**
-     * Get all alliance data
-     *
-     * @return array
-     */
     public function getAllAllianceDataById(int $id): array
     {
         return $this->db->queryFetch(
@@ -37,12 +19,6 @@ class Alliances extends Model
         );
     }
 
-    /**
-     * Check if an alliance exists verifying its name or tag
-     *
-     * @param string $alliance
-     * @return array|null
-     */
     public function checkAllianceByNameOrTag(string $alliance): ?array
     {
         return $this->db->queryFetch(
@@ -53,12 +29,6 @@ class Alliances extends Model
         );
     }
 
-    /**
-     * Check if the alliance tag exists
-     *
-     * @param string $alliance_tag
-     * @return boolean
-     */
     public function checkAllianceTag(string $alliance_tag): bool
     {
         $alliance_tag = trim($alliance_tag);
@@ -83,12 +53,6 @@ class Alliances extends Model
         return true;
     }
 
-    /**
-     * Check if the alliance name exists
-     *
-     * @param string $alliance_name
-     * @return boolean
-     */
     public function checkAllianceName(string $alliance_name): bool
     {
         $alliance_name = trim($alliance_name);
@@ -114,12 +78,6 @@ class Alliances extends Model
         return true;
     }
 
-    /**
-     * Check if it is the alliance founder
-     *
-     * @param integer $user_id
-     * @return boolean
-     */
     public function checkAllianceFounder(int $user_id): bool
     {
         $ally_data = $this->db->queryFetch(
@@ -133,12 +91,6 @@ class Alliances extends Model
         return ($ally_data['user_ally_id'] > 0 && !empty($ally_data['user_ally_id']) && $ally_data['user_ally_request'] > 0 && !empty($ally_data['user_ally_request']));
     }
 
-    /**
-     * Get all the alliance members
-     *
-     * @param integer $alliance_id
-     * @return array
-     */
     public function getAllianceMembers(int $alliance_id): array
     {
         return $this->db->queryFetchAll(
@@ -156,12 +108,6 @@ class Alliances extends Model
         );
     }
 
-    /**
-     * Remove alliance members
-     *
-     * @param string $ids_string
-     * @return void
-     */
     public function removeAllianceMembers(string $ids_string): void
     {
         $this->db->query(
@@ -174,11 +120,6 @@ class Alliances extends Model
         );
     }
 
-    /**
-     * Get all users
-     *
-     * @return array
-     */
     public function getAllUsers(): array
     {
         return $this->db->queryFetchAll(
@@ -188,13 +129,6 @@ class Alliances extends Model
             FROM `" . USERS . "`;"
         );
     }
-
-    /**
-     * Update the alliance data
-     *
-     * @param array $alliance_data
-     * @return void
-     */
     public function updateAllianceData(array $alliance_data): void
     {
         $this->db->query(
@@ -212,12 +146,6 @@ class Alliances extends Model
         );
     }
 
-    /**
-     * Get an alliance members count
-     *
-     * @param integer $alliance_id
-     * @return array
-     */
     public function countAllianceMembers(int $alliance_id): array
     {
         return $this->db->queryFetch(
@@ -228,12 +156,6 @@ class Alliances extends Model
         );
     }
 
-    /**
-     * Update alliance ranks
-     *
-     * @param int    $alliance_id Alliance ID
-     * @param string $ranks       Ranks
-     */
     public function updateAllianceRanks($alliance_id, $ranks)
     {
         $this->db->query(

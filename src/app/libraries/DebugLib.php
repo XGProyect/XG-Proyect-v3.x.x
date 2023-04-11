@@ -1,9 +1,9 @@
 <?php
 
-namespace App\libraries;
+namespace App\Libraries;
 
-use App\core\enumerators\ErrorTypesEnumerator as ErrorTypes;
-use App\libraries\Functions;
+use App\Core\Enumerators\ErrorTypesEnumerator as ErrorTypes;
+use App\Libraries\Functions;
 
 class DebugLib
 {

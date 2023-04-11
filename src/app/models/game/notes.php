@@ -1,31 +1,11 @@
 <?php
-/**
- * Notes Model
- *
- * @category Model
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
 
-namespace App\models\game;
+namespace App\Models\Game;
 
-use App\core\Model;
+use App\Core\Model;
 
-/**
- * Notes Class
- */
 class Notes extends Model
 {
-    /**
-     * Get all notes by a certain user
-     *
-     * @param int $user_id
-     *
-     * @return array
-     */
     public function getAllNotesByUserId(int $user_id): array
     {
         return $this->db->queryFetchAll(
@@ -37,14 +17,6 @@ class Notes extends Model
         ) ?? [];
     }
 
-    /**
-     * Get a note by a certain user
-     *
-     * @param int $user_id
-     * @param int $note_id
-     *
-     * @return array
-     */
     public function getNoteById(int $user_id, int $note_id): array
     {
         return $this->db->queryFetch(
@@ -56,14 +28,6 @@ class Notes extends Model
         ) ?? [];
     }
 
-    /**
-     * Create a note by a certain user
-     *
-     * @param int $user_id
-     * @param int $note_id
-     *
-     * @return void
-     */
     public function createNewNote(array $note_data): void
     {
         foreach ($note_data as $field => $value) {

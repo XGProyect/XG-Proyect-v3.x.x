@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\controllers\adm;
+namespace App\Controllers\Adm;
 
-use App\core\BaseController;
-use App\core\enumerators\PlanetTypesEnumerator;
-use App\core\enumerators\UserRanksEnumerator as UserRanks;
-use App\libraries\adm\AdministrationLib as Administration;
-use App\libraries\FormatLib as Format;
-use App\libraries\Functions;
+use App\Core\BaseController;
+use App\Core\Enumerators\PlanetTypesEnumerator;
+use App\Core\Enumerators\UserRanksEnumerator as UserRanks;
+use App\Libraries\Adm\AdministrationLib as Administration;
+use App\Libraries\FormatLib as Format;
+use App\Libraries\Functions;
 
 class Maker extends BaseController
 {

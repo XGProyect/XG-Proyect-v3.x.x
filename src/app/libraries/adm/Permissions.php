@@ -1,33 +1,14 @@
 <?php
-/**
- * Permissions
- *
- * @category Library
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
 
-namespace App\libraries\adm;
+namespace App\Libraries\Adm;
 
-use App\core\enumerators\AdminPagesEnumerator as AdminPages;
-use App\core\enumerators\UserRanksEnumerator as UserRanks;
-use App\helpers\ArraysHelper;
-use App\libraries\Functions;
+use App\Core\Enumerators\AdminPagesEnumerator as AdminPages;
+use App\Core\Enumerators\UserRanksEnumerator as UserRanks;
+use App\Helpers\ArraysHelper;
+use App\Libraries\Functions;
+use Exception;
 use JsonException;
 
-/**
- * Permissions Class
- *
- * @category Classes
- * @package  buildings
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
 class Permissions
 {
     /**
@@ -44,11 +25,6 @@ class Permissions
      */
     private $permissions = [];
 
-    /**
-     * Constructor
-     *
-     * @param string $permissions
-     */
     public function __construct(string $permissions)
     {
         try {

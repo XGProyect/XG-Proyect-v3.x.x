@@ -1,29 +1,9 @@
 <?php
-/**
- * Buildings
- *
- * @category Library
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
 
-namespace App\libraries\buildings;
+namespace App\Libraries\Buildings;
 
-use App\libraries\buildings\QueueElements;
+use App\Libraries\Buildings\QueueElements;
 
-/**
- * Queue Class
- *
- * @category Classes
- * @package  buildings
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
 final class Queue
 {
     public const QUEUE_SEPARATOR = ';';

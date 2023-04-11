@@ -1,23 +1,10 @@
 <?php
-/**
- * MissionControlLibrary Model
- *
- * @category Model
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
 
-namespace App\models\libraries;
+namespace App\Models\Libraries;
 
-use App\core\Model;
+use App\Core\Model;
 
-/**
- * MissionControlLibrary Class
- */
-class MissionControlLibrary extends Model
+class MissionControlLib extends Model
 {
     /**
      * Return a list of all the arriving fleets that are going

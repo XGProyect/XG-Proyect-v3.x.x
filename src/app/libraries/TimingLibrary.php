@@ -1,13 +1,10 @@
 <?php
 
-namespace App\libraries;
+namespace App\Libraries;
 
-use App\core\Language;
-use App\libraries\Functions;
+use App\Core\Language;
+use App\Libraries\Functions;
 
-/**
- * Timing Library Class
- */
 abstract class TimingLibrary
 {
     /**

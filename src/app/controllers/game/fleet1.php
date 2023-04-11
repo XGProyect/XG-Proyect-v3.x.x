@@ -1,31 +1,18 @@
 <?php
-/**
- * Fleet1 Controller
- *
- * @category Controller
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
 
-namespace App\controllers\game;
+namespace App\Controllers\Game;
 
-use App\core\BaseController;
-use App\core\enumerators\ShipsEnumerator as Ships;
-use App\helpers\UrlHelper;
-use App\libraries\FleetsLib;
-use App\libraries\FormatLib;
-use App\libraries\Functions;
-use App\libraries\game\Fleets;
-use App\libraries\premium\Premium;
-use App\libraries\research\Researches;
-use App\libraries\Users;
+use App\Core\BaseController;
+use App\Core\Enumerators\ShipsEnumerator as Ships;
+use App\Helpers\UrlHelper;
+use App\Libraries\FleetsLib;
+use App\Libraries\FormatLib;
+use App\Libraries\Functions;
+use App\Libraries\Game\Fleets;
+use App\Libraries\Premium\Premium;
+use App\Libraries\Research\Researches;
+use App\Libraries\Users;
 
-/**
- * Fleet1 Class
- */
 class Fleet1 extends BaseController
 {
     public const MODULE_ID = 8;

@@ -2,24 +2,10 @@
 
 declare(strict_types=1);
 
-/**
- * Noobs Protection Library
- *
- * @category Library
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
- */
+namespace App\Libraries;
 
-namespace App\libraries;
+use App\Core\XGPCore;
 
-use App\core\XGPCore;
-
-/**
- * NoobsProtectionLib Class
- */
 class NoobsProtectionLib extends XGPCore
 {
     /**

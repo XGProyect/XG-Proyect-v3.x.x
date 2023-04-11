@@ -2,71 +2,21 @@
 
 declare(strict_types=1);
 
-/**
- * Resource Market
- *
- * @category Library
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
+namespace App\Libraries\Game;
 
-namespace App\libraries\game;
+use App\Core\Entity\BuildingsEntity;
+use App\Core\Entity\PlanetEntity;
+use App\Core\Entity\PremiumEntity;
+use App\Core\Entity\UserEntity;
+use App\Libraries\ProductionLib as Production;
 
-use App\core\entities\BuildingsEntity;
-use App\core\entities\PlanetEntity;
-use App\core\entities\PremiumEntity;
-use App\core\entities\UserEntity;
-use App\libraries\ProductionLib as Production;
-
-/**
- * ResourceMarket Class
- *
- * @category Classes
- * @package  alliance
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
 class ResourceMarket
 {
-    /**
-     * Contains the current user data
-     *
-     * @var \UserEntity
-     */
-    private $user;
+    private UserEntity $user;
+    private PremiumEntity $premium;
+    private PlanetEntity $planet;
+    private BuildingsEntity $buildings;
 
-    /**
-     * Contains the current user premium data
-     *
-     * @var \PremiumEntity
-     */
-    private $premium;
-
-    /**
-     * Contains the current planet data
-     *
-     * @var \PlanetEntity
-     */
-    private $planet;
-
-    /**
-     * Contains the current planet buildings
-     *
-     * @var \BuildingEntity
-     */
-    private $buildings;
-
-    /**
-     * Constructor
-     *
-     * @param array $user
-     * @param array $planet
-     */
     public function __construct(array $user, array $planet)
     {
         $this->setUpUser($user);

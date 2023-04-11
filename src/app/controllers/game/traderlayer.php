@@ -1,11 +1,11 @@
 <?php
 
-namespace App\controllers\game;
+namespace App\Controllers\Game;
 
-use App\core\BaseController;
-use App\libraries\FormatLib as Format;
-use App\libraries\Functions;
-use App\libraries\Users;
+use App\Core\BaseController;
+use App\Libraries\FormatLib as Format;
+use App\Libraries\Functions;
+use App\Libraries\Users;
 
 class TraderLayer extends BaseController
 {

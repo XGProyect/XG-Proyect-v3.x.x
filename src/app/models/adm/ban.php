@@ -2,24 +2,10 @@
 
 declare(strict_types=1);
 
-/**
- * Ban Model
- *
- * @category Model
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
+namespace App\Models\Adm;
 
-namespace App\models\adm;
+use App\Core\Model;
 
-use App\core\Model;
-
-/**
- * Ban Class
- */
 class Ban extends Model
 {
     /**

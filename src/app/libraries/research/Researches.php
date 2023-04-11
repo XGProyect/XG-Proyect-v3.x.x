@@ -1,51 +1,14 @@
 <?php
-/**
- * Researches
- *
- * @category Library
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
 
-namespace App\libraries\research;
+namespace App\Libraries\Research;
 
-use App\core\entities\ResearchEntity;
+use App\Core\Entity\ResearchEntity;
 
-/**
- * researches Class
- *
- * @category Classes
- * @package  research
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
 class Researches
 {
-    /**
-     *
-     * @var array
-     */
-    private $_research = [];
+    private array $_research = [];
+    private int $_current_user_id = 0;
 
-    /**
-     *
-     * @var int
-     */
-    private $_current_user_id = 0;
-
-    /**
-     * Constructor
-     *
-     * @param array $research        Research
-     * @param int   $current_user_id Current User ID
-     *
-     * @return void
-     */
     public function __construct(array $research, int $current_user_id)
     {
         if (is_array($research)) {

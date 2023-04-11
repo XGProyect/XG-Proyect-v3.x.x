@@ -1,15 +1,15 @@
 <?php
 
-namespace App\controllers\adm;
+namespace App\Controllers\Adm;
 
-use App\core\BaseController;
-use App\core\enumerators\PlanetTypesEnumerator;
-use App\core\enumerators\UserRanksEnumerator as UserRanks;
-use App\libraries\adm\AdministrationLib as Administration;
-use App\libraries\FormatLib as Format;
-use App\libraries\Functions;
-use App\libraries\StatisticsLibrary;
-use App\libraries\users\Shortcuts;
+use App\Core\BaseController;
+use App\Core\Enumerators\PlanetTypesEnumerator;
+use App\Core\Enumerators\UserRanksEnumerator as UserRanks;
+use App\Libraries\Adm\AdministrationLib as Administration;
+use App\Libraries\FormatLib as Format;
+use App\Libraries\Functions;
+use App\Libraries\StatisticsLibrary;
+use App\Libraries\Users\Shortcuts;
 
 class Users extends BaseController
 {
@@ -18,21 +18,9 @@ class Users extends BaseController
     private int $_moon = 0;
     private int $_id = 0;
     private int $_authlevel = 0;
-    /**
-     * @var mixed
-     */
     private $_alert_info;
-    /**
-     * @var mixed
-     */
     private $_alert_type;
-    /**
-     * @var mixed
-     */
     private $_user_query;
-    /**
-     * @var mixed
-     */
     private $_stats;
     protected $usersModel;
 

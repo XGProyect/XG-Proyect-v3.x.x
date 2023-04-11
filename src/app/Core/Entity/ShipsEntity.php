@@ -1,44 +1,13 @@
 <?php
-/**
- * Ships entity
- *
- * @category Core
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
 
-namespace App\core\entities;
+namespace App\Core\Entity;
 
 use Exception;
 
-/**
- * Ships Entity Class
- *
- * @category Entity
- * @package  Core
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
 class ShipsEntity
 {
-    /**
-     *
-     * @var array
-     */
-    private $_ships = [];
+    private array $_ships = [];
 
-    /**
-     * Init with the ships data
-     *
-     * @param array $ships Ships
-     *
-     * @return void
-     */
     public function __construct($ships)
     {
         $this->setShips($ships);

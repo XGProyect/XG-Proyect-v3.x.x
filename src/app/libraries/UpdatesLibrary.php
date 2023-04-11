@@ -1,41 +1,22 @@
 <?php
-/**
- * XG Proyect
- *
- * Open-source OGame Clon
- *
- * This content is released under the GPL-3.0 License
- *
- * Copyright (c) 2008-2020 XG Proyect
- *
- * @package    XG Proyect
- * @author     XG Proyect Team
- * @copyright  2008-2020 XG Proyect
- * @license    https://www.gnu.org/licenses/gpl-3.0.en.html GPL-3.0 License
- * @link       https://github.com/XGProyect/
- * @since      3.0.0
- */
 
-namespace App\libraries;
+namespace App\Libraries;
 
-use App\core\enumerators\BuildingsEnumerator as Buildings;
-use App\core\enumerators\PlanetTypesEnumerator;
-use App\core\Language;
-use App\core\XGPCore;
-use App\helpers\UrlHelper;
-use App\libraries\DevelopmentsLib as Developments;
-use App\libraries\FormatLib as Format;
-use App\libraries\Formulas;
-use App\libraries\Functions;
-use App\libraries\MissionControlLibrary;
-use App\libraries\OfficiersLib as Officiers;
-use App\libraries\ProductionLib as Production;
-use App\libraries\StatisticsLibrary;
-use App\libraries\Users;
+use App\Core\Enumerators\BuildingsEnumerator as Buildings;
+use App\Core\Enumerators\PlanetTypesEnumerator;
+use App\Core\Language;
+use App\Core\XGPCore;
+use App\Helpers\UrlHelper;
+use App\Libraries\DevelopmentsLib as Developments;
+use App\Libraries\FormatLib as Format;
+use App\Libraries\Formulas;
+use App\Libraries\Functions;
+use App\Libraries\MissionControlLib;
+use App\Libraries\OfficiersLib as Officiers;
+use App\Libraries\ProductionLib as Production;
+use App\Libraries\StatisticsLibrary;
+use App\Libraries\Users;
 
-/**
- * UpdatesLibrary Class
- */
 class UpdatesLibrary extends XGPCore
 {
     /**
@@ -151,7 +132,7 @@ class UpdatesLibrary extends XGPCore
     private function updateFleets()
     {
         // let's start the missions control process
-        $mission_control = new MissionControlLibrary();
+        $mission_control = new MissionControlLib();
         $mission_control->arrivingFleets();
         $mission_control->returningFleets();
     }

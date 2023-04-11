@@ -1,11 +1,11 @@
 <?php
 
-namespace App\controllers\install;
+namespace App\Controllers\Install;
 
-use App\core\BaseController;
-use App\helpers\StringsHelper;
-use App\libraries\Functions;
-use App\libraries\PlanetLib;
+use App\Core\BaseController;
+use App\Helpers\StringsHelper;
+use App\Libraries\Functions;
+use App\Libraries\PlanetLib;
 
 class Installation extends BaseController
 {

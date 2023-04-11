@@ -1,51 +1,14 @@
 <?php
-/**
- * AcsFleets
- *
- * @category Library
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
 
-namespace App\libraries\game;
+namespace App\Libraries\Game;
 
-use App\core\entities\AcsFleetEntity;
+use App\Core\Entity\AcsFleetEntity;
 
-/**
- * AcsFleets Class
- *
- * @category Classes
- * @package  fleets
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
 class AcsFleets
 {
-    /**
-     *
-     * @var array
-     */
-    private $_acs = [];
+    private array $_acs = [];
+    private int $_current_user_id = 0;
 
-    /**
-     *
-     * @var int
-     */
-    private $_current_user_id = 0;
-
-    /**
-     * Constructor
-     *
-     * @param array $acs             Acs
-     * @param int   $current_user_id Current User ID
-     *
-     * @return void
-     */
     public function __construct($acs, $current_user_id)
     {
         if (is_array($acs)) {

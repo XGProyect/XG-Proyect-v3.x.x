@@ -1,65 +1,25 @@
 <?php
-/**
- * Alliances Controller
- *
- * @category Controller
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
- */
 
-namespace App\controllers\adm;
+namespace App\Controllers\Adm;
 
-use App\core\BaseController;
-use App\core\enumerators\AllianceRanksEnumerator as AllianceRanks;
-use App\core\enumerators\SwitchIntEnumerator as SwitchInt;
-use App\libraries\adm\AdministrationLib as Administration;
-use App\libraries\alliance\Ranks;
-use App\libraries\Functions;
+use App\Core\BaseController;
+use App\Core\Enumerators\AllianceRanksEnumerator as AllianceRanks;
+use App\Core\Enumerators\SwitchIntEnumerator as SwitchInt;
+use App\Libraries\Adm\AdministrationLib as Administration;
+use App\Libraries\Alliance\Ranks;
+use App\Libraries\Functions;
 
-/**
- * Alliances Class
- */
 class Alliances extends BaseController
 {
-    /**
-     * @var mixed
-     */
     private $_edit;
-    /**
-     * @var mixed
-     */
     private $_planet;
-    /**
-     * @var mixed
-     */
     private $_moon;
-    /**
-     * @var mixed
-     */
     private $_id;
-    /**
-     * @var mixed
-     */
     private $_alert_info;
-    /**
-     * @var mixed
-     */
     private $_alert_type;
-    /**
-     * @var mixed
-     */
     private $_user_query;
-
-    /**
-     * Contains the alliance ranks
-     *
-     * @var Ranks
-     */
-    private $ranks = null;
-    protected alliancesModel;
+    private ?Ranks $ranks = null;
+    protected $alliancesModel;
 
     public function __construct()
     {

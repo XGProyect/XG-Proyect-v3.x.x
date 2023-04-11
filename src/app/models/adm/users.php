@@ -1,31 +1,12 @@
 <?php
-/**
- * Users Model
- *
- * @category Model
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
 
-namespace App\models\adm;
+namespace App\Models\Adm;
 
-use App\core\Model;
-use App\libraries\Functions;
+use App\Core\Model;
+use App\Libraries\Functions;
 
-/**
- * Users Class
- */
 class Users extends Model
 {
-    /**
-     * Check if the user exists, returns true if it does, false if the user doesn't exist
-     *
-     * @param string $user
-     * @return array
-     */
     public function checkUser(string $user): array
     {
         return $this->db->queryFetch(
@@ -39,12 +20,6 @@ class Users extends Model
         ) ?? [];
     }
 
-    /**
-     * Get the user data with the provided user ID
-     *
-     * @param integer $id
-     * @return array
-     */
     public function getUserDataById(int $user_id): array
     {
         return $this->db->queryFetch(
@@ -61,12 +36,6 @@ class Users extends Model
         ) ?? [];
     }
 
-    /**
-     * Get all planets by User ID
-     *
-     * @param integer $user_id
-     * @return array
-     */
     public function getAllPlanetsByUserId(int $user_id): array
     {
         return $this->db->queryFetchAll(
@@ -81,11 +50,6 @@ class Users extends Model
         ) ?? [];
     }
 
-    /**
-     * Get all alliances from the server
-     *
-     * @return array
-     */
     public function getAllAlliances(): array
     {
         return $this->db->queryFetchAll(
@@ -97,13 +61,6 @@ class Users extends Model
         ) ?? [];
     }
 
-    /**
-     * Check if the username exists
-     *
-     * @param string $username
-     * @param integer $user_id
-     * @return array
-     */
     public function checkUsername(string $username, int $user_id): array
     {
         return $this->db->queryFetch(
@@ -114,13 +71,6 @@ class Users extends Model
         ) ?? [];
     }
 
-    /**
-     * Check if the email exists
-     *
-     * @param string $email
-     * @param integer $user_id
-     * @return array
-     */
     public function checkEmail(string $email, int $user_id): array
     {
         return $this->db->queryFetch(
@@ -131,12 +81,6 @@ class Users extends Model
         ) ?? [];
     }
 
-    /**
-     * Delete a session by user ID
-     *
-     * @param integer $user_id
-     * @return void
-     */
     public function deleteSessionByUserId(int $user_id): void
     {
         $this->db->query(
@@ -146,14 +90,6 @@ class Users extends Model
         );
     }
 
-    /**
-     * Get all planets data based on the provided data
-     *
-     * @param integer $user_id
-     * @param integer $planet_id
-     * @param string $edit
-     * @return array
-     */
     public function getAllPlanetsData(int $user_id, int $planet_id = 0, string $edit = ''): array
     {
         $sub_query = '';
@@ -207,14 +143,6 @@ class Users extends Model
         ) ?? [];
     }
 
-    /**
-     * Get all moons data based on the provided data
-     *
-     * @param integer $user_id
-     * @param integer $moon_id
-     * @param string $edit
-     * @return array
-     */
     public function getAllMoonsData(int $user_id, int $moon_id = 0, string $edit = ''): array
     {
         $sub_query = '';
@@ -257,11 +185,6 @@ class Users extends Model
         ) ?? [];
     }
 
-    /**
-     * Get all users
-     *
-     * @return array
-     */
     public function getAllUsers(): array
     {
         return $this->db->queryFetchAll(
@@ -278,12 +201,6 @@ class Users extends Model
      *
      */
 
-    /**
-     * Update user data
-     *
-     * @param array $data
-     * @return void
-     */
     public function saveUserData(array $data): void
     {
         $this->db->query(
@@ -299,14 +216,6 @@ class Users extends Model
         );
     }
 
-    /**
-     * Save current user preferences
-     *
-     * @param array $post
-     * @param int $user_id
-     * @param array $current_user
-     * @return void
-     */
     public function saveUserPreferences(array $post, int $user_id, array $current_user): void
     {
         $vacation_head = '';
@@ -362,13 +271,6 @@ class Users extends Model
         );
     }
 
-    /**
-     * Save the technologies for the current user
-     *
-     * @param array $technologies
-     * @param integer $user_id
-     * @return void
-     */
     public function saveTechnologies(array $technologies, int $user_id): void
     {
         // start
@@ -392,14 +294,6 @@ class Users extends Model
         $this->db->query($query_string);
     }
 
-    /**
-     * Save the premium for the current user
-     *
-     * @param array $premium_data
-     * @param integer $user_id
-     * @param array $user_query
-     * @return void
-     */
     public function savePremium(array $premium_data, int $user_id, array $user_query): void
     {
         // start
@@ -445,13 +339,6 @@ class Users extends Model
         $this->db->query($query_string);
     }
 
-    /**
-     * Save the planet data
-     *
-     * @param array $planet_data
-     * @param integer $planet_id
-     * @return void
-     */
     public function savePlanet(array $planet_data, int $planet_id): void
     {
         // start
@@ -497,13 +384,6 @@ class Users extends Model
         $this->db->query($query_string);
     }
 
-    /**
-     * Save the planet buildings
-     *
-     * @param array $buildings
-     * @param integer $planet_id
-     * @return void
-     */
     public function saveBuildings(array $buildings, int $planet_id): void
     {
         // start
@@ -529,13 +409,6 @@ class Users extends Model
         $this->db->query($query_string);
     }
 
-    /**
-     * Save the planet ships
-     *
-     * @param array $ships
-     * @param integer $planet_id
-     * @return void
-     */
     public function saveShips(array $ships, int $planet_id): void
     {
         // start
@@ -559,13 +432,6 @@ class Users extends Model
         $this->db->query($query_string);
     }
 
-    /**
-     * Save the planet defenses
-     *
-     * @param array $defenses
-     * @param integer $planet_id
-     * @return void
-     */
     public function saveDefenses(array $defenses, int $planet_id): void
     {
         // start
@@ -589,12 +455,6 @@ class Users extends Model
         $this->db->query($query_string);
     }
 
-    /**
-     * Delete a planet by ID
-     *
-     * @param integer $planet_id
-     * @return void
-     */
     public function deletePlanetById(int $planet_id): void
     {
         $this->db->query(
@@ -607,12 +467,6 @@ class Users extends Model
         );
     }
 
-    /**
-     * Set a planet as destroyed and its related moon if there's any
-     *
-     * @param integer $planet_id
-     * @return void
-     */
     public function softDeletePlanetById(int $planet_id): void
     {
         $this->db->query(
@@ -628,12 +482,6 @@ class Users extends Model
         );
     }
 
-    /**
-     * Delete a moon by ID
-     *
-     * @param integer $moon_id
-     * @return void
-     */
     public function deleteMoonById(int $moon_id): void
     {
         $this->db->query(
@@ -646,12 +494,6 @@ class Users extends Model
         );
     }
 
-    /**
-     * Set a moon as destroyed
-     *
-     * @param integer $moon_id
-     * @return void
-     */
     public function softDeleteMoonById(int $moon_id): void
     {
         $this->db->query(

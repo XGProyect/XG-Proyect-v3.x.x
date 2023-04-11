@@ -2,52 +2,15 @@
 
 declare(strict_types=1);
 
-/**
- * Preferences
- *
- * @category Library
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
+namespace App\Libraries\Game;
 
-namespace App\libraries\game;
+use App\Core\Entity\PreferencesEntity;
 
-use App\core\entities\PreferencesEntity;
-
-/**
- * Preferences Class
- *
- * @category Classes
- * @package  alliance
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
 class Preferences
 {
-    /**
-     *
-     * @var array
-     */
-    private $preferences = [];
+    private array $preferences = [];
+    private int $current_user_id = 0;
 
-    /**
-     *
-     * @var int
-     */
-    private $current_user_id = 0;
-
-    /**
-     * Constructor
-     *
-     * @param array $preferences
-     * @param integer $current_user_id
-     * @return void
-     */
     public function __construct(array $preferences, int $current_user_id)
     {
         if (is_array($preferences)) {

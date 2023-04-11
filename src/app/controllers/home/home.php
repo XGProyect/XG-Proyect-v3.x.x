@@ -1,9 +1,9 @@
 <?php
 
-namespace App\controllers\home;
+namespace App\Controllers\Home;
 
-use App\core\BaseController;
-use App\libraries\Functions;
+use App\Core\BaseController;
+use App\Libraries\Functions;
 
 class Home extends BaseController
 {

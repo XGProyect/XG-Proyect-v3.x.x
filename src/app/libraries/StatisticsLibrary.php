@@ -1,14 +1,14 @@
 <?php
 
-namespace App\libraries;
+namespace App\Libraries;
 
-use App\core\XGPCore;
-use App\libraries\Functions;
-use App\models\libraries\Statistics_library;
+use App\Core\XGPCore;
+use App\Libraries\Functions;
+use App\Models\Libraries\StatisticsLibrary as StatisticsLib;
 
 class StatisticsLibrary extends XGPCore
 {
-    private Statistics_library $statisticsLibraryModel;
+    private StatisticsLib $statisticsLibraryModel;
 
     /**
      * @var mixed
@@ -20,7 +20,7 @@ class StatisticsLibrary extends XGPCore
         parent::__construct();
 
         // load model
-        $this->statisticsLibraryModel = Functions::model('libraries/Statistics_library');
+        $this->statisticsLibraryModel = Functions::model('libraries/StatisticsLibrary');
     }
 
     /**

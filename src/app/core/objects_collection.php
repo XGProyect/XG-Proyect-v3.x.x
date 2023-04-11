@@ -1,12 +1,5 @@
 <?php
-/**
- * objects_collection.php
- *
- * @author   XG Proyect Team
- * @license  https://www.xgproyect.org XG Proyect
- * @link     https://www.xgproyect.org
- * @version  3.2.0
- */
+
 $resource = [
     1 => "building_metal_mine",
     2 => "building_crystal_mine",

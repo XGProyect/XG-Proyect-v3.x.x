@@ -1,21 +1,18 @@
 <?php
 
-namespace App\controllers\game;
+namespace App\Controllers\Game;
 
-use App\core\BaseController;
-use App\core\enumerators\PlanetTypesEnumerator;
-use App\helpers\UrlHelper;
-use App\libraries\DevelopmentsLib;
-use App\libraries\FleetsLib;
-use App\libraries\FormatLib;
-use App\libraries\Functions;
-use App\libraries\TimingLibrary as Timing;
-use App\libraries\UpdatesLibrary;
-use App\libraries\Users;
+use App\Core\BaseController;
+use App\Core\Enumerators\PlanetTypesEnumerator;
+use App\Helpers\UrlHelper;
+use App\Libraries\DevelopmentsLib;
+use App\Libraries\FleetsLib;
+use App\Libraries\FormatLib;
+use App\Libraries\Functions;
+use App\Libraries\TimingLibrary as Timing;
+use App\Libraries\UpdatesLibrary;
+use App\Libraries\Users;
 
-/**
- * Overview Class
- */
 class Overview extends BaseController
 {
     public const MODULE_ID = 1;

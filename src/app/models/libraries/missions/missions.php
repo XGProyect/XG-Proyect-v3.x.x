@@ -1,25 +1,11 @@
 <?php
 
-/**
- * Missions Model
- *
- * @category Model
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
+namespace App\Models\Libraries\Missions;
 
-namespace App\models\libraries\missions;
+use App\Core\Model;
+use App\Libraries\FleetsLib;
+use App\Libraries\StatisticsLibrary;
 
-use App\core\Model;
-use App\libraries\FleetsLib;
-use App\libraries\StatisticsLibrary;
-
-/**
- * Missions Class
- */
 class Missions extends Model
 {
     /**

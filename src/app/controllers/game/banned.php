@@ -1,26 +1,13 @@
 <?php
-/**
- * Banned Controller
- *
- * @category Controller
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
- */
 
-namespace App\controllers\game;
+namespace App\Controllers\Game;
 
-use App\core\BaseController;
-use App\helpers\UrlHelper;
-use App\libraries\Functions;
-use App\libraries\TimingLibrary as Timing;
-use App\libraries\Users;
+use App\Core\BaseController;
+use App\Helpers\UrlHelper;
+use App\Libraries\Functions;
+use App\Libraries\TimingLibrary as Timing;
+use App\Libraries\Users;
 
-/**
- * Banned Class
- */
 class Banned extends BaseController
 {
     public const MODULE_ID = 22;

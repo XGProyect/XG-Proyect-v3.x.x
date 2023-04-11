@@ -1,61 +1,15 @@
 <?php
-/**
- * Objects.php
- *
- * @author   XG Proyect Team
- * @license  https://www.xgproyect.org XG Proyect
- * @link     https://www.xgproyect.org
- * @version  3.2.0
- */
 
-namespace App\core;
+namespace App\Core;
 
-/**
- * Objects Class
- */
 class Objects
 {
-    /**
-     * Contains an array with resources
-     *
-     * @var array
-     */
-    private $objects;
-
-    /**
-     * Contains an array with requirements
-     *
-     * @var array
-     */
-    private $relations;
-
-    /**
-     * Contains an array with the price list
-     *
-     * @var array
-     */
-    private $price;
-
-    /**
-     * Contains an array with the combat specs
-     *
-     * @var array
-     */
-    private $combat_specs;
-
-    /**
-     * Contains an array with the production formulas
-     *
-     * @var array
-     */
-    private $production;
-
-    /**
-     * Contains an array with the set of objects by type and related IDs
-     *
-     * @var array
-     */
-    private $objects_list;
+    private array $objects;
+    private array $relations;
+    private array $price;
+    private array $combat_specs;
+    private array $production;
+    private array $objects_list;
 
     public function __construct()
     {

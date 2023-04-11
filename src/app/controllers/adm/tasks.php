@@ -2,29 +2,15 @@
 
 declare(strict_types=1);
 
-/**
- * Tasks Controller
- *
- * @category Controller
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
+namespace App\Controllers\Adm;
 
-namespace App\controllers\adm;
+use App\Core\BaseController;
+use App\Helpers\UrlHelper;
+use App\Libraries\Adm\AdministrationLib as Administration;
+use App\Libraries\FormatLib as Format;
+use App\Libraries\Functions;
+use App\Libraries\TimingLibrary as Timing;
 
-use App\core\BaseController;
-use App\helpers\UrlHelper;
-use App\libraries\adm\AdministrationLib as Administration;
-use App\libraries\FormatLib as Format;
-use App\libraries\Functions;
-use App\libraries\TimingLibrary as Timing;
-
-/**
- * Tasks Class
- */
 class Tasks extends BaseController
 {
     public function __construct()

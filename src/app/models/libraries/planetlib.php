@@ -2,13 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\models\libraries;
+namespace App\Models\Libraries;
 
-use App\core\Model;
+use App\Core\Model;
 
-/**
- * PlanetLib Class
- */
 class PlanetLib extends Model
 {
     /**

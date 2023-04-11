@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\controllers\game;
+namespace App\Controllers\Game;
 
-use App\core\BaseController;
-use App\helpers\UrlHelper;
-use App\libraries\DevelopmentsLib;
-use App\libraries\FormatLib;
-use App\libraries\Functions;
-use App\libraries\Users;
+use App\Core\BaseController;
+use App\Helpers\UrlHelper;
+use App\Libraries\DevelopmentsLib;
+use App\Libraries\FormatLib;
+use App\Libraries\Functions;
+use App\Libraries\Users;
 use Exception;
 
 class Empire extends BaseController

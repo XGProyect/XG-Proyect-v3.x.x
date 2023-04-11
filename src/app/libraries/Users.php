@@ -1,12 +1,12 @@
 <?php
 
-namespace App\libraries;
+namespace App\Libraries;
 
-use App\core\enumerators\AllianceRanksEnumerator as AllianceRanks;
-use App\core\enumerators\SwitchIntEnumerator as SwitchInt;
-use App\libraries\alliance\Ranks;
-use App\libraries\Functions;
-use App\models\libraries\UsersLibrary;
+use App\Core\Enumerators\AllianceRanksEnumerator as AllianceRanks;
+use App\Core\Enumerators\SwitchIntEnumerator as SwitchInt;
+use App\Libraries\Alliance\Ranks;
+use App\Libraries\Functions;
+use App\Models\Libraries\UsersLibrary;
 
 class Users
 {

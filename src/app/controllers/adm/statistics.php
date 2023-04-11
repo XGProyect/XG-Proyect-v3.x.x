@@ -2,27 +2,13 @@
 
 declare(strict_types=1);
 
-/**
- * Statistics Controller
- *
- * @category Controller
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
- */
+namespace App\Controllers\Adm;
 
-namespace App\controllers\adm;
+use App\Core\BaseController;
+use App\Core\Enumerators\UserRanksEnumerator as UserRanks;
+use App\Libraries\Adm\AdministrationLib as Administration;
+use App\Libraries\Functions;
 
-use App\core\BaseController;
-use App\core\enumerators\UserRanksEnumerator as UserRanks;
-use App\libraries\adm\AdministrationLib as Administration;
-use App\libraries\Functions;
-
-/**
- * Statistics Class
- */
 class Statistics extends BaseController
 {
     public const STATISTICS_SETTINGS = [

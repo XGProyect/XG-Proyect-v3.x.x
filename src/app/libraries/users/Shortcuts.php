@@ -1,49 +1,15 @@
 <?php
-/**
- * Shortcuts
- *
- * @category Library
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
 
-namespace App\libraries\users;
+namespace App\Libraries\Users;
 
-use App\helpers\StringsHelper;
+use App\Helpers\StringsHelper;
 use Exception;
 use JsonException;
 
-/**
- * Shortcuts Class
- *
- * @category Classes
- * @package  alliance
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
 class Shortcuts
 {
-    /**
-     * Contains the shortcuts
-     *
-     * @var array
-     */
-    private $_shortcuts = [];
+    private array $_shortcuts = [];
 
-    /**
-     * Constructor
-     *
-     * @param string $shortcuts List of shortcuts as a JSON string
-     *
-     * @return void
-     *
-     * @throws Exception
-     */
     public function __construct($shortcuts)
     {
         try {

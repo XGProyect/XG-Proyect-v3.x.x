@@ -1,40 +1,14 @@
 <?php
-/**
- * Attack Language Library
- *
- * @category Library
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
- */
 
-namespace App\libraries\missions;
+namespace App\Libraries\Missions;
 
 use Lang;
 
-/**
- * Attack_lang Class
- */
 class Attack_lang implements Lang
 {
-    /**
-     * @var mixed
-     */
     private $lang;
-    /**
-     * @var mixed
-     */
     private $objects;
 
-    /**
-     * Constructor
-     *
-     * @param array $lang Language
-     *
-     * @return void
-     */
     public function __construct($lang, $objects)
     {
         $this->lang = $lang;

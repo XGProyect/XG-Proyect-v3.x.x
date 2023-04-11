@@ -1,13 +1,13 @@
 <?php
 
-namespace App\controllers\game;
+namespace App\Controllers\Game;
 
-use App\core\BaseController;
-use App\libraries\FormatLib;
-use App\libraries\Functions;
-use App\libraries\game\AcsFleets;
-use App\libraries\game\Fleets;
-use App\libraries\Users;
+use App\Core\BaseController;
+use App\Libraries\FormatLib;
+use App\Libraries\Functions;
+use App\Libraries\Game\AcsFleets;
+use App\Libraries\Game\Fleets;
+use App\Libraries\Users;
 
 class Federation extends BaseController
 {

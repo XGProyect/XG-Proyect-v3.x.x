@@ -1,24 +1,11 @@
 <?php
-/**
- * Expedition Library
- *
- * @category Library
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
- */
 
-namespace App\libraries\missions;
+namespace App\Libraries\Missions;
 
-use App\libraries\FleetsLib;
-use App\libraries\FormatLib;
-use App\libraries\Functions;
+use App\Libraries\FleetsLib;
+use App\Libraries\FormatLib;
+use App\Libraries\Functions;
 
-/**
- * Expedition Class
- */
 class Expedition extends Missions
 {
     /**

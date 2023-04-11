@@ -9,8 +9,8 @@
  * @link     http://www.xgproyect.org
  * @version  3.1.0
  */
-use App\core\common;
-use App\libraries\Functions;
+use App\Core\common;
+use App\Libraries\Functions;
 
 define('XGP_ROOT', realpath(dirname(__DIR__)) . DIRECTORY_SEPARATOR);
 
@@ -52,7 +52,7 @@ if (isset($page)) {
     if (file_exists($file_name)) {
         include $file_name;
 
-        $class_name = 'App\controllers\game\\' . ucfirst($page);
+        $class_name = 'App\Controllers\Game\\' . ucfirst($page);
 
         (new $class_name())->index();
     }

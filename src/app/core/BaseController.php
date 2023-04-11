@@ -2,24 +2,24 @@
 
 declare(strict_types=1);
 
-namespace App\core;
+namespace App\Core;
 
-use App\core\Objects;
-use App\core\Template;
-use App\libraries\Page;
-use App\libraries\Users;
-use CI_Lang;
+use App\Core\Objects;
+use App\Core\Template;
+use App\Libraries\Page;
+use App\Libraries\Users;
+use CiLang;
 use Exception;
 
 abstract class BaseController
 {
     protected ?Users $userLibrary = null;
-    protected array $user = [];
-    protected array $planet = [];
+    protected ?array $user = [];
+    protected ?array $planet = [];
     protected Objects $objects;
     protected ?Page $page = null;
     protected ?Template $template = null;
-    protected CI_Lang $langs;
+    protected CiLang $langs;
 
     public function __construct()
     {
@@ -97,7 +97,7 @@ abstract class BaseController
     {
         try {
             // require langugage library
-            $ci_lang_path = XGP_ROOT . LIB_PATH . 'Ci' . DIRECTORY_SEPARATOR . 'Lang.php';
+            $ci_lang_path = XGP_ROOT . LIB_PATH . 'Ci' . DIRECTORY_SEPARATOR . 'CiLang.php';
 
             if (!file_exists($ci_lang_path)) {
                 // not found
@@ -113,7 +113,7 @@ abstract class BaseController
             // use CI library
             require_once $ci_lang_path;
 
-            $this->langs = new CI_Lang();
+            $this->langs = new CiLang();
             $this->langs->load($languageFile, DEFAULT_LANG);
         } catch (Exception $e) {
             die('Fatal error: ' . $e->getMessage());

@@ -1,15 +1,15 @@
 <?php
 
-namespace App\controllers\game;
+namespace App\Controllers\Game;
 
-use App\core\BaseController;
-use App\core\enumerators\DefensesEnumerator as Defenses;
-use App\core\enumerators\ShipsEnumerator as Ships;
-use App\libraries\DevelopmentsLib;
-use App\libraries\FormatLib;
-use App\libraries\Formulas;
-use App\libraries\Functions;
-use App\libraries\Users;
+use App\Core\BaseController;
+use App\Core\Enumerators\DefensesEnumerator as Defenses;
+use App\Core\Enumerators\ShipsEnumerator as Ships;
+use App\Libraries\DevelopmentsLib;
+use App\Libraries\FormatLib;
+use App\Libraries\Formulas;
+use App\Libraries\Functions;
+use App\Libraries\Users;
 use Exception;
 
 class Shipyard extends BaseController

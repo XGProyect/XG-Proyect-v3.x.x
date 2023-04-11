@@ -1,8 +1,8 @@
 <?php
 
-namespace App\controllers\ajax;
+namespace App\Controllers\Ajax;
 
-use App\core\BaseController;
+use App\Core\BaseController;
 
 class Info extends BaseController
 {

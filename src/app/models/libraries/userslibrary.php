@@ -1,9 +1,9 @@
 <?php
 
-namespace App\models\libraries;
+namespace App\Models\Libraries;
 
-use App\core\Model;
-use App\libraries\Functions;
+use App\Core\Model;
+use App\Libraries\Functions;
 
 class UsersLibrary extends Model
 {

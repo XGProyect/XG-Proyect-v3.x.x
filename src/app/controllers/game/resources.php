@@ -1,15 +1,15 @@
 <?php
 
-namespace App\controllers\game;
+namespace App\Controllers\Game;
 
-use App\core\BaseController;
-use App\core\enumerators\PlanetTypesEnumerator;
-use App\libraries\FormatLib;
-use App\libraries\Formulas;
-use App\libraries\Functions;
-use App\libraries\OfficiersLib;
-use App\libraries\ProductionLib;
-use App\libraries\Users;
+use App\Core\BaseController;
+use App\Core\Enumerators\PlanetTypesEnumerator;
+use App\Libraries\FormatLib;
+use App\Libraries\Formulas;
+use App\Libraries\Functions;
+use App\Libraries\OfficiersLib;
+use App\Libraries\ProductionLib;
+use App\Libraries\Users;
 
 class Resources extends BaseController
 {

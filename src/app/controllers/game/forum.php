@@ -1,29 +1,13 @@
 <?php
-/**
- * Forum Controller
- *
- * @category Controller
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
- */
 
-namespace App\controllers\game;
+namespace App\Controllers\Game;
 
-use App\core\BaseController;
-use App\libraries\Functions;
-use App\libraries\Users;
+use App\Core\BaseController;
+use App\Libraries\Functions;
+use App\Libraries\Users;
 
-/**
- * Forum Class
- */
 class Forum extends BaseController
 {
-    /**
-     * @var int Module ID
-     */
     public const MODULE_ID = 14;
 
     public function __construct()

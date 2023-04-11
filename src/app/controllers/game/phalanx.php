@@ -1,13 +1,13 @@
 <?php
 
-namespace App\controllers\game;
+namespace App\Controllers\Game;
 
-use App\core\BaseController;
-use App\core\enumerators\PlanetTypesEnumerator;
-use App\libraries\FleetsLib;
-use App\libraries\Formulas;
-use App\libraries\Functions;
-use App\libraries\Users;
+use App\Core\BaseController;
+use App\Core\Enumerators\PlanetTypesEnumerator;
+use App\Libraries\FleetsLib;
+use App\Libraries\Formulas;
+use App\Libraries\Functions;
+use App\Libraries\Users;
 
 class Phalanx extends BaseController
 {

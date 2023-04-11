@@ -1,41 +1,12 @@
 <?php
-/**
- * XG Proyect
- *
- * Open-source OGame Clon
- *
- * This content is released under the GPL-3.0 License
- *
- * Copyright (c) 2008-2020 XG Proyect
- *
- * @package    XG Proyect
- * @author     XG Proyect Team
- * @copyright  2008-2020 XG Proyect
- * @license    https://www.gnu.org/licenses/gpl-3.0.en.html GPL-3.0 License
- * @link       https://github.com/XGProyect/
- * @since      3.0.0
- */
 
-namespace App\core;
+namespace App\Core;
 
-use App\libraries\Functions;
+use App\Libraries\Functions;
 
-/**
- * Sessions class
- */
 class Sessions
 {
-    /**
-     *
-     * @var boolean
-     */
-    private $alive = true;
-
-    /**
-     * Contains the model
-     *
-     * @var Sessions
-     */
+    private bool $alive = true;
     private $sessionsModel;
 
     public function __construct()
