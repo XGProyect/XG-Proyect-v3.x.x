@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controllers\Adm;
+namespace App\Http\Controllers\Adm;
 
 use App\Core\BaseController;
 use App\Core\Enumerators\AllianceRanksEnumerator as AllianceRanks;

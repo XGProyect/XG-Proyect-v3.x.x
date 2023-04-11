@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Controllers\Home;
+namespace App\Http\Controllers\Home;
 
 use App\Core\BaseController;
 use App\Libraries\Functions;

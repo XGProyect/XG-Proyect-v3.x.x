@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controllers\Install;
+namespace App\Http\Controllers\Install;
 
 use App\Core\BaseController;
 use App\Helpers\StringsHelper;

@@ -20,17 +20,17 @@ if (is_null($page)) {
 $page = strtr(
     $page,
     [
-        'resources' => 'buildings',
-        'resourceSettings' => 'resources',
-        'station' => 'buildings',
-        'federationlayer' => 'federation',
-        'shortcuts' => 'fleetshortcuts',
-        'forums' => 'forum',
-        'defense' => 'shipyard',
+        'resources' => 'Buildings',
+        'resourceSettings' => 'Resources',
+        'station' => 'Buildings',
+        'federationlayer' => 'Federation',
+        'shortcuts' => 'Fleetshortcuts',
+        'forums' => 'Forum',
+        'defense' => 'Shipyard',
     ]
 );
 
-$file_name = strtolower(XGP_ROOT . GAME_PATH . $page . '.php');
+$file_name = XGP_ROOT . GAME_PATH . $page . 'Controller.php';
 
 if (isset($page)) {
     // logout
@@ -43,7 +43,7 @@ if (isset($page)) {
     if (file_exists($file_name)) {
         include $file_name;
 
-        $class_name = 'App\Controllers\Game\\' . ucfirst($page);
+        $class_name = 'App\Http\Controllers\Game\\' . ucfirst($page) . 'Controller';
 
         (new $class_name())->index();
     }

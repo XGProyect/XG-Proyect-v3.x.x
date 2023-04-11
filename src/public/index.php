@@ -16,12 +16,12 @@ if (is_null($page)) {
     $page = 'home';
 }
 
-$file_name = XGP_ROOT . HOME_PATH . $page . '.php';
+$file_name = XGP_ROOT . HOME_PATH . $page . 'Controller.php';
 
 if (file_exists($file_name)) {
     include $file_name;
 
-    $class_name = 'App\Controllers\Home\\' . ucfirst($page);
+    $class_name = 'App\Http\Controllers\Home\\' . ucfirst($page) . 'Controller';
 
     (new $class_name())->index();
 }

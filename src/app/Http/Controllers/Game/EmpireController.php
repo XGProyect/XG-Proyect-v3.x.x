@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Controllers\Game;
+namespace App\Http\Controllers\Game;
 
 use App\Core\BaseController;
 use App\Helpers\UrlHelper;

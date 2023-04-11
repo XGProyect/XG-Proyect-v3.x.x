@@ -30,7 +30,7 @@ if (is_null($page)) {
     $page = 'home';
 }
 
-$file_name = XGP_ROOT . ADMIN_PATH . $page . '.php';
+$file_name = XGP_ROOT . ADMIN_PATH . $page . 'Controller.php';
 
 // logout
 if ($page == 'logout') {
@@ -41,7 +41,7 @@ if ($page == 'logout') {
 if (file_exists($file_name)) {
     include $file_name;
 
-    $class_name = 'App\Controllers\Adm\\' . ucfirst($page);
+    $class_name = 'App\Http\Controllers\Adm\\' . ucfirst($page) . 'Controller';
 
     (new $class_name())->index();
 } else {

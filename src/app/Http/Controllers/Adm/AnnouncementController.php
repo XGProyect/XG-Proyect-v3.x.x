@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Controllers\Adm;
+namespace App\Http\Controllers\Adm;
 
 use App\Core\BaseController;
 use App\Core\Enumerators\MessagesEnumerator;
@@ -11,7 +11,7 @@ use App\Libraries\Adm\AdministrationLib as Administration;
 use App\Libraries\FormatLib as Format;
 use App\Libraries\Functions;
 
-class Announcement extends BaseController
+class AnnouncementController extends BaseController
 {
     private array $alerts = [];
     protected $announcementModel;

@@ -16,7 +16,7 @@ $file_name = XGP_ROOT . INSTALL_PATH . $page . '.php';
 if (file_exists($file_name)) {
     include $file_name;
 
-    $class_name = 'App\Controllers\Install\\' . ucfirst($page);
+    $class_name = 'App\Http\Controllers\Install\\' . ucfirst($page);
 
     (new $class_name())->index();
 }

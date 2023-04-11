@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controllers\Game;
+namespace App\Http\Controllers\Game;
 
 use App\Core\BaseController;
 use App\Core\Enumerators\BuildingsEnumerator as Buildings;

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controllers\Ajax;
+namespace App\Http\Controllers\Ajax;
 
 use App\Core\BaseController;
 

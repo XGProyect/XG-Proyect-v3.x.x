@@ -11,12 +11,12 @@ $system = new Common();
 $system->bootUp('home');
 
 if (isset($_GET['content'])) {
-    $file_name = XGP_ROOT . AJAX_PATH . $_GET['content'] . '.php';
+    $file_name = XGP_ROOT . AJAX_PATH . $_GET['content'] . 'Controller.php';
 
     if (file_exists($file_name)) {
         include $file_name;
 
-        $class_name = 'App\Controllers\Ajax\\' . ucfirst($_GET['content']);
+        $class_name = 'App\Http\Controllers\Ajax\\' . ucfirst($_GET['content']) . 'Controller';
 
         (new $class_name())->index();
     }

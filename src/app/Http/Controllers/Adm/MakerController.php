@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Controllers\Adm;
+namespace App\Http\Controllers\Adm;
 
 use App\Core\BaseController;
 use App\Core\Enumerators\PlanetTypesEnumerator;
