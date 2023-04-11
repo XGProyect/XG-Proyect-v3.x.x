@@ -11,7 +11,7 @@ use App\Libraries\OfficiersLib;
 use App\Libraries\ProductionLib;
 use App\Libraries\Users;
 
-class Resources extends BaseController
+class ResourcesController extends BaseController
 {
     public const MODULE_ID = 4;
 

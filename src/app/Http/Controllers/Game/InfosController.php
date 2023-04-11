@@ -16,7 +16,7 @@ use App\Libraries\OfficiersLib;
 use App\Libraries\ProductionLib;
 use App\Libraries\Users;
 
-class Infos extends BaseController
+class InfosController extends BaseController
 {
     public const MODULE_ID = 24;
 
