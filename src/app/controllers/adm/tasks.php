@@ -27,9 +27,6 @@ use App\libraries\TimingLibrary as Timing;
  */
 class Tasks extends BaseController
 {
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         parent::__construct();

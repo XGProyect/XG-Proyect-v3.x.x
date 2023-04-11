@@ -22,9 +22,6 @@ class Officier extends BaseController
      */
     public const MODULE_ID = 15;
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         parent::__construct();

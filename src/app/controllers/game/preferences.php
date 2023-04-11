@@ -58,9 +58,6 @@ class Preferences extends BaseController
      */
     private $post = false;
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         parent::__construct();

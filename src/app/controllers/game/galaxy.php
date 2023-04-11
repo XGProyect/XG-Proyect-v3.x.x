@@ -62,9 +62,6 @@ class Galaxy extends BaseController
      */
     private $_galaxyLib;
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         parent::__construct();

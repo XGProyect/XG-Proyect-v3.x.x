@@ -26,9 +26,6 @@ use App\libraries\TimingLibrary as Timing;
  */
 class Fleets extends BaseController
 {
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         parent::__construct();

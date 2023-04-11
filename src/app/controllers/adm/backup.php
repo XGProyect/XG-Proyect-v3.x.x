@@ -2,17 +2,6 @@
 
 declare(strict_types=1);
 
-/**
- * Backup Controller
- *
- * @category Controller
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
- */
-
 namespace App\controllers\adm;
 
 use App\core\BaseController;
@@ -21,18 +10,12 @@ use App\libraries\FormatLib as Format;
 use App\libraries\Functions;
 use App\libraries\TimingLibrary as Timing;
 
-/**
- * Backup Class
- */
 class Backup extends BaseController
 {
     public const BACKUP_SETTINGS = [
         'auto_backup' => FILTER_UNSAFE_RAW,
     ];
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         parent::__construct();

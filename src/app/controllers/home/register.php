@@ -34,9 +34,6 @@ class Register extends BaseController
      */
     private $error_id;
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         parent::__construct();

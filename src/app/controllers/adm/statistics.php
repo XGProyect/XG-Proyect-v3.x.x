@@ -54,9 +54,6 @@ class Statistics extends BaseController
      */
     private $user_level = 0;
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         parent::__construct();

@@ -26,9 +26,6 @@ use App\libraries\missions\Missions;
  */
 class Deploy extends Missions
 {
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         parent::__construct();

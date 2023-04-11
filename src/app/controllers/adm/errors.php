@@ -23,9 +23,6 @@ use App\libraries\adm\AdministrationLib as Administration;
  */
 class Errors extends BaseController
 {
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         parent::__construct();

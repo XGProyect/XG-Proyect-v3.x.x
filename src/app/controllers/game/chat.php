@@ -38,9 +38,6 @@ class Chat extends BaseController
      */
     private $_message_data = [];
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         parent::__construct();

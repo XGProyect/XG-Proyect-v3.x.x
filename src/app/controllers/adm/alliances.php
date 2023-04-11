@@ -60,9 +60,6 @@ class Alliances extends BaseController
      */
     private $ranks = null;
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         parent::__construct();

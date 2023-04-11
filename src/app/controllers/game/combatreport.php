@@ -30,9 +30,6 @@ class Combatreport extends BaseController
      */
     private $report = null;
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         parent::__construct();

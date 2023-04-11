@@ -60,9 +60,6 @@ class Movement extends BaseController
      */
     private $premium = null;
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         parent::__construct();

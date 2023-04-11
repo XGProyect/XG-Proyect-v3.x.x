@@ -25,9 +25,6 @@ class Statistics extends BaseController
 {
     public const MODULE_ID = 16;
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         parent::__construct();

@@ -29,9 +29,6 @@ abstract class Model
      */
     protected $db;
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         $this->setNewDb();

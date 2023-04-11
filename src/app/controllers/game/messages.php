@@ -40,9 +40,6 @@ class Messages extends BaseController
         MessagesEnumerator::GENERAL => ['type_name' => 'generalopen'],
     ];
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         parent::__construct();

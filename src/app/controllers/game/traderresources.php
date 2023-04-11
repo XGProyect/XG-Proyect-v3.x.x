@@ -58,9 +58,6 @@ class TraderResources extends BaseController
      */
     private $error = '';
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         parent::__construct();

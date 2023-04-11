@@ -1,14 +1,4 @@
 <?php
-/**
- * Resources Controller
- *
- * @category Controller
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
- */
 
 namespace App\controllers\game;
 
@@ -21,29 +11,14 @@ use App\libraries\OfficiersLib;
 use App\libraries\ProductionLib;
 use App\libraries\Users;
 
-/**
- * Resources Class
- */
 class Resources extends BaseController
 {
     public const MODULE_ID = 4;
 
-    /**
-     * @var mixed
-     */
-    private $_resource;
-    /**
-     * @var mixed
-     */
-    private $_prod_grid;
-    /**
-     * @var mixed
-     */
-    private $_reslist;
+    private $resource;
+    private $prodGrid;
+    private $reslist;
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         parent::__construct();
@@ -57,9 +32,9 @@ class Resources extends BaseController
         // check if session is active
         Users::checkSession();
 
-        $this->_resource = $this->objects->getObjects();
-        $this->_prod_grid = $this->objects->getProduction();
-        $this->_reslist = $this->objects->getObjectsList();
+        $this->resource = $this->objects->getObjects();
+        $this->prodGrid = $this->objects->getProduction();
+        $this->reslist = $this->objects->getObjectsList();
     }
 
     /**
@@ -97,9 +72,9 @@ class Resources extends BaseController
             $game_deuterium_basic_income = 0;
         }
 
-        $this->planet['planet_metal_max'] = ProductionLib::maxStorable($this->planet[$this->_resource[22]]);
-        $this->planet['planet_crystal_max'] = ProductionLib::maxStorable($this->planet[$this->_resource[23]]);
-        $this->planet['planet_deuterium_max'] = ProductionLib::maxStorable($this->planet[$this->_resource[24]]);
+        $this->planet['planet_metal_max'] = ProductionLib::maxStorable($this->planet[$this->resource[22]]);
+        $this->planet['planet_crystal_max'] = ProductionLib::maxStorable($this->planet[$this->resource[23]]);
+        $this->planet['planet_deuterium_max'] = ProductionLib::maxStorable($this->planet[$this->resource[24]]);
 
         $parse['production_level'] = 100;
         $post_percent = ProductionLib::maxProduction($this->planet['planet_energy_max'], $this->planet['planet_energy_used']);
@@ -119,16 +94,16 @@ class Resources extends BaseController
             'deuterium' => 0,
         ];
 
-        foreach ($this->_reslist['prod'] as $ProdID) {
-            if ($this->planet[$this->_resource[$ProdID]] > 0 && isset($this->_prod_grid[$ProdID])) {
+        foreach ($this->reslist['prod'] as $ProdID) {
+            if ($this->planet[$this->resource[$ProdID]] > 0 && isset($this->prodGrid[$ProdID])) {
                 $resourcesTotal = [
                     'metal' => 0,
                     'crystal' => 0,
                     'deuterium' => 0,
                 ];
 
-                $BuildLevelFactor = $this->planet['planet_' . $this->_resource[$ProdID] . '_percent'];
-                $BuildLevel = $this->planet[$this->_resource[$ProdID]];
+                $BuildLevelFactor = $this->planet['planet_' . $this->resource[$ProdID] . '_percent'];
+                $BuildLevel = $this->planet[$this->resource[$ProdID]];
                 $BuildEnergy = $this->user['research_energy_technology'];
 
                 // BOOST
@@ -136,10 +111,10 @@ class Resources extends BaseController
                 $engineer_boost = 1 + (1 * (OfficiersLib::isOfficierActive($this->user['premium_officier_engineer']) ? ENGINEER_ENERGY : 0));
 
                 // PRODUCTION FORMULAS
-                $metal_prod = eval($this->_prod_grid[$ProdID]['formule']['metal']);
-                $crystal_prod = eval($this->_prod_grid[$ProdID]['formule']['crystal']);
-                $deuterium_prod = eval($this->_prod_grid[$ProdID]['formule']['deuterium']);
-                $energy_prod = eval($this->_prod_grid[$ProdID]['formule']['energy']);
+                $metal_prod = eval($this->prodGrid[$ProdID]['formule']['metal']);
+                $crystal_prod = eval($this->prodGrid[$ProdID]['formule']['crystal']);
+                $deuterium_prod = eval($this->prodGrid[$ProdID]['formule']['deuterium']);
+                $energy_prod = eval($this->prodGrid[$ProdID]['formule']['energy']);
 
                 // PRODUCTION
                 $resourcesTotal['metal'] += ProductionLib::productionAmount($metal_prod, $geologe_boost, $game_resource_multiplier);
@@ -184,14 +159,14 @@ class Resources extends BaseController
                 $crystal = ProductionLib::currentProduction($crystal_prod, $post_percent);
                 $deuterium = ProductionLib::currentProduction($deuterium_prod, $post_percent);
                 $energy = ProductionLib::currentProduction($energy, $post_percent);
-                $Field = 'planet_' . $this->_resource[$ProdID] . '_percent';
+                $Field = 'planet_' . $this->resource[$ProdID] . '_percent';
                 $CurrRow = [];
-                $CurrRow['name'] = $this->_resource[$ProdID];
+                $CurrRow['name'] = $this->resource[$ProdID];
                 $CurrRow['percent'] = $this->planet[$Field];
                 $CurrRow['option'] = $this->build_options($CurrRow['percent']);
-                $CurrRow['type'] = $this->langs->language[$this->_resource[$ProdID]];
+                $CurrRow['type'] = $this->langs->language[$this->resource[$ProdID]];
                 $CurrRow['level'] = ($ProdID > 200) ? $this->langs->line('rs_amount') : $this->langs->line('level');
-                $CurrRow['level_type'] = $this->planet[$this->_resource[$ProdID]];
+                $CurrRow['level_type'] = $this->planet[$this->resource[$ProdID]];
                 $CurrRow['metal_type'] = FormatLib::prettyNumber($metal);
                 $CurrRow['crystal_type'] = FormatLib::prettyNumber($crystal);
                 $CurrRow['deuterium_type'] = FormatLib::prettyNumber($deuterium);

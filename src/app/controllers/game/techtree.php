@@ -36,9 +36,6 @@ class Techtree extends BaseController
      */
     private $_requirements;
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         parent::__construct();

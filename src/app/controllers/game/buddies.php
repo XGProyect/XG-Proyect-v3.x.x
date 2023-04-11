@@ -40,9 +40,6 @@ class Buddies extends BaseController
      */
     private $buddy = null;
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         parent::__construct();

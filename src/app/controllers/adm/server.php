@@ -2,17 +2,6 @@
 
 declare(strict_types=1);
 
-/**
- * Server Controller
- *
- * @category Controller
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
- */
-
 namespace App\controllers\adm;
 
 use App\core\BaseController;
@@ -23,9 +12,6 @@ use App\libraries\Functions;
 use DateTime;
 use DateTimeZone;
 
-/**
- * Server Class
- */
 class Server extends BaseController
 {
     /**
@@ -42,9 +28,6 @@ class Server extends BaseController
      */
     private $game_config = [];
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         parent::__construct();

@@ -11,9 +11,6 @@ use App\libraries\Users;
 use CI_Lang;
 use Exception;
 
-/**
- * Controller Class
- */
 abstract class BaseController
 {
     protected ?Users $userLibrary = null;

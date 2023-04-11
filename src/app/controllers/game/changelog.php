@@ -24,9 +24,6 @@ class Changelog extends BaseController
 {
     public const MODULE_ID = 0;
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         parent::__construct();

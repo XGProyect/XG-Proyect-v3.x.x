@@ -56,9 +56,6 @@ class Search extends BaseController
      */
     private $results = [];
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         parent::__construct();

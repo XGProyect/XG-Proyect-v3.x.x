@@ -49,9 +49,6 @@ class Research extends BaseController
      */
     private $_lab_level;
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         parent::__construct();
@@ -211,7 +208,7 @@ class Research extends BaseController
 
                         break;
 
-                    // start a research
+                        // start a research
                     case 'search':
                         if (DevelopmentsLib::isDevelopmentAllowed($this->user, $working_planet, $technology) && DevelopmentsLib::isDevelopmentPayable($this->user, $working_planet, $technology) && !$this->userLibrary->isOnVacations($this->user)) {
                             $costs = DevelopmentsLib::developmentPrice(

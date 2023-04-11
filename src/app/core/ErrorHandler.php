@@ -18,9 +18,6 @@ final class ErrorHandler
      */
     private $debug;
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         // report all errors

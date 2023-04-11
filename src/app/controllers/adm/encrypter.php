@@ -38,9 +38,6 @@ class Encrypter extends BaseController
      */
     private $encrypted = '';
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         parent::__construct();

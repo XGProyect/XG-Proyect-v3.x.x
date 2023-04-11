@@ -57,9 +57,6 @@ class Objects
      */
     private $objects_list;
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         // REQUIRE THIS DAMN FILE

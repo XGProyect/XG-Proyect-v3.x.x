@@ -37,9 +37,6 @@ class Banned extends BaseController
      */
     private $bans_count = 0;
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         parent::__construct();

@@ -69,9 +69,6 @@ class Users extends BaseController
      */
     private $_stats;
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         parent::__construct();

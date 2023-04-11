@@ -57,9 +57,6 @@ class Fleet3 extends BaseController
      */
     private $_allowed_missions = [];
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         parent::__construct();

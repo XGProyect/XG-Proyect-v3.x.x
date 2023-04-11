@@ -124,9 +124,6 @@ class Fleet4 extends BaseController
      */
     private $_fleet_ships = [];
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         parent::__construct();

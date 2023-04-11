@@ -2,17 +2,6 @@
 
 declare(strict_types=1);
 
-/**
- * Changelog Controller
- *
- * @category Controller
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
-
 namespace App\controllers\adm;
 
 use App\core\BaseController;
@@ -21,14 +10,8 @@ use App\libraries\Functions;
 use DateTime;
 use Exception;
 
-/**
- * Changelog Class
- */
 class Changelog extends BaseController
 {
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         parent::__construct();

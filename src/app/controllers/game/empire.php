@@ -35,9 +35,6 @@ class Empire extends BaseController
      */
     public const MODULE_ID = 2;
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         parent::__construct();

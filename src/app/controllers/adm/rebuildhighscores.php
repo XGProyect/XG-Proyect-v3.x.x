@@ -38,9 +38,6 @@ class RebuildHighscores extends BaseController
      */
     private $result = [];
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         parent::__construct();

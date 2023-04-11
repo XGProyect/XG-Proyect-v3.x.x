@@ -57,9 +57,6 @@ class NoobsProtectionLib extends XGPCore
      */
     private $allowed_level;
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         // load model

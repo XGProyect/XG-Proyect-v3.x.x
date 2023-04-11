@@ -32,9 +32,6 @@ class Language
      */
     private $lang_extension = 'php';
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
     }

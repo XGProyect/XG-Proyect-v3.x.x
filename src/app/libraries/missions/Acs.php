@@ -20,9 +20,6 @@ namespace App\libraries\missions;
  */
 class Acs extends Missions
 {
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         parent::__construct();

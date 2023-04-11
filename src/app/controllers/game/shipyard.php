@@ -69,9 +69,6 @@ class Shipyard extends BaseController
      */
     private $building_in_progress = false;
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         parent::__construct();

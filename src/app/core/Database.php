@@ -58,9 +58,6 @@ class Database
         'prefix' => '',
     ];
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         require_once XGP_ROOT . CONFIGS_PATH . 'config.php';

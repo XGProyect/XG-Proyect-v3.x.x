@@ -22,9 +22,6 @@ use App\libraries\StatisticsLibrary;
  */
 class Colonize extends Missions
 {
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         parent::__construct();

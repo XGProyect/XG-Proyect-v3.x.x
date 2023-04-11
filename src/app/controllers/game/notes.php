@@ -44,9 +44,6 @@ class Notes extends BaseController
      */
     private $notes = null;
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         parent::__construct();

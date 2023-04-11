@@ -38,9 +38,6 @@ class Update extends BaseController
      */
     private $output = [];
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         parent::__construct();

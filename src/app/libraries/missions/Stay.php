@@ -20,9 +20,6 @@ use App\libraries\Functions;
  */
 class Stay extends Missions
 {
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         parent::__construct();

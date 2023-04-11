@@ -49,9 +49,6 @@ class Attack extends Missions
      */
     private $hyperspace_technology = [];
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         parent::__construct();

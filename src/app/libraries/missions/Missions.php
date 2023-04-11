@@ -48,9 +48,6 @@ class Missions extends XGPCore
      */
     protected $combat_caps;
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         parent::__construct();

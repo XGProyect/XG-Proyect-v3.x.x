@@ -37,9 +37,6 @@ class Languages extends BaseController
      */
     private $current_file = '';
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         parent::__construct();

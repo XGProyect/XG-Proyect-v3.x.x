@@ -38,9 +38,6 @@ class Recycle extends Missions
      */
     private $recyclers_capacity = 0;
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         parent::__construct();

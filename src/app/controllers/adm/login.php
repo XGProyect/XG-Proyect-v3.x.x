@@ -24,9 +24,6 @@ use App\libraries\Functions;
  */
 class Login extends BaseController
 {
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         parent::__construct();

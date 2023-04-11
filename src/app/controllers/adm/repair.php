@@ -22,9 +22,6 @@ use App\libraries\Functions;
  */
 class Repair extends BaseController
 {
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         parent::__construct();

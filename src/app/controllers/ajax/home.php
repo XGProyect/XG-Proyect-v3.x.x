@@ -19,9 +19,6 @@ use App\core\BaseController;
  */
 class Home extends BaseController
 {
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         parent::__construct();

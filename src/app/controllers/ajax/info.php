@@ -1,27 +1,11 @@
 <?php
-/**
- * Info Controller
- *
- * @category Controller
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
- */
 
 namespace App\controllers\ajax;
 
 use App\core\BaseController;
 
-/**
- * Info Class
- */
 class Info extends BaseController
 {
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         parent::__construct();

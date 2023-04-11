@@ -66,9 +66,6 @@ class Federation extends BaseController
      */
     private $_message = '';
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         parent::__construct();

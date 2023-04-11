@@ -1,14 +1,4 @@
 <?php
-/**
- * Ban Controller
- *
- * @category Controller
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
- */
 
 namespace App\controllers\adm;
 
@@ -16,9 +6,6 @@ use App\core\BaseController;
 use App\libraries\adm\AdministrationLib as Administration;
 use App\libraries\Functions;
 
-/**
- * Ban Class
- */
 class Ban extends BaseController
 {
     /**
@@ -30,9 +17,6 @@ class Ban extends BaseController
      */
     private $_banned_count = 0;
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         parent::__construct();

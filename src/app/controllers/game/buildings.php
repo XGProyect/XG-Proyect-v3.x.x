@@ -52,9 +52,6 @@ class Buildings extends BaseController
      */
     private $_commander_active = false;
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         parent::__construct();

@@ -37,9 +37,6 @@ class Mail extends BaseController
      */
     private $send_result = '';
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         parent::__construct();

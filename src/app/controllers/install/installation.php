@@ -34,9 +34,6 @@ class Installation extends BaseController
      */
     private $db_prefix;
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         parent::__construct();

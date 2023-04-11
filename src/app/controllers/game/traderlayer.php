@@ -24,9 +24,6 @@ class TraderLayer extends BaseController
 {
     public const MODULE_ID = 5;
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         parent::__construct();

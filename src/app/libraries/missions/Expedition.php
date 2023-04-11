@@ -35,9 +35,6 @@ class Expedition extends Missions
      */
     private $all_destroyed = false;
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         parent::__construct();
@@ -81,19 +78,19 @@ class Expedition extends Missions
                 case (($this->hazard < 3)):
                     $this->hazardBlackhole($fleet_row, $current_fleet);
                     break;
-                // NOTHING
+                    // NOTHING
                 case (($this->hazard == 3)):
                     $this->hazardNothing($fleet_row);
                     break;
-                // RESOURCES
+                    // RESOURCES
                 case ((($this->hazard >= 4) && ($this->hazard < 7))):
                     $this->hazardResources($fleet_row, $fleet_capacity);
                     break;
-                // NOTHING
+                    // NOTHING
                 case (($this->hazard == 7)):
                     $this->hazardNothing($fleet_row);
                     break;
-                // SHIPS
+                    // SHIPS
                 case ((($this->hazard >= 8) && ($this->hazard < 11))):
                     $this->hazardShips($fleet_row, $fleet_points, $current_fleet);
                     break;

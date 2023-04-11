@@ -52,9 +52,6 @@ class Fleetshortcuts extends BaseController
      */
     private $_clean_data = [];
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         parent::__construct();

@@ -45,9 +45,6 @@ class UpdatesLibrary extends XGPCore
      */
     private $updatesModel;
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         parent::__construct();

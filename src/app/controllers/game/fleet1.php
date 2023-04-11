@@ -54,9 +54,6 @@ class Fleet1 extends BaseController
      */
     private $_ship_count = 0;
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         parent::__construct();

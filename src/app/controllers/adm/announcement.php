@@ -35,9 +35,6 @@ class Announcement extends BaseController
      */
     private $alerts = [];
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         parent::__construct();

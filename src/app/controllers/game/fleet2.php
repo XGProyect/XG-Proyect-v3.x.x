@@ -53,9 +53,6 @@ class Fleet2 extends BaseController
         'speed_all' => [],
     ];
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         parent::__construct();

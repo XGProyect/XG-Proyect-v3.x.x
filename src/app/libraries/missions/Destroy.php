@@ -61,9 +61,6 @@ class Destroy extends Missions
         'ds_chance' => 0,
     ];
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         parent::__construct();

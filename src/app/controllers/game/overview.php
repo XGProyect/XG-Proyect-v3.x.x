@@ -25,9 +25,6 @@ class Overview extends BaseController
      */
     private $noob;
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         parent::__construct();

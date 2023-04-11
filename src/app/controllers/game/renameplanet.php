@@ -23,9 +23,6 @@ class Renameplanet extends BaseController
 {
     public const MODULE_ID = 1;
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         parent::__construct();

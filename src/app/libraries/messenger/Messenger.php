@@ -32,9 +32,6 @@ final class Messenger
      */
     private $messengerModel;
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         // load model

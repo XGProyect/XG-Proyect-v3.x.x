@@ -26,9 +26,6 @@ class Phalanx extends BaseController
 {
     public const MODULE_ID = 11;
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         parent::__construct();

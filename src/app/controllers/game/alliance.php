@@ -57,9 +57,6 @@ class Alliance extends BaseController
      */
     private $alliance = null;
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         parent::__construct();

@@ -30,9 +30,6 @@ class Mailing extends BaseController
      */
     private $alert = '';
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         parent::__construct();

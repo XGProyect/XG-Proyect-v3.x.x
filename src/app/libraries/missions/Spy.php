@@ -26,9 +26,6 @@ use App\libraries\OfficiersLib;
  */
 class Spy extends Missions
 {
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         parent::__construct();

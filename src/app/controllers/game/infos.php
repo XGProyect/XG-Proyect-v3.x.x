@@ -52,9 +52,6 @@ class Infos extends BaseController
      */
     private $_prod_grid;
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         parent::__construct();
