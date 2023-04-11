@@ -16,51 +16,14 @@ use Exception;
  */
 abstract class BaseController
 {
-    /**
-     * Contains the User object
-     *
-     * @var User
-     */
-    protected $userLibrary = null;
+    protected ?Users $userLibrary = null;
+    protected array $user = [];
+    protected array $planet = [];
+    protected Objects $objects;
+    protected ?Page $page = null;
+    protected ?Template $template = null;
+    protected CI_Lang $langs;
 
-    /**
-     * Contains the current user data
-     *
-     * @var array
-     */
-    protected $user = [];
-
-    /**
-     * Contains the current planet data
-     *
-     * @var array
-     */
-    protected $planet = [];
-
-    /**
-     * Contains the whole set of objects by request
-     *
-     * @var Objects
-     */
-    protected $objects;
-
-    /**
-     * Contains the Page object
-     *
-     * @var Page
-     */
-    protected $page = null;
-
-    /**
-     * Contains the Template object
-     *
-     * @var Template
-     */
-    protected $template = null;
-
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         $this->userLibrary = new Users();
@@ -73,11 +36,7 @@ abstract class BaseController
     }
 
     /**
-     * Will be removed
-     *
      * @deprecated since 3.2.0 will be removed on 4.0.0
-     *
-     * @return array
      */
     protected function getUserData(): array
     {
@@ -85,11 +44,7 @@ abstract class BaseController
     }
 
     /**
-     * Will be removed
-     *
      * @deprecated since 3.2.0 will be removed on 4.0.0
-     *
-     * @return array
      */
     protected function getPlanetData(): array
     {
@@ -97,39 +52,22 @@ abstract class BaseController
     }
 
     /**
-     * Will be removed
-     *
      * @deprecated since 3.2.0 will be removed on 4.0.0
-     *
-     * @return array
      */
-    protected function getTemplate(): array
+    protected function getTemplate(): ?Template
     {
         return $this->template;
     }
 
     /**
-     * Will be removed
-     *
      * @deprecated since 3.2.0 will be removed on 4.0.0
-     *
-     * @return array
      */
-    protected function getObjects(): array
+    protected function getObjects(): ?Objects
     {
         return $this->objects;
     }
 
-    /**
-     * Load the provided model, support a dir path
-     *
-     * @param string $class Mandatory field, if not will throw an exception
-     *
-     * @return void
-     *
-     * @throws Exception
-     */
-    public function loadModel($class)
+    public function loadModel(string $class): void
     {
         try {
             // some validations
@@ -156,12 +94,9 @@ abstract class BaseController
     }
 
     /**
-     * Load a language file using CI Library
-     *
-     * @param string|array $language_file
-     * @return void
+     * @param string|array $languageFile
      */
-    public function loadLang($language_file): void
+    public function loadLang($languageFile): void
     {
         try {
             // require langugage library
@@ -169,7 +104,7 @@ abstract class BaseController
 
             if (!file_exists($ci_lang_path)) {
                 // not found
-                throw new Exception('Language file "' . $language_file . '" not defined');
+                throw new Exception('Language file "' . $languageFile . '" not defined');
                 return;
             }
 
@@ -182,7 +117,7 @@ abstract class BaseController
             require_once $ci_lang_path;
 
             $this->langs = new CI_Lang();
-            $this->langs->load($language_file, DEFAULT_LANG);
+            $this->langs->load($languageFile, DEFAULT_LANG);
         } catch (Exception $e) {
             die('Fatal error: ' . $e->getMessage());
         }

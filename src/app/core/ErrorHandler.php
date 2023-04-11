@@ -2,17 +2,6 @@
 
 declare(strict_types=1);
 
-/**
- * Error Handler
- *
- * @category Core
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @since    3.1.0
- */
-
 namespace App\core;
 
 use App\libraries\DebugLib as Debug;

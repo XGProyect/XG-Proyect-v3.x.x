@@ -1,14 +1,4 @@
 <?php
-/**
- * Fleets Library
- *
- * @category Library
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
- */
 
 namespace App\libraries;
 
@@ -18,7 +8,6 @@ use App\core\Language;
 use App\core\Template;
 use App\core\XGPCore;
 use App\helpers\UrlHelper;
-use App\libraries\FleetsLib;
 use App\libraries\FormatLib;
 use App\libraries\Functions;
 use App\libraries\OfficiersLib;
@@ -27,17 +16,6 @@ use App\libraries\TimingLibrary as Timing;
 use App\libraries\Users;
 use CI_Lang;
 
-/**
- * FleetsLib Class
- *
- * @category Classes
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- *
- */
 class FleetsLib extends XGPCore
 {
     /**

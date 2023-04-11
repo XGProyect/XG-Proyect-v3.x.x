@@ -56,7 +56,7 @@ class Galaxy extends BaseController
     /**
      * @var mixed
      */
-    private $_noob;
+    private $noob;
     /**
      * @var mixed
      */
@@ -82,7 +82,7 @@ class Galaxy extends BaseController
         $this->_resource = $this->objects->getObjects();
         $this->_pricelist = $this->objects->getPrice();
         $this->_reslist = $this->objects->getObjectsList();
-        $this->_noob = Functions::loadLibrary('NoobsProtectionLib');
+        $this->noob = Functions::loadLibrary('NoobsProtectionLib');
         $this->_galaxyLib = Functions::loadLibrary('GalaxyLib');
 
         if ($this->user['preference_vacation_mode'] > 0) {
@@ -343,7 +343,7 @@ class Galaxy extends BaseController
 
         $target_user = $this->Galaxy_Model->getTargetUserDataByCoords($galaxy, $system, $planet);
 
-        $user_points = $this->_noob->returnPoints($this->user['user_id'], $target_user['user_id']);
+        $user_points = $this->noob->returnPoints($this->user['user_id'], $target_user['user_id']);
         $MyGameLevel = $user_points['user_points'];
         $HeGameLevel = $user_points['target_points'];
 
@@ -391,10 +391,10 @@ class Galaxy extends BaseController
         }
 
         if ($target_user['user_onlinetime'] >= (time() - 60 * 60 * 24 * 7)) {
-            if ($this->_noob->isWeak(intval($MyGameLevel), intval($HeGameLevel))) {
+            if ($this->noob->isWeak(intval($MyGameLevel), intval($HeGameLevel))) {
                 $error .= $this->langs->line('fl_week_player') . '<br>';
                 $errors++;
-            } elseif ($this->_noob->isStrong(intval($MyGameLevel), intval($HeGameLevel))) {
+            } elseif ($this->noob->isStrong(intval($MyGameLevel), intval($HeGameLevel))) {
                 $error .= $this->langs->line('fl_strong_player') . '<br>';
                 $errors++;
             }
@@ -547,7 +547,7 @@ class Galaxy extends BaseController
             }
         }
 
-        $user_points = $this->_noob->returnPoints($this->user['user_id'], $target_user['user_id']);
+        $user_points = $this->noob->returnPoints($this->user['user_id'], $target_user['user_id']);
         $CurrentPoints = $user_points['user_points'];
         $TargetPoints = $user_points['target_points'];
         $TargetVacat = $target_user['preference_vacation_mode'];
@@ -569,11 +569,11 @@ class Galaxy extends BaseController
         }
 
         if ($target_user['user_onlinetime'] >= (time() - 60 * 60 * 24 * 7)) {
-            if ($this->_noob->isWeak(intval($CurrentPoints), intval($TargetPoints)) && $target_user['user_id'] != '' && $order == 6) {
+            if ($this->noob->isWeak(intval($CurrentPoints), intval($TargetPoints)) && $target_user['user_id'] != '' && $order == 6) {
                 die("603 ");
             }
 
-            if ($this->_noob->isStrong(intval($CurrentPoints), intval($TargetPoints)) && $target_user['user_id'] != '' && $order == 6) {
+            if ($this->noob->isStrong(intval($CurrentPoints), intval($TargetPoints)) && $target_user['user_id'] != '' && $order == 6) {
                 die("604 ");
             }
         }

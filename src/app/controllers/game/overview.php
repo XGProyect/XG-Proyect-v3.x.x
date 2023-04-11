@@ -1,14 +1,4 @@
 <?php
-/**
- * Overview Controller
- *
- * @category Controller
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
- */
 
 namespace App\controllers\game;
 
@@ -33,7 +23,7 @@ class Overview extends BaseController
     /**
      * @var mixed
      */
-    private $_noob;
+    private $noob;
 
     /**
      * Constructor
@@ -51,7 +41,7 @@ class Overview extends BaseController
         // load Language
         parent::loadLang(['game/global', 'game/overview', 'game/buildings', 'game/constructions']);
 
-        $this->_noob = Functions::loadLibrary('NoobsProtectionLib');
+        $this->noob = Functions::loadLibrary('NoobsProtectionLib');
     }
 
     /**
@@ -416,7 +406,7 @@ class Overview extends BaseController
         $user_rank = '-';
         $total_rank = $this->user['user_statistic_total_rank'] == '' ? $this->planet['stats_users'] : $this->user['user_statistic_total_rank'];
 
-        if ($this->_noob->isRankVisible($this->user['user_authlevel'])) {
+        if ($this->noob->isRankVisible($this->user['user_authlevel'])) {
             $user_rank = FormatLib::prettyNumber($this->user['user_statistic_total_points']) . " (" . $this->langs->line('ov_place') . ' ' . UrlHelper::setUrl('game.php?page=statistics&range=' . $total_rank, $total_rank, $total_rank) . ' ' . $this->langs->line('ov_of') . ' ' . $this->planet['stats_users'] . ")";
         }
 
