@@ -1,0 +1,4 @@
+<?php echo LangManager::getInstance()->getAttackersAttackingDescr(number_format($_round->getAttackersFireCount(),0, ',', '.'),number_format($_round->getAttackersFirePower(),0, ',', '.')); ?>
+<?php echo LangManager::getInstance()->getDefendersDefendingDescr(number_format($_round->getDefendersAssorbedDamage(),0, ',', '.')); ?><br />
+<?php echo LangManager::getInstance()->getDefendersAttackingDescr(number_format($_round->getDefendersFireCount(),0, ',', '.'),number_format($_round->getDefendersFirePower(),0, ',', '.')); ?>
+<?php echo LangManager::getInstance()->getAttackersDefendingDescr(number_format($_round->getAttachersAssorbedDamage(),0, ',', '.')); ?><br />

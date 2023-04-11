@@ -1,0 +1,27 @@
+<html>
+<head>
+<style type="text/css">
+@import url(<?php echo $css; ?>public/style.css);
+</style>
+</head>
+<body>
+<center>
+<br /><br />
+    <?php $_st = 'Attacker'; $_playerGroup =  $this->getResultAttackersFleetOnRound('START'); include('playerGroup.html');?>
+    <?php $_st = 'Defender'; $_playerGroup =  $this->getResultDefendersFleetOnRound('START'); include('playerGroup.html');?>
+    <br>
+    <br /><br />
+    <?php for ( $_i=1;$_i<=$this->getLastRoundNumber();$_i++){ ?>
+        <?php $_round = $this->getRound($_i);$_roundBefore = $this->getRound($_i - 1); include('round.html'); ?>
+    <?php } ?>
+    <br /><br />
+    <?php $_st = 'Attacker'; $_playerGroup =  $this->getResultAttackersFleetOnRound('END'); include('playerGroup.html');?>
+    <?php $_st = 'Defender'; $_playerGroup =  $this->getResultDefendersFleetOnRound('END'); include('playerGroup.html');?>
+    <br /><br />
+    <?php if($this->attackerHasWin()) { include('attackers_win.html');} ?>
+    <?php if($this->defenderHasWin()) { include('defenders_win.html'); } ?>
+    <?php if($this->isAdraw()) { include('draw.html'); } ?>
+    <?php include('details.html'); ?>
+</center>
+</body>
+</html>

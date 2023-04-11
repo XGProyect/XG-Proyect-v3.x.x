@@ -1,0 +1,26 @@
+<div id="<?php echo $type ?>_fleet[<?php echo $_l ?>]" >
+               <center>
+                  <table>
+                     
+                     <?php foreach($reslist['fleet'] as $idType) { ?>
+                        <tr>
+                           <td><?php echo LangManager::getInstance()->getShipName($idType);?></td>
+                           <td><input type="number" class="rounded" name="<?php echo $type ?>_fleet[<?php echo $_l ?>][<?php echo $idType ?>]" value="0"></td>
+                           <td><a href="javascript:void(0);" onmouseover="return overlib('<?php include('tooltip.html');?>', CAPTION, '<font color=\'blue\'>Performance</font>', WRAP, STATUS, 'This is a tooltip popup with a caption.');" onmouseout="nd();">i</a></td>
+                        </tr>
+                     <?php } ?>
+                     <tr>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                     </tr>
+                     <?php $enabled = ($type == 'defender' && $_l == 1)?  "enabled" : "disabled";  ?>
+                     <?php foreach($reslist['defense'] as $idType) { ?>
+                        <tr>
+                            <td><?php echo LangManager::getInstance()->getShipName($idType);?></td>
+                            <td><input type="number" class="rounded" name="<?php echo $type ?>_fleet[<?php echo $_l ?>][<?php echo $idType ?>]" value="0"></td>
+                            <td><a href="javascript:void(0);" onmouseover="return overlib('<?php include('tooltip.html');?>', CAPTION, '<font color=\'blue\'>Performance</font>', WRAP, STATUS, 'This is a tooltip popup with a caption.');" onmouseout="nd();">i</a></td>
+                        </tr>
+                     <?php } ?>
+                  </table>
+               </center>
+            </div>
