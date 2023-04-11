@@ -1,14 +1,4 @@
 <?php
-/**
- * Phalanx Controller
- *
- * @category Controller
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
- */
 
 namespace App\controllers\game;
 
@@ -19,12 +9,11 @@ use App\libraries\Formulas;
 use App\libraries\Functions;
 use App\libraries\Users;
 
-/**
- * Phalanx Class
- */
 class Phalanx extends BaseController
 {
     public const MODULE_ID = 11;
+
+    protected $phalanxModel;
 
     public function __construct()
     {
@@ -40,11 +29,6 @@ class Phalanx extends BaseController
         parent::loadLang(['game/phalanx']);
     }
 
-    /**
-     * Users land here
-     *
-     * @return void
-     */
     public function index(): void
     {
         // Check module access
@@ -54,11 +38,6 @@ class Phalanx extends BaseController
         $this->buildPage();
     }
 
-    /**
-     * Build the page
-     *
-     * @return void
-     */
     private function buildPage(): void
     {
         $parse = $this->langs->language;
@@ -82,14 +61,14 @@ class Phalanx extends BaseController
 
         /* main page */
         if ($this->planet['planet_deuterium'] >= 10000) {
-            $this->Phalanx_Model->reduceDeuterium($this->user['user_current_planet']);
+            $this->phalanxModel->reduceDeuterium($this->user['user_current_planet']);
 
-            $target_planet_info = $this->Phalanx_Model->getTargetPlanetIdAndName($Galaxy, $System, $Planet);
+            $target_planet_info = $this->phalanxModel->getTargetPlanetIdAndName($Galaxy, $System, $Planet);
 
             $TargetID = $target_planet_info['planet_user_id'];
             $TargetName = $target_planet_info['planet_name'];
 
-            $target_moon = $this->Phalanx_Model->getTargetMoonStatus($Galaxy, $System, $Planet);
+            $target_moon = $this->phalanxModel->getTargetMoonStatus($Galaxy, $System, $Planet);
 
             //if there isn't a moon,
             if ($target_moon === false) {
@@ -98,7 +77,7 @@ class Phalanx extends BaseController
                 $TargetMoonIsDestroyed = (isset($target_moon['planet_destroyed']) && $target_moon['planet_destroyed'] !== 0);
             }
 
-            $FleetToTarget = $this->Phalanx_Model->getFleetsToTarget($Galaxy, $System, $Planet);
+            $FleetToTarget = $this->phalanxModel->getFleetsToTarget($Galaxy, $System, $Planet);
 
             $Record = 0;
             $fpage = [];

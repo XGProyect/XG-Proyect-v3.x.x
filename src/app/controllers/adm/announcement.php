@@ -2,17 +2,6 @@
 
 declare(strict_types=1);
 
-/**
- * Announcement Controller
- *
- * @category Controller
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
-
 namespace App\controllers\adm;
 
 use App\core\BaseController;
@@ -23,17 +12,10 @@ use App\libraries\FormatLib as Format;
 use App\libraries\Functions;
 use JS_PATH;
 
-/**
- * Announcement Class
- */
 class Announcement extends BaseController
 {
-    /**
-     * Contains the alert array
-     *
-     * @var array
-     */
-    private $alerts = [];
+    private array $alerts = [];
+    protected $announcementModel;
 
     public function __construct()
     {
@@ -49,11 +31,6 @@ class Announcement extends BaseController
         parent::loadLang(['adm/global', 'adm/announcement']);
     }
 
-    /**
-     * Users land here
-     *
-     * @return void
-     */
     public function index(): void
     {
         // check if the user is allowed to access
@@ -116,7 +93,7 @@ class Announcement extends BaseController
      */
     private function doMessageAction(array $post): void
     {
-        $players = $this->Announcement_Model->getAllPlayers();
+        $players = $this->announcementModel->getAllPlayers();
 
         if (isset($post['color-picker'])) {
             $color = $post['color-picker'];
@@ -155,7 +132,7 @@ class Announcement extends BaseController
      */
     private function doEmailAction(array $post): void
     {
-        $players = $this->Announcement_Model->getAllPlayers();
+        $players = $this->announcementModel->getAllPlayers();
         $from = [
             'mail' => Functions::readConfig('admin_email'),
             'name' => Functions::readConfig('game_name'),
@@ -190,11 +167,6 @@ class Announcement extends BaseController
         );
     }
 
-    /**
-     * Build the page
-     *
-     * @return void
-     */
     private function buildPage(): void
     {
         $this->page->displayAdmin(

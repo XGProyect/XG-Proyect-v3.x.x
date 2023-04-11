@@ -38,6 +38,8 @@ class Update extends BaseController
      */
     private $output = [];
 
+    protected $updateModel;
+
     public function __construct()
     {
         parent::__construct();
@@ -52,11 +54,6 @@ class Update extends BaseController
         parent::loadLang(['adm/global', 'adm/update']);
     }
 
-    /**
-     * Users land here
-     *
-     * @return void
-     */
     public function index(): void
     {
         // check if the user is allowed to access
@@ -68,11 +65,6 @@ class Update extends BaseController
         $this->buildPage();
     }
 
-    /**
-     * Build the page
-     *
-     * @return void
-     */
     private function buildPage(): void
     {
         $parse = $this->langs->language;
@@ -199,7 +191,7 @@ class Update extends BaseController
         if (isset($queries) && count($queries) > 0) {
             foreach ($queries as $query) {
                 if (!$this->demo) {
-                    $this->output[] = $this->Update_Model->runQuery($query);
+                    $this->output[] = $this->updateModel->runQuery($query);
                 } else {
                     $this->output[] = $query;
                 }

@@ -1,14 +1,4 @@
 <?php
-/**
- * Renameplanet Controller
- *
- * @category Controller
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
- */
 
 namespace App\controllers\game;
 
@@ -16,12 +6,11 @@ use App\core\BaseController;
 use App\libraries\Functions;
 use App\libraries\Users;
 
-/**
- * Renameplanet Class
- */
 class Renameplanet extends BaseController
 {
     public const MODULE_ID = 1;
+
+    protected $renameplanetModel;
 
     public function __construct()
     {
@@ -37,11 +26,6 @@ class Renameplanet extends BaseController
         parent::loadLang(['game/renameplanet']);
     }
 
-    /**
-     * Users land here
-     *
-     * @return void
-     */
     public function index(): void
     {
         // Check module access
@@ -51,11 +35,6 @@ class Renameplanet extends BaseController
         $this->buildPage();
     }
 
-    /**
-     * Build the page
-     *
-     * @return void
-     */
     private function buildPage(): void
     {
         $parse = $this->langs->language;
@@ -106,7 +85,7 @@ class Renameplanet extends BaseController
         }
 
         if ($new_name != '') {
-            $this->Renameplanet_Model->updatePlanetName($new_name, $this->user['user_current_planet']);
+            $this->renameplanetModel->updatePlanetName($new_name, $this->user['user_current_planet']);
             Functions::message($this->langs->line('rp_planet_name_changed'), "game.php?page=renameplanet", 2);
         }
     }
@@ -120,7 +99,7 @@ class Renameplanet extends BaseController
     {
         $own_fleet = 0;
         $enemy_fleet = 0;
-        $fleets_incoming = $this->Renameplanet_Model->getFleets(
+        $fleets_incoming = $this->renameplanetModel->getFleets(
             $this->user['user_id'],
             $this->planet['planet_galaxy'],
             $this->planet['planet_system'],
@@ -145,7 +124,7 @@ class Renameplanet extends BaseController
         } else {
             if (password_verify($_POST['pw'], $this->user['user_password']) && $this->user['user_home_planet_id'] != $this->user['user_current_planet']) {
                 if ($this->planet['moon_id'] != 0) {
-                    $this->Renameplanet_Model->deleteMoonAndPlanet(
+                    $this->renameplanetModel->deleteMoonAndPlanet(
                         $this->user['user_id'],
                         $this->user['user_current_planet'],
                         $this->planet['planet_galaxy'],
@@ -153,7 +132,7 @@ class Renameplanet extends BaseController
                         $this->planet['planet_planet']
                     );
                 } else {
-                    $this->Renameplanet_Model->deletePlanet($this->user['user_id'], $this->user['user_current_planet']);
+                    $this->renameplanetModel->deletePlanet($this->user['user_id'], $this->user['user_current_planet']);
                 }
 
                 Functions::message($this->langs->line('rp_planet_abandoned'), 'game.php?page=overview');

@@ -1,25 +1,14 @@
 <?php
-/**
- * Home Controller
- *
- * @category Controller
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
- */
 
 namespace App\controllers\home;
 
 use App\core\BaseController;
 use App\libraries\Functions;
 
-/**
- * Home Class
- */
 class Home extends BaseController
 {
+    protected $homeModel;
+
     public function __construct()
     {
         parent::__construct();
@@ -31,11 +20,6 @@ class Home extends BaseController
         parent::loadLang(['home/home']);
     }
 
-    /**
-     * Users land here
-     *
-     * @return void
-     */
     public function index(): void
     {
         // time to do something
@@ -58,15 +42,15 @@ class Home extends BaseController
         ]);
 
         if (!empty($loginData['login']) && !empty($loginData['pass'])) {
-            $login = $this->Home_Model->getUserWithProvidedCredentials($loginData['login']);
+            $login = $this->homeModel->getUserWithProvidedCredentials($loginData['login']);
 
             if (isset($login) && password_verify($loginData['pass'], $login['user_password'])) {
                 if (isset($login['banned_longer']) && $login['banned_longer'] <= time()) {
-                    $this->Home_Model->removeBan($login['user_name']);
+                    $this->homeModel->removeBan($login['user_name']);
                 }
 
                 if ($this->userLibrary->userLogin($login['user_id'], $login['user_password'])) {
-                    $this->Home_Model->setUserHomeCurrentPlanet($login['user_id']);
+                    $this->homeModel->setUserHomeCurrentPlanet($login['user_id']);
 
                     // redirect to game
                     Functions::redirect('game.php?page=overview');
@@ -78,11 +62,6 @@ class Home extends BaseController
         }
     }
 
-    /**
-     * Build the page
-     *
-     * @return void
-     */
     private function buildPage(): void
     {
         $this->page->display(

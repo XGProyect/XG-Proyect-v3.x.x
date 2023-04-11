@@ -1,14 +1,4 @@
 <?php
-/**
- * Galaxy Controller
- *
- * @category Controller
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
- */
 
 namespace App\controllers\game;
 
@@ -19,48 +9,16 @@ use App\libraries\Formulas;
 use App\libraries\Functions;
 use App\libraries\Users;
 
-/**
- * Galaxy Class
- */
 class Galaxy extends BaseController
 {
-    /**
-     * The module ID
-     *
-     * @var int
-     */
     public const MODULE_ID = 11;
-
-    /**
-     * Contains the galaxy data
-     *
-     * @var array
-     */
-    private $galaxy = [];
-
-    /**
-     * Contains the current amount of planets
-     *
-     * @var integer
-     */
-    private $planet_count = 0;
-
-    /**
-     * @var mixed
-     */
+    private array $galaxy = [];
+    private int $planet_count = 0;
     private $_galaxy;
-    /**
-     * @var mixed
-     */
     private $_system;
-    /**
-     * @var mixed
-     */
     private $noob;
-    /**
-     * @var mixed
-     */
     private $_galaxyLib;
+    protected $galaxyModel;
 
     public function __construct()
     {
@@ -90,11 +48,6 @@ class Galaxy extends BaseController
         //$this->setUpPreferences();
     }
 
-    /**
-     * Users land here
-     *
-     * @return void
-     */
     public function index(): void
     {
         // Check module access
@@ -123,16 +76,11 @@ class Galaxy extends BaseController
         }
     }
 
-    /**
-     * Build the page
-     *
-     * @return void
-     */
     private function buildPage(): void
     {
         // fleets
         $max_fleets = FleetsLib::getMaxFleets($this->user['research_computer_technology'], $this->user['premium_officier_admiral']);
-        $current_fleets = $this->Galaxy_Model->countAmountFleetsByUserId($this->user['user_id']);
+        $current_fleets = $this->galaxyModel->countAmountFleetsByUserId($this->user['user_id']);
 
         // missiles and espionage probes
         $CurrentPlID = $this->planet['planet_id'];
@@ -155,7 +103,7 @@ class Galaxy extends BaseController
             die(Functions::message($this->langs->line('gl_no_missiles'), "game.php?page=galaxy&mode=0", 2));
         }
 
-        $this->galaxy = $this->Galaxy_Model->getGalaxyDataByGalaxyAndSystem($this->_galaxy, $this->_system, $this->user['user_id']);
+        $this->galaxy = $this->galaxyModel->getGalaxyDataByGalaxyAndSystem($this->_galaxy, $this->_system, $this->user['user_id']);
 
         $parse['selected_galaxy'] = $this->_galaxy;
         $parse['selected_system'] = $this->_system;
@@ -338,7 +286,7 @@ class Galaxy extends BaseController
         $tempvar1 = abs($system - $this->planet['planet_system']);
         $tempvar2 = Formulas::missileRange($this->user['research_impulse_drive']);
 
-        $target_user = $this->Galaxy_Model->getTargetUserDataByCoords($galaxy, $system, $planet);
+        $target_user = $this->galaxyModel->getTargetUserDataByCoords($galaxy, $system, $planet);
 
         $user_points = $this->noob->returnPoints($this->user['user_id'], $target_user['user_id']);
         $MyGameLevel = $user_points['user_points'];
@@ -419,7 +367,7 @@ class Galaxy extends BaseController
             8 => $this->langs->line('defense_large_shield_dome'),
         ];
 
-        $this->Fleet_Model->insertNewMissilesMission([
+        $this->fleetModel->insertNewMissilesMission([
             'fleet_owner' => $this->user['user_id'],
             'fleet_amount' => $missiles_amount,
             'fleet_array' => FleetsLib::setFleetShipsArray([503 => $missiles_amount]),
@@ -527,9 +475,9 @@ class Galaxy extends BaseController
             die("614 ");
         }
 
-        $current_fleets = $this->Galaxy_Model->countAmountFleetsByUserId($this->user['user_id']);
+        $current_fleets = $this->galaxyModel->countAmountFleetsByUserId($this->user['user_id']);
 
-        $target_user = $this->Galaxy_Model->getTargetUserDataByCoords($galaxy, $system, $planet, $_POST['planettype']);
+        $target_user = $this->galaxyModel->getTargetUserDataByCoords($galaxy, $system, $planet, $_POST['planettype']);
 
         if ($target_user == null) {
             $target_user = $this->user;
@@ -537,7 +485,7 @@ class Galaxy extends BaseController
 
         // invisible debris by jstar
         if ($order == 8) {
-            $TargetGPlanet = $this->Galaxy_Model->getPlanetDebrisByCoords($galaxy, $system, $planet);
+            $TargetGPlanet = $this->galaxyModel->getPlanetDebrisByCoords($galaxy, $system, $planet);
 
             if ($TargetGPlanet['planet_debris_metal'] == 0 && $TargetGPlanet['planet_debris_crystal'] == 0 && time() > ($TargetGPlanet['planet_invisible_start_time'] + DEBRIS_LIFE_TIME)) {
                 die();
@@ -620,7 +568,7 @@ class Galaxy extends BaseController
             die("601 ");
         }
 
-        $this->Fleet_Model->insertNewFleet(
+        $this->fleetModel->insertNewFleet(
             [
                 'fleet_owner' => $this->user['user_id'],
                 'fleet_mission' => intval($order),

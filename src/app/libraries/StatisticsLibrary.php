@@ -1,48 +1,20 @@
 <?php
-/**
- * XG Proyect
- *
- * Open-source OGame Clon
- *
- * This content is released under the GPL-3.0 License
- *
- * Copyright (c) 2008-2020 XG Proyect
- *
- * @package    XG Proyect
- * @author     XG Proyect Team
- * @copyright  2008-2020 XG Proyect
- * @license    https://www.gnu.org/licenses/gpl-3.0.en.html GPL-3.0 License
- * @link       https://github.com/XGProyect/
- * @since      3.0.0
- */
 
 namespace App\libraries;
 
 use App\core\XGPCore;
 use App\libraries\Functions;
+use App\models\libraries\Statistics_library;
 
-/**
- * StatisticsLibrary Class
- */
 class StatisticsLibrary extends XGPCore
 {
-    /**
-     * Contains the model
-     *
-     * @var Statistics_library
-     */
-    private $statisticsLibraryModel;
+    private Statistics_library $statisticsLibraryModel;
 
     /**
      * @var mixed
      */
     private $time;
 
-    /**
-     * Constructor
-     *
-     * @return void
-     */
     public function __construct()
     {
         parent::__construct();

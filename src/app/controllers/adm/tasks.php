@@ -38,11 +38,6 @@ class Tasks extends BaseController
         parent::loadLang(['adm/global', 'adm/tasks']);
     }
 
-    /**
-     * Users land here
-     *
-     * @return void
-     */
     public function index(): void
     {
         // check if the user is allowed to access
@@ -54,11 +49,6 @@ class Tasks extends BaseController
         $this->buildPage();
     }
 
-    /**
-     * Build the page
-     *
-     * @return void
-     */
     private function buildPage(): void
     {
         $this->page->displayAdmin(

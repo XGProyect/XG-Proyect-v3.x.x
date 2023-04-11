@@ -3,36 +3,19 @@
 namespace App\controllers\install;
 
 use App\core\BaseController;
-use App\core\Database;
 use App\helpers\StringsHelper;
 use App\libraries\Functions;
 use App\libraries\PlanetLib;
 
-/**
- * Installation Class
- */
 class Installation extends BaseController
 {
-    /**
-     * @var mixed
-     */
+    private PlanetLib $_planet;
     private $db_host;
-    /**
-     * @var mixed
-     */
     private $db_name;
-    /**
-     * @var mixed
-     */
     private $db_user;
-    /**
-     * @var mixed
-     */
     private $db_password;
-    /**
-     * @var mixed
-     */
     private $db_prefix;
+    protected $installationModel;
 
     public function __construct()
     {
@@ -47,22 +30,12 @@ class Installation extends BaseController
         parent::loadLang(['installation/installation']);
     }
 
-    /**
-     * Users land here
-     *
-     * @return void
-     */
     public function index(): void
     {
         // build the page
         $this->buildPage();
     }
 
-    /**
-     * Build the page
-     *
-     * @return void
-     */
     private function buildPage(): void
     {
         $parse = $this->langs->language;
@@ -371,7 +344,7 @@ class Installation extends BaseController
      */
     private function tablesExists()
     {
-        $result = $this->Installation_Model->getListOfTables(DB_NAME);
+        $result = $this->installationModel->getListOfTables(DB_NAME);
         $arr = [];
 
         foreach ($result as $row) {
@@ -392,7 +365,7 @@ class Installation extends BaseController
      */
     private function adminExists()
     {
-        return $this->Installation_Model->getAdmin()['count'] >= 1;
+        return $this->installationModel->getAdmin()['count'] >= 1;
     }
 
     /**
@@ -402,7 +375,7 @@ class Installation extends BaseController
      */
     private function tryConnection()
     {
-        return $this->Installation_Model->tryConnection($this->db_host, $this->db_user, $this->db_password);
+        return $this->installationModel->tryConnection($this->db_host, $this->db_user, $this->db_password);
     }
 
     /**
@@ -412,7 +385,7 @@ class Installation extends BaseController
      */
     private function tryDatabase()
     {
-        return $this->Installation_Model->tryDatabase($this->db_name);
+        return $this->installationModel->tryDatabase($this->db_name);
     }
 
     /**
@@ -466,7 +439,7 @@ class Installation extends BaseController
         require_once XGP_ROOT . 'database' . DIRECTORY_SEPARATOR . 'database.php';
 
         if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-            $this->Installation_Model->setWindowsSqlMode();
+            $this->installationModel->setWindowsSqlMode();
         }
 
         /**
@@ -474,7 +447,7 @@ class Installation extends BaseController
          */
         foreach ($tables as $table => $query) {
             // run query for each table
-            $status[$table] = $this->Installation_Model->runSimpleQuery($query);
+            $status[$table] = $this->installationModel->runSimpleQuery($query);
 
             // if something fails... return false
             if ($status[$table] != 1) {
@@ -482,7 +455,7 @@ class Installation extends BaseController
             }
         }
         if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-            $this->Installation_Model->setNormalMode();
+            $this->installationModel->setNormalMode();
         }
 
         // ok!
@@ -508,8 +481,8 @@ class Installation extends BaseController
         }
 
         // some default values
-        $adm_name = $this->Installation_Model->escapeValue($_POST['adm_user']);
-        $adm_email = $this->Installation_Model->escapeValue($_POST['adm_email']);
+        $adm_name = $this->installationModel->escapeValue($_POST['adm_user']);
+        $adm_email = $this->installationModel->escapeValue($_POST['adm_email']);
         $adm_pass = Functions::hash($_POST['adm_pass']);
 
         // create user and its planet

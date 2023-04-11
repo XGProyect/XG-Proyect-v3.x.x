@@ -2,17 +2,6 @@
 
 declare(strict_types=1);
 
-/**
- * Search Controller
- *
- * @category Controller
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
- */
-
 namespace App\controllers\game;
 
 use App\core\BaseController;
@@ -20,27 +9,15 @@ use App\core\enumerators\SwitchIntEnumerator as SwitchInt;
 use App\helpers\UrlHelper;
 use App\libraries\FormatLib;
 use App\libraries\Functions;
+use App\libraries\NoobsProtectionLib;
 use App\libraries\Users;
 
-/**
- * Search Class
- */
 class Search extends BaseController
 {
     public const MODULE_ID = 17;
 
-    /**
-     *
-     * @var \NoobsProtectionLib
-     */
-    private $noob = null;
-
-    /**
-     * Contains the search terms provided by the player
-     *
-     * @var array
-     */
-    private $search_terms = [
+    private ?NoobsProtectionLib $noob = null;
+    private array $search_terms = [
         'search_type' => '',
         'player_name' => '',
         'alliance_tag' => '',
@@ -48,13 +25,8 @@ class Search extends BaseController
         'search_text' => '',
         'error_block' => '',
     ];
-
-    /**
-     * Contains the search results
-     *
-     * @var array
-     */
-    private $results = [];
+    private array $results = [];
+    protected $searchModel;
 
     public function __construct()
     {
@@ -73,11 +45,6 @@ class Search extends BaseController
         $this->noob = Functions::loadLibrary('NoobsProtectionLib');
     }
 
-    /**
-     * Users land here
-     *
-     * @return void
-     */
     public function index(): void
     {
         // Check module access
@@ -112,13 +79,13 @@ class Search extends BaseController
             switch ($search_query['search_type']) {
                 case 'player_name':
                 default:
-                    $this->results = $this->Search_Model->getResultsByPlayerName($search_query['search_text']);
+                    $this->results = $this->searchModel->getResultsByPlayerName($search_query['search_text']);
                     break;
                 case 'alliance_tag':
-                    $this->results = $this->Search_Model->getResultsByAllianceTag($search_query['search_text']);
+                    $this->results = $this->searchModel->getResultsByAllianceTag($search_query['search_text']);
                     break;
                 case 'planet_names':
-                    $this->results = $this->Search_Model->getResultsByPlanetName($search_query['search_text']);
+                    $this->results = $this->searchModel->getResultsByPlanetName($search_query['search_text']);
                     break;
             }
 
@@ -128,11 +95,6 @@ class Search extends BaseController
         }
     }
 
-    /**
-     * Build the page
-     *
-     * @return void
-     */
     private function buildPage(): void
     {
         $this->page->display(

@@ -1,12 +1,4 @@
 <?php
-/**
- * research.php
- *
- * @author   XG Proyect Team
- * @license  https://www.xgproyect.org XG Proyect
- * @link     https://www.xgproyect.org
- * @version  3.2.0
- */
 
 namespace App\controllers\game;
 
@@ -17,37 +9,15 @@ use App\libraries\FormatLib;
 use App\libraries\Functions;
 use App\libraries\Users;
 
-/**
- * Research Class
- */
 class Research extends BaseController
 {
     public const MODULE_ID = 6;
 
-    /**
-     * @var mixed
-     */
-    private $_current_user;
-    /**
-     * @var mixed
-     */
-    private $_current_planet;
-    /**
-     * @var mixed
-     */
     private $_resource;
-    /**
-     * @var mixed
-     */
     private $_reslist;
-    /**
-     * @var mixed
-     */
     private $_is_working;
-    /**
-     * @var mixed
-     */
     private $_lab_level;
+    protected $researchModel;
 
     public function __construct()
     {
@@ -72,11 +42,6 @@ class Research extends BaseController
         $this->handleTechnologieBuild();
     }
 
-    /**
-     * Users land here
-     *
-     * @return void
-     */
     public function index(): void
     {
         // Check module access
@@ -90,12 +55,7 @@ class Research extends BaseController
         $this->buildPage();
     }
 
-    /**
-     * Build the page
-     *
-     * @return void
-     */
-    private function buildPage()
+    private function buildPage(): void
     {
         $parse = $this->langs->language;
         $technology_list = '';
@@ -238,7 +198,7 @@ class Research extends BaseController
                 }
 
                 if ($update_data == true) {
-                    $this->Research_Model->startNewResearch($working_planet, $this->user);
+                    $this->researchModel->startNewResearch($working_planet, $this->user);
                 }
 
                 $this->planet = $working_planet;
@@ -309,7 +269,7 @@ class Research extends BaseController
 
         if ($this->user['research_current_research'] != 0) {
             if ($this->user['research_current_research'] != $this->planet['planet_id']) {
-                $working_planet = $this->Research_Model->getPlanetResearching($this->user['research_current_research']);
+                $working_planet = $this->researchModel->getPlanetResearching($this->user['research_current_research']);
             }
 
             if (isset($working_planet)) {
@@ -344,6 +304,6 @@ class Research extends BaseController
     private function setLabsAmount()
     {
         $labs_limit = $this->user[$this->_resource[123]] + 1;
-        $this->_lab_level = $this->Research_Model->getAllLabsLevel($this->user['user_id'], $labs_limit);
+        $this->_lab_level = $this->researchModel->getAllLabsLevel($this->user['user_id'], $labs_limit);
     }
 }

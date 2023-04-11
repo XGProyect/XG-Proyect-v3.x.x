@@ -1,14 +1,4 @@
 <?php
-/**
- * Techtree Controller
- *
- * @category Controller
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
- */
 
 namespace App\controllers\game;
 
@@ -17,9 +7,6 @@ use App\libraries\FormatLib;
 use App\libraries\Functions;
 use App\libraries\Users;
 
-/**
- * Techtree Class
- */
 class Techtree extends BaseController
 {
     public const MODULE_ID = 10;
@@ -53,11 +40,6 @@ class Techtree extends BaseController
         $this->_requirements = $this->objects->getRelations();
     }
 
-    /**
-     * Users land here
-     *
-     * @return void
-     */
     public function index(): void
     {
         // Check module access
@@ -67,12 +49,7 @@ class Techtree extends BaseController
         $this->buildPage();
     }
 
-    /**
-     * Build the page
-     *
-     * @return void
-     */
-    private function buildPage()
+    private function buildPage(): void
     {
         /**
          * Parse the items

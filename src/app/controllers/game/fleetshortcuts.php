@@ -1,14 +1,4 @@
 <?php
-/**
- * Fleetshortcuts Controller
- *
- * @category Controller
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
 
 namespace App\controllers\game;
 
@@ -17,40 +7,15 @@ use App\libraries\Functions;
 use App\libraries\Users;
 use App\libraries\users\Shortcuts;
 
-/**
- * Fleetshortcuts Class
- */
 class Fleetshortcuts extends BaseController
 {
-    /**
-     *
-     * @var int
-     */
     public const MODULE_ID = 8;
-
-    /**
-     *
-     * @var string
-     */
     public const REDIRECT_TARGET = 'game.php?page=shortcuts';
 
-    /**
-     *
-     * @var \Shortcuts
-     */
-    private $_shortcuts = null;
-
-    /**
-     *
-     * @var int
-     */
-    private $_shortcuts_count = 0;
-
-    /**
-     *
-     * @var array
-     */
-    private $_clean_data = [];
+    private ?Shortcuts $_shortcuts = null;
+    private int $_shortcuts_count = 0;
+    private array $_clean_data = [];
+    protected $shortcutsModel;
 
     public function __construct()
     {
@@ -69,11 +34,6 @@ class Fleetshortcuts extends BaseController
         $this->setUpShortcuts();
     }
 
-    /**
-     * Users land here
-     *
-     * @return void
-     */
     public function index(): void
     {
         // Check module access
@@ -152,12 +112,7 @@ class Fleetshortcuts extends BaseController
         }
     }
 
-    /**
-     * Build the page
-     *
-     * @return void
-     */
-    private function buildPage()
+    private function buildPage(): void
     {
         /**
          * Parse the items
@@ -344,7 +299,7 @@ class Fleetshortcuts extends BaseController
                     );
                 }
 
-                $this->Shortcuts_Model->updateShortcuts(
+                $this->shortcutsModel->updateShortcuts(
                     $this->user['user_id'],
                     $this->_shortcuts->getAllAsJsonString()
                 );

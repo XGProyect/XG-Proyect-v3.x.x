@@ -34,11 +34,6 @@ class Forum extends BaseController
         Users::checkSession();
     }
 
-    /**
-     * Users land here
-     *
-     * @return void
-     */
     public function index(): void
     {
         // Check module access
@@ -48,12 +43,7 @@ class Forum extends BaseController
         $this->buildPage();
     }
 
-    /**
-     * Build the page
-     *
-     * @return void
-     */
-    private function buildPage()
+    private function buildPage(): void
     {
         Functions::redirect(Functions::readConfig('forum_url'));
     }

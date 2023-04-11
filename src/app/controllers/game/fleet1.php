@@ -53,6 +53,7 @@ class Fleet1 extends BaseController
      * @var int
      */
     private $_ship_count = 0;
+    protected $fleetModel;
 
     public function __construct()
     {
@@ -71,11 +72,6 @@ class Fleet1 extends BaseController
         $this->setUpFleets();
     }
 
-    /**
-     * Users land here
-     *
-     * @return void
-     */
     public function index(): void
     {
         // Check module access
@@ -94,7 +90,7 @@ class Fleet1 extends BaseController
     private function setUpFleets()
     {
         $this->_fleets = new Fleets(
-            $this->Fleet_Model->getAllFleetsByUserId($this->user['user_id']),
+            $this->fleetModel->getAllFleetsByUserId($this->user['user_id']),
             $this->user['user_id']
         );
 
@@ -109,12 +105,7 @@ class Fleet1 extends BaseController
         );
     }
 
-    /**
-     * Build the page
-     *
-     * @return void
-     */
-    private function buildPage()
+    private function buildPage(): void
     {
         /**
          * Parse the items
@@ -174,7 +165,7 @@ class Fleet1 extends BaseController
         $objects = $this->objects->getObjects();
         $price = $this->objects->getPrice();
 
-        $ships = $this->Fleet_Model->getShipsByPlanetId($this->planet['planet_id']);
+        $ships = $this->fleetModel->getShipsByPlanetId($this->planet['planet_id']);
 
         $list_of_ships = [];
 

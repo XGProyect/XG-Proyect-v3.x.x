@@ -30,33 +30,11 @@ class Preferences extends BaseController
 {
     public const MODULE_ID = 21;
 
-    /**
-     * Reference to Preferences library
-     *
-     * @var \Preferences
-     */
-    private $preferences = null;
-
-    /**
-     * List of fields to update
-     *
-     * @var array
-     */
-    private $fields_to_update = [];
-
-    /**
-     * Contains an error message
-     *
-     * @var string
-     */
-    private $error = '';
-
-    /**
-     * Stores if data was sent
-     *
-     * @var boolean
-     */
-    private $post = false;
+    private ?Preferences $preferences = null;
+    private array $fields_to_update = [];
+    private string $error = '';
+    private bool $post = false;
+    protected $preferencesModel;
 
     public function __construct()
     {
@@ -75,11 +53,6 @@ class Preferences extends BaseController
         $this->setUpPreferences();
     }
 
-    /**
-     * Users land here
-     *
-     * @return void
-     */
     public function index(): void
     {
         // Check module access
@@ -101,7 +74,7 @@ class Preferences extends BaseController
     private function setUpPreferences(): void
     {
         $this->preferences = new Pref(
-            $this->Preferences_Model->getAllPreferencesByUserId((int) $this->user['user_id']),
+            $this->preferencesModel->getAllPreferencesByUserId((int) $this->user['user_id']),
             (int) $this->user['user_id']
         );
     }
@@ -160,7 +133,7 @@ class Preferences extends BaseController
             $this->validatePlanetSortSequence($preferences);
 
             if ($this->error == '') {
-                $this->Preferences_Model->updateValidatedFields(
+                $this->preferencesModel->updateValidatedFields(
                     $this->fields_to_update,
                     (int) $this->user['user_id']
                 );
@@ -170,11 +143,6 @@ class Preferences extends BaseController
         }
     }
 
-    /**
-     * Build the page
-     *
-     * @return void
-     */
     private function buildPage(): void
     {
         $this->page->display(
@@ -294,7 +262,7 @@ class Preferences extends BaseController
             ];
         }
 
-        if ($this->Preferences_Model->isEmpireActive((int) $this->user['user_id'])) {
+        if ($this->preferencesModel->isEmpireActive((int) $this->user['user_id'])) {
             return [
                 'disabled' => 'style="display: none"',
                 'pr_vacation_mode_active' => Format::strongText(
@@ -349,7 +317,7 @@ class Preferences extends BaseController
                 $user_name_len = strlen(trim($preferences['new_user_name']));
 
                 if ($user_name_len > 3 && $user_name_len <= 20) {
-                    if (!$this->Preferences_Model->checkIfNicknameExists($preferences['new_user_name'])) {
+                    if (!$this->preferencesModel->checkIfNicknameExists($preferences['new_user_name'])) {
                         $this->fields_to_update['user_name'] = $preferences['new_user_name'];
                         $this->fields_to_update['preference_nickname_change'] = time();
                     } else {
@@ -399,7 +367,7 @@ class Preferences extends BaseController
                 $user_email_len = strlen(trim($preferences['new_user_email']));
 
                 if ($user_email_len > 4 && $user_email_len <= 64) {
-                    if (!$this->Preferences_Model->checkIfEmailExists($preferences['new_user_email'])) {
+                    if (!$this->preferencesModel->checkIfEmailExists($preferences['new_user_email'])) {
                         $this->fields_to_update['user_email'] = $preferences['new_user_email'];
                     } else {
                         $this->error = $this->langs->line('pr_error_email_in_use');
@@ -458,10 +426,10 @@ class Preferences extends BaseController
     {
         if ($this->preferences->isVacationModeOn()) {
             if ($this->preferences->isVacationModeRemovalAllowed()) {
-                $this->Preferences_Model->endVacation((int) $this->user['user_id']);
+                $this->preferencesModel->endVacation((int) $this->user['user_id']);
             }
         } else {
-            $this->Preferences_Model->startVacation((int) $this->user['user_id']);
+            $this->preferencesModel->startVacation((int) $this->user['user_id']);
         }
     }
 

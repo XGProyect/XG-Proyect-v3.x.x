@@ -1,12 +1,4 @@
 <?php
-/**
- * Page.php
- *
- * @author   XG Proyect Team
- * @license  https://www.xgproyect.org XG Proyect
- * @link     https://www.xgproyect.org
- * @version  3.2.0
- */
 
 namespace App\libraries;
 
@@ -22,46 +14,15 @@ use App\libraries\OfficiersLib;
 use App\libraries\ProductionLib as Production;
 use App\libraries\TimingLibrary as Timing;
 
-/**
- * Page Class
- */
 class Page
 {
-    /**
-     * @var array
-     */
-    private $current_user;
+    private array $current_user;
+    private array $current_planet;
+    private array $current_year;
+    private Template $template;
+    private Language $langs;
+    private Objects $objects;
 
-    /**
-     * @var array
-     */
-    private $current_planet;
-
-    /**
-     * @var int
-     */
-    private $current_year;
-
-    /**
-     * @var \Template
-     */
-    private $template;
-
-    /**
-     * @var \Language
-     */
-    private $langs;
-
-    /**
-     * @var \Objects
-     */
-    private $objects;
-
-    /**
-     * Constructor
-     *
-     * @param object $users
-     */
     public function __construct(object $users)
     {
         $this->current_user = $users->getUserData();

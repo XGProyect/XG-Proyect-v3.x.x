@@ -49,11 +49,6 @@ class RebuildHighscores extends BaseController
         parent::loadLang(['adm/global', 'adm/rebuildhighscores']);
     }
 
-    /**
-     * Users land here
-     *
-     * @return void
-     */
     public function index(): void
     {
         // check if the user is allowed to access
@@ -81,11 +76,6 @@ class RebuildHighscores extends BaseController
         Functions::updateConfig('stat_last_update', $this->result['stats_time']);
     }
 
-    /**
-     * Build the page
-     *
-     * @return void
-     */
     private function buildPage(): void
     {
         $this->page->displayAdmin(

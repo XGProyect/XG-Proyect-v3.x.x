@@ -23,12 +23,7 @@ use App\libraries\adm\AdministrationLib as Administration;
  */
 class Languages extends BaseController
 {
-    /**
-     * Contains the alert string
-     *
-     * @var string
-     */
-    private $alert = '';
+    private string $alert = '';
 
     /**
      * Contains the current file
@@ -48,11 +43,6 @@ class Languages extends BaseController
         parent::loadLang(['adm/global', 'adm/languages']);
     }
 
-    /**
-     * Users land here
-     *
-     * @return void
-     */
     public function index(): void
     {
         // check if the user is allowed to access
@@ -121,11 +111,6 @@ class Languages extends BaseController
         $this->alert = Administration::saveMessage('ok', $this->langs->line('le_all_ok_message'));
     }
 
-    /**
-     * Build the page
-     *
-     * @return void
-     */
     private function buildPage(): void
     {
         $this->page->displayAdmin(

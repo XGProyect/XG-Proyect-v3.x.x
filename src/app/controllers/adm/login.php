@@ -24,6 +24,8 @@ use App\libraries\Functions;
  */
 class Login extends BaseController
 {
+    protected $loginModel;
+
     public function __construct()
     {
         parent::__construct();
@@ -38,11 +40,6 @@ class Login extends BaseController
         parent::loadLang(['adm/login']);
     }
 
-    /**
-     * Users land here
-     *
-     * @return void
-     */
     public function index(): void
     {
         // time to do something
@@ -65,7 +62,7 @@ class Login extends BaseController
         ]);
 
         if (!empty($loginData['inputEmail']) && !empty($loginData['inputPassword'])) {
-            $login = $this->Login_Model->getLoginData($loginData['inputEmail']);
+            $login = $this->loginModel->getLoginData($loginData['inputEmail']);
 
             if ($login) {
                 if (password_verify($loginData['inputPassword'], $login['user_password'])
@@ -86,11 +83,6 @@ class Login extends BaseController
         }
     }
 
-    /**
-     * Build the page
-     *
-     * @return void
-     */
     private function buildPage(): void
     {
         $this->page->displayAdmin(

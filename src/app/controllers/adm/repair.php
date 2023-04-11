@@ -1,14 +1,4 @@
 <?php
-/**
- * Repair Controller
- *
- * @category Controller
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
- */
 
 namespace App\controllers\adm;
 
@@ -17,11 +7,10 @@ use App\libraries\adm\AdministrationLib as Administration;
 use App\libraries\FormatLib;
 use App\libraries\Functions;
 
-/**
- * Repair Class
- */
 class Repair extends BaseController
 {
+    protected $repairModel;
+
     public function __construct()
     {
         parent::__construct();
@@ -36,11 +25,6 @@ class Repair extends BaseController
         parent::loadLang(['adm/global', 'adm/repair']);
     }
 
-    /**
-     * Users land here
-     *
-     * @return void
-     */
     public function index(): void
     {
         // check if the user is allowed to access
@@ -52,18 +36,13 @@ class Repair extends BaseController
         $this->buildPage();
     }
 
-    /**
-     * Build the page
-     *
-     * @return void
-     */
     private function buildPage(): void
     {
         $parse = $this->langs->language;
         $parse['alert'] = '';
 
         if (!$_POST) {
-            $tables = $this->Repair_Model->getAllTables();
+            $tables = $this->repairModel->getAllTables();
 
             $parse['display'] = 'block';
             $parse['head'] = $this->template->set('adm/repair_row_head_view', $this->langs->language);
@@ -98,18 +77,18 @@ class Repair extends BaseController
                 foreach ($_POST['table'] as $key => $table) {
                     $parse['row'] = $table;
 
-                    $this->Repair_Model->checkTable($table);
+                    $this->repairModel->checkTable($table);
                     $parse['result'] = $this->langs->line('db_check_ok');
                     $result_rows .= $this->template->set('adm/repair_result_view', $parse);
 
                     if (isset($_POST['Optimize']) && $_POST['Optimize'] == 'yes') {
-                        $this->Repair_Model->optimizeTable($table);
+                        $this->repairModel->optimizeTable($table);
                         $parse['result'] = $this->langs->line('db_opt');
                         $result_rows .= $this->template->set('adm/repair_result_view', $parse);
                     }
 
                     if (isset($_POST['Repair']) && $_POST['Repair'] == 'yes') {
-                        $this->Repair_Model->repairTable($table);
+                        $this->repairModel->repairTable($table);
                         $parse['result'] = $this->langs->line('db_rep');
                         $result_rows .= $this->template->set('adm/repair_result_view', $parse);
                     }

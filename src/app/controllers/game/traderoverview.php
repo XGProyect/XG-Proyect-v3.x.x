@@ -1,14 +1,4 @@
 <?php
-/**
- * traderoverview.php
- *
- * @category Controller
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.3.0
- */
 
 namespace App\controllers\game;
 
@@ -16,9 +6,6 @@ use App\core\BaseController;
 use App\libraries\Functions;
 use App\libraries\Users;
 
-/**
- * TraderOverview Class
- */
 class TraderOverview extends BaseController
 {
     /**
@@ -45,11 +32,6 @@ class TraderOverview extends BaseController
         $this->buildPage();
     }
 
-    /**
-     * Build the page
-     *
-     * @return void
-     */
     private function buildPage(): void
     {
         $this->page->display(

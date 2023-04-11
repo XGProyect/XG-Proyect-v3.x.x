@@ -52,6 +52,7 @@ class Fleet2 extends BaseController
         'amount' => 0,
         'speed_all' => [],
     ];
+    protected $fleetModel;
 
     public function __construct()
     {
@@ -70,11 +71,6 @@ class Fleet2 extends BaseController
         $this->setUpFleets();
     }
 
-    /**
-     * Users land here
-     *
-     * @return void
-     */
     public function index(): void
     {
         // Check module access
@@ -103,12 +99,7 @@ class Fleet2 extends BaseController
         );
     }
 
-    /**
-     * Build the page
-     *
-     * @return void
-     */
-    private function buildPage()
+    private function buildPage(): void
     {
         /**
          * Parse the items
@@ -145,7 +136,7 @@ class Fleet2 extends BaseController
         $objects = $this->objects->getObjects();
         $price = $this->objects->getPrice();
 
-        $ships = $this->Fleet_Model->getShipsByPlanetId($this->planet['planet_id']);
+        $ships = $this->fleetModel->getShipsByPlanetId($this->planet['planet_id']);
 
         $list_of_ships = [];
         $selected_fleet = filter_input_array(INPUT_POST);
@@ -286,7 +277,7 @@ class Fleet2 extends BaseController
      */
     private function buildColoniesBlock()
     {
-        $planets = $this->Fleet_Model->getAllPlanetsByUserId($this->user['user_id']);
+        $planets = $this->fleetModel->getAllPlanetsByUserId($this->user['user_id']);
         $list_of_planets = [];
 
         if ($planets) {
@@ -324,7 +315,7 @@ class Fleet2 extends BaseController
      */
     private function buildAcsBlock()
     {
-        $current_acs = $this->Fleet_Model->getOngoingAcs($this->user['user_id']);
+        $current_acs = $this->fleetModel->getOngoingAcs($this->user['user_id']);
         $acs_fleets = [];
 
         if ($current_acs) {

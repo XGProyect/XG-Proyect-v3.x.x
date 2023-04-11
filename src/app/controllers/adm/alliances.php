@@ -59,6 +59,7 @@ class Alliances extends BaseController
      * @var Ranks
      */
     private $ranks = null;
+    protected alliancesModel;
 
     public function __construct()
     {
@@ -74,11 +75,6 @@ class Alliances extends BaseController
         parent::loadLang(['adm/global', 'adm/alliances']);
     }
 
-    /**
-     * Users land here
-     *
-     * @return void
-     */
     public function index(): void
     {
         // check if the user is allowed to access
@@ -90,11 +86,6 @@ class Alliances extends BaseController
         $this->buildPage();
     }
 
-    /**
-     * Build the page
-     *
-     * @return void
-     */
     private function buildPage(): void
     {
         $parse = $this->langs->language;
@@ -108,7 +99,7 @@ class Alliances extends BaseController
                 $parse['alert'] = Administration::saveMessage('error', $this->langs->line('al_nothing_found'));
                 $alliance = '';
             } else {
-                $this->_alliance_query = $this->Alliances_Model->getAllAllianceDataById($this->_id);
+                $this->_alliance_query = $this->alliancesModel->getAllAllianceDataById($this->_id);
                 $this->ranks = new Ranks($this->_alliance_query['alliance_ranks']);
 
                 if ($_POST) {
@@ -266,7 +257,7 @@ class Alliances extends BaseController
             $this->_alliance_query['alliance_name'],
             $this->langs->line('al_alliance_members')
         );
-        $all_members = $this->Alliances_Model->getAllianceMembers($this->_id);
+        $all_members = $this->alliancesModel->getAllianceMembers($this->_id);
 
         $members = '';
 
@@ -322,19 +313,19 @@ class Alliances extends BaseController
         $errors = '';
 
         if ($alliance_name != $alliance_name_orig) {
-            if ($alliance_name == '' or !$this->Alliances_Model->checkAllianceName($alliance_name)) {
+            if ($alliance_name == '' or !$this->alliancesModel->checkAllianceName($alliance_name)) {
                 $errors .= $this->langs->line('al_error_alliance_name') . '<br />';
             }
         }
 
         if ($alliance_tag != $alliance_tag_orig) {
-            if ($alliance_tag == '' or !$this->Alliances_Model->checkAllianceTag($alliance_tag)) {
+            if ($alliance_tag == '' or !$this->alliancesModel->checkAllianceTag($alliance_tag)) {
                 $errors .= $this->langs->line('al_error_alliance_tag') . '<br />';
             }
         }
 
         if ($alliance_owner != $alliance_owner_orig) {
-            if ($alliance_owner <= 0 or $this->Alliances_Model->checkAllianceFounder($alliance_owner)) {
+            if ($alliance_owner <= 0 or $this->alliancesModel->checkAllianceFounder($alliance_owner)) {
                 $errors .= $this->langs->line('al_error_founder') . '<br />';
             }
         }
@@ -343,7 +334,7 @@ class Alliances extends BaseController
             $this->_alert_info = $errors;
             $this->_alert_type = 'warning';
         } else {
-            $this->Alliances_Model->updateAllianceData([
+            $this->alliancesModel->updateAllianceData([
                 'alliance_name' => $alliance_name,
                 'alliance_tag' => $alliance_tag,
                 'alliance_owner' => $alliance_owner,
@@ -374,7 +365,7 @@ class Alliances extends BaseController
                     $_POST['rank_name']
                 );
 
-                $this->Alliances_Model->updateAllianceRanks(
+                $this->alliancesModel->updateAllianceRanks(
                     $this->_id,
                     $this->ranks->getAllRanksAsJsonString()
                 );
@@ -406,7 +397,7 @@ class Alliances extends BaseController
                 );
             }
 
-            $this->Alliances_Model->updateAllianceRanks(
+            $this->alliancesModel->updateAllianceRanks(
                 $this->_id,
                 $this->ranks->getAllRanksAsJsonString()
             );
@@ -421,7 +412,7 @@ class Alliances extends BaseController
                 $this->ranks->deleteRankById($rank_id);
             }
 
-            $this->Alliances_Model->updateAllianceRanks(
+            $this->alliancesModel->updateAllianceRanks(
                 $this->_id,
                 $this->ranks->getAllRanksAsJsonString()
             );
@@ -450,10 +441,10 @@ class Alliances extends BaseController
                     }
                 }
 
-                $amount = $this->Alliances_Model->countAllianceMembers($this->_id);
+                $amount = $this->alliancesModel->countAllianceMembers($this->_id);
 
                 if ($amount['Amount'] > 1) {
-                    $this->Alliances_Model->removeAllianceMembers($ids_string);
+                    $this->alliancesModel->removeAllianceMembers($ids_string);
 
                     // RETURN THE ALERT
                     $this->_alert_info = $this->langs->line('us_all_ok_message');
@@ -480,7 +471,7 @@ class Alliances extends BaseController
     private function buildUsersCombo($user_id)
     {
         $combo_rows = '';
-        $users = $this->Alliances_Model->getAllUsers();
+        $users = $this->alliancesModel->getAllUsers();
 
         foreach ($users as $users_row) {
             $combo_rows .= '<option value="' . $users_row['user_id'] . '" ' . ($users_row['user_id'] == $user_id ? ' selected' : '') . '>' . $users_row['user_name'] . '</option>';
@@ -501,7 +492,7 @@ class Alliances extends BaseController
      */
     private function checkAlliance($alliance)
     {
-        if ($alliance_query = $this->Alliances_Model->checkAllianceByNameOrTag($alliance)) {
+        if ($alliance_query = $this->alliancesModel->checkAllianceByNameOrTag($alliance)) {
             $this->_id = $alliance_query['alliance_id'];
 
             return true;

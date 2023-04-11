@@ -1,14 +1,4 @@
 <?php
-/**
- * Statistics Controller
- *
- * @category Controller
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
- */
 
 namespace App\controllers\game;
 
@@ -18,12 +8,11 @@ use App\libraries\Functions;
 use App\libraries\TimingLibrary as Timing;
 use App\libraries\Users;
 
-/**
- * Statistics Class
- */
 class Statistics extends BaseController
 {
     public const MODULE_ID = 16;
+
+    protected $statisticsModel;
 
     public function __construct()
     {
@@ -39,11 +28,6 @@ class Statistics extends BaseController
         parent::loadLang(['game/global', 'game/statistics']);
     }
 
-    /**
-     * Users land here
-     *
-     * @return void
-     */
     public function index(): void
     {
         // Check module access
@@ -53,12 +37,7 @@ class Statistics extends BaseController
         $this->buildPage();
     }
 
-    /**
-     * Build the page
-     *
-     * @return void
-     */
-    private function buildPage()
+    private function buildPage(): void
     {
         $parse = $this->langs->language;
         $who = (isset($_POST['who'])) ? $_POST['who'] : ((isset($_GET['who'])) ? $_GET['who'] : 1);
@@ -81,7 +60,7 @@ class Statistics extends BaseController
         $OldRank = $data['oldrank'];
 
         if ($who == 2) {
-            $MaxAllys = $this->Statistics_Model->countAlliances();
+            $MaxAllys = $this->statisticsModel->countAlliances();
 
             $parse['range'] = $this->build_range_list($MaxAllys, $range);
             $parse['stat_header'] = $this->template->set(
@@ -90,7 +69,7 @@ class Statistics extends BaseController
             );
 
             $start = floor(intval($range / 100) % 100) * 100;
-            $query = $this->Statistics_Model->getAlliances($Order, $start);
+            $query = $this->statisticsModel->getAlliances($Order, $start);
 
             $start++;
 
@@ -122,7 +101,7 @@ class Statistics extends BaseController
             );
 
             $start = floor(intval($range / 100) % 100) * 100;
-            $query = $this->Statistics_Model->getUsers($Order, $start);
+            $query = $this->statisticsModel->getUsers($Order, $start);
 
             $start++;
             $parse['stat_date'] = Timing::formatExtendedDate(Functions::readConfig('stat_last_update'));

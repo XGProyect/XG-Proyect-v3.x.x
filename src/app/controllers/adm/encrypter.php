@@ -49,11 +49,6 @@ class Encrypter extends BaseController
         parent::loadLang(['adm/global', 'adm/encrypter']);
     }
 
-    /**
-     * Users land here
-     *
-     * @return void
-     */
     public function index(): void
     {
         // check if the user is allowed to access
@@ -83,11 +78,6 @@ class Encrypter extends BaseController
         }
     }
 
-    /**
-     * Build the page
-     *
-     * @return void
-     */
     private function buildPage(): void
     {
         $this->page->displayAdmin(

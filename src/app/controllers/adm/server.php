@@ -7,26 +7,14 @@ namespace App\controllers\adm;
 use App\core\BaseController;
 use App\helpers\UrlHelper;
 use App\libraries\adm\AdministrationLib as Administration;
-use App\libraries\FormatLib as Format;
 use App\libraries\Functions;
 use DateTime;
 use DateTimeZone;
 
 class Server extends BaseController
 {
-    /**
-     * Contains the alert string
-     *
-     * @var string
-     */
-    private $alerts = [];
-
-    /**
-     * Contains the game settings
-     *
-     * @var array
-     */
     private $game_config = [];
+    protected $serverModel;
 
     public function __construct()
     {
@@ -42,11 +30,6 @@ class Server extends BaseController
         parent::loadLang(['adm/global', 'adm/server']);
     }
 
-    /**
-     * Users land here
-     *
-     * @return void
-     */
     public function index(): void
     {
         // check if the user is allowed to access
@@ -195,14 +178,9 @@ class Server extends BaseController
         }
     }
 
-    /**
-     * Build the page
-     *
-     * @return void
-     */
     private function buildPage(): void
     {
-        $this->game_config = $this->Server_Model->readAllConfigs();
+        $this->game_config = $this->serverModel->readAllConfigs();
         $parse = $this->langs->language;
         $parse['alert'] = '';
 
@@ -211,7 +189,7 @@ class Server extends BaseController
             $this->runAction();
 
             // update all the settings
-            $this->Server_Model->updateConfigs($this->game_config);
+            $this->serverModel->updateConfigs($this->game_config);
 
             $parse['alert'] = Administration::saveMessage('ok', $this->langs->line('se_all_ok_message'));
         }
@@ -251,7 +229,7 @@ class Server extends BaseController
         $utc = new DateTimeZone('UTC');
         $dt = new DateTime('now', $utc);
         $time_zones = '';
-        $current_time_zone = $this->Server_Model->readConfig('date_time_zone');
+        $current_time_zone = $this->serverModel->readConfig('date_time_zone');
 
         // Get the data
         foreach (DateTimeZone::listIdentifiers() as $tz) {

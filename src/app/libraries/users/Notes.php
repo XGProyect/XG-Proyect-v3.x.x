@@ -1,50 +1,14 @@
 <?php
-/**
- * Notes
- *
- * @category Library
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
 
 namespace App\libraries\users;
 
 use App\core\entities\NotesEntity;
 
-/**
- * Notes Class
- *
- * @category Classes
- * @package  users
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
 class Notes
 {
-    /**
-     *
-     * @var array
-     */
-    private $notes = [];
+    private array $notes = [];
+    private int $notes_count = 0;
 
-    /**
-     *
-     * @var int
-     */
-    private $notes_count = 0;
-
-    /**
-     * Constructor
-     *
-     * @param array $notes Notes
-     *
-     * @return void
-     */
     public function __construct($notes)
     {
         if (is_array($notes)) {

@@ -51,6 +51,7 @@ class Buildings extends BaseController
      * @var boolean
      */
     private $_commander_active = false;
+    protected $buildingsModel;
 
     public function __construct()
     {
@@ -69,11 +70,6 @@ class Buildings extends BaseController
         $this->setUpBuildings();
     }
 
-    /**
-     * Users land here
-     *
-     * @return void
-     */
     public function index(): void
     {
         // Check module access
@@ -142,7 +138,7 @@ class Buildings extends BaseController
                     UpdatesLibrary::setFirstElement($this->planet, $this->user);
 
                     // start building
-                    $this->Buildings_Model->updatePlanetBuildingQueue(
+                    $this->buildingsModel->updatePlanetBuildingQueue(
                         $this->planet
                     );
                 }
@@ -156,12 +152,7 @@ class Buildings extends BaseController
         }
     }
 
-    /**
-     * Build the page
-     *
-     * @return void
-     */
-    private function buildPage()
+    private function buildPage(): void
     {
         /**
          * Parse the items

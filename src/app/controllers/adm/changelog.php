@@ -12,6 +12,8 @@ use Exception;
 
 class Changelog extends BaseController
 {
+    protected $changelogModel;
+
     public function __construct()
     {
         parent::__construct();
@@ -26,11 +28,6 @@ class Changelog extends BaseController
         parent::loadLang(['adm/global', 'adm/changelog']);
     }
 
-    /**
-     * Users land here
-     *
-     * @return void
-     */
     public function index(): void
     {
         // check if the user is allowed to access
@@ -66,11 +63,6 @@ class Changelog extends BaseController
         }
     }
 
-    /**
-     * Build the page
-     *
-     * @return void
-     */
     private function buildPage(): void
     {
         $this->page->displayAdmin(
@@ -94,7 +86,7 @@ class Changelog extends BaseController
      */
     private function buildListOfEntries(): array
     {
-        $entries = $this->Changelog_Model->getAllEntries();
+        $entries = $this->changelogModel->getAllEntries();
         $entries_list = [];
 
         foreach ($entries as $entry) {
@@ -179,7 +171,7 @@ class Changelog extends BaseController
         $changelog_description = '';
 
         if ($action == 'edit') {
-            if ($result = $this->Changelog_Model->getSingleEntry($changelog_id)) {
+            if ($result = $this->changelogModel->getSingleEntry($changelog_id)) {
                 $changelog_lang_id = $result->getChangelogLangId();
                 $changelog_version = $result->getChangelogVersion();
                 $changelog_date = $result->getChangelogDate();
@@ -256,11 +248,11 @@ class Changelog extends BaseController
 
             if ($valid) {
                 if ($data['action'] == 'add') {
-                    $this->Changelog_Model->addEntry($data);
+                    $this->changelogModel->addEntry($data);
                 }
 
                 if ($data['action'] == 'edit') {
-                    $this->Changelog_Model->updateEntry($data);
+                    $this->changelogModel->updateEntry($data);
                 }
 
                 Functions::redirect('admin.php?page=changelog&success=' . $data['action']);
@@ -276,7 +268,7 @@ class Changelog extends BaseController
      */
     private function deleteAction(int $changelog_id): void
     {
-        $this->Changelog_Model->deleteEntry($changelog_id);
+        $this->changelogModel->deleteEntry($changelog_id);
 
         Functions::redirect('admin.php?page=changelog&success=delete');
     }
@@ -289,7 +281,7 @@ class Changelog extends BaseController
      */
     private function getAllLanguages(int $default_language): array
     {
-        $languages = $this->Changelog_Model->getAllLanguages();
+        $languages = $this->changelogModel->getAllLanguages();
         $list_of_languages = [];
 
         foreach ($languages as $language) {

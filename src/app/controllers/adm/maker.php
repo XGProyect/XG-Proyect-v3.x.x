@@ -2,17 +2,6 @@
 
 declare(strict_types=1);
 
-/**
- * Maker Controller
- *
- * @category Controller
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
- */
-
 namespace App\controllers\adm;
 
 use App\core\BaseController;
@@ -22,17 +11,10 @@ use App\libraries\adm\AdministrationLib as Administration;
 use App\libraries\FormatLib as Format;
 use App\libraries\Functions;
 
-/**
- * Maker Class
- */
 class Maker extends BaseController
 {
-    /**
-     * Contains the alert string
-     *
-     * @var string
-     */
-    private $alert = '';
+    private string $alert = '';
+    protected $makerModel;
 
     public function __construct()
     {
@@ -48,11 +30,6 @@ class Maker extends BaseController
         parent::loadLang(['adm/global', 'adm/maker']);
     }
 
-    /**
-     * Users land here
-     *
-     * @return void
-     */
     public function index(): void
     {
         // check if the user is allowed to access
@@ -64,11 +41,6 @@ class Maker extends BaseController
         $this->buildPage();
     }
 
-    /**
-     * Build the page
-     *
-     * @return void
-     */
     private function buildPage(): void
     {
         $this->page->displayAdmin(
@@ -108,9 +80,9 @@ class Maker extends BaseController
             $i = 0;
             $error = '';
 
-            $check_user = $this->Maker_Model->checkUserName($name);
-            $check_email = $this->Maker_Model->checkUserEmail($email);
-            $check_planet = $this->Maker_Model->checkPlanet($galaxy, $system, $planet);
+            $check_user = $this->makerModel->checkUserName($name);
+            $check_email = $this->makerModel->checkUserEmail($email);
+            $check_planet = $this->makerModel->checkPlanet($galaxy, $system, $planet);
 
             if (!is_numeric($galaxy) && !is_numeric($system) && !is_numeric($planet)) {
                 $error = $this->langs->line('mk_user_only_numbers');
@@ -155,7 +127,7 @@ class Maker extends BaseController
             }
 
             if ($i == 0) {
-                $this->Maker_Model->createNewUser($name, $email, $auth, $pass, $galaxy, $system, $planet);
+                $this->makerModel->createNewUser($name, $email, $auth, $pass, $galaxy, $system, $planet);
 
                 $this->alert = Administration::saveMessage('ok', strtr($this->langs->line('mk_user_added'), ['%s' => $pass]));
             } else {
@@ -180,10 +152,10 @@ class Maker extends BaseController
             $alliance_tag = (string) $_POST['tag'];
             $alliance_founder = (int) $_POST['founder'];
 
-            $check_alliance = $this->Maker_Model->checkAlliance($alliance_name, $alliance_tag);
+            $check_alliance = $this->makerModel->checkAlliance($alliance_name, $alliance_tag);
 
             if (!$check_alliance && !empty($alliance_founder) && $alliance_founder > 0) {
-                $this->Maker_Model->createAlliance($alliance_name, $alliance_tag, $alliance_founder, $this->langs->line('mk_alliance_founder_rank'));
+                $this->makerModel->createAlliance($alliance_name, $alliance_tag, $alliance_founder, $this->langs->line('mk_alliance_founder_rank'));
 
                 $this->alert = Administration::saveMessage('ok', $this->langs->line('mk_alliance_added'));
             } else {
@@ -212,8 +184,8 @@ class Maker extends BaseController
             $field_max = (int) $_POST['planet_field_max'];
             $i = 0;
 
-            $check_planet = $this->Maker_Model->checkPlanet($galaxy, $system, $planet);
-            $user_query = $this->Maker_Model->checkUserById($user_id);
+            $check_planet = $this->makerModel->checkPlanet($galaxy, $system, $planet);
+            $user_query = $this->makerModel->checkUserById($user_id);
 
             if ($check_planet['count'] == 0 && $user_query) {
                 if ($galaxy < 1 or $system < 1 or $planet < 1 or !is_numeric($galaxy) or !is_numeric($system) or !is_numeric($planet)) {
@@ -235,7 +207,7 @@ class Maker extends BaseController
                         $name = $this->langs->line('mk_planet_default_name');
                     }
 
-                    $this->Maker_Model->createNewPlanet($galaxy, $system, $planet, $user_id, $field_max, $name);
+                    $this->makerModel->createNewPlanet($galaxy, $system, $planet, $user_id, $field_max, $name);
 
                     $this->alert = Administration::saveMessage('ok', $this->langs->line('mk_planet_added'));
                 } else {
@@ -266,7 +238,7 @@ class Maker extends BaseController
             $temp_max = (int) $_POST['planet_temp_max'];
             $max_fields = (int) $_POST['planet_field_max'];
 
-            $moon_planet = $this->Maker_Model->checkMoon($planet_id);
+            $moon_planet = $this->makerModel->checkMoon($planet_id);
 
             if ($moon_planet && is_numeric($planet_id)) {
                 if ($moon_planet['id_moon'] == '' && $moon_planet['planet_type'] == PlanetTypesEnumerator::PLANET && $moon_planet['planet_destroyed'] == 0) {
@@ -300,7 +272,7 @@ class Maker extends BaseController
                     }
 
                     if ($errors == 0) {
-                        $this->Maker_Model->createNewMoon(
+                        $this->makerModel->createNewMoon(
                             $galaxy,
                             $system,
                             $planet,
@@ -333,7 +305,7 @@ class Maker extends BaseController
     private function buildUsersCombo(): string
     {
         $combo_rows = '';
-        $users = $this->Maker_Model->getAllServerUsers();
+        $users = $this->makerModel->getAllServerUsers();
 
         foreach ($users as $users_row) {
             if (isset($_GET['user']) && $_GET['user'] > 0) {
@@ -354,7 +326,7 @@ class Maker extends BaseController
     private function buildPlanetCombo(): string
     {
         $combo_rows = '';
-        $planets = $this->Maker_Model->getAllActivePlanets();
+        $planets = $this->makerModel->getAllActivePlanets();
 
         foreach ($planets as $planets_row) {
             if (isset($_GET['planet']) && $_GET['planet'] > 0) {
@@ -402,7 +374,7 @@ class Maker extends BaseController
     private function buildAllianceUsersCombo(): string
     {
         $combo_rows = '';
-        $users = $this->Maker_Model->getUsersWithoutAlliance();
+        $users = $this->makerModel->getUsersWithoutAlliance();
 
         foreach ($users as $users_row) {
             $combo_rows .= '<option value="' . $users_row['user_id'] . '">' . $users_row['user_name'] . '</option>';

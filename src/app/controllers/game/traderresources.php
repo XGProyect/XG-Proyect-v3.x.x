@@ -1,14 +1,4 @@
 <?php
-/**
- * Trader Controller
- *
- * @category Controller
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.3.0
- */
 
 namespace App\controllers\game;
 
@@ -18,45 +8,15 @@ use App\libraries\Functions;
 use App\libraries\game\ResourceMarket;
 use App\libraries\Users;
 
-/**
- * Trader Class
- */
 class TraderResources extends BaseController
 {
-    /**
-     * The module ID
-     *
-     * @var int
-     */
     public const MODULE_ID = 5;
-
-    /**
-     * Contains the resources type
-     *
-     * @var array
-     */
     public const RESOURCES = ['metal', 'crystal', 'deuterium'];
-
-    /**
-     * Contains the refill percentages
-     *
-     * @var array
-     */
     public const PERCENTAGES = [10, 50, 100];
 
-    /**
-     * ResourceMarket object
-     *
-     * @var \ResourceMarket
-     */
-    private $trader;
-
-    /**
-     * Contains an error message
-     *
-     * @var string
-     */
-    private $error = '';
+    private ?ResourceMarket $trader;
+    private string $error = '';
+    protected $traderModel;
 
     public function __construct()
     {
@@ -75,11 +35,6 @@ class TraderResources extends BaseController
         $this->setUpTrader();
     }
 
-    /**
-     * Users land here
-     *
-     * @return void
-     */
     public function index(): void
     {
         // Check module access
@@ -138,7 +93,7 @@ class TraderResources extends BaseController
     {
         if ($this->trader->{'is' . $resource . 'StorageFillable'}($percentage)) {
             if ($this->trader->isRefillPayable($resource, $percentage)) {
-                $this->Trader_Model->refillStorage(
+                $this->traderModel->refillStorage(
                     $this->trader->{'getPriceToFill' . $percentage . 'Percent'}($resource),
                     $resource,
                     $this->trader->getProjectedResouces($resource, $percentage),
@@ -155,11 +110,6 @@ class TraderResources extends BaseController
         }
     }
 
-    /**
-     * Build the page
-     *
-     * @return void
-     */
     private function buildPage(): void
     {
         $this->page->display(

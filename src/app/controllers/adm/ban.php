@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\controllers\adm;
 
 use App\core\BaseController;
@@ -16,6 +18,7 @@ class Ban extends BaseController
      * @var int
      */
     private $_banned_count = 0;
+    protected $banModel;
 
     public function __construct()
     {
@@ -31,11 +34,6 @@ class Ban extends BaseController
         parent::loadLang(['adm/global', 'adm/ban']);
     }
 
-    /**
-     * Users land here
-     *
-     * @return void
-     */
     public function index(): void
     {
         // check if the user is allowed to access
@@ -47,11 +45,6 @@ class Ban extends BaseController
         $this->buildPage();
     }
 
-    /**
-     * Build the page
-     *
-     * @return void
-     */
     private function buildPage(): void
     {
         switch ((isset($_GET['mode']) ? $_GET['mode'] : '')) {
@@ -86,7 +79,7 @@ class Ban extends BaseController
         if (isset($_POST['unban_name']) && $_POST['unban_name']) {
             $username = $_POST['unban_name'];
 
-            $this->Ban_Model->unbanUser($username);
+            $this->banModel->unbanUser($username);
 
             $parse['alert'] = Administration::saveMessage('ok', (str_replace('%s', $username, $this->langs->line('bn_lift_ban_success'))));
         }
@@ -119,7 +112,7 @@ class Ban extends BaseController
             $parse['changedate'] = $this->langs->line('bn_auto_lift_ban_message');
             $parse['vacation'] = '';
 
-            $banned_user = $this->Ban_Model->getBannedUserData($ban_name);
+            $banned_user = $this->banModel->getBannedUserData($ban_name);
 
             if ($banned_user) {
                 $parse['banned_until'] = $this->langs->line('bn_banned_until') . ' (' . date(Functions::readConfig('date_format_extended'), $banned_user['banned_longer']) . ')';
@@ -154,7 +147,7 @@ class Ban extends BaseController
                         $banned_until = $current_time + $ban_time;
                     }
 
-                    $this->Ban_Model->setOrUpdateBan(
+                    $this->banModel->setOrUpdateBan(
                         $banned_user,
                         [
                             'ban_name' => $ban_name,
@@ -202,7 +195,7 @@ class Ban extends BaseController
         }
 
         // get the users according to the filters
-        $users_query = $this->Ban_Model->getListOfUsers($where_authlevel, $where_banned, $query_order);
+        $users_query = $this->banModel->getListOfUsers($where_authlevel, $where_banned, $query_order);
 
         foreach ($users_query as $user) {
             $status = '';
@@ -232,7 +225,7 @@ class Ban extends BaseController
         $banned_list = '';
 
         // get the banned users
-        $banned_query = $this->Ban_Model->getBannedUsers($order);
+        $banned_query = $this->banModel->getBannedUsers($order);
 
         foreach ($banned_query as $user) {
             $banned_list .= '<option value="' . $user['user_name'] . '">' . $user['user_name'] . '&nbsp;&nbsp;(ID:&nbsp;' . $user['user_id'] . ')</option>';

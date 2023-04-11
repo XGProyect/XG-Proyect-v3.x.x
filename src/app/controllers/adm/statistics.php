@@ -40,12 +40,7 @@ class Statistics extends BaseController
         ],
     ];
 
-    /**
-     * Contains the alert string
-     *
-     * @var string
-     */
-    private $alert = '';
+    private string $alert = '';
 
     /**
      * Contains the current setting
@@ -65,11 +60,6 @@ class Statistics extends BaseController
         parent::loadLang(['adm/global', 'adm/statistics']);
     }
 
-    /**
-     * Users land here
-     *
-     * @return void
-     */
     public function index(): void
     {
         // check if the user is allowed to access
@@ -104,11 +94,6 @@ class Statistics extends BaseController
         }
     }
 
-    /**
-     * Build the page
-     *
-     * @return void
-     */
     private function buildPage(): void
     {
         $this->page->displayAdmin(

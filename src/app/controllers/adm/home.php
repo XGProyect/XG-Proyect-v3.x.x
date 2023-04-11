@@ -26,6 +26,8 @@ use JsonException;
  */
 class Home extends BaseController
 {
+    protected $homeModel;
+
     public function __construct()
     {
         parent::__construct();
@@ -40,11 +42,6 @@ class Home extends BaseController
         parent::loadLang(['adm/global', 'adm/home']);
     }
 
-    /**
-     * Users land here
-     *
-     * @return void
-     */
     public function index(): void
     {
         // check if the user is allowed to access
@@ -56,14 +53,9 @@ class Home extends BaseController
         $this->buildPage();
     }
 
-    /**
-     * Build the page
-     *
-     * @return void
-     */
     private function buildPage(): void
     {
-        $server_stats = $this->Home_Model->getUsersStats();
+        $server_stats = $this->homeModel->getUsersStats();
 
         $this->page->displayAdmin(
             $this->template->set(
@@ -75,8 +67,8 @@ class Home extends BaseController
                         'alert' => [$this->buildAlertsBlock()],
                         'average_user_points' => Format::shortlyNumber($server_stats['average_user_points']),
                         'average_alliance_points' => Format::shortlyNumber($server_stats['average_alliance_points']),
-                        'database_size' => Format::prettyBytes($this->Home_Model->getDbSize()['db_size']),
-                        'database_server' => $this->Home_Model->getDbVersion(),
+                        'database_size' => Format::prettyBytes($this->homeModel->getDbSize()['db_size']),
+                        'database_server' => $this->homeModel->getDbVersion(),
                         'php_version' => PHP_VERSION,
                         'server_version' => SYSTEM_VERSION,
                     ]

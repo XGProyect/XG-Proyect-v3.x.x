@@ -1,14 +1,4 @@
 <?php
-/**
- * Notes Controller
- *
- * @category Controller
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
- */
 
 namespace App\controllers\game;
 
@@ -21,28 +11,12 @@ use App\libraries\TimingLibrary as Timing;
 use App\libraries\Users;
 use App\libraries\users\Notes as Note;
 
-/**
- * Notes Class
- */
 class Notes extends BaseController
 {
-    /**
-     *
-     * @var int
-     */
     public const MODULE_ID = 19;
-
-    /**
-     *
-     * @var string
-     */
     public const REDIRECT_TARGET = 'game.php?page=notes';
-
-    /**
-     *
-     * @var \Notes
-     */
-    private $notes = null;
+    private ?Notes $notes = null;
+    protected $notesModel;
 
     public function __construct()
     {
@@ -61,11 +35,6 @@ class Notes extends BaseController
         $this->setUpNotes();
     }
 
-    /**
-     * Users land here
-     *
-     * @return void
-     */
     public function index(): void
     {
         // Check module access
@@ -132,17 +101,12 @@ class Notes extends BaseController
     private function setUpNotes()
     {
         $this->notes = new Note(
-            $this->Notes_Model->getAllNotesByUserId($this->user['user_id']),
+            $this->notesModel->getAllNotesByUserId($this->user['user_id']),
             $this->user['user_id']
         );
     }
 
-    /**
-     * Build the page
-     *
-     * @return void
-     */
-    private function buildPage()
+    private function buildPage(): void
     {
         /**
          * Parse the items
@@ -239,7 +203,7 @@ class Notes extends BaseController
 
         // edit
         if ($edit_view == 2 && !is_null($note_id)) {
-            $note = $this->Notes_Model->getNoteById($this->user['user_id'], $note_id);
+            $note = $this->notesModel->getNoteById($this->user['user_id'], $note_id);
             $selected = array_fill_keys(array_keys($selected), null); // clear values keeping the keys
 
             if ($note) {
@@ -278,7 +242,7 @@ class Notes extends BaseController
      */
     private function createNewNote(array $data): void
     {
-        $this->Notes_Model->createNewNote(
+        $this->notesModel->createNewNote(
             [
                 'note_owner' => $this->user['user_id'],
                 'note_time' => time(),
@@ -298,7 +262,7 @@ class Notes extends BaseController
      */
     private function editNote(array $data): void
     {
-        $this->Notes_Model->updateNoteById(
+        $this->notesModel->updateNoteById(
             $this->user['user_id'],
             $data['n'],
             [
@@ -327,7 +291,7 @@ class Notes extends BaseController
             }
         }
 
-        $this->Notes_Model->deleteNoteById(
+        $this->notesModel->deleteNoteById(
             $this->user['user_id'],
             join(',', $delete_string)
         );

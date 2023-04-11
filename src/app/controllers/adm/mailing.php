@@ -23,12 +23,7 @@ class Mailing extends BaseController
         'mailing_smtp_crypto' => FILTER_UNSAFE_RAW,
     ];
 
-    /**
-     * Contains the alert string
-     *
-     * @var string
-     */
-    private $alert = '';
+    private string $alert = '';
 
     public function __construct()
     {
@@ -41,11 +36,6 @@ class Mailing extends BaseController
         parent::loadLang(['adm/global', 'adm/mailing']);
     }
 
-    /**
-     * Users land here
-     *
-     * @return void
-     */
     public function index(): void
     {
         // check if the user is allowed to access
@@ -80,11 +70,6 @@ class Mailing extends BaseController
         }
     }
 
-    /**
-     * Build the page
-     *
-     * @return void
-     */
     private function buildPage(): void
     {
         $this->page->displayAdmin(

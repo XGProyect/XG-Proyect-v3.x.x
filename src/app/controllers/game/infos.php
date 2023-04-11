@@ -31,26 +31,12 @@ class Infos extends BaseController
 {
     public const MODULE_ID = 24;
 
-    /**
-     * @var mixed
-     */
     private $_element_id;
-    /**
-     * @var mixed
-     */
     private $_resource;
-    /**
-     * @var mixed
-     */
     private $_pricelist;
-    /**
-     * @var mixed
-     */
     private $_combat_caps;
-    /**
-     * @var mixed
-     */
     private $_prod_grid;
+    protected $infosModel
 
     public function __construct()
     {
@@ -72,11 +58,6 @@ class Infos extends BaseController
         $this->_element_id = isset($_GET['gid']) ? (int) $_GET['gid'] : null;
     }
 
-    /**
-     * Users land here
-     *
-     * @return void
-     */
     public function index(): void
     {
         // Check module access
@@ -86,12 +67,7 @@ class Infos extends BaseController
         $this->buildPage();
     }
 
-    /**
-     * Build the page
-     *
-     * @return void
-     */
-    private function buildPage()
+    private function buildPage(): void
     {
         if (!array_key_exists($this->_element_id, $this->_resource)) {
             Functions::redirect('game.php?page=techtree');
@@ -340,7 +316,7 @@ class Infos extends BaseController
                     $RetMessage = $this->langs->line('in_jump_gate_error_data');
                 }
 
-                $TargetGate = $this->Infos_Model->getTargetGate($TargetPlanet);
+                $TargetGate = $this->infosModel->getTargetGate($TargetPlanet);
 
                 if ($TargetGate['building_jump_gate'] > 0) {
                     $RestString = $this->GetNextJumpWaitTime($TargetGate);
@@ -369,7 +345,7 @@ class Infos extends BaseController
                             }
                         }
                         if ($SubQueryOri != "") {
-                            $this->Infos_Model->doJump(
+                            $this->infosModel->doJump(
                                 $SubQueryOri,
                                 $SubQueryDes,
                                 $JumpTime,
@@ -430,7 +406,7 @@ class Infos extends BaseController
      */
     private function BuildJumpableMoonCombo()
     {
-        $MoonList = $this->Infos_Model->getListOfMoons($this->user['user_id']);
+        $MoonList = $this->infosModel->getListOfMoons($this->user['user_id']);
 
         $Combo = "";
 

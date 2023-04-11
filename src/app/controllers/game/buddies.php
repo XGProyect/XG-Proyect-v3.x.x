@@ -1,44 +1,22 @@
 <?php
-/**
- * Buddies Controller
- *
- * @category Controller
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
 
 namespace App\controllers\game;
 
 use App\core\BaseController;
 use App\core\entities\BuddyEntity;
-use App\libraries\buddies\Buddy;
 use App\core\enumerators\BuddiesStatusEnumerator as BuddiesStatus;
+use App\libraries\buddies\Buddy;
 use App\libraries\Functions;
 use App\libraries\TimingLibrary as Timing;
 use App\libraries\Users;
 use Exception;
 
-/**
- * Buddies Class
- */
 class Buddies extends BaseController
 {
-    /**
-     * The module ID
-     *
-     * @var int
-     */
     public const MODULE_ID = 20;
 
-    /**
-     * Contains a Buddy object
-     *
-     * @var \Buddy
-     */
-    private $buddy = null;
+    private ?Buddy $buddy = null;
+    protected $buddiesModel;
 
     public function __construct()
     {
@@ -57,11 +35,6 @@ class Buddies extends BaseController
         $this->setUpBudies();
     }
 
-    /**
-     * Users land here
-     *
-     * @return void
-     */
     public function index(): void
     {
         // Check module access
@@ -83,7 +56,7 @@ class Buddies extends BaseController
     private function setUpBudies()
     {
         $this->buddy = new Buddy(
-            $this->Buddies_Model->getBuddiesByUserId($this->user['user_id']),
+            $this->buddiesModel->getBuddiesByUserId($this->user['user_id']),
             $this->user['user_id']
         );
     }
@@ -151,7 +124,7 @@ class Buddies extends BaseController
         $bid = filter_input(INPUT_GET, 'bid', FILTER_VALIDATE_INT);
 
         $buddy = new BuddyEntity(
-            $this->Buddies_Model->getBuddyDataByBuddyId($bid)
+            $this->buddiesModel->getBuddyDataByBuddyId($bid)
         );
 
         if ($buddy->getBuddyStatus() == BuddiesStatus::isNotBuddy) {
@@ -168,7 +141,7 @@ class Buddies extends BaseController
             }
         }
 
-        $this->Buddies_Model->removeBuddyById($bid, $this->user['user_id']);
+        $this->buddiesModel->removeBuddyById($bid, $this->user['user_id']);
     }
 
     /**
@@ -181,12 +154,12 @@ class Buddies extends BaseController
         $bid = filter_input(INPUT_GET, 'bid', FILTER_VALIDATE_INT);
 
         $buddy = new BuddyEntity(
-            $this->Buddies_Model->getBuddyDataByBuddyId($bid)
+            $this->buddiesModel->getBuddyDataByBuddyId($bid)
         );
 
         $this->sendMessage($buddy->getBuddySender(), 3);
 
-        $this->Buddies_Model->setBuddyStatusById($bid, $this->user['user_id']);
+        $this->buddiesModel->setBuddyStatusById($bid, $this->user['user_id']);
     }
 
     /**
@@ -201,7 +174,7 @@ class Buddies extends BaseController
 
         $buddy = null;
 
-        if ($buddy_data = $this->Buddies_Model->getBuddyIdByReceiverAndSender($user, $this->user['user_id'])) {
+        if ($buddy_data = $this->buddiesModel->getBuddyIdByReceiverAndSender($user, $this->user['user_id'])) {
             $buddy = new BuddyEntity($buddy_data);
         }
 
@@ -211,7 +184,7 @@ class Buddies extends BaseController
 
         $this->sendMessage($user, 4);
 
-        $this->Buddies_Model->insertNewBuddyRequest(
+        $this->buddiesModel->insertNewBuddyRequest(
             $user,
             $this->user['user_id'],
             $text
@@ -275,7 +248,7 @@ class Buddies extends BaseController
             Functions::message($this->langs->line('bu_cannot_request_yourself'), 'game.php?page=buddies', 2, true);
         }
 
-        $user = $this->Buddies_Model->checkIfBuddyExists($user);
+        $user = $this->buddiesModel->checkIfBuddyExists($user);
 
         if (!$user) {
             Functions::redirect('game.php?page=buddies');
@@ -293,12 +266,7 @@ class Buddies extends BaseController
         );
     }
 
-    /**
-     * Build the page
-     *
-     * @return void
-     */
-    private function buildPage()
+    private function buildPage(): void
     {
         /**
          * Parse the items
@@ -390,7 +358,7 @@ class Buddies extends BaseController
         }
 
         // get user data
-        $user_data = $this->Buddies_Model->getBuddyDataById($id_to_get);
+        $user_data = $this->buddiesModel->getBuddyDataById($id_to_get);
 
         return [
             'id' => $user_data['user_id'],

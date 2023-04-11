@@ -1,53 +1,14 @@
 <?php
-/**
- * Debug Library
- *
- * @category Library
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
- */
 
 namespace App\libraries;
 
 use App\core\enumerators\ErrorTypesEnumerator as ErrorTypes;
 use App\libraries\Functions;
 
-/**
- * DebugLib Class
- */
 class DebugLib
 {
-    /**
-     * Contains an array of executed queries
-     *
-     * @var array
-     */
-    private $queries = [];
-
-    /**
-     * Contains an array of errors
-     *
-     * @var array
-     */
-    private $logs = [];
-
-    /**
-     * dump
-     *
-     * @param array $var Var
-     *
-     * @return string
-     */
-    private function dump($var)
-    {
-        $result = var_export($var, true);
-        $loc = whereCalled();
-
-        return "\n<pre>Dump: $loc\n$result</pre>";
-    }
+    private array $queries = [];
+    private array $logs = [];
 
     /**
      * Return error stack trace until provided level

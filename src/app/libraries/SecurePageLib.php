@@ -1,40 +1,11 @@
 <?php
-/**
- * SecurePage Library
- *
- * @category Library
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
- */
 
 namespace App\libraries;
 
-/**
- * This class is originally developed by "Bendikt Martin Myklebust" this is updated by "Rakesh Chandel".
- * To Secure Global varaible values consisting in array while posting from GET,Session, and POST.
- *
- * @category Classes
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
- */
 class SecurePageLib
 {
-    /**
-     * @var mixed
-     */
     private static $instance = null;
 
-    /**
-     * __construct
-     *
-     * @return void
-     */
     public function __construct()
     {
         //apply controller to all
@@ -45,11 +16,6 @@ class SecurePageLib
         $_COOKIE = array_map([$this, 'validate'], $_COOKIE);
     }
 
-    /**
-     * __construct
-     *
-     * @return void
-     */
     private function validate($value)
     {
         if (!is_array($value)) {
@@ -74,12 +40,7 @@ class SecurePageLib
         return $value;
     }
 
-    /**
-     * run
-     *
-     * @return void
-     */
-    public static function run()
+    public static function run(): void
     {
         if (self::$instance == null) {
             $c = __CLASS__;

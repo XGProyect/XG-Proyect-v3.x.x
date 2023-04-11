@@ -2,17 +2,6 @@
 
 declare(strict_types=1);
 
-/**
- * Messages Controller
- *
- * @category Controller
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
- */
-
 namespace App\controllers\adm;
 
 use App\core\BaseController;
@@ -20,24 +9,11 @@ use App\core\enumerators\MessagesEnumerator;
 use App\libraries\adm\AdministrationLib as Administration;
 use App\libraries\TimingLibrary as Timing;
 
-/**
- * Messages Class
- */
 class Messages extends BaseController
 {
-    /**
-     * Contains the alert string
-     *
-     * @var string
-     */
-    private $alert = '';
-
-    /**
-     * Contains a list of results
-     *
-     * @var array
-     */
-    private $results = [];
+    private string $alert = '';
+    private array $results = [];
+    protected $messagesModel;
 
     public function __construct()
     {
@@ -53,11 +29,6 @@ class Messages extends BaseController
         parent::loadLang(['adm/global', 'adm/messages']);
     }
 
-    /**
-     * Users land here
-     *
-     * @return void
-     */
     public function index(): void
     {
         // check if the user is allowed to access
@@ -111,11 +82,6 @@ class Messages extends BaseController
         }
     }
 
-    /**
-     * Build the page
-     *
-     * @return void
-     */
     private function buildPage(): void
     {
         $this->page->displayAdmin(
@@ -143,7 +109,7 @@ class Messages extends BaseController
     private function doSearch(array $to_search): void
     {
         // build the query, run the query and return the result
-        $search_results = $this->Messages_Model->getAllMessagesFiltered($to_search);
+        $search_results = $this->messagesModel->getAllMessagesFiltered($to_search);
         $results_list = [];
 
         if ($search_results) {
@@ -173,7 +139,7 @@ class Messages extends BaseController
      */
     private function deleteMessage(int $message_id): void
     {
-        $this->Messages_Model->deleteAllMessagesByIds([$message_id]);
+        $this->messagesModel->deleteAllMessagesByIds([$message_id]);
 
         $this->alert = Administration::saveMessage('ok', $this->langs->line('mg_delete_ok'));
     }
@@ -195,7 +161,7 @@ class Messages extends BaseController
             }
         }
 
-        $this->Messages_Model->deleteAllMessagesByIds($ids);
+        $this->messagesModel->deleteAllMessagesByIds($ids);
 
         $this->alert = Administration::saveMessage('ok', $this->langs->line('mg_delete_ok'));
     }

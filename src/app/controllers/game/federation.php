@@ -1,14 +1,4 @@
 <?php
-/**
- * Federation Controller
- *
- * @category Controller
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
- */
 
 namespace App\controllers\game;
 
@@ -19,52 +9,18 @@ use App\libraries\game\AcsFleets;
 use App\libraries\game\Fleets;
 use App\libraries\Users;
 
-/**
- * Federation Class
- */
 class Federation extends BaseController
 {
-    /**
-     *
-     * @var int
-     */
     public const MODULE_ID = 8;
-
-    /**
-     *
-     * @var string
-     */
     public const REDIRECT_TARGET = 'game.php?page=fleet1';
 
-    /**
-     *
-     * @var \Fleets
-     */
-    private $_fleets = null;
-
-    /**
-     *
-     * @var \AcsFleets
-     */
-    private $_group = null;
-
-    /**
-     *
-     * @var string
-     */
-    private $_acs_code = '';
-
-    /**
-     *
-     * @var int
-     */
-    private $_members_count = 0;
-
-    /**
-     *
-     * @var string
-     */
-    private $_message = '';
+    private ?Fleets $_fleets = null;
+    private ?AcsFleets $_group = null;
+    private string $_acs_code = '';
+    private int $_members_count = 0;
+    private string $_message = '';
+    private $fleetModel;
+    private $buddiesModel;
 
     public function __construct()
     {
@@ -84,11 +40,6 @@ class Federation extends BaseController
         $this->setUpFleets();
     }
 
-    /**
-     * Users land here
-     *
-     * @return void
-     */
     public function index(): void
     {
         // Check module access
@@ -110,7 +61,7 @@ class Federation extends BaseController
     private function setUpFleets()
     {
         $this->_fleets = new Fleets(
-            $this->Fleet_Model->getAllFleetsByUserId($this->user['user_id']),
+            $this->fleetModel->getAllFleetsByUserId($this->user['user_id']),
             $this->user['user_id']
         );
     }
@@ -141,12 +92,7 @@ class Federation extends BaseController
         }
     }
 
-    /**
-     * Build the page
-     *
-     * @return void
-     */
-    private function buildPage()
+    private function buildPage(): void
     {
         $this->validateData();
 
@@ -192,13 +138,13 @@ class Federation extends BaseController
             if ($fleet_id) {
                 $own_fleet = $this->_fleets->getOwnValidFleetById($fleet_id);
 
-                $acs = $this->Fleet_Model->getAcsDataByGroupId(
+                $acs = $this->fleetModel->getAcsDataByGroupId(
                     $own_fleet->getFleetGroup()
                 );
 
                 if ($acs['acs_members'] < 5
                     && $member != $this->user['user_id']) {
-                    $this->Fleet_Model->insertNewAcsMember(
+                    $this->fleetModel->insertNewAcsMember(
                         $member,
                         $own_fleet->getFleetGroup()
                     );
@@ -233,13 +179,13 @@ class Federation extends BaseController
             if ($fleet_id) {
                 $own_fleet = $this->_fleets->getOwnValidFleetById($fleet_id);
 
-                $acs = $this->Fleet_Model->getAcsDataByGroupId(
+                $acs = $this->fleetModel->getAcsDataByGroupId(
                     $own_fleet->getFleetGroup()
                 );
 
                 if ($acs['acs_members'] >= 1
                     && $member != $this->user['user_id']) {
-                    $this->Fleet_Model->removeAcsMember(
+                    $this->fleetModel->removeAcsMember(
                         $member,
                         $own_fleet->getFleetGroup()
                     );
@@ -260,7 +206,7 @@ class Federation extends BaseController
         if (!empty($user_name)) {
             $fleet_id = filter_input(INPUT_GET, 'fleet', FILTER_VALIDATE_INT);
 
-            $user_id = $this->Fleet_Model->getUserIdByName($user_name, $fleet_id);
+            $user_id = $this->fleetModel->getUserIdByName($user_name, $fleet_id);
             if ($user_id > 0 && $user_id != $this->user['user_id']) {
                 $this->addAcsMember($user_id);
 
@@ -293,11 +239,11 @@ class Federation extends BaseController
             if ($fleet_id) {
                 $own_fleet = $this->_fleets->getOwnValidFleetById($fleet_id);
 
-                $acs = $this->Fleet_Model->getAcsDataByGroupId(
+                $acs = $this->fleetModel->getAcsDataByGroupId(
                     $own_fleet->getFleetGroup()
                 );
 
-                $this->Fleet_Model->updateAcsName(
+                $this->fleetModel->updateAcsName(
                     $acs_name,
                     $acs['acs_id'],
                     $this->user['user_id']
@@ -321,7 +267,7 @@ class Federation extends BaseController
             if (!is_null($own_fleet)) {
                 if ($own_fleet->getFleetGroup() <= 0) {
                     // create a new acs, and get its group ID
-                    $group_id = $this->Fleet_Model->createNewAcs(
+                    $group_id = $this->fleetModel->createNewAcs(
                         $this->generateRandomAcsCode(),
                         $own_fleet
                     );
@@ -330,7 +276,7 @@ class Federation extends BaseController
                 }
 
                 $this->_group = new AcsFleets(
-                    [$this->Fleet_Model->getAcsDataByGroupId($group_id)],
+                    [$this->fleetModel->getAcsDataByGroupId($group_id)],
                     $this->user['user_id']
                 );
 
@@ -360,7 +306,7 @@ class Federation extends BaseController
     {
         $list_of_buddies = [];
 
-        $buddies = $this->Buddies_Model->getBuddiesDetailsForAcsById(
+        $buddies = $this->buddiesModel->getBuddiesDetailsForAcsById(
             $this->user['user_id'],
             $this->_group->getFirstAcs()->getAcsFleetId()
         );
@@ -388,7 +334,7 @@ class Federation extends BaseController
     {
         $list_of_members = [];
 
-        $members = $this->Fleet_Model->getListOfAcsMembers(
+        $members = $this->fleetModel->getListOfAcsMembers(
             $this->_group->getFirstAcs()->getAcsFleetId()
         );
 

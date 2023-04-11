@@ -1,23 +1,10 @@
 <?php
-/**
- * Statistics_library Model
- *
- * @category Model
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
 
 namespace App\models\libraries;
 
 use App\core\Model;
 use App\libraries\Functions;
 
-/**
- * Statistics_library Class
- */
 class Statistics_library extends Model
 {
     /**

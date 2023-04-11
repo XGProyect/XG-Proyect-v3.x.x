@@ -56,6 +56,7 @@ class Fleet3 extends BaseController
      * @var array
      */
     private $_allowed_missions = [];
+    protected $fleetModel;
 
     public function __construct()
     {
@@ -74,11 +75,6 @@ class Fleet3 extends BaseController
         $this->setUpFleets();
     }
 
-    /**
-     * Users land here
-     *
-     * @return void
-     */
     public function index(): void
     {
         // Check module access
@@ -140,7 +136,7 @@ class Fleet3 extends BaseController
         $objects = $this->objects->getObjects();
         $price = $this->objects->getPrice();
 
-        $ships = $this->Fleet_Model->getShipsByPlanetId($this->planet['planet_id']);
+        $ships = $this->fleetModel->getShipsByPlanetId($this->planet['planet_id']);
 
         $list_of_ships = [];
         $selected_fleet = $this->getSessionShips();
@@ -370,7 +366,7 @@ class Fleet3 extends BaseController
          * data
          */
         $ships = $this->getSessionShips();
-        $acs = $this->Fleet_Model->getAcsCount(
+        $acs = $this->fleetModel->getAcsCount(
             $_SESSION['fleet_data']['target']['group']
         );
 
@@ -378,7 +374,7 @@ class Fleet3 extends BaseController
         $action_type = 'other';
         $ocuppied = false;
 
-        $selected_planet = $this->Fleet_Model->getPlanetOwnerByCoords(
+        $selected_planet = $this->fleetModel->getPlanetOwnerByCoords(
             $_SESSION['fleet_data']['target']['galaxy'],
             $_SESSION['fleet_data']['target']['system'],
             $_SESSION['fleet_data']['target']['planet'],
@@ -559,7 +555,7 @@ class Fleet3 extends BaseController
      */
     private function isFriendly(array $target_planet): bool
     {
-        $is_buddy = $this->Fleet_Model->getBuddies(
+        $is_buddy = $this->fleetModel->getBuddies(
             $this->user['user_id'],
             $target_planet['planet_user_id']
         ) >= 1;

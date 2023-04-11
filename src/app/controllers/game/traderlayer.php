@@ -1,14 +1,4 @@
 <?php
-/**
- * Trader Layer Controller
- *
- * @category Controller
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.3.0
- */
 
 namespace App\controllers\game;
 
@@ -17,9 +7,6 @@ use App\libraries\FormatLib as Format;
 use App\libraries\Functions;
 use App\libraries\Users;
 
-/**
- * TraderLayer Class
- */
 class TraderLayer extends BaseController
 {
     public const MODULE_ID = 5;
@@ -41,11 +28,6 @@ class TraderLayer extends BaseController
         $this->buildPage();
     }
 
-    /**
-     * Users land here
-     *
-     * @return void
-     */
     public function index(): void
     {
         // Check module access
@@ -55,11 +37,6 @@ class TraderLayer extends BaseController
         $this->buildPage();
     }
 
-    /**
-     * Build the page
-     *
-     * @return void
-     */
     private function buildPage(): void
     {
         $this->page->display(

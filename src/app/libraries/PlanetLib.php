@@ -1,20 +1,4 @@
 <?php
-/**
- * XG Proyect
- *
- * Open-source OGame Clon
- *
- * This content is released under the GPL-3.0 License
- *
- * Copyright (c) 2008-2020 XG Proyect
- *
- * @package    XG Proyect
- * @author     XG Proyect Team
- * @copyright  2008-2020 XG Proyect
- * @license    https://www.gnu.org/licenses/gpl-3.0.en.html GPL-3.0 License
- * @link       https://github.com/XGProyect/
- * @since      3.0.0
- */
 
 namespace App\libraries;
 
@@ -23,30 +7,13 @@ use App\core\Language;
 use App\core\XGPCore;
 use App\libraries\Formulas;
 use App\libraries\Functions;
+use App\models\libraries\PlanetLib as PlanetLibModel;
 
-/**
- * PlanetLib class
- */
 class PlanetLib extends XGPCore
 {
-    /**
-     * Contains the model
-     *
-     * @var Planetlib
-     */
-    protected $planetslibModel;
+    protected PlanetLibModel $planetslibModel;
+    private array $langs;
 
-    /**
-     *
-     * @var array
-     */
-    private $langs;
-
-    /**
-     * __construct
-     *
-     * @return void
-     */
     public function __construct()
     {
         parent::__construct();

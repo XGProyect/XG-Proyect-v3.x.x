@@ -1,20 +1,4 @@
 <?php
-/**
- * XG Proyect
- *
- * Open-source OGame Clon
- *
- * This content is released under the GPL-3.0 License
- *
- * Copyright (c) 2008-2020 XG Proyect
- *
- * @package    XG Proyect
- * @author     XG Proyect Team
- * @copyright  2008-2020 XG Proyect
- * @license    https://www.gnu.org/licenses/gpl-3.0.en.html GPL-3.0 License
- * @link       https://github.com/XGProyect/
- * @since      3.0.0
- */
 
 namespace App\controllers\adm;
 
@@ -27,31 +11,13 @@ use App\libraries\Functions;
 use App\libraries\StatisticsLibrary;
 use App\libraries\users\Shortcuts;
 
-/**
- * Users Class
- */
 class Users extends BaseController
 {
-    /**
-     * @var string
-     */
-    private $_edit = '';
-    /**
-     * @var int
-     */
-    private $_planet = 0;
-    /**
-     * @var int
-     */
-    private $_moon = 0;
-    /**
-     * @var int
-     */
-    private $_id = 0;
-    /**
-     * @var int
-     */
-    private $_authlevel = 0;
+    private string $_edit = '';
+    private int $_planet = 0;
+    private int $_moon = 0;
+    private int $_id = 0;
+    private int $_authlevel = 0;
     /**
      * @var mixed
      */
@@ -68,6 +34,7 @@ class Users extends BaseController
      * @var mixed
      */
     private $_stats;
+    protected $usersModel;
 
     public function __construct()
     {
@@ -86,11 +53,6 @@ class Users extends BaseController
         $this->_stats = new StatisticsLibrary();
     }
 
-    /**
-     * Users land here
-     *
-     * @return void
-     */
     public function index(): void
     {
         // check if the user is allowed to access
@@ -108,11 +70,6 @@ class Users extends BaseController
     #
     ######################################
 
-    /**
-     * Build the page
-     *
-     * @return void
-     */
     private function buildPage(): void
     {
         $parse = $this->langs->language;
@@ -125,7 +82,7 @@ class Users extends BaseController
         $parse['alert'] = '';
 
         if ($user != '') {
-            $checked_user = $this->Users_Model->checkUser($user);
+            $checked_user = $this->usersModel->checkUser($user);
 
             if (!$checked_user) {
                 $parse['alert'] = Administration::saveMessage('error', $this->langs->line('us_nothing_found'));
@@ -135,7 +92,7 @@ class Users extends BaseController
                 $this->_authlevel = $checked_user['user_authlevel'];
 
                 // initial data
-                $this->_user_query = $this->Users_Model->getUserDataById($this->_id);
+                $this->_user_query = $this->usersModel->getUserDataById($this->_id);
 
                 // save the data
                 if (isset($_POST['send_data']) && $_POST['send_data']) {
@@ -143,7 +100,7 @@ class Users extends BaseController
                 }
 
                 // get refreshed data
-                $this->_user_query = $this->Users_Model->getUserDataById($this->_id);
+                $this->_user_query = $this->usersModel->getUserDataById($this->_id);
             }
         }
 
@@ -403,7 +360,7 @@ class Users extends BaseController
      */
     private function getDataPlanets()
     {
-        $planets_query = $this->Users_Model->getAllPlanetsData($this->_id, $this->_planet, $this->_edit);
+        $planets_query = $this->usersModel->getAllPlanetsData($this->_id, $this->_planet, $this->_edit);
         $parse = $this->langs->language;
         $parse['planets'] = str_replace('%s', $this->_user_query['user_name'], $this->langs->line('us_user_planets'));
 
@@ -430,7 +387,7 @@ class Users extends BaseController
                 break;
 
             case ($this->_edit == 'delete'):
-                $this->Users_Model->softDeletePlanetById($this->_planet);
+                $this->usersModel->softDeletePlanetById($this->_planet);
                 $this->refreshPage();
                 break;
 
@@ -453,7 +410,7 @@ class Users extends BaseController
      */
     private function getDataMoons()
     {
-        $moons_query = $this->Users_Model->getAllMoonsData($this->_id, $this->_moon, $this->_edit);
+        $moons_query = $this->usersModel->getAllMoonsData($this->_id, $this->_moon, $this->_edit);
         $parse = $this->langs->language;
         $parse['moons'] = str_replace('%s', $this->_user_query['user_name'], $this->langs->line('us_user_moons'));
 
@@ -480,7 +437,7 @@ class Users extends BaseController
                 break;
 
             case ($this->_edit == 'delete'):
-                $this->Users_Model->softDeleteMoonById($this->_moon);
+                $this->usersModel->softDeleteMoonById($this->_moon);
                 $this->refreshPage();
                 break;
 
@@ -523,7 +480,7 @@ class Users extends BaseController
 
         $errors = '';
 
-        if ($username == '' or $this->Users_Model->checkUsername($username, $this->_id)) {
+        if ($username == '' or $this->usersModel->checkUsername($username, $this->_id)) {
             $errors .= $this->langs->line('us_error_username') . '<br />';
         }
 
@@ -533,7 +490,7 @@ class Users extends BaseController
             $password = "`user_password`";
         }
 
-        if ($email == '' or $this->Users_Model->checkEmail($email, $this->_id)) {
+        if ($email == '' or $this->usersModel->checkEmail($email, $this->_id)) {
             $errors .= $this->langs->line('us_error_email') . '<br />';
         }
 
@@ -557,7 +514,7 @@ class Users extends BaseController
             $this->_alert_info = $errors;
             $this->_alert_type = 'error';
         } else {
-            $this->Users_Model->saveUserData([
+            $this->usersModel->saveUserData([
                 'username' => $username,
                 'password' => $password,
                 'email' => $email,
@@ -569,7 +526,7 @@ class Users extends BaseController
             ]);
 
             if ($this->user['user_id'] != $this->_id) {
-                $this->Users_Model->deleteSessionByUserId($this->_id);
+                $this->usersModel->deleteSessionByUserId($this->_id);
             }
 
             $this->_alert_info = $this->langs->line('us_all_ok_message');
@@ -584,7 +541,7 @@ class Users extends BaseController
      */
     private function saveSettings()
     {
-        $this->Users_Model->saveUserPreferences($_POST, $this->_id, $this->_user_query);
+        $this->usersModel->saveUserPreferences($_POST, $this->_id, $this->_user_query);
 
         $this->_alert_info = $this->langs->line('us_all_ok_message');
         $this->_alert_type = 'ok';
@@ -597,7 +554,7 @@ class Users extends BaseController
      */
     private function saveResearch(): void
     {
-        $this->Users_Model->saveTechnologies($_POST, $this->_id);
+        $this->usersModel->saveTechnologies($_POST, $this->_id);
 
         // points rebuild
         $this->_stats->rebuildPoints($this->_id, 0, 'research');
@@ -614,7 +571,7 @@ class Users extends BaseController
      */
     private function savePremium(): void
     {
-        $this->Users_Model->savePremium($_POST, $this->_id, $this->_user_query);
+        $this->usersModel->savePremium($_POST, $this->_id, $this->_user_query);
 
         // alert
         $this->_alert_info = $this->langs->line('us_all_ok_message');
@@ -638,7 +595,7 @@ class Users extends BaseController
             return;
         }
 
-        $this->Users_Model->savePlanet($_POST, $id_get);
+        $this->usersModel->savePlanet($_POST, $id_get);
 
         // alert
         $this->_alert_info = $this->langs->line('us_all_ok_message');
@@ -660,7 +617,7 @@ class Users extends BaseController
             $id_get = $this->_moon;
         }
 
-        $this->Users_Model->saveBuildings($_POST, $id_get);
+        $this->usersModel->saveBuildings($_POST, $id_get);
 
         // points rebuild
         $this->_stats->rebuildPoints($this->_id, $id_get, 'buildings');
@@ -683,7 +640,7 @@ class Users extends BaseController
             $id_get = $this->_moon;
         }
 
-        $this->Users_Model->saveShips($_POST, $id_get);
+        $this->usersModel->saveShips($_POST, $id_get);
 
         // points rebuild
         $this->_stats->rebuildPoints($this->_id, $id_get, 'ships');
@@ -706,7 +663,7 @@ class Users extends BaseController
             $id_get = $this->_moon;
         }
 
-        $this->Users_Model->saveDefenses($_POST, $id_get);
+        $this->usersModel->saveDefenses($_POST, $id_get);
 
         // points rebuild
         $this->_stats->rebuildPoints($this->_id, $id_get, 'defenses');
@@ -729,7 +686,7 @@ class Users extends BaseController
     private function buildUsersCombo($user_id)
     {
         $combo_rows = '';
-        $users = $this->Users_Model->getAllUsers();
+        $users = $this->usersModel->getAllUsers();
 
         foreach ($users as $users_row) {
             $combo_rows .= '<option value="' . $users_row['user_id'] . '" ' . ($users_row['user_id'] == $user_id ? ' selected' : '') . '>' . $users_row['user_name'] . '</option>';
@@ -747,7 +704,7 @@ class Users extends BaseController
     private function buildPlanetCombo($user_data, $id_field)
     {
         $combo_rows = '';
-        $planets = $this->Users_Model->getAllPlanetsByUserId($this->_id);
+        $planets = $this->usersModel->getAllPlanetsByUserId($this->_id);
 
         foreach ($planets as $planets_row) {
             if ($user_data[$id_field] == $planets_row['planet_id']) {
@@ -768,7 +725,7 @@ class Users extends BaseController
     private function buildAllianceCombo($user_data)
     {
         $combo_rows = '';
-        $alliances = $this->Users_Model->getAllAlliances();
+        $alliances = $this->usersModel->getAllAlliances();
 
         foreach ($alliances as $alliance_row) {
             if ($user_data['user_ally_id'] == $alliance_row['alliance_id']) {
@@ -1260,7 +1217,7 @@ class Users extends BaseController
 
         $this->deleteMoon();
 
-        $this->Users_Model->deletePlanetById($id_planet);
+        $this->usersModel->deletePlanetById($id_planet);
     }
 
     /**
@@ -1276,7 +1233,7 @@ class Users extends BaseController
             $id_moon = $this->_moon;
         }
 
-        $this->Users_Model->deleteMoonById($id_moon);
+        $this->usersModel->deleteMoonById($id_moon);
     }
     ######################################
     #

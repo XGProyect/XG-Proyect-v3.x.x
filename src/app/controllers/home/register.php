@@ -1,38 +1,15 @@
 <?php
-/**
- * Register Controller
- *
- * @category Controller
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
- */
 
 namespace App\controllers\home;
 
 use App\core\BaseController;
 use App\libraries\Functions;
 
-/**
- * Register Class
- */
 class Register extends BaseController
 {
-    /**
-     * Contains the set of coords for an available position
-     *
-     * @var array
-     */
-    private $available_coords = [];
-
-    /**
-     * Contains the error
-     *
-     * @var int
-     */
-    private $error_id;
+    private array $available_coords = [];
+    private int $error_id;
+    protected $registerModel;
 
     public function __construct()
     {
@@ -45,11 +22,6 @@ class Register extends BaseController
         parent::loadLang(['home/register']);
     }
 
-    /**
-     * Users land here
-     *
-     * @return void
-     */
     public function index(): void
     {
         if (Functions::readConfig('reg_enable') != 1) {
@@ -60,11 +32,6 @@ class Register extends BaseController
         $this->buildPage();
     }
 
-    /**
-     * Build the page
-     *
-     * @return void
-     */
     private function buildPage(): void
     {
         if ($_POST) {
@@ -84,7 +51,7 @@ class Register extends BaseController
                 // start user creation
                 $this->calculateNewPlanetPosition();
 
-                $this->Register_Model->createNewUser(
+                $this->registerModel->createNewUser(
                     $this->userLibrary,
                     [
                         'new_user_name' => $user_name,
@@ -94,7 +61,7 @@ class Register extends BaseController
                     $this->available_coords
                 );
 
-                $new_user = $this->Register_Model->getNewUserData();
+                $new_user = $this->registerModel->getNewUserData();
 
                 // Send Welcome Message to the user if the feature is enabled
                 if (Functions::readConfig('reg_welcome_message')) {
@@ -191,12 +158,12 @@ class Register extends BaseController
             $errors++;
         }
 
-        if ($this->Register_Model->checkUser($_POST['character'])) {
+        if ($this->registerModel->checkUser($_POST['character'])) {
             $errors++;
             $this->error_id = 1;
         }
 
-        if ($this->Register_Model->checkEmail($_POST['email'])) {
+        if ($this->registerModel->checkEmail($_POST['email'])) {
             $errors++;
             $this->error_id = 2;
         }
@@ -254,7 +221,7 @@ class Register extends BaseController
                 break;
             }
 
-            if (!$this->Register_Model->checkIfPlanetExists($galaxy, $system, $planet)) {
+            if (!$this->registerModel->checkIfPlanetExists($galaxy, $system, $planet)) {
                 Functions::updateConfig('lastsettedgalaxypos', $last_galaxy);
                 Functions::updateConfig('lastsettedsystempos', $last_system);
                 Functions::updateConfig('lastsettedplanetpos', $last_planet);

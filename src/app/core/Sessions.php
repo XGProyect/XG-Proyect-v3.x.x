@@ -38,11 +38,6 @@ class Sessions
      */
     private $sessionsModel;
 
-    /**
-     * Constructor
-     *
-     * @return void
-     */
     public function __construct()
     {
         // load model

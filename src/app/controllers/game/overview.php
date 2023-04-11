@@ -20,10 +20,8 @@ class Overview extends BaseController
 {
     public const MODULE_ID = 1;
 
-    /**
-     * @var mixed
-     */
     private $noob;
+    protected $overviewModel;
 
     public function __construct()
     {
@@ -41,11 +39,6 @@ class Overview extends BaseController
         $this->noob = Functions::loadLibrary('NoobsProtectionLib');
     }
 
-    /**
-     * Users land here
-     *
-     * @return void
-     */
     public function index(): void
     {
         // Check module access
@@ -55,11 +48,6 @@ class Overview extends BaseController
         $this->buildPage();
     }
 
-    /**
-     * Build the page
-     *
-     * @return void
-     */
     private function buildPage(): void
     {
         $moon = $this->getPlanetMoon();
@@ -181,7 +169,7 @@ class Overview extends BaseController
         $fleet_row = [];
         $record = 0;
 
-        $own_fleets = $this->Overview_Model->getOwnFleets($this->user['user_id']);
+        $own_fleets = $this->overviewModel->getOwnFleets($this->user['user_id']);
 
         foreach ($own_fleets as $fleets) {
             ######################################
@@ -361,7 +349,7 @@ class Overview extends BaseController
     {
         $colony = 1;
 
-        $planets_query = $this->Overview_Model->getPlanets($this->user['user_id']);
+        $planets_query = $this->overviewModel->getPlanets($this->user['user_id']);
         $planet_block = '<tr>';
 
         foreach ($planets_query as $user_planet) {

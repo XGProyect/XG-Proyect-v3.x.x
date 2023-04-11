@@ -1,30 +1,12 @@
 <?php
-/**
- * Mission Control Library
- *
- * @category Library
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
- */
 
 namespace App\libraries;
 
 use App\libraries\Functions;
 
-/**
- * MissionControlLibrary Class
- */
 class MissionControlLibrary
 {
-    /**
-     * Contains the model MissionControlLibrary
-     *
-     * @var \MissionControlLibrary
-     */
-    private $Mission_control_library_Model = null;
+    private ?MissionControlLibrary $missionControlLibraryModel = null;
 
     /**
      * __construct
@@ -34,7 +16,7 @@ class MissionControlLibrary
     public function __construct()
     {
         // load the required model
-        $this->Mission_control_library_Model = Functions::model('libraries/MissionControlLibrary');
+        $this->missionControlLibraryModel = Functions::model('libraries/MissionControlLibrary');
     }
 
     /**
@@ -45,7 +27,7 @@ class MissionControlLibrary
     public function arrivingFleets()
     {
         $this->processMissions(
-            $this->Mission_control_library_Model->getArrivingFleets()
+            $this->missionControlLibraryModel->getArrivingFleets()
         );
     }
 
@@ -57,7 +39,7 @@ class MissionControlLibrary
     public function returningFleets()
     {
         $this->processMissions(
-            $this->Mission_control_library_Model->getReturningFleets()
+            $this->missionControlLibraryModel->getReturningFleets()
         );
     }
 

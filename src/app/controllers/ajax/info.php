@@ -14,23 +14,13 @@ class Info extends BaseController
         parent::loadLang(['ajax/info']);
     }
 
-    /**
-     * Users land here
-     *
-     * @return void
-     */
     public function index(): void
     {
         // build the page
         $this->buildPage();
     }
 
-    /**
-     * Build the page
-     *
-     * @return void
-     */
-    private function buildPage()
+    private function buildPage(): void
     {
         $this->page->display(
             $this->template->set('ajax/info_view', $this->langs->language),

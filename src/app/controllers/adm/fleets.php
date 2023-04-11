@@ -2,17 +2,6 @@
 
 declare(strict_types=1);
 
-/**
- * Fleets Controller
- *
- * @category Controller
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
-
 namespace App\controllers\adm;
 
 use App\core\BaseController;
@@ -21,11 +10,10 @@ use App\libraries\FleetsLib;
 use App\libraries\FormatLib as Format;
 use App\libraries\TimingLibrary as Timing;
 
-/**
- * Fleets Class
- */
 class Fleets extends BaseController
 {
+    protected $fleetsModel;
+
     public function __construct()
     {
         parent::__construct();
@@ -40,11 +28,6 @@ class Fleets extends BaseController
         parent::loadLang(['adm/global', 'adm/objects', 'adm/fleets']);
     }
 
-    /**
-     * Users land here
-     *
-     * @return void
-     */
     public function index(): void
     {
         // check if the user is allowed to access
@@ -82,7 +65,7 @@ class Fleets extends BaseController
      */
     private function doRestartAction(int $fleet_id): void
     {
-        $this->Fleets_Model->restartFleetById($fleet_id);
+        $this->fleetsModel->restartFleetById($fleet_id);
     }
 
     /**
@@ -93,7 +76,7 @@ class Fleets extends BaseController
      */
     private function doEndAction(int $fleet_id): void
     {
-        $this->Fleets_Model->endFleetById($fleet_id);
+        $this->fleetsModel->endFleetById($fleet_id);
     }
 
     /**
@@ -104,7 +87,7 @@ class Fleets extends BaseController
      */
     private function doReturnAction(int $fleet_id): void
     {
-        $this->Fleets_Model->returnFleetById($fleet_id);
+        $this->fleetsModel->returnFleetById($fleet_id);
     }
 
     /**
@@ -115,14 +98,9 @@ class Fleets extends BaseController
      */
     private function doDeleteAction(int $fleet_id): void
     {
-        $this->Fleets_Model->deleteFleetById($fleet_id);
+        $this->fleetsModel->deleteFleetById($fleet_id);
     }
 
-    /**
-     * Build the page
-     *
-     * @return void
-     */
     private function buildPage(): void
     {
         $this->page->displayAdmin(
@@ -143,7 +121,7 @@ class Fleets extends BaseController
      */
     private function buildFleetMovementsBlock(): array
     {
-        $fleets = $this->Fleets_Model->getAllFleets();
+        $fleets = $this->fleetsModel->getAllFleets();
         $fleet_movements = [];
 
         foreach ($fleets as $fleet) {

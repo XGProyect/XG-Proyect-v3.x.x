@@ -35,12 +35,7 @@ class Premium extends BaseController
         'registration_dark_matter' => FILTER_VALIDATE_INT,
     ];
 
-    /**
-     * Contains the alert string
-     *
-     * @var string
-     */
-    private $alert = '';
+    private string $alert = '';
 
     public function __construct()
     {
@@ -53,11 +48,6 @@ class Premium extends BaseController
         parent::loadLang(['adm/global', 'adm/premium']);
     }
 
-    /**
-     * Users land here
-     *
-     * @return void
-     */
     public function index(): void
     {
         // check if the user is allowed to access
@@ -94,11 +84,6 @@ class Premium extends BaseController
         }
     }
 
-    /**
-     * Build the page
-     *
-     * @return void
-     */
     private function buildPage(): void
     {
         $this->page->displayAdmin(

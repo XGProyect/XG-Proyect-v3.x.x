@@ -5,9 +5,6 @@ namespace App\models\libraries;
 use App\core\Model;
 use App\libraries\Functions;
 
-/**
- * UsersLibrary Class
- */
 class UsersLibrary extends Model
 {
     /**

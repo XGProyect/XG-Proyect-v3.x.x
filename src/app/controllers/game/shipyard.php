@@ -1,14 +1,4 @@
 <?php
-/**
- * Shipyard Controller
- *
- * @category Controller
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
 
 namespace App\controllers\game;
 
@@ -22,52 +12,21 @@ use App\libraries\Functions;
 use App\libraries\Users;
 use Exception;
 
-/**
- * Shipyard Class
- */
 class Shipyard extends BaseController
 {
-    /**
-     * The module ID
-     *
-     * @var int
-     */
     public const MODULE_ID = 7;
-
-    /**
-     * Count variable that we'll use to build the missile queue
-     *
-     * @var array
-     */
-    private $missiles = [
+    private array $missiles = [
         Defenses::defense_anti_ballistic_missile => 0,
         Defenses::defense_interplanetary_missile => 0,
     ];
-
-    /**
-     * The amount of resources that will need to decrease
-     *
-     * @var array
-     */
-    private $resources_consumed = [
+    private array $resources_consumed = [
         'metal' => 0,
         'crystal' => 0,
         'deuterium' => 0,
     ];
-
-    /**
-     * List of currently available buildings
-     *
-     * @var array
-     */
-    private $allowed_items = [];
-
-    /**
-     * Store if we are currently building or not
-     *
-     * @var boolean
-     */
-    private $building_in_progress = false;
+    private array $allowed_items = [];
+    private bool $building_in_progress = false;
+    protected $shipyardModel;
 
     public function __construct()
     {
@@ -86,11 +45,6 @@ class Shipyard extends BaseController
         $this->setUpShipyard();
     }
 
-    /**
-     * Users land here
-     *
-     * @return void
-     */
     public function index(): void
     {
         // Check module access
@@ -165,7 +119,7 @@ class Shipyard extends BaseController
             }
 
             if ($total_items_to_build > 0) {
-                $this->Shipyard_Model->insertItemsToBuild(
+                $this->shipyardModel->insertItemsToBuild(
                     $this->resources_consumed,
                     $shipyard_queue,
                     $this->planet['planet_id']
@@ -176,12 +130,7 @@ class Shipyard extends BaseController
         }
     }
 
-    /**
-     * Build the page
-     *
-     * @return void
-     */
-    private function buildPage()
+    private function buildPage(): void
     {
         /**
          * Parse the items

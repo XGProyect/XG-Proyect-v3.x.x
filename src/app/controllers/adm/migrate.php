@@ -69,11 +69,6 @@ class Migrate extends BaseController
         parent::loadLang(['adm/global', 'adm/migrate']);
     }
 
-    /**
-     * Users land here
-     *
-     * @return void
-     */
     public function index(): void
     {
         // check if the user is allowed to access
@@ -85,12 +80,7 @@ class Migrate extends BaseController
         $this->buildPage();
     }
 
-    /**
-     * Build the page
-     *
-     * @return void
-     */
-    private function buildPage()
+    private function buildPage(): void
     {
         $parse = $this->langs->language;
         $continue = true;

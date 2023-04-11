@@ -24,19 +24,9 @@ class Chat extends BaseController
 {
     public const MODULE_ID = 18;
 
-    /**
-     * Receiver home planet data
-     *
-     * @var array
-     */
-    private $_receiver_data = [];
-
-    /**
-     * Private message data
-     *
-     * @var array
-     */
-    private $_message_data = [];
+    private array $_receiver_data = [];
+    private array $_message_data = [];
+    protected $messagesModel;
 
     public function __construct()
     {
@@ -52,11 +42,6 @@ class Chat extends BaseController
         parent::loadLang(['game/chat']);
     }
 
-    /**
-     * Users land here
-     *
-     * @return void
-     */
     public function index(): void
     {
         // Check module access
@@ -80,7 +65,7 @@ class Chat extends BaseController
         $message_sent = filter_input_array(INPUT_POST);
 
         if ($write_to) {
-            $this->_receiver_data = $this->Messages_Model->getHomePlanet($write_to);
+            $this->_receiver_data = $this->messagesModel->getHomePlanet($write_to);
 
             if (!$this->_receiver_data) {
                 Functions::redirect('game.php?page=messages');
@@ -130,12 +115,7 @@ class Chat extends BaseController
         }
     }
 
-    /**
-     * Build the page
-     *
-     * @return void
-     */
-    private function buildPage()
+    private function buildPage(): void
     {
         $this->page->display(
             $this->template->set(

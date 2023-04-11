@@ -1,12 +1,4 @@
 <?php
-/**
- * DevelopmentsLib.php
- *
- * @author   XG Proyect Team
- * @license  https://www.xgproyect.org XG Proyect
- * @link     https://www.xgproyect.org
- * @version  3.2.0
- */
 
 namespace App\libraries;
 
@@ -14,14 +6,10 @@ use App\core\enumerators\BuildingsEnumerator as Buildings;
 use App\core\enumerators\ResearchEnumerator as Research;
 use App\core\Template;
 use App\core\XGPCore;
-use App\libraries\DevelopmentsLib;
 use App\libraries\FormatLib;
 use App\libraries\Formulas;
 use App\libraries\OfficiersLib;
 
-/**
- * DevelopmentsLib Class
- */
 class DevelopmentsLib extends XGPCore
 {
     /**

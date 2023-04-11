@@ -32,12 +32,7 @@ class Planets extends BaseController
         'energy_basic_income' => FILTER_VALIDATE_INT,
     ];
 
-    /**
-     * Contains the alert string
-     *
-     * @var string
-     */
-    private $alert = '';
+    private string $alert = '';
 
     public function __construct()
     {
@@ -50,11 +45,6 @@ class Planets extends BaseController
         parent::loadLang(['adm/global', 'adm/planets']);
     }
 
-    /**
-     * Users land here
-     *
-     * @return void
-     */
     public function index(): void
     {
         // check if the user is allowed to access
@@ -89,11 +79,6 @@ class Planets extends BaseController
         }
     }
 
-    /**
-     * Build the page
-     *
-     * @return void
-     */
     private function buildPage(): void
     {
         $this->page->displayAdmin(

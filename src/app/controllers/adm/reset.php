@@ -20,12 +20,8 @@ use App\libraries\adm\AdministrationLib as Administration;
  */
 class Reset extends BaseController
 {
-    /**
-     * Contains the alert string
-     *
-     * @var string
-     */
-    private $alert = '';
+    private string $alert = '';
+    protected $resetModel;
 
     public function __construct()
     {
@@ -41,11 +37,6 @@ class Reset extends BaseController
         parent::loadLang(['adm/global', 'adm/reset']);
     }
 
-    /**
-     * Users land here
-     *
-     * @return void
-     */
     public function index(): void
     {
         // check if the user is allowed to access
@@ -71,117 +62,112 @@ class Reset extends BaseController
             if (!isset($_POST['resetall'])) {
                 // reset defenses
                 if (isset($_POST['defenses']) && $_POST['defenses'] == 'on') {
-                    $this->Reset_Model->resetDefenses();
+                    $this->resetModel->resetDefenses();
                 }
 
                 // reset ships
                 if (isset($_POST['ships']) && $_POST['ships'] == 'on') {
-                    $this->Reset_Model->resetShips();
+                    $this->resetModel->resetShips();
                 }
 
                 // reset shipyard queues
                 if (isset($_POST['h_d']) && $_POST['h_d'] == 'on') {
-                    $this->Reset_Model->resetShipyardQueues();
+                    $this->resetModel->resetShipyardQueues();
                 }
 
                 // reset planet buildings
                 if (isset($_POST['edif_p']) && $_POST['edif_p'] == 'on') {
-                    $this->Reset_Model->resetPlanetBuildings();
+                    $this->resetModel->resetPlanetBuildings();
                 }
 
                 // reset moon buildings
                 if (isset($_POST['edif_l']) && $_POST['edif_l'] == 'on') {
-                    $this->Reset_Model->resetMoonBuildings();
+                    $this->resetModel->resetMoonBuildings();
                 }
 
                 // reset buildings queues
                 if (isset($_POST['edif']) && $_POST['edif'] == 'on') {
-                    $this->Reset_Model->resetBuildingsQueues();
+                    $this->resetModel->resetBuildingsQueues();
                 }
 
                 // reset research
                 if (isset($_POST['inves']) && $_POST['inves'] == 'on') {
-                    $this->Reset_Model->resetResearch();
+                    $this->resetModel->resetResearch();
                 }
 
                 // reset research queues
                 if (isset($_POST['inves_c']) && $_POST['inves_c'] == 'on') {
-                    $this->Reset_Model->resetResearchQueues();
+                    $this->resetModel->resetResearchQueues();
                 }
 
                 // reset officiers
                 if (isset($_POST['ofis']) && $_POST['ofis'] == 'on') {
-                    $this->Reset_Model->resetOfficiers();
+                    $this->resetModel->resetOfficiers();
                 }
 
                 // reset dark matter
                 if (isset($_POST['dark']) && $_POST['dark'] == 'on') {
-                    $this->Reset_Model->resetDarkMatter();
+                    $this->resetModel->resetDarkMatter();
                 }
 
                 // reset resources
                 if (isset($_POST['resources']) && $_POST['resources'] == 'on') {
-                    $this->Reset_Model->resetResources();
+                    $this->resetModel->resetResources();
                 }
 
                 // reset notes
                 if (isset($_POST['notes']) && $_POST['notes'] == 'on') {
-                    $this->Reset_Model->resetNotes();
+                    $this->resetModel->resetNotes();
                 }
 
                 // reset reports
                 if (isset($_POST['rw']) && $_POST['rw'] == 'on') {
-                    $this->Reset_Model->resetReports();
+                    $this->resetModel->resetReports();
                 }
 
                 // reset friends
                 if (isset($_POST['friends']) && $_POST['friends'] == 'on') {
-                    $this->Reset_Model->resetFriends();
+                    $this->resetModel->resetFriends();
                 }
 
                 // reset alliances
                 if (isset($_POST['alliances']) && $_POST['alliances'] == 'on') {
-                    $this->Reset_Model->resetAlliances();
+                    $this->resetModel->resetAlliances();
                 }
 
                 // reset fleets
                 if (isset($_POST['fleets']) && $_POST['fleets'] == 'on') {
-                    $this->Reset_Model->resetFleets();
+                    $this->resetModel->resetFleets();
                 }
 
                 // reset banned
                 if (isset($_POST['banneds']) && $_POST['banneds'] == 'on') {
-                    $this->Reset_Model->resetBanned();
+                    $this->resetModel->resetBanned();
                 }
 
                 // reset messages
                 if (isset($_POST['messages']) && $_POST['messages'] == 'on') {
-                    $this->Reset_Model->resetMessages();
+                    $this->resetModel->resetMessages();
                 }
 
                 // reset statistics
                 if (isset($_POST['statpoints']) && $_POST['statpoints'] == 'on') {
-                    $this->Reset_Model->resetStatistics();
+                    $this->resetModel->resetStatistics();
                 }
 
                 // reset moons
                 if (isset($_POST['moons']) && $_POST['moons'] == 'on') {
-                    $this->Reset_Model->resetMoons();
+                    $this->resetModel->resetMoons();
                 }
             } else {
                 // reset everything
-                $this->Reset_Model->resetAll();
+                $this->resetModel->resetAll();
             }
 
             $this->alert = Administration::saveMessage('ok', $this->langs->line('re_reset_excess'));
         }
     }
 
-    /**
-     * Build the page
-     *
-     * @return void
-     */
     private function buildPage(): void
     {
         $this->page->displayAdmin(

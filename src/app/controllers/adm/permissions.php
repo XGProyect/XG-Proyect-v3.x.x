@@ -26,12 +26,7 @@ use App\libraries\Functions;
  */
 class Permissions extends BaseController
 {
-    /**
-     * Contains the alert string
-     *
-     * @var string
-     */
-    private $alert = '';
+    private string $alert = '';
 
     public function __construct()
     {
@@ -47,11 +42,6 @@ class Permissions extends BaseController
         $this->setUpPermissions();
     }
 
-    /**
-     * Users land here
-     *
-     * @return void
-     */
     public function index(): void
     {
         // check if the user is allowed to access
@@ -110,11 +100,6 @@ class Permissions extends BaseController
         }
     }
 
-    /**
-     * Build the page
-     *
-     * @return void
-     */
     private function buildPage(): void
     {
         $this->page->displayAdmin(

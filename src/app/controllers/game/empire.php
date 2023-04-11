@@ -2,17 +2,6 @@
 
 declare(strict_types=1);
 
-/**
- * Empire Controller
- *
- * @category Controller
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
-
 namespace App\controllers\game;
 
 use App\core\BaseController;
@@ -23,17 +12,11 @@ use App\libraries\Functions;
 use App\libraries\Users;
 use Exception;
 
-/**
- * Empire Class
- */
 class Empire extends BaseController
 {
-    /**
-     * The module ID
-     *
-     * @var int
-     */
     public const MODULE_ID = 2;
+
+    protected $empireModel;
 
     public function __construct()
     {
@@ -49,11 +32,6 @@ class Empire extends BaseController
         parent::loadLang(['game/global', 'game/constructions', 'game/defenses', 'game/technologies', 'game/ships', 'game/empire']);
     }
 
-    /**
-     * Users land here
-     *
-     * @return void
-     */
     public function index(): void
     {
         // Check module access
@@ -63,12 +41,7 @@ class Empire extends BaseController
         $this->buildPage();
     }
 
-    /**
-     * Build the page
-     *
-     * @return void
-     */
-    private function buildPage()
+    private function buildPage(): void
     {
         $this->page->display(
             $this->template->set(
@@ -88,7 +61,7 @@ class Empire extends BaseController
      */
     private function buildBlocks(): array
     {
-        $empire_data = $this->Empire_Model->getAllPlayerData((int) $this->user['user_id']);
+        $empire_data = $this->empireModel->getAllPlayerData((int) $this->user['user_id']);
 
         foreach ($empire_data as $planet) {
             // general data

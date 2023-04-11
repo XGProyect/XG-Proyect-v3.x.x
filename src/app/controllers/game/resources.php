@@ -18,6 +18,7 @@ class Resources extends BaseController
     private $resource;
     private $prodGrid;
     private $reslist;
+    protected $resourcesModel;
 
     public function __construct()
     {
@@ -37,11 +38,6 @@ class Resources extends BaseController
         $this->reslist = $this->objects->getObjectsList();
     }
 
-    /**
-     * Users land here
-     *
-     * @return void
-     */
     public function index(): void
     {
         // Check module access
@@ -51,12 +47,7 @@ class Resources extends BaseController
         $this->buildPage();
     }
 
-    /**
-     * Build the page
-     *
-     * @return void
-     */
-    private function buildPage()
+    private function buildPage(): void
     {
         $parse = $this->langs->language;
 
@@ -239,7 +230,7 @@ class Resources extends BaseController
                 }
             }
 
-            $this->Resources_Model->updateCurrentPlanet($this->planet, $SubQry);
+            $this->resourcesModel->updateCurrentPlanet($this->planet, $SubQry);
 
             Functions::redirect('game.php?page=resourceSettings');
         }

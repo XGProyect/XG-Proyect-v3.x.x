@@ -1,27 +1,7 @@
 <?php
-/**
- * Production Library
- *
- * @category Library
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
- */
 
 namespace App\libraries;
 
-/**
- * ProductionLib Class
- *
- * @category Classes
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
- */
 class ProductionLib
 {
     /**

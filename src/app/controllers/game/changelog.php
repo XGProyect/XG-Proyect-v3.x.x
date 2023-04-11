@@ -1,14 +1,4 @@
 <?php
-/**
- * Changelog Controller
- *
- * @category Controller
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
- */
 
 namespace App\controllers\game;
 
@@ -17,12 +7,11 @@ use App\libraries\Functions;
 use App\libraries\TimingLibrary as Timing;
 use App\libraries\Users;
 
-/**
- * Change log Class
- */
 class Changelog extends BaseController
 {
     public const MODULE_ID = 0;
+
+    protected $changelogModel;
 
     public function __construct()
     {
@@ -38,11 +27,6 @@ class Changelog extends BaseController
         parent::loadLang(['game/changelog']);
     }
 
-    /**
-     * Users land here
-     *
-     * @return void
-     */
     public function index(): void
     {
         // Check module access
@@ -52,15 +36,10 @@ class Changelog extends BaseController
         $this->buildPage();
     }
 
-    /**
-     * Build the page
-     *
-     * @return void
-     */
-    private function buildPage()
+    private function buildPage(): void
     {
         $changes = [];
-        $entries = $this->Changelog_Model->getAllChangelogEntries();
+        $entries = $this->changelogModel->getAllChangelogEntries();
 
         if ($entries) {
             foreach ($entries as $entry) {

@@ -23,19 +23,10 @@ use App\libraries\Users;
  */
 class Banned extends BaseController
 {
-    /**
-     * The module ID
-     *
-     * @var int
-     */
     public const MODULE_ID = 22;
 
-    /**
-     * Count of banned players
-     *
-     * @var integer
-     */
-    private $bans_count = 0;
+    private int $bans_count = 0;
+    protected $bannedModel;
 
     public function __construct()
     {
@@ -51,11 +42,6 @@ class Banned extends BaseController
         parent::loadLang(['game/banned']);
     }
 
-    /**
-     * Users land here
-     *
-     * @return void
-     */
     public function index(): void
     {
         // Check module access
@@ -65,12 +51,7 @@ class Banned extends BaseController
         $this->buildPage();
     }
 
-    /**
-     * Build the page
-     *
-     * @return void
-     */
-    private function buildPage()
+    private function buildPage(): void
     {
         $this->page->display(
             $this->template->set(
@@ -93,7 +74,7 @@ class Banned extends BaseController
      */
     private function buildBannedPlayersList(): array
     {
-        $bans = $this->Banned_Model->getBannedUsers();
+        $bans = $this->bannedModel->getBannedUsers();
         $list_of_bans = [];
 
         if (!empty($bans)) {

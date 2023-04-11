@@ -1,20 +1,4 @@
 <?php
-/**
- * XG Proyect
- *
- * Open-source OGame Clon
- *
- * This content is released under the GPL-3.0 License
- *
- * Copyright (c) 2008-2020 XG Proyect
- *
- * @package    XG Proyect
- * @author     XG Proyect Team
- * @copyright  2008-2020 XG Proyect
- * @license    https://www.gnu.org/licenses/gpl-3.0.en.html GPL-3.0 License
- * @link       https://github.com/XGProyect/
- * @since      3.0.0
- */
 
 namespace App\libraries;
 
@@ -22,33 +6,17 @@ use App\core\enumerators\AllianceRanksEnumerator as AllianceRanks;
 use App\core\enumerators\SwitchIntEnumerator as SwitchInt;
 use App\libraries\alliance\Ranks;
 use App\libraries\Functions;
+use App\models\libraries\UsersLibrary;
 
-/**
- * Users Class
- */
 class Users
 {
-    /**
-     * @var mixed
-     */
     private $user_data;
-    /**
-     * @var mixed
-     */
     private $planet_data;
-    /**
-     * @var mixed
-     */
-    private $Users_Model;
+    private UsersLibrary $usersModel;
 
-    /**
-     * __construct
-     *
-     * @return void
-     */
     public function __construct()
     {
-        $this->Users_Model = Functions::model('libraries/UsersLibrary');
+        $this->usersModel = Functions::model('libraries/UsersLibrary');
 
         if (self::isSessionSet()) {
             // Get user data and check it
@@ -131,10 +99,10 @@ class Users
      */
     public function deleteUser($user_id)
     {
-        $user_data = $this->Users_Model->getAllyIdByUserId($user_id);
+        $user_data = $this->usersModel->getAllyIdByUserId($user_id);
 
         if ($user_data['user_ally_id'] != 0) {
-            $alliance = $this->Users_Model->getAllianceDataByAllianceId($user_data['user_ally_id']);
+            $alliance = $this->usersModel->getAllianceDataByAllianceId($user_data['user_ally_id']);
 
             if ($alliance['ally_members'] > 1 && (isset($alliance['alliance_ranks']) && !is_null($alliance['alliance_ranks']))) {
                 $ranks = new Ranks($alliance['alliance_ranks']);
@@ -150,19 +118,19 @@ class Users
 
                 // check and update
                 if (is_numeric($userRank)) {
-                    $this->Users_Model->updateAllianceOwner($alliance['alliance_id'], $userRank);
+                    $this->usersModel->updateAllianceOwner($alliance['alliance_id'], $userRank);
                 } else {
-                    $this->Users_Model->deleteAllianceById($alliance['alliance_id']);
+                    $this->usersModel->deleteAllianceById($alliance['alliance_id']);
                 }
             } else {
-                $this->Users_Model->deleteAllianceById($alliance['alliance_id']);
+                $this->usersModel->deleteAllianceById($alliance['alliance_id']);
             }
         }
 
-        $this->Users_Model->deletePlanetsAndRelatedDataByUserId($user_id);
-        $this->Users_Model->deleteMessagesByUserId($user_id);
-        $this->Users_Model->deleteBuddysByUserId($user_id);
-        $this->Users_Model->deleteUserDataById($user_id);
+        $this->usersModel->deletePlanetsAndRelatedDataByUserId($user_id);
+        $this->usersModel->deleteMessagesByUserId($user_id);
+        $this->usersModel->deleteBuddysByUserId($user_id);
+        $this->usersModel->deleteUserDataById($user_id);
     }
 
     /**
@@ -211,12 +179,12 @@ class Users
      */
     private function setUserData()
     {
-        $user_row = $this->Users_Model->setUserDataByUserId($_SESSION['user_id']);
+        $user_row = $this->usersModel->setUserDataByUserId($_SESSION['user_id']);
 
         $this->displayLoginErrors($user_row);
 
         // update user activity data
-        $this->Users_Model->updateUserActivityData(
+        $this->usersModel->updateUserActivityData(
             $_SERVER['REQUEST_URI'],
             $_SERVER['REMOTE_ADDR'],
             $_SERVER['HTTP_USER_AGENT'],
@@ -255,7 +223,7 @@ class Users
      */
     private function setPlanetData()
     {
-        $this->planet_data = $this->Users_Model->setPlanetData(
+        $this->planet_data = $this->usersModel->setPlanetData(
             $this->user_data['user_current_planet'],
             Functions::readConfig('stat_admin_level')
         );
@@ -272,11 +240,11 @@ class Users
         $restore = isset($_GET['re']) ? (int) $_GET['re'] : '';
 
         if (isset($select) && is_numeric($select) && isset($restore) && $restore == 0 && $select != 0) {
-            $owned = $this->Users_Model->getUserPlanetByIdAndUserId($select, $this->user_data['user_id']);
+            $owned = $this->usersModel->getUserPlanetByIdAndUserId($select, $this->user_data['user_id']);
 
             if ($owned) {
                 $this->user_data['current_planet'] = $select;
-                $this->Users_Model->changeUserPlanetByUserId($select, $this->user_data['user_id']);
+                $this->usersModel->changeUserPlanetByUserId($select, $this->user_data['user_id']);
             }
         }
     }
@@ -302,15 +270,15 @@ class Users
             $insert_query = substr_replace($insert_query, '', -2) . ';';
 
             // get the last inserted user id
-            $user_id = $this->Users_Model->createNewUser($insert_query);
+            $user_id = $this->usersModel->createNewUser($insert_query);
 
             // insert extra required tables
             if ($full_insert) {
                 // create the buildings, defenses and ships tables
-                $this->Users_Model->createPremium($user_id);
-                $this->Users_Model->createResearch($user_id);
-                $this->Users_Model->createSettings($user_id);
-                $this->Users_Model->createUserStatistics($user_id);
+                $this->usersModel->createPremium($user_id);
+                $this->usersModel->createResearch($user_id);
+                $this->usersModel->createSettings($user_id);
+                $this->usersModel->createUserStatistics($user_id);
             }
 
             return $user_id;

@@ -15,6 +15,7 @@ class Backup extends BaseController
     public const BACKUP_SETTINGS = [
         'auto_backup' => FILTER_UNSAFE_RAW,
     ];
+    protected $backupModel;
 
     public function __construct()
     {
@@ -30,11 +31,6 @@ class Backup extends BaseController
         parent::loadLang(['adm/global', 'adm/backup']);
     }
 
-    /**
-     * Users land here
-     *
-     * @return void
-     */
     public function index(): void
     {
         // check if the user is allowed to access
@@ -77,7 +73,7 @@ class Backup extends BaseController
 
         // create a new backup
         if ($backup) {
-            $this->Backup_Model->performBackup();
+            $this->backupModel->performBackup();
         }
 
         // download or delete a file
@@ -124,11 +120,6 @@ class Backup extends BaseController
         Functions::redirect('admin.php?page=backup');
     }
 
-    /**
-     * Build the page
-     *
-     * @return void
-     */
     private function buildPage(): void
     {
         $this->page->displayAdmin(

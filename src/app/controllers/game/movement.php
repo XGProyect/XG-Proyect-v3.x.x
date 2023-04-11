@@ -30,35 +30,12 @@ use App\libraries\Users;
  */
 class Movement extends BaseController
 {
-    /**
-     *
-     * @var int
-     */
     public const MODULE_ID = 8;
-
-    /**
-     *
-     * @var string
-     */
     public const REDIRECT_TARGET = 'game.php?page=movement';
 
-    /**
-     *
-     * @var \Fleets
-     */
-    private $fleets = null;
-
-    /**
-     *
-     * @var \Research
-     */
-    private $research = null;
-
-    /**
-     *
-     * @var \Premium
-     */
-    private $premium = null;
+    private ?Fleets $fleets = null;
+    private ?Research $research = null;
+    private ?Premium $premium = null;
 
     public function __construct()
     {
@@ -77,11 +54,6 @@ class Movement extends BaseController
         $this->setUpFleets();
     }
 
-    /**
-     * Users land here
-     *
-     * @return void
-     */
     public function index(): void
     {
         // Check module access
@@ -103,7 +75,7 @@ class Movement extends BaseController
     private function setUpFleets()
     {
         $this->fleets = new Fleets(
-            $this->Fleet_Model->getAllFleetsByUserId($this->user['user_id']),
+            $this->fleetModel->getAllFleetsByUserId($this->user['user_id']),
             $this->user['user_id']
         );
 
@@ -132,12 +104,7 @@ class Movement extends BaseController
         }
     }
 
-    /**
-     * Build the page
-     *
-     * @return void
-     */
-    private function buildPage()
+    private function buildPage(): void
     {
         /**
          * Parse the items
@@ -316,7 +283,7 @@ class Movement extends BaseController
             $fleet = $this->fleets->getOwnFleetById($fleet_id);
 
             if (!is_null($fleet) && $fleet->getFleetMess() != 1) {
-                $this->Fleet_Model->returnFleet(
+                $this->fleetModel->returnFleet(
                     $fleet,
                     $this->user['user_id']
                 );

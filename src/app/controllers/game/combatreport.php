@@ -1,14 +1,4 @@
 <?php
-/**
- * Combatreport Controller
- *
- * @category Controller
- * @package  Application
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.0.0
- */
 
 namespace App\controllers\game;
 
@@ -17,18 +7,12 @@ use App\libraries\combatreport\Report;
 use App\libraries\Functions;
 use App\libraries\Users;
 
-/**
- * Combatreport Class
- */
 class Combatreport extends BaseController
 {
     public const MODULE_ID = 23;
 
-    /**
-     *
-     * @var \Report
-     */
-    private $report = null;
+    private ?Report $report = null;
+    protected $combatreportModel;
 
     public function __construct()
     {
@@ -47,11 +31,6 @@ class Combatreport extends BaseController
         $this->setUpReport();
     }
 
-    /**
-     * Users land here
-     *
-     * @return void
-     */
     public function index(): void
     {
         // Check module access
@@ -72,7 +51,7 @@ class Combatreport extends BaseController
     private function setUpReport()
     {
         $this->report = new Report(
-            [$this->Combatreport_Model->getReportById(filter_input(INPUT_GET, 'report'))],
+            [$this->combatreportModel->getReportById(filter_input(INPUT_GET, 'report'))],
             $this->user['user_id']
         );
     }
@@ -91,12 +70,7 @@ class Combatreport extends BaseController
         }
     }
 
-    /**
-     * Build the page
-     *
-     * @return void
-     */
-    private function buildPage()
+    private function buildPage(): void
     {
         $this->page->display(
             $this->getReportTemplate(),

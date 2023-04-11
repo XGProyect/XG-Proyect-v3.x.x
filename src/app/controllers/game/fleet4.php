@@ -123,6 +123,7 @@ class Fleet4 extends BaseController
      * @var array
      */
     private $_fleet_ships = [];
+    protected $fleetModel;
 
     public function __construct()
     {
@@ -141,11 +142,6 @@ class Fleet4 extends BaseController
         $this->setUpFleets();
     }
 
-    /**
-     * Users land here
-     *
-     * @return void
-     */
     public function index(): void
     {
         // Check module access
@@ -164,7 +160,7 @@ class Fleet4 extends BaseController
     private function setUpFleets()
     {
         $this->_fleets = new Fleets(
-            $this->Fleet_Model->getAllFleetsByUserId($this->user['user_id']),
+            $this->fleetModel->getAllFleetsByUserId($this->user['user_id']),
             $this->user['user_id']
         );
 
@@ -179,12 +175,7 @@ class Fleet4 extends BaseController
         );
     }
 
-    /**
-     * Build the page
-     *
-     * @return void
-     */
-    private function buildPage()
+    private function buildPage(): void
     {
         // filter stuff from fleet1, fleet2 and fleet3
         $this->setInputsData();
@@ -256,7 +247,7 @@ class Fleet4 extends BaseController
     {
         $target_data = $this->getTargetData();
 
-        $target = $this->Fleet_Model->getTargetDataByCoords(
+        $target = $this->fleetModel->getTargetDataByCoords(
             $target_data['galaxy'],
             $target_data['system'],
             $target_data['planet'],
@@ -393,7 +384,7 @@ class Fleet4 extends BaseController
             't' . (int) $target_data['type'];
 
             if ($target_data['acs_target'] == $target_string
-                && $this->Fleet_Model->getAcsCount($target_data['group']) > 0) {
+                && $this->fleetModel->getAcsCount($target_data['group']) > 0) {
                 // set acs group
                 $this->_fleet_data['fleet_group'] = $target_data['group'];
 
@@ -417,7 +408,7 @@ class Fleet4 extends BaseController
         $fleet = $this->getSessionShips();
 
         // planet ships
-        $planet_ships = $this->Fleet_Model->getShipsByPlanetId($this->planet['planet_id']);
+        $planet_ships = $this->fleetModel->getShipsByPlanetId($this->planet['planet_id']);
 
         // objects
         $objects = $this->objects->getObjects();
@@ -496,7 +487,7 @@ class Fleet4 extends BaseController
         }
 
         if ($data['mission'] == Missions::STAY) {
-            $is_buddy = $this->Fleet_Model->getBuddies(
+            $is_buddy = $this->fleetModel->getBuddies(
                 $this->planet['planet_user_id'],
                 $this->_target_data['planet_user_id']
             ) >= 1;
@@ -766,7 +757,7 @@ class Fleet4 extends BaseController
         $end_time = $stay_duration + (2 * $duration) + $base_time;
 
         if ($this->getTargetData()['group'] != 0) {
-            $acs_start_time = $this->Fleet_Model->getAcsMaxTime(
+            $acs_start_time = $this->fleetModel->getAcsMaxTime(
                 $this->getTargetData()['group']
             );
 
@@ -774,7 +765,7 @@ class Fleet4 extends BaseController
                 $end_time += $acs_start_time - $start_time;
                 $start_time = $acs_start_time;
             } else {
-                $this->Fleet_Model->updateAcsTimes(
+                $this->fleetModel->updateAcsTimes(
                     $this->getTargetData()['group'],
                     $start_time,
                     ($start_time - $acs_start_time)
@@ -848,7 +839,7 @@ class Fleet4 extends BaseController
     {
         // create the new fleet and
         // remove from the planet the ships and resources
-        $this->Fleet_Model->insertNewFleet(
+        $this->fleetModel->insertNewFleet(
             $this->_fleet_data,
             $this->planet,
             $this->_fleet_ships

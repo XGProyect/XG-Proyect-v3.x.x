@@ -10,17 +10,11 @@ use App\libraries\OfficiersLib;
 use App\libraries\Users;
 use DPATH;
 
-/**
- * Officier class
- */
 class Officier extends BaseController
 {
-    /**
-     * The module ID
-     *
-     * @var int
-     */
     public const MODULE_ID = 15;
+
+    protected $notesModel;
 
     public function __construct()
     {
@@ -36,11 +30,6 @@ class Officier extends BaseController
         parent::loadLang(['game/global', 'game/officier']);
     }
 
-    /**
-     * Users land here
-     *
-     * @return void
-     */
     public function index(): void
     {
         // Check module access
@@ -87,18 +76,13 @@ class Officier extends BaseController
                     $time_to_add = time() + $set_time;
                 }
 
-                $this->Officier_Model->setPremium($this->user['user_id'], $price, $officier, $time_to_add);
+                $this->officierModel->setPremium($this->user['user_id'], $price, $officier, $time_to_add);
 
                 Functions::redirect('game.php?page=officier');
             }
         }
     }
 
-    /**
-     * Build the page
-     *
-     * @return void
-     */
     private function buildPage(): void
     {
         /**

@@ -78,7 +78,7 @@ abstract class BaseController
                     require_once $model_file;
 
                     $class_route = strtr(MODELS_PATH . $class_route . DIRECTORY_SEPARATOR . $class_name, ['/' => '\\']);
-                    $this->{$class_name . '_Model'} = new $class_route();
+                    $this->{strtolower($class_name) . 'Model'} = new $class_route();
                     return;
                 }
             }
