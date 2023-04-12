@@ -538,6 +538,16 @@ class Page
         $parse['re_darkmatter'] = $darkmatter;
         $parse['re_energy'] = $energy;
 
+        // Mobile Version
+        $parse['re_mobile_metal'] = FormatLib::shortlyNumber($this->current_planet['planet_metal']);
+        $parse['re_mobile_crystal'] = FormatLib::shortlyNumber($this->current_planet['planet_crystal']);
+        $parse['re_mobile_deuterium'] = FormatLib::shortlyNumber($this->current_planet['planet_deuterium']);
+        $parse['re_mobile_darkmatter'] = FormatLib::shortlyNumber($this->current_user['premium_dark_matter']);
+        $parse['re_mobile_energy'] = FormatLib::shortlyNumber(
+            $this->current_planet['planet_energy_max'] + $this->current_planet['planet_energy_used']
+        ) . "/" . FormatLib::shortlyNumber($this->current_planet['planet_energy_max']);
+
+
         return $this->template->set(
             'general/topnav',
             array_merge(
@@ -560,9 +570,13 @@ class Page
         $menu_block1 = '';
         $menu_block2 = '';
         $menu_block3 = '';
+        //New Lines
+        $menu_mobile1 = '';
+        $menu_mobile2 = '';
+        $menu_mobile3 = '';
         $modules_array = explode(';', Functions::readConfig('modules'));
         $tota_rank = $this->current_user['user_statistic_total_rank'] == '' ?
-        $this->current_planet['stats_users'] : $this->current_user['user_statistic_total_rank'];
+            $this->current_planet['stats_users'] : $this->current_user['user_statistic_total_rank'];
         $pages = [
             ['overview', $lang->line('lm_overview'), '', 'FFF', '', '1', '1'],
             ['empire', $lang->line('lm_empire'), '', 'FFF', '', '1', '2'],
@@ -628,29 +642,23 @@ class Page
             // MENU BLOCK [1 - 2 - 3]
             switch ($data[5]) {
                 case '1':
-                    $menu_block1 .= $this->template->set(
-                        'general/left_menu_row_view',
-                        $parse
-                    );
-
+                    $menu_block = &$menu_block1;
+                    $menu_mobile = &$menu_mobile1;
                     break;
-
                 case '2':
-                    $menu_block2 .= $this->template->set(
-                        'general/left_menu_row_view',
-                        $parse
-                    );
-
+                    $menu_block = &$menu_block2;
+                    $menu_mobile = &$menu_mobile2;
                     break;
-
                 case '3':
-                    $menu_block3 .= $this->template->set(
-                        'general/left_menu_row_view',
-                        $parse
-                    );
-
+                    $menu_block = &$menu_block3;
+                    $menu_mobile = &$menu_mobile3;
                     break;
+                default:
+                    return;
             }
+
+            $menu_block .= $this->template->set('general/left_menu_row_view', $parse);
+            $menu_mobile .= $this->template->set('general/left_mobile_menu_row_view', $parse);
         }
 
         // PARSE THE MENU AND OTHER DATA
@@ -660,6 +668,9 @@ class Page
         $parse['menu_block1'] = $menu_block1;
         $parse['menu_block2'] = $menu_block2;
         $parse['menu_block3'] = $menu_block3;
+        $parse['menu_mobile1'] = $menu_mobile1;
+        $parse['menu_mobile2'] = $menu_mobile2;
+        $parse['menu_mobile3'] = $menu_mobile3;
         $parse['admin_link'] = (($this->current_user['user_authlevel'] > 0) ?
             "<tr><td><div align=\"center\"><a href=\"admin.php\" target=\"_blank\">
             <font color=\"lime\">" . $lang->line('lm_administration') . "</font></a></div></td></tr>" : "");
