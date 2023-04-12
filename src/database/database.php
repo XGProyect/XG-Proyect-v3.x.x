@@ -1,14 +1,5 @@
 <?php
-/**
- * Database Schema File
- *
- * @category Data
- * @package  N/A
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
+
 $tables['acs'] = "CREATE TABLE `" . ACS . "` (
 `acs_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
 `acs_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
