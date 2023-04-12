@@ -20,7 +20,7 @@ use Exception;
 
 // Require some stuff
 require_once XGP_ROOT . 'config' . DIRECTORY_SEPARATOR . 'constants.php';
-require_once XGP_ROOT . CORE_PATH . 'AutoLoader.php';
+require_once XGP_ROOT . VENDOR_PATH . 'autoload.php';
 
 class Common
 {
@@ -41,8 +41,8 @@ class Common
      */
     public function bootUp(string $app): void
     {
+
         // overall loads
-        $this->autoLoad();
         $this->setErrorHandler();
         $this->isServerInstalled();
 
@@ -56,46 +56,17 @@ class Common
         }
     }
 
-    /**
-     * Get session
-     *
-     * @return Sessions
-     */
     public function getSession(): Sessions
     {
         return $this->sessions;
     }
 
-    /**
-     * Auto load the core, libraries and helpers
-     *
-     * @return void
-     */
-    private function autoLoad(): void
-    {
-        AutoLoader::registerExcludes('BattleEngine');
-
-        AutoLoader::registerNamespace('App_Core', XGP_ROOT . CORE_PATH);
-        AutoLoader::registerNamespace('App_Helpers', XGP_ROOT . HELPERS_PATH);
-        AutoLoader::registerNamespace('App_Libraries', XGP_ROOT . LIB_PATH);
-    }
-
-    /**
-     * Set a new error handler
-     *
-     * @return void
-     */
     private function setErrorHandler(): void
     {
         // XGP error handler
         new ErrorHandler();
     }
 
-    /**
-     * Check if the server is installed
-     *
-     * @return void
-     */
     private function isServerInstalled(): void
     {
         try {
@@ -123,11 +94,6 @@ class Common
         }
     }
 
-    /**
-     * Init the default language
-     *
-     * @return void
-     */
     private function initLanguage(): void
     {
         $set = false;
@@ -139,31 +105,16 @@ class Common
         define('DEFAULT_LANG', Functions::getCurrentLanguage($set));
     }
 
-    /**
-     * Set the system timezone
-     *
-     * @return void
-     */
     private function setSystemTimezone(): void
     {
         date_default_timezone_set(Functions::readConfig('date_time_zone'));
     }
 
-    /**
-     * Return a new session object
-     *
-     * @return Sessions
-     */
     private function setSession(): void
     {
         $this->sessions = new Sessions();
     }
 
-    /**
-     * Set secure page to escape requests
-     *
-     * @return void
-     */
     private function setSecure(): void
     {
         $current_page = isset($_GET['page']) ? $_GET['page'] : '';
@@ -175,11 +126,6 @@ class Common
         }
     }
 
-    /**
-     * Set updates
-     *
-     * @return void
-     */
     private function setUpdates(): void
     {
         define('SHIP_DEBRIS_FACTOR', Functions::readConfig('fleet_cdr') / 100);
@@ -189,11 +135,6 @@ class Common
         new UpdatesLibrary();
     }
 
-    /**
-     * Check if the server is open
-     *
-     * @return void
-     */
     private function isServerOpen(): void
     {
         if (Functions::readConfig('game_enable') == SwitchInt::off) {
@@ -206,11 +147,6 @@ class Common
         }
     }
 
-    /**
-     * Check if the user is banned
-     *
-     * @return void
-     */
     private function checkBanStatus(): void
     {
         Users::checkSession();

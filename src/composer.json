@@ -28,27 +28,27 @@
         "bartlett/php-compatinfo": "^6.1",
         "phpunit/phpunit": "^9.0",
         "squizlabs/php_codesniffer": "^3.5",
-        "friendsofphp/php-cs-fixer": "^3.16"
+        "friendsofphp/php-cs-fixer": "^3.16",
+        "symfony/var-dumper": "^6.2"
+    },
+    "config": {
+        "allow-plugins": {
+            "composer/package-versions-deprecated": true
+        }
     },
     "autoload": {
         "classmap": [
-            "src/"
+            "app/"
         ]
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
     "scripts": {
         "phpcompatinfo": [
-            "src/vendor/bin/phpcompatinfo --progress analyser:run ./src/app/"
+            "vendor/bin/phpcompatinfo --progress analyser:run ./src/app/"
         ],
         "phpunit": [
-            "src/vendor/bin/phpunit --verbose --config src/tests/phpunit.xml --testsuite xgp_application"
+            "vendor/bin/phpunit --verbose --config src/tests/phpunit.xml --testsuite xgp_application"
         ]
-    },
-    "config": {
-        "vendor-dir": "src/vendor",
-        "allow-plugins": {
-            "composer/package-versions-deprecated": true
-        }
     }
 }
