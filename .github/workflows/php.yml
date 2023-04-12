@@ -21,13 +21,17 @@ jobs:
     - name: Validate composer.json and composer.lock
       run: composer validate
       with:
-        path: src/
+        composer-options: "--working-dir=src"
 
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress --no-suggest
+      with:
+        composer-options: "--working-dir=src"
 
     - name: Run phpunit
       run: composer phpunit
+      with:
+        composer-options: "--working-dir=src"
   lint:
     name: Run Lint
     runs-on: ubuntu-20.04
