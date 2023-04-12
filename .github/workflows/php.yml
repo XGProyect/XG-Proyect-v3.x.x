@@ -10,7 +10,7 @@ jobs:
     name: Run Unit Testing
     runs-on: ubuntu-20.04
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Setup PHP
       uses: shivammathur/setup-php@v2
@@ -25,7 +25,7 @@ jobs:
       run: composer install --prefer-dist --no-progress --no-suggest --working-dir=src
 
     - name: Run phpunit
-      run: composer phpunit
+      run: composer phpunit --working-dir=src
   lint:
     name: Run Lint
     runs-on: ubuntu-20.04
