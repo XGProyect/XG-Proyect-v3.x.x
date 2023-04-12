@@ -26,4 +26,7 @@ $lang = [
     'lm_forums' => 'Foro',
     'lm_logout' => 'Salir',
     'lm_administration' => 'Administración',
+    'lm_production' => 'Producción',
+    'lm_info' => 'Información y ayuda',
+    'lm_user_menu' => 'Menú de usuario'
 ];
