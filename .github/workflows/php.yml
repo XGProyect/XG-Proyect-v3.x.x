@@ -20,6 +20,8 @@ jobs:
 
     - name: Validate composer.json and composer.lock
       run: composer validate
+      with:
+        path: src/
 
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress --no-suggest
@@ -40,13 +42,9 @@ jobs:
 
     - name: Validate composer.json and composer.lock
       run: composer validate
-      with:
-        path: src/
 
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress --no-suggest
-      with:
-        path: src/
 
     - name: Run phplint
       uses: overtrue/phplint@4.1.0
@@ -83,13 +81,9 @@ jobs:
 
     - name: Validate composer.json and composer.lock
       run: composer validate
-      with:
-        path: src/
 
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress --no-suggest
-      with:
-        path: src/
 
     - name: Setup database
       env:
