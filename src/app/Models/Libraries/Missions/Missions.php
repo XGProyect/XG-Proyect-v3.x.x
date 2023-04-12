@@ -74,7 +74,7 @@ class Missions extends Model
         }
     }
 
-    public function getAllPlanetDataByCoords(array $data = []): void
+    public function getAllPlanetDataByCoords(array $data = []): array
     {
         if (is_array($data)) {
             return $this->db->queryFetch(
