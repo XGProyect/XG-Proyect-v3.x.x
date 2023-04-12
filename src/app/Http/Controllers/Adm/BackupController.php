@@ -9,13 +9,14 @@ use App\Libraries\Adm\AdministrationLib as Administration;
 use App\Libraries\FormatLib as Format;
 use App\Libraries\Functions;
 use App\Libraries\TimingLibrary as Timing;
+use App\Models\Adm\Backup;
 
 class BackupController extends BaseController
 {
     public const BACKUP_SETTINGS = [
         'auto_backup' => FILTER_UNSAFE_RAW,
     ];
-    protected $backupModel;
+    private Backup $backupModel;
 
     public function __construct()
     {
@@ -24,11 +25,10 @@ class BackupController extends BaseController
         // check if session is active
         Administration::checkSession();
 
-        // load Model
-        parent::loadModel('adm/backup');
-
         // load Language
         parent::loadLang(['adm/global', 'adm/backup']);
+
+        $this->backupModel = new Backup();
     }
 
     public function index(): void

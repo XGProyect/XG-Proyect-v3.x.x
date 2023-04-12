@@ -18,9 +18,6 @@ class TraderLayerController extends BaseController
         // check if session is active
         Users::checkSession();
 
-        // load Model
-        parent::loadModel('game/trader');
-
         // load Language
         parent::loadLang(['game/global', 'game/trader']);
 

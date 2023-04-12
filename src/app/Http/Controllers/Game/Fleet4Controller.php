@@ -13,51 +13,18 @@ use App\Libraries\Game\Fleets;
 use App\Libraries\Premium\Premium;
 use App\Libraries\Research\Researches;
 use App\Libraries\Users;
+use App\Models\Game\Fleet;
 
 class Fleet4Controller extends BaseController
 {
-    /**
-     *
-     * @var int
-     */
     public const MODULE_ID = 8;
-
-    /**
-     *
-     * @var string
-     */
     public const REDIRECT_TARGET = 'game.php?page=movement';
 
-    /**
-     *
-     * @var \Fleets
-     */
-    private $_fleets = null;
-
-    /**
-     *
-     * @var \Research
-     */
-    private $_research = null;
-
-    /**
-     *
-     * @var \Premium
-     */
-    private $_premium = null;
-
-    /**
-     * Already filtered POST data
-     *
-     * @var array
-     */
-    private $_clean_input_data = [];
-
-    /**
-     *
-     * @var array
-     */
-    private $_fleet_data = [
+    private ?Fleets $_fleets = null;
+    private ?Researches $_research = null;
+    private ?Premium $_premium = null;
+    private array $_clean_input_data = [];
+    private array $_fleet_data = [
         'fleet_owner' => 0,
         'fleet_mission' => 0,
         'fleet_amount' => 0,
@@ -80,37 +47,12 @@ class Fleet4Controller extends BaseController
         'fleet_target_owner' => 0,
         'fleet_group' => 0,
     ];
-
-    /**
-     *
-     * @var array
-     */
-    private $_target_data = [];
-
-    /**
-     *
-     * @var boolean
-     */
-    private $_own_planet = false;
-
-    /**
-     *
-     * @var boolean
-     */
-    private $_occupied_planet = false;
-
-    /**
-     *
-     * @var int
-     */
-    private $_fleet_storage = 0;
-
-    /**
-     *
-     * @var array
-     */
-    private $_fleet_ships = [];
-    protected $fleetModel;
+    private array $_target_data = [];
+    private bool $_own_planet = false;
+    private bool $_occupied_planet = false;
+    private int $_fleet_storage = 0;
+    private array $_fleet_ships = [];
+    private Fleet $fleetModel;
 
     public function __construct()
     {
@@ -119,11 +61,10 @@ class Fleet4Controller extends BaseController
         // check if session is active
         Users::checkSession();
 
-        // load Model
-        parent::loadModel('game/fleet');
-
         // load Language
         parent::loadLang(['game/fleet']);
+
+        $this->fleetModel = new Fleet();
 
         // init a new fleets object
         $this->setUpFleets();

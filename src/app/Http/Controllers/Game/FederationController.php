@@ -8,6 +8,8 @@ use App\Libraries\Functions;
 use App\Libraries\Game\AcsFleets;
 use App\Libraries\Game\Fleets;
 use App\Libraries\Users;
+use App\Models\Game\Buddies;
+use App\Models\Game\Fleet;
 
 class FederationController extends BaseController
 {
@@ -19,8 +21,8 @@ class FederationController extends BaseController
     private string $_acs_code = '';
     private int $_members_count = 0;
     private string $_message = '';
-    private $fleetModel;
-    private $buddiesModel;
+    private Fleet $fleetModel;
+    private Buddies $buddiesModel;
 
     public function __construct()
     {
@@ -29,12 +31,11 @@ class FederationController extends BaseController
         // check if session is active
         Users::checkSession();
 
-        // load Model
-        parent::loadModel('game/fleet');
-        parent::loadModel('game/buddies');
-
         // load Language
         parent::loadLang(['game/fleet']);
+
+        $this->fleetModel = new Fleet();
+        $this->buddiesModel = new Buddies();
 
         // init a new fleets object
         $this->setUpFleets();

@@ -13,6 +13,7 @@ use App\Libraries\FormatLib;
 use App\Libraries\Functions;
 use App\Libraries\TimingLibrary as Timing;
 use App\Libraries\Users;
+use App\Models\Game\Alliance;
 
 class AllianceController extends BaseController
 {
@@ -22,10 +23,9 @@ class AllianceController extends BaseController
         'founder' => 0,
         'newcomer' => 1,
     ];
-
     private ?BBCodeLib $bbcode = null;
     private ?Alliances $alliance = null;
-    protected $allianceModel;
+    private Alliance $allianceModel;
 
     public function __construct()
     {
@@ -37,14 +37,12 @@ class AllianceController extends BaseController
         // Check module access
         Functions::moduleMessage(Functions::isModuleAccesible(self::MODULE_ID));
 
-        // load Model
-        parent::loadModel('game/alliance');
-
         // load Language
         parent::loadLang(['game/alliance']);
 
         // load Library
         $this->bbcode = Functions::loadLibrary('BBCodeLib');
+        $this->allianceModel = new Alliance();
 
         // init a new buddy object
         $this->setUpAlliances();

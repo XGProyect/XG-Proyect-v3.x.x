@@ -15,7 +15,6 @@ use App\Libraries\SecurePageLib;
 use App\Libraries\TimingLibrary as Timing;
 use App\Libraries\UpdatesLibrary;
 use App\Libraries\Users;
-use AutoLoader;
 use Exception;
 
 // Require some stuff

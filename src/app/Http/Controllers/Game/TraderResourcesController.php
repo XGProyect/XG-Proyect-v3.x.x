@@ -7,6 +7,7 @@ use App\Libraries\FormatLib as Format;
 use App\Libraries\Functions;
 use App\Libraries\Game\ResourceMarket;
 use App\Libraries\Users;
+use App\Models\Game\Trader;
 
 class TraderResourcesController extends BaseController
 {
@@ -16,7 +17,7 @@ class TraderResourcesController extends BaseController
 
     private ?ResourceMarket $trader;
     private string $error = '';
-    protected $traderModel;
+    private Trader $traderModel;
 
     public function __construct()
     {
@@ -25,11 +26,10 @@ class TraderResourcesController extends BaseController
         // check if session is active
         Users::checkSession();
 
-        // load Model
-        parent::loadModel('game/trader');
-
         // load Language
         parent::loadLang(['game/global', 'game/trader']);
+
+        $this->traderModel = new Trader();
 
         // init a new trader object
         $this->setUpTrader();

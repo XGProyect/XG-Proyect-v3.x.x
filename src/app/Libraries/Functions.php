@@ -52,29 +52,6 @@ abstract class Functions
     }
 
     /**
-     * loadModel
-     *
-     * @param string $model Model
-     *
-     * @return boolean
-     */
-    public static function model($model = '')
-    {
-        if (!empty($model)) {
-            // Require file
-            require_once XGP_ROOT . MODELS_PATH . strtolower($model) . '.php';
-
-            $class_name = 'App\models\\' . strtr($model, ['/' => '\\']);
-
-            // Create new $library object
-            return new $class_name();
-        } else {
-            // ups!
-            return false;
-        }
-    }
-
-    /**
      * chronoApplet
      *
      * @param string  $type  Type

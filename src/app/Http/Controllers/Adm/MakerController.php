@@ -10,11 +10,12 @@ use App\Core\Enumerators\UserRanksEnumerator as UserRanks;
 use App\Libraries\Adm\AdministrationLib as Administration;
 use App\Libraries\FormatLib as Format;
 use App\Libraries\Functions;
+use App\Models\Adm\Maker;
 
 class MakerController extends BaseController
 {
     private string $alert = '';
-    protected $makerModel;
+    private Maker $makerModel;
 
     public function __construct()
     {
@@ -23,11 +24,10 @@ class MakerController extends BaseController
         // check if session is active
         Administration::checkSession();
 
-        // load Model
-        parent::loadModel('adm/maker');
-
         // load Language
         parent::loadLang(['adm/global', 'adm/maker']);
+
+        $this->makerModel = new Maker();
     }
 
     public function index(): void

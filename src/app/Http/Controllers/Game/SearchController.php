@@ -11,6 +11,7 @@ use App\Libraries\FormatLib;
 use App\Libraries\Functions;
 use App\Libraries\NoobsProtectionLib;
 use App\Libraries\Users;
+use App\Models\Game\Search;
 
 class SearchController extends BaseController
 {
@@ -26,7 +27,7 @@ class SearchController extends BaseController
         'error_block' => '',
     ];
     private array $results = [];
-    protected $searchModel;
+    private Search $searchModel;
 
     public function __construct()
     {
@@ -35,14 +36,12 @@ class SearchController extends BaseController
         // check if session is active
         Users::checkSession();
 
-        // load Model
-        parent::loadModel('game/search');
-
         // load Language
         parent::loadLang(['game/search']);
 
         // load library
-        $this->noob = Functions::loadLibrary('NoobsProtectionLib');
+        $this->noob = new NoobsProtectionLib();
+        $this->searchModel = new Search();
     }
 
     public function index(): void

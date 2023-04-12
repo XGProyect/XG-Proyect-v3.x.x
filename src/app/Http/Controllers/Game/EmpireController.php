@@ -10,13 +10,14 @@ use App\Libraries\DevelopmentsLib;
 use App\Libraries\FormatLib;
 use App\Libraries\Functions;
 use App\Libraries\Users;
+use App\Models\Game\Empire;
 use Exception;
 
 class EmpireController extends BaseController
 {
     public const MODULE_ID = 2;
 
-    protected $empireModel;
+    private Empire $empireModel;
 
     public function __construct()
     {
@@ -25,11 +26,10 @@ class EmpireController extends BaseController
         // check if session is active
         Users::checkSession();
 
-        // load Model
-        parent::loadModel('game/empire');
-
         // load Language
         parent::loadLang(['game/global', 'game/constructions', 'game/defenses', 'game/technologies', 'game/ships', 'game/empire']);
+
+        $this->empireModel = new Empire();
     }
 
     public function index(): void

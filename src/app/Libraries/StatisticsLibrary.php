@@ -13,8 +13,7 @@ class StatisticsLibrary
 
     public function __construct()
     {
-        // load model
-        $this->statisticsLibraryModel = Functions::model('libraries/StatisticsLibrary');
+        $this->statisticsLibraryModel = new StatisticsLib();
     }
 
     /**

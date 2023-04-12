@@ -10,6 +10,7 @@ use App\Libraries\Functions;
 use App\Libraries\OfficiersLib;
 use App\Libraries\ProductionLib;
 use App\Libraries\Users;
+use App\Models\Game\Resources;
 
 class ResourcesController extends BaseController
 {
@@ -18,14 +19,11 @@ class ResourcesController extends BaseController
     private $resource;
     private $prodGrid;
     private $reslist;
-    protected $resourcesModel;
+    private Resources $resourcesModel;
 
     public function __construct()
     {
         parent::__construct();
-
-        // load Model
-        parent::loadModel('game/resources');
 
         // load Language
         parent::loadLang(['game/global', 'game/constructions', 'game/ships', 'game/resources', 'game/technologies']);
@@ -33,6 +31,7 @@ class ResourcesController extends BaseController
         // check if session is active
         Users::checkSession();
 
+        $this->resourcesModel = new Resources();
         $this->resource = $this->objects->getObjects();
         $this->prodGrid = $this->objects->getProduction();
         $this->reslist = $this->objects->getObjectsList();

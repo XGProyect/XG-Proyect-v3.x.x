@@ -8,13 +8,14 @@ use App\Core\BaseController;
 use App\Helpers\UrlHelper;
 use App\Libraries\Adm\AdministrationLib as Administration;
 use App\Libraries\Functions;
+use App\Models\Adm\Server;
 use DateTime;
 use DateTimeZone;
 
 class ServerController extends BaseController
 {
     private $game_config = [];
-    protected $serverModel;
+    private Server $serverModel;
 
     public function __construct()
     {
@@ -23,11 +24,10 @@ class ServerController extends BaseController
         // check if session is active
         Administration::checkSession();
 
-        // load Model
-        parent::loadModel('adm/server');
-
         // load Language
         parent::loadLang(['adm/global', 'adm/server']);
+
+        $this->serverModel = new Server();
     }
 
     public function index(): void

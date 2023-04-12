@@ -12,34 +12,21 @@ use App\Libraries\Premium\Premium;
 use App\Libraries\Research\Researches;
 use App\Libraries\Users;
 use App\Libraries\Users\Shortcuts;
+use App\Models\Game\Fleet;
 
 class Fleet2Controller extends BaseController
 {
     public const MODULE_ID = 8;
 
-    /**
-     *
-     * @var \Research
-     */
-    private $_research = null;
-
-    /**
-     *
-     * @var \Premium
-     */
-    private $_premium = null;
-
-    /**
-     *
-     * @var array
-     */
-    private $_fleet_data = [
+    private ?Researches $_research = null;
+    private ?Premium $_premium = null;
+    private array $_fleet_data = [
         'fleet_array' => [],
         'fleet_list' => '',
         'amount' => 0,
         'speed_all' => [],
     ];
-    protected $fleetModel;
+    private Fleet $fleetModel;
 
     public function __construct()
     {
@@ -48,11 +35,10 @@ class Fleet2Controller extends BaseController
         // check if session is active
         Users::checkSession();
 
-        // load Model
-        parent::loadModel('game/fleet');
-
         // load Language
         parent::loadLang(['game/global', 'game/fleet']);
+
+        $this->fleetModel = new Fleet();
 
         // init a new fleets object
         $this->setUpFleets();

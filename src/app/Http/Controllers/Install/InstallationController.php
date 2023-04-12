@@ -6,6 +6,7 @@ use App\Core\BaseController;
 use App\Helpers\StringsHelper;
 use App\Libraries\Functions;
 use App\Libraries\PlanetLib;
+use App\Models\Install\Installation;
 
 class InstallationController extends BaseController
 {
@@ -15,19 +16,17 @@ class InstallationController extends BaseController
     private $db_user;
     private $db_password;
     private $db_prefix;
-    protected $installationModel;
+    private Installation $installationModel;
 
     public function __construct()
     {
         parent::__construct();
 
-        $this->_planet = new PlanetLib();
-
-        // load Model
-        parent::loadModel('install/installation');
-
         // load Language
         parent::loadLang(['installation/installation']);
+
+        $this->_planet = new PlanetLib();
+        $this->installationModel = new Installation();
     }
 
     public function index(): void

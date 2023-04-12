@@ -16,7 +16,7 @@ class Users
 
     public function __construct()
     {
-        $this->usersModel = Functions::model('libraries/UsersLibrary');
+        $this->usersModel = new UsersLibrary();
 
         if (self::isSessionSet()) {
             // Get user data and check it

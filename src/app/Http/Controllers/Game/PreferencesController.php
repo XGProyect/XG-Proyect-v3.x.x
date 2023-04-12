@@ -11,6 +11,7 @@ use App\Libraries\Functions;
 use App\Libraries\Game\Preferences as Pref;
 use App\Libraries\TimingLibrary as Timing;
 use App\Libraries\Users;
+use App\Models\Game\Preferences;
 
 class PreferencesController extends BaseController
 {
@@ -20,7 +21,7 @@ class PreferencesController extends BaseController
     private array $fields_to_update = [];
     private string $error = '';
     private bool $post = false;
-    protected $preferencesModel;
+    private Preferences $preferencesModel;
 
     public function __construct()
     {
@@ -29,11 +30,10 @@ class PreferencesController extends BaseController
         // check if session is active
         Users::checkSession();
 
-        // load Model
-        parent::loadModel('game/preferences');
-
         // load Language
         parent::loadLang(['game/preferences']);
+
+        $this->preferencesModel = new Preferences();
 
         // init a new preferences object
         $this->setUpPreferences();

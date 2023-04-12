@@ -7,12 +7,13 @@ namespace App\Http\Controllers\Adm;
 use App\Core\BaseController;
 use App\Libraries\Adm\AdministrationLib as Administration;
 use App\Libraries\Functions;
+use App\Models\Adm\Ban;
 
 class BanController extends BaseController
 {
     private int $_users_count = 0;
     private int $_banned_count = 0;
-    protected $banModel;
+    private Ban $banModel;
 
     public function __construct()
     {
@@ -21,11 +22,10 @@ class BanController extends BaseController
         // check if session is active
         Administration::checkSession();
 
-        // load Model
-        parent::loadModel('adm/ban');
-
         // load Language
         parent::loadLang(['adm/global', 'adm/ban']);
+
+        $this->banModel = new Ban();
     }
 
     public function index(): void

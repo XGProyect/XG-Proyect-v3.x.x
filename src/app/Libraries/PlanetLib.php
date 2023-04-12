@@ -12,12 +12,11 @@ use CiLang;
 class PlanetLib
 {
     private CiLang $langs;
-    protected PlanetLibModel $planetslibModel;
+    private PlanetLibModel $planetslibModel;
 
     public function __construct()
     {
-        // load model
-        $this->planetslibModel = Functions::model('libraries/planetlib');
+        $this->planetslibModel = new PlanetLibModel();
 
         // load Language
         $this->loadLanguage();

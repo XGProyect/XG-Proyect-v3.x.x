@@ -8,6 +8,8 @@ use App\Libraries\FormatLib;
 use App\Libraries\Formulas;
 use App\Libraries\Functions;
 use App\Libraries\Users;
+use App\Models\Game\Fleet;
+use App\Models\Game\Galaxy;
 
 class GalaxyController extends BaseController
 {
@@ -21,8 +23,8 @@ class GalaxyController extends BaseController
     private $_system;
     private $noob;
     private $_galaxyLib;
-    protected $galaxyModel;
-    protected $fleetModel;
+    private Galaxy $galaxyModel;
+    private Fleet $fleetModel;
 
     public function __construct()
     {
@@ -31,13 +33,11 @@ class GalaxyController extends BaseController
         // check if session is active
         Users::checkSession();
 
-        // load Model
-        parent::loadModel('game/fleet');
-        parent::loadModel('game/galaxy');
-
         // load Language
         parent::loadLang(['game/global', 'game/defenses', 'game/missions', 'game/galaxy']);
 
+        $this->fleetModel = new Fleet();
+        $this->galaxyModel = new Galaxy();
         $this->_resource = $this->objects->getObjects();
         $this->_pricelist = $this->objects->getPrice();
         $this->_reslist = $this->objects->getObjectsList();

@@ -4,11 +4,12 @@ namespace App\Http\Controllers\Adm;
 
 use App\Core\BaseController;
 use App\Libraries\Adm\AdministrationLib as Administration;
+use App\Models\Adm\Reset;
 
 class ResetController extends BaseController
 {
     private string $alert = '';
-    protected $resetModel;
+    private Reset $resetModel;
 
     public function __construct()
     {
@@ -17,11 +18,10 @@ class ResetController extends BaseController
         // check if session is active
         Administration::checkSession();
 
-        // load Model
-        parent::loadModel('adm/reset');
-
         // load Language
         parent::loadLang(['adm/global', 'adm/reset']);
+
+        $this->resetModel = new Reset();
     }
 
     public function index(): void

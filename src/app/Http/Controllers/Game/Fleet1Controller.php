@@ -12,35 +12,17 @@ use App\Libraries\Game\Fleets;
 use App\Libraries\Premium\Premium;
 use App\Libraries\Research\Researches;
 use App\Libraries\Users;
+use App\Models\Game\Fleet;
 
 class Fleet1Controller extends BaseController
 {
     public const MODULE_ID = 8;
 
-    /**
-     *
-     * @var \Fleets
-     */
-    private $_fleets = null;
-
-    /**
-     *
-     * @var \Research
-     */
-    private $_research = null;
-
-    /**
-     *
-     * @var \Premium
-     */
-    private $_premium = null;
-
-    /**
-     *
-     * @var int
-     */
-    private $_ship_count = 0;
-    protected $fleetModel;
+    private ?Fleets $_fleets = null;
+    private ?Researches $_research = null;
+    private ?Premium $_premium = null;
+    private int $_ship_count = 0;
+    private Fleet $fleetModel;
 
     public function __construct()
     {
@@ -49,11 +31,10 @@ class Fleet1Controller extends BaseController
         // check if session is active
         Users::checkSession();
 
-        // load Model
-        parent::loadModel('game/fleet');
-
         // load Language
         parent::loadLang(['game/ships', 'game/fleet']);
+
+        $this->fleetModel = new Fleet();
 
         // init a new fleets object
         $this->setUpFleets();

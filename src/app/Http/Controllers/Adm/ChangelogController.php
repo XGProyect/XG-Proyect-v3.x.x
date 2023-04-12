@@ -7,12 +7,13 @@ namespace App\Http\Controllers\Adm;
 use App\Core\BaseController;
 use App\Libraries\Adm\AdministrationLib as Administration;
 use App\Libraries\Functions;
+use App\Models\Adm\Changelog;
 use DateTime;
 use Exception;
 
 class ChangelogController extends BaseController
 {
-    protected $changelogModel;
+    private Changelog $changelogModel;
 
     public function __construct()
     {
@@ -21,11 +22,10 @@ class ChangelogController extends BaseController
         // check if session is active
         Administration::checkSession();
 
-        // load Model
-        parent::loadModel('adm/changelog');
-
         // load Language
         parent::loadLang(['adm/global', 'adm/changelog']);
+
+        $this->changelogModel = new Changelog();
     }
 
     public function index(): void

@@ -6,13 +6,14 @@ use App\Core\BaseController;
 use App\Libraries\Combatreport\Report;
 use App\Libraries\Functions;
 use App\Libraries\Users;
+use App\Models\Game\Combatreport;
 
 class CombatreportController extends BaseController
 {
     public const MODULE_ID = 23;
 
     private ?Report $report = null;
-    protected $combatreportModel;
+    private Combatreport $combatreportModel;
 
     public function __construct()
     {
@@ -21,11 +22,10 @@ class CombatreportController extends BaseController
         // check if session is active
         Users::checkSession();
 
-        // load Model
-        parent::loadModel('game/combatreport');
-
         // load Language
         parent::loadLang(['game/combatreport']);
+
+        $this->combatreportModel = new Combatreport();
 
         // init a new report object
         $this->setUpReport();

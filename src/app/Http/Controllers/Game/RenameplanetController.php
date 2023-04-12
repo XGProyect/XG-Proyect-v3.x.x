@@ -5,12 +5,13 @@ namespace App\Http\Controllers\Game;
 use App\Core\BaseController;
 use App\Libraries\Functions;
 use App\Libraries\Users;
+use App\Models\Game\Renameplanet;
 
 class RenameplanetController extends BaseController
 {
     public const MODULE_ID = 1;
 
-    protected $renameplanetModel;
+    private Renameplanet $renameplanetModel;
 
     public function __construct()
     {
@@ -19,11 +20,10 @@ class RenameplanetController extends BaseController
         // check if session is active
         Users::checkSession();
 
-        // load Model
-        parent::loadModel('game/renameplanet');
-
         // load Language
         parent::loadLang(['game/renameplanet']);
+
+        $this->renameplanetModel = new Renameplanet();
     }
 
     public function index(): void

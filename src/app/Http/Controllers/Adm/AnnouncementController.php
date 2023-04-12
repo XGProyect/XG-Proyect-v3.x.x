@@ -10,11 +10,12 @@ use App\Core\Enumerators\UserRanksEnumerator as UserRanks;
 use App\Libraries\Adm\AdministrationLib as Administration;
 use App\Libraries\FormatLib as Format;
 use App\Libraries\Functions;
+use App\Models\Adm\Announcement;
 
 class AnnouncementController extends BaseController
 {
     private array $alerts = [];
-    protected $announcementModel;
+    private Announcement $announcementModel;
 
     public function __construct()
     {
@@ -23,11 +24,10 @@ class AnnouncementController extends BaseController
         // check if session is active
         Administration::checkSession();
 
-        // load Model
-        parent::loadModel('adm/announcement');
-
         // load Language
         parent::loadLang(['adm/global', 'adm/announcement']);
+
+        $this->announcementModel = new Announcement();
     }
 
     public function index(): void

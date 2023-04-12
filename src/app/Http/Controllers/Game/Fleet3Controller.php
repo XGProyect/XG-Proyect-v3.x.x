@@ -11,39 +11,17 @@ use App\Libraries\FormatLib;
 use App\Libraries\Functions;
 use App\Libraries\Research\Researches;
 use App\Libraries\Users;
+use App\Models\Game\Fleet;
 
 class Fleet3Controller extends BaseController
 {
-    /**
-     *
-     * @var int
-     */
     public const MODULE_ID = 8;
-
-    /**
-     *
-     * @var string
-     */
     public const REDIRECT_TARGET = 'game.php?page=fleet1';
 
-    /**
-     *
-     * @var \Fleets
-     */
-    private $_research = null;
-
-    /**
-     *
-     * @var int
-     */
-    private $_current_mission = 0;
-
-    /**
-     *
-     * @var array
-     */
-    private $_allowed_missions = [];
-    protected $fleetModel;
+    private ?Researches $_research = null;
+    private int $_current_mission = 0;
+    private array $_allowed_missions = [];
+    private Fleet $fleetModel;
 
     public function __construct()
     {
@@ -52,11 +30,10 @@ class Fleet3Controller extends BaseController
         // check if session is active
         Users::checkSession();
 
-        // load Model
-        parent::loadModel('game/fleet');
-
         // load Language
         parent::loadLang(['game/global', 'game/missions', 'game/fleet']);
+
+        $this->fleetModel = new Fleet();
 
         // init a new fleets object
         $this->setUpFleets();

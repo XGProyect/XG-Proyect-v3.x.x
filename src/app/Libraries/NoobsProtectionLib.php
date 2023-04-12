@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace App\Libraries;
 
+use App\Models\Libraries\NoobsProtectionLib as NoobsProtectionLibModel;
+
 class NoobsProtectionLib
 {
-    protected $noobsprotectionlibModel;
+    private NoobsProtectionLibModel $noobsprotectionlibModel;
     private $protection;
     private $protectiontime;
     private $protectionmulti;
@@ -14,8 +16,7 @@ class NoobsProtectionLib
 
     public function __construct()
     {
-        // load model
-        $this->noobsprotectionlibModel = Functions::model('libraries/noobsprotectionlib');
+        $this->noobsprotectionlibModel = new NoobsProtectionLibModel();
 
         // set configs
         $this->setAllSettings();

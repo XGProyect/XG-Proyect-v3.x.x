@@ -7,10 +7,11 @@ namespace App\Http\Controllers\Adm;
 use App\Core\BaseController;
 use App\Libraries\Adm\AdministrationLib as Administration;
 use App\Libraries\Functions;
+use App\Models\Adm\Login;
 
 class LoginController extends BaseController
 {
-    protected $loginModel;
+    private Login $loginModel;
 
     public function __construct()
     {
@@ -19,11 +20,10 @@ class LoginController extends BaseController
         // check if session is active
         Administration::checkSession();
 
-        // load Model
-        parent::loadModel('adm/login');
-
         // load Language
         parent::loadLang(['adm/login']);
+
+        $this->loginModel = new Login();
     }
 
     public function index(): void

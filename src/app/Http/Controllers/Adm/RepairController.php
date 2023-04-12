@@ -6,10 +6,11 @@ use App\Core\BaseController;
 use App\Libraries\Adm\AdministrationLib as Administration;
 use App\Libraries\FormatLib;
 use App\Libraries\Functions;
+use App\Models\Adm\Repair;
 
 class RepairController extends BaseController
 {
-    protected $repairModel;
+    private Repair $repairModel;
 
     public function __construct()
     {
@@ -18,11 +19,10 @@ class RepairController extends BaseController
         // check if session is active
         Administration::checkSession();
 
-        // load Model
-        parent::loadModel('adm/repair');
-
         // load Language
         parent::loadLang(['adm/global', 'adm/repair']);
+
+        $this->repairModel = new Repair();
     }
 
     public function index(): void

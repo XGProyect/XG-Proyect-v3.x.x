@@ -10,6 +10,7 @@ use App\Libraries\FormatLib as Format;
 use App\Libraries\Functions;
 use App\Libraries\StatisticsLibrary;
 use App\Libraries\Users\Shortcuts;
+use App\Models\Adm\Users;
 
 class UsersController extends BaseController
 {
@@ -22,7 +23,7 @@ class UsersController extends BaseController
     private $_alert_type;
     private $_user_query;
     private $_stats;
-    protected $usersModel;
+    private Users $usersModel;
 
     public function __construct()
     {
@@ -31,14 +32,13 @@ class UsersController extends BaseController
         // check if session is active
         Administration::checkSession();
 
-        // load Model
-        parent::loadModel('adm/users');
 
         // load Language
         parent::loadLang(['adm/global', 'adm/users']);
 
         // set data
         $this->_stats = new StatisticsLibrary();
+        $this->usersModel = new Users();
     }
 
     public function index(): void

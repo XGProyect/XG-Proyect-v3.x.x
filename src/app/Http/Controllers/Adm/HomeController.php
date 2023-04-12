@@ -8,11 +8,12 @@ use App\Core\BaseController;
 use App\Libraries\Adm\AdministrationLib as Administration;
 use App\Libraries\FormatLib as Format;
 use App\Libraries\Functions;
+use App\Models\Adm\Home;
 use JsonException;
 
 class HomeController extends BaseController
 {
-    protected $homeModel;
+    private Home $homeModel;
 
     public function __construct()
     {
@@ -21,11 +22,10 @@ class HomeController extends BaseController
         // check if session is active
         Administration::checkSession();
 
-        // load Model
-        parent::loadModel('adm/home');
-
         // load Language
         parent::loadLang(['adm/global', 'adm/home']);
+
+        $this->homeModel = new Home();
     }
 
     public function index(): void

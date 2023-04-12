@@ -8,12 +8,13 @@ use App\Libraries\FleetsLib;
 use App\Libraries\Formulas;
 use App\Libraries\Functions;
 use App\Libraries\Users;
+use App\Models\Game\Phalanx;
 
 class PhalanxController extends BaseController
 {
     public const MODULE_ID = 11;
 
-    protected $phalanxModel;
+    private Phalanx $phalanxModel;
 
     public function __construct()
     {
@@ -22,11 +23,10 @@ class PhalanxController extends BaseController
         // check if session is active
         Users::checkSession();
 
-        // load Model
-        parent::loadModel('game/phalanx');
-
         // load Language
         parent::loadLang(['game/phalanx']);
+
+        $this->phalanxModel = new Phalanx();
     }
 
     public function index(): void

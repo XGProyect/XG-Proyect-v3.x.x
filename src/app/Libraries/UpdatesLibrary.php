@@ -16,15 +16,16 @@ use App\Libraries\OfficiersLib as Officiers;
 use App\Libraries\ProductionLib as Production;
 use App\Libraries\StatisticsLibrary;
 use App\Libraries\Users;
+use App\Models\Libraries\UpdatesLibrary as UpdatesLibraryModel;
 
 class UpdatesLibrary
 {
-    private $updatesModel;
+    private UpdatesLibraryModel $updatesModel;
 
     public function __construct()
     {
         // load Model
-        $this->updatesModel = Functions::model('libraries/UpdatesLibrary');
+        $this->updatesModel = new UpdatesLibraryModel();
 
         // Other stuff
         $this->cleanUp();
@@ -158,7 +159,7 @@ class UpdatesLibrary
      */
     private static function checkBuildingQueue(&$current_planet, &$current_user): bool
     {
-        $db = Functions::model('libraries/UpdatesLibrary');
+        $db = new UpdatesLibraryModel();
         $resource = Objects::getInstance()->getObjects();
         $ret_value = false;
 
@@ -239,7 +240,7 @@ class UpdatesLibrary
      */
     public static function setFirstElement(&$current_planet, $current_user): void
     {
-        $db = Functions::model('libraries/UpdatesLibrary');
+        $db = new UpdatesLibraryModel();
         $lang = new Language();
         $lang = $lang->loadLang(['game/global', 'game/constructions', 'game/buildings'], true);
         $resource = Objects::getInstance()->getObjects();
@@ -636,7 +637,7 @@ class UpdatesLibrary
 
         if ($Simul == false) {
             // new DB Object
-            $db = Functions::model('libraries/UpdatesLibrary');
+            $db = new UpdatesLibraryModel();
 
             // SHIPS AND DEFENSES UPDATE
             $builded = self::updateHangarQueue($current_user, $current_planet, $ProductionTime);

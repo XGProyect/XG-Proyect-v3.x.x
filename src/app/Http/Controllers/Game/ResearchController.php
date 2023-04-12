@@ -8,6 +8,7 @@ use App\Libraries\DevelopmentsLib;
 use App\Libraries\FormatLib;
 use App\Libraries\Functions;
 use App\Libraries\Users;
+use App\Models\Game\Research;
 
 class ResearchController extends BaseController
 {
@@ -17,7 +18,7 @@ class ResearchController extends BaseController
     private $_reslist;
     private $_is_working;
     private $_lab_level;
-    protected $researchModel;
+    private Research $researchModel;
 
     public function __construct()
     {
@@ -29,12 +30,10 @@ class ResearchController extends BaseController
         // Check module access
         Functions::moduleMessage(Functions::isModuleAccesible(self::MODULE_ID));
 
-        // load Model
-        parent::loadModel('game/research');
-
         // load Language
         parent::loadLang(['game/global', 'game/research', 'game/technologies']);
 
+        $this->researchModel = new Research();
         $this->_resource = $this->objects->getObjects();
         $this->_reslist = $this->objects->getObjectsList();
 

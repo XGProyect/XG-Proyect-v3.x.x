@@ -9,6 +9,7 @@ use App\Libraries\Buddies\Buddy;
 use App\Libraries\Functions;
 use App\Libraries\TimingLibrary as Timing;
 use App\Libraries\Users;
+use App\Models\Game\Buddies;
 use Exception;
 
 class BuddiesController extends BaseController
@@ -16,7 +17,7 @@ class BuddiesController extends BaseController
     public const MODULE_ID = 20;
 
     private ?Buddy $buddy = null;
-    protected $buddiesModel;
+    private Buddies $buddiesModel;
 
     public function __construct()
     {
@@ -25,11 +26,10 @@ class BuddiesController extends BaseController
         // check if session is active
         Users::checkSession();
 
-        // load Model
-        parent::loadModel('game/buddies');
-
         // load Language
         parent::loadLang(['game/buddies']);
+
+        $this->buddiesModel = new Buddies();
 
         // init a new buddy object
         $this->setUpBudies();

@@ -7,12 +7,13 @@ use App\Libraries\FormatLib;
 use App\Libraries\Functions;
 use App\Libraries\TimingLibrary as Timing;
 use App\Libraries\Users;
+use App\Models\Game\Statistics;
 
 class StatisticsController extends BaseController
 {
     public const MODULE_ID = 16;
 
-    protected $statisticsModel;
+    private Statistics $statisticsModel;
 
     public function __construct()
     {
@@ -21,11 +22,10 @@ class StatisticsController extends BaseController
         // check if session is active
         Users::checkSession();
 
-        // load Model
-        parent::loadModel('game/statistics');
-
         // load Language
         parent::loadLang(['game/global', 'game/statistics']);
+
+        $this->statisticsModel = new Statistics();
     }
 
     public function index(): void

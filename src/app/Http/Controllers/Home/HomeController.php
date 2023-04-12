@@ -4,20 +4,20 @@ namespace App\Http\Controllers\Home;
 
 use App\Core\BaseController;
 use App\Libraries\Functions;
+use App\Models\Home\Home;
 
 class HomeController extends BaseController
 {
-    protected $homeModel;
+    private Home $homeModel;
 
     public function __construct()
     {
         parent::__construct();
 
-        // load Model
-        parent::loadModel('home/home');
-
         // load Language
         parent::loadLang(['home/home']);
+
+        $this->homeModel = new Home();
     }
 
     public function index(): void

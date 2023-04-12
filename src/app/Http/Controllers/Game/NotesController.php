@@ -10,13 +10,14 @@ use App\Libraries\Functions;
 use App\Libraries\TimingLibrary as Timing;
 use App\Libraries\Users;
 use App\Libraries\Users\Notes as Note;
+use App\Models\Game\Notes;
 
 class NotesController extends BaseController
 {
     public const MODULE_ID = 19;
     public const REDIRECT_TARGET = 'game.php?page=notes';
     private ?Note $notes = null;
-    protected $notesModel;
+    private Notes $notesModel;
 
     public function __construct()
     {
@@ -25,11 +26,10 @@ class NotesController extends BaseController
         // check if session is active
         Users::checkSession();
 
-        // load Model
-        parent::loadModel('game/notes');
-
         // load Language
         parent::loadLang(['game/notes']);
+
+        $this->notesModel = new Notes();
 
         // init a new notes object
         $this->setUpNotes();

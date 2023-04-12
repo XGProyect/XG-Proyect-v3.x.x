@@ -6,12 +6,13 @@ use App\Core\BaseController;
 use App\Libraries\Functions;
 use App\Libraries\TimingLibrary as Timing;
 use App\Libraries\Users;
+use App\Models\Game\Changelog;
 
 class ChangelogController extends BaseController
 {
     public const MODULE_ID = 0;
 
-    protected $changelogModel;
+    private Changelog $changelogModel;
 
     public function __construct()
     {
@@ -20,11 +21,10 @@ class ChangelogController extends BaseController
         // check if session is active
         Users::checkSession();
 
-        // load Model
-        parent::loadModel('game/changelog');
-
         // load Language
         parent::loadLang(['game/changelog']);
+
+        $this->changelogModel = new Changelog();
     }
 
     public function index(): void

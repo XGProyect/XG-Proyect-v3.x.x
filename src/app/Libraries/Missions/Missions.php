@@ -4,7 +4,6 @@ namespace App\Libraries\Missions;
 
 use App\Core\Objects;
 use App\Libraries\FleetsLib;
-use App\Libraries\Functions;
 use App\Libraries\UpdatesLibrary;
 use App\Models\Libraries\Missions\Missions as MissionsModel;
 
@@ -17,8 +16,7 @@ class Missions
 
     public function __construct()
     {
-        // load model
-        $this->missionsModel = Functions::model('libraries/missions/missions');
+        $this->missionsModel = new MissionsModel();
 
         $this->resource = Objects::getInstance()->getObjects();
         $this->pricelist = Objects::getInstance()->getPrice();

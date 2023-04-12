@@ -14,6 +14,7 @@ use App\Libraries\Premium\Premium;
 use App\Libraries\Research\Researches;
 use App\Libraries\TimingLibrary as Timing;
 use App\Libraries\Users;
+use App\Models\Game\Fleet;
 
 class MovementController extends BaseController
 {
@@ -23,7 +24,7 @@ class MovementController extends BaseController
     private ?Fleets $fleets = null;
     private ?Researches $research = null;
     private ?Premium $premium = null;
-    protected $fleetModel;
+    private Fleet $fleetModel;
 
     public function __construct()
     {
@@ -32,11 +33,10 @@ class MovementController extends BaseController
         // check if session is active
         Users::checkSession();
 
-        // load Model
-        parent::loadModel('game/fleet');
-
         // load Language
         parent::loadLang(['game/missions', 'game/ships', 'game/fleet']);
+
+        $this->fleetModel = new Fleet();
 
         // init a new fleets object
         $this->setUpFleets();

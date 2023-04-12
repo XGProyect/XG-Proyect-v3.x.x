@@ -2,17 +2,16 @@
 
 namespace App\Core;
 
-use App\Libraries\Functions;
+use App\Models\Core\Sessions as SessionsModel;
 
 class Sessions
 {
     private bool $alive = true;
-    private $sessionsModel;
+    private SessionsModel $sessionsModel;
 
     public function __construct()
     {
-        // load model
-        $this->sessionsModel = Functions::model('core/sessions');
+        $this->sessionsModel = new SessionsModel();
 
         session_set_save_handler(
             [ & $this->sessionsModel, 'openConnection'],
@@ -28,9 +27,6 @@ class Sessions
         }
     }
 
-    /**
-     * Destructor
-     */
     public function __destruct()
     {
         if ($this->alive) {
@@ -39,11 +35,6 @@ class Sessions
         }
     }
 
-    /**
-     * delete
-     *
-     * @return void
-     */
     public function delete()
     {
         if (ini_get('session.use_cookies')) {

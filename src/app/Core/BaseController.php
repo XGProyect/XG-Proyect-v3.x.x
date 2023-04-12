@@ -32,32 +32,6 @@ abstract class BaseController
         $this->template = new Template();
     }
 
-    public function loadModel(string $class): void
-    {
-        try {
-            // some validations
-            if ((string) $class && $class != '' && !is_null($class)) {
-                $class_route = strtolower(substr($class, 0, strrpos($class, '/')));
-                $class_name = ucfirst(strtolower(substr($class, strrpos($class, '/') + 1, strlen($class))));
-                $model_file = XGP_ROOT . MODELS_PATH . strtolower($class) . '.php';
-
-                // check if the file exists
-                if (file_exists($model_file)) {
-                    require_once $model_file;
-
-                    $class_route = strtr(MODELS_PATH . $class_route . DIRECTORY_SEPARATOR . $class_name, ['/' => '\\']);
-                    $this->{strtolower($class_name) . 'Model'} = new $class_route();
-                    return;
-                }
-            }
-
-            // not found
-            throw new Exception('Model not defined');
-        } catch (Exception $e) {
-            die('Fatal error: ' . $e->getMessage());
-        }
-    }
-
     /**
      * @param string|array $languageFile
      */

@@ -2,7 +2,6 @@
 
 namespace App\Libraries;
 
-use App\Libraries\Functions;
 use App\Models\Libraries\MissionControlLib as MissionControlLibModel;
 
 class MissionControlLib
@@ -11,8 +10,7 @@ class MissionControlLib
 
     public function __construct()
     {
-        // load the required model
-        $this->missionControlLibModel = Functions::model('libraries/MissionControlLib');
+        $this->missionControlLibModel = new MissionControlLibModel();
     }
 
     /**

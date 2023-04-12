@@ -6,22 +6,22 @@ namespace App\Http\Controllers\Home;
 
 use App\Core\BaseController;
 use App\Libraries\Functions;
+use App\Models\Home\Mail;
 
 class MailController extends BaseController
 {
     private string $game_name = '';
     private string $send_result = '';
-    protected $mailModel;
+    private Mail $mailModel;
 
     public function __construct()
     {
         parent::__construct();
 
-        // load Model
-        parent::loadModel('home/mail');
-
         // load Language
         parent::loadLang(['home/mail']);
+
+        $this->mailModel = new Mail();
 
         // init some recurrent data
         $this->setUpData();

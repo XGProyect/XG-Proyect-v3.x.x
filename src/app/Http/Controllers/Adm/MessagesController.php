@@ -8,12 +8,13 @@ use App\Core\BaseController;
 use App\Core\Enumerators\MessagesEnumerator;
 use App\Libraries\Adm\AdministrationLib as Administration;
 use App\Libraries\TimingLibrary as Timing;
+use App\Models\Adm\Messages;
 
 class MessagesController extends BaseController
 {
     private string $alert = '';
     private array $results = [];
-    protected $messagesModel;
+    private Messages $messagesModel;
 
     public function __construct()
     {
@@ -22,11 +23,10 @@ class MessagesController extends BaseController
         // check if session is active
         Administration::checkSession();
 
-        // load Model
-        parent::loadModel('adm/messages');
-
         // load Language
         parent::loadLang(['adm/global', 'adm/messages']);
+
+        $this->messagesModel = new Messages();
     }
 
     public function index(): void

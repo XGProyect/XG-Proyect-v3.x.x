@@ -13,32 +13,17 @@ use App\Libraries\OfficiersLib;
 use App\Libraries\TimingLibrary as Timing;
 use App\Libraries\UpdatesLibrary;
 use App\Libraries\Users;
+use App\Models\Game\Buildings;
 use Exception;
 
 class BuildingsController extends BaseController
 {
     public const MODULE_ID = 3;
 
-    /**
-     *
-     * @var \Buildings
-     */
     private $_building = null;
-
-    /**
-     * List of currently available buildings
-     *
-     * @var array
-     */
-    private $_allowed_buildings = [];
-
-    /**
-     * Status of the commander officer
-     *
-     * @var boolean
-     */
-    private $_commander_active = false;
-    protected $buildingsModel;
+    private array $_allowed_buildings = [];
+    private bool $_commander_active = false;
+    protected Buildings $buildingsModel;
 
     public function __construct()
     {
@@ -47,11 +32,10 @@ class BuildingsController extends BaseController
         // check if session is active
         Users::checkSession();
 
-        // load Model
-        parent::loadModel('game/buildings');
-
         // load Language
         parent::loadLang(['game/global', 'game/buildings', 'game/constructions']);
+
+        $this->buildingsModel = new Buildings();
 
         // init a new building object with the current building queue
         $this->setUpBuildings();

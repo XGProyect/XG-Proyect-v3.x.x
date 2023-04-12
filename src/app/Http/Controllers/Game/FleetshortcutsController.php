@@ -6,6 +6,7 @@ use App\Core\BaseController;
 use App\Libraries\Functions;
 use App\Libraries\Users;
 use App\Libraries\Users\Shortcuts;
+use App\Models\Game\Shortcuts as ShortcutsModel;
 
 class FleetshortcutsController extends BaseController
 {
@@ -15,7 +16,7 @@ class FleetshortcutsController extends BaseController
     private ?Shortcuts $_shortcuts = null;
     private int $_shortcuts_count = 0;
     private array $_clean_data = [];
-    protected $shortcutsModel;
+    private ShortcutsModel $shortcutsModel;
 
     public function __construct()
     {
@@ -24,11 +25,10 @@ class FleetshortcutsController extends BaseController
         // check if session is active
         Users::checkSession();
 
-        // load Model
-        parent::loadModel('game/shortcuts');
-
         // load Language
         parent::loadLang(['game/global', 'game/fleet']);
+
+        $this->shortcutsModel = new ShortcutsModel();
 
         // init a new shortcut object
         $this->setUpShortcuts();

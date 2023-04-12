@@ -9,10 +9,11 @@ use App\Libraries\Adm\AdministrationLib as Administration;
 use App\Libraries\FleetsLib;
 use App\Libraries\FormatLib as Format;
 use App\Libraries\TimingLibrary as Timing;
+use App\Models\Adm\Fleets;
 
 class FleetsController extends BaseController
 {
-    protected $fleetsModel;
+    private Fleets $fleetsModel;
 
     public function __construct()
     {
@@ -21,11 +22,10 @@ class FleetsController extends BaseController
         // check if session is active
         Administration::checkSession();
 
-        // load Model
-        parent::loadModel('adm/fleets');
-
         // load Language
         parent::loadLang(['adm/global', 'adm/objects', 'adm/fleets']);
+
+        $this->fleetsModel = new Fleets();
     }
 
     public function index(): void

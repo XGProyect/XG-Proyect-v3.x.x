@@ -9,16 +9,18 @@ use App\Libraries\DevelopmentsLib;
 use App\Libraries\FleetsLib;
 use App\Libraries\FormatLib;
 use App\Libraries\Functions;
+use App\Libraries\NoobsProtectionLib;
 use App\Libraries\TimingLibrary as Timing;
 use App\Libraries\UpdatesLibrary;
 use App\Libraries\Users;
+use App\Models\Game\Overview;
 
 class OverviewController extends BaseController
 {
     public const MODULE_ID = 1;
 
-    private $noob;
-    protected $overviewModel;
+    private Overview $overviewModel;
+    private NoobsProtectionLib $noob;
 
     public function __construct()
     {
@@ -27,13 +29,11 @@ class OverviewController extends BaseController
         // check if session is active
         Users::checkSession();
 
-        // load Model
-        parent::loadModel('game/overview');
-
         // load Language
         parent::loadLang(['game/global', 'game/overview', 'game/buildings', 'game/constructions']);
 
-        $this->noob = Functions::loadLibrary('NoobsProtectionLib');
+        $this->overviewModel = new Overview();
+        $this->noob = new NoobsProtectionLib();
     }
 
     public function index(): void
@@ -49,34 +49,34 @@ class OverviewController extends BaseController
     {
         $moon = $this->getPlanetMoon();
 
-        $data = [
-            'dpath' => DPATH,
-            'planet_name' => $this->planet['planet_name'],
-            'user_name' => $this->user['user_name'],
-            'date_time' => Timing::formatExtendedDate(time()),
-            'Have_new_message' => $this->getMessages(),
-            'fleet_list' => $this->getFleetMovements(),
-            'planet_image' => $this->planet['planet_image'],
-            'building' => $this->getCurrentWork($this->planet),
-            'moon_img' => $moon['moon_img'],
-            'moon' => $moon['moon'],
-            'anothers_planets' => $this->getPlanets(),
-            'planet_diameter' => FormatLib::prettyNumber($this->planet['planet_diameter']),
-            'planet_field_current' => $this->planet['planet_field_current'],
-            'planet_field_max' => DevelopmentsLib::maxFields($this->planet),
-            'planet_temp_min' => $this->planet['planet_temp_min'],
-            'planet_temp_max' => $this->planet['planet_temp_max'],
-            'galaxy_galaxy' => $this->planet['planet_galaxy'],
-            'galaxy_system' => $this->planet['planet_system'],
-            'galaxy_planet' => $this->planet['planet_planet'],
-            'user_rank' => $this->getUserRank(),
-        ];
-
-        // DISPLAY THE RESULT PAGE
         $this->page->display(
             $this->template->set(
                 'overview/overview_body',
-                array_merge($this->langs->language, $data)
+                array_merge(
+                    $this->langs->language,
+                    [
+                        'dpath' => DPATH,
+                        'planet_name' => $this->planet['planet_name'],
+                        'user_name' => $this->user['user_name'],
+                        'date_time' => Timing::formatExtendedDate(time()),
+                        'Have_new_message' => $this->getMessages(),
+                        'fleet_list' => $this->getFleetMovements(),
+                        'planet_image' => $this->planet['planet_image'],
+                        'building' => $this->getCurrentWork($this->planet),
+                        'moon_img' => $moon['moon_img'],
+                        'moon' => $moon['moon'],
+                        'anothers_planets' => $this->getPlanets(),
+                        'planet_diameter' => FormatLib::prettyNumber($this->planet['planet_diameter']),
+                        'planet_field_current' => $this->planet['planet_field_current'],
+                        'planet_field_max' => DevelopmentsLib::maxFields($this->planet),
+                        'planet_temp_min' => $this->planet['planet_temp_min'],
+                        'planet_temp_max' => $this->planet['planet_temp_max'],
+                        'galaxy_galaxy' => $this->planet['planet_galaxy'],
+                        'galaxy_system' => $this->planet['planet_system'],
+                        'galaxy_planet' => $this->planet['planet_planet'],
+                        'user_rank' => $this->getUserRank(),
+                    ]
+                )
             )
         );
     }

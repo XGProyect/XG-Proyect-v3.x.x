@@ -4,22 +4,22 @@ namespace App\Http\Controllers\Home;
 
 use App\Core\BaseController;
 use App\Libraries\Functions;
+use App\Models\Home\Register;
 
 class RegisterController extends BaseController
 {
     private array $available_coords = [];
     private int $error_id;
-    protected $registerModel;
+    private Register $registerModel;
 
     public function __construct()
     {
         parent::__construct();
 
-        // load Model
-        parent::loadModel('home/register');
-
         // load Language
         parent::loadLang(['home/register']);
+
+        $this->registerModel = new Register();
     }
 
     public function index(): void

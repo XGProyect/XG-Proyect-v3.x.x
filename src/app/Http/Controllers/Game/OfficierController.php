@@ -8,12 +8,13 @@ use App\Libraries\FormatLib;
 use App\Libraries\Functions;
 use App\Libraries\OfficiersLib;
 use App\Libraries\Users;
+use App\Models\Game\Officier;
 
 class OfficierController extends BaseController
 {
     public const MODULE_ID = 15;
 
-    protected $officierModel;
+    private Officier $officierModel;
 
     public function __construct()
     {
@@ -22,11 +23,10 @@ class OfficierController extends BaseController
         // check if session is active
         Users::checkSession();
 
-        // load Model
-        parent::loadModel('game/officier');
-
         // load Language
         parent::loadLang(['game/global', 'game/officier']);
+
+        $this->officierModel = new Officier();
     }
 
     public function index(): void

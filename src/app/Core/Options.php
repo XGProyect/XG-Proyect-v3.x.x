@@ -2,18 +2,16 @@
 
 namespace App\Core;
 
-use App\Libraries\Functions;
+use App\Models\Core\Options as OptionsModel;
 
 class Options
 {
     private static $instance = null;
-
-    private $optionsModel;
+    private OptionsModel $optionsModel;
 
     public function __construct()
     {
-        // load model
-        $this->optionsModel = Functions::model('core/options');
+        $this->optionsModel = new OptionsModel();
     }
 
     public static function getInstance(): Options

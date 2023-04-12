@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Adm;
 use App\Core\BaseController;
 use App\Libraries\Adm\AdministrationLib as Administration;
 use App\Libraries\Functions;
+use App\Models\Adm\Update;
 
 class UpdateController extends BaseController
 {
@@ -12,8 +13,7 @@ class UpdateController extends BaseController
     private $db_version;
     private $demo;
     private $output = [];
-
-    protected $updateModel;
+    private Update $updateModel;
 
     public function __construct()
     {
@@ -22,11 +22,10 @@ class UpdateController extends BaseController
         // check if session is active
         Administration::checkSession();
 
-        // load Model
-        parent::loadModel('adm/update');
-
         // load Language
         parent::loadLang(['adm/global', 'adm/update']);
+
+        $this->updateModel = new Update();
     }
 
     public function index(): void

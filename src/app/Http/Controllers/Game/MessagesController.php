@@ -10,6 +10,7 @@ use App\Helpers\UrlHelper;
 use App\Libraries\Functions;
 use App\Libraries\OfficiersLib;
 use App\Libraries\Users;
+use App\Models\Game\Messages;
 
 class MessagesController extends BaseController
 {
@@ -23,7 +24,7 @@ class MessagesController extends BaseController
         MessagesEnumerator::USER => ['type_name' => 'useropen'],
         MessagesEnumerator::GENERAL => ['type_name' => 'generalopen'],
     ];
-    protected $messagesModel;
+    private Messages $messagesModel;
 
     public function __construct()
     {
@@ -32,11 +33,10 @@ class MessagesController extends BaseController
         // check if session is active
         Users::checkSession();
 
-        // load Model
-        parent::loadModel('game/messages');
-
         // load Language
         parent::loadLang(['game/messages']);
+
+        $this->messagesModel = new Messages();
     }
 
     public function index(): void

@@ -8,18 +8,17 @@ use App\Core\Enumerators\SwitchIntEnumerator as SwitchInt;
 use App\Libraries\Adm\AdministrationLib as Administration;
 use App\Libraries\Alliance\Ranks;
 use App\Libraries\Functions;
+use App\Models\Adm\Alliances;
 
 class AlliancesController extends BaseController
 {
     private $_edit;
-    private $_planet;
-    private $_moon;
     private $_id;
     private $_alert_info;
     private $_alert_type;
-    private $_user_query;
+    private $_alliance_query;
     private ?Ranks $ranks = null;
-    protected $alliancesModel;
+    private Alliances $alliancesModel;
 
     public function __construct()
     {
@@ -28,11 +27,10 @@ class AlliancesController extends BaseController
         // check if session is active
         Administration::checkSession();
 
-        // load Model
-        parent::loadModel('adm/alliances');
-
         // load Language
         parent::loadLang(['adm/global', 'adm/alliances']);
+
+        $this->alliancesModel = new Alliances();
     }
 
     public function index(): void

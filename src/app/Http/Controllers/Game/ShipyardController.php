@@ -10,6 +10,7 @@ use App\Libraries\FormatLib;
 use App\Libraries\Formulas;
 use App\Libraries\Functions;
 use App\Libraries\Users;
+use App\Models\Game\Shipyard;
 use Exception;
 
 class ShipyardController extends BaseController
@@ -26,7 +27,7 @@ class ShipyardController extends BaseController
     ];
     private array $allowed_items = [];
     private bool $building_in_progress = false;
-    protected $shipyardModel;
+    private Shipyard $shipyardModel;
 
     public function __construct()
     {
@@ -35,11 +36,10 @@ class ShipyardController extends BaseController
         // check if session is active
         Users::checkSession();
 
-        // load Model
-        parent::loadModel('game/shipyard');
-
         // load Language
         parent::loadLang(['game/global', 'game/shipyard', 'game/defenses', 'game/ships']);
+
+        $this->shipyardModel = new Shipyard();
 
         // init a new building object with the current building queue
         $this->setUpShipyard();

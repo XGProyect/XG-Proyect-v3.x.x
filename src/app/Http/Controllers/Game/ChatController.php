@@ -6,6 +6,7 @@ use App\Core\BaseController;
 use App\Libraries\FormatLib;
 use App\Libraries\Functions;
 use App\Libraries\Users;
+use App\Models\Game\Messages;
 
 class ChatController extends BaseController
 {
@@ -13,7 +14,7 @@ class ChatController extends BaseController
 
     private array $_receiver_data = [];
     private array $_message_data = [];
-    protected $messagesModel;
+    private Messages $messagesModel;
 
     public function __construct()
     {
@@ -22,11 +23,10 @@ class ChatController extends BaseController
         // check if session is active
         Users::checkSession();
 
-        // load Model
-        parent::loadModel('game/messages');
-
         // load Language
         parent::loadLang(['game/chat']);
+
+        $this->messagesModel = new Messages();
     }
 
     public function index(): void

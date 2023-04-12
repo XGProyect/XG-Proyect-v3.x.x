@@ -15,6 +15,7 @@ use App\Libraries\Functions;
 use App\Libraries\OfficiersLib;
 use App\Libraries\ProductionLib;
 use App\Libraries\Users;
+use App\Models\Game\Infos;
 
 class InfosController extends BaseController
 {
@@ -25,7 +26,7 @@ class InfosController extends BaseController
     private $_pricelist;
     private $_combat_caps;
     private $_prod_grid;
-    protected $infosModel;
+    private Infos $infosModel;
 
     public function __construct()
     {
@@ -34,12 +35,10 @@ class InfosController extends BaseController
         // check if session is active
         Users::checkSession();
 
-        // load Model
-        parent::loadModel('game/infos');
-
         // load Language
         parent::loadLang(['game/global', 'game/infos', 'game/constructions', 'game/defenses', 'game/ships', 'game/technologies']);
 
+        $this->infosModel = new Infos();
         $this->_resource = $this->objects->getObjects();
         $this->_pricelist = $this->objects->getPrice();
         $this->_combat_caps = $this->objects->getCombatSpecs();

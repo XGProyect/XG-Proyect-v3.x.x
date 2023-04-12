@@ -7,13 +7,14 @@ use App\Helpers\UrlHelper;
 use App\Libraries\Functions;
 use App\Libraries\TimingLibrary as Timing;
 use App\Libraries\Users;
+use App\Models\Game\Banned;
 
 class BannedController extends BaseController
 {
     public const MODULE_ID = 22;
 
     private int $bans_count = 0;
-    protected $bannedModel;
+    private Banned $bannedModel;
 
     public function __construct()
     {
@@ -22,11 +23,10 @@ class BannedController extends BaseController
         // check if session is active
         Users::checkSession();
 
-        // load Model
-        parent::loadModel('game/banned');
-
         // load Language
         parent::loadLang(['game/banned']);
+
+        $this->bannedModel = new Banned();
     }
 
     public function index(): void
