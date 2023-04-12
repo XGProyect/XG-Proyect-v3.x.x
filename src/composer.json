@@ -20,14 +20,12 @@
     ],
     "license": "GPL-3.0-only",
     "require": {
-        "php": "^7.3|^8.0",
+        "php": "^7.4|^8.0",
         "phpmailer/phpmailer": "^6.5",
         "eftec/bladeone": "^4.2"
     },
     "require-dev": {
-        "bartlett/php-compatinfo": "^6.1",
-        "phpunit/phpunit": "^9.0",
-        "squizlabs/php_codesniffer": "^3.5",
+        "phpunit/phpunit": "^10.0",
         "friendsofphp/php-cs-fixer": "^3.16",
         "symfony/var-dumper": "^6.2"
     },
@@ -44,11 +42,8 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "scripts": {
-        "phpcompatinfo": [
-            "vendor/bin/phpcompatinfo --progress analyser:run ./src/app/"
-        ],
         "phpunit": [
-            "vendor/bin/phpunit --verbose --config src/tests/phpunit.xml --testsuite xgp_application"
+            "vendor/bin/phpunit --config tests/phpunit.xml --testsuite xgp_application"
         ]
     }
 }
