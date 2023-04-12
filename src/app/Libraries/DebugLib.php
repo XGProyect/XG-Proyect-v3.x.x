@@ -87,16 +87,6 @@ class DebugLib
         ];
     }
 
-    /**
-     * Take different actions like displaying the error, logging the error and sending an email
-     *
-     * @param integer $code
-     * @param string $description
-     * @param string $file
-     * @param integer $line
-     * @param string $type
-     * @return void
-     */
     public function error(int $code = 0, string $description = '', string $file = '', int $line = 0, string $type = 'db'): void
     {
         if (count($this->logs) > 0) {

@@ -14,6 +14,7 @@ use App\Libraries\FleetsLib;
 use App\Libraries\FormatLib;
 use App\Libraries\Formulas;
 use App\Libraries\Functions;
+use CiLang;
 
 class GalaxyLib extends XGPCore
 {
@@ -21,69 +22,20 @@ class GalaxyLib extends XGPCore
     public const DEBRIS_TYPE = 2;
     public const MOON_TYPE = 3;
 
-    /**
-     * @var mixed
-     */
-    private $langs;
-    /**
-     * @var mixed
-     */
+    protected ?CiLang $langs;
     private $current_user;
-    /**
-     * @var mixed
-     */
     private $current_planet;
-    /**
-     * @var mixed
-     */
     private $row_data;
-    /**
-     * @var mixed
-     */
     private $galaxy;
-    /**
-     * @var mixed
-     */
     private $system;
-    /**
-     * @var mixed
-     */
     private $planet;
-    /**
-     * @var mixed
-     */
     private $resource;
-    /**
-     * @var mixed
-     */
     private $pricelist;
-    /**
-     * @var mixed
-     */
     private $noob;
-    /**
-     * @var mixed
-     */
     private $template;
+    private bool $no_popup = false;
 
-    /**
-     * Indicates if we should display the popup or not
-     *
-     * @var boolean
-     */
-    private $no_popup = false;
-
-    /**
-     * __construct
-     *
-     * @param array $user   User
-     * @param array $planet Planet
-     * @param int   $galaxy Galaxy
-     * @param int   $system System
-     *
-     * @return void
-     */
-    public function __construct($user = '', $planet = '', $galaxy = '', $system = '', $langs = '')
+    public function __construct($user = '', $planet = '', $galaxy = '', $system = '', ?CiLang $langs = null)
     {
         parent::__construct();
 
@@ -99,11 +51,6 @@ class GalaxyLib extends XGPCore
         $this->setTemplate();
     }
 
-    /**
-     * Set template object
-     *
-     * @return void
-     */
     private function setTemplate(): void
     {
         $this->template = new Template();
@@ -115,15 +62,7 @@ class GalaxyLib extends XGPCore
     #
     ######################################
 
-    /**
-     * buildRow
-     *
-     * @param array $row_data Row data
-     * @param array $planet   Planet
-     *
-     * @return array
-     */
-    public function buildRow($row_data, $planet)
+    public function buildRow($row_data, $planet): array
     {
         // SOME DATA THAT WE ARE GOING TO REQUIRE FOR EACH COLUMN
         $this->row_data = $row_data;
@@ -172,12 +111,7 @@ class GalaxyLib extends XGPCore
     #
     ######################################
 
-    /**
-     * planetBlock
-     *
-     * @return array
-     */
-    private function planetBlock()
+    private function planetBlock(): array
     {
         $action['spy'] = '';
         $action['phalanx'] = '';

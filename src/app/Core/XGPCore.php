@@ -7,7 +7,7 @@ use Exception;
 
 abstract class XGPCore
 {
-    protected CiLang $langs;
+    protected ?CiLang $langs;
     protected static $objects;
 
     public function __construct()
