@@ -4,13 +4,13 @@ namespace App\Libraries;
 
 use App\Core\Enumerators\BuildingsEnumerator as Buildings;
 use App\Core\Enumerators\ResearchEnumerator as Research;
+use App\Core\Objects;
 use App\Core\Template;
-use App\Core\XGPCore;
 use App\Libraries\FormatLib;
 use App\Libraries\Formulas;
 use App\Libraries\OfficiersLib;
 
-class DevelopmentsLib extends XGPCore
+class DevelopmentsLib
 {
     public static function getTemplate(): Template
     {
@@ -37,14 +37,14 @@ class DevelopmentsLib extends XGPCore
     public static function maxFields($current_planet): int
     {
         return $current_planet['planet_field_max'] + (
-            $current_planet[parent::$objects->getObjects(33)] * FIELDS_BY_TERRAFORMER
+            $current_planet[Objects::getInstance()->getObjects(33)] * FIELDS_BY_TERRAFORMER
         );
     }
 
     public static function developmentPrice(array $current_user, array $current_planet, int $element, $incremental = true, $destroy = false): array
     {
-        $resource = parent::$objects->getObjects();
-        $pricelist = parent::$objects->getPrice();
+        $resource = Objects::getInstance()->getObjects();
+        $pricelist = Objects::getInstance()->getPrice();
 
         if ($incremental) {
             $level = (isset($current_planet[$resource[$element]])) ? $current_planet[$resource[$element]] : $current_user[$resource[$element]];
@@ -110,8 +110,8 @@ class DevelopmentsLib extends XGPCore
      */
     public static function formatedDevelopmentPrice($current_user, $current_planet, $element, $lang, $userfactor = true, $level = false)
     {
-        $resource = parent::$objects->getObjects();
-        $pricelist = parent::$objects->getPrice();
+        $resource = Objects::getInstance()->getObjects();
+        $pricelist = Objects::getInstance()->getPrice();
 
         if ($userfactor && ($level === false)) {
             $level = (isset($current_planet[$resource[$element]])) ? $current_planet[$resource[$element]] : $current_user[$resource[$element]];
@@ -162,9 +162,9 @@ class DevelopmentsLib extends XGPCore
      */
     public static function developmentTime($current_user, $current_planet, $element, $level = false, $total_lab_level = 0)
     {
-        $resource = parent::$objects->getObjects();
-        $pricelist = parent::$objects->getPrice();
-        $reslist = parent::$objects->getObjectsList();
+        $resource = Objects::getInstance()->getObjects();
+        $pricelist = Objects::getInstance()->getPrice();
+        $reslist = Objects::getInstance()->getObjectsList();
 
         // IF ROUTINE FIX BY JSTAR
         if ($level === false) {
@@ -215,7 +215,7 @@ class DevelopmentsLib extends XGPCore
      */
     public static function tearDownTime(int $building, int $robotics_factory, int $nanite_factory, int $level): float
     {
-        $pricelist = parent::$objects->getPrice();
+        $pricelist = Objects::getInstance()->getPrice();
 
         $metal_cost = Formulas::getTearDownBaseCost($pricelist[$building]['metal'], $pricelist[$building]['factor'], $level);
         $crystal_cost = Formulas::getTearDownBaseCost($pricelist[$building]['crystal'], $pricelist[$building]['factor'], $level);
@@ -246,8 +246,8 @@ class DevelopmentsLib extends XGPCore
      */
     public static function isDevelopmentAllowed($current_user, $current_planet, $element)
     {
-        $resource = parent::$objects->getObjects();
-        $requeriments = parent::$objects->getRelations();
+        $resource = Objects::getInstance()->getObjects();
+        $requeriments = Objects::getInstance()->getRelations();
 
         if (isset($requeriments[$element])) {
             $enabled = true;

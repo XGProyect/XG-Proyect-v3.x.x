@@ -2,23 +2,17 @@
 
 namespace App\Libraries;
 
-use App\Core\XGPCore;
+use App\Core\Objects;
 use App\Libraries\Functions;
 use App\Models\Libraries\StatisticsLibrary as StatisticsLib;
 
-class StatisticsLibrary extends XGPCore
+class StatisticsLibrary
 {
     private StatisticsLib $statisticsLibraryModel;
-
-    /**
-     * @var mixed
-     */
     private $time;
 
     public function __construct()
     {
-        parent::__construct();
-
         // load model
         $this->statisticsLibraryModel = Functions::model('libraries/StatisticsLibrary');
     }
@@ -47,7 +41,7 @@ class StatisticsLibrary extends XGPCore
                 break;
         }
 
-        $element = parent::$objects->getPrice($element);
+        $element = Objects::getInstance()->getPrice($element);
         $resources_total = $element['metal'] + $element['crystal'] + $element['deuterium'];
         $level_mult = pow($element['factor'], $current_level);
         $points = ($resources_total * $level_mult) / Functions::readConfig('stat_points');
@@ -71,7 +65,7 @@ class StatisticsLibrary extends XGPCore
         }
 
         $points = 0;
-        $objects = parent::$objects->getObjects();
+        $objects = Objects::getInstance()->getObjects();
 
         if ($what == 'research') {
             $objectsToUpdate = $this->statisticsLibraryModel->getResearchToUpdate($user_id);
@@ -82,7 +76,7 @@ class StatisticsLibrary extends XGPCore
         if (!is_null($objects)) {
             foreach ($objects as $id => $object) {
                 if (isset($objectsToUpdate[$object])) {
-                    $price = parent::$objects->getPrice($id);
+                    $price = Objects::getInstance()->getPrice($id);
                     $total = $price['metal'] + $price['crystal'] + $price['deuterium'];
                     $level = $objectsToUpdate[$object];
 

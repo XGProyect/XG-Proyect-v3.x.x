@@ -5,7 +5,7 @@ namespace App\Libraries;
 use App\Core\Enumerators\BuildingsEnumerator as Buildings;
 use App\Core\Enumerators\PlanetTypesEnumerator;
 use App\Core\Language;
-use App\Core\XGPCore;
+use App\Core\Objects;
 use App\Helpers\UrlHelper;
 use App\Libraries\DevelopmentsLib as Developments;
 use App\Libraries\FormatLib as Format;
@@ -17,19 +17,12 @@ use App\Libraries\ProductionLib as Production;
 use App\Libraries\StatisticsLibrary;
 use App\Libraries\Users;
 
-class UpdatesLibrary extends XGPCore
+class UpdatesLibrary
 {
-    /**
-     * Contains the model
-     *
-     * @var UpdatesLibrary
-     */
     private $updatesModel;
 
     public function __construct()
     {
-        parent::__construct();
-
         // load Model
         $this->updatesModel = Functions::model('libraries/UpdatesLibrary');
 
@@ -166,7 +159,7 @@ class UpdatesLibrary extends XGPCore
     private static function checkBuildingQueue(&$current_planet, &$current_user): bool
     {
         $db = Functions::model('libraries/UpdatesLibrary');
-        $resource = parent::$objects->getObjects();
+        $resource = Objects::getInstance()->getObjects();
         $ret_value = false;
 
         if ($current_planet['planet_b_building_id'] != 0) {
@@ -249,7 +242,7 @@ class UpdatesLibrary extends XGPCore
         $db = Functions::model('libraries/UpdatesLibrary');
         $lang = new Language();
         $lang = $lang->loadLang(['game/global', 'game/constructions', 'game/buildings'], true);
-        $resource = parent::$objects->getObjects();
+        $resource = Objects::getInstance()->getObjects();
 
         if ($current_planet['planet_b_building'] == 0) {
             $current_queue = $current_planet['planet_b_building_id'];
@@ -428,9 +421,8 @@ class UpdatesLibrary extends XGPCore
      */
     public static function updatePlanetResources(&$current_user, &$current_planet, $UpdateTime, $Simul = false)
     {
-        $resource = parent::$objects->getObjects();
-        $ProdGrid = parent::$objects->getProduction();
-        $reslist = parent::$objects->getObjectsList();
+        $resource = Objects::getInstance()->getObjects();
+        $ProdGrid = Objects::getInstance()->getProduction();
 
         $game_resource_multiplier = Functions::readConfig('resource_multiplier');
         $game_metal_basic_income = Functions::readConfig('metal_basic_income');
@@ -715,7 +707,7 @@ class UpdatesLibrary extends XGPCore
      */
     private static function updateHangarQueue($current_user, &$current_planet, $ProductionTime)
     {
-        $resource = parent::$objects->getObjects();
+        $resource = Objects::getInstance()->getObjects();
 
         if ($current_planet['planet_b_hangar_id'] != "") {
             $Builded = [];

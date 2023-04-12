@@ -4,130 +4,96 @@ namespace App\Core;
 
 class Objects
 {
-    private array $objects;
-    private array $relations;
-    private array $price;
-    private array $combat_specs;
-    private array $production;
-    private array $objects_list;
+    private static ?Objects $instance = null;
+    private array $objects = [];
+    private array $relations = [];
+    private array $price = [];
+    private array $combatSpecs = [];
+    private array $production = [];
+    private array $objectsList = [];
+
+    public static function getInstance(): self
+    {
+        if (self::$instance === null) {
+            self::$instance = new Objects();
+        }
+
+        return self::$instance;
+    }
 
     public function __construct()
     {
-        // REQUIRE THIS DAMN FILE
+        // require this damn file
         require XGP_ROOT . CORE_PATH . 'objects_collection.php';
 
-        // SET THE ARRAY ELEMENTS TO A PARTICULAR PROPERTY
+        // pass the require array into properties
         $this->objects = $resource;
         $this->relations = $requeriments;
         $this->price = $pricelist;
-        $this->combat_specs = $CombatCaps;
+        $this->combatSpecs = $CombatCaps;
         $this->production = $ProdGrid;
-        $this->objects_list = $reslist;
+        $this->objectsList = $reslist;
     }
 
-    /**
-     * getObjects
-     *
-     * @param int $object_id Object ID
-     *
-     * @return array
-     */
-    public function getObjects($object_id = null)
+    public function getObjects(?int $objectId = null)
     {
-        if (!empty($object_id)) {
-            return $this->objects[$object_id];
+        if (!empty($objectId)) {
+            return $this->objects[$objectId];
         } else {
             return $this->objects;
         }
     }
 
-    /**
-     * getRelations
-     *
-     * @param int $object_id Object ID
-     *
-     * @return array
-     */
-    public function getRelations($object_id = null)
+    public function getRelations(?int $objectId = null)
     {
-        if (!empty($object_id)) {
-            return $this->relations[$object_id];
+        if (!empty($objectId)) {
+            return $this->relations[$objectId];
         } else {
             return $this->relations;
         }
     }
 
-    /**
-     * getPrice
-     *
-     * @param int    $object_id Object ID
-     * @param string $resource  Resource
-     *
-     * @return array
-     */
-    public function getPrice($object_id = null, $resource = '')
+    public function getPrice(?int $objectId = null, string $resource = '')
     {
-        if (!empty($object_id)) {
+        if (!empty($objectId)) {
             if (empty($resource)) {
-                return $this->price[$object_id];
+                return $this->price[$objectId];
             } else {
-                return $this->price[$object_id][$resource];
+                return $this->price[$objectId][$resource];
             }
         } else {
             return $this->price;
         }
     }
 
-    /**
-     * getCombatSpecs
-     *
-     * @param int    $object_id Object ID
-     * @param string $type      Type
-     *
-     * @return array
-     */
-    public function getCombatSpecs($object_id = null, $type = '')
+    public function getCombatSpecs(?int $objectId = null, string $type = '')
     {
-        if (!empty($object_id)) {
+        if (!empty($objectId)) {
             if (empty($type)) {
-                return $this->combat_specs[$object_id];
+                return $this->combatSpecs[$objectId];
             } else {
-                return $this->combat_specs[$object_id][$type];
+                return $this->combatSpecs[$objectId][$type];
             }
         } else {
-            return $this->combat_specs;
+            return $this->combatSpecs;
         }
     }
 
-    /**
-     * getProduction
-     *
-     * @param int $object_id Object ID
-     *
-     * @return array
-     */
-    public function getProduction($object_id = null)
+    public function getProduction(?int $objectId = null)
     {
-        if (!empty($object_id)) {
-            return $this->production[$object_id];
+        if (!empty($objectId)) {
+            return $this->production[$objectId];
         } else {
             return $this->production;
         }
     }
 
-    /**
-     * getObjectsList
-     *
-     * @param int $object_id Object ID
-     *
-     * @return array
-     */
-    public function getObjectsList($object_id = null)
+    public function getObjectsList(?string $objectId = null)
     {
-        if (!empty($object_id)) {
-            return $this->objects_list[$object_id];
+        if (!empty($objectId)) {
+            return $this->objectsList[$objectId];
         } else {
-            return $this->objects_list;
+            return $this->objectsList;
         }
     }
 }

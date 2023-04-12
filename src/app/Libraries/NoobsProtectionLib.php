@@ -4,43 +4,12 @@ declare(strict_types=1);
 
 namespace App\Libraries;
 
-use App\Core\XGPCore;
-
-class NoobsProtectionLib extends XGPCore
+class NoobsProtectionLib
 {
-    /**
-     * Contains the model
-     *
-     * @var Noobsprotectionlib
-     */
     protected $noobsprotectionlibModel;
-
-    /**
-     * Protection on/off
-     *
-     * @var bool
-     */
     private $protection;
-
-    /**
-     * Minimum amount of points (base points)
-     *
-     * @var int
-     */
     private $protectiontime;
-
-    /**
-     * Protection multiplier
-     *
-     * @var int
-     */
     private $protectionmulti;
-
-    /**
-     * Minimum allowed level
-     *
-     * @var int
-     */
     private $allowed_level;
 
     public function __construct()
@@ -52,11 +21,6 @@ class NoobsProtectionLib extends XGPCore
         $this->setAllSettings();
     }
 
-    /**
-     * Set all configs
-     *
-     * @return void
-     */
     public function setAllSettings(): void
     {
         $configs = $this->noobsprotectionlibModel->readAllConfigs();
@@ -67,13 +31,6 @@ class NoobsProtectionLib extends XGPCore
         $this->allowed_level = (int) $configs['stat_admin_level'];
     }
 
-    /**
-     * Check if the first compared player is stronger than the second compared player
-     *
-     * @param integer $current_points
-     * @param integer $other_points
-     * @return boolean
-     */
     public function isWeak(int $current_points, int $other_points): bool
     {
         if ($this->protection) {
@@ -93,13 +50,6 @@ class NoobsProtectionLib extends XGPCore
         return false;
     }
 
-    /**
-     * Check if the first compared player is stronger than the second compared player
-     *
-     * @param integer $current_points
-     * @param integer $other_points
-     * @return boolean
-     */
     public function isStrong(int $current_points, int $other_points): bool
     {
         if ($this->protection) {
@@ -119,24 +69,11 @@ class NoobsProtectionLib extends XGPCore
         return false;
     }
 
-    /**
-     * Return points for both requested users
-     *
-     * @param integer $current_user_id
-     * @param integer $other_user_id
-     * @return array
-     */
     public function returnPoints(int $current_user_id, int $other_user_id): array
     {
         return $this->noobsprotectionlibModel->returnBothPartiesPoints($current_user_id, $other_user_id);
     }
 
-    /**
-     * Determines if the rank can be shown or not
-     *
-     * @param integer $user_auth_level
-     * @return boolean
-     */
     public function isRankVisible(int $user_auth_level): bool
     {
         return ($user_auth_level <= $this->allowed_level);

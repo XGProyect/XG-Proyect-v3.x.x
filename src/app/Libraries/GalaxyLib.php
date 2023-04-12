@@ -6,8 +6,8 @@ use App\Core\Enumerators\MissionsEnumerator as Missions;
 use App\Core\Enumerators\PlanetTypesEnumerator;
 use App\Core\Enumerators\ShipsEnumerator as Ships;
 use App\Core\Enumerators\UserRanksEnumerator as UserRanks;
+use App\Core\Objects;
 use App\Core\Template;
-use App\Core\XGPCore;
 use App\Helpers\StringsHelper;
 use App\Helpers\UrlHelper;
 use App\Libraries\FleetsLib;
@@ -16,7 +16,7 @@ use App\Libraries\Formulas;
 use App\Libraries\Functions;
 use CiLang;
 
-class GalaxyLib extends XGPCore
+class GalaxyLib
 {
     public const PLANET_TYPE = 1;
     public const DEBRIS_TYPE = 2;
@@ -37,15 +37,14 @@ class GalaxyLib extends XGPCore
 
     public function __construct($user = '', $planet = '', $galaxy = '', $system = '', ?CiLang $langs = null)
     {
-        parent::__construct();
-
         $this->langs = $langs;
         $this->current_user = $user;
         $this->current_planet = $planet;
         $this->galaxy = $galaxy;
         $this->system = $system;
-        $this->resource = parent::$objects->getObjects();
-        $this->pricelist = parent::$objects->getPrice();
+
+        $this->resource = Objects::getInstance()->getObjects();
+        $this->pricelist = Objects::getInstance()->getPrice();
         $this->noob = Functions::loadLibrary('NoobsProtectionLib');
 
         $this->setTemplate();

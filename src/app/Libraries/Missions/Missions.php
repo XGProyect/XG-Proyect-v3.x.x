@@ -2,13 +2,13 @@
 
 namespace App\Libraries\Missions;
 
-use App\Core\XGPCore;
+use App\Core\Objects;
 use App\Libraries\FleetsLib;
 use App\Libraries\Functions;
 use App\Libraries\UpdatesLibrary;
 use App\Models\Libraries\Missions\Missions as MissionsModel;
 
-class Missions extends XGPCore
+class Missions
 {
     protected MissionsModel $missionsModel;
     protected $resource;
@@ -17,65 +17,41 @@ class Missions extends XGPCore
 
     public function __construct()
     {
-        parent::__construct();
-
         // load model
         $this->missionsModel = Functions::model('libraries/missions/missions');
 
-        $this->resource = parent::$objects->getObjects();
-        $this->pricelist = parent::$objects->getPrice();
-        $this->combat_caps = parent::$objects->getCombatSpecs();
+        $this->resource = Objects::getInstance()->getObjects();
+        $this->pricelist = Objects::getInstance()->getPrice();
+        $this->combat_caps = Objects::getInstance()->getCombatSpecs();
     }
 
-    /**
-     * removeFleet
-     *
-     * @param int $fleet_id Fleed ID
-     *
-     * @return void
-     */
-    protected function removeFleet($fleet_id)
+    protected function removeFleet(int $fleetId): void
     {
-        $this->missionsModel->deleteFleetById($fleet_id);
+        $this->missionsModel->deleteFleetById($fleetId);
     }
 
-    /**
-     * returnFleet
-     *
-     * @param int $fleet_id Fleed ID
-     *
-     * @return void
-     */
-    protected function returnFleet($fleet_id)
+    protected function returnFleet(int $fleetId): void
     {
-        $this->missionsModel->updateFleetStatusToReturnById($fleet_id);
+        $this->missionsModel->updateFleetStatusToReturnById($fleetId);
     }
 
-    /**
-     * restoreFleet
-     *
-     * @param array   $fleet_row Fleet row
-     * @param boolean $start     Start
-     *
-     * @return void
-     */
-    protected function restoreFleet($fleet_row, $start = true)
+    protected function restoreFleet(array $fleetRow, bool $start = true): void
     {
         if ($start) {
-            $galaxy = $fleet_row['fleet_start_galaxy'];
-            $system = $fleet_row['fleet_start_system'];
-            $planet = $fleet_row['fleet_start_planet'];
-            $type = $fleet_row['fleet_start_type'];
+            $galaxy = $fleetRow['fleet_start_galaxy'];
+            $system = $fleetRow['fleet_start_system'];
+            $planet = $fleetRow['fleet_start_planet'];
+            $type = $fleetRow['fleet_start_type'];
         } else {
-            $galaxy = $fleet_row['fleet_end_galaxy'];
-            $system = $fleet_row['fleet_end_system'];
-            $planet = $fleet_row['fleet_end_planet'];
-            $type = $fleet_row['fleet_end_type'];
+            $galaxy = $fleetRow['fleet_end_galaxy'];
+            $system = $fleetRow['fleet_end_system'];
+            $planet = $fleetRow['fleet_end_planet'];
+            $type = $fleetRow['fleet_end_type'];
         }
 
         $this->makeUpdate($galaxy, $system, $planet, $type);
 
-        $ships = FleetsLib::getFleetShipsArray($fleet_row['fleet_array']);
+        $ships = FleetsLib::getFleetShipsArray($fleetRow['fleet_array']);
         $ships_fields = '';
 
         foreach ($ships as $id => $amount) {
@@ -85,15 +61,15 @@ class Missions extends XGPCore
 
         $fuel_return = 0;
 
-        if ($fleet_row['fleet_mission'] == 4 && !$start) {
-            $fuel_return = $fleet_row['fleet_fuel'] / 2;
+        if ($fleetRow['fleet_mission'] == 4 && !$start) {
+            $fuel_return = $fleetRow['fleet_fuel'] / 2;
         }
 
-        $update_array = [
+        $updateArray = [
             'resources' => [
-                'metal' => $fleet_row['fleet_resource_metal'],
-                'crystal' => $fleet_row['fleet_resource_crystal'],
-                'deuterium' => ($fleet_row['fleet_resource_deuterium'] + $fuel_return),
+                'metal' => $fleetRow['fleet_resource_metal'],
+                'crystal' => $fleetRow['fleet_resource_crystal'],
+                'deuterium' => ($fleetRow['fleet_resource_deuterium'] + $fuel_return),
             ],
             'ships' => $ships_fields,
             'coords' => [
@@ -104,38 +80,30 @@ class Missions extends XGPCore
             ],
         ];
 
-        $this->missionsModel->updatePlanetsShipsByCoords($update_array);
+        $this->missionsModel->updatePlanetsShipsByCoords($updateArray);
     }
 
-    /**
-     * storeResources
-     *
-     * @param array   $fleet_row Fleet row
-     * @param boolean $start     Start
-     *
-     * @return void
-     */
-    protected function storeResources($fleet_row, $start = false)
+    protected function storeResources(array $fleetRow, $start = false): void
     {
         if ($start) {
-            $galaxy = $fleet_row['fleet_start_galaxy'];
-            $system = $fleet_row['fleet_start_system'];
-            $planet = $fleet_row['fleet_start_planet'];
-            $type = $fleet_row['fleet_start_type'];
+            $galaxy = $fleetRow['fleet_start_galaxy'];
+            $system = $fleetRow['fleet_start_system'];
+            $planet = $fleetRow['fleet_start_planet'];
+            $type = $fleetRow['fleet_start_type'];
         } else {
-            $galaxy = $fleet_row['fleet_end_galaxy'];
-            $system = $fleet_row['fleet_end_system'];
-            $planet = $fleet_row['fleet_end_planet'];
-            $type = $fleet_row['fleet_end_type'];
+            $galaxy = $fleetRow['fleet_end_galaxy'];
+            $system = $fleetRow['fleet_end_system'];
+            $planet = $fleetRow['fleet_end_planet'];
+            $type = $fleetRow['fleet_end_type'];
         }
 
         $this->makeUpdate($galaxy, $system, $planet, $type);
 
-        $update_array = [
+        $updateArray = [
             'resources' => [
-                'metal' => $fleet_row['fleet_resource_metal'],
-                'crystal' => $fleet_row['fleet_resource_crystal'],
-                'deuterium' => $fleet_row['fleet_resource_deuterium'],
+                'metal' => $fleetRow['fleet_resource_metal'],
+                'crystal' => $fleetRow['fleet_resource_crystal'],
+                'deuterium' => $fleetRow['fleet_resource_deuterium'],
             ],
             'coords' => [
                 'galaxy' => $galaxy,
@@ -145,20 +113,10 @@ class Missions extends XGPCore
             ],
         ];
 
-        $this->missionsModel->updatePlanetResourcesByCoords($update_array);
+        $this->missionsModel->updatePlanetResourcesByCoords($updateArray);
     }
 
-    /**
-     * Update planet resources, ships, and queues
-     *
-     * @param int   $galaxy    Galaxy
-     * @param int   $system    System
-     * @param int   $planet    Planet
-     * @param int   $type      Planet Type
-     *
-     * @return void
-     */
-    protected function makeUpdate($galaxy, $system, $planet, $type)
+    protected function makeUpdate(int $galaxy, int $system, int $planet, int $type): void
     {
         $target_planet = $this->missionsModel->getAllPlanetDataByCoords([
             'coords' => [
@@ -177,23 +135,11 @@ class Missions extends XGPCore
         UpdatesLibrary::updatePlanetResources($target_user, $target_planet, time());
     }
 
-    /**
-     * Check if the mission can be started
-     *
-     * @param array $fleet
-     * @return boolean
-     */
     protected function canStartMission(array $fleet): bool
     {
         return ($fleet['fleet_mess'] == 0 && $fleet['fleet_start_time'] <= time() && $fleet['fleet_end_stay'] <= time());
     }
 
-    /**
-     * Check if the mission can be completed
-     *
-     * @param array $fleet
-     * @return boolean
-     */
     protected function canCompleteMission(array $fleet): bool
     {
         return ($fleet['fleet_end_time'] <= time());

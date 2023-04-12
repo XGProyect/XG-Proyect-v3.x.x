@@ -5,8 +5,8 @@ namespace App\Libraries;
 use App\Core\Enumerators\DefensesEnumerator as Defenses;
 use App\Core\Enumerators\MissionsEnumerator as Missions;
 use App\Core\Language;
+use App\Core\Objects;
 use App\Core\Template;
-use App\Core\XGPCore;
 use App\Helpers\UrlHelper;
 use App\Libraries\FormatLib;
 use App\Libraries\Functions;
@@ -16,21 +16,14 @@ use App\Libraries\TimingLibrary as Timing;
 use App\Libraries\Users;
 use CiLang;
 
-class FleetsLib extends XGPCore
+class FleetsLib
 {
-    /**
-     * Determine ship consumption
-     *
-     * @param  int   $ship
-     * @param  array $user
-     * @return void
-     */
-    public static function shipConsumption($ship, $user)
+    public static function shipConsumption(int $ship, array $user): array
     {
         if ($user['research_impulse_drive'] >= 5) {
-            return parent::$objects->getPrice($ship, 'consumption2');
+            return Objects::getInstance()->getPrice($ship, 'consumption2');
         } else {
-            return parent::$objects->getPrice($ship, 'consumption');
+            return Objects::getInstance()->getPrice($ship, 'consumption');
         }
     }
 
@@ -88,7 +81,7 @@ class FleetsLib extends XGPCore
      */
     public static function fleetMaxSpeed($fleet_array, $fleet, $user)
     {
-        $pricelist = parent::$objects->getPrice();
+        $pricelist = Objects::getInstance()->getPrice();
         $speed_all = [];
 
         if ($fleet != 0) {
@@ -316,7 +309,7 @@ class FleetsLib extends XGPCore
     public static function fleetShipsPopup($fleet_row, $text, $fleet_type, $current_user = '')
     {
         $lang = static::loadLanguage(['game/events', 'game/ships']);
-        $objects = parent::$objects->getObjects();
+        $objects = Objects::getInstance()->getObjects();
 
         $ships = self::getFleetShipsArray($fleet_row['fleet_array']);
         $pop_up = "<a href='#' onmouseover=\"return overlib('";
