@@ -32,38 +32,6 @@ abstract class BaseController
         $this->template = new Template();
     }
 
-    /**
-     * @deprecated since 3.2.0 will be removed on 4.0.0
-     */
-    protected function getUserData(): array
-    {
-        return $this->user;
-    }
-
-    /**
-     * @deprecated since 3.2.0 will be removed on 4.0.0
-     */
-    protected function getPlanetData(): array
-    {
-        return $this->planet;
-    }
-
-    /**
-     * @deprecated since 3.2.0 will be removed on 4.0.0
-     */
-    protected function getTemplate(): ?Template
-    {
-        return $this->template;
-    }
-
-    /**
-     * @deprecated since 3.2.0 will be removed on 4.0.0
-     */
-    protected function getObjects(): ?Objects
-    {
-        return $this->objects;
-    }
-
     public function loadModel(string $class): void
     {
         try {
@@ -97,9 +65,9 @@ abstract class BaseController
     {
         try {
             // require langugage library
-            $ci_lang_path = XGP_ROOT . LIB_PATH . 'Ci' . DIRECTORY_SEPARATOR . 'CiLang.php';
+            $langPath = XGP_ROOT . LIB_PATH . 'Ci' . DIRECTORY_SEPARATOR . 'CiLang.php';
 
-            if (!file_exists($ci_lang_path)) {
+            if (!file_exists($langPath)) {
                 // not found
                 throw new Exception('Language file "' . $languageFile . '" not defined');
                 return;
@@ -111,7 +79,7 @@ abstract class BaseController
             }
 
             // use CI library
-            require_once $ci_lang_path;
+            require_once $langPath;
 
             $this->langs = new CiLang();
             $this->langs->load($languageFile, DEFAULT_LANG);

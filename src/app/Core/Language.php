@@ -11,14 +11,16 @@ class Language
 
     /**
      * @param string|array $language_file
+     *
+     * @return mixed
      */
     public function loadLang($language_file, $return = false)
     {
         try {
             // require langugage library
-            $ci_lang_path = XGP_ROOT . LIB_PATH . 'Ci' . DIRECTORY_SEPARATOR . 'CiLang.php';
+            $langPath = XGP_ROOT . LIB_PATH . 'Ci' . DIRECTORY_SEPARATOR . 'CiLang.php';
 
-            if (!file_exists($ci_lang_path)) {
+            if (!file_exists($langPath)) {
                 // not found
                 throw new Exception('Language file "' . $language_file . '" not defined');
                 return;
@@ -30,7 +32,7 @@ class Language
             }
 
             // use CI library
-            require_once $ci_lang_path;
+            require_once $langPath;
 
             if ($return) {
                 $lang = new CiLang();

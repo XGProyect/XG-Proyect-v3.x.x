@@ -281,14 +281,6 @@ class FormatLib
         return ceil($value * $precisionFactor) / $precisionFactor;
     }
 
-    /**
-     * Return the coords in format [g:s:p] and links them to the galaxy
-     *
-     * @param int $galaxy
-     * @param int $system
-     * @param int $planet
-     * @return void
-     */
     public static function prettyCoords(int $galaxy, int $system, int $planet): string
     {
         return UrlHelper::setUrl(

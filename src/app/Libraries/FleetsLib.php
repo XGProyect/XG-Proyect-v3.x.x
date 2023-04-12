@@ -18,7 +18,7 @@ use CiLang;
 
 class FleetsLib
 {
-    public static function shipConsumption(int $ship, array $user): array
+    public static function shipConsumption(int $ship, array $user): int
     {
         if ($user['research_impulse_drive'] >= 5) {
             return Objects::getInstance()->getPrice($ship, 'consumption2');
@@ -27,70 +27,39 @@ class FleetsLib
         }
     }
 
-    /**
-     * targetDistance
-     *
-     * @param int $orig_galaxy Origin Galaxy
-     * @param int $dest_galaxy Destiny Ga
-     * @param int $orig_system Origin System
-     * @param int $dest_system Destiny System
-     * @param int $orig_planet Origin Planet
-     * @param int $dest_planet Destiny Planet
-     *
-     * @return int
-     */
-    public static function targetDistance($orig_galaxy, $dest_galaxy, $orig_system, $dest_system, $orig_planet, $dest_planet)
+    public static function targetDistance(int $origGalaxy, int $destGalaxy, int $origSystem, int $destSystem, int $origPlanet, int $destPlanet): int
     {
         $distance = 5;
 
-        if (($orig_galaxy - $dest_galaxy) != 0) {
-            $distance = abs($orig_galaxy - $dest_galaxy) * 20000;
-        } elseif (($orig_system - $dest_system) != 0) {
-            $distance = abs($orig_system - $dest_system) * 5 * 19 + 2700;
-        } elseif (($orig_planet - $dest_planet) != 0) {
-            $distance = abs($orig_planet - $dest_planet) * 5 + 1000;
+        if (($origGalaxy - $destGalaxy) != 0) {
+            $distance = abs($origGalaxy - $destGalaxy) * 20000;
+        } elseif (($origSystem - $destSystem) != 0) {
+            $distance = abs($origSystem - $destSystem) * 5 * 19 + 2700;
+        } elseif (($origPlanet - $destPlanet) != 0) {
+            $distance = abs($origPlanet - $destPlanet) * 5 + 1000;
         }
 
         return $distance;
     }
 
-    /**
-     * The formula calculates the mission duration
-     *
-     * @param int $percentage      The speed percentage set by the user
-     * @param int $max_fleet_speed Max fleet speed
-     * @param int $distance        The distance
-     * @param int $speed_factor    The game speed factor
-     *
-     * @return int
-     */
-    public static function missionDuration($percentage, $max_fleet_speed, $distance, $speed_factor)
+    public static function missionDuration(int $percentage, int $maxFleetSpeed, int $distance, int $speedFactor): int
     {
         // original formula: 3500 / Factor(percentage) * sqrt($distance * 10 / $max_fleet_speed) + 10)
-        return (35000 / $percentage * sqrt($distance * 10 / $max_fleet_speed) + 10) / $speed_factor;
+        return (35000 / $percentage * sqrt($distance * 10 / $maxFleetSpeed) + 10) / $speedFactor;
     }
 
-    /**
-     * fleetMaxSpeed
-     *
-     * @param array  $fleet_array Fleet
-     * @param int    $fleet       Fleed id
-     * @param string $user        User
-     *
-     * @return int
-     */
-    public static function fleetMaxSpeed($fleet_array, $fleet, $user)
+    public static function fleetMaxSpeed(string $fleetArray, int $fleet, array $user): int
     {
         $pricelist = Objects::getInstance()->getPrice();
         $speed_all = [];
 
         if ($fleet != 0) {
-            $fleet_array = [];
-            $fleet_array[$fleet] = 1;
+            $fleetArray = [];
+            $fleetArray[$fleet] = 1;
         }
 
-        if (!empty($fleet_array) && !is_null($fleet_array)) {
-            foreach ($fleet_array as $ship => $count) {
+        if (!empty($fleetArray) && !is_null($fleetArray)) {
+            foreach ($fleetArray as $ship => $count) {
                 /**
                  * Special condition for Small cargo
                  */
@@ -150,7 +119,7 @@ class FleetsLib
     /**
      * fleetConsumption
      *
-     * @param array $fleet_array      Fleet
+     * @param array $fleetArray      Fleet
      * @param int   $speed_factor     Speed factor
      * @param int   $mission_duration Mission duration
      * @param int   $mission_distance Mission distance
@@ -158,12 +127,12 @@ class FleetsLib
      *
      * @return int
      */
-    public static function fleetConsumption($fleet_array, $speed_factor, $mission_duration, $mission_distance, $user)
+    public static function fleetConsumption($fleetArray, $speed_factor, $mission_duration, $mission_distance, $user)
     {
         $consumption = 0;
         $basic_consumption = 0;
 
-        foreach ($fleet_array as $ship => $count) {
+        foreach ($fleetArray as $ship => $count) {
             if ($ship > 0) {
                 $ship_speed = self::fleetMaxSpeed("", $ship, $user);
                 $ship_consumption = self::shipConsumption($ship, $user);
@@ -177,104 +146,66 @@ class FleetsLib
         return round($consumption);
     }
 
-    /**
-     * getMaxFleets
-     *
-     * @param int $computer_tech Computer tech level
-     * @param int $amiral_level  Amiral available
-     *
-     * @return int
-     */
-    public static function getMaxFleets($computer_tech, $amiral_level)
+    public static function getMaxFleets($computerTech, $amiralLevel): int
     {
-        return OfficiersLib::getMaxComputer($computer_tech, $amiral_level);
+        return OfficiersLib::getMaxComputer($computerTech, $amiralLevel);
     }
 
-    /**
-     * getMaxExpeditions
-     *
-     * @param int $astrophysics_tech Astrophysics Tech level
-     *
-     * @return int
-     */
-    public static function getMaxExpeditions($astrophysics_tech)
+    public static function getMaxExpeditions(int $astrophysicsTech): int
     {
-        return floor(sqrt($astrophysics_tech));
+        return floor(sqrt($astrophysicsTech));
     }
 
-    /**
-     * getMaxColonies
-     *
-     * @param int $astrophysics_tech Astrophysics Tech level
-     *
-     * @return int
-     */
-    public static function getMaxColonies($astrophysics_tech)
+    public static function getMaxColonies($astrophysicsTech): int
     {
-        return ceil($astrophysics_tech / 2);
+        return ceil($astrophysicsTech / 2);
     }
 
-    /**
-     * startLink
-     *
-     * @param array  $fleet_row
-     * @param string $fleet_type
-     *
-     * @return string
-     */
-    public static function startLink($fleet_row, $fleet_type)
+    public static function startLink(array $fleetRow, string $fleetType): string
     {
         $coords = FormatLib::prettyCoords(
-            $fleet_row['fleet_start_galaxy'],
-            $fleet_row['fleet_start_system'],
-            $fleet_row['fleet_start_planet']
+            $fleetRow['fleet_start_galaxy'],
+            $fleetRow['fleet_start_system'],
+            $fleetRow['fleet_start_planet']
         );
 
         $link = "game.php?page=galaxy&mode=3&galaxy=" .
-            $fleet_row['fleet_start_galaxy'] . "&system=" . $fleet_row['fleet_start_system'];
+            $fleetRow['fleet_start_galaxy'] . "&system=" . $fleetRow['fleet_start_system'];
 
-        return UrlHelper::setUrl($link, $coords, '', $fleet_type);
+        return UrlHelper::setUrl($link, $coords, '', $fleetType);
     }
 
-    /**
-     * targetLink
-     *
-     * @param array  $fleet_row
-     * @param string $fleet_type
-     *
-     * @return string
-     */
-    public static function targetLink($fleet_row, $fleet_type)
+    public static function targetLink(array $fleetRow, string $fleetType): string
     {
         $coords = FormatLib::prettyCoords(
-            $fleet_row['fleet_end_galaxy'],
-            $fleet_row['fleet_end_system'],
-            $fleet_row['fleet_end_planet']
+            $fleetRow['fleet_end_galaxy'],
+            $fleetRow['fleet_end_system'],
+            $fleetRow['fleet_end_planet']
         );
 
         $link = "game.php?page=galaxy&mode=3&galaxy=" .
-            $fleet_row['fleet_end_galaxy'] . "&system=" . $fleet_row['fleet_end_system'];
+            $fleetRow['fleet_end_galaxy'] . "&system=" . $fleetRow['fleet_end_system'];
 
-        return UrlHelper::setUrl($link, $coords, '', $fleet_type);
+        return UrlHelper::setUrl($link, $coords, '', $fleetType);
     }
 
     /**
      * fleetResourcesPopup
      *
-     * @param array  $fleet_row  Fleet row
+     * @param array  $fleetRow  Fleet row
      * @param string $text       Text
      * @param string $fleet_type Fleet type
      *
      * @return void
      */
-    public static function fleetResourcesPopup($fleet_row, $text, $fleet_type)
+    public static function fleetResourcesPopup($fleetRow, $text, $fleet_type)
     {
-        $total_resources = $fleet_row['fleet_resource_metal'] + $fleet_row['fleet_resource_crystal'] + $fleet_row['fleet_resource_deuterium'];
+        $total_resources = $fleetRow['fleet_resource_metal'] + $fleetRow['fleet_resource_crystal'] + $fleetRow['fleet_resource_deuterium'];
 
         if ($total_resources != 0) {
-            $popup['fleet_resource_metal'] = FormatLib::prettyNumber($fleet_row['fleet_resource_metal']);
-            $popup['fleet_resource_crystal'] = FormatLib::prettyNumber($fleet_row['fleet_resource_crystal']);
-            $popup['fleet_resource_deuterium'] = FormatLib::prettyNumber($fleet_row['fleet_resource_deuterium']);
+            $popup['fleet_resource_metal'] = FormatLib::prettyNumber($fleetRow['fleet_resource_metal']);
+            $popup['fleet_resource_crystal'] = FormatLib::prettyNumber($fleetRow['fleet_resource_crystal']);
+            $popup['fleet_resource_deuterium'] = FormatLib::prettyNumber($fleetRow['fleet_resource_deuterium']);
 
             $resources_popup = (new Page(new Users()))->jsReady(
                 self::getTemplate()->set(
@@ -299,19 +230,19 @@ class FleetsLib
     /**
      * fleetShipsPopup
      *
-     * @param array  $fleet_row    Fleet row
+     * @param array  $fleetRow    Fleet row
      * @param string $text         Text
      * @param string $fleet_type   Fleet type
      * @param array  $current_user Current user
      *
      * @return void
      */
-    public static function fleetShipsPopup($fleet_row, $text, $fleet_type, $current_user = '')
+    public static function fleetShipsPopup($fleetRow, $text, $fleet_type, $current_user = '')
     {
         $lang = static::loadLanguage(['game/events', 'game/ships']);
         $objects = Objects::getInstance()->getObjects();
 
-        $ships = self::getFleetShipsArray($fleet_row['fleet_array']);
+        $ships = self::getFleetShipsArray($fleetRow['fleet_array']);
         $pop_up = "<a href='#' onmouseover=\"return overlib('";
         $pop_up .= "<table width=200>";
 
@@ -320,27 +251,27 @@ class FleetsLib
             $current_user['premium_officier_technocrat']
         );
 
-        if ($espionage_tech < 2 && $fleet_row['fleet_owner'] != $current_user['user_id']) {
+        if ($espionage_tech < 2 && $fleetRow['fleet_owner'] != $current_user['user_id']) {
             $pop_up .= "<tr><td width=50% align=left><font color=white>" .
             $lang->line('ev_no_fleet_data') . "<font></td></tr>";
-        } elseif ($espionage_tech >= 2 && $espionage_tech < 4 && $fleet_row['fleet_owner'] != $current_user['user_id']) {
+        } elseif ($espionage_tech >= 2 && $espionage_tech < 4 && $fleetRow['fleet_owner'] != $current_user['user_id']) {
             $pop_up .= "<tr><td width=50% align=left><font color=white>" .
-            $lang->line('ev_aproaching') . $fleet_row['fleet_amount'] .
+            $lang->line('ev_aproaching') . $fleetRow['fleet_amount'] .
             $lang->line('ev_ships') . "<font></td></tr>";
         } else {
-            if ($fleet_row['fleet_owner'] != $current_user['user_id']) {
+            if ($fleetRow['fleet_owner'] != $current_user['user_id']) {
                 $pop_up .= "<tr><td width=100% align=left><font color=white>" .
-                $lang->line('ev_aproaching') . $fleet_row['fleet_amount'] . $lang->line('ev_ships') .
+                $lang->line('ev_aproaching') . $fleetRow['fleet_amount'] . $lang->line('ev_ships') .
                     ":<font></td></tr>";
             }
 
             foreach ($ships as $ship => $amount) {
-                if ($fleet_row['fleet_owner'] == $current_user['user_id']) {
+                if ($fleetRow['fleet_owner'] == $current_user['user_id']) {
                     $pop_up .= "<tr><td width=50% align=left><font color=white>" .
                     $lang->language[$objects[$ship]] .
                     ":<font></td><td width=50% align=right><font color=white>" .
                     FormatLib::prettyNumber($amount) . "<font></td></tr>";
-                } elseif ($fleet_row['fleet_owner'] != $current_user['user_id']) {
+                } elseif ($fleetRow['fleet_owner'] != $current_user['user_id']) {
                     if ($espionage_tech >= 4 && $espionage_tech < 8) {
                         $pop_up .= "<tr><td width=50% align=left><font color=white>" .
                         $lang->language[$objects[$ship]] .
@@ -364,15 +295,15 @@ class FleetsLib
     /**
      * enemyLink
      *
-     * @param array $fleet_row Fleet row
+     * @param array $fleetRow Fleet row
      *
      * @return string
      */
-    public static function enemyLink($fleet_row)
+    public static function enemyLink($fleetRow)
     {
-        $url = 'game.php?page=chat&playerId=' . $fleet_row['fleet_owner'];
+        $url = 'game.php?page=chat&playerId=' . $fleetRow['fleet_owner'];
         $image = Functions::setImage(DPATH . '/img/m.gif');
-        $link = $fleet_row['start_planet_user'] . ' ' . UrlHelper::setUrl($url, $image);
+        $link = $fleetRow['start_planet_user'] . ' ' . UrlHelper::setUrl($url, $image);
 
         return $link;
     }
@@ -380,7 +311,7 @@ class FleetsLib
     /**
      * flyingFleetsTable
      *
-     * @param array  $fleet_row    Fleet row
+     * @param array  $fleetRow    Fleet row
      * @param string $Status       Status
      * @param int    $Owner        Owner
      * @param string $Label        Label
@@ -389,7 +320,7 @@ class FleetsLib
      *
      * @return void
      */
-    public static function flyingFleetsTable($fleet_row, $Status, $Owner, $Label, $Record, $current_user, $acs_owner = false)
+    public static function flyingFleetsTable($fleetRow, $Status, $Owner, $Label, $Record, $current_user, $acs_owner = false)
     {
         $lang = static::loadLanguage(['game/events', 'game/missions']);
 
@@ -413,18 +344,18 @@ class FleetsLib
         }
 
         $FleetStatus = [0 => 'flight', 1 => 'holding', 2 => 'return'];
-        $MissionType = $fleet_row['fleet_mission'];
+        $MissionType = $fleetRow['fleet_mission'];
         if ($MissionType != Missions::MISSILE) {
             $FleetContent = self::fleetShipsPopup(
-                $fleet_row,
+                $fleetRow,
                 $lang->line('ev_fleet'),
                 $FleetPrefix . $FleetStyle[$MissionType],
                 $current_user
             );
         }
 
-        $StartType = $fleet_row['fleet_start_type'];
-        $TargetType = $fleet_row['fleet_end_type'];
+        $StartType = $fleetRow['fleet_start_type'];
+        $TargetType = $fleetRow['fleet_end_type'];
 
         if ($Status != 2) {
             if ($StartType == 1) {
@@ -433,8 +364,8 @@ class FleetsLib
                 $StartID = $lang->line('ev_from_the_moon');
             }
 
-            $StartID .= $fleet_row['start_planet_name'] . " ";
-            $StartID .= FleetsLib::startLink($fleet_row, $FleetPrefix . $FleetStyle[$MissionType]);
+            $StartID .= $fleetRow['start_planet_name'] . " ";
+            $StartID .= FleetsLib::startLink($fleetRow, $FleetPrefix . $FleetStyle[$MissionType]);
 
             if ($MissionType != Missions::EXPEDITION) {
                 switch ($TargetType) {
@@ -454,8 +385,8 @@ class FleetsLib
                 $TargetID = $lang->line('ev_the_position');
             }
 
-            $TargetID .= $fleet_row['target_planet_name'] . " ";
-            $TargetID .= FleetsLib::targetLink($fleet_row, $FleetPrefix . $FleetStyle[$MissionType]);
+            $TargetID .= $fleetRow['target_planet_name'] . " ";
+            $TargetID .= FleetsLib::targetLink($fleetRow, $FleetPrefix . $FleetStyle[$MissionType]);
         } else {
             if ($StartType == 1) {
                 $StartID = $lang->line('ev_to_the_planet');
@@ -463,8 +394,8 @@ class FleetsLib
                 $StartID = $lang->line('ev_the_moon');
             }
 
-            $StartID .= $fleet_row['start_planet_name'] . " ";
-            $StartID .= FleetsLib::startLink($fleet_row, $FleetPrefix . $FleetStyle[$MissionType]);
+            $StartID .= $fleetRow['start_planet_name'] . " ";
+            $StartID .= FleetsLib::startLink($fleetRow, $FleetPrefix . $FleetStyle[$MissionType]);
 
             if ($MissionType != Missions::EXPEDITION) {
                 switch ($TargetType) {
@@ -484,14 +415,14 @@ class FleetsLib
                 $TargetID = $lang->line('ev_from_position');
             }
 
-            $TargetID .= $fleet_row['target_planet_name'] . " ";
-            $TargetID .= FleetsLib::targetLink($fleet_row, $FleetPrefix . $FleetStyle[$MissionType]);
+            $TargetID .= $fleetRow['target_planet_name'] . " ";
+            $TargetID .= FleetsLib::targetLink($fleetRow, $FleetPrefix . $FleetStyle[$MissionType]);
         }
 
         if ($MissionType == Missions::MISSILE) {
             $EventString = $lang->line('ev_missile_attack') .
-            " ( " . FleetsLib::getFleetShipsArray($fleet_row['fleet_array'])[Defenses::defense_interplanetary_missile] . " ) ";
-            $Time = $fleet_row['fleet_start_time'];
+            " ( " . FleetsLib::getFleetShipsArray($fleetRow['fleet_array'])[Defenses::defense_interplanetary_missile] . " ) ";
+            $Time = $fleetRow['fleet_start_time'];
             $Rest = $Time - time();
 
             $EventString .= $StartID;
@@ -506,12 +437,12 @@ class FleetsLib
                 $EventString = $lang->line('ev_a');
                 $EventString .= $FleetContent;
                 $EventString .= $lang->line('ev_of');
-                $EventString .= self::enemyLink($fleet_row);
+                $EventString .= self::enemyLink($fleetRow);
             }
 
             switch ($Status) {
                 case 0:
-                    $Time = $fleet_row['fleet_start_time'];
+                    $Time = $fleetRow['fleet_start_time'];
                     $Rest = $Time - time();
 
                     $EventString .= $lang->line('ev_goes');
@@ -522,7 +453,7 @@ class FleetsLib
                     break;
 
                 case 1:
-                    $Time = $fleet_row['fleet_end_stay'];
+                    $Time = $fleetRow['fleet_end_stay'];
                     $Rest = $Time - time();
 
                     $EventString .= $lang->line('ev_goes');
@@ -533,7 +464,7 @@ class FleetsLib
                     break;
 
                 case 2:
-                    $Time = $fleet_row['fleet_end_time'];
+                    $Time = $fleetRow['fleet_end_time'];
                     $Rest = $Time - time();
 
                     $EventString .= $lang->line('ev_comming_back');
@@ -544,7 +475,7 @@ class FleetsLib
             }
 
             $EventString .= self::fleetResourcesPopup(
-                $fleet_row,
+                $fleetRow,
                 $lang->language['type_mission'][$MissionType],
                 $FleetPrefix . $FleetStyle[$MissionType]
             );
@@ -592,25 +523,25 @@ class FleetsLib
     /**
      * Serialize the fleet array
      *
-     * @param array $fleet_array Fleet array
+     * @param array $fleetArray Fleet array
      *
      * @return string
      */
-    public static function setFleetShipsArray(array $fleet_array): string
+    public static function setFleetShipsArray(array $fleetArray): string
     {
-        return serialize($fleet_array);
+        return serialize($fleetArray);
     }
 
     /**
      * Un-serialize the fleet array
      *
-     * @param string $fleet_array Fleet array
+     * @param string $fleetArray Fleet array
      *
      * @return array
      */
-    public static function getFleetShipsArray(string $fleet_array): array
+    public static function getFleetShipsArray(string $fleetArray): array
     {
-        return unserialize($fleet_array);
+        return unserialize($fleetArray);
     }
 
     /**
@@ -639,10 +570,10 @@ class FleetsLib
      *
      * @return void
      */
-    private static function loadLanguage(array $required_lang): CiLang
+    private static function loadLanguage(array $requiredLang): CiLang
     {
         $lang = new Language();
 
-        return $lang->loadLang($required_lang, true);
+        return $lang->loadLang($requiredLang, true);
     }
 }
