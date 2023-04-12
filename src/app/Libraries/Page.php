@@ -664,6 +664,9 @@ class Page
         // PARSE THE MENU AND OTHER DATA
         $parse['dpath'] = DPATH;
         $parse['lm_players'] = $lang->line('lm_players');
+        $parse['lm_production'] = $lang->line('lm_production');
+        $parse['lm_info'] = $lang->line('lm_info');
+        $parse['lm_user_menu'] = $lang->line('lm_user_menu');
         $parse['user_name'] = UrlHelper::setUrl('game.php?page=preferences', $this->current_user['user_name']);
         $parse['menu_block1'] = $menu_block1;
         $parse['menu_block2'] = $menu_block2;
