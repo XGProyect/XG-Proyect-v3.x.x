@@ -1,0 +1,8 @@
+<Files *.*> 
+    deny from all
+    Allow from 127.0.0.1
+</Files>
+<Files "index.php">
+    Order Allow,Deny
+    Allow from all
+</Files>

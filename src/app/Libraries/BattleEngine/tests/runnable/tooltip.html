@@ -1,0 +1,12 @@
+<a><b>integrity</b> <?php echo $pricelist[$idType]['metal']+$pricelist[$idType]['crystal']; ?></a><?php /*fix*/ ?>
+<?php foreach ($combatCaps[$idType] as $i => $k){ ?>
+    <?php if ($i == "sd"){ ?>
+        <?php foreach ($k as $i => $k){ ?>
+            <?php if ($k != 0){ ?>
+                <p><b>RF to <?php echo LangManager::getInstance()->getShipName($i); ?></b> <?php echo $k; ?></p><?php /*fix*/ ?>
+            <?php } ?>
+        <?php } ?>
+    <?php } else{ ?>
+        <p><b><?php echo $i; ?></b> <?php echo $k; ?></p><?php /*fix*/ ?>
+    <?php } ?>
+<?php }?>

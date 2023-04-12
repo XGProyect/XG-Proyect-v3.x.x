@@ -1,0 +1,15 @@
+<!--<font size=4><cite>Round <?php echo $_i ?></cite></font>-->
+<br><br>
+<?php
+$_st = 'Attacker'; 
+$_playerGroup = (isset($_roundBefore))?$_roundBefore->getAfterBattleAttackers():$_round->getAfterBattleAttackers(); 
+include('playerGroup.html');
+?> 
+<br>
+<?php 
+$_st = 'Defender'; 
+$_playerGroup = (isset($_roundBefore))?$_roundBefore->getAfterBattleDefenders():$_round->getAfterBattleDefenders();
+include('playerGroup.html');?>
+<br><br>
+<?php include('round_info.html'); ?>
+<br>

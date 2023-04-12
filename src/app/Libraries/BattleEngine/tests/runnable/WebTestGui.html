@@ -1,0 +1,64 @@
+<html>
+   <head>  
+   <script type="text/javascript" src="tabber.js"></script>
+   <link rel="stylesheet" type="text/css" href="round.css">
+   <link href="tabber.css" media="all" type="text/css" rel="stylesheet">
+   <title>OPBE</title>
+   <script type="text/javascript" src="overlibmws.js"></script>
+   </head>
+   <body>
+      <div id="box_trasparente">
+         <div>
+            <font color="blue">Ogame Probabilistic Battle Engine</font><br>
+            Version: beta 5       <br>
+            Simulations done : <?php echo $count ?> <br>
+            Select vars: 
+            <select name="vars" onchange="window.location = 'WebTest.php?vars='+this.value;";>
+            	<?php foreach($list as $var) { ?>
+            		<option value="<?php echo $var; ?>" <?php if($selectedVar ==  $var) echo "selected"; ?>><?php echo $var; ?> </option>
+            	<?php } ?>
+            </select><br>
+            <a href="WebTest.php?good=1"><img src="good.png"></a><a href="WebTest.php?bad=1"><img src="bad.png"></a> <?php echo $good ?> | <?php echo $bad ?>
+         </div>
+         <form method="post" action="WebTest.php">
+         <input type="hidden" name="lang" value="<?php echo $selectedVar; ?>" />
+         <input type="hidden" name="vars" value="<?php echo $selectedVar; ?>" />
+         <center>
+            <table width= "70%">
+                <tr>
+                    <td align="center" ><?php $type='attacker'; include('techs.html'); ?></td>
+                    <td align="center" ><?php $type='defender'; include('techs.html'); ?></td>
+                </tr>
+                <tr>
+                    <td align="center">
+                        <div id="atab" class="tabber"> 
+                        <?php for($_l=1;$_l<3;$_l++) { ?> 
+                            <div class="tabbertab">
+                                <h3>AttFleet <?php echo $_l ?></h3>
+                                <?php $type='attacker'; include('player.html'); ?>
+                            </div>  
+                        <?php } ?>
+                        </div>
+                    </td>
+                    <td align="center">
+                        <div id="dtab" class="tabber">
+                            <?php for($_l=1;$_l<3;$_l++) { ?>
+                            <div class="tabbertab">
+                                <h3>DefFleet <?php echo $_l ?></h3>
+                                <?php $type='defender'; include('player.html'); ?>
+                            </div>
+                            <?php } ?>
+                        </div>
+                    </td>
+                </tr> 
+            </table>
+            <div id="go">
+               <input type="button" class="submit" value="reset" onClick="this.form.reset()">
+               <input type="submit" class="submit" value="battle!">
+            </center>
+            Debug password = <input type="text" class="rounded" name="debug" value="">
+         </form>
+         <img src="http://www.gnu.org/graphics/agplv3-155x51.png" />
+      </div>
+   </body>
+</html>   
