@@ -22,25 +22,11 @@ final class ErrorHandler
         register_shutdown_function([$this, 'fatalErrorShutdownFunction']);
     }
 
-    /**
-     * Create a new DebugLib object
-     *
-     * @return void
-     */
     private function createNewDebugObject(): void
     {
         $this->debug = new Debug();
     }
 
-    /**
-     * Set the error handler
-     *
-     * @param integer $code
-     * @param string $description
-     * @param string $file
-     * @param string $line
-     * @return boolean
-     */
     final public function errorHandler(int $code, string $description, string $file, int $line): bool
     {
         $displayErrors = strtolower(ini_get("display_errors"));
@@ -59,16 +45,12 @@ final class ErrorHandler
         return true;
     }
 
-    /**
-     * Set a shutdown function on fatal error
-     *
-     * @return void
-     */
     final public function fatalErrorShutdownFunction(): void
     {
         $last_error = error_get_last();
-        if ($last_error['type'] === E_ERROR) {
-            $this->errorHandler(E_ERROR, $last_error['message'], $last_error['file'], $last_error['line']);
+
+        if (!empty($last_error)) {
+            $this->errorHandler($last_error['type'], $last_error['message'], $last_error['file'], $last_error['line']);
         }
     }
 }

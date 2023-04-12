@@ -11,12 +11,12 @@ $system = new Common();
 $system->bootUp('install');
 
 $page = isset($_GET['page']) ? $_GET['page'] : 'installation';
-$file_name = XGP_ROOT . INSTALL_PATH . $page . '.php';
+$file_name = XGP_ROOT . INSTALL_PATH . $page . 'Controller.php';
 
 if (file_exists($file_name)) {
     include $file_name;
 
-    $class_name = 'App\Http\Controllers\Install\\' . ucfirst($page);
+    $class_name = 'App\Http\Controllers\Install\\' . ucfirst($page) . 'Controller';
 
     (new $class_name())->index();
 }

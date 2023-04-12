@@ -3,6 +3,7 @@
 namespace App\Core;
 
 use App\Libraries\DebugLib;
+use Exception;
 use mysqli;
 
 class Database
@@ -68,47 +69,35 @@ class Database
         }
     }
 
-    /**
-     * tryConnection
-     *
-     * @param string $host Host
-     * @param string $user User
-     * @param string $pass Pass
-     *
-     * @return mysqli
-     */
-    public function tryConnection($host = '', $user = '', $pass = null)
+    public function tryConnection(string $host = '', string $user = '', string $pass = null): bool
     {
-        if (empty($host) or empty($user)) {
-            return;
-        }
+        try {
+            if (empty($host) or empty($user)) {
+                return false;
+            }
 
-        $this->connection = @new mysqli($host, $user, $pass);
+            $this->connection = new mysqli($host, $user, $pass);
 
-        if ($this->connection->connect_error) {
+            if ($this->connection->connect_error) {
+                return false;
+            }
+
+            // force utf8 to avoid weird characters
+            $this->connection->set_charset("utf8");
+
+            return true;
+        } catch (Exception $e) {
             return false;
         }
-
-        // force utf8 to avoid weird characters
-        $this->connection->set_charset("utf8");
-
-        return true;
     }
 
-    /**
-     * tryDatabase
-     *
-     * @param string $db_name DB Name
-     *
-     * @return boolean
-     */
-    public function tryDatabase($db_name)
+    public function tryDatabase(string $db_name): bool
     {
         if (empty($db_name)) {
             return false;
         }
 
-        $db_select = @$this->connection->select_db($db_name);
+        $db_select = $this->connection->select_db($db_name);
 
         if ($db_select) {
             return true;
@@ -117,12 +106,7 @@ class Database
         }
     }
 
-    /**
-     * Test if MySQLi connection was stablished
-     *
-     * @return boolean
-     */
-    public function testConnection()
+    public function testConnection(): bool
     {
         if (is_resource($this->connection) or is_object($this->connection)) {
             if ($this->connection->ping()) {
@@ -133,12 +117,7 @@ class Database
         return false;
     }
 
-    /**
-     * closeConnection
-     *
-     * @return boolean
-     */
-    public function closeConnection()
+    public function closeConnection(): bool
     {
         if (isset($this->connection) && (is_resource($this->connection) or is_object($this->connection))) {
             if ($this->connection->connect_errno == 0) {
@@ -153,19 +132,12 @@ class Database
         return false;
     }
 
-    /**
-     * query
-     *
-     * @param string $sql SQL String
-     *
-     * @return mixed
-     */
-    public function query($sql = '')
+    public function query(string $sql = '')
     {
         if ($sql != '') {
             $sql = $this->prepareSql($sql);
             $this->last_query = $sql;
-            $result = @$this->connection->query($sql);
+            $result = $this->connection->query($sql);
 
             $this->confirmQuery($result);
 
@@ -175,19 +147,12 @@ class Database
         return false;
     }
 
-    /**
-     * queryFetch
-     *
-     * @param string $sql SQL String
-     *
-     * @return mixed
-     */
-    public function queryFetch($sql = '')
+    public function queryFetch(string $sql = '')
     {
         if ($sql != '') {
             $sql = $this->prepareSql($sql);
             $this->last_query = $sql;
-            $result = @$this->connection->query($sql);
+            $result = $this->connection->query($sql);
 
             $this->confirmQuery($result);
 
@@ -197,26 +162,23 @@ class Database
         return false;
     }
 
-    /**
-     * queryFetchAll
-     *
-     * @param string $sql SQL String
-     *
-     * @return mixed
-     */
     public function queryFetchAll($sql = '')
     {
-        if ($sql != '') {
-            $sql = $this->prepareSql($sql);
-            $this->last_query = $sql;
-            $result = @$this->connection->query($sql);
+        try {
+            if ($sql != '') {
+                $sql = $this->prepareSql($sql);
+                $this->last_query = $sql;
+                $result = $this->connection->query($sql);
 
-            $this->confirmQuery($result);
+                $this->confirmQuery($result);
 
-            return $this->fetchAll($result);
+                return $this->fetchAll($result);
+            }
+
+            return false;
+        } catch (Exception $e) {
+            return false;
         }
-
-        return false;
     }
 
     /**
@@ -228,50 +190,33 @@ class Database
      */
     public function queryMulty($sql = '')
     {
-        if ($sql != '') {
-            $sql = $this->prepareSql($sql);
-            $this->last_query = $sql;
-            $result = @$this->connection->multi_query($sql);
+        try {
+            if ($sql != '') {
+                $sql = $this->prepareSql($sql);
+                $this->last_query = $sql;
+                $result = $this->connection->multi_query($sql);
 
-            $this->confirmQuery($result);
+                $this->confirmQuery($result);
 
-            return $result;
+                return $result;
+            }
+
+            return false;
+        } catch (Exception $e) {
+            return false;
         }
-
-        return false;
     }
 
-    /**
-     * escapeValue
-     *
-     * @param mixed $value Value to escape
-     *
-     * @return mixed
-     */
     public function escapeValue($value)
     {
         return $this->connection->real_escape_string($value);
     }
 
-    /**
-     * fetchArray
-     *
-     * @param array $result_set Result set
-     *
-     * @return array
-     */
     public function fetchArray($result_set)
     {
         return $result_set->fetch_array(MYSQLI_ASSOC);
     }
 
-    /**
-     * fetchAll
-     *
-     * @param array $result_set Result set
-     *
-     * @return array
-     */
     public function fetchAll($result_set)
     {
         if (function_exists('mysqli_fetch_all')) {
@@ -287,114 +232,52 @@ class Database
         return $results_array;
     }
 
-    /**
-     * fetchAssoc
-     *
-     * @param array $result_set Result set
-     *
-     * @return array
-     */
     public function fetchAssoc($result_set)
     {
         return $result_set->fetch_assoc();
     }
 
-    /**
-     * fetchRow
-     *
-     * @param array $result_set Result set
-     *
-     * @return array
-     */
     public function fetchRow($result_set)
     {
         return $result_set->fetch_row();
     }
 
-    /**
-     * numRows
-     *
-     * @param array $result_set Result set
-     *
-     * @return int
-     */
     public function numRows($result_set)
     {
         return $result_set->num_rows;
     }
 
-    /**
-     * numFields
-     *
-     * @param array $result_set Result set
-     *
-     * @return int
-     */
     public function numFields($result_set)
     {
         return $result_set->field_count;
     }
 
-    /**
-     * insertId
-     *
-     * @return int
-     */
     public function insertId()
     {
         // get the last id inserted over the current db connection
         return $this->connection->insert_id;
     }
 
-    /**
-     * affectedRows
-     *
-     * @return array
-     */
     public function affectedRows()
     {
         return $this->connection->affected_rows;
     }
 
-    /**
-     * serverInfo
-     *
-     * @return array
-     */
     public function serverInfo()
     {
         return $this->connection->server_info;
     }
 
-    /**
-     * freeResult
-     *
-     * @param array $result_set Result set
-     *
-     * @return void
-     */
-    public function freeResult($result_set)
+    public function freeResult($result_set): void
     {
         $result_set->free_result();
     }
 
-    /**
-     * Set the auto commit for transactions
-     *
-     * @param bool $status
-     *
-     * @return void
-     */
-    public function setAutoCommit(bool $status = true)
+    public function setAutoCommit(bool $status = true): void
     {
         $this->connection->autocommit($status);
     }
 
-    /**
-     * Start a transaction
-     *
-     * @return void
-     */
     public function beginTransaction()
     {
         // disable auto commit
@@ -403,11 +286,6 @@ class Database
         $this->connection->begin_transaction();
     }
 
-    /**
-     * Confirm and commit a transaction
-     *
-     * @return void
-     */
     public function commitTransaction()
     {
         $this->connection->commit();
@@ -416,11 +294,6 @@ class Database
         $this->setAutoCommit();
     }
 
-    /**
-     * Rollback changes since transaction begin
-     *
-     * @return void
-     */
     public function rollbackTransaction()
     {
         $this->connection->rollback();
@@ -429,13 +302,6 @@ class Database
         $this->setAutoCommit();
     }
 
-    /**
-     * backupDb
-     *
-     * @param array $tables Data
-     *
-     * @return string
-     */
     public function backupDb($tables = '*')
     {
         // GET ALL THE TABLES
@@ -496,13 +362,6 @@ class Database
         return $writed;
     }
 
-    /**
-     * confirmQuery
-     *
-     * @param array $result Result set
-     *
-     * @return void
-     */
     private function confirmQuery($result)
     {
         if (!$result) {
@@ -518,12 +377,6 @@ class Database
         $this->debug->add($this->last_query);
     }
 
-    /**
-     * Prepares the query string to be ready to be executed
-     *
-     * @param string $query
-     * @return string
-     */
     private function prepareSql(string $query): string
     {
         return strtr($query, ['{xgp_prefix}' => $this->db_data['prefix']]);

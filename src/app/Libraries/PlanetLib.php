@@ -4,20 +4,18 @@ namespace App\Libraries;
 
 use App\Core\Enumerators\PlanetTypesEnumerator;
 use App\Core\Language;
-use App\Core\XGPCore;
 use App\Libraries\Formulas;
 use App\Libraries\Functions;
 use App\Models\Libraries\PlanetLib as PlanetLibModel;
+use CiLang;
 
-class PlanetLib extends XGPCore
+class PlanetLib
 {
+    private CiLang $langs;
     protected PlanetLibModel $planetslibModel;
-    private $langs;
 
     public function __construct()
     {
-        parent::__construct();
-
         // load model
         $this->planetslibModel = Functions::model('libraries/planetlib');
 
