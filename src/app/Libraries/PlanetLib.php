@@ -134,12 +134,7 @@ class PlanetLib extends XGPCore
         return false;
     }
 
-    /**
-     * Load CI language
-     *
-     * @return void
-     */
-    private function loadLanguage()
+    private function loadLanguage(): void
     {
         $lang = new Language();
         $lang = $lang->loadLang('game/global', true);

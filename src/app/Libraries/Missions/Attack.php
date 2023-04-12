@@ -13,6 +13,7 @@ use App\Libraries\PlanetLib;
 use App\Libraries\UpdatesLibrary;
 use Battle;
 use BattleReport;
+use CiLang;
 use DebugManager;
 use Defense;
 use Fleet;
@@ -29,12 +30,8 @@ class Attack extends Missions
     public const DEFENSE_MIN_ID = 401;
     public const DEFENSE_MAX_ID = 408;
 
-    /**
-     * Contains each player hyperspace technology level
-     *
-     * @var array
-     */
-    private $hyperspace_technology = [];
+    private array $hyperspace_technology = [];
+    protected CiLang $langs;
 
     public function __construct()
     {

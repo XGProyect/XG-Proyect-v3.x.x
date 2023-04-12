@@ -12,24 +12,12 @@ use App\Libraries\OfficiersLib;
 
 class DevelopmentsLib extends XGPCore
 {
-    /**
-     * Return a new instance of Template
-     *
-     * @return Template
-     */
     public static function getTemplate(): Template
     {
         return new Template();
     }
 
-    /**
-     * setBuildingPage
-     *
-     * @param int $element Element
-     *
-     * @return string
-     */
-    public static function setBuildingPage($element)
+    public static function setBuildingPage(int $element): string
     {
         $resources_array = [1, 2, 3, 4, 12, 22, 23, 24];
         $station_array = [14, 15, 21, 31, 33, 34, 44];
@@ -46,31 +34,14 @@ class DevelopmentsLib extends XGPCore
         return 'overview';
     }
 
-    /**
-     * maxFields
-     *
-     * @param array $current_planet Current planet
-     *
-     * @return void
-     */
-    public static function maxFields($current_planet)
+    public static function maxFields($current_planet): int
     {
         return $current_planet['planet_field_max'] + (
             $current_planet[parent::$objects->getObjects(33)] * FIELDS_BY_TERRAFORMER
         );
     }
 
-    /**
-     * Get the development price
-     *
-     * @param array $current_user
-     * @param array $current_planet
-     * @param integer $element
-     * @param boolean $incremental
-     * @param boolean $destroy
-     * @return void
-     */
-    public static function developmentPrice(array $current_user, array $current_planet, int $element, $incremental = true, $destroy = false)
+    public static function developmentPrice(array $current_user, array $current_planet, int $element, $incremental = true, $destroy = false): array
     {
         $resource = parent::$objects->getObjects();
         $pricelist = parent::$objects->getPrice();

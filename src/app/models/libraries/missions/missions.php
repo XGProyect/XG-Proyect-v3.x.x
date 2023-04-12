@@ -8,66 +8,38 @@ use App\Libraries\StatisticsLibrary;
 
 class Missions extends Model
 {
-    /**
-     * Delete a fleet by its ID
-     *
-     * @param int $fleet_id Fleet ID
-     *
-     * @return void
-     */
-    public function deleteFleetById($fleet_id)
+    public function deleteFleetById(int $fleedId): void
     {
-        if ((int) $fleet_id > 0) {
+        if ((int) $fleedId > 0) {
             $this->db->query(
-                "DELETE FROM `" . FLEETS . "` WHERE `fleet_id` = '" . $fleet_id . "'"
+                "DELETE FROM `" . FLEETS . "` WHERE `fleet_id` = '" . $fleedId . "'"
             );
         }
     }
 
-    /**
-     * Update fleet status to return by ID
-     *
-     * @param int $fleet_id Fleet ID
-     *
-     * @return void
-     */
-    public function updateFleetStatusToReturnById($fleet_id)
+    public function updateFleetStatusToReturnById(int $fleedId): void
     {
-        if ((int) $fleet_id > 0) {
+        if ((int) $fleedId > 0) {
             $this->db->query(
                 "UPDATE " . FLEETS . " SET
                     `fleet_mess` = '1'
-                WHERE `fleet_id` = '" . $fleet_id . "'"
+                WHERE `fleet_id` = '" . $fleedId . "'"
             );
         }
     }
 
-    /**
-     * Update fleet status to stay by ID
-     *
-     * @param int $fleet_id Fleet ID
-     *
-     * @return void
-     */
-    public function updateFleetStatusToStayById($fleet_id)
+    public function updateFleetStatusToStayById($fleedId): void
     {
-        if ((int) $fleet_id > 0) {
+        if ((int) $fleedId > 0) {
             $this->db->query(
                 "UPDATE " . FLEETS . " SET
                     `fleet_mess` = '2'
-                WHERE `fleet_id` = '" . $fleet_id . "'"
+                WHERE `fleet_id` = '" . $fleedId . "'"
             );
         }
     }
 
-    /**
-     * Update planet ships by the provided coords and with the provided data
-     *
-     * @param array $data Data to update
-     *
-     * @return void
-     */
-    public function updatePlanetsShipsByCoords($data = [])
+    public function updatePlanetsShipsByCoords(array $data = []): void
     {
         if (is_array($data)) {
             $this->db->query(
@@ -85,14 +57,7 @@ class Missions extends Model
         }
     }
 
-    /**
-     * Update planet resources by the provided coords and with the provided data
-     *
-     * @param array $data Data to update
-     *
-     * @return void
-     */
-    public function updatePlanetResourcesByCoords($data = [])
+    public function updatePlanetResourcesByCoords(array $data = []): void
     {
         if (is_array($data)) {
             $this->db->query(
@@ -109,14 +74,7 @@ class Missions extends Model
         }
     }
 
-    /**
-     * Get all planet data
-     *
-     * @param array $data Data to update
-     *
-     * @return array
-     */
-    public function getAllPlanetDataByCoords($data = [])
+    public function getAllPlanetDataByCoords(array $data = []): void
     {
         if (is_array($data)) {
             return $this->db->queryFetch(
@@ -139,13 +97,13 @@ class Missions extends Model
     /**
      * Get all user data by user ID
      *
-     * @param int $user_id User ID
+     * @param int $userId User ID
      *
      * @return array
      */
-    public function getAllUserDataByUserId($user_id)
+    public function getAllUserDataByUserId(int $userId)
     {
-        if ((int) $user_id > 0) {
+        if ((int) $userId > 0) {
             return $this->db->queryFetch(
                 "SELECT u.*,
                     r.*,
@@ -155,7 +113,7 @@ class Missions extends Model
                 INNER JOIN `" . RESEARCH . "` AS r ON r.research_user_id = u.user_id
                 INNER JOIN `" . PREMIUM . "` AS pr ON pr.premium_user_id = u.user_id
                 INNER JOIN `" . PREFERENCES . "` AS pref ON pref.preference_user_id = u.user_id
-                WHERE u.`user_id` = '" . $user_id . "'
+                WHERE u.`user_id` = '" . $userId . "'
                 LIMIT 1;"
             );
         }
@@ -229,7 +187,7 @@ class Missions extends Model
      *
      * @return array
      */
-    public function getAllFleetsByEndCoordsAndTimes($data = [])
+    public function getAllFleetsByEndCoordsAndTimes(array $data = [])
     {
         if (is_array($data)) {
             return $this->db->queryFetchAll(
@@ -254,7 +212,7 @@ class Missions extends Model
      *
      * @return void
      */
-    public function updatePlanetDebrisByCoords($data = [])
+    public function updatePlanetDebrisByCoords(array $data = [])
     {
         if (is_array($data)) {
             $this->db->query(
@@ -274,13 +232,13 @@ class Missions extends Model
     /**
      * Get user technologies by the provided user ID
      *
-     * @param int $user_id User ID
+     * @param int $userId User ID
      *
      * @return array
      */
-    public function getTechnologiesByUserId($user_id)
+    public function getTechnologiesByUserId($userId)
     {
-        if ((int) $user_id > 0) {
+        if ((int) $userId > 0) {
             return $this->db->queryFetch(
                 "SELECT u.user_name,
                     r.research_weapons_technology,
@@ -290,7 +248,7 @@ class Missions extends Model
                 FROM " . USERS . " AS u
                     INNER JOIN `" . RESEARCH . "` AS r
                         ON r.research_user_id = u.user_id
-                WHERE u.user_id = '" . $user_id . "';"
+                WHERE u.user_id = '" . $userId . "';"
             );
         }
     }
@@ -302,7 +260,7 @@ class Missions extends Model
      *
      * @return array
      */
-    public function getMoonIdByCoords($data = [])
+    public function getMoonIdByCoords(array $data = [])
     {
         if (is_array($data)) {
             return $this->db->queryFetch(
@@ -325,7 +283,7 @@ class Missions extends Model
      *
      * @return void
      */
-    public function insertReport($data = [])
+    public function insertReport(array $data = [])
     {
         if (is_array($data)) {
             $this->db->query(
@@ -346,7 +304,7 @@ class Missions extends Model
      *
      * @return void
      */
-    public function updateReturningFleetData($data = [])
+    public function updateReturningFleetData(array $data = [])
     {
         if (is_array($data)) {
             $this->db->query(
@@ -384,7 +342,7 @@ class Missions extends Model
      *
      * @return void
      */
-    public function updatePlanetLossesById($data = [])
+    public function updatePlanetLossesById(array $data = [])
     {
         if (is_array($data)) {
             // Updating defenses and ships on planet
@@ -408,7 +366,7 @@ class Missions extends Model
      *
      * @return array
      */
-    public function getPlanetAndUserCountsCounts($data = [])
+    public function getPlanetAndUserCountsCounts(array $data = [])
     {
         if (is_array($data)) {
             return $this->db->queryFetch(
@@ -440,7 +398,7 @@ class Missions extends Model
      *
      * @return void
      */
-    public function getFriendlyPlanetData($data = [])
+    public function getFriendlyPlanetData(array $data = [])
     {
         if (is_array($data)) {
             return $this->db->queryFetch(
@@ -502,7 +460,7 @@ class Missions extends Model
      *
      * @return void
      */
-    public function updateColonizationStatistics($data = [])
+    public function updateColonizationStatistics(array $data = [])
     {
         if (is_array($data)) {
             $this->db->query(
@@ -526,7 +484,7 @@ class Missions extends Model
      *
      * @return void
      */
-    public function updateColonizatonReturningFleet($data = [])
+    public function updateColonizatonReturningFleet(array $data = [])
     {
         if (is_array($data)) {
             $this->db->query(
@@ -562,7 +520,7 @@ class Missions extends Model
      *
      * @return array
      */
-    public function getDestroyerData($data = [])
+    public function getDestroyerData(array $data = [])
     {
         if (is_array($data)) {
             return $this->db->queryFetch(
@@ -594,7 +552,7 @@ class Missions extends Model
      *
      * @return array
      */
-    public function getTargetToDestroyData($data = [])
+    public function getTargetToDestroyData(array $data = [])
     {
         if (is_array($data)) {
             return $this->db->queryFetch(
@@ -632,7 +590,7 @@ class Missions extends Model
      *
      * @return void
      */
-    public function updateFleetsStatusToMakeThemReturn($data = [])
+    public function updateFleetsStatusToMakeThemReturn(array $data = [])
     {
         if (is_array($data)) {
             $this->db->queryMulty(
@@ -660,7 +618,7 @@ class Missions extends Model
      *
      * @return void
      */
-    public function updateUserCurrentPlanetByCoordsAndUserId($data = [])
+    public function updateUserCurrentPlanetByCoordsAndUserId(array $data = [])
     {
         if (is_array($data)) {
             $this->db->query(
@@ -684,7 +642,7 @@ class Missions extends Model
      *
      * @return void
      */
-    public function updatePlanetDataAfterDestruction($data = [])
+    public function updatePlanetDataAfterDestruction(array $data = [])
     {
         if (is_array($data)) {
             $this->db->query(
@@ -735,7 +693,7 @@ class Missions extends Model
      *
      * @return void
      */
-    public function updateFleetArrayById($data = [])
+    public function updateFleetArrayById(array $data = [])
     {
         if (is_array($data)) {
             $this->db->query(
@@ -754,7 +712,7 @@ class Missions extends Model
      *
      * @return void
      */
-    public function updateFleetResourcesById($data = [])
+    public function updateFleetResourcesById(array $data = [])
     {
         if (is_array($data)) {
             $this->db->query(
@@ -782,7 +740,7 @@ class Missions extends Model
      *
      * @return void
      */
-    public function getMissileAttackerDataByCoords($data = [])
+    public function getMissileAttackerDataByCoords(array $data = [])
     {
         if (is_array($data)) {
             return $this->db->queryFetch(
@@ -804,7 +762,7 @@ class Missions extends Model
      *
      * @return void
      */
-    public function getMissileTargetDataByCoords($data = [])
+    public function getMissileTargetDataByCoords(array $data = [])
     {
         if (is_array($data)) {
             return $this->db->queryFetch(
@@ -827,7 +785,7 @@ class Missions extends Model
      *
      * @return void
      */
-    public function updatePlanetDefenses($data = [])
+    public function updatePlanetDefenses(array $data = [])
     {
         if (is_array($data)) {
             $this->db->query(
@@ -851,7 +809,7 @@ class Missions extends Model
      *
      * @return void
      */
-    public function updatePlanetDebrisFieldAndFleet($data = [])
+    public function updatePlanetDebrisFieldAndFleet(array $data = [])
     {
         if (is_array($data)) {
             $this->db->query(
@@ -877,7 +835,7 @@ class Missions extends Model
      *
      * @return void
      */
-    public function getPlanetDebris($data = [])
+    public function getPlanetDebris(array $data = [])
     {
         if (is_array($data)) {
             return $this->db->queryFetch(
@@ -909,7 +867,7 @@ class Missions extends Model
      *
      * @return array
      */
-    public function getSpyUserDataByCords($data = [])
+    public function getSpyUserDataByCords(array $data = [])
     {
         if (is_array($data)) {
             return $this->db->queryFetch(
@@ -942,7 +900,7 @@ class Missions extends Model
      *
      * @return array
      */
-    public function getInquiredUserDataByCords($data = [])
+    public function getInquiredUserDataByCords(array $data = [])
     {
         if (is_array($data)) {
             return $this->db->queryFetch(
@@ -983,7 +941,7 @@ class Missions extends Model
      *
      * @return void
      */
-    public function updateCrystalDebrisByPlanetId($data = [])
+    public function updateCrystalDebrisByPlanetId(array $data = [])
     {
         if (is_array($data)) {
             $this->db->query(

@@ -7,32 +7,15 @@ use Exception;
 
 abstract class XGPCore
 {
-    /**
-     * @var mixed
-     */
-    protected static $lang;
-
-    /**
-     * @var mixed
-     */
+    protected CiLang $langs;
     protected static $objects;
 
-    /**
-     * __construct
-     *
-     * @return void
-     */
     public function __construct()
     {
         $this->setObjectsClass();
     }
 
-    /**
-     * setObjectsClass
-     *
-     * @return void
-     */
-    private function setObjectsClass()
+    private function setObjectsClass(): void
     {
         self::$objects = new Objects();
     }
@@ -41,13 +24,12 @@ abstract class XGPCore
      * Load a language file using CI Library
      *
      * @param string|array $language_file
-     * @return void
      */
     protected function loadLang($language_file): void
     {
         try {
             // require langugage library
-            $ci_lang_path = XGP_ROOT . LIB_PATH . 'Ci' . DIRECTORY_SEPARATOR . 'Lang.php';
+            $ci_lang_path = XGP_ROOT . LIB_PATH . 'Ci' . DIRECTORY_SEPARATOR . 'CiLang.php';
 
             if (!file_exists($ci_lang_path)) {
                 // not found

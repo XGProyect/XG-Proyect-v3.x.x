@@ -6,27 +6,13 @@ use App\Core\XGPCore;
 use App\Libraries\FleetsLib;
 use App\Libraries\Functions;
 use App\Libraries\UpdatesLibrary;
+use App\Models\Libraries\Missions\Missions as MissionsModel;
 
 class Missions extends XGPCore
 {
-    /**
-     * Contains the model
-     *
-     * @var Missions
-     */
-    protected $missionsModel;
-
-    /**
-     * @var mixed
-     */
+    protected MissionsModel $missionsModel;
     protected $resource;
-    /**
-     * @var mixed
-     */
     protected $pricelist;
-    /**
-     * @var mixed
-     */
     protected $combat_caps;
 
     public function __construct()
