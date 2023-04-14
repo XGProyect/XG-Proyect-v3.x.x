@@ -1,4 +1,4 @@
-ARG PHP_VERSION=7.3
+ARG PHP_VERSION=7.4
 FROM php:${PHP_VERSION}-apache
 
 # install the PHP extensions we need
@@ -14,9 +14,6 @@ RUN set -ex; \
 		libfreetype6-dev \
 	; \
 	\
-	# for PHP <= 7.3
-	(docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr || \
-	# for PHP >= 7.4
 	docker-php-ext-configure gd --with-freetype --with-jpeg); \
 	docker-php-ext-install gd mysqli opcache zip; \
 	\
