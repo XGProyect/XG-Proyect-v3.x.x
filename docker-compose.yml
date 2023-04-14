@@ -3,38 +3,38 @@ services:
   xgproyect-v3:
     build:
       context: .
-      dockerfile: Dockerfile
+      args:
+        PHP_VERSION: 7.4
     container_name: xgproyect-v3
+    restart: always
     ports:
-      - 127.0.0.1:80:80
-      - 127.0.0.1:443:443
+      - 80:80
+      - 443:443
     volumes:
-      - ./src/upload:/var/www/html
+      - ./src:/var/www/html
     depends_on:
       - db
-    networks:
-      - xgp_network
   db:
     image: mysql:5.7
+    restart: on-failure
     ports:
-      - 127.0.0.1:33060:3306 # change ip if required
+      - 33060:3306
     volumes:
       - ./data:/docker-entrypoint-initdb.d
     environment:
       MYSQL_DATABASE: xgp
       MYSQL_ROOT_PASSWORD: root
-    networks:
-      - xgp_network
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     ports:
-        - "8081:80"
+      - 8081:80
     environment:
-        MYSQL_ROOT_PASSWORD: root
-        PMA_HOST: db
-    networks:
-        - xgp_network
-
-networks:
-    xgp_network:
-      external: true
+      MYSQL_ROOT_PASSWORD: root
+      PMA_HOST: db
+  mailhog:
+    image: mailhog/mailhog
+    container_name: mailhog
+    restart: on-failure
+    ports:
+      - 1025:1025 # smtp server
+      - 8025:8025 # web ui

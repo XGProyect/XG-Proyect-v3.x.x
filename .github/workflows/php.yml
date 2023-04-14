@@ -2,41 +2,58 @@ name: PHP Tests
 
 on:
   push:
-    branches: [ test-ci, xgp-3.2 ]
+    branches: '**'
   pull_request:
 
 jobs:
   test:
+    name: Run Unit Testing
     runs-on: ubuntu-20.04
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
+
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '7.4'
+        extensions: gd, mysqli, opcache, zip
 
     - name: Validate composer.json and composer.lock
-      run: composer validate
+      run: composer validate --working-dir=src
 
     - name: Install dependencies
-      run: composer install --prefer-dist --no-progress --no-suggest
+      run: composer install --prefer-dist --no-progress --no-suggest --working-dir=src
 
-      # Not fully working at the moment, ignore errors
     - name: Run phpunit
-      run: composer test
-      continue-on-error: true
+      run: composer phpunit --working-dir=src
+  lint:
+    name: Run Lint
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '7.4'
+        extensions: gd, mysqli, opcache, zip
+
+    - name: Validate composer.json and composer.lock
+      run: composer validate --working-dir=src
+
+    - name: Install dependencies
+      run: composer install --prefer-dist --no-progress --no-suggest --working-dir=src
 
     - name: Run phplint
-      uses: overtrue/phplint@2.1.0
+      uses: overtrue/phplint@4.1.0
       with:
-        path: src/upload/
-        options: --exclude=*.log
-  min-version:
+        path: src/
+        options: --exclude=*.log --exclude=vendor
+  php-cs-fixer:
+    name: Run PHP CS Fixer
     runs-on: ubuntu-20.04
     steps:
-    - uses: actions/checkout@v2
-
-    - name: Validate composer.json and composer.lock
-      run: composer validate
-
-    - name: Install dependencies
-      run: composer install --prefer-dist --no-progress --no-suggest
-
-    - name: Run phpcompatinfo
-      run: composer run-script phpcompatinfo
+    - uses: actions/checkout@v3
+    - uses: docker://oskarstark/php-cs-fixer-ga:3.4.0.1
+      with:
+        args: --diff --dry-run src/

@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" bootstrap="bootstrap.php" colors="true" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.0/phpunit.xsd" cacheDirectory=".phpunit.cache">
+  <coverage>
+    <include>
+      <directory>app/</directory>
+    </include>
+  </coverage>
+  <testsuites>
+    <testsuite name="xgp_application">
+      <directory>app/</directory>
+    </testsuite>
+  </testsuites>
+  <logging>
+    <testdoxHtml outputFile="build/logs/testdox.html"/>
+  </logging>
+</phpunit>

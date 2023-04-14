@@ -1,0 +1,51 @@
+{
+    "name": "xgproyect/xgproyect",
+    "description": "XGP Open-source OGame Clon",
+    "keywords": [
+        "ogame",
+        "clon"
+    ],
+    "type": "project",
+    "homepage": "https://xgproyect.org",
+    "support": {
+        "source": "https://github.com/XGProyect/XG-Proyect-v3.x.x",
+        "issues": "https://github.com/XGProyect/XG-Proyect-v3.x.x/issues"
+    },
+    "authors": [
+        {
+            "name": "Lucas Kovács",
+            "homepage": "https://github.com/LucasKovacs",
+            "role": "Lead"
+        }
+    ],
+    "license": "GPL-3.0-only",
+    "require": {
+        "php": "^7.4|^8.0",
+        "phpmailer/phpmailer": "^6.5",
+        "eftec/bladeone": "^4.2"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.0",
+        "bartlett/php-compatinfo": "6.1"
+    },
+    "config": {
+        "allow-plugins": {
+            "composer/package-versions-deprecated": true
+        }
+    },
+    "autoload": {
+        "classmap": [
+            "app/"
+        ]
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "scripts": {
+        "phpcompatinfo": [
+            "vendor/bin/phpcompatinfo --progress analyser:run ./app/"
+        ],
+        "phpunit": [
+            "vendor/bin/phpunit --config tests/phpunit.xml --testsuite xgp_application"
+        ]
+    }
+}

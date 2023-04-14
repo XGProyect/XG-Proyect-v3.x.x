@@ -1,4 +1,5 @@
-FROM php:7.3-apache
+ARG PHP_VERSION=7.4
+FROM php:${PHP_VERSION}-apache
 
 # install the PHP extensions we need
 RUN set -ex; \
@@ -10,9 +11,10 @@ RUN set -ex; \
 		libjpeg-dev \
 		libpng-dev \
 		libzip-dev \
+		libfreetype6-dev \
 	; \
 	\
-	docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr; \
+	docker-php-ext-configure gd --with-freetype --with-jpeg; \
 	docker-php-ext-install gd mysqli opcache zip; \
 	\
 # reset apt-mark's "manual" list so that "purge --auto-remove" will remove all build dependencies
@@ -44,6 +46,6 @@ RUN a2enmod rewrite expires
 
 VOLUME /var/www/html
 
-COPY . /var/www/html
+COPY --chown=www-data:www-data ./src /var/www/html
 
 CMD ["apache2-foreground"]

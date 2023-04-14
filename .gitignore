@@ -1,25 +1,31 @@
 #
 # application
 #
-src/upload/application/config/config.php
+src/config/config.php
 
 #
-# writable
+# public
 #
-src/upload/writable/backups/*.sql
-src/upload/writable/cache/*.html
-/src/upload/writable/logs/*.txt
+src/public/compiles/*
+
+#
+# storage
+#
+src/storage/backups/*.sql
+src/storage/cache/*.html
+src/storage/logs/*.txt
 
 #
 # tests
 #
-src/upload/tests/.phpunit.result.cache
-src/upload/tests/build/
-src/upload/tests/_reports/
+src/tests/.phpunit.result.cache
+src/tests/build/
+src/tests/_reports/
 
 #
 # docs
 #
+.phpdoc/*
 /docs/*
 
 #
