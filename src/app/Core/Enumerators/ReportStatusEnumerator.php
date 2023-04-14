@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Libraries\enumerators;
+namespace App\Core\Enumerators;
 
 abstract class ReportStatusEnumerator
 {
