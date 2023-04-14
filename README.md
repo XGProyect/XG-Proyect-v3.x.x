@@ -29,6 +29,7 @@ Download and install XG Proyect is easy.
 
 - Go to the releases section and get the latest stable release.  
 - Then unzip the upload dir in your localhost, rename that folder to wathever you want.  
+- Open your terminal and go to the directory that you just created and run composer install.
 - Point you browser to your localhost and follow the step by step instructions provided by the installation software.
 
 ### Composer
