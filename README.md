@@ -26,7 +26,7 @@ MySQLi 5.7 or greater
 ## How to get XG Proyect?
 
 ### Manually
-This is the simplest and easiest way if you're not a technical person. Download and install XG Proyect will be easier.
+This is the simplest and easiest way if you're not a technical person. Download and install XG Proyect will be easy! ;)
 
 - Go to the releases section and get the latest stable release, and simply download it. It is the file `.zip` then you can do whatever you want with that package, use it on your local stack, hosting or even docker!
 
