@@ -1,14 +1,5 @@
 <?php
-/**
- * Admin File
- *
- * @category Root File
- * @package  N/A
- * @author   XG Proyect Team
- * @license  http://www.xgproyect.org XG Proyect
- * @link     http://www.xgproyect.org
- * @version  3.1.0
- */
+
 use App\Core\common;
 use App\Libraries\Adm\AdministrationLib;
 use App\Libraries\Functions;
@@ -16,12 +7,12 @@ use App\Libraries\Functions;
 define('IN_ADMIN', true);
 define('XGP_ROOT', realpath(dirname(__DIR__)) . DIRECTORY_SEPARATOR);
 
-require XGP_ROOT . 'app' . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'Common.php';
+require XGP_ROOT . 'app' . DIRECTORY_SEPARATOR . 'Core' . DIRECTORY_SEPARATOR . 'Common.php';
 
 $system = new Common();
 $system->bootUp('admin');
 
-include_once XGP_ROOT . 'app' . DIRECTORY_SEPARATOR . 'libraries' . DIRECTORY_SEPARATOR . 'adm' . DIRECTORY_SEPARATOR . 'AdministrationLib.php';
+include_once XGP_ROOT . 'app' . DIRECTORY_SEPARATOR . 'Libraries' . DIRECTORY_SEPARATOR . 'Adm' . DIRECTORY_SEPARATOR . 'AdministrationLib.php';
 
 // check updates
 $page = filter_input(INPUT_GET, 'page');
@@ -30,7 +21,7 @@ if (is_null($page)) {
     $page = 'home';
 }
 
-$file_name = XGP_ROOT . ADMIN_PATH . $page . 'Controller.php';
+$file_name = XGP_ROOT . ADMIN_PATH . ucfirst($page) . 'Controller.php';
 
 // logout
 if ($page == 'logout') {

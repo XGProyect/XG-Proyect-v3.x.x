@@ -5,7 +5,7 @@ use App\Libraries\Functions;
 
 define('XGP_ROOT', realpath(dirname(__DIR__)) . DIRECTORY_SEPARATOR);
 
-require XGP_ROOT . 'app' . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'Common.php';
+require XGP_ROOT . 'app' . DIRECTORY_SEPARATOR . 'Core' . DIRECTORY_SEPARATOR . 'Common.php';
 
 $system = new Common();
 $system->bootUp('game');
@@ -30,7 +30,7 @@ $page = strtr(
     ]
 );
 
-$file_name = XGP_ROOT . GAME_PATH . $page . 'Controller.php';
+$file_name = XGP_ROOT . GAME_PATH . ucfirst($page) . 'Controller.php';
 
 if (isset($page)) {
     // logout
