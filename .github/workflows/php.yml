@@ -86,7 +86,7 @@ jobs:
     - name: Setup database
       env:
         DATABASE_URL: "mysql://root:xgproyect@127.0.0.1:${{ job.services.nginx.ports['3306'] }}/xgp?serverVersion=mariadb-10.6.5"
-      run: cd vendor/bartlett/php-compatinfo-db/ && ../../bin/doctrine orm:schema-tool:create && bin/compatinfo-db db:init
+      run: cd src/vendor/bartlett/php-compatinfo-db/ && ../../bin/doctrine orm:schema-tool:create && bin/compatinfo-db db:init
 
     - name: Run phpcompatinfo
       env:
