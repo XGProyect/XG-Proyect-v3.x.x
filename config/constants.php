@@ -12,7 +12,7 @@
  *
  */
 // GAME FILES VERSION
-define('SYSTEM_VERSION', '3.3.0');
+define('SYSTEM_VERSION', '3.4.0');
 
 // DEBUG MODE
 define('DEBUG_MODE', false);
