@@ -8,12 +8,10 @@
         <div id="trailer" class="inner-box last clearfix">
             <h2 id="trailer">{aj_home_trailer}</h2>
             <div id="flashTrailer">
-                <object width="425" height="270">
-                    <param name="movie" value="public/flash/flashtrailer.swf">
-                    <param name="wmode" value="opaque">
-                    <embed src="public/flash/flashtrailer.swf" type="application/x-shockwave-flash" wmode="opaque" allowfullscreen="true" allowscriptaccess="always" width="425" height="270">
-
-                </object>
+                <video width="425" height="270" controls autoplay muted poster="public/video/trailer_play.png" style="background-color: #000">
+                    <source src="public/video/trailer.mp4" type="video/mp4">
+                    <img src="public/video/trailer_play.png">
+                </video>
             </div>
         </div>
 
