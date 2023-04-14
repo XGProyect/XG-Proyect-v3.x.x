@@ -47,7 +47,6 @@ class RepairController extends BaseController
             $parse['display'] = 'block';
             $parse['head'] = $this->template->set('adm/repair_row_head_view', $this->langs->language);
             $parse['tables'] = '';
-            $parse['np_general'] = '';
             $parse['results'] = '';
 
             foreach ($tables as $row) {
@@ -69,7 +68,6 @@ class RepairController extends BaseController
             $parse['display'] = 'none';
             $parse['head'] = $this->template->set('adm/repair_result_head_view', $this->langs->language);
             $parse['tables'] = '';
-            $parse['np_general'] = '';
 
             if (isset($_POST['table']) && is_array($_POST['table'])) {
                 $result_rows = '';

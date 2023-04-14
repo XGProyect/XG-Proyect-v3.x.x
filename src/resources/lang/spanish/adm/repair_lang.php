@@ -1,6 +1,7 @@
 <?php
 
 $lang = [
+    'db_general' => 'General',
     'db_not_opt' => '¡Error!',
     'db_not_check' => '¡Hay errores!',
     'db_opt' => '¡Optimizado!',
