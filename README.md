@@ -13,7 +13,7 @@
 About
 ====
 
-XG Proyect (XGP) is a web browser game based on the famous OGame. Our goal is to offer a package that is as similar as possible to the original.
+XG Proyect (XGP) is a web browser game based on the famous OGame. Our goal is to offer a package that is as similar as possible to the original, but keeping their original design.
 
 Official Website: https://www.xgproyect.org/  
 Live Server: https://www.xgproyect.net/  
