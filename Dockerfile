@@ -14,7 +14,7 @@ RUN set -ex; \
 		libfreetype6-dev \
 	; \
 	\
-	docker-php-ext-configure gd --with-freetype --with-jpeg); \
+	docker-php-ext-configure gd --with-freetype --with-jpeg; \
 	docker-php-ext-install gd mysqli opcache zip; \
 	\
 # reset apt-mark's "manual" list so that "purge --auto-remove" will remove all build dependencies
