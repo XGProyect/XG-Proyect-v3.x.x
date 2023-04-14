@@ -332,7 +332,7 @@ class Database
                     $return .= 'INSERT INTO ' . $table . ' VALUES(';
 
                     for ($j = 0; $j < $num_fields; $j++) {
-                        $row[$j] = addslashes($row[$j]);
+                        $row[$j] = addslashes((string)$row[$j]);
                         $row[$j] = str_replace("\n", "\\n", $row[$j]);
 
                         if (isset($row[$j])) {
