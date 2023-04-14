@@ -46,6 +46,6 @@ RUN a2enmod rewrite expires
 
 VOLUME /var/www/html
 
-COPY --chown=www-data:www-data ./src /var/www/html
+COPY --chown=www-data:www-data . /var/www/html
 
 CMD ["apache2-foreground"]

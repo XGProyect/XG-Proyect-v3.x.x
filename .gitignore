@@ -1,26 +1,26 @@
 #
 # application
 #
-src/config/config.php
+config/config.php
 
 #
 # public
 #
-src/public/compiles/*
+public/compiles/*
 
 #
 # storage
 #
-src/storage/backups/*.sql
-src/storage/cache/*.html
-src/storage/logs/*.txt
+storage/backups/*.sql
+storage/cache/*.html
+storage/logs/*.txt
 
 #
 # tests
 #
-src/tests/.phpunit.result.cache
-src/tests/build/
-src/tests/_reports/
+tests/.phpunit.result.cache
+tests/build/
+tests/_reports/
 
 #
 # docs
