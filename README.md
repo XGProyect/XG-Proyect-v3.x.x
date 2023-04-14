@@ -1,4 +1,5 @@
 
+
 <p align="center"
     <a href="https://www.xgproyect.org/" target="_blank">
         <img align="center" img src="https://xgproyect.org/wp-content/uploads/2019/10/xgp-new-logo-black.png" width="250px" title="XG Proyect" alt="xgp-logo">
@@ -25,20 +26,21 @@ MySQLi 5.7 or greater
 ## How to get XG Proyect?
 
 ### Manually
-Download and install XG Proyect is easy.
+This is the simplest and easiest way if you're not a technical person. Download and install XG Proyect will be easier.
 
-- Go to the releases section and get the latest stable release.  
-- Then unzip the upload dir in your localhost, rename that folder to wathever you want.  
-- Open your terminal and go to the directory that you just created and run composer install.
-- Point you browser to your localhost and follow the step by step instructions provided by the installation software.
+- Go to the releases section and get the latest stable release, and simply download it. It is the file `.zip` then you can do whatever you want with that package, use it on your local stack, hosting or even docker!
 
 ### Composer
+Choose this option if you want to contribute to the project.
+
+Composer which will get you everything, including docker and would install the test dependencies like PHPUnit.
 
 ```
 composer create-project xgproyect/xgproyect
 ```
 
 ## How to run XG Proyect?
+### Docker
 Easiest way to do it, is using Docker.
 
 ```
@@ -50,15 +52,18 @@ You can also build with different PHP versions:
 docker build -t xgproyect:7.4 --build-arg PHP_VERSION=7.4 .
 ```
 
-Or build and run, altogether, specifying a PHP version:
+Or build and run, altogether, specifying a **PHP version**:
 ```
-docker-compose build --build-arg PHP_VERSION=8.0 && docker-compose up -d
+docker-compose build --build-arg PHP_VERSION=8.2 && docker-compose up -d
 ```
 
 Simple change the **PHP version** to any other **version** that you'd like to test.
 
+### Other ways
+- Other options are also possible like XAMPP, or using it on your own hosting.
+
 ## MailHog
-XGP uses MailHog and PHPMailer as tools for better mailing support. MailHog allows you to intercept emails locally and receive them under a convenient panel.
+XGP uses MailHog and PHPMailer as tools for better mailing support. MailHog allows you to intercept emails **locally** and receive them under a convenient panel.
 
 Read our <a href="https://github.com/XGProyect/XG-Proyect-v3.x.x/wiki/MailHog-usage-and-setup" target="_blank">MailHog guide</a> to get started.
 
