@@ -1,0 +1,51 @@
+<?php
+$lang = [
+    'of_title' => 'Offiziere',
+    'of_recruit' => 'Rekrutieren',
+    'of_inactive' => 'Inaktiv',
+    'of_darkmatter_description' => 'Dunkle Materie ist eine Substanz, deren Speicherung erst seit wenigen Standardjahren möglich ist und noch viel Aufwand erfordert. Es kann zu ungeahnten Energiemengen verarbeitet werden. Die Methoden zur Gewinnung von dunkler Materie sind komplex und voller Risiken, was sie sehr wertvoll macht. Nur gekaufte und noch verfügbare dunkle Materie schützt ein Konto vor Löschung!',
+    'of_darkmatter_description_short' => 'Kommandanten und Offiziere können mit dieser seltenen Substanz angeheuert werden.',
+    'of_get_darkmatter' => 'Hole dir dunkle Materie',
+    'of_months' => '3 Monate für',
+    'of_week' => '1 Woche für',
+    'of_time_remaining_less' => 'Aktiv für weitere %s',
+    'of_time_remaining_one' => '1 Tag verbleibend',
+    'of_time_remaining_many' => 'Noch länger als %s aktiv',
+    'of_hire_commander' => 'Kommandant anheuern',
+    'of_hire_admiral' => 'Admiral anheuern',
+    'of_hire_engineer' => 'Ingenieur anheuern',
+    'of_hire_geologist' => 'Geologen anheuern',
+    'of_hire_technocrat' => 'Technokrat anheuern',
+    'of_add_premium_officier_commander' => '+40 Favoriten, Gebäudewarteschlange, Imperiumsansicht, Abkürzungen, Transportscanner, werbefrei* (*ausgenommen: spielbezogene Referenzen)',
+    'of_add_premium_officier_admiral' => 'Max. Flottenslots +2, Max. Expeditionen +1, Verbesserte Fluchtrate der Flotte',
+    'of_add_premium_officier_engineer' => 'Halbiert Verluste bei Verteidigung, +10 % Energieproduktion',
+    'of_add_premium_officier_geologist' => '+10 % Minenproduktion',
+    'of_add_premium_officier_technocrat' => '+2 Spionagestufen, 25 % weniger Forschungszeit',
+    'officiers' => [
+        601 => [
+            'name' => 'Kommandant',
+            'description' => 'Die Kommandanten-Position hat sich in der modernen Kriegsführung etabliert. Aufgrund der vereinfachten Befehlsstruktur können Anweisungen schneller bearbeitet werden. Mit dem Kommandanten haben Sie Ihr gesamtes Imperium im Blick! Dadurch können Sie Strukturen entwickeln, die Sie Ihrem Feind einen Schritt näher bringen.',
+            'benefits' => '+40 Favoriten, Gebäudewarteschlange, Imperiumsansicht, Abkürzungen, Transportscanner, werbefrei',
+        ],
+        602 => [
+            'name' => 'Admiral',
+            'description' => 'Der Flottenadmiral ist ein erfahrener Kriegsveteran und erfahrener Stratege. Auch im härtesten Gefecht schafft er es, sich einen Überblick zu verschaffen und den Kontakt zu seinen untergeordneten Admiralen zu halten. Der Flottenadmiral ist auch ein versierter Computerprogrammierer, der in einer Notsituation zwei zusätzliche Plätze erhalten kann, um seine Schlachtflotten zu steuern. Er bietet auch einen zusätzlichen Expeditionsslot und ermöglicht die Weitergabe von Befehlen an die Flotte, die detailliert angeben, welche Ressourcen beim Plündern nach einem erfolgreichen Angriff priorisiert werden sollen.',
+            'benefits' => 'Max. Flottenslots +2, Max. Expeditionen +1, Verbesserte Fluchtrate der Flotte',
+        ],
+        603 => [
+            'name' => 'Ingenieur',
+            'description' => 'Der Ingenieur ist ein Spezialist für Energiemanagement und Verteidigungsfähigkeiten. In Friedenszeiten erhöht er die Energie der Kolonien und sorgt für eine gleichmäßige Energieverteilung über alle Netze. Im Falle eines feindlichen Angriffs leitet er sofort die gesamte Kraft an alle Verteidigungsmechanismen weiter und vermeidet eine eventuelle Überlastung, was zu geringeren Verteidigungsverlusten während eines Kampfes führt.',
+            'benefits' => 'Halbiert Verluste bei Verteidigung, +10 % Energieproduktion',
+        ],
+        604 => [
+            'name' => 'Geologe',
+            'description' => 'Der Geologe ist Experte für Astro-Mineralogie und Kristallographie. Er unterstützt seine Teams in Metallurgie und Chemie, während er sich auch um die interplanetare Kommunikation kümmert, um die Verwendung und Veredelung des Rohstoffs im gesamten Imperium zu optimieren. Durch den Einsatz modernster Vermessungsausrüstung kann der Geologe optimale Gebiete für den Bergbau lokalisieren und die Bergbauproduktion um 10 % steigern.',
+            'benefits' => '+10 % Minenproduktion',
+        ],
+        605 => [
+            'name' => 'Technokrat',
+            'description' => 'Die Gilde der Technokraten besteht aus genialen Wissenschaftlern, und Sie werden sie immer über dem Reich finden, wo jeder menschlichen Logik die Stirn geboten würde. Seit Tausenden von Jahren hat kein normaler Mensch jemals den Code eines Technokraten geknackt. Der Technokrat begeistert die Forscher des Imperiums mit seiner Anwesenheit.',
+            'benefits' => '+2 Spionagestufen, 25 % weniger Forschungszeit',
+        ],
+    ],
+];

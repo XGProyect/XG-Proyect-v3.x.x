@@ -1,0 +1,20 @@
+<?php
+$lang = [
+    'an_title' => 'Ankündigung',
+    'an_sub_title' => 'Von hier aus können Sie Ankündigungen an alle Server-Spieler senden.',
+    'an_subject' => 'Betreff',
+    'an_general' => 'Allgemein',
+    'an_none' => 'Ankündigung',
+    'an_characters' => 'Zeichen',
+    'an_send_as' => 'Senden als',
+    'an_send_as_message' => 'Nachricht',
+    'an_send_as_email' => 'Email (20 pro Eintrag)',
+    'an_send_message' => 'Sende Nachricht',
+    'an_not_sent' => 'Wir können Ihre Nachricht nicht zustellen!',
+    'an_sent' => 'Nachricht erfolgreich gesendet!',
+    'an_delivery_result' => '<strong>Email Übertragung:</strong><br>%s',
+    'an_info' => 'Sie können %player% verwenden, um Benutzernamen anzusprechen und die Nachricht personalisierter zu machen! Das Tag wird durch den Benutzername ersetzt, sobald die Nachricht gesendet wird.',
+    'an_email_sent' => 'Gesendet!',
+    'an_email_failed' => 'Fehlgeschlagen!',
+    'al_color' => 'Farbe auswählen',
+];

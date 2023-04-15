@@ -1,0 +1,21 @@
+<?php
+$lang = [
+    'rp_your_planet' => 'Dein Planet',
+    'rp_coords' => 'Position',
+    'rp_planet_name' => 'Name',
+    'rp_actions' => 'Funktionen',
+    'rp_abandon_planet' => 'Kolonie verlassen',
+    'rp_planet_rename' => 'umbenennen',
+    'rp_planet_rename_action' => 'umbenennen',
+    'rp_security_request' => 'Sicherheitsabfrage',
+    'rp_security_confirm' => 'Bitte bestätigen Sie das Löschen des Planeten.',
+    'rp_with_pass' => 'indem Sie Ihr Passwort eingeben',
+    'rp_password' => 'Passwort',
+    'rp_delete_planet' => 'Planet löschen!',
+    'rp_newname_error' => 'Sie haben ein ungültiges Zeichen eingegeben. Sie können nur alphanumerische Zeichen eingeben.',
+    'rp_planet_name_changed' => 'Planetenname wurde geändert!',
+    'rp_abandon_planet_not_possible' => 'Es ist nicht möglich, einen Planeten zu verlassen, auf dem sich Flotten bewegen',
+    'rp_planet_abandoned' => 'Planet erfolgreich verlassen',
+    'rp_principal_planet_cant_abanone' => 'Du kannst deinen Hauptplaneten nicht löschen!',
+    'rp_wrong_pass' => 'Falsches Passwort, versuchen Sie es erneut.',
+];

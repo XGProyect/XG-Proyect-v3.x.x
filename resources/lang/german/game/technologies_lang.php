@@ -1,0 +1,20 @@
+<?php
+$lang = [
+    'research' => 'Forschung',
+    'research_espionage_technology' => 'Spionagetechnologie',
+    'research_computer_technology' => 'Computertechnologie',
+    'research_weapons_technology' => 'Waffentechnologie',
+    'research_shielding_technology' => 'Schildtechnologie',
+    'research_armour_technology' => 'Rüstungstechnologie',
+    'research_energy_technology' => 'Energie-Technologie',
+    'research_hyperspace_technology' => 'Hyperspace Technologie',
+    'research_combustion_drive' => 'Verbrennungsantrieb',
+    'research_impulse_drive' => 'Impulsantrieb',
+    'research_hyperspace_drive' => 'Hyperspace-Antrieb',
+    'research_laser_technology' => 'Lasertechnologie',
+    'research_ionic_technology' => 'Ionentechnologie',
+    'research_plasma_technology' => 'Plasmatechnologie',
+    'research_intergalactic_research_network' => 'Intergalaktisches Forschungsnetzwerk',
+    'research_astrophysics' => 'Astrophysik',
+    'research_graviton_technology' => 'Gravitonen-Technologie',
+];
