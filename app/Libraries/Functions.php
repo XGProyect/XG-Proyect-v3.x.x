@@ -300,7 +300,6 @@ abstract class Functions
                 $mail->Port = !empty(self::readConfig('mailing_smtp_port')) ? self::readConfig('mailing_smtp_port') : null;
                 $mail->SMTPSecure = !empty(self::readConfig('mailing_smtp_crypto')) ? self::readConfig('mailing_smtp_crypto') : null;
                 $mail->Timeout = !empty(self::readConfig('mailing_smtp_timeout')) ? self::readConfig('mailing_smtp_timeout') : null;
-                $mail->CharSet = "UTF-8";
 
                 if (
                     !empty(self::readConfig('mailing_smtp_user')) &&
