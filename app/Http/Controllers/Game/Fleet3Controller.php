@@ -126,7 +126,7 @@ class Fleet3Controller extends BaseController
                     $list_of_ships[] = [
                         'ship_id' => $ship_id,
                         'consumption' => FleetsLib::shipConsumption($ship_id, $this->user),
-                        'speed' => FleetsLib::fleetMaxSpeed('', $ship_id, $this->user),
+                        'speed' => FleetsLib::fleetMaxSpeed(null, $ship_id, $this->user),
                         'capacity' => FleetsLib::getMaxStorage(
                             $price[$ship_id]['capacity'],
                             $this->_research->getCurrentResearch()->getResearchHyperspaceTechnology()

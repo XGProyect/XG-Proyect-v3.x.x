@@ -42,13 +42,16 @@ class FleetsLib
         return $distance;
     }
 
-    public static function missionDuration(int $percentage, int $maxFleetSpeed, int $distance, int $speedFactor): int
+    public static function missionDuration(int $percentage, int $maxFleetSpeed, int $distance, int $speedFactor): float
     {
         // original formula: 3500 / Factor(percentage) * sqrt($distance * 10 / $max_fleet_speed) + 10)
         return (35000 / $percentage * sqrt($distance * 10 / $maxFleetSpeed) + 10) / $speedFactor;
     }
 
-    public static function fleetMaxSpeed(string $fleetArray, int $fleet, array $user): int
+    /**
+     * @return mixed
+     */
+    public static function fleetMaxSpeed(?array $fleetArray, int $fleet, array $user)
     {
         $pricelist = Objects::getInstance()->getPrice();
         $speed_all = [];
@@ -134,7 +137,7 @@ class FleetsLib
 
         foreach ($fleetArray as $ship => $count) {
             if ($ship > 0) {
-                $ship_speed = self::fleetMaxSpeed("", $ship, $user);
+                $ship_speed = self::fleetMaxSpeed(null, $ship, $user);
                 $ship_consumption = self::shipConsumption($ship, $user);
                 $spd = 35000 / ($mission_duration * $speed_factor - 10) * sqrt($mission_distance * 10 / $ship_speed);
 
