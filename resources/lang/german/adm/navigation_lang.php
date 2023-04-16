@@ -1,7 +1,7 @@
 <?php
 $lang = [
-    'nv_search_for' => 'Search for...',
-    'nv_alert_center' => 'Alerts Center',
-    'nv_new_download' => 'There\'s a new version available!',
-    'nv_logout' => 'Logout',
+    'nv_search_for' => 'Suchen nach...',
+    'nv_alert_center' => 'Benachrichtigungszentrum',
+    'nv_new_download' => 'Es ist eine neue Version verfügbar!',
+    'nv_logout' => 'Ausloggen',
 ];

@@ -1,9 +1,9 @@
 <?php
 $lang = [
-    'se_server_parameters' => 'Server settings',
+    'se_server_parameters' => 'Servereinstellungen',
     'se_name' => 'Name',
     'se_logo' => 'Logo',
-    'se_lang' => 'Language',
+    'se_lang' => 'Sprache',
     'se_general_speed' => 'General speed',
     'se_normal_speed' => 'Default general speed: 1<br>Maximum recommended speed: 100',
     'se_normal_speed_resoruces' => 'Default production speed: 1<br>Maximum recommended speed: 100',

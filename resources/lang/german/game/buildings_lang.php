@@ -34,7 +34,7 @@ $lang = [
     ],
     'bd_building_queue_build_order' => 'Baureihenfolge',
     'bd_building_queue_destroy_order' => 'Abrissreihenfolge',
-    'bd_building_queue_not_enough_resources' => 'Das %s von Gebäude %s Level %s auf %s konnte nicht durchgeführt werden.<br><br>Ungenügende Ressourcen: %s.',
+    'bd_building_queue_not_enough_resources' => 'Das %s von Gebäude %s Stufe %s auf %s konnte nicht durchgeführt werden.<br><br>Ungenügende Ressourcen: %s.',
     'bd_building_queue_not_enough_resources_from' => 'Systemnachricht',
     'bd_building_queue_not_enough_resources_subject' => 'Produktion abgebrochen',
 ];

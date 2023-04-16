@@ -31,7 +31,7 @@ $lang = [
     'write_message' => 'Nachricht verfassen',
     'homeworld' => 'Heimatwelt',
     'module_not_accesible' => 'Seite konnte nicht gefunden werden.',
-    'level' => 'Level ',
+    'level' => 'Stufe ',
 
     // banning
     'bg_account_banned_message' => 'DEIN KONTO WURDE GESPERRT',

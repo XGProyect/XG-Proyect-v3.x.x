@@ -1,7 +1,7 @@
 <?php
 $lang = [
-    'ready_to_leave' => 'Ready to Leave?',
-    'ready_to_leave_instructions' => 'Select "Logout" below if you are ready to end your current session.',
-    'ready_to_leave_cancel' => 'Cancel',
-    'ready_to_leave_logout' => 'Logout',
+    'ready_to_leave' => 'Bereit zu gehen?',
+    'ready_to_leave_instructions' => 'Wählen Sie unten "Abmelden", wenn Sie bereit sind, Ihre aktuelle Sitzung zu beenden.',
+    'ready_to_leave_cancel' => 'Abbrechen',
+    'ready_to_leave_logout' => 'Abmelden',
 ];

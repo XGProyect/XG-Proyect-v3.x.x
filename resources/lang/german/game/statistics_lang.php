@@ -2,9 +2,9 @@
 $lang = [
     'st_player' => 'Spieler',
     'st_alliance' => 'Allianz',
-    'st_points' => 'Punkten',
+    'st_points' => 'Punkte',
     'st_fleets' => 'Flottenstärke',
-    'st_researh' => 'Forschungslevel',
+    'st_researh' => 'Forschungsstufe',
     'st_buildings' => 'Gebäudestärke',
     'st_defenses' => 'Verteidigungsstärke',
     'st_position' => 'Rang',

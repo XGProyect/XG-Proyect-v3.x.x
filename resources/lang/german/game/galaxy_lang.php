@@ -82,7 +82,7 @@ $lang = [
     'gl_no_action' => 'Keine Aktionen verfügbar.',
     'gl_player_vacation_mode' => 'Spieler im Urlaubsmodus',
     // lines below will be probably moved to a new controller that handles missiles launch
-    'gl_silo_level' => 'Dein Raketensilo muss mindestens auf Level 4 sein',
+    'gl_silo_level' => 'Dein Raketensilo muss mindestens auf Stufe 4 sein',
     'gl_impulse_drive_required' => 'Du musst den Impulsantrieb erforschen.',
     'gl_not_send_other_galaxy' => 'Du kannst Raketen nicht in eine andere Galaxie senden.',
     'gl_planet_doesnt_exists' => 'Die anvisierte Welt existiert nicht.',
