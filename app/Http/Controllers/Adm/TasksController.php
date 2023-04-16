@@ -10,6 +10,7 @@ use App\Libraries\Adm\AdministrationLib as Administration;
 use App\Libraries\FormatLib as Format;
 use App\Libraries\Functions;
 use App\Libraries\TimingLibrary as Timing;
+use DateTime;
 
 class TasksController extends BaseController
 {
@@ -78,7 +79,7 @@ class TasksController extends BaseController
         if ($this->isTaskScheduled($task)) {
             $task_time = Functions::readConfig($task);
             $next_run = Timing::formatExtendedDate($task_time);
-            $last_run = Format::prettyTime(time() - $task_time);
+            $last_run = Format::prettyTimeAgo(date('Y-m-d H:i:s', (int) $task_time)) . ' ago';
         }
 
         return [

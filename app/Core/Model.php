@@ -15,19 +15,11 @@ abstract class Model
         $this->setNewDb();
     }
 
-    /**
-     * Destructor
-     */
     public function __destruct()
     {
         $this->db->closeConnection();
     }
 
-    /**
-     * Creates a new Database object
-     *
-     * @return void
-     */
     private function setNewDb(): void
     {
         $this->db = new Database();

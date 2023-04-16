@@ -38,9 +38,7 @@ class Database
     }
 
     /**
-     * Open connection
-     *
-     * @return void
+     * @return mixed
      */
     public function openConnection()
     {
