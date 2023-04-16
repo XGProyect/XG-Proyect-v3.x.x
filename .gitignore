@@ -42,5 +42,5 @@ nbproject/
 #
 # composer
 #
-vendor
+/vendor
 composer.lock
