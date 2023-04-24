@@ -596,10 +596,6 @@ class Page
                 continue;
             }
 
-            if (!OfficiersLib::isOfficierActive($this->current_user['premium_officier_commander']) && $data[0] == 'empire') {
-                continue;
-            }
-
             // BUILD URL
             if ($data[2] != '') {
                 $link = 'game.php?page=' . $data[0] . '&' . $data[2];

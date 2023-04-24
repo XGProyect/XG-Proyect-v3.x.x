@@ -17,7 +17,7 @@ $lang = [
     'of_hire_engineer' => 'Contratar ingeniero',
     'of_hire_geologist' => 'Contratar geólogo',
     'of_hire_technocrat' => 'Contratar tecnócrata',
-    'of_add_premium_officier_commander' => '+40 favoritos, Lista de construcción, Visión de imperio, Accesos rápidos, Visión de recursos en transportes entrantes, Sin publicidad* (*excepto mensajes sobre el juego)',
+    'of_add_premium_officier_commander' => '+40 favoritos, Lista de construcción, Accesos rápidos, Visión de recursos en transportes entrantes, Sin publicidad* (*excepto mensajes sobre el juego)',
     'of_add_premium_officier_admiral' => 'Huecos de flota máximos +2, tasa de retirada de flotas mejorada',
     'of_add_premium_officier_engineer' => 'Minimiza las perdidas de las defensas a la mitad, +10% de producción de energía',
     'of_add_premium_officier_geologist' => '+10% producción de mineral',
@@ -26,7 +26,7 @@ $lang = [
         601 => [
             'name' => 'Comandante',
             'description' => 'El puesto de Comandante se ha establecido por si mismo en la guerra moderna. A causa del simplificado manejo de las estructuras, las instrucciones pueden procesarse más rápidamente. ¡Con él serás capaz de tener una visión general de tu imperio! Esto te permitirá desarrollar estructuras que te llevan a estar a la delantera de tu enemigo.',
-            'benefits' => '+40 favoritos, Lista de construcción, Visión del imperio, Vista de galaxia mejorada, Filtro de mensajes, Visión de recursos en transportes entrantes, Sin publicidad',
+            'benefits' => '+40 favoritos, Lista de construcción, Vista de galaxia mejorada, Filtro de mensajes, Visión de recursos en transportes entrantes, Sin publicidad',
         ],
         602 => [
             'name' => 'Almirante',

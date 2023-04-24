@@ -17,7 +17,7 @@ $lang = [
     'of_hire_engineer' => 'Hire Engineer',
     'of_hire_geologist' => 'Hire Geologist',
     'of_hire_technocrat' => 'Hire Technocrat',
-    'of_add_premium_officier_commander' => '+40 favourites, building queue, empire view, shortcuts, transport scanner, advertisement free* (*excludes: game related references)',
+    'of_add_premium_officier_commander' => '+40 favourites, building queue, shortcuts, transport scanner, advertisement free* (*excludes: game related references)',
     'of_add_premium_officier_admiral' => 'Max. fleet slots +2, Max. expeditions +1, Improved fleet escape rate',
     'of_add_premium_officier_engineer' => 'Halves losses to defences, +10% energy production',
     'of_add_premium_officier_geologist' => '+10% mine production',
@@ -26,7 +26,7 @@ $lang = [
         601 => [
             'name' => 'Commander',
             'description' => 'The Commander-position has established itself in modern warfare. Because of the simplified command structure, instructions can be handled faster. With Commander you are able to overview your entire empire! This allows you to develop structures that bring you one step closer to your enemy.',
-            'benefits' => '+40 favourites, Building queue, Empire view, Transport scanner, Advertisement free',
+            'benefits' => '+40 favourites, Building queue, Transport scanner, Advertisement free',
         ],
         602 => [
             'name' => 'Admiral',
