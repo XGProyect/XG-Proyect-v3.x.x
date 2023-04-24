@@ -157,7 +157,7 @@ class Fleet extends IterableUtil
         ob_start();
         $_fleet = $this;
         $_st = '';
-        require OPBEPATH . 'views/fleet.html';
+        require OPBEPATH . 'Views/fleet.html';
         return ob_get_clean();
     }
 

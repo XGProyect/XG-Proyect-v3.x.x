@@ -101,7 +101,7 @@ class PlayerGroup extends IterableUtil
         ob_start();
         $_playerGroup = $this;
         $_st = '';
-        require OPBEPATH . 'views/playerGroup.html';
+        require OPBEPATH . 'Views/playerGroup.html';
         return ob_get_clean();
     }
 

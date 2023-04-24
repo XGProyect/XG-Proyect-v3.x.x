@@ -3,6 +3,7 @@
 namespace App\Libraries\BattleEngine\Core;
 
 use App\Libraries\BattleEngine\Models\PlayerGroup;
+use App\Libraries\BattleEngine\Utils\Events;
 use App\Libraries\BattleEngine\Utils\Math;
 use Exception;
 
@@ -227,7 +228,7 @@ class BattleReport
     {
         $prob = $this->getMoonProb();
 
-        $this->moonEvent = Math::tryEvent($prob, 'Events::event_moon', $prob);
+        $this->moonEvent = Math::tryEvent($prob, [Events::class, 'event_moon'], $prob);
 
         return $this->moonEvent;
     }
@@ -328,7 +329,7 @@ class BattleReport
     {
         ob_start();
         $css = $this->css;
-        require OPBEPATH . 'views/report.html';
+        require OPBEPATH . 'Views/report.html';
         return ob_get_clean();
     }
 

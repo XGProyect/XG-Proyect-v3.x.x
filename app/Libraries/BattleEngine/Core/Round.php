@@ -205,7 +205,7 @@ class Round
         ob_start();
         $_round = $this;
         $_i = $this->number;
-        require OPBEPATH . 'views/round.html';
+        require OPBEPATH . 'Views/round.html';
         return ob_get_clean();
     }
 

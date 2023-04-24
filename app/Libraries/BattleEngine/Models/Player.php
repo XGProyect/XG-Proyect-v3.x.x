@@ -190,7 +190,7 @@ class Player extends IterableUtil
         ob_start();
         $_player = $this;
         $_st = '';
-        require OPBEPATH . 'views/player2.html';
+        require OPBEPATH . 'Views/player2.html';
         return ob_get_clean();
     }
 
