@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Libraries\BattleEngine\Models;
+
 /**
  *  OPBE
  *  Copyright (C) 2013  Jstar

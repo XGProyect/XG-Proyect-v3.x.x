@@ -1,4 +1,7 @@
 <?php
+
+namespace App\Libraries\BattleEngine\Constants;
+
 /**
  *  OPBE
  *  Copyright (C) 2015  Jstar

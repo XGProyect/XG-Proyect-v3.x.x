@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Libraries\BattleEngine\Models;
+
 /**
  *  OPBE
  *  Copyright (C) 2013  Jstar
@@ -66,7 +68,7 @@ class Type
     {
         ob_start();
         $_type = $this;
-        require(OPBEPATH . "views/type.html");
+        require OPBEPATH . 'views/type.html';
         return ob_get_clean();
     }
 

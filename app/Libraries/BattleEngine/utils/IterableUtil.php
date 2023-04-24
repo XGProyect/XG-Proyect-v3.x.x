@@ -1,5 +1,10 @@
 <?php
 
+namespace App\Libraries\BattleEngine\Utils;
+
+use Iterator;
+use ReturnTypeWillChange;
+
 /**
  *  OPBE
  *  Copyright (C) 2013  Jstar

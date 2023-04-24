@@ -1,5 +1,11 @@
 <?php
 
+namespace App\Libraries\BattleEngine\Models;
+
+use App\Libraries\BattleEngine\CombatObject\FireManager;
+use App\Libraries\BattleEngine\Utils\IterableUtil;
+use Exception;
+
 /**
  *  OPBE
  *  Copyright (C) 2013  Jstar
@@ -28,7 +34,7 @@
  */
 class Fleet extends IterableUtil
 {
-    protected $array = array();
+    protected $array = [];
     private $count;
     private $id;
     // added but only used in report templates
@@ -40,7 +46,7 @@ class Fleet extends IterableUtil
     private $system;
     private $planet;
 
-    public function __construct($id, $shipTypes = array(), $weapons_tech = null, $shields_tech = null, $armour_tech = null, $name = "", $galaxy = null, $system = null, $planet = null)
+    public function __construct($id, $shipTypes = [], $weapons_tech = null, $shields_tech = null, $armour_tech = null, $name = '', $galaxy = null, $system = null, $planet = null)
     {
         $this->id = $id;
         $this->count = 0;
@@ -150,17 +156,17 @@ class Fleet extends IterableUtil
     {
         ob_start();
         $_fleet = $this;
-        $_st = "";
-        require(OPBEPATH . "views/fleet.html");
+        $_st = '';
+        require OPBEPATH . 'views/fleet.html';
         return ob_get_clean();
     }
 
     public function inflictDamage(FireManager $fires)
     {
-        $physicShots = array();
+        $physicShots = [];
         //doesn't matter who shot first, but who receive first the damage
         foreach ($fires->getIterator() as $fire) {
-            $tmp = array();
+            $tmp = [];
             foreach ($this->getOrderedIterator() as $idShipTypeDefender => $shipTypeDefender) {
                 $idShipTypeAttacker = $fire->getId();
                 log_comment("---- firing from $idShipTypeAttacker to $idShipTypeDefender ----");
@@ -201,7 +207,7 @@ class Fleet extends IterableUtil
 
     public function cleanShips()
     {
-        $shipsCleaners = array();
+        $shipsCleaners = [];
         foreach ($this->array as $id => $shipType) {
             log_comment("---- exploding $id ----");
             $sc = $shipType->cleanShips();

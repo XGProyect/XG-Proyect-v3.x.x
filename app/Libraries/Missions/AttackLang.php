@@ -2,9 +2,9 @@
 
 namespace App\Libraries\Missions;
 
-use Lang;
+use App\Libraries\BattleEngine\Utils\Lang;
 
-class Attack_lang implements Lang
+class AttackLang implements Lang
 {
     private $lang;
     private $objects;

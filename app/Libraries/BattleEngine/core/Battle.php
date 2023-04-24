@@ -1,5 +1,9 @@
 <?php
 
+namespace App\Libraries\BattleEngine\Core;
+
+use App\Libraries\BattleEngine\Models\PlayerGroup;
+
 /**
  *  OPBE
  *  Copyright (C) 2013  Jstar
@@ -33,13 +37,6 @@ class Battle
     private $report;
     private $battleStarted;
 
-    /**
-     * Battle::__construct()
-     *
-     * @param PlayerGroup $attackers
-     * @param PlayerGroup $defenders
-     * @return Battle
-     */
     public function __construct(PlayerGroup $attackers, PlayerGroup $defenders)
     {
         $this->attackers = $attackers;

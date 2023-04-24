@@ -1,5 +1,11 @@
 <?php
 
+namespace App\Libraries\BattleEngine\Models;
+
+use App\Libraries\BattleEngine\CombatObject\PhysicShot;
+use App\Libraries\BattleEngine\CombatObject\ShipsCleaner;
+use Exception;
+
 /**
  *  OPBE
  *  Copyright (C) 2015  Jstar
@@ -366,7 +372,7 @@ class ShipType extends Type
             return;
         }
         if ($shotsToThisShipType < 0) {
-            throw new Exception("Negative amount of shotsToThisShipType!");
+            throw new Exception('Negative amount of shotsToThisShipType!');
         }
 
         log_var('Defender single hull', $this->singleLife);

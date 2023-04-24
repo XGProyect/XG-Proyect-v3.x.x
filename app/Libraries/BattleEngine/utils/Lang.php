@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Libraries\BattleEngine\Utils;
+
 interface Lang
 {
     public function getShipName($id);
@@ -32,5 +34,3 @@ interface Lang
 
     public function getNewMoon($name, $galaxy, $system, $planet);
 }
-
-/* end of Lang.php */

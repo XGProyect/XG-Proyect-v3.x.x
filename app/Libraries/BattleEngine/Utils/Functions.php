@@ -1,7 +1,5 @@
 <?php
 
-namespace App\Libraries\BattleEngine\Models;
-
 /**
  *  OPBE
  *  Copyright (C) 2013  Jstar
@@ -28,6 +26,16 @@ namespace App\Libraries\BattleEngine\Models;
  * @version beta(26-10-2013)
  * @link https://github.com/jstar88/opbe
  */
-class HomeFleet extends Fleet
+
+function log_var($name, $value)
 {
+    if (is_array($value)) {
+        $value = var_export($value);
+    }
+    log_comment("$name = $value");
+}
+
+function log_comment($comment)
+{
+    echo "[log]$comment<br>\n";
 }

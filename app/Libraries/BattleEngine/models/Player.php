@@ -1,5 +1,11 @@
 <?php
 
+namespace App\Libraries\BattleEngine\Models;
+
+use App\Libraries\BattleEngine\CombatObject\FireManager;
+use App\Libraries\BattleEngine\Utils\IterableUtil;
+use Exception;
+
 /**
  *  OPBE
  *  Copyright (C) 2013  Jstar
@@ -29,7 +35,7 @@
 class Player extends IterableUtil
 {
     private $id;
-    protected $array = array();
+    protected $array = [];
     private $weapons_tech = 0;
     private $shields_tech = 0;
     private $armour_tech = 0;
@@ -38,7 +44,7 @@ class Player extends IterableUtil
     private $system;
     private $planet;
 
-    public function __construct($id, $fleets = array(), $weapons_tech = null, $shields_tech = null, $armour_tech = null, $name = "", $galaxy = null, $system = null, $planet = null)
+    public function __construct($id, $fleets = [], $weapons_tech = null, $shields_tech = null, $armour_tech = null, $name = '', $galaxy = null, $system = null, $planet = null)
     {
         $this->id = $id;
         $this->name = $name;
@@ -183,14 +189,14 @@ class Player extends IterableUtil
     {
         ob_start();
         $_player = $this;
-        $_st = "";
-        require(OPBEPATH . "views/player2.html");
+        $_st = '';
+        require OPBEPATH . 'views/player2.html';
         return ob_get_clean();
     }
 
     public function inflictDamage(FireManager $fire)
     {
-        $physicShots = array();
+        $physicShots = [];
         foreach ($this->array as $idFleet => $fleet) {
             echo "------- firing to fleet with ID = $idFleet -------- <br>";
             $ps = $fleet->inflictDamage($fire);
@@ -201,7 +207,7 @@ class Player extends IterableUtil
 
     public function cleanShips()
     {
-        $shipsCleaners = array();
+        $shipsCleaners = [];
         foreach ($this->array as $idFleet => $fleet) {
             echo "------- cleanShips to fleet with ID = $idFleet -------- <br>";
             $sc = $fleet->cleanShips();

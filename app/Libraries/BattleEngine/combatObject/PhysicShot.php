@@ -1,5 +1,10 @@
 <?php
 
+namespace App\Libraries\BattleEngine\CombatObject;
+
+use App\Libraries\BattleEngine\Models\ShipType;
+use Exception;
+
 /**
  *  OPBE
  *  Copyright (C) 2015  Jstar

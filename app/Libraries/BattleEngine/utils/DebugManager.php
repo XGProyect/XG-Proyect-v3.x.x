@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Libraries\BattleEngine\Utils;
+
 /**
  *  OPBE
  *  Copyright (C) 2015  Jstar
@@ -49,11 +51,11 @@ class DebugManager
     public static function runDebugged($func, $errorHandler = null, $exceptionHandler = null)
     {
         if ($errorHandler == null) {
-            $errorHandler = ['DebugManager', 'myErrorHandler'];
+            $errorHandler = [DebugManager::class, 'myErrorHandler'];
         }
 
         if ($exceptionHandler == null) {
-            $exceptionHandler = ['DebugManager', 'save'];
+            $exceptionHandler = [DebugManager::class, 'save'];
         }
 
         return function () use ($func, $errorHandler, $exceptionHandler) {
@@ -98,7 +100,7 @@ class DebugManager
                 break;
         }
         $error .= "Error on line $errline in file $errfile";
-        $error .= ", PHP " . PHP_VERSION . " (" . PHP_OS . ")" . PHP_EOL;
+        $error .= ', PHP ' . PHP_VERSION . ' (' . PHP_OS . ')' . PHP_EOL;
         DebugManager::save($error);
         /* Don't execute PHP internal error handler */
         return true;
@@ -123,17 +125,4 @@ class DebugManager
         file_put_contents(OPBEPATH . 'errors' . DIRECTORY_SEPARATOR . date('d-m-y__H-i-s') . '.html', $time . PHP_EOL . $other . PHP_EOL . $post . PHP_EOL . $get . PHP_EOL . $output);
         die('An error occurred, we will resolve it soon as possible');
     }
-}
-
-function log_var($name, $value)
-{
-    if (is_array($value)) {
-        $value = var_export($value);
-    }
-    log_comment("$name = $value");
-}
-
-function log_comment($comment)
-{
-    echo "[log]$comment<br>\n";
 }

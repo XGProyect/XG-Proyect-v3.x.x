@@ -1,5 +1,9 @@
 <?php
 
+namespace App\Libraries\BattleEngine\Utils;
+
+use Exception;
+
 /**
  *  OPBE
  *  Copyright (C) 2013  Jstar
@@ -68,7 +72,7 @@ class Gauss
     {
         $i = 0;
         if ($min > $m || $max < $m) {
-            throw new Exception("Mean is not bounded by min and max");
+            throw new Exception('Mean is not bounded by min and max');
         }
         while (true) {
             $n = self::getNextMs($m, $s);

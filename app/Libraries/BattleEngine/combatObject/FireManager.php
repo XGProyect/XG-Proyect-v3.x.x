@@ -1,5 +1,9 @@
 <?php
 
+namespace App\Libraries\BattleEngine\CombatObject;
+
+use App\Libraries\BattleEngine\Utils\IterableUtil;
+
 /**
  *  OPBE
  *  Copyright (C) 2013  Jstar
@@ -28,7 +32,7 @@
  */
 class FireManager extends IterableUtil
 {
-    protected $array = array();
+    protected $array = [];
 
     public function add(Fire $fire)
     {

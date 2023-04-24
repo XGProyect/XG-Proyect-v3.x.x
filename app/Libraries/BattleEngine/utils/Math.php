@@ -1,5 +1,11 @@
 <?php
 
+namespace App\Libraries\BattleEngine\Utils;
+
+use Exception;
+use RecursiveArrayIterator;
+use RecursiveIteratorIterator;
+
 /**
  *  OPBE
  *  Copyright (C) 2013  Jstar

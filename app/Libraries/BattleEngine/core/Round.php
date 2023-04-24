@@ -1,4 +1,11 @@
 <?php
+
+namespace App\Libraries\BattleEngine\Core;
+
+use App\Libraries\BattleEngine\CombatObject\Fire;
+use App\Libraries\BattleEngine\CombatObject\FireManager;
+use App\Libraries\BattleEngine\Models\PlayerGroup;
+
 /**
  *  OPBE
  *  Copyright (C) 2013  Jstar
@@ -53,7 +60,6 @@ class Round
      * @param int: the round number
      * @return void
      */
-
     public function __construct(PlayerGroup $attackers, PlayerGroup $defenders, $number)
     {
         $this->number = $number;
@@ -94,9 +100,9 @@ class Round
         }
         //--------------------------------------------------------------------------//
         //------------------------- Sending the fire -------------------------------//
-        echo "***** firing to defenders *****<br>";
+        echo '***** firing to defenders *****<br>';
         $this->physicShotsToDefenders = $this->defenders->inflictDamage($this->fire_a);
-        echo "***** firing to attackers *****<br>";
+        echo '***** firing to attackers *****<br>';
         $this->physicShotsToAttachers = $this->attackers->inflictDamage($this->fire_d);
         //--------------------------------------------------------------------------//
         //------------------------- Cleaning ships ---------------------------------//
@@ -199,7 +205,7 @@ class Round
         ob_start();
         $_round = $this;
         $_i = $this->number;
-        require(OPBEPATH . "views/round.html");
+        require OPBEPATH . 'views/round.html';
         return ob_get_clean();
     }
 
