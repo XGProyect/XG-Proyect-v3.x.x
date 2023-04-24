@@ -82,10 +82,7 @@ class Expedition extends Missions
                     $this->hazardShips($fleet_row, $fleet_points, $current_fleet);
                     break;
             }
-        }
-
-        // complete mission
-        if (parent::canCompleteMission($fleet_row)) {
+        } elseif (parent::canCompleteMission($fleet_row)) {
             if (!$this->all_destroyed) {
                 $this->expeditionMessage(
                     $fleet_row['fleet_owner'],
