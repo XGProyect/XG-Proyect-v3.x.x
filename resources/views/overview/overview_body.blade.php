@@ -36,7 +36,7 @@
         </tr>
         <tr>
             <th>{{$ov_points}}</th>
-            <th colspan="3">{{$user_rank}}</td>
+            <th colspan="3">{!! $user_rank !!}</td>
         </tr>
     </table>
 </div>
