@@ -14,6 +14,7 @@ public/compiles/*
 storage/backups/*.sql
 storage/cache/*.html
 storage/logs/*.txt
+**/errors/*.html
 
 #
 # tests
