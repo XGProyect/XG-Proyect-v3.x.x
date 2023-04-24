@@ -19,7 +19,7 @@ class SecurePageLib
     private function validate($value)
     {
         if (!is_array($value)) {
-            $value = str_ireplace("script", "blocked", $value);
+            $value = str_ireplace('script', 'blocked', $value);
 
             if (version_compare(PHP_VERSION, '7.3.0', '<')) {
                 if (get_magic_quotes_gpc()) {

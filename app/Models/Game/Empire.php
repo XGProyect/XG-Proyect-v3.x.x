@@ -16,7 +16,7 @@ class Empire extends Model
     {
         if ($user_id > 0) {
             return $this->db->queryFetchAll(
-                "SELECT `planet_id`,
+                'SELECT `planet_id`,
                     `planet_name`,
                     `planet_galaxy`,
                     `planet_system`,
@@ -75,10 +75,10 @@ class Empire extends Model
                     s.`ship_destroyer`,
                     s.`ship_deathstar`,
                     s.`ship_battlecruiser`
-                FROM `" . PLANETS . "` AS p
-                INNER JOIN `" . BUILDINGS . "` AS b ON b.building_planet_id = p.`planet_id`
-                INNER JOIN `" . DEFENSES . "` AS d ON d.defense_planet_id = p.`planet_id`
-                INNER JOIN `" . SHIPS . "` AS s ON s.ship_planet_id = p.`planet_id`
+                FROM `' . PLANETS . '` AS p
+                INNER JOIN `' . BUILDINGS . '` AS b ON b.building_planet_id = p.`planet_id`
+                INNER JOIN `' . DEFENSES . '` AS d ON d.defense_planet_id = p.`planet_id`
+                INNER JOIN `' . SHIPS . "` AS s ON s.ship_planet_id = p.`planet_id`
                 WHERE `planet_user_id` = '" . $user_id . "'
                     AND `planet_destroyed` = 0;"
             );

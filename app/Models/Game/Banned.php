@@ -14,9 +14,9 @@ class Banned extends Model
     public function getBannedUsers()
     {
         return $this->db->queryFetchAll(
-            "SELECT *
-            FROM " . BANNED . "
-            ORDER BY `banned_id`;"
+            'SELECT *
+            FROM ' . BANNED . '
+            ORDER BY `banned_id`;'
         );
     }
 }

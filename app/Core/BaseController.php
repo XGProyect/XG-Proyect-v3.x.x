@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Core;
 
-use App\Core\Objects;
-use App\Core\Template;
 use App\Libraries\Page;
 use App\Libraries\Users;
 use CiLang;

@@ -114,7 +114,7 @@ class InfosController extends BaseController
             $GateTPL = 'infos/info_gate_table';
 
             if ($_POST) {
-                Functions::message($this->doFleetJump(), "game.php?page=infos&gid=43", 2);
+                Functions::message($this->doFleetJump(), 'game.php?page=infos&gid=43', 2);
             }
         } elseif ($this->_element_id == 124) {
             $PageTPL = 'infos/info_buildings_table';
@@ -137,10 +137,10 @@ class InfosController extends BaseController
             $parse['upd_conso'] = '';
 
             if ($this->_element_id == 202) {
-                $parse['upd_speed'] = "<font color=\"yellow\">(" . FormatLib::prettyNumber($this->_pricelist[$this->_element_id]['speed2']) . ")</font>";
-                $parse['upd_conso'] = "<font color=\"yellow\">(" . FormatLib::prettyNumber($this->_pricelist[$this->_element_id]['consumption2']) . ")</font>";
+                $parse['upd_speed'] = '<font color="yellow">(' . FormatLib::prettyNumber($this->_pricelist[$this->_element_id]['speed2']) . ')</font>';
+                $parse['upd_conso'] = '<font color="yellow">(' . FormatLib::prettyNumber($this->_pricelist[$this->_element_id]['consumption2']) . ')</font>';
             } elseif ($this->_element_id == 211) {
-                $parse['upd_speed'] = "<font color=\"yellow\">(" . FormatLib::prettyNumber($this->_pricelist[$this->_element_id]['speed2']) . ")</font>";
+                $parse['upd_speed'] = '<font color="yellow">(' . FormatLib::prettyNumber($this->_pricelist[$this->_element_id]['speed2']) . ')</font>';
             }
         } elseif ($this->_element_id >= 401 && $this->_element_id <= 550) {
             $PageTPL = 'infos/info_buildings_defense';
@@ -184,13 +184,13 @@ class InfosController extends BaseController
                 $RestString = $this->GetNextJumpWaitTime($this->planet);
                 $parse['gate_start_link'] = $this->planet_link($this->planet);
                 if ($RestString['value'] != 0) {
-                    $parse['gate_time_script'] = Functions::chronoApplet("Gate", "1", $RestString['value'], true);
-                    $parse['gate_wait_time'] = "<div id=\"bxx" . "Gate" . "1" . "\"></div>";
-                    $parse['gate_script_go'] = Functions::chronoApplet("Gate", "1", $RestString['value'], false);
+                    $parse['gate_time_script'] = Functions::chronoApplet('Gate', '1', $RestString['value'], true);
+                    $parse['gate_wait_time'] = '<div id="bxx' . 'Gate' . '1' . '"></div>';
+                    $parse['gate_script_go'] = Functions::chronoApplet('Gate', '1', $RestString['value'], false);
                 } else {
-                    $parse['gate_time_script'] = "";
-                    $parse['gate_wait_time'] = "";
-                    $parse['gate_script_go'] = "";
+                    $parse['gate_time_script'] = '';
+                    $parse['gate_wait_time'] = '';
+                    $parse['gate_script_go'] = '';
                 }
                 $parse['gate_dest_moons'] = $this->BuildJumpableMoonCombo($this->user, $this->planet);
                 $parse['gate_fleet_rows'] = $this->BuildFleetListRows($this->planet);
@@ -214,14 +214,14 @@ class InfosController extends BaseController
     {
         $current_built_lvl = $this->planet[$this->_resource[$this->_element_id]];
         $BuildStartLvl = max(1, $current_built_lvl - 2);
-        $Table = "";
+        $Table = '';
         $ProdFirst = 0;
         $ActualProd = ProductionLib::maxStorable($current_built_lvl);
 
         for ($BuildLevel = $BuildStartLvl; $BuildLevel < $BuildStartLvl + 15; ++$BuildLevel) {
             $Prod = ProductionLib::maxStorable($BuildLevel);
 
-            $bloc['build_lvl'] = ($current_built_lvl == $BuildLevel) ? "<font color=\"#ff0000\">" . $BuildLevel . "</font>" : $BuildLevel;
+            $bloc['build_lvl'] = ($current_built_lvl == $BuildLevel) ? '<font color="#ff0000">' . $BuildLevel . '</font>' : $BuildLevel;
             $bloc['build_prod'] = FormatLib::prettyNumber($Prod);
             $bloc['build_prod_diff'] = FormatLib::colorNumber(FormatLib::prettyNumber(($Prod - $ActualProd)));
 
@@ -244,10 +244,10 @@ class InfosController extends BaseController
     {
         $current_built_lvl = $this->user[$this->_resource[$this->_element_id]];
         $BuildStartLvl = max(1, $current_built_lvl - 2);
-        $Table = "";
+        $Table = '';
 
         for ($BuildLevel = $BuildStartLvl; $BuildLevel < $BuildStartLvl + 15; ++$BuildLevel) {
-            $bloc['tech_lvl'] = ($current_built_lvl == $BuildLevel) ? "<font color=\"#ff0000\">" . $BuildLevel . "</font>" : $BuildLevel;
+            $bloc['tech_lvl'] = ($current_built_lvl == $BuildLevel) ? '<font color="#ff0000">' . $BuildLevel . '</font>' : $BuildLevel;
             $bloc['tech_colonies'] = FormatLib::prettyNumber(FleetsLib::getMaxColonies($BuildLevel));
             $bloc['tech_expeditions'] = FormatLib::prettyNumber(FleetsLib::getMaxExpeditions($BuildLevel));
 
@@ -270,14 +270,14 @@ class InfosController extends BaseController
             $NextJumpTime = $LastJumpTime + $WaitBetweenJmp;
             if ($NextJumpTime >= time()) {
                 $RestWait = $NextJumpTime - time();
-                $RestString = " " . FormatLib::prettyTime($RestWait);
+                $RestString = ' ' . FormatLib::prettyTime($RestWait);
             } else {
                 $RestWait = 0;
-                $RestString = "";
+                $RestString = '';
             }
         } else {
             $RestWait = 0;
-            $RestString = "";
+            $RestString = '';
         }
         $RetValue['string'] = $RestString;
         $RetValue['value'] = $RestWait;
@@ -316,7 +316,7 @@ class InfosController extends BaseController
                         $SubQueryDes = '';
 
                         for ($Ship = 200; $Ship < 300; $Ship++) {
-                            $ShipLabel = "c" . $Ship;
+                            $ShipLabel = 'c' . $Ship;
                             $gemi_kontrol = isset($_POST[$ShipLabel]) ? $_POST[$ShipLabel] : null;
 
                             if (is_numeric($gemi_kontrol)) {
@@ -327,12 +327,12 @@ class InfosController extends BaseController
                                 }
 
                                 if ($ShipArray[$Ship] > 0) {
-                                    $SubQueryOri .= "`" . $this->_resource[$Ship] . "` = `" . $this->_resource[$Ship] . "` - '" . $ShipArray[$Ship] . "', ";
-                                    $SubQueryDes .= "`" . $this->_resource[$Ship] . "` = `" . $this->_resource[$Ship] . "` + '" . $ShipArray[$Ship] . "', ";
+                                    $SubQueryOri .= '`' . $this->_resource[$Ship] . '` = `' . $this->_resource[$Ship] . "` - '" . $ShipArray[$Ship] . "', ";
+                                    $SubQueryDes .= '`' . $this->_resource[$Ship] . '` = `' . $this->_resource[$Ship] . "` + '" . $ShipArray[$Ship] . "', ";
                                 }
                             }
                         }
-                        if ($SubQueryOri != "") {
+                        if ($SubQueryOri != '') {
                             $this->infosModel->doJump(
                                 $SubQueryOri,
                                 $SubQueryDes,
@@ -372,7 +372,7 @@ class InfosController extends BaseController
     {
         $RowsTPL = 'infos/info_gate_rows';
         $CurrIdx = 1;
-        $Result = "";
+        $Result = '';
         for ($Ship = 200; $Ship < 250; $Ship++) {
             if (isset($this->_resource[$Ship]) && $this->_resource[$Ship] != '') {
                 if ($this->planet[$this->_resource[$Ship]] > 0) {
@@ -396,13 +396,13 @@ class InfosController extends BaseController
     {
         $MoonList = $this->infosModel->getListOfMoons($this->user['user_id']);
 
-        $Combo = "";
+        $Combo = '';
 
         foreach ($MoonList as $CurMoon) {
             if ($CurMoon['planet_id'] != $this->planet['planet_id']) {
                 $RestString = $this->GetNextJumpWaitTime($CurMoon);
                 if ($CurMoon[$this->_resource[43]] >= 1) {
-                    $Combo .= "<option value=\"" . $CurMoon['planet_id'] . "\">[" . $CurMoon['planet_galaxy'] . ":" . $CurMoon['planet_system'] . ":" . $CurMoon['planet_planet'] . "] " . $CurMoon['planet_name'] . $RestString['string'] . "</option>\n";
+                    $Combo .= '<option value="' . $CurMoon['planet_id'] . '">[' . $CurMoon['planet_galaxy'] . ':' . $CurMoon['planet_system'] . ':' . $CurMoon['planet_planet'] . '] ' . $CurMoon['planet_name'] . $RestString['string'] . "</option>\n";
                 }
             }
         }
@@ -426,7 +426,7 @@ class InfosController extends BaseController
         $Table = '';
 
         for ($BuildLevel = $BuildStartLvl; $BuildLevel < $BuildStartLvl + 15; $BuildLevel++) {
-            $bloc['build_lvl'] = ($current_built_lvl == $BuildLevel) ? "<font color=\"#ff0000\">" . $BuildLevel . "</font>" : $BuildLevel;
+            $bloc['build_lvl'] = ($current_built_lvl == $BuildLevel) ? '<font color="#ff0000">' . $BuildLevel . '</font>' : $BuildLevel;
             $bloc['build_range'] = ($BuildLevel * $BuildLevel) - 1;
 
             $Table .= $this->template->set($Template, $bloc);
@@ -572,10 +572,10 @@ class InfosController extends BaseController
      */
     private function ShowRapidFireTo()
     {
-        $ResultString = "";
+        $ResultString = '';
         for ($Type = 200; $Type < 500; $Type++) {
             if (isset($this->_combat_caps[$this->_element_id]['sd'][$Type]) && $this->_combat_caps[$this->_element_id]['sd'][$Type] > 1) {
-                $ResultString .= $this->langs->line('in_rf_again') . " " . $this->langs->language[$this->_resource[$Type]] . " <font color=\"#00ff00\">" . $this->_combat_caps[$this->_element_id]['sd'][$Type] . "</font><br>";
+                $ResultString .= $this->langs->line('in_rf_again') . ' ' . $this->langs->language[$this->_resource[$Type]] . ' <font color="#00ff00">' . $this->_combat_caps[$this->_element_id]['sd'][$Type] . '</font><br>';
             }
         }
         return $ResultString;
@@ -586,10 +586,10 @@ class InfosController extends BaseController
      */
     private function ShowRapidFireFrom()
     {
-        $ResultString = "";
+        $ResultString = '';
         for ($Type = 200; $Type < 500; $Type++) {
             if (isset($this->_combat_caps[$Type]['sd'][$this->_element_id]) && $this->_combat_caps[$Type]['sd'][$this->_element_id] > 1) {
-                $ResultString .= $this->langs->line('in_rf_from') . " " . $this->langs->language[$this->_resource[$Type]] . " <font color=\"#ff0000\">" . $this->_combat_caps[$Type]['sd'][$this->_element_id] . "</font><br>";
+                $ResultString .= $this->langs->line('in_rf_from') . ' ' . $this->langs->language[$this->_resource[$Type]] . ' <font color="#ff0000">' . $this->_combat_caps[$Type]['sd'][$this->_element_id] . '</font><br>';
             }
         }
         return $ResultString;
@@ -600,7 +600,7 @@ class InfosController extends BaseController
      */
     private function planet_link($current_planet)
     {
-        return "<a href=\"game.php?page=galaxy&mode=3&galaxy=" . $current_planet['planet_galaxy'] . "&system=" . $current_planet['planet_system'] . "\">[" . $current_planet['planet_galaxy'] . ":" . $current_planet['planet_system'] . ":" . $current_planet['planet_planet'] . "]</a>";
+        return '<a href="game.php?page=galaxy&mode=3&galaxy=' . $current_planet['planet_galaxy'] . '&system=' . $current_planet['planet_system'] . '">[' . $current_planet['planet_galaxy'] . ':' . $current_planet['planet_system'] . ':' . $current_planet['planet_planet'] . ']</a>';
     }
 
     /**

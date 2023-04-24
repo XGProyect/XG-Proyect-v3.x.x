@@ -18,9 +18,9 @@ class Preferences extends Model
     public function getAllPreferencesByUserId(int $user_id): array
     {
         return $this->db->queryFetchAll(
-            "SELECT
+            'SELECT
                 p.*
-            FROM `" . PREFERENCES . "` p
+            FROM `' . PREFERENCES . "` p
             WHERE p.`preference_user_id` = '" . $user_id . "';"
         ) ?? [];
     }
@@ -34,8 +34,8 @@ class Preferences extends Model
     public function checkIfNicknameExists(string $nickname): array
     {
         return $this->db->queryFetch(
-            "SELECT `user_id`
-            FROM `" . USERS . "`
+            'SELECT `user_id`
+            FROM `' . USERS . "`
             WHERE `user_name` = '" . $this->db->escapeValue($nickname) . "'
             LIMIT 1;"
         ) ?? [];
@@ -50,8 +50,8 @@ class Preferences extends Model
     public function checkIfEmailExists(string $email): array
     {
         return $this->db->queryFetch(
-            "SELECT `user_email`
-            FROM `" . USERS . "`
+            'SELECT `user_email`
+            FROM `' . USERS . "`
             WHERE `user_email` = '" . $this->db->escapeValue($email) . "'
             LIMIT 1;"
         ) ?? [];
@@ -70,17 +70,17 @@ class Preferences extends Model
 
         foreach ($fields as $column => $value) {
             if (strpos($column, 'user_') !== false) {
-                $columns_to_update[] = "u.`" . $column . "` = '" . $value . "'";
+                $columns_to_update[] = 'u.`' . $column . "` = '" . $value . "'";
             }
 
             if (strpos($column, 'preference_') !== false) {
-                $columns_to_update[] = "p.`" . $column . "` = " . (is_null($value) ? 'NULL' : "'" . $value . "'");
+                $columns_to_update[] = 'p.`' . $column . '` = ' . (is_null($value) ? 'NULL' : "'" . $value . "'");
             }
         }
 
         $this->db->query(
-            "UPDATE " . USERS . " AS u, " . PREFERENCES . " AS p SET
-            " . join(', ', $columns_to_update) . "
+            'UPDATE ' . USERS . ' AS u, ' . PREFERENCES . ' AS p SET
+            ' . join(', ', $columns_to_update) . "
             WHERE u.`user_id` = '" . $user_id . "'
                 AND p.`preference_user_id` = '" . $user_id . "';"
         );
@@ -96,11 +96,11 @@ class Preferences extends Model
     {
         if ($user_id > 0) {
             $activity = $this->db->queryFetch(
-                "SELECT (
+                'SELECT (
                     (
                         SELECT
                             COUNT(f.`fleet_id`) AS quantity
-                        FROM `" . FLEETS . "` f
+                        FROM `' . FLEETS . "` f
                         WHERE f.`fleet_owner` = '" . $user_id . "'
                     )
                 +
@@ -133,7 +133,7 @@ class Preferences extends Model
     {
         if (!$this->isEmpireActive($user_id)) {
             $this->db->query(
-                "UPDATE `" . PREFERENCES . "` pr, `" . PLANETS . "` p SET
+                'UPDATE `' . PREFERENCES . '` pr, `' . PLANETS . "` p SET
                     pr.`preference_vacation_mode` = '" . time() . "',
                     p.`planet_building_metal_mine_percent` = '0',
                     p.`planet_building_crystal_mine_percent` = '0',
@@ -161,7 +161,7 @@ class Preferences extends Model
     {
         if ($user_id > 0) {
             $this->db->query(
-                "UPDATE `" . PREFERENCES . "` pr, `" . PLANETS . "` p SET
+                'UPDATE `' . PREFERENCES . '` pr, `' . PLANETS . "` p SET
                     pr.`preference_vacation_mode` = NULL,
                     p.`planet_last_update` = '" . time() . "',
                     p.`planet_building_metal_mine_percent` = '10',

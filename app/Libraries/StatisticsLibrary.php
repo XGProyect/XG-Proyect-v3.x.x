@@ -3,7 +3,6 @@
 namespace App\Libraries;
 
 use App\Core\Objects;
-use App\Libraries\Functions;
 use App\Models\Libraries\StatisticsLibrary as StatisticsLib;
 
 class StatisticsLibrary
@@ -126,7 +125,7 @@ class StatisticsLibrary
 
         // END STATISTICS BUILD
         $mtime = microtime();
-        $mtime = explode(" ", $mtime);
+        $mtime = explode(' ', $mtime);
         $mtime = $mtime[1] + $mtime[0];
         $endtime = $mtime;
 
@@ -222,7 +221,7 @@ class StatisticsLibrary
         }
 
         // UPDATE QUERY
-        $update_query = "INSERT INTO " . USERS_STATISTICS . "
+        $update_query = 'INSERT INTO ' . USERS_STATISTICS . '
                         (user_statistic_user_id,
                         user_statistic_buildings_old_rank,
                         user_statistic_buildings_rank,
@@ -235,7 +234,7 @@ class StatisticsLibrary
                         user_statistic_total_points,
                         user_statistic_total_old_rank,
                         user_statistic_total_rank,
-                        user_statistic_update_time) VALUES ";
+                        user_statistic_update_time) VALUES ';
 
         // SET VARIABLES
         $values = '';
@@ -372,7 +371,7 @@ class StatisticsLibrary
         }
 
         // UPDATE QUERY
-        $update_query = "INSERT INTO " . ALLIANCE_STATISTICS . "
+        $update_query = 'INSERT INTO ' . ALLIANCE_STATISTICS . '
 							(alliance_statistic_alliance_id,
 								alliance_statistic_buildings_points,
 								alliance_statistic_buildings_old_rank,
@@ -389,7 +388,7 @@ class StatisticsLibrary
 								alliance_statistic_total_points,
 								alliance_statistic_total_old_rank,
 								alliance_statistic_total_rank,
-								alliance_statistic_update_time) VALUES ";
+								alliance_statistic_update_time) VALUES ';
 
         // SET VARIABLES
         $values = '';

@@ -10,9 +10,9 @@ class Users extends Model
     public function checkUser(string $user): array
     {
         return $this->db->queryFetch(
-            "SELECT
+            'SELECT
                 `user_id`, `user_authlevel`
-            FROM `" . USERS . "`
+            FROM `' . USERS . "`
             WHERE
                 `user_name` = '" . $user . "'
             OR
@@ -23,14 +23,14 @@ class Users extends Model
     public function getUserDataById(int $user_id): array
     {
         return $this->db->queryFetch(
-            "SELECT u.*,
+            'SELECT u.*,
                     p.*,
                     pr.*,
                     r.*
-            FROM `" . USERS . "` AS u
-                INNER JOIN `" . PREFERENCES . "` AS pr ON pr.`preference_user_id` = u.`user_id`
-                INNER JOIN `" . PREMIUM . "` AS p ON p.`premium_user_id` = u.`user_id`
-                INNER JOIN `" . RESEARCH . "` AS r ON r.`research_user_id` = u.`user_id`
+            FROM `' . USERS . '` AS u
+                INNER JOIN `' . PREFERENCES . '` AS pr ON pr.`preference_user_id` = u.`user_id`
+                INNER JOIN `' . PREMIUM . '` AS p ON p.`premium_user_id` = u.`user_id`
+                INNER JOIN `' . RESEARCH . "` AS r ON r.`research_user_id` = u.`user_id`
             WHERE (u.user_id = '" . $user_id . "')
             LIMIT 1;"
         ) ?? [];
@@ -39,13 +39,13 @@ class Users extends Model
     public function getAllPlanetsByUserId(int $user_id): array
     {
         return $this->db->queryFetchAll(
-            "SELECT
+            'SELECT
                     `planet_id`,
                     `planet_name`,
                     `planet_galaxy`,
                     `planet_system`,
                     `planet_planet`
-            FROM `" . PLANETS . "`
+            FROM `' . PLANETS . "`
             WHERE `planet_user_id` = '" . $user_id . "';"
         ) ?? [];
     }
@@ -53,19 +53,19 @@ class Users extends Model
     public function getAllAlliances(): array
     {
         return $this->db->queryFetchAll(
-            "SELECT
+            'SELECT
                 `alliance_id`,
                 `alliance_name`,
                 `alliance_tag`
-            FROM `" . ALLIANCE . "`;"
+            FROM `' . ALLIANCE . '`;'
         ) ?? [];
     }
 
     public function checkUsername(string $username, int $user_id): array
     {
         return $this->db->queryFetch(
-            "SELECT `user_id`
-            FROM `" . USERS . "`
+            'SELECT `user_id`
+            FROM `' . USERS . "`
             WHERE `user_name` = '" . $username . "' AND
                     `user_id` <> '" . $user_id . "';"
         ) ?? [];
@@ -74,8 +74,8 @@ class Users extends Model
     public function checkEmail(string $email, int $user_id): array
     {
         return $this->db->queryFetch(
-            "SELECT `user_id`
-            FROM `" . USERS . "`
+            'SELECT `user_id`
+            FROM `' . USERS . "`
             WHERE `user_email` = '" . $email . "' AND
                 `user_id` <> '" . $user_id . "';"
         ) ?? [];
@@ -84,7 +84,7 @@ class Users extends Model
     public function deleteSessionByUserId(int $user_id): void
     {
         $this->db->query(
-            "DELETE FROM `" . SESSIONS . "`
+            'DELETE FROM `' . SESSIONS . "`
             WHERE `session_data`
             LIKE '%user_id|s:1:\"" . $user_id . "\"%'"
         );
@@ -128,12 +128,12 @@ class Users extends Model
 
         return $this->db->queryFetchAll(
             "SELECT {$get_query}
-            FROM `" . PLANETS . "` AS p
-            INNER JOIN `" . BUILDINGS . "` AS b ON b.`building_planet_id` = p.`planet_id`
-            INNER JOIN `" . DEFENSES . "` AS d ON d.`defense_planet_id` = p.`planet_id`
-            INNER JOIN `" . SHIPS . "` AS s ON s.`ship_planet_id` = p.`planet_id`
-            LEFT JOIN `" . PLANETS . "` AS m ON m.`planet_id` = (SELECT mp.`planet_id`
-            FROM `" . PLANETS . "` AS mp
+            FROM `" . PLANETS . '` AS p
+            INNER JOIN `' . BUILDINGS . '` AS b ON b.`building_planet_id` = p.`planet_id`
+            INNER JOIN `' . DEFENSES . '` AS d ON d.`defense_planet_id` = p.`planet_id`
+            INNER JOIN `' . SHIPS . '` AS s ON s.`ship_planet_id` = p.`planet_id`
+            LEFT JOIN `' . PLANETS . '` AS m ON m.`planet_id` = (SELECT mp.`planet_id`
+            FROM `' . PLANETS . "` AS mp
             WHERE (mp.`planet_galaxy` = p.`planet_galaxy` AND
                 mp.`planet_system` = p.`planet_system` AND
                 mp.`planet_planet` = p.`planet_planet` AND
@@ -176,10 +176,10 @@ class Users extends Model
 
         return $this->db->queryFetchAll(
             "SELECT {$get_query}
-            FROM `" . PLANETS . "` AS m
-            INNER JOIN `" . BUILDINGS . "` AS b ON b.`building_planet_id` = m.`planet_id`
-            INNER JOIN `" . DEFENSES . "` AS d ON d.`defense_planet_id` = m.`planet_id`
-            INNER JOIN `" . SHIPS . "` AS s ON s.`ship_planet_id` = m.`planet_id`
+            FROM `" . PLANETS . '` AS m
+            INNER JOIN `' . BUILDINGS . '` AS b ON b.`building_planet_id` = m.`planet_id`
+            INNER JOIN `' . DEFENSES . '` AS d ON d.`defense_planet_id` = m.`planet_id`
+            INNER JOIN `' . SHIPS . "` AS s ON s.`ship_planet_id` = m.`planet_id`
             WHERE m.`planet_user_id` = '" . $user_id . "'
                             AND m.`planet_type` = 3{$sub_query};"
         ) ?? [];
@@ -188,10 +188,10 @@ class Users extends Model
     public function getAllUsers(): array
     {
         return $this->db->queryFetchAll(
-            "SELECT
+            'SELECT
                 `user_id`,
                 `user_name`
-            FROM `" . USERS . "`;"
+            FROM `' . USERS . '`;'
         ) ?? [];
     }
 
@@ -200,11 +200,10 @@ class Users extends Model
      * SAVE DATA METHODS
      *
      */
-
     public function saveUserData(array $data): void
     {
         $this->db->query(
-            "UPDATE `" . USERS . "` SET
+            'UPDATE `' . USERS . "` SET
                 `user_name` = '" . $data['username'] . "',
                 `user_password` = " . $data['password'] . ",
                 `user_email` = '" . $data['email'] . "',
@@ -233,7 +232,7 @@ class Users extends Model
         // BUILD THE SPECIFIC QUERY
         if (($current_user['preference_vacation_mode'] > 0) && $preference_vacations_status == 0) {
             // WE HAVE TO REMOVE HIM FROM VACATION AND SET PLANET PRODUCTION
-            $vacation_head = " , `" . PLANETS . "` AS p";
+            $vacation_head = ' , `' . PLANETS . '` AS p';
             $vacation_condition = " AND p.`planet_user_id` = '" . (int) $user_id . "'";
             $vacation_query = "
                 pr.`preference_vacation_mode` = {$preference_vacation_mode},
@@ -248,7 +247,7 @@ class Users extends Model
             or is_null($current_user['preference_vacation_mode'])
             && $preference_vacations_status == 1) {
             // WE HAVE TO ADD HIM TO VACATION AND REMOVE PLANET PRODUCTION
-            $vacation_head = " , `" . PLANETS . "` AS p";
+            $vacation_head = ' , `' . PLANETS . '` AS p';
             $vacation_condition = " AND p.`planet_user_id` = '" . (int) $user_id . "'";
             $vacation_query = "
                 pr.`preference_vacation_mode` = {$preference_vacation_mode},
@@ -261,7 +260,7 @@ class Users extends Model
         }
 
         $this->db->query(
-            "UPDATE `" . PREFERENCES . "` AS pr{$vacation_head} SET
+            'UPDATE `' . PREFERENCES . "` AS pr{$vacation_head} SET
                 {$vacation_query}
                 pr.`preference_spy_probes` = '{$preference_spy_probes}',
                 pr.`preference_planet_sort` = '{$preference_planet_sort}',
@@ -274,7 +273,7 @@ class Users extends Model
     public function saveTechnologies(array $technologies, int $user_id): void
     {
         // start
-        $query_string = "UPDATE `" . RESEARCH . "` SET ";
+        $query_string = 'UPDATE `' . RESEARCH . '` SET ';
 
         // build middle
         foreach ($technologies as $tech => $level) {
@@ -297,7 +296,7 @@ class Users extends Model
     public function savePremium(array $premium_data, int $user_id, array $user_query): void
     {
         // start
-        $query_string = "UPDATE `" . PREMIUM . "` SET ";
+        $query_string = 'UPDATE `' . PREMIUM . '` SET ';
 
         // build middle
         foreach ($premium_data as $premium => $data) {
@@ -342,7 +341,7 @@ class Users extends Model
     public function savePlanet(array $planet_data, int $planet_id): void
     {
         // start
-        $query_string = "UPDATE `" . PLANETS . "` SET ";
+        $query_string = 'UPDATE `' . PLANETS . '` SET ';
 
         // remove unneeded field
         unset($planet_data['send_data'], $planet_data['planet_b_building_id'], $planet_data['planet_b_tech_id'], $planet_data['planet_b_hangar_id']);
@@ -387,7 +386,7 @@ class Users extends Model
     public function saveBuildings(array $buildings, int $planet_id): void
     {
         // start
-        $query_string = "UPDATE `" . BUILDINGS . "`, `" . PLANETS . "` SET ";
+        $query_string = 'UPDATE `' . BUILDINGS . '`, `' . PLANETS . '` SET ';
         $total_fields = 0;
 
         // build middle
@@ -401,7 +400,7 @@ class Users extends Model
 
         // end
         $query_string .= " `planet_field_current` = '" . $total_fields . "', ";
-        $query_string .= " `planet_field_max` = IF(`planet_type` = 3, 1 + `building_mondbasis` * " . FIELDS_BY_MOONBASIS_LEVEL . ", `planet_field_max`) ";
+        $query_string .= ' `planet_field_max` = IF(`planet_type` = 3, 1 + `building_mondbasis` * ' . FIELDS_BY_MOONBASIS_LEVEL . ', `planet_field_max`) ';
         $query_string .= " WHERE `building_planet_id` = '" . $planet_id . "'
                             AND `planet_id` = '" . $planet_id . "';";
 
@@ -412,7 +411,7 @@ class Users extends Model
     public function saveShips(array $ships, int $planet_id): void
     {
         // start
-        $query_string = "UPDATE `" . SHIPS . "` SET ";
+        $query_string = 'UPDATE `' . SHIPS . '` SET ';
 
         // build middle
         foreach ($ships as $ship => $amount) {
@@ -435,7 +434,7 @@ class Users extends Model
     public function saveDefenses(array $defenses, int $planet_id): void
     {
         // start
-        $query_string = "UPDATE `" . DEFENSES . "` SET ";
+        $query_string = 'UPDATE `' . DEFENSES . '` SET ';
 
         // build middle
         foreach ($defenses as $defense => $amount) {
@@ -458,10 +457,10 @@ class Users extends Model
     public function deletePlanetById(int $planet_id): void
     {
         $this->db->query(
-            "DELETE p,b,d,s FROM `" . PLANETS . "` AS p
-            INNER JOIN `" . BUILDINGS . "` AS b ON b.`building_planet_id` = p.`planet_id`
-            INNER JOIN `" . DEFENSES . "` AS d ON d.`defense_planet_id` = p.`planet_id`
-            INNER JOIN `" . SHIPS . "` AS s ON s.`ship_planet_id` = p.`planet_id`
+            'DELETE p,b,d,s FROM `' . PLANETS . '` AS p
+            INNER JOIN `' . BUILDINGS . '` AS b ON b.`building_planet_id` = p.`planet_id`
+            INNER JOIN `' . DEFENSES . '` AS d ON d.`defense_planet_id` = p.`planet_id`
+            INNER JOIN `' . SHIPS . "` AS s ON s.`ship_planet_id` = p.`planet_id`
             WHERE `planet_id` = '" . $planet_id . "'
                 AND `planet_type`= '1';"
         );
@@ -470,7 +469,7 @@ class Users extends Model
     public function softDeletePlanetById(int $planet_id): void
     {
         $this->db->query(
-            "UPDATE `" . PLANETS . "` AS p, `" . PLANETS . "` AS m, `" . USERS . "` AS u SET
+            'UPDATE `' . PLANETS . '` AS p, `' . PLANETS . '` AS m, `' . USERS . "` AS u SET
             p.`planet_destroyed` = '" . (time() + (PLANETS_LIFE_TIME * 3600)) . "',
             m.`planet_destroyed` = '" . (time() + (PLANETS_LIFE_TIME * 3600)) . "',
             u.`user_current_planet` = u.`user_home_planet_id`
@@ -485,10 +484,10 @@ class Users extends Model
     public function deleteMoonById(int $moon_id): void
     {
         $this->db->query(
-            "DELETE m,b,d,s FROM `" . PLANETS . "` AS m
-            INNER JOIN `" . BUILDINGS . "` AS b ON b.`building_planet_id` = m.`planet_id`
-            INNER JOIN `" . DEFENSES . "` AS d ON d.`defense_planet_id` = m.`planet_id`
-            INNER JOIN `" . SHIPS . "` AS s ON s.`ship_planet_id` = m.`planet_id`
+            'DELETE m,b,d,s FROM `' . PLANETS . '` AS m
+            INNER JOIN `' . BUILDINGS . '` AS b ON b.`building_planet_id` = m.`planet_id`
+            INNER JOIN `' . DEFENSES . '` AS d ON d.`defense_planet_id` = m.`planet_id`
+            INNER JOIN `' . SHIPS . "` AS s ON s.`ship_planet_id` = m.`planet_id`
             WHERE `planet_id` = '" . $moon_id . "'
                 AND `planet_type` = '3';"
         );
@@ -497,7 +496,7 @@ class Users extends Model
     public function softDeleteMoonById(int $moon_id): void
     {
         $this->db->query(
-            "UPDATE `" . PLANETS . "` AS m, `" . USERS . "` AS u SET
+            'UPDATE `' . PLANETS . '` AS m, `' . USERS . "` AS u SET
                 m.`planet_destroyed` = '" . (time() + (PLANETS_LIFE_TIME * 3600)) . "',
                 u.`user_current_planet` = u.`user_home_planet_id`
                 WHERE m.`planet_id` = '" . $moon_id . "'

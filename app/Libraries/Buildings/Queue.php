@@ -2,8 +2,6 @@
 
 namespace App\Libraries\Buildings;
 
-use App\Libraries\Buildings\QueueElements;
-
 final class Queue
 {
     public const QUEUE_SEPARATOR = ';';

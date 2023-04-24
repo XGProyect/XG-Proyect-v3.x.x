@@ -18,7 +18,7 @@ class Messenger extends Model
     public function insertMessage(MessagesOptions $options): void
     {
         $this->db->query(
-            "INSERT INTO `" . MESSAGES . "` SET
+            'INSERT INTO `' . MESSAGES . "` SET
             `message_receiver` = '" . $options->getTo() . "',
             `message_sender` = '" . $options->getSender() . "',
             `message_time` = '" . $options->getTime() . "',

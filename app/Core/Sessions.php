@@ -14,12 +14,12 @@ class Sessions
         $this->sessionsModel = new SessionsModel();
 
         session_set_save_handler(
-            [ & $this->sessionsModel, 'openConnection'],
-            [ & $this->sessionsModel, 'closeConnection'],
-            [ & $this->sessionsModel, 'getSessionDataById'],
-            [ & $this->sessionsModel, 'insertNewSessionData'],
-            [ & $this->sessionsModel, 'deleteSessionDataById'],
-            [ & $this->sessionsModel, 'cleanSessionData']
+            [&$this->sessionsModel, 'openConnection'],
+            [&$this->sessionsModel, 'closeConnection'],
+            [&$this->sessionsModel, 'getSessionDataById'],
+            [&$this->sessionsModel, 'insertNewSessionData'],
+            [&$this->sessionsModel, 'deleteSessionDataById'],
+            [&$this->sessionsModel, 'cleanSessionData']
         );
 
         if (session_id() == '') {

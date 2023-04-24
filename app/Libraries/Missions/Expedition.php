@@ -264,7 +264,7 @@ class Expedition extends Missions
         if ($found_ship != null) {
             foreach ($found_ship as $ship => $count) {
                 if ($count != 0) {
-                    $found_ship_message .= $this->langs->line($this->resource[$ship]) . ": " . $count . "<br>";
+                    $found_ship_message .= $this->langs->line($this->resource[$ship]) . ': ' . $count . '<br>';
                 }
             }
         }

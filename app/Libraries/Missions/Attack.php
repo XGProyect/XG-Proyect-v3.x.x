@@ -7,8 +7,6 @@ use App\Libraries\Combatreport\Report;
 use App\Libraries\FleetsLib;
 use App\Libraries\FormatLib;
 use App\Libraries\Functions;
-use App\Libraries\Missions\Attack_lang;
-use App\Libraries\Missions\Missions;
 use App\Libraries\PlanetLib;
 use App\Libraries\UpdatesLibrary;
 use Battle;
@@ -720,7 +718,7 @@ class Attack extends Missions
         ]);
 
         // Updating flying fleets
-        $id_string = join(",", $emptyFleets);
+        $id_string = join(',', $emptyFleets);
 
         if (!empty($id_string)) {
             $this->missionsModel->deleteMultipleFleetsByIds($id_string);

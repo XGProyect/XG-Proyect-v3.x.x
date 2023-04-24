@@ -3,7 +3,6 @@
 namespace App\Libraries;
 
 use App\Core\Enumerators\BuildingsEnumerator as Buildings;
-use App\Libraries\Functions;
 
 abstract class Formulas
 {

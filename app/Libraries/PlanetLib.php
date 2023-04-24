@@ -4,8 +4,6 @@ namespace App\Libraries;
 
 use App\Core\Enumerators\PlanetTypesEnumerator;
 use App\Core\Language;
-use App\Libraries\Formulas;
-use App\Libraries\Functions;
 use App\Models\Libraries\PlanetLib as PlanetLibModel;
 use CiLang;
 

@@ -16,8 +16,8 @@ class Buddies extends Model
     public function getBuddyDataByBuddyId($buddy_id)
     {
         return $this->db->queryFetch(
-            "SELECT *
-            FROM `" . BUDDY . "`
+            'SELECT *
+            FROM `' . BUDDY . "`
             WHERE `buddy_id` = '" . (int) $buddy_id . "'"
         );
     }
@@ -31,8 +31,8 @@ class Buddies extends Model
     public function getBuddiesByUserId($user_id)
     {
         return $this->db->queryFetchAll(
-            "SELECT *
-                FROM `" . BUDDY . "`
+            'SELECT *
+                FROM `' . BUDDY . "`
                 WHERE `buddy_sender` = '" . (int) $user_id . "'
                     OR `buddy_receiver` = '" . (int) $user_id . "'"
         );
@@ -48,7 +48,7 @@ class Buddies extends Model
     public function getBuddyDataById($user_id)
     {
         return $this->db->queryFetch(
-            "SELECT u.`user_id`,
+            'SELECT u.`user_id`,
                     u.`user_name`,
                     u.`user_galaxy`,
                     u.`user_system`,
@@ -56,8 +56,8 @@ class Buddies extends Model
                     u.`user_onlinetime`,
                     a.`alliance_id`,
                     a.`alliance_name`
-            FROM " . USERS . " AS u
-            LEFT JOIN `" . ALLIANCE . "` AS a ON a.`alliance_id` = u.`user_ally_id`
+            FROM ' . USERS . ' AS u
+            LEFT JOIN `' . ALLIANCE . "` AS a ON a.`alliance_id` = u.`user_ally_id`
             WHERE u.`user_id`='" . (int) $user_id . "'"
         );
     }
@@ -73,7 +73,7 @@ class Buddies extends Model
     public function removeBuddyById($buddy_id, $user_id)
     {
         $this->db->query(
-            "DELETE FROM `" . BUDDY . "`
+            'DELETE FROM `' . BUDDY . "`
             WHERE `buddy_id` = '" . (int) $buddy_id . "'
                 AND (`buddy_receiver` = '" . (int) $user_id . "'
                         OR `buddy_sender` = '" . (int) $user_id . "') "
@@ -91,7 +91,7 @@ class Buddies extends Model
     public function setBuddyStatusById($buddy_id, $user_id)
     {
         $this->db->query(
-            "UPDATE `" . BUDDY . "`
+            'UPDATE `' . BUDDY . "`
                 SET `buddy_status` = '1'
             WHERE `buddy_id` = '" . (int) $buddy_id . "' AND
                     `buddy_receiver` = '" . (int) $user_id . "'"
@@ -109,8 +109,8 @@ class Buddies extends Model
     public function getBuddyIdByReceiverAndSender($send_to, $user_id)
     {
         return $this->db->queryFetch(
-            "SELECT `buddy_id`
-            FROM `" . BUDDY . "`
+            'SELECT `buddy_id`
+            FROM `' . BUDDY . "`
             WHERE (`buddy_receiver` = '" . (int) $user_id . "' AND
                     `buddy_sender` = '" . (int) $send_to . "') OR
                             (`buddy_receiver` = '" . (int) $send_to . "' AND
@@ -130,7 +130,7 @@ class Buddies extends Model
     public function insertNewBuddyRequest($user, $user_id, $text)
     {
         $this->db->query(
-            "INSERT INTO `" . BUDDY . "` SET
+            'INSERT INTO `' . BUDDY . "` SET
                 `buddy_sender` = '" . (int) $user_id . "',
                 `buddy_receiver` = '" . (int) $user . "',
                 `buddy_status` = '0',
@@ -148,10 +148,10 @@ class Buddies extends Model
     public function checkIfBuddyExists($user_id)
     {
         return $this->db->queryFetch(
-            "SELECT
+            'SELECT
                 `user_id`,
                 `user_name`
-                FROM `" . USERS . "`
+                FROM `' . USERS . "`
                 WHERE `user_id` = '" . (int) $user_id . "'"
         );
     }
@@ -167,11 +167,11 @@ class Buddies extends Model
     public function getBuddiesDetailsForAcsById(int $user_id, int $group_id): array
     {
         return $this->db->queryFetchAll(
-            "SELECT DISTINCT
+            'SELECT DISTINCT
                 u.`user_id`,
                 u.`user_name`
-            FROM `" . BUDDY . "` AS b
-            LEFT JOIN `" . USERS . "` AS u
+            FROM `' . BUDDY . '` AS b
+            LEFT JOIN `' . USERS . "` AS u
             	ON ((u.user_id = b.buddy_sender) OR (u.user_id = b.buddy_receiver))
             WHERE
             (

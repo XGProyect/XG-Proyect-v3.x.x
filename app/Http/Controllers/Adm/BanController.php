@@ -161,7 +161,7 @@ class BanController extends BaseController
             Functions::redirect('admin.php?page=ban');
         }
 
-        return $this->template->set("adm/ban_result_view", $parse);
+        return $this->template->set('adm/ban_result_view', $parse);
     }
 
     /**

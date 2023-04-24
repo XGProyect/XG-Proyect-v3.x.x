@@ -4,7 +4,6 @@ namespace App\Libraries\Alliance;
 
 use App\Core\Entity\AllianceEntity;
 use App\Core\Enumerators\SwitchIntEnumerator;
-use App\Libraries\Alliance\Ranks;
 
 class Alliances
 {

@@ -53,14 +53,14 @@ class CiLang
      *
      * @var    array
      */
-    public $language = array();
+    public $language = [];
 
     /**
      * List of loaded language files
      *
      * @var    array
      */
-    public $is_loaded = array();
+    public $is_loaded = [];
 
     /**
      * Class constructor
@@ -145,7 +145,7 @@ class CiLang
             //log_message('error', 'Language file contains no data: language/' . $idiom . '/' . $langfile);
 
             if ($return === true) {
-                return array();
+                return [];
             }
             return;
         }

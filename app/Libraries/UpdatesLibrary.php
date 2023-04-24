@@ -9,13 +9,8 @@ use App\Core\Objects;
 use App\Helpers\UrlHelper;
 use App\Libraries\DevelopmentsLib as Developments;
 use App\Libraries\FormatLib as Format;
-use App\Libraries\Formulas;
-use App\Libraries\Functions;
-use App\Libraries\MissionControlLib;
 use App\Libraries\OfficiersLib as Officiers;
 use App\Libraries\ProductionLib as Production;
-use App\Libraries\StatisticsLibrary;
-use App\Libraries\Users;
 use App\Models\Libraries\UpdatesLibrary as UpdatesLibraryModel;
 
 class UpdatesLibrary
@@ -167,10 +162,10 @@ class UpdatesLibrary
             $current_queue = $current_planet['planet_b_building_id'];
 
             if ($current_queue != 0) {
-                $queue_array = explode(";", $current_queue);
+                $queue_array = explode(';', $current_queue);
             }
 
-            $build_array = explode(",", $queue_array[0]);
+            $build_array = explode(',', $queue_array[0]);
             $element = $build_array[0];
             $build_end_time = floor($build_array[3]);
             $build_mode = $build_array[4];
@@ -249,11 +244,11 @@ class UpdatesLibrary
             $current_queue = $current_planet['planet_b_building_id'];
 
             if ($current_queue != 0) {
-                $queue_array = explode(";", $current_queue);
+                $queue_array = explode(';', $current_queue);
                 $loop = true;
 
                 while ($loop) {
-                    $list_id_array = explode(",", $queue_array[0]);
+                    $list_id_array = explode(',', $queue_array[0]);
                     $element = $list_id_array[0];
                     $level = $list_id_array[1];
                     $build_time = $list_id_array[2];
@@ -289,7 +284,7 @@ class UpdatesLibrary
 
                         // if we upgrade robots or nanobots we must recalculate everything
                         foreach ($queue_array as $queue_item => $data) {
-                            $element_data = explode(",", $data);
+                            $element_data = explode(',', $data);
                             $previous_time = $element_data[2];
                             $element_data[2] = Developments::developmentTime($current_user, $current_planet, $element_data[0]);
                             if ($for_destroy) {
@@ -313,10 +308,10 @@ class UpdatesLibrary
 
                             $prevData = $element_data[3];
 
-                            $recalculated_queue[$queue_item] = join(",", $element_data);
+                            $recalculated_queue[$queue_item] = join(',', $element_data);
                         }
 
-                        $new_queue = join(";", $recalculated_queue);
+                        $new_queue = join(';', $recalculated_queue);
 
                         if ($new_queue == '') {
                             $new_queue = '0';
@@ -384,9 +379,9 @@ class UpdatesLibrary
                         array_shift($queue_array);
 
                         foreach ($queue_array as $num => $info) {
-                            $fix_ele = explode(",", $info);
+                            $fix_ele = explode(',', $info);
                             $fix_ele[3] = $fix_ele[3] - $build_time; // build end time
-                            $queue_array[$num] = join(",", $fix_ele);
+                            $queue_array[$num] = join(',', $fix_ele);
                         }
 
                         $actual_count = count($queue_array);
@@ -660,7 +655,7 @@ class UpdatesLibrary
                         }
 
                         if ($resource[$element] != '') {
-                            $sub_query .= "`" . $resource[$element] . "` = '" . $current_planet[$resource[$element]] . "', ";
+                            $sub_query .= '`' . $resource[$element] . "` = '" . $current_planet[$resource[$element]] . "', ";
                         }
                     }
                 }
@@ -678,13 +673,13 @@ class UpdatesLibrary
 
                 $tech_query = "`planet_b_tech` = '0',";
                 $tech_query .= "`planet_b_tech_id` = '0',";
-                $tech_query .= "`" . $resource[$current_planet['planet_b_tech_id']] . "` = '" .
+                $tech_query .= '`' . $resource[$current_planet['planet_b_tech_id']] . "` = '" .
                     $current_user[$resource[$current_planet['planet_b_tech_id']]] . "',";
                 $tech_query .= "`user_statistic_technology_points` = `user_statistic_technology_points` + '" .
                     $current_user['research_points'] . "',";
                 $tech_query .= "`research_current_research` = '0',";
             } else {
-                $tech_query = "";
+                $tech_query = '';
             }
 
             $db->updateAllPlanetData([
@@ -710,7 +705,7 @@ class UpdatesLibrary
     {
         $resource = Objects::getInstance()->getObjects();
 
-        if ($current_planet['planet_b_hangar_id'] != "") {
+        if ($current_planet['planet_b_hangar_id'] != '') {
             $Builded = [];
             $BuildArray = [];
             $BuildQueue = explode(';', $current_planet['planet_b_hangar_id']);
@@ -769,7 +764,7 @@ class UpdatesLibrary
                 }
 
                 if ($Count != 0) {
-                    $current_planet['planet_b_hangar_id'] .= $Element . "," . $Count . ";";
+                    $current_planet['planet_b_hangar_id'] .= $Element . ',' . $Count . ';';
                 }
             }
         } else {

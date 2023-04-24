@@ -34,8 +34,8 @@ class Messages extends Model
     public function deleteAllMessagesByIds(array $ids): void
     {
         $this->db->query(
-            "DELETE FROM `" . MESSAGES . "`
-            WHERE `message_id` IN (" . join(',', $ids) . ")"
+            'DELETE FROM `' . MESSAGES . '`
+            WHERE `message_id` IN (' . join(',', $ids) . ')'
         );
     }
 
@@ -52,7 +52,7 @@ class Messages extends Model
             $message_user = $to_query['message_user'];
 
             if (is_string($message_user)) {
-                $query_search['message_user'] = "(`message_sender` = (SELECT `user_id` FROM `" . USERS . "` WHERE `user_name` = '" . $message_user . "' LIMIT 1) OR `message_receiver` = (SELECT `user_id` FROM `" . USERS . "` WHERE `user_name` = '" . $message_user . "' LIMIT 1))";
+                $query_search['message_user'] = '(`message_sender` = (SELECT `user_id` FROM `' . USERS . "` WHERE `user_name` = '" . $message_user . "' LIMIT 1) OR `message_receiver` = (SELECT `user_id` FROM `" . USERS . "` WHERE `user_name` = '" . $message_user . "' LIMIT 1))";
             }
         }
 
@@ -88,11 +88,11 @@ class Messages extends Model
         }
 
         if (isset($query_search)) {
-            $search_query_string = "SELECT m.*, u1.`user_name` AS `sender`, u2.`user_name` AS `receiver`
-                FROM `" . MESSAGES . "` AS m
-                LEFT JOIN `" . USERS . "` as u1 ON u1.`user_id` = m.`message_sender`
-                LEFT JOIN `" . USERS . "` as u2 ON u2.`user_id` = m.`message_receiver`
-                WHERE ";
+            $search_query_string = 'SELECT m.*, u1.`user_name` AS `sender`, u2.`user_name` AS `receiver`
+                FROM `' . MESSAGES . '` AS m
+                LEFT JOIN `' . USERS . '` as u1 ON u1.`user_id` = m.`message_sender`
+                LEFT JOIN `' . USERS . '` as u2 ON u2.`user_id` = m.`message_receiver`
+                WHERE ';
 
             foreach ($query_search as $content) {
                 $search_query_string .= $content . ' AND ';

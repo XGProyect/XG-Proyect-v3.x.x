@@ -29,9 +29,9 @@ final class ErrorHandler
 
     final public function errorHandler(int $code, string $description, string $file, int $line): bool
     {
-        $displayErrors = strtolower(ini_get("display_errors"));
+        $displayErrors = strtolower(ini_get('display_errors'));
 
-        if (error_reporting() === 0 || $displayErrors === "on") {
+        if (error_reporting() === 0 || $displayErrors === 'on') {
             return false;
         }
 

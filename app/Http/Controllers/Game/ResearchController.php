@@ -105,7 +105,7 @@ class ResearchController extends BaseController
                             $bloc
                         );
                     } else {
-                        $action_link = "<center>-</center>";
+                        $action_link = '<center>-</center>';
                     }
                 }
                 $RowParse['tech_link'] = $action_link;
@@ -236,7 +236,7 @@ class ResearchController extends BaseController
 
                 for ($i = 0; $i < MAX_BUILDING_QUEUE_SIZE; $i++) {
                     if (isset($queue[$i])) {
-                        $element_data = explode(",", $queue[$i]);
+                        $element_data = explode(',', $queue[$i]);
                         $element_id = $element_data[0];
 
                         if ($element_id == 31) {

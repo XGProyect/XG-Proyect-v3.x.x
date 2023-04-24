@@ -3,7 +3,6 @@
 namespace App\Libraries;
 
 use App\Core\Language;
-use App\Libraries\Functions;
 
 abstract class TimingLibrary
 {
@@ -78,7 +77,7 @@ abstract class TimingLibrary
     {
         $days = floor((time() - $time) / (3600 * 24));
 
-        return strtr("%s d", ["%s" => $days]);
+        return strtr('%s d', ['%s' => $days]);
     }
 
     /**

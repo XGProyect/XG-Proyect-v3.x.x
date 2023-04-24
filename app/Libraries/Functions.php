@@ -11,8 +11,6 @@ use App\Helpers\StringsHelper;
 use App\Libraries\Messenger\MessagesFormat;
 use App\Libraries\Messenger\MessagesOptions;
 use App\Libraries\Messenger\Messenger;
-use App\Libraries\Page;
-use App\Libraries\Users;
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
 
@@ -168,7 +166,7 @@ abstract class Functions
         (new Page(new Users()))->display(
             self::getTemplate()->set('general/message_body', $parse),
             $topnav,
-            (($dest != "") ? "<meta http-equiv=\"refresh\" content=\"$time;URL=$dest\">" : ""),
+            (($dest != '') ? "<meta http-equiv=\"refresh\" content=\"$time;URL=$dest\">" : ''),
             $menu
         );
     }
@@ -285,9 +283,9 @@ abstract class Functions
                 return false;
             }
 
-            require_once $mailLibPath. '/src/Exception.php';
-            require_once $mailLibPath. '/src/PHPMailer.php';
-            require_once $mailLibPath. '/src/SMTP.php';
+            require_once $mailLibPath . '/src/Exception.php';
+            require_once $mailLibPath . '/src/PHPMailer.php';
+            require_once $mailLibPath . '/src/SMTP.php';
 
             $mail = new PHPMailer();
 
@@ -300,15 +298,15 @@ abstract class Functions
                 $mail->Port = !empty(self::readConfig('mailing_smtp_port')) ? self::readConfig('mailing_smtp_port') : null;
                 $mail->SMTPSecure = !empty(self::readConfig('mailing_smtp_crypto')) ? self::readConfig('mailing_smtp_crypto') : null;
                 $mail->Timeout = !empty(self::readConfig('mailing_smtp_timeout')) ? self::readConfig('mailing_smtp_timeout') : null;
-                $mail->CharSet = "UTF-8";
+                $mail->CharSet = 'UTF-8';
 
                 if (
                     !empty(self::readConfig('mailing_smtp_user')) &&
                     !empty(self::readConfig('mailing_smtp_pass'))
                 ) {
-                    $mail->SMTPAuth   = true;
-                    $mail->Username   = self::readConfig('mailing_smtp_user');
-                    $mail->Password   = self::readConfig('mailing_smtp_pass');
+                    $mail->SMTPAuth = true;
+                    $mail->Username = self::readConfig('mailing_smtp_user');
+                    $mail->Password = self::readConfig('mailing_smtp_pass');
                 }
             }
 

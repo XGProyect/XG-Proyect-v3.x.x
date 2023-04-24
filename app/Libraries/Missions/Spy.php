@@ -7,7 +7,6 @@ use App\Helpers\StringsHelper;
 use App\Libraries\FleetsLib;
 use App\Libraries\FormatLib;
 use App\Libraries\Functions;
-use App\Libraries\Missions\Missions;
 use App\Libraries\OfficiersLib;
 
 class Spy extends Missions
@@ -56,7 +55,7 @@ class Spy extends Missions
             $fleet = FleetsLib::getFleetShipsArray($fleet_row['fleet_array']);
 
             foreach ($fleet as $id => $amount) {
-                if ($id == "210") {
+                if ($id == '210') {
                     $LS = $amount;
                     $SpyToolDebris = $LS * 300;
 
@@ -101,13 +100,13 @@ class Spy extends Missions
                         );
                     }
 
-                    $AttackLink = "<center>";
-                    $AttackLink .= "<a href=\"game.php?page=fleet1&galaxy=" . $fleet_row['fleet_end_galaxy'] . "&system=" . $fleet_row['fleet_end_system'] . "";
-                    $AttackLink .= "&planet=" . $fleet_row['fleet_end_planet'] . "&planettype=" . $fleet_row['fleet_end_type'] . "";
-                    $AttackLink .= "&target_mission=1";
-                    $AttackLink .= " \">" . $this->langs->language['type_mission'][MissionsEnumerator::ATTACK] . "";
-                    $AttackLink .= "</a></center>";
-                    $MessageEnd = "<center>" . sprintf($this->langs->line('spy_report_detection'), $TargetChances) . "</center>";
+                    $AttackLink = '<center>';
+                    $AttackLink .= '<a href="game.php?page=fleet1&galaxy=' . $fleet_row['fleet_end_galaxy'] . '&system=' . $fleet_row['fleet_end_system'] . '';
+                    $AttackLink .= '&planet=' . $fleet_row['fleet_end_planet'] . '&planettype=' . $fleet_row['fleet_end_type'] . '';
+                    $AttackLink .= '&target_mission=1';
+                    $AttackLink .= ' ">' . $this->langs->language['type_mission'][MissionsEnumerator::ATTACK] . '';
+                    $AttackLink .= '</a></center>';
+                    $MessageEnd = '<center>' . sprintf($this->langs->line('spy_report_detection'), $TargetChances) . '</center>';
 
                     $spionage_difference = abs($CurrentSpyLvl - $TargetSpyLvl);
 
@@ -132,23 +131,23 @@ class Spy extends Missions
                     }
 
                     if ($resources <= $LS) {
-                        $SpyMessage = $Materials . "<br />" . $AttackLink . $MessageEnd;
+                        $SpyMessage = $Materials . '<br />' . $AttackLink . $MessageEnd;
                     }
 
                     if ($fleet <= $LS) {
-                        $SpyMessage = $PlanetFleet . "<br />" . $AttackLink . $MessageEnd;
+                        $SpyMessage = $PlanetFleet . '<br />' . $AttackLink . $MessageEnd;
                     }
 
                     if ($defense <= $LS) {
-                        $SpyMessage = $PlanetDefense . "<br />" . $AttackLink . $MessageEnd;
+                        $SpyMessage = $PlanetDefense . '<br />' . $AttackLink . $MessageEnd;
                     }
 
                     if ($buildings <= $LS) {
-                        $SpyMessage = $PlanetBuildings . "<br />" . $AttackLink . $MessageEnd;
+                        $SpyMessage = $PlanetBuildings . '<br />' . $AttackLink . $MessageEnd;
                     }
 
                     if ($tech <= $LS) {
-                        $SpyMessage = $TargetTechnos . "<br />" . $AttackLink . $MessageEnd;
+                        $SpyMessage = $TargetTechnos . '<br />' . $AttackLink . $MessageEnd;
                     }
 
                     Functions::sendMessage(
@@ -198,16 +197,16 @@ class Spy extends Missions
 
         switch ($mode) {
             case 0:
-                $String = "<table width=\"440\"><tr><td class=\"c\" colspan=\"5\">";
+                $String = '<table width="440"><tr><td class="c" colspan="5">';
                 $String .= $report_title;
-                $String .= "</td>";
-                $String .= "</tr><tr>";
-                $String .= "<td width=220>" . $this->langs->line('metal') . "</td><td width=220 align=right>" . FormatLib::prettyNumber($target_data['planet_metal']) . "</td><td>&nbsp;</td>";
-                $String .= "<td width=220>" . $this->langs->line('crystal') . "</td></td><td width=220 align=right>" . FormatLib::prettyNumber($target_data['planet_crystal']) . "</td>";
-                $String .= "</tr><tr>";
-                $String .= "<td width=220>" . $this->langs->line('deuterium') . "</td><td width=220 align=right>" . FormatLib::prettyNumber($target_data['planet_deuterium']) . "</td><td>&nbsp;</td>";
-                $String .= "<td width=220>" . $this->langs->line('energy') . "</td><td width=220 align=right>" . FormatLib::prettyNumber($target_data['planet_energy_max']) . "</td>";
-                $String .= "</tr>";
+                $String .= '</td>';
+                $String .= '</tr><tr>';
+                $String .= '<td width=220>' . $this->langs->line('metal') . '</td><td width=220 align=right>' . FormatLib::prettyNumber($target_data['planet_metal']) . '</td><td>&nbsp;</td>';
+                $String .= '<td width=220>' . $this->langs->line('crystal') . '</td></td><td width=220 align=right>' . FormatLib::prettyNumber($target_data['planet_crystal']) . '</td>';
+                $String .= '</tr><tr>';
+                $String .= '<td width=220>' . $this->langs->line('deuterium') . '</td><td width=220 align=right>' . FormatLib::prettyNumber($target_data['planet_deuterium']) . '</td><td>&nbsp;</td>';
+                $String .= '<td width=220>' . $this->langs->line('energy') . '</td><td width=220 align=right>' . FormatLib::prettyNumber($target_data['planet_energy_max']) . '</td>';
+                $String .= '</tr>';
 
                 $LookAtLoop = false;
 
@@ -245,7 +244,7 @@ class Spy extends Missions
         }
 
         if ($LookAtLoop == true) {
-            $String = "<table width=\"440\" cellspacing=\"1\"><tr><td class=\"c\" colspan=\"" . ((2 * 2) + (2 - 1)) . "\">" . $report_title . "</td></tr>";
+            $String = '<table width="440" cellspacing="1"><tr><td class="c" colspan="' . ((2 * 2) + (2 - 1)) . '">' . $report_title . '</td></tr>';
             $Count = 0;
             $CurrentLook = 0;
 
@@ -254,31 +253,31 @@ class Spy extends Missions
                 for ($Item = $ResFrom[$CurrentLook]; $Item <= $ResTo[$CurrentLook]; $Item++) {
                     if (isset($this->resource[$Item]) && $target_data[$this->resource[$Item]] > 0) {
                         if ($row == 0) {
-                            $String .= "<tr>";
+                            $String .= '<tr>';
                         }
 
-                        $String .= "<td align=left>" . $this->langs->language[$this->resource[$Item]] . "</td><td align=right>" . FormatLib::prettyNumber($target_data[$this->resource[$Item]]) . "</td>";
+                        $String .= '<td align=left>' . $this->langs->language[$this->resource[$Item]] . '</td><td align=right>' . FormatLib::prettyNumber($target_data[$this->resource[$Item]]) . '</td>';
 
                         if ($row < 2 - 1) {
-                            $String .= "<td>&nbsp;</td>";
+                            $String .= '<td>&nbsp;</td>';
                         }
 
                         $Count += $target_data[$this->resource[$Item]];
                         $row++;
 
                         if ($row == 2) {
-                            $String .= "</tr>";
+                            $String .= '</tr>';
                             $row = 0;
                         }
                     }
                 }
 
                 while ($row != 0) {
-                    $String .= "<td>&nbsp;</td><td>&nbsp;</td>";
+                    $String .= '<td>&nbsp;</td><td>&nbsp;</td>';
                     $row++;
 
                     if ($row == 2) {
-                        $String .= "</tr>";
+                        $String .= '</tr>';
                         $row = 0;
                     }
                 }
@@ -286,7 +285,7 @@ class Spy extends Missions
             }
         }
 
-        $String .= "</table>";
+        $String .= '</table>';
 
         $return['String'] = $String;
         $return['Count'] = $Count;

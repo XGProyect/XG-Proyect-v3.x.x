@@ -213,10 +213,10 @@ class FormatLib
     public static function prettyNumber($n, $floor = true)
     {
         if ($floor) {
-            $n = floor($n??0.0);
+            $n = floor($n ?? 0.0);
         }
 
-        return number_format($n, 0, ",", ".");
+        return number_format($n, 0, ',', '.');
     }
 
     /**
@@ -256,10 +256,10 @@ class FormatLib
     public static function floatToString($numeric, $pro = 0, $output = false)
     {
         return ($output) ? str_replace(
-            ",",
-            ".",
-            sprintf("%." . $pro . "f", $numeric)
-        ) : sprintf("%." . $pro . "f", $numeric);
+            ',',
+            '.',
+            sprintf('%.' . $pro . 'f', $numeric)
+        ) : sprintf('%.' . $pro . 'f', $numeric);
     }
 
     /**

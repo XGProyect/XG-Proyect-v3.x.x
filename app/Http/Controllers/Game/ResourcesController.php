@@ -225,7 +225,7 @@ class ResourcesController extends BaseController
 
                     $Value = $Value / 10;
                     $this->planet[$FieldName] = $Value;
-                    $SubQry .= ", `" . $FieldName . "` = '" . $Value . "'";
+                    $SubQry .= ', `' . $FieldName . "` = '" . $Value . "'";
                 }
             }
 
@@ -255,12 +255,12 @@ class ResourcesController extends BaseController
             $opt_value = $option * 10;
 
             if ($option == $current_porcentage) {
-                $opt_selected = " selected=selected";
+                $opt_selected = ' selected=selected';
             } else {
-                $opt_selected = "";
+                $opt_selected = '';
             }
 
-            $option_row .= "<option value=\"" . $opt_value . "\"" . $opt_selected . ">" . $opt_value . "%</option>";
+            $option_row .= '<option value="' . $opt_value . '"' . $opt_selected . '>' . $opt_value . '%</option>';
         }
 
         return $option_row;

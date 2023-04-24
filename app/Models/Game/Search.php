@@ -16,7 +16,7 @@ class Search extends Model
     {
         if (!empty($playerName)) {
             return $this->db->queryFetchAll(
-                "SELECT
+                'SELECT
                     u.`user_id`,
                     u.`user_name`,
                     u.`user_authlevel`,
@@ -27,12 +27,12 @@ class Search extends Model
                     s.`user_statistic_total_rank` AS `user_rank`,
                     a.`alliance_id`,
                     a.`alliance_name`
-                FROM `" . USERS . "` AS u
-                    INNER JOIN `" . USERS_STATISTICS . "` AS s ON s.`user_statistic_user_id` = u.`user_id`
-                    INNER JOIN `" . PLANETS . "` AS p ON p.`planet_id` = u.`user_home_planet_id`
-                    LEFT JOIN `" . ALLIANCE . "` AS a ON a.alliance_id = u.`user_ally_id`
+                FROM `' . USERS . '` AS u
+                    INNER JOIN `' . USERS_STATISTICS . '` AS s ON s.`user_statistic_user_id` = u.`user_id`
+                    INNER JOIN `' . PLANETS . '` AS p ON p.`planet_id` = u.`user_home_planet_id`
+                    LEFT JOIN `' . ALLIANCE . "` AS a ON a.alliance_id = u.`user_ally_id`
                 WHERE u.`user_name` LIKE '%" . $this->db->escapeValue($playerName) . "%'
-                LIMIT " . MAX_SEARCH_RESULTS . ";"
+                LIMIT " . MAX_SEARCH_RESULTS . ';'
             );
         }
 
@@ -49,7 +49,7 @@ class Search extends Model
     {
         if (!empty($allianceTag)) {
             return $this->db->queryFetchAll(
-                "SELECT
+                'SELECT
                     a.`alliance_id`,
                     a.`alliance_name`,
                     a.`alliance_tag`,
@@ -57,14 +57,14 @@ class Search extends Model
                     s.`alliance_statistic_total_points` AS `alliance_points`,
                     (SELECT
                         COUNT(user_id) AS `ally_members`
-                        FROM `" . USERS . "`
+                        FROM `' . USERS . '`
                         WHERE `user_ally_id` = a.`alliance_id`
                     ) AS `alliance_members`
-                FROM `" . ALLIANCE . "` AS a
-                    LEFT JOIN `" . ALLIANCE_STATISTICS . "` AS s ON a.`alliance_id` = s.`alliance_statistic_alliance_id`
+                FROM `' . ALLIANCE . '` AS a
+                    LEFT JOIN `' . ALLIANCE_STATISTICS . "` AS s ON a.`alliance_id` = s.`alliance_statistic_alliance_id`
                 WHERE (a.alliance_name LIKE '%" . $this->db->escapeValue($allianceTag) . "%')
                     OR (a.alliance_tag LIKE '%" . $this->db->escapeValue($allianceTag) . "%')
-                LIMIT " . MAX_SEARCH_RESULTS . ";"
+                LIMIT " . MAX_SEARCH_RESULTS . ';'
             );
         }
 
@@ -81,7 +81,7 @@ class Search extends Model
     {
         if (!empty($planetName)) {
             return $this->db->queryFetchAll(
-                "SELECT
+                'SELECT
                     u.`user_id`,
                     u.`user_name`,
                     u.`user_authlevel`,
@@ -92,12 +92,12 @@ class Search extends Model
                     s.`user_statistic_total_rank` AS `user_rank`,
                     a.`alliance_id`,
                     a.`alliance_name`
-                FROM `" . USERS . "` AS u
-                    INNER JOIN `" . USERS_STATISTICS . "` AS s ON s.`user_statistic_user_id` = u.`user_id`
-                    INNER JOIN `" . PLANETS . "` AS p ON p.`planet_user_id` = u.`user_id`
-                    LEFT JOIN `" . ALLIANCE . "` AS a ON a.`alliance_id` = u.`user_ally_id`
+                FROM `' . USERS . '` AS u
+                    INNER JOIN `' . USERS_STATISTICS . '` AS s ON s.`user_statistic_user_id` = u.`user_id`
+                    INNER JOIN `' . PLANETS . '` AS p ON p.`planet_user_id` = u.`user_id`
+                    LEFT JOIN `' . ALLIANCE . "` AS a ON a.`alliance_id` = u.`user_ally_id`
                 WHERE p.`planet_name` LIKE '%" . $this->db->escapeValue($planetName) . "%'
-                LIMIT " . MAX_SEARCH_RESULTS . ";"
+                LIMIT " . MAX_SEARCH_RESULTS . ';'
             );
         }
 

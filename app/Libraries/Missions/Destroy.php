@@ -9,8 +9,6 @@ use App\Libraries\FleetsLib;
 use App\Libraries\FormatLib;
 use App\Libraries\Formulas;
 use App\Libraries\Functions;
-use App\Libraries\Missions\Attack_lang;
-use App\Libraries\Missions\Missions;
 use App\Libraries\UpdatesLibrary;
 use Battle;
 use DebugManager;
@@ -765,7 +763,7 @@ class Destroy extends Missions
         ]);
 
         // Updating flying fleets
-        $id_string = join(",", $emptyFleets);
+        $id_string = join(',', $emptyFleets);
 
         if (!empty($id_string)) {
             $this->missionsModel->deleteMultipleFleetsByIds($id_string);
@@ -897,7 +895,7 @@ class Destroy extends Missions
 
         $raport[] = sprintf($this->langs->line('des_moon_ds_chances'), $this->_destruction['moon_chance'], $this->_destruction['ds_chance']);
 
-        return join("<br/>", $raport);
+        return join('<br/>', $raport);
     }
 
     /**

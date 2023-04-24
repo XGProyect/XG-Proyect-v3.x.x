@@ -58,6 +58,6 @@ abstract class UrlHelper
      */
     public static function getUrlProtocol(): string
     {
-        return (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' or $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
+        return (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' or $_SERVER['SERVER_PORT'] == 443) ? 'https://' : 'http://';
     }
 }

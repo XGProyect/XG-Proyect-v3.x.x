@@ -18,11 +18,11 @@ class Messages extends Model
     {
         if ((int) $user_id > 0 && !empty($msg_type_string)) {
             return $this->db->queryFetchAll(
-                "SELECT *
-                FROM `" . MESSAGES . "`
-                WHERE `message_receiver` = " . $user_id . "
-                        AND `message_type` IN (" . rtrim($msg_type_string, ',') . ")
-                ORDER BY `message_time` DESC;"
+                'SELECT *
+                FROM `' . MESSAGES . '`
+                WHERE `message_receiver` = ' . $user_id . '
+                        AND `message_type` IN (' . rtrim($msg_type_string, ',') . ')
+                ORDER BY `message_time` DESC;'
             );
         }
 
@@ -40,9 +40,9 @@ class Messages extends Model
     {
         if ((int) $user_id > 0) {
             return $this->db->queryFetchAll(
-                "SELECT
+                'SELECT
                     *
-                FROM `" . MESSAGES . "`
+                FROM `' . MESSAGES . "`
                 WHERE `message_receiver` = '" . $user_id . "'
                 ORDER BY `message_time` DESC;"
             );
@@ -63,10 +63,10 @@ class Messages extends Model
     {
         if ((int) $user_id > 0 && !empty($msg_type_string)) {
             return $this->db->query(
-                "UPDATE `" . MESSAGES . "` SET
+                'UPDATE `' . MESSAGES . "` SET
                     `message_read` = '1'
-                WHERE `message_receiver` = " . $user_id . "
-                        AND `message_type` IN (" . rtrim($msg_type_string, ',') . ");"
+                WHERE `message_receiver` = " . $user_id . '
+                        AND `message_type` IN (' . rtrim($msg_type_string, ',') . ');'
             );
         }
 
@@ -85,9 +85,9 @@ class Messages extends Model
     {
         if ((int) $user_id > 0) {
             return $this->db->query(
-                "UPDATE `" . MESSAGES . "` SET
+                'UPDATE `' . MESSAGES . "` SET
                     `message_read` = '1'
-                WHERE `message_receiver` = " . $user_id . ";"
+                WHERE `message_receiver` = " . $user_id . ';'
             );
         }
 
@@ -105,9 +105,9 @@ class Messages extends Model
     {
         if ((int) $planet_id > 0) {
             return $this->db->queryFetch(
-                "SELECT u.`user_id`, u.`user_name`, p.`planet_galaxy`, p.`planet_system`, p.`planet_planet`
-                FROM " . PLANETS . " AS p
-                INNER JOIN " . USERS . " as u ON p.planet_user_id = u.user_id
+                'SELECT u.`user_id`, u.`user_name`, p.`planet_galaxy`, p.`planet_system`, p.`planet_planet`
+                FROM ' . PLANETS . ' AS p
+                INNER JOIN ' . USERS . " as u ON p.planet_user_id = u.user_id
                 WHERE p.`planet_user_id` = '" . $planet_id . "';"
             );
         }
@@ -126,7 +126,7 @@ class Messages extends Model
     {
         if ((int) $user_id > 0) {
             return $this->db->query(
-                "DELETE FROM " . MESSAGES . "
+                'DELETE FROM ' . MESSAGES . "
                 WHERE `message_receiver` = '" . $user_id . "';"
             );
         }
@@ -146,8 +146,8 @@ class Messages extends Model
     {
         if ((int) $user_id > 0) {
             return $this->db->query(
-                "DELETE FROM " . MESSAGES . "
-                WHERE `message_id` IN (" . $messages_ids . ")
+                'DELETE FROM ' . MESSAGES . '
+                WHERE `message_id` IN (' . $messages_ids . ")
                     AND `message_receiver` = '" . $user_id . "';"
             );
         }
@@ -167,8 +167,8 @@ class Messages extends Model
     {
         if ((int) $user_id > 0 && (int) $message_type >= 0) {
             return $this->db->query(
-                "DELETE FROM " . MESSAGES . "
-                WHERE `message_type` IN (" . $message_type . ")
+                'DELETE FROM ' . MESSAGES . '
+                WHERE `message_type` IN (' . $message_type . ")
                     AND `message_receiver` = '" . $user_id . "';"
             );
         }
@@ -187,11 +187,11 @@ class Messages extends Model
     {
         if ((int) $user_id > 0) {
             return $this->db->queryFetchAll(
-                "SELECT
+                'SELECT
                     `message_type`,
                     COUNT(`message_type`) AS message_type_count,
                     SUM(`message_read` = 0) AS unread_count
-                FROM `" . MESSAGES . "`
+                FROM `' . MESSAGES . "`
                 WHERE `message_receiver` = '" . $user_id . "'
                 GROUP BY `message_type`"
             );
@@ -212,9 +212,9 @@ class Messages extends Model
     {
         if ((int) $user_id > 0 && (int) $user_ally_id >= 0) {
             return $this->db->queryFetch(
-                "SELECT
+                'SELECT
                 ( SELECT COUNT(`user_id`)
-                    FROM `" . USERS . "`
+                    FROM `' . USERS . "`
                     WHERE `user_ally_id` = '" . $user_ally_id . "'
                         AND `user_ally_id` <> 0
                         AND `user_id` <> '" . $user_id . "'
@@ -253,12 +253,12 @@ class Messages extends Model
     {
         if ((int) $user_id > 0) {
             return $this->db->query(
-                "SELECT
+                'SELECT
                     u.`user_id`,
                     u.`user_name`,
                     u.`user_email`
-                FROM `" . BUDDY . "` b
-                LEFT JOIN `" . USERS . "` u
+                FROM `' . BUDDY . '` b
+                LEFT JOIN `' . USERS . "` u
                     ON u.user_id = IF(`buddy_sender` = '" . $user_id . "', `buddy_receiver`, `buddy_sender`)
                 WHERE `buddy_sender`='" . $user_id . "'
                     OR `buddy_receiver`='" . $user_id . "'"
@@ -280,8 +280,8 @@ class Messages extends Model
     {
         if ((int) $user_id > 0 && (int) $user_ally_id > 0) {
             return $this->db->query(
-                "SELECT `user_id`, `user_name`, `user_email`
-                FROM " . USERS . "
+                'SELECT `user_id`, `user_name`, `user_email`
+                FROM ' . USERS . "
                 WHERE user_ally_id = '" . $user_ally_id . "'
                     AND `user_id` <> '" . $user_id . "';"
             );
@@ -301,8 +301,8 @@ class Messages extends Model
     {
         if ((int) $user_id > 0) {
             return $this->db->queryFetchAll(
-                "SELECT `user_name`, `user_email`
-                FROM " . USERS . "
+                'SELECT `user_name`, `user_email`
+                FROM ' . USERS . "
                 WHERE user_authlevel > '0'
                     AND `user_id` <> '" . $user_id . "';"
             );
@@ -322,8 +322,8 @@ class Messages extends Model
     {
         if ((int) $user_id > 0) {
             return $this->db->query(
-                "SELECT `note_id`, `note_priority`, `note_title`
-                FROM `" . NOTES . "`
+                'SELECT `note_id`, `note_priority`, `note_title`
+                FROM `' . NOTES . "`
                 WHERE `note_owner` = '" . $user_id . "';"
             );
         }

@@ -19,7 +19,7 @@ class Fleet extends Model
     {
         if ((int) $planet_id > 0) {
             return $this->db->queryFetch(
-                "SELECT
+                'SELECT
                         s.`ship_small_cargo_ship`,
                         s.`ship_big_cargo_ship`,
                         s.`ship_light_fighter`,
@@ -34,7 +34,7 @@ class Fleet extends Model
                         s.`ship_destroyer`,
                         s.`ship_deathstar`,
                         s.`ship_battlecruiser`
-                    FROM `" . SHIPS . "` AS s
+                    FROM `' . SHIPS . "` AS s
                     WHERE s.`ship_planet_id` = '" . $planet_id . "';"
             );
         }
@@ -53,9 +53,9 @@ class Fleet extends Model
     {
         if ((int) $user_id > 0) {
             return $this->db->queryFetchAll(
-                "SELECT
+                'SELECT
                         f.*
-                    FROM `" . FLEETS . "` f
+                    FROM `' . FLEETS . "` f
                     WHERE f.`fleet_owner` = '" . $user_id . "';"
             );
         }
@@ -74,15 +74,15 @@ class Fleet extends Model
     {
         if (!empty($group_id)) {
             return $this->db->queryFetch(
-                "SELECT
+                'SELECT
                         acs.*,
                         (
                             SELECT
                                 COUNT(*)
-                            FROM `" . ACS_MEMBERS . "` am
+                            FROM `' . ACS_MEMBERS . '` am
                             WHERE am.`acs_group_id` = acs.`acs_id`
                         ) AS `acs_members`
-                    FROM `" . ACS . "` acs
+                    FROM `' . ACS . "` acs
                     WHERE acs.`acs_id` = '" . $group_id . "';"
             );
         }
@@ -101,14 +101,14 @@ class Fleet extends Model
     {
         if ((int) $user_id > 0) {
             return $this->db->queryFetchAll(
-                "SELECT
+                'SELECT
                     p.`planet_id`,
                     p.`planet_name`,
                     p.`planet_galaxy`,
                     p.`planet_system`,
                     p.`planet_planet`,
                     p.`planet_type`
-                FROM `" . PLANETS . "` AS p
+                FROM `' . PLANETS . "` AS p
                 WHERE p.`planet_user_id` = '" . $user_id . "';"
             );
         }
@@ -125,11 +125,11 @@ class Fleet extends Model
     public function getOngoingAcs($user_id)
     {
         return $this->db->queryFetchAll(
-            "SELECT
+            'SELECT
                     acs.*
-                FROM `" . ACS_MEMBERS . "` am
-                INNER JOIN `" . ACS . "` acs ON acs.`acs_id` = am.`acs_group_id`
-                INNER JOIN `" . FLEETS . "` f ON f.`fleet_group` = acs.`acs_id`
+                FROM `' . ACS_MEMBERS . '` am
+                INNER JOIN `' . ACS . '` acs ON acs.`acs_id` = am.`acs_group_id`
+                INNER JOIN `' . FLEETS . "` f ON f.`fleet_group` = acs.`acs_id`
                 WHERE am.`acs_user_id` = '" . $user_id . "';"
         );
     }
@@ -147,11 +147,11 @@ class Fleet extends Model
     public function getPlanetOwnerByCoords(int $g, int $s, int $p, int $pt): array
     {
         return $this->db->queryFetch(
-            "SELECT
+            'SELECT
                 p.`planet_user_id`,
                 u.`user_ally_id`
-            FROM `" . PLANETS . "` AS p
-            INNER JOIN `" . USERS . "` AS u
+            FROM `' . PLANETS . '` AS p
+            INNER JOIN `' . USERS . "` AS u
                 ON u.`user_id` = p.`planet_user_id`
             WHERE p.`planet_galaxy` = '" . $g . "'
                 AND p.`planet_system` = '" . $s . "'
@@ -173,7 +173,7 @@ class Fleet extends Model
     public function getTargetDataByCoords(int $g, int $s, int $p, int $pt): array
     {
         return $this->db->queryFetch(
-            "SELECT
+            'SELECT
                 p.`planet_user_id`,
                 p.`planet_debris_metal`,
                 p.`planet_debris_crystal`,
@@ -184,9 +184,9 @@ class Fleet extends Model
                 u.`user_onlinetime`,
                 u.`user_ally_id`,
                 pr.`preference_vacation_mode`
-            FROM `" . PLANETS . "` p
-            INNER JOIN `" . USERS . "` u ON u.`user_id` = p.`planet_user_id`
-            INNER JOIN `" . PREFERENCES . "` pr ON pr.`preference_user_id` = u.`user_id`
+            FROM `' . PLANETS . '` p
+            INNER JOIN `' . USERS . '` u ON u.`user_id` = p.`planet_user_id`
+            INNER JOIN `' . PREFERENCES . "` pr ON pr.`preference_user_id` = u.`user_id`
             WHERE p.`planet_galaxy` = '" . $g . "'
                 AND p.`planet_system` = '" . $s . "'
                 AND p.`planet_planet` = '" . $p . "'
@@ -204,8 +204,8 @@ class Fleet extends Model
     public function getAcsCount($acs_id): int
     {
         return $this->db->queryFetch(
-            "SELECT COUNT(`acs_id`) AS `acs_amount`
-            FROM `" . ACS . "`
+            'SELECT COUNT(`acs_id`) AS `acs_amount`
+            FROM `' . ACS . "`
             WHERE `acs_id` = '" . $acs_id . "'"
         )['acs_amount'] ?? 0;
     }
@@ -225,11 +225,11 @@ class Fleet extends Model
 
             // prepare the query
             foreach ($fleet_data as $field => $value) {
-                $sql[] = "`" . $field . "` = '" . $value . "'";
+                $sql[] = '`' . $field . "` = '" . $value . "'";
             }
 
             $this->db->query(
-                "INSERT INTO `" . FLEETS . "` SET "
+                'INSERT INTO `' . FLEETS . '` SET '
                 . join(', ', $sql) .
                 ", `fleet_creation` = '" . time() . "';"
             );
@@ -259,7 +259,7 @@ class Fleet extends Model
             $this->db->beginTransaction();
 
             $this->db->query(
-                "INSERT INTO `" . FLEETS . "` SET
+                'INSERT INTO `' . FLEETS . "` SET
                 `fleet_owner` = '" . $data['fleet_owner'] . "',
                 `fleet_mission` = '10',
                 `fleet_amount` = " . $data['fleet_amount'] . ",
@@ -286,8 +286,8 @@ class Fleet extends Model
             );
 
             $this->db->query(
-                "UPDATE `" . DEFENSES . "` SET
-                    `defense_interplanetary_missile` = `defense_interplanetary_missile` - " . $data['fleet_amount'] . "
+                'UPDATE `' . DEFENSES . '` SET
+                    `defense_interplanetary_missile` = `defense_interplanetary_missile` - ' . $data['fleet_amount'] . "
                 WHERE `defense_planet_id` =  '" . $data['user_current_planet'] . "'"
             );
 
@@ -310,17 +310,17 @@ class Fleet extends Model
     {
         // prepare the query
         foreach ($fleet_ships as $field => $value) {
-            $sql[] = "`" . $field . "` = `" . $field . "` - '" . $value . "'";
+            $sql[] = '`' . $field . '` = `' . $field . "` - '" . $value . "'";
         }
 
         $this->db->query(
-            "UPDATE `" . PLANETS . "` AS p
-            INNER JOIN `" . SHIPS . "` AS s ON s.`ship_planet_id` = p.`planet_id` SET
-            " . join(', ', $sql) . ",
-            `planet_metal` = `planet_metal` - " . $fleet_data['fleet_resource_metal'] . ",
-            `planet_crystal` = `planet_crystal` - " . $fleet_data['fleet_resource_crystal'] . ",
-            `planet_deuterium` = `planet_deuterium` - " . ($fleet_data['fleet_resource_deuterium'] + $fleet_data['fleet_fuel']) . "
-            WHERE `planet_id` = " . $planet_data['planet_id'] . ";"
+            'UPDATE `' . PLANETS . '` AS p
+            INNER JOIN `' . SHIPS . '` AS s ON s.`ship_planet_id` = p.`planet_id` SET
+            ' . join(', ', $sql) . ',
+            `planet_metal` = `planet_metal` - ' . $fleet_data['fleet_resource_metal'] . ',
+            `planet_crystal` = `planet_crystal` - ' . $fleet_data['fleet_resource_crystal'] . ',
+            `planet_deuterium` = `planet_deuterium` - ' . ($fleet_data['fleet_resource_deuterium'] + $fleet_data['fleet_fuel']) . '
+            WHERE `planet_id` = ' . $planet_data['planet_id'] . ';'
         );
     }
 
@@ -335,8 +335,8 @@ class Fleet extends Model
     public function getBuddies(int $current_planet, int $target_planet): string
     {
         return $this->db->queryFetch(
-            "SELECT COUNT(*) AS buddies
-            FROM  `" . BUDDY . "`
+            'SELECT COUNT(*) AS buddies
+            FROM  `' . BUDDY . "`
             WHERE (
                 (
                     buddy_sender = '" . $current_planet . "'
@@ -361,8 +361,8 @@ class Fleet extends Model
     public function getAcsMaxTime(int $group_id): string
     {
         return $this->db->queryFetch(
-            "SELECT MAX(`fleet_start_time`) AS start_time
-                FROM `" . FLEETS . "`
+            'SELECT MAX(`fleet_start_time`) AS start_time
+                FROM `' . FLEETS . "`
                 WHERE `fleet_group` = '" . $group_id . "';"
         )['start_time'];
     }
@@ -379,7 +379,7 @@ class Fleet extends Model
     public function updateAcsTimes(int $group_id, int $start_time, int $end_time)
     {
         $this->db->query(
-            "UPDATE `" . FLEETS . "` SET
+            'UPDATE `' . FLEETS . "` SET
             `fleet_start_time` = '" . $start_time . "',
             `fleet_end_time` = fleet_end_time + '" . $end_time . "'
             WHERE `fleet_group` = '" . $group_id . "';"
@@ -396,8 +396,8 @@ class Fleet extends Model
     public function getAcsOwner(int $fleet_group): int
     {
         return $this->db->queryFetch(
-            "SELECT af.`acs_owner`
-                FROM `" . ACS . "` af
+            'SELECT af.`acs_owner`
+                FROM `' . ACS . "` af
                 WHERE af.`acs_id` = '" . $fleet_group . "';"
         )['acs_owner'] ?? 0;
     }
@@ -412,12 +412,12 @@ class Fleet extends Model
     public function removeAcs(int $fleet_group): void
     {
         $this->db->query(
-            "DELETE FROM `" . ACS . "`
+            'DELETE FROM `' . ACS . "`
             WHERE `acs_id` = '" . $fleet_group . "';"
         );
 
         $this->db->query(
-            "UPDATE `" . FLEETS . "` f SET
+            'UPDATE `' . FLEETS . "` f SET
                 f.`fleet_group` = '0'
             WHERE f.`fleet_group` = '" . $fleet_group . "';"
         );
@@ -447,7 +447,7 @@ class Fleet extends Model
 
                 if ($fleet->getFleetMission() == Missions::ACS) {
                     $this->db->query(
-                        "UPDATE `" . FLEETS . "` f SET
+                        'UPDATE `' . FLEETS . "` f SET
                             f.`fleet_group` = '0'
                         WHERE f.`fleet_id` = '" . $fleet->getFleetId() . "';"
                     );
@@ -466,7 +466,7 @@ class Fleet extends Model
             }
 
             $this->db->query(
-                "UPDATE `" . FLEETS . "` f SET
+                'UPDATE `' . FLEETS . "` f SET
                     f.`fleet_start_time` = '" . $base_time . "',
                     f.`fleet_end_stay` = '0',
                     f.`fleet_end_time` = '" . $return_time . "',
@@ -499,7 +499,7 @@ class Fleet extends Model
             $this->db->beginTransaction();
 
             $this->db->query(
-                "INSERT INTO `" . ACS . "` SET
+                'INSERT INTO `' . ACS . "` SET
                     `acs_name` = '" . $acs_code . "',
                     `acs_owner` = '" . $fleet->getFleetOwner() . "',
                     `acs_galaxy` = '" . $fleet->getFleetEndGalaxy() . "',
@@ -511,7 +511,7 @@ class Fleet extends Model
             $group_id = $this->db->insertId();
 
             $this->db->query(
-                "UPDATE `" . FLEETS . "` SET
+                'UPDATE `' . FLEETS . "` SET
                     `fleet_group` = '" . $group_id . "'
                 WHERE `fleet_id` = '" . $fleet->getFleetId() . "'"
             );
@@ -538,11 +538,11 @@ class Fleet extends Model
     public function getListOfAcsMembers($group_id)
     {
         return $this->db->queryFetchAll(
-            "SELECT
+            'SELECT
                 u.`user_id`,
                 u.`user_name`
-            FROM `" . ACS_MEMBERS . "` am
-                INNER JOIN `" . USERS . "` u ON u.`user_id` = am.`acs_user_id`
+            FROM `' . ACS_MEMBERS . '` am
+                INNER JOIN `' . USERS . "` u ON u.`user_id` = am.`acs_user_id`
             WHERE am.`acs_group_id` = '" . $group_id . "'"
         );
     }
@@ -558,7 +558,7 @@ class Fleet extends Model
     public function updateAcsName(string $acs_name, int $acs_id, int $user_id): void
     {
         $this->db->query(
-            "UPDATE `" . ACS . "` acs SET
+            'UPDATE `' . ACS . "` acs SET
                 acs.`acs_name` = '" . $this->db->escapeValue($acs_name) . "'
             WHERE acs.`acs_id` = '" . $acs_id . "'
                 AND acs.`acs_owner` = '" . $user_id . "';"
@@ -576,7 +576,7 @@ class Fleet extends Model
     public function insertNewAcsMember(int $member, int $group_id): void
     {
         $this->db->query(
-            "INSERT INTO `" . ACS_MEMBERS . "` SET
+            'INSERT INTO `' . ACS_MEMBERS . "` SET
                 `acs_group_id` = '" . $group_id . "',
                 `acs_user_id` = '" . $member . "'"
         );
@@ -593,7 +593,7 @@ class Fleet extends Model
     public function removeAcsMember(int $member, int $group_id): void
     {
         $this->db->query(
-            "DELETE FROM `" . ACS_MEMBERS . "`
+            'DELETE FROM `' . ACS_MEMBERS . "`
              WHERE `acs_group_id` = '" . $group_id . "'
                 AND `acs_user_id` = '" . $member . "'"
         );
@@ -609,9 +609,9 @@ class Fleet extends Model
     public function getUserIdByName(string $user_name, int $group_id): int
     {
         return $this->db->queryFetch(
-            "SELECT
+            'SELECT
                 u.`user_id`
-            FROM `" . USERS . "` u
+            FROM `' . USERS . "` u
             WHERE u.`user_name` = '" . $user_name . "'
             AND u.`user_id` NOT IN (
                 SELECT

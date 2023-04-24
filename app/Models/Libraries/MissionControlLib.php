@@ -15,21 +15,21 @@ class MissionControlLib extends Model
     public function getArrivingFleets()
     {
         return $this->db->queryFetchAll(
-            "SELECT
+            'SELECT
                 f.*,
                 sp.`planet_name` AS `planet_start_name`,
                 ep.`planet_name` AS `planet_end_name`,
                 sr.`research_hyperspace_technology`
-            FROM `" . FLEETS . "` f
-            LEFT JOIN `" . PLANETS . "` sp
+            FROM `' . FLEETS . '` f
+            LEFT JOIN `' . PLANETS . '` sp
                 ON (sp.`planet_galaxy` = f.`fleet_start_galaxy` AND
                     sp.`planet_system` = f.`fleet_start_system` AND
                     sp.`planet_planet` = f.`fleet_start_planet` AND
                     sp.`planet_type` = f.`fleet_start_type`
             )
-            LEFT JOIN `" . RESEARCH . "` sr
+            LEFT JOIN `' . RESEARCH . '` sr
                 ON sr.`research_user_id` = f.`fleet_owner`
-            LEFT JOIN `" . PLANETS . "` ep
+            LEFT JOIN `' . PLANETS . "` ep
                 ON (ep.`planet_galaxy` = f.`fleet_end_galaxy` AND
                     ep.`planet_system` = f.`fleet_end_system` AND
                     ep.`planet_planet` = f.`fleet_end_planet` AND
@@ -51,21 +51,21 @@ class MissionControlLib extends Model
     public function getReturningFleets()
     {
         return $this->db->queryFetchAll(
-            "SELECT
+            'SELECT
                 f.*,
                 sp.`planet_name` AS `planet_start_name`,
                 ep.`planet_name` AS `planet_end_name`,
                 sr.`research_hyperspace_technology`
-            FROM `" . FLEETS . "` f
-            LEFT JOIN `" . PLANETS . "` sp
+            FROM `' . FLEETS . '` f
+            LEFT JOIN `' . PLANETS . '` sp
                 ON (sp.`planet_galaxy` = f.`fleet_start_galaxy` AND
                     sp.`planet_system` = f.`fleet_start_system` AND
                     sp.`planet_planet` = f.`fleet_start_planet` AND
                     sp.`planet_type` = f.`fleet_start_type`
             )
-            LEFT JOIN `" . RESEARCH . "` sr
+            LEFT JOIN `' . RESEARCH . '` sr
                 ON sr.`research_user_id` = f.`fleet_owner`
-            LEFT JOIN `" . PLANETS . "` ep
+            LEFT JOIN `' . PLANETS . "` ep
                 ON (ep.`planet_galaxy` = f.`fleet_end_galaxy` AND
                     ep.`planet_system` = f.`fleet_end_system` AND
                     ep.`planet_planet` = f.`fleet_end_planet` AND

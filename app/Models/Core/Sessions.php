@@ -39,9 +39,9 @@ class Sessions extends Model
     public function getSessionDataById(string $sid): string
     {
         $sessions = $this->db->query(
-            "SELECT
+            'SELECT
                 `session_data`
-            FROM `" . SESSIONS . "`
+            FROM `' . SESSIONS . "`
             WHERE `session_id` = '" . $this->db->escapeValue($sid) . "'
             LIMIT 1"
         );
@@ -65,7 +65,7 @@ class Sessions extends Model
     public function insertNewSessionData(string $sid, string $data): bool
     {
         $this->db->query(
-            "REPLACE INTO `" . SESSIONS . "` (`session_id`, `session_data`)
+            'REPLACE INTO `' . SESSIONS . "` (`session_id`, `session_data`)
             VALUES ('" . $this->db->escapeValue($sid) . "', '" . $this->db->escapeValue($data) . "')"
         );
 
@@ -81,7 +81,7 @@ class Sessions extends Model
     public function deleteSessionDataById(string $sid): bool
     {
         $this->db->query(
-            "DELETE FROM `" . SESSIONS . "`
+            'DELETE FROM `' . SESSIONS . "`
             WHERE `session_id` = '" . $this->db->escapeValue($sid) . "'"
         );
 
@@ -97,8 +97,8 @@ class Sessions extends Model
     public function cleanSessionData(int $expire): bool
     {
         $this->db->query(
-            "DELETE FROM `" . SESSIONS . "`
-            WHERE DATE_ADD(`session_last_accessed`, INTERVAL " . $expire . " SECOND) < NOW()"
+            'DELETE FROM `' . SESSIONS . '`
+            WHERE DATE_ADD(`session_last_accessed`, INTERVAL ' . $expire . ' SECOND) < NOW()'
         );
 
         return ($this->db->affectedRows() > 0);

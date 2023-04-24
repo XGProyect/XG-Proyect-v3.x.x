@@ -9,9 +9,9 @@ class Notes extends Model
     public function getAllNotesByUserId(int $user_id): array
     {
         return $this->db->queryFetchAll(
-            "SELECT
+            'SELECT
                 n.*
-            FROM `" . NOTES . "` n
+            FROM `' . NOTES . "` n
             WHERE n.`note_owner` = '" . $user_id . "'
             ORDER BY n.`note_time` DESC;"
         ) ?? [];
@@ -20,9 +20,9 @@ class Notes extends Model
     public function getNoteById(int $user_id, int $note_id): array
     {
         return $this->db->queryFetch(
-            "SELECT
+            'SELECT
                 n.*
-            FROM `" . NOTES . "` n
+            FROM `' . NOTES . "` n
             WHERE n.`note_id` = '" . $note_id . "'
                 AND n.`note_owner` = '" . $user_id . "';"
         ) ?? [];
@@ -31,11 +31,11 @@ class Notes extends Model
     public function createNewNote(array $note_data): void
     {
         foreach ($note_data as $field => $value) {
-            $sql[] = "`" . $field . "` = '" . $value . "'";
+            $sql[] = '`' . $field . "` = '" . $value . "'";
         }
 
         $this->db->query(
-            "INSERT INTO `" . NOTES . "` SET "
+            'INSERT INTO `' . NOTES . '` SET '
             . join(', ', $sql)
         );
     }
@@ -52,11 +52,11 @@ class Notes extends Model
     public function updateNoteById(int $user_id, int $note_id, array $note_data): void
     {
         foreach ($note_data as $field => $value) {
-            $sql[] = "n.`" . $field . "` = '" . $value . "'";
+            $sql[] = 'n.`' . $field . "` = '" . $value . "'";
         }
 
         $this->db->query(
-            "UPDATE `" . NOTES . "` n SET "
+            'UPDATE `' . NOTES . '` n SET '
             . join(', ', $sql) .
             "WHERE n.`note_owner` = '" . $user_id . "'
                 AND n.`note_id` = '" . $note_id . "';"
@@ -74,9 +74,9 @@ class Notes extends Model
     public function deleteNoteById(int $user_id, string $notes_ids): void
     {
         $this->db->query(
-            "DELETE FROM `" . NOTES . "`
+            'DELETE FROM `' . NOTES . "`
             WHERE `note_owner` = '" . $user_id . "'
-                AND `note_id` IN (" . $notes_ids . ");"
+                AND `note_id` IN (" . $notes_ids . ');'
         );
     }
 }

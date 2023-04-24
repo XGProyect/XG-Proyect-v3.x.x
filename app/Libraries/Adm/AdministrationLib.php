@@ -4,7 +4,6 @@ namespace App\Libraries\Adm;
 
 use App\Core\Language;
 use App\Core\Template;
-use App\Libraries\Adm\Permissions;
 use App\Libraries\Functions;
 use App\Libraries\Page;
 use App\Libraries\Users;
@@ -67,7 +66,7 @@ class AdministrationLib
      */
     public static function authorization(string $module, int $user_level)
     {
-        $cleaned_module_name = strtolower(substr(strrchr($module, "\\"), 1));
+        $cleaned_module_name = strtolower(substr(strrchr($module, '\\'), 1));
         $permissions = new Permissions(Functions::readConfig('admin_permissions'));
 
         return $permissions->isAccessAllowed($cleaned_module_name, $user_level);
@@ -181,8 +180,7 @@ class AdministrationLib
      */
     public static function closeSession()
     {
-        unset($_SESSION['admin_id']);
-        unset($_SESSION['admin_password']);
+        unset($_SESSION['admin_id'], $_SESSION['admin_password']);
     }
 
     /**

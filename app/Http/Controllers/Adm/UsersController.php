@@ -32,7 +32,6 @@ class UsersController extends BaseController
         // check if session is active
         Administration::checkSession();
 
-
         // load Language
         parent::loadLang(['adm/global', 'adm/users']);
 
@@ -52,11 +51,11 @@ class UsersController extends BaseController
         $this->buildPage();
     }
 
-    ######################################
-    #
-    # main methods
-    #
-    ######################################
+    //#####################################
+    //
+    // main methods
+    //
+    //#####################################
 
     private function buildPage(): void
     {
@@ -259,11 +258,11 @@ class UsersController extends BaseController
         // REDIRECTION
         Functions::redirect("admin.php{$page}{$type}{$user}");
     }
-    ######################################
-    #
-    # getData methods
-    #
-    ######################################
+    //#####################################
+    //
+    // getData methods
+    //
+    //#####################################
 
     /**
      * return the information page for the current user
@@ -440,11 +439,11 @@ class UsersController extends BaseController
 
         return $this->template->set($view, $parse);
     }
-    ######################################
-    #
-    # save / update methods
-    #
-    ######################################
+    //#####################################
+    //
+    // save / update methods
+    //
+    //#####################################
 
     /**
      * method saveInfo
@@ -475,7 +474,7 @@ class UsersController extends BaseController
         if ($password != '') {
             $password = "'" . Functions::hash($password) . "'";
         } else {
-            $password = "`user_password`";
+            $password = '`user_password`';
         }
 
         if ($email == '' or $this->usersModel->checkEmail($email, $this->_id)) {
@@ -660,11 +659,11 @@ class UsersController extends BaseController
         $this->_alert_info = $this->langs->line('us_all_ok_message');
         $this->_alert_type = 'ok';
     }
-    ######################################
-    #
-    # build combo methods
-    #
-    ######################################
+    //#####################################
+    //
+    // build combo methods
+    //
+    //#####################################
 
     /**
      * method buildUsersCombo
@@ -737,7 +736,7 @@ class UsersController extends BaseController
             $user_shortcuts = new Shortcuts($shortcuts);
 
             foreach ($user_shortcuts->getAllAsArray() as $key => $value) {
-                $shortcut['description'] = $value['name'] . " " . Format::prettyCoords($value['g'], $value['s'], $value['p']) . " ";
+                $shortcut['description'] = $value['name'] . ' ' . Format::prettyCoords($value['g'], $value['s'], $value['p']) . ' ';
 
                 switch ($value['pt']) {
                     case 1:
@@ -756,7 +755,7 @@ class UsersController extends BaseController
 
                 $shortcut['select'] = 'shortcuts';
                 $shortcut['selected'] = '';
-                $shortcut['value'] = $value['g'] . ";" . $value['s'] . ";" . $value['p'] . ";" . $value['pt'];
+                $shortcut['value'] = $value['g'] . ';' . $value['s'] . ';' . $value['p'] . ';' . $value['pt'];
                 $shortcut['title'] = $shortcut['description'];
                 $shortcuts .= '<option value="' . $shortcut['value'] . '"' . $shortcut['selected'] . '>' . $shortcut['title'] . '</option>';
             }
@@ -783,7 +782,7 @@ class UsersController extends BaseController
         ];
 
         foreach ($sort_types as $id => $name) {
-            $sort .= "<option value =\"{$id}\"" . (($this->_user_query['preference_planet_sort'] == $id) ? " selected" : "") . ">{$name}</option>";
+            $sort .= "<option value =\"{$id}\"" . (($this->_user_query['preference_planet_sort'] == $id) ? ' selected' : '') . ">{$name}</option>";
         }
 
         return $sort;
@@ -803,7 +802,7 @@ class UsersController extends BaseController
         ];
 
         foreach ($order_types as $id => $name) {
-            $order .= "<option value =\"{$id}\"" . (($this->_user_query['preference_planet_sort_sequence'] == $id) ? " selected" : "") . ">{$name}</option>";
+            $order .= "<option value =\"{$id}\"" . (($this->_user_query['preference_planet_sort_sequence'] == $id) ? ' selected' : '') . ">{$name}</option>";
         }
 
         return $order;
@@ -842,7 +841,7 @@ class UsersController extends BaseController
         $percent_values = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
         foreach ($percent_values as $id => $number) {
-            $percent .= "<option value=\"{$id}\"  " . ($current_value == $number ? ' selected' : '') . ">" . ($number * 10) . "</option>";
+            $percent .= "<option value=\"{$id}\"  " . ($current_value == $number ? ' selected' : '') . '>' . ($number * 10) . '</option>';
         }
 
         return $percent;
@@ -868,7 +867,7 @@ class UsersController extends BaseController
                     $ready = date('i:s', $queue[3] - time());
                 }
 
-                $queue_list .= "<option value=\"{$queue[0]}\">" . $this->langs->language['tech'][$queue[0]] . " (" . $queue[1] . "^) (" . date("i:s", $queue[2]) . ") (" . $ready . ") [" . $queue[4] . "] </option>";
+                $queue_list .= "<option value=\"{$queue[0]}\">" . $this->langs->language['tech'][$queue[0]] . ' (' . $queue[1] . '^) (' . date('i:s', $queue[2]) . ') (' . $ready . ') [' . $queue[4] . '] </option>';
             }
 
             return $queue_list;
@@ -888,23 +887,23 @@ class UsersController extends BaseController
 
         while (($image_dir = readdir($images_dir)) !== false) {
             if (strpos($image_dir, '.jpg')) {
-                $images_options .= "<option ";
+                $images_options .= '<option ';
 
                 if ($current_image . '.jpg' == $image_dir) {
-                    $images_options .= "selected = selected";
+                    $images_options .= 'selected = selected';
                 }
 
-                $images_options .= " value=\"" . preg_replace("/\\.[^.\\s]{3,4}$/", "", $image_dir) . "\">" . $image_dir . "</option>";
+                $images_options .= ' value="' . preg_replace('/\\.[^.\\s]{3,4}$/', '', $image_dir) . '">' . $image_dir . '</option>';
             }
         }
 
         return $images_options;
     }
-    ######################################
-    #
-    # sub tables methods
-    #
-    ######################################
+    //#####################################
+    //
+    // sub tables methods
+    //
+    //#####################################
 
     /**
      * return the builded technologies table with respective levels
@@ -975,7 +974,7 @@ class UsersController extends BaseController
     private function planetsTable($planets_data): array
     {
         $parse = $this->langs->language;
-        $parse['image_path'] = DEFAULT_SKINPATH . "planets/small/s_";
+        $parse['image_path'] = DEFAULT_SKINPATH . 'planets/small/s_';
         $parse['user'] = $this->_user_query['user_name'];
         $prepare_table = [];
 
@@ -1008,7 +1007,7 @@ class UsersController extends BaseController
                     $style = 'class="greyout"';
                 }
 
-                $parse['moon_image'] = "<img src=\"{$parse['image_path']}{$planets['moon_image']}.jpg\" alt=\"{$planets['moon_image']}.jpg\" title=\"{$planets['moon_image']}.jpg\" border=\"0\" " . $style . ">";
+                $parse['moon_image'] = "<img src=\"{$parse['image_path']}{$planets['moon_image']}.jpg\" alt=\"{$planets['moon_image']}.jpg\" title=\"{$planets['moon_image']}.jpg\" border=\"0\" " . $style . '>';
             }
 
             $prepare_table[] = $parse;
@@ -1047,11 +1046,11 @@ class UsersController extends BaseController
 
         return $prepare_table;
     }
-    ######################################
-    #
-    # edition methods (pages)
-    #
-    ######################################
+    //#####################################
+    //
+    // edition methods (pages)
+    //
+    //#####################################
 
     /**
      * Edit main planet or moon data
@@ -1184,11 +1183,11 @@ class UsersController extends BaseController
 
         return $prepare_table;
     }
-    ######################################
-    #
-    # edition methods (pages)
-    #
-    ######################################
+    //#####################################
+    //
+    // edition methods (pages)
+    //
+    //#####################################
 
     /**
      * deletePlanet
@@ -1223,11 +1222,11 @@ class UsersController extends BaseController
 
         $this->usersModel->deleteMoonById($id_moon);
     }
-    ######################################
-    #
-    # other required methods
-    #
-    ######################################
+    //#####################################
+    //
+    // other required methods
+    //
+    //#####################################
 
     /**
      * Return an string with the online time formatted

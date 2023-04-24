@@ -56,7 +56,7 @@ class Missions
         $ships_fields = '';
 
         foreach ($ships as $id => $amount) {
-            $ships_fields .= "`" . $this->resource[$id] . "` = `" .
+            $ships_fields .= '`' . $this->resource[$id] . '` = `' .
             $this->resource[$id] . "` + '" . $amount . "', ";
         }
 

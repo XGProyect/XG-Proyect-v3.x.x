@@ -44,14 +44,14 @@ class StatisticsController extends BaseController
         $type = (isset($_POST['type'])) ? $_POST['type'] : ((isset($_GET['type'])) ? $_GET['type'] : 1);
         $range = (isset($_POST['range'])) ? $_POST['range'] : ((isset($_GET['range'])) ? $_GET['range'] : 1);
 
-        $parse['who'] = "<option value=\"1\"" . (($who == "1") ? " SELECTED" : "") . ">" . $this->langs->line('st_player') . "</option>";
-        $parse['who'] .= "<option value=\"2\"" . (($who == "2") ? " SELECTED" : "") . ">" . $this->langs->line('st_alliance') . "</option>";
+        $parse['who'] = '<option value="1"' . (($who == '1') ? ' SELECTED' : '') . '>' . $this->langs->line('st_player') . '</option>';
+        $parse['who'] .= '<option value="2"' . (($who == '2') ? ' SELECTED' : '') . '>' . $this->langs->line('st_alliance') . '</option>';
 
-        $parse['type'] = "<option value=\"1\"" . (($type == "1") ? " SELECTED" : "") . ">" . $this->langs->line('st_points') . "</option>";
-        $parse['type'] .= "<option value=\"2\"" . (($type == "2") ? " SELECTED" : "") . ">" . $this->langs->line('st_fleets') . "</option>";
-        $parse['type'] .= "<option value=\"3\"" . (($type == "3") ? " SELECTED" : "") . ">" . $this->langs->line('st_researh') . "</option>";
-        $parse['type'] .= "<option value=\"4\"" . (($type == "4") ? " SELECTED" : "") . ">" . $this->langs->line('st_buildings') . "</option>";
-        $parse['type'] .= "<option value=\"5\"" . (($type == "5") ? " SELECTED" : "") . ">" . $this->langs->line('st_defenses') . "</option>";
+        $parse['type'] = '<option value="1"' . (($type == '1') ? ' SELECTED' : '') . '>' . $this->langs->line('st_points') . '</option>';
+        $parse['type'] .= '<option value="2"' . (($type == '2') ? ' SELECTED' : '') . '>' . $this->langs->line('st_fleets') . '</option>';
+        $parse['type'] .= '<option value="3"' . (($type == '3') ? ' SELECTED' : '') . '>' . $this->langs->line('st_researh') . '</option>';
+        $parse['type'] .= '<option value="4"' . (($type == '4') ? ' SELECTED' : '') . '>' . $this->langs->line('st_buildings') . '</option>';
+        $parse['type'] .= '<option value="5"' . (($type == '5') ? ' SELECTED' : '') . '>' . $this->langs->line('st_defenses') . '</option>';
 
         $data = $this->ranking_type($type);
         $Order = $data['order'];
@@ -74,7 +74,7 @@ class StatisticsController extends BaseController
             $start++;
 
             $parse['stat_date'] = Timing::formatExtendedDate(Functions::readConfig('stat_last_update'));
-            $parse['stat_values'] = "";
+            $parse['stat_values'] = '';
 
             foreach ($query as $StatRow) {
                 $parse['ally_rank'] = $start;
@@ -105,7 +105,7 @@ class StatisticsController extends BaseController
 
             $start++;
             $parse['stat_date'] = Timing::formatExtendedDate(Functions::readConfig('stat_last_update'));
-            $parse['stat_values'] = "";
+            $parse['stat_values'] = '';
             $previusId = 0;
 
             foreach ($query as $StatRow) {
@@ -113,7 +113,7 @@ class StatisticsController extends BaseController
                 $ranking = $StatRow['user_statistic_' . $OldRank] - $StatRow['user_statistic_' . $Rank];
 
                 if ($StatRow['user_id'] == $this->user['user_id']) {
-                    $parse['player_name'] = "<font color=\"lime\">" . $StatRow['user_name'] . "</font>";
+                    $parse['player_name'] = '<font color="lime">' . $StatRow['user_name'] . '</font>';
                 } else {
                     $parse['player_name'] = $StatRow['user_name'];
                 }
@@ -121,7 +121,7 @@ class StatisticsController extends BaseController
                 if ($StatRow['user_id'] != $this->user['user_id']) {
                     $parse['player_mes'] = '<a href="game.php?page=chat&playerId=' . $StatRow['user_id'] . '"><img src="' . DPATH . 'img/m.gif" border="0" title="' . $this->langs->line('write_message') . '" /></a>';
                 } else {
-                    $parse['player_mes'] = "";
+                    $parse['player_mes'] = '';
                 }
 
                 if ($StatRow['alliance_name'] != '') {
@@ -192,7 +192,7 @@ class StatisticsController extends BaseController
         for ($page = 0; $page <= $last_page; $page++) {
             $page_value = $page * 100 + 1;
             $page_range = $page_value + 99;
-            $range_list .= "<option value=\"" . $page_value . "\"" . (($range >= $page_value && $range <= $page_range) ? " SELECTED" : "") . ">" . $page_value . "-" . $page_range . "</option>";
+            $range_list .= '<option value="' . $page_value . '"' . (($range >= $page_value && $range <= $page_range) ? ' SELECTED' : '') . '>' . $page_value . '-' . $page_range . '</option>';
         }
 
         return $range_list; // RETURN THE LIST
@@ -209,38 +209,38 @@ class StatisticsController extends BaseController
         switch ($type) {
             case 1: // TOTAL POINTS
             default:
-                $return['order'] = "total_points";
-                $return['points'] = "total_points";
-                $return['rank'] = "total_rank";
-                $return['oldrank'] = "total_old_rank";
+                $return['order'] = 'total_points';
+                $return['points'] = 'total_points';
+                $return['rank'] = 'total_rank';
+                $return['oldrank'] = 'total_old_rank';
                 break;
 
             case 2: // SHIPS
-                $return['order'] = "ships_points";
-                $return['points'] = "ships_points";
-                $return['rank'] = "ships_rank";
-                $return['oldrank'] = "ships_old_rank";
+                $return['order'] = 'ships_points';
+                $return['points'] = 'ships_points';
+                $return['rank'] = 'ships_rank';
+                $return['oldrank'] = 'ships_old_rank';
                 break;
 
             case 3: // TECHNOLOGY
-                $return['order'] = "technology_points";
-                $return['points'] = "technology_points";
-                $return['rank'] = "technology_rank";
-                $return['oldrank'] = "technology_old_rank";
+                $return['order'] = 'technology_points';
+                $return['points'] = 'technology_points';
+                $return['rank'] = 'technology_rank';
+                $return['oldrank'] = 'technology_old_rank';
                 break;
 
             case 4: // BUILDINGS
-                $return['order'] = "buildings_points";
-                $return['points'] = "buildings_points";
-                $return['rank'] = "buildings_rank";
-                $return['oldrank'] = "buildings_old_rank";
+                $return['order'] = 'buildings_points';
+                $return['points'] = 'buildings_points';
+                $return['rank'] = 'buildings_rank';
+                $return['oldrank'] = 'buildings_old_rank';
                 break;
 
             case 5: // DEFENSE
-                $return['order'] = "defenses_points";
-                $return['points'] = "defenses_points";
-                $return['rank'] = "defenses_rank";
-                $return['oldrank'] = "defenses_old_rank";
+                $return['order'] = 'defenses_points';
+                $return['points'] = 'defenses_points';
+                $return['rank'] = 'defenses_rank';
+                $return['oldrank'] = 'defenses_old_rank';
                 break;
         }
 
