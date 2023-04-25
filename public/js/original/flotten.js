@@ -173,7 +173,7 @@ function consumption() {
 			//spd = Math.min(spd, 1.0);
 			//spd = spd * sp;
 			//spd = 10;
-			basicConsumption = spd 
+			basicConsumption = spd
                             + document.getElementsByName("ship" + i)[0].value
                             * document.getElementsByName("consumption" + i)[0].value
                             * Math.pow(((spd / 10) + 1), 2);
@@ -241,7 +241,6 @@ function storage() {
 		}
 	}
 	storage  = storage * getStorageFaktor();
-	storage -= consumption();
 	if (document.getElementsByName("ship210")[0]) {
 		storage -= unusedProbeStorage();
 	}
@@ -297,7 +296,6 @@ function shortInfo() {
 	var stor = storage();
 	var cons = consumption();
 
-
 	document.getElementById("maxspeed").innerHTML = tsdpkt(maxspeed());
 	if (stor >= 0) {
 		document.getElementById("consumption").innerHTML = '<font color="lime">'+tsdpkt(cons)+'</font>';
@@ -326,12 +324,8 @@ function maxResource(id) {
 	if (isNaN(thisresource)){
 		thisresource=0;
 	}
-	
+
 	var storCap = storage();
-	if (id==3){
-		thisresource -= consumption();
-	}
-	
 	var metalToTransport = parseInt(document.getElementsByName("resource1")[0].value);
 	var crystalToTransport = parseInt(document.getElementsByName("resource2")[0].value);
 	var deuteriumToTransport = parseInt(document.getElementsByName("resource3")[0].value);
@@ -341,14 +335,14 @@ function maxResource(id) {
 	}
 	if (isNaN(crystalToTransport)){
 		crystalToTransport=0;
-	}	
+	}
 	if (isNaN(deuteriumToTransport)){
 		deuteriumToTransport=0;
-	}	
+	}
 
 	var freeCapacity = Math.max(storCap - metalToTransport - crystalToTransport - deuteriumToTransport, 0);
 	var cargo = Math.min (freeCapacity + thisresourcechosen, thisresource);
-	
+
 	if (document.getElementsByName("resource" + id)[0]) {
 		document.getElementsByName("resource" + id)[0].value = cargo;
 	}
@@ -360,7 +354,7 @@ function maxResources() {
 	var storCap = storage();
 	var metalToTransport = document.getElementsByName("thisresource1")[0].value;
 	var crystalToTransport = document.getElementsByName("thisresource2")[0].value;
-	var deuteriumToTransport = document.getElementsByName("thisresource3")[0].value - consumption();
+	var deuteriumToTransport = document.getElementsByName("thisresource3")[0].value;
 
 	var freeCapacity = storCap - metalToTransport - crystalToTransport - deuteriumToTransport;
 	if (freeCapacity < 0) {
