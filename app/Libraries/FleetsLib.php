@@ -216,7 +216,7 @@ class FleetsLib
         }
 
         if ($resources_popup != '') {
-            $pop_up = "<a href='#' onmouseover=\"return overlib('" . $resources_popup . "');";
+            $pop_up = "<a href='#' onmouseover=\"return overlib('" . strtr($resources_popup, ['"' => '']) . "');";
             $pop_up .= '" onmouseout="return nd();" class="' . $fleet_type . '">' . $text . '</a>';
         } else {
             $pop_up = $text . '';
