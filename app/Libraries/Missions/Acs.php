@@ -21,14 +21,14 @@ class Acs extends Missions
     {
         // do mission
         if (parent::canStartMission($fleet)) {
-            parent::returnFleet($fleet['fleet_id']);
+            parent::returnFleet((int) $fleet['fleet_id']);
         }
 
         // complete mission
         if (parent::canCompleteMission($fleet)) {
             // transfer the ships to the planet
             parent::restoreFleet($fleet);
-            parent::removeFleet($fleet['fleet_id']);
+            parent::removeFleet((int) $fleet['fleet_id']);
         }
     }
 }

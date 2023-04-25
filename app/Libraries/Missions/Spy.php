@@ -170,15 +170,15 @@ class Spy extends Missions
                             'planet_id' => $target_data['planet_id'],
                         ]);
 
-                        parent::removeFleet($fleet_row['fleet_id']);
+                        parent::removeFleet((int) $fleet_row['fleet_id']);
                     } else {
-                        parent::returnFleet($fleet_row['fleet_id']);
+                        parent::returnFleet((int) $fleet_row['fleet_id']);
                     }
                 }
             }
         } elseif ($fleet_row['fleet_mess'] == 1 && $fleet_row['fleet_end_time'] <= time()) {
             parent::restoreFleet($fleet_row, true);
-            parent::removeFleet($fleet_row['fleet_id']);
+            parent::removeFleet((int) $fleet_row['fleet_id']);
         }
     }
 

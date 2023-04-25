@@ -69,7 +69,7 @@ class Attack extends Missions
                 $this->missionsModel->deleteAcsFleetById($fleet_row['fleet_group']);
                 $this->missionsModel->updateAcsFleetStatusByGroupId($fleet_row['fleet_group']);
             } else {
-                parent::returnFleet($fleet_row['fleet_id']);
+                parent::returnFleet((int) $fleet_row['fleet_id']);
             }
 
             $targetUser = $this->missionsModel->getAllUserDataByUserId($target_planet['planet_user_id']);
@@ -201,7 +201,7 @@ class Attack extends Missions
             );
 
             parent::restoreFleet($fleet_row);
-            parent::removeFleet($fleet_row['fleet_id']);
+            parent::removeFleet((int) $fleet_row['fleet_id']);
         }
     }
 

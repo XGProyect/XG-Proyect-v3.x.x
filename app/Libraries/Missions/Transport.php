@@ -54,7 +54,7 @@ class Transport extends Missions
 
             // transfer the ships to the planet
             parent::restoreFleet($fleet);
-            parent::removeFleet($fleet['fleet_id']);
+            parent::removeFleet((int) $fleet['fleet_id']);
         }
     }
 

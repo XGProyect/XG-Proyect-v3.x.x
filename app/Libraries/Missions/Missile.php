@@ -152,7 +152,7 @@ class Missile extends Missions
                 str_replace($search, $replace, $this->langs->line('mis_result' . $single)) . $message
             );
 
-            parent::removeFleet($fleet_row['fleet_id']);
+            parent::removeFleet((int) $fleet_row['fleet_id']);
         }
     }
 

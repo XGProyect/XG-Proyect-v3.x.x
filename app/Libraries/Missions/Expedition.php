@@ -91,7 +91,7 @@ class Expedition extends Missions
                 );
 
                 parent::restoreFleet($fleet_row, true);
-                parent::removeFleet($fleet_row['fleet_id']);
+                parent::removeFleet((int) $fleet_row['fleet_id']);
             }
         }
     }
@@ -119,7 +119,7 @@ class Expedition extends Missions
             );
 
             $this->missionsModel->updateLostShipsAndDefensePoints($fleet_row['fleet_owner'], $current_fleet);
-            parent::removeFleet($fleet_row['fleet_id']);
+            parent::removeFleet((int) $fleet_row['fleet_id']);
         } else {
             $this->all_destroyed = true;
             $new_ships = [];
@@ -153,7 +153,7 @@ class Expedition extends Missions
                 );
 
                 $this->missionsModel->updateLostShipsAndDefensePoints($fleet_row['fleet_owner'], $current_fleet);
-                parent::removeFleet($fleet_row['fleet_id']);
+                parent::removeFleet((int) $fleet_row['fleet_id']);
             }
         }
     }
@@ -173,7 +173,7 @@ class Expedition extends Missions
             $fleet_row['fleet_end_stay']
         );
 
-        parent::returnFleet($fleet_row['fleet_id']);
+        parent::returnFleet((int) $fleet_row['fleet_id']);
     }
 
     /**
