@@ -290,7 +290,7 @@ abstract class Functions
             $mail = new PHPMailer();
 
             // mailing settings
-            $mail->protocol = self::readConfig('mailing_protocol');
+            $mail->Mailer = self::readConfig('mailing_protocol');
 
             if (self::readConfig('mailing_protocol') === 'smtp') {
                 $mail->isSMTP();
