@@ -3,7 +3,6 @@
 namespace App\Libraries;
 
 use App\Helpers\StringsHelper;
-use App\Libraries\FormatLib as Format;
 use App\Libraries\TimingLibrary as Timing;
 
 class OfficiersLib
@@ -56,10 +55,7 @@ class OfficiersLib
     public static function getOfficierTimeLeft(int $expiration, array $lang): string
     {
         $lang_line = 'of_time_remaining_many';
-        $time_left = strtr(
-            Format::prettyTimeAgo(Timing::formatShortDate($expiration)),
-            $lang['timing']
-        );
+        $time_left = round(Timing::getDaysLeft($expiration));
 
         if (Timing::getDaysLeft($expiration) <= 1) {
             $lang_line = 'of_time_remaining_less';
