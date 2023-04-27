@@ -127,7 +127,7 @@ class BanController extends BaseController
                     $current_time = time();
                     $ban_time = $days * 86400;
                     $ban_time += $hour * 3600;
-                    $vacation_mode = isset($_POST['vacat']) ?? null;
+                    $vacation_mode = isset($_POST['vacat']) ? $_POST['vacat'] : null;
 
                     if (isset($banned_user)) {
                         if ($banned_user['banned_longer'] > time()) {
