@@ -108,13 +108,13 @@ class PhalanxController extends BaseController
                     //scannig of fleet started planet
                     if ($isStartedfromThis && ($FleetRow['fleet_start_type'] == 1 || ($FleetRow['fleet_start_type'] == 3 && $TargetMoonIsDestroyed))) {
                         if ($Mission != 4) {
-                            $Label = "fs";
+                            $Label = 'fs';
                             $fpage[$ArrivetoTargetTime] .= "\n" . FleetsLib::flyingFleetsTable($FleetRow, 0, $myFleet, $Label, $Record, $this->user);
                         }
                     }
                     //scanning of destination fleet planet
                     elseif (!$isStartedfromThis && ($FleetRow['fleet_end_type'] == 1 || ($FleetRow['fleet_end_type'] == 3 && $TargetMoonIsDestroyed))) {
-                        $Label = "fs";
+                        $Label = 'fs';
                         $fpage[$ArrivetoTargetTime] .= "\n" . FleetsLib::flyingFleetsTable($FleetRow, 0, $myFleet, $Label, $Record, $this->user);
                     }
                 }
@@ -122,7 +122,7 @@ class PhalanxController extends BaseController
                  * you can see stay-fleet event only if the target is a planet(or destroyed moon) and is the targetPlanet
                  */
                 if ($EndStayTime > time() && $Mission == 5 && ($FleetRow['fleet_end_type'] == 1 || ($FleetRow['fleet_end_type'] == 3 && $TargetMoonIsDestroyed)) && $isTheTarget) {
-                    $Label = "ft";
+                    $Label = 'ft';
                     $fpage[$EndStayTime] .= "\n" . FleetsLib::flyingFleetsTable($FleetRow, 1, $myFleet, $Label, $Record, $this->user);
                 }
                 /* 3)the return fleet table event
@@ -130,7 +130,7 @@ class PhalanxController extends BaseController
                  * but no if it is a hold mission or mip
                  */
                 if ($ReturnTime > time() && $Mission != 4 && $Mission != 10 && $isStartedfromThis && ($FleetRow['fleet_start_type'] == 1 || ($FleetRow['fleet_start_type'] == 3 && $TargetMoonIsDestroyed))) {
-                    $Label = "fe";
+                    $Label = 'fe';
                     $fpage[$ReturnTime] .= "\n" . FleetsLib::flyingFleetsTable($FleetRow, 2, $myFleet, $Label, $Record, $this->user);
                 }
             }

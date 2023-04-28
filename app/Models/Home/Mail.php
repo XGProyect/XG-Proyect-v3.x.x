@@ -12,9 +12,9 @@ class Mail extends Model
     public function getEmailUsername(string $email): ?string
     {
         return $this->db->queryFetch(
-            "SELECT
+            'SELECT
                 `user_name`
-            FROM `" . USERS . "`
+            FROM `' . USERS . "`
             WHERE `user_email` = '" . $this->db->escapeValue($email) . "'
             LIMIT 1;"
         )['user_name'];
@@ -23,7 +23,7 @@ class Mail extends Model
     public function setUserNewPassword(string $email, string $new_password): void
     {
         $this->db->query(
-            "UPDATE `" . USERS . "` SET
+            'UPDATE `' . USERS . "` SET
                 `user_password` = '" . Functions::hash($new_password) . "'
             WHERE `user_email` = '" . $this->db->escapeValue($email) . "'
             LIMIT 1;"

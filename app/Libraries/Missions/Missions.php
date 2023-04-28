@@ -2,10 +2,12 @@
 
 namespace App\Libraries\Missions;
 
+use App\Core\Language;
 use App\Core\Objects;
 use App\Libraries\FleetsLib;
 use App\Libraries\UpdatesLibrary;
 use App\Models\Libraries\Missions\Missions as MissionsModel;
+use CiLang;
 
 class Missions
 {
@@ -13,6 +15,7 @@ class Missions
     protected $resource;
     protected $pricelist;
     protected $combat_caps;
+    protected ?CiLang $langs = null;
 
     public function __construct()
     {
@@ -53,7 +56,7 @@ class Missions
         $ships_fields = '';
 
         foreach ($ships as $id => $amount) {
-            $ships_fields .= "`" . $this->resource[$id] . "` = `" .
+            $ships_fields .= '`' . $this->resource[$id] . '` = `' .
             $this->resource[$id] . "` + '" . $amount . "', ";
         }
 
@@ -141,5 +144,10 @@ class Missions
     protected function canCompleteMission(array $fleet): bool
     {
         return ($fleet['fleet_end_time'] <= time());
+    }
+
+    protected function loadLang(array $requiredLang): void
+    {
+        $this->langs = (new Language())->loadLang($requiredLang, true);
     }
 }

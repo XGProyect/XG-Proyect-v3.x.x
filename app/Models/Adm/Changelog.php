@@ -17,13 +17,13 @@ class Changelog extends Model
     public function getAllEntries(): ?array
     {
         return $this->db->queryFetchAll(
-            "SELECT
+            'SELECT
                 c.*,
                 l.`language_name` AS `changelog_language`
-            FROM `" . CHANGELOG . "` AS c
-            INNER JOIN `" . LANGUAGES . "` AS l
+            FROM `' . CHANGELOG . '` AS c
+            INNER JOIN `' . LANGUAGES . '` AS l
                 ON l.`language_id` = c.`changelog_lang_id`
-            ORDER BY c.`changelog_date` DESC, c.`changelog_version` DESC"
+            ORDER BY c.`changelog_date` DESC, c.`changelog_version` DESC'
         );
     }
 
@@ -36,9 +36,9 @@ class Changelog extends Model
     public function getSingleEntry(int $changelog_id): ChangelogEntity
     {
         return new ChangelogEntity($this->db->queryFetch(
-            "SELECT
+            'SELECT
                 c.*
-            FROM `" . CHANGELOG . "` AS c
+            FROM `' . CHANGELOG . "` AS c
             WHERE c.`changelog_id` = '" . $changelog_id . "';"
         ));
     }
@@ -55,11 +55,11 @@ class Changelog extends Model
             $this->db->beginTransaction();
 
             $this->db->query(
-                "INSERT INTO `" . CHANGELOG . "` SET
+                'INSERT INTO `' . CHANGELOG . '` SET
                     `changelog_lang_id` = (
                         SELECT
                             l.`language_id`
-                        FROM `" . LANGUAGES . "` AS l
+                        FROM `' . LANGUAGES . "` AS l
                         WHERE l.`language_id` = '" . $data['changelog_language'] . "'
                         LIMIT 1
                     ),
@@ -86,11 +86,11 @@ class Changelog extends Model
             $this->db->beginTransaction();
 
             $this->db->query(
-                "UPDATE `" . CHANGELOG . "` AS c SET
+                'UPDATE `' . CHANGELOG . '` AS c SET
                     c.`changelog_lang_id` = (
                         SELECT
                             l.`language_id`
-                        FROM `" . LANGUAGES . "` AS l
+                        FROM `' . LANGUAGES . "` AS l
                         WHERE l.`language_id` = '" . $data['changelog_language'] . "'
                         LIMIT 1
                     ),
@@ -115,7 +115,7 @@ class Changelog extends Model
     public function deleteEntry(int $changelog_id): void
     {
         $this->db->query(
-            "DELETE FROM `" . CHANGELOG . "` WHERE `changelog_id` = '" . $changelog_id . "';"
+            'DELETE FROM `' . CHANGELOG . "` WHERE `changelog_id` = '" . $changelog_id . "';"
         );
     }
 
@@ -127,10 +127,10 @@ class Changelog extends Model
     public function getAllLanguages(): array
     {
         return $this->db->queryFetchAll(
-            "SELECT
+            'SELECT
                 l.*
-            FROM `" . LANGUAGES . "` AS l
-            ORDER BY l.`language_name`"
+            FROM `' . LANGUAGES . '` AS l
+            ORDER BY l.`language_name`'
         );
     }
 }

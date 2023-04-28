@@ -6,9 +6,6 @@ namespace App\Core;
 
 use App\Core\Enumerators\SwitchIntEnumerator as SwitchInt;
 use App\Core\Enumerators\UserRanksEnumerator as UserRanks;
-use App\Core\ErrorHandler;
-use App\Core\Language;
-use App\Core\Sessions;
 use App\Helpers\StringsHelper;
 use App\Libraries\Functions;
 use App\Libraries\SecurePageLib;
@@ -40,7 +37,6 @@ class Common
      */
     public function bootUp(string $app): void
     {
-
         // overall loads
         $this->setErrorHandler();
         $this->isServerInstalled();

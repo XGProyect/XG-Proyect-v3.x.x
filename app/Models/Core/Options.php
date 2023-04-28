@@ -16,7 +16,7 @@ class Options extends Model
     public function getAllOptions(): \mysqli_result
     {
         return $this->db->query(
-            "SELECT * FROM `" . OPTIONS . "`;"
+            'SELECT * FROM `' . OPTIONS . '`;'
         );
     }
 
@@ -29,8 +29,8 @@ class Options extends Model
     public function getOption(string $option): ?string
     {
         return $this->db->queryFetch(
-            "SELECT *
-                FROM `" . OPTIONS . "`
+            'SELECT *
+                FROM `' . OPTIONS . "`
                 WHERE `option_name` = '" . $option . "';"
         )['option_value'];
     }
@@ -45,7 +45,7 @@ class Options extends Model
     public function writeOption(string $option, string $value): bool
     {
         return $this->db->query(
-            "INSERT INTO `" . OPTIONS . "`
+            'INSERT INTO `' . OPTIONS . "`
                 (`option_name`, `option_value`)
             VALUES('" . $option . "', '" . $value . "')
             ON DUPLICATE KEY UPDATE
@@ -63,7 +63,7 @@ class Options extends Model
     public function deleteOption(string $option): bool
     {
         return $this->db->query(
-            "DELETE `" . OPTIONS . "`
+            'DELETE `' . OPTIONS . "`
                 WHERE `option_name` = '" . $option . "';"
         );
     }

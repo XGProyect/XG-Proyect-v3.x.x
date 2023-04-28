@@ -1,0 +1,20 @@
+<?php
+$lng = App\Libraries\BattleEngine\Utils\LangManager::getInstance();
+$debris = $this->getDebris();
+$Mdebris = number_format($debris[0],0, ',', '.');
+$Cdebris = number_format($debris[1],0, ',', '.');
+?>
+<?php echo $lng->getAttackersLostUnits(number_format($this->getTotalAttackersLostUnits(),0, ',', '.')); ?><br />
+<?php echo $lng->getDefendersLostUnits(number_format($this->getTotalDefendersLostUnits(),0, ',', '.')); ?><br />
+
+<?php echo $lng->getFloatingDebris($Mdebris,$Cdebris); ?><br />
+<?php echo $lng->getMoonProb( $this->getMoonProb()); ?><br />
+<?php $moon = $this->getMoonEvent(); ?>
+<?php if ($moon !== false) { echo $lng->getNewMoon('Planet', 1, 1, 1); ?>
+<br />
+<?php } ?>
+<br />
+Repaired Defense:<br />
+<?php foreach ($this->getDefendersRepaired() as $_id => $_player) {  ?>
+    <?php $st='Defender'; include('player2.html'); ?>
+<?php } ?>

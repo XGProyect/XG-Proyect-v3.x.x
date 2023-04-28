@@ -16,7 +16,7 @@ class Shipyard extends Model
     public function insertItemsToBuild($resources, $shipyard_queue, $planet_id)
     {
         $this->db->query(
-            "UPDATE " . PLANETS . " AS p SET
+            'UPDATE ' . PLANETS . " AS p SET
                 p.`planet_b_hangar_id` = CONCAT(p.`planet_b_hangar_id`, '" . $shipyard_queue . "'),
                 p.`planet_metal` = '" . $resources['metal'] . "',
                 p.`planet_crystal` = '" . $resources['crystal'] . "',

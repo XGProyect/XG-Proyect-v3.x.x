@@ -4,23 +4,22 @@ namespace App\Libraries\Missions;
 
 use App\Core\Enumerators\ShipsEnumerator as Ships;
 use App\Helpers\UrlHelper;
+use App\Libraries\BattleEngine\Core\Battle;
+use App\Libraries\BattleEngine\Core\BattleReport;
+use App\Libraries\BattleEngine\Models\Defense;
+use App\Libraries\BattleEngine\Models\Fleet;
+use App\Libraries\BattleEngine\Models\HomeFleet;
+use App\Libraries\BattleEngine\Models\Player;
+use App\Libraries\BattleEngine\Models\PlayerGroup;
+use App\Libraries\BattleEngine\Models\Ship;
+use App\Libraries\BattleEngine\Utils\DebugManager;
+use App\Libraries\BattleEngine\Utils\LangManager;
 use App\Libraries\Combatreport\Report;
 use App\Libraries\FleetsLib;
 use App\Libraries\FormatLib;
 use App\Libraries\Formulas;
 use App\Libraries\Functions;
-use App\Libraries\Missions\Attack_lang;
-use App\Libraries\Missions\Missions;
 use App\Libraries\UpdatesLibrary;
-use Battle;
-use DebugManager;
-use Defense;
-use Fleet;
-use HomeFleet;
-use LangManager;
-use Player;
-use PlayerGroup;
-use Ship;
 
 class Destroy extends Missions
 {
@@ -79,23 +78,16 @@ class Destroy extends Missions
         ]);
 
         if ($fleet_row['fleet_mess'] == 0 && $fleet_row['fleet_start_time'] <= time()) {
-            // require several stuff
-            require XGP_ROOT . LIB_PATH .
-                'BattleEngine' . DIRECTORY_SEPARATOR .
-                'utils' . DIRECTORY_SEPARATOR . 'includer.php';
-
-            // require language implementation
-            require XGP_ROOT . LIB_PATH .
-                'missions' . DIRECTORY_SEPARATOR . 'Attack_lang.php';
+            require XGP_ROOT . LIB_PATH . 'BattleEngine' . DIRECTORY_SEPARATOR . 'Utils' . DIRECTORY_SEPARATOR . 'Includer.php';
 
             // set language for the reports
-            LangManager::getInstance()->setImplementation(new Attack_lang($this->langs, $this->resource));
+            LangManager::getInstance()->setImplementation(new AttackLang($this->langs, $this->resource));
 
             if ($fleet_row['fleet_group'] > 0) {
                 $this->missionsModel->deleteAcsFleetById($fleet_row['fleet_group']);
                 $this->missionsModel->updateAcsFleetStatusByGroupId($fleet_row['fleet_group']);
             } else {
-                parent::returnFleet($fleet_row['fleet_id']);
+                parent::returnFleet((int) $fleet_row['fleet_id']);
             }
 
             $targetUser = $this->missionsModel->getAllUserDataByUserId($target_planet['planet_user_id']);
@@ -249,7 +241,7 @@ class Destroy extends Missions
             );
 
             parent::restoreFleet($fleet_row, true);
-            parent::removeFleet($fleet_row['fleet_id']);
+            parent::removeFleet((int) $fleet_row['fleet_id']);
         }
     }
 
@@ -765,7 +757,7 @@ class Destroy extends Missions
         ]);
 
         // Updating flying fleets
-        $id_string = join(",", $emptyFleets);
+        $id_string = join(',', $emptyFleets);
 
         if (!empty($id_string)) {
             $this->missionsModel->deleteMultipleFleetsByIds($id_string);
@@ -897,7 +889,7 @@ class Destroy extends Missions
 
         $raport[] = sprintf($this->langs->line('des_moon_ds_chances'), $this->_destruction['moon_chance'], $this->_destruction['ds_chance']);
 
-        return join("<br/>", $raport);
+        return join('<br/>', $raport);
     }
 
     /**

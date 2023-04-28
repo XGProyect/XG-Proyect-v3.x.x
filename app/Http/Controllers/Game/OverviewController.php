@@ -107,9 +107,9 @@ class OverviewController extends BaseController
 
                 // THE BUILDING BLOCK
                 if ($is_current_planet) {
-                    $building_block = DevelopmentsLib::currentBuilding("overview", $this->langs->language, $building);
+                    $building_block = DevelopmentsLib::currentBuilding('overview', $this->langs->language, $building);
                     $building_block .= $this->langs->language[$this->objects->getObjects($building)] . ' (' . $level . ')';
-                    $building_block .= "<br /><div id=\"blc\" class=\"z\">" . FormatLib::prettyTime($time_to_end) . "</div>";
+                    $building_block .= '<br /><div id="blc" class="z">' . FormatLib::prettyTime($time_to_end) . '</div>';
                     $building_block .= "\n<script language=\"JavaScript\">";
                     $building_block .= "\n	pp = \"" . $time_to_end . "\";\n";
                     $building_block .= "\n	pk = \"" . 1 . "\";\n";
@@ -169,11 +169,11 @@ class OverviewController extends BaseController
         $own_fleets = $this->overviewModel->getOwnFleets($this->user['user_id']);
 
         foreach ($own_fleets as $fleets) {
-            ######################################
-            #
-            # own fleets
-            #
-            ######################################
+            //#####################################
+            //
+            // own fleets
+            //
+            //#####################################
 
             $start_time = $fleets['fleet_start_time'];
             $stay_time = $fleets['fleet_end_stay'];
@@ -218,11 +218,11 @@ class OverviewController extends BaseController
                 }
             }
 
-            ######################################
-            #
-            # incoming fleets
-            #
-            ######################################
+            //#####################################
+            //
+            // incoming fleets
+            //
+            //#####################################
             if ($fleets['fleet_owner'] != $this->user['user_id']) {
                 if ($fleets['fleet_mission'] == 2) {
                     $record++;
@@ -261,11 +261,11 @@ class OverviewController extends BaseController
                 }
             }
 
-            ######################################
-            #
-            # other fleets
-            #
-            ######################################
+            //#####################################
+            //
+            // other fleets
+            //
+            //#####################################
 
             if ($fleets['fleet_owner'] != $this->user['user_id']) {
                 $acs_member = false;
@@ -325,7 +325,7 @@ class OverviewController extends BaseController
         $return['moon'] = '';
 
         if ($this->planet['moon_id'] != 0 && $this->planet['moon_destroyed'] == 0 && $this->planet['planet_type'] == PlanetTypesEnumerator::PLANET) {
-            $moon_name = $this->planet['moon_name'] . " (" . $this->langs->line('moon') . ")";
+            $moon_name = $this->planet['moon_name'] . ' (' . $this->langs->line('moon') . ')';
             $url = 'game.php?page=overview&cp=' . $this->planet['moon_id'] . '&re=0';
             $image = DPATH . 'planets/' . $this->planet['moon_image'] . '.jpg';
             $attributes = 'height="50" width="50"';
@@ -389,7 +389,7 @@ class OverviewController extends BaseController
         $total_rank = $this->user['user_statistic_total_rank'] == '' ? $this->planet['stats_users'] : $this->user['user_statistic_total_rank'];
 
         if ($this->noob->isRankVisible($this->user['user_authlevel'])) {
-            $user_rank = FormatLib::prettyNumber($this->user['user_statistic_total_points']) . " (" . $this->langs->line('ov_place') . ' ' . UrlHelper::setUrl('game.php?page=statistics&range=' . $total_rank, $total_rank, $total_rank) . ' ' . $this->langs->line('ov_of') . ' ' . $this->planet['stats_users'] . ")";
+            $user_rank = FormatLib::prettyNumber($this->user['user_statistic_total_points']) . ' (' . $this->langs->line('ov_place') . ' ' . UrlHelper::setUrl('game.php?page=statistics&range=' . $total_rank, $total_rank, $total_rank) . ' ' . $this->langs->line('ov_of') . ' ' . $this->planet['stats_users'] . ')';
         }
 
         return $user_rank;

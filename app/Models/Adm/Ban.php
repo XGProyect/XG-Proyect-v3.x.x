@@ -19,12 +19,12 @@ class Ban extends Model
         $clean_user_name = $this->db->escapeValue($user_name);
 
         $this->db->query(
-            "DELETE FROM `" . BANNED . "`
+            'DELETE FROM `' . BANNED . "`
             WHERE `banned_who` = '" . $clean_user_name . "'"
         );
 
         $this->db->query(
-            "UPDATE `" . USERS . "` SET
+            'UPDATE `' . USERS . "` SET
                 `user_banned` = '0'
             WHERE `user_name` = '" . $clean_user_name . "'
             LIMIT 1"
@@ -42,16 +42,16 @@ class Ban extends Model
         $clean_user_name = $this->db->escapeValue($ban_name);
 
         return $this->db->queryFetch(
-            "SELECT
+            'SELECT
                 b.*,
                 p.`preference_user_id`,
                 p.`preference_vacation_mode`
-            FROM `" . BANNED . "` AS b
-            INNER JOIN `" . PREFERENCES . "` AS p
+            FROM `' . BANNED . '` AS b
+            INNER JOIN `' . PREFERENCES . '` AS p
                 ON p.`preference_user_id` = (
                     SELECT
                         `user_id`
-                    FROM `" . USERS . "`
+                    FROM `' . USERS . "`
                     WHERE `user_name` = '" . $clean_user_name . "'
                     LIMIT 1
                 )
@@ -74,7 +74,7 @@ class Ban extends Model
 
             if (isset($banned_user)) {
                 $this->db->query(
-                    "UPDATE `" . BANNED . "`  SET
+                    'UPDATE `' . BANNED . "`  SET
                         `banned_who` = '" . $ban_data['ban_name'] . "',
                         `banned_theme` = '" . $ban_data['ban_reason'] . "',
                         `banned_time` = '" . $ban_data['ban_time'] . "',
@@ -85,7 +85,7 @@ class Ban extends Model
                 );
             } else {
                 $this->db->query(
-                    "INSERT INTO `" . BANNED . "` SET
+                    'INSERT INTO `' . BANNED . "` SET
                         `banned_who` = '" . $ban_data['ban_name'] . "',
                         `banned_theme` = '" . $ban_data['ban_reason'] . "',
                         `banned_time` = '" . $ban_data['ban_time'] . "',
@@ -96,14 +96,14 @@ class Ban extends Model
             }
 
             $user_id = $this->db->queryFetch(
-                "SELECT
+                'SELECT
                     `user_id`
-                FROM `" . USERS . "`
+                FROM `' . USERS . "`
                 WHERE `user_name` = '" . $ban_data['ban_name'] . "' LIMIT 1"
             )['user_id'];
 
             $this->db->query(
-                "UPDATE `" . USERS . "` AS u, `" . PREFERENCES . "` AS pr, `" . PLANETS . "` AS p SET
+                'UPDATE `' . USERS . '` AS u, `' . PREFERENCES . '` AS pr, `' . PLANETS . "` AS p SET
                     u.`user_banned` = '" . $ban_data['ban_until'] . "',
                     pr.`preference_vacation_mode` = " . (isset($vacation_mode) && $vacation_mode != '' ? "'" . time() . "'" : 'NULL') . ",
                     p.`planet_building_metal_mine_percent` = '0',
@@ -112,9 +112,9 @@ class Ban extends Model
                     p.`planet_building_solar_plant_percent` = '0',
                     p.`planet_building_fusion_reactor_percent` = '0',
                     p.`planet_ship_solar_satellite_percent` = '0'
-                WHERE u.`user_id` = " . $user_id . "
-                        AND pr.`preference_user_id` = " . $user_id . "
-                        AND p.`planet_user_id` = " . $user_id . ";"
+                WHERE u.`user_id` = " . $user_id . '
+                        AND pr.`preference_user_id` = ' . $user_id . '
+                        AND p.`planet_user_id` = ' . $user_id . ';'
             );
 
             $this->db->commitTransaction();
@@ -134,13 +134,13 @@ class Ban extends Model
     public function getListOfUsers(string $where_authlevel, string $where_banned, string $query_order): array
     {
         return $this->db->queryFetchAll(
-            "SELECT
+            'SELECT
                 `user_id`,
                 `user_name`,
                 `user_banned`
-            FROM `" . USERS . "`
-            " . $where_authlevel . " " . $where_banned . "
-            ORDER BY " . $query_order . " ASC"
+            FROM `' . USERS . '`
+            ' . $where_authlevel . ' ' . $where_banned . '
+            ORDER BY ' . $query_order . ' ASC'
         );
     }
 
@@ -153,12 +153,12 @@ class Ban extends Model
     public function getBannedUsers(string $order): ?array
     {
         return $this->db->queryFetchAll(
-            "SELECT
+            'SELECT
                 `user_id`,
                 `user_name`
-            FROM `" . USERS . "`
+            FROM `' . USERS . "`
             WHERE `user_banned` <> '0'
-            ORDER BY " . $order . " ASC"
+            ORDER BY " . $order . ' ASC'
         );
     }
 }

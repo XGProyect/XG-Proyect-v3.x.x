@@ -366,7 +366,7 @@ class ShipyardController extends BaseController
                     $item_time = $this->getItemTime($item_values[0]);
 
                     $item_time_per_type .= $item_time . ',';
-                    $item_name_per_type .= '\'' . html_entity_decode($this->langs->language[$this->objects->getObjects($item_values[0])], ENT_COMPAT, "utf-8") . '\',';
+                    $item_name_per_type .= '\'' . html_entity_decode($this->langs->language[$this->objects->getObjects($item_values[0])], ENT_COMPAT, 'utf-8') . '\',';
                     $item_amount_per_type .= $item_values[1] . ',';
 
                     // $item_values[1] = amount

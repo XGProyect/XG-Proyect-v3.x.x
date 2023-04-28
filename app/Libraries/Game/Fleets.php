@@ -49,7 +49,7 @@ class Fleets
      */
     public function getFleetById(int $fleet_id): FleetEntity
     {
-        return $this->_fleets[$this->validateIndex($fleet_id)] ?? new FleetEntity(array());
+        return $this->_fleets[$this->validateIndex($fleet_id)] ?? new FleetEntity([]);
     }
 
     /**

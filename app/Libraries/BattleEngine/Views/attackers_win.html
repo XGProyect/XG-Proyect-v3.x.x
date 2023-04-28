@@ -1,0 +1,9 @@
+<?php
+$lng = App\Libraries\BattleEngine\Utils\LangManager::getInstance();
+$steal = $this->getSteal();
+$metal = number_format($steal['metal'],0, ',', '.');
+$crystal = number_format($steal['crystal'],0, ',', '.');
+$deuterium = number_format($steal['deuterium'],0, ',', '.');
+?>
+<?php echo $lng->getAttackerHasWon(); ?><br />
+<?php echo $lng->getStoleDescr($metal,$crystal,$deuterium); ?>.<br />

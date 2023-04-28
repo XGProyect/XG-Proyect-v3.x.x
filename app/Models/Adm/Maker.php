@@ -16,10 +16,10 @@ class Maker extends Model
     public function getUsersWithoutAlliance(): array
     {
         return $this->db->queryFetchAll(
-            "SELECT
+            'SELECT
                 `user_id`,
                 `user_name`
-            FROM `" . USERS . "`
+            FROM `' . USERS . "`
             WHERE `user_ally_id` = '0'
                 AND `user_ally_request` = '0';"
         ) ?? [];
@@ -33,10 +33,10 @@ class Maker extends Model
     public function getAllServerUsers(): array
     {
         return $this->db->queryFetchAll(
-            "SELECT
+            'SELECT
                 `user_id`,
                 `user_name`
-            FROM `" . USERS . "`;"
+            FROM `' . USERS . '`;'
         ) ?? [];
     }
 
@@ -48,13 +48,13 @@ class Maker extends Model
     public function getAllActivePlanets(): array
     {
         return $this->db->queryFetchAll(
-            "SELECT
+            'SELECT
                 `planet_id`,
                 `planet_name`,
                 `planet_galaxy`,
                 `planet_system`,
                 `planet_planet`
-            FROM `" . PLANETS . "`
+            FROM `' . PLANETS . "`
             WHERE `planet_destroyed` = '0'
                 AND `planet_type` = '1';"
         ) ?? [];
@@ -69,9 +69,9 @@ class Maker extends Model
     public function checkUserName(string $username): array
     {
         return $this->db->queryFetch(
-            "SELECT
+            'SELECT
                 `user_name`
-            FROM `" . USERS . "`
+            FROM `' . USERS . "`
             WHERE `user_name` = '" . $this->db->escapeValue($username) . "'
             LIMIT 1"
         ) ?? [];
@@ -86,9 +86,9 @@ class Maker extends Model
     public function checkUserEmail(string $email): array
     {
         return $this->db->queryFetch(
-            "SELECT
+            'SELECT
                 `user_email`
-            FROM `" . USERS . "`
+            FROM `' . USERS . "`
             WHERE `user_email` = '" . $this->db->escapeValue($email) . "'
             LIMIT 1"
         ) ?? [];
@@ -103,8 +103,8 @@ class Maker extends Model
     public function checkPlanet(int $galaxy, int $system, int $planet): array
     {
         return $this->db->queryFetch(
-            "SELECT COUNT(`planet_id`) AS `count`
-            FROM `" . PLANETS . "`
+            'SELECT COUNT(`planet_id`) AS `count`
+            FROM `' . PLANETS . "`
             WHERE
                 `planet_galaxy` = '" . $galaxy . "'
             AND
@@ -135,7 +135,7 @@ class Maker extends Model
             $this->db->beginTransaction();
 
             $this->db->query(
-                "INSERT INTO `" . USERS . "` SET
+                'INSERT INTO `' . USERS . "` SET
                     `user_name` = '" . $this->db->escapeValue($name) . "',
                     `user_email` = '" . $this->db->escapeValue($email) . "',
                     `user_ip_at_reg` = '" . $_SERVER['REMOTE_ADDR'] . "',
@@ -149,22 +149,22 @@ class Maker extends Model
             $last_user_id = $this->db->insertId();
 
             $this->db->query(
-                "INSERT INTO `" . RESEARCH . "` SET
+                'INSERT INTO `' . RESEARCH . "` SET
                     `research_user_id` = '" . $last_user_id . "';"
             );
 
             $this->db->query(
-                "INSERT INTO `" . USERS_STATISTICS . "` SET
+                'INSERT INTO `' . USERS_STATISTICS . "` SET
                     `user_statistic_user_id` = '" . $last_user_id . "';"
             );
 
             $this->db->query(
-                "INSERT INTO `" . PREMIUM . "` (`premium_user_id`, `premium_dark_matter`)
+                'INSERT INTO `' . PREMIUM . "` (`premium_user_id`, `premium_dark_matter`)
                 VALUES('" . $last_user_id . "', '" . Functions::readConfig('registration_dark_matter') . "');"
             );
 
             $this->db->query(
-                "INSERT INTO `" . PREFERENCES . "` SET
+                'INSERT INTO `' . PREFERENCES . "` SET
                     `preference_user_id` = '" . $last_user_id . "';"
             );
 
@@ -174,7 +174,7 @@ class Maker extends Model
             $last_planet_id = $this->db->insertId();
 
             $this->db->query(
-                "UPDATE `" . USERS . "` SET
+                'UPDATE `' . USERS . "` SET
                     `user_home_planet_id` = '" . $last_planet_id . "',
                     `user_current_planet` = '" . $last_planet_id . "',
                     `user_galaxy` = '" . $galaxy . "',
@@ -201,9 +201,9 @@ class Maker extends Model
     public function checkAlliance(string $alliance_name, string $alliance_tag): array
     {
         return $this->db->queryFetch(
-            "SELECT
+            'SELECT
                 `alliance_id`
-            FROM `" . ALLIANCE . "`
+            FROM `' . ALLIANCE . "`
             WHERE `alliance_name` = '" . $this->db->escapeValue($alliance_name) . "'
                 OR `alliance_tag` = '" . $this->db->escapeValue($alliance_tag) . "';"
         ) ?? [];
@@ -228,7 +228,7 @@ class Maker extends Model
             $rights_string = '[{"rank":"Founder","rights":{"1":1,"2":1,"3":1,"4":1,"5":1,"6":1,"7":1,"8":1,"9":1}},{"rank":"Newcomer","rights":{"1":0,"2":0,"3":0,"4":0,"5":0,"6":0,"7":0,"8":0,"9":0}}]';
 
             $this->db->query(
-                "INSERT INTO `" . ALLIANCE . "` SET
+                'INSERT INTO `' . ALLIANCE . "` SET
                 `alliance_name` = '" . $alliance_name . "',
                 `alliance_tag` = '" . $alliance_tag . "' ,
                 `alliance_owner` = '" . (int) $user_id . "',
@@ -239,12 +239,12 @@ class Maker extends Model
             $new_alliance_id = $this->db->insertId();
 
             $this->db->query(
-                "INSERT INTO `" . ALLIANCE_STATISTICS . "` SET
+                'INSERT INTO `' . ALLIANCE_STATISTICS . "` SET
                     `alliance_statistic_alliance_id`='" . $new_alliance_id . "'"
             );
 
             $this->db->query(
-                "UPDATE `" . USERS . "` SET
+                'UPDATE `' . USERS . "` SET
                     `user_ally_id` = '" . $new_alliance_id . "',
                     `user_ally_register_time` = '" . $time . "'
                 WHERE `user_id` = '" . $alliance_founder . "'"
@@ -264,8 +264,8 @@ class Maker extends Model
     public function checkUserById(int $user_id): array
     {
         return $this->db->queryFetch(
-            "SELECT *
-            FROM `" . USERS . "`
+            'SELECT *
+            FROM `' . USERS . "`
             WHERE `user_id` = '" . $user_id . "'"
         ) ?? [];
     }
@@ -290,7 +290,7 @@ class Maker extends Model
             $creator->setNewPlanet($galaxy, $system, $planet, $user_id, '', '', false);
 
             $this->db->query(
-                "UPDATE `" . PLANETS . "` SET
+                'UPDATE `' . PLANETS . "` SET
                     `planet_field_max` = '" . $field_max . "',
                     `planet_name` = '" . $name . "'
                     WHERE `planet_galaxy` = '" . $galaxy . "'
@@ -312,17 +312,17 @@ class Maker extends Model
     public function checkMoon(int $planet_id): array
     {
         return $this->db->queryFetch(
-            "SELECT
+            'SELECT
                 p.*,
                 (
                     SELECT
                         `planet_id`
                     FROM
-                        `" . PLANETS . "`
+                        `' . PLANETS . '`
                     WHERE
                             `planet_galaxy` = (
                                 SELECT `planet_galaxy`
-                                FROM `" . PLANETS . "`
+                                FROM `' . PLANETS . "`
                                 WHERE `planet_id` = '" . $planet_id . "'
                                         AND `planet_type` = 1
                         )

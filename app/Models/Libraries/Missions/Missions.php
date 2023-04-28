@@ -12,7 +12,7 @@ class Missions extends Model
     {
         if ((int) $fleedId > 0) {
             $this->db->query(
-                "DELETE FROM `" . FLEETS . "` WHERE `fleet_id` = '" . $fleedId . "'"
+                'DELETE FROM `' . FLEETS . "` WHERE `fleet_id` = '" . $fleedId . "'"
             );
         }
     }
@@ -21,7 +21,7 @@ class Missions extends Model
     {
         if ((int) $fleedId > 0) {
             $this->db->query(
-                "UPDATE " . FLEETS . " SET
+                'UPDATE ' . FLEETS . " SET
                     `fleet_mess` = '1'
                 WHERE `fleet_id` = '" . $fleedId . "'"
             );
@@ -32,7 +32,7 @@ class Missions extends Model
     {
         if ((int) $fleedId > 0) {
             $this->db->query(
-                "UPDATE " . FLEETS . " SET
+                'UPDATE ' . FLEETS . " SET
                     `fleet_mess` = '2'
                 WHERE `fleet_id` = '" . $fleedId . "'"
             );
@@ -43,8 +43,8 @@ class Missions extends Model
     {
         if (is_array($data)) {
             $this->db->query(
-                "UPDATE " . PLANETS . " AS p
-                INNER JOIN " . SHIPS . " AS s ON s.ship_planet_id = p.`planet_id` SET
+                'UPDATE ' . PLANETS . ' AS p
+                INNER JOIN ' . SHIPS . " AS s ON s.ship_planet_id = p.`planet_id` SET
                     {$data['ships']}
                     `planet_metal` = `planet_metal` + '" . $data['resources']['metal'] . "',
                     `planet_crystal` = `planet_crystal` + '" . $data['resources']['crystal'] . "',
@@ -61,7 +61,7 @@ class Missions extends Model
     {
         if (is_array($data)) {
             $this->db->query(
-                "UPDATE " . PLANETS . " SET
+                'UPDATE ' . PLANETS . " SET
                     `planet_metal` = `planet_metal` + '" . $data['resources']['metal'] . "',
                     `planet_crystal` = `planet_crystal` + '" . $data['resources']['crystal'] . "',
                     `planet_deuterium` = `planet_deuterium` + '" . $data['resources']['deuterium'] . "'
@@ -78,11 +78,11 @@ class Missions extends Model
     {
         if (is_array($data)) {
             return $this->db->queryFetch(
-                "SELECT *
-                FROM `" . PLANETS . "` AS p
-                LEFT JOIN `" . BUILDINGS . "` AS b ON b.building_planet_id = p.`planet_id`
-                LEFT JOIN `" . DEFENSES . "` AS d ON d.defense_planet_id = p.`planet_id`
-                LEFT JOIN `" . SHIPS . "` AS s ON s.ship_planet_id = p.`planet_id`
+                'SELECT *
+                FROM `' . PLANETS . '` AS p
+                LEFT JOIN `' . BUILDINGS . '` AS b ON b.building_planet_id = p.`planet_id`
+                LEFT JOIN `' . DEFENSES . '` AS d ON d.defense_planet_id = p.`planet_id`
+                LEFT JOIN `' . SHIPS . "` AS s ON s.ship_planet_id = p.`planet_id`
                 WHERE `planet_galaxy` = '" . (int) $data['coords']['galaxy'] . "' AND
                     `planet_system` = '" . (int) $data['coords']['system'] . "' AND
                     `planet_planet` = '" . (int) $data['coords']['planet'] . "' AND
@@ -105,14 +105,14 @@ class Missions extends Model
     {
         if ((int) $userId > 0) {
             return $this->db->queryFetch(
-                "SELECT u.*,
+                'SELECT u.*,
                     r.*,
                     pr.*,
                     pref.preference_vacation_mode
-                FROM `" . USERS . "` AS u
-                INNER JOIN `" . RESEARCH . "` AS r ON r.research_user_id = u.user_id
-                INNER JOIN `" . PREMIUM . "` AS pr ON pr.premium_user_id = u.user_id
-                INNER JOIN `" . PREFERENCES . "` AS pref ON pref.preference_user_id = u.user_id
+                FROM `' . USERS . '` AS u
+                INNER JOIN `' . RESEARCH . '` AS r ON r.research_user_id = u.user_id
+                INNER JOIN `' . PREMIUM . '` AS pr ON pr.premium_user_id = u.user_id
+                INNER JOIN `' . PREFERENCES . "` AS pref ON pref.preference_user_id = u.user_id
                 WHERE u.`user_id` = '" . $userId . "'
                 LIMIT 1;"
             );
@@ -132,7 +132,7 @@ class Missions extends Model
     {
         if ((int) $fleet_group_id > 0) {
             $this->db->query(
-                "DELETE FROM `" . ACS . "`
+                'DELETE FROM `' . ACS . "`
                 WHERE `acs_id` = '" . $fleet_group_id . "'"
             );
         }
@@ -149,7 +149,7 @@ class Missions extends Model
     {
         if ((int) $fleet_group_id > 0) {
             $this->db->query(
-                "UPDATE `" . FLEETS . "` SET
+                'UPDATE `' . FLEETS . "` SET
                     `fleet_mess` = '1'
                 WHERE `fleet_group` = '" . $fleet_group_id . "'"
             );
@@ -167,11 +167,11 @@ class Missions extends Model
     {
         if ((int) $fleet_group_id > 0) {
             return $this->db->queryFetchAll(
-                "SELECT
+                'SELECT
                     f.*,
                     r.`research_hyperspace_technology`
-                FROM `" . FLEETS . "` f
-                LEFT JOIN `" . RESEARCH . "` r
+                FROM `' . FLEETS . '` f
+                LEFT JOIN `' . RESEARCH . "` r
                     ON r.`research_user_id` = f.`fleet_owner`
                 WHERE f.`fleet_group` = '" . $fleet_group_id . "';"
             );
@@ -191,8 +191,8 @@ class Missions extends Model
     {
         if (is_array($data)) {
             return $this->db->queryFetchAll(
-                "SELECT *
-                FROM `" . FLEETS . "`
+                'SELECT *
+                FROM `' . FLEETS . "`
                 WHERE `fleet_end_galaxy` = '" . (int) $data['coords']['galaxy'] . "' AND
                     `fleet_end_system` = '" . (int) $data['coords']['system'] . "' AND
                     `fleet_end_planet` = '" . (int) $data['coords']['planet'] . "' AND
@@ -216,7 +216,7 @@ class Missions extends Model
     {
         if (is_array($data)) {
             $this->db->query(
-                "UPDATE " . PLANETS . " SET
+                'UPDATE ' . PLANETS . " SET
                     `planet_invisible_start_time` = '" . $data['time'] . "',
                     `planet_debris_metal` = `planet_debris_metal` + '" . $data['debris']['metal'] . "',
                     `planet_debris_crystal` = `planet_debris_crystal` + '" . $data['debris']['crystal'] . "'
@@ -240,13 +240,13 @@ class Missions extends Model
     {
         if ((int) $userId > 0) {
             return $this->db->queryFetch(
-                "SELECT u.user_name,
+                'SELECT u.user_name,
                     r.research_weapons_technology,
                     r.research_shielding_technology,
                     r.research_armour_technology,
                     r.research_hyperspace_technology
-                FROM " . USERS . " AS u
-                    INNER JOIN `" . RESEARCH . "` AS r
+                FROM ' . USERS . ' AS u
+                    INNER JOIN `' . RESEARCH . "` AS r
                         ON r.research_user_id = u.user_id
                 WHERE u.user_id = '" . $userId . "';"
             );
@@ -264,8 +264,8 @@ class Missions extends Model
     {
         if (is_array($data)) {
             return $this->db->queryFetch(
-                "SELECT `planet_id`
-                FROM `" . PLANETS . "`
+                'SELECT `planet_id`
+                FROM `' . PLANETS . "`
                 WHERE `planet_galaxy` = '" . $data['coords']['galaxy'] . "'
                     AND `planet_system` = '" . $data['coords']['system'] . "'
                     AND `planet_planet` = '" . $data['coords']['planet'] . "'
@@ -287,7 +287,7 @@ class Missions extends Model
     {
         if (is_array($data)) {
             $this->db->query(
-                "INSERT INTO `" . REPORTS . "` SET
+                'INSERT INTO `' . REPORTS . "` SET
                 `report_owners` = '" . $data['owners'] . "',
                 `report_rid` = '" . $data['rid'] . "',
                 `report_content` = '" . $data['content'] . "',
@@ -308,7 +308,7 @@ class Missions extends Model
     {
         if (is_array($data)) {
             $this->db->query(
-                "UPDATE `" . FLEETS . "` SET
+                'UPDATE `' . FLEETS . "` SET
                 `fleet_array` = '" . $data['ships'] . "',
                 `fleet_amount` = '" . $data['amount'] . "',
                 `fleet_mess` = '1',
@@ -330,8 +330,8 @@ class Missions extends Model
     public function deleteMultipleFleetsByIds($id_string)
     {
         $this->db->query(
-            "DELETE FROM `" . FLEETS . "`
-            WHERE `fleet_id` IN (" . $id_string . ")"
+            'DELETE FROM `' . FLEETS . '`
+            WHERE `fleet_id` IN (' . $id_string . ')'
         );
     }
 
@@ -347,11 +347,11 @@ class Missions extends Model
         if (is_array($data)) {
             // Updating defenses and ships on planet
             $this->db->query(
-                "UPDATE `" . PLANETS . "`, `" . SHIPS . "`, `" . DEFENSES . "`  SET
-                " . $data['ships'] . "
-                `planet_metal` = `planet_metal` -  " . $data['stolen']['metal'] . ",
-                `planet_crystal` = `planet_crystal` -  " . $data['stolen']['crystal'] . ",
-                `planet_deuterium` = `planet_deuterium` -  " . $data['stolen']['deuterium'] . "
+                'UPDATE `' . PLANETS . '`, `' . SHIPS . '`, `' . DEFENSES . '`  SET
+                ' . $data['ships'] . '
+                `planet_metal` = `planet_metal` -  ' . $data['stolen']['metal'] . ',
+                `planet_crystal` = `planet_crystal` -  ' . $data['stolen']['crystal'] . ',
+                `planet_deuterium` = `planet_deuterium` -  ' . $data['stolen']['deuterium'] . "
                 WHERE `planet_id` = '" . $data['planet_id'] . "' AND
                     `ship_planet_id` = '" . $data['planet_id'] . "' AND
                     `defense_planet_id` = '" . $data['planet_id'] . "'"
@@ -370,9 +370,9 @@ class Missions extends Model
     {
         if (is_array($data)) {
             return $this->db->queryFetch(
-                "SELECT
+                'SELECT
                     (SELECT COUNT(*)
-                            FROM " . PLANETS . " AS pc1
+                            FROM ' . PLANETS . " AS pc1
                             WHERE pc1.`planet_user_id` = '" . $data['user_id'] . "' AND
                                             pc1.`planet_type` = '1' AND
                                             pc1.`planet_destroyed` = '0') AS planet_count,
@@ -402,7 +402,7 @@ class Missions extends Model
     {
         if (is_array($data)) {
             return $this->db->queryFetch(
-                "SELECT
+                'SELECT
                     pc1.`planet_user_id` AS `start_id`,
                     pc1.`planet_name` AS `start_name`,
                     pc2.`planet_user_id` AS `target_id`,
@@ -411,8 +411,8 @@ class Missions extends Model
                     pc2.`planet_crystal` AS `target_crystal`,
                     pc2.`planet_deuterium` AS `target_deuterium`,
                     u.`user_name` AS `start_user_name`
-                FROM `" . PLANETS . "` AS pc1 JOIN `" . PLANETS . "` AS pc2
-                LEFT JOIN `" . USERS . "` AS u
+                FROM `' . PLANETS . '` AS pc1 JOIN `' . PLANETS . '` AS pc2
+                LEFT JOIN `' . USERS . "` AS u
                     ON u.`user_id` = pc1.`planet_user_id`
                 WHERE pc1.planet_galaxy = '" . $data['coords']['start']['galaxy'] . "' AND
                     pc1.`planet_system` = '" . $data['coords']['start']['system'] . "' AND
@@ -439,8 +439,8 @@ class Missions extends Model
             }
         }
 
-        $this->db->query("
-            UPDATE `" . USERS_STATISTICS . "` AS us SET
+        $this->db->query('
+            UPDATE `' . USERS_STATISTICS . "` AS us SET
                 us.`user_statistic_ships_points` = us.`user_statistic_ships_points` - '" . $shipPoints . "' ,
                 us.`user_statistic_defenses_points` = us.`user_statistic_defenses_points` - '" . $defensePoints . "'
             WHERE us.`user_statistic_user_id` = '" . $playerId . "'
@@ -464,10 +464,10 @@ class Missions extends Model
     {
         if (is_array($data)) {
             $this->db->query(
-                "UPDATE " . USERS_STATISTICS . " AS us SET
-                us.`user_statistic_ships_points` = us.`user_statistic_ships_points` - " . $data['points'] . "
+                'UPDATE ' . USERS_STATISTICS . ' AS us SET
+                us.`user_statistic_ships_points` = us.`user_statistic_ships_points` - ' . $data['points'] . '
                 WHERE us.`user_statistic_user_id` = (
-                    SELECT p.planet_user_id FROM " . PLANETS . " AS p
+                    SELECT p.planet_user_id FROM ' . PLANETS . " AS p
                     WHERE p.planet_galaxy = '" . $data['coords']['galaxy'] . "' AND
                         p.planet_system = '" . $data['coords']['system'] . "' AND
                         p.planet_planet = '" . $data['coords']['planet'] . "' AND
@@ -488,7 +488,7 @@ class Missions extends Model
     {
         if (is_array($data)) {
             $this->db->query(
-                "UPDATE " . FLEETS . ", " . USERS_STATISTICS . " SET
+                'UPDATE ' . FLEETS . ', ' . USERS_STATISTICS . " SET
                 `fleet_array` = '" . $data['ships'] . "',
                 `fleet_amount` = `fleet_amount` - 1,
                 `fleet_resource_metal` = '0',
@@ -524,21 +524,21 @@ class Missions extends Model
     {
         if (is_array($data)) {
             return $this->db->queryFetch(
-                "SELECT
+                'SELECT
                     p.planet_name,
                     r.research_weapons_technology,
                     r.research_shielding_technology,
                     r.research_armour_technology,
                     u.user_name,
                     u.user_id
-                FROM " . PLANETS . " AS p
-                INNER JOIN " . USERS . " AS u ON u.user_id = p.planet_user_id
-                INNER JOIN " . PREMIUM . " AS pr ON pr.premium_user_id = p.planet_user_id
-                INNER JOIN " . RESEARCH . " AS r ON r.research_user_id = p.planet_user_id
-                WHERE p.`planet_galaxy` = " . $data['coords']['galaxy'] . " AND
-                                p.`planet_system` = " . $data['coords']['system'] . " AND
-                                p.`planet_planet` = " . $data['coords']['planet'] . " AND
-                                p.`planet_type` = " . $data['coords']['type'] . ";"
+                FROM ' . PLANETS . ' AS p
+                INNER JOIN ' . USERS . ' AS u ON u.user_id = p.planet_user_id
+                INNER JOIN ' . PREMIUM . ' AS pr ON pr.premium_user_id = p.planet_user_id
+                INNER JOIN ' . RESEARCH . ' AS r ON r.research_user_id = p.planet_user_id
+                WHERE p.`planet_galaxy` = ' . $data['coords']['galaxy'] . ' AND
+                                p.`planet_system` = ' . $data['coords']['system'] . ' AND
+                                p.`planet_planet` = ' . $data['coords']['planet'] . ' AND
+                                p.`planet_type` = ' . $data['coords']['type'] . ';'
             );
         }
 
@@ -556,7 +556,7 @@ class Missions extends Model
     {
         if (is_array($data)) {
             return $this->db->queryFetch(
-                "SELECT
+                'SELECT
                     s.*,
                     d.*,
                     p.`planet_id`,
@@ -567,12 +567,12 @@ class Missions extends Model
                     r.research_weapons_technology,
                     r.research_shielding_technology,
                     r.research_armour_technology
-                FROM " . PLANETS . " AS p
-                INNER JOIN " . SHIPS . " AS s ON s.ship_planet_id = p.`planet_id`
-                INNER JOIN " . DEFENSES . " AS d ON d.defense_planet_id = p.`planet_id`
-                INNER JOIN " . USERS . " AS u ON u.user_id = p.planet_user_id
-                INNER JOIN " . PREMIUM . " AS pr ON pr.premium_user_id = p.planet_user_id
-                INNER JOIN " . RESEARCH . " AS r ON r.research_user_id = p.planet_user_id
+                FROM ' . PLANETS . ' AS p
+                INNER JOIN ' . SHIPS . ' AS s ON s.ship_planet_id = p.`planet_id`
+                INNER JOIN ' . DEFENSES . ' AS d ON d.defense_planet_id = p.`planet_id`
+                INNER JOIN ' . USERS . ' AS u ON u.user_id = p.planet_user_id
+                INNER JOIN ' . PREMIUM . ' AS pr ON pr.premium_user_id = p.planet_user_id
+                INNER JOIN ' . RESEARCH . " AS r ON r.research_user_id = p.planet_user_id
                 WHERE p.`planet_galaxy` = '" . $data['coords']['galaxy'] . "' AND
                                 p.`planet_system` = '" . $data['coords']['system'] . "' AND
                                 p.`planet_planet` = '" . $data['coords']['planet'] . "' AND
@@ -594,7 +594,7 @@ class Missions extends Model
     {
         if (is_array($data)) {
             $this->db->queryMulty(
-                "UPDATE `" . FLEETS . "` AS f SET
+                'UPDATE `' . FLEETS . "` AS f SET
                     f.`fleet_start_type` = '1'
                 WHERE f.`fleet_start_galaxy` = '" . $data['coords']['galaxy'] . "'
                     AND f.`fleet_start_system` = '" . $data['coords']['system'] . "'
@@ -622,10 +622,10 @@ class Missions extends Model
     {
         if (is_array($data)) {
             $this->db->query(
-                "UPDATE " . USERS . " SET
+                'UPDATE ' . USERS . ' SET
                     `user_current_planet` = (
                         SELECT `planet_id`
-                        FROM " . PLANETS . "
+                        FROM ' . PLANETS . "
                         WHERE `planet_galaxy` = '" . $data['coords']['fleet_end_galaxy'] . "' AND
                             `planet_system` = '" . $data['coords']['fleet_end_system'] . "' AND
                             `planet_planet` = '" . $data['coords']['fleet_end_planet'] . "' AND
@@ -646,9 +646,9 @@ class Missions extends Model
     {
         if (is_array($data)) {
             $this->db->query(
-                "UPDATE " . PLANETS . " AS p
-                INNER JOIN " . SHIPS . " AS s ON s.ship_planet_id = p.`planet_id`
-                INNER JOIN " . DEFENSES . " AS d ON d.defense_planet_id = p.`planet_id` SET
+                'UPDATE ' . PLANETS . ' AS p
+                INNER JOIN ' . SHIPS . ' AS s ON s.ship_planet_id = p.`planet_id`
+                INNER JOIN ' . DEFENSES . " AS d ON d.defense_planet_id = p.`planet_id` SET
                 {$data['data_to_update']}
                 `planet_invisible_start_time` = '" . $data['time'] . "',
                 `planet_debris_metal` = `planet_debris_metal` + '" . $data['debris']['metal'] . "',
@@ -672,7 +672,7 @@ class Missions extends Model
     {
         if (is_array($data)) {
             $this->db->query(
-                "UPDATE " . FLEETS . " SET
+                'UPDATE ' . FLEETS . " SET
                 `fleet_amount` = '" . $data['amount'] . "',
                 `fleet_array` = '" . FleetsLib::setFleetShipsArray($data['ships']) . "',
                 `fleet_mess` = '1'
@@ -697,7 +697,7 @@ class Missions extends Model
     {
         if (is_array($data)) {
             $this->db->query(
-                "UPDATE " . FLEETS . " SET
+                'UPDATE ' . FLEETS . " SET
                 `fleet_array` = '" . $data['ships'] . "',
                 `fleet_mess` = '1'
                 WHERE `fleet_id` = '" . (int) $data['fleet_id'] . "';"
@@ -716,8 +716,8 @@ class Missions extends Model
     {
         if (is_array($data)) {
             $this->db->query(
-                "UPDATE " . FLEETS . " AS f
-                INNER JOIN " . PREMIUM . " AS pr ON pr.premium_user_id = f.fleet_owner SET
+                'UPDATE ' . FLEETS . ' AS f
+                INNER JOIN ' . PREMIUM . " AS pr ON pr.premium_user_id = f.fleet_owner SET
                 `fleet_resource_metal` = `fleet_resource_metal` + '" . $data['found']['metal'] . "',
                 `fleet_resource_crystal` = `fleet_resource_crystal` + '" . $data['found']['crystal'] . "',
                 `fleet_resource_deuterium` = `fleet_resource_deuterium` + '" . $data['found']['deuterium'] . "',
@@ -744,13 +744,13 @@ class Missions extends Model
     {
         if (is_array($data)) {
             return $this->db->queryFetch(
-                "SELECT p.`planet_name`, r.`research_weapons_technology`
-                FROM " . PLANETS . " AS p
-                INNER JOIN " . RESEARCH . " AS r ON r.research_user_id = p.planet_user_id
-                WHERE `planet_galaxy` = " . $data['coords']['galaxy'] . " AND
-                    `planet_system` = " . $data['coords']['system'] . " AND
-                    `planet_planet` = " . $data['coords']['planet'] . " AND
-                    `planet_type` = " . $data['coords']['type'] . ";"
+                'SELECT p.`planet_name`, r.`research_weapons_technology`
+                FROM ' . PLANETS . ' AS p
+                INNER JOIN ' . RESEARCH . ' AS r ON r.research_user_id = p.planet_user_id
+                WHERE `planet_galaxy` = ' . $data['coords']['galaxy'] . ' AND
+                    `planet_system` = ' . $data['coords']['system'] . ' AND
+                    `planet_planet` = ' . $data['coords']['planet'] . ' AND
+                    `planet_type` = ' . $data['coords']['type'] . ';'
             );
         }
     }
@@ -766,14 +766,14 @@ class Missions extends Model
     {
         if (is_array($data)) {
             return $this->db->queryFetch(
-                "SELECT p.`planet_id`, p.`planet_name`, p.`planet_user_id`, d.*, r.`research_shielding_technology`
-                FROM " . PLANETS . " AS p
-                INNER JOIN " . DEFENSES . " AS d ON d.defense_planet_id = p.`planet_id`
-                INNER JOIN " . RESEARCH . " AS r ON r.research_user_id = p.planet_user_id
-                WHERE `planet_galaxy` = " . $data['coords']['galaxy'] . " AND
-                    `planet_system` = " . $data['coords']['system'] . " AND
-                    `planet_planet` = " . $data['coords']['planet'] . " AND
-                    `planet_type` = " . $data['coords']['type'] . ";"
+                'SELECT p.`planet_id`, p.`planet_name`, p.`planet_user_id`, d.*, r.`research_shielding_technology`
+                FROM ' . PLANETS . ' AS p
+                INNER JOIN ' . DEFENSES . ' AS d ON d.defense_planet_id = p.`planet_id`
+                INNER JOIN ' . RESEARCH . ' AS r ON r.research_user_id = p.planet_user_id
+                WHERE `planet_galaxy` = ' . $data['coords']['galaxy'] . ' AND
+                    `planet_system` = ' . $data['coords']['system'] . ' AND
+                    `planet_planet` = ' . $data['coords']['planet'] . ' AND
+                    `planet_type` = ' . $data['coords']['type'] . ';'
             );
         }
     }
@@ -789,7 +789,7 @@ class Missions extends Model
     {
         if (is_array($data)) {
             $this->db->query(
-                "UPDATE " . DEFENSES . " SET
+                'UPDATE ' . DEFENSES . " SET
                 {$data['destroyed_query']}
                 `defense_anti-ballistic_missile` = '" . $data['amount'] . "'
                 WHERE defense_planet_id = '" . (int) $data['planet_id'] . "';"
@@ -813,7 +813,7 @@ class Missions extends Model
     {
         if (is_array($data)) {
             $this->db->query(
-                "UPDATE " . PLANETS . ", " . FLEETS . " SET
+                'UPDATE ' . PLANETS . ', ' . FLEETS . " SET
                 `planet_debris_metal` = `planet_debris_metal` - '" . $data['recycled']['metal'] . "',
                 `planet_debris_crystal` = `planet_debris_crystal` - '" . $data['recycled']['crystal'] . "',
                 `fleet_resource_metal` = `fleet_resource_metal` + '" . $data['recycled']['metal'] . "',
@@ -839,11 +839,11 @@ class Missions extends Model
     {
         if (is_array($data)) {
             return $this->db->queryFetch(
-                "SELECT
+                'SELECT
                     `planet_name` AS target_name,
                     `planet_debris_metal`,
                     `planet_debris_crystal`
-                FROM `" . PLANETS . "`
+                FROM `' . PLANETS . "`
                 WHERE `planet_galaxy` = '" . $data['coords']['galaxy'] . "' AND
                     `planet_system` = '" . $data['coords']['system'] . "' AND
                     `planet_planet` = '" . $data['coords']['planet'] . "' AND
@@ -871,7 +871,7 @@ class Missions extends Model
     {
         if (is_array($data)) {
             return $this->db->queryFetch(
-                "SELECT
+                'SELECT
                     p.`planet_name`,
                     p.`planet_galaxy`,
                     p.`planet_system`,
@@ -879,14 +879,14 @@ class Missions extends Model
                     u.`user_name`,
                     r.`research_espionage_technology`,
                     pr.`premium_officier_technocrat`
-                    FROM `" . PLANETS . "` AS p
-                    INNER JOIN `" . USERS . "` AS u ON u.`user_id` = p.`planet_user_id`
-                    INNER JOIN `" . PREMIUM . "` AS pr ON pr.`premium_user_id` = p.`planet_user_id`
-                    INNER JOIN `" . RESEARCH . "` AS r ON r.`research_user_id` = p.`planet_user_id`
-                    WHERE p.`planet_galaxy` = " . $data['coords']['galaxy'] . " AND
-                        p.`planet_system` = " . $data['coords']['system'] . " AND
-                        p.`planet_planet` = " . $data['coords']['planet'] . " AND
-                        p.`planet_type` = " . $data['coords']['type'] . ";"
+                    FROM `' . PLANETS . '` AS p
+                    INNER JOIN `' . USERS . '` AS u ON u.`user_id` = p.`planet_user_id`
+                    INNER JOIN `' . PREMIUM . '` AS pr ON pr.`premium_user_id` = p.`planet_user_id`
+                    INNER JOIN `' . RESEARCH . '` AS r ON r.`research_user_id` = p.`planet_user_id`
+                    WHERE p.`planet_galaxy` = ' . $data['coords']['galaxy'] . ' AND
+                        p.`planet_system` = ' . $data['coords']['system'] . ' AND
+                        p.`planet_planet` = ' . $data['coords']['planet'] . ' AND
+                        p.`planet_type` = ' . $data['coords']['type'] . ';'
             );
         }
 
@@ -904,7 +904,7 @@ class Missions extends Model
     {
         if (is_array($data)) {
             return $this->db->queryFetch(
-                "SELECT
+                'SELECT
                     p.`planet_id`,
                     p.`planet_user_id`,
                     p.`planet_name`,
@@ -917,13 +917,13 @@ class Missions extends Model
                     p.`planet_energy_max`,
                     s.*, d.*, b.*, r.*,
                     pr.`premium_officier_technocrat`
-                    FROM `" . PLANETS . "` AS p
-                    INNER JOIN `" . SHIPS . "` AS s ON s.`ship_planet_id` = p.`planet_id`
-                    INNER JOIN `" . DEFENSES . "` AS d ON d.`defense_planet_id` = p.`planet_id`
-                    INNER JOIN `" . BUILDINGS . "` AS b ON b.`building_planet_id` = p.`planet_id`
-                    INNER JOIN `" . USERS . "` AS u ON u.`user_id` = p.`planet_user_id`
-                    INNER JOIN `" . PREMIUM . "` AS pr ON pr.`premium_user_id` = p.`planet_user_id`
-                    INNER JOIN `" . RESEARCH . "` AS r ON r.`research_user_id` = p.`planet_user_id`
+                    FROM `' . PLANETS . '` AS p
+                    INNER JOIN `' . SHIPS . '` AS s ON s.`ship_planet_id` = p.`planet_id`
+                    INNER JOIN `' . DEFENSES . '` AS d ON d.`defense_planet_id` = p.`planet_id`
+                    INNER JOIN `' . BUILDINGS . '` AS b ON b.`building_planet_id` = p.`planet_id`
+                    INNER JOIN `' . USERS . '` AS u ON u.`user_id` = p.`planet_user_id`
+                    INNER JOIN `' . PREMIUM . '` AS pr ON pr.`premium_user_id` = p.`planet_user_id`
+                    INNER JOIN `' . RESEARCH . "` AS r ON r.`research_user_id` = p.`planet_user_id`
                     WHERE p.`planet_galaxy` = '" . $data['coords']['galaxy'] . "' AND
                         p.`planet_system` = '" . $data['coords']['system'] . "' AND
                         p.`planet_planet` = '" . $data['coords']['planet'] . "' AND
@@ -945,24 +945,24 @@ class Missions extends Model
     {
         if (is_array($data)) {
             $this->db->query(
-                "UPDATE " . PLANETS . " SET
+                'UPDATE ' . PLANETS . " SET
                 `planet_invisible_start_time` = '" . $data['time'] . "',
                 `planet_debris_crystal` = `planet_debris_crystal` + '" . $data['crystal'] . "'
                 WHERE `planet_id` = '" . $data['planet_id'] . "';"
             );
         }
     }
+
     /**
      *
      * TRANSPORT
      *
      */
-
     public function updateReturningFleetResources(int $fleedId = 0): void
     {
         if ($fleedId > 0) {
             $this->db->query(
-                "UPDATE " . FLEETS . " SET
+                'UPDATE ' . FLEETS . " SET
                     `fleet_resource_metal` = '0' ,
                     `fleet_resource_crystal` = '0' ,
                     `fleet_resource_deuterium` = '0' ,

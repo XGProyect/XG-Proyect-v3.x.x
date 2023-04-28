@@ -39,24 +39,24 @@ class Home extends Model
     public function getUsersStats(): array
     {
         return $this->db->queryFetch(
-            "SELECT
+            'SELECT
                 (
                     SELECT
                         COUNT(u.`user_id`) AS `total_users`
                     FROM
-                        `" . USERS . "` u
+                        `' . USERS . '` u
                 ) AS `number_users`,
                 (
                     SELECT
                         COUNT(a.`alliance_id`) AS `total_alliances`
                     FROM
-                        `" . ALLIANCE . "` a
+                        `' . ALLIANCE . '` a
                 ) AS `number_alliances`,
                 (
                     SELECT
                         COUNT(p.`planet_id`) AS `total_planets`
                     FROM
-                        `" . PLANETS . "` p
+                        `' . PLANETS . "` p
                     WHERE
                         p.`planet_type` = '1'
                 ) AS `number_planets`,
@@ -72,26 +72,26 @@ class Home extends Model
                     SELECT
                         COUNT(f.`fleet_id`) AS `total_fleets`
                     FROM
-                        `" . FLEETS . "` f
+                        `" . FLEETS . '` f
                 ) AS `number_fleets`,
                 (
                     SELECT
                         COUNT(r.`report_rid`) AS `total_reports`
                     FROM
-                        `" . REPORTS . "` r
+                        `' . REPORTS . '` r
                 ) AS `number_reports`,
                 (
                     SELECT
                         FLOOR(AVG(s.`user_statistic_total_points`)) AS `average_user_total_points`
                     FROM
-                        `" . USERS_STATISTICS . "` s
+                        `' . USERS_STATISTICS . '` s
                 ) AS `average_user_points`,
                 (
                     SELECT
                         FLOOR(AVG(s.`alliance_statistic_total_points`)) AS `average_alliance_total_points`
                     FROM
-                        `" . ALLIANCE_STATISTICS . "` s
-                ) AS `average_alliance_points`"
+                        `' . ALLIANCE_STATISTICS . '` s
+                ) AS `average_alliance_points`'
         );
     }
 }

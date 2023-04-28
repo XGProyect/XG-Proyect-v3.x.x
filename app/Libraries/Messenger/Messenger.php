@@ -2,7 +2,6 @@
 
 namespace App\Libraries\Messenger;
 
-use App\Libraries\Functions;
 use App\Models\Libraries\Messenger\Messenger as MessengerModel;
 
 final class Messenger

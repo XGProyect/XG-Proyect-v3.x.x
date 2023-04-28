@@ -512,9 +512,9 @@ class BuildingsController extends BaseController
         $CurrentQueue = $this->planet['planet_b_building_id'];
 
         if ($CurrentQueue != 0) {
-            $QueueArray = explode(";", $CurrentQueue);
+            $QueueArray = explode(';', $CurrentQueue);
             $ActualCount = count($QueueArray);
-            $CanceledIDArray = explode(",", $QueueArray[0]);
+            $CanceledIDArray = explode(',', $QueueArray[0]);
             $building = $CanceledIDArray[0];
             $BuildMode = $CanceledIDArray[4];
 
@@ -524,7 +524,7 @@ class BuildingsController extends BaseController
                 $BuildEndTime = time();
 
                 for ($ID = 0; $ID < $NewCount; $ID++) {
-                    $ListIDArray = explode(",", $QueueArray[$ID]);
+                    $ListIDArray = explode(',', $QueueArray[$ID]);
 
                     if ($ListIDArray[0] == $building) {
                         $ListIDArray[1] -= 1;
@@ -534,9 +534,9 @@ class BuildingsController extends BaseController
                     $BuildEndTime += $current_build_time;
                     $ListIDArray[2] = $current_build_time;
                     $ListIDArray[3] = $BuildEndTime;
-                    $QueueArray[$ID] = join(",", $ListIDArray);
+                    $QueueArray[$ID] = join(',', $ListIDArray);
                 }
-                $NewQueue = join(";", $QueueArray);
+                $NewQueue = join(';', $QueueArray);
                 $ReturnValue = true;
                 $BuildEndTime = '0';
             } else {
@@ -580,21 +580,21 @@ class BuildingsController extends BaseController
             $CurrentQueue = $this->planet['planet_b_building_id'];
 
             if (!empty($CurrentQueue)) {
-                $QueueArray = explode(";", $CurrentQueue);
+                $QueueArray = explode(';', $CurrentQueue);
                 $ActualCount = count($QueueArray);
                 if ($ActualCount < 2) {
                     Functions::redirect('game.php?page=' . $this->getCurrentPage());
                 }
 
                 //  finding the buildings time
-                $ListIDArrayToDelete = explode(",", $QueueArray[$QueueID - 1]);
+                $ListIDArrayToDelete = explode(',', $QueueArray[$QueueID - 1]);
                 $lastB = $ListIDArrayToDelete;
                 $lastID = $QueueID - 1;
 
                 //search for biggest element
                 for ($ID = $QueueID; $ID < $ActualCount; $ID++) {
                     //next buildings
-                    $nextListIDArray = explode(",", $QueueArray[$ID]);
+                    $nextListIDArray = explode(',', $QueueArray[$ID]);
                     //if same type of element
                     if ($nextListIDArray[0] == $ListIDArrayToDelete[0]) {
                         $lastB = $nextListIDArray;
@@ -604,14 +604,14 @@ class BuildingsController extends BaseController
 
                 // update the rest of buildings queue
                 for ($ID = $lastID; $ID < $ActualCount - 1; $ID++) {
-                    $nextListIDArray = explode(",", $QueueArray[$ID + 1]);
+                    $nextListIDArray = explode(',', $QueueArray[$ID + 1]);
                     $nextBuildEndTime = $nextListIDArray[3] - $lastB[2];
                     $nextListIDArray[3] = $nextBuildEndTime;
-                    $QueueArray[$ID] = join(",", $nextListIDArray);
+                    $QueueArray[$ID] = join(',', $nextListIDArray);
                 }
 
                 unset($QueueArray[$ActualCount - 1]);
-                $NewQueue = join(";", $QueueArray);
+                $NewQueue = join(';', $QueueArray);
             }
 
             $this->planet['planet_b_building_id'] = $NewQueue;
@@ -641,10 +641,10 @@ class BuildingsController extends BaseController
         }
 
         if ($CurrentQueue != 0) {
-            $QueueArray = explode(";", $CurrentQueue);
+            $QueueArray = explode(';', $CurrentQueue);
             $ActualCount = count($QueueArray);
         } else {
-            $QueueArray = "";
+            $QueueArray = '';
             $ActualCount = 0;
         }
 
@@ -675,7 +675,7 @@ class BuildingsController extends BaseController
                 if ($QueueID > 1) {
                     $InArray = 0;
                     for ($QueueElement = 0; $QueueElement < $ActualCount; $QueueElement++) {
-                        $QueueSubArray = explode(",", $QueueArray[$QueueElement]);
+                        $QueueSubArray = explode(',', $QueueArray[$QueueElement]);
                         if ($QueueSubArray[0] == $building) {
                             $InArray++;
                         }
@@ -723,12 +723,12 @@ class BuildingsController extends BaseController
                     $QueueArray = [];
                     $BuildEndTime = time() + $BuildTime;
                 } else {
-                    $PrevBuild = explode(",", $QueueArray[$ActualCount - 1]);
+                    $PrevBuild = explode(',', $QueueArray[$ActualCount - 1]);
                     $BuildEndTime = $PrevBuild[3] + $BuildTime;
                 }
 
-                $QueueArray[$ActualCount] = $building . "," . $BuildLevel . "," . $BuildTime . "," . $BuildEndTime . "," . $BuildMode;
-                $NewQueue = join(";", $QueueArray);
+                $QueueArray[$ActualCount] = $building . ',' . $BuildLevel . ',' . $BuildTime . ',' . $BuildEndTime . ',' . $BuildMode;
+                $NewQueue = join(';', $QueueArray);
 
                 $this->planet['planet_b_building_id'] = $NewQueue;
             }
@@ -750,7 +750,7 @@ class BuildingsController extends BaseController
         $BuildMode = '';
 
         if ($CurrentQueue != 0) {
-            $QueueArray = explode(";", $CurrentQueue);
+            $QueueArray = explode(';', $CurrentQueue);
             $ActualCount = count($QueueArray);
         } else {
             $QueueArray = '0';
@@ -762,7 +762,7 @@ class BuildingsController extends BaseController
         if ($ActualCount != 0) {
             $PlanetID = $this->planet['planet_id'];
             for ($QueueID = 0; $QueueID < $ActualCount; $QueueID++) {
-                $BuildArray = explode(",", $QueueArray[$QueueID]);
+                $BuildArray = explode(',', $QueueArray[$QueueID]);
                 $BuildEndTime = floor($BuildArray[3]);
                 $CurrentTime = floor(time());
 
@@ -783,32 +783,32 @@ class BuildingsController extends BaseController
                     }
 
                     if ($ListID > 0) {
-                        $ListIDRow .= "<tr>";
+                        $ListIDRow .= '<tr>';
                         if ($BuildMode == 'build') {
-                            $ListIDRow .= "	<td class=\"l\" colspan=\"2\">" . $ListID . ".: " . $ElementTitle . " " . $BuildLevel . "</td>";
+                            $ListIDRow .= '	<td class="l" colspan="2">' . $ListID . '.: ' . $ElementTitle . ' ' . $BuildLevel . '</td>';
                         } else {
-                            $ListIDRow .= "	<td class=\"l\" colspan=\"2\">" . $ListID . ".: " . $ElementTitle . " " . $BuildLevel . " " . $this->langs->line('bd_dismantle') . "</td>";
+                            $ListIDRow .= '	<td class="l" colspan="2">' . $ListID . '.: ' . $ElementTitle . ' ' . $BuildLevel . ' ' . $this->langs->line('bd_dismantle') . '</td>';
                         }
-                        $ListIDRow .= "	<td class=\"k\">";
+                        $ListIDRow .= '	<td class="k">';
 
                         if ($ListID == 1) {
-                            $ListIDRow .= "		<div id=\"blc\" class=\"z\">" . $BuildTime . "<br>";
-                            $ListIDRow .= "		<a href=\"game.php?page=" . $this->getCurrentPage() . "&listid=" . $ListID . "&amp;cmd=cancel&amp;planet=" . $PlanetID . "\">" . $this->langs->line('bd_interrupt') . "</a></div>";
-                            $ListIDRow .= "		<script language=\"JavaScript\">";
-                            $ListIDRow .= "			pp = \"" . $BuildTime . "\";\n";
-                            $ListIDRow .= "			pk = \"" . $ListID . "\";\n";
+                            $ListIDRow .= '		<div id="blc" class="z">' . $BuildTime . '<br>';
+                            $ListIDRow .= '		<a href="game.php?page=' . $this->getCurrentPage() . '&listid=' . $ListID . '&amp;cmd=cancel&amp;planet=' . $PlanetID . '">' . $this->langs->line('bd_interrupt') . '</a></div>';
+                            $ListIDRow .= '		<script language="JavaScript">';
+                            $ListIDRow .= '			pp = "' . $BuildTime . "\";\n";
+                            $ListIDRow .= '			pk = "' . $ListID . "\";\n";
                             $ListIDRow .= "			pm = \"cancel\";\n";
-                            $ListIDRow .= "			pl = \"" . $PlanetID . "\";\n";
+                            $ListIDRow .= '			pl = "' . $PlanetID . "\";\n";
                             $ListIDRow .= "			t();\n";
-                            $ListIDRow .= "		</script>";
-                            $ListIDRow .= "		<strong color=\"lime\"><br><font color=\"lime\">" . Timing::formatExtendedDate($BuildEndTime) . "</font></strong>";
+                            $ListIDRow .= '		</script>';
+                            $ListIDRow .= '		<strong color="lime"><br><font color="lime">' . Timing::formatExtendedDate($BuildEndTime) . '</font></strong>';
                         } else {
-                            $ListIDRow .= "		<font color=\"red\">";
-                            $ListIDRow .= "		<a href=\"game.php?page=" . $this->getCurrentPage() . "&listid=" . $ListID . "&amp;cmd=remove&amp;planet=" . $PlanetID . "\">" . $this->langs->line('bd_cancel') . "</a></font>";
+                            $ListIDRow .= '		<font color="red">';
+                            $ListIDRow .= '		<a href="game.php?page=' . $this->getCurrentPage() . '&listid=' . $ListID . '&amp;cmd=remove&amp;planet=' . $PlanetID . '">' . $this->langs->line('bd_cancel') . '</a></font>';
                         }
 
-                        $ListIDRow .= "	</td>";
-                        $ListIDRow .= "</tr>";
+                        $ListIDRow .= '	</td>';
+                        $ListIDRow .= '</tr>';
                     }
                 }
             }

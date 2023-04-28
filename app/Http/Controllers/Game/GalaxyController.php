@@ -104,7 +104,7 @@ class GalaxyController extends BaseController
         $planet = $setted_position['planet'];
 
         if ($mode == 2 && $this->planet['defense_interplanetary_missile'] < 1) {
-            die(Functions::message($this->langs->line('gl_no_missiles'), "game.php?page=galaxy&mode=0", 2));
+            die(Functions::message($this->langs->line('gl_no_missiles'), 'game.php?page=galaxy&mode=0', 2));
         }
 
         $this->galaxy = $this->galaxyModel->getGalaxyDataByGalaxyAndSystem($this->_galaxy, $this->_system, $this->user['user_id']);
@@ -210,8 +210,8 @@ class GalaxyController extends BaseController
                 break;
             case 1:
                 // validate, we want only numbers
-                $galaxy = (isset($_POST['galaxy']) && intval($_POST['galaxy'])) ? preg_replace("[^0-9]", "", $_POST['galaxy']) : 1;
-                $system = (isset($_POST['system']) && intval($_POST['system'])) ? preg_replace("[^0-9]", "", $_POST['system']) : 1;
+                $galaxy = (isset($_POST['galaxy']) && intval($_POST['galaxy'])) ? preg_replace('[^0-9]', '', $_POST['galaxy']) : 1;
+                $system = (isset($_POST['system']) && intval($_POST['system'])) ? preg_replace('[^0-9]', '', $_POST['system']) : 1;
 
                 /**
                  * Change galaxy
@@ -324,7 +324,7 @@ class GalaxyController extends BaseController
             $errors++;
         }
 
-        if (((!is_numeric($target) && $target != "all") or ($target < 0 or $target > 8))) {
+        if (((!is_numeric($target) && $target != 'all') or ($target < 0 or $target > 8))) {
             $error .= $this->langs->line('gl_wrong_target') . '<br>';
             $errors++;
         }
@@ -354,7 +354,7 @@ class GalaxyController extends BaseController
         }
 
         if ($errors != 0) {
-            Functions::message($error, "game.php?page=galaxy&mode=0&galaxy=" . $galaxy . "&system=" . $system, 3);
+            Functions::message($error, 'game.php?page=galaxy&mode=0&galaxy=' . $galaxy . '&system=' . $system, 3);
         }
 
         $flight_time = round(((30 + (60 * $tempvar1)) * 2500) / Functions::readConfig('fleet_speed'));
@@ -388,7 +388,7 @@ class GalaxyController extends BaseController
             'user_current_planet' => $this->user['user_current_planet'],
         ]);
 
-        Functions::message("<b>" . $missiles_amount . "</b>" . $this->langs->line('gl_missiles_sended') . $DefenseLabel[$target], "game.php?page=overview", 3);
+        Functions::message('<b>' . $missiles_amount . '</b>' . $this->langs->line('gl_missiles_sended') . $DefenseLabel[$target], 'game.php?page=overview', 3);
     }
 
     /**
@@ -427,13 +427,13 @@ class GalaxyController extends BaseController
         $fleet['amount'] = 0;
 
         foreach ($this->_reslist['fleet'] as $ship_id) {
-            $TName = "ship" . $ship_id;
+            $TName = 'ship' . $ship_id;
             $ship_amount = isset($_POST[$TName]) ? (int) $_POST[$TName] : 0;
 
             if ($ship_id > 200 && $ship_id < 300 && $ship_amount > 0) {
                 if ($ship_amount > $this->planet[$this->_resource[$ship_id]]) {
                     $fleet['fleetarray'][$ship_id] = (int) $this->planet[$this->_resource[$ship_id]];
-                    $fleet['fleetlist'] .= $ship_id . "," . $this->planet[$this->_resource[$ship_id]] . ";";
+                    $fleet['fleetlist'] .= $ship_id . ',' . $this->planet[$this->_resource[$ship_id]] . ';';
                     $fleet['amount'] += (int) $this->planet[$this->_resource[$ship_id]];
                     $PartialCount += (int) $this->planet[$this->_resource[$ship_id]];
 
@@ -441,7 +441,7 @@ class GalaxyController extends BaseController
                     $PartialFleet = true;
                 } else {
                     $fleet['fleetarray'][$ship_id] = $ship_amount;
-                    $fleet['fleetlist'] .= $ship_id . "," . $ship_amount . ";";
+                    $fleet['fleetlist'] .= $ship_id . ',' . $ship_amount . ';';
                     $fleet['amount'] += $ship_amount;
                     $speedalls[$ship_id] = $ship_amount;
                 }
@@ -466,7 +466,7 @@ class GalaxyController extends BaseController
 
         if ($PartialFleet == true) {
             if ($PartialCount < 1) {
-                die("611 ");
+                die('611 ');
             }
         }
 
@@ -476,7 +476,7 @@ class GalaxyController extends BaseController
         $FleetArray = isset($fleet['fleetarray']) ? $fleet['fleetarray'] : null;
 
         if (($galaxy > MAX_GALAXY_IN_WORLD or $galaxy < 1) or ($system > MAX_SYSTEM_IN_GALAXY or $system < 1) or ($planet > MAX_PLANET_IN_SYSTEM or $planet < 1) or (is_null($FleetArray))) {
-            die("614 ");
+            die('614 ');
         }
 
         $current_fleets = $this->galaxyModel->countAmountFleetsByUserId($this->user['user_id']);
@@ -502,37 +502,37 @@ class GalaxyController extends BaseController
         $TargetVacat = $target_user['preference_vacation_mode'];
 
         if ((FleetsLib::getMaxFleets($this->user[$this->_resource[108]], $this->user['premium_officier_admiral'])) <= $current_fleets) {
-            die("612 ");
+            die('612 ');
         }
 
         if (!is_array($FleetArray)) {
-            die("611 ");
+            die('611 ');
         }
 
         if (!(($order == 6) or ($order == 8))) {
-            die("601 ");
+            die('601 ');
         }
 
         if (($TargetVacat && $order != 8) or ($this->user['preference_vacation_mode'] > 0)) {
-            die("605 ");
+            die('605 ');
         }
 
         if ($target_user['user_onlinetime'] >= (time() - 60 * 60 * 24 * 7)) {
             if ($this->noob->isWeak(intval($CurrentPoints), intval($TargetPoints)) && $target_user['user_id'] != '' && $order == 6) {
-                die("603 ");
+                die('603 ');
             }
 
             if ($this->noob->isStrong(intval($CurrentPoints), intval($TargetPoints)) && $target_user['user_id'] != '' && $order == 6) {
-                die("604 ");
+                die('604 ');
             }
         }
 
         if ($target_user['user_id'] == '' && $order != 8) {
-            die("601 ");
+            die('601 ');
         }
 
         if (($target_user['user_id'] == $this->planet['planet_user_id']) && ($order == 6)) {
-            die("601 ");
+            die('601 ');
         }
 
         $Distance = FleetsLib::targetDistance($this->planet['planet_galaxy'], $_POST['galaxy'], $this->planet['planet_system'], $_POST['system'], $this->planet['planet_planet'], $_POST['planet']);
@@ -565,11 +565,11 @@ class GalaxyController extends BaseController
         $consumption = round($consumption) + 1;
 
         if ($UserDeuterium < $consumption) {
-            die("613 ");
+            die('613 ');
         }
 
         if (Functions::readConfig('adm_attack') == 1 && $target_user['user_authlevel'] > 0) {
-            die("601 ");
+            die('601 ');
         }
 
         $this->fleetModel->insertNewFleet(
@@ -600,12 +600,12 @@ class GalaxyController extends BaseController
 
         foreach ($FleetArray as $Ships => $Count) {
             if ($max_spy_probes > $this->planet[$this->_resource[$Ships]]) {
-                $ResultMessage = "610 " . $FleetShipCount;
+                $ResultMessage = '610 ' . $FleetShipCount;
             }
         }
 
         if ($ResultMessage == '') {
-            $ResultMessage = "600 " . $Ships;
+            $ResultMessage = '600 ' . $Ships;
         }
 
         die($ResultMessage);

@@ -17,9 +17,9 @@ class Statistics extends Model
     public function countAlliances(): int
     {
         return (int) $this->db->queryFetch(
-            "SELECT
+            'SELECT
                 COUNT(`alliance_id`) AS `count`
-            FROM `" . ALLIANCE . "`;"
+            FROM `' . ALLIANCE . '`;'
         )['count'];
     }
 

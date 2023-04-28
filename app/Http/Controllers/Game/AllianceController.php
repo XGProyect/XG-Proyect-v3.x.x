@@ -354,7 +354,7 @@ class AllianceController extends BaseController
             $message = str_replace(['%s', '%d'], [$alliance_name, $alliance_tag], $this->langs->line('al_created'));
             return Functions::messageBox(
                 $message,
-                $message . "<br/><br/>",
+                $message . '<br/><br/>',
                 'game.php?page=alliance',
                 $this->langs->line('al_continue')
             );
@@ -506,7 +506,7 @@ class AllianceController extends BaseController
 
             return Functions::messageBox(
                 $this->langs->line('al_circular_sended'),
-                join("<br/>", $members_list),
+                join('<br/>', $members_list),
                 'game.php?page=alliance',
                 $this->langs->line('al_continue'),
                 true

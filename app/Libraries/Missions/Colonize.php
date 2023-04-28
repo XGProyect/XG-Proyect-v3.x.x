@@ -50,11 +50,11 @@ class Colonize extends Missions
                 if ($planet_count >= $max_colonies) {
                     $this->colonizeMessage($fleet_row['fleet_owner'], $message[1], $fleet_row['fleet_start_time']);
 
-                    parent::returnFleet($fleet_row['fleet_id']);
+                    parent::returnFleet((int) $fleet_row['fleet_id']);
                 } elseif (!$this->positionAllowed($fleet_row['fleet_end_planet'], $colonization_check['astro_level'])) {
                     $this->colonizeMessage($fleet_row['fleet_owner'], $message[4], $fleet_row['fleet_start_time']);
 
-                    parent::returnFleet($fleet_row['fleet_id']);
+                    parent::returnFleet((int) $fleet_row['fleet_id']);
                 } else {
                     if ($this->startCreation($fleet_row)) {
                         $this->colonizeMessage($fleet_row['fleet_owner'], $message[2], $fleet_row['fleet_start_time']);
@@ -70,7 +70,7 @@ class Colonize extends Missions
                                 ],
                             ]);
                             parent::storeResources($fleet_row);
-                            parent::removeFleet($fleet_row['fleet_id']);
+                            parent::removeFleet((int) $fleet_row['fleet_id']);
                         } else {
                             parent::storeResources($fleet_row);
 
@@ -89,19 +89,19 @@ class Colonize extends Missions
                     } else {
                         $this->colonizeMessage($fleet_row['fleet_owner'], $message[3], $fleet_row['fleet_end_time']);
 
-                        parent::returnFleet($fleet_row['fleet_id']);
+                        parent::returnFleet((int) $fleet_row['fleet_id']);
                     }
                 }
             } else {
                 $this->colonizeMessage($fleet_row['fleet_owner'], $message[3], $fleet_row['fleet_end_time']);
 
-                parent::returnFleet($fleet_row['fleet_id']);
+                parent::returnFleet((int) $fleet_row['fleet_id']);
             }
         }
 
         if ($fleet_row['fleet_end_time'] < time()) {
             parent::restoreFleet($fleet_row, true);
-            parent::removeFleet($fleet_row['fleet_id']);
+            parent::removeFleet((int) $fleet_row['fleet_id']);
         }
     }
 

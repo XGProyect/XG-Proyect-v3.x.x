@@ -15,12 +15,12 @@ class Galaxy extends Model
                 (
                     SELECT
                         CONCAT (GROUP_CONCAT(`buddy_receiver`), ',', GROUP_CONCAT(`buddy_sender`)) AS `buddys`
-                    FROM `" . BUDDY . "` AS b
+                    FROM `" . BUDDY . '` AS b
                     WHERE
                     (
-                        b.`buddy_receiver` = " . $user_id . "
+                        b.`buddy_receiver` = ' . $user_id . '
                         OR
-                        b.`buddy_sender` = " . $user_id . "
+                        b.`buddy_sender` = ' . $user_id . '
                     )
                 ) AS buddys,
                 p.`planet_debris_metal` AS `metal`,
@@ -55,22 +55,22 @@ class Galaxy extends Model
                 (
                     SELECT
                         COUNT(`user_id`) AS `ally_members`
-                    FROM `" . USERS . "`
+                    FROM `' . USERS . '`
                     WHERE `user_ally_id` = a.`alliance_id`
                 ) AS `ally_members`
-            FROM `" . PLANETS . "` AS p
-                INNER JOIN `" . USERS . "` AS u
+            FROM `' . PLANETS . '` AS p
+                INNER JOIN `' . USERS . '` AS u
                     ON p.`planet_user_id` = u.`user_id`
-                INNER JOIN `" . PREFERENCES . "` AS pr
+                INNER JOIN `' . PREFERENCES . '` AS pr
                     ON pr.`preference_user_id` = u.`user_id`
-                INNER JOIN `" . USERS_STATISTICS . "` AS s
+                INNER JOIN `' . USERS_STATISTICS . '` AS s
                     ON s.`user_statistic_user_id` = u.`user_id`
-                LEFT JOIN `" . ALLIANCE . "` AS a
+                LEFT JOIN `' . ALLIANCE . '` AS a
                     ON a.`alliance_id` = u.`user_ally_id`
-                LEFT JOIN `" . PLANETS . "` AS m
+                LEFT JOIN `' . PLANETS . '` AS m
                     ON m.`planet_id` = (
                         SELECT mp.`planet_id`
-                        FROM `" . PLANETS . "` AS mp
+                        FROM `' . PLANETS . "` AS mp
                         WHERE (
                             mp.`planet_galaxy` = p.`planet_galaxy`
                             AND
@@ -101,9 +101,9 @@ class Galaxy extends Model
     public function countAmountFleetsByUserId(int $user_id): int
     {
         return (int) $this->db->queryFetch(
-            "SELECT
+            'SELECT
                 COUNT(`fleet_id`) AS total_fleets
-            FROM `" . FLEETS . "`
+            FROM `' . FLEETS . "`
             WHERE `fleet_owner` = '" . $user_id . "';"
         )['total_fleets'];
     }
@@ -111,34 +111,34 @@ class Galaxy extends Model
     public function getTargetUserDataByCoords(int $galaxy, int $system, int $planet, int $planet_type = 1): ?array
     {
         return $this->db->queryFetch(
-            "SELECT
+            'SELECT
                 u.`user_id`,
                 u.`user_onlinetime`,
                 u.`user_authlevel`,
                 pr.`preference_vacation_mode`
-            FROM `" . USERS . "` AS u
-            INNER JOIN `" . PREFERENCES . "` AS pr ON pr.preference_user_id = u.user_id
+            FROM `' . USERS . '` AS u
+            INNER JOIN `' . PREFERENCES . '` AS pr ON pr.preference_user_id = u.user_id
             WHERE u.user_id = (
                 SELECT `planet_user_id`
-                FROM `" . PLANETS . "`
-                WHERE planet_galaxy = " . $galaxy . "  AND
-                    planet_system = " . $system . " AND
-                    planet_planet = " . $planet . " AND
-                    planet_type = " . $planet_type . "
+                FROM `' . PLANETS . '`
+                WHERE planet_galaxy = ' . $galaxy . '  AND
+                    planet_system = ' . $system . ' AND
+                    planet_planet = ' . $planet . ' AND
+                    planet_type = ' . $planet_type . '
                 LIMIT 1
                 )
-            LIMIT 1"
+            LIMIT 1'
         );
     }
 
     public function getPlanetDebrisByCoords(int $galaxy, int $system, int $planet): ?array
     {
         return $this->db->queryFetch(
-            "SELECT
+            'SELECT
                 `planet_invisible_start_time`,
                 `planet_debris_metal`,
                 `planet_debris_crystal`
-            FROM `" . PLANETS . "`
+            FROM `' . PLANETS . "`
             WHERE `planet_galaxy` = '" . $galaxy . "'
                 AND `planet_system` = '" . $system . "'
                 AND `planet_planet` = '" . $planet . "'

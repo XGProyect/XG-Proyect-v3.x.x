@@ -19,7 +19,7 @@ class Officier extends Model
     {
         if ($user_id > 0) {
             $this->db->query(
-                "UPDATE `" . PREMIUM . "` SET
+                'UPDATE `' . PREMIUM . "` SET
                     `premium_dark_matter` = `premium_dark_matter` - '" . $price . "',
                     `" . $officier . "` = '" . $time_to_add . "'
                 WHERE `premium_user_id` = '" . $user_id . "';"

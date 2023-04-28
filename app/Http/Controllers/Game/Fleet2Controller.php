@@ -133,12 +133,12 @@ class Fleet2Controller extends BaseController
                     $this->_fleet_data['fleet_array'][$ship_id] = $amount_to_set;
                     $this->_fleet_data['fleet_list'] .= $ship_id . ',' . strval($amount_to_set) . ';';
                     $this->_fleet_data['amount'] += $amount_to_set;
-                    $this->_fleet_data['speed_all'][$ship_id] = FleetsLib::fleetMaxSpeed('', $ship_id, $this->user);
+                    $this->_fleet_data['speed_all'][$ship_id] = FleetsLib::fleetMaxSpeed(null, $ship_id, $this->user);
 
                     $list_of_ships[] = [
                         'ship_id' => $ship_id,
                         'consumption' => FleetsLib::shipConsumption($ship_id, $this->user),
-                        'speed' => FleetsLib::fleetMaxSpeed('', $ship_id, $this->user),
+                        'speed' => FleetsLib::fleetMaxSpeed(null, $ship_id, $this->user),
                         'capacity' => FleetsLib::getMaxStorage(
                             $price[$ship_id]['capacity'],
                             $this->_research->getCurrentResearch()->getResearchHyperspaceTechnology()

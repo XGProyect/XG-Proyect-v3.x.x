@@ -8,9 +8,6 @@ use App\Core\Language;
 use App\Core\Objects;
 use App\Core\Template;
 use App\Helpers\UrlHelper;
-use App\Libraries\FormatLib;
-use App\Libraries\Functions;
-use App\Libraries\OfficiersLib;
 use App\Libraries\ProductionLib as Production;
 use App\Libraries\TimingLibrary as Timing;
 use CiLang;
@@ -457,7 +454,7 @@ class Page
         $parse['css_path'] = CSS_PATH;
         $parse['skin_path'] = DPATH;
         $parse['js_path'] = JS_PATH;
-        $parse['meta_tags'] = ($metatags) ? $metatags : "";
+        $parse['meta_tags'] = ($metatags) ? $metatags : '';
 
         return $this->template->set(
             'general/simple_header',
@@ -510,7 +507,7 @@ class Page
         $darkmatter = FormatLib::prettyNumber($this->current_user['premium_dark_matter']);
         $energy = FormatLib::prettyNumber(
             $this->current_planet['planet_energy_max'] + $this->current_planet['planet_energy_used']
-        ) . "/" . FormatLib::prettyNumber($this->current_planet['planet_energy_max']);
+        ) . '/' . FormatLib::prettyNumber($this->current_planet['planet_energy_max']);
 
         // METAL
         if ($this->current_planet['planet_metal'] >= Production::maxStorable($this->current_planet['building_metal_store'])) {
@@ -596,10 +593,6 @@ class Page
                 continue;
             }
 
-            if (!OfficiersLib::isOfficierActive($this->current_user['premium_officier_commander']) && $data[0] == 'empire') {
-                continue;
-            }
-
             // BUILD URL
             if ($data[2] != '') {
                 $link = 'game.php?page=' . $data[0] . '&' . $data[2];
@@ -661,8 +654,8 @@ class Page
         $parse['menu_block2'] = $menu_block2;
         $parse['menu_block3'] = $menu_block3;
         $parse['admin_link'] = (($this->current_user['user_authlevel'] > 0) ?
-            "<tr><td><div align=\"center\"><a href=\"admin.php\" target=\"_blank\">
-            <font color=\"lime\">" . $lang->line('lm_administration') . "</font></a></div></td></tr>" : "");
+            '<tr><td><div align="center"><a href="admin.php" target="_blank">
+            <font color="lime">' . $lang->line('lm_administration') . '</font></a></div></td></tr>' : '');
         $parse['servername'] = Functions::readConfig('game_name');
         $parse['changelog'] = UrlHelper::setUrl('game.php?page=changelog', SYSTEM_VERSION);
         $parse['version'] = SYSTEM_VERSION;
@@ -748,16 +741,16 @@ class Page
                 $list .= (($planets['planet_id'] == $this->current_user['user_current_planet']) ?
                     'selected="selected" ' : '');
 
-                $list .= "value=\"game.php?page=" . $page . "&gid=" .
-                    $gid . "&cp=" . $planets['planet_id'] . "";
-                $list .= "&amp;mode=" . $mode;
-                $list .= "&amp;re=0\">";
+                $list .= 'value="game.php?page=' . $page . '&gid=' .
+                    $gid . '&cp=' . $planets['planet_id'] . '';
+                $list .= '&amp;mode=' . $mode;
+                $list .= '&amp;re=0">';
 
                 $list .= (($planets['planet_type'] != PlanetTypesEnumerator::MOON) ? $planets['planet_name'] : $planets['planet_name'] . ' (' . $lang->line('moon') . ')');
-                $list .= "&nbsp;[" . $planets['planet_galaxy'] . ":";
-                $list .= $planets['planet_system'] . ":";
+                $list .= '&nbsp;[' . $planets['planet_galaxy'] . ':';
+                $list .= $planets['planet_system'] . ':';
                 $list .= $planets['planet_planet'];
-                $list .= "]&nbsp;&nbsp;</option>";
+                $list .= ']&nbsp;&nbsp;</option>';
             }
         }
 
@@ -777,30 +770,30 @@ class Page
     private function sortPlanets()
     {
         $db = new Database();
-        $order = $this->current_user['preference_planet_sort_sequence'] == 1 ? "DESC" : "ASC"; // up or down
+        $order = $this->current_user['preference_planet_sort_sequence'] == 1 ? 'DESC' : 'ASC'; // up or down
         $sort = $this->current_user['preference_planet_sort'];
 
-        $planets = "SELECT `planet_id`, `planet_name`, `planet_galaxy`, `planet_system`, `planet_planet`, `planet_type`
-                    FROM " . PLANETS . "
+        $planets = 'SELECT `planet_id`, `planet_name`, `planet_galaxy`, `planet_system`, `planet_planet`, `planet_type`
+                    FROM ' . PLANETS . "
                     WHERE `planet_user_id` = '" . (int) $this->current_user['user_id'] . "'
                         AND `planet_destroyed` = 0 ORDER BY ";
 
         switch ($sort) {
             case 0: // emergence
             default:
-                $planets .= "`planet_id` " . $order;
+                $planets .= '`planet_id` ' . $order;
                 break;
             case 1: // coordinates
-                $planets .= "`planet_galaxy` " . $order . ", `planet_system` " . $order . ", `planet_planet` " . $order . ", `planet_type` " . $order;
+                $planets .= '`planet_galaxy` ' . $order . ', `planet_system` ' . $order . ', `planet_planet` ' . $order . ', `planet_type` ' . $order;
                 break;
             case 2: // alphabet
-                $planets .= "`planet_name` " . $order;
+                $planets .= '`planet_name` ' . $order;
                 break;
             case 3: // size
-                $planets .= "`planet_diameter` " . $order;
+                $planets .= '`planet_diameter` ' . $order;
                 break;
             case 4: // used_fields
-                $planets .= "`planet_field_current` " . $order;
+                $planets .= '`planet_field_current` ' . $order;
                 break;
         }
 

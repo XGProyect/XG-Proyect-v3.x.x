@@ -79,21 +79,13 @@ class FormatLib
         return $time;
     }
 
-    /**
-     * prettyTimeAgo
-     *
-     * @param int $datetime DateTime
-     * @param $full
-     *
-     * @return string
-     */
-    public static function prettyTimeAgo($datetime, $full = false)
+    public static function prettyTimeAgo(string $datetime, $full = false): string
     {
         $now = new DateTime();
         $ago = new DateTime($datetime);
         $diff = $now->diff($ago);
-        $diff->w = floor($diff->d / 7);
-        $diff->d -= $diff->w * 7;
+        $weeks = floor($diff->d / 7);
+        $diff->d -= $weeks * 7;
 
         $string = [
             'y' => 'year',
@@ -106,10 +98,18 @@ class FormatLib
         ];
 
         foreach ($string as $k => &$v) {
-            if ($diff->$k) {
-                $v = $diff->$k . ' ' . $v . ($diff->$k > 1 ? 's' : '');
+            if ($k !== 'w') {
+                if ($diff->$k) {
+                    $v = $diff->$k . ' ' . $v . ($diff->$k > 1 ? 's' : '');
+                } else {
+                    unset($string[$k]);
+                }
             } else {
-                unset($string[$k]);
+                if (!empty($weeks)) {
+                    $v = $weeks . ' ' . $v . ($weeks > 1 ? 's' : '');
+                } else {
+                    unset($string[$k]);
+                }
             }
         }
 
@@ -213,10 +213,10 @@ class FormatLib
     public static function prettyNumber($n, $floor = true)
     {
         if ($floor) {
-            $n = floor($n??0.0);
+            $n = floor($n ?? 0.0);
         }
 
-        return number_format($n, 0, ",", ".");
+        return number_format($n, 0, ',', '.');
     }
 
     /**
@@ -256,10 +256,10 @@ class FormatLib
     public static function floatToString($numeric, $pro = 0, $output = false)
     {
         return ($output) ? str_replace(
-            ",",
-            ".",
-            sprintf("%." . $pro . "f", $numeric)
-        ) : sprintf("%." . $pro . "f", $numeric);
+            ',',
+            '.',
+            sprintf('%.' . $pro . 'f', $numeric)
+        ) : sprintf('%.' . $pro . 'f', $numeric);
     }
 
     /**

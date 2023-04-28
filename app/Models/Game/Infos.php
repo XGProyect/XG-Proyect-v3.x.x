@@ -11,12 +11,12 @@ class Infos extends Model
     public function getTargetGate(int $target_planet_id): array
     {
         return $this->db->queryFetch(
-            "SELECT
+            'SELECT
                 p.`planet_id`,
                 b.`building_jump_gate`,
                 p.`planet_last_jump_time`
-            FROM `" . PLANETS . "` AS p
-            INNER JOIN `" . BUILDINGS . "` AS b
+            FROM `' . PLANETS . '` AS p
+            INNER JOIN `' . BUILDINGS . "` AS b
                 ON b.`building_planet_id` = p.`planet_id`
             WHERE p.`planet_id` = '" . $target_planet_id . "';"
         );
@@ -28,7 +28,7 @@ class Infos extends Model
             $this->db->beginTransaction();
 
             $this->db->query(
-                "UPDATE `" . PLANETS . "`, `" . USERS . "`, `" . SHIPS . "` SET
+                'UPDATE `' . PLANETS . '`, `' . USERS . '`, `' . SHIPS . "` SET
                     $sub_query_origin
                     `planet_last_jump_time` = '" . $jump_time . "',
                     `user_current_planet` = '" . $target_planet_id . "'
@@ -38,7 +38,7 @@ class Infos extends Model
             );
 
             $this->db->query(
-                "UPDATE `" . PLANETS . "`, `" . SHIPS . "` SET
+                'UPDATE `' . PLANETS . '`, `' . SHIPS . "` SET
                 $sub_query_destiny
                 `planet_last_jump_time` = '" . $jump_time . "'
                 WHERE `planet_id` = '" . $target_planet_id . "'
@@ -60,7 +60,7 @@ class Infos extends Model
     public function getListOfMoons(int $user_id): array
     {
         return $this->db->queryFetchAll(
-            "SELECT
+            'SELECT
                 m.`planet_id`,
                 m.`planet_galaxy`,
                 m.`planet_system`,
@@ -68,8 +68,8 @@ class Infos extends Model
                 m.`planet_name`,
                 m.`planet_last_jump_time`,
                 b.`building_jump_gate`
-            FROM `" . PLANETS . "` AS m
-            INNER JOIN `" . BUILDINGS . "` AS b ON b.building_planet_id = m.planet_id
+            FROM `' . PLANETS . '` AS m
+            INNER JOIN `' . BUILDINGS . "` AS b ON b.building_planet_id = m.planet_id
             WHERE m.`planet_type` = '3'
                 AND m.`planet_user_id` = '" . $user_id . "';"
         );

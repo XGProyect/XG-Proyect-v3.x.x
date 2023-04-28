@@ -38,9 +38,7 @@ class Database
     }
 
     /**
-     * Open connection
-     *
-     * @return void
+     * @return mixed
      */
     public function openConnection()
     {
@@ -83,7 +81,7 @@ class Database
             }
 
             // force utf8 to avoid weird characters
-            $this->connection->set_charset("utf8");
+            $this->connection->set_charset('utf8');
 
             return true;
         } catch (Exception $e) {
@@ -332,8 +330,8 @@ class Database
                     $return .= 'INSERT INTO ' . $table . ' VALUES(';
 
                     for ($j = 0; $j < $num_fields; $j++) {
-                        $row[$j] = addslashes($row[$j]);
-                        $row[$j] = str_replace("\n", "\\n", $row[$j]);
+                        $row[$j] = addslashes((string) $row[$j]);
+                        $row[$j] = str_replace("\n", '\\n', $row[$j]);
 
                         if (isset($row[$j])) {
                             $return .= '"' . $row[$j] . '"';
@@ -365,10 +363,10 @@ class Database
     private function confirmQuery($result)
     {
         if (!$result) {
-            $output = "Database query failed: " . $this->connection->error;
+            $output = 'Database query failed: ' . $this->connection->error;
 
             // uncomment below line when you want to debug your last query
-            $output .= " Last SQL Query: " . $this->last_query;
+            $output .= ' Last SQL Query: ' . $this->last_query;
 
             die($this->debug->error(-1, $output));
         }

@@ -81,12 +81,12 @@ class RenameplanetController extends BaseController
         $new_name = strip_tags(trim($new_name));
 
         if (preg_match("/[^A-z0-9_\- ]/", $new_name) == 1) {
-            Functions::message($this->langs->line('rp_newname_error'), "game.php?page=renameplanet", 2);
+            Functions::message($this->langs->line('rp_newname_error'), 'game.php?page=renameplanet', 2);
         }
 
         if ($new_name != '') {
             $this->renameplanetModel->updatePlanetName($new_name, $this->user['user_current_planet']);
-            Functions::message($this->langs->line('rp_planet_name_changed'), "game.php?page=renameplanet", 2);
+            Functions::message($this->langs->line('rp_planet_name_changed'), 'game.php?page=renameplanet', 2);
         }
     }
 

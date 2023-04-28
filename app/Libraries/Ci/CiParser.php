@@ -139,7 +139,7 @@ class CiParser
             return false;
         }
 
-        $replace = array();
+        $replace = [];
         foreach ($data as $key => $val) {
             $replace = array_merge(
                 $replace,
@@ -186,7 +186,7 @@ class CiParser
      */
     protected function _parse_single($key, $val, $string)
     {
-        return array($this->l_delim.$key.$this->r_delim => (string) $val);
+        return [$this->l_delim . $key . $this->r_delim => (string) $val];
     }
 
     // --------------------------------------------------------------------
@@ -203,9 +203,9 @@ class CiParser
      */
     protected function _parse_pair($variable, $data, $string)
     {
-        $replace = array();
+        $replace = [];
         preg_match_all(
-            '#'.preg_quote($this->l_delim.$variable.$this->r_delim).'(.+?)'.preg_quote($this->l_delim.'/'.$variable.$this->r_delim).'#s',
+            '#' . preg_quote($this->l_delim . $variable . $this->r_delim) . '(.+?)' . preg_quote($this->l_delim . '/' . $variable . $this->r_delim) . '#s',
             $string,
             $matches,
             PREG_SET_ORDER
@@ -214,18 +214,18 @@ class CiParser
         foreach ($matches as $match) {
             $str = '';
             foreach ($data as $row) {
-                $temp = array();
+                $temp = [];
                 foreach ($row as $key => $val) {
                     if (is_array($val)) {
                         $pair = $this->_parse_pair($key, $val, $match[1]);
-                        if (! empty($pair)) {
+                        if (!empty($pair)) {
                             $temp = array_merge($temp, $pair);
                         }
 
                         continue;
                     }
 
-                    $temp[$this->l_delim.$key.$this->r_delim] = $val;
+                    $temp[$this->l_delim . $key . $this->r_delim] = $val;
                 }
 
                 $str .= strtr($match[1], $temp);

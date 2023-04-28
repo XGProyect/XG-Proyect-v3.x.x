@@ -20,12 +20,12 @@ class Renameplanet extends Model
     public function getFleets(int $user_id, int $galaxy, int $system, int $planet): ?array
     {
         return $this->db->queryFetchAll(
-            "SELECT
+            'SELECT
                 `fleet_owner`,
                 `fleet_target_owner`,
                 `fleet_end_type`,
                 `fleet_mess`
-            FROM `" . FLEETS . "`
+            FROM `' . FLEETS . "`
             WHERE (
                     fleet_owner = '" . $user_id . "' AND
                     fleet_start_galaxy = '" . $galaxy . "' AND
@@ -55,7 +55,7 @@ class Renameplanet extends Model
     public function deleteMoonAndPlanet(int $user_id, int $planet_id, int $galaxy, int $system, int $planet): void
     {
         $this->db->query(
-            "UPDATE `" . PLANETS . "` AS p, `" . PLANETS . "` AS m, `" . USERS . "` AS u SET
+            'UPDATE `' . PLANETS . '` AS p, `' . PLANETS . '` AS m, `' . USERS . "` AS u SET
                 p.`planet_destroyed` = '" . (time() + (PLANETS_LIFE_TIME * 3600)) . "',
                 m.`planet_destroyed` = '" . (time() + (PLANETS_LIFE_TIME * 3600)) . "',
                 u.`user_current_planet` = u.`user_home_planet_id`
@@ -78,7 +78,7 @@ class Renameplanet extends Model
     public function deletePlanet(int $user_id, int $planet_id): void
     {
         $this->db->query(
-            "UPDATE `" . PLANETS . "` AS p, `" . USERS . "` AS u SET
+            'UPDATE `' . PLANETS . '` AS p, `' . USERS . "` AS u SET
                 p.`planet_destroyed` = '" . (time() + (PLANETS_LIFE_TIME * 3600)) . "',
                 u.`user_current_planet` = u.`user_home_planet_id`
             WHERE p.`planet_id` = '" . $planet_id . "' AND
@@ -96,7 +96,7 @@ class Renameplanet extends Model
     public function updatePlanetName(string $new_name, int $planet_id): void
     {
         $this->db->query(
-            "UPDATE `" . PLANETS . "` SET
+            'UPDATE `' . PLANETS . "` SET
                 `planet_name` = '" . $this->db->escapeValue($new_name) . "'
             WHERE `planet_id` = '" . $planet_id . "'
             LIMIT 1;"

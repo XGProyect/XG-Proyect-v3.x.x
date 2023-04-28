@@ -1,0 +1,28 @@
+<table class="lined widthFull" style="width:100%;border-collapse:collapse;border: 1px #415680 solid;margin-bottom: 10px;">
+    <tr>
+        <td style="text-align:center">
+            <?php echo $_st; ?> <?php echo $_fleet->getName(); ?> [<?php echo $_fleet->getGalaxy(); ?>:<?php echo $_fleet->getSystem(); ?>:<?php echo $_fleet->getPlanet(); ?>]<br>
+            <?php echo App\Libraries\BattleEngine\Utils\LangManager::getInstance()->getTechs($_fleet->getWeaponsTech(), $_fleet->getShieldsTech(), $_fleet->getArmourTech()); ?>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <table class="lined widthFull" style="margin: 0 auto;">
+                <thead>
+                    <tr>
+                        <?php foreach($_fleet as $_shipID => $_ship) { ?>
+                            <th><?php echo App\Libraries\BattleEngine\Utils\LangManager::getInstance()->getShipName($_shipID); ?></th>
+                        <?php } ?>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <?php foreach($_fleet as $_shipID => $_ship) { ?>
+                            <th><?php echo $_ship->getCount(); ?></th>
+                        <?php } ?>
+                    </tr>
+                </tbody>
+            </table>
+        </td>
+    </tr>
+</table>

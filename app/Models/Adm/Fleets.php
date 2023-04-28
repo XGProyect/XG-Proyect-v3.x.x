@@ -14,20 +14,20 @@ class Fleets extends Model
     public function getAllFleets(): array
     {
         return $this->db->queryFetchAll(
-            "SELECT
+            'SELECT
                 f.*,
                 (
                     SELECT `user_name`
-                    FROM `" . USERS . "`
+                    FROM `' . USERS . '`
                     WHERE `user_id` = f.`fleet_owner`
                 ) AS fleet_username,
                 (
                     SELECT `user_name`
-                    FROM `" . USERS . "`
+                    FROM `' . USERS . '`
                     WHERE `user_id` = f.`fleet_target_owner`
                 ) AS `target_username`
-            FROM `" . FLEETS . "` AS f
-            ORDER BY f.`fleet_end_time` ASC;"
+            FROM `' . FLEETS . '` AS f
+            ORDER BY f.`fleet_end_time` ASC;'
         );
     }
 
@@ -45,9 +45,9 @@ class Fleets extends Model
             $base_time = time();
 
             $times = $this->db->queryFetch(
-                "SELECT
+                'SELECT
                     (f.`fleet_end_time` - f.`fleet_start_time`) AS `mission_time`
-                FROM `" . FLEETS . "` f
+                FROM `' . FLEETS . "` f
                 WHERE f.`fleet_id` = '" . $fleet . "';"
             );
 
@@ -55,7 +55,7 @@ class Fleets extends Model
             $end_time = $base_time + $times['mission_time'] * 2;
 
             $this->db->query(
-                "UPDATE `" . FLEETS . "` f SET
+                'UPDATE `' . FLEETS . "` f SET
                     f.`fleet_start_time` = '" . $start_time . "',
                     f.`fleet_end_stay` = '0',
                     f.`fleet_end_time` = '" . $end_time . "'
@@ -77,8 +77,8 @@ class Fleets extends Model
     public function endFleetById(int $fleet_id): void
     {
         $this->db->query(
-            "UPDATE
-                `" . FLEETS . "` f
+            'UPDATE
+                `' . FLEETS . "` f
             SET
                 f.`fleet_start_time` = '" . time() . "',
                 f.`fleet_end_time` = '" . time() . "',
@@ -96,7 +96,7 @@ class Fleets extends Model
     public function returnFleetById(int $fleet_id): void
     {
         $this->db->query(
-            "UPDATE `" . FLEETS . "` f SET
+            'UPDATE `' . FLEETS . "` f SET
                 f.`fleet_start_time` = '" . time() . "',
                 f.`fleet_end_stay` = '0',
                 f.`fleet_end_time` = '" . (time() * 2) . "' - f.`fleet_creation`,
@@ -115,8 +115,8 @@ class Fleets extends Model
     public function deleteFleetById(int $fleet_id): void
     {
         $this->db->query(
-            "DELETE f.*
-            FROM `" . FLEETS . "` f
+            'DELETE f.*
+            FROM `' . FLEETS . "` f
             WHERE f.`fleet_id` = '" . $fleet_id . "';"
         );
     }

@@ -588,9 +588,6 @@ class Fleet4Controller extends BaseController
         $consumption = $this->getFleetData()['consumption'];
         $storage_needed = 0;
 
-        // reduce cargo storage
-        $this->_fleet_storage -= $consumption;
-
         $metal = max(0, $metal);
         $crystal = max(0, $crystal);
         $deuterium = max(0, $deuterium);

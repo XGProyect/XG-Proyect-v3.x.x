@@ -18,7 +18,7 @@ class Resources extends Model
     public function updateCurrentPlanet(array $planet, string $sub_query): void
     {
         $this->db->query(
-            "UPDATE `" . PLANETS . "` SET
+            'UPDATE `' . PLANETS . "` SET
                 `planet_id` = '" . $planet['planet_id'] . "'
                 $sub_query
                 WHERE `planet_id` = '" . $planet['planet_id'] . "';"

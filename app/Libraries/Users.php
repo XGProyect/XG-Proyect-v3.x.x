@@ -5,7 +5,6 @@ namespace App\Libraries;
 use App\Core\Enumerators\AllianceRanksEnumerator as AllianceRanks;
 use App\Core\Enumerators\SwitchIntEnumerator as SwitchInt;
 use App\Libraries\Alliance\Ranks;
-use App\Libraries\Functions;
 use App\Models\Libraries\UsersLibrary;
 
 class Users
@@ -156,11 +155,11 @@ class Users
     {
         return ($user['user_onlinetime'] < (time() - ONE_WEEK));
     }
-    ###########################################################################
-    #
-    # Private Methods
-    #
-    ###########################################################################
+    //##########################################################################
+    //
+    // Private Methods
+    //
+    //##########################################################################
 
     /**
      * isSessionSet
@@ -211,7 +210,7 @@ class Users
             Functions::redirect(SYSTEM_ROOT);
         }
 
-        if (!password_verify(($user_row['user_password'] . "-" . SECRETWORD), $_SESSION['user_password']) && !defined('IN_LOGIN')) {
+        if (!password_verify(($user_row['user_password'] . '-' . SECRETWORD), $_SESSION['user_password']) && !defined('IN_LOGIN')) {
             Functions::redirect(SYSTEM_ROOT);
         }
     }
@@ -263,7 +262,7 @@ class Users
             $insert_query = 'INSERT INTO ' . USERS . ' SET ';
 
             foreach ($data as $column => $value) {
-                $insert_query .= "`" . $column . "` = '" . $value . "', ";
+                $insert_query .= '`' . $column . "` = '" . $value . "', ";
             }
 
             // Remove last comma

@@ -17,7 +17,7 @@ class Installation extends Model
     public function getListOfTables($db_name)
     {
         return $this->db->queryFetchAll(
-            "SHOW TABLES FROM " . $db_name
+            'SHOW TABLES FROM ' . $db_name
         );
     }
 
@@ -29,7 +29,7 @@ class Installation extends Model
     public function getAdmin()
     {
         return $this->db->queryFetch(
-            "SELECT COUNT(`user_id`) as count FROM " . USERS . "
+            'SELECT COUNT(`user_id`) as count FROM ' . USERS . "
                 WHERE `user_id` = '1' OR `user_authlevel` = '3';"
         );
     }
@@ -68,7 +68,7 @@ class Installation extends Model
     public function setWindowsSqlMode()
     {
         // Store the current sql_mode
-        $this->db->query("set @orig_mode = @@global.sql_mode");
+        $this->db->query('set @orig_mode = @@global.sql_mode');
 
         // Set sql_mode to one that won't trigger errors...
         $this->db->query('set @@global.sql_mode = "MYSQL40"');

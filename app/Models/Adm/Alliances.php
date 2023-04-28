@@ -9,11 +9,11 @@ class Alliances extends Model
     public function getAllAllianceDataById(int $id): array
     {
         return $this->db->queryFetch(
-            "SELECT
+            'SELECT
                 a.*,
                 als.*
-            FROM `" . ALLIANCE . "` AS a
-            INNER JOIN `" . ALLIANCE_STATISTICS . "` AS als ON als.alliance_statistic_alliance_id = a.alliance_id
+            FROM `' . ALLIANCE . '` AS a
+            INNER JOIN `' . ALLIANCE_STATISTICS . "` AS als ON als.alliance_statistic_alliance_id = a.alliance_id
             WHERE (a.`alliance_id` = '{$id}')
             LIMIT 1;"
         );
@@ -22,8 +22,8 @@ class Alliances extends Model
     public function checkAllianceByNameOrTag(string $alliance): ?array
     {
         return $this->db->queryFetch(
-            "SELECT `alliance_id`
-                FROM `" . ALLIANCE . "`
+            'SELECT `alliance_id`
+                FROM `' . ALLIANCE . "`
                 WHERE `alliance_name` = '" . $alliance . "' OR
                     `alliance_tag` = '" . $alliance . "';"
         );
@@ -41,8 +41,8 @@ class Alliances extends Model
         $alliance_tag = $this->db->escapeValue($alliance_tag);
 
         $check_tag = $this->db->queryFetch(
-            "SELECT `alliance_tag`
-            FROM `" . ALLIANCE . "`
+            'SELECT `alliance_tag`
+            FROM `' . ALLIANCE . "`
             WHERE `alliance_tag` = '" . $alliance_tag . "'"
         );
 
@@ -65,9 +65,9 @@ class Alliances extends Model
         $alliance_name = $this->db->escapeValue($alliance_name);
 
         $check_name = $this->db->queryFetch(
-            "SELECT
+            'SELECT
                 `alliance_name`
-            FROM `" . ALLIANCE . "`
+            FROM `' . ALLIANCE . "`
             WHERE `alliance_name` = '" . $alliance_name . "'"
         );
 
@@ -81,10 +81,10 @@ class Alliances extends Model
     public function checkAllianceFounder(int $user_id): bool
     {
         $ally_data = $this->db->queryFetch(
-            "SELECT
+            'SELECT
                 `user_ally_id`,
                 `user_ally_request`
-            FROM `" . USERS . "`
+            FROM `' . USERS . "`
             WHERE `user_id` = '" . $user_id . "';"
         );
 
@@ -94,7 +94,7 @@ class Alliances extends Model
     public function getAllianceMembers(int $alliance_id): array
     {
         return $this->db->queryFetchAll(
-            "SELECT u.`user_id`,
+            'SELECT u.`user_id`,
                 u.`user_name`,
                 u.`user_ally_request`,
                 u.`user_ally_request_text`,
@@ -102,8 +102,8 @@ class Alliances extends Model
                 u.`user_ally_rank_id`,
                 a.`alliance_owner`,
                 a.`alliance_ranks`
-            FROM `" . USERS . "` AS u
-            LEFT JOIN `" . ALLIANCE . "` AS a ON a.`alliance_id` = u.`user_ally_id`
+            FROM `' . USERS . '` AS u
+            LEFT JOIN `' . ALLIANCE . "` AS a ON a.`alliance_id` = u.`user_ally_id`
             WHERE u.`user_ally_id` = '" . $alliance_id . "';"
         );
     }
@@ -111,28 +111,29 @@ class Alliances extends Model
     public function removeAllianceMembers(string $ids_string): void
     {
         $this->db->query(
-            "UPDATE `" . USERS . "` SET
+            'UPDATE `' . USERS . "` SET
                 `user_ally_id` = 0,
                 `user_ally_request` = 0,
                 `user_ally_request_text` = '',
                 `user_ally_rank_id` = 0
-            WHERE `user_id` IN (" . rtrim($ids_string, ',') . ")"
+            WHERE `user_id` IN (" . rtrim($ids_string, ',') . ')'
         );
     }
 
     public function getAllUsers(): array
     {
         return $this->db->queryFetchAll(
-            "SELECT
+            'SELECT
                 `user_id`,
                 `user_name`
-            FROM `" . USERS . "`;"
+            FROM `' . USERS . '`;'
         );
     }
+
     public function updateAllianceData(array $alliance_data): void
     {
         $this->db->query(
-            "UPDATE `" . ALLIANCE . "` SET
+            'UPDATE `' . ALLIANCE . "` SET
                 `alliance_name` = '" . $this->db->escapeValue($alliance_data['alliance_name']) . "',
                 `alliance_tag` = '" . $this->db->escapeValue($alliance_data['alliance_tag']) . "',
                 `alliance_owner` = '" . $alliance_data['alliance_owner'] . "',
@@ -149,9 +150,9 @@ class Alliances extends Model
     public function countAllianceMembers(int $alliance_id): array
     {
         return $this->db->queryFetch(
-            "SELECT
+            'SELECT
                 COUNT(`user_id`) AS `Amount`
-            FROM `" . USERS . "`
+            FROM `' . USERS . "`
             WHERE `user_ally_id` = '" . $alliance_id . "';"
         );
     }
@@ -159,7 +160,7 @@ class Alliances extends Model
     public function updateAllianceRanks($alliance_id, $ranks)
     {
         $this->db->query(
-            "UPDATE `" . ALLIANCE . "` SET
+            'UPDATE `' . ALLIANCE . "` SET
                 `alliance_ranks` = '" . $ranks . "'
             WHERE `alliance_id` = '" . (int) $alliance_id . "'"
         );

@@ -44,13 +44,13 @@ abstract class StringsHelper
     public static function escapeString(string $value): string
     {
         return strtr($value, [
-            "\\" => "\\\\",
-            "\x00" => "\\0",
-            "\n" => "\\n",
-            "\r" => "\\r",
+            '\\' => '\\\\',
+            "\x00" => '\\0',
+            "\n" => '\\n',
+            "\r" => '\\r',
             "'" => "\'",
             '"' => '\"',
-            "\x1a" => "\\Z",
+            "\x1a" => '\\Z',
         ]);
     }
 

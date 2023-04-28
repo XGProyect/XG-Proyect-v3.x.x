@@ -152,7 +152,7 @@ class Fleet1Controller extends BaseController
                         'ship_id' => $ship_id,
                         'max_ships' => $ship_amount,
                         'consumption' => FleetsLib::shipConsumption($ship_id, $this->user),
-                        'speed' => FleetsLib::fleetMaxSpeed('', $ship_id, $this->user),
+                        'speed' => FleetsLib::fleetMaxSpeed(null, $ship_id, $this->user),
                         'capacity' => FleetsLib::getMaxStorage(
                             $price[$ship_id]['capacity'],
                             $this->_research->getCurrentResearch()->getResearchHyperspaceTechnology()
@@ -175,7 +175,7 @@ class Fleet1Controller extends BaseController
      */
     private function buildShipName($ship_name, $ship_id)
     {
-        $title = $this->langs->line('fl_speed_title') . FleetsLib::fleetMaxSpeed('', $ship_id, $this->user);
+        $title = $this->langs->line('fl_speed_title') . FleetsLib::fleetMaxSpeed(null, $ship_id, $this->user);
 
         return UrlHelper::setUrl('', $this->langs->line($ship_name), $title);
     }

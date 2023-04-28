@@ -2,8 +2,6 @@
 
 namespace App\Libraries\Buildings;
 
-use App\Libraries\Buildings\Queue;
-use App\Libraries\Buildings\QueueElements;
 use App\Libraries\DevelopmentsLib;
 use App\Libraries\OfficiersLib;
 

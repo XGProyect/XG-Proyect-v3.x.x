@@ -10,10 +10,6 @@ use App\Core\Objects;
 use App\Core\Template;
 use App\Helpers\StringsHelper;
 use App\Helpers\UrlHelper;
-use App\Libraries\FleetsLib;
-use App\Libraries\FormatLib;
-use App\Libraries\Formulas;
-use App\Libraries\Functions;
 use CiLang;
 
 class GalaxyLib
@@ -55,11 +51,11 @@ class GalaxyLib
         $this->template = new Template();
     }
 
-    ######################################
-    #
-    # main methods
-    #
-    ######################################
+    //#####################################
+    //
+    // main methods
+    //
+    //#####################################
 
     public function buildRow($row_data, $planet): array
     {
@@ -104,11 +100,11 @@ class GalaxyLib
         // RETURN DATA
         return $row;
     }
-    ######################################
-    #
-    # blocks methods
-    #
-    ######################################
+    //#####################################
+    //
+    // blocks methods
+    //
+    //#####################################
 
     private function planetBlock(): array
     {
@@ -194,8 +190,8 @@ class GalaxyLib
         if ($this->row_data['planet_destroyed'] == 0) {
             if ($this->isPhalanxActive()) {
                 $attributes = "onclick=fenster('game.php?page=phalanx&galaxy=" . $this->galaxy .
-                "&amp;system=" . $this->system . "&amp;planet=" . $this->planet .
-                "&amp;planettype=" . self::PLANET_TYPE . "')";
+                '&amp;system=' . $this->system . '&amp;planet=' . $this->planet .
+                '&amp;planettype=' . self::PLANET_TYPE . "')";
                 $phalanx_link = UrlHelper::setUrl('', $this->row_data['planet_name'], 'Phalanx', $attributes);
             }
 
@@ -203,11 +199,11 @@ class GalaxyLib
 
             if ($this->row_data['planet_last_update'] > (time() - 59 * 60) && $this->row_data['user_id'] != $this->current_user['user_id']) {
                 if ($this->row_data['planet_last_update'] > (time() - 10 * 60) && $this->row_data['user_id'] != $this->current_user['user_id']) {
-                    $planetname .= "(*)";
+                    $planetname .= '(*)';
                 } else {
-                    $planetname .= " (" . FormatLib::prettyTimeHour(
+                    $planetname .= ' (' . FormatLib::prettyTimeHour(
                         time() - $this->row_data['planet_last_update']
-                    ) . ")";
+                    ) . ')';
                 }
             }
         } else {
@@ -424,17 +420,17 @@ class GalaxyLib
             );
         }
 
-        $actions = "<td>";
+        $actions = '<td>';
         $actions .= str_replace('"', '', UrlHelper::setUrl(
             'game.php?page=chat&playerId=' . $this->row_data['user_id'],
             $this->langs->line('write_message')
         ));
-        $actions .= "</td></tr><tr><td>";
+        $actions .= '</td></tr><tr><td>';
         $actions .= str_replace('"', '', UrlHelper::setUrl(
-            "game.php?page=buddies&mode=2&u=" . $this->row_data['user_id'],
+            'game.php?page=buddies&mode=2&u=' . $this->row_data['user_id'],
             $this->langs->line('gl_buddy_request')
         ));
-        $actions .= "</td></tr><tr>";
+        $actions .= '</td></tr><tr>';
 
         return array_merge(
             [
@@ -512,7 +508,7 @@ class GalaxyLib
         $actions = [
             'spy' => [
                 'image' => Functions::setImage(DPATH . 'img/e.gif', $this->langs->line('gl_spy')),
-                'attributes' => "onclick=\"javascript:doit(6, " . $this->galaxy . ", " . $this->system . ", " . $this->planet . ", 1, " . $this->current_user['preference_spy_probes'] . ");\"",
+                'attributes' => 'onclick="javascript:doit(6, ' . $this->galaxy . ', ' . $this->system . ', ' . $this->planet . ', 1, ' . $this->current_user['preference_spy_probes'] . ');"',
             ],
             'write' => [
                 'image' => Functions::setImage(DPATH . 'img/m.gif', $this->langs->line('write_message')),
@@ -552,11 +548,11 @@ class GalaxyLib
 
         return join('&nbsp;', $links);
     }
-    ######################################
-    #
-    # missions methods
-    #
-    ######################################
+    //#####################################
+    //
+    // missions methods
+    //
+    //#####################################
 
     /**
      * attackLink
@@ -567,8 +563,8 @@ class GalaxyLib
      */
     private function attackLink($planet_type)
     {
-        $url = "game.php?page=fleet1&galaxy=" . $this->galaxy . "&amp;system=" . $this->system . "&amp;planet=" .
-        $this->planet . "&amp;planettype=" . $planet_type . "&amp;target_mission=1";
+        $url = 'game.php?page=fleet1&galaxy=' . $this->galaxy . '&amp;system=' . $this->system . '&amp;planet=' .
+        $this->planet . '&amp;planettype=' . $planet_type . '&amp;target_mission=1';
         return str_replace('"', '', UrlHelper::setUrl($url, $this->langs->language['type_mission'][Missions::ATTACK]));
     }
 
@@ -581,8 +577,8 @@ class GalaxyLib
      */
     private function transportLink($planet_type)
     {
-        $url = "game.php?page=fleet1&galaxy=" . $this->galaxy . "&system=" . $this->system .
-        "&planet=" . $this->planet . "&planettype=" . $planet_type . "&target_mission=3";
+        $url = 'game.php?page=fleet1&galaxy=' . $this->galaxy . '&system=' . $this->system .
+        '&planet=' . $this->planet . '&planettype=' . $planet_type . '&target_mission=3';
         return str_replace('"', '', UrlHelper::setUrl($url, $this->langs->language['type_mission'][Missions::TRANSPORT]));
     }
 
@@ -595,8 +591,8 @@ class GalaxyLib
      */
     private function deployLink($planet_type)
     {
-        $url = "game.php?page=fleet1&galaxy=" . $this->galaxy . "&system=" . $this->system .
-        "&planet=" . $this->planet . "&planettype=" . $planet_type . "&target_mission=4";
+        $url = 'game.php?page=fleet1&galaxy=' . $this->galaxy . '&system=' . $this->system .
+        '&planet=' . $this->planet . '&planettype=' . $planet_type . '&target_mission=4';
         return str_replace('"', '', UrlHelper::setUrl($url, $this->langs->language['type_mission'][Missions::DEPLOY]));
     }
 
@@ -609,8 +605,8 @@ class GalaxyLib
      */
     private function holdPositionLink($planet_type)
     {
-        $url = "game.php?page=fleet1&galaxy=" . $this->galaxy . "&system=" . $this->system .
-        "&planet=" . $this->planet . "&planettype=" . $planet_type . "&target_mission=5";
+        $url = 'game.php?page=fleet1&galaxy=' . $this->galaxy . '&system=' . $this->system .
+        '&planet=' . $this->planet . '&planettype=' . $planet_type . '&target_mission=5';
         return str_replace('"', '', UrlHelper::setUrl($url, $this->langs->language['type_mission'][Missions::STAY]));
     }
 
@@ -623,8 +619,8 @@ class GalaxyLib
      */
     private function spyLink($planet_type)
     {
-        $attributes = "onclick=&#039javascript:doit(6, " . $this->galaxy . ", " . $this->system . ", " .
-        $this->planet . ", " . $planet_type . ", " . $this->current_user['preference_spy_probes'] . ");&#039";
+        $attributes = 'onclick=&#039javascript:doit(6, ' . $this->galaxy . ', ' . $this->system . ', ' .
+        $this->planet . ', ' . $planet_type . ', ' . $this->current_user['preference_spy_probes'] . ');&#039';
         return str_replace('"', '', UrlHelper::setUrl('', $this->langs->language['type_mission'][Missions::SPY], '', $attributes));
     }
 
@@ -637,8 +633,8 @@ class GalaxyLib
      */
     private function destroyLink($planet_type)
     {
-        $url = "game.php?page=fleet1&galaxy=" . $this->galaxy . "&system=" . $this->system . "&planet=" .
-        $this->planet . "&planettype=" . $planet_type . "&target_mission=9";
+        $url = 'game.php?page=fleet1&galaxy=' . $this->galaxy . '&system=' . $this->system . '&planet=' .
+        $this->planet . '&planettype=' . $planet_type . '&target_mission=9';
         return str_replace('"', '', UrlHelper::setUrl($url, $this->langs->language['type_mission'][Missions::DESTROY]));
     }
 
@@ -651,8 +647,8 @@ class GalaxyLib
      */
     private function missileLink($planet_type)
     {
-        $url = "game.php?page=galaxy&mode=2&galaxy=" . $this->galaxy . "&system=" . $this->system . "&planet=" .
-        $this->planet . "&current=" . $this->current_user['user_current_planet'];
+        $url = 'game.php?page=galaxy&mode=2&galaxy=' . $this->galaxy . '&system=' . $this->system . '&planet=' .
+        $this->planet . '&current=' . $this->current_user['user_current_planet'];
         return str_replace('"', '', UrlHelper::setUrl($url, $this->langs->language['gl_missile_attack']));
     }
 
@@ -665,15 +661,15 @@ class GalaxyLib
      */
     private function phalanxLink($planet_type)
     {
-        $attributes = "onclick=fenster(&#039;game.php?page=phalanx&galaxy=" . $this->galaxy . "&amp;system=" .
-        $this->system . "&amp;planet=" . $this->planet . "&amp;planettype=" . $planet_type . "&#039;)";
+        $attributes = 'onclick=fenster(&#039;game.php?page=phalanx&galaxy=' . $this->galaxy . '&amp;system=' .
+        $this->system . '&amp;planet=' . $this->planet . '&amp;planettype=' . $planet_type . '&#039;)';
         return str_replace('"', '', UrlHelper::setUrl('', $this->langs->line('gl_phalanx'), '', $attributes));
     }
-    ######################################
-    #
-    # other methods
-    #
-    ######################################
+    //#####################################
+    //
+    // other methods
+    //
+    //#####################################
 
     /**
      * Check if it is a friendly (buddy or alliance)

@@ -14,15 +14,15 @@ class Changelog extends Model
     public function getAllChangelogEntries()
     {
         return $this->db->queryFetchAll(
-            "SELECT
+            'SELECT
                 c.`changelog_version`,
                 c.`changelog_date`,
                 c.`changelog_description`
-            FROM `" . CHANGELOG . "` c
-            LEFT JOIN `" . LANGUAGES . "` l
+            FROM `' . CHANGELOG . '` c
+            LEFT JOIN `' . LANGUAGES . '` l
                 ON l.`language_id` = c.`changelog_lang_id`
             WHERE l.`language_name` = (
-                SELECT o.`option_value` FROM `" . OPTIONS . "` o WHERE `option_name` = 'lang'
+                SELECT o.`option_value` FROM `' . OPTIONS . "` o WHERE `option_name` = 'lang'
             )
             ORDER BY c.`changelog_date` DESC"
         );

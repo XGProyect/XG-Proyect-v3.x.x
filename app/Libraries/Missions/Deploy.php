@@ -8,7 +8,6 @@ use App\Helpers\StringsHelper;
 use App\Libraries\FleetsLib as Fleets;
 use App\Libraries\FormatLib as Format;
 use App\Libraries\Functions;
-use App\Libraries\Missions\Missions;
 
 class Deploy extends Missions
 {
@@ -46,7 +45,7 @@ class Deploy extends Missions
 
         // transfer the ships to the planet
         parent::restoreFleet($fleet, $start_planet);
-        parent::removeFleet($fleet['fleet_id']);
+        parent::removeFleet((int) $fleet['fleet_id']);
     }
 
     /**

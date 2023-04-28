@@ -17,7 +17,7 @@ class Phalanx extends Model
     public function reduceDeuterium(int $planet_id): void
     {
         $this->db->query(
-            "UPDATE `" . PLANETS . "` SET
+            'UPDATE `' . PLANETS . "` SET
                 `planet_deuterium` = `planet_deuterium` - '" . PHALANX_COST . "'
             WHERE `planet_id` = '" . $planet_id . "';"
         );
@@ -34,10 +34,10 @@ class Phalanx extends Model
     public function getTargetPlanetIdAndName(int $galaxy, int $system, int $planet): array
     {
         return $this->db->queryFetch(
-            "SELECT
+            'SELECT
                 `planet_name`,
                 `planet_user_id`
-            FROM `" . PLANETS . "`
+            FROM `' . PLANETS . "`
             WHERE `planet_galaxy` = '" . $galaxy . "' AND
                     `planet_system` = '" . $system . "' AND
                     `planet_planet` = '" . $planet . "' AND
@@ -56,9 +56,9 @@ class Phalanx extends Model
     public function getTargetMoonStatus(int $galaxy, int $system, int $planet): ?array
     {
         return $this->db->queryFetch(
-            "SELECT
+            'SELECT
                 `planet_destroyed`
-            FROM `" . PLANETS . "`
+            FROM `' . PLANETS . "`
             WHERE `planet_galaxy` = '" . $galaxy . "' AND
                     `planet_system` = '" . $system . "' AND
                     `planet_planet` = '" . $planet . "' AND
@@ -77,25 +77,25 @@ class Phalanx extends Model
     public function getFleetsToTarget(int $galaxy, int $system, int $planet): ?array
     {
         return $this->db->queryFetchAll(
-            "SELECT
+            'SELECT
                 f.*,
                 po.`planet_name` AS `start_planet_name`,
                 pt.`planet_name` AS `target_planet_name`,
                 uo.`user_name` AS `start_planet_user`,
                 ut.`user_name` AS `target_planet_user`
-            FROM `" . FLEETS . "` f
-                INNER JOIN `" . USERS . "` uo
+            FROM `' . FLEETS . '` f
+                INNER JOIN `' . USERS . '` uo
                     ON uo.`user_id` = f.`fleet_owner`
-                LEFT JOIN `" . USERS . "` ut
+                LEFT JOIN `' . USERS . '` ut
                     ON ut.`user_id` = f.`fleet_target_owner`
-                INNER JOIN `" . PLANETS . "` po
+                INNER JOIN `' . PLANETS . '` po
                     ON (
                         po.planet_galaxy = f.fleet_start_galaxy AND
                         po.planet_system = f.fleet_start_system AND
                         po.planet_planet = f.fleet_start_planet AND
                         po.planet_type = f.fleet_start_type
                     )
-                LEFT JOIN `" . PLANETS . "` pt
+                LEFT JOIN `' . PLANETS . "` pt
                     ON (
                     pt.planet_galaxy = f.fleet_end_galaxy AND
                     pt.planet_system = f.fleet_end_system AND

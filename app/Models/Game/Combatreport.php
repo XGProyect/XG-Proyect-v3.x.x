@@ -16,9 +16,9 @@ class Combatreport extends Model
     public function getReportById($report_id): ?array
     {
         return $this->db->queryFetch(
-            "SELECT
+            'SELECT
                 *
-            FROM `" . REPORTS . "`
+            FROM `' . REPORTS . "`
             WHERE `report_rid` = '" . $this->db->escapeValue($report_id) . "';"
         );
     }
