@@ -7,7 +7,6 @@ namespace App\Core;
 use App\Libraries\Page;
 use App\Libraries\Users;
 use CiLang;
-use Exception;
 
 abstract class BaseController
 {
@@ -33,30 +32,8 @@ abstract class BaseController
     /**
      * @param string|array $languageFile
      */
-    public function loadLang($languageFile): void
+    protected function loadLang($languageFile): void
     {
-        try {
-            // require langugage library
-            $langPath = XGP_ROOT . LIB_PATH . 'Ci' . DIRECTORY_SEPARATOR . 'CiLang.php';
-
-            if (!file_exists($langPath)) {
-                // not found
-                throw new Exception('Language file "' . $languageFile . '" not defined');
-                return;
-            }
-
-            // required by the library
-            if (!defined('BASEPATH')) {
-                define('BASEPATH', XGP_ROOT . RESOURCES_PATH);
-            }
-
-            // use CI library
-            require_once $langPath;
-
-            $this->langs = new CiLang();
-            $this->langs->load($languageFile, DEFAULT_LANG);
-        } catch (Exception $e) {
-            die('Fatal error: ' . $e->getMessage());
-        }
+        $this->langs = (new Language())->loadLang($languageFile, true);
     }
 }
