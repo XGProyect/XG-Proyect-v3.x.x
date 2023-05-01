@@ -72,6 +72,7 @@ class InstallationController extends BaseController
 
         // ACTION FOR THE CURRENT PAGE
         $parse['alert'] = '';
+        $alerts = '';
 
         switch ((isset($_POST['page']) ? $_POST['page'] : '')) {
             case 'step1':
