@@ -21,7 +21,7 @@ class SecurePageLib
         if (!is_array($value)) {
             $value = str_ireplace('script', 'blocked', $value);
 
-            if (version_compare(PHP_VERSION, '7.3.0', '<')) {
+            if (version_compare(PHP_VERSION, '7.4.0', '<')) {
                 if (get_magic_quotes_gpc()) {
                     $value = htmlentities(stripslashes($value), ENT_QUOTES, 'UTF-8', false);
                 } else {

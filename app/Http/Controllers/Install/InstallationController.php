@@ -290,7 +290,7 @@ class InstallationController extends BaseController
      */
     private function serverRequirementes()
     {
-        return !(version_compare(PHP_VERSION, '7.3.0', '<'));
+        return !(version_compare(PHP_VERSION, '7.4.0', '<'));
     }
 
     /**
