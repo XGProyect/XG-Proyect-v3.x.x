@@ -6,14 +6,7 @@ use App\Helpers\UrlHelper;
 
 class BBCodeLib
 {
-    /**
-     * bbCode function.
-     *
-     * @param string $string String
-     *
-     * @return void
-     */
-    public function bbCode($string = '')
+    public function bbCode(?string $string = ''): string
     {
         $bbcodes = [
             '/\\n/' => '$this->setLineJump()',
@@ -32,6 +25,7 @@ class BBCodeLib
             '/\[font=(.*?)\](.*?)\[\/font\]/is' => '$this->setFontFamiliy(\'\\1\',\'\\2\')',
             '/\[bg=(.*?)\](.*?)\[\/bg\]/is' => '$this->setBackgroundColor(\'\\1\',\'\\2\')',
             '/\[size=(.*?)\](.*?)\[\/size\]/is' => '$this->setFontSize(\'\\1\',\'\\2\')',
+            '/\[coordinates\](.*?):(.*?):(.*?)\[\/coordinates]/is' => '$this->setCoordinates(\'\\1\',\'\\2\',\'\\3\')',
         ];
 
         $string = stripslashes($string ?? '');
@@ -49,20 +43,13 @@ class BBCodeLib
         return $string;
     }
 
-    /**
-     * Recover the different stuff and choose the right one
-     *
-     * @param array  $matches Matches
-     * @param string $replace Replace
-     *
-     * @return string
-     */
-    private function getBbCode($matches, $replace)
+    private function getBbCode(array $matches, string $replace): string
     {
         if (isset($matches[1])) {
             $replacements = [
                 '\1' => isset($matches[1]) ? $matches[1] : '',
                 '\2' => isset($matches[2]) ? $matches[2] : '',
+                '\3' => isset($matches[3]) ? $matches[3] : '',
             ];
 
             return eval('return ' . strtr($replace, $replacements) . ';');
@@ -71,34 +58,17 @@ class BBCodeLib
         }
     }
 
-    /**
-     * Set la line jump
-     *
-     * @return string
-     */
-    private function setLineJump()
+    private function setLineJump(): string
     {
         return '<br/>';
     }
 
-    /**
-     * Set return
-     *
-     * @return string
-     */
-    private function setReturn()
+    private function setReturn(): string
     {
         return '';
     }
 
-    /**
-     * Set list for a block of text.
-     *
-     * @param mixed $string String
-     *
-     * @return string
-     */
-    private function setList($string)
+    private function setList(mixed $string): string
     {
         $tmp = explode('[*]', stripslashes($string));
         $out = null;
@@ -112,63 +82,27 @@ class BBCodeLib
         return '<ul>' . $out . '</ul>';
     }
 
-    /**
-     * Set bold for a piece of text.
-     *
-     * @param mixed $string String
-     *
-     * @return string
-     */
-    private function setBold($string)
+    private function setBold(string $string): string
     {
         return '<span style="font-weight: bold;">' . stripslashes($string) . '</span>';
     }
 
-    /**
-     * Set italic for a piece of text.
-     *
-     * @param mixed $string String
-     *
-     * @return string
-     */
-    private function setItalic($string)
+    private function setItalic(string $string): string
     {
         return '<span style="font-style: italic;">' . stripslashes($string) . '</span>';
     }
 
-    /**
-     * Set underline for a piece of text.
-     *
-     * @param mixed $string String
-     *
-     * @return string
-     */
-    private function setUnderline($string)
+    private function setUnderline(string $string): string
     {
         return '<span style="text-decoration: underline;">' . stripslashes($string) . '</span>';
     }
 
-    /**
-     * Set line through for a piece of text.
-     *
-     * @param mixed $string String
-     *
-     * @return string
-     */
-    private function setStrike($string)
+    private function setStrike(string $string): string
     {
         return '<span style="text-decoration: line-through;">' . stripslashes($string) . '</span>';
     }
 
-    /**
-     * Set the url for a piece of text.
-     *
-     * @param mixed $url   Url
-     * @param mixed $title Title
-     *
-     * @return string
-     */
-    private function setUrl($url, $title)
+    private function setUrl(string $url, string $title): ?string
     {
         $title = htmlspecialchars(stripslashes($title), ENT_QUOTES);
         $url = trim($url);
@@ -179,86 +113,46 @@ class BBCodeLib
         if (in_array(strstr($url, ':', true), $exclude) == false) {
             return UrlHelper::setUrl($url, $title, $title);
         }
+
+        return $url;
     }
 
-    /**
-     * Set an email for a piece of text
-     *
-     * @param mixed $mail  Mail
-     * @param mixed $title Title
-     *
-     * @return string
-     */
-    private function setEmail($mail, $title)
+    private function setEmail(string $mail, string $title): string
     {
         return '<a href="mailto:' . $mail . '" title="' . $mail . '">' . stripslashes($title) . '</a>';
     }
 
-    /**
-     * Set an image
-     *
-     * @param mixed $img Mixed
-     *
-     * @return void
-     */
-    private function setImage($img)
+    private function setImage(string $img): string
     {
         if ((substr($img, 0, 7) != 'http://') && (substr($img, 0, 8) != 'https://')) {
             $img = XGP_ROOT . IMG_PATH . $img;
         }
+
         return '<img src="' . $img . '" alt="' . $img . '" title="' . $img . '" />';
     }
 
-    /**
-     * Set the font color for a piece of text.
-     *
-     * @param string $color Color
-     * @param string $title Title
-     *
-     * @return string
-     */
-    private function setFontColor($color, $title)
+    private function setFontColor(string $color, string $title): string
     {
         return '<span style="color:' . $color . '">' . stripslashes($title) . '</span>';
     }
 
-    /**
-     * Set the font family for a piece of text.
-     *
-     * @param string $font  Font
-     * @param string $title Title
-     *
-     * @return string
-     */
-    private function setFontFamiliy($font, $title)
+    private function setFontFamiliy(string $font, string $title): string
     {
         return '<span style="font-family:' . $font . '">' . stripslashes($title) . '</span>';
     }
 
-    /**
-     * Set the background color for a piece of text.
-     *
-     * @param mixed $bg    Background color
-     * @param mixed $title Title
-     *
-     * @return void
-     */
-    private function setBackgroundColor($bg, $title)
+    private function setBackgroundColor(string $bg, string $title): string
     {
         return '<span style="background-color:' . $bg . '">' . stripslashes($title) . '</span>';
     }
 
-    /**
-     * Set the font size fro a piece of text.
-     *
-     * @param mixed $size
-     * @param mixed $text
-     *
-     * @return void
-     */
-    private function setFontSize($size, $text)
+    private function setFontSize(string $size, string $text): string
     {
-        $title = stripslashes($text);
-        return '<span style="font-size:' . $size . 'px">' . $title . '</span>';
+        return '<span style="font-size:' . $size . 'px">' . stripslashes($text) . '</span>';
+    }
+
+    private function setCoordinates($galaxy, $system, $planet)
+    {
+        return FormatLib::prettyCoords($galaxy, $system, $planet);
     }
 }
