@@ -395,7 +395,7 @@ class InstallationController extends BaseController
      */
     private function writeConfigFile()
     {
-        $config_file = @fopen(XGP_ROOT . CONFIGS_PATH . 'config.php', 'w');
+        $config_file = fopen(XGP_ROOT . CONFIGS_PATH . 'config.php', 'w');
 
         if (!$config_file) {
             return false;
@@ -418,8 +418,8 @@ class InstallationController extends BaseController
         }
 
         // check if something was created and delete it
-        if (file_exists($config_file)) {
-            unlink($config_file);
+        if (file_exists(XGP_ROOT . CONFIGS_PATH . 'config.php')) {
+            unlink(XGP_ROOT . CONFIGS_PATH . 'config.php');
         }
 
         return false;
