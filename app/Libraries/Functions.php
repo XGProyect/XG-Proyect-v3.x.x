@@ -4,11 +4,11 @@ namespace App\Libraries;
 
 use App\Core\Database;
 use App\Core\Enumerators\MessagesEnumerator;
+use App\Core\Enumerators\MessagesTypeEnumerator;
 use App\Core\Language;
 use App\Core\Options;
 use App\Core\Template;
 use App\Helpers\StringsHelper;
-use App\Libraries\Messenger\MessagesFormat;
 use App\Libraries\Messenger\MessagesOptions;
 use App\Libraries\Messenger\Messenger;
 use PHPMailer\PHPMailer\Exception;
@@ -253,7 +253,7 @@ abstract class Functions
         $options->setSubject($subject);
 
         if ($allowHtml) {
-            $options->setMessageFormat(MessagesFormat::HTML);
+            $options->setMessageFormat(MessagesTypeEnumerator::HTML);
         }
 
         $options->setMessageText($message);
