@@ -105,7 +105,7 @@ class TechtreeController extends BaseController
      *
      * @return array
      */
-    private function getRequirements(int $object): array
+    private function getRequirements(int $object, int $current_level = 0): array
     {
         $list_of_requirements = [];
 
@@ -113,22 +113,20 @@ class TechtreeController extends BaseController
             return $list_of_requirements;
         }
 
-        foreach ($this->_requirements[$object] as $requirement => $level) {
+        foreach ($this->_requirements[$object] as $requirement => $required_level) {
             $color = 'Red';
+            $current_resource_level = $this->planet[$this->_resource[$requirement]] ?? $this->user[$this->_resource[$requirement]] ?? 0;
+            $current_resource_level = max($current_resource_level, $current_level);
 
-            if ((isset($this->user[$this->_resource[$requirement]])
-                && $this->user[$this->_resource[$requirement]] >= $level)
-                or (isset($this->planet[$this->_resource[$requirement]])
-                    && $this->planet[$this->_resource[$requirement]] >= $level)) {
+            if ($current_resource_level >= $required_level) {
                 $color = 'Green';
+                $display_level = $required_level;
+            } else {
+                $display_level = $current_resource_level . '/' . $required_level;
             }
 
             $list_of_requirements[] = FormatLib::{'color' . $color}(
-                FormatLib::formatLevel(
-                    $this->langs->language[$this->_resource[$requirement]],
-                    $this->langs->line('level'),
-                    $level
-                )
+                FormatLib::formatLevel($this->langs->language[$this->_resource[$requirement]], $this->langs->line('level'), $display_level)
             );
         }
 
