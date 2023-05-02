@@ -36,7 +36,7 @@ class UpdatesLibrary
      *
      * @return void
      */
-    private function cleanUp()
+    private function cleanUp(): void
     {
         $last_cleanup = Functions::readConfig('last_cleanup');
         $cleanup_interval = 6; // 6 HOURS

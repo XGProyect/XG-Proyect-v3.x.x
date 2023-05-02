@@ -3,6 +3,7 @@
 namespace App\Libraries\Messenger;
 
 use App\Core\Enumerators\MessagesEnumerator;
+use App\Core\Enumerators\MessagesTypeEnumerator;
 use App\Helpers\StringsHelper;
 
 final class MessagesOptions
@@ -121,7 +122,7 @@ final class MessagesOptions
     public function getMessageFormat()
     {
         if ($this->_message_format == '') {
-            return MessageFormat::simple;
+            return MessagesTypeEnumerator::SIMPLE;
         }
 
         return $this->_message_format;
