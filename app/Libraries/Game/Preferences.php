@@ -29,7 +29,7 @@ class Preferences
         $list_of_preferences = [];
 
         foreach ($this->preferences as $preference) {
-            if (($preference instanceof PreferenceEntity)) {
+            if (($preference instanceof PreferencesEntity)) {
                 $list_of_preferences[] = $preference;
             }
         }
