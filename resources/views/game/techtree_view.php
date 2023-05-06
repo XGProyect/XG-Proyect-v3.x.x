@@ -9,15 +9,20 @@
             <th class="l" width="40%">
                 <table width="100%">
                     <tr>
-                        <td style="background-color: transparent;" align="left"><a href="game.php?page=infos&gid={tt_info}">{tt_name}</a></td>
-                        <td style="background-color: transparent;" align="right">{tt_detail}</td>
+                        <td style="background-color: transparent;" align="left">
+                            <img src="{dpath}elements/{tt_info}.gif" alt="{tt_name}" style="height: 28px;width: 28px;">
+                            <a href="game.php?page=infos&gid={tt_info}">
+                                <span style="vertical-align:top;font-weight:normal;">{tt_name}</span>
+                            </a>
+                        </td>
+                        <td style="background-color: transparent;font-weight:normal;" align="right">{tt_detail}</td>
                     </tr>
                 </table>
             </th>
             <th class="l" width="60%">
                 <table width="100%">
                     <tr>
-                        <td style="background-color: transparent;" align="left">{requirements}</td>
+                        <td style="background-color: transparent;font-weight:normal;" align="left">{requirements}</td>
                     </tr>
                 </table>
             </th>
@@ -31,15 +36,20 @@
             <th class="l" width="40%">
                 <table width="100%">
                     <tr>
-                        <td style="background-color: transparent;" align="left"><a href="game.php?page=infos&gid={tt_info}">{tt_name}</a></td>
-                        <td style="background-color: transparent;" align="right">{tt_detail}</td>
+                        <td style="background-color: transparent;" align="left">
+                            <img src="{dpath}elements/{tt_info}.gif" alt="{tt_name}" style="height: 28px;width: 28px;">
+                            <a href="game.php?page=infos&gid={tt_info}">
+                                <span style="vertical-align:top;font-weight:normal;">{tt_name}</span>
+                            </a>
+                        </td>
+                        <td style="background-color: transparent;font-weight:normal;" align="right">{tt_detail}</td>
                     </tr>
                 </table>
             </th>
             <th class="l" width="60%">
                 <table width="100%">
                     <tr>
-                        <td style="background-color: transparent;" align="left">{requirements}</td>
+                        <td style="background-color: transparent;font-weight:normal;" align="left">{requirements}</td>
                     </tr>
                 </table>
             </th>
@@ -53,15 +63,20 @@
             <th class="l" width="40%">
                 <table width="100%">
                     <tr>
-                        <td style="background-color: transparent;" align="left"><a href="game.php?page=infos&gid={tt_info}">{tt_name}</a></td>
-                        <td style="background-color: transparent;" align="right">{tt_detail}</td>
+                        <td style="background-color: transparent;" align="left">
+                            <img src="{dpath}elements/{tt_info}.gif" alt="{tt_name}" style="height: 28px;width: 28px;">
+                            <a href="game.php?page=infos&gid={tt_info}">
+                                <span style="vertical-align:top;font-weight:normal;">{tt_name}</span>
+                            </a>
+                        </td>
+                        <td style="background-color: transparent;font-weight:normal;" align="right">{tt_detail}</td>
                     </tr>
                 </table>
             </th>
             <th class="l" width="60%">
                 <table width="100%">
                     <tr>
-                        <td style="background-color: transparent;" align="left">{requirements}</td>
+                        <td style="background-color: transparent;font-weight:normal;" align="left">{requirements}</td>
                     </tr>
                 </table>
             </th>
@@ -75,15 +90,20 @@
             <th class="l" width="40%">
                 <table width="100%">
                     <tr>
-                        <td style="background-color: transparent;" align="left"><a href="game.php?page=infos&gid={tt_info}">{tt_name}</a></td>
-                        <td style="background-color: transparent;" align="right">{tt_detail}</td>
+                        <td style="background-color: transparent;" align="left">
+                            <img src="{dpath}elements/{tt_info}.gif" alt="{tt_name}" style="height: 28px;width: 28px;">
+                            <a href="game.php?page=infos&gid={tt_info}">
+                                <span style="vertical-align:top;font-weight:normal;">{tt_name}</span>
+                            </a>
+                        </td>
+                        <td style="background-color: transparent;font-weight:normal;" align="right">{tt_detail}</td>
                     </tr>
                 </table>
             </th>
             <th class="l" width="60%">
                 <table width="100%">
                     <tr>
-                        <td style="background-color: transparent;" align="left">{requirements}</td>
+                        <td style="background-color: transparent;font-weight:normal;" align="left">{requirements}</td>
                     </tr>
                 </table>
             </th>
@@ -97,15 +117,20 @@
             <th class="l" width="40%">
                 <table width="100%">
                     <tr>
-                        <td style="background-color: transparent;" align="left"><a href="game.php?page=infos&gid={tt_info}">{tt_name}</a></td>
-                        <td style="background-color: transparent;" align="right">{tt_detail}</td>
+                        <td style="background-color: transparent;" align="left">
+                            <img src="{dpath}elements/{tt_info}.gif" alt="{tt_name}" style="height: 28px;width: 28px;">
+                            <a href="game.php?page=infos&gid={tt_info}">
+                                <span style="vertical-align:top;font-weight:normal;">{tt_name}</span>
+                            </a>
+                        </td>
+                        <td style="background-color: transparent;font-weight:normal;" align="right">{tt_detail}</td>
                     </tr>
                 </table>
             </th>
             <th class="l" width="60%">
                 <table width="100%">
                     <tr>
-                        <td style="background-color: transparent;" align="left">{requirements}</td>
+                        <td style="background-color: transparent;font-weight:normal;" align="left">{requirements}</td>
                     </tr>
                 </table>
             </th>
