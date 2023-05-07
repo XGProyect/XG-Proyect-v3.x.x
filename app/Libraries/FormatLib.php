@@ -370,7 +370,7 @@ class FormatLib
      *
      * @return string
      */
-    public static function formatLevel(string $object, string $lvl_string, int $level): string
+    public static function formatLevel(string $object, string $lvl_string, string $level): string
     {
         return $object . ' (' . $lvl_string . $level . ')';
     }
