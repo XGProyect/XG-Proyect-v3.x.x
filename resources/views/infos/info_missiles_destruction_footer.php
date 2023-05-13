@@ -1,1 +1,1 @@
-<input type="submit" class="btn_blue float_right" id="destroyMissiles" value="Proceder">
+<input type="submit" value="{in_missiles_destroy_button}">
