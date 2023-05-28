@@ -680,20 +680,13 @@ class Missions extends Model
             );
         }
     }
+
     /**
      *
      * EXPEDITION
      *
      */
-
-    /**
-     *
-     *
-     * @param array $data Data to update
-     *
-     * @return void
-     */
-    public function updateFleetArrayById(array $data = [])
+    public function updateFleetArrayById(array $data = []): void
     {
         if (is_array($data)) {
             $this->db->query(
@@ -705,28 +698,42 @@ class Missions extends Model
         }
     }
 
-    /**
-     * Updates the fleet resources with what we found on the expedition
-     *
-     * @param array $data Data to update
-     *
-     * @return void
-     */
-    public function updateFleetResourcesById(array $data = [])
+    public function updateFleetResourcesById(int $fleetId, string $resource, int $amount): void
     {
-        if (is_array($data)) {
-            $this->db->query(
-                'UPDATE ' . FLEETS . ' AS f
-                INNER JOIN ' . PREMIUM . " AS pr ON pr.premium_user_id = f.fleet_owner SET
-                `fleet_resource_metal` = `fleet_resource_metal` + '" . $data['found']['metal'] . "',
-                `fleet_resource_crystal` = `fleet_resource_crystal` + '" . $data['found']['crystal'] . "',
-                `fleet_resource_deuterium` = `fleet_resource_deuterium` + '" . $data['found']['deuterium'] . "',
-                `premium_dark_matter` = `premium_dark_matter` + '" . $data['found']['darkmatter'] . "',
-                `fleet_mess` = '1'
-                WHERE `fleet_id` = '" . (int) $data['fleet_id'] . "';"
-            );
-        }
+        $this->db->query(
+            'UPDATE ' . FLEETS . " AS f SET
+            `fleet_resource_' . $resource . '` = `fleet_resource_' . $resource . '` + '" . $amount . "',
+            `fleet_mess` = '1'
+            WHERE `fleet_id` = '" . $fleetId . "';"
+        );
     }
+
+    public function updateDarkMatter(int $userId, int $darkMatter): void
+    {
+        $this->db->query(
+            'UPDATE ' . PREMIUM . " AS p SET
+            `premium_dark_matter` = `premium_dark_matter` + '" . $darkMatter . "'
+            WHERE `premium_user_id` = '" . $userId . "';"
+        );
+    }
+
+    public function getTopPlayerPoints(): int
+    {
+        return $this->db->queryFetch(
+            'SELECT MAX(us.user_statistic_total_points) AS total FROM `xgp_users_statistics` us;'
+        )['total'];
+    }
+
+    public function updateFleetEndTime(int $fleetId, int $fleetEndTime): void
+    {
+        $this->db->query(
+            'UPDATE ' . FLEETS . " AS f SET
+            `fleet_end_time` = '" . $fleetEndTime . "',
+            `fleet_mess` = '1'
+            WHERE `fleet_id` = '" . $fleetId . "';"
+        );
+    }
+
     /**
      *
      * MISSILE

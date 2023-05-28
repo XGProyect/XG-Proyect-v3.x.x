@@ -84,8 +84,5 @@ $lang = [
     'exp_status_fresh_2' => 'Registro en el diario de navegación del oficial de comunicación: Es una gran sensación ser el primero en un sector inexplorado.', // ok
 
     // old lines
-    'exp_blackholl_1' => 'La flota fue arrastrada hacia un agujero negro, esta parcialmente destruida.',
-    'exp_blackholl_2' => 'La flota fue arrastrada hacia un agujero negro, y fue completamente destruida!',
-    'exp_found_goods' => 'La flota ha descubierto una nave no tripulada! <br> Tus exploradores han recuperado %s de %s, %s de %s, %s de %s y %s de %s.',
     'exp_back_home' => 'Tu expedición regresó al hangar.',
 ];
