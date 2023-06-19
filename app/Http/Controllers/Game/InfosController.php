@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Game;
 use App\Core\BaseController;
 use App\Core\Enumerators\BuildingsEnumerator as Buildings;
 use App\Core\Enumerators\ResearchEnumerator as Research;
+use App\Core\Enumerators\DefensesEnumerator as Defenses;
 use App\Helpers\StringsHelper;
 use App\Helpers\UrlHelper;
 use App\Libraries\DevelopmentsLib;
@@ -70,7 +71,27 @@ class InfosController extends BaseController
         $parse['dpath'] = DPATH;
         $parse['name'] = $this->langs->language[$this->_resource[$this->_element_id]];
         $parse['image'] = $this->_element_id;
-        $parse['description'] = $this->langs->language['info'][$this->_resource[$this->_element_id]];
+        if ($this->_element_id == 44) {
+            $siloLevel = $this->planet[$this->_resource[44]];
+            $interplanetaryCapacityPerLevel = 5; // Capacidad de misiles interplanetarios por nivel
+            $antiballisticCapacityPerLevel = 10; // Capacidad de misiles antibalísticos por nivel
+
+            if ($siloLevel > 0) {
+                $interplanetaryCapacity = $siloLevel * $interplanetaryCapacityPerLevel;
+                $antiballisticCapacity = $siloLevel * $antiballisticCapacityPerLevel;
+            } else {
+                $interplanetaryCapacity = $interplanetaryCapacityPerLevel;
+                $antiballisticCapacity = $antiballisticCapacityPerLevel;
+            }
+
+            $parse['description'] = strtr($this->langs->language['info'][$this->_resource[Buildings::BUILDING_MISSILE_SILO]], [
+                '%s' => $siloLevel,
+                '%i' => $interplanetaryCapacity,
+                '%a' => $antiballisticCapacity
+            ]);
+        } else {
+            $parse['description'] = $this->langs->language['info'][$this->_resource[$this->_element_id]];
+        }
         $parse['table_head'] = '';
         $parse['table_data'] = '';
 
@@ -116,6 +137,11 @@ class InfosController extends BaseController
             if ($_POST) {
                 Functions::message($this->doFleetJump(), 'game.php?page=infos&gid=43', 2);
             }
+        } elseif ($this->_element_id == 44) {
+            $PageTPL = 'infos/info_missiles_destruction_general';
+            $TableHeadTPL = 'infos/info_missiles_destruction_header';
+            $TableTPL = 'infos/info_missiles_destruction_table';
+            $TableFooterTPL = 'infos/info_missiles_destruction_footer';
         } elseif ($this->_element_id == 124) {
             $PageTPL = 'infos/info_buildings_table';
             $TableHeadTPL = 'infos/info_astrophysics_header';
@@ -167,6 +193,8 @@ class InfosController extends BaseController
                 $parse['table_data'] = $this->astrophysics_table($TableTPL);
             } elseif ($this->_element_id == 42) {
                 $parse['table_data'] = $this->phalanxRange($TableTPL);
+            } elseif ($this->_element_id == 44) {
+                $parse['table_data'] = $this->showMissilesDestructionTable($TableTPL);
             } else {
                 $parse['table_data'] = $this->showProductionTable($TableTPL);
             }
@@ -203,6 +231,41 @@ class InfosController extends BaseController
         }
 
         $this->page->display($page);
+    }
+
+    private function showMissilesDestructionTable($template)
+    {
+        if (isset($_POST['form']) && $_POST['form'] === 'missiles') {
+            // Obtener los valores ingresados en los campos del formulario
+            $destroy_502 = (int) $_POST['destroy_502'];
+            $destroy_503 = (int) $_POST['destroy_503'];
+
+            // Validar los valores ingresados si es necesario
+            // ...
+
+            // Realizar la eliminación de los misiles
+            $antiballistic = min($destroy_502, $this->planet[$this->_resource[Defenses::defense_anti_ballistic_missile]]);
+            $interplanetary = min($destroy_503, $this->planet[$this->_resource[Defenses::defense_interplanetary_missile]]);
+
+            $this->infosModel->getDestroyMissiles($antiballistic, $interplanetary, $this->planet['planet_id']);
+
+            $this->planet[$this->_resource[Defenses::defense_anti_ballistic_missile]] -= $antiballistic;
+            $this->planet[$this->_resource[Defenses::defense_interplanetary_missile]] -= $interplanetary;
+
+            // Redireccionar a la página deseada
+            Functions::redirect('game.php?page=infos&gid=44');
+            exit();
+        }
+
+        $template = 'infos/info_missiles_destruction_table';
+        $parse['defense_anti-ballistic_missile'] = $this->langs->line('defense_anti-ballistic_missile');
+        $parse['defense_interplanetary_missile'] = $this->langs->line('defense_interplanetary_missile');
+
+        $parse['anti_ballistic'] = $this->planet[$this->_resource[Defenses::defense_anti_ballistic_missile]];
+        $parse['interplanetary'] = $this->planet[$this->_resource[Defenses::defense_interplanetary_missile]];
+        $Result = $this->template->set($template, $parse);
+
+        return $Result;
     }
 
     /**

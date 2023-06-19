@@ -74,4 +74,14 @@ class Infos extends Model
                 AND m.`planet_user_id` = '" . $user_id . "';"
         );
     }
+
+    public function getDestroyMissiles(int $antiballistic, int $interplanetary, int $planet)
+    {
+        $this->db->query(
+            'UPDATE `' . DEFENSES . "` SET
+                `defense_anti-ballistic_missile` = `defense_anti-ballistic_missile` - '" . $antiballistic . "',
+                `defense_interplanetary_missile` = `defense_interplanetary_missile` - '" . $interplanetary . "'
+                WHERE `defense_planet_id` = '" . $planet . "';"
+        );
+    }
 }
