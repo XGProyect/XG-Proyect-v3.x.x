@@ -1072,7 +1072,7 @@ class AllianceController extends BaseController
      */
     private function getAdminTagSection()
     {
-        $tag = filter_input(INPUT_POST, 'nametag', FILTER_UNSAFE_RAW);
+        $tag = filter_input(INPUT_POST, 'tag', FILTER_UNSAFE_RAW);
 
         if (isset($tag)) {
             if (strlen($tag) < 3 or strlen($tag) > 8) {
@@ -1092,7 +1092,7 @@ class AllianceController extends BaseController
         }
 
         return $this->template->set(
-            'alliance/alliance_admin_rename',
+            'alliance/alliance_admin_rename_tag',
             array_merge(
                 $this->langs->language,
                 [
