@@ -250,7 +250,8 @@ class AllianceController extends BaseController
                 'members' => $this->getMemberslistSection(),
                 'description' => $this->buildDescriptionBlock(),
                 'text' => $this->buildTextBlock(),
-                'leave' => $this->buildLeaveBlock(),
+                'alliance_request' => $this->buildRequestsBlock()['detail_content']
+                // 'leave' => $this->buildLeaveBlock(),
             ], $this->langs->language)
         );
     }
@@ -723,6 +724,7 @@ class AllianceController extends BaseController
                     'alliance_rank' => $this->getAdminRightsSection(),
                     'alliance_tag' => $this->getAdminTagSection(),
                     'alliance_name' => $this->getAdminNameSection(),
+                    'alliance_request' => $this->buildRequestsBlock()['detail_content']
                 ]
             )
         );
@@ -1298,10 +1300,7 @@ class AllianceController extends BaseController
         )['total_requests'];
 
         if ($this->alliance->hasAccess(AllianceRanks::APPLICATION_MANAGEMENT) && $count != 0) {
-            $requests = UrlHelper::setUrl(
-                'game.php?page=alliance&mode=admin&edit=requests',
-                $count . ' ' . $this->langs->line('al_new_requests')
-            );
+            $requests = '(' . $count . ')';
         }
 
         return [

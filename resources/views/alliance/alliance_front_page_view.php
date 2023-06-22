@@ -8,7 +8,7 @@
             <th style="width:25%"><a href="game.php?page=alliance">{al_alliance_overview}</a></th>
             <th style="width:25%"><a href="game.php?page=alliance&mode=admin&edit=ally">{al_alliance_management}</a></th>
             <th style="width:25%"><a href="game.php?page=alliance&mode=circular">{al_alliace_communication}</a></th>
-            <th style="width:25%"><a href="game.php?page=alliance&mode=apply">{al_alliance_application}</a></th>
+            <th style="width:25%"><a href="game.php?page=alliance&mode=admin&edit=requests">{al_alliance_application} {alliance_request}</a></th>
         </tr>
         {image}
         <tr>
