@@ -630,7 +630,7 @@ class AllianceController extends BaseController
             'options' => FILTER_UNSAFE_RAW,
             'owner_range' => FILTER_UNSAFE_RAW,
             'newcomer_range' => FILTER_UNSAFE_RAW,
-            'web' => FILTER_VALIDATE_URL,
+            'homepage' => FILTER_VALIDATE_URL,
             'image' => FILTER_VALIDATE_URL,
             'request_notallow' => [
                 'filter' => FILTER_SANITIZE_NUMBER_INT,
@@ -643,7 +643,7 @@ class AllianceController extends BaseController
                 $this->getAllianceId(),
                 [
                     'alliance_owner_range' => ($post['owner_range'] ? StringsHelper::escapeString($post['owner_range']) : ''),
-                    'alliance_web' => ($post['web'] ? StringsHelper::escapeString($post['web']) : ''),
+                    'alliance_web' => ($post['homepage'] ? StringsHelper::escapeString($post['homepage']) : ''),
                     'alliance_image' => ($post['image'] ? StringsHelper::escapeString($post['image']) : ''),
                     'alliance_request_notallow' => $post['request_notallow'],
                 ]

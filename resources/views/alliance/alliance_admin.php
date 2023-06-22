@@ -85,7 +85,7 @@
                     <table width="100%">
                         <tr>
                             <th style="text-align: left;">{al_web_site}</th>
-                            <th style="text-align: left;"><input type="text" name="web" value="{alliance_web}" size="70"></th>
+                            <th style="text-align: left;"><input type="text" name="homepage" value="{alliance_web}" size="70"></th>
                         </tr>
                         <tr>
                             <th style="text-align: left;">{al_manage_image}</th>
