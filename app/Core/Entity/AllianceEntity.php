@@ -140,4 +140,14 @@ class AllianceEntity extends Entity
     {
         return $this->data['alliance_members'];
     }
+
+    /**
+     * Return the alliance created date
+     * 
+     * @return string
+     */
+    public function getCreatedAlliance()
+    {
+        return $this->data['alliance_register_time'];
+    }
 }
