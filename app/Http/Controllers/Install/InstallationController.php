@@ -407,6 +407,14 @@ class InstallationController extends BaseController
         $data .= "defined('DB_NAME') ? null : define('DB_NAME', '" . $this->db_name . "');\n";
         $data .= "defined('DB_PREFIX') ? null : define('DB_PREFIX', '" . $this->db_prefix . "');\n";
         $data .= "defined('SECRETWORD') ? null : define('SECRETWORD', 'xgp-" . StringsHelper::randomString(16) . "');\n";
+        $data .= "\n//This is added to allow API pull from database\n";
+        $data .= '$dsn = "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME;' . "\n";
+        $data .= '$options = [' . "\n";
+        $data .= "    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,\n";
+        $data .= "    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,\n";
+        $data .= "    PDO::ATTR_EMULATE_PREPARES   => false,\n";
+        $data .= "];\n";
+        $data .= '$pdo = new PDO($dsn, DB_USER, DB_PASS, $options);' . "\n";
         $data .= '?>';
 
         // create the new file
