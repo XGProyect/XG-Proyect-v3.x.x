@@ -6,6 +6,8 @@ $stmt = $pdo->prepare("SELECT user_id, user_name, user_authlevel, user_ally_id F
 $stmt->execute();
 $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+$final_json_colored = "";
+
 // Process and transform user data
 $playerData = [];
 foreach ($users as $user) {
@@ -75,30 +77,47 @@ $playerInfo['Research Points'] = number_format(intval($statistics['user_statisti
 $key = 'PlayerID_' . $user['user_id'];
 $playerData[$key] = $playerInfo;
 
+// Output Pretty JSON
+$playerJson = json_encode([$key => $playerInfo], JSON_PRETTY_PRINT);
+
+    $json_colored = preg_replace_callback('/("(\\\\u[a-zA-Z0-9]{4}|\\\\.|[^"\\\\])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+-]?\d+)?)/', function ($match) use ($playerType) {
+        $cls = 'number';
+        if (preg_match('/^"/', $match[0])) {
+            if (preg_match('/:$/', $match[0])) {
+                $cls = 'key ' . $playerType; 
+            } else {
+                $cls = 'string ' . $playerType;
+            }
+        } elseif (preg_match('/(true|false|null)\b/', $match[0])) {
+            $cls = 'bool';
+        }
+        return "<span class=\"$cls\">$match[0]</span>";
+    }, $playerJson);
+
+    $final_json_colored .= $json_colored . ",\n";
 }
 
-// Output Pretty JSON
-$json = json_encode($playerData, JSON_PRETTY_PRINT);
+$final_json_colored = rtrim($final_json_colored, ",\n");
+$json_no_brackets = preg_replace('/[{}\[\]]/', '', $final_json_colored);
 
-// Remove curly braces and square brackets from the JSON
-$json_no_brackets = preg_replace('/[{}\[\]]/', '', $json);
-
-// Output the styled JSON in HTML
+// Output the styled JSON without curly braces and square brackets
 echo <<<HTML
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Players API Result</title>
+    <title>Players API Results</title>
     <style>
         body { font-family: Arial, sans-serif; margin: 20px; }
         pre { background-color: #f5f5f5; padding: 10px; border: 1px solid #ddd; }
         code { color: #333; }
         .key { color: blue; }
         .string { color: green; }
-        .number { color: red; }
+        .number { color: green; }
         .bool { color: #955; }
+        .string.Admin { color: red; }
+        .string.GO, .string.SGO { color: orange; }
     </style>
 </head>
 <body>
@@ -106,4 +125,5 @@ echo <<<HTML
 </body>
 </html>
 HTML;
+
 ?>

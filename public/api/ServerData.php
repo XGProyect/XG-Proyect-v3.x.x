@@ -45,7 +45,7 @@ echo <<<HTML
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Server Settings API Result</title>
+    <title>Universe Settings API Result</title>
     <style>
         body { font-family: Arial, sans-serif; margin: 20px; }
         pre { background-color: #f5f5f5; padding: 10px; border: 1px solid #ddd; }
