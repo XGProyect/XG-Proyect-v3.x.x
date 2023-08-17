@@ -256,7 +256,7 @@ class BattleReport
                         $metal += $lost[0];
                         $crystal += $lost[1];
                     }
-                    $factor = constant(strtoupper($role) . '_DEBRIS_FACTOR');
+                    $factor = constant(strtoupper($role) . 'SHIPS_DEBRIS_FACTOR');
                     $sendMetal += $metal * $factor;
                     $sendCrystal += $crystal * $factor;
                 }
@@ -278,7 +278,7 @@ class BattleReport
                         $metal += $lost[0];
                         $crystal += $lost[1];
                     }
-                    $factor = constant(strtoupper($role) . '_DEBRIS_FACTOR');
+                    $factor = constant(strtoupper($role) . 'DEFENSE_DEBRIS_FACTOR');
                     $sendMetal += $metal * $factor;
                     $sendCrystal += $crystal * $factor;
                 }
