@@ -40,6 +40,7 @@ class PhysicShot
     private $bouncedDamage = 0;
     private $hullDamage = 0;
     private $cellDestroyed = 0;
+    private $fighters;
 
     /**
      * PhysicShot::__construct()
