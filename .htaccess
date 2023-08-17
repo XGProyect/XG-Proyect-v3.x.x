@@ -5,9 +5,13 @@
     RewriteCond %{REQUEST_URI}::$1 ^(.*?/)(.*)::\2$
     RewriteRule ^(.*)$ - [E=BASE:%1]
 
+    # redirect requests for API to api.php
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^api/([^/]+)/?$ %{ENV:BASE}api.php?endpoint=$1 [L,QSA]
+
     # redirect requests to public folder
     RewriteCond %{THE_REQUEST} /public/([^\s?]*) [NC]
     RewriteRule ^ %1 [L,NE,R=302]
-
-    RewriteRule ^((?!public/).*)$ %{ENV:BASE}/public/$1 [L,NC]
+    RewriteRule ^((?!public/).*)$ %{ENV:BASE}public/$1 [L,NC]
 </IfModule>
