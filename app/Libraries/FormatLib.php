@@ -3,18 +3,22 @@
 namespace App\Libraries;
 
 use App\Core\Enumerators\ImportanceEnumerator as Importance;
+use App\Core\Language;
 use App\Helpers\UrlHelper;
 use DateTime;
+use CiLang;
 
 class FormatLib
 {
-    /**
-     * Convert or format a time in seconds to its string representation. Ex.: weeks, days, hours, minutes, seconds
-     *
-     * @param int $input_seconds
-     *
-     * @return string
-     */
+    private Language $langs;
+
+    private static function loadLanguage(array $requiredLang): CiLang
+    {
+        $lang = new Language();
+
+        return $lang->loadLang($requiredLang, true);
+    }
+
     public static function prettyTime(float $input_seconds): string
     {
         $sec_min = 60;
@@ -26,19 +30,19 @@ class FormatLib
         $weeks = floor($input_seconds / $sec_week);
 
         // Extract days
-        $daysSeconds = (int)$input_seconds % $sec_week;
+        $daysSeconds = (int) $input_seconds % $sec_week;
         $days = floor($daysSeconds / $sec_day);
 
         // Extract hours
-        $hourSeconds = (int)$input_seconds % $sec_day;
+        $hourSeconds = (int) $input_seconds % $sec_day;
         $hours = floor($hourSeconds / $sec_hour);
 
         // Extract minutes
-        $minuteSeconds = (int)$hourSeconds % $sec_hour;
+        $minuteSeconds = (int) $hourSeconds % $sec_hour;
         $minutes = floor($minuteSeconds / $sec_min);
 
         // Extract the remaining seconds
-        $remainingSeconds = (int)$minuteSeconds % $sec_min;
+        $remainingSeconds = (int) $minuteSeconds % $sec_min;
         $seconds = ceil($remainingSeconds);
 
         // Format and return
@@ -217,6 +221,39 @@ class FormatLib
         }
 
         return number_format($n, 0, ',', '.');
+    }
+
+    public static function xgNumberGetHumanReadable($value, $shortForm = false, $precision = 3)
+    {
+        $lang = static::loadLanguage(['game/global']);
+
+        $value = floor($value);
+        $unit = '';
+
+        if ($shortForm) {
+            if ($value >= 1000000000) {
+                $unit = $lang->line('unit_milliard');
+                $value = $value / 1000000000;
+            } elseif ($value >= 1000000) {
+                $unit = $lang->line('unit_mega');
+                $value = $value / 1000000;
+            }
+        }
+
+        $floorWithPrecision = function ($value, $precision) {
+            return floor($value * pow(10, $precision)) / pow(10, $precision);
+        };
+
+        $value = $floorWithPrecision($value, $precision);
+
+        while ($precision >= 0) {
+            if ($floorWithPrecision($value, $precision - 1) != $value) {
+                break;
+            }
+            $precision = $precision - 1;
+        }
+
+        return number_format($value, $precision, $lang->line('decimal_point'), $lang->line('thousand_seperator')) . $unit;
     }
 
     /**

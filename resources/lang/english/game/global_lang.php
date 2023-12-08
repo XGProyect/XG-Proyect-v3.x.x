@@ -23,6 +23,7 @@ $lang = [
         3 => '(M)',
     ],
 
+
     // galaxy objects
     'planet' => 'Planet',
     'colony' => 'Colony',
@@ -58,4 +59,11 @@ $lang = [
         'second' => 'second',
         'seconds' => 'seconds',
     ],
+
+    'unit_mega' => 'Mn',
+    'unit_kilo' => 'K',
+    'unit_milliard' => 'Bn',
+
+    'decimal_point' => '.',
+    'thousand_seperator' => ',',
 ];

@@ -58,4 +58,12 @@ $lang = [
         'second' => 'segundo',
         'seconds' => 'segundos',
     ],
+
+
+    'unit_mega' => 'M',
+    'unit_kilo' => 'K',
+    'unit_milliard' => 'Mrd',
+
+    'decimal_point' => ',',
+    'thousand_seperator' => '.',
 ];
