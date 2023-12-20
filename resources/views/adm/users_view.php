@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div class="container-fluid px-4 pt-3">
     {alert}
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
@@ -10,9 +10,9 @@
         <div class="col-lg-12">
             <div class="card shadow mb-4">
                 <!-- Card Header - Accordion -->
-                <a href="#collapseGeneral" class="d-block card-header py-3" data-toggle="collapse" role="button"
+                <a href="#collapseGeneral" class="d-block card-header py-3" data-bs-toggle="collapse" role="button"
                     aria-expanded="true" aria-controls="collapseGeneral">
-                    <h6 class="m-0 font-weight-bold text-primary">{us_search}</h6>
+                    <h6 class="m-0 fw-bold text-primary">{us_search}</h6>
                 </a>
                 <!-- Card Content - Collapse -->
                 <div class="collapse show" id="collapseGeneral" style="">
@@ -34,7 +34,7 @@
                                             {user_rank}
                                         </button>
                                         <button class="btn btn-primary dropdown-toggle{status_box}"
-                                            data-toggle="dropdown" href="#">
+                                            data-bs-toggle="dropdown" href="#">
                                             <span class="caret"></span>
                                         </button>
                                         <div class="dropdown-menu">
@@ -71,7 +71,7 @@
                                 </div>
                             </div>
                         </form>
-                        <div class="text-center">
+                        <div class="text-center mt-2">
                             <{tag} class="btn btn-info btn-icon-split {status}"
                                 href="admin.php?page=users&type=info&user={user}">
                                 <span class="icon text-white-50">

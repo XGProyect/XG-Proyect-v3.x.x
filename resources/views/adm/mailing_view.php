@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div class="container-fluid px-4 pt-3">
     {alert}
     <form action="" method="POST">
         <!-- Page Heading -->
@@ -17,9 +17,9 @@
             <div class="col-lg-6">
                 <div class="card shadow mb-4">
                     <!-- Card Header - Accordion -->
-                    <a href="#collapseGeneral" class="d-block card-header py-3" data-toggle="collapse" role="button"
+                    <a href="#collapseGeneral" class="d-block card-header py-3" data-bs-toggle="collapse" role="button"
                         aria-expanded="true" aria-controls="collapseGeneral">
-                        <h6 class="m-0 font-weight-bold text-primary">{ma_general}</h6>
+                        <h6 class="m-0 fw-bold text-primary">{ma_general}</h6>
                     </a>
                     <!-- Card Content - Collapse -->
                     <div class="collapse show" id="collapseGeneral" style="">
@@ -34,7 +34,7 @@
                                                 </span>
                                             </td>
                                             <td>
-                                                <select class="form-control"  name="mailing_protocol">
+                                                <select class="form-control form-select"  name="mailing_protocol">
                                                     {protocol_options}
                                                     <option value="{value}"{selected}>{option}</option>
                                                     {/protocol_options}
@@ -51,9 +51,9 @@
             <div class="col-lg-6">
                 <div class="card shadow mb-4">
                     <!-- Card Header - Accordion -->
-                    <a href="#collapseOtherParameters" class="d-block card-header py-3" data-toggle="collapse"
+                    <a href="#collapseOtherParameters" class="d-block card-header py-3" data-bs-toggle="collapse"
                         role="button" aria-expanded="true" aria-controls="collapseOtherParameters">
-                        <h6 class="m-0 font-weight-bold text-primary">{ma_smtp_title}</h6>
+                        <h6 class="m-0 fw-bold text-primary">{ma_smtp_title}</h6>
                     </a>
                     <!-- Card Content - Collapse -->
                     <div class="collapse show" id="collapseOtherParameters" style="">
@@ -129,7 +129,7 @@
                                                 </span>
                                             </td>
                                             <td>
-                                                <select class="form-control" name="mailing_smtp_crypto">
+                                                <select class="form-control form-select" name="mailing_smtp_crypto">
                                                     {smtp_crypto_options}
                                                     <option value="{value}"{selected}>{option}</option>
                                                     {/smtp_crypto_options}

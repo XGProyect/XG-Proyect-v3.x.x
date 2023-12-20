@@ -342,20 +342,27 @@ class InstallationController extends BaseController
      *
      * @return boolean
      */
-    private function tablesExists()
+    private function tablesExists(): bool
     {
         $result = $this->installationModel->getListOfTables(DB_NAME);
         $arr = [];
 
-        foreach ($result as $row) {
-            foreach ($row as $table) {
-                if (strpos($table, DB_PREFIX) !== false) {
-                    $arr[] = $table;
+        // Check if $result is an array or an object before proceeding
+        if (is_array($result) || is_object($result)) {
+            foreach ($result as $row) {
+                foreach ($row as $table) {
+                    if (strpos($table, DB_PREFIX) !== false) {
+                        $arr[] = $table;
+                    }
                 }
             }
+            return (count($arr) > 0);
+        } else {
+            // Handle the case where $result is not of expected type
+            // For example, log the error or handle it in another appropriate way
+            // You can return false or throw an exception here, depending on your use case
+            return false;
         }
-
-        return (count($arr) > 0);
     }
 
     /**

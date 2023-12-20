@@ -5,30 +5,29 @@
         });
     });
 </script>
-<div class="navbar navbar-inverse navbar-fixed-top">
-    <div class="navbar-inner">
-        <div class="container-fluid">
-            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </a>
-            <a class="brand">XG Proyect</a>
-            <div class="nav-collapse collapse">
-                <p class="navbar-text pull-right">
-                <div style="float:right;height:0px;padding:0px;margin:0px">
-                    <form name="change_language" id="change_language" method="post" action="">
-                        <select id="language" name="language" onchange="submit()">
-                            <option selected disabled>{ins_language_select}</option>
-                            {language_select}
-                        </select>
-                    </form>
-                </div>
-                </p>
-                <ul class="nav">
-                    {menu_items}
-                </ul>
-            </div><!--/.nav-collapse -->
+<nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark p-0" aria-label="Main navigation">
+    <div class="container-fluid">
+
+        <a class="navbar-brand" href="admin.php?page=home">
+            <img src="https://xgproyect.org/wp-content/uploads/2019/10/xgp-new-logo-white.png" alt="XG Proyect Logo"
+                title="XG Proyect" width="150px">
+        </a>
+
+        <button class="navbar-toggler p-0 border-0" type="button" id="navbarSideCollapse"
+            aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="navbar-collapse offcanvas-collapse" id="navbarsExampleDefault">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                {menu_items}
+            </ul>
+            <form name="change_language" id="change_language" method="post" action="" class="d-flex" role="search">
+                <select id="language" name="language" onchange="submit()" class="form-control form-select">
+                    <option selected disabled>{ins_language_select}</option>
+                    {language_select}
+                </select>
+            </form>
         </div>
     </div>
-</div>
+</nav>

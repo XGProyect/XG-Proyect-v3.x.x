@@ -129,7 +129,11 @@ class Page
         $page .= $current_page;
         $page .= $this->template->set(
             'install/simple_footer',
-            ['year' => $this->current_year]
+            [
+                'admin_public_path' => strtr(SYSTEM_ROOT, ['install' => '']) . ADMIN_PUBLIC_PATH,
+                'version' => SYSTEM_VERSION,
+                'year' => $this->current_year
+            ]
         );
 
         // Show result page
@@ -259,7 +263,7 @@ class Page
                 $active_block = $data[1];
             }
 
-            $items .= '<a class="collapse-item' . $active . '" href="' . ADM_URL . 'admin.php?page=' . $data[0] . '"  ' . $extra . '>' . $lang->line($data[0]) . '</a>';
+            $items .= '<a class="nav-link' . $active . '" href="' . ADM_URL . 'admin.php?page=' . $data[0] . '"  ' . $extra . '>' . $lang->line($data[0]) . '</a>';
 
             $parse_block[$data[1]] = $items;
         }
@@ -354,8 +358,7 @@ class Page
             'install/simple_header',
             [
                 'title' => 'Install',
-                'js_path' => '../js/',
-                'css_path' => '../css/',
+                'admin_public_path' => strtr(SYSTEM_ROOT, ['install' => '']) . ADMIN_PUBLIC_PATH,
             ]
         );
     }
@@ -386,12 +389,12 @@ class Page
         foreach ($pages as $key => $data) {
             if ($data[2] != '') {
                 // URL
-                $items .= '<li' . ($current_page == $data[0] ? ' class="active"' : '') .
-                    '><a href="index.php?page=' . $data[0] . '&mode=' . $data[2] . '">' . $data[1] . '</a></li>';
+                $items .= '<li class="nav-item' . ($current_page == $data[0] ? ' active' : '') .
+                    '"><a class="nav-link" href="index.php?page=' . $data[0] . '&mode=' . $data[2] . '">' . $data[1] . '</a></li>';
             } else {
                 // URL
-                $items .= '<li' . ($current_page == $data[0] ? ' class="active"' : '') .
-                    '><a href="index.php?page=' . $data[0] . '">' . $data[1] . '</a></li>';
+                $items .= '<li class="nav-item' . ($current_page == $data[0] ? ' active' : '') .
+                    '"><a class="nav-link" href="index.php?page=' . $data[0] . '">' . $data[1] . '</a></li>';
             }
         }
 
@@ -426,8 +429,10 @@ class Page
         // BUILD THE MENU
         foreach ($steps as $key => $data) {
             // URL
-            $items .= '<li' . ($current_mode == $data[0] ? ' class="active"' : '') .
-                '><a href="#">' . $data[1] . '</a></li>';
+            $items .= '<li class="nav-item' . ($current_mode == $data[0] ? ' active' : '') .
+                '"><a href="#" class="nav-link ' . ($current_mode == $data[0] ? ' active' : '') .
+                ' rounded-5" id="home-tab2" data-bs-toggle="tab" type="button" role="tab"
+                aria-selected="true">' . $data[1] . '</a></li>';
         }
 
         // PARSE THE MENU AND OTHER DATA
@@ -559,7 +564,7 @@ class Page
         $menu_block3 = '';
         $modules_array = explode(';', Functions::readConfig('modules'));
         $tota_rank = $this->current_user['user_statistic_total_rank'] == '' ?
-        $this->current_planet['stats_users'] : $this->current_user['user_statistic_total_rank'];
+            $this->current_planet['stats_users'] : $this->current_user['user_statistic_total_rank'];
         $pages = [
             ['overview', $lang->line('lm_overview'), '', 'FFF', '', '1', '1'],
             ['empire', $lang->line('lm_empire'), '', 'FFF', '', '1', '2'],

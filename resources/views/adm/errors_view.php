@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div class="container-fluid px-4 pt-3">
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">{er_title}</h1>
@@ -14,9 +14,9 @@
         <div class="col-lg-12">
             <div class="card shadow mb-4">
                 <!-- Card Header - Accordion -->
-                <a href="#collapseErrors" class="d-block card-header py-3" data-toggle="collapse" role="button"
+                <a href="#collapseErrors" class="d-block card-header py-3" data-bs-toggle="collapse" role="button"
                     aria-expanded="true" aria-controls="collapseErrors">
-                    <h6 class="m-0 font-weight-bold text-primary">{er_error_list}</h6>
+                    <h6 class="m-0 fw-bold text-primary">{er_error_list}</h6>
                 </a>
                 <!-- Card Content - Collapse -->
                 <div class="collapse show" id="collapseErrors" style="">

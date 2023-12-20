@@ -1,8 +1,8 @@
-<div class="container-fluid">
+<div class="container-fluid px-4 pt-3">
 
     {alert}
     <div class="alert {second_style}">
-        <button type="button" class="close" data-dismiss="alert">×</button>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="X"></button>
         <strong>{error_type}</strong>
         <br>
         {error_message}
@@ -15,9 +15,9 @@
 
     <div class="card shadow mb-4">
         <!-- Card Header - Accordion -->
-        <a href="#collapseStatistics" class="d-block card-header py-3" data-toggle="collapse" role="button"
+        <a href="#collapseStatistics" class="d-block card-header py-3" data-bs-toggle="collapse" role="button"
             aria-expanded="true" aria-controls="collapseStatistics">
-            <h6 class="m-0 font-weight-bold text-primary">{hm_server_statistics}</h6>
+            <h6 class="m-0 fw-bold text-primary">{hm_server_statistics}</h6>
         </a>
         <!-- Card Content - Collapse -->
         <div class="collapse show" id="collapseStatistics" style="">
@@ -70,9 +70,9 @@
 
     <div class="card shadow mb-4">
         <!-- Card Header - Accordion -->
-        <a href="#collapseCredits" class="d-block card-header py-3" data-toggle="collapse" role="button"
+        <a href="#collapseCredits" class="d-block card-header py-3" data-bs-toggle="collapse" role="button"
             aria-expanded="true" aria-controls="collapseCredits">
-            <h6 class="m-0 font-weight-bold text-primary">{hm_credits}</h6>
+            <h6 class="m-0 fw-bold text-primary">{hm_credits}</h6>
         </a>
         <!-- Card Content - Collapse -->
         <div class="collapse show" id="collapseCredits">
@@ -90,7 +90,8 @@
                     <br>
                     <a href="https://codeigniter.com/" target="_blank">CodeIgniter | Lang & Parser</a>
                     <br>
-                    <a href="https://startbootstrap.com/themes/sb-admin-2/" target="_blank">Start Bootstrap | SB Admin 2</a>
+                    <a href="https://startbootstrap.com/themes/sb-admin-2/" target="_blank">Start Bootstrap | SB Admin
+                        2</a>
                     <br>
                     <a href="https://github.com/PHPMailer/PHPMailer" target="_blank">PHPMailer</a>
                     <br>

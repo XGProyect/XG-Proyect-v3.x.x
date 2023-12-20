@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div class="container-fluid px-4 pt-3">
     {alert}
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
@@ -10,9 +10,9 @@
         <div class="col-lg-6">
             <div class="card shadow mb-4">
                 <!-- Card Header - Accordion -->
-                <a href="#collapseMakeUser" class="d-block card-header py-3" data-toggle="collapse" role="button"
+                <a href="#collapseMakeUser" class="d-block card-header py-3" data-bs-toggle="collapse" role="button"
                     aria-expanded="true" aria-controls="collapseMakeUser">
-                    <h6 class="m-0 font-weight-bold text-primary">{mk_user_title}</h6>
+                    <h6 class="m-0 fw-bold text-primary">{mk_user_title}</h6>
                 </a>
                 <!-- Card Content - Collapse -->
                 <div class="collapse" id="collapseMakeUser" style="">
@@ -40,7 +40,7 @@
                                     <tr>
                                         <td>{mk_user_level}</td>
                                         <td>
-                                            <select class="form-control" name="authlevel">
+                                            <select class="form-control form-select" name="authlevel">
                                                 {user_levels}
                                                 <option value="{id}">{name}</option>
                                                 {/user_levels}
@@ -82,9 +82,9 @@
         <div class="col-lg-6">
             <div class="card shadow mb-4">
                 <!-- Card Header - Accordion -->
-                <a href="#collapseMakeAlliance" class="d-block card-header py-3" data-toggle="collapse" role="button"
+                <a href="#collapseMakeAlliance" class="d-block card-header py-3" data-bs-toggle="collapse" role="button"
                     aria-expanded="true" aria-controls="collapseMakeAlliance">
-                    <h6 class="m-0 font-weight-bold text-primary">{mk_alliance_title}</h6>
+                    <h6 class="m-0 fw-bold text-primary">{mk_alliance_title}</h6>
                 </a>
                 <!-- Card Content - Collapse -->
                 <div class="collapse" id="collapseMakeAlliance" style="">
@@ -104,7 +104,7 @@
                                     <tr>
                                         <td>{mk_alliance_founder}</td>
                                         <td>
-                                            <select class="form-control" name="founder">
+                                            <select class="form-control form-select" name="founder">
                                                 <option value="0">-</option>
                                                 {founders_combo}
                                             </select>
@@ -131,9 +131,9 @@
         <div class="col-lg-6">
             <div class="card shadow mb-4">
                 <!-- Card Header - Accordion -->
-                <a href="#collapseMakePlanet" class="d-block card-header py-3" data-toggle="collapse" role="button"
+                <a href="#collapseMakePlanet" class="d-block card-header py-3" data-bs-toggle="collapse" role="button"
                     aria-expanded="true" aria-controls="collapseMakePlanet">
-                    <h6 class="m-0 font-weight-bold text-primary">{mk_planet_title}</h6>
+                    <h6 class="m-0 fw-bold text-primary">{mk_planet_title}</h6>
                 </a>
                 <!-- Card Content - Collapse -->
                 <div class="collapse" id="collapseMakePlanet" style="">
@@ -145,7 +145,7 @@
                                     <tr>
                                         <td>{mk_planet_user}</td>
                                         <td>
-                                            <select class="form-control" name="user">
+                                            <select class="form-control form-select" name="user">
                                                 <option value="0">-</option>
                                                 {users_combo}
                                             </select>
@@ -200,9 +200,9 @@
         <div class="col-lg-6">
             <div class="card shadow mb-4">
                 <!-- Card Header - Accordion -->
-                <a href="#collapseMakeMoon" class="d-block card-header py-3" data-toggle="collapse" role="button"
+                <a href="#collapseMakeMoon" class="d-block card-header py-3" data-bs-toggle="collapse" role="button"
                     aria-expanded="true" aria-controls="collapseMakeMoon">
-                    <h6 class="m-0 font-weight-bold text-primary">{mk_moon_title}</h6>
+                    <h6 class="m-0 fw-bold text-primary">{mk_moon_title}</h6>
                 </a>
                 <!-- Card Content - Collapse -->
                 <div class="collapse" id="collapseMakeMoon" style="">
@@ -214,7 +214,7 @@
                                     <tr>
                                         <td>{mk_moon_planet}</td>
                                         <td>
-                                            <select class="form-control" name="planet">
+                                            <select class="form-control form-select" name="planet">
                                                 <option value="0">-</option>
                                                 {planets_combo}
                                             </select>
