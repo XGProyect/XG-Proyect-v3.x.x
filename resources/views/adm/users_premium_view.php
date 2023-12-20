@@ -1,8 +1,8 @@
 <div class="card shadow mb-4">
     <!-- Card Header - Accordion -->
-    <a href="#collapsePremium" class="d-block card-header py-3" data-toggle="collapse" role="button"
+    <a href="#collapsePremium" class="d-block card-header py-3" data-bs-toggle="collapse" role="button"
         aria-expanded="true" aria-controls="collapsePremium">
-        <h6 class="m-0 font-weight-bold text-primary">{premium}</h6>
+        <h6 class="m-0 fw-bold text-primary">{premium}</h6>
     </a>
     <!-- Card Content - Collapse -->
     <div class="collapse show" id="collapsePremium" style="">
@@ -26,7 +26,7 @@
                                 <span class="small_font bold_font {status_style}">{status}</span>
                             </td>
                             <td>
-                                <select name="{field}" class="form-control">
+                                <select name="{field}" class="form-control form-select">
                                     {combo}
                                 </select>
                             </td>

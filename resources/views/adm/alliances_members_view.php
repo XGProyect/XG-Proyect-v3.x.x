@@ -1,8 +1,8 @@
 <div class="card shadow mb-4">
     <!-- Card Header - Accordion -->
-    <a href="#collapseMembers" class="d-block card-header py-3" data-toggle="collapse" role="button"
+    <a href="#collapseMembers" class="d-block card-header py-3" data-bs-toggle="collapse" role="button"
         aria-expanded="true" aria-controls="collapseMembers">
-        <h6 class="m-0 font-weight-bold text-primary">{al_alliance_members}</h6>
+        <h6 class="m-0 fw-bold text-primary">{al_alliance_members}</h6>
     </a>
     <!-- Card Content - Collapse -->
     <div class="collapse show" id="collapseMembers" style="">

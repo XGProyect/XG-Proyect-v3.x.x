@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div class="container-fluid px-4 pt-3">
     {alert}
     <form name="frm_reset" action="" method="post">
         <!-- Page Heading -->
@@ -11,9 +11,9 @@
             <div class="col-lg-6">
                 <div class="card shadow mb-4">
                     <!-- Card Header - Accordion -->
-                    <a href="#collapseGeneral" class="d-block card-header py-3" data-toggle="collapse" role="button"
+                    <a href="#collapseGeneral" class="d-block card-header py-3" data-bs-toggle="collapse" role="button"
                         aria-expanded="true" aria-controls="collapseGeneral">
-                        <h6 class="m-0 font-weight-bold text-primary">{re_general}</h6>
+                        <h6 class="m-0 fw-bold text-primary">{re_general}</h6>
                     </a>
                     <!-- Card Content - Collapse -->
                     <div class="collapse show" id="collapseGeneral" style="">
@@ -78,9 +78,9 @@
             <div class="col-lg-6">
                 <div class="card shadow mb-4">
                     <!-- Card Header - Accordion -->
-                    <a href="#collapseBuildings" class="d-block card-header py-3" data-toggle="collapse" role="button"
+                    <a href="#collapseBuildings" class="d-block card-header py-3" data-bs-toggle="collapse" role="button"
                         aria-expanded="true" aria-controls="collapseBuildings">
-                        <h6 class="m-0 font-weight-bold text-primary">{re_buldings}</h6>
+                        <h6 class="m-0 fw-bold text-primary">{re_buldings}</h6>
                     </a>
                     <!-- Card Content - Collapse -->
                     <div class="collapse show" id="collapseBuildings" style="">
@@ -115,9 +115,9 @@
                 </div>
                 <div class="card shadow mb-4">
                     <!-- Card Header - Accordion -->
-                    <a href="#collapseResearch" class="d-block card-header py-3" data-toggle="collapse" role="button"
+                    <a href="#collapseResearch" class="d-block card-header py-3" data-bs-toggle="collapse" role="button"
                         aria-expanded="true" aria-controls="collapseResearch">
-                        <h6 class="m-0 font-weight-bold text-primary">{re_inve_ofis}</h6>
+                        <h6 class="m-0 fw-bold text-primary">{re_inve_ofis}</h6>
                     </a>
                     <!-- Card Content - Collapse -->
                     <div class="collapse show" id="collapseResearch" style="">
@@ -152,9 +152,9 @@
                 </div>
                 <div class="card shadow mb-4">
                     <!-- Card Header - Accordion -->
-                    <a href="#collapseGeneral" class="d-block card-header py-3" data-toggle="collapse" role="button"
+                    <a href="#collapseGeneral" class="d-block card-header py-3" data-bs-toggle="collapse" role="button"
                         aria-expanded="true" aria-controls="collapseGeneral">
-                        <h6 class="m-0 font-weight-bold text-primary">{re_defenses_and_ships}</h6>
+                        <h6 class="m-0 fw-bold text-primary">{re_defenses_and_ships}</h6>
                     </a>
                     <!-- Card Content - Collapse -->
                     <div class="collapse show" id="collapseGeneral" style="">
@@ -189,9 +189,9 @@
                 </div>
                 <div class="card shadow mb-4">
                     <!-- Card Header - Accordion -->
-                    <a href="#collapseGeneral" class="d-block card-header py-3" data-toggle="collapse" role="button"
+                    <a href="#collapseGeneral" class="d-block card-header py-3" data-bs-toggle="collapse" role="button"
                         aria-expanded="true" aria-controls="collapseGeneral">
-                        <h6 class="m-0 font-weight-bold text-primary">{re_resources}</h6>
+                        <h6 class="m-0 fw-bold text-primary">{re_resources}</h6>
                     </a>
                     <!-- Card Content - Collapse -->
                     <div class="collapse show" id="collapseGeneral" style="">

@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div class="container-fluid px-4 pt-3">
     {alert}
     <form method="post" action="">
         <!-- Page Heading -->
@@ -17,9 +17,9 @@
             <div class="col-lg-6">
                 <div class="card shadow mb-4">
                     <!-- Card Header - Accordion -->
-                    <a href="#collapseGeneral" class="d-block card-header py-3" data-toggle="collapse" role="button"
+                    <a href="#collapseGeneral" class="d-block card-header py-3" data-bs-toggle="collapse" role="button"
                         aria-expanded="true" aria-controls="collapseGeneral">
-                        <h6 class="m-0 font-weight-bold text-primary">{cs_general}</h6>
+                        <h6 class="m-0 fw-bold text-primary">{cs_general}</h6>
                     </a>
                     <!-- Card Content - Collapse -->
                     <div class="collapse show" id="collapseGeneral" style="">
@@ -56,7 +56,7 @@
                                                 </span>
                                             </td>
                                             <td>
-                                                <select class="form-control" name="stat_admin_level"
+                                                <select class="form-control form-select" name="stat_admin_level"
                                                     id="stat_admin_level">
                                                     {user_levels}
                                                     <option value="{id}" {sel}>{name}</option>

@@ -1,2 +1,2 @@
-<body class="bg-gradient-primary">
+<body class="bg-primary">
     {page_content}

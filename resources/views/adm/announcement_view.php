@@ -1,5 +1,5 @@
 <script src="{js_path}cntchar-min.js" type="text/javascript"></script>
-<div class="container-fluid">
+<div class="container-fluid px-4 pt-3">
     {alert}
     <form action="" method="POST" name="announcement">
         <!-- Page Heading -->
@@ -18,9 +18,9 @@
             <div class="col-lg-12">
                 <div class="card shadow mb-4">
                     <!-- Card Header - Accordion -->
-                    <a href="#collapseGeneral" class="d-block card-header py-3" data-toggle="collapse" role="button"
+                    <a href="#collapseGeneral" class="d-block card-header py-3" data-bs-toggle="collapse" role="button"
                         aria-expanded="true" aria-controls="collapseGeneral">
-                        <h6 class="m-0 font-weight-bold text-primary">{an_general}</h6>
+                        <h6 class="m-0 fw-bold text-primary">{an_general}</h6>
                     </a>
                     <!-- Card Content - Collapse -->
                     <div class="collapse show" id="collapseGeneral" style="">
@@ -35,7 +35,7 @@
                                             </td>
                                             <td width="20%">
                                                 <!--<input class="form-control" name="color-picker" type="color">-->
-                                                <select class="form-control" name="color-picker">
+                                                <select class="form-control form-select" name="color-picker">
                                                     <option disabled selected>{al_color}</option>
                                                     {colors}
                                                     <option value="{color}">{color}</option>
@@ -62,7 +62,7 @@
                                         </tr>
                                         <tr>
                                             <td colspan="3">
-                                                <i class="fas fa-question-circle" data-toggle="popover"
+                                                <i class="fas fa-question-circle" data-bs-toggle="popover"
                                                     data-trigger="hover" data-content="{an_info}" data-html="true"></i>
                                                 <textarea class="form-control" name="text" rows="10"
                                                     onkeyup="javascript:cntChars('announcement', 5000);"></textarea>

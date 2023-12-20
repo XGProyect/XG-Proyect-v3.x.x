@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div class="container-fluid px-4 pt-3">
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">{bku_title}</h1>
@@ -18,9 +18,9 @@
         <div class="col-lg-6">
             <div class="card shadow mb-4">
                 <!-- Card Header - Accordion -->
-                <a href="#collapseGeneral" class="d-block card-header py-3" data-toggle="collapse" role="button"
+                <a href="#collapseGeneral" class="d-block card-header py-3" data-bs-toggle="collapse" role="button"
                     aria-expanded="true" aria-controls="collapseGeneral">
-                    <h6 class="m-0 font-weight-bold text-primary">{bku_general}</h6>
+                    <h6 class="m-0 fw-bold text-primary">{bku_general}</h6>
                 </a>
                 <!-- Card Content - Collapse -->
                 <div class="collapse show" id="collapseGeneral" style="">
@@ -34,7 +34,7 @@
                                             <td>
                                                 <span>
                                                     {bku_auto}
-                                                    <i class="fas fa-question-circle" data-toggle="popover"
+                                                    <i class="fas fa-question-circle" data-bs-toggle="popover"
                                                         data-trigger="hover" data-content="{bku_auto_legend}"
                                                         data-html="true"></i>
                                                 </span>
@@ -63,9 +63,9 @@
         <div class="col-lg-6">
             <div class="card shadow mb-4">
                 <!-- Card Header - Accordion -->
-                <a href="#collapseList" class="d-block card-header py-3" data-toggle="collapse" role="button"
+                <a href="#collapseList" class="d-block card-header py-3" data-bs-toggle="collapse" role="button"
                     aria-expanded="true" aria-controls="collapseList">
-                    <h6 class="m-0 font-weight-bold text-primary">{bku_list}</h6>
+                    <h6 class="m-0 fw-bold text-primary">{bku_list}</h6>
                 </a>
                 <!-- Card Content - Collapse -->
                 <div class="collapse show" id="collapseList" style="">

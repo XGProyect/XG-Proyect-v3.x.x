@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div class="container-fluid px-4 pt-3">
     {alert}
     <form action="" method="POST" name="changelog">
         <!-- Page Heading -->
@@ -17,9 +17,9 @@
             <div class="col-lg-12">
                 <div class="card shadow mb-4">
                     <!-- Card Header - Accordion -->
-                    <a href="#collapseGeneral" class="d-block card-header py-3" data-toggle="collapse" role="button"
+                    <a href="#collapseGeneral" class="d-block card-header py-3" data-bs-toggle="collapse" role="button"
                         aria-expanded="true" aria-controls="collapseGeneral">
-                        <h6 class="m-0 font-weight-bold text-primary">{ch_general}</h6>
+                        <h6 class="m-0 fw-bold text-primary">{ch_general}</h6>
                     </a>
                     <!-- Card Content - Collapse -->
                     <div class="collapse show" id="collapseGeneral" style="">
@@ -33,7 +33,7 @@
                                         <th>{ch_actions}</th>
                                     </tr>
                                     {changelog}
-                                    <tr data-toggle="collapse" data-target="#toggle{changelog_id}" aria-expanded="false"
+                                    <tr data-bs-toggle="collapse" data-target="#toggle{changelog_id}" aria-expanded="false"
                                         aria-controls="toggle{changelog_id}">
                                         <td>{changelog_date}</td>
                                         <td>{changelog_version}</td>
@@ -58,11 +58,11 @@
                                                 <div class="card shadow mb-4">
                                                     <div
                                                         class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                                        <h6 class="m-0 font-weight-bold text-primary">{ch_the_description}
+                                                        <h6 class="m-0 fw-bold text-primary">{ch_the_description}
                                                         </h6>
                                                         <div class="dropdown no-arrow">
                                                             <a class="dropdown-toggle" href="#" role="button"
-                                                                id="dropdownMenuLink" data-toggle="dropdown"
+                                                                id="dropdownMenuLink" data-bs-toggle="dropdown"
                                                                 aria-haspopup="true" aria-expanded="false">
                                                                 <i
                                                                     class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>

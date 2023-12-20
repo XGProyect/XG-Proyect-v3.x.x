@@ -1,97 +1,101 @@
-<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+<nav class="sb-sidenav accordion sb-sidenav-light" id="sidenavAccordion">
+    <div class="sb-sidenav-menu">
+        <div class="nav">
+            <div class="sb-sidenav-menu-heading">{general}</div>
 
-    <!-- Sidebar - Brand -->
-    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="admin.php?page=home">
-        <div class="sidebar-brand-icon">
-            <img src="https://xgproyect.org/wp-content/uploads/2019/10/xgp-new-logo-white.png" alt="XG Proyect Logo"
-                title="XG Proyect" width="150px">
+            <a class="nav-link collapsed{active_2}" href="#" data-bs-toggle="collapse"
+                data-bs-target="#collapseSettingsMenu" aria-expanded="false" aria-controls="collapseSettingsMenu">
+                <div class="sb-nav-link-icon">
+                    <i class="fas fa-fw fa-cogs"></i>
+                </div>
+                {configuration}
+                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+            </a>
+
+            <div class="collapse{active_2_show}" id="collapseSettingsMenu" aria-labelledby="headingSettings"
+                data-bs-parent="#sidenavAccordion">
+                <nav class="sb-sidenav-menu-nested nav">
+                    <div class="bg-white py-2 rounded">
+                        {menu_block_2}
+                    </div>
+                </nav>
+            </div>
+
+
+            <a class="nav-link collapsed{active_3}" href="#" data-bs-toggle="collapse"
+                data-bs-target="#collapseInformationMenu" aria-expanded="false" aria-controls="collapseInformationMenu">
+                <div class="sb-nav-link-icon">
+                    <i class="fas fa-fw fa-info-circle"></i>
+                </div>
+                {information}
+                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+            </a>
+
+            <div class="collapse{active_3_show}" id="collapseInformationMenu" aria-labelledby="headingInformation"
+                data-bs-parent="#sidenavAccordion">
+                <nav class="sb-sidenav-menu-nested nav">
+                    <div class="bg-white py-2 rounded">
+                        {menu_block_3}
+                    </div>
+                </nav>
+            </div>
+
+
+            <a class="nav-link collapsed{active_4}" href="#" data-bs-toggle="collapse" data-bs-target="#collapseEditionMenu"
+                aria-expanded="false" aria-controls="collapseEditionMenu">
+                <div class="sb-nav-link-icon">
+                    <i class="fas fa-fw fa-pen"></i>
+                </div>
+                {edition}
+                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+            </a>
+
+            <div class="collapse{active_4_show}" id="collapseEditionMenu" aria-labelledby="headingEdition"
+                data-bs-parent="#sidenavAccordion">
+                <nav class="sb-sidenav-menu-nested nav">
+                    <div class="bg-white py-2 rounded">
+                        {menu_block_4}
+                    </div>
+                </nav>
+            </div>
+
+
+            <a class="nav-link collapsed{active_5}" href="#" data-bs-toggle="collapse" data-bs-target="#collapseToolsMenu"
+                aria-expanded="false" aria-controls="collapseToolsMenu">
+                <div class="sb-nav-link-icon">
+                    <i class="fas fa-fw fa-tools"></i>
+                </div>
+                {tools}
+                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+            </a>
+
+            <div class="collapse{active_5_show}" id="collapseToolsMenu" aria-labelledby="headingTools"
+                data-bs-parent="#sidenavAccordion">
+                <nav class="sb-sidenav-menu-nested nav">
+                    <div class="bg-white py-2 rounded">
+                        {menu_block_5}
+                    </div>
+                </nav>
+            </div>
+
+            <a class="nav-link collapsed{active_6}" href="#" data-bs-toggle="collapse"
+                data-bs-target="#collapseMaintenanceMenu" aria-expanded="false" aria-controls="collapseMaintenanceMenu">
+                <div class="sb-nav-link-icon">
+                    <i class="fas fa-fw fa-brush"></i>
+                </div>
+                {maintenance}
+                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+            </a>
+
+            <div class="collapse{active_6_show}" id="collapseMaintenanceMenu" aria-labelledby="headingMaintenance"
+                data-bs-parent="#sidenavAccordion">
+                <nav class="sb-sidenav-menu-nested nav">
+                    <div class="bg-white py-2 rounded">
+                        {menu_block_6}
+                    </div>
+                </nav>
+            </div>
+
         </div>
-    </a>
-
-    <!-- Divider -->
-    <hr class="sidebar-divider">
-
-    <!-- Heading -->
-    <div class="sidebar-heading">
-        {general}
     </div>
-
-    <!-- Nav Item - Pages Collapse Menu -->
-    <li class="nav-item{active_2}">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true"
-            aria-controls="collapseOne">
-            <i class="fas fa-fw fa-cogs"></i>
-            <span>{configuration}</span>
-        </a>
-        <div id="collapseOne" class="collapse{active_2_show}" aria-labelledby="headingOne" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                {menu_block_2}
-            </div>
-        </div>
-    </li>
-
-    <!-- Nav Item - Pages Collapse Menu -->
-    <li class="nav-item{active_3}">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true"
-            aria-controls="collapseTwo">
-            <i class="fas fa-fw fa-info-circle"></i>
-            <span>{information}</span>
-        </a>
-        <div id="collapseTwo" class="collapse{active_3_show}" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                {menu_block_3}
-            </div>
-        </div>
-    </li>
-
-    <!-- Nav Item - Pages Collapse Menu -->
-    <li class="nav-item{active_4}">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true"
-            aria-controls="collapseThree">
-            <i class="fas fa-fw fa-pen"></i>
-            <span>{edition}</span>
-        </a>
-        <div id="collapseThree" class="collapse{active_4_show}" aria-labelledby="headingThree" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                {menu_block_4}
-            </div>
-        </div>
-    </li>
-
-    <!-- Nav Item - Pages Collapse Menu -->
-    <li class="nav-item{active_5}">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFour" aria-expanded="true"
-            aria-controls="collapseFour">
-            <i class="fas fa-fw fa-tools"></i>
-            <span>{tools}</span>
-        </a>
-        <div id="collapseFour" class="collapse{active_5_show}" aria-labelledby="headingFour" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                {menu_block_5}
-            </div>
-        </div>
-    </li>
-
-    <!-- Nav Item - Pages Collapse Menu -->
-    <li class="nav-item{active_6}">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFive" aria-expanded="true"
-            aria-controls="collapseFive">
-            <i class="fas fa-fw fa-brush"></i>
-            <span>{maintenance}</span>
-        </a>
-        <div id="collapseFive" class="collapse{active_6_show}" aria-labelledby="headingFive" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                {menu_block_6}
-            </div>
-        </div>
-    </li>
-
-    <!-- Divider -->
-    <hr class="sidebar-divider d-none d-md-block">
-
-    <!-- Sidebar Toggler (Sidebar) -->
-    <div class="text-center d-none d-md-inline">
-        <button class="rounded-circle border-0" id="sidebarToggle"></button>
-    </div>
-
-</ul>
+</nav>

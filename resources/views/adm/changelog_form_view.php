@@ -1,5 +1,5 @@
 <script src="{js_path}cntchar-min.js" type="text/javascript"></script>
-<div class="container-fluid">
+<div class="container-fluid px-4 pt-3">
     <form action="" method="POST" name="changelog">
         <input type="hidden" name="action" value="{action}">
         <input type="hidden" name="changelog_id" value="{changelog_id}">
@@ -13,9 +13,9 @@
             <div class="col-lg-12">
                 <div class="card shadow mb-4">
                     <!-- Card Header - Accordion -->
-                    <a href="#collapseGeneral" class="d-block card-header py-3" data-toggle="collapse" role="button"
+                    <a href="#collapseGeneral" class="d-block card-header py-3" data-bs-toggle="collapse" role="button"
                         aria-expanded="true" aria-controls="collapseGeneral">
-                        <h6 class="m-0 font-weight-bold text-primary">{current_action}</h6>
+                        <h6 class="m-0 fw-bold text-primary">{current_action}</h6>
                     </a>
                     <!-- Card Content - Collapse -->
                     <div class="collapse show" id="collapseGeneral" style="">
@@ -36,14 +36,14 @@
                                                         required>
                                                 </div>
                                                 <div class="col-1">
-                                                    <i class="fas fa-question-circle" data-toggle="popover"
+                                                    <i class="fas fa-question-circle" data-bs-toggle="popover"
                                                         data-trigger="hover" data-content="{ch_version_info}"
                                                         data-html="true"></i>
                                                 </div>
                                             </div>
                                         </td>
                                         <td>
-                                            <select class="form-control" name="changelog_language" required>
+                                            <select class="form-control form-select" name="changelog_language" required>
                                                 <option value="">{ch_pick_language}</option>
                                                 {languages}
                                                 <option value="{language_id}" {selected}>{language_name}</option>
