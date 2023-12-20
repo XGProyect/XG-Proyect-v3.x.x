@@ -567,12 +567,12 @@ class InstallationController extends BaseController
                 break;
 
             case 'error':
-                $parse['color'] = 'alert-error';
+                $parse['color'] = 'alert-danger';
                 $parse['status'] = $this->langs->line('ins_error_title');
                 break;
 
             case 'warning':
-                $parse['color'] = 'alert-block';
+                $parse['color'] = 'alert-warning';
                 $parse['status'] = $this->langs->line('ins_warning_title');
                 break;
         }

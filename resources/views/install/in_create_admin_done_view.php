@@ -1,7 +1,7 @@
 <div class="container mt-4">
     <div class="row">
-        {alert}
         <div class="col-xl-9 col-lg-8 mx-auto">
+            {alert}
             <div class="card shadow mb-4">
                 <!-- Card Header - Dropdown -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
