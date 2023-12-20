@@ -15,10 +15,6 @@ About
 
 XG Proyect (XGP) is an OGame clone open-source web application framework designed for creating game clones, particularly those inspired by the popular game OGame, set in a vast and captivating space-themed universe. Our goal is to offer a package that is as similar as possible to the original, but keeping their original design.
 
-
-Official Website: https://www.xgproyect.org/  
-Live Server: https://www.xgproyect.net/  
-
 ## Requirements
 
 PHP 7.4 or greater  
@@ -29,16 +25,20 @@ MySQLi 5.7 or greater
 ### Manually
 This is the simplest and easiest way if you're not a technical person. Download and install XG Proyect will be easy! ;)
 
-- Go to the releases section and get the latest stable release, and simply download it. It is the file `.zip` then you can do whatever you want with that package, use it on your local stack, hosting or even docker!
+ 1. Go to [releases](https://github.com/XGProyect/XG-Proyect-v3.x.x/releases)
+ 2. Look for the last version and then **assets** and finally look for the `.zip` file.
+ 3. Unzip the file.
+ 4. Browse the folder and search for the upload directory, there are hidden files in it, be sure that those are copied over also, specially the `.htaccess` file.
+ 5. Using docker, XAMPP or any local stack that you want set the copies files to your root.
 
 ### Composer
-Choose this option if you want to contribute to the project.
+Composer is a package manager and also a quick way to setup your project.
 
-Composer which will get you everything, including docker and would install the test dependencies like PHPUnit.
-
+1. Run
 ```
 composer create-project xgproyect/xgproyect
 ```
+2. Once composer has finishing installing all the dependencies you can use docker, see below.
 
 ## How to run XG Proyect?
 ### Docker
@@ -62,6 +62,15 @@ Simple change the **PHP version** to any other **version** that you'd like to te
 
 ### Other ways
 - Other options are also possible like XAMPP, or using it on your own hosting.
+
+### DB Connect defaults
+```
+host=db
+user=root
+password=root
+db=xgp
+prefix=xgp_
+```
 
 ## MailHog
 XGP uses MailHog and PHPMailer as tools for better mailing support. MailHog allows you to intercept emails **locally** and receive them under a convenient panel.
