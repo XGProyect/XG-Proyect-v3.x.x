@@ -72,6 +72,7 @@ class InstallationController extends BaseController
 
         // ACTION FOR THE CURRENT PAGE
         $parse['alert'] = '';
+        $alerts = '';
 
         switch ((isset($_POST['page']) ? $_POST['page'] : '')) {
             case 'step1':
@@ -289,7 +290,7 @@ class InstallationController extends BaseController
      */
     private function serverRequirementes()
     {
-        return !(version_compare(PHP_VERSION, '7.3.0', '<'));
+        return !(version_compare(PHP_VERSION, '7.4.0', '<'));
     }
 
     /**
@@ -341,20 +342,27 @@ class InstallationController extends BaseController
      *
      * @return boolean
      */
-    private function tablesExists()
+    private function tablesExists(): bool
     {
         $result = $this->installationModel->getListOfTables(DB_NAME);
         $arr = [];
 
-        foreach ($result as $row) {
-            foreach ($row as $table) {
-                if (strpos($table, DB_PREFIX) !== false) {
-                    $arr[] = $table;
+        // Check if $result is an array or an object before proceeding
+        if (is_array($result) || is_object($result)) {
+            foreach ($result as $row) {
+                foreach ($row as $table) {
+                    if (strpos($table, DB_PREFIX) !== false) {
+                        $arr[] = $table;
+                    }
                 }
             }
+            return (count($arr) > 0);
+        } else {
+            // Handle the case where $result is not of expected type
+            // For example, log the error or handle it in another appropriate way
+            // You can return false or throw an exception here, depending on your use case
+            return false;
         }
-
-        return (count($arr) > 0);
     }
 
     /**
@@ -394,7 +402,7 @@ class InstallationController extends BaseController
      */
     private function writeConfigFile()
     {
-        $config_file = @fopen(XGP_ROOT . CONFIGS_PATH . 'config.php', 'w');
+        $config_file = fopen(XGP_ROOT . CONFIGS_PATH . 'config.php', 'w');
 
         if (!$config_file) {
             return false;
@@ -417,8 +425,8 @@ class InstallationController extends BaseController
         }
 
         // check if something was created and delete it
-        if (file_exists($config_file)) {
-            unlink($config_file);
+        if (file_exists(XGP_ROOT . CONFIGS_PATH . 'config.php')) {
+            unlink(XGP_ROOT . CONFIGS_PATH . 'config.php');
         }
 
         return false;
@@ -559,12 +567,12 @@ class InstallationController extends BaseController
                 break;
 
             case 'error':
-                $parse['color'] = 'alert-error';
+                $parse['color'] = 'alert-danger';
                 $parse['status'] = $this->langs->line('ins_error_title');
                 break;
 
             case 'warning':
-                $parse['color'] = 'alert-block';
+                $parse['color'] = 'alert-warning';
                 $parse['status'] = $this->langs->line('ins_warning_title');
                 break;
         }

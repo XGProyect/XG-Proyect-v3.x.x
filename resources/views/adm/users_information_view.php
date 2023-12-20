@@ -1,8 +1,8 @@
 <div class="card shadow mb-4">
     <!-- Card Header - Accordion -->
-    <a href="#collapseInformation" class="d-block card-header py-3" data-toggle="collapse" role="button"
+    <a href="#collapseInformation" class="d-block card-header py-3" data-bs-toggle="collapse" role="button"
         aria-expanded="true" aria-controls="collapseInformation">
-        <h6 class="m-0 font-weight-bold text-primary">{information}</h6>
+        <h6 class="m-0 fw-bold text-primary">{information}</h6>
     </a>
     <!-- Card Content - Collapse -->
     <div class="collapse show" id="collapseInformation" style="">
@@ -26,7 +26,7 @@
                         <tr>
                             <td>{us_user_information_level}</td>
                             <td>
-                                <select name="authlevel" class="form-control">
+                                <select name="authlevel" class="form-control form-select">
                                     {user_roles}
                                         <option value="{role_id}" {role_sel}>{role_name}</option>
                                     {/user_roles}
@@ -36,7 +36,7 @@
                         <tr>
                             <td>{us_user_information_pp}</td>
                             <td>
-                                <select name="id_planet" class="form-control">
+                                <select name="id_planet" class="form-control form-select">
                                     {main_planet}
                                 </select>
                             </td>
@@ -44,7 +44,7 @@
                         <tr>
                             <td>{us_user_information_ap}</td>
                             <td>
-                                <select name="current_planet" class="form-control">
+                                <select name="current_planet" class="form-control form-select">
                                     {current_planet}
                                 </select>
                             </td>
@@ -76,7 +76,7 @@
                         <tr>
                             <td>{us_user_information_shortcuts}</td>
                             <td>
-                                <select name="user_fleet_shortcuts" class="form-control">
+                                <select name="user_fleet_shortcuts" class="form-control form-select">
                                     {user_fleet_shortcuts}
                                 </select>
                             </td>
@@ -84,7 +84,7 @@
                         <tr>
                             <td>{us_user_information_alliance}</td>
                             <td>
-                                <select name="ally_id" class="form-control">
+                                <select name="ally_id" class="form-control form-select">
                                     <option value="0">-</option>
                                     {alliances}
                                 </select>

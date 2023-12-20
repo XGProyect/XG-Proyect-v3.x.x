@@ -1,8 +1,8 @@
 <div class="card shadow mb-4">
     <!-- Card Header - Accordion -->
-    <a href="#collapsePlanets" class="d-block card-header py-3" data-toggle="collapse" role="button"
+    <a href="#collapsePlanets" class="d-block card-header py-3" data-bs-toggle="collapse" role="button"
         aria-expanded="true" aria-controls="collapsePlanets">
-        <h6 class="m-0 font-weight-bold text-primary">{planets}</h6>
+        <h6 class="m-0 fw-bold text-primary">{planets}</h6>
     </a>
     <!-- Card Content - Collapse -->
     <div class="collapse show" id="collapsePlanets" style="">
@@ -15,7 +15,7 @@
                             <img src="{image_path}{planet_image}.jpg" alt="{planet_image}.jpg"
                                 title="{planet_image}.jpg" border="0" {planet_image_style}>
                             {moon_image}
-                            <button class="btn btn-info dropdown-toggle" data-toggle="dropdown">{planet_name}
+                            <button class="btn btn-info dropdown-toggle" data-bs-toggle="dropdown">{planet_name}
                                 {planet_status}
                                 [{moon_name} {moon_status}]
                                 {us_user_planets_actions} <span class="caret"></span></button>

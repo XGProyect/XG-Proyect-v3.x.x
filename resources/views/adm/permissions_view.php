@@ -1,5 +1,5 @@
 
-<div class="container-fluid">
+<div class="container-fluid px-4 pt-3">
     {alert}
     <form action="" method="POST" name="changelog">
         <!-- Page Heading -->
@@ -19,9 +19,9 @@
             <div class="col-lg-12">
                 <div class="card shadow mb-4">
                     <!-- Card Header - Accordion -->
-                    <a href="#collapse{section_name}" class="d-block card-header py-3" data-toggle="collapse" role="button"
+                    <a href="#collapse{section_name}" class="d-block card-header py-3" data-bs-toggle="collapse" role="button"
                         aria-expanded="true" aria-controls="collapse{section_name}">
-                        <h6 class="m-0 font-weight-bold text-primary">{section_title}</h6>
+                        <h6 class="m-0 fw-bold text-primary">{section_title}</h6>
                     </a>
                     <!-- Card Content - Collapse -->
                     <div class="collapse show" id="collapse{section_name}" style="">

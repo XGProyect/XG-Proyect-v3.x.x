@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div class="container-fluid px-4 pt-3">
     {alert}
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
@@ -16,15 +16,15 @@
         <div class="col-lg-12">
             <div class="card shadow mb-4">
                 <!-- Card Header - Accordion -->
-                <a href="#collapseGeneral" class="d-block card-header py-3" data-toggle="collapse" role="button"
+                <a href="#collapseGeneral" class="d-block card-header py-3" data-bs-toggle="collapse" role="button"
                     aria-expanded="true" aria-controls="collapseGeneral">
-                    <h6 class="m-0 font-weight-bold text-primary">{le_edit}</h6>
+                    <h6 class="m-0 fw-bold text-primary">{le_edit}</h6>
                 </a>
                 <!-- Card Content - Collapse -->
                 <div class="collapse show" id="collapseGeneral" style="">
                     <div class="card-body">
                         <form action="" method="POST" name="change_language">
-                            <select class="form-control" name="file" class="input-xlarge" onchange="submit()">
+                            <select class="form-control form-select" name="file" class="input-xlarge" onchange="submit()">
                                 <option value="">{le_file}</option>
                                 {language_files}
                                 <option value="{lang_file}" {selected}>{lang_file}</option>

@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div class="container-fluid px-4 pt-3">
     {alert}
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
@@ -12,9 +12,9 @@
                 <input type="hidden" name="search" value="1">
                 <div class="card shadow mb-4">
                     <!-- Card Header - Accordion -->
-                    <a href="#collapseFilter" class="d-block card-header py-3" data-toggle="collapse" role="button"
+                    <a href="#collapseFilter" class="d-block card-header py-3" data-bs-toggle="collapse" role="button"
                         aria-expanded="true" aria-controls="collapseFilter">
-                        <h6 class="m-0 font-weight-bold text-primary">{mg_filter_by}</h6>
+                        <h6 class="m-0 fw-bold text-primary">{mg_filter_by}</h6>
                     </a>
                     <!-- Card Content - Collapse -->
                     <div class="collapse {show_search}" id="collapseFilter" style="">
@@ -35,7 +35,7 @@
                                                 max="3000-12-31">
                                         </td>
                                         <td>
-                                            <select class="form-control" name="message_type">
+                                            <select class="form-control form-select" name="message_type">
                                                 <option value="">{mg_filter_type}</option>
                                                 {type_options}
                                                 <option value="{value}">{name}</option>
@@ -66,9 +66,9 @@
             <form name="frm_message_results" method="POST" action="admin.php?page=messages">
                 <div class="card shadow mb-4">
                     <!-- Card Header - Accordion -->
-                    <a href="#collapseResults" class="d-block card-header py-3" data-toggle="collapse" role="button"
+                    <a href="#collapseResults" class="d-block card-header py-3" data-bs-toggle="collapse" role="button"
                         aria-expanded="true" aria-controls="collapseResults">
-                        <h6 class="m-0 font-weight-bold text-primary">{mg_search_results}</h6>
+                        <h6 class="m-0 fw-bold text-primary">{mg_search_results}</h6>
                     </a>
                     <!-- Card Content - Collapse -->
                     <div class="collapse {show_results}" id="collapseResults" style="">
@@ -99,7 +99,7 @@
                                         <th>{mg_actions}</th>
                                     </tr>
                                     {results}
-                                    <tr data-toggle="collapse" data-target="#toggle{message_id}" aria-expanded="false"
+                                    <tr data-bs-toggle="collapse" data-target="#toggle{message_id}" aria-expanded="false"
                                         aria-controls="toggle{message_id}">
                                         <td>
                                             <input class="form-check-input" type="checkbox"
@@ -127,11 +127,11 @@
                                                 <div class="card shadow mb-4">
                                                     <div
                                                         class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                                        <h6 class="m-0 font-weight-bold text-primary">{mg_the_message}
+                                                        <h6 class="m-0 fw-bold text-primary">{mg_the_message}
                                                         </h6>
                                                         <div class="dropdown no-arrow">
                                                             <a class="dropdown-toggle" href="#" role="button"
-                                                                id="dropdownMenuLink" data-toggle="dropdown"
+                                                                id="dropdownMenuLink" data-bs-toggle="dropdown"
                                                                 aria-haspopup="true" aria-expanded="false">
                                                                 <i
                                                                     class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>

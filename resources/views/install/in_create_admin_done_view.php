@@ -1,17 +1,27 @@
-
-
-<div class="span9">
-    {alert}
-    <div class="hero-unit">
-        <h1>{ins_install_title}</h1>
-        <br />
-        <div align="center">
-            <span class="text-info">{ins_completed}</span>
-
-            <h3>{ins_admin_account_created}</h3>
-            <span class="text-error">{ins_delete_install}</span>
-            <br/><br/>
-            <input type="button" class="btn btn-primary" name="next" onclick="self.location.href = '../'" value="{ins_end}">
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-xl-9 col-lg-8 mx-auto">
+            {alert}
+            <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">{ins_install_title}</h6>
+                </div>
+                <!-- Card Body -->
+                <div class="card-body">
+                    <form action="" method="post">
+                        <input type="hidden" name="page" value="{step}" />
+                        <div class="text-center">
+                            <h4>{ins_completed}</h4>
+                            <h4>{ins_admin_account_created}</h4>
+                            <span class="text-danger">{ins_delete_install}</span>
+                            <br /><br />
+                            <input type="button" class="btn btn-primary" name="next"
+                                onclick="self.location.href = '../'" value="{ins_end}">
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
-</div><!--/span-->
+</div>

@@ -1,8 +1,8 @@
 <div class="card shadow mb-4">
     <!-- Card Header - Accordion -->
-    <a href="#collapseSettings" class="d-block card-header py-3" data-toggle="collapse" role="button"
+    <a href="#collapseSettings" class="d-block card-header py-3" data-bs-toggle="collapse" role="button"
         aria-expanded="true" aria-controls="collapseSettings">
-        <h6 class="m-0 font-weight-bold text-primary">{settings}</h6>
+        <h6 class="m-0 fw-bold text-primary">{settings}</h6>
     </a>
     <!-- Card Content - Collapse -->
     <div class="collapse show" id="collapseSettings" style="">
@@ -17,7 +17,7 @@
                         <tr>
                             <td>{us_user_preference_planet_sort}</td>
                             <td>
-                                <select name="preference_planet_sort" class="form-control">
+                                <select name="preference_planet_sort" class="form-control form-select">
                                     {preference_planet_sort}
                                 </select>
                             </td>
@@ -25,7 +25,7 @@
                         <tr>
                             <td>{us_user_preference_planet_sort_sequence}</td>
                             <td>
-                                <select name="preference_planet_sort_sequence" class="form-control">
+                                <select name="preference_planet_sort_sequence" class="form-control form-select">
                                     {preference_planet_sort_sequence}
                                 </select>
                             </td>

@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div class="container-fluid px-4 pt-3">
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">{ff_title}</h1>
@@ -8,9 +8,9 @@
         <div class="col-lg-12">
             <div class="card shadow mb-4">
                 <!-- Card Header - Accordion -->
-                <a href="#collapseErrors" class="d-block card-header py-3" data-toggle="collapse" role="button"
+                <a href="#collapseErrors" class="d-block card-header py-3" data-bs-toggle="collapse" role="button"
                     aria-expanded="true" aria-controls="collapseErrors">
-                    <h6 class="m-0 font-weight-bold text-primary">{ff_general}</h6>
+                    <h6 class="m-0 fw-bold text-primary">{ff_general}</h6>
                 </a>
                 <!-- Card Content - Collapse -->
                 <div class="collapse show" id="collapseErrors" style="">
@@ -39,7 +39,7 @@
                                         <td>
                                             <span>
                                                 {amount}
-                                                <i class="fas fa-question-circle" data-toggle="popover"
+                                                <i class="fas fa-question-circle" data-bs-toggle="popover"
                                                     data-trigger="hover" data-content="{amount_content}"
                                                     data-html="true"></i>
                                             </span>
@@ -56,25 +56,25 @@
                                             <a href="admin.php?page=fleets&action=restart&fleetId={fleet_id}"
                                                 class="btn btn-primary btn-circle btn-sm">
                                                 <i class="fas fa-fast-backward" title="{ff_restart_action_title}"
-                                                    data-toggle="popover" data-trigger="hover"
+                                                    data-bs-toggle="popover" data-trigger="hover"
                                                     data-content="{ff_restart_action_description}" data-html="true"></i>
                                             </a>
                                             <a href="admin.php?page=fleets&action=end&fleetId={fleet_id}"
                                                 class="btn btn-success btn-circle btn-sm">
                                                 <i class="fas fa-fast-forward" title="{ff_end_action_title}"
-                                                    data-toggle="popover" data-trigger="hover"
+                                                    data-bs-toggle="popover" data-trigger="hover"
                                                     data-content="{ff_end_action_description}" data-html="true"></i>
                                             </a>
                                             <a href="admin.php?page=fleets&action=return&fleetId={fleet_id}"
                                                 class="btn btn-warning btn-circle btn-sm">
                                                 <i class="fas fa-undo-alt" title="{ff_return_action_title}"
-                                                    data-toggle="popover" data-trigger="hover"
+                                                    data-bs-toggle="popover" data-trigger="hover"
                                                     data-content="{ff_return_action_description}" data-html="true"></i>
                                             </a>
                                             <a href="admin.php?page=fleets&action=delete&fleetId={fleet_id}"
                                                 class="btn btn-danger btn-circle btn-sm">
                                                 <i class="fas fa-trash-alt" title="{ff_delete_action_title}"
-                                                    data-toggle="popover" data-trigger="hover"
+                                                    data-bs-toggle="popover" data-trigger="hover"
                                                     data-content="{ff_delete_action_description}" data-html="true"></i>
                                             </a>
                                         </th>

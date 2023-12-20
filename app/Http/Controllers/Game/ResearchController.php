@@ -217,43 +217,22 @@ class ResearchController extends BaseController
         }
     }
 
-    /**
-     * method isLaboratoryInQueue
-     * param
-     * return true if all clear, false if is anything in the queue
-     */
-    private function isLaboratoryInQueue()
+    private function isLaboratoryInQueue(): bool
     {
-        $return = true;
-        $current_building = '';
-        $element_id = 0;
-
         if ($this->planet['planet_b_building_id'] != 0) {
             $current_queue = $this->planet['planet_b_building_id'];
+            $queue = explode(';', $current_queue);
 
-            if (strpos($current_queue, ';')) {
-                $queue = explode(';', $current_queue);
-
-                for ($i = 0; $i < MAX_BUILDING_QUEUE_SIZE; $i++) {
-                    if (isset($queue[$i])) {
-                        $element_data = explode(',', $queue[$i]);
-                        $element_id = $element_data[0];
-
-                        if ($element_id == 31) {
-                            break;
-                        }
+            for ($i = 0; $i < MAX_BUILDING_QUEUE_SIZE; $i++) {
+                if (isset($queue[$i])) {
+                    if (explode(',', $queue[$i])[0] == 31) {
+                        return false;
                     }
                 }
-            } else {
-                $current_building = $current_queue;
-            }
-
-            if ($current_building == 31 or $element_id == 31) {
-                $return = false;
             }
         }
 
-        return $return;
+        return true;
     }
 
     /**

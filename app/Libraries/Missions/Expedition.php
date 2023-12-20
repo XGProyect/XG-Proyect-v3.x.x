@@ -2,25 +2,18 @@
 
 namespace App\Libraries\Missions;
 
+use App\Core\Objects;
 use App\Libraries\FleetsLib;
 use App\Libraries\FormatLib;
 use App\Libraries\Functions;
+use App\Services\Formulas\Expedition as FmlExpedition;
 
 class Expedition extends Missions
 {
-    /**
-     * The amount of hazard for an expedition
-     *
-     * @var int
-     */
-    private $hazard;
-
-    /**
-     * A flag to indicate if a fleet was completly destroyed.
-     *
-     * @var int
-     */
-    private $all_destroyed = false;
+    private FmlExpedition $fmlExpedition;
+    private int $resourceExpeditionPoints = 0;
+    private int $shipExpeditionPoints = 0;
+    private int $fleetCapacity = 0;
 
     public function __construct()
     {
@@ -28,238 +21,206 @@ class Expedition extends Missions
 
         // load Language
         parent::loadLang(['game/global', 'game/missions', 'game/expedition', 'game/ships']);
+
+        $this->fmlExpedition = new FmlExpedition();
     }
 
-    /**
-     * expeditionMission
-     *
-     * @param array $fleet_row Fleet row
-     *
-     * @return void
-     */
-    public function expeditionMission($fleet_row)
+    public function expeditionMission(array $fleet): void
     {
         // do mission
-        if (parent::canStartMission($fleet_row)) {
-            $ships_points = $this->setShipsPoints();
-            $ships = FleetsLib::getFleetShipsArray($fleet_row['fleet_array']);
-            $fleet_capacity = 0;
-            $fleet_points = 0;
-            $current_fleet = [];
+        if (parent::canStartMission($fleet)) {
+            $this->setExpeditionPoints($fleet);
 
-            foreach ($ships as $id => $count) {
-                $current_fleet[$id] = $count;
-                $fleet_capacity += FleetsLib::getMaxStorage(
-                    $this->pricelist[$id]['capacity'],
-                    $fleet_row['research_hyperspace_technology']
-                ) * $count;
-                $fleet_points += ($count * $ships_points[$id]);
-            }
-
-            // GET A NUMBER BETWEEN 0 AND 10 RANDOMLY
-            $this->hazard = mt_rand(0, 10);
-
-            // EXPEDITION RESULT "HAZARD"
-            switch ($this->hazard) {
-                // BLACKHOLE
-                case (($this->hazard < 3)):
-                    $this->hazardBlackhole($fleet_row, $current_fleet);
+            switch ($this->fmlExpedition->getExpeditionResult()) {
+                case 'darkMatter':
+                    $this->resultDarkMatter($fleet);
                     break;
-                    // NOTHING
-                case (($this->hazard == 3)):
-                    $this->hazardNothing($fleet_row);
+                case 'ships':
+                    $this->resultShips($fleet);
                     break;
-                    // RESOURCES
-                case ((($this->hazard >= 4) && ($this->hazard < 7))):
-                    $this->hazardResources($fleet_row, $fleet_capacity);
+                case 'resources':
+                    $this->resultResources($fleet);
                     break;
-                    // NOTHING
-                case (($this->hazard == 7)):
-                    $this->hazardNothing($fleet_row);
+                case 'pirates':
+                    //$this->resultPirates($fleet);
+                    $this->resultNothing($fleet);
                     break;
-                    // SHIPS
-                case ((($this->hazard >= 8) && ($this->hazard < 11))):
-                    $this->hazardShips($fleet_row, $fleet_points, $current_fleet);
+                case 'aliens':
+                    //$this->resultAliens($fleet);
+                    $this->resultNothing($fleet);
+                    break;
+                case 'delay':
+                    $this->resultDelay($fleet);
+                    break;
+                case 'early':
+                    $this->resultEarly($fleet);
+                    break;
+                case 'merchant':
+                    //$this->resultMerchant($fleet);
+                    $this->resultNothing($fleet);
+                    break;
+                case 'blackHole':
+                    $this->resultBlackHole($fleet);
+                    break;
+                case 'nothing':
+                default:
+                    $this->resultNothing($fleet);
                     break;
             }
-        } elseif (parent::canCompleteMission($fleet_row)) {
-            if (!$this->all_destroyed) {
-                $this->expeditionMessage(
-                    $fleet_row['fleet_owner'],
-                    $this->langs->line('exp_back_home'),
-                    $fleet_row['fleet_end_time']
+        } elseif (parent::canCompleteMission($fleet)) {
+            $fleetUsedStorage = $fleet['fleet_resource_metal'] + $fleet['fleet_resource_crystal'] + $fleet['fleet_resource_deuterium'];
+
+            if ($fleetUsedStorage === 0) {
+                $message = sprintf(
+                    $this->langs->line('mi_fleet_back_without_resources'),
+                    $fleet['planet_end_name'],
+                    FormatLib::prettyCoords($fleet['fleet_end_galaxy'], $fleet['fleet_end_system'], $fleet['fleet_end_planet']),
+                    $fleet['planet_start_name'],
+                    FormatLib::prettyCoords($fleet['fleet_start_galaxy'], $fleet['fleet_start_system'], $fleet['fleet_start_planet']),
                 );
 
-                parent::restoreFleet($fleet_row, true);
-                parent::removeFleet((int) $fleet_row['fleet_id']);
-            }
-        }
-    }
-
-    /**
-     * hazardBlackhole
-     *
-     * @param array $fleet_row     Fleet row
-     * @param array $current_fleet Current fleet
-     *
-     * @return void
-     */
-    private function hazardBlackhole($fleet_row, $current_fleet)
-    {
-        $this->hazard += 1;
-        $lost_amount = (($this->hazard * 33) + 1) / 100;
-
-        if ($lost_amount == 1) {
-            $this->all_destroyed = true;
-
-            $this->expeditionMessage(
-                $fleet_row['fleet_owner'],
-                $this->langs->line('exp_blackholl_2'),
-                $fleet_row['fleet_end_stay']
-            );
-
-            $this->missionsModel->updateLostShipsAndDefensePoints($fleet_row['fleet_owner'], $current_fleet);
-            parent::removeFleet((int) $fleet_row['fleet_id']);
-        } else {
-            $this->all_destroyed = true;
-            $new_ships = [];
-            $lost_ships = [];
-
-            foreach ($current_fleet as $ship => $amount) {
-                if (floor($amount * $lost_amount) != 0) {
-                    $lost_ships[$ship] = floor($amount * $lost_amount);
-                    $new_ships[$ship] = ($amount - $lost_ships[$ship]);
-                    $this->all_destroyed = false;
-                }
-            }
-
-            if (!$this->all_destroyed) {
                 $this->expeditionMessage(
-                    $fleet_row['fleet_owner'],
-                    $this->langs->line('exp_blackholl_1'),
-                    $fleet_row['fleet_end_stay']
+                    (int) $fleet['fleet_owner'],
+                    $message,
+                    (int) $fleet['fleet_end_stay'],
+                    [
+                        'galaxy' => $fleet['fleet_end_galaxy'],
+                        'system' => $fleet['fleet_end_system'],
+                        'planet' => $fleet['fleet_end_planet'],
+                    ]
                 );
-
-                $this->missionsModel->updateLostShipsAndDefensePoints($fleet_row['fleet_owner'], $lost_ships);
-                $this->missionsModel->updateFleetArrayById([
-                    'ships' => FleetsLib::setFleetShipsArray($new_ships),
-                    'fleet_id' => $fleet_row['fleet_id'],
-                ]);
             } else {
-                $this->expeditionMessage(
-                    $fleet_row['fleet_owner'],
-                    $this->langs->line('exp_blackholl_2'),
-                    $fleet_row['fleet_end_stay']
+                $message = sprintf(
+                    $this->langs->line('mi_fleet_back_with_resources'),
+                    $fleet['planet_end_name'],
+                    FormatLib::prettyCoords($fleet['fleet_end_galaxy'], $fleet['fleet_end_system'], $fleet['fleet_end_planet']),
+                    $fleet['planet_start_name'],
+                    FormatLib::prettyCoords($fleet['fleet_start_galaxy'], $fleet['fleet_start_system'], $fleet['fleet_start_planet']),
+                    FormatLib::prettyNumber($fleet['fleet_resource_metal']),
+                    FormatLib::prettyNumber($fleet['fleet_resource_crystal']),
+                    FormatLib::prettyNumber($fleet['fleet_resource_deuterium'])
                 );
 
-                $this->missionsModel->updateLostShipsAndDefensePoints($fleet_row['fleet_owner'], $current_fleet);
-                parent::removeFleet((int) $fleet_row['fleet_id']);
+                $this->expeditionMessage(
+                    (int) $fleet['fleet_owner'],
+                    $message,
+                    (int) $fleet['fleet_end_stay'],
+                    [
+                        'galaxy' => $fleet['fleet_end_galaxy'],
+                        'system' => $fleet['fleet_end_system'],
+                        'planet' => $fleet['fleet_end_planet'],
+                    ]
+                );
             }
+
+            parent::restoreFleet($fleet, true);
+            parent::removeFleet($fleet['fleet_id']);
         }
     }
 
-    /**
-     * hazardNothing
-     *
-     * @param array $fleet_row Fleet row
-     *
-     * @return void
-     */
-    private function hazardNothing($fleet_row)
+    private function setExpeditionPoints(array $fleet): void
     {
-        $this->expeditionMessage(
-            $fleet_row['fleet_owner'],
-            $this->langs->line('exp_nothing_' . mt_rand(1, 6)),
-            $fleet_row['fleet_end_stay']
+        $priceList = Objects::getInstance()->getPrice();
+        $expeditionPoints = 0;
+
+        foreach (FleetsLib::getFleetShipsArray($fleet['fleet_array']) as $id => $count) {
+            if (in_array($id, $this->fmlExpedition->getPossibleShips())) {
+                $expeditionPoints += $this->fmlExpedition->calculateExpeditionPoints(
+                    ($priceList[$id]['metal'] + $priceList[$id]['crystal'])
+                ) * $count;
+            }
+
+            $this->fleetCapacity += FleetsLib::getMaxStorage(
+                $priceList[$id]['capacity'],
+                $fleet['research_hyperspace_technology']
+            ) * $count;
+        }
+
+        $topPlayerPoints = $this->missionsModel->getTopPlayerPoints();
+
+        $maxResourceFindExpeditionPoints = $this->fmlExpedition->getMaxExpeditionPoints(
+            $topPlayerPoints
+        );
+        $maxShipsFindExpeditionPoints = $this->fmlExpedition->getMaxShipsExpeditionPoints(
+            $topPlayerPoints
         );
 
-        parent::returnFleet((int) $fleet_row['fleet_id']);
-    }
+        $this->resourceExpeditionPoints = $expeditionPoints;
+        $this->shipExpeditionPoints = $expeditionPoints;
 
-    /**
-     * hazardResources
-     *
-     * @param array $fleet_row      Fleet row
-     * @param int   $fleet_capacity Fleet capacity
-     *
-     * @return void
-     */
-    private function hazardResources($fleet_row, $fleet_capacity)
-    {
-        $fleet_current_capacity = $fleet_row['fleet_resource_metal'] + $fleet_row['fleet_resource_crystal'] + $fleet_row['fleet_resource_deuterium'];
-        $fleet_capacity -= $fleet_current_capacity;
+        // limit the amount of resources that can be found
+        if ($expeditionPoints > $maxResourceFindExpeditionPoints) {
+            $this->resourceExpeditionPoints = $maxResourceFindExpeditionPoints;
+        }
 
-        if ($fleet_capacity > 5000) {
-            $min_capacity = $fleet_capacity - 5000;
-            $max_capacity = $fleet_capacity;
-            $found_resources = mt_rand($min_capacity, $max_capacity);
-            $found_metal = intval($found_resources / 2);
-            $found_crystal = intval($found_resources / 4);
-            $found_deuterium = intval($found_resources / 6);
-            $found_darkmatter = ($fleet_capacity > 10000) ? intval(3 * log($fleet_capacity / 10000) * 100) : 0;
-            $found_darkmatter = mt_rand(intval($found_darkmatter / 2), $found_darkmatter);
-
-            $this->missionsModel->updateFleetResourcesById([
-                'found' => [
-                    'metal' => $found_metal,
-                    'crystal' => $found_crystal,
-                    'deuterium' => $found_deuterium,
-                    'darkmatter' => $found_darkmatter,
-                ],
-                'fleet_id' => $fleet_row['fleet_id'],
-            ]);
-
-            $message = sprintf(
-                $this->langs->line('exp_found_goods'),
-                FormatLib::prettyNumber($found_metal),
-                $this->langs->line('metal'),
-                FormatLib::prettyNumber($found_crystal),
-                $this->langs->line('crystal'),
-                FormatLib::prettyNumber($found_deuterium),
-                $this->langs->line('deuterium'),
-                FormatLib::prettyNumber($found_darkmatter),
-                $this->langs->line('dark_matter')
-            );
-
-            $this->expeditionMessage($fleet_row['fleet_owner'], $message, $fleet_row['fleet_end_stay']);
+        // limit the amount of ships that can be found
+        if ($expeditionPoints > $maxShipsFindExpeditionPoints) {
+            $this->shipExpeditionPoints = $maxShipsFindExpeditionPoints;
         }
     }
 
     /**
-     * hazardShips
+     * @todo needs polishing, there are 3 types of packages
+     * small package: 300-400 DM
+     * medium package: 500-700 DM
+     * large package: 1.000-1.800 DM
      *
-     * @param array $fleet_row    Fleet row
-     * @param int   $fleet_points Fleet points
-     * @param array $current_fleet Current fleet
-     *
-     * @return void
+     * needs review because I replicated previous used logic for resources
+     * I couldn't find any rule behind this...
      */
-    private function hazardShips($fleet_row, $fleet_points, $current_fleet)
+    private function resultDarkMatter(array $fleet): void
     {
-        $ships_ratio = $this->setShipsRatios();
-        $found_chance = $fleet_points / $fleet_row['fleet_amount'];
+        $darkMatterFound = $this->fmlExpedition->getDarkMatterSourceSize(
+            $this->fmlExpedition->calculateDarkMatterSourceSize()
+        );
+
+        $this->expeditionMessage(
+            (int) $fleet['fleet_owner'],
+            $this->langs->line('exp_dm_' . mt_rand(1, 5)),
+            (int) $fleet['fleet_end_stay'],
+            [
+                'galaxy' => $fleet['fleet_end_galaxy'],
+                'system' => $fleet['fleet_end_system'],
+                'planet' => $fleet['fleet_end_planet'],
+            ]
+        );
+
+        $this->missionsModel->updateDarkMatter((int) $fleet['fleet_owner'], $darkMatterFound);
+
+        parent::returnFleet($fleet['fleet_id']);
+    }
+
+    /**
+     * @todo probably not 100% like the original game
+     */
+    private function resultShips(array $fleet): void
+    {
+        $shipsRatio = $this->fmlExpedition->getShipsObtainableChances();
+        $foundChance = $this->shipExpeditionPoints / $fleet['fleet_amount'];
+        $currentFleet = FleetsLib::getFleetShipsArray($fleet['fleet_array']);
+        $foundShip = [];
 
         for ($ship = 202; $ship <= 215; $ship++) {
-            if (isset($current_fleet[$ship]) && $current_fleet[$ship] != 0) {
-                $found_ship[$ship] = round($current_fleet[$ship] * $ships_ratio[$ship] * $found_chance) + 1;
+            if (isset($currentFleet[$ship]) && $currentFleet[$ship] != 0) {
+                $foundShip[$ship] = round($currentFleet[$ship] * $shipsRatio[$ship] * $foundChance) + 1;
 
-                if ($found_ship[$ship] > 0) {
-                    $current_fleet[$ship] += $found_ship[$ship];
+                if ($foundShip[$ship] > 0) {
+                    $currentFleet[$ship] += $foundShip[$ship];
                 }
             }
         }
 
-        $new_ships = [];
+        $newShips = [];
         $found_ship_message = '';
 
-        foreach ($current_fleet as $ship => $count) {
+        foreach ($currentFleet as $ship => $count) {
             if ($count > 0) {
-                $new_ships[$ship] = $count;
+                $newShips[$ship] = $count;
             }
         }
 
-        if ($found_ship != null) {
-            foreach ($found_ship as $ship => $count) {
+        if ($foundShip != null) {
+            foreach ($foundShip as $ship => $count) {
                 if ($count != 0) {
                     $found_ship_message .= $this->langs->line($this->resource[$ship]) . ': ' . $count . '<br>';
                 }
@@ -267,61 +228,248 @@ class Expedition extends Missions
         }
 
         $this->missionsModel->updateFleetArrayById([
-            'ships' => FleetsLib::setFleetShipsArray($new_ships),
-            'fleet_id' => $fleet_row['fleet_id'],
+            'ships' => FleetsLib::setFleetShipsArray($newShips),
+            'fleet_id' => $fleet['fleet_id'],
         ]);
 
-        $message = sprintf($this->langs->line('exp_new_ships_' . mt_rand(1, 5)), $found_ship_message);
+        $message = sprintf(
+            $this->langs->line('exp_new_ships_' . mt_rand(1, 5)),
+            $found_ship_message
+        );
 
-        $this->expeditionMessage($fleet_row['fleet_owner'], $message, $fleet_row['fleet_end_stay']);
+        $this->expeditionMessage(
+            $fleet['fleet_owner'],
+            $message,
+            (int) $fleet['fleet_end_stay'],
+            [
+                'galaxy' => $fleet['fleet_end_galaxy'],
+                'system' => $fleet['fleet_end_system'],
+                'planet' => $fleet['fleet_end_planet'],
+            ]
+        );
+    }
+
+    private function resultResources(array $fleet): void
+    {
+        // fleet capacity
+        $fleetUsedStorage = $fleet['fleet_resource_metal'] + $fleet['fleet_resource_crystal'] + $fleet['fleet_resource_deuterium'];
+        $fleetMaxCapacity = $this->fleetCapacity - $fleetUsedStorage;
+
+        // expedition resources obtained calculations
+        $typeObtained = $this->fmlExpedition->calculateResourceTypeObtained();
+        $foundAmount = $this->fmlExpedition->getResourceFoundAmount(
+            $this->fmlExpedition->getResourceSourceSizeMultChances(
+                $typeObtained
+            ),
+            $this->resourceExpeditionPoints,
+            $typeObtained
+        );
+
+        if ($foundAmount > $fleetMaxCapacity) {
+            $fillFleetStorage = $fleetMaxCapacity;
+        } else {
+            $fillFleetStorage = $foundAmount;
+        }
+
+        $this->missionsModel->updateFleetResourcesById(
+            (int) $fleet['fleet_id'],
+            $typeObtained,
+            $fillFleetStorage
+        );
+
+        $this->expeditionMessage(
+            (int) $fleet['fleet_owner'],
+            $this->langs->line('exp_new_resources_' . mt_rand(1, 4)),
+            (int) $fleet['fleet_end_stay'],
+            [
+                'galaxy' => $fleet['fleet_end_galaxy'],
+                'system' => $fleet['fleet_end_system'],
+                'planet' => $fleet['fleet_end_planet'],
+            ]
+        );
+
+        parent::returnFleet($fleet['fleet_id']);
     }
 
     /**
-     * setShipsPoints
-     *
-     * @return array
+     * @todo implement
      */
-    private function setShipsPoints()
+    private function resultPirates(array $fleet): void
     {
-        return [
-            202 => 1.0, 203 => 1.5, 204 => 0.5, 205 => 1.5, 206 => 2.0,
-            207 => 2.5, 208 => 0.5, 209 => 1.0, 210 => 0.01, 211 => 3.0,
-            212 => 0.0, 213 => 3.5, 214 => 5.0, 215 => 3.2,
-        ];
     }
 
     /**
-     * setShipsRatios
-     *
-     * @return array
+     * @todo implement
      */
-    private function setShipsRatios()
+    private function resultAliens(array $fleet): void
     {
-        return [
-            202 => 0.1, 203 => 0.1, 204 => 0.1, 205 => 0.5, 206 => 0.25,
-            207 => 0.125, 208 => 0.5, 209 => 0.1, 210 => 0.1, 211 => 0.0625,
-            212 => 0.0, 213 => 0.0625, 214 => 0.03125, 215 => 0.0625,
-        ];
     }
 
     /**
-     * expeditionMessage
-     *
-     * @param int $owner      Owner
-     * @param string $message Message
-     * @param int $time       Time
-     *
-     * @return void
+     * @todo probably not 100% like the original game
      */
-    private function expeditionMessage($owner, $message, $time)
+    private function resultDelay(array $fleet): void
     {
+        $fleetDelayMultiplier = $this->fmlExpedition->getFleetDeplay();
+        $returnTime = (int) $fleet['fleet_end_time'] - (int) $fleet['fleet_end_stay'];
+
+        $this->missionsModel->updateFleetEndTime(
+            (int) $fleet['fleet_id'],
+            ($fleet['fleet_end_time'] + ($returnTime * $fleetDelayMultiplier))
+        );
+
+        $this->expeditionMessage(
+            (int) $fleet['fleet_owner'],
+            $this->langs->line('exp_delay_' . mt_rand(1, 5)),
+            (int) $fleet['fleet_end_stay'],
+            [
+                'galaxy' => $fleet['fleet_end_galaxy'],
+                'system' => $fleet['fleet_end_system'],
+                'planet' => $fleet['fleet_end_planet'],
+            ]
+        );
+
+        parent::returnFleet($fleet['fleet_id']);
+    }
+
+    /**
+     * @todo probably not 100% like the original game
+     */
+    private function resultEarly(array $fleet): void
+    {
+        $returnTime = (int) $fleet['fleet_end_time'] - (int) $fleet['fleet_end_stay'];
+
+        $this->missionsModel->updateFleetEndTime(
+            (int) $fleet['fleet_id'],
+            ($fleet['fleet_end_time'] - ($returnTime / 2))
+        );
+
+        $this->expeditionMessage(
+            (int) $fleet['fleet_owner'],
+            $this->langs->line('exp_delay_' . mt_rand(1, 5)),
+            (int) $fleet['fleet_end_stay'],
+            [
+                'galaxy' => $fleet['fleet_end_galaxy'],
+                'system' => $fleet['fleet_end_system'],
+                'planet' => $fleet['fleet_end_planet'],
+            ]
+        );
+
+        parent::returnFleet($fleet['fleet_id']);
+    }
+
+    /**
+     * @todo implement
+     */
+    private function resultMerchant(array $fleet): void
+    {
+    }
+
+    /**
+     * @todo probably not 100% like the original game
+     */
+    private function resultBlackHole(array $fleet): void
+    {
+        $lostChances = (mt_rand(0, 3) * 33 + 1) / 100;
+
+        if ($lostChances == 1) {
+            $this->expeditionMessage(
+                $fleet['fleet_owner'],
+                $this->langs->line('exp_lost_1'),
+                (int) $fleet['fleet_end_stay'],
+                [
+                    'galaxy' => $fleet['fleet_end_galaxy'],
+                    'system' => $fleet['fleet_end_system'],
+                    'planet' => $fleet['fleet_end_planet'],
+                ]
+            );
+
+            $this->missionsModel->updateLostShipsAndDefensePoints(
+                $fleet['fleet_owner'],
+                FleetsLib::getFleetShipsArray($fleet['fleet_array'])
+            );
+            parent::removeFleet($fleet['fleet_id']);
+        } else {
+            $newShips = [];
+            $lostShips = [];
+            $lostAll = true;
+
+            foreach (FleetsLib::getFleetShipsArray($fleet['fleet_array']) as $ship => $amount) {
+                if (floor($amount * $lostChances) != 0) {
+                    $lostShips[$ship] = floor($amount * $lostChances);
+                    $newShips[$ship] = ($amount - $lostShips[$ship]);
+                    $lostAll = false;
+                }
+            }
+
+            if (!$lostAll) {
+                $this->expeditionMessage(
+                    $fleet['fleet_owner'],
+                    $this->langs->line('exp_lost_1'),
+                    (int) $fleet['fleet_end_stay'],
+                    [
+                        'galaxy' => $fleet['fleet_end_galaxy'],
+                        'system' => $fleet['fleet_end_system'],
+                        'planet' => $fleet['fleet_end_planet'],
+                    ]
+                );
+
+                $this->missionsModel->updateLostShipsAndDefensePoints($fleet['fleet_owner'], $lostShips);
+                $this->missionsModel->updateFleetArrayById([
+                    'ships' => FleetsLib::setFleetShipsArray($newShips),
+                    'fleet_id' => $fleet['fleet_id'],
+                ]);
+            } else {
+                $this->expeditionMessage(
+                    $fleet['fleet_owner'],
+                    $this->langs->line('exp_lost_1'),
+                    (int) $fleet['fleet_end_stay'],
+                    [
+                        'galaxy' => $fleet['fleet_end_galaxy'],
+                        'system' => $fleet['fleet_end_system'],
+                        'planet' => $fleet['fleet_end_planet'],
+                    ]
+                );
+
+                $this->missionsModel->updateLostShipsAndDefensePoints(
+                    $fleet['fleet_owner'],
+                    FleetsLib::getFleetShipsArray($fleet['fleet_array'])
+                );
+                parent::removeFleet($fleet['fleet_id']);
+            }
+        }
+    }
+
+    private function resultNothing(array $fleet): void
+    {
+        $this->expeditionMessage(
+            $fleet['fleet_owner'],
+            $this->langs->line('exp_nothing_' . mt_rand(1, 6)),
+            (int) $fleet['fleet_end_stay'],
+            [
+                'galaxy' => $fleet['fleet_end_galaxy'],
+                'system' => $fleet['fleet_end_system'],
+                'planet' => $fleet['fleet_end_planet'],
+            ]
+        );
+
+        parent::returnFleet($fleet['fleet_id']);
+    }
+
+    private function expeditionMessage(int $owner, string $message, int $time, array $coords): void
+    {
+        $subject = sprintf(
+            $this->langs->line('exp_report_title'),
+            FormatLib::prettyCoords($coords['galaxy'], $coords['system'], $coords['planet'])
+        );
+
         Functions::sendMessage(
             $owner,
             '',
             $time,
             5,
             $this->langs->line('mi_fleet_command'),
-            $this->langs->line('exp_report_title'),
+            $subject,
             $message
         );
     }
