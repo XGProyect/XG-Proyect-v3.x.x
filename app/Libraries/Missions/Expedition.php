@@ -31,7 +31,7 @@ class Expedition extends Missions
         if (parent::canStartMission($fleet)) {
             $this->setExpeditionPoints($fleet);
 
-            switch($this->fmlExpedition->getExpeditionResult()) {
+            switch ($this->fmlExpedition->getExpeditionResult()) {
                 case 'darkMatter':
                     $this->resultDarkMatter($fleet);
                     break;
