@@ -1,0 +1,42 @@
+includes:
+    - vendor/larastan/larastan/extension.neon
+
+parameters:
+    level: 5
+    paths:
+        - app
+
+    # Start with level 5, gradually increase to 9
+    # Ignore legacy code patterns for now
+    ignoreErrors:
+        - '#Unsafe usage of new static#'
+        - '#Property .* has no type specified#'
+        - '#Method .* has no return type specified#'
+        - '#Method .* has parameter .* with no type specified#'
+
+    # Scan these directories
+    scanDirectories:
+        - app/Core
+        - app/Http/Controllers
+        - app/Libraries
+        - app/Models
+        - app/Helpers
+
+    # Exclude legacy files
+    excludePaths:
+        - app/Core/objects_collection.php
+        - app/Core/CiParser.php
+        - app/Core/CiLang.php
+
+    # Check missing type hints
+    checkMissingIterableValueType: false
+    checkGenericClassInNonGenericObjectType: false
+
+    # Report unmatched ignored errors
+    reportUnmatchedIgnoredErrors: false
+
+    # Memory limit
+    tmpDir: storage/phpstan
+
+    # Bleeding edge features
+    treatPhpDocTypesAsCertain: false

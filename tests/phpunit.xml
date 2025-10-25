@@ -1,16 +1,49 @@
 <?xml version="1.0"?>
-<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" bootstrap="bootstrap.php" colors="true" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.0/phpunit.xsd" cacheDirectory=".phpunit.cache">
-  <coverage>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         bootstrap="bootstrap.php"
+         colors="true"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/11.0/phpunit.xsd"
+         cacheDirectory="../storage/.phpunit.cache"
+         displayDetailsOnTestsThatTriggerWarnings="true"
+         failOnWarning="true"
+         failOnRisky="true"
+         beStrictAboutOutputDuringTests="true"
+         beStrictAboutCoverageMetadata="true">
+
+  <coverage pathCoverage="false">
+    <report>
+      <html outputDirectory="../storage/coverage/html"/>
+      <text outputFile="php://stdout" showOnlySummary="true"/>
+    </report>
     <include>
-      <directory>app/</directory>
+      <directory>../app/</directory>
     </include>
+    <exclude>
+      <directory>../app/Core/objects_collection.php</directory>
+      <directory>../app/Core/CiParser.php</directory>
+      <directory>../app/Core/CiLang.php</directory>
+    </exclude>
   </coverage>
+
   <testsuites>
-    <testsuite name="xgp_application">
-      <directory>app/</directory>
+    <testsuite name="Unit">
+      <directory>Unit/</directory>
+    </testsuite>
+    <testsuite name="Feature">
+      <directory>Feature/</directory>
     </testsuite>
   </testsuites>
+
+  <php>
+    <env name="APP_ENV" value="testing"/>
+    <env name="DB_CONNECTION" value="mysql"/>
+    <env name="DB_HOST" value="localhost"/>
+    <env name="DB_PORT" value="33060"/>
+    <env name="DB_DATABASE" value="xgp_test"/>
+  </php>
+
   <logging>
-    <testdoxHtml outputFile="build/logs/testdox.html"/>
+    <testdoxHtml outputFile="../storage/logs/testdox.html"/>
+    <junit outputFile="../storage/logs/junit.xml"/>
   </logging>
 </phpunit>

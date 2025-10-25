@@ -1,3 +1,14 @@
+# ===========================================
+# XG-Proyect .gitignore (Modernized)
+# ===========================================
+
+#
+# Environment
+#
+.env
+.env.local
+.env.*.local
+
 #
 # application
 #
@@ -7,14 +18,25 @@ config/config.php
 # public
 #
 public/compiles/*
+!public/compiles/.gitkeep
+public/upload/*
+!public/upload/.gitkeep
 
 #
 # storage
 #
 storage/backups/*.sql
+storage/backups/*
+!storage/backups/.gitkeep
 storage/cache/*.html
 storage/logs/*.txt
+storage/logs/*.log
 **/errors/*.html
+storage/coverage/
+storage/.phpunit.cache/
+storage/phpstan/
+storage/sessions/*
+!storage/sessions/.gitkeep
 
 #
 # tests
@@ -22,26 +44,75 @@ storage/logs/*.txt
 tests/.phpunit.result.cache
 tests/build/
 tests/_reports/
+.phpunit.result.cache
+phpunit.xml
 
 #
 # docs
 #
 .phpdoc/*
-/docs/*
+/docs/*.html
+/docs/api/*
+!/docs/*.md
 
 #
 # docker
 #
+data/
 data/xgp.sql
+docker-compose.override.yml
 
 #
 # IDE
 #
 *.code-workspace
 nbproject/
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
 
 #
 # composer
 #
 /vendor
 composer.lock
+composer.phar
+
+#
+# Node
+#
+/node_modules/
+npm-debug.log
+yarn-error.log
+
+#
+# Code Quality Tools
+#
+.phpstan.result.cache
+.php-cs-fixer.cache
+
+#
+# OS
+#
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+
+#
+# Temporary
+#
+*.tmp
+*.temp
+*.cache
+.cache/
+
+#
+# Database
+#
+*.sql
+*.sqlite
+*.db
+xgp_test.sql

@@ -1,0 +1,160 @@
+version: "3.8"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.optimized
+      target: development
+      args:
+        PHP_VERSION: 8.3
+    container_name: xgproyect-dev
+    restart: unless-stopped
+    environment:
+      - APP_ENV=development
+      - DB_CONNECTION=pgsql
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_DATABASE=xgp
+      - DB_USERNAME=xgproyect
+      - DB_PASSWORD=xgproyect
+      - DB_LEGACY_HOST=db
+      - DB_LEGACY_PORT=3306
+      - XDEBUG_MODE=develop,debug,coverage
+      - XDEBUG_CONFIG=client_host=host.docker.internal
+    volumes:
+      - .:/var/www/html
+    ports:
+      - "9000:9000"
+      - "9003:9003"  # Xdebug
+    depends_on:
+      - postgres
+      - db
+      - redis
+    networks:
+      - xgproyect-dev
+
+  nginx:
+    image: nginx:alpine
+    container_name: xgproyect-nginx-dev
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./public:/var/www/html/public
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - app
+    networks:
+      - xgproyect-dev
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: xgproyect-postgres-dev
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: xgp
+      POSTGRES_USER: xgproyect
+      POSTGRES_PASSWORD: xgproyect
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --locale=C"
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data_dev:/var/lib/postgresql/data
+      - ./database/postgres:/docker-entrypoint-initdb.d
+    command:
+      - "postgres"
+      - "-c"
+      - "max_connections=200"
+      - "-c"
+      - "shared_buffers=256MB"
+      - "-c"
+      - "effective_cache_size=1GB"
+      - "-c"
+      - "work_mem=16MB"
+      - "-c"
+      - "maintenance_work_mem=64MB"
+      - "-c"
+      - "random_page_cost=1.1"
+    networks:
+      - xgproyect-dev
+
+  db:
+    image: mysql:8.0
+    container_name: xgproyect-mysql-dev
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: xgp
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "33060:3306"
+    volumes:
+      - mysql_data_dev:/var/lib/mysql
+      - ./database/mysql:/docker-entrypoint-initdb.d
+    command: --default-authentication-plugin=mysql_native_password
+    networks:
+      - xgproyect-dev
+    profiles:
+      - legacy  # Only start with --profile legacy
+
+  redis:
+    image: redis:7-alpine
+    container_name: xgproyect-redis-dev
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    networks:
+      - xgproyect-dev
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: xgproyect-pgadmin-dev
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@xgproyect.local
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+      PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: 'False'
+    ports:
+      - "5050:80"
+    volumes:
+      - pgadmin_data_dev:/var/lib/pgadmin
+    depends_on:
+      - postgres
+    networks:
+      - xgproyect-dev
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: xgproyect-phpmyadmin-dev
+    restart: unless-stopped
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "8081:80"
+    depends_on:
+      - db
+    networks:
+      - xgproyect-dev
+    profiles:
+      - legacy  # Only start with --profile legacy
+
+  mailhog:
+    image: mailhog/mailhog
+    container_name: xgproyect-mailhog-dev
+    restart: unless-stopped
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+    networks:
+      - xgproyect-dev
+
+networks:
+  xgproyect-dev:
+    driver: bridge
+
+volumes:
+  postgres_data_dev:
+  mysql_data_dev:
+  pgadmin_data_dev:

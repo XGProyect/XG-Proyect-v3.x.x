@@ -4,7 +4,7 @@ services:
     build:
       context: .
       args:
-        PHP_VERSION: 7.4
+        PHP_VERSION: 8.3
     container_name: xgproyect-v3
     restart: always
     ports:
@@ -15,7 +15,7 @@ services:
     depends_on:
       - db
   db:
-    image: mysql:5.7
+    image: mysql:8.0
     restart: on-failure
     ports:
       - 33060:3306

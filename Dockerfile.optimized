@@ -1,0 +1,177 @@
+# =====================================================
+# Multi-Stage Dockerfile for XG-Proyect
+# PHP 8.3 with optimized production build
+# =====================================================
+
+# ========== BASE STAGE ==========
+ARG PHP_VERSION=8.3
+FROM php:${PHP_VERSION}-fpm-alpine AS base
+
+# Install system dependencies
+RUN apk add --no-cache \
+    bash \
+    curl \
+    freetype-dev \
+    jpeg-dev \
+    libpng-dev \
+    libzip-dev \
+    zip \
+    unzip \
+    git \
+    mysql-client \
+    postgresql-dev \
+    postgresql-client \
+    supervisor \
+    nginx
+
+# Install PHP extensions
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install -j$(nproc) \
+        gd \
+        mysqli \
+        opcache \
+        zip \
+        pdo \
+        pdo_mysql \
+        pdo_pgsql \
+        pgsql
+
+# Install Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# Set working directory
+WORKDIR /var/www/html
+
+# ========== DEPENDENCIES STAGE ==========
+FROM base AS dependencies
+
+# Copy composer files
+COPY composer.json composer.lock ./
+
+# Install PHP dependencies
+RUN composer install \
+    --no-dev \
+    --no-scripts \
+    --no-autoloader \
+    --prefer-dist \
+    --optimize-autoloader
+
+# ========== BUILDER STAGE ==========
+FROM base AS builder
+
+# Copy application files
+COPY --chown=www-data:www-data . .
+
+# Copy vendor from dependencies stage
+COPY --from=dependencies /var/www/html/vendor ./vendor
+
+# Generate optimized autoloader
+RUN composer dump-autoload --optimize --classmap-authoritative
+
+# Create necessary directories
+RUN mkdir -p \
+    storage/logs \
+    storage/backups \
+    storage/phpstan \
+    public/compiles \
+    public/upload && \
+    chown -R www-data:www-data storage public/compiles public/upload
+
+# ========== PRODUCTION STAGE ==========
+FROM base AS production
+
+# Production PHP configuration
+RUN { \
+    echo 'opcache.memory_consumption=256'; \
+    echo 'opcache.interned_strings_buffer=16'; \
+    echo 'opcache.max_accelerated_files=10000'; \
+    echo 'opcache.revalidate_freq=60'; \
+    echo 'opcache.fast_shutdown=1'; \
+    echo 'opcache.enable_cli=1'; \
+    echo 'opcache.validate_timestamps=0'; \
+    echo 'opcache.save_comments=1'; \
+    echo 'opcache.enable_file_override=1'; \
+    } > /usr/local/etc/php/conf.d/opcache-recommended.ini
+
+RUN { \
+    echo 'memory_limit=512M'; \
+    echo 'upload_max_filesize=20M'; \
+    echo 'post_max_size=20M'; \
+    echo 'max_execution_time=300'; \
+    echo 'max_input_time=300'; \
+    echo 'date.timezone=UTC'; \
+    echo 'expose_php=Off'; \
+    echo 'display_errors=Off'; \
+    echo 'log_errors=On'; \
+    echo 'error_log=/var/www/html/storage/logs/php_errors.log'; \
+    } > /usr/local/etc/php/conf.d/custom.ini
+
+# Copy application from builder
+COPY --from=builder --chown=www-data:www-data /var/www/html /var/www/html
+
+# Copy nginx configuration
+COPY docker/nginx/nginx.conf /etc/nginx/nginx.conf
+COPY docker/nginx/default.conf /etc/nginx/conf.d/default.conf
+
+# Copy supervisor configuration
+COPY docker/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+# Set correct permissions
+RUN chown -R www-data:www-data /var/www/html \
+    && chmod -R 755 /var/www/html \
+    && chmod -R 775 storage public/compiles public/upload
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=40s --retries=3 \
+    CMD curl -f http://localhost/health || exit 1
+
+# Expose port
+EXPOSE 9000
+
+# Use supervisor to run nginx + php-fpm
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+
+# ========== DEVELOPMENT STAGE ==========
+FROM base AS development
+
+# Development PHP configuration
+RUN { \
+    echo 'opcache.memory_consumption=128'; \
+    echo 'opcache.interned_strings_buffer=8'; \
+    echo 'opcache.max_accelerated_files=4000'; \
+    echo 'opcache.revalidate_freq=2'; \
+    echo 'opcache.fast_shutdown=1'; \
+    echo 'opcache.enable_cli=1'; \
+    echo 'opcache.validate_timestamps=1'; \
+    } > /usr/local/etc/php/conf.d/opcache-recommended.ini
+
+RUN { \
+    echo 'memory_limit=512M'; \
+    echo 'upload_max_filesize=20M'; \
+    echo 'post_max_size=20M'; \
+    echo 'max_execution_time=300'; \
+    echo 'display_errors=On'; \
+    echo 'error_reporting=E_ALL'; \
+    echo 'log_errors=On'; \
+    } > /usr/local/etc/php/conf.d/custom.ini
+
+# Install Xdebug
+RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS \
+    && pecl install xdebug \
+    && docker-php-ext-enable xdebug \
+    && apk del .build-deps
+
+# Xdebug configuration
+RUN { \
+    echo 'xdebug.mode=develop,debug,coverage'; \
+    echo 'xdebug.client_host=host.docker.internal'; \
+    echo 'xdebug.client_port=9003'; \
+    echo 'xdebug.start_with_request=yes'; \
+    } > /usr/local/etc/php/conf.d/xdebug.ini
+
+WORKDIR /var/www/html
+
+# Expose port
+EXPOSE 9000
+
+CMD ["php-fpm"]
