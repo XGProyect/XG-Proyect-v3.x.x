@@ -1,3 +1,11 @@
+> [!WARNING]
+> **XG Proyect 3 is no longer under active development.**
+>
+> New installations should use **XG Proyect 4 (Laravel Edition)** instead:
+>
+> 👉 https://github.com/XGProyect/XGProyect
+>
+> This repository remains available for historical reference, bug fixes, and existing installations. New features and future development will be focused on XG Proyect 4.
 
 
 
